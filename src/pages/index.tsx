@@ -1,8 +1,8 @@
 import { GetStaticProps } from "next";
 import { Layout } from "@/components";
-import { PageInterface } from "@/helpers";
 import { Section } from "@/components/Section";
 import { Container } from "@mui/material";
+import pageData from "../samplePages/newhere.json";
 
 type Props = {
   pageData: any;
@@ -38,7 +38,7 @@ export default function Home(props: Props) {
 export const getStaticProps: GetStaticProps = async () => {
 
   //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/about.json").then(resp => resp.json());
-  const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/newhere.json").then(resp => resp.json());
+  //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/newhere.json").then(resp => resp.json());
 
   return {
     props: { pageData },
