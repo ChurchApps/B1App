@@ -1,0 +1,36 @@
+{
+  "title": "About Us",
+  "headerImage": "/tempLibrary/headers/worship.jpg",
+  "sections": [
+    {
+      "background": "#FFFFFF",
+      "text": "dark",
+      "components": [
+        {
+          "componentType": "textWithPhoto",
+          "answers": {
+            "photoPosition": "right",
+            "photo": "/tempLibrary/teen-praying.jpg",
+            "photoAlt": "Teen Praying",
+            "text": "# OUR MISSION\nThe mission is the guiding compass of the church. It defines “who we are.” It’s a thread that should weave through every activity and ministry opportunity that we undertake. Simply put, our mission is our unique expression of the Great Commission.\n\nOur mission statement is:\n\n**Helping Others Follow Jesus.**\n\nEverything we do should stem from our mission of making disciples."
+          }
+        }
+      ]
+    },
+    {
+      "background": "#EEEEEE",
+      "text": "dark",
+      "components": [
+        {
+          "componentType": "textWithPhoto",
+          "answers": {
+            "photoPosition": "left",
+            "photo": "/tempLibrary/praise.jpg",
+            "photoAlt": "Praise",
+            "text": "# OUR VALUES\n\n### The Bible is for everyone.\n\nWe rely on the Holy Spirit to reveal truth from God’s Word—not a teacher. Spiritual growth takes place when studying God’s Word becomes a private discipline.\n\n### Every member is a missionary.\n\nWe encourage the rapid release of ordinary disciples into the world.\n\n### Spiritual growth happens in community.\n\nChristianity is best lived out in the context of relationships.\n\n### The Great Commission is global in scale.\n\nSo must our efforts as a church.\n\n### Family matters.\n\nFamily is one of the foundational institutions God uses to accomplish His mission.\n\n### The next generation is worth our sacrifice.\n\nEvery generation is significant but we will surrender our time, money, and preferences for children and students."
+          }
+        }
+      ]
+    }
+  ]
+}

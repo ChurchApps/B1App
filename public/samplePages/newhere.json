@@ -1,0 +1,153 @@
+{
+  "title": "New Here?",
+  "headerImage": "/tempLibrary/headers/worship.jpg",
+  "sections": [
+    {
+      "background": "#FFFFFF",
+      "text": "dark",
+      "components": [
+        {
+          "componentType": "textWithPhoto",
+          "answers": {
+            "photoPosition": "right",
+            "photo": "/tempLibrary/pastor.jpg",
+            "text": "# WELCOME!\n**Hello and Welcome to Cedar Ridge Christian Church!**\nMy name is Greg Pittman and I'm the pastor at Cedar Ridge Christian Church and I'm so glad you've taken the time to find out a little bit more about us.  If you were to come to our house we'd count you as family.  In fact, that's my favorite description of the church it's family it's about relationships, it's about building community, and when you come to Cedar Ridge your family. Our mission is simple.  That's helping others follow Jesus. We're a multi-site Church with campuses in Broken Arrow and Coweta; allowing us to be a Community Church while at the same time making a global impact."
+          }
+        }
+      ]
+    },
+    {
+      "background": "/tempLibrary/backgrounds/worship.jpg",
+      "text": "light",
+      "components": [
+        {
+          "componentType": "row",
+          "columns": [
+            {
+              "size": 8,
+              "components": [
+                {
+                  "componentType": "text",
+                  "answers": {
+                    "text": "# WHAT ARE YOUR SERVICES LIKE?\nWe like to call our worship services multigenerational. We want to worship and exalt Jesus in an environment that is open to everyone. We sing songs, pray together, and hear God's word from Pastor Greg Pitman. Our services also feature creative elements to help tell God's story as we work to reach Coweta, BA & Beyond. Join us at 9:00 AM & 10:30 AM for worship.\nWe also have small group classes that meet at 9:00 AM and 10:30 AM."
+                  }
+                }
+              ]
+            },
+            {
+              "size": 4,
+              "components": [
+                {
+                  "componentType": "text",
+                  "answers": {
+                    "text": "# SERVICE TIMES:\n___\nSunday Morning Worship:\n9:00 AM •  10:30 AM\n___\nSunday Groups:\n9:00 AM • 10:30 AM\n\n[FIND A GROUP](/groups){: .btn}\n___\nWednesday Activities:\n6:30pm - 8:00pm"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "background": "#FFFFFF",
+      "text": "dark",
+      "components": [
+        {
+          "componentType": "text",
+          "answers": {
+            "text": "# How do I get to CRCC?"
+          }
+        },
+        {
+          "componentType": "row",
+          "columns": [
+            {
+              "size": 6,
+              "components": [
+                {
+                  "componentType": "map",
+                  "answers": {
+                    "campusId": "1234567890"
+                  }
+                }
+              ]
+            },
+            {
+              "size": 6,
+              "components": [
+                {
+                  "componentType": "textWithPhoto",
+                  "answers": {
+                    "photoPosition": "bottom",
+                    "photo": "/tempLibrary/building.jpg",
+                    "text": "**Cedar Ridge Christian Church**\n100 W. Albany St.\nBroken Arrow, OK 74012\n[Get Directions](https://maps.google.com){: .btn}\n[Learn More About Us](/about){: .btn .secondary}"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "background": "/tempLibrary/backgrounds/kids.jpg",
+      "text": "light",
+      "components": [
+        {
+          "componentType": "text",
+          "answers": {
+            "text": "# WHAT ABOUT MY KIDS?\nGlad you asked! We are absolutely committed to raising up the next generation of Christ followers and Christian leaders. We have some of the most amazing and dynamic activities you will find, so we have the friends and fun well covered. But we are also very intentional and strategic. We want to walk with you as you guide your children towards a lifetime of Christ-like living.\n\nWe have kids programming for preschoolers through fifth grade on Sundays at 8:00 AM, 9:30 AM, and 11:00 AM. Students meet on Sundays at 9:30 AM in our Student Center.\n[Learn More About Kids Ministry](/kids){: .btn} [Learn More About Student Ministry](/student){: .btn .tertiary} [Learn More About Community Preschool](/preschool){: .btn .secondary}"
+          }
+        }
+      ]
+    },
+    {
+      "background": "#FFFFFF",
+      "text": "dark",
+      "components": [
+        {
+          "componentType": "textWithPhoto",
+          "answers": {
+            "photoPosition": "right",
+            "photo": "/tempLibrary/bible.jpg",
+            "text": "# WHAT DO WE BELIEVE?\nWe are followers of Jesus Christ first and foremost. We have a high view of Scripture and are passionate about learning and living out God's Word. We would be considered both conservative in our theology and contemporary in our approach to ministry.\n[What We Believe](/beliefs){: .btn}"
+          }
+        }
+      ]
+    },
+    {
+      "background": "/tempLibrary/backgrounds/crowd.jpg",
+      "text": "light",
+      "components": [
+        {
+          "componentType": "row",
+          "columns": [
+            {
+              "size": 8,
+              "components": [
+                {
+                  "componentType": "text",
+                  "answers": {
+                    "text": "# HOW DO I GET INVOLVED?\nThat's easy! As you find a worship service, you will also want to find a Small Group on Sunday mornings. Small Groups help us make a large church smaller as we connect to each other, build relationships, and do life together. There are plenty of ways to volunteer at CRCC and we will help you find a great place to serve. We also have a new members class to help you make all the right connections with us.\n[Click Here to Find Your Next Step](/get-involved){: .btn .secondary}"
+                  }
+                }
+              ]
+            },
+            {
+              "size": 4,
+              "components": [
+                {
+                  "componentType": "text",
+                  "answers": {
+                    "text": "# OTHER QUESTIONS?\nYou can find more information by exploring our website. If you prefer, feel free to give us a call at 918-555-5555 or [send us a message here](/contact). We would love to hear from you and we hope you have a great experience in the Lord at Cedar Ridge Christian Church."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

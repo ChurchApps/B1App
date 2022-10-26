@@ -1,0 +1,15 @@
+# change file name to .env
+
+# before adding env variables make sure you know how env variables work with
+# nextjs - https://nextjs.org/docs/basic-features/environment-variables
+
+NEXT_PUBLIC_ACCESS_API=https://accessapi.staging.churchapps.org
+NEXT_PUBLIC_MEMBERSHIP_API=https://membershipapi.staging.churchapps.org
+NEXT_PUBLIC_LESSONS_API=https://api.staging.lessons.church
+
+NEXT_PUBLIC_CONTENT_ROOT=https://content.staging.lessons.church
+NEXT_PUBLIC_ACCOUNTS_APP_URL=https://accounts.staging.churchapps.org
+NEXT_PUBLIC_CHURCH_APPS_URL=https://staging.churchapps.org
+
+#Optional - UA-123456789-1
+NEXT_PUBLIC_GOOGLE_ANALYTICS=
