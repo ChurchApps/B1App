@@ -1,4 +1,4 @@
-import { ComponentInterface, RowInterface, SectionChildInterface, SectionInterface } from "@/utils";
+import { ComponentInterface, RowInterface, SectionChildInterface, SectionInterface } from "@/helpers";
 import { RowComponent } from "./componentTypes/RowComponent";
 import { TextOnly } from "./componentTypes/TextOnly";
 import { TextWithPhoto } from "./componentTypes/TextWithPhoto";

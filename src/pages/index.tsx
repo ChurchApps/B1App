@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import { Layout } from "@/components";
-import { PageInterface } from "@/utils";
+import { PageInterface } from "@/helpers";
 import { Section } from "@/components/Section";
 import { Container } from "@mui/material";
 

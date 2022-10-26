@@ -1,4 +1,4 @@
-import { SectionInterface } from "@/utils";
+import { SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
 import { CSSProperties } from "react";
 import { Component } from "./Component";

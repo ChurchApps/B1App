@@ -1,4 +1,4 @@
-import { ComponentInterface, RowInterface } from "@/utils";
+import { ComponentInterface, RowInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";

@@ -3,7 +3,6 @@ import { CommonEnvironmentHelper } from "../appBase/helpers/CommonEnvironmentHel
 
 export class EnvironmentHelper {
   private static LessonsApi = "";
-  static GoogleAnalyticsTag = "";
   static Common = CommonEnvironmentHelper;
 
   static init = () => {
@@ -27,19 +26,19 @@ export class EnvironmentHelper {
     this.initStaging();
 
     EnvironmentHelper.LessonsApi = process.env.NEXT_PUBLIC_LESSONS_API || EnvironmentHelper.LessonsApi;
-    EnvironmentHelper.GoogleAnalyticsTag = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || EnvironmentHelper.GoogleAnalyticsTag;
+
   };
 
   //NOTE: None of these values are secret.
   static initStaging = () => {
     console.log("INIT STAGING");
     EnvironmentHelper.LessonsApi = "https://api.staging.lessons.church";
-    EnvironmentHelper.GoogleAnalyticsTag = "";
+
   };
 
   //NOTE: None of these values are secret.
   static initProd = () => {
     EnvironmentHelper.LessonsApi = "https://api.lessons.church";
-    EnvironmentHelper.GoogleAnalyticsTag = "UA-164774603-9";
+
   };
 }

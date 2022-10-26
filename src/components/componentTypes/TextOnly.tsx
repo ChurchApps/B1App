@@ -1,4 +1,4 @@
-import { ComponentInterface } from "@/utils";
+import { ComponentInterface } from "@/helpers";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 

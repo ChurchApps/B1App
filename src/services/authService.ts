@@ -1,4 +1,4 @@
-import { ApiHelper, LoginResponseInterface, UserInterface } from "@/utils";
+import { ApiHelper, LoginResponseInterface, UserInterface } from "@/helpers";
 
 type Payload = UserInterface | { jwt: string } | { authGuid: string };
 
