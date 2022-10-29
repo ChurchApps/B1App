@@ -1,10 +1,14 @@
 import Link from "next/link";
-import { useRouter } from "next/router"
-import { UserHelper, ApiHelper } from "@/helpers";
-import { ClickAwayListener, Container, Icon, Menu, MenuItem, AppBar, Stack, Box, Toolbar, IconButton, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { ChurchInterface } from "@/helpers";
+import { Container, AppBar, Stack, Box } from "@mui/material";
+import { useEffect, useState } from "react";
 
-export function Header() {
+type Props = {
+  church: ChurchInterface;
+  churchSettings: any;
+};
+
+export function Header(props: Props) {
 
   const [transparent, setTransparent] = useState(true);
 
@@ -20,8 +24,8 @@ export function Header() {
   }, []);
 
   const getLogo = () => {
-    if (transparent) return "https://content.churchapps.org/3/settings/logoDark.png?dt=1638219047334";
-    else return "https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
+    if (transparent) return props.churchSettings?.logoDark || ""; //return "https://content.churchapps.org/3/settings/logoDark.png?dt=1638219047334";
+    else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
   }
 
 
@@ -31,7 +35,7 @@ export function Header() {
         <Container>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/">
-              <a className="logo"><img src={getLogo()} alt="Cedar Ridge Christian Church" /></a>
+              <a className="logo"><img src={getLogo()} alt={props.church.name} /></a>
             </Link>
             <Box sx={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
               <Link href="/about"><a>About Us</a></Link> &nbsp; &middot; &nbsp;

@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { ChurchInterface } from "@/helpers";
 
 type Props = {
   children: React.ReactNode;
@@ -11,9 +12,9 @@ type Props = {
   metaDescription?: string;
   ogDescription?: string;
   image?: string;
+  churchSettings?: any;
+  church?: ChurchInterface;
 };
-
-
 
 export function Layout(props: Props) {
   const getDescription = () => {
@@ -26,7 +27,6 @@ export function Layout(props: Props) {
   const getImage = () => {
     if (props.image) return (<meta property="og:image" content={props.image}></meta>);
   }
-
 
   const mdTheme = createTheme({
     palette: {
@@ -45,13 +45,13 @@ export function Layout(props: Props) {
       <CssBaseline />
       <div>
         <Head>
-          <title>{props.pageTitle || "YourSite.church"}</title>
+          <title>{props.pageTitle || props.church?.name}</title>
           {getDescription()}
           {getImage()}
         </Head>
-        {!props.withoutNavbar && <Header />}
+        {!props.withoutNavbar && <Header church={props.church} churchSettings={props.churchSettings} />}
         <main>{props.children}</main>
-        {!props.withoutFooter && <Footer />}
+        {!props.withoutFooter && <Footer church={props.church} churchSettings={props.churchSettings} />}
       </div>
     </ThemeProvider>
   );

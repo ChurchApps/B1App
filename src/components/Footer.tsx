@@ -1,12 +1,19 @@
+import { ChurchInterface } from "@/helpers";
 import { Box, Container, Grid } from "@mui/material";
 
-export function Footer() {
+
+type Props = {
+  church: ChurchInterface;
+  churchSettings: any;
+};
+
+export function Footer(props: Props) {
   return (
     <div id="footer">
       <Container>
         <Grid container columnSpacing={3}>
           <Grid item md={4} xs={12}>
-            <img src="https://content.churchapps.org/3/settings/logoDark.png?dt=1638219047334" alt="Cedar Ridge Christian Church" />
+            <img src={props.churchSettings.logoDark} alt={props.church.name} />
             4010 W New Orleans St<br />
             Broken Arrow, Oklahoma 74011
           </Grid>
