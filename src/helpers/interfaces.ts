@@ -26,7 +26,11 @@ export interface SectionInterface {
 
 
 export interface PageInterface {
+  id?: string;
+  churchId?: string;
+  url?: string;
   title?: string;
-  header?: string;
+  headerImage?: string;
+
   sections?: SectionInterface[];
 }
