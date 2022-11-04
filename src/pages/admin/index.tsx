@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
-import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Grid, Link, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { ApiHelper, PageInterface } from "@/helpers";
 import { DisplayBox } from "@/components";
 import { SmallButton } from "@/appBase/components";
@@ -29,8 +29,12 @@ export default function Admin() {
     pages.forEach(p => {
       const page = p;
       result.push(<TableRow>
-        <TableCell>{p.url}</TableCell>
-        <TableCell>{p.title}</TableCell>
+        <TableCell>
+          <Link href={"/pages/" + p.id}><a>{p.url}</a></Link>
+        </TableCell>
+        <TableCell>
+          <Link href={"/pages/" + p.id}><a>{p.title}</a></Link>
+        </TableCell>
         <TableCell align="right"><SmallButton icon="edit" onClick={() => { setEditPage(page); }} /></TableCell>
       </TableRow>)
     });

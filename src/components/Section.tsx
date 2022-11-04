@@ -1,16 +1,16 @@
 import { SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
 import { CSSProperties } from "react";
-import { Component } from "./Component";
+import { Element } from "./Element";
 
 interface Props { section: SectionInterface }
 
 export const Section: React.FC<Props> = props => {
 
-  const getComponents = () => {
+  const getElement = () => {
     const result: JSX.Element[] = []
-    props.section.components.forEach(c => {
-      result.push(<Component component={c} />)
+    props.section.elements.forEach(e => {
+      result.push(<Element element={e} />)
     });
     return result;
   }
@@ -36,7 +36,7 @@ export const Section: React.FC<Props> = props => {
   return (
     <div style={getStyle()} className={getClassName()}>
       <Container style={{ paddingTop: 40, paddingBottom: 40, position: "relative" }}>
-        {getComponents()}
+        {getElement()}
       </Container>
     </div>
   );

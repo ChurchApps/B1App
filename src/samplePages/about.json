@@ -5,9 +5,9 @@
     {
       "background": "#FFFFFF",
       "text": "dark",
-      "components": [
+      "elements": [
         {
-          "componentType": "textWithPhoto",
+          "elementType": "textWithPhoto",
           "answers": {
             "photoPosition": "right",
             "photo": "/tempLibrary/teen-praying.jpg",
@@ -20,9 +20,9 @@
     {
       "background": "#EEEEEE",
       "text": "dark",
-      "components": [
+      "elements": [
         {
-          "componentType": "textWithPhoto",
+          "elementType": "textWithPhoto",
           "answers": {
             "photoPosition": "left",
             "photo": "/tempLibrary/praise.jpg",

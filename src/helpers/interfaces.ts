@@ -2,15 +2,21 @@ export * from "@/appBase/interfaces";
 
 export interface ColumnInterface {
   size: number;
-  components: ComponentInterface[];
+  elements: ElementInterface[];
 }
 
 export interface SectionChildInterface {
-  componentType: string;
+  elementType: string;
 }
 
-export interface ComponentInterface extends SectionChildInterface {
-  answers: any;
+export interface ElementInterface extends SectionChildInterface {
+  id?: string;
+  churchId?: string;
+  sectionId?: string;
+  sort?: number;
+  parentId?: string;
+  size?: number;
+  answers?: any;
 }
 
 export interface RowInterface extends SectionChildInterface {
@@ -18,9 +24,14 @@ export interface RowInterface extends SectionChildInterface {
 }
 
 export interface SectionInterface {
+  id?: string;
+  churchId?: string;
+  pageId?: string;
   background?: string;
-  text?: string;
-  components?: ComponentInterface[];
+  textColor?: string;
+  sort?: number;
+
+  elements?: Element[];
 }
 
 
