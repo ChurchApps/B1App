@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
-import { Grid, Link, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { ApiHelper, PageInterface } from "@/helpers";
 import { DisplayBox } from "@/components";
 import { SmallButton } from "@/appBase/components";
 import { PageEdit } from "@/components/admin/PageEdit";
+import Link from "next/link";
 
 export default function Admin() {
   const router = useRouter();
@@ -13,10 +14,6 @@ export default function Admin() {
   const [pages, setPages] = useState<PageInterface[]>([]);
   const [editPage, setEditPage] = useState<PageInterface>(null);
 
-  useEffect(() => {
-    if (!isAuthenticated) { router.push("/login"); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => { if (isAuthenticated) { loadData(); } }, [isAuthenticated]);
 
@@ -30,13 +27,13 @@ export default function Admin() {
       const page = p;
       result.push(<TableRow>
         <TableCell>
-          <Link href={"/pages/" + p.id}><a>{p.url}</a></Link>
+          <Link href={"/admin/pages/" + p.id}><a>{p.url}</a></Link>
         </TableCell>
         <TableCell>
-          <Link href={"/pages/" + p.id}><a>{p.title}</a></Link>
+          <Link href={"/admin/pages/" + p.id}><a>{p.title}</a></Link>
         </TableCell>
         <TableCell align="right"><SmallButton icon="edit" onClick={() => { setEditPage(page); }} /></TableCell>
-      </TableRow>)
+      </TableRow>);
     });
     return result;
   }

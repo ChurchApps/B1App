@@ -1,9 +1,10 @@
+import { SmallButton } from "@/appBase/components";
 import { SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
 import { CSSProperties } from "react";
 import { Element } from "./Element";
 
-interface Props { section: SectionInterface }
+interface Props { section: SectionInterface, onEdit?: (section: SectionInterface) => void }
 
 export const Section: React.FC<Props> = props => {
 
@@ -33,9 +34,18 @@ export const Section: React.FC<Props> = props => {
     return result;
   }
 
+  const getEdit = () => {
+    if (props.onEdit) {
+      return (<span style={{ position: "absolute", top: 3, right: 3, backgroundColor: "#FFF", borderRadius: 5 }}>
+        <SmallButton icon="edit" onClick={() => props.onEdit(props.section)} />
+      </span>)
+    }
+  }
+
   return (
     <div style={getStyle()} className={getClassName()}>
       <Container style={{ paddingTop: 40, paddingBottom: 40, position: "relative" }}>
+        {getEdit()}
         {getElement()}
       </Container>
     </div>
