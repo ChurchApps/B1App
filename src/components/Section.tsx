@@ -1,17 +1,18 @@
 import { SmallButton } from "@/appBase/components";
-import { SectionInterface } from "@/helpers";
+import { ElementInterface, SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
 import { CSSProperties } from "react";
 import { Element } from "./Element";
 
-interface Props { section: SectionInterface, onEdit?: (section: SectionInterface) => void }
+interface Props { section: SectionInterface, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
 
 export const Section: React.FC<Props> = props => {
 
-  const getElement = () => {
+  const getElements = () => {
     const result: JSX.Element[] = []
     props.section.elements.forEach(e => {
-      result.push(<Element element={e} />)
+      console.log("Element: " + JSON.stringify(e))
+      result.push(<Element element={e} onEdit={props.onEdit} />)
     });
     return result;
   }
@@ -37,7 +38,7 @@ export const Section: React.FC<Props> = props => {
   const getEdit = () => {
     if (props.onEdit) {
       return (<span style={{ position: "absolute", top: 3, right: 3, backgroundColor: "#FFF", borderRadius: 5 }}>
-        <SmallButton icon="edit" onClick={() => props.onEdit(props.section)} />
+        <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
       </span>)
     }
   }
@@ -46,7 +47,7 @@ export const Section: React.FC<Props> = props => {
     <div style={getStyle()} className={getClassName()}>
       <Container style={{ paddingTop: 40, paddingBottom: 40, position: "relative" }}>
         {getEdit()}
-        {getElement()}
+        {getElements()}
       </Container>
     </div>
   );

@@ -16,6 +16,7 @@ export interface ElementInterface extends SectionChildInterface {
   sort?: number;
   parentId?: string;
   size?: number;
+  answersJSON?: string;
   answers?: any;
 }
 
@@ -31,7 +32,7 @@ export interface SectionInterface {
   textColor?: string;
   sort?: number;
 
-  elements?: Element[];
+  elements?: ElementInterface[];
 }
 
 

@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
 import { Grid } from "@mui/material";
-import { ApiHelper, PageInterface, UserHelper } from "@/helpers";
+import { ApiHelper, ElementInterface, PageInterface, SectionInterface, UserHelper } from "@/helpers";
 import { DisplayBox } from "@/components";
 import { Section } from "@/components/Section";
+import { SectionEdit } from "@/components/admin/SectionEdit";
+import { ElementEdit } from "@/components/admin/ElementEdit";
 
 export default function Admin() {
   const router = useRouter();
   const [page, setPage] = useState<PageInterface>(null);
+  const [editSection, setEditSection] = useState<SectionInterface>(null);
+  const [editElement, setEditElement] = useState<ElementInterface>(null);
 
   const id = router.query.id;
 
@@ -26,8 +30,9 @@ export default function Admin() {
     return result;
   }
 
-  const handleSectionEdit = () => {
-
+  const handleSectionEdit = (s: SectionInterface, e: ElementInterface) => {
+    if (s) setEditSection(s);
+    else if (e) setEditElement(e);
   }
 
 
@@ -42,7 +47,8 @@ export default function Admin() {
           </DisplayBox>
         </Grid>
         <Grid item md={4} xs={12}>
-          Edit Here
+          {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
+          {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} />}
         </Grid>
       </Grid>
     </Wrapper>

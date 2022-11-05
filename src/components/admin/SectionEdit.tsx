@@ -19,16 +19,14 @@ export function SectionEdit(props: Props) {
     let p = { ...section };
     const val = e.target.value;
     switch (e.target.name) {
-      //case "title": p.title = val; break;
-      //case "url": p.url = val; break;
+      case "background": p.background = val; break;
+      case "textColor": p.textColor = val; break;
     }
     setSection(p);
   };
 
   const validate = () => {
     let errors = [];
-    //if (section.url === "") errors.push("Please enter a path.");
-    //if (section.title === "") errors.push("Please enter a title.");
     setErrors(errors);
     return errors.length === 0;
   };
@@ -55,10 +53,9 @@ export function SectionEdit(props: Props) {
     <>
       <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
         <ErrorMessages errors={errors} />
-
         <br />
-        <TextField fullWidth label="Title" name="title" value={section.textColor} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <TextField fullWidth label="Url Path" name="url" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <TextField fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <TextField fullWidth label="Text Color" name="textColor" value={section.textColor} onChange={handleChange} onKeyDown={handleKeyDown} />
       </InputBox>
     </>
   );
