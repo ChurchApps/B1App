@@ -43,9 +43,14 @@ export const Section: React.FC<Props> = props => {
     }
   }
 
+  const getAddElement = (sort: number) => {
+    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto" })} toolTip="Add Element" /></div>)
+  }
+
   return (
     <div style={getStyle()} className={getClassName()}>
       <Container style={{ paddingTop: 40, paddingBottom: 40, position: "relative" }}>
+        {props.onEdit && getAddElement(0)}
         {getEdit()}
         {getElements()}
       </Container>

@@ -6,6 +6,7 @@ export interface ColumnInterface {
 }
 
 export interface SectionChildInterface {
+  sort?: number;
   elementType: string;
 }
 
@@ -13,7 +14,6 @@ export interface ElementInterface extends SectionChildInterface {
   id?: string;
   churchId?: string;
   sectionId?: string;
-  sort?: number;
   parentId?: string;
   size?: number;
   answersJSON?: string;

@@ -10,6 +10,11 @@ interface Props {
 }
 
 export const Element: React.FC<Props> = props => {
+
+  const getAddElement = (sort: number) => {
+    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto" })} toolTip="Add Element" /></div>)
+  }
+
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>
 
   switch (props.element.elementType) {
@@ -33,6 +38,7 @@ export const Element: React.FC<Props> = props => {
         <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} />
       </span>
       {result}
+      {props.onEdit && getAddElement(props.element.sort + 1)}
     </>
   }
   return <div style={{ position: "relative" }}>{result}</div>;

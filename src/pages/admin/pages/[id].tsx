@@ -7,6 +7,7 @@ import { DisplayBox } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { ElementEdit } from "@/components/admin/ElementEdit";
+import { SmallButton } from "@/appBase/components";
 
 export default function Admin() {
   const router = useRouter();
@@ -22,10 +23,16 @@ export default function Admin() {
 
   useEffect(loadData, [id]);
 
+  const getAddSection = (sort: number) => {
+    return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
+  }
+
   const getSections = () => {
     const result: JSX.Element[] = []
+    result.push(getAddSection(0));
     page?.sections.forEach(section => {
       result.push(<Section section={section} onEdit={handleSectionEdit} />)
+      result.push(getAddSection(section.sort + 1));
     });
     return result;
   }
