@@ -1,8 +1,8 @@
-import { ElementInterface, RowInterface } from "@/helpers";
+import { ElementInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { Element } from "../Element";
 
-interface Props { row: RowInterface }
+interface Props { row: ElementInterface }
 
 export const RowElement: React.FC<Props> = props => {
 
@@ -16,8 +16,8 @@ export const RowElement: React.FC<Props> = props => {
 
   const getColumns = () => {
     const result: JSX.Element[] = []
-    props.row.columns.forEach(c => {
-      result.push(<Grid item md={c.size} xs={12}>{getElements(c.elements)}</Grid>);
+    props.row.elements.forEach(c => {
+      result.push(<Grid item md={c.answers.size} xs={12}>{getElements(c.elements)}</Grid>);
     });
     return result;
   }

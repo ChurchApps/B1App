@@ -5,12 +5,7 @@ export interface ColumnInterface {
   elements: ElementInterface[];
 }
 
-export interface SectionChildInterface {
-  sort?: number;
-  elementType: string;
-}
-
-export interface ElementInterface extends SectionChildInterface {
+export interface ElementInterface {
   id?: string;
   churchId?: string;
   sectionId?: string;
@@ -18,10 +13,9 @@ export interface ElementInterface extends SectionChildInterface {
   size?: number;
   answersJSON?: string;
   answers?: any;
-}
-
-export interface RowInterface extends SectionChildInterface {
-  columns: ColumnInterface[];
+  sort?: number;
+  elementType: string;
+  elements?: ElementInterface[];
 }
 
 export interface SectionInterface {
@@ -34,8 +28,6 @@ export interface SectionInterface {
 
   elements?: ElementInterface[];
 }
-
-
 
 export interface PageInterface {
   id?: string;

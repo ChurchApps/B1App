@@ -22,9 +22,12 @@
       "elements": [
         {
           "elementType": "row",
-          "columns": [
+          "elements": [
             {
-              "size": 8,
+              "elementType": "column",
+              "answers": {
+                "size": 8
+              },
               "elements": [
                 {
                   "elementType": "text",
@@ -35,7 +38,10 @@
               ]
             },
             {
-              "size": 4,
+              "elementType": "column",
+              "answers": {
+                "size": 4
+              },
               "elements": [
                 {
                   "elementType": "text",
@@ -61,9 +67,12 @@
         },
         {
           "elementType": "row",
-          "columns": [
+          "elements": [
             {
-              "size": 6,
+              "elementType": "column",
+              "answers": {
+                "size": 6
+              },
               "elements": [
                 {
                   "elementType": "map",
@@ -74,7 +83,10 @@
               ]
             },
             {
-              "size": 6,
+              "elementType": "column",
+              "answers": {
+                "size": 6
+              },
               "elements": [
                 {
                   "elementType": "textWithPhoto",
@@ -122,9 +134,12 @@
       "elements": [
         {
           "elementType": "row",
-          "columns": [
+          "elements": [
             {
-              "size": 8,
+              "elementType": "column",
+              "answers": {
+                "size": 8
+              },
               "elements": [
                 {
                   "elementType": "text",
@@ -135,7 +150,10 @@
               ]
             },
             {
-              "size": 4,
+              "elementType": "column",
+              "answers": {
+                "size": 4
+              },
               "elements": [
                 {
                   "elementType": "text",
