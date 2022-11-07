@@ -54,7 +54,7 @@ export function ElementEdit(props: Props) {
       <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
         <ErrorMessages errors={errors} />
         <br />
-        <TextField fullWidth label="Background" name="background" value={element.elementType} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <TextField fullWidth label="Background" name="elementType" value={element.elementType} onChange={handleChange} onKeyDown={handleKeyDown} />
         <TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />
       </InputBox>
     </>

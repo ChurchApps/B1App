@@ -1,18 +1,18 @@
 import { SmallButton } from "@/appBase/components";
-import { ElementInterface, RowInterface, SectionChildInterface, SectionInterface } from "@/helpers";
+import { ElementInterface, SectionInterface } from "@/helpers";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
 
 interface Props {
-  element: SectionChildInterface
+  element: ElementInterface
   onEdit?: (section: SectionInterface, element: ElementInterface) => void
 }
 
 export const Element: React.FC<Props> = props => {
 
   const getAddElement = (sort: number) => {
-    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto" })} toolTip="Add Element" /></div>)
+    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>
@@ -25,7 +25,7 @@ export const Element: React.FC<Props> = props => {
       result = <TextWithPhoto element={props.element as ElementInterface} />
       break;
     case "row":
-      result = <RowElement row={props.element as RowInterface} />
+      result = <RowElement element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
     case "map":
       result = <h2>Google Map Goes Here</h2>
