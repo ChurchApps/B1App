@@ -1,10 +1,11 @@
 import { GetStaticProps } from "next";
+import Link from "next/link";
 
 export default function Home() {
   return (<>
     <p>Select a site:</p>
-    <a href="/crcc/">CRCC</a><br />
-    <a href="/ironwood/">Ironwood</a>
+    <Link href="/crcc/"><a>CRCC</a></Link>
+    <Link href="/ironwood/"><a>Ironwood</a></Link>
   </>);
 }
 
