@@ -13,11 +13,11 @@ export function RowElement(props: Props) {
   }
 
 
-  const getAddElement = (column: Element, sort: number) => {
+  const getAddElement = (column: ElementInterface, sort: number) => {
     return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
   }
 
-  const getElements = (column: Element, elements: ElementInterface[]) => {
+  const getElements = (column: ElementInterface, elements: ElementInterface[]) => {
     const result: JSX.Element[] = []
     if (props.onEdit) result.push(getAddElement(column, 0))
     elements?.forEach(c => {
