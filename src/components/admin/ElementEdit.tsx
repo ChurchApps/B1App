@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ElementInterface, UserHelper } from "@/helpers";
-import { SelectChangeEvent, TextField } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
   element: ElementInterface;
@@ -11,6 +11,7 @@ type Props = {
 export function ElementEdit(props: Props) {
   const [element, setElement] = useState<ElementInterface>(null);
   const [errors, setErrors] = useState([]);
+  var parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
 
   const handleCancel = () => props.updatedCallback(element);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -21,6 +22,10 @@ export function ElementEdit(props: Props) {
     switch (e.target.name) {
       case "elementType": p.elementType = val; break;
       case "answersJSON": p.answersJSON = val; break;
+      default:
+        parsedData[e.target.name] = val;
+        p.answersJSON = JSON.stringify(parsedData);
+        break;
     }
     setElement(p);
   };
@@ -46,6 +51,37 @@ export function ElementEdit(props: Props) {
     }
   };
 
+  const getJsonFields = () => (<TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
+  const getColumnFields = () => (<TextField fullWidth label="Column width (12 per row; 6 columns = 1/2, 4 columns = 1/3)" name="size" type="number" value={parsedData.size || ""} onChange={handleChange} onKeyDown={handleKeyDown} />);
+  const getTextFields = () => (<TextField fullWidth label="Text" name="text" value={parsedData.text || ""} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
+  const getTextWithPhotoFields = () => (<>
+    <TextField fullWidth label="Photo" name="photo" value={parsedData.photo || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <FormControl fullWidth>
+      <InputLabel>Photo Position</InputLabel>
+      <Select fullWidth label="Photo Position" name="photoPosition" value={parsedData.photoPosition || ""} onChange={handleChange}>
+        <MenuItem value="left">Left</MenuItem>
+        <MenuItem value="right">Right</MenuItem>
+        <MenuItem value="top">Top</MenuItem>
+        <MenuItem value="bottom">Bottom</MenuItem>
+      </Select>
+    </FormControl>
+    <TextField fullWidth label="Text" name="text" value={parsedData.text || ""} onChange={handleChange} onKeyDown={handleKeyDown} multiline />
+  </>);
+
+  const getFields = () => {
+    let result = getJsonFields();
+    switch (element?.elementType) {
+      case "row": result = <></>; break;
+      case "column": result = getColumnFields(); break;
+      case "text": result = getTextFields(); break;
+      case "textWithPhoto": result = getTextWithPhotoFields(); break;
+
+    }
+    return result;
+  }
+
+
   useEffect(() => { setElement(props.element); }, [props.element]);
 
   if (!element) return <></>
@@ -54,8 +90,16 @@ export function ElementEdit(props: Props) {
       <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
         <ErrorMessages errors={errors} />
         <br />
-        <TextField fullWidth label="Background" name="elementType" value={element.elementType} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />
+        <FormControl fullWidth>
+          <InputLabel>Element Type</InputLabel>
+          <Select fullWidth label="Element Type" value={element.elementType} onChange={handleChange}>
+            <MenuItem value="text">Text</MenuItem>
+            <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
+            <MenuItem value="row">Row</MenuItem>
+            <MenuItem value="column">Column</MenuItem>
+          </Select>
+        </FormControl>
+        {getFields()}
       </InputBox>
     </>
   );
