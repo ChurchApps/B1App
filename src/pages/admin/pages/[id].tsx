@@ -7,14 +7,19 @@ import { DisplayBox } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { ElementEdit } from "@/components/admin/ElementEdit";
+import { ElementAdd } from "@/components/admin/ElementAdd";
 import { SmallButton } from "@/appBase/components";
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import React from "react";
+import { DroppableArea } from "@/components/admin/DroppableArea";
 
 export default function Admin() {
+
   const router = useRouter();
   const [page, setPage] = useState<PageInterface>(null);
   const [editSection, setEditSection] = useState<SectionInterface>(null);
   const [editElement, setEditElement] = useState<ElementInterface>(null);
-
   const id = router.query.id;
 
   const loadData = () => {
@@ -43,21 +48,31 @@ export default function Admin() {
   }
 
 
+
   return (
     <Wrapper>
       <h1>Edit Page</h1>
 
-      <Grid container spacing={3}>
-        <Grid item md={8} xs={12}>
-          <DisplayBox headerText="Page Preview" headerIcon="article"  >
-            {getSections()}
-          </DisplayBox>
+      <DndProvider backend={HTML5Backend}>
+
+
+
+        <Grid container spacing={3}>
+          <Grid item md={8} xs={12}>
+            <DroppableArea />
+
+            <DisplayBox headerText="Page Preview" headerIcon="article"  >
+              {getSections()}
+
+            </DisplayBox>
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <ElementAdd />
+            {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
+            {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} />}
+          </Grid>
         </Grid>
-        <Grid item md={4} xs={12}>
-          {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
-          {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} />}
-        </Grid>
-      </Grid>
+      </DndProvider>
     </Wrapper>
   );
 }
