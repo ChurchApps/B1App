@@ -7,6 +7,7 @@ import { MarkdownEditor } from "@/appBase/components";
 type Props = {
   element: ElementInterface;
   updatedCallback: (element: ElementInterface) => void;
+  onRealtimeChange: (element: ElementInterface) => void;
 };
 
 export function ElementEdit(props: Props) {
@@ -34,6 +35,7 @@ export function ElementEdit(props: Props) {
   const handleMarkdownChange = (field: string, newValue: string) => {
     let p = { ...element };
     parsedData[field] = newValue;
+    p.answers = parsedData;
     p.answersJSON = JSON.stringify(parsedData);
     setElement(p);
   };
@@ -91,6 +93,9 @@ export function ElementEdit(props: Props) {
 
 
   useEffect(() => { setElement(props.element); }, [props.element]);
+  useEffect(() => {
+    if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
+  }, [element]);
 
   if (!element) return <></>
   else return (

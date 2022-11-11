@@ -12,7 +12,6 @@ export const Section: React.FC<Props> = props => {
   const getElements = () => {
     const result: JSX.Element[] = []
     props.section.elements.forEach(e => {
-      console.log("Element: " + JSON.stringify(e))
       result.push(<Element element={e} onEdit={props.onEdit} />)
     });
     return result;

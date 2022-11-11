@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
 import { Grid } from "@mui/material";
@@ -48,7 +48,7 @@ export default function Admin() {
     else if (e) setEditElement(e);
   }
 
-  const rightBarStyle = (scrollTop < 180) ? {} : {
+  const rightBarStyle: CSSProperties = (scrollTop < 180) ? {} : {
     width: document.getElementById("editorBar")?.clientWidth,
     position: "fixed",
     marginTop: -180
@@ -61,6 +61,21 @@ export default function Admin() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [scrollTop]);
+
+  const handleRealtimeChange = (element: ElementInterface) => {
+    const p = { ...page };
+    p.sections.forEach(s => {
+      realtimeUpdateElement(element, s.elements);
+    })
+    setPage(p);
+  }
+
+  const realtimeUpdateElement = (element: ElementInterface, elements: ElementInterface[]) => {
+    for (let i = 0; i < elements.length; i++) {
+      if (elements[i].id === element.id) elements[i] = element;
+      if (element.elements?.length > 0) realtimeUpdateElement(element, element.elements);
+    }
+  }
 
   return (
     <Wrapper>
@@ -75,9 +90,9 @@ export default function Admin() {
           <Grid item md={4} xs={12}>
             <div id="editorBar">
               <div style={rightBarStyle}>
-                <ElementAdd />
+                {!editSection && !editElement && <ElementAdd />}
                 {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
-                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} />}
+                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} />}
               </div>
             </div>
           </Grid>

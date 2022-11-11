@@ -13,10 +13,6 @@ type Props = {
 
 
 export default function Home(props: Props) {
-
-  console.log(props);
-
-
   const getSections = () => {
     const result: JSX.Element[] = []
     props.pageData.sections.forEach(section => {
