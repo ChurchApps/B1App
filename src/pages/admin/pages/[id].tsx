@@ -19,6 +19,7 @@ export default function Admin() {
   const [page, setPage] = useState<PageInterface>(null);
   const [editSection, setEditSection] = useState<SectionInterface>(null);
   const [editElement, setEditElement] = useState<ElementInterface>(null);
+  const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id;
 
   const loadData = () => {
@@ -47,6 +48,20 @@ export default function Admin() {
     else if (e) setEditElement(e);
   }
 
+  const rightBarStyle = (scrollTop < 180) ? {} : {
+    width: document.getElementById("editorBar")?.clientWidth,
+    position: "fixed",
+    marginTop: -180
+  };
+
+  useEffect(() => {
+    const onScroll = e => {
+      setScrollTop(e.target.documentElement.scrollTop);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [scrollTop]);
+
   return (
     <Wrapper>
       <h1>Edit Page</h1>
@@ -58,9 +73,13 @@ export default function Admin() {
             </DisplayBox>
           </Grid>
           <Grid item md={4} xs={12}>
-            <ElementAdd />
-            {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
-            {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} />}
+            <div id="editorBar">
+              <div style={rightBarStyle}>
+                <ElementAdd />
+                {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
+                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} />}
+              </div>
+            </div>
           </Grid>
         </Grid>
       </DndProvider>
