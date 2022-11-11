@@ -3,16 +3,16 @@ import React from "react";
 import { useDrag } from 'react-dnd'
 
 type Props = {
-  index: number, key: string, icon: string, label: string
+  dndType: string, elementType: string, icon: string, label: string
 };
 
 export function AddableElement(props: Props) {
   const dragRef = React.useRef(null)
-  const DND_ITEM_TYPE = 'row';
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
-      type: DND_ITEM_TYPE,
+      type: props.dndType,
+      item: { elementType: props.elementType },
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
       }),

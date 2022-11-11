@@ -1,5 +1,6 @@
 import { SmallButton } from "@/appBase/components";
 import { ElementInterface, SectionInterface } from "@/helpers";
+import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
@@ -12,7 +13,8 @@ interface Props {
 export const Element: React.FC<Props> = props => {
 
   const getAddElement = (sort: number) => {
-    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
+    return (<DroppableArea accept="element" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort })} />);
+    //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>

@@ -1,6 +1,7 @@
 import { SmallButton } from "@/appBase/components";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
+import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 
 interface Props { element: ElementInterface, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
@@ -9,12 +10,14 @@ export function RowElement(props: Props) {
 
 
   const getAddColumn = (sort: number) => {
-    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "column", sort, parentId: props.element.id })} toolTip="Add Column" /></div>)
+    return (<DroppableArea accept="column" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id })} />);
+    //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "column", sort, parentId: props.element.id })} toolTip="Add Column" /></div>)
   }
 
 
   const getAddElement = (column: ElementInterface, sort: number) => {
-    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
+    return (<DroppableArea accept="element" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id })} />);
+    //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
   }
 
   const getElements = (column: ElementInterface, elements: ElementInterface[]) => {

@@ -1,7 +1,8 @@
 import { SmallButton } from "@/appBase/components";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { Container } from "@mui/material";
+import { Container, Icon } from "@mui/material";
 import { CSSProperties } from "react";
+import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 
 interface Props { section: SectionInterface, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
@@ -44,7 +45,8 @@ export const Section: React.FC<Props> = props => {
   }
 
   const getAddElement = (sort: number) => {
-    return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
+    return (<DroppableArea accept="element" onDrop={(data) => props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort })} />);
+    //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 
   return (

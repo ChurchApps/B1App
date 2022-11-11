@@ -8,7 +8,6 @@ import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { ElementEdit } from "@/components/admin/ElementEdit";
 import { ElementAdd } from "@/components/admin/ElementAdd";
-import { SmallButton } from "@/appBase/components";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
@@ -29,7 +28,8 @@ export default function Admin() {
   useEffect(loadData, [id]);
 
   const getAddSection = (sort: number) => {
-    return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
+    return (<DroppableArea accept="section" onDrop={(data) => setEditSection({ sort, background: "#FFF", textColor: "light" })} />);
+    //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
 
   const getSections = () => {
@@ -47,23 +47,14 @@ export default function Admin() {
     else if (e) setEditElement(e);
   }
 
-
-
   return (
     <Wrapper>
       <h1>Edit Page</h1>
-
       <DndProvider backend={HTML5Backend}>
-
-
-
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
-            <DroppableArea />
-
             <DisplayBox headerText="Page Preview" headerIcon="article"  >
               {getSections()}
-
             </DisplayBox>
           </Grid>
           <Grid item md={4} xs={12}>
