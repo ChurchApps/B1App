@@ -1,4 +1,4 @@
-import { DisplayBox } from "@/appBase/components";
+import { DisplayBox } from "@/appBase/components/DisplayBox";
 import { Grid } from "@mui/material";
 import React from "react";
 import { AddableElement } from "./AddableElement";

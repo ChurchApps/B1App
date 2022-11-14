@@ -34,12 +34,10 @@ export function Header(props: Props) {
       <AppBar id="navbar" position="fixed" className={(transparent) ? "transparent" : ""}>
         <Container>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Link href="/">
-              <a className="logo"><img src={getLogo()} alt={props.church.name} /></a>
-            </Link>
+            <Link href="/"><img src={getLogo()} alt={props.church.name} /></Link>
             <Box sx={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
-              <Link href="/about"><a>About Us</a></Link> &nbsp; &middot; &nbsp;
-              <Link href="/newhere"><a>New Here?</a></Link>
+              <Link href="/about">About Us</Link> &nbsp; &middot; &nbsp;
+              <Link href="/newhere">New Here?</Link>
 
             </Box>
           </Stack>
@@ -48,25 +46,4 @@ export function Header(props: Props) {
     </div >
   );
 
-
-  /*
-  return (
-    <div>
-      <AppBar id="navbar" position="fixed">
-        <Container>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Link href="/">
-              <a className="logo"><img src="https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334" alt="Cedar Ridge Christian Church" /></a>
-            </Link>
-            <Box sx={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
-              <Link href="/about"><a>About Us</a></Link> &nbsp; &middot; &nbsp;
-              <Link href="/newhere"><a>New Here?</a></Link>
-
-            </Box>
-          </Stack>
-        </Container>
-      </AppBar>
-      <div id="navSpacer" />
-    </div>
-  );*/
 }

@@ -27,10 +27,10 @@ export default function Admin() {
       const page = p;
       result.push(<TableRow>
         <TableCell>
-          <Link href={"/admin/pages/" + p.id}><a>{p.url}</a></Link>
+          <Link href={"/admin/pages/" + p.id}>{p.url}</Link>
         </TableCell>
         <TableCell>
-          <Link href={"/admin/pages/" + p.id}><a>{p.title}</a></Link>
+          <Link href={"/admin/pages/" + p.id}>{p.title}</Link>
         </TableCell>
         <TableCell align="right"><SmallButton icon="edit" onClick={() => { setEditPage(page); }} /></TableCell>
       </TableRow>);

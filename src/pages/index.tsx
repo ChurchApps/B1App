@@ -4,8 +4,8 @@ import Link from "next/link";
 export default function Home() {
   return (<>
     <p>Select a site:</p>
-    <Link href="/crcc/"><a>CRCC</a></Link>
-    <Link href="/ironwood/"><a>Ironwood</a></Link>
+    <Link href="/crcc/">CRCC</Link>
+    <Link href="/ironwood/">Ironwood</Link>
   </>);
 }
 
