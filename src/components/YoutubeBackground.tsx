@@ -106,7 +106,9 @@ export function YoutubeBackground({
             rest?.onEnd && rest.onEnd(e);
           }}
           opts={videoOptions}
-          className={styles.videoIframe}
+          className={styles.videoInnerContainer}
+          iframeClassName={styles.videoIframe}
+
         />
       </div>
     </div>
