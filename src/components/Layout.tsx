@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import { ChurchInterface } from "@/helpers";
+import { ChurchInterface, LinkInterface } from "@/helpers";
 
 type Props = {
   children: React.ReactNode;
@@ -14,6 +14,7 @@ type Props = {
   image?: string;
   churchSettings?: any;
   church?: ChurchInterface;
+  navLinks: LinkInterface[];
 };
 
 export function Layout(props: Props) {
@@ -49,7 +50,7 @@ export function Layout(props: Props) {
           {getDescription()}
           {getImage()}
         </Head>
-        {!props.withoutNavbar && <Header church={props.church} churchSettings={props.churchSettings} />}
+        {!props.withoutNavbar && <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} />}
         <main>{props.children}</main>
         {!props.withoutFooter && <Footer church={props.church} churchSettings={props.churchSettings} />}
       </div>

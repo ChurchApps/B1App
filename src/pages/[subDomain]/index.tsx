@@ -3,12 +3,13 @@ import { Layout } from "@/components";
 import { Section } from "@/components/Section";
 import { Container } from "@mui/material";
 import pageData from "../../samplePages/newhere.json";
-import { ApiHelper, ChurchInterface, SettingInterface } from "@/helpers";
+import { ApiHelper, ChurchInterface, LinkInterface } from "@/helpers";
 
 type Props = {
   pageData: any;
   church: ChurchInterface,
-  churchSettings: any
+  churchSettings: any,
+  navLinks: LinkInterface[]
 };
 
 
@@ -22,7 +23,7 @@ export default function Home(props: Props) {
   }
 
   return (
-    <Layout church={props.church} churchSettings={props.churchSettings}>
+    <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div className="pageHeader" style={{ backgroundImage: "url('" + props.pageData.headerImage + "')" }}>
         <Container style={{ position: "relative", paddingTop: 40, paddingBottom: 40 }}>
           <h1 style={{ textAlign: "center" }}>{props.pageData.title}</h1>
@@ -48,13 +49,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const subDomain = params.subDomain;
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + subDomain, "AccessApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "AccessApi");
-
+  const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
 
   //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/about.json").then(resp => resp.json());
   //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/newhere.json").then(resp => resp.json());
 
   return {
-    props: { pageData, church, churchSettings },
+    props: { pageData, church, churchSettings, navLinks },
     revalidate: 30,
   };
 };

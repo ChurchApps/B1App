@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { ChurchInterface } from "@/helpers";
+import { ChurchInterface, LinkInterface } from "@/helpers";
 import { Container, AppBar, Stack, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 
 type Props = {
   church: ChurchInterface;
   churchSettings: any;
+  navLinks: LinkInterface[];
 };
 
 export function Header(props: Props) {
@@ -28,6 +29,14 @@ export function Header(props: Props) {
     else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
   }
 
+  const getLinks = () => {
+    const result: JSX.Element[] = [];
+    props.navLinks?.forEach(l => {
+      result.push(<Link href={l.url} style={{ paddingLeft: 15, paddingRight: 15 }}>{l.text}</Link>);
+    });
+    return result;
+  }
+
 
   return (
     <div>
@@ -36,9 +45,7 @@ export function Header(props: Props) {
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} /></Link>
             <Box sx={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
-              <Link href="/about">About Us</Link> &nbsp; &middot; &nbsp;
-              <Link href="/newhere">New Here?</Link>
-
+              {getLinks()}
             </Box>
           </Stack>
         </Container>
