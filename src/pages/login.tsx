@@ -24,7 +24,7 @@ export default function Login() {
   }
 
   return (
-    <Layout withoutNavbar withoutFooter>
+    <Layout withoutNavbar withoutFooter navLinks={[]}>
       <LoginPage auth={auth} context={null} jwt={jwt} appName="YourSite.church" loginSuccessOverride={loginSuccess} />
     </Layout>
   );
