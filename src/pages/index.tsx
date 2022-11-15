@@ -5,7 +5,7 @@ export default function Home() {
   return (<>
     <p>Select a site:</p>
     <Link href="http://crcc.localhost:3000/test">CRCC</Link><br />
-    <Link href="http://crcc.localhost:3000/test">Ironwood</Link>
+    <Link href="http://ironwood.localhost:3000/test">Ironwood</Link>
   </>);
 }
 

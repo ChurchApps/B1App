@@ -7,6 +7,7 @@ import { DisplayBox } from "@/components";
 import { SmallButton } from "@/appBase/components";
 import { PageEdit } from "@/components/admin/PageEdit";
 import Link from "next/link";
+import { Links } from "@/components/admin/Links";
 
 export default function Admin() {
   const router = useRouter();
@@ -64,6 +65,7 @@ export default function Admin() {
         </Grid>
         <Grid item md={4} xs={12}>
           {(editPage) && <PageEdit page={editPage} updatedCallback={() => { setEditPage(null); loadData(); }} />}
+          <Links />
         </Grid>
       </Grid>
     </Wrapper>
