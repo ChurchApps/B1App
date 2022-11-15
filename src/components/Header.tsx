@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 type Props = {
   church: ChurchInterface;
   churchSettings: any;
-  navLinks: LinkInterface[];
+  navLinks?: LinkInterface[];
 };
 
 export function Header(props: Props) {

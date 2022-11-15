@@ -14,7 +14,7 @@ type Props = {
   image?: string;
   churchSettings?: any;
   church?: ChurchInterface;
-  navLinks: LinkInterface[];
+  navLinks?: LinkInterface[];
 };
 
 export function Layout(props: Props) {
