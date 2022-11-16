@@ -75,11 +75,19 @@ body {
   text-align: center;
 }
 
-.sectionFirst {
+#page .section {
+  min-height: 100px;
+}
+
+#page .sectionFirst {
   padding-top: 60px;
 }
 
-.sectionDark {
+#page .videoDark {
+  color: #FFFFFF;
+}
+
+#page .sectionDark {
   background-attachment: fixed;
   background-position-x: 50%;
   background-position-y: 50%;
@@ -88,9 +96,7 @@ body {
   position: relative;
 }
 
-
-
-.sectionDark:before {
+#page .sectionDark:before {
   content: '';
   position: absolute;
   left: 0;

@@ -20,7 +20,7 @@ export default function Admin() {
   const [editSection, setEditSection] = useState<SectionInterface>(null);
   const [editElement, setEditElement] = useState<ElementInterface>(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const id = router.query.id;
+  const id = router.query.id.toString();
 
   const loadData = () => {
     ApiHelper.get("/pages/" + UserHelper.currentChurch.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
@@ -29,7 +29,7 @@ export default function Admin() {
   useEffect(loadData, [id]);
 
   const getAddSection = (sort: number) => {
-    return (<DroppableArea accept="section" onDrop={(data) => setEditSection({ sort, background: "#FFF", textColor: "light" })} />);
+    return (<DroppableArea accept="section" onDrop={(data) => setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id })} />);
     //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
 
@@ -84,7 +84,9 @@ export default function Admin() {
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
             <DisplayBox headerText="Page Preview" headerIcon="article"  >
-              {getSections()}
+              <div id="page">
+                {getSections()}
+              </div>
             </DisplayBox>
           </Grid>
           <Grid item md={4} xs={12}>

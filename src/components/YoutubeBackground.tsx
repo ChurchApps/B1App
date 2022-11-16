@@ -8,6 +8,7 @@ interface Props extends YouTubeProps {
   playerOptions?: {};
   aspectRatio?: any;
   noCookie?: boolean;
+  contentClassName?: string;
 }
 
 export function YoutubeBackground({
@@ -18,6 +19,7 @@ export function YoutubeBackground({
   style,
   className,
   aspectRatio = "16:9",
+  contentClassName,
   ...rest
 }: Props) {
   const [videoHeight, setVideoHeight] = useState(10);
@@ -84,7 +86,7 @@ export function YoutubeBackground({
 
   return (
     <div style={style} ref={containerRef} className={[styles.container, className].join(" ")}>
-      <div>{children}</div>
+      <div style={{ zIndex: 2, position: "relative" }} className={contentClassName}>{children}</div>
       <div
         className={styles.videoContainer}
         style={{
