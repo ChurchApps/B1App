@@ -3,7 +3,7 @@
   "sections": [
     {
       "background": "/tempLibrary/headers/worship.jpg",
-      "text": "light",
+      "textColor": "light",
       "elements": [
         {
           "elementType": "text",
@@ -15,7 +15,7 @@
     },
     {
       "background": "#FFFFFF",
-      "text": "dark",
+      "textColor": "dark",
       "elements": [
         {
           "elementType": "textWithPhoto",
@@ -29,7 +29,7 @@
     },
     {
       "background": "/tempLibrary/backgrounds/worship.jpg",
-      "text": "light",
+      "textColor": "light",
       "elements": [
         {
           "elementType": "row",
@@ -68,7 +68,7 @@
     },
     {
       "background": "#FFFFFF",
-      "text": "dark",
+      "textColor": "dark",
       "elements": [
         {
           "elementType": "text",
@@ -115,7 +115,7 @@
     },
     {
       "background": "/tempLibrary/backgrounds/kids.jpg",
-      "text": "light",
+      "textColor": "light",
       "elements": [
         {
           "elementType": "text",
@@ -127,7 +127,7 @@
     },
     {
       "background": "#FFFFFF",
-      "text": "dark",
+      "textColor": "dark",
       "elements": [
         {
           "elementType": "textWithPhoto",
@@ -141,7 +141,7 @@
     },
     {
       "background": "/tempLibrary/backgrounds/crowd.jpg",
-      "text": "light",
+      "textColor": "light",
       "elements": [
         {
           "elementType": "row",

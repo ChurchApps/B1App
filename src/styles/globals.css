@@ -88,15 +88,18 @@ body {
 }
 
 #page .sectionDark {
+  color: #FFFFFF;
+}
+
+#page .sectionBG {
   background-attachment: fixed;
   background-position-x: 50%;
   background-position-y: 50%;
   background-size: cover;
-  color: #FFFFFF;
   position: relative;
 }
 
-#page .sectionDark:before {
+#page .sectionBG:before {
   content: '';
   position: absolute;
   left: 0;

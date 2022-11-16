@@ -3,7 +3,7 @@
   "sections": [
     {
       "background": "/tempLibrary/headers/worship.jpg",
-      "text": "light",
+      "textColor": "light",
       "elements": [
         {
           "elementType": "text",
@@ -15,7 +15,7 @@
     },
     {
       "background": "#FFFFFF",
-      "text": "dark",
+      "textColor": "dark",
       "elements": [
         {
           "elementType": "textWithPhoto",
@@ -30,7 +30,7 @@
     },
     {
       "background": "#EEEEEE",
-      "text": "dark",
+      "textColor": "dark",
       "elements": [
         {
           "elementType": "textWithPhoto",

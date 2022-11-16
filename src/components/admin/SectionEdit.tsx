@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, SectionInterface, UserHelper } from "@/helpers";
-import { SelectChangeEvent, TextField } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
   section: SectionInterface;
@@ -55,7 +55,13 @@ export function SectionEdit(props: Props) {
         <ErrorMessages errors={errors} />
         <br />
         <TextField fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <TextField fullWidth label="Text Color" name="textColor" value={section.textColor} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <FormControl fullWidth>
+          <InputLabel>Text Color</InputLabel>
+          <Select fullWidth label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
+            <MenuItem value="light">Light</MenuItem>
+            <MenuItem value="dark">Dark</MenuItem>
+          </Select>
+        </FormControl>
       </InputBox>
     </>
   );

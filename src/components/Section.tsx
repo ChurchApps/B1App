@@ -36,13 +36,14 @@ export const Section: React.FC<Props> = props => {
 
   const getVideoClassName = () => {
     let result = "";
-    if (props.section.textColor === "light") result += " videoDark"
+    if (props.section.textColor === "light") result += " sectionDark"
     if (props.first) result += " sectionFirst"
     return result;
   }
 
   const getClassName = () => {
     let result = "section";
+    if (props.section.background.indexOf("/") > -1) result += " sectionBG"
     if (props.section.textColor === "light") result += " sectionDark"
     if (props.first) result += " sectionFirst"
     return result;

@@ -77,6 +77,7 @@ export default function Admin() {
     }
   }
 
+
   return (
     <Wrapper>
       <h1>Edit Page</h1>
@@ -84,7 +85,7 @@ export default function Admin() {
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
             <DisplayBox headerText="Page Preview" headerIcon="article"  >
-              <div id="page">
+              <div id="page" style={{ height: 500, overflowY: "scroll" }}>
                 {getSections()}
               </div>
             </DisplayBox>
