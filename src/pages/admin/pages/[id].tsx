@@ -13,8 +13,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
 
-export default function Admin() {
 
+export default function Admin() {
+  const { isAuthenticated } = ApiHelper
   const router = useRouter();
   const [page, setPage] = useState<PageInterface>(null);
   const [editSection, setEditSection] = useState<SectionInterface>(null);
@@ -22,8 +23,12 @@ export default function Admin() {
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id.toString();
 
+  useEffect(() => {
+    if (!isAuthenticated) { router.push("/login"); }
+  }, []);
+
   const loadData = () => {
-    ApiHelper.get("/pages/" + UserHelper.currentChurch.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
+    if (isAuthenticated) ApiHelper.get("/pages/" + UserHelper.currentChurch.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
   }
 
   useEffect(loadData, [id]);

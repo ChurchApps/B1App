@@ -8,7 +8,8 @@ export default function Home() {
       <p>Select a site:</p>
       <Link href="/crcc">CRCC</Link><br />
       <Link href="/ironwood">Ironwood</Link><br />
-      <Link href="/livecs/home">LiveCS Home</Link><br />
+      <Link href="/livecs/home">LiveCS Home</Link><br /><br />
+      <Link href="/admin">Admin</Link><br /><br />
     </Container>
   );
 }

@@ -43,7 +43,7 @@ export function Header(props: Props) {
       <AppBar id="navbar" position="fixed" className={(transparent) ? "transparent" : ""}>
         <Container>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Link href="/"><img src={getLogo()} alt={props.church.name} /></Link>
+            <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
             <Box sx={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
               {getLinks()}
             </Box>

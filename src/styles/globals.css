@@ -46,27 +46,9 @@ body {
   font-size: 35px;
 }
 
-.pageHeader {
-  background-position-x: 50%;
-  background-position-y: 50%;
-  background-size: cover;
-  color: #FFFFFF;
-  position: relative;
-}
-
-
-.pageHeader:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: .55;
-  box-sizing: inherit;
+#headerLogo {
+  max-width: 400px;
+  max-height: 65px;
 }
 
 #page H1 {
