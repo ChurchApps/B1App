@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { Layout } from "@/components";
 import { Section } from "@/components/Section";
 import { Container } from "@mui/material";
-import pageData from "../../samplePages/newhere.json";
+import pageData from "../../samplePages/livecs.json";
 import { ApiHelper, ChurchInterface, LinkInterface } from "@/helpers";
 
 type Props = {
@@ -12,24 +12,22 @@ type Props = {
   navLinks: LinkInterface[]
 };
 
-
 export default function Home(props: Props) {
   const getSections = () => {
     const result: JSX.Element[] = []
-    props.pageData.sections.forEach(section => {
-      result.push(<Section section={section} />)
-    });
+    let first = true;
+    for (let section of props.pageData.sections) {
+      result.push(<Section section={section} first={first} />)
+      first = false;
+    }
     return result;
   }
 
   return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
-      <div className="pageHeader" style={{ backgroundImage: "url('" + props.pageData.headerImage + "')" }}>
-        <Container style={{ position: "relative", paddingTop: 40, paddingBottom: 40 }}>
-          <h1 style={{ textAlign: "center" }}>{props.pageData.title}</h1>
-        </Container>
+      <div id="page">
+        {getSections()}
       </div>
-      {getSections()}
     </Layout>
   );
 }

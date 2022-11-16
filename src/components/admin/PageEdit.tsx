@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, PageInterface, UserHelper } from "@/helpers";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
-import { ImageEditor } from "@/appBase/components/ImageEditor";
-import UserContext from "@/helpers/UserContext";
+import { SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
   page: PageInterface;
@@ -13,7 +11,6 @@ type Props = {
 export function PageEdit(props: Props) {
   const [page, setPage] = useState<PageInterface>(null);
   const [errors, setErrors] = useState([]);
-  const [showImageEditor, setShowImageEditor] = useState<boolean>(false);
 
   const handleCancel = () => props.updatedCallback(page);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -26,13 +23,6 @@ export function PageEdit(props: Props) {
       case "url": p.url = val; break;
     }
     setPage(p);
-  };
-
-  const handleImageUpdated = (dataUrl: string) => {
-    const p = { ...page };
-    p.headerImage = dataUrl;
-    setPage(p);
-    setShowImageEditor(false);
   };
 
   const validate = () => {
@@ -58,24 +48,13 @@ export function PageEdit(props: Props) {
     }
   };
 
-  const handleImageClick = (e: React.MouseEvent) => { e.preventDefault(); setShowImageEditor(true); };
-
   useEffect(() => { setPage(props.page); }, [props.page]);
-
-  const getImageEditor = () => {
-    if (showImageEditor) return (<ImageEditor onUpdate={handleImageUpdated} photoUrl={page.headerImage} onCancel={() => setShowImageEditor(false)} aspectRatio={4 / 1} />);
-  };
 
   if (!page) return <></>
   else return (
     <>
-      {getImageEditor()}
       <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
         <ErrorMessages errors={errors} />
-        <a href="about:blank" className="d-block" onClick={handleImageClick}>
-          <img src={page.headerImage || "/images/blank.png"} className="profilePic d-block mx-auto" id="imgPreview" alt="page" />
-        </a>
-        <br />
         <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
         <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} onKeyDown={handleKeyDown} />
         <div>

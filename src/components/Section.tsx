@@ -5,7 +5,11 @@ import { CSSProperties } from "react";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 
-interface Props { section: SectionInterface, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
+interface Props {
+  first?: boolean,
+  section: SectionInterface,
+  onEdit?: (section: SectionInterface, element: ElementInterface) => void
+}
 
 export const Section: React.FC<Props> = props => {
 
@@ -32,6 +36,8 @@ export const Section: React.FC<Props> = props => {
   const getClassName = () => {
     let result = "section";
     if (props.section.background.indexOf("/") > -1) result += " sectionDark"
+    console.log(props.first);
+    if (props.first) result += " sectionFirst"
     return result;
   }
 

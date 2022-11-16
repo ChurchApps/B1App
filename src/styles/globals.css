@@ -34,23 +34,16 @@ img {
   width: 100%;
 }
 
-h1 {
-  font-size: 35px;
-}
-
-h2 span {
-  color: #24b8ff;
-}
-
 body {
   background-color: #f3f3f6;
   margin: 0px;
 }
 
-h1 {
+#page h2 {
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
   margin-bottom: 25px;
+  font-size: 35px;
 }
 
 .pageHeader {
@@ -76,11 +69,15 @@ h1 {
   box-sizing: inherit;
 }
 
-.pageHeader H1 {
+#page H1 {
   font-size: 80px;
   border-bottom: none;
+  text-align: center;
 }
 
+.sectionFirst {
+  padding-top: 60px;
+}
 
 .sectionDark {
   background-attachment: fixed;
@@ -469,176 +466,6 @@ label .description {
 .no-default-style {
   border: none;
   background: none;
-}
-
-.homeSection {
-  padding-top: 50px;
-  padding-bottom: 70px;
-}
-
-.homeSection .title {
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  color: #03a9f4;
-  font-weight: bold;
-}
-
-.homeSection .title span {
-  color: #03a9f4;
-}
-
-.homeSection.alt {
-  color: #fff;
-}
-
-.homeSection.alt .title {
-  color: #fff;
-}
-
-.homeSection h2 {
-  margin-bottom: 30px;
-  font-size: 36px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.homeSection ul {
-  padding-left: 0px;
-}
-
-.homeSection li {
-  list-style: none;
-  background: url("/images/home/checkbox.png") 0px 3px no-repeat;
-  padding: 0px 0px 15px 37px;
-}
-
-.pageSection {
-  padding-top: 70px;
-  padding-bottom: 70px;
-}
-
-.pageSection .title {
-  font-size: 14px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  color: #03a9f4;
-  font-weight: bold;
-}
-
-.pageSection .title span {
-  color: #333;
-}
-
-.pageSection.alt {
-  color: #fff;
-}
-
-.pageSection.alt .title {
-  color: #fff;
-}
-
-.pageSection h2 {
-  margin-bottom: 30px;
-  font-size: 36px;
-  font-weight: bold;
-}
-
-.pageSection ul {
-  padding-left: 20px;
-  margin-bottom: 0px;
-}
-
-#hero h1 {
-  font-weight: bold;
-}
-
-#hero h1 span {
-  color: #03a9f4;
-  font-style: italic;
-  font-weight: normal;
-}
-
-#hero {
-  padding-top: 10px;
-  padding-bottom: 50px;
-}
-
-#statsSection {
-  background-image: url("/images/about-bg.jpg");
-  background-position: center center;
-  background-size: cover;
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
-
-#statsSection .iconBox {
-  text-align: right;
-}
-
-#statsSection .iconBox svg {
-  width: auto;
-  height: 75px;
-  margin-top: 10px;
-  fill: #FFF;
-}
-
-#statsSection .iconBox span {
-  font-size: 80px;
-  margin-top: 10px;
-  fill: #FFF;
-}
-
-#statsSection .statBox {
-  align-content: left
-}
-
-#statsSection .statBox div {
-  font-size: 40px;
-  margin-left: 10px;
-}
-
-#statsSection .statBox span {
-  font-size: 22px;
-  display: block;
-  margin-top: -7px;
-  margin-left: 10px;
-}
-
-
-#aboutSection {
-  background-image: url("/images/about-bg.jpg");
-  background-position: center center;
-  background-size: cover;
-}
-
-#aboutSection p {
-  color: #b4c5ce;
-  line-height: 30px;
-}
-
-#aboutSection b {
-  color: #fff;
-}
-
-#aboutSection .btn {
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-
-#connectSection {
-  background-image: url('/images/connect-bg.png');
-  background-position: center center;
-  background-size: cover;
-}
-
-#connectSection img {
-  margin-top: 20px;
-}
-
-#connectSection li {
-  color: #DDD;
 }
 
 .lead {
