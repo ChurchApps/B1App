@@ -14,9 +14,7 @@ export function AddableElement(props: Props) {
     () => ({
       type: props.dndType,
       item: { elementType: props.elementType },
-      collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),
-      }),
+      collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
     }),
     [],
   )

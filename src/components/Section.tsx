@@ -2,6 +2,8 @@ import { SmallButton } from "@/appBase/components";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Container, Icon } from "@mui/material";
 import { CSSProperties } from "react";
+import { AddableElement } from "./admin/AddableElement";
+import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
@@ -53,9 +55,13 @@ export const Section: React.FC<Props> = props => {
 
   const getEdit = () => {
     if (props.onEdit) {
-      return (<span className="sectionEditButton">
-        <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
-      </span>)
+      return (
+        <div>
+          <DraggableIcon dndType="section" elementType="section" />
+          <span className="sectionEditButton">
+            <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
+          </span>
+        </div>);
     }
   }
 
