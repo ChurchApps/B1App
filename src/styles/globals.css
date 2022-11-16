@@ -1184,17 +1184,49 @@ a.dropdown-toggle::after {
   padding: 2px
 }
 
-.part table {
-  border-spacing: 0px;
-  width: 100%
+.sectionEditButton,
+.elementEditButton {
+  display: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background-color: "#FFF";
+  border-radius: 5px;
+  background-color: #FFF;
 }
 
-.part table td,
-.part table th {
-  border: 1px solid #DDD;
-  margin: 0px;
-  padding: 2px
+.columnWrapper:hover {
+  background-color: #FF9999;
 }
+
+.elementWrapper:hover {
+  background-color: #99FF99;
+}
+
+.elementWrapper:hover .elementEditButton {
+  display: block;
+}
+
+.sectionWrapper:hover {
+  background-color: #9999FF !important;
+}
+
+.sectionWrapper:hover .sectionEditButton {
+  display: block;
+}
+
+.sectionDark.sectionWrapper:hover {
+  background-color: #000099 !important;
+}
+
+.sectionDark .columnWrapper:hover {
+  background-color: #990000;
+}
+
+.sectionDark .elementWrapper:hover {
+  background-color: #009900;
+}
+
 
 @media (max-width: 600px) {
   .downloadAccordion {

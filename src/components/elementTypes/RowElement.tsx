@@ -29,10 +29,15 @@ export function RowElement(props: Props) {
     return result;
   }
 
+  const getClassName = () => {
+    if (props.onEdit) return "columnWrapper";
+    else return "";
+  }
+
   const getColumns = () => {
     const result: JSX.Element[] = []
     props.element.elements?.forEach(c => {
-      result.push(<Grid item md={c.answers.size} xs={12} style={{}}>{getElements(c, c.elements)}</Grid>);
+      result.push(<Grid item md={c.answers.size} xs={12} className={getClassName()}>{getElements(c, c.elements)}</Grid>);
     });
     return result;
   }

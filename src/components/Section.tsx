@@ -38,6 +38,7 @@ export const Section: React.FC<Props> = props => {
     let result = "";
     if (props.section.textColor === "light") result += " sectionDark"
     if (props.first) result += " sectionFirst"
+    if (props.onEdit) result += " sectionWrapper";
     return result;
   }
 
@@ -45,13 +46,14 @@ export const Section: React.FC<Props> = props => {
     let result = "section";
     if (props.section.background.indexOf("/") > -1) result += " sectionBG"
     if (props.section.textColor === "light") result += " sectionDark"
-    if (props.first) result += " sectionFirst"
+    if (props.first) result += " sectionFirst";
+    if (props.onEdit) result += " sectionWrapper";
     return result;
   }
 
   const getEdit = () => {
     if (props.onEdit) {
-      return (<span style={{ position: "absolute", top: 3, right: 3, backgroundColor: "#FFF", borderRadius: 5 }}>
+      return (<span className="sectionEditButton">
         <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
       </span>)
     }

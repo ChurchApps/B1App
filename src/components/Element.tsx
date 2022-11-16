@@ -35,11 +35,12 @@ export const Element: React.FC<Props> = props => {
   }
 
   if (props.onEdit) {
-    result = <>
-      <span style={{ position: "absolute", top: 3, right: 3, backgroundColor: "#FFF", borderRadius: 5 }}>
+    result = <><div className="elementWrapper">
+      <span className="elementEditButton">
         <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} />
       </span>
       {result}
+    </div>
       {props.onEdit && getAddElement(props.element.sort + 1)}
     </>
   }
