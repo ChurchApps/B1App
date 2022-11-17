@@ -1187,9 +1187,7 @@ a.dropdown-toggle::after {
 .sectionEditButton,
 .elementEditButton {
   display: none;
-  position: absolute;
-  top: 3px;
-  right: 3px;
+  float: right;
   background-color: "#FFF";
   border-radius: 5px;
   background-color: #FFF;
@@ -1212,7 +1210,7 @@ a.dropdown-toggle::after {
 }
 
 .sectionWrapper:hover .sectionEditButton {
-  display: block;
+  display: inline;
 }
 
 .sectionDark.sectionWrapper:hover {
@@ -1233,6 +1231,11 @@ a.dropdown-toggle::after {
 
 .sectionWrapper:hover .dragButton {
   display: block;
+}
+
+.sectionActions {
+  position: absolute;
+  top: 0px
 }
 
 

@@ -19,7 +19,7 @@ export const Section: React.FC<Props> = props => {
   const getElements = () => {
     const result: JSX.Element[] = []
     props.section.elements.forEach(e => {
-      result.push(<Element element={e} onEdit={props.onEdit} />)
+      result.push(<Element element={e} onEdit={props.onEdit} onMove={props.onMove} />)
     });
     return result;
   }
@@ -56,14 +56,31 @@ export const Section: React.FC<Props> = props => {
   const getEdit = () => {
     if (props.onEdit) {
       return (
-        <div>
-          <DraggableIcon dndType="section" elementType="section" data={props.section} />
-          <span className="sectionEditButton">
-            <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
-          </span>
-        </div>);
+        <>
+          <div className="sectionActions">
+            <table style={{ float: "right" }}>
+              <tr>
+                <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
+                <td>
+                  <div className="sectionEditButton">
+                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
+                  </div>
+
+                </td>
+              </tr>
+            </table>
+
+
+
+          </div>
+        </>
+      );
     }
   }
+
+  /*
+  
+  */
 
   const handleDrop = (data: any, sort: number) => {
     if (data.data) {

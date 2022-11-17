@@ -23,9 +23,7 @@ export function DraggableIcon(props: Props) {
   const opacity = isDragging ? 0.5 : 1
 
   return (
-    <div ref={dragRef} style={{ opacity, marginTop: -65 }} className="dragButton">
-      <br />
-      <br />
+    <div ref={dragRef} style={{ opacity }} className="dragButton">
       <Icon>open_with</Icon><br />
     </div>
   );

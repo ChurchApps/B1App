@@ -27,5 +27,5 @@ export function DroppableArea(props: Props) {
       {props.children || <Icon>add</Icon>}
     </div>
   );
-  else return <></>
+  else return <div style={{ height: 30 }}></div>
 }

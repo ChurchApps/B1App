@@ -2,6 +2,7 @@ import { DisplayBox } from "@/appBase/components/DisplayBox";
 import { Grid } from "@mui/material";
 import React from "react";
 import { AddableElement } from "./AddableElement";
+import { DraggableIcon } from "./DraggableIcon";
 
 type Props = {
 
@@ -13,6 +14,9 @@ export function ElementAdd(props: Props) {
     <>
       <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article" >
         <p>Drag and drop onto page</p>
+        <DraggableIcon dndType="section" elementType="section" data={{}} />
+        <br />
+
         <Grid container spacing={3}>
           <AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" />
           <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" />

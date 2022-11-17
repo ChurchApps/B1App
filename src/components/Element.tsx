@@ -1,5 +1,6 @@
 import { SmallButton } from "@/appBase/components";
 import { ApiHelper, ElementInterface, SectionInterface } from "@/helpers";
+import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
@@ -44,11 +45,16 @@ export const Element: React.FC<Props> = props => {
       break;
   }
 
+  /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
+
   if (props.onEdit) {
     result = <><div className="elementWrapper">
       <span className="elementEditButton">
         <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} />
       </span>
+      <div className="elementActions">
+
+      </div>
       {result}
     </div>
       {props.onEdit && getAddElement(props.element.sort + 0.1)}
