@@ -65,13 +65,9 @@ export const Section: React.FC<Props> = props => {
                   <div className="sectionEditButton">
                     <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
                   </div>
-
                 </td>
               </tr>
             </table>
-
-
-
           </div>
         </>
       );
@@ -92,7 +88,8 @@ export const Section: React.FC<Props> = props => {
     else props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort });
   }
 
-  const getAddElement = (sort: number) => {
+  const getAddElement = (s: number) => {
+    const sort = s;
     return (<DroppableArea accept="element" onDrop={(data) => handleDrop(data, sort)} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }

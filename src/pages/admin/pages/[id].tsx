@@ -34,8 +34,6 @@ export default function Admin() {
   useEffect(loadData, [id]);
 
   const handleDrop = (data: any, sort: number) => {
-    console.log("DROPPED!");
-    console.log(data);
     if (data.data) {
       const section: SectionInterface = data.data;
       section.sort = sort;
@@ -44,7 +42,8 @@ export default function Admin() {
     else setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id });
   }
 
-  const getAddSection = (sort: number) => {
+  const getAddSection = (s: number) => {
+    const sort = s;
     return (<DroppableArea accept="section" onDrop={(data) => handleDrop(data, sort)} />);
     //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
@@ -53,7 +52,7 @@ export default function Admin() {
     const result: JSX.Element[] = []
     result.push(getAddSection(0));
     page?.sections.forEach(section => {
-      result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { console.log("!!!!MOVED") }} />)
+      result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1));
     });
     return result;

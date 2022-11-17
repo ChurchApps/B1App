@@ -23,9 +23,13 @@ export function DroppableArea(props: Props) {
   );
 
   if (canDrop) return (
-    <div style={{ height: 30, textAlign: "center", color: "#000099", width: "100%", backgroundColor: (isOver) ? "#00FF00" : "#CCCCCC" }} ref={drop}>
-      {props.children || <Icon>add</Icon>}
+    <div style={{ position: "relative" }}>
+      <div style={{ position: "absolute", top: 0, left: 0, height: 30, width: "100%", zIndex: 9999, backgroundColor: (isOver) ? "#00FF00" : "#CCCCCC" }}>
+        <div style={{ textAlign: "center", color: "#000099", width: "100%" }} ref={drop}>
+          {props.children || <Icon>add</Icon>}
+        </div>
+      </div>
     </div>
   );
-  else return <div style={{ height: 30 }}></div>
+  else return <></>
 }

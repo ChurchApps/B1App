@@ -9,13 +9,15 @@ interface Props { element: ElementInterface, onEdit?: (section: SectionInterface
 export function RowElement(props: Props) {
 
 
-  const getAddColumn = (sort: number) => {
+  const getAddColumn = (s: number) => {
+    const sort = s;
     return (<DroppableArea accept="column" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id })} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "column", sort, parentId: props.element.id })} toolTip="Add Column" /></div>)
   }
 
 
-  const getAddElement = (column: ElementInterface, sort: number) => {
+  const getAddElement = (column: ElementInterface, s: number) => {
+    const sort = s;
     return (<DroppableArea accept="element" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id })} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
   }

@@ -1186,7 +1186,6 @@ a.dropdown-toggle::after {
 
 .sectionEditButton,
 .elementEditButton {
-  display: none;
   float: right;
   background-color: "#FFF";
   border-radius: 5px;
@@ -1201,19 +1200,11 @@ a.dropdown-toggle::after {
   background-color: #99FF99;
 }
 
-.elementWrapper:hover .elementEditButton {
-  display: block;
-}
-
-.sectionWrapper:hover {
+.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   background-color: #9999FF !important;
 }
 
-.sectionWrapper:hover .sectionEditButton {
-  display: inline;
-}
-
-.sectionDark.sectionWrapper:hover {
+.sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   background-color: #000099 !important;
 }
 
@@ -1225,19 +1216,27 @@ a.dropdown-toggle::after {
   background-color: #009900;
 }
 
-.dragButton {
+.sectionActions {
   display: none;
+  position: absolute;
+  top: 10;
+  right: 0;
 }
 
-.sectionWrapper:hover .dragButton {
+.sectionWrapper:not(:has(.elementWrapper:hover)):hover .sectionActions {
   display: block;
 }
 
-.sectionActions {
+.elementActions {
+  display: none;
   position: absolute;
-  top: 0px
+  top: 10;
+  right: 0;
 }
 
+.elementWrapper:hover .elementActions {
+  display: block;
+}
 
 @media (max-width: 600px) {
   .downloadAccordion {
