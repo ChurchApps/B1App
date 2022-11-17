@@ -1,5 +1,5 @@
 import { SmallButton } from "@/appBase/components";
-import { ElementInterface, SectionInterface } from "@/helpers";
+import { ApiHelper, ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
@@ -8,13 +8,23 @@ import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
 interface Props {
   element: ElementInterface
   onEdit?: (section: SectionInterface, element: ElementInterface) => void
+  onMove?: () => void
 }
 
 export const Element: React.FC<Props> = props => {
 
+  const handleDrop = (data: any, sort: number) => {
+    if (data.data) {
+      const element: ElementInterface = data.data;
+      element.sort = sort;
+      element.sectionId = props.element.sectionId;
+      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
+    }
+    else props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort });
+  }
+
   const getAddElement = (sort: number) => {
-    return (<DroppableArea accept="element" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort })} />);
-    //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
+    return (<DroppableArea accept="element" onDrop={(data) => handleDrop(data, sort)} />);
   }
 
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>
@@ -41,7 +51,7 @@ export const Element: React.FC<Props> = props => {
       </span>
       {result}
     </div>
-      {props.onEdit && getAddElement(props.element.sort + 1)}
+      {props.onEdit && getAddElement(props.element.sort + 0.1)}
     </>
   }
   return <div style={{ position: "relative" }}>{result}</div>;

@@ -1,8 +1,7 @@
 import { SmallButton } from "@/appBase/components";
-import { ElementInterface, SectionInterface } from "@/helpers";
-import { Container, Icon } from "@mui/material";
+import { ApiHelper, ElementInterface, SectionInterface } from "@/helpers";
+import { Container } from "@mui/material";
 import { CSSProperties } from "react";
-import { AddableElement } from "./admin/AddableElement";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
@@ -12,6 +11,7 @@ interface Props {
   first?: boolean,
   section: SectionInterface,
   onEdit?: (section: SectionInterface, element: ElementInterface) => void
+  onMove?: () => void
 }
 
 export const Section: React.FC<Props> = props => {
@@ -57,7 +57,7 @@ export const Section: React.FC<Props> = props => {
     if (props.onEdit) {
       return (
         <div>
-          <DraggableIcon dndType="section" elementType="section" />
+          <DraggableIcon dndType="section" elementType="section" data={props.section} />
           <span className="sectionEditButton">
             <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
           </span>
@@ -65,8 +65,18 @@ export const Section: React.FC<Props> = props => {
     }
   }
 
+  const handleDrop = (data: any, sort: number) => {
+    if (data.data) {
+      const element: ElementInterface = data.data;
+      element.sort = sort;
+      element.sectionId = props.section.id;
+      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
+    }
+    else props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort });
+  }
+
   const getAddElement = (sort: number) => {
-    return (<DroppableArea accept="element" onDrop={(data) => props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort })} />);
+    return (<DroppableArea accept="element" onDrop={(data) => handleDrop(data, sort)} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 

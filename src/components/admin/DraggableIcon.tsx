@@ -3,7 +3,7 @@ import React from "react";
 import { useDrag } from 'react-dnd'
 
 type Props = {
-  dndType: string, elementType: string
+  dndType: string, elementType: string, data: any
 };
 
 export function DraggableIcon(props: Props) {
@@ -12,7 +12,7 @@ export function DraggableIcon(props: Props) {
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: props.dndType,
-      item: { elementType: props.elementType },
+      item: { elementType: props.elementType, data: props.data },
       collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
     }),
     [],
@@ -23,7 +23,7 @@ export function DraggableIcon(props: Props) {
   const opacity = isDragging ? 0.5 : 1
 
   return (
-    <div ref={dragRef} style={{ opacity, marginTop: -65 }}>
+    <div ref={dragRef} style={{ opacity, marginTop: -65 }} className="dragButton">
       <br />
       <br />
       <Icon>open_with</Icon><br />

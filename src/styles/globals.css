@@ -1227,6 +1227,14 @@ a.dropdown-toggle::after {
   background-color: #009900;
 }
 
+.dragButton {
+  display: none;
+}
+
+.sectionWrapper:hover .dragButton {
+  display: block;
+}
+
 
 @media (max-width: 600px) {
   .downloadAccordion {
