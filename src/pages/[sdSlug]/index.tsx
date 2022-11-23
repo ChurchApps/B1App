@@ -1,14 +1,15 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Layout } from "@/components";
 import { Section } from "@/components/Section";
-import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
+import pageData from "../../samplePages/newhere.json";
+import { ApiHelper, ChurchInterface, LinkInterface } from "@/helpers";
 
 type Props = {
   pageData: any;
   church: ChurchInterface,
   churchSettings: any,
-  navLinks: LinkInterface[],
-  subDomainSlug: string;
+  navLinks: LinkInterface[];
+  sdSlug: string;
 };
 
 export default function Home(props: Props) {
@@ -25,35 +26,35 @@ export default function Home(props: Props) {
   return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
-        <b>Subdomain/Page</b><br />
-        {props.subDomainSlug}
-        {JSON.stringify(ApiHelper.apiConfigs)}
+        <b>Subdomain</b><br />
+        {props.sdSlug}<br /><br />
         {getSections()}
       </div>
     </Layout>
   );
 }
 
+
 export const getStaticPaths: GetStaticPaths = async () => {
 
-  //{ params: { subDomain: "crcc", page: "newhere" } },
-  //{ params: { subDomain: "ironwood", page: "" } },
   const paths = [
-
+    { params: { sdSlug: "crcc" } },
+    { params: { sdSlug: "ironwood" } },
   ];
 
   return { paths, fallback: "blocking", };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.subDomainSlug, "AccessApi");
+  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "AccessApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "AccessApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
 
-  const pageData: PageInterface = await ApiHelper.get("/pages/" + church.id + "/tree?url=" + params.pageSlug, "ContentApi");
+  //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/about.json").then(resp => resp.json());
+  //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/newhere.json").then(resp => resp.json());
 
   return {
-    props: { pageData, church, churchSettings, navLinks, subDomainSlug: params.subDomainSlug },
+    props: { pageData, church, churchSettings, navLinks, sdSlug: params.sdSlug },
     revalidate: 30,
   };
 };
