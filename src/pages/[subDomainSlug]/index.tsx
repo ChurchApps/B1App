@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/newhere.json").then(resp => resp.json());
 
   return {
-    props: { pageData, church, churchSettings, navLinks, subDomain: params.subDomainSlug },
+    props: { pageData, church, churchSettings, navLinks, subDomainSlug: params.subDomainSlug },
     revalidate: 30,
   };
 };
