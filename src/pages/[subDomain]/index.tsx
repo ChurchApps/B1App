@@ -8,7 +8,8 @@ type Props = {
   pageData: any;
   church: ChurchInterface,
   churchSettings: any,
-  navLinks: LinkInterface[]
+  navLinks: LinkInterface[];
+  subDomain: string;
 };
 
 export default function Home(props: Props) {
@@ -25,6 +26,9 @@ export default function Home(props: Props) {
   return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
+        <b>Subdomain</b><br />
+        {props.subDomain}
+        {JSON.stringify(ApiHelper.apiConfigs)}
         {getSections()}
       </div>
     </Layout>
@@ -52,7 +56,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/newhere.json").then(resp => resp.json());
 
   return {
-    props: { pageData, church, churchSettings, navLinks },
+    props: { pageData, church, churchSettings, navLinks, subDomain: params.subDomain },
     revalidate: 30,
   };
 };

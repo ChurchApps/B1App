@@ -25,6 +25,7 @@ export default function Home(props: Props) {
   return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
+        <b>Subdomain/Page</b><br />
         {props.subDomain}
         {JSON.stringify(ApiHelper.apiConfigs)}
         {getSections()}
