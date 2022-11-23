@@ -8,7 +8,6 @@ type Props = {
   church: ChurchInterface,
   churchSettings: any,
   navLinks: LinkInterface[],
-  sdSlug: string;
 };
 
 export default function Home(props: Props) {
@@ -25,9 +24,6 @@ export default function Home(props: Props) {
   return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
-        <b>Subdomain/Page</b><br />
-        {props.sdSlug}
-        {JSON.stringify(ApiHelper.apiConfigs)}
         {getSections()}
       </div>
     </Layout>
@@ -53,7 +49,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const pageData: PageInterface = await ApiHelper.get("/pages/" + church.id + "/tree?url=" + params.pageSlug, "ContentApi");
 
   return {
-    props: { pageData, church, churchSettings, navLinks, sdSlug: params.sdSlug },
+    props: { pageData, church, churchSettings, navLinks },
     revalidate: 30,
   };
 };
