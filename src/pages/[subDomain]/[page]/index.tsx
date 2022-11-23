@@ -32,9 +32,9 @@ export default function Home(props: Props) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
+  //{ params: { subDomain: "ironwood", page: "" } },
   const paths = [
-    { params: { subDomain: "crcc", page: "" } },
-    { params: { subDomain: "ironwood", page: "" } },
+    { params: { subDomain: "crcc", page: "newhere" } },
   ];
 
   return { paths, fallback: "blocking", };
