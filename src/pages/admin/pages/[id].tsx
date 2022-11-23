@@ -21,7 +21,7 @@ export default function Admin() {
   const [editSection, setEditSection] = useState<SectionInterface>(null);
   const [editElement, setEditElement] = useState<ElementInterface>(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const id = router.query.id.toString();
+  const id = router.query.id?.toString() || "";
 
   useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); }
