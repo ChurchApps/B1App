@@ -1,13 +1,14 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Layout } from "@/components";
 import { Section } from "@/components/Section";
-import { ApiHelper, ChurchInterface, LinkInterface, PageInterface } from "@/helpers";
+import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
 
 type Props = {
   pageData: any;
   church: ChurchInterface,
   churchSettings: any,
-  navLinks: LinkInterface[]
+  navLinks: LinkInterface[],
+  subDomain: string;
 };
 
 export default function Home(props: Props) {
@@ -24,6 +25,8 @@ export default function Home(props: Props) {
   return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
+        {props.subDomain}
+        {JSON.stringify(ApiHelper.apiConfigs)}
         {getSections()}
       </div>
     </Layout>
@@ -49,7 +52,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const pageData: PageInterface = await ApiHelper.get("/pages/" + church.id + "/tree?url=" + params.page, "ContentApi");
 
   return {
-    props: { pageData, church, churchSettings, navLinks },
+    props: { pageData, church, churchSettings, navLinks, subDomain: params.subDomain },
     revalidate: 30,
   };
 };
