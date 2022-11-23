@@ -9,7 +9,7 @@ type Props = {
   church: ChurchInterface,
   churchSettings: any,
   navLinks: LinkInterface[];
-  subDomain: string;
+  subDomainSlug: string;
 };
 
 export default function Home(props: Props) {
@@ -27,7 +27,7 @@ export default function Home(props: Props) {
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
         <b>Subdomain</b><br />
-        {props.subDomain}
+        {props.subDomainSlug}
         {JSON.stringify(ApiHelper.apiConfigs)}
         {getSections()}
       </div>
@@ -39,16 +39,15 @@ export default function Home(props: Props) {
 export const getStaticPaths: GetStaticPaths = async () => {
 
   const paths = [
-    { params: { subDomain: "crcc" } },
-    { params: { subDomain: "ironwood" } },
+    { params: { subDomainSlug: "crcc" } },
+    { params: { subDomainSlug: "ironwood" } },
   ];
 
   return { paths, fallback: "blocking", };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const subDomain = params.subDomain;
-  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + subDomain, "AccessApi");
+  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.subDomainSlug, "AccessApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "AccessApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
 
@@ -56,7 +55,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   //const pageData: PageInterface = await fetch("http://localhost:3000/samplePages/newhere.json").then(resp => resp.json());
 
   return {
-    props: { pageData, church, churchSettings, navLinks, subDomain: params.subDomain },
+    props: { pageData, church, churchSettings, navLinks, subDomain: params.subDomainSlug },
     revalidate: 30,
   };
 };
