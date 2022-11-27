@@ -47,6 +47,7 @@ export const Element: React.FC<Props> = props => {
       break;
     case "donation":
       result = <NonAuthDonation churchId={props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      break;
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
