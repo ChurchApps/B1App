@@ -4,7 +4,10 @@ import React from "react";
 import { useDrag } from 'react-dnd'
 
 type Props = {
-  dndType: string, elementType: string, icon: string, label: string
+  dndType: string;
+  elementType: string;
+  icon: string;
+  label: string;
 };
 
 export function AddableElement(props: Props) {
@@ -25,7 +28,7 @@ export function AddableElement(props: Props) {
 
   return (
     <Grid item xs={4}>
-      <div ref={dragRef} style={{ textAlign: "center", border: "1px solid #CCC", borderRadius: 5, paddingTop: 10, paddingBottom: 10, opacity }}>
+      <div ref={dragRef} style={{ textAlign: "center", border: "1px solid #CCC", borderRadius: 5, paddingTop: 10, paddingBottom: 10, opacity, cursor: "pointer" }}>
         <Icon>{props.icon}</Icon><br />
         {props.label}
       </div>
