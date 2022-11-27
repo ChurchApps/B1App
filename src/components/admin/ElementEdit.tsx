@@ -86,7 +86,7 @@ export function ElementEdit(props: Props) {
       case "column": result = getColumnFields(); break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
-
+      case "donation": result = <></>; break;
     }
     return result;
   }
@@ -110,6 +110,7 @@ export function ElementEdit(props: Props) {
             <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
             <MenuItem value="row">Row</MenuItem>
             <MenuItem value="column">Column</MenuItem>
+            <MenuItem value="donation">Donation</MenuItem>
           </Select>
         </FormControl>
         {getFields()}

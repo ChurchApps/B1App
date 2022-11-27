@@ -5,6 +5,7 @@ import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
+import { NonAuthDonation } from "@/appBase/donationComponents/components"
 
 interface Props {
   element: ElementInterface
@@ -44,6 +45,8 @@ export const Element: React.FC<Props> = props => {
     case "map":
       result = <h2>Google Map Goes Here</h2>
       break;
+    case "donation":
+      result = <NonAuthDonation churchId={props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
