@@ -3,7 +3,6 @@
 # before adding env variables make sure you know how env variables work with
 # nextjs - https://nextjs.org/docs/basic-features/environment-variables
 
-NEXT_PUBLIC_ACCESS_API=https://accessapi.staging.churchapps.org
 NEXT_PUBLIC_MEMBERSHIP_API=https://membershipapi.staging.churchapps.org
 NEXT_PUBLIC_LESSONS_API=https://api.staging.lessons.church
 

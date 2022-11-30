@@ -46,8 +46,8 @@ export default function Admin() {
   const getEditContent = (<SmallButton icon="add" onClick={() => { setEditPage({}) }} />);
 
   const getChurchEditSetting = () => {
-    if (Permissions.accessApi.settings.edit) {
-      const jwt = ApiHelper.getConfig("AccessApi").jwt;
+    if (Permissions.membershipApi.settings.edit) {
+      const jwt = ApiHelper.getConfig("MembershipApi").jwt;
       const url = `${EnvironmentHelper.Common.AccountsRoot}/login?jwt=${jwt}&returnUrl=/${UserHelper.currentChurch?.id}/manage`;
       return (<tr><td><a href={url} style={{ display: "flex" }}><Icon sx={{ marginRight: "5px" }}>edit</Icon>Customize Appearance</a></td></tr>);
     }
