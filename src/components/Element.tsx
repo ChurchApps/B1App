@@ -8,9 +8,10 @@ import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
 import { NonAuthDonation } from "@/appBase/donationComponents/components"
 
 interface Props {
-  element: ElementInterface
-  onEdit?: (section: SectionInterface, element: ElementInterface) => void
-  onMove?: () => void
+  element: ElementInterface;
+  churchId?: string;
+  onEdit?: (section: SectionInterface, element: ElementInterface) => void;
+  onMove?: () => void;
 }
 
 export const Element: React.FC<Props> = props => {
@@ -46,7 +47,7 @@ export const Element: React.FC<Props> = props => {
       result = <h2>Google Map Goes Here</h2>
       break;
     case "donation":
-      result = <NonAuthDonation churchId={props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      result = <NonAuthDonation churchId={props.churchId ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
       break;
   }
 
