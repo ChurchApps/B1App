@@ -58,8 +58,8 @@ export function PageEdit(props: Props) {
         <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
         <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} onKeyDown={handleKeyDown} />
         <div>
-          <a href={`https://${UserHelper.currentChurch.subDomain}.yoursite.church${page.url}`} target="_blank" rel="noopener noreferrer">
-            {`https://${UserHelper.currentChurch.subDomain}.yoursite.church${page.url}`}
+          <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.yoursite.church${page.url}`} target="_blank" rel="noopener noreferrer">
+            {`https://${UserHelper.currentUserChurch.church.subDomain}.yoursite.church${page.url}`}
           </a>
         </div>
       </InputBox>

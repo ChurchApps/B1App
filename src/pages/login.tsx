@@ -8,7 +8,7 @@ export default function Login() {
   const router = useRouter()
   const [cookies] = useCookies()
 
-  if (ApiHelper.isAuthenticated && UserHelper.currentChurch) { router.push("/admin") }
+  if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) { router.push("/admin") }
 
   const loginSuccess = () => {
     router.push("/admin");

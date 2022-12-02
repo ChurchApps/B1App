@@ -28,7 +28,7 @@ export default function Admin() {
   }, []);
 
   const loadData = () => {
-    if (isAuthenticated) ApiHelper.get("/pages/" + UserHelper.currentChurch.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
+    if (isAuthenticated) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
   }
 
   useEffect(loadData, [id]);
