@@ -1,12 +1,9 @@
 import { ElementInterface } from "@/helpers";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeAttrs from "rehype-attr";
-import rehypeRaw from "rehype-raw";
+import { Markdown } from "../index";
 
 interface Props { element: ElementInterface }
 
 export const TextOnly: React.FC<Props> = props => {
-  let result = <ReactMarkdown rehypePlugins={[rehypeRaw, [rehypeAttrs, { properties: "attr" }]]} remarkPlugins={[remarkGfm]}>{props.element.answers?.text || ""}</ReactMarkdown>
+  let result = <Markdown value={props.element.answers?.text || ""} />
   return result;
 }
