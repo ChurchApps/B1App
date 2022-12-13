@@ -4,4 +4,4 @@ export { DisplayBox } from "@/appBase/components/DisplayBox";
 export { Loading } from "@/appBase/components/Loading";
 export { InputBox } from "@/appBase/components/InputBox";
 export { LogoutPage } from "@/appBase/pageComponents/LogoutPage";
-export { Markdown } from "@/appBase/components/markdown";
+export { MarkdownEditor, MarkdownPreview } from "@/appBase/components";
