@@ -1,5 +1,5 @@
 import React from "react";
-import UserContext from "../helpers/UserContext";
+import UserContext from "../UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../appBase/components";
 import { useRouter } from "next/router"

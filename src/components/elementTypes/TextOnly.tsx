@@ -1,9 +1,9 @@
 import { ElementInterface } from "@/helpers";
-import { Markdown } from "../index";
+import { MarkdownPreview } from "@/components"
 
 interface Props { element: ElementInterface }
 
 export const TextOnly: React.FC<Props> = props => {
-  let result = <Markdown value={props.element.answers?.text || ""} />
+  let result = <MarkdownPreview value={props.element.answers?.text || ""} />
   return result;
 }
