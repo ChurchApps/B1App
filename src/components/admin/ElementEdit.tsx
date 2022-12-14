@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ElementInterface, UserHelper } from "@/helpers";
 import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { MarkdownEditor } from "@/appBase/components";
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 type Props = {
   element: ElementInterface;
@@ -65,7 +68,7 @@ export function ElementEdit(props: Props) {
   const getColumnFields = () => (<TextField fullWidth label="Column width (12 per row; 6 columns = 1/2, 4 columns = 1/3)" name="size" type="number" value={parsedData.size || ""} onChange={handleChange} onKeyDown={handleKeyDown} />);
   const getTextFields = () => (
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={(val) => { handleMarkdownChange("text", val) }} />
+      <MarkdownEditor editor={MDEditor} value={parsedData.text || ""} onChange={(val) => { handleMarkdownChange("text", val) }} />
     </Box>
   );
   const getTextWithPhotoFields = () => (<>
@@ -81,7 +84,7 @@ export function ElementEdit(props: Props) {
       </Select>
     </FormControl>
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} />
+      <MarkdownEditor editor={MDEditor} value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} />
     </Box>
   </>);
 
