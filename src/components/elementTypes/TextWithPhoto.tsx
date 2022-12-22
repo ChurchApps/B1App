@@ -5,10 +5,10 @@ import { MarkdownPreview } from "@/components";
 
 interface Props { element: ElementInterface }
 
-const Preview = dynamic(() => import("@uiw/react-markdown-preview"), { ssr: false });
+const Editor = dynamic(() => import("react-draft-wysiwyg").then(mod => mod.Editor), { ssr: false });
 
 export const TextWithPhoto: React.FC<Props> = props => {
-  let result = <MarkdownPreview editor={Preview} value={props.element.answers?.text || ""} />
+  let result = <MarkdownPreview editor={Editor} value={props.element.answers?.text || ""} />
   switch (props.element.answers?.photoPosition || "left") {
     case "left":
       result = (
@@ -17,7 +17,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
           </Grid>
           <Grid item md={8} xs={12}>
-            <MarkdownPreview editor={Preview} value={props.element.answers?.text || ""} />
+            <MarkdownPreview editor={Editor} value={props.element.answers?.text || ""} />
           </Grid>
         </Grid>
       )
@@ -26,7 +26,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <Grid container columnSpacing={3}>
           <Grid item md={8} xs={12}>
-            <MarkdownPreview editor={Preview} value={props.element.answers?.text || ""} />
+            <MarkdownPreview editor={Editor} value={props.element.answers?.text || ""} />
           </Grid>
           <Grid item md={4} xs={12}>
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
@@ -37,7 +37,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
     case "bottom":
       result = (
         <>
-          <MarkdownPreview editor={Preview} value={props.element.answers?.text || ""} />
+          <MarkdownPreview editor={Editor} value={props.element.answers?.text || ""} />
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
         </>
       )
@@ -46,7 +46,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <>
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
-          <MarkdownPreview editor={Preview} value={props.element.answers?.text || ""} />
+          <MarkdownPreview editor={Editor} value={props.element.answers?.text || ""} />
         </>
       )
       break;
