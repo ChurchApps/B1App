@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ElementInterface } from "@/helpers";
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { MarkdownEditor } from "@/appBase/components";
+import React from "react";
+import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
 
 const Editor = dynamic(() => import("react-draft-wysiwyg").then(mod => mod.Editor), { ssr: false });
 
@@ -14,6 +16,7 @@ type Props = {
 };
 
 export function ElementEdit(props: Props) {
+  const [selectPhotoField, setSelectPhotoField] = React.useState<string>(null);
   const [element, setElement] = useState<ElementInterface>(null);
   const [errors, setErrors] = useState([]);
   var parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
@@ -73,6 +76,7 @@ export function ElementEdit(props: Props) {
   );
   const getTextWithPhotoFields = () => (<>
     <TextField fullWidth label="Photo" name="photo" value={parsedData.photo || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
     <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <FormControl fullWidth>
       <InputLabel>Photo Position</InputLabel>
@@ -100,6 +104,13 @@ export function ElementEdit(props: Props) {
     return result;
   }
 
+  const handlePhotoSelected = (image: string) => {
+    let p = { ...element };
+    parsedData[selectPhotoField] = image;
+    p.answersJSON = JSON.stringify(parsedData);
+    setElement(p);
+    setSelectPhotoField(null);
+  }
 
   useEffect(() => { setElement(props.element); }, [props.element]);
   useEffect(() => {
@@ -124,6 +135,7 @@ export function ElementEdit(props: Props) {
         </FormControl>
         {getFields()}
       </InputBox>
+      {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} />}
     </>
   );
 }
