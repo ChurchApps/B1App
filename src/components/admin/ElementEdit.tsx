@@ -6,6 +6,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEve
 import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
+import Hidden from "@mui/material/Hidden";
 
 const Editor = dynamic(() => import("react-draft-wysiwyg").then(mod => mod.Editor), { ssr: false });
 
@@ -75,7 +76,7 @@ export function ElementEdit(props: Props) {
     </Box>
   );
   const getTextWithPhotoFields = () => (<>
-    <TextField fullWidth label="Photo" name="photo" value={parsedData.photo || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></>}
     <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
     <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <FormControl fullWidth>
@@ -135,7 +136,7 @@ export function ElementEdit(props: Props) {
         </FormControl>
         {getFields()}
       </InputBox>
-      {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} />}
+      {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}
     </>
   );
 }
