@@ -1,6 +1,4 @@
-const removeImports = require('next-remove-imports')();
-
-module.exports = removeImports({
+module.exports = {
   reactStrictMode: true,
   env: {
     STAGE: process.env.STAGE,
@@ -11,4 +9,4 @@ module.exports = removeImports({
     NEXT_PUBLIC_CHURCH_APPS_URL: process.env.NEXT_PUBLIC_CHURCH_APPS_URL,
     NEXT_PUBLIC_GOOGLE_ANALYTICS: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS,
   },
-});
+};
