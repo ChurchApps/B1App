@@ -12,7 +12,7 @@ export const Wrapper: React.FC<Props> = props => {
   const tabs = []
   const router = useRouter();
 
-  tabs.push(<NavItem url="/" label="Home" icon="home" router={router} />);
+  tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
