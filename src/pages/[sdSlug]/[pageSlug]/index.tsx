@@ -24,11 +24,8 @@ export default function Home(props: Props) {
   }
 
   return (
-    <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
-      <div id="page">
-        {getSections()}
-      </div>
-    </Layout>
+    <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+
   );
 }
 

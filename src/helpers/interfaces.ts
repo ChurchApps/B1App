@@ -34,6 +34,7 @@ export interface PageInterface {
   churchId?: string;
   url?: string;
   title?: string;
+  layout?: string;
 
   sections?: SectionInterface[];
 }

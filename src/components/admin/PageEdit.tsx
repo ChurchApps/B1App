@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, PageInterface, UserHelper } from "@/helpers";
-import { SelectChangeEvent, TextField } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
   page: PageInterface;
@@ -21,6 +21,7 @@ export function PageEdit(props: Props) {
     switch (e.target.name) {
       case "title": p.title = val; break;
       case "url": p.url = val; break;
+      case "layout": p.layout = val; break;
     }
     setPage(p);
   };
@@ -62,6 +63,14 @@ export function PageEdit(props: Props) {
             {`https://${UserHelper.currentUserChurch.church.subDomain}.yoursite.church${page.url}`}
           </a>
         </div>
+
+        <FormControl fullWidth>
+          <InputLabel>Layout</InputLabel>
+          <Select fullWidth label="Layout" value={page.layout} onChange={handleChange}>
+            <MenuItem value="headerFooter">Header & Footer</MenuItem>
+            <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
+          </Select>
+        </FormControl>
       </InputBox>
     </>
   );
