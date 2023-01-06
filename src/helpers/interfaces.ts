@@ -22,6 +22,7 @@ export interface SectionInterface {
   id?: string;
   churchId?: string;
   pageId?: string;
+  zone?: string;
   background?: string;
   textColor?: string;
   sort?: number;

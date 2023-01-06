@@ -46,7 +46,7 @@ export function HeaderFooter(props: Props) {
         <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} />
         <main>
           <div id="page">
-            <Zone church={props.church} sections={props.pageData.sections} />
+            <Zone church={props.church} sections={props.pageData.sections} zone="main" />
           </div>
         </main>
         <Footer church={props.church} churchSettings={props.churchSettings} />

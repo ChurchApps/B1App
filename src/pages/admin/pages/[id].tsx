@@ -37,6 +37,7 @@ export default function Admin() {
     if (data.data) {
       const section: SectionInterface = data.data;
       section.sort = sort;
+      section.zone = "main";
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
     else setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id });
