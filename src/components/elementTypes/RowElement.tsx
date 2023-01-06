@@ -1,4 +1,3 @@
-import { SmallButton } from "@/appBase/components";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
@@ -18,7 +17,7 @@ export function RowElement(props: Props) {
 
   const getAddElement = (column: ElementInterface, s: number) => {
     const sort = s;
-    return (<DroppableArea accept="element" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id })} />);
+    return (<DroppableArea accept={["element", "elementTree"]} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id })} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
   }
 
@@ -37,9 +36,10 @@ export function RowElement(props: Props) {
   }
 
   const getColumns = () => {
+    const emptyStyle = { minHeight: 100, border: "1px solid #999" }
     const result: JSX.Element[] = []
     props.element.elements?.forEach(c => {
-      result.push(<Grid item md={c.answers.size} xs={12} className={getClassName()}>{getElements(c, c.elements)}</Grid>);
+      result.push(<Grid item md={c.answers.size} xs={12} className={getClassName()} style={(c.elements?.length > 0 || !props.onEdit ? {} : emptyStyle)}>{getElements(c, c.elements)}</Grid>);
     });
     return result;
   }

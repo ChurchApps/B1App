@@ -85,13 +85,14 @@ export const Section: React.FC<Props> = props => {
       element.sort = sort;
       element.sectionId = props.section.id;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
+
     }
     else props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort });
   }
 
   const getAddElement = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept="element" onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["element", "elementTree"]} onDrop={(data) => handleDrop(data, sort)} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 
