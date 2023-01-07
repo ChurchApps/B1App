@@ -2,19 +2,22 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
 import { Grid, Icon, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { ApiHelper, EnvironmentHelper, PageInterface, UserHelper } from "@/helpers";
+import { ApiHelper, BlockInterface, EnvironmentHelper, PageInterface, UserHelper } from "@/helpers";
 import { DisplayBox } from "@/components";
 import { SmallButton } from "@/appBase/components";
 import { PageEdit } from "@/components/admin/PageEdit";
 import Link from "next/link";
 import { Links } from "@/components/admin/Links";
 import { Permissions } from "@/appBase/interfaces"
+import { BlockEdit } from "@/components/admin/BlockEdit";
 
 export default function Admin() {
   const router = useRouter();
   const { isAuthenticated } = ApiHelper
   const [pages, setPages] = useState<PageInterface[]>([]);
   const [editPage, setEditPage] = useState<PageInterface>(null);
+  const [blocks, setBlocks] = useState<BlockInterface[]>([]);
+  const [editBlock, setEditBlock] = useState<BlockInterface>(null);
 
   useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); }
@@ -24,6 +27,7 @@ export default function Admin() {
 
   const loadData = () => {
     ApiHelper.get("/pages", "ContentApi").then(p => setPages(p));
+    ApiHelper.get("/blocks", "ContentApi").then(b => setBlocks(b));
   }
 
   const getRows = () => {
@@ -43,7 +47,25 @@ export default function Admin() {
     return result;
   }
 
+  const getBlocks = () => {
+    let result: JSX.Element[] = []
+    blocks.forEach(b => {
+      const block = b;
+      result.push(<TableRow>
+        <TableCell>
+          <Link href={"/admin/blocks/" + b.id}>{b.name}</Link>
+        </TableCell>
+        <TableCell>
+          {(b.blockType === "elements") ? "Element(s)" : "Section(s)"}
+        </TableCell>
+        <TableCell align="right"><SmallButton icon="edit" onClick={() => { setEditBlock(block); }} /></TableCell>
+      </TableRow>);
+    });
+    return result;
+  }
+
   const getEditContent = (<SmallButton icon="add" onClick={() => { setEditPage({}) }} />);
+  const getEditBlockContent = (<SmallButton icon="add" onClick={() => { setEditBlock({ blockType: "elements" }) }} />);
 
   const getChurchEditSetting = () => {
     if (Permissions.membershipApi.settings.edit) {
@@ -74,9 +96,24 @@ export default function Admin() {
               </TableBody>
             </Table>
           </DisplayBox>
+          <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={getEditBlockContent}  >
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {getBlocks()}
+              </TableBody>
+            </Table>
+          </DisplayBox>
         </Grid>
         <Grid item md={4} xs={12}>
           {(editPage) && <PageEdit page={editPage} updatedCallback={() => { setEditPage(null); loadData(); }} />}
+          {(editBlock) && <BlockEdit block={editBlock} updatedCallback={() => { setEditBlock(null); loadData(); }} />}
           <Links />
           <DisplayBox headerIcon="link" headerText="External Resources" editContent={false} help="accounts/appearance">
             <table className="table">

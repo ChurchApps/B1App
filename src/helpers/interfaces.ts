@@ -9,6 +9,7 @@ export interface ElementInterface {
   id?: string;
   churchId?: string;
   sectionId?: string;
+  blockId?: string;
   parentId?: string;
   size?: number;
   answersJSON?: string;
@@ -22,10 +23,12 @@ export interface SectionInterface {
   id?: string;
   churchId?: string;
   pageId?: string;
+  blockId?: string;
   zone?: string;
   background?: string;
   textColor?: string;
   sort?: number;
+  targetBlockId?: string;
 
   elements?: ElementInterface[];
 }
@@ -45,4 +48,6 @@ export interface BlockInterface {
   churchId?: string;
   blockType?: string;
   name?: string;
+
+  sections?: SectionInterface[];
 }
