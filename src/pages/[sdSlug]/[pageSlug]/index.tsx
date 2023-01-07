@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Layout } from "@/components";
+import { Layout, PageLayout } from "@/components";
 import { Section } from "@/components/Section";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
 
@@ -24,7 +24,7 @@ export default function Home(props: Props) {
   }
 
   return (
-    <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+    <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
 
   );
 }

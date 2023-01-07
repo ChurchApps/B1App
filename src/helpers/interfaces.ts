@@ -39,3 +39,10 @@ export interface PageInterface {
 
   sections?: SectionInterface[];
 }
+
+export interface BlockInterface {
+  id?: string;
+  churchId?: string;
+  blockType?: string;
+  name?: string;
+}
