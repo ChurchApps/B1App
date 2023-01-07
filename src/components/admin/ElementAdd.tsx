@@ -5,6 +5,7 @@ import { AddableElement } from "./AddableElement";
 
 type Props = {
   includeBlocks: boolean
+  includeSection: boolean
 };
 
 export function ElementAdd(props: Props) {
@@ -22,7 +23,7 @@ export function ElementAdd(props: Props) {
           <b>Simple Elements:</b></p>
 
         <Grid container spacing={3}>
-          <AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" />
+          {props.includeSection && (<AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" />)}
           <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" />
           <AddableElement dndType="column" elementType="column" icon="table_chart" label="Column" />
           <AddableElement dndType="element" elementType="text" icon="article" label="Text" />

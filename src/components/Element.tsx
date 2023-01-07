@@ -23,7 +23,7 @@ export const Element: React.FC<Props> = props => {
       element.sectionId = props.element.sectionId;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
     }
-    else props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort });
+    else props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId });
   }
 
   const getAddElement = (s: number) => {

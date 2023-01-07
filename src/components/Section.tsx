@@ -85,9 +85,8 @@ export const Section: React.FC<Props> = props => {
       element.sort = sort;
       element.sectionId = props.section.id;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
-
     }
-    else props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort });
+    else props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId });
   }
 
   const getAddElement = (s: number) => {

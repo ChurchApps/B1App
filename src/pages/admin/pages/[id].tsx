@@ -109,7 +109,7 @@ export default function Admin() {
           <Grid item md={4} xs={12}>
             <div id="editorBar">
               <div style={rightBarStyle}>
-                {!editSection && !editElement && <ElementAdd />}
+                {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} />}
                 {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
                 {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} />}
               </div>
