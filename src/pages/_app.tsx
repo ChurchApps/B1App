@@ -6,6 +6,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCookies } from "react-cookie"
 import { EnvironmentHelper } from "@/helpers";
+import { UserProvider } from "@/context/UserContext";
 
 EnvironmentHelper.init();
 
@@ -14,11 +15,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [cookies] = useCookies();
 
   return (
-    <>
+    <UserProvider>
       <Head>
       </Head>
       <Component {...pageProps} />
-    </>
+    </UserProvider>
   );
 }
 export default MyApp;

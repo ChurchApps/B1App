@@ -4,11 +4,16 @@
 # nextjs - https://nextjs.org/docs/basic-features/environment-variables
 
 NEXT_PUBLIC_MEMBERSHIP_API=https://membershipapi.staging.churchapps.org
+NEXT_PUBLIC_ATTENDANCE_API=https://attendanceapi.staging.churchapps.org
+NEXT_PUBLIC_GIVING_API=https://givingapi.staging.churchapps.org
+NEXT_PUBLIC_B1_API=https://api.staging.b1.church
 NEXT_PUBLIC_LESSONS_API=https://api.staging.lessons.church
 
 NEXT_PUBLIC_CONTENT_ROOT=https://content.staging.lessons.church
 NEXT_PUBLIC_ACCOUNTS_APP_URL=https://accounts.staging.churchapps.org
 NEXT_PUBLIC_CHURCH_APPS_URL=https://staging.churchapps.org
+NEXT_PUBLIC_STREAMINGLIVE_URL=https://{key}.staging.streaminglive.church
+NEXT_PUBLIC_LESSONS_URL=https://staging.lessons.church
 
 #Optional - UA-123456789-1
 NEXT_PUBLIC_GOOGLE_ANALYTICS=
