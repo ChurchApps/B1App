@@ -28,7 +28,7 @@ export const Element: React.FC<Props> = props => {
 
   const getAddElement = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept={["element", "elementTree"]} onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
   }
 
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>

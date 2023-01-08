@@ -1,6 +1,7 @@
 import { DisplayBox } from "@/appBase/components/DisplayBox";
+import { ApiHelper, ArrayHelper, BlockInterface, UserHelper } from "@/helpers";
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AddableElement } from "./AddableElement";
 
 type Props = {
@@ -9,13 +10,27 @@ type Props = {
 };
 
 export function ElementAdd(props: Props) {
+  const [blocks, setBlocks] = useState<BlockInterface[]>([]);
+
+  const loadData = () => { ApiHelper.get("/blocks", "ContentApi").then(b => setBlocks(b)); }
+
+  useEffect(loadData, []);
 
   /*
      <p><b>Components:</b></p>
         <Grid container spacing={3}>
-          <AddableElement dndType="elementTree" elementType="row" icon="table_chart" label="3 Columns with Text" />
+          <AddableElement dndType="elementBlock" elementType="row" icon="table_chart" label="3 Columns with Text" />
         </Grid> 
   */
+
+  const Blocks = () => {
+    let result: JSX.Element[] = []
+    blocks.forEach((b) => {
+      result.push(<AddableElement dndType={b.blockType} elementType="block" blockId={b.id} icon={(b.blockType === "elementBlock") ? "table_chart" : "reorder"} label={b.name} />);
+    });
+    return <Grid container spacing={3}>{result}</Grid>
+  }
+
   return (
     <>
       <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article" >
@@ -34,9 +49,7 @@ export function ElementAdd(props: Props) {
 
         {props.includeBlocks && (<>
           <p><b>Blocks:</b></p>
-          <Grid container spacing={3}>
-            <AddableElement dndType="sectionBlock" elementType="row" icon="table_chart" label="Footer" />
-          </Grid>
+          <Blocks />
         </>)}
       </DisplayBox>
     </>

@@ -58,8 +58,8 @@ export function BlockEdit(props: Props) {
         <FormControl fullWidth>
           <InputLabel>Block Type</InputLabel>
           <Select fullWidth label="Block Type" name="blockType" value={block.blockType} onChange={handleChange}>
-            <MenuItem value="elements">Element(s)</MenuItem>
-            <MenuItem value="sections">Section(s)</MenuItem>
+            <MenuItem value="elementBlock">Element(s)</MenuItem>
+            <MenuItem value="sectionBlock">Section(s)</MenuItem>
           </Select>
         </FormControl>
       </InputBox>

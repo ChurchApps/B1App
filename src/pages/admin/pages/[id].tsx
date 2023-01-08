@@ -40,12 +40,15 @@ export default function Admin() {
       section.zone = "main";
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
-    else setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id });
+    else {
+      console.log("*****", data);
+      setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id, targetBlockId: data.blockId });
+    }
   }
 
   const getAddSection = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept="section" onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
     //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
 

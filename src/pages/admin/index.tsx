@@ -56,7 +56,7 @@ export default function Admin() {
           <Link href={"/admin/blocks/" + b.id}>{b.name}</Link>
         </TableCell>
         <TableCell>
-          {(b.blockType === "elements") ? "Element(s)" : "Section(s)"}
+          {(b.blockType === "elementBlock") ? "Element(s)" : "Section(s)"}
         </TableCell>
         <TableCell align="right"><SmallButton icon="edit" onClick={() => { setEditBlock(block); }} /></TableCell>
       </TableRow>);
@@ -65,7 +65,7 @@ export default function Admin() {
   }
 
   const getEditContent = (<SmallButton icon="add" onClick={() => { setEditPage({}) }} />);
-  const getEditBlockContent = (<SmallButton icon="add" onClick={() => { setEditBlock({ blockType: "elements" }) }} />);
+  const getEditBlockContent = (<SmallButton icon="add" onClick={() => { setEditBlock({ blockType: "elementBlock" }) }} />);
 
   const getChurchEditSetting = () => {
     if (Permissions.membershipApi.settings.edit) {

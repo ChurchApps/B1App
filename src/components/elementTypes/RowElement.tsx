@@ -17,7 +17,7 @@ export function RowElement(props: Props) {
 
   const getAddElement = (column: ElementInterface, s: number) => {
     const sort = s;
-    return (<DroppableArea accept={["element", "elementTree"]} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: props.element.blockId })} />);
+    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: props.element.blockId })} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
   }
 

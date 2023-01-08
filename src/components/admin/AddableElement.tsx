@@ -8,17 +8,21 @@ type Props = {
   elementType: string;
   icon: string;
   label: string;
+  blockId?: string;
 };
 
 export function AddableElement(props: Props) {
   const dragRef = React.useRef(null)
 
   const [{ isDragging }, drag, preview] = useDrag(
-    () => ({
-      type: props.dndType,
-      item: { elementType: props.elementType },
-      collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
-    }),
+    () => {
+      let result = {
+        type: props.dndType,
+        item: { elementType: props.elementType, blockId: props.blockId },
+        collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
+      }
+      return result;
+    },
     [],
   )
 
