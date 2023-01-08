@@ -6,6 +6,7 @@ export { Loading } from "@/appBase/components/Loading";
 export { InputBox } from "@/appBase/components/InputBox";
 export { LogoutPage } from "@/appBase/pageComponents/LogoutPage";
 export { MarkdownEditor, MarkdownPreview } from "@/appBase/components";
+export { LoadingPage } from "./LoadingPage";
 
 // Settings
 export { YourSiteSettings } from "./admin/settings/YourSiteSettings";
