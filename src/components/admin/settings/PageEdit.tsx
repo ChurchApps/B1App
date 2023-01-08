@@ -77,6 +77,8 @@ export function PageEdit({ page: pageFromProps, updatedFunction = () => {} }: Pr
     >
       <TextField fullWidth label="Page Name" name="name" value={page?.name || ""} onChange={handleChange} />
       <label>Contents</label>
+      {/* 
+        // @ts-ignore */}
       <Editor editorState={editorState} onEditorStateChange={(e) => setEditorState(e)} editorStyle={{ height: 200 }} />
     </InputBox>
   );
