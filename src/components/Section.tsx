@@ -11,9 +11,8 @@ interface Props {
   first?: boolean,
   section: SectionInterface,
   churchId?: string;
-  onEdit?: (section: SectionInterface, element: ElementInterface) => void
-  onMove?: () => void
-  canEditBlocks?: boolean;
+  onEdit?: (section: SectionInterface, element: ElementInterface) => void;
+  onMove?: () => void;
 }
 
 export const Section: React.FC<Props> = props => {
@@ -56,46 +55,23 @@ export const Section: React.FC<Props> = props => {
   }
 
   const getEdit = () => {
-    const treatAsBlock = !props.canEditBlocks && props.section.blockId;
     if (props.onEdit) {
-      if (treatAsBlock) {
-        return (
-          <div className="sectionActions">
-            <table style={{ float: "right" }}>
-              <tr>
-                <td></td>
-                <td>
-                  <div className="sectionEditButton">
-                    <SmallButton icon="edit" onClick={async () => { const section = await ApiHelper.get("/sections/" + props.section.sourceId, "ContentApi"); props.onEdit(section, null); }} />
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </div>
-        )
-      }
-      else {
-        return (
-          <div className="sectionActions">
-            <table style={{ float: "right" }}>
-              <tr>
-                <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
-                <td>
-                  <div className="sectionEditButton">
-                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </div>
-        );
-      }
+      return (
+        <div className="sectionActions">
+          <table style={{ float: "right" }}>
+            <tr>
+              <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
+              <td>
+                <div className="sectionEditButton">
+                  <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      );
     }
   }
-
-  /*
-  
-  */
 
   const handleDrop = (data: any, sort: number) => {
     if (data.data) {

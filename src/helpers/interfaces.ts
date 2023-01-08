@@ -31,6 +31,7 @@ export interface SectionInterface {
   targetBlockId?: string;
 
   sourceId?: string;
+  sections?: SectionInterface[];
   elements?: ElementInterface[];
 }
 

@@ -12,6 +12,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
+import { SectionBlock } from "@/components/SectionBlock";
 
 
 export default function Admin() {
@@ -56,7 +57,8 @@ export default function Admin() {
     const result: JSX.Element[] = []
     result.push(getAddSection(0));
     page?.sections.forEach(section => {
-      result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} canEditBlocks={false} />)
+      if (section.targetBlockId) result.push(<SectionBlock section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      else result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1));
     });
     return result;
