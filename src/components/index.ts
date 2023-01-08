@@ -8,6 +8,16 @@ export { LogoutPage } from "@/appBase/pageComponents/LogoutPage";
 export { MarkdownEditor, MarkdownPreview } from "@/appBase/components";
 export { LoadingPage } from "./LoadingPage";
 
+// login
+export { Login } from "./Login";
+
 // Settings
 export { YourSiteSettings } from "./admin/settings/YourSiteSettings";
 export { B1Settings } from "./admin/settings/B1Settings";
+
+// donate
+export { AuthLanding } from "./donate/AuthLanding";
+
+// donation-landing
+export { GiveNowPanel } from "./donationLanding/GiveNowPanel";
+export { SignInPanel } from "./donationLanding/SignInPanel";

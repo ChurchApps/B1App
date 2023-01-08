@@ -35,7 +35,10 @@ export const Wrapper: React.FC<Props> = props => {
   ConfigHelper.current.tabs.forEach(tab => {
     switch(tab.linkType) {
       case "donation":
-        tabs.push(<NavItem key="/donate" url="/donate" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
+        tabs.push(<NavItem key="/member/donate" url="/member/donate" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
+        break;
+      case "donationLanding":
+        tabs.push(<NavItem key="/member/donation-landing" url="/member/donation-landing" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
         break;
       case "checkin":
         tabs.push(<NavItem key="/checkin" url="/checkin" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "checkin"} />)

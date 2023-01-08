@@ -209,6 +209,9 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
             <MenuItem value="donation" disabled={isDisabled("donation")}>
               Donation
             </MenuItem>
+            <MenuItem value="donationLanding" disabled={isDisabled("donationLanding")}>
+              Donation Landing
+            </MenuItem>
             <MenuItem value="directory" disabled={isDisabled("directory")}>
               Member Directory
             </MenuItem>
