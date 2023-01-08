@@ -22,7 +22,7 @@ export default function Admin() {
         {
           UserHelper.user?.firstName
             ? (getContent())
-            : <><h1>Member Directory</h1><h3 className="text-center w-100">Please <Link href="/login/?returnUrl=/directory">Login</Link> to view Directory.</h3></>
+            : <><h1>Member Directory</h1><h3 className="text-center w-100">Please <Link href="/login/?returnUrl=/member/directory">Login</Link> to view Directory.</h3></>
         }
       </Wrapper>
     </Box>
