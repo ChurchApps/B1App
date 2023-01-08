@@ -49,7 +49,7 @@ export function YourSiteSettings() {
     <SmallButton
       icon="add"
       onClick={() => {
-        setEditBlock({ blockType: "elements" });
+        setEditBlock({ blockType: "elementBlock" });
       }}
     />
   );
@@ -93,7 +93,7 @@ export function YourSiteSettings() {
       <TableCell>
         <Link href={"/admin/blocks/" + block.id}>{block.name}</Link>
       </TableCell>
-      <TableCell>{block.blockType === "elements" ? "Element(s)" : "Section(s)"}</TableCell>
+      <TableCell>{block.blockType === "elementBlock" ? "Element(s)" : "Section(s)"}</TableCell>
       <TableCell align="right">
         <SmallButton
           icon="edit"

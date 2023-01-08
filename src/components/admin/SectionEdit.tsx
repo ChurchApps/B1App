@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
-import { ApiHelper, SectionInterface } from "@/helpers";
+import { ApiHelper, ArrayHelper, BlockInterface, SectionInterface } from "@/helpers";
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
 import { CompactPicker, HuePicker, MaterialPicker, SliderPicker } from 'react-color'
@@ -11,6 +11,7 @@ type Props = {
 };
 
 export function SectionEdit(props: Props) {
+  const [blocks, setBlocks] = useState<BlockInterface[]>(null);
   const [section, setSection] = useState<SectionInterface>(null);
   const [errors, setErrors] = useState([]);
   const [selectPhotoField, setSelectPhotoField] = useState<string>(null);
@@ -25,6 +26,7 @@ export function SectionEdit(props: Props) {
       case "background": p.background = val; break;
       case "backgroundType": p.background = (val === "image") ? "https://content.churchapps.org/stockPhotos/4/bible.png" : "#000000"
       case "textColor": p.textColor = val; break;
+      case "targetBlockId": p.targetBlockId = val; break;
     }
     setSection(p);
   };
@@ -56,6 +58,15 @@ export function SectionEdit(props: Props) {
       ApiHelper.delete("/sections/" + section.id.toString(), "ContentApi").then(() => props.updatedCallback(null));
     }
   };
+
+  const loadBlocks = async () => {
+    if (props.section.targetBlockId) {
+      let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+      setBlocks(ArrayHelper.getAll(result, "blockType", "sectionBlock"));
+    }
+  }
+
+  useEffect(() => { setSection(props.section); loadBlocks() }, [props.section]);
 
   const BackgroundField = () => {
     //{ parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></> }
@@ -90,25 +101,45 @@ export function SectionEdit(props: Props) {
     );
   }
 
-  useEffect(() => { setSection(props.section); }, [props.section]);
+  const StandardFields = () => {
+    return (<>
+      <ErrorMessages errors={errors} />
+      <br />
+      <BackgroundField />
+      <FormControl fullWidth>
+        <InputLabel>Text Color</InputLabel>
+        <Select fullWidth label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
+          <MenuItem value="light">Light</MenuItem>
+          <MenuItem value="dark">Dark</MenuItem>
+        </Select>
+      </FormControl>
+    </>)
+  }
+
+  const BlockFields = () => {
+    let options: JSX.Element[] = [];
+    blocks?.forEach(b => {
+      options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
+    });
+    return (<>
+      <FormControl fullWidth>
+        <InputLabel>Block</InputLabel>
+        <Select fullWidth label="Block" name="targetBlockId" value={section.targetBlockId || ""} onChange={handleChange}>
+          {options}
+        </Select>
+      </FormControl>
+    </>)
+  }
+
+  const Fields = () => (
+    (section?.targetBlockId) ? <BlockFields /> : <StandardFields />
+  )
 
   if (!section) return <></>
   else return (
     <>
       <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
-        <ErrorMessages errors={errors} />
-        <br />
-
-        <BackgroundField />
-
-
-        <FormControl fullWidth>
-          <InputLabel>Text Color</InputLabel>
-          <Select fullWidth label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
-            <MenuItem value="light">Light</MenuItem>
-            <MenuItem value="dark">Dark</MenuItem>
-          </Select>
-        </FormControl>
+        <Fields />
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={4} />}
     </>

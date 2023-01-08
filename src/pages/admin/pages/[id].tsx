@@ -12,6 +12,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
+import { SectionBlock } from "@/components/SectionBlock";
 
 
 export default function Admin() {
@@ -40,12 +41,14 @@ export default function Admin() {
       section.zone = "main";
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
-    else setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id });
+    else {
+      setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id, targetBlockId: data.blockId });
+    }
   }
 
   const getAddSection = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept="section" onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
     //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
 
@@ -53,7 +56,8 @@ export default function Admin() {
     const result: JSX.Element[] = []
     result.push(getAddSection(0));
     page?.sections.forEach(section => {
-      result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      if (section.targetBlockId) result.push(<SectionBlock section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      else result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1));
     });
     return result;
@@ -109,7 +113,7 @@ export default function Admin() {
           <Grid item md={4} xs={12}>
             <div id="editorBar">
               <div style={rightBarStyle}>
-                {!editSection && !editElement && <ElementAdd />}
+                {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} />}
                 {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
                 {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} />}
               </div>

@@ -40,7 +40,7 @@ export default function Admin() {
       section.zone = "main";
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
-    else setEditSection({ sort, background: "#FFF", textColor: "light", blockId: id });
+    else setEditSection({ sort, background: "#FFF", textColor: "light" });
   }
 
   const getAddSection = (s: number) => {
@@ -109,7 +109,7 @@ export default function Admin() {
           <Grid item md={4} xs={12}>
             <div id="editorBar">
               <div style={rightBarStyle}>
-                {!editSection && !editElement && <ElementAdd />}
+                {!editSection && !editElement && <ElementAdd includeBlocks={false} includeSection={block?.blockType === "sectionBlock"} />}
                 {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
                 {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} />}
               </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
-import { ApiHelper, ElementInterface } from "@/helpers";
+import { ApiHelper, ArrayHelper, BlockInterface, ElementInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
@@ -13,6 +13,7 @@ type Props = {
 };
 
 export function ElementEdit(props: Props) {
+  const [blocks, setBlocks] = useState<BlockInterface[]>(null);
   const [selectPhotoField, setSelectPhotoField] = React.useState<string>(null);
   const [element, setElement] = useState<ElementInterface>(null);
   const [errors, setErrors] = useState([]);
@@ -34,6 +35,13 @@ export function ElementEdit(props: Props) {
     }
     setElement(p);
   };
+
+  const loadBlocks = async () => {
+    if (props.element.elementType === "block") {
+      let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+      setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
+    }
+  }
 
   const handleMarkdownChange = (field: string, newValue: string) => {
     let p = { ...element };
@@ -109,28 +117,55 @@ export function ElementEdit(props: Props) {
     setSelectPhotoField(null);
   }
 
-  useEffect(() => { setElement(props.element); }, [props.element]);
+  useEffect(() => { setElement(props.element); loadBlocks() }, [props.element]);
   useEffect(() => {
     if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
+
   }, [element]);
+
+  const StandardFields = () => {
+    return (<>
+      <ErrorMessages errors={errors} />
+      <br />
+      <FormControl fullWidth>
+        <InputLabel>Element Type</InputLabel>
+        <Select fullWidth label="Element Type" value={element.elementType} name="elementType" onChange={handleChange}>
+          <MenuItem value="text">Text</MenuItem>
+          <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
+          <MenuItem value="row">Row</MenuItem>
+          <MenuItem value="column">Column</MenuItem>
+          <MenuItem value="donation">Donation</MenuItem>
+        </Select>
+      </FormControl>
+      {getFields()}
+    </>)
+  }
+
+  const BlockFields = () => {
+    let options: JSX.Element[] = [];
+    blocks?.forEach(b => {
+      options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
+    });
+    return (<>
+      <FormControl fullWidth>
+        <InputLabel>Block</InputLabel>
+        <Select fullWidth label="Block" name="targetBlockId" value={parsedData.targetBlockId || ""} onChange={handleChange}>
+          {options}
+        </Select>
+      </FormControl>
+    </>)
+  }
+
+  const Fields = () => (
+    (element?.elementType === "block") ? <BlockFields /> : <StandardFields />
+  )
+
 
   if (!element) return <></>
   else return (
     <>
       <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
-        <ErrorMessages errors={errors} />
-        <br />
-        <FormControl fullWidth>
-          <InputLabel>Element Type</InputLabel>
-          <Select fullWidth label="Element Type" value={element.elementType} onChange={handleChange}>
-            <MenuItem value="text">Text</MenuItem>
-            <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
-            <MenuItem value="row">Row</MenuItem>
-            <MenuItem value="column">Column</MenuItem>
-            <MenuItem value="donation">Donation</MenuItem>
-          </Select>
-        </FormControl>
-        {getFields()}
+        <Fields />
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}
     </>

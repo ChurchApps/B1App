@@ -1223,6 +1223,11 @@ a.dropdown-toggle::after {
   right: 0;
 }
 
+.sectionActions.alwaysVisible {
+  display: block;
+  z-index: 9999;
+}
+
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover .sectionActions {
   display: block;
 }

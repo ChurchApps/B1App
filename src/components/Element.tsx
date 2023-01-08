@@ -6,6 +6,7 @@ import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
 import { NonAuthDonation } from "@/appBase/donationComponents/components"
+import { ElementBlock } from "./elementTypes/ElementBlock";
 
 interface Props {
   element: ElementInterface;
@@ -23,17 +24,24 @@ export const Element: React.FC<Props> = props => {
       element.sectionId = props.element.sectionId;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
     }
-    else props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort });
+    else {
+      const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId };
+      if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
+      props.onEdit(null, element);
+    }
   }
 
   const getAddElement = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept={["element", "elementTree"]} onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
   }
 
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>
 
   switch (props.element.elementType) {
+    case "block":
+      result = <ElementBlock element={props.element as ElementInterface} />
+      break;
     case "text":
       result = <TextOnly element={props.element as ElementInterface} />
       break;
@@ -52,10 +60,8 @@ export const Element: React.FC<Props> = props => {
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
-
   if (props.onEdit) {
     result = <><div className="elementWrapper">
-
       <div className="elementActions">
         <table style={{ float: "right" }}>
           <tr>
@@ -68,9 +74,6 @@ export const Element: React.FC<Props> = props => {
           </tr>
         </table>
       </div>
-
-
-
       {result}
     </div>
       {props.onEdit && getAddElement(props.element.sort + 0.1)}

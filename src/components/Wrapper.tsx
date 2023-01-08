@@ -13,6 +13,7 @@ export const Wrapper: React.FC<Props> = props => {
   const router = useRouter();
 
   tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
 
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 

@@ -11,8 +11,8 @@ interface Props {
   first?: boolean,
   section: SectionInterface,
   churchId?: string;
-  onEdit?: (section: SectionInterface, element: ElementInterface) => void
-  onMove?: () => void
+  onEdit?: (section: SectionInterface, element: ElementInterface) => void;
+  onMove?: () => void;
 }
 
 export const Section: React.FC<Props> = props => {
@@ -57,27 +57,21 @@ export const Section: React.FC<Props> = props => {
   const getEdit = () => {
     if (props.onEdit) {
       return (
-        <>
-          <div className="sectionActions">
-            <table style={{ float: "right" }}>
-              <tr>
-                <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
-                <td>
-                  <div className="sectionEditButton">
-                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
-                  </div>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </>
+        <div className="sectionActions">
+          <table style={{ float: "right" }}>
+            <tr>
+              <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
+              <td>
+                <div className="sectionEditButton">
+                  <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
       );
     }
   }
-
-  /*
-  
-  */
 
   const handleDrop = (data: any, sort: number) => {
     if (data.data) {
@@ -85,14 +79,17 @@ export const Section: React.FC<Props> = props => {
       element.sort = sort;
       element.sectionId = props.section.id;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
-
     }
-    else props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort });
+    else {
+      const element: ElementInterface = { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId };
+      if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
+      props.onEdit(null, element);
+    }
   }
 
   const getAddElement = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept={["element", "elementTree"]} onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 

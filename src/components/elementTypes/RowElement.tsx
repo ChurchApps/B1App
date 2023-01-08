@@ -10,14 +10,14 @@ export function RowElement(props: Props) {
 
   const getAddColumn = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept="column" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id })} />);
+    return (<DroppableArea accept="column" onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id, blockId: props.element.blockId })} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "column", sort, parentId: props.element.id })} toolTip="Add Column" /></div>)
   }
 
 
   const getAddElement = (column: ElementInterface, s: number) => {
     const sort = s;
-    return (<DroppableArea accept={["element", "elementTree"]} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id })} />);
+    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: props.element.blockId })} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
   }
 
