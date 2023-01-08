@@ -12,6 +12,7 @@ interface Props {
   churchId?: string;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
   onMove?: () => void;
+  canEditBlocks?: boolean;
 }
 
 export const Element: React.FC<Props> = props => {
@@ -52,8 +53,7 @@ export const Element: React.FC<Props> = props => {
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
-
-  if (props.onEdit) {
+  if (props.onEdit && (props.canEditBlocks || !props.element.blockId)) {
     result = <><div className="elementWrapper">
 
       <div className="elementActions">
@@ -68,9 +68,6 @@ export const Element: React.FC<Props> = props => {
           </tr>
         </table>
       </div>
-
-
-
       {result}
     </div>
       {props.onEdit && getAddElement(props.element.sort + 0.1)}

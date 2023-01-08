@@ -118,7 +118,7 @@ export function SectionEdit(props: Props) {
 
   const BlockFields = () => {
     let options: JSX.Element[] = [];
-    blocks.forEach(b => {
+    blocks?.forEach(b => {
       options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
     });
     return (<>

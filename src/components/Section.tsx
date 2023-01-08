@@ -13,6 +13,7 @@ interface Props {
   churchId?: string;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void
   onMove?: () => void
+  canEditBlocks?: boolean;
 }
 
 export const Section: React.FC<Props> = props => {
@@ -55,9 +56,26 @@ export const Section: React.FC<Props> = props => {
   }
 
   const getEdit = () => {
+    const treatAsBlock = !props.canEditBlocks && props.section.blockId;
     if (props.onEdit) {
-      return (
-        <>
+      if (treatAsBlock) {
+        return (
+          <div className="sectionActions">
+            <table style={{ float: "right" }}>
+              <tr>
+                <td></td>
+                <td>
+                  <div className="sectionEditButton">
+                    <SmallButton icon="edit" onClick={async () => { const section = await ApiHelper.get("/sections/" + props.section.sourceId, "ContentApi"); props.onEdit(section, null); }} />
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        )
+      }
+      else {
+        return (
           <div className="sectionActions">
             <table style={{ float: "right" }}>
               <tr>
@@ -70,8 +88,8 @@ export const Section: React.FC<Props> = props => {
               </tr>
             </table>
           </div>
-        </>
-      );
+        );
+      }
     }
   }
 

@@ -56,7 +56,7 @@ export default function Admin() {
     const result: JSX.Element[] = []
     result.push(getAddSection(0));
     page?.sections.forEach(section => {
-      result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} canEditBlocks={false} />)
       result.push(getAddSection(section.sort + 0.1));
     });
     return result;

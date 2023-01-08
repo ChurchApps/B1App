@@ -30,6 +30,7 @@ export interface SectionInterface {
   sort?: number;
   targetBlockId?: string;
 
+  sourceId?: string;
   elements?: ElementInterface[];
 }
 
