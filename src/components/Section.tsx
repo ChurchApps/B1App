@@ -80,7 +80,11 @@ export const Section: React.FC<Props> = props => {
       element.sectionId = props.section.id;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
     }
-    else props.onEdit(null, { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId });
+    else {
+      const element: ElementInterface = { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId };
+      if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
+      props.onEdit(null, element);
+    }
   }
 
   const getAddElement = (s: number) => {

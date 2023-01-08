@@ -135,8 +135,6 @@ export function SectionEdit(props: Props) {
     (section?.targetBlockId) ? <BlockFields /> : <StandardFields />
   )
 
-
-
   if (!section) return <></>
   else return (
     <>

@@ -42,7 +42,6 @@ export default function Admin() {
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
     else {
-      console.log("*****", data);
       setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id, targetBlockId: data.blockId });
     }
   }
