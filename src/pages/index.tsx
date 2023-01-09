@@ -1,4 +1,3 @@
-import { GetStaticProps } from "next";
 import Link from "next/link";
 import { Container } from "@mui/material";
 import { Wrapper } from "@/components/Wrapper";
@@ -15,7 +14,7 @@ export default function Home() {
         <Link href="/livecs/home">LiveCS Home</Link>
         <br />
         <br />
-        <Link href="/admin">Admin</Link>
+        <Link href="/ironwood/admin">Admin</Link>
         <br />
         <br />
       </Container>

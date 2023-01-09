@@ -11,9 +11,10 @@ interface Props {
   showLogo?: boolean;
   redirectAfterLogin?: boolean;
   loginContainerCssProps?: PaperProps
+  keyName: string;
 }
 
-export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps }: Props) {
+export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps, keyName }: Props) {
   const router = useRouter();
   const [cookies] = useCookies();
   const context = useContext(UserContext)
@@ -40,6 +41,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
         appName="YourSite.church"
         showLogo={showLogo}
         loginContainerCssProps={loginContainerCssProps}
+        keyName={keyName}
       />
     </Layout>
   );
