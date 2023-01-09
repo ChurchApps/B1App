@@ -2,6 +2,7 @@ export { Layout } from "./Layout";
 export { PageLayout } from "./PageLayout";
 export { LoadingPage } from "./LoadingPage";
 export { Wrapper } from "./Wrapper";
+export { Theme } from "./Theme";
 
 // appbase
 export { ErrorMessages } from "@/appBase/components/ErrorMessages";
