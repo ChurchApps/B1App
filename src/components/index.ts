@@ -26,3 +26,8 @@ export { AuthLanding } from "./donate/AuthLanding";
 // donation-landing
 export { GiveNowPanel } from "./donationLanding/GiveNowPanel";
 export { SignInPanel } from "./donationLanding/SignInPanel";
+
+// checkin
+export { Household } from "./checkin/HouseHold";
+export { CheckinComplete } from "./checkin/CheckinComplete";
+export { Services } from "./checkin/Services"
