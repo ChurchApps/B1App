@@ -63,7 +63,7 @@ export const Wrapper: React.FC<Props> = props => {
         tabs.push(<NavItem key={`/pages/${tab.churchId}/${tab.linkData}`} url={`/pages/${tab.churchId}/${tab.linkData}`} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "page"} />)
         break
       case "votd":
-        tabs.push(<NavItem key="/votd" url="/votd" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "votd"} />)
+        tabs.push(<NavItem key="/member/votd" url="/member/votd" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "votd"} />)
         break
       case "groups":
         tabs.push(<NavItem key="/groups" url="/groups" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "groups"} />)
