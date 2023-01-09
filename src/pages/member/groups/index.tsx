@@ -31,7 +31,7 @@ export default function Groups() {
         {groups?.length > 0 ? (
           groups.map((group) => (
             <Grid item md={4} xs={12}>
-              <Link href={"/groups/" + group.id}>
+              <Link href={"/member/groups/" + group.id}>
                 <div style={{ backgroundColor: "#000000", width: "100%", aspectRatio: "4" }}>
                   <div style={{ position: "relative" }}>
                     <div

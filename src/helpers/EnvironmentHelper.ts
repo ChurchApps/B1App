@@ -28,7 +28,7 @@ export class EnvironmentHelper {
 
   static initDev = () => {
     this.initStaging();
-    EnvironmentHelper.B1Api = process.env.NEXT_PUBLIC_B1_API || "";
+    EnvironmentHelper.B1Api = process.env.NEXT_PUBLIC_B1_API || EnvironmentHelper.B1Api;
     EnvironmentHelper.ContentApi = process.env.NEXT_PUBLIC_CONTENT_API || EnvironmentHelper.ContentApi;
 
   };

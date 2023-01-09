@@ -18,7 +18,7 @@ interface Props {
   completeHandler: () => void;
 }
 
-export function Household({ completeHandler = () => {} }: Props) {
+export function Household({ completeHandler = () => { } }: Props) {
   const [showGroups, setShowGroups] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pendingVisits, setPendingVisits] = useState<VisitInterface[]>(null);
@@ -53,7 +53,7 @@ export function Household({ completeHandler = () => {} }: Props) {
     }
 
     return (
-      <div className="checkinServiceTime">
+      <div className="checkinServiceTime" key={st.id}>
         <Grid container spacing={3}>
           <Grid item xs={4}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -172,7 +172,7 @@ export function Household({ completeHandler = () => {} }: Props) {
   }
 
   if (showGroups) {
-    <Groups selectedHandler={handleGroupSelected} />;
+    return <Groups selectedHandler={handleGroupSelected} />;
   }
 
   return (
