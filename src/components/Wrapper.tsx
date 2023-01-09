@@ -4,12 +4,13 @@ import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../appBase/components";
 import { useRouter } from "next/router"
 import { Themes } from "@/appBase/helpers";
-import { ConfigHelper } from "@/helpers"
+import { ConfigHelper, PersonHelper } from "@/helpers"
 
 interface Props { pageTitle?: string, children: React.ReactNode }
 
 export const Wrapper: React.FC<Props> = props => {
   const context = React.useContext(UserContext);
+  PersonHelper.person = context.person;
   const tabs = []
   const router = useRouter();
 
