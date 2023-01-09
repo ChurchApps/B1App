@@ -12,6 +12,7 @@ export { LogoutPage } from "@/appBase/pageComponents/LogoutPage";
 export { MarkdownEditor, MarkdownPreview } from "@/appBase/components";
 export { DonationPage } from "@/appBase/donationComponents/DonationPage";
 export { NonAuthDonation } from "@/appBase/donationComponents/components";
+export { Conversations } from "@/appBase/components/notes/Conversations"
 
 // login
 export { Login } from "./Login";
