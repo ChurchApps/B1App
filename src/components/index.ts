@@ -12,7 +12,8 @@ export { LogoutPage } from "@/appBase/pageComponents/LogoutPage";
 export { MarkdownEditor, MarkdownPreview } from "@/appBase/components";
 export { DonationPage } from "@/appBase/donationComponents/DonationPage";
 export { NonAuthDonation } from "@/appBase/donationComponents/components";
-export { Conversations } from "@/appBase/components/notes/Conversations"
+export { Conversations } from "@/appBase/components/notes/Conversations";
+export { FormSubmissionEdit } from "@/appBase/components/FormSubmissionEdit";
 
 // login
 export { Login } from "./Login";
@@ -29,6 +30,6 @@ export { GiveNowPanel } from "./donationLanding/GiveNowPanel";
 export { SignInPanel } from "./donationLanding/SignInPanel";
 
 // checkin
-export { Household } from "./checkin/HouseHold";
+export { Household } from "./checkin/Household";
 export { CheckinComplete } from "./checkin/CheckinComplete";
-export { Services } from "./checkin/Services"
+export { Services } from "./checkin/Services";
