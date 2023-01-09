@@ -1260,3 +1260,12 @@ a.dropdown-toggle::after {
     width: 400px !important;
   }
 }
+
+.full-frame {
+  width: 100%;
+  height: calc(100vh - 64px);
+  width: calc(100% + 48px);
+  margin-top: -32px;
+  margin-left: -24px;
+  border: none;
+}
