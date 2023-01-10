@@ -1,10 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { UserHelper } from "../../helpers";
-import { DirectorySearch } from "../../components/member/directory/DirectorySearch";
-import { Person } from "../../components/member/directory/Person";
+import { UserHelper } from "@/helpers";
+import { DirectorySearch } from "@/components/member/directory/DirectorySearch";
+import { Person } from "@/components/member/directory/Person";
 import { Wrapper } from "@/components/Wrapper";
-
 
 export default function Admin() {
 
