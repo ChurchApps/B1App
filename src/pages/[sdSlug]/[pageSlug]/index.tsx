@@ -8,7 +8,6 @@ type Props = {
   church: ChurchInterface,
   churchSettings: any,
   navLinks: LinkInterface[],
-  params: any
 };
 
 export default function Home(props: Props) {
@@ -24,16 +23,7 @@ export default function Home(props: Props) {
     return result;
   }
 
-  console.log(props);
-  return (
-    <>
-      <h1>Page Slug</h1>
-      <div>
-        {JSON.stringify(props)}
-      </div>
-      <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
-    </>
-  );
+  return (<PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />);
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -59,7 +49,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=" + params.pageSlug, "ContentApi");
 
   return {
-    props: { pageData, church, churchSettings, navLinks, params },
+    props: { pageData, church, churchSettings, navLinks },
     revalidate: 30,
   };
 };
