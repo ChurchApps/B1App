@@ -4,7 +4,7 @@ import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../appBase/components";
 import { useRouter } from "next/router"
 import { Themes } from "@/appBase/helpers";
-import { ConfigHelper, PersonHelper } from "@/helpers"
+import { ConfigHelper, EnvironmentHelper, PersonHelper } from "@/helpers"
 
 interface Props { pageTitle?: string, children: React.ReactNode }
 
@@ -17,21 +17,21 @@ export const Wrapper: React.FC<Props> = props => {
   const getSelectedTab = () => {
     const path = window.location.pathname;
     let result = "";
-    if (path.startsWith("/donate")) result = "donation";
-    else if (path.startsWith("/checkin")) result = "checkin";
-    else if (path.startsWith("/stream")) result = "stream";
-    else if (path.startsWith("/lessons")) result = "lessons";
-    else if (path.startsWith("/directory")) result = "directory";
-    else if (path.startsWith("/url")) result = "url";
-    else if (path.startsWith("/bible")) result = "bible";
-    else if (path.startsWith("/pages")) result = "page";
-    else if (path.startsWith("/votd")) result = "votd";
+    if (path.startsWith("/member/donate")) result = "donation";
+    else if (path.startsWith("/member/checkin")) result = "checkin";
+    else if (path.startsWith("/member/stream")) result = "stream";
+    else if (path.startsWith("/member/lessons")) result = "lessons";
+    else if (path.startsWith("/member/directory")) result = "directory";
+    else if (path.startsWith("/member/url")) result = "url";
+    else if (path.startsWith("/member/bible")) result = "bible";
+    else if (path.startsWith("/member/pages")) result = "page";
+    else if (path.startsWith("/member/votd")) result = "votd";
     return result;
   }
 
   const selectedTab = getSelectedTab();
 
-  tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  if (!EnvironmentHelper.HideYoursite) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
 
   ConfigHelper.current.tabs.forEach(tab => {

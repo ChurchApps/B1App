@@ -2,7 +2,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { Layout } from "@/components";
 import { Section } from "@/components/Section";
 import pageData from "../../samplePages/newhere.json";
-import { ApiHelper, ChurchInterface, LinkInterface } from "@/helpers";
+import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface } from "@/helpers";
+import { Navigate } from "react-router-dom";
 
 type Props = {
   pageData: any;
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export default function Home(props: Props) {
+
   const getSections = () => {
     const result: JSX.Element[] = []
     let first = true;
@@ -31,7 +33,6 @@ export default function Home(props: Props) {
   );
 }
 
-
 export const getStaticPaths: GetStaticPaths = async () => {
 
   const paths = [
@@ -43,6 +44,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (EnvironmentHelper.HideYoursite) return { redirect: { destination: "/member", permanent: false } }
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");

@@ -9,7 +9,6 @@ export class EnvironmentHelper {
 
   static init = () => {
     let stage = process.env.NEXT_STAGE;
-    stage = "staging";
 
     switch (stage) {
       case "staging": EnvironmentHelper.initStaging(); break;
@@ -32,7 +31,7 @@ export class EnvironmentHelper {
     this.initStaging();
     EnvironmentHelper.B1Api = process.env.NEXT_PUBLIC_B1_API || EnvironmentHelper.B1Api;
     EnvironmentHelper.ContentApi = process.env.NEXT_PUBLIC_CONTENT_API || EnvironmentHelper.ContentApi;
-    if (process.env.NEXT_HIDE_YOURSITE === "0") EnvironmentHelper.HideYoursite = false;
+    if (process.env.NEXT_HIDE_YOURSITE) EnvironmentHelper.HideYoursite = true;
   };
 
   //NOTE: None of these values are secret.
@@ -40,7 +39,7 @@ export class EnvironmentHelper {
     console.log("INIT STAGING");
     EnvironmentHelper.B1Api = "https://api.staging.b1.church";
     EnvironmentHelper.ContentApi = "https://contentapi.staging.churchapps.org";
-    EnvironmentHelper.HideYoursite = true;
+    EnvironmentHelper.HideYoursite = false;
   };
 
   //NOTE: None of these values are secret.
