@@ -8,16 +8,17 @@ import { EnvironmentHelper } from "@/helpers";
 import { UserProvider } from "@/context/UserContext";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { LoadingPage } from "@/components"
+import { SubdomainHelper } from "@/helpers/SubdomainHelper";
 
 EnvironmentHelper.init();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [config, setConfig] = useState<ConfigurationInterface>({} as ConfigurationInterface)
-  
-  const loadConfig = () => {
-    const keyName = window.location.hostname.split(".")[0];
 
-    ConfigHelper.load(keyName).then(data => {
+  const loadConfig = () => {
+    SubdomainHelper.subDomain = window.location.hostname.split(".")[0];
+
+    ConfigHelper.load(SubdomainHelper.subDomain).then(data => {
       setConfig(data);
     })
   }

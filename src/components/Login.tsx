@@ -11,7 +11,7 @@ interface Props {
   showLogo?: boolean;
   redirectAfterLogin?: boolean;
   loginContainerCssProps?: PaperProps
-  keyName: string;
+  keyName?: string;
 }
 
 export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps, keyName }: Props) {
