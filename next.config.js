@@ -1,29 +1,27 @@
 module.exports = {
   reactStrictMode: true,
   async rewrites() {
-    return process.env.NEXT_STAGE
-      ? [
+    [
+      {
+        source: "/",
+        has: [
           {
-            source: "/",
-            has: [
-              {
-                type: "host",
-                value: "(?<subdomain>.*)\\..*",
-              },
-            ],
-            destination: "/:subdomain",
+            type: "host",
+            value: "(?<subdomain>.*)\\..*",
           },
+        ],
+        destination: "/:subdomain",
+      },
+      {
+        source: "/:path*",
+        has: [
           {
-            source: "/:path*",
-            has: [
-              {
-                type: "host",
-                value: "(?<subdomain>.*)\\..*",
-              },
-            ],
-            destination: "/:subdomain/:path*",
+            type: "host",
+            value: "(?<subdomain>.*)\\..*",
           },
-        ]
-      : [];
+        ],
+        destination: "/:subdomain/:path*",
+      },
+    ]
   },
 };
