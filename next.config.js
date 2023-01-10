@@ -7,7 +7,7 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "(?<subdomain>.*)\\..*",
+            value: "(?<subdomain>.*?)\\..*",
           },
         ],
         destination: "/:subdomain",
@@ -17,7 +17,7 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "(?<subdomain>.*)\\..*",
+            value: "(?<subdomain>.*?)\\..*",
           },
         ],
         destination: "/:subdomain/:path*",
