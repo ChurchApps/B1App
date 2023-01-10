@@ -7,6 +7,16 @@ module.exports = {
         has: [
           {
             type: "host",
+            value: "localhost",
+          },
+        ],
+        destination: "/localhost",
+      },
+      {
+        source: "/",
+        has: [
+          {
+            type: "host",
             value: "(?<subdomain>.*?)\\..*",
           },
         ],
