@@ -1,5 +1,4 @@
-module.exports = {
-  reactStrictMode: true,
+const devRewrites = (process.env.NEXT_STAGE) ? {
   async rewrites() {
     return [
       {
@@ -24,4 +23,9 @@ module.exports = {
       }
     ]
   }
+} : null;
+
+module.exports = {
+  reactStrictMode: true,
+  devRewrites
 };
