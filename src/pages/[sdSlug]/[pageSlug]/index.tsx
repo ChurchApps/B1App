@@ -23,9 +23,12 @@ export default function Home(props: Props) {
     return result;
   }
 
+  console.log(props);
   return (
-    <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
-
+    <>
+      <h1>Page Slug</h1>
+      <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+    </>
   );
 }
 

@@ -25,6 +25,7 @@ export default function Home(props: Props) {
   return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
+        <h1>SD Slug</h1>
         {getSections()}
       </div>
     </Layout>
