@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Wrapper } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 
-export default function Votd(props: any) {
+export default function Votd(props: WrapperPageProps) {
   const [shape, setShape] = useState("16x9");
 
   const getShape = () => {
@@ -36,7 +37,7 @@ export default function Votd(props: any) {
   const day = getDayOfYear();
 
   return (
-    <Wrapper sdSlug={props.sdSlug}>
+    <Wrapper config={props.config}>
       <img
         src={"https://livechurchsolutions.github.io/VotdContent/v1/" + day + "/" + shape + ".jpg"}
         className="full-frame"
@@ -52,8 +53,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  return {
-    props: { sdSlug: params.sdSlug },
-    revalidate: 30,
-  };
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
 };

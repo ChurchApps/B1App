@@ -1,12 +1,12 @@
 import React from "react";
 import Link from "next/link";
-import { UserHelper } from "@/helpers";
+import { ConfigHelper, UserHelper, WrapperPageProps } from "@/helpers";
 import { DirectorySearch } from "@/components/member/directory/DirectorySearch";
 import { Person } from "@/components/member/directory/Person";
 import { Wrapper } from "@/components/Wrapper";
 import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Admin(props: any) {
+export default function Admin(props: WrapperPageProps) {
 
   const [personId, setPersonId] = React.useState("");
 
@@ -17,7 +17,7 @@ export default function Admin(props: any) {
 
   return (
 
-    <Wrapper sdSlug={props.sdSlug}>
+    <Wrapper config={props.config}>
       {
         UserHelper.user?.firstName
           ? (getContent())
@@ -34,9 +34,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  return {
-    props: { sdSlug: params.sdSlug },
-    revalidate: 30,
-  };
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
 };
 

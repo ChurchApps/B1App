@@ -1,5 +1,6 @@
 export * from "@/appBase/interfaces";
 import { Permissions as BasePermissions } from "@/appBase/interfaces/Permissions"
+import { ConfigurationInterface } from "./ConfigHelper";
 
 export interface ColumnInterface {
   size: number;
@@ -74,6 +75,10 @@ export interface B1LinkInterface {
   linkData: string;
   icon: string;
   photo?: string;
+}
+
+export interface WrapperPageProps {
+  config: ConfigurationInterface
 }
 
 export class Permissions extends BasePermissions {
