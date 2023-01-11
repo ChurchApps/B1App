@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../appBase/components";
 import { useRouter } from "next/router"
 import { Themes } from "@/appBase/helpers";
 import { ConfigHelper, EnvironmentHelper, PersonHelper } from "@/helpers"
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { SubdomainHelper } from "@/helpers/SubdomainHelper";
-import { LoadingPage } from "./LoadingPage";
+
 
 interface Props { pageTitle?: string, children: React.ReactNode }
 
@@ -16,15 +14,6 @@ export const Wrapper: React.FC<Props> = props => {
   PersonHelper.person = context.person;
   const tabs = []
   const router = useRouter();
-  const [config, setConfig] = useState<ConfigurationInterface>({} as ConfigurationInterface)
-
-  const loadConfig = () => {
-    SubdomainHelper.subDomain = window.location.hostname.split(".")[0];
-    ConfigHelper.load(SubdomainHelper.subDomain).then(data => { setConfig(data); })
-  }
-
-  useEffect(loadConfig, [])
-
 
   const getSelectedTab = () => {
     const path = window.location.pathname;
@@ -90,16 +79,12 @@ export const Wrapper: React.FC<Props> = props => {
 
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
+  return <ThemeProvider theme={Themes.BaseTheme}>
+    <CssBaseline />
+    <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
+      <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} >{props.children}</SiteWrapper>
+    </Box>
+  </ThemeProvider>
 
-  if (config.keyName === undefined) {
-    return <LoadingPage config={config} />
-  } else {
-    return <ThemeProvider theme={Themes.BaseTheme}>
-      <CssBaseline />
-      <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-        <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} >{props.children}</SiteWrapper>
-      </Box>
-    </ThemeProvider>
-  }
 
 };
