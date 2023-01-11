@@ -38,7 +38,7 @@ export default function DonationLanding(props: Props) {
   if (config.keyName === undefined) {
     return <LoadingPage config={config} />
   } else {
-    const logoSrc = AppearanceHelper.getLogoLight(ConfigHelper.current.appearance, "/images/logo.png");
+    const logoSrc = AppearanceHelper.getLogoLight(ConfigHelper?.current?.appearance, "/images/logo.png");
     return (
       <Box
         sx={{
