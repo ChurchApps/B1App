@@ -34,8 +34,6 @@ export const Wrapper: React.FC<Props> = props => {
 
   if (!EnvironmentHelper.HideYoursite) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
-  console.log(props.config);
-
   props.config.tabs?.forEach(tab => {
     switch (tab.linkType) {
       case "donation":
