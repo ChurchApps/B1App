@@ -18,6 +18,7 @@ export const Wrapper: React.FC<Props> = props => {
   const router = useRouter();
   const [config, setConfig] = useState<ConfigurationInterface>({} as ConfigurationInterface)
 
+  /*
   const loadConfig = () => {
     if (typeof window !== "undefined") {
       SubdomainHelper.subDomain = window.location.hostname.split(".")[0];
@@ -26,10 +27,11 @@ export const Wrapper: React.FC<Props> = props => {
   }
 
   useEffect(loadConfig, [])
-
+*/
 
   const getSelectedTab = () => {
-    const path = (typeof window === "undefined") ? "" : window.location.pathname;
+    //const path = (typeof window === "undefined") ? "" : window.location.pathname;
+    const path = "";
     let result = "";
     if (path.startsWith("/member/donate")) result = "donation";
     else if (path.startsWith("/member/checkin")) result = "checkin";
