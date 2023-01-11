@@ -19,7 +19,7 @@ export const Wrapper: React.FC<Props> = props => {
   const [config, setConfig] = useState<ConfigurationInterface>({} as ConfigurationInterface)
 
   const loadConfig = () => {
-    if (window) {
+    if (typeof window !== "undefined") {
       SubdomainHelper.subDomain = window.location.hostname.split(".")[0];
       ConfigHelper.load(SubdomainHelper.subDomain).then(data => { setConfig(data); })
     }
@@ -68,7 +68,7 @@ export const Wrapper: React.FC<Props> = props => {
         tabs.push(<NavItem key="/member/directory" url="/member/directory" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "directory"} />)
         break
       case "url":
-        tabs.push(<NavItem key={`/member/url/${tab.id}`} url={`/member/url/${tab.id}`} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "url" && window?.location?.href?.indexOf(tab.id) > -1} />)
+        tabs.push(<NavItem key={`/member/url/${tab.id}`} url={`/member/url/${tab.id}`} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "url" && typeof window !== "undefined" && window?.location?.href?.indexOf(tab.id) > -1} />)
         break
       case "bible":
         tabs.push(<NavItem key="/member/bible" url="/member/bible" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "bible"} />)
