@@ -11,6 +11,8 @@ type Props = {
 };
 
 export default function Home(props: Props) {
+
+  console.log("****Settings", EnvironmentHelper.HideYoursite, typeof window)
   useEffect(() => {
     if (EnvironmentHelper.HideYoursite && typeof window !== undefined) window.location.href = window.location.origin + "/member";
   }, []); //eslint-disable-line
