@@ -30,7 +30,10 @@ export class EnvironmentHelper {
     this.initStaging();
     EnvironmentHelper.B1Api = process.env.NEXT_PUBLIC_B1_API || EnvironmentHelper.B1Api;
     EnvironmentHelper.ContentApi = process.env.NEXT_PUBLIC_CONTENT_API || EnvironmentHelper.ContentApi;
-    if (process.env.NEXT_HIDE_YOURSITE) EnvironmentHelper.HideYoursite = true;
+    if (process.env.NEXT_HIDE_YOURSITE === "1") EnvironmentHelper.HideYoursite = true;
+    console.log("****HIDE?")
+    console.log(process.env.NEXT_HIDE_YOURSITE);
+    console.log(EnvironmentHelper.HideYoursite)
   };
 
   //NOTE: None of these values are secret.

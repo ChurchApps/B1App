@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Layout, PageLayout } from "@/components";
+import { PageLayout } from "@/components";
 import { Section } from "@/components/Section";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
 
@@ -11,17 +11,7 @@ type Props = {
 };
 
 export default function Home(props: Props) {
-  const getSections = () => {
-    const result: JSX.Element[] = []
-    let first = true;
-    if (props.pageData?.sections) {
-      for (let section of props.pageData.sections) {
-        result.push(<Section section={section} first={first} churchId={props.church.id} />)
-        first = false;
-      }
-    }
-    return result;
-  }
+  if (EnvironmentHelper.HideYoursite && typeof window !== undefined) window.location.href = window.location.origin + "/member";
 
   return (<PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />);
 }
@@ -42,7 +32,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (EnvironmentHelper.HideYoursite) return { redirect: { destination: "/member", permanent: false } }
 
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
