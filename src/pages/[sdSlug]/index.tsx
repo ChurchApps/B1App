@@ -3,7 +3,7 @@ import { Layout } from "@/components";
 import { Section } from "@/components/Section";
 import pageData from "../../samplePages/newhere.json";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface } from "@/helpers";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 type Props = {
   pageData: any;
@@ -13,7 +13,9 @@ type Props = {
 };
 
 export default function Home(props: Props) {
-  if (EnvironmentHelper.HideYoursite && typeof window !== undefined) window.location.href = window.location.origin + "/member";
+  useEffect(() => {
+    if (EnvironmentHelper.HideYoursite && typeof window !== undefined) window.location.href = window.location.origin + "/member";
+  }, []); //eslint-disable-line
 
   const getSections = () => {
     const result: JSX.Element[] = []
