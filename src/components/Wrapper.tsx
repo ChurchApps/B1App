@@ -19,8 +19,10 @@ export const Wrapper: React.FC<Props> = props => {
   const [config, setConfig] = useState<ConfigurationInterface>({} as ConfigurationInterface)
 
   const loadConfig = () => {
-    SubdomainHelper.subDomain = window.location.hostname.split(".")[0];
-    ConfigHelper.load(SubdomainHelper.subDomain).then(data => { setConfig(data); })
+    if (window) {
+      SubdomainHelper.subDomain = window.location.hostname.split(".")[0];
+      ConfigHelper.load(SubdomainHelper.subDomain).then(data => { setConfig(data); })
+    }
   }
 
   useEffect(loadConfig, [])
@@ -91,7 +93,7 @@ export const Wrapper: React.FC<Props> = props => {
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
 
-  if (config.keyName === undefined) {
+  if (window && config.keyName === undefined) {
     return <LoadingPage config={config} />
   } else {
     return <ThemeProvider theme={Themes.BaseTheme}>
