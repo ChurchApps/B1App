@@ -29,7 +29,7 @@ export const Wrapper: React.FC<Props> = props => {
 
 
   const getSelectedTab = () => {
-    const path = (window) ? window.location.pathname : "";
+    const path = (typeof window === "undefined") ? "" : window.location.pathname;
     let result = "";
     if (path.startsWith("/member/donate")) result = "donation";
     else if (path.startsWith("/member/checkin")) result = "checkin";
