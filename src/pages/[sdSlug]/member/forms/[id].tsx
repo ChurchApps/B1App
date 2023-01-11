@@ -3,8 +3,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConfigHelper, ApiHelper, PersonHelper, DateHelper } from "@/helpers";
 import { Wrapper, Loading, FormSubmissionEdit } from "@/components";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Form() {
+export default function Form(props: any) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [restrictedForm, setRestrictedForm] = useState<boolean>(true);
@@ -66,8 +67,20 @@ export default function Form() {
   useEffect(loadData, [formId]);
 
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       {isFormSubmitted ? <h3 className="text-center">Your form has been successfully submitted.</h3> : getForm()}
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};

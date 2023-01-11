@@ -2,10 +2,11 @@ import Link from "next/link";
 import { Icon, Grid, Typography, Button } from "@mui/material";
 import { PersonHelper, ConfigHelper } from "@/helpers";
 import { DonationPage as BaseDonationPage, NonAuthDonation, Wrapper } from "@/components";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Donate() {
+export default function Donate(props: any) {
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       <h1>
         <Icon>volunteer_activism</Icon>Give
       </h1>
@@ -37,3 +38,16 @@ export default function Donate() {
     </Wrapper>
   );
 }
+
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};

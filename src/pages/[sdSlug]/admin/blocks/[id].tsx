@@ -12,9 +12,10 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
+import { GetStaticPaths, GetStaticProps } from "next";
 
 
-export default function Admin() {
+export default function Admin(props: any) {
   const { isAuthenticated } = ApiHelper
   const router = useRouter();
   const [block, setBlock] = useState<BlockInterface>(null);
@@ -95,7 +96,7 @@ export default function Admin() {
 
 
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       <h1>Edit Block</h1>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
@@ -120,3 +121,15 @@ export default function Admin() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};

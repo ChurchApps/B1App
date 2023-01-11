@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Wrapper } from "@/components";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Votd() {
+export default function Votd(props: any) {
   const [shape, setShape] = useState("16x9");
 
   const getShape = () => {
@@ -35,7 +36,7 @@ export default function Votd() {
   const day = getDayOfYear();
 
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       <img
         src={"https://livechurchsolutions.github.io/VotdContent/v1/" + day + "/" + shape + ".jpg"}
         className="full-frame"
@@ -44,3 +45,15 @@ export default function Votd() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};

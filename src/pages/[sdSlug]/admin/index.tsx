@@ -20,7 +20,7 @@ export default function Admin(props: Props) {
   useEffect(() => { if (!isAuthenticated) { router.push("/login"); } }, []);
 
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       <TabContext value={activeTab}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={(_, value) => setActiveTab(value)} aria-label="lab API tabs example">

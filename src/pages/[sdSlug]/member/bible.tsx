@@ -1,8 +1,9 @@
 import { Wrapper } from "@/components";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Bible() {
+export default function Bible(props: any) {
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       <iframe
         title="content"
         className="full-frame"
@@ -11,3 +12,15 @@ export default function Bible() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};

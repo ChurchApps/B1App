@@ -1,9 +1,10 @@
 import { Wrapper } from "@/components";
 import { EnvironmentHelper, ConfigHelper } from "@/helpers";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Lessons() {
+export default function Lessons(props: any) {
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       <iframe
         title="content"
         className="full-frame"
@@ -12,3 +13,15 @@ export default function Lessons() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};

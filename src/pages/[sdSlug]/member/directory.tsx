@@ -4,8 +4,9 @@ import { UserHelper } from "@/helpers";
 import { DirectorySearch } from "@/components/member/directory/DirectorySearch";
 import { Person } from "@/components/member/directory/Person";
 import { Wrapper } from "@/components/Wrapper";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Admin() {
+export default function Admin(props: any) {
 
   const [personId, setPersonId] = React.useState("");
 
@@ -16,7 +17,7 @@ export default function Admin() {
 
   return (
 
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       {
         UserHelper.user?.firstName
           ? (getContent())
@@ -26,3 +27,16 @@ export default function Admin() {
 
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};
+

@@ -4,8 +4,9 @@ import { useRouter } from "next/router";
 import { GroupInterface, ApiHelper, UserHelper } from "@/helpers";
 import { Wrapper, MarkdownPreview, Conversations } from "@/components";
 import UserContext from "@/context/UserContext";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function GroupPage() {
+export default function GroupPage(props: any) {
   const [group, setGroup] = useState<GroupInterface>(null);
   const router = useRouter();
   const context = useContext(UserContext);
@@ -19,7 +20,7 @@ export default function GroupPage() {
 
   if (!UserHelper.currentUserChurch?.person?.id) {
     return (
-      <Wrapper>
+      <Wrapper sdSlug={props.sdSlug}>
         <h1>Group</h1>
         <h3 className="text-center w-100">
           Please <Link href="/login/?returnUrl=/directory">Login</Link> to view your groups.
@@ -29,7 +30,7 @@ export default function GroupPage() {
   }
 
   return (
-    <Wrapper>
+    <Wrapper sdSlug={props.sdSlug}>
       {group ? (
         <>
           <h1>{group.name}</h1>
@@ -43,3 +44,15 @@ export default function GroupPage() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: { sdSlug: params.sdSlug },
+    revalidate: 30,
+  };
+};
