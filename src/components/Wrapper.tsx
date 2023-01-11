@@ -48,7 +48,7 @@ export const Wrapper: React.FC<Props> = props => {
   if (!EnvironmentHelper.HideYoursite) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
 
-  ConfigHelper.current.tabs.forEach(tab => {
+  ConfigHelper.current.tabs?.forEach(tab => {
     switch (tab.linkType) {
       case "donation":
         tabs.push(<NavItem key="/member/donate" url="/member/donate" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
