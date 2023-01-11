@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Layout } from "@/components";
+import { Layout, Loading } from "@/components";
 import { Section } from "@/components/Section";
 import pageData from "../../samplePages/newhere.json";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface } from "@/helpers";
@@ -27,7 +27,8 @@ export default function Home(props: Props) {
     return result;
   }
 
-  return (
+  if (EnvironmentHelper.HideYoursite) return <Loading />
+  else return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
       <div id="page">
         {getSections()}
