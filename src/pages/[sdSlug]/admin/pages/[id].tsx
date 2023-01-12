@@ -2,7 +2,7 @@ import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
 import { Grid } from "@mui/material";
-import { ApiHelper, ElementInterface, PageInterface, SectionInterface, UserHelper } from "@/helpers";
+import { ApiHelper, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
 import { DisplayBox } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
@@ -13,9 +13,10 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
 import { SectionBlock } from "@/components/SectionBlock";
+import { GetStaticPaths, GetStaticProps } from "next";
 
 
-export default function Admin() {
+export default function Admin(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper
   const router = useRouter();
   const [page, setPage] = useState<PageInterface>(null);
@@ -97,9 +98,8 @@ export default function Admin() {
     }
   }
 
-
   return (
-    <Wrapper>
+    <Wrapper config={props.config}>
       <h1>Edit Page</h1>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
@@ -124,3 +124,13 @@ export default function Admin() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
+};

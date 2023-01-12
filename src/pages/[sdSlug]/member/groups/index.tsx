@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid, Typography } from "@mui/material";
 import { Wrapper } from "@/components";
-import { ApiHelper, GroupInterface, UserHelper } from "@/helpers";
+import { ApiHelper, ConfigHelper, GroupInterface, UserHelper, WrapperPageProps } from "@/helpers";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Groups() {
+export default function Groups(props: WrapperPageProps) {
   const [groups, setGroups] = useState<GroupInterface[]>([]);
 
   const loadData = () => {
@@ -15,7 +16,7 @@ export default function Groups() {
 
   if (!UserHelper.currentUserChurch?.person?.id) {
     return (
-      <Wrapper>
+      <Wrapper config={props.config}>
         <h1>My Groups</h1>
         <h3 className="text-center w-100">
           Please <Link href="/login/?returnUrl=/directory">Login</Link> to view your groups.
@@ -25,7 +26,7 @@ export default function Groups() {
   }
 
   return (
-    <Wrapper>
+    <Wrapper config={props.config}>
       <h1>My Groups</h1>
       <Grid container spacing={3}>
         {groups?.length > 0 ? (
@@ -68,3 +69,13 @@ export default function Groups() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
+};

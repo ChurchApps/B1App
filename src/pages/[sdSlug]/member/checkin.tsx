@@ -2,9 +2,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { Grid } from "@mui/material";
 import { Wrapper, Household, CheckinComplete, Services } from "@/components";
-import { UserHelper } from "@/helpers";
+import { ConfigHelper, UserHelper, WrapperPageProps } from "@/helpers";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Checkin() {
+export default function Checkin(props: WrapperPageProps) {
   const [currentStep, setCurrentStep] = useState<"household" | "complete">();
 
   let content = null;
@@ -21,7 +22,7 @@ export default function Checkin() {
   }
 
   return (
-    <Wrapper>
+    <Wrapper config={props.config}>
       {UserHelper.user?.firstName ? (
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
@@ -36,3 +37,17 @@ export default function Checkin() {
     </Wrapper>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = [];
+  return { paths, fallback: "blocking", };
+};
+;
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return {
+    props: { config },
+    revalidate: 30,
+  };
+};

@@ -9,7 +9,7 @@ export interface ServiceInterface { videoUrl: string, serviceTime: string, durat
 export interface ConfigurationInterface { keyName?: string, churchId?: string, tabs?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface }
 
 export class ConfigHelper {
-  static current: ConfigurationInterface;
+  //static current: ConfigurationInterface;
   static churchId = "";
 
   static async load(keyName: string) {
@@ -18,9 +18,8 @@ export class ConfigHelper {
     const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + churchId + "?category=tab", "B1Api");
     const church = await ApiHelper.getAnonymous("/churches/lookup/?id=" + churchId, "MembershipApi")
     let result: ConfigurationInterface = { appearance: appearance, church: church, tabs: tabs }
-    localStorage.setItem(`b1theme_${keyName}`, JSON.stringify(result));
+    //localStorage.setItem(`b1theme_${keyName}`, JSON.stringify(result));
     result.keyName = keyName;
-    ConfigHelper.current = result;
     return result;
   }
 
@@ -32,8 +31,8 @@ export class ConfigHelper {
     return ConfigHelper.churchId;
   }
 
-  static getFirstRoute() {
-    const firstTab = ConfigHelper.current.tabs[0]
+  static getFirstRoute(config: ConfigurationInterface) {
+    const firstTab = config.tabs[0]
 
     if (!firstTab) {
       return UserHelper.checkAccess(Permissions.b1Api.settings.edit) ? "/admin/settings" : "/"

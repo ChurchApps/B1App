@@ -1,32 +1,21 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { GiveNowPanel, Layout, SignInPanel } from "@/components";
-import { Section } from "@/components/Section";
-import pageData from "../../samplePages/newhere.json";
-import { ApiHelper, AppearanceHelper, ChurchInterface, ConfigHelper, EnvironmentHelper, LinkInterface } from "@/helpers";
-import { Navigate } from "react-router-dom";
+import { GiveNowPanel, SignInPanel } from "@/components";
+import { AppearanceHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
 import { TabContext, TabPanel } from "@mui/lab";
 import { Box, Card, Tabs, Tab } from "@mui/material";
 import { useState } from "react";
 
-type Props = {
-
-};
-
-export default function DonationLanding(props: Props) {
+export default function DonationLanding(props: WrapperPageProps) {
   const [value, setValue] = useState("0");
-  const logoSrc = AppearanceHelper.getLogoLight(ConfigHelper.current.appearance, "/images/logo.png");
+
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
+  const logoSrc = AppearanceHelper.getLogoLight(props.config.appearance, "/images/logo.png");
   return (
-    <Box
-      sx={{
-        backgroundColor: "#f9f9f9",
-        minHeight: "100vh"
-      }}
-    >
+    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
       <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
         <Card>
           <Box sx={{ paddingTop: 8, paddingX: 10, paddingBottom: 3 }}>
@@ -50,22 +39,22 @@ export default function DonationLanding(props: Props) {
       </Box>
     </Box>
   );
+
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
   const paths = [
-    { params: { sdSlug: "crcc" } },
-    { params: { sdSlug: "ironwood" } },
+    { params: { sdSlug: "livecs" } }
   ];
 
   return { paths, fallback: "blocking", };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-
+  const config = await ConfigHelper.load(params.sdSlug.toString());
   return {
-    props: {},
+    props: { config },
     revalidate: 30,
   };
 };
