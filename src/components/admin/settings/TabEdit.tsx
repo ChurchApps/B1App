@@ -22,7 +22,7 @@ interface Props {
   updatedFunction?: () => void;
 }
 
-export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () => {} }: Props) {
+export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () => { } }: Props) {
   const [currentTab, setCurrentTab] = useState<B1LinkInterface>(null);
   const [pages, setPages] = useState<B1PageInterface[]>(null);
   const [showLibrary, setShowLibrary] = useState<boolean>(false);
@@ -135,9 +135,10 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
   };
 
   const isDisabled = (tabName: string) => {
+    /*
     if (ConfigHelper.current.tabs.some((t) => t.linkType === tabName)) {
       return true;
-    }
+    }*/
     return false;
   };
 

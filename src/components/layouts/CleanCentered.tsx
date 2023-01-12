@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, Card, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@/helpers";
 import Zone from "./Zone";
 

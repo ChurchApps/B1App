@@ -20,7 +20,6 @@ export class ConfigHelper {
     let result: ConfigurationInterface = { appearance: appearance, church: church, tabs: tabs }
     //localStorage.setItem(`b1theme_${keyName}`, JSON.stringify(result));
     result.keyName = keyName;
-    //ConfigHelper.current = result;
     return result;
   }
 
