@@ -1,9 +1,10 @@
 import { Wrapper } from "@/components";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Bible(props: any) {
+export default function Bible(props: WrapperPageProps) {
   return (
-    <Wrapper sdSlug={props.sdSlug}>
+    <Wrapper config={props.config}>
       <iframe
         title="content"
         className="full-frame"
@@ -19,8 +20,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const config = await ConfigHelper.load(params.sdSlug.toString());
   return {
-    props: { sdSlug: params.sdSlug },
+    props: { config },
     revalidate: 30,
   };
 };
+

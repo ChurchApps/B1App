@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { Icon, Grid, Typography, Button } from "@mui/material";
-import { PersonHelper, ConfigHelper } from "@/helpers";
+import { PersonHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
 import { DonationPage as BaseDonationPage, NonAuthDonation, Wrapper } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Donate(props: any) {
+export default function Donate(props: WrapperPageProps) {
   return (
-    <Wrapper sdSlug={props.sdSlug}>
+    <Wrapper config={props.config}>
       <h1>
         <Icon>volunteer_activism</Icon>Give
       </h1>
@@ -46,8 +46,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  return {
-    props: { sdSlug: params.sdSlug },
-    revalidate: 30,
-  };
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
 };

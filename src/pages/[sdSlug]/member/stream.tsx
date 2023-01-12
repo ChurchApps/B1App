@@ -1,14 +1,14 @@
-import { EnvironmentHelper, ConfigHelper } from "@/helpers";
+import { EnvironmentHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
 import { Wrapper } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Stream(props: any) {
+export default function Stream(props: WrapperPageProps) {
   return (
-    <Wrapper sdSlug={props.sdSlug}>
+    <Wrapper config={props.config}>
       <iframe
         title="content"
         className="full-frame"
-        src={EnvironmentHelper.Common.StreamingLiveRoot.replace("{key}", ConfigHelper.current.church.subDomain)}
+        src={EnvironmentHelper.Common.StreamingLiveRoot.replace("{key}", props.config.church.subDomain)}
       />
     </Wrapper>
   );
@@ -21,8 +21,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  return {
-    props: { sdSlug: params.sdSlug },
-    revalidate: 30,
-  };
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../appBase/components";
@@ -6,11 +6,8 @@ import { useRouter } from "next/router"
 import { Themes } from "@/appBase/helpers";
 import { ConfigHelper, EnvironmentHelper, PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { SubdomainHelper } from "@/helpers/SubdomainHelper";
-import { LoadingPage } from "./LoadingPage";
 
-
-interface Props { sdSlug: string, pageTitle?: string, children: React.ReactNode }
+interface Props { config: ConfigurationInterface, pageTitle?: string, children: React.ReactNode }
 
 export const Wrapper: React.FC<Props> = props => {
   const context = React.useContext(UserContext);
@@ -37,8 +34,7 @@ export const Wrapper: React.FC<Props> = props => {
 
   if (!EnvironmentHelper.HideYoursite) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
-
-  ConfigHelper?.current?.tabs?.forEach(tab => {
+  props.config.tabs?.forEach(tab => {
     switch (tab.linkType) {
       case "donation":
         tabs.push(<NavItem key="/member/donate" url="/member/donate" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
@@ -83,30 +79,12 @@ export const Wrapper: React.FC<Props> = props => {
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
 
-
-  const [config, setConfig] = useState<ConfigurationInterface>({} as ConfigurationInterface)
-
-  const loadConfig = () => {
-    SubdomainHelper.subDomain = props.sdSlug;
-
-    ConfigHelper.load(SubdomainHelper.subDomain).then(data => {
-      setConfig(data);
-    })
-  }
-
-  useEffect(loadConfig, [])
-
-  if (config.keyName === undefined) {
-    return <LoadingPage config={config} />
-  } else {
-
-    return <ThemeProvider theme={Themes.BaseTheme}>
-      <CssBaseline />
-      <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-        <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} >{props.children}</SiteWrapper>
-      </Box>
-    </ThemeProvider>
-  }
+  return <ThemeProvider theme={Themes.BaseTheme} >
+    <CssBaseline />
+    <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
+      <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} >{props.children}</SiteWrapper>
+    </Box>
+  </ThemeProvider>
 
 
 };

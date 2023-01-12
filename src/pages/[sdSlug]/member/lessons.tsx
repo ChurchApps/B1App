@@ -1,14 +1,14 @@
 import { Wrapper } from "@/components";
-import { EnvironmentHelper, ConfigHelper } from "@/helpers";
+import { EnvironmentHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
 import { GetStaticPaths, GetStaticProps } from "next";
 
-export default function Lessons(props: any) {
+export default function Lessons(props: WrapperPageProps) {
   return (
-    <Wrapper sdSlug={props.sdSlug}>
+    <Wrapper config={props.config}>
       <iframe
         title="content"
         className="full-frame"
-        src={EnvironmentHelper.Common.LessonsRoot + "/b1/" + ConfigHelper.current.church.id}
+        src={EnvironmentHelper.Common.LessonsRoot + "/b1/" + props.config.church.id}
       />
     </Wrapper>
   );
@@ -19,9 +19,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: "blocking", };
 };
 
+
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  return {
-    props: { sdSlug: params.sdSlug },
-    revalidate: 30,
-  };
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
 };
