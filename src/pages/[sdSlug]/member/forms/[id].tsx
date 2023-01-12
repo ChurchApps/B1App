@@ -18,7 +18,7 @@ export default function Form(props: WrapperPageProps) {
 
   const loadData = () => {
     setIsLoading(true);
-    ApiHelper.get("/forms/standalone/" + formId + "?churchId=" + ConfigHelper.churchId, "MembershipApi").then(
+    ApiHelper.get("/forms/standalone/" + formId + "?churchId=" + props.config.church.id, "MembershipApi").then(
       (data) => {
         let now = new Date().setHours(0, 0, 0, 0);
         let start = data.accessStartTime ? new Date(data.accessStartTime) : null;
@@ -37,7 +37,7 @@ export default function Form(props: WrapperPageProps) {
 
   const showForm = () => (
     <FormSubmissionEdit
-      churchId={ConfigHelper.churchId}
+      churchId={props.config.church.id}
       addFormId={addFormId}
       unRestrictedFormId={unRestrictedFormId}
       contentType="form"
