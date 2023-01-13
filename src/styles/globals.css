@@ -39,7 +39,7 @@ body {
   margin: 0px;
 }
 
-#page h2 {
+.page h2 {
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
   margin-bottom: 25px;
@@ -51,29 +51,29 @@ body {
   max-height: 65px;
 }
 
-#page H1 {
+.page H1 {
   font-size: 80px;
   border-bottom: none;
   text-align: center;
 }
 
-#page .section {
+.page .section {
   min-height: 100px;
 }
 
-#page .sectionFirst {
+.page .sectionFirst {
   padding-top: 60px;
 }
 
-#page .videoDark {
+.page .videoDark {
   color: #FFFFFF;
 }
 
-#page .sectionDark {
+.page .sectionDark {
   color: #FFFFFF;
 }
 
-#page .sectionBG {
+.page .sectionBG {
   background-attachment: fixed;
   background-position-x: 50%;
   background-position-y: 50%;
@@ -81,7 +81,7 @@ body {
   position: relative;
 }
 
-#page .sectionBG:before {
+.page .sectionBG:before {
   content: '';
   position: absolute;
   left: 0;

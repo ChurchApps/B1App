@@ -30,7 +30,7 @@ export default function Home(props: Props) {
   if (EnvironmentHelper.HideYoursite) return <Loading />
   else return (
     <Layout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks}>
-      <div id="page">
+      <div className="page">
         {getSections()}
       </div>
     </Layout>

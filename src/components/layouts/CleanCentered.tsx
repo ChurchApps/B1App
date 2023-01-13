@@ -46,7 +46,7 @@ export function CleanCentered(props: Props) {
           <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
             <Card>
               <main>
-                <div id="page">
+                <div className="page">
                   <Zone church={props.church} sections={props.pageData.sections} zone="main" />
                 </div>
               </main>
