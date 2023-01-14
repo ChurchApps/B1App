@@ -15,7 +15,6 @@ const getChildren = (elements: ElementInterface[]) => {
 
 export const ElementBlock: React.FC<Props> = (props) => {
   let result = <>
-    Element Block - **TODO: Implement**
     {getChildren(props.element.elements)}
   </>;
   return result;

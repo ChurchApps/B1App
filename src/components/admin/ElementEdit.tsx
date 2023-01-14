@@ -5,6 +5,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEve
 import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
+import { RowEdit } from "./RowEdit";
 
 type Props = {
   element: ElementInterface;
@@ -100,7 +101,7 @@ export function ElementEdit(props: Props) {
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
-      case "row": result = <></>; break;
+      case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} />; break;
       case "column": result = getColumnFields(); break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
@@ -115,6 +116,12 @@ export function ElementEdit(props: Props) {
     p.answersJSON = JSON.stringify(parsedData);
     setElement(p);
     setSelectPhotoField(null);
+  }
+
+  const handleRowChange = (parsedData: any) => {
+    let e = { ...element };
+    e.answersJSON = JSON.stringify(parsedData);
+    setElement(e);
   }
 
   useEffect(() => { setElement(props.element); loadBlocks() }, [props.element]);

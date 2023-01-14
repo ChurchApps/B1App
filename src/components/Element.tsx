@@ -27,6 +27,7 @@ export const Element: React.FC<Props> = props => {
     else {
       const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId };
       if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
+      else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
       props.onEdit(null, element);
     }
   }
