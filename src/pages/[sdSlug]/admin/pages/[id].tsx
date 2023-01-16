@@ -65,7 +65,7 @@ export default function Admin(props: WrapperPageProps) {
     result.push(getAddSection(0, zone));
     const sections = ArrayHelper.getAll(page?.sections, "zone", zone);
     sections.forEach(section => {
-      if (section.targetBlockId) result.push(<SectionBlock section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       else result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });

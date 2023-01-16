@@ -41,22 +41,22 @@ export const Element: React.FC<Props> = props => {
 
   switch (props.element.elementType) {
     case "block":
-      result = <ElementBlock element={props.element as ElementInterface} />
+      result = <ElementBlock key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "text":
-      result = <TextOnly element={props.element as ElementInterface} />
+      result = <TextOnly key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "textWithPhoto":
-      result = <TextWithPhoto element={props.element as ElementInterface} />
+      result = <TextWithPhoto key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "row":
-      result = <RowElement element={props.element as ElementInterface} onEdit={props.onEdit} />
+      result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
     case "map":
-      result = <h2>Google Map Goes Here</h2>
+      result = <h2 key={props.element.id}>Google Map Goes Here</h2>
       break;
     case "donation":
-      result = <NonAuthDonation churchId={props.churchId ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      result = <NonAuthDonation key={props.element.id} churchId={props.churchId ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
       break;
   }
 
