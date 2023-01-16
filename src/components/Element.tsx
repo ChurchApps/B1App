@@ -65,14 +65,16 @@ export const Element: React.FC<Props> = props => {
     result = <><div className="elementWrapper">
       <div className="elementActions">
         <table style={{ float: "right" }}>
-          <tr>
-            <td><DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} /></td>
-            <td>
-              <div className="sectionEditButton">
-                <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} />
-              </div>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td><DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} /></td>
+              <td>
+                <div className="sectionEditButton">
+                  <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} />
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
       {result}

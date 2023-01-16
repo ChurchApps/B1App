@@ -8,7 +8,7 @@ interface Props {
 const getChildren = (elements: ElementInterface[]) => {
   const result: JSX.Element[] = []
   elements?.forEach(c => {
-    result.push(<Element element={c} />)
+    result.push(<Element key={c.id} element={c} />)
   });
   return result;
 }

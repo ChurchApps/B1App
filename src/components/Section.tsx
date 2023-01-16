@@ -59,14 +59,16 @@ export const Section: React.FC<Props> = props => {
       return (
         <div className="sectionActions">
           <table style={{ float: "right" }}>
-            <tr>
-              <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
-              <td>
-                <div className="sectionEditButton">
-                  <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
-                </div>
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
+                <td>
+                  <div className="sectionEditButton">
+                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       );

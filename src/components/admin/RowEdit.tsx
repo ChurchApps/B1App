@@ -29,9 +29,11 @@ export function RowEdit(props: Props) {
       idx++;
     });
     return (<Table size="small">
-      <TableRow>
-        {result}
-      </TableRow>
+      <TableBody>
+        <TableRow>
+          {result}
+        </TableRow>
+      </TableBody>
     </Table>);
   }
 
