@@ -5,6 +5,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEve
 import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
+import { RowEdit } from "./RowEdit";
 
 type Props = {
   element: ElementInterface;
@@ -17,6 +18,7 @@ export function ElementEdit(props: Props) {
   const [selectPhotoField, setSelectPhotoField] = React.useState<string>(null);
   const [element, setElement] = useState<ElementInterface>(null);
   const [errors, setErrors] = useState([]);
+  const [innerErrors, setInnerErrors] = useState([]);
   var parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
 
   const handleCancel = () => props.updatedCallback(element);
@@ -51,18 +53,14 @@ export function ElementEdit(props: Props) {
     setElement(p);
   };
 
-  const validate = () => {
-    let errors = [];
-    setErrors(errors);
-    return errors.length === 0;
-  };
-
   const handleSave = () => {
-    if (validate()) {
+    if (innerErrors.length === 0) {
       ApiHelper.post("/elements", [element], "ContentApi").then((data) => {
         setElement(data);
         props.updatedCallback(data);
       });
+    } else {
+      setErrors(innerErrors);
     }
   };
 
@@ -73,7 +71,6 @@ export function ElementEdit(props: Props) {
   };
 
   const getJsonFields = () => (<TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
-  const getColumnFields = () => (<TextField fullWidth label="Column width (12 per row; 6 columns = 1/2, 4 columns = 1/3)" name="size" type="number" value={parsedData.size || ""} onChange={handleChange} onKeyDown={handleKeyDown} />);
   const getTextFields = () => (
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={(val) => { handleMarkdownChange("text", val) }} />
@@ -100,8 +97,7 @@ export function ElementEdit(props: Props) {
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
-      case "row": result = <></>; break;
-      case "column": result = getColumnFields(); break;
+      case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />; break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
       case "donation": result = <></>; break;
@@ -115,6 +111,12 @@ export function ElementEdit(props: Props) {
     p.answersJSON = JSON.stringify(parsedData);
     setElement(p);
     setSelectPhotoField(null);
+  }
+
+  const handleRowChange = (parsedData: any) => {
+    let e = { ...element };
+    e.answersJSON = JSON.stringify(parsedData);
+    setElement(e);
   }
 
   useEffect(() => { setElement(props.element); loadBlocks() }, [props.element]);
@@ -133,7 +135,6 @@ export function ElementEdit(props: Props) {
           <MenuItem value="text">Text</MenuItem>
           <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
           <MenuItem value="row">Row</MenuItem>
-          <MenuItem value="column">Column</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
         </Select>
       </FormControl>

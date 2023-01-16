@@ -16,7 +16,7 @@ export default function Donate(props: WrapperPageProps) {
         <>
           <Grid container spacing={3}>
             <Grid item md={8} xs={12}>
-              <NonAuthDonation churchId={ConfigHelper.churchId} />
+              <NonAuthDonation churchId={props.config.church.id} />
             </Grid>
             <Grid item md={4} xs={12}>
               <Typography
