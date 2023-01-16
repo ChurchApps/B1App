@@ -103,7 +103,7 @@ export default function Admin(props: WrapperPageProps) {
   const realtimeUpdateElement = (element: ElementInterface, elements: ElementInterface[]) => {
     for (let i = 0; i < elements.length; i++) {
       if (elements[i].id === element.id) elements[i] = element;
-      if (element.elements?.length > 0) realtimeUpdateElement(element, element.elements);
+      //if (elements[i].elements?.length > 0) realtimeUpdateElement(element, element.elements);
     }
   }
 

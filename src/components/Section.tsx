@@ -64,7 +64,7 @@ export const Section: React.FC<Props> = props => {
                 <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
                 <td>
                   <div className="sectionEditButton">
-                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
+                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} toolTip="section" />
                   </div>
                 </td>
               </tr>

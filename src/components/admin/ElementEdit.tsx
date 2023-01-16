@@ -71,7 +71,6 @@ export function ElementEdit(props: Props) {
   };
 
   const getJsonFields = () => (<TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
-  const getColumnFields = () => (<TextField fullWidth label="Column width (12 per row; 6 columns = 1/2, 4 columns = 1/3)" name="size" type="number" value={parsedData.size || ""} onChange={handleChange} onKeyDown={handleKeyDown} />);
   const getTextFields = () => (
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={(val) => { handleMarkdownChange("text", val) }} />
@@ -99,7 +98,6 @@ export function ElementEdit(props: Props) {
     let result = getJsonFields();
     switch (element?.elementType) {
       case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />; break;
-      case "column": result = getColumnFields(); break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
       case "donation": result = <></>; break;
@@ -137,7 +135,6 @@ export function ElementEdit(props: Props) {
           <MenuItem value="text">Text</MenuItem>
           <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
           <MenuItem value="row">Row</MenuItem>
-          <MenuItem value="column">Column</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
         </Select>
       </FormControl>
