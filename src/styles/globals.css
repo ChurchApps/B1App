@@ -1412,4 +1412,12 @@ a.dropdown-toggle::after {
   margin-bottom: 0;
 }
 
+.text-success {
+  color: #28a745
+}
+
+.text-danger {
+  color: #dc3545
+}
+
 /* End private messaging & notes */

@@ -18,6 +18,7 @@ export function ElementEdit(props: Props) {
   const [selectPhotoField, setSelectPhotoField] = React.useState<string>(null);
   const [element, setElement] = useState<ElementInterface>(null);
   const [errors, setErrors] = useState([]);
+  const [innerErrors, setInnerErrors] = useState([]);
   var parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
 
   const handleCancel = () => props.updatedCallback(element);
@@ -52,18 +53,14 @@ export function ElementEdit(props: Props) {
     setElement(p);
   };
 
-  const validate = () => {
-    let errors = [];
-    setErrors(errors);
-    return errors.length === 0;
-  };
-
   const handleSave = () => {
-    if (validate()) {
+    if (innerErrors.length === 0) {
       ApiHelper.post("/elements", [element], "ContentApi").then((data) => {
         setElement(data);
         props.updatedCallback(data);
       });
+    } else {
+      setErrors(innerErrors);
     }
   };
 
@@ -101,7 +98,7 @@ export function ElementEdit(props: Props) {
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
-      case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} />; break;
+      case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />; break;
       case "column": result = getColumnFields(); break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
