@@ -59,14 +59,16 @@ export const Section: React.FC<Props> = props => {
       return (
         <div className="sectionActions">
           <table style={{ float: "right" }}>
-            <tr>
-              <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
-              <td>
-                <div className="sectionEditButton">
-                  <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
-                </div>
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
+                <td>
+                  <div className="sectionEditButton">
+                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} toolTip="section" />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       );
@@ -83,6 +85,7 @@ export const Section: React.FC<Props> = props => {
     else {
       const element: ElementInterface = { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId };
       if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
+      else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
       props.onEdit(null, element);
     }
   }

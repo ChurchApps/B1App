@@ -27,6 +27,7 @@ export const Element: React.FC<Props> = props => {
     else {
       const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId };
       if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
+      else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
       props.onEdit(null, element);
     }
   }
@@ -40,38 +41,41 @@ export const Element: React.FC<Props> = props => {
 
   switch (props.element.elementType) {
     case "block":
-      result = <ElementBlock element={props.element as ElementInterface} />
+      result = <ElementBlock key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "text":
-      result = <TextOnly element={props.element as ElementInterface} />
+      result = <TextOnly key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "textWithPhoto":
-      result = <TextWithPhoto element={props.element as ElementInterface} />
+      result = <TextWithPhoto key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "row":
-      result = <RowElement element={props.element as ElementInterface} onEdit={props.onEdit} />
+      result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
     case "map":
-      result = <h2>Google Map Goes Here</h2>
+      result = <h2 key={props.element.id}>Google Map Goes Here</h2>
       break;
     case "donation":
-      result = <NonAuthDonation churchId={props.churchId ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      result = <NonAuthDonation key={props.element.id} churchId={props.churchId ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
       break;
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
+  console.log("****", props.element?.elementType, props.onEdit)
   if (props.onEdit) {
     result = <><div className="elementWrapper">
       <div className="elementActions">
         <table style={{ float: "right" }}>
-          <tr>
-            <td><DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} /></td>
-            <td>
-              <div className="sectionEditButton">
-                <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} />
-              </div>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td><DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} /></td>
+              <td>
+                <div className="elementEditButton">
+                  <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} toolTip={props.element.elementType} />
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
       {result}

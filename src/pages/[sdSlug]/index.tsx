@@ -21,7 +21,7 @@ export default function Home(props: Props) {
     const result: JSX.Element[] = []
     let first = true;
     for (let section of props.pageData.sections) {
-      result.push(<Section section={section} first={first} />)
+      result.push(<Section key={section.id} section={section} first={first} />)
       first = false;
     }
     return result;

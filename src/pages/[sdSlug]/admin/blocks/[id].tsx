@@ -53,7 +53,7 @@ export default function Admin(props: WrapperPageProps) {
     const result: JSX.Element[] = []
     result.push(getAddSection(0));
     block?.sections.forEach(section => {
-      result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      result.push(<Section key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1));
     });
     return result;

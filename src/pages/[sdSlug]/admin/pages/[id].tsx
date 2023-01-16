@@ -54,9 +54,8 @@ export default function Admin(props: WrapperPageProps) {
   }
 
   const getAddSection = (s: number, zone: string) => {
-    console.log("getAddSection", zone);
     const sort = s;
-    return (<DroppableArea accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort, zone)} />);
+    return (<DroppableArea key={"addSection_" + zone + "_" + s.toString()} accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort, zone)} />);
     //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
 
@@ -65,8 +64,8 @@ export default function Admin(props: WrapperPageProps) {
     result.push(getAddSection(0, zone));
     const sections = ArrayHelper.getAll(page?.sections, "zone", zone);
     sections.forEach(section => {
-      if (section.targetBlockId) result.push(<SectionBlock section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
-      else result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      else result.push(<Section key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });
     return result;
@@ -104,7 +103,7 @@ export default function Admin(props: WrapperPageProps) {
   const realtimeUpdateElement = (element: ElementInterface, elements: ElementInterface[]) => {
     for (let i = 0; i < elements.length; i++) {
       if (elements[i].id === element.id) elements[i] = element;
-      if (element.elements?.length > 0) realtimeUpdateElement(element, element.elements);
+      //if (elements[i].elements?.length > 0) realtimeUpdateElement(element, element.elements);
     }
   }
 
