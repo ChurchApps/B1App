@@ -26,7 +26,7 @@ export function ElementAdd(props: Props) {
   const Blocks = () => {
     let result: JSX.Element[] = []
     blocks.forEach((b) => {
-      result.push(<AddableElement dndType={b.blockType} elementType="block" blockId={b.id} icon={(b.blockType === "elementBlock") ? "table_chart" : "reorder"} label={b.name} />);
+      result.push(<AddableElement key={b.id} dndType={b.blockType} elementType="block" blockId={b.id} icon={(b.blockType === "elementBlock") ? "table_chart" : "reorder"} label={b.name} />);
     });
     return <Grid container spacing={3}>{result}</Grid>
   }
@@ -40,11 +40,9 @@ export function ElementAdd(props: Props) {
         <Grid container spacing={3}>
           {props.includeSection && (<AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" />)}
           <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" />
-          <AddableElement dndType="column" elementType="column" icon="table_chart" label="Column" />
           <AddableElement dndType="element" elementType="text" icon="article" label="Text" />
           <AddableElement dndType="element" elementType="textWithPhoto" icon="photo" label="Text with Photo" />
           <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" />
-
         </Grid>
 
         {props.includeBlocks && (<>

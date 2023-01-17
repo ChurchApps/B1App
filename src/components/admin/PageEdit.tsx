@@ -66,7 +66,7 @@ export function PageEdit(props: Props) {
 
         <FormControl fullWidth>
           <InputLabel>Layout</InputLabel>
-          <Select fullWidth label="Layout" value={page.layout} onChange={handleChange}>
+          <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange}>
             <MenuItem value="headerFooter">Header & Footer</MenuItem>
             <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
           </Select>

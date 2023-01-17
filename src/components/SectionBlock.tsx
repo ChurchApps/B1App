@@ -20,14 +20,16 @@ export const SectionBlock: React.FC<Props> = props => {
       return (
         <div className="sectionActions alwaysVisible">
           <table style={{ float: "right" }}>
-            <tr>
-              <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
-              <td>
-                <div className="sectionEditButton">
-                  <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
-                </div>
-              </td>
-            </tr>
+            <tbody>
+              <tr>
+                <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
+                <td>
+                  <div className="sectionEditButton">
+                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       );
@@ -37,7 +39,7 @@ export const SectionBlock: React.FC<Props> = props => {
   const getSections = () => {
     const result: JSX.Element[] = []
     props.section.sections.forEach(section => {
-      result.push(<Section section={section} />)
+      result.push(<Section key={section.id} section={section} />)
     });
     return result;
   }

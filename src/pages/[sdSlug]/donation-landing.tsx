@@ -29,7 +29,7 @@ export default function DonationLanding(props: WrapperPageProps) {
               </Tabs>
             </Box>
             <TabPanel value="0">
-              <GiveNowPanel />
+              <GiveNowPanel churchId={props.config.church.id} />
             </TabPanel>
             <TabPanel value="1">
               <SignInPanel />

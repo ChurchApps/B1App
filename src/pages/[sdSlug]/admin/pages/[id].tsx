@@ -2,7 +2,7 @@ import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
 import { Grid } from "@mui/material";
-import { ApiHelper, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ArrayHelper, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
 import { DisplayBox } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
@@ -25,6 +25,11 @@ export default function Admin(props: WrapperPageProps) {
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id?.toString() || "";
 
+  const zones = {
+    cleanCentered: ["main"],
+    headerFooter: ["main", "header", "footer"],
+  }
+
   useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); }
   }, []);
@@ -35,31 +40,33 @@ export default function Admin(props: WrapperPageProps) {
 
   useEffect(loadData, [id]);
 
-  const handleDrop = (data: any, sort: number) => {
+  const handleDrop = (data: any, sort: number, zone: string) => {
+    console.log("handleDrop", zone);
     if (data.data) {
       const section: SectionInterface = data.data;
       section.sort = sort;
-      section.zone = "main";
+      section.zone = zone;
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
     else {
-      setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id, targetBlockId: data.blockId });
+      setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id, targetBlockId: data.blockId, zone: zone });
     }
   }
 
-  const getAddSection = (s: number) => {
+  const getAddSection = (s: number, zone: string) => {
     const sort = s;
-    return (<DroppableArea accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea key={"addSection_" + zone + "_" + s.toString()} accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort, zone)} />);
     //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
 
-  const getSections = () => {
+  const getSections = (zone: string) => {
     const result: JSX.Element[] = []
-    result.push(getAddSection(0));
-    page?.sections.forEach(section => {
-      if (section.targetBlockId) result.push(<SectionBlock section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
-      else result.push(<Section section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
-      result.push(getAddSection(section.sort + 0.1));
+    result.push(getAddSection(0, zone));
+    const sections = ArrayHelper.getAll(page?.sections, "zone", zone);
+    sections.forEach(section => {
+      if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      else result.push(<Section key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      result.push(getAddSection(section.sort + 0.1, zone));
     });
     return result;
   }
@@ -75,6 +82,7 @@ export default function Admin(props: WrapperPageProps) {
     marginTop: -180
   };
 
+  /*Todo: affix the sidebar with CSS instead*/
   useEffect(() => {
     const onScroll = e => {
       setScrollTop(e.target.documentElement.scrollTop);
@@ -82,6 +90,7 @@ export default function Admin(props: WrapperPageProps) {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [scrollTop]);
+
 
   const handleRealtimeChange = (element: ElementInterface) => {
     const p = { ...page };
@@ -94,9 +103,26 @@ export default function Admin(props: WrapperPageProps) {
   const realtimeUpdateElement = (element: ElementInterface, elements: ElementInterface[]) => {
     for (let i = 0; i < elements.length; i++) {
       if (elements[i].id === element.id) elements[i] = element;
-      if (element.elements?.length > 0) realtimeUpdateElement(element, element.elements);
+      //if (elements[i].elements?.length > 0) realtimeUpdateElement(element, element.elements);
     }
   }
+
+  const ZoneBoxes = () => {
+    let result = [];
+    let idx = 0;
+    zones[page?.layout]?.forEach((z: string) => {
+      const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
+      result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article"  >
+        <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
+          {getSections(z)}
+        </div>
+      </DisplayBox>);
+      idx++;
+    });
+    return <>{result}</>
+
+  }
+
 
   return (
     <Wrapper config={props.config}>
@@ -104,11 +130,9 @@ export default function Admin(props: WrapperPageProps) {
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
-            <DisplayBox headerText="Page Preview" headerIcon="article"  >
-              <div id="page" style={{ height: 500, overflowY: "scroll" }}>
-                {getSections()}
-              </div>
-            </DisplayBox>
+
+            <ZoneBoxes />
+
           </Grid>
           <Grid item md={4} xs={12}>
             <div id="editorBar">
