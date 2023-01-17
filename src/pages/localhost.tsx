@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Container } from "@mui/material";
-import { MarkdownEditor } from "@/components";
+import { MarkdownEditor, MarkdownPreview } from "@/components";
 import { useState } from "react";
 
 export default function Localhost() {
@@ -20,7 +20,16 @@ export default function Localhost() {
       <Link href="http://ironwood.localhost:3000/admin">Admin</Link>
       <br />
       <br />
-      <MarkdownEditor value={val} onChange={(v) => { setVal(v) }} />
+      <MarkdownPreview value={val} />
+      <MarkdownEditor value={val} onChange={(v) => {
+        // setVal(v) works
+        const obj = { text: v };
+        const json = JSON.stringify(obj);
+        console.log(json);
+        const newObj = JSON.parse(json);
+        console.log("***", newObj.text);
+        setVal(newObj.text);
+      }} />
     </Container>
 
   );

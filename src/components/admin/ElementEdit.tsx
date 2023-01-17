@@ -125,9 +125,10 @@ export function ElementEdit(props: Props) {
   useEffect(() => {
     if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
 
-  }, [element]);*/
+  }, [element]);
+  */
 
-  const StandardFields = () => {
+  const getStandardFields = () => {
     return (<>
       <ErrorMessages errors={errors} />
       <br />
@@ -144,7 +145,7 @@ export function ElementEdit(props: Props) {
     </>)
   }
 
-  const BlockFields = () => {
+  const getBlockFields = () => {
     let options: JSX.Element[] = [];
     blocks?.forEach(b => {
       options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
@@ -159,16 +160,11 @@ export function ElementEdit(props: Props) {
     </>)
   }
 
-  const Fields = () => (
-    (element?.elementType === "block") ? <BlockFields /> : <StandardFields />
-  )
-
-
   if (!element) return <></>
   else return (
     <>
       <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
-        <Fields />
+        {(element?.elementType === "block") ? getBlockFields() : getStandardFields()}
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}
     </>
