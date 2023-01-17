@@ -46,11 +46,12 @@ export function ElementEdit(props: Props) {
   }
 
   const handleMarkdownChange = (field: string, newValue: string) => {
-    let p = { ...element };
     parsedData[field] = newValue;
+    let p = { ...element };
     p.answers = parsedData;
     p.answersJSON = JSON.stringify(parsedData);
-    setElement(p);
+    console.log("handleMarkdwonChange", p);
+    if (p.answersJSON !== element.answersJSON) setElement(p);
   };
 
   const handleSave = () => {
@@ -73,7 +74,7 @@ export function ElementEdit(props: Props) {
   const getJsonFields = () => (<TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
   const getTextFields = () => (
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={(val) => { handleMarkdownChange("text", val) }} />
+      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} />
     </Box>
   );
   const getTextWithPhotoFields = () => (<>
@@ -120,10 +121,11 @@ export function ElementEdit(props: Props) {
   }
 
   useEffect(() => { setElement(props.element); loadBlocks() }, [props.element]);
+  /*
   useEffect(() => {
     if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
 
-  }, [element]);
+  }, [element]);*/
 
   const StandardFields = () => {
     return (<>
