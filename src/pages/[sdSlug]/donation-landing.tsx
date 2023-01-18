@@ -44,9 +44,7 @@ export default function DonationLanding(props: WrapperPageProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
-  const paths = [
-    { params: { sdSlug: "livecs" } }
-  ];
+  const paths = [];
 
   return { paths, fallback: "blocking", };
 };
@@ -55,6 +53,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const config = await ConfigHelper.load(params.sdSlug.toString());
   return {
     props: { config },
-    revalidate: 30,
+    revalidate: 1,
   };
 };
