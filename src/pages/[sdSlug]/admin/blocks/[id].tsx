@@ -40,7 +40,7 @@ export default function Admin(props: WrapperPageProps) {
       section.zone = "main";
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
-    else setEditSection({ sort, background: "#FFF", textColor: "light" });
+    else setEditSection({ sort, background: "#FFF", textColor: "light", blockId: id });
   }
 
   const getAddSection = (s: number) => {
