@@ -53,6 +53,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const config = await ConfigHelper.load(params.sdSlug.toString());
   return {
     props: { config },
-    revalidate: 1,
+    revalidate: 30,
   };
 };

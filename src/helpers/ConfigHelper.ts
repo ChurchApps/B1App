@@ -11,7 +11,7 @@ export class ConfigHelper {
 
   static async load(keyName: string) {
     const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi")
-    let appearance = await AppearanceHelper.load(church.id);
+    let appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
     const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=tab", "B1Api");
     let result: ConfigurationInterface = { appearance: appearance, church: church, tabs: tabs }
     result.keyName = keyName;
