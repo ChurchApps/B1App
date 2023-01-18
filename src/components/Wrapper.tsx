@@ -4,7 +4,7 @@ import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../appBase/components";
 import { useRouter } from "next/router"
 import { Themes } from "@/appBase/helpers";
-import { ConfigHelper, EnvironmentHelper, PersonHelper } from "@/helpers"
+import { EnvironmentHelper, PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props { config: ConfigurationInterface, pageTitle?: string, children: React.ReactNode }
@@ -82,7 +82,7 @@ export const Wrapper: React.FC<Props> = props => {
   return <ThemeProvider theme={Themes.BaseTheme} >
     <CssBaseline />
     <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-      <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} >{props.children}</SiteWrapper>
+      <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} appearance={props.config.appearance} >{props.children}</SiteWrapper>
     </Box>
   </ThemeProvider>
 
