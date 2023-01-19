@@ -51,7 +51,6 @@ export function HeaderFooter(props: Props) {
             <Zone church={props.church} sections={props.pageData.sections} zone="footer" />
           </div>
         </main>
-        <Footer church={props.church} churchSettings={props.churchSettings} />
       </div>
     </ThemeProvider>
   );

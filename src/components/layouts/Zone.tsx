@@ -1,5 +1,6 @@
 import { Section } from "@/components/Section";
 import { ArrayHelper, ChurchInterface, SectionInterface } from "@/helpers";
+import { SectionBlock } from "../SectionBlock";
 
 type Props = {
   church: ChurchInterface,
@@ -12,9 +13,9 @@ export default function Zone(props: Props) {
   let first = true;
   const sections = ArrayHelper.getAll(props.sections, "zone", props.zone);
   for (let section of sections) {
-    result.push(<Section key={section.id} section={section} first={first} churchId={props.church.id} />)
+    if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} />)
+    else result.push(<Section key={section.id} section={section} first={first} churchId={props.church.id} />)
     first = false;
   }
   return <>{result}</>;
 }
-
