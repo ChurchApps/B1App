@@ -39,22 +39,24 @@ body {
   margin: 0px;
 }
 
-.page h2 {
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-  margin-bottom: 25px;
-  font-size: 35px;
-}
-
 #headerLogo {
   max-width: 400px;
   max-height: 65px;
 }
 
 .page H1 {
-  font-size: 80px;
+  font-size: 60px;
   border-bottom: none;
   text-align: center;
+  margin-bottom: 40px;
+}
+
+.page h2 {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+  font-size: 35px;
+  line-height: 40px;
 }
 
 .page .section {
@@ -1200,7 +1202,7 @@ a.dropdown-toggle::after {
 }
 
 .elementWrapper:hover {
-  background-color: #99FF99;
+  background-color: #28a745;
 }
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
@@ -1212,7 +1214,7 @@ a.dropdown-toggle::after {
 }
 
 .sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
-  background-color: #000099 !important;
+  background-color: #007bff !important;
 }
 
 .sectionDark .columnWrapper:hover {

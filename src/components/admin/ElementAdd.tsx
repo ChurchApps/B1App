@@ -28,7 +28,7 @@ export function ElementAdd(props: Props) {
     blocks.forEach((b) => {
       result.push(<AddableElement key={b.id} dndType={b.blockType} elementType="block" blockId={b.id} icon={(b.blockType === "elementBlock") ? "table_chart" : "reorder"} label={b.name} />);
     });
-    return <Grid container spacing={3}>{result}</Grid>
+    return <Grid container spacing={1}>{result}</Grid>
   }
 
   return (
@@ -37,7 +37,7 @@ export function ElementAdd(props: Props) {
         <p>Drag and drop onto page<br />
           <b>Simple Elements:</b></p>
 
-        <Grid container spacing={3}>
+        <Grid container spacing={1}>
           {props.includeSection && (<AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" />)}
           <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" />
           <AddableElement dndType="element" elementType="text" icon="article" label="Text" />

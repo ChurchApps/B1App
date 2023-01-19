@@ -119,7 +119,9 @@ export default function Admin(props: WrapperPageProps) {
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
       result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article"  >
         <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
-          {getSections(z)}
+          <div className="page">
+            {getSections(z)}
+          </div>
         </div>
       </DisplayBox>);
       idx++;

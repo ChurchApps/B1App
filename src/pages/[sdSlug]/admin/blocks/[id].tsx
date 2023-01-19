@@ -102,7 +102,9 @@ export default function Admin(props: WrapperPageProps) {
           <Grid item md={8} xs={12}>
             <DisplayBox headerText="Block Preview" headerIcon="article"  >
               <div id="block" style={{ height: 500, overflowY: "scroll" }}>
-                {getSections()}
+                <div className="page">
+                  {getSections()}
+                </div>
               </div>
             </DisplayBox>
           </Grid>
