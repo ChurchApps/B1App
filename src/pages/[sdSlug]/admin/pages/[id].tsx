@@ -65,8 +65,8 @@ export default function Admin(props: WrapperPageProps) {
     result.push(getAddSection(0, zone));
     const sections = ArrayHelper.getAll(page?.sections, "zone", zone);
     sections.forEach(section => {
-      if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
-      else result.push(<Section key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });
     return result;
@@ -112,7 +112,7 @@ export default function Admin(props: WrapperPageProps) {
     }
   }
 
-  const ZoneBoxes = () => {
+  const getZoneBoxes = () => {
     let result = [];
     let idx = 0;
     zones[page?.layout]?.forEach((z: string) => {
@@ -138,7 +138,7 @@ export default function Admin(props: WrapperPageProps) {
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
 
-            <ZoneBoxes />
+            {getZoneBoxes()}
 
           </Grid>
           <Grid item md={4} xs={12}>

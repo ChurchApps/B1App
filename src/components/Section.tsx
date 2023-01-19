@@ -11,6 +11,7 @@ interface Props {
   first?: boolean,
   section: SectionInterface,
   churchId?: string;
+  churchSettings: any;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
   onMove?: () => void;
 }
@@ -20,7 +21,7 @@ export const Section: React.FC<Props> = props => {
   const getElements = () => {
     const result: JSX.Element[] = []
     props.section.elements.forEach(e => {
-      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} churchId={props.churchId} />)
+      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} churchId={props.churchId} churchSettings={props.churchSettings} textColor={props.section.textColor} />)
     });
     return result;
   }

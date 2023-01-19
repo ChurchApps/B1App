@@ -105,6 +105,10 @@ export function ElementEdit(props: Props) {
     </Box>
   </>);
 
+  const getLogoFields = () => (<>
+    <TextField fullWidth label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+  </>);
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -112,6 +116,7 @@ export function ElementEdit(props: Props) {
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
       case "card": result = getCardFields(); break;
+      case "logo": result = getLogoFields(); break;
       case "donation": result = <></>; break;
     }
     return result;
@@ -146,10 +151,11 @@ export function ElementEdit(props: Props) {
       <FormControl fullWidth>
         <InputLabel>Element Type</InputLabel>
         <Select fullWidth label="Element Type" value={element.elementType} name="elementType" onChange={handleChange}>
+          <MenuItem value="row">Row</MenuItem>
           <MenuItem value="text">Text</MenuItem>
           <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
           <MenuItem value="card">Card</MenuItem>
-          <MenuItem value="row">Row</MenuItem>
+          <MenuItem value="logo">Logo</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
         </Select>
       </FormControl>

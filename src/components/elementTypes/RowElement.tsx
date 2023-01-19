@@ -3,7 +3,7 @@ import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 
-interface Props { element: ElementInterface, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
+interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
 
 export function RowElement(props: Props) {
 
@@ -17,7 +17,7 @@ export function RowElement(props: Props) {
     const result: JSX.Element[] = []
     if (props.onEdit) result.push(getAddElement(column, 0))
     elements?.forEach(c => {
-      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} />)
+      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />)
     });
     return result;
   }

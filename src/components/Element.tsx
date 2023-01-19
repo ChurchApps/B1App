@@ -8,10 +8,13 @@ import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
 import { NonAuthDonation } from "@/appBase/donationComponents/components"
 import { ElementBlock } from "./elementTypes/ElementBlock";
 import { CardElement } from "./elementTypes/CardElement";
+import { LogoElement } from "./elementTypes/LogoElement";
 
 interface Props {
   element: ElementInterface;
   churchId?: string;
+  churchSettings: any;
+  textColor: string;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
   onMove?: () => void;
 }
@@ -42,10 +45,13 @@ export const Element: React.FC<Props> = props => {
 
   switch (props.element.elementType) {
     case "block":
-      result = <ElementBlock key={props.element.id} element={props.element as ElementInterface} />
+      result = <ElementBlock key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} textColor={props.textColor} />
       break;
     case "card":
       result = <CardElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "logo":
+      result = <LogoElement key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} textColor={props.textColor} />
       break;
     case "text":
       result = <TextOnly key={props.element.id} element={props.element as ElementInterface} />
@@ -54,7 +60,7 @@ export const Element: React.FC<Props> = props => {
       result = <TextWithPhoto key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "row":
-      result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
+      result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
       break;
     case "map":
       result = <h2 key={props.element.id}>Google Map Goes Here</h2>
