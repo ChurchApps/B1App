@@ -102,6 +102,9 @@ export const Section: React.FC<Props> = props => {
     {getElements()}
   </Container>);
 
-  if (props.section.background.indexOf("youtube") > -1) return (<YoutubeBackground videoId="3iXYciBTQ0c" overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
+  if (props.section.background.indexOf("youtube:") > -1) {
+    const youtubeId = props.section.background.split(":")[1];
+    return (<YoutubeBackground videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
+  }
   else return (<div style={getStyle()} className={getClassName()}>{contents}</div>);
 }

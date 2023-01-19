@@ -50,7 +50,7 @@ export default function Admin(props: WrapperPageProps) {
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
     else {
-      setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id, targetBlockId: data.blockId, zone: zone });
+      setEditSection({ sort, background: "#FFF", textColor: "dark", pageId: id, targetBlockId: data.blockId, zone: zone });
     }
   }
 

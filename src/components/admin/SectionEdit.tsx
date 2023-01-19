@@ -24,9 +24,21 @@ export function SectionEdit(props: Props) {
     const val = e.target.value;
     switch (e.target.name) {
       case "background": p.background = val; break;
-      case "backgroundType": p.background = (val === "image") ? "https://content.churchapps.org/stockPhotos/4/bible.png" : "#000000"
+      case "backgroundType":
+        switch (val) {
+          case "image":
+            p.background = "https://content.churchapps.org/stockPhotos/4/bible.png"
+            break;
+          case "youtube":
+            p.background = "youtube:3iXYciBTQ0c";
+            break;
+          default:
+            p.background = "#000000"
+            break;
+        }
       case "textColor": p.textColor = val; break;
       case "targetBlockId": p.targetBlockId = val; break;
+      case "youtubeId": p.background = "youtube:" + val; break;
     }
     setSection(p);
   };
@@ -89,7 +101,9 @@ export function SectionEdit(props: Props) {
     //{ parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></> }
     //<Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
 
-    const backgroundType = section.background?.startsWith("#") ? "color" : "image";
+    let backgroundType = "image";
+    if (section.background?.startsWith("#")) backgroundType = "color";
+    else if (section.background?.startsWith("youtube")) backgroundType = "youtube"
 
     let result: JSX.Element[] = [
       <FormControl fullWidth>
@@ -97,6 +111,7 @@ export function SectionEdit(props: Props) {
         <Select fullWidth label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange}>
           <MenuItem value="color">Color</MenuItem>
           <MenuItem value="image">Image</MenuItem>
+          <MenuItem value="youtube">Youtube Video</MenuItem>
         </Select>
       </FormControl>
     ];
@@ -105,7 +120,13 @@ export function SectionEdit(props: Props) {
       result.push(<SliderPicker key="sliderPicker" color={section.background} onChangeComplete={(color) => { if (color.hex !== "#000000") { let s = { ...section }; s.background = color.hex; setSection(s); } }} />);
       result.push(getGrayOptions())
       result.push(<TextField key="backgroundText" fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />)
-    } else {
+    } else if (backgroundType === "youtube") {
+      const parts = section.background.split(":");
+      const youtubeId = (parts.length > 1) ? parts[1] : "";
+      result.push(<>
+        <TextField fullWidth label="Youtube ID" name="youtubeId" value={youtubeId} onChange={handleChange} onKeyDown={handleKeyDown} />
+      </>)
+    } else if (backgroundType === "image") {
       result.push(<>
         <img src={section.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br />
         <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
