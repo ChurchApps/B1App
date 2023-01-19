@@ -42,6 +42,7 @@ export function ElementAdd(props: Props) {
           <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" />
           <AddableElement dndType="element" elementType="text" icon="article" label="Text" />
           <AddableElement dndType="element" elementType="textWithPhoto" icon="photo" label="Text with Photo" />
+          <AddableElement dndType="element" elementType="card" icon="badge" label="Card" />
           <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" />
         </Grid>
 

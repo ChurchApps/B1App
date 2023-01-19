@@ -7,6 +7,7 @@ import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
 import { NonAuthDonation } from "@/appBase/donationComponents/components"
 import { ElementBlock } from "./elementTypes/ElementBlock";
+import { CardElement } from "./elementTypes/CardElement";
 
 interface Props {
   element: ElementInterface;
@@ -42,6 +43,9 @@ export const Element: React.FC<Props> = props => {
   switch (props.element.elementType) {
     case "block":
       result = <ElementBlock key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "card":
+      result = <CardElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "text":
       result = <TextOnly key={props.element.id} element={props.element as ElementInterface} />

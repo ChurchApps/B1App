@@ -94,12 +94,24 @@ export function ElementEdit(props: Props) {
     </Box>
   </>);
 
+  const getCardFields = () => (<>
+    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></>}
+    <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+    <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth label="Link Url" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <Box sx={{ marginTop: 2 }}>
+      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
+    </Box>
+  </>);
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
       case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />; break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
+      case "card": result = getCardFields(); break;
       case "donation": result = <></>; break;
     }
     return result;
@@ -136,6 +148,7 @@ export function ElementEdit(props: Props) {
         <Select fullWidth label="Element Type" value={element.elementType} name="elementType" onChange={handleChange}>
           <MenuItem value="text">Text</MenuItem>
           <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
+          <MenuItem value="card">Card</MenuItem>
           <MenuItem value="row">Row</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
         </Select>
