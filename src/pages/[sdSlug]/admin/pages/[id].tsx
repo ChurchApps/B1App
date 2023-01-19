@@ -22,6 +22,7 @@ export default function Admin(props: WrapperPageProps) {
   const [page, setPage] = useState<PageInterface>(null);
   const [editSection, setEditSection] = useState<SectionInterface>(null);
   const [editElement, setEditElement] = useState<ElementInterface>(null);
+  const [editorBarHeight, setEditorBarHeight] = useState(400);
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id?.toString() || "";
 
@@ -76,17 +77,21 @@ export default function Admin(props: WrapperPageProps) {
     else if (e) setEditElement(e);
   }
 
-  const rightBarStyle: CSSProperties = (scrollTop < 180) ? {} : {
-    width: document.getElementById("editorBar")?.clientWidth,
-    position: "fixed",
-    marginTop: -180
-  };
+  let rightBarStyle: CSSProperties = {}
+
+  if (typeof window !== "undefined") {
+    const editorBar = document.getElementById("editorBar");
+    if (window?.innerHeight) {
+      const editorBarOffset = (editorBarHeight > window.innerHeight) ? (editorBarHeight - window.innerHeight) : 0;
+      const bottomMargin = editorBarOffset === 0 ? 0 : 50;
+      if (scrollTop >= 180 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -180 - bottomMargin };
+    }
+    if (editorBar && editorBar.clientHeight !== editorBarHeight && editorBar.clientHeight > 0) setEditorBarHeight(editorBar.clientHeight)
+  }
 
   /*Todo: affix the sidebar with CSS instead*/
   useEffect(() => {
-    const onScroll = e => {
-      setScrollTop(e.target.documentElement.scrollTop);
-    };
+    const onScroll = e => { setScrollTop(e.target.documentElement.scrollTop); };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [scrollTop]);
