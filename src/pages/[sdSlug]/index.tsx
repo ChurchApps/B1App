@@ -7,7 +7,7 @@ type Props = {
   pageData: any;
   church: ChurchInterface,
   churchSettings: any,
-  navLinks: LinkInterface[];
+  navLinks: LinkInterface[],
 };
 
 export default function Home(props: Props) {
@@ -20,16 +20,13 @@ export default function Home(props: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-
-  const paths = [
-    { params: { sdSlug: "crcc" } },
-    { params: { sdSlug: "ironwood" } },
-  ];
+  const paths = [];
 
   return { paths, fallback: "blocking", };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
