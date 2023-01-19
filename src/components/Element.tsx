@@ -61,7 +61,6 @@ export const Element: React.FC<Props> = props => {
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
-  console.log("****", props.element?.elementType, props.onEdit)
   if (props.onEdit) {
     result = <><div className="elementWrapper">
       <div className="elementActions">

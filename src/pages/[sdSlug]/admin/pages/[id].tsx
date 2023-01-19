@@ -41,7 +41,7 @@ export default function Admin(props: WrapperPageProps) {
   useEffect(loadData, [id]);
 
   const handleDrop = (data: any, sort: number, zone: string) => {
-    console.log("handleDrop", zone);
+    console.log("handleDrop", zone, sort);
     if (data.data) {
       const section: SectionInterface = data.data;
       section.sort = sort;

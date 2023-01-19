@@ -20,7 +20,6 @@ export function Services({ selectedHandler }: Props) {
 
   const loadData = () => {
     setIsLoading(true);
-    console.log("loading");
     ApiHelper.get("/services", "AttendanceApi").then((data) => {
       setServices(data);
       setIsLoading(false);
@@ -66,7 +65,6 @@ export function Services({ selectedHandler }: Props) {
         }
       );
     });
-    console.log(JSON.stringify(CheckinHelper.serviceTimes));
 
     setIsLoading(false);
     selectedHandler();

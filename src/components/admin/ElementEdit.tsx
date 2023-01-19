@@ -50,7 +50,6 @@ export function ElementEdit(props: Props) {
     let p = { ...element };
     p.answers = parsedData;
     p.answersJSON = JSON.stringify(parsedData);
-    console.log("handleMarkdwonChange", p);
     if (p.answersJSON !== element.answersJSON) setElement(p);
   };
 

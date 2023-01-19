@@ -10,7 +10,6 @@ type Props = {
 export function RowEdit(props: Props) {
   const cols: number[] = []
   props.parsedData.columns?.split(",").forEach((c: string) => cols.push(parseInt(c)));
-  console.log("**PARSED DATA", props.parsedData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     e.preventDefault();

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ArrayHelper, BlockInterface, SectionInterface } from "@/helpers";
-import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
-import { CompactPicker, HuePicker, MaterialPicker, SliderPicker } from 'react-color'
+import { SliderPicker } from 'react-color'
 
 type Props = {
   section: SectionInterface;
@@ -68,7 +68,24 @@ export function SectionEdit(props: Props) {
 
   useEffect(() => { setSection(props.section); loadBlocks() }, [props.section]);
 
-  const BackgroundField = () => {
+  const getGrayOptions = () => {
+    let colors = ["#FFFFFF", "#CCCCCC", "#888888", "#444444", "#000000"]
+    let result: JSX.Element[] = [];
+    colors.forEach(c => {
+      const style: any = { backgroundColor: c, width: "100%", height: (section.background === c) ? 20 : 12, display: "block" }
+      if (c === "#FFFFFF") style.border = "1px solid #999";
+      result.push(<td><a href="about:blank" style={style} onClick={(e) => { e.preventDefault(); let s = { ...section }; s.background = c; setSection(s); }}>&nbsp;</a></td>);
+    })
+    return (<table style={{ width: "100%", marginTop: 10 }} key="grayColors">
+      <tbody>
+        <tr>
+          {result}
+        </tr>
+      </tbody>
+    </table>);
+  }
+
+  const getBackgroundField = () => {
     //{ parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></> }
     //<Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
 
@@ -85,10 +102,9 @@ export function SectionEdit(props: Props) {
     ];
 
     if (backgroundType === "color") {
-      result.push(<>
-        <SliderPicker color={section.background} onChangeComplete={(color) => { if (color.hex !== "#000000") { let s = { ...section }; s.background = color.hex; setSection(s); } }} />
-        <TextField fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />
-      </>);
+      result.push(<SliderPicker key="sliderPicker" color={section.background} onChangeComplete={(color) => { if (color.hex !== "#000000") { let s = { ...section }; s.background = color.hex; setSection(s); } }} />);
+      result.push(getGrayOptions())
+      result.push(<TextField key="backgroundText" fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />)
     } else {
       result.push(<>
         <img src={section.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br />
@@ -101,11 +117,11 @@ export function SectionEdit(props: Props) {
     );
   }
 
-  const StandardFields = () => {
+  const getStandardFields = () => {
     return (<>
       <ErrorMessages errors={errors} />
       <br />
-      <BackgroundField />
+      {getBackgroundField()}
       <FormControl fullWidth>
         <InputLabel>Text Color</InputLabel>
         <Select fullWidth label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
@@ -116,7 +132,7 @@ export function SectionEdit(props: Props) {
     </>)
   }
 
-  const BlockFields = () => {
+  const getBlockFields = () => {
     let options: JSX.Element[] = [];
     blocks?.forEach(b => {
       options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
@@ -131,15 +147,11 @@ export function SectionEdit(props: Props) {
     </>)
   }
 
-  const Fields = () => (
-    (section?.targetBlockId) ? <BlockFields /> : <StandardFields />
-  )
-
   if (!section) return <></>
   else return (
     <>
       <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
-        <Fields />
+        {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={4} />}
     </>
