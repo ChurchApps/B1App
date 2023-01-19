@@ -95,6 +95,9 @@ body {
   box-sizing: inherit;
 }
 
+.section {
+  color: #333;
+}
 
 
 #navbar.transparent {
@@ -1204,6 +1207,10 @@ a.dropdown-toggle::after {
   background-color: #9999FF !important;
 }
 
+.sectionDark {
+  color: #EEE;
+}
+
 .sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   background-color: #000099 !important;
 }
@@ -1426,7 +1433,8 @@ a.dropdown-toggle::after {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 24px;
+  /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
