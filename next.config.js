@@ -6,6 +6,28 @@ module.exports = {
         source: "/",
         has: [
           {
+            type: "header",
+            key: "x-site",
+            value: "(?<subdomain>.*?)\\..*",
+          },
+        ],
+        destination: "/:subdomain",
+      },
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "header",
+            key: "x-site",
+            value: "(?<subdomain>.*?)\\..*",
+          },
+        ],
+        destination: "/:subdomain/:path*",
+      },
+      {
+        source: "/",
+        has: [
+          {
             type: "host",
             value: "localhost",
           },
