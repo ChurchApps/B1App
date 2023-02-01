@@ -71,14 +71,18 @@ export function SectionEdit(props: Props) {
     }
   };
 
-  const loadBlocks = async () => {
-    if (props.section.targetBlockId) {
-      let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
-      setBlocks(ArrayHelper.getAll(result, "blockType", "sectionBlock"));
+  
+  useEffect(() => {
+    const loadBlocks = async () => {
+      if (props.section.targetBlockId) {
+        let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+        setBlocks(ArrayHelper.getAll(result, "blockType", "sectionBlock"));
+      }
     }
-  }
 
-  useEffect(() => { setSection(props.section); loadBlocks() }, [props.section]);
+    setSection(props.section);
+    loadBlocks();
+  }, [props.section]);
 
   const getGrayOptions = () => {
     let colors = ["#FFFFFF", "#CCCCCC", "#888888", "#444444", "#000000"]
@@ -128,7 +132,7 @@ export function SectionEdit(props: Props) {
       </>)
     } else if (backgroundType === "image") {
       result.push(<>
-        <img src={section.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br />
+        <img src={section.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="background image" /><br />
         <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
       </>)
     }

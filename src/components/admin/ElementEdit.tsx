@@ -38,13 +38,6 @@ export function ElementEdit(props: Props) {
     setElement(p);
   };
 
-  const loadBlocks = async () => {
-    if (props.element.elementType === "block") {
-      let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
-      setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
-    }
-  }
-
   const handleMarkdownChange = (field: string, newValue: string) => {
     parsedData[field] = newValue;
     let p = { ...element };
@@ -76,8 +69,10 @@ export function ElementEdit(props: Props) {
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
     </Box>
   );
+
+  // TODO: add alt field while saving image and use it here, in image tage.
   const getTextWithPhotoFields = () => (<>
-    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></>}
+    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
     <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
     <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <FormControl fullWidth>
@@ -94,8 +89,9 @@ export function ElementEdit(props: Props) {
     </Box>
   </>);
 
+  // TODO: add alt field while saving image and use it here, in image tage.
   const getCardFields = () => (<>
-    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></>}
+    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
     <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
     <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <TextField fullWidth label="Link Url" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
@@ -136,7 +132,17 @@ export function ElementEdit(props: Props) {
     setElement(e);
   }
 
-  useEffect(() => { setElement(props.element); loadBlocks() }, [props.element]);
+  useEffect(() => {
+    const loadBlocks = async () => {
+      if (props.element.elementType === "block") {
+        let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+        setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
+      }
+    }
+ 
+    setElement(props.element);
+    loadBlocks();
+  }, [props.element]);
   /*
   useEffect(() => {
     if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
