@@ -23,7 +23,7 @@ export function YourSiteSettings() {
     if (!isAuthenticated) {
       router.push("/login");
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const loadData = () => {
     if (!isAuthenticated) {

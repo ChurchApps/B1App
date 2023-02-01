@@ -32,7 +32,7 @@ export function Header(props: Props) {
   const getLinks = () => {
     const result: JSX.Element[] = [];
     props.navLinks?.forEach(l => {
-      result.push(<Link href={l.url} style={{ paddingLeft: 15, paddingRight: 15 }}>{l.text}</Link>);
+      result.push(<Link key={l.id} href={l.url} style={{ paddingLeft: 15, paddingRight: 15 }}>{l.text}</Link>);
     });
     return result;
   }
