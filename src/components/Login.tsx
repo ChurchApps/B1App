@@ -16,11 +16,16 @@ interface Props {
 
 export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps, keyName }: Props) {
   const router = useRouter();
+  const { returnUrl } = router.query;
   const [cookies] = useCookies();
   const context = useContext(UserContext)
 
   if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) {
-    router.push("/admin");
+    if (returnUrl) {
+      router.push(`${returnUrl}`);
+    } else {
+      router.push("/admin");
+    }
   }
 
   const appUrl = process.browser ? window.location.href : "";
