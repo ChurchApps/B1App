@@ -10,7 +10,6 @@ type Props = {
 export function RowEdit(props: Props) {
   const cols: number[] = []
   props.parsedData.columns?.split(",").forEach((c: string) => cols.push(parseInt(c)));
-  console.log("**PARSED DATA", props.parsedData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     e.preventDefault();
@@ -20,7 +19,7 @@ export function RowEdit(props: Props) {
     props.setErrors([]);
   };
 
-  const PreviewTable = () => {
+  const getPreviewTable = () => {
     const colors = ["#FBF8CC", "#FDE4CF", "#FFCFD2", "#F1C0E8", "#CFBAF0", "#A3C4F3", "#90DBF4", "#8EECF5", "#98F5E1", "B9FBC0", "#FBF8CC", "#FDE4CF"]
     let result: JSX.Element[] = [];
     let idx = 0;
@@ -52,7 +51,7 @@ export function RowEdit(props: Props) {
   }
 
   const handleAdd = (e: React.MouseEvent) => {
-    e.preventDefault
+    e.preventDefault();
     let total = 0;
     cols.forEach(c => total += c);
     const newVal = (total >= 12) ? 1 : 12 - total;
@@ -66,7 +65,7 @@ export function RowEdit(props: Props) {
     updateColumns();
   }
 
-  const CustomSizes = () => {
+  const getCustomSizes = () => {
     let result: JSX.Element[] = [];
     let idx = 0;
     let total = 0;
@@ -127,9 +126,9 @@ export function RowEdit(props: Props) {
           <MenuItem value="custom">Custom</MenuItem>
         </Select>
       </FormControl>
-      {(commonValue === "custom") && <CustomSizes />}
+      {(commonValue === "custom") && getCustomSizes()}
       <div><b>Preview</b> - <small>Numbers represent twelfths of page.</small></div>
-      <PreviewTable />
+      {getPreviewTable()}
     </>
   );
 

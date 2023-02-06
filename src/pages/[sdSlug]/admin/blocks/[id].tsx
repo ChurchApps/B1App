@@ -53,7 +53,7 @@ export default function Admin(props: WrapperPageProps) {
     const result: JSX.Element[] = []
     result.push(getAddSection(0));
     block?.sections.forEach(section => {
-      result.push(<Section key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      result.push(<Section key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} churchSettings={props.config} />)
       result.push(getAddSection(section.sort + 0.1));
     });
     return result;
@@ -102,7 +102,9 @@ export default function Admin(props: WrapperPageProps) {
           <Grid item md={8} xs={12}>
             <DisplayBox headerText="Block Preview" headerIcon="article"  >
               <div id="block" style={{ height: 500, overflowY: "scroll" }}>
-                {getSections()}
+                <div className="page">
+                  {getSections()}
+                </div>
               </div>
             </DisplayBox>
           </Grid>

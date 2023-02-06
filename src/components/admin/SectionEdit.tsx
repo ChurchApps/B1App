@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ArrayHelper, BlockInterface, SectionInterface } from "@/helpers";
-import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
-import { CompactPicker, HuePicker, MaterialPicker, SliderPicker } from 'react-color'
+import { SliderPicker } from 'react-color'
 
 type Props = {
   section: SectionInterface;
@@ -24,9 +24,21 @@ export function SectionEdit(props: Props) {
     const val = e.target.value;
     switch (e.target.name) {
       case "background": p.background = val; break;
-      case "backgroundType": p.background = (val === "image") ? "https://content.churchapps.org/stockPhotos/4/bible.png" : "#000000"
+      case "backgroundType":
+        switch (val) {
+          case "image":
+            p.background = "https://content.churchapps.org/stockPhotos/4/bible.png"
+            break;
+          case "youtube":
+            p.background = "youtube:3iXYciBTQ0c";
+            break;
+          default:
+            p.background = "#000000"
+            break;
+        }
       case "textColor": p.textColor = val; break;
       case "targetBlockId": p.targetBlockId = val; break;
+      case "youtubeId": p.background = "youtube:" + val; break;
     }
     setSection(p);
   };
@@ -59,20 +71,43 @@ export function SectionEdit(props: Props) {
     }
   };
 
-  const loadBlocks = async () => {
-    if (props.section.targetBlockId) {
-      let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
-      setBlocks(ArrayHelper.getAll(result, "blockType", "sectionBlock"));
+  
+  useEffect(() => {
+    const loadBlocks = async () => {
+      if (props.section.targetBlockId) {
+        let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+        setBlocks(ArrayHelper.getAll(result, "blockType", "sectionBlock"));
+      }
     }
+
+    setSection(props.section);
+    loadBlocks();
+  }, [props.section]);
+
+  const getGrayOptions = () => {
+    let colors = ["#FFFFFF", "#CCCCCC", "#888888", "#444444", "#000000"]
+    let result: JSX.Element[] = [];
+    colors.forEach(c => {
+      const style: any = { backgroundColor: c, width: "100%", height: (section.background === c) ? 20 : 12, display: "block" }
+      if (c === "#FFFFFF") style.border = "1px solid #999";
+      result.push(<td><a href="about:blank" style={style} onClick={(e) => { e.preventDefault(); let s = { ...section }; s.background = c; setSection(s); }}>&nbsp;</a></td>);
+    })
+    return (<table style={{ width: "100%", marginTop: 10 }} key="grayColors">
+      <tbody>
+        <tr>
+          {result}
+        </tr>
+      </tbody>
+    </table>);
   }
 
-  useEffect(() => { setSection(props.section); loadBlocks() }, [props.section]);
-
-  const BackgroundField = () => {
+  const getBackgroundField = () => {
     //{ parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></> }
     //<Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
 
-    const backgroundType = section.background?.startsWith("#") ? "color" : "image";
+    let backgroundType = "image";
+    if (section.background?.startsWith("#")) backgroundType = "color";
+    else if (section.background?.startsWith("youtube")) backgroundType = "youtube"
 
     let result: JSX.Element[] = [
       <FormControl fullWidth>
@@ -80,18 +115,24 @@ export function SectionEdit(props: Props) {
         <Select fullWidth label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange}>
           <MenuItem value="color">Color</MenuItem>
           <MenuItem value="image">Image</MenuItem>
+          <MenuItem value="youtube">Youtube Video</MenuItem>
         </Select>
       </FormControl>
     ];
 
     if (backgroundType === "color") {
+      result.push(<SliderPicker key="sliderPicker" color={section.background} onChangeComplete={(color) => { if (color.hex !== "#000000") { let s = { ...section }; s.background = color.hex; setSection(s); } }} />);
+      result.push(getGrayOptions())
+      result.push(<TextField key="backgroundText" fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />)
+    } else if (backgroundType === "youtube") {
+      const parts = section.background.split(":");
+      const youtubeId = (parts.length > 1) ? parts[1] : "";
       result.push(<>
-        <SliderPicker color={section.background} onChangeComplete={(color) => { if (color.hex !== "#000000") { let s = { ...section }; s.background = color.hex; setSection(s); } }} />
-        <TextField fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />
-      </>);
-    } else {
+        <TextField fullWidth label="Youtube ID" name="youtubeId" value={youtubeId} onChange={handleChange} onKeyDown={handleKeyDown} />
+      </>)
+    } else if (backgroundType === "image") {
       result.push(<>
-        <img src={section.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br />
+        <img src={section.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="background image" /><br />
         <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
       </>)
     }
@@ -101,11 +142,11 @@ export function SectionEdit(props: Props) {
     );
   }
 
-  const StandardFields = () => {
+  const getStandardFields = () => {
     return (<>
       <ErrorMessages errors={errors} />
       <br />
-      <BackgroundField />
+      {getBackgroundField()}
       <FormControl fullWidth>
         <InputLabel>Text Color</InputLabel>
         <Select fullWidth label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
@@ -116,7 +157,7 @@ export function SectionEdit(props: Props) {
     </>)
   }
 
-  const BlockFields = () => {
+  const getBlockFields = () => {
     let options: JSX.Element[] = [];
     blocks?.forEach(b => {
       options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
@@ -131,15 +172,11 @@ export function SectionEdit(props: Props) {
     </>)
   }
 
-  const Fields = () => (
-    (section?.targetBlockId) ? <BlockFields /> : <StandardFields />
-  )
-
   if (!section) return <></>
   else return (
     <>
       <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
-        <Fields />
+        {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={4} />}
     </>

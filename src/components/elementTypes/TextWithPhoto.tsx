@@ -5,7 +5,7 @@ import { MarkdownPreview } from "@/components";
 interface Props { element: ElementInterface }
 
 export const TextWithPhoto: React.FC<Props> = props => {
-  let result = <MarkdownPreview  value={props.element.answers?.text || ""} />
+  let result = <MarkdownPreview value={props.element.answers?.text || ""} />
   switch (props.element.answers?.photoPosition || "left") {
     case "left":
       result = (
@@ -48,5 +48,5 @@ export const TextWithPhoto: React.FC<Props> = props => {
       )
       break;
   }
-  return result;
+  return <div style={{ marginBottom: 30 }}>{result}</div>;
 }

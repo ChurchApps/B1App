@@ -22,6 +22,7 @@ export default function Admin(props: WrapperPageProps) {
   const [page, setPage] = useState<PageInterface>(null);
   const [editSection, setEditSection] = useState<SectionInterface>(null);
   const [editElement, setEditElement] = useState<ElementInterface>(null);
+  const [editorBarHeight, setEditorBarHeight] = useState(400);
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id?.toString() || "";
 
@@ -41,7 +42,7 @@ export default function Admin(props: WrapperPageProps) {
   useEffect(loadData, [id]);
 
   const handleDrop = (data: any, sort: number, zone: string) => {
-    console.log("handleDrop", zone);
+    console.log("handleDrop", zone, sort);
     if (data.data) {
       const section: SectionInterface = data.data;
       section.sort = sort;
@@ -49,7 +50,7 @@ export default function Admin(props: WrapperPageProps) {
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
     else {
-      setEditSection({ sort, background: "#FFF", textColor: "light", pageId: id, targetBlockId: data.blockId, zone: zone });
+      setEditSection({ sort, background: "#FFF", textColor: "dark", pageId: id, targetBlockId: data.blockId, zone: zone });
     }
   }
 
@@ -64,8 +65,8 @@ export default function Admin(props: WrapperPageProps) {
     result.push(getAddSection(0, zone));
     const sections = ArrayHelper.getAll(page?.sections, "zone", zone);
     sections.forEach(section => {
-      if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
-      else result.push(<Section key={section.id} section={section} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });
     return result;
@@ -76,17 +77,21 @@ export default function Admin(props: WrapperPageProps) {
     else if (e) setEditElement(e);
   }
 
-  const rightBarStyle: CSSProperties = (scrollTop < 180) ? {} : {
-    width: document.getElementById("editorBar")?.clientWidth,
-    position: "fixed",
-    marginTop: -180
-  };
+  let rightBarStyle: CSSProperties = {}
+
+  if (typeof window !== "undefined") {
+    const editorBar = document.getElementById("editorBar");
+    if (window?.innerHeight) {
+      const editorBarOffset = (editorBarHeight > window.innerHeight) ? (editorBarHeight - window.innerHeight) : 0;
+      const bottomMargin = editorBarOffset === 0 ? 0 : 50;
+      if (scrollTop >= 180 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -180 - bottomMargin };
+    }
+    if (editorBar && editorBar.clientHeight !== editorBarHeight && editorBar.clientHeight > 0) setEditorBarHeight(editorBar.clientHeight)
+  }
 
   /*Todo: affix the sidebar with CSS instead*/
   useEffect(() => {
-    const onScroll = e => {
-      setScrollTop(e.target.documentElement.scrollTop);
-    };
+    const onScroll = e => { setScrollTop(e.target.documentElement.scrollTop); };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [scrollTop]);
@@ -107,14 +112,16 @@ export default function Admin(props: WrapperPageProps) {
     }
   }
 
-  const ZoneBoxes = () => {
+  const getZoneBoxes = () => {
     let result = [];
     let idx = 0;
     zones[page?.layout]?.forEach((z: string) => {
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
       result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article"  >
         <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
-          {getSections(z)}
+          <div className="page">
+            {getSections(z)}
+          </div>
         </div>
       </DisplayBox>);
       idx++;
@@ -131,7 +138,7 @@ export default function Admin(props: WrapperPageProps) {
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
 
-            <ZoneBoxes />
+            {getZoneBoxes()}
 
           </Grid>
           <Grid item md={4} xs={12}>

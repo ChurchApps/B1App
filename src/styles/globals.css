@@ -39,22 +39,25 @@ body {
   margin: 0px;
 }
 
-.page h2 {
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-  margin-bottom: 25px;
-  font-size: 35px;
-}
-
 #headerLogo {
   max-width: 400px;
   max-height: 65px;
 }
 
 .page H1 {
-  font-size: 80px;
+  font-size: 60px;
   border-bottom: none;
   text-align: center;
+  margin-bottom: 40px;
+}
+
+.page h2 {
+  /*border-bottom: 1px solid #ccc;*/
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+  font-size: 35px;
+  line-height: 40px;
+  text-transform: none;
 }
 
 .page .section {
@@ -95,6 +98,9 @@ body {
   box-sizing: inherit;
 }
 
+.section {
+  color: #333;
+}
 
 
 #navbar.transparent {
@@ -1197,15 +1203,19 @@ a.dropdown-toggle::after {
 }
 
 .elementWrapper:hover {
-  background-color: #99FF99;
+  background-color: #28a745;
 }
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   background-color: #9999FF !important;
 }
 
+.sectionDark {
+  color: #EEE;
+}
+
 .sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
-  background-color: #000099 !important;
+  background-color: #007bff !important;
 }
 
 .sectionDark .columnWrapper:hover {
@@ -1426,7 +1436,8 @@ a.dropdown-toggle::after {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 24px;
+  /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;

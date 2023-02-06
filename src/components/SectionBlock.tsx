@@ -9,6 +9,7 @@ interface Props {
   first?: boolean,
   section: SectionInterface,
   churchId?: string;
+  churchSettings: any;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void
   onMove?: () => void
 }
@@ -39,7 +40,7 @@ export const SectionBlock: React.FC<Props> = props => {
   const getSections = () => {
     const result: JSX.Element[] = []
     props.section.sections.forEach(section => {
-      result.push(<Section key={section.id} section={section} />)
+      result.push(<Section key={section.id} section={section} churchSettings={props.churchSettings} />)
     });
     return result;
   }

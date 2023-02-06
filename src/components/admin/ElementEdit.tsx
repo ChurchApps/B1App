@@ -38,19 +38,11 @@ export function ElementEdit(props: Props) {
     setElement(p);
   };
 
-  const loadBlocks = async () => {
-    if (props.element.elementType === "block") {
-      let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
-      setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
-    }
-  }
-
   const handleMarkdownChange = (field: string, newValue: string) => {
     parsedData[field] = newValue;
     let p = { ...element };
     p.answers = parsedData;
     p.answersJSON = JSON.stringify(parsedData);
-    console.log("handleMarkdwonChange", p);
     if (p.answersJSON !== element.answersJSON) setElement(p);
   };
 
@@ -74,11 +66,13 @@ export function ElementEdit(props: Props) {
   const getJsonFields = () => (<TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
   const getTextFields = () => (
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} />
+      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
     </Box>
   );
+
+  // TODO: add alt field while saving image and use it here, in image tage.
   const getTextWithPhotoFields = () => (<>
-    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} /><br /></>}
+    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
     <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
     <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <FormControl fullWidth>
@@ -91,8 +85,24 @@ export function ElementEdit(props: Props) {
       </Select>
     </FormControl>
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} />
+      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
     </Box>
+  </>);
+
+  // TODO: add alt field while saving image and use it here, in image tage.
+  const getCardFields = () => (<>
+    {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
+    <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+    <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth label="Link Url" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <Box sx={{ marginTop: 2 }}>
+      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
+    </Box>
+  </>);
+
+  const getLogoFields = () => (<>
+    <TextField fullWidth label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
   </>);
 
   const getFields = () => {
@@ -101,6 +111,8 @@ export function ElementEdit(props: Props) {
       case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />; break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
+      case "card": result = getCardFields(); break;
+      case "logo": result = getLogoFields(); break;
       case "donation": result = <></>; break;
     }
     return result;
@@ -120,7 +132,17 @@ export function ElementEdit(props: Props) {
     setElement(e);
   }
 
-  useEffect(() => { setElement(props.element); loadBlocks() }, [props.element]);
+  useEffect(() => {
+    const loadBlocks = async () => {
+      if (props.element.elementType === "block") {
+        let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+        setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
+      }
+    }
+ 
+    setElement(props.element);
+    loadBlocks();
+  }, [props.element]);
   /*
   useEffect(() => {
     if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
@@ -135,9 +157,11 @@ export function ElementEdit(props: Props) {
       <FormControl fullWidth>
         <InputLabel>Element Type</InputLabel>
         <Select fullWidth label="Element Type" value={element.elementType} name="elementType" onChange={handleChange}>
+          <MenuItem value="row">Row</MenuItem>
           <MenuItem value="text">Text</MenuItem>
           <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
-          <MenuItem value="row">Row</MenuItem>
+          <MenuItem value="card">Card</MenuItem>
+          <MenuItem value="logo">Logo</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
         </Select>
       </FormControl>

@@ -21,15 +21,7 @@ export default function Localhost() {
       <br />
       <br />
       <MarkdownPreview value={val} />
-      <MarkdownEditor value={val} onChange={(v) => {
-        // setVal(v) works
-        const obj = { text: v };
-        const json = JSON.stringify(obj);
-        console.log(json);
-        const newObj = JSON.parse(json);
-        console.log("***", newObj.text);
-        setVal(newObj.text);
-      }} />
+      <MarkdownEditor value={val} onChange={(v) => { setVal(v) }} />
     </Container>
 
   );
