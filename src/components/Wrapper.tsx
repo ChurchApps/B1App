@@ -3,7 +3,7 @@ import UserContext from "../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../appBase/components";
 import { useRouter } from "next/router"
-import { Themes } from "@/appBase/helpers";
+import { Themes, UserHelper } from "@/appBase/helpers";
 import { EnvironmentHelper, PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
@@ -32,7 +32,7 @@ export const Wrapper: React.FC<Props> = props => {
 
   const selectedTab = getSelectedTab();
 
-  if (!EnvironmentHelper.HideYoursite) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  if (!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
   props.config.tabs?.forEach(tab => {
     switch (tab.linkType) {

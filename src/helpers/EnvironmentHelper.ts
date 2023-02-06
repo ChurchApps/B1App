@@ -4,7 +4,7 @@ import { CommonEnvironmentHelper } from "../appBase/helpers/CommonEnvironmentHel
 export class EnvironmentHelper {
   private static ContentApi = "";
   private static B1Api = "";
-  public static HideYoursite = false;
+  private static HideYoursite = false;
   static Common = CommonEnvironmentHelper;
 
   static init = () => {
@@ -35,7 +35,6 @@ export class EnvironmentHelper {
 
   //NOTE: None of these values are secret.
   static initStaging = () => {
-    console.log("INIT STAGING");
     EnvironmentHelper.B1Api = "https://api.staging.b1.church";
     EnvironmentHelper.ContentApi = "https://contentapi.staging.churchapps.org";
     EnvironmentHelper.HideYoursite = false;
@@ -47,4 +46,15 @@ export class EnvironmentHelper {
     EnvironmentHelper.ContentApi = "https://contentapi.churchapps.org";
     EnvironmentHelper.HideYoursite = true;
   };
+
+  static shouldHideYourSite = (churchId: string) => {
+    let result = EnvironmentHelper.HideYoursite;
+    if (result) {
+      const exceptions = ["40"];
+      if (exceptions.indexOf(churchId) > -1) result = false;
+    }
+    return result;
+  }
+
+
 }

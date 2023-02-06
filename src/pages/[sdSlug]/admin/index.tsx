@@ -7,10 +7,10 @@ import TabPanel from "@mui/lab/TabPanel";
 import { YourSiteSettings, B1Settings } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, EnvironmentHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ConfigHelper, EnvironmentHelper, UserHelper, WrapperPageProps } from "@/helpers";
 
 export default function Admin(props: WrapperPageProps) {
-  const [activeTab, setActiveTab] = useState<"b1" | "yoursite">((EnvironmentHelper.HideYoursite) ? "b1" : "yoursite");
+  const [activeTab, setActiveTab] = useState<"b1" | "yoursite">((EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) ? "b1" : "yoursite");
   const { isAuthenticated } = ApiHelper;
 
   useEffect(() => { if (!isAuthenticated) { router.push("/login"); } }, []);
@@ -20,11 +20,11 @@ export default function Admin(props: WrapperPageProps) {
       <TabContext value={activeTab}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <TabList onChange={(_, value) => setActiveTab(value)} aria-label="lab API tabs example">
-            {!EnvironmentHelper.HideYoursite && (<Tab label="Your Site Settings" value="yoursite" />)}
+            {!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id) && (<Tab label="Your Site Settings" value="yoursite" />)}
             <Tab label="B1 Settings" value="b1" />
           </TabList>
         </Box>
-        {!EnvironmentHelper.HideYoursite && (
+        {!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id) && (
           <TabPanel value="yoursite">
             <YourSiteSettings />
           </TabPanel>

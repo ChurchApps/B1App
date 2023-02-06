@@ -12,10 +12,10 @@ type Props = {
 
 export default function Home(props: Props) {
   useEffect(() => {
-    if (EnvironmentHelper.HideYoursite && typeof window !== undefined) window.location.href = window.location.origin + "/member";
+    if (EnvironmentHelper.shouldHideYourSite(props.church.id) && typeof window !== undefined) window.location.href = window.location.origin + "/member";
   }, []); //eslint-disable-line
 
-  if (EnvironmentHelper.HideYoursite) return <Loading />
+  if (EnvironmentHelper.shouldHideYourSite(props.church.id)) return <Loading />
   else return (<PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />);
 }
 
