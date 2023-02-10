@@ -50,7 +50,7 @@ export class EnvironmentHelper {
   static shouldHideYourSite = (churchId: string) => {
     let result = EnvironmentHelper.HideYoursite;
     if (result) {
-      const exceptions = ["40"];
+      const exceptions = ["40", "IbZzogNKDzr"];
       if (exceptions.indexOf(churchId) > -1) result = false;
     }
     return result;
