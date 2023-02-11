@@ -5,7 +5,7 @@ import { MarkdownPreview } from "@/components";
 interface Props { element: ElementInterface }
 
 export const TextWithPhoto: React.FC<Props> = props => {
-  let result = <MarkdownPreview value={props.element.answers?.text || ""} />
+  let result = <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
   switch (props.element.answers?.photoPosition || "left") {
     case "left":
       result = (
@@ -14,7 +14,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
           </Grid>
           <Grid item md={8} xs={12}>
-            <MarkdownPreview value={props.element.answers?.text || ""} />
+            <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
           </Grid>
         </Grid>
       )
@@ -23,7 +23,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <Grid container columnSpacing={3}>
           <Grid item md={8} xs={12}>
-            <MarkdownPreview value={props.element.answers?.text || ""} />
+            <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
           </Grid>
           <Grid item md={4} xs={12}>
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
@@ -34,7 +34,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
     case "bottom":
       result = (
         <>
-          <MarkdownPreview value={props.element.answers?.text || ""} />
+          <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
         </>
       )
@@ -43,7 +43,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <>
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
-          <MarkdownPreview value={props.element.answers?.text || ""} />
+          <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
         </>
       )
       break;
