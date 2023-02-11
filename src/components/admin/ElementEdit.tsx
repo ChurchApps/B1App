@@ -57,6 +57,17 @@ export function ElementEdit(props: Props) {
     }
   };
 
+  const selectTextAlignment = (
+    <FormControl fullWidth>
+      <InputLabel>Text Alignment</InputLabel>
+      <Select fullWidth label="Text Alignment" name="textAlignment" value={parsedData.textAlignment || "left"} onChange={handleChange}>
+        <MenuItem value="left">Left</MenuItem>
+        <MenuItem value="center">Center</MenuItem>
+        <MenuItem value="right">Right</MenuItem>
+      </Select>
+    </FormControl>
+  )
+
   const handleDelete = () => {
     if (window.confirm("Are you sure you wish to permanently delete this element?")) {
       ApiHelper.delete("/elements/" + element.id.toString(), "ContentApi").then(() => props.updatedCallback(null));
@@ -65,10 +76,15 @@ export function ElementEdit(props: Props) {
 
   const getJsonFields = () => (<TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
   const getTextFields = () => (
-    <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
-    </Box>
+    <>
+      {selectTextAlignment}
+      <Box sx={{ marginTop: 2 }}>
+        <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
+      </Box>
+    </>
   );
+
+  console.log("parsedData: ", parsedData)
 
   // TODO: add alt field while saving image and use it here, in image tage.
   const getTextWithPhotoFields = () => (<>
@@ -84,8 +100,9 @@ export function ElementEdit(props: Props) {
         <MenuItem value="bottom">Bottom</MenuItem>
       </Select>
     </FormControl>
+    {selectTextAlignment}
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
+      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
     </Box>
   </>);
 
@@ -96,8 +113,9 @@ export function ElementEdit(props: Props) {
     <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <TextField fullWidth label="Link Url" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <TextField fullWidth label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    {selectTextAlignment}
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} />
+      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
     </Box>
   </>);
 
