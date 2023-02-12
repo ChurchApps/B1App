@@ -1,7 +1,8 @@
-import Link from "next/link";
-import { ChurchInterface, LinkInterface } from "@/helpers";
-import { Container, AppBar, Stack, Box } from "@mui/material";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Container, AppBar, Stack, Box, IconButton, Menu, MenuItem } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import { ChurchInterface, LinkInterface } from "@/helpers";
 
 type Props = {
   church: ChurchInterface;
@@ -10,8 +11,9 @@ type Props = {
 };
 
 export function Header(props: Props) {
-
   const [transparent, setTransparent] = useState(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +39,9 @@ export function Header(props: Props) {
     return result;
   }
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div>
@@ -44,9 +49,44 @@ export function Header(props: Props) {
         <Container>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
-            <Box sx={{ display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap",  }}>
               {getLinks()}
             </Box>
+            <IconButton
+              size="large"
+              color="inherit"
+              aria-label="menu"
+              id="nav-menu"
+              aria-controls={open ? 'long-menu' : undefined}
+              aria-expanded={open ? 'true' : undefined}
+              aria-haspopup="true"
+              sx={{ display: { xs: "flex", md: "none" } }}
+              onClick={(e) => setAnchorEl(e.currentTarget)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="nav-menu"
+              MenuListProps={{
+                'aria-labelledby': 'long-button',
+              }}
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              PaperProps={{
+                style: {
+                  width: '20ch',
+                },
+              }}
+            >
+              {props.navLinks?.map((l) => (
+                <Link key={l.id} href={l.url} style={{ textDecoration: "none", color: "inherit" }}>
+                  <MenuItem >
+                    {l.text}
+                  </MenuItem>
+                </Link>
+              ))}
+            </Menu>
           </Stack>
         </Container>
       </AppBar>
