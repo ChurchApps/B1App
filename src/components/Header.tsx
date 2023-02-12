@@ -31,6 +31,11 @@ export function Header(props: Props) {
     else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
   }
 
+  const getMenuColor = () => {
+    if (transparent) return "#FFF";
+    else return "#333";
+  }
+
   const getLinks = () => {
     const result: JSX.Element[] = [];
     props.navLinks?.forEach(l => {
@@ -63,7 +68,7 @@ export function Header(props: Props) {
               sx={{ display: { xs: "flex", md: "none" } }}
               onClick={(e) => setAnchorEl(e.currentTarget)}
             >
-              <MenuIcon />
+              <MenuIcon style={{color:getMenuColor()}} />
             </IconButton>
             <Menu
               id="nav-menu"

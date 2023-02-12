@@ -45,7 +45,7 @@ export function ElementAdd(props: Props) {
           <AddableElement dndType="element" elementType="card" icon="badge" label="Card" />
           <AddableElement dndType="element" elementType="logo" icon="home_app_logo" label="Logo" />
           <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" />
-          <AddableElement dndType="element" elementType="iframe" icon="crop_free" label="Iframe" />
+          <AddableElement dndType="element" elementType="iframe" icon="crop_free" label="Embed Page" />
         </Grid>
 
         {props.includeBlocks && (<>
