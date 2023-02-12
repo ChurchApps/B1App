@@ -127,16 +127,7 @@ export function ElementEdit(props: Props) {
     return (
       <>
         <TextField fullWidth label="Source" name="iframeSrc" value={parsedData.iframeSrc || ""} onChange={handleChange} />
-        <TextField fullWidth label="Width (px)" name="iframeWidth" value={parsedData.iframeWidth || ""} onChange={handleChange} />
-        <TextField fullWidth label="Height (px)" name="iframeHeight" value={parsedData.iframeHeight || ""} onChange={handleChange} />
-        <FormControl fullWidth>
-          <InputLabel>Alignment</InputLabel>
-          <Select fullWidth label="Alignment" name="iframeAlignment" value={parsedData.iframeAlignment || "left"} onChange={handleChange}>
-            <MenuItem value="left">Left</MenuItem>
-            <MenuItem value="center">Center</MenuItem>
-            <MenuItem value="right">Right</MenuItem>
-          </Select>
-        </FormControl>
+        <TextField fullWidth label="Height (px)" name="iframeHeight" value={parsedData.iframeHeight || ""} placeholder="1000" onChange={handleChange} />
       </>
     )
   }

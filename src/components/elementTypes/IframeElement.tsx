@@ -5,27 +5,14 @@ interface Props {
 }
 
 export function IframeElement({ element }: Props) {
-  
-  let align;
-  switch (element.answers?.iframeAlignment) {
-    case "right":
-      align = "flex-end"
-      break;
-    case "center":
-      align = "center"
-      break;
-    case "left":
-    default:
-      align = "flex-start"
-      break;
-  }
 
   return (
-    <div style={{ display: "flex", justifyContent: align }}>
+    <div style={{ display: "flex" }}>
       <iframe
         src={element.answers?.iframeSrc || ""}
-        height={element.answers?.iframeHeight}
-        width={element.answers?.iframeWidth}
+        height={element.answers?.iframeHeight || "1000"}
+        width="100%"
+        style={{border:"none", backgroundColor:"#FFFFFF"}}
       />
     </div>
   );

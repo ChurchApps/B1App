@@ -76,6 +76,12 @@ body {
   color: #FFFFFF;
 }
 
+
+.page .sectionDark .editor-link {
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
 .page .sectionBG {
   background-attachment: fixed;
   background-position-x: 50%;
