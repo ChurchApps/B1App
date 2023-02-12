@@ -9,6 +9,7 @@ import { NonAuthDonation } from "@/appBase/donationComponents/components"
 import { ElementBlock } from "./elementTypes/ElementBlock";
 import { CardElement } from "./elementTypes/CardElement";
 import { LogoElement } from "./elementTypes/LogoElement";
+import { IframeElement } from "./elementTypes/IframeElement";
 
 interface Props {
   element: ElementInterface;
@@ -67,6 +68,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "donation":
       result = <NonAuthDonation key={props.element.id} churchId={props.churchId ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      break;
+    case "iframe":
+      result = <IframeElement key={props.element.id} element={props.element as ElementInterface} />
       break;
   }
 
