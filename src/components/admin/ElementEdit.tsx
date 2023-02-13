@@ -152,9 +152,8 @@ export function ElementEdit(props: Props) {
         <FormControl fullWidth>
           <InputLabel>Variant</InputLabel>
           <Select fullWidth label="Button Type" name="buttonLinkVariant" value={parsedData.buttonLinkVariant || "contained"} onChange={handleChange}>
-            <MenuItem value="text">Text</MenuItem>
             <MenuItem value="contained">Contained</MenuItem>
-            <MenuItem value="outline">outline</MenuItem>
+            <MenuItem value="outlined">Outlined</MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth>
@@ -169,7 +168,8 @@ export function ElementEdit(props: Props) {
           </Select>
         </FormControl>
         <FormGroup sx={{ marginLeft: 1, marginY: 2 }}>
-          <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.buttonLinkIsExternal === "true" ? true : false} />} name="buttonLinkIsExternal" label="Open in new Tab" />
+          <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
+          <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.fullWidth === "true" ? true : false} />} name="fullWidth" label="Full width" />
         </FormGroup>
       </>
     )
@@ -236,7 +236,7 @@ export function ElementEdit(props: Props) {
           <MenuItem value="logo">Logo</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
           <MenuItem value="iframe">Embed Page</MenuItem>
-          <MenuItem value="buttonLink">Buttoned Link</MenuItem>
+          <MenuItem value="buttonLink">Button</MenuItem>
         </Select>
       </FormControl>
       {getFields()}
