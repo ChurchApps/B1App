@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ArrayHelper, BlockInterface, ElementInterface } from "@/helpers";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
 import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
@@ -37,6 +37,20 @@ export function ElementEdit(props: Props) {
     }
     setElement(p);
   };
+
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let p = { ...element };
+    let val: any = e.target.checked.toString();
+    switch (e.target.name) {
+      case "elementType": p.elementType = val; break;
+      case "answersJSON": p.answersJSON = val; break;
+      default:
+        parsedData[e.target.name] = val;
+        p.answersJSON = JSON.stringify(parsedData);
+        break;
+    }
+    setElement(p);
+  }
 
   const handleMarkdownChange = (field: string, newValue: string) => {
     parsedData[field] = newValue;
@@ -84,8 +98,6 @@ export function ElementEdit(props: Props) {
     </>
   );
 
-  console.log("parsedData: ", parsedData)
-
   // TODO: add alt field while saving image and use it here, in image tage.
   const getTextWithPhotoFields = () => (<>
     {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
@@ -132,6 +144,37 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getButtonLink = () => {
+    return (
+      <>
+        <TextField fullWidth label="Text" name="buttonLinkText" value={parsedData.buttonLinkText || ""} onChange={handleChange} />
+        <TextField fullWidth label="url" name="buttonLinkUrl" value={parsedData.buttonLinkUrl || ""} onChange={handleChange} />
+        <FormControl fullWidth>
+          <InputLabel>Variant</InputLabel>
+          <Select fullWidth label="Button Type" name="buttonLinkVariant" value={parsedData.buttonLinkVariant || "contained"} onChange={handleChange}>
+            <MenuItem value="text">Text</MenuItem>
+            <MenuItem value="contained">Contained</MenuItem>
+            <MenuItem value="outline">outline</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel>Color</InputLabel>
+          <Select fullWidth label="Button Type" name="buttonLinkColor" value={parsedData.buttonLinkColor || "primary"} onChange={handleChange}>
+            <MenuItem value="primary">Primary</MenuItem>
+            <MenuItem value="secondary">Secondary</MenuItem>
+            <MenuItem value="error">Error</MenuItem>
+            <MenuItem value="warning">Warning</MenuItem>
+            <MenuItem value="info">Info</MenuItem>
+            <MenuItem value="success">Success</MenuItem>
+          </Select>
+        </FormControl>
+        <FormGroup sx={{ marginLeft: 1, marginY: 2 }}>
+          <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.buttonLinkIsExternal === "true" ? true : false} />} name="buttonLinkIsExternal" label="Open in new Tab" />
+        </FormGroup>
+      </>
+    )
+  }
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -142,6 +185,7 @@ export function ElementEdit(props: Props) {
       case "logo": result = getLogoFields(); break;
       case "donation": result = <></>; break;
       case "iframe": result = getIframeFields(); break;
+      case "buttonLink": result = getButtonLink(); break;
     }
     return result;
   }
@@ -191,7 +235,8 @@ export function ElementEdit(props: Props) {
           <MenuItem value="card">Card</MenuItem>
           <MenuItem value="logo">Logo</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
-          <MenuItem value="iframe">Iframe</MenuItem>
+          <MenuItem value="iframe">Embed Page</MenuItem>
+          <MenuItem value="buttonLink">Buttoned Link</MenuItem>
         </Select>
       </FormControl>
       {getFields()}
