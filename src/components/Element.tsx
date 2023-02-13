@@ -10,6 +10,7 @@ import { ElementBlock } from "./elementTypes/ElementBlock";
 import { CardElement } from "./elementTypes/CardElement";
 import { LogoElement } from "./elementTypes/LogoElement";
 import { IframeElement } from "./elementTypes/IframeElement";
+import { ButtonLink } from "./elementTypes/ButtonLink";
 
 interface Props {
   element: ElementInterface;
@@ -71,6 +72,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "iframe":
       result = <IframeElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "buttonLink":
+      result = <ButtonLink key={props.element.id} element={props.element as ElementInterface}></ButtonLink>
       break;
   }
 
