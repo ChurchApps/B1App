@@ -36,14 +36,14 @@ export class EnvironmentHelper {
   //NOTE: None of these values are secret.
   static initStaging = () => {
     EnvironmentHelper.B1Api = "https://api.staging.b1.church";
-    EnvironmentHelper.ContentApi = "https://contentapi.staging.churchapps.org";
+    //EnvironmentHelper.ContentApi = "https://contentapi.staging.churchapps.org";
     EnvironmentHelper.HideYoursite = false;
   };
 
   //NOTE: None of these values are secret.
   static initProd = () => {
     EnvironmentHelper.B1Api = "https://api.b1.church";
-    EnvironmentHelper.ContentApi = "https://contentapi.churchapps.org";
+    //EnvironmentHelper.ContentApi = "https://contentapi.churchapps.org";
     EnvironmentHelper.HideYoursite = true;
   };
 
