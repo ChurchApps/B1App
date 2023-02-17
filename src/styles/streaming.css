@@ -1,0 +1,48 @@
+
+#liveContainer {
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+}
+
+#liveBody {
+  flex: 9;
+  display: flex;
+  height: 100%;
+}
+
+#videoContainer {
+  flex: 3;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+#videoContainer iframe {
+  width: 100%;
+  flex: 1 1 100%;
+  align-self: center;
+  height: 100%;
+}
+
+#noVideoContent {
+  width: 100%;
+  color: #fff;
+  font-size: 40px;
+  overflow: hidden;
+  flex: 1 1 0%;
+  width: 100%;
+  text-align: center;
+  align-self: center;
+}
+
+#interactionContainer {
+  flex: 1;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+#interactionContainer iframe {
+  width: 100%;
+}
