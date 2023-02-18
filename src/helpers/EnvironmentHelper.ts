@@ -52,5 +52,4 @@ export class EnvironmentHelper {
     return result;
   }
 
-
 }

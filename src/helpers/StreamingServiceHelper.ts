@@ -1,3 +1,4 @@
+import { ChatConfigHelper } from "./ChatConfigHelper";
 import { StreamConfigInterface, StreamingServiceExtendedInterface } from "./interfaces";
 
 
@@ -6,11 +7,11 @@ export class StreamingServiceHelper {
   static currentService: StreamingServiceExtendedInterface | null;
   static timer: NodeJS.Timeout;
 
-  /*
+  
   static checkService() {
     let cs;
-    if (ConfigHelper.current !== undefined) {
-      cs = StreamingServiceHelper.determineCurrentService(ConfigHelper.current.services);
+    if (ChatConfigHelper.current !== undefined) {
+      cs = StreamingServiceHelper.determineCurrentService(ChatConfigHelper.current.services);
     }
     if (JSON.stringify(cs) !== JSON.stringify(StreamingServiceHelper.currentService)) {
       StreamingServiceHelper.currentService = cs;
@@ -22,7 +23,7 @@ export class StreamingServiceHelper {
     StreamingServiceHelper.currentServiceChangedCallback = callback;
     if (StreamingServiceHelper.timer !== undefined) clearInterval(StreamingServiceHelper.timer);
     StreamingServiceHelper.timer = setInterval(StreamingServiceHelper.checkService, 1000);
-  }*/
+  }
 
   static updateServiceTimes(config: StreamConfigInterface) {
     if (config.services != null) {
