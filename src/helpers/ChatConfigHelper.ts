@@ -1,5 +1,5 @@
 import { AppearanceInterface } from "../appBase/helpers/AppearanceHelper";
-import { EnvironmentHelper, SermonInterface } from "."
+import { EnvironmentHelper, SermonInterface, StreamConfigInterface } from "."
 import { ChatHelper } from "./ChatHelper";
 import { StreamingServiceHelper } from "./StreamingServiceHelper";
 
@@ -11,7 +11,7 @@ export interface ServiceInterface { videoUrl: string, serviceTime: string, early
 export interface ConfigurationInterface { keyName?: string, churchId?: string, appearance: AppearanceInterface, buttons?: ButtonInterface[], tabs?: TabInterface[], services?: ServiceInterface[], switchToConversationId: string, jitsiRoom: string }
 
 export class ChatConfigHelper {
-  static current: ConfigurationInterface;
+  static current: StreamConfigInterface;
 
   static loadCached(keyName: string) {
     const json = localStorage.getItem("config_" + keyName);

@@ -19,9 +19,11 @@ export const LiveStream: React.FC<Props> = (props) => {
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
   
   const loadData = async (keyName: string) => {
+    console.log("loadData");
     let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then(response => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
+    ChatConfigHelper.current = result;
     ChatHelper.initChat();
     setConfig(result);
   }
@@ -39,7 +41,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   }
 
   const checkHost = async (d: StreamConfigInterface) => {
-    if (chatState.user.isHost) {
+    if (chatState?.user?.isHost) {
       const hostChatDetails = await ApiHelper.get("/streamingServices/" + currentService.id + "/hostChat", "ContentApi");
       if (hostChatDetails.room) {
         d.tabs.push({ type: "hostchat", text: "Host Chat", icon: "group", data: "", url: "" });
@@ -78,6 +80,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   }
 
   const checkJoinRooms = () => {
+    console.log("checkJoinRooms", currentService, config)
     if (currentService && config) {
       joinMainRoom(ChatConfigHelper.current.churchId);
       checkHost(config);
@@ -87,17 +90,23 @@ export const LiveStream: React.FC<Props> = (props) => {
 
   //useEffect(() => { loadData(props.keyName); }, []);
   //useEffect(() => { loadData(props.keyName); }, []);
+  
+  
   useEffect(() => {
     ChatHelper.onChange = () => {
-      console.log("IT CHANGED")
       setChatState({ ...ChatHelper.current });
       setConfig({ ...ChatConfigHelper.current });
     }
-    StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs) });
+    StreamingServiceHelper.initTimer((cs) => { 
+      console.log("timer fired");
+      setCurrentService(cs) 
+    });
     loadData(props.keyName);
     setCurrentService(StreamingServiceHelper.currentService);
     initUser();
   }, []);
+
+  React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
 
   /*
   useEffect(() => {
@@ -111,7 +120,7 @@ export const LiveStream: React.FC<Props> = (props) => {
     initUser();
   }, [loadData]);
 */
-  console.log("chatstate", chatState);
+  //console.log("chatstate", chatState);
 
   return (
     <Grid container spacing={3}>
