@@ -85,10 +85,11 @@ export const LiveStream: React.FC<Props> = (props) => {
   }
 
 
-  useEffect(() => { loadData(props.keyName); }, []);
+  //useEffect(() => { loadData(props.keyName); }, []);
   //useEffect(() => { loadData(props.keyName); }, []);
   useEffect(() => {
     ChatHelper.onChange = () => {
+      console.log("IT CHANGED")
       setChatState({ ...ChatHelper.current });
       setConfig({ ...ChatConfigHelper.current });
     }
@@ -114,13 +115,16 @@ export const LiveStream: React.FC<Props> = (props) => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={9}>
+      <Grid item xs={12}>
         {JSON.stringify(config)}
-        <VideoContainer currentService={currentService} />
-        {(chatState) && <InteractionContainer chatState={chatState} config={config} />}
-      </Grid>
-      <Grid item xs={3}>
+        <div id="liveContainer">
+          <div id="liveBody">
+            <VideoContainer currentService={currentService} />
+            {(config) && <InteractionContainer chatState={chatState} config={config} />}
+          </div>
+        </div>
 
+        <h2>Bottom of page</h2>
       </Grid>
     </Grid>
   );

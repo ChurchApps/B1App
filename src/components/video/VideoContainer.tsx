@@ -64,12 +64,8 @@ export const VideoContainer: React.FC<Props> = (props) => {
   }, [isMounted]);
 
   return (
-    <div id="liveContainer">
-      <div id="liveBody">
-        <div id="videoContainer">
-          {getContents()}
-        </div>
-      </div>
+    <div id="videoContainer">
+      {getContents()}
     </div>
   );
 }

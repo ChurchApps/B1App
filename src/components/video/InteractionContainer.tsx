@@ -2,8 +2,11 @@ import React from "react";
 
 import { Icon, Box } from "@mui/material";
 import useMountedState from "../../appBase/hooks/useMountedState";
-import { StreamingTabInterface, EnvironmentHelper, ConfigHelper, StreamConfigInterface, ChatStateInterface } from "@/helpers";
-import { Chat } from "@mui/icons-material";
+import { StreamingTabInterface, EnvironmentHelper, StreamConfigInterface, ChatStateInterface } from "@/helpers";
+import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
+import { HostChat, ReceivePrayer } from "./chat/host";
+import { RequestPrayer } from "./chat/RequestPrayer";
+import { Chat } from "./chat/Chat";
 
 interface Props {
   config: StreamConfigInterface,
@@ -30,7 +33,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
     if (props.config.tabs != null) {
       for (let i = 0; i < props.config.tabs.length; i++) {
         let t = props.config.tabs[i];
-        result.push(<td key={i}><a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); selectTab(i); }} className="altTab"><Icon sx={{ marginRight: "5px" }}>{t.icon}</Icon></a></td>);
+        result.push(<td key={i}><a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); selectTab(i); }} className="streamingAltTab"><Icon sx={{ marginRight: "5px" }}>{t.icon}</Icon></a></td>);
       }
     }
     return result;
@@ -79,7 +82,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
       for (let i = 0; i < props.config.tabs.length; i++) {
         let t = props.config.tabs[i];
         let visible = i === selectedTab;
-        let className = getFlashing(visible, t) ? "tab flashing" : "tab";
+        let className = getFlashing(visible, t) ? "streamingTab flashing" : "streamingTab";
 
         result.push(<a key={"anchor" + i.toString()} href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); selectTab(i); }} className={className}>
           <Box sx={{ display: "flex", alignItems: "center" }}><Icon sx={{ marginRight: "5px", marginLeft: "5px" }}>{t.icon}</Icon>{t.text}</Box>
@@ -113,7 +116,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
   React.useEffect(() => {
     if (props.config.switchToConversationId !== "" && props.config.switchToConversationId !== undefined) {
       if (props.config.tabs != null) {
-        ConfigHelper.addMissingPrivateTab();
+        ChatConfigHelper.addMissingPrivateTab();
         let prayerTabIndex = -1;
         for (let i = 0; i < props.config.tabs.length; i++) {
           const t = props.config.tabs[i];
@@ -132,7 +135,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
   return (
     <div id="interactionContainer">
-      <table id="altTabs">
+      <table id="streamingAltTabs">
         <tbody>
           <tr>{getAltTabs()}</tr>
         </tbody>

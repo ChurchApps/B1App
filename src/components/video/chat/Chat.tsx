@@ -1,7 +1,8 @@
 import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
 import React from "react";
-import { ChatSend, Callout, Attendance, ChatReceive } from ".";
+import { ChatSend, Callout, Attendance } from ".";
 import { ChatRoomInterface, ChatUserInterface } from "../../../helpers"
+import { ChatReceive } from "./ChatReceive";
 
 interface Props {
     room: ChatRoomInterface,

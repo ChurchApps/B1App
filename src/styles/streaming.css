@@ -46,3 +46,204 @@
 #interactionContainer iframe {
   width: 100%;
 }
+
+.streamingTab {
+  flex: 0 0 0%;
+  text-decoration: none;
+  vertical-align: middle;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: var(--secondaryContrast);
+  background-color: var(--secondaryColor);
+}
+
+.streamingTab:hover {
+  text-decoration: none;
+  color: var(--secondaryContrast);
+}
+
+.streamingTab i {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.streamingTab.childTab {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+}
+
+/*#tabs > *:not(:first-child) {border-left:1px solid var(--primaryColor);}*/
+.frame {
+  flex: 1;
+  display: flex;
+}
+
+.chatContainer,
+#prayerContainer,
+#receivePrayerContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  flex: 1;
+}
+
+#chatReceive,
+#prayerReceive {
+  flex: 1 0 0;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+#callout {
+  padding-bottom: 5px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+  background-color: #ffffd0;
+}
+
+#fbComments {
+  padding-bottom: 5px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+  background-color: #ffffd0;
+}
+
+#prayerContainer {
+  padding-left: 25%;
+  padding-right: 25%;
+  padding-top: 100px;
+}
+
+#nameBar {
+  flex: 0 0 25px;
+  background-color: #ddd;
+  display: block;
+  text-align: center;
+  border-bottom: 1px solid #fff;
+  font-size: 16px;
+}
+
+#attendance {
+  flex: 1 0 0;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+#attendance span {
+  float: right;
+  color: #999;
+}
+
+#attendance i {
+  color: #999;
+  margin-right: 10px;
+}
+
+#attendanceCount {
+  flex: 0 0 25px;
+  background-color: #ddd;
+  display: block;
+  text-align: center;
+}
+
+#attendanceCount:hover {
+  text-decoration: none;
+}
+
+.attendanceExpanded {
+  padding-left: 20px;
+}
+
+.attendanceExpanded span.id {
+  font-size: 11px;
+  float: none !important;
+}
+
+#chatSend,
+prayerSend {
+  flex: 0 0 0px;
+}
+
+#chatName,
+#prayerName {
+  flex: 0 0 0px;
+  border-top: 1px solid #005288;
+  padding: 10px;
+}
+
+#chatTabs td {
+  padding: 0px;
+  width: 50%;
+}
+
+#chatTabs a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  color: #333;
+  background-color: #ddd;
+  display: block;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+}
+
+#chatTabs a.active,
+#chatTabs a:hover {
+  color: var(--primaryColor);
+  background-color: #fff;
+}
+
+#sendMessageButton {
+  border-radius: 0px;
+}
+
+#streamingAltTabs {
+  display: none;
+  width: 100%;
+}
+
+#streamingAltTabs td {
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+#streamingAltTabs td:first-child {
+  padding-left: 0px;
+}
+
+#streamingAltTabs td:last-child {
+  padding-right: 0px;
+}
+
+.streamingAltTab {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+  display: block;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.streamingAltTab:hover {
+  text-decoration: none;
+  color: var(--primaryContrast);
+}
+
+.streamingAltTab.active {
+  color: var(--primaryColor);
+  background-color: var(--primaryContrast);
+}
