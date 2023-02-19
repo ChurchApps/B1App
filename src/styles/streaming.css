@@ -1,3 +1,6 @@
+#streamRoot {
+  height: 100vh;
+}
 
 #liveContainer {
   height: 100%;
@@ -246,4 +249,152 @@ prayerSend {
 .streamingAltTab.active {
   color: var(--primaryColor);
   background-color: var(--primaryContrast);
+}
+
+#streamingHeader {
+  flex: 0 0 55px;
+  display: flex;
+  align-items: center;
+  background-color: var(--primaryColor);
+  padding-top: 3px;
+  padding-bottom: 3px;
+  box-shadow: 0px 3px 3px 0px #000;
+}
+
+
+#logo {
+  flex: 1;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: row;
+  align-content: space-around;
+  margin-right: 5px;
+}
+
+#logo img {
+  max-width: 100%;
+  align-self: center;
+  display: flex;
+  max-height: 45px;
+}
+
+#logo a {
+  flex: 1 1 0px;
+  align-self: center;
+}
+
+#userLink {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-content: space-around;
+  text-align: right;
+}
+
+#userLink div {
+  align-self: center;
+  flex: 1 1 100%;
+  padding-right: 20px;
+}
+
+#userLink div a {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: var(--primaryContrast);
+}
+
+#userLink div a:hover {
+  text-decoration: none;
+}
+
+#userMenu {
+  position: absolute;
+  top: 55px;
+  z-index: 9999;
+  left: 0px;
+  right: 0px;
+}
+
+#userMenu>div {
+  width: 250px;
+  max-width: 100%;
+  position: relative;
+  background-color: var(--primaryColor);
+  float: right;
+  box-shadow: -3px 3px 3px #999;
+  color: var(--primaryContrast);
+  padding: 8px;
+}
+
+#userMenu a {
+  color: var(--primaryContrast);
+}
+
+#userMenu .nav-item,
+#userMenu .divider {
+  border-bottom: 1px solid var(--primaryContrast);
+}
+
+#userMenu .nav:last-child .nav-item:last-child {
+  border-bottom: none;
+}
+
+#liveButtons {
+  flex: 3;
+  display: flex;
+  flex-direction: row;
+  align-content: space-around;
+}
+
+#liveButtons div {
+  align-self: center;
+  flex: 1 1 100%;
+  padding-right: 5px;
+}
+
+#liveButtons ul {
+  margin-left: auto;
+  margin-right: auto;
+  width: max-content;
+}
+
+#liveButtons a {
+  color: var(--primaryContrast);
+  padding-left: 20px;
+  padding-right: 20px;
+  border-right: 1px solid var(--primaryContrast);
+}
+
+#liveButtons li:last-child a {
+  border-right: none;
+}
+
+
+.btn-primary {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+  border-color: var(--primaryContrast);
+}
+
+.btn-secondary {
+  color: var(--primaryColor);
+  background-color: var(--primaryContrast);
+  border-color: var(--primaryColor);
+}
+
+.btn-secondary:hover {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+  border-color: var(--primaryContrast);
+}
+
+#liveButtons .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
 }

@@ -9,8 +9,10 @@ import { InteractionContainer } from "./InteractionContainer";
 import { VideoContainer } from "./VideoContainer";
 import Cookies from "js-cookie";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
+import { AppearanceInterface } from "@/appBase/helpers";
+import { StreamingHeader } from "./StreamingHeader";
 
-interface Props { keyName:string }
+interface Props { keyName:string, appearance: AppearanceInterface }
 
 export const LiveStream: React.FC<Props> = (props) => {
   
@@ -123,18 +125,12 @@ export const LiveStream: React.FC<Props> = (props) => {
   //console.log("chatstate", chatState);
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        {JSON.stringify(config)}
-        <div id="liveContainer">
-          <div id="liveBody">
-            <VideoContainer currentService={currentService} />
-            {(config) && <InteractionContainer chatState={chatState} config={config} />}
-          </div>
-        </div>
-
-        <h2>Bottom of page</h2>
-      </Grid>
-    </Grid>
+    <div id="liveContainer">
+      <StreamingHeader user={chatState?.user} nameUpdateFunction={handleNameUpdate} config={config} isHost={chatState?.user?.isHost} />
+      <div id="liveBody">
+        <VideoContainer currentService={currentService} />
+        {(config) && <InteractionContainer chatState={chatState} config={config} />}
+      </div>
+    </div>
   );
 }

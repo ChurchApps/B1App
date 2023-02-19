@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { Loading, PageLayout, Theme } from "@/components";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
 import { useEffect } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { LiveStream } from "@/components/video/LiveStream";
 
 type Props = {
@@ -12,23 +12,12 @@ type Props = {
   navLinks: LinkInterface[],
 };
 
-export default function StreamTest(props: Props) {
+export default function Stream(props: Props) {
   return (<>
-    <Theme appearance={props.churchSettings} />    
-    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
-      <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
-        <h1>Hi</h1>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} />
-          </Grid>
-        </Grid>
-        <br/><br/>
-        <br/><br/>
-
-        <h2>Bottom of page</h2>
-      </Box>
-    </Box>
+  <Theme appearance={props.churchSettings} />  
+    <div id="streamRoot">
+      <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} />
+    </div>
   </>);
 }
 
