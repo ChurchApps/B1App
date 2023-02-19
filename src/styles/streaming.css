@@ -253,6 +253,7 @@ prayerSend {
 
 #streamingHeader {
   flex: 0 0 55px;
+  min-height: 55px;
   display: flex;
   align-items: center;
   background-color: var(--primaryColor);
@@ -397,4 +398,21 @@ prayerSend {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+}
+
+#userMenu .nav {
+  border-bottom: 1px solid var(--primaryContrast);
+  padding-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#userMenu .nav:last-child {
+  border-bottom: none;
+}
+
+#userMenu .nav-item {
+  list-style: none;
+  border-top: none;
+  border-bottom: none; 
 }
