@@ -32,6 +32,7 @@ export class SocketHelper {
   }
 
   static handleMessage = (payload: ChatPayloadInterface) => {
+    console.log("payload", payload)
     switch (payload.action) {
       case "attendance": SocketHelper.events.attendanceHandler(payload.data); break;
       case "callout": SocketHelper.events.calloutHandler(payload.data); break;

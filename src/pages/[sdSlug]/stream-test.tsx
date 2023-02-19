@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Loading, PageLayout } from "@/components";
+import { Loading, PageLayout, Theme } from "@/components";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
 import { useEffect } from "react";
 import { Box } from "@mui/material";
@@ -13,12 +13,15 @@ type Props = {
 };
 
 export default function Home(props: Props) {
-  return (<Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
-    <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
-      <h1>Hi</h1>
-      <LiveStream keyName={props.church.subDomain} />
+  return (<>
+    <Theme appearance={props.churchSettings} />    
+    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
+      <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
+        <h1>Hi</h1>
+        <LiveStream keyName={props.church.subDomain} />
+      </Box>
     </Box>
-  </Box>);
+  </>);
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

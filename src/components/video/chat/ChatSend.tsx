@@ -38,18 +38,22 @@ export const ChatSend: React.FC<Props> = (props) => {
 
   let emojiContent = (showEmojis) ? <Emojis selectedFunction={insertEmoji} /> : null;
 
+  let size:"medium" | "small" = "medium";
+  if (1===1) size = "small"; //temp.  Need to figure out a way to determine if this is full screen or windowed and adjust accordingly.
+
   return (
     <div id="chatSend">
       {emojiContent}
-      <div id="sendPublic" style={{ marginLeft: 5, marginRight: 5 }}>
+      <div id="sendPublic" style={(size==="medium") ? { marginLeft: 5, marginRight:  5 } : {} }>
 
-        <FormControl fullWidth variant="outlined">
-          <InputLabel htmlFor="searchText">Send Message</InputLabel>
-          <OutlinedInput id="sendChatText" name="sendChatText" type="text" label="Send Message" value={message} onChange={handleChange}
+        <FormControl fullWidth variant="outlined" size={size}>
+          <InputLabel htmlFor="searchText">{(size === "medium") ? "Send Message" : "Message"}</InputLabel>
+          <OutlinedInput id="sendChatText" name="sendChatText" type="text" label={(size === "medium") ? "Send Message" : "Message"} value={message} onChange={handleChange}
             onKeyDown={handleKeyDown} autoComplete="off"
+            style={(size==="small") ? {paddingRight:4} : {} }
             endAdornment={<>
               <Button variant="outlined" size="small" style={{ paddingRight: 8, paddingLeft: 8, minWidth: 0, marginRight: 5 }} onClick={toggleEmojis} data-field="sendText" className="emojiButton"><span role="img" aria-label="emoji">😀</span></Button>
-              <Button variant="contained" onClick={handleSendMessage}>Send</Button>
+              <Button variant="contained" onClick={handleSendMessage} size="small">Send</Button>
             </>}
           />
         </FormControl>

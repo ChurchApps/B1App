@@ -2,8 +2,8 @@ import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Wrapper } from "@/components/Wrapper";
 import { Grid } from "@mui/material";
-import { ApiHelper, ArrayHelper, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
-import { DisplayBox } from "@/components";
+import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
+import { DisplayBox, Theme } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { ElementEdit } from "@/components/admin/ElementEdit";
@@ -15,8 +15,12 @@ import { DroppableArea } from "@/components/admin/DroppableArea";
 import { SectionBlock } from "@/components/SectionBlock";
 import { GetStaticPaths, GetStaticProps } from "next";
 
+interface Props extends WrapperPageProps {
+  church: ChurchInterface,
+  churchSettings: any,
+};
 
-export default function Admin(props: WrapperPageProps) {
+export default function Admin(props: Props) {
   const { isAuthenticated } = ApiHelper
   const router = useRouter();
   const [page, setPage] = useState<PageInterface>(null);
@@ -130,16 +134,14 @@ export default function Admin(props: WrapperPageProps) {
 
   }
 
-
-  return (
+  return (<>
+    <Theme appearance={props.churchSettings} />
     <Wrapper config={props.config}>
       <h1>Edit Page</h1>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
-
             {getZoneBoxes()}
-
           </Grid>
           <Grid item md={4} xs={12}>
             <div id="editorBar">
@@ -153,7 +155,7 @@ export default function Admin(props: WrapperPageProps) {
         </Grid>
       </DndProvider>
     </Wrapper>
-  );
+  </>);
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
