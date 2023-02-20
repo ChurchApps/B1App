@@ -20,7 +20,7 @@ export default function StreamTest(props: Props) {
         <h1>Hi</h1>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} />
+            <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} includeHeader={false} includeInteraction={true} />
           </Grid>
         </Grid>
         <br/><br/>

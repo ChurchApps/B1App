@@ -3,7 +3,7 @@ import React from "react";
 import { StreamingServiceExtendedInterface } from "@/helpers";
 import useMountedState from "@/appBase/hooks/useMountedState";
 
-interface Props { currentService: StreamingServiceExtendedInterface | null }
+interface Props { currentService: StreamingServiceExtendedInterface | null, embedded:boolean }
 
 export const VideoContainer: React.FC<Props> = (props) => {
 
@@ -64,7 +64,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
   }, [isMounted]);
 
   return (
-    <div id="videoContainer">
+    <div id="videoContainer" className={(props.embedded) ? "embedded" : ""}>
       {getContents()}
     </div>
   );

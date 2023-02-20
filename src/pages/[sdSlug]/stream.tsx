@@ -1,8 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Loading, PageLayout, Theme } from "@/components";
-import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
-import { useEffect } from "react";
-import { Box } from "@mui/material";
+import { Theme } from "@/components";
+import { ApiHelper, ChurchInterface, LinkInterface, PageInterface } from "@/helpers";
 import { LiveStream } from "@/components/video/LiveStream";
 
 type Props = {
@@ -16,7 +14,7 @@ export default function Stream(props: Props) {
   return (<>
   <Theme appearance={props.churchSettings} />  
     <div id="streamRoot">
-      <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} />
+      <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} includeHeader={true} includeInteraction={true} />
     </div>
   </>);
 }

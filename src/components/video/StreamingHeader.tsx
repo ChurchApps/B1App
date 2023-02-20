@@ -1,6 +1,7 @@
 import { AppearanceInterface } from "@/appBase/helpers";
 import { UserInterface, ApiHelper, EnvironmentHelper, AppearanceHelper, StreamConfigInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
+import { StreamChatManager } from "@/helpers/StreamChatManager";
 import { Icon } from "@mui/material";
 import Link from "next/link";
 import React from "react";
@@ -10,7 +11,6 @@ import { StreamingNavItems } from "./StreamingNavItems";
 
 interface Props {
   user: UserInterface,
-  nameUpdateFunction: (displayName: string) => void,
   config?: StreamConfigInterface,
   appearance?: AppearanceInterface,
   isHost: boolean
@@ -24,7 +24,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
 
   const updateName = (displayName: string) => {
     setShowUserMenu(false);
-    props.nameUpdateFunction(displayName);
+    StreamChatManager.handleNameUpdate(displayName);
   }
 
   const getLoginLink = () => {

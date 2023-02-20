@@ -41,6 +41,17 @@
   align-self: center;
 }
 
+
+#videoContainer.embedded {
+  padding-bottom: 56.25%;
+  position: relative;
+}
+
+#videoContainer.embedded iframe, #videoContainer.embedded #noVideoContent {
+  position: absolute;
+  align-self:auto;
+}
+
 #interactionContainer {
   flex: 1;
   background-color: #fff;

@@ -1,135 +1,65 @@
-import { ApiHelper, ChatStateInterface, ConfigHelper, ConversationInterface, EnvironmentHelper, StreamConfigInterface, StreamingServiceExtendedInterface, StreamingServiceInterface, UserHelper, UserInterface } from "@/helpers";
+import { ChatStateInterface, EnvironmentHelper, StreamConfigInterface, StreamingServiceExtendedInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { SocketHelper } from "@/helpers/SocketHelper";
 import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
-import { Grid, TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import { InteractionContainer } from "./InteractionContainer";
 import { VideoContainer } from "./VideoContainer";
-import Cookies from "js-cookie";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { AppearanceInterface } from "@/appBase/helpers";
 import { StreamingHeader } from "./StreamingHeader";
+import { StreamChatManager } from "@/helpers/StreamChatManager";
 
-interface Props { keyName:string, appearance: AppearanceInterface }
+interface Props { 
+  keyName:string, 
+  appearance: AppearanceInterface 
+  includeInteraction: boolean,
+  includeHeader: boolean
+}
 
 export const LiveStream: React.FC<Props> = (props) => {
   
   const [config, setConfig] = React.useState<StreamConfigInterface>(null);
   const [chatState, setChatState] = React.useState<ChatStateInterface>(null);
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
-  
+
   const loadData = async (keyName: string) => {
-    console.log("loadData");
     let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then(response => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;
-    ChatHelper.initChat();
+    if (props.includeInteraction) ChatHelper.initChat();
     setConfig(result);
   }
-
-  
-  const joinMainRoom = async (churchId: string) => {
-    if (currentService) {
-      const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/current/" + churchId + "/streamingLive/" + currentService.id, "MessagingApi");
-      ChatHelper.current.mainRoom = ChatHelper.createRoom(conversation);
-      ChatHelper.current.mainRoom.conversation.title = "Chat";
-      setChatState(ChatHelper.current);
-      ChatHelper.joinRoom(conversation.id, conversation.churchId);
-      ChatHelper.current.mainRoom.joined = true;
-    }
-  }
-
-  const checkHost = async (d: StreamConfigInterface) => {
-    if (chatState?.user?.isHost) {
-      const hostChatDetails = await ApiHelper.get("/streamingServices/" + currentService.id + "/hostChat", "ContentApi");
-      if (hostChatDetails.room) {
-        d.tabs.push({ type: "hostchat", text: "Host Chat", icon: "group", data: "", url: "" });
-        const hostConversation: ConversationInterface = await ApiHelper.get("/conversations/current/" + d.churchId + "/streamingLiveHost/" + hostChatDetails.room, "MessagingApi");
-        ChatHelper.current.hostRoom = ChatHelper.createRoom(hostConversation);
-        ChatHelper.current.hostRoom.conversation.title = "Host Chat";
-        setChatState(ChatHelper.current);
-        setTimeout(() => {
-          ChatHelper.joinRoom(hostConversation.id, hostConversation.churchId);
-          ChatHelper.current.hostRoom.joined = true;
-        }, 500);
-      }
-    }
-  }
-
-  const handleNameUpdate = (displayName: string) => {
-    //const displayName = `${firstName} ${lastName}`
-    const data = { socketId: SocketHelper.socketId, name: displayName };
-    ApiHelper.postAnonymous("/connections/setName", data, "MessagingApi");
-    ChatHelper.current.user.firstName = displayName;
-    ChatHelper.current.user.lastName = "";
-    Cookies.set("displayName", displayName);
-    ChatHelper.onChange();
-  }
-
-  const initUser = () => {
-    const chatUser = ChatHelper.getUser();
-    if (ApiHelper.isAuthenticated) {
-      const { firstName, lastName } = UserHelper.user;
-      chatUser.firstName = firstName || "Anonymous";
-      chatUser.lastName = lastName || "";
-      //chatUser.isHost = true;
-      ChatHelper.current.user = chatUser;
-      ChatHelper.onChange();
-    }
-  }
-
+   
   const checkJoinRooms = () => {
-    console.log("checkJoinRooms", currentService, config)
-    if (currentService && config) {
-      joinMainRoom(ChatConfigHelper.current.churchId);
-      checkHost(config);
+    if (props.includeInteraction && currentService && config) {
+      StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId, currentService, setChatState);
+      StreamChatManager.checkHost(config, currentService.id, chatState, setChatState);
     }
   }
-
-
-  //useEffect(() => { loadData(props.keyName); }, []);
-  //useEffect(() => { loadData(props.keyName); }, []);
-  
   
   useEffect(() => {
-    ChatHelper.onChange = () => {
-      setChatState({ ...ChatHelper.current });
-      setConfig({ ...ChatConfigHelper.current });
-    }
-    StreamingServiceHelper.initTimer((cs) => { 
-      console.log("timer fired");
-      setCurrentService(cs) 
-    });
-    loadData(props.keyName);
-    setCurrentService(StreamingServiceHelper.currentService);
-    initUser();
-  }, []);
-
-  React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
-
-  /*
-  useEffect(() => {
-    ChatHelper.onChange = () => {
-      setChatState({ ...ChatHelper.current });
-      setConfig({ ...ChatConfigHelper.current });
+    if (props.includeInteraction)
+    {
+      ChatHelper.onChange = () => {
+        setChatState({ ...ChatHelper.current });
+        setConfig({ ...ChatConfigHelper.current });
+      }
+      StreamChatManager.initUser();
     }
     StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs) });
     loadData(props.keyName);
     setCurrentService(StreamingServiceHelper.currentService);
-    initUser();
-  }, [loadData]);
-*/
-  //console.log("chatstate", chatState);
+  }, []);
+
+  React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
 
   return (
     <div id="liveContainer">
-      <StreamingHeader user={chatState?.user} nameUpdateFunction={handleNameUpdate} config={config} isHost={chatState?.user?.isHost} />
+      {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} isHost={chatState?.user?.isHost} />}
       <div id="liveBody">
-        <VideoContainer currentService={currentService} />
-        {(config) && <InteractionContainer chatState={chatState} config={config} />}
+        <VideoContainer currentService={currentService} embedded={!props.includeHeader} />
+        {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} />}
       </div>
     </div>
   );
