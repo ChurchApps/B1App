@@ -20,11 +20,10 @@ export default function Admin(props: WrapperPageProps) {
   //Add back pages
   return (
     <AdminWrapper config={props.config}>
-      <h1><Icon>live_tv</Icon> Admin Settings</h1>
+      <h1><Icon>live_tv</Icon> Stream Settings</h1>
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
           <Services />
-          
         </Grid>
         <Grid item md={4} xs={12}>
           <Links />

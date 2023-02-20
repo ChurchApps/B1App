@@ -11,9 +11,10 @@ import { StreamChatManager } from "@/helpers/StreamChatManager";
 
 interface Props { 
   keyName:string, 
-  appearance: AppearanceInterface 
+  appearance: AppearanceInterface,
   includeInteraction: boolean,
-  includeHeader: boolean
+  includeHeader: boolean,
+  offlineContent?: JSX.Element
 }
 
 export const LiveStream: React.FC<Props> = (props) => {
@@ -54,13 +55,26 @@ export const LiveStream: React.FC<Props> = (props) => {
 
   React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
 
-  return (
-    <div id="liveContainer">
-      {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} isHost={chatState?.user?.isHost} />}
-      <div id="liveBody">
-        <VideoContainer currentService={currentService} embedded={!props.includeHeader} />
-        {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} />}
-      </div>
+  let result = (<div id="liveContainer">
+    {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} isHost={chatState?.user?.isHost} />}
+    <div id="liveBody">
+      <VideoContainer currentService={currentService} embedded={!props.includeHeader} />
+      {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} />}
     </div>
-  );
+  </div>);
+
+  if (props.offlineContent) {
+    console.log("check offline")
+    console.log(currentService);
+    let showAlt = !currentService;
+    if (!showAlt) {
+      const seconds = (currentService.localCountdownTime.getTime() - new Date().getTime()) / 1000;
+      console.log(seconds);
+      if (seconds>3600) showAlt = true;
+    }
+    if (showAlt) result = props.offlineContent;
+  } 
+  
+  return result;
+
 }

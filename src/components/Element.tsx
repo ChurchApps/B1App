@@ -1,5 +1,5 @@
 import { SmallButton } from "@/appBase/components";
-import { ApiHelper, ElementInterface, SectionInterface } from "@/helpers";
+import { ApiHelper, ChurchInterface, ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
@@ -11,10 +11,11 @@ import { CardElement } from "./elementTypes/CardElement";
 import { LogoElement } from "./elementTypes/LogoElement";
 import { IframeElement } from "./elementTypes/IframeElement";
 import { ButtonLink } from "./elementTypes/ButtonLink";
+import { StreamElement } from "./elementTypes/StreamElement";
 
 interface Props {
   element: ElementInterface;
-  churchId?: string;
+  church?: ChurchInterface;
   churchSettings: any;
   textColor: string;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
@@ -68,8 +69,11 @@ export const Element: React.FC<Props> = props => {
       result = <h2 key={props.element.id}>Google Map Goes Here</h2>
       break;
     case "donation":
-      result = <NonAuthDonation key={props.element.id} churchId={props.churchId ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      result = <NonAuthDonation key={props.element.id} churchId={props.church?.id ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
       break;
+    case "stream":
+        result = <StreamElement key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} church={props.church} editMode={ props.onEdit !== undefined } />
+        break;
     case "iframe":
       result = <IframeElement key={props.element.id} element={props.element as ElementInterface} />
       break;

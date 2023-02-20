@@ -23,7 +23,6 @@ export const AdminWrapper: React.FC<Props> = (props) => {
     const path = typeof window !== "undefined" ? window?.location?.pathname : "";
     let result = "admin";
     if (path.startsWith("/admin/site")) result = "site";
-    else if (path.startsWith("/admin/video/settings")) result = "stream";
     else if (path.startsWith("/admin/video")) result = "sermons";
     return result;
   };
@@ -32,9 +31,8 @@ export const AdminWrapper: React.FC<Props> = (props) => {
 
   if (!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
-  tabs.push(<NavItem key="sermons" url="/admin/video" label="Sermons" icon="video_library" router={router} selected={selectedTab === "sermons"} />);
-  tabs.push(<NavItem key="stream" url="/admin/video/settings" label="Stream Settings" icon="live_tv" router={router} selected={selectedTab === "stream"} />);
-  if (!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);
+  tabs.push(<NavItem key="sermons" url="/admin/video" label="Sermons" icon="live_tv" router={router} selected={selectedTab === "sermons"} />);
+    if (!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);
   tabs.push(<NavItem key="admin" url="/admin" label="Mobile" icon="phone_android" router={router} selected={selectedTab === "admin"} />);
 
   const navContent = (

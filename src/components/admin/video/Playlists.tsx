@@ -1,5 +1,5 @@
 import { SmallButton, Loading, DisplayBox } from "@/appBase/components";
-import { ApiHelper, UserHelper } from "@/helpers";
+import { ApiHelper, PlaylistInterface, UserHelper } from "@/helpers";
 import { Icon } from "@mui/material";
 import React from "react";
 import { PlaylistEdit } from "./PlaylistEdit";

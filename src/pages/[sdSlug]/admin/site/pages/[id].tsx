@@ -1,6 +1,5 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Wrapper } from "@/components/Wrapper";
 import { Grid } from "@mui/material";
 import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
 import { DisplayBox, Theme } from "@/components";
@@ -14,6 +13,7 @@ import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
 import { SectionBlock } from "@/components/SectionBlock";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { AdminWrapper } from "@/components/admin/AdminWrapper";
 
 interface Props extends WrapperPageProps {
   church: ChurchInterface,
@@ -136,7 +136,7 @@ export default function Admin(props: Props) {
 
   return (<>
     <Theme appearance={props.churchSettings} />
-    <Wrapper config={props.config}>
+    <AdminWrapper config={props.config}>
       <h1>Edit Page</h1>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
@@ -154,7 +154,7 @@ export default function Admin(props: Props) {
           </Grid>
         </Grid>
       </DndProvider>
-    </Wrapper>
+    </AdminWrapper>
   </>);
 }
 
