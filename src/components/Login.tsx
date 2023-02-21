@@ -16,17 +16,13 @@ interface Props {
 
 export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps, keyName }: Props) {
   const router = useRouter();
-  const { returnUrl } = router.query;
+  let returnUrl:string = router.query.returnUrl as string;
   const [cookies] = useCookies();
   const context = useContext(UserContext)
 
-  if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) {
-    if (returnUrl) {
-      router.push(`${returnUrl}`);
-    } else {
-      router.push("/admin");
-    }
-  }
+  if (!returnUrl) returnUrl = "/member"
+
+  if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) router.push(`${returnUrl}`);
 
   const appUrl = process.browser ? window.location.href : "";
   let jwt: string = "",
@@ -47,6 +43,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
         showLogo={showLogo}
         loginContainerCssProps={loginContainerCssProps}
         keyName={keyName}
+        returnUrl={returnUrl}
       />
     </Layout>
   );

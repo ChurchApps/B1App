@@ -28,7 +28,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   }
 
   const getLoginLink = () => {
-    if (!ApiHelper.isAuthenticated) return (<Link href="/login" className="nav-link">Login</Link>);
+    if (!ApiHelper.isAuthenticated) return (<Link href="/login?returnUrl=/stream" className="nav-link">Login</Link>);
     else return (<Link href="/logout" className="nav-link">Logout</Link>);
   }
 
