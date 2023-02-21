@@ -136,6 +136,17 @@ export function ElementEdit(props: Props) {
   </>);
 
   const getStreamFields = () => {
+    let blockField = <></>
+    if (parsedData.offlineContent==="block")  {
+      let options: JSX.Element[] = [];
+      blocks?.forEach(b => { options.push(<MenuItem value={b.id}>{b.name}</MenuItem>) });
+      blockField = (<FormControl fullWidth>
+          <InputLabel>Block</InputLabel>
+          <Select fullWidth label="Block" name="targetBlockId" value={parsedData.targetBlockId || ""} onChange={handleChange}>
+            {options}
+          </Select>
+        </FormControl>);
+    }
     return (
       <>
         <FormControl fullWidth>
@@ -153,6 +164,7 @@ export function ElementEdit(props: Props) {
             <MenuItem value="block">Block</MenuItem>
           </Select>
         </FormControl>
+        {blockField}
       </>
     )
   }
@@ -227,17 +239,24 @@ export function ElementEdit(props: Props) {
     setElement(e);
   }
 
+  useEffect(() => { setElement(props.element); }, [props.element]);
+
   useEffect(() => {
     const loadBlocks = async () => {
-      if (props.element.elementType === "block") {
-        let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
-        setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
+      console.log(props.element, parsedData);
+      if (blocks===null)
+      {
+        if (props.element.elementType === "block" || (props.element.elementType==="stream" && parsedData?.offlineContent==="block")) {
+          console.log("MADE IT");
+          let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+          setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
+        }
       }
     }
  
-    setElement(props.element);
     loadBlocks();
-  }, [props.element]);
+  }, [element]);
+
   /*
   useEffect(() => {
     if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
