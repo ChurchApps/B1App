@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Loading, PageLayout } from "@/components";
+import { Loading, PageLayout, Theme } from "@/components";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
 import { useEffect } from "react";
 
@@ -16,7 +16,10 @@ export default function Home(props: Props) {
   }, []); //eslint-disable-line
 
   if (EnvironmentHelper.shouldHideYourSite(props.church.id)) return <Loading />
-  else return (<PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />);
+  else return (<>
+    <Theme appearance={props.churchSettings} />
+    <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+  </>);
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

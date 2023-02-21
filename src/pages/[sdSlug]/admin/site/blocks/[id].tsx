@@ -1,9 +1,8 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Wrapper } from "@/components/Wrapper";
 import { Grid } from "@mui/material";
-import { ApiHelper, ElementInterface, BlockInterface, SectionInterface, UserHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
-import { DisplayBox } from "@/components";
+import { ApiHelper, ElementInterface, BlockInterface, SectionInterface, UserHelper, ConfigHelper, WrapperPageProps, ChurchInterface } from "@/helpers";
+import { DisplayBox, Theme } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { ElementEdit } from "@/components/admin/ElementEdit";
@@ -13,8 +12,14 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { AdminWrapper } from "@/components/admin/AdminWrapper";
 
-export default function Admin(props: WrapperPageProps) {
+interface Props extends WrapperPageProps {
+  church: ChurchInterface,
+  churchSettings: any,
+};
+
+export default function Admin(props: Props) {
   const { isAuthenticated } = ApiHelper
   const router = useRouter();
   const [block, setBlock] = useState<BlockInterface>(null);
@@ -95,7 +100,8 @@ export default function Admin(props: WrapperPageProps) {
 
 
   return (
-    <Wrapper config={props.config}>
+    <AdminWrapper config={props.config}>
+      <Theme appearance={props.churchSettings} />
       <h1>Edit Block</h1>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
@@ -119,7 +125,7 @@ export default function Admin(props: WrapperPageProps) {
           </Grid>
         </Grid>
       </DndProvider>
-    </Wrapper>
+    </AdminWrapper>
   );
 }
 
@@ -130,5 +136,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const config = await ConfigHelper.load(params.sdSlug.toString());
-  return { props: { config }, revalidate: 30 };
+  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
+  const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
+  return { props: { config, churchSettings }, revalidate: 30 };
 };

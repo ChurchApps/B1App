@@ -15,7 +15,7 @@ export default function Zone(props: Props) {
   const sections = ArrayHelper.getAll(props.sections, "zone", props.zone);
   for (let section of sections) {
     if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} churchSettings={props.churchSettings} />)
-    else result.push(<Section key={section.id} section={section} first={first} churchId={props.church.id} churchSettings={props.churchSettings} />)
+    else result.push(<Section key={section.id} section={section} first={first} church={props.church} churchSettings={props.churchSettings} />)
     first = false;
   }
   return <>{result}</>;

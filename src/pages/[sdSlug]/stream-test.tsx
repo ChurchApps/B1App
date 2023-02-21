@@ -2,6 +2,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { Loading, PageLayout, Theme } from "@/components";
 import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
 import { useEffect } from "react";
+import { Box, Grid } from "@mui/material";
+import { LiveStream } from "@/components/video/LiveStream";
 
 type Props = {
   pageData: any;
@@ -10,15 +12,23 @@ type Props = {
   navLinks: LinkInterface[],
 };
 
-export default function Home(props: Props) {
-  useEffect(() => {
-    if (EnvironmentHelper.shouldHideYourSite(props.church.id) && typeof window !== undefined) window.location.href = window.location.origin + "/member";
-  }, []); //eslint-disable-line
+export default function StreamTest(props: Props) {
+  return (<>
+    <Theme appearance={props.churchSettings} />    
+    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
+      <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
+        <h1>Hi</h1>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} includeHeader={false} includeInteraction={true} />
+          </Grid>
+        </Grid>
+        <br/><br/>
+        <br/><br/>
 
-  if (EnvironmentHelper.shouldHideYourSite(props.church.id)) return <Loading />
-  else return (<>
-    <Theme appearance={props.churchSettings} />
-    <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+        <h2>Bottom of page</h2>
+      </Box>
+    </Box>
   </>);
 }
 

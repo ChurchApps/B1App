@@ -1,29 +1,32 @@
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { AppearanceInterface } from "@/appBase/helpers";
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet"
+import { ConfigHelper } from "../helpers";
 
+interface Props { appearance?: AppearanceInterface }
 
-export const Theme = () => {
+export const Theme: React.FC<Props> = (props) => {
+
   const defaultColors = {
-    primaryColor: "#FFFFFF",
-    primaryContrast: "#333333",
-    secondaryColor: "#1b75bc",
-    secondaryContrast: "#FFFFFF",
-  };
+    primaryColor: "#08A0CC",
+    primaryContrast: "#FFFFFF",
+    secondaryColor: "#FFBA1A",
+    secondaryContrast: "#000000"
+  }
 
   let css = null;
 
-  css = (
-    <style type="text/css">{`
+  if (props.appearance?.primaryColor) {
+    css = (<style type="text/css">{`
       :root { 
-        --primaryColor: ${defaultColors.primaryColor}; 
-        --primaryContrast: ${defaultColors.primaryContrast}; 
-        --secondaryColor: ${defaultColors.secondaryColor};
-        --secondaryContrast: ${defaultColors.secondaryContrast};
+        --primaryColor: ${props.appearance?.primaryColor || defaultColors.primaryColor}; 
+        --primaryContrast: ${props.appearance?.primaryContrast || defaultColors.primaryContrast}; 
+        --secondaryColor: ${props.appearance?.secondaryColor || defaultColors.secondaryColor};
+        --secondaryContrast: ${props.appearance?.secondaryContrast || defaultColors.secondaryContrast};
       }
-      `}</style>
-  );
+      `}</style>);
+  }
 
+  return (<Helmet>{css}</Helmet>);
+}
 
-  return <Helmet>{css}</Helmet>;
-};

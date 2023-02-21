@@ -4,9 +4,10 @@ import router from "next/router";
 import { ApiHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
-import { ImageEditor } from "@/appBase/components";
+import { DisplayBox, ImageEditor } from "@/appBase/components";
 import { Sermons } from "@/components/admin/video/Sermons";
 import { Playlists } from "@/components/admin/video/Playlists";
+import Link from "next/link";
 
 export default function Admin(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -40,6 +41,9 @@ export default function Admin(props: WrapperPageProps) {
         </Grid>
         <Grid item md={4} xs={12}>
           {imageEditor}
+          <DisplayBox headerIcon="settings" headerText="Settings">
+            <Link href="/admin/video/settings">Edit Times and Appearance</Link>
+          </DisplayBox>
           <Playlists showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "playlist" && photoUrl) || null} />
         </Grid>
       </Grid>

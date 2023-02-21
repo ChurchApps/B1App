@@ -1,5 +1,7 @@
 export * from "@/appBase/interfaces";
+import { SermonInterface } from "@/appBase/interfaces/Content";
 import { Permissions as BasePermissions } from "@/appBase/interfaces/Permissions"
+import { ConversationInterface, MessageInterface } from ".";
 import { ConfigurationInterface } from "./ConfigHelper";
 
 export interface ColumnInterface {
@@ -87,4 +89,29 @@ export class Permissions extends BasePermissions {
       edit: { api: "B1Api", contentType: "Settings", action: "Edit" }
     }
   };
+}
+
+export interface StreamingButtonInterface { text: string, url: string }
+export interface StreamingTabInterface { text: string, url: string, icon: string, type: string, data: string, updated?: boolean }
+export interface StreamingServiceExtendedInterface { videoUrl: string, serviceTime: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string, id?: string, sermon?: SermonInterface }
+export interface StreamConfigInterface { keyName?: string, churchId?: string, buttons?: StreamingButtonInterface[], tabs?: StreamingTabInterface[], services?: StreamingServiceExtendedInterface[], switchToConversationId: string, jitsiRoom: string }
+
+export type ChatPayloadAction = "message" | "deleteMessage" | "callout" | "attendance" | "prayerRequest" | "socketId" | "privateMessage" | "privateRoomAdded" | "videoChatInvite";
+export interface ChatPayloadInterface { churchId: string, conversationId: string, action: ChatPayloadAction, data: any }
+export interface ChatViewerInterface { displayName: string, id: string }
+export interface ChatAttendanceInterface { viewers?: ChatViewerInterface[], totalViewers?: number, conversationId: string }
+export interface ChatRoomInterface { conversation: ConversationInterface, attendance: ChatAttendanceInterface, messages: MessageInterface[], callout: MessageInterface, prayerRequests?: ConversationInterface[], joined: boolean }
+export interface ChatStateInterface { mainRoom: ChatRoomInterface, hostRoom: ChatRoomInterface, privateRooms: ChatRoomInterface[], chatEnabled: boolean, user: ChatUserInterface }
+export interface ChatUserInterface { firstName: string, lastName: string, isHost: boolean }
+
+export interface ChatEventsInterface {
+  messageHandler: (message: MessageInterface) => void,
+  deleteHandler: (messageId: string) => void,
+  calloutHandler: (message: MessageInterface) => void,
+  attendanceHandler: (attendance: ChatAttendanceInterface) => void,
+  prayerRequestHandler: (conversation: ConversationInterface) => void,
+  privateMessageHandler: (conversation: ConversationInterface) => void,
+  privateRoomAddedHandler: (conversation: ConversationInterface) => void,
+  videoChatInviteHandler: (roomName: string) => void,
+  disconnectHandler: () => void,
 }

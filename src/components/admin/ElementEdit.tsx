@@ -135,6 +135,40 @@ export function ElementEdit(props: Props) {
     <TextField fullWidth label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
   </>);
 
+  const getStreamFields = () => {
+    let blockField = <></>
+    if (parsedData.offlineContent==="block")  {
+      let options: JSX.Element[] = [];
+      blocks?.forEach(b => { options.push(<MenuItem value={b.id}>{b.name}</MenuItem>) });
+      blockField = (<FormControl fullWidth>
+          <InputLabel>Block</InputLabel>
+          <Select fullWidth label="Block" name="targetBlockId" value={parsedData.targetBlockId || ""} onChange={handleChange}>
+            {options}
+          </Select>
+        </FormControl>);
+    }
+    return (
+      <>
+        <FormControl fullWidth>
+          <InputLabel>Mode</InputLabel>
+          <Select fullWidth label="Mode" name="mode" value={parsedData.mode || "video"} onChange={handleChange}>
+            <MenuItem value="video">Video Only</MenuItem>
+            <MenuItem value="interaction">Video and Interaction</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel>Offline Content</InputLabel>
+          <Select fullWidth label="Offline Content" name="offlineContent" value={parsedData.offlineContent || "countdown"} onChange={handleChange}>
+            <MenuItem value="countdown">Next Service Time</MenuItem>
+            <MenuItem value="hide">Hide</MenuItem>
+            <MenuItem value="block">Block</MenuItem>
+          </Select>
+        </FormControl>
+        {blockField}
+      </>
+    )
+  }
+
   const getIframeFields = () => {
     return (
       <>
@@ -184,6 +218,7 @@ export function ElementEdit(props: Props) {
       case "card": result = getCardFields(); break;
       case "logo": result = getLogoFields(); break;
       case "donation": result = <></>; break;
+      case "stream": result = getStreamFields(); break;
       case "iframe": result = getIframeFields(); break;
       case "buttonLink": result = getButtonLink(); break;
     }
@@ -204,17 +239,24 @@ export function ElementEdit(props: Props) {
     setElement(e);
   }
 
+  useEffect(() => { setElement(props.element); }, [props.element]);
+
   useEffect(() => {
     const loadBlocks = async () => {
-      if (props.element.elementType === "block") {
-        let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
-        setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
+      console.log(props.element, parsedData);
+      if (blocks===null)
+      {
+        if (props.element.elementType === "block" || (props.element.elementType==="stream" && parsedData?.offlineContent==="block")) {
+          console.log("MADE IT");
+          let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
+          setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
+        }
       }
     }
  
-    setElement(props.element);
     loadBlocks();
-  }, [props.element]);
+  }, [element]);
+
   /*
   useEffect(() => {
     if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
@@ -222,11 +264,8 @@ export function ElementEdit(props: Props) {
   }, [element]);
   */
 
-  const getStandardFields = () => {
-    return (<>
-      <ErrorMessages errors={errors} />
-      <br />
-      <FormControl fullWidth>
+  /*
+  <FormControl fullWidth>
         <InputLabel>Element Type</InputLabel>
         <Select fullWidth label="Element Type" value={element.elementType} name="elementType" onChange={handleChange}>
           <MenuItem value="row">Row</MenuItem>
@@ -235,10 +274,16 @@ export function ElementEdit(props: Props) {
           <MenuItem value="card">Card</MenuItem>
           <MenuItem value="logo">Logo</MenuItem>
           <MenuItem value="donation">Donation</MenuItem>
+          <MenuItem value="stream">Stream</MenuItem>
           <MenuItem value="iframe">Embed Page</MenuItem>
           <MenuItem value="buttonLink">Button</MenuItem>
         </Select>
       </FormControl>
+  */
+
+  const getStandardFields = () => {
+    return (<>
+      <ErrorMessages errors={errors} />
       {getFields()}
     </>)
   }
