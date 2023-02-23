@@ -21,7 +21,10 @@ export default function Localhost() {
       <br />
       <br />
       <MarkdownPreview value={val} />
-      <MarkdownEditor value={val} onChange={(v) => { setVal(v) }} />
+      <MarkdownEditor value={val} onChange={(v) => { 
+        console.log(v);
+        setVal(v) 
+      }} />
     </Container>
 
   );
