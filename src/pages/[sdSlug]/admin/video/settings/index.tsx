@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
 import { Links } from "@/components/admin/Links";
@@ -9,6 +9,7 @@ import { Pages } from "@mui/icons-material";
 import { ExternalLinks } from "@/components/admin/video/ExternalLinks";
 import { Services } from "@/components/admin/video/Services";
 import { Tabs } from "@/components/admin/video/Tabs";
+import { EmbeddablePages } from "@/components/admin/EmbeddablePages";
 
 export default function Admin(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -24,6 +25,7 @@ export default function Admin(props: WrapperPageProps) {
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
           <Services />
+          <EmbeddablePages onSelected={(page:PageInterface) => { } } />
         </Grid>
         <Grid item md={4} xs={12}>
           <Links />
