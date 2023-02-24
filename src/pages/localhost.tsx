@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Container } from "@mui/material";
+import { Container, TextField } from "@mui/material";
 import { MarkdownEditor, MarkdownPreview } from "@/components";
 import { useState } from "react";
 
@@ -20,8 +20,16 @@ export default function Localhost() {
       <Link href="http://ironwood.localhost:3000/admin">Admin</Link>
       <br />
       <br />
+      <h3>Editor</h3>
+      <MarkdownEditor value={val} onChange={(v) => { 
+        console.log(v);
+        setVal(v) 
+      }} />
+      <h3>Markdown</h3>
+      <TextField multiline fullWidth value={val} />
+      <h3>Preview</h3>
       <MarkdownPreview value={val} />
-      <MarkdownEditor value={val} onChange={(v) => { setVal(v) }} />
+      
     </Container>
 
   );
