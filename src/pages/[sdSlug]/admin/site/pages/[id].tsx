@@ -32,6 +32,7 @@ export default function Admin(props: Props) {
 
   const zones = {
     cleanCentered: ["main"],
+    embed: ["main"],
     headerFooter: ["main", "header", "footer"],
   }
 

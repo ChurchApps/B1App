@@ -17,6 +17,7 @@ export function PageLayout(props: Props) {
   if (props.pageData) {
     switch (props.pageData?.layout) {
       case "cleanCentered":
+      case "embed":
         result = <CleanCentered church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
         break;
       case "headerFooter":

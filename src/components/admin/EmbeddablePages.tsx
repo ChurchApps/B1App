@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { DisplayBox } from "@/components";
@@ -7,25 +6,23 @@ import { SmallButton } from "@/appBase/components";
 import { PageInterface, ApiHelper } from "@/helpers";
 
 type Props = {
-  onSelected: (page:PageInterface) => void
+  onSelected: (page:PageInterface) => void,
+  pathPrefix: string,
+  refreshKey?: number,
 };
 
 export function EmbeddablePages(props:Props) {
-  const { isAuthenticated } = ApiHelper;
   const [pages, setPages] = useState<PageInterface[]>([]);
-  const router = useRouter();
-
-  // redirect to login when not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
-  }, [isAuthenticated]);
 
   const loadData = () => {
-    if (!isAuthenticated) { return; }
-    ApiHelper.get("/pages", "ContentApi").then((p) => setPages(p || []));
+    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => { 
+      let filteredPages = [];
+      _pages.forEach(p => { if (p.url.startsWith(props.pathPrefix)) filteredPages.push(p); });
+      setPages(filteredPages || []) 
+    });
   };
-
-  useEffect(loadData, [isAuthenticated]);
+  
+  useEffect(loadData, [props.refreshKey]);
 
   const pagesUi = pages.map((page) => (
     <TableRow key={page.id}>
@@ -41,7 +38,7 @@ export function EmbeddablePages(props:Props) {
     </TableRow>
   ));
 
-  const editContent = (<SmallButton icon="add" onClick={() => { props.onSelected( {} ) }} /> );
+  const editContent = (<SmallButton icon="add" onClick={() => { props.onSelected( { url:props.pathPrefix + "/page-name", layout:"embed" } ) }} /> );
 
   return (
     <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent}>
