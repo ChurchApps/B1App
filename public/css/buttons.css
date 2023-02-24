@@ -38,6 +38,11 @@
   background-image: none;
 }
 
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #007bff;
