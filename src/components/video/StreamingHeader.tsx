@@ -96,7 +96,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
             </ul>
           </div>
         </div>
-        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu}>{firstName ? `${firstName} ${lastName}` : "Loading"} <Icon>expand_more</Icon></a></div></div>
+        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu}>{firstName ? `${firstName} ${lastName}` : "Anonymous"} <Icon>expand_more</Icon></a></div></div>
       </div>
       {getUserMenu()}
     </>

@@ -5,6 +5,7 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField
 
 type Props = {
   page: PageInterface;
+  embedded?: boolean;
   updatedCallback: (page: PageInterface) => void;
 };
 
@@ -63,14 +64,15 @@ export function PageEdit(props: Props) {
             {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
           </a>
         </div>
-
-        <FormControl fullWidth>
-          <InputLabel>Layout</InputLabel>
-          <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange}>
-            <MenuItem value="headerFooter">Header & Footer</MenuItem>
-            <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
-          </Select>
-        </FormControl>
+        {!props.embedded && (
+          <FormControl fullWidth>
+            <InputLabel>Layout</InputLabel>
+            <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange}>
+              <MenuItem value="headerFooter">Header & Footer</MenuItem>
+              <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
+            </Select>
+          </FormControl>
+        )}
       </InputBox>
     </>
   );

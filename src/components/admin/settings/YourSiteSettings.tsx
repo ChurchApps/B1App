@@ -30,7 +30,13 @@ export function YourSiteSettings() {
       return;
     }
 
-    ApiHelper.get("/pages", "ContentApi").then((p) => setPages(p || []));
+    ApiHelper.get("/pages", "ContentApi").then((_pages) => { 
+      let filteredPages = [];
+      _pages.forEach(p => { 
+        if (!p.url.startsWith("/stream/") && !p.url.startsWith("/member/")) filteredPages.push(p); 
+      });
+      setPages(filteredPages || []) 
+    });
     ApiHelper.get("/blocks", "ContentApi").then((b) => setBlocks(b || []));
   };
 
