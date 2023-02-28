@@ -33,7 +33,7 @@ export function YourSiteSettings() {
     ApiHelper.get("/pages", "ContentApi").then((_pages) => { 
       let filteredPages = [];
       _pages.forEach(p => { 
-        if (!p.url.startsWith("/stream/") && !p.url.startsWith("/members/")) filteredPages.push(p); 
+        if (!p.url.startsWith("/stream/") && !p.url.startsWith("/member/")) filteredPages.push(p); 
       });
       setPages(filteredPages || []) 
     });
