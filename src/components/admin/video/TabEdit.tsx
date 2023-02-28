@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
 import SearchIcons from "./../../../appBase/components/material/iconpicker/IconPicker";
 import { InputBox, ErrorMessages } from "@/appBase/components";
-import { LinkInterface, PageInterface, ApiHelper } from "@/helpers";
+import { LinkInterface, PageInterface, ApiHelper, ArrayHelper } from "@/helpers";
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }
 
@@ -34,15 +34,23 @@ export const TabEdit: React.FC<Props> = (props) => {
 
   const checkDelete = currentTab?.id ? handleDelete : undefined;
   const handleCancel = () => { props.updatedFunction(); }
-  const loadPages = () => { ApiHelper.get("/pages/", "StreamingLiveApi").then((data: PageInterface[]) => setPages(data)) }
+  const loadPages = () => {
+    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => { 
+      let filteredPages = [];
+      _pages.forEach(p => { if (p.url.startsWith("/stream")) filteredPages.push(p); });
+      setPages(filteredPages || []) 
+    });
+  };
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const val = e.target.value;
+    console.log("page", ArrayHelper.getOne(pages, "id", val));
     let t = { ...currentTab };
     switch (e.target.name) {
       case "text": t.text = val; break;
       case "type": t.linkType = val; break;
-      case "page": t.linkData = val; break;
+      case "page": t.linkData = val; t.url=ArrayHelper.getOne(pages, "id", val).url; console.log(t.url); break;
       case "url": t.url = val; break;
     }
     setCurrentTab(t);
@@ -60,8 +68,8 @@ export const TabEdit: React.FC<Props> = (props) => {
       return;
     }
 
-    if (currentTab.linkType === "page") currentTab.url = currentTab.linkData + "?ts=" + new Date().getTime().toString();
-    else if (currentTab.linkType !== "url") currentTab.url = "";
+    //if (currentTab.linkType === "page") currentTab.url = currentTab.linkData + "?ts=" + new Date().getTime().toString();
+    if (currentTab.linkType !== "url" && currentTab.linkType!=="page") currentTab.url = "";
     ApiHelper.post("/links", [currentTab], "ContentApi").then(props.updatedFunction);
   }
 
@@ -72,7 +80,7 @@ export const TabEdit: React.FC<Props> = (props) => {
       );
     } else return null;
   }
-/*
+
   const getPage = () => {
     if (currentTab?.linkType === "page") {
       let options: JSX.Element[] = [];
@@ -80,9 +88,9 @@ export const TabEdit: React.FC<Props> = (props) => {
       else {
         options = [];
         pages.forEach(page => {
-          options.push(<MenuItem value={page.id} key={page.id}>{page.name}</MenuItem>)
+          options.push(<MenuItem value={page.id} key={page.id}>{page.title}</MenuItem>)
         });
-        if (currentTab.linkData === "") currentTab.linkData = pages[0]?.path;
+        if (currentTab.linkData === "") currentTab.linkData = pages[0]?.url;
       }
       console.log("PAGE - " + currentTab?.linkData)
       return (
@@ -95,7 +103,7 @@ export const TabEdit: React.FC<Props> = (props) => {
       );
     } else return null;
   }
-*/
+
   React.useEffect(() => { setCurrentTab(props.currentTab); }, [props.currentTab]);
 
   if (!currentTab) return <></>
@@ -123,7 +131,7 @@ export const TabEdit: React.FC<Props> = (props) => {
       </FormControl>
       {getUrl()}
       {
-      //getPage()
+      getPage()
       }
 
       <Dialog open={isModalOpen}>

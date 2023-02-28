@@ -54,11 +54,18 @@ export const InteractionContainer: React.FC<Props> = (props) => {
   const getPage = (tab: StreamingTabInterface, i: number, visible: boolean) => {
 
     let url = tab.url;
-    if (!url.startsWith("http")) url = EnvironmentHelper.Common.ContentRoot + "/" + url;
+    if (!url.startsWith("http") && !url.startsWith("/stream")) url = EnvironmentHelper.Common.ContentRoot + "/" + url;
 
-    return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-      <iframe src={"/pageWrapper.html?url=" + escape(url)} frameBorder="0" title={"frame" + i.toString()} /> :
-    </div>);
+    if (url.startsWith("/stream"))
+    {
+      return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
+        <iframe src={url} frameBorder="0" title={"frame" + i.toString()} /> :
+      </div>);
+    } else {
+      return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
+        <iframe src={"/pageWrapper.html?url=" + escape(url)} frameBorder="0" title={"frame" + i.toString()} /> :
+      </div>);
+    }
   }
 
   //const getPage = async (tab: TabInterface, i: number, visible: boolean) => {
