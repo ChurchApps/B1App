@@ -63,7 +63,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
       </div>);
     } else {
       return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-        <iframe src={"/pageWrapper.html?url=" + escape(url)} frameBorder="0" title={"frame" + i.toString()} /> :
+        <iframe src={"/oldPageWrapper.html?url=" + escape(url)} frameBorder="0" title={"frame" + i.toString()} /> :
       </div>);
     }
   }
