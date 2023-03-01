@@ -11,6 +11,7 @@ type Props = {
 };
 
 export default function Stream(props: Props) {
+  console.log(props.churchSettings);
   return (<>
   <Theme appearance={props.churchSettings} />  
     <div id="streamRoot">

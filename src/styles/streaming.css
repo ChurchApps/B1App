@@ -290,6 +290,7 @@ prayerSend {
   align-self: center;
   display: flex;
   max-height: 45px;
+  width: auto;
 }
 
 #logo a {

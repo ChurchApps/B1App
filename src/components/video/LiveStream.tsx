@@ -56,7 +56,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
 
   let result = (<div id="liveContainer">
-    {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} isHost={chatState?.user?.isHost} />}
+    {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={chatState?.user?.isHost} />}
     <div id="liveBody">
       <VideoContainer currentService={currentService} embedded={!props.includeHeader} />
       {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} />}
