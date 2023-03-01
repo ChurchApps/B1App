@@ -12,6 +12,7 @@ import { LogoElement } from "./elementTypes/LogoElement";
 import { IframeElement } from "./elementTypes/IframeElement";
 import { ButtonLink } from "./elementTypes/ButtonLink";
 import { StreamElement } from "./elementTypes/StreamElement";
+import { VideoElement } from "./elementTypes/VideoElement";
 
 interface Props {
   element: ElementInterface;
@@ -79,6 +80,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "buttonLink":
       result = <ButtonLink key={props.element.id} element={props.element as ElementInterface}></ButtonLink>
+      break;
+    case "video":
+      result = <VideoElement key={props.element.id} element={props.element as ElementInterface} />
       break;
   }
 

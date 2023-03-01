@@ -48,6 +48,7 @@ export function ElementAdd(props: Props) {
           <AddableElement dndType="element" elementType="buttonLink" icon="smart_button" label="Button" />
           <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" />
           <AddableElement dndType="element" elementType="stream" icon="live_tv" label="Stream" />
+          <AddableElement dndType="element" elementType="video" icon="slow_motion_video" label="Video" />
         </Grid>
 
         {props.includeBlocks && (<>

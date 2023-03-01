@@ -209,6 +209,22 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getVideoFields = () => {
+    return (
+      <>
+      <FormControl fullWidth>
+          <InputLabel>Video</InputLabel>
+          <Select fullWidth label="Video" name="video" onChange={handleChange} defaultValue="youtube">
+            <MenuItem value="youtube">Youtube</MenuItem>
+            <MenuItem value="vimeo">Vimeo</MenuItem>
+          </Select>
+        </FormControl>
+        {/* value={parsedData.buttonLinkUrl || ""} */}
+        <TextField fullWidth label="url" name="videoLinkUrl" onChange={handleChange}/>
+      </>
+    )
+  }
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -221,6 +237,7 @@ export function ElementEdit(props: Props) {
       case "stream": result = getStreamFields(); break;
       case "iframe": result = getIframeFields(); break;
       case "buttonLink": result = getButtonLink(); break;
+      case "video": result = getVideoFields(); break;
     }
     return result;
   }
