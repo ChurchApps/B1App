@@ -1,5 +1,5 @@
 import { SmallButton } from "@/appBase/components";
-import { ApiHelper, ElementInterface, SectionInterface } from "@/helpers";
+import { ApiHelper, ChurchInterface, ElementInterface, SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
 import { CSSProperties } from "react";
 import { DraggableIcon } from "./admin/DraggableIcon";
@@ -10,7 +10,7 @@ import { YoutubeBackground } from "./YoutubeBackground";
 interface Props {
   first?: boolean,
   section: SectionInterface,
-  churchId?: string;
+  church?: ChurchInterface;
   churchSettings: any;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
   onMove?: () => void;
@@ -21,7 +21,7 @@ export const Section: React.FC<Props> = props => {
   const getElements = () => {
     const result: JSX.Element[] = []
     props.section.elements.forEach(e => {
-      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} churchId={props.churchId} churchSettings={props.churchSettings} textColor={props.section.textColor} />)
+      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={props.section.textColor} />)
     });
     return result;
   }

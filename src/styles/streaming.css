@@ -1,0 +1,431 @@
+#streamRoot {
+  height: 100vh;
+}
+
+#liveContainer {
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+}
+
+#liveBody {
+  flex: 9;
+  display: flex;
+  height: 100%;
+}
+
+#videoContainer {
+  flex: 3;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+#videoContainer iframe {
+  width: 100%;
+  flex: 1 1 100%;
+  align-self: center;
+  height: 100%;
+}
+
+#noVideoContent {
+  width: 100%;
+  color: #fff;
+  font-size: 40px;
+  overflow: hidden;
+  flex: 1 1 0%;
+  width: 100%;
+  text-align: center;
+  align-self: center;
+}
+
+
+#videoContainer.embedded {
+  padding-bottom: 56.25%;
+  position: relative;
+}
+
+#videoContainer.embedded iframe, #videoContainer.embedded #noVideoContent {
+  position: absolute;
+  align-self:auto;
+}
+
+#interactionContainer {
+  flex: 1;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+#interactionContainer iframe {
+  width: 100%;
+}
+
+.streamingTab {
+  flex: 0 0 0%;
+  text-decoration: none;
+  vertical-align: middle;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: var(--secondaryContrast);
+  background-color: var(--secondaryColor);
+}
+
+.streamingTab:hover {
+  text-decoration: none;
+  color: var(--secondaryContrast);
+}
+
+.streamingTab i {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.streamingTab.childTab {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+}
+
+/*#tabs > *:not(:first-child) {border-left:1px solid var(--primaryColor);}*/
+.frame {
+  flex: 1;
+  display: flex;
+}
+
+.chatContainer,
+#prayerContainer,
+#receivePrayerContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  flex: 1;
+}
+
+#chatReceive,
+#prayerReceive {
+  flex: 1 0 0;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+#callout {
+  padding-bottom: 5px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+  background-color: #ffffd0;
+}
+
+#fbComments {
+  padding-bottom: 5px;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
+  background-color: #ffffd0;
+}
+
+#prayerContainer {
+  padding-left: 25%;
+  padding-right: 25%;
+  padding-top: 100px;
+}
+
+#nameBar {
+  flex: 0 0 25px;
+  background-color: #ddd;
+  display: block;
+  text-align: center;
+  border-bottom: 1px solid #fff;
+  font-size: 16px;
+}
+
+#attendance {
+  flex: 1 0 0;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+#attendance span {
+  float: right;
+  color: #999;
+}
+
+#attendance i {
+  color: #999;
+  margin-right: 10px;
+}
+
+#attendanceCount {
+  flex: 0 0 25px;
+  background-color: #ddd;
+  display: block;
+  text-align: center;
+}
+
+#attendanceCount:hover {
+  text-decoration: none;
+}
+
+.attendanceExpanded {
+  padding-left: 20px;
+}
+
+.attendanceExpanded span.id {
+  font-size: 11px;
+  float: none !important;
+}
+
+#chatSend,
+prayerSend {
+  flex: 0 0 0px;
+}
+
+#chatName,
+#prayerName {
+  flex: 0 0 0px;
+  border-top: 1px solid #005288;
+  padding: 10px;
+}
+
+#chatTabs td {
+  padding: 0px;
+  width: 50%;
+}
+
+#chatTabs a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  color: #333;
+  background-color: #ddd;
+  display: block;
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+}
+
+#chatTabs a.active,
+#chatTabs a:hover {
+  color: var(--primaryColor);
+  background-color: #fff;
+}
+
+#sendMessageButton {
+  border-radius: 0px;
+}
+
+#streamingAltTabs {
+  display: none;
+  width: 100%;
+}
+
+#streamingAltTabs td {
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+#streamingAltTabs td:first-child {
+  padding-left: 0px;
+}
+
+#streamingAltTabs td:last-child {
+  padding-right: 0px;
+}
+
+.streamingAltTab {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+  display: block;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.streamingAltTab:hover {
+  text-decoration: none;
+  color: var(--primaryContrast);
+}
+
+.streamingAltTab.active {
+  color: var(--primaryColor);
+  background-color: var(--primaryContrast);
+}
+
+#streamingHeader {
+  flex: 0 0 55px;
+  min-height: 55px;
+  display: flex;
+  align-items: center;
+  background-color: var(--primaryColor);
+  padding-top: 3px;
+  padding-bottom: 3px;
+  box-shadow: 0px 3px 3px 0px #000;
+}
+
+
+#logo {
+  flex: 1;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: row;
+  align-content: space-around;
+  margin-right: 5px;
+}
+
+#logo img {
+  max-width: 100%;
+  align-self: center;
+  display: flex;
+  max-height: 45px;
+}
+
+#logo a {
+  flex: 1 1 0px;
+  align-self: center;
+}
+
+#userLink {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-content: space-around;
+  text-align: right;
+}
+
+#userLink div {
+  align-self: center;
+  flex: 1 1 100%;
+  padding-right: 20px;
+}
+
+#userLink div a {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: var(--primaryContrast);
+}
+
+#userLink div a:hover {
+  text-decoration: none;
+}
+
+#userMenu {
+  position: absolute;
+  top: 55px;
+  z-index: 9999;
+  left: 0px;
+  right: 0px;
+}
+
+#userMenu>div {
+  width: 250px;
+  max-width: 100%;
+  position: relative;
+  background-color: var(--primaryColor);
+  float: right;
+  box-shadow: -3px 3px 3px #999;
+  color: var(--primaryContrast);
+  padding: 8px;
+}
+
+#userMenu a {
+  color: var(--primaryContrast);
+}
+
+#userMenu .nav-item,
+#userMenu .divider {
+  border-bottom: 1px solid var(--primaryContrast);
+}
+
+#userMenu .nav:last-child .nav-item:last-child {
+  border-bottom: none;
+}
+
+#liveButtons {
+  flex: 3;
+  display: flex;
+  flex-direction: row;
+  align-content: space-around;
+}
+
+#liveButtons div {
+  align-self: center;
+  flex: 1 1 100%;
+  padding-right: 5px;
+}
+
+#liveButtons ul {
+  margin-left: auto;
+  margin-right: auto;
+  width: max-content;
+}
+
+#liveButtons a {
+  color: var(--primaryContrast);
+  padding-left: 20px;
+  padding-right: 20px;
+  border-right: 1px solid var(--primaryContrast);
+}
+
+#liveButtons li:last-child a {
+  border-right: none;
+}
+
+
+.btn-primary {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+  border-color: var(--primaryContrast);
+}
+
+.btn-secondary {
+  color: var(--primaryColor);
+  background-color: var(--primaryContrast);
+  border-color: var(--primaryColor);
+}
+
+.btn-secondary:hover {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+  border-color: var(--primaryContrast);
+}
+
+#liveButtons .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+#userMenu .nav {
+  border-bottom: 1px solid var(--primaryContrast);
+  padding-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+#userMenu .nav:last-child {
+  border-bottom: none;
+}
+
+#userMenu .nav-item {
+  list-style: none;
+  border-top: none;
+  border-bottom: none; 
+}

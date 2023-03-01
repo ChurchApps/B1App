@@ -1260,6 +1260,11 @@ a.dropdown-toggle::after {
   z-index: 2;
 }
 
+#embeddedLayout { height: 100vh; background-color: #FFFFFF;}
+#embeddedLayout .page .sectionFirst {
+  padding-top:0px;
+}
+
 @media (max-width: 600px) {
   .downloadAccordion {
     min-width: 90vw !important;

@@ -30,7 +30,13 @@ export function YourSiteSettings() {
       return;
     }
 
-    ApiHelper.get("/pages", "ContentApi").then((p) => setPages(p || []));
+    ApiHelper.get("/pages", "ContentApi").then((_pages) => { 
+      let filteredPages = [];
+      _pages.forEach(p => { 
+        if (!p.url.startsWith("/stream/") && !p.url.startsWith("/member/")) filteredPages.push(p); 
+      });
+      setPages(filteredPages || []) 
+    });
     ApiHelper.get("/blocks", "ContentApi").then((b) => setBlocks(b || []));
   };
 
@@ -72,10 +78,10 @@ export function YourSiteSettings() {
   const pagesUi = pages.map((page) => (
     <TableRow key={page.id}>
       <TableCell>
-        <Link href={"/admin/pages/" + page.id}>{page.url}</Link>
+        <Link href={"/admin/site/pages/" + page.id}>{page.url}</Link>
       </TableCell>
       <TableCell>
-        <Link href={"/admin/pages/" + page.id}>{page.title}</Link>
+        <Link href={"/admin/site/pages/" + page.id}>{page.title}</Link>
       </TableCell>
       <TableCell align="right">
         <SmallButton
@@ -91,7 +97,7 @@ export function YourSiteSettings() {
   const blocksUi = blocks.map((block) => (
     <TableRow key={block.id}>
       <TableCell>
-        <Link href={"/admin/blocks/" + block.id}>{block.name}</Link>
+        <Link href={"/admin/site/blocks/" + block.id}>{block.name}</Link>
       </TableCell>
       <TableCell>{block.blockType === "elementBlock" ? "Element(s)" : "Section(s)"}</TableCell>
       <TableCell align="right">
