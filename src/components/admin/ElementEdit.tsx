@@ -214,13 +214,12 @@ export function ElementEdit(props: Props) {
       <>
       <FormControl fullWidth>
           <InputLabel>Video</InputLabel>
-          <Select fullWidth label="Video" name="video" onChange={handleChange} defaultValue="youtube">
+          <Select fullWidth label="Video" name="video" onChange={handleChange} value={parsedData.video || "youtube"}>
             <MenuItem value="youtube">Youtube</MenuItem>
             <MenuItem value="vimeo">Vimeo</MenuItem>
           </Select>
         </FormControl>
-        {/* value={parsedData.buttonLinkUrl || ""} */}
-        <TextField fullWidth label="url" name="videoLinkUrl" onChange={handleChange}/>
+        <TextField fullWidth label="url" name="videoLinkUrl" value={parsedData.videoLinkUrl || ""} onChange={handleChange}/>
       </>
     )
   }

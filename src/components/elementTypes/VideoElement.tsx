@@ -5,27 +5,19 @@ interface Props {
 }
 
 export const VideoElement: React.FC<Props> = (props) => {
-  console.log("yesysysy props from the videoElement.tsx", props);
 
-  const rawLink =
-    props.element.answers.video === "youtube" &&
-    props.element.answers.videoLinkUrl.replace("watch?v=", "embed/");
+  const youtubeEmbedLink = `https://www.youtube.com/embed/${props.element.answers.videoLinkUrl}`;
+  const vimeoEmbedLink = `https://player.vimeo.com/video/${props.element.answers.videoLinkUrl}`
 
-  const embedLink = rawLink.replace("&themeRefresh=1", "");
+  const value = props.element?.answers?.video || "youtube"  
 
   return (
     <iframe
-      src={embedLink}
-      //   src="https://player.vimeo.com/video/791837360"
+      src={value === "youtube" ? youtubeEmbedLink : vimeoEmbedLink}
       width="100%"
       height="300px"
       allowFullScreen
+      style={{border: 0}}
     ></iframe>
   );
 };
-
-//vimeo.com/791837360
-
-https: {
-  /* <iframe src="https://player.vimeo.com/video/791837360?h=544f5e275e" frameborder="0"></iframe> */
-}
