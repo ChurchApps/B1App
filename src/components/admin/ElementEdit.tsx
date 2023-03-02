@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ArrayHelper, BlockInterface, ElementInterface } from "@/helpers";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography } from "@mui/material";
 import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
@@ -209,6 +209,32 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getVideoFields = () => {
+    return (
+      <>
+        <FormControl fullWidth>
+          <InputLabel>Type</InputLabel>
+          <Select fullWidth label="Type" name="videoType" onChange={handleChange} value={parsedData.videoType || "youtube"}>
+            <MenuItem value="youtube">Youtube</MenuItem>
+            <MenuItem value="vimeo">Vimeo</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField fullWidth label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange}/>
+        <TextField fullWidth label="Height (px)" name="videoHeight" value={parsedData.videoHeight || "300px"} onChange={handleChange}/>
+        {(!parsedData.videoType || parsedData.videoType === "youtube") && (
+          <Typography fontSize="12px" fontStyle="italic">
+            video url - https://www.youtube.com/watch?v=dQw4w9WgXcQ <br /> id - dQw4w9WgXcQ
+          </Typography>
+        )}
+        {parsedData.videoType === "vimeo" && (
+          <Typography fontSize="12px" fontStyle="italic">
+            video url - https://vimeo.com/751393851 <br /> id - 751393851
+          </Typography>
+        )}
+      </>
+    )
+  }
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -221,6 +247,7 @@ export function ElementEdit(props: Props) {
       case "stream": result = getStreamFields(); break;
       case "iframe": result = getIframeFields(); break;
       case "buttonLink": result = getButtonLink(); break;
+      case "video": result = getVideoFields(); break;
     }
     return result;
   }
