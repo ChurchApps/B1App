@@ -220,7 +220,6 @@ export function ElementEdit(props: Props) {
           </Select>
         </FormControl>
         <TextField fullWidth label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange}/>
-        <TextField fullWidth label="Height (px)" name="videoHeight" value={parsedData.videoHeight || "300px"} onChange={handleChange}/>
         {(!parsedData.videoType || parsedData.videoType === "youtube") && (
           <Typography fontSize="12px" fontStyle="italic">
             video url - https://www.youtube.com/watch?v=dQw4w9WgXcQ <br /> id - dQw4w9WgXcQ

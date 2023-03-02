@@ -10,7 +10,8 @@ export const VideoElement: React.FC<Props> = (props) => {
     value === "youtube"
       ? `https://www.youtube.com/embed/${props.element.answers.videoId}`
       : `https://player.vimeo.com/video/${props.element.answers.videoId}`;
-  const height = props.element?.answers?.videoHeight || "300px";
 
-  return <iframe src={src} width="100%" height={height} allowFullScreen style={{ border: 0 }} />;
+  return (<div className="videoWrapper" style={{marginBottom: "20px"}}>
+    <iframe src={src} allowFullScreen style={{ border: 0 }} />;
+    </div>)
 };
