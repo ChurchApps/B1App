@@ -14,17 +14,7 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
-    const tab: B1LinkInterface = {
-      churchId: UserHelper.currentUserChurch.church.id,
-      sort: tabs.length,
-      text: "",
-      url: "",
-      icon: "link",
-      linkData: "",
-      linkType: "url",
-      category: "tab",
-    };
-
+    const tab: B1LinkInterface = { churchId: UserHelper.currentUserChurch.church.id, sort: tabs.length, text: "", url: "", icon: "link", linkData: "", linkType: "url", category: "b1Tab" };
     setCurrentTab(tab);
   };
 
@@ -35,11 +25,11 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
   };
 
   const loadData = () => {
-    ApiHelper.get("/links?category=tab", "B1Api").then((data) => setTabs(data));
+    ApiHelper.get("/links?category=b1Tab", "ContentApi").then((data) => setTabs(data));
   };
 
   const saveChanges = () => {
-    ApiHelper.post("/links", tabs, "B1Api").then(loadData);
+    ApiHelper.post("/links", tabs, "ContentApi").then(loadData);
   };
 
   const makeSortSequential = () => {
@@ -68,18 +58,12 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
     let idx = 0;
     let rows: JSX.Element[] = [];
     tabs.forEach((tab) => {
-      const upLink =
-        idx === 0 ? null : (
-          <a href="about:blank" data-idx={idx} onClick={moveUp}>
-            <Icon>arrow_upward</Icon>
-          </a>
-        );
-      const downLink =
-        idx === tabs.length - 1 ? null : (
-          <a href="about:blank" data-idx={idx} onClick={moveDown}>
-            <Icon>arrow_downward</Icon>
-          </a>
-        );
+      const upLink = (idx === 0)
+        ? null 
+        : (<a href="about:blank" data-idx={idx} onClick={moveUp}><Icon>arrow_upward</Icon></a>);
+      const downLink = (idx === tabs.length - 1) 
+        ? null 
+        : (<a href="about:blank" data-idx={idx} onClick={moveDown}><Icon>arrow_downward</Icon></a>);
       rows.push(
         <tr key={idx}>
           <td>
@@ -92,13 +76,7 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
           <td style={{ textAlign: "right" }}>
             {upLink}
             {downLink}
-            <a
-              href="about:blank"
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                setCurrentTab(tab);
-              }}
-            >
+            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentTab(tab); }} >
               <Icon>edit</Icon>
             </a>
           </td>
