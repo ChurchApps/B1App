@@ -6,6 +6,7 @@ import { FormSubmissionEdit } from "@/components";
 
 interface Props {
     element: ElementInterface;
+    showHeader?: boolean
 }
 
 export const FormElement = (props: Props) => {
@@ -53,6 +54,7 @@ export const FormElement = (props: Props) => {
             personId={PersonHelper?.person?.id}
             updatedFunction={() => {}}
             cancelFunction={() => {}}
+            showHeader={props.showHeader}
             />
         </>
     )
