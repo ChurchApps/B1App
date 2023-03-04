@@ -59,9 +59,9 @@ export default function Admin(props: Props) {
     }
   }
 
-  const getAddSection = (s: number, zone: string) => {
+  const getAddSection = (s: number, zone: string, droppableAreaText?: string) => {
     const sort = s;
-    return (<DroppableArea key={"addSection_" + zone + "_" + s.toString()} accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort, zone)} />);
+    return (<DroppableArea key={"addSection_" + zone + "_" + s.toString()} text={droppableAreaText} accept={["section", "sectionBlock"]} onDrop={(data) => handleDrop(data, sort, zone)} />);
     //return (<div style={{ textAlign: "center", background: "#EEE" }}><SmallButton icon="add" onClick={() => setEditSection({ sort, background: "#FFF", textColor: "light" })} toolTip="Add Section" /></div>)
   }
 
@@ -121,6 +121,7 @@ export default function Admin(props: Props) {
     let result = [];
     let idx = 0;
     zones[page?.layout]?.forEach((z: string) => {
+      const sections = ArrayHelper.getAll(page?.sections, "zone", z);
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
       result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article"  >
         <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
@@ -128,6 +129,7 @@ export default function Admin(props: Props) {
             {getSections(z)}
           </div>
         </div>
+        <div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, z, "Drop at the bottom of page")}</div>
       </DisplayBox>);
       idx++;
     });
