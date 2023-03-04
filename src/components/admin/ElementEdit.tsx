@@ -219,7 +219,6 @@ export function ElementEdit(props: Props) {
             <MenuItem value="vimeo">Vimeo</MenuItem>
           </Select>
         </FormControl>
-        <TextField fullWidth label="Height (px)" name="videoHeight" value={parsedData.videoHeight || "300px"} onChange={handleChange}/>
         <TextField fullWidth label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange}/>
         {(!parsedData.videoType || parsedData.videoType === "youtube") && (
           <Typography fontSize="12px" fontStyle="italic">
