@@ -1468,3 +1468,6 @@ a.dropdown-toggle::after {
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
+
+.b1Frame { width:100%; height:80vh; }
+.b1Frame iframe { width:100%; height:100%; }
