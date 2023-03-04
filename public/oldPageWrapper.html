@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <title>Streaming Live</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  </link>
+  <style>
+    img {max-width:100% !important;}
+  </style>
+</head>
+
+<body style="padding:15px;">
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+
+  <script>
+    function getUrlParameter(name) {
+      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+
+    async function loadContent() {
+      const contents = await fetch(getUrlParameter("url"), { method: 'GET' }).then(response => response.text());
+      document.getElementById('root').innerHTML = contents;
+    }
+    loadContent();
+
+  </script>
+
+</body>
+
+</html>
