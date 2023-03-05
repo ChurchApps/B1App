@@ -1,4 +1,4 @@
-import { AppearanceInterface } from "@/appBase/helpers";
+import { AppearanceInterface, UserHelper } from "@/appBase/helpers";
 import { UserInterface, ApiHelper, EnvironmentHelper, AppearanceHelper, StreamConfigInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
@@ -7,6 +7,7 @@ import Link from "next/link";
 import React from "react";
 import { ChatName } from "./chat";
 import { StreamingNavItems } from "./StreamingNavItems";
+import { Permissions } from "@/helpers/interfaces";
 
 
 interface Props {
@@ -41,7 +42,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     }
   }
   const getSettingLink = () => {
-    if (props.isHost) return (
+    if (UserHelper.checkAccess(Permissions.contentApi.settings.edit)) return (
       <li className="nav-item"><Link href="/admin" className="nav-link">Admin Dashboard</Link></li>
     );
   }
