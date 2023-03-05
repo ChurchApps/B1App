@@ -45,7 +45,6 @@ export const TabEdit: React.FC<Props> = (props) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const val = e.target.value;
-    console.log("page", ArrayHelper.getOne(pages, "id", val));
     let t = { ...currentTab };
     switch (e.target.name) {
       case "text": t.text = val; break;

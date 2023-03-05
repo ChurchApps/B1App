@@ -84,11 +84,7 @@ export interface WrapperPageProps {
 }
 
 export class Permissions extends BasePermissions {
-  static b1Api = {
-    settings: {
-      edit: { api: "B1Api", contentType: "Settings", action: "Edit" }
-    }
-  };
+  
 }
 
 export interface StreamingButtonInterface { text: string, url: string }

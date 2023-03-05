@@ -12,7 +12,7 @@ export class ConfigHelper {
   static async load(keyName: string) {
     const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi")
     let appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
-    const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=tab", "B1Api");
+    const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=b1Tab", "ContentApi");
     let result: ConfigurationInterface = { appearance: appearance, church: church, tabs: tabs }
     result.keyName = keyName;
     return result;
@@ -22,7 +22,7 @@ export class ConfigHelper {
     const firstTab = config.tabs[0]
 
     if (!firstTab) {
-      return UserHelper.checkAccess(Permissions.b1Api.settings.edit) ? "/admin/settings" : "/"
+      return UserHelper.checkAccess(Permissions.contentApi.settings.edit) ? "/admin/settings" : "/"
     }
 
     let route = ""
