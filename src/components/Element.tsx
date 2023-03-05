@@ -86,7 +86,7 @@ export const Element: React.FC<Props> = props => {
       result = <VideoElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "form":
-      result = <FormElement key={props.element.id} element={props.element as ElementInterface} showHeader={false} />
+      result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
       break;
   }
 
