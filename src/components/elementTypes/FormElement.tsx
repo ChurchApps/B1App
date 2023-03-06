@@ -19,7 +19,6 @@ export const FormElement = (props: Props) => {
   const [config, setConfig] = useState<ConfigurationInterface>(null);
   const [addFormId, setAddFormId] = useState<string>("");
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
-  const [showForm, setShowForm] = useState<boolean>(false)
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
   const router = useRouter();
   const formId = props.element.answers.formId;
@@ -57,30 +56,29 @@ export const FormElement = (props: Props) => {
 
   return (
     <>
-    {isFormSubmitted && !showForm ? <p>Your form has been successfully submitted. <Button variant="text" size="small" onClick={() => setShowForm(true)}>Fill Again</Button></p> : 
-      <FormSubmissionEdit
-        churchId={config.church.id}
-        addFormId={addFormId}
-        unRestrictedFormId={unRestrictedFormId}
-        contentType="form"
-        contentId={formId}
-        formSubmissionId=""
-        personId={PersonHelper?.person?.id}
-        updatedFunction={handleUpdate}
+      {isFormSubmitted ? (
+        <p>
+          Your form has been successfully submitted.{" "}
+          <Button
+            variant="text"
+            size="small"
+            onClick={() => setIsFormSubmitted(false)}
+          >
+            Fill Again
+          </Button>
+        </p>
+      ) : (
+        <FormSubmissionEdit
+          churchId={config.church.id}
+          addFormId={addFormId}
+          unRestrictedFormId={unRestrictedFormId}
+          contentType="form"
+          contentId={formId}
+          formSubmissionId=""
+          personId={PersonHelper?.person?.id}
+          updatedFunction={handleUpdate}
         />
-    }
-    {(showForm && !isFormSubmitted) &&
-    <FormSubmissionEdit
-        churchId={config.church.id}
-        addFormId={addFormId}
-        unRestrictedFormId={unRestrictedFormId}
-        contentType="form"
-        contentId={formId}
-        formSubmissionId=""
-        personId={PersonHelper?.person?.id}
-        updatedFunction={handleUpdate}
-        />
-    }
+      )}
     </>
   );
 };
