@@ -234,6 +234,14 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getRawHTML = () => {
+    return (
+      <>
+        <TextField fullWidth label="HTML Content" name="rawHTML" onChange={handleChange} value={parsedData.rawHTML || ""} multiline minRows={7} maxRows={15} helperText="<h1>B1 Church</h1>" />
+      </>
+    )
+  }
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -247,6 +255,7 @@ export function ElementEdit(props: Props) {
       case "iframe": result = getIframeFields(); break;
       case "buttonLink": result = getButtonLink(); break;
       case "video": result = getVideoFields(); break;
+      case "rawHTML": result = getRawHTML(); break;
     }
     return result;
   }

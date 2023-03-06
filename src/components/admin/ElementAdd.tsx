@@ -49,6 +49,7 @@ export function ElementAdd(props: Props) {
           <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" />
           <AddableElement dndType="element" elementType="stream" icon="live_tv" label="Stream" />
           <AddableElement dndType="element" elementType="video" icon="play_circle" label="Video" />
+          <AddableElement dndType="element" elementType="rawHTML" icon="code" label="HTML" />
         </Grid>
 
         {props.includeBlocks && (<>
