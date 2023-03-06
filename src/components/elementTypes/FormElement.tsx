@@ -54,31 +54,34 @@ export const FormElement = (props: Props) => {
     return <Loading />;
   }
 
+  if (isFormSubmitted) {
+    return (
+      <p>
+        Your form has been successfully submitted.{" "}
+        <Button
+          variant="text"
+          size="small"
+          onClick={() => setIsFormSubmitted(false)}
+        >
+          Fill Again
+        </Button>
+      </p>
+    );
+  }
+
   return (
     <>
-      {isFormSubmitted ? (
-        <p>
-          Your form has been successfully submitted.{" "}
-          <Button
-            variant="text"
-            size="small"
-            onClick={() => setIsFormSubmitted(false)}
-          >
-            Fill Again
-          </Button>
-        </p>
-      ) : (
-        <FormSubmissionEdit
-          churchId={config.church.id}
-          addFormId={addFormId}
-          unRestrictedFormId={unRestrictedFormId}
-          contentType="form"
-          contentId={formId}
-          formSubmissionId=""
-          personId={PersonHelper?.person?.id}
-          updatedFunction={handleUpdate}
-        />
-      )}
+      <FormSubmissionEdit
+        churchId={config.church.id}
+        addFormId={addFormId}
+        unRestrictedFormId={unRestrictedFormId}
+        contentType="form"
+        contentId={formId}
+        formSubmissionId=""
+        personId={PersonHelper?.person?.id}
+        updatedFunction={handleUpdate}
+        showHeader={false}
+      />
     </>
   );
 };
