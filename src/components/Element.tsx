@@ -13,7 +13,7 @@ import { IframeElement } from "./elementTypes/IframeElement";
 import { ButtonLink } from "./elementTypes/ButtonLink";
 import { StreamElement } from "./elementTypes/StreamElement";
 import { VideoElement } from "./elementTypes/VideoElement";
-import {RawHTMLElement} from "./elementTypes/RawHTMLElement";
+import { RawHTMLElement } from "./elementTypes/RawHTMLElement";
 
 interface Props {
   element: ElementInterface;

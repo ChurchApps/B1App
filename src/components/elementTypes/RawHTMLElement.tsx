@@ -7,7 +7,7 @@ interface Props {
 export const RawHTMLElement = ({ element }: Props) => {
   return (
     <>
-      <div dangerouslySetInnerHTML={{ __html: element.answers.rawHTML }} />
+      <div dangerouslySetInnerHTML={{ __html: element.answers.rawHTML || "" }} />
     </>
   );
 };

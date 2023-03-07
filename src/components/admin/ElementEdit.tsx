@@ -237,7 +237,7 @@ export function ElementEdit(props: Props) {
   const getRawHTML = () => {
     return (
       <>
-        <TextField fullWidth label="HTML Content" name="rawHTML" onChange={handleChange} value={parsedData.rawHTML || ""} multiline minRows={7} maxRows={15} helperText="<h1>B1 Church</h1>" />
+        <TextField fullWidth label="HTML Content" name="rawHTML" onChange={handleChange} value={parsedData.rawHTML || ""} multiline minRows={7} maxRows={15} />
       </>
     )
   }
