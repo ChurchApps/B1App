@@ -430,3 +430,26 @@ prayerSend {
   border-top: none;
   border-bottom: none; 
 }
+
+
+@media (max-aspect-ratio: 5/3) {
+  #liveBody {
+    flex-direction: column;
+  }
+
+  #videoContainer {
+    flex: 2;
+  }
+
+  #interactionContainer {
+    flex: 3;
+  }
+
+  .streamingTab {
+    display: none;
+  }
+
+  #streamingAltTabs {
+    display: table;
+  }
+}
