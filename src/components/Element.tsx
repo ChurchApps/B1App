@@ -13,7 +13,8 @@ import { IframeElement } from "./elementTypes/IframeElement";
 import { ButtonLink } from "./elementTypes/ButtonLink";
 import { StreamElement } from "./elementTypes/StreamElement";
 import { VideoElement } from "./elementTypes/VideoElement";
-import {FormElement} from "./elementTypes/FormElement";
+import { RawHTMLElement } from "./elementTypes/RawHTMLElement";
+import { FormElement } from "./elementTypes/FormElement";
 
 interface Props {
   element: ElementInterface;
@@ -84,6 +85,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "video":
       result = <VideoElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "rawHTML":
+      result = <RawHTMLElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "form":
       result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
