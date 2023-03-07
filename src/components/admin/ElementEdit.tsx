@@ -6,6 +6,7 @@ import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
 import { RowEdit } from "./RowEdit";
+import { FormEdit } from "./FormEdit"
 
 type Props = {
   element: ElementInterface;
@@ -256,6 +257,7 @@ export function ElementEdit(props: Props) {
       case "buttonLink": result = getButtonLink(); break;
       case "video": result = getVideoFields(); break;
       case "rawHTML": result = getRawHTML(); break;
+      case "form": result = <FormEdit parsedData={parsedData} handleChange={handleChange} />; break;
     }
     return result;
   }
@@ -313,7 +315,7 @@ export function ElementEdit(props: Props) {
           <MenuItem value="iframe">Embed Page</MenuItem>
           <MenuItem value="buttonLink">Button</MenuItem>
         </Select>
-      </FormControl>
+  </FormControl>
   */
 
   const getStandardFields = () => {
