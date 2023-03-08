@@ -46,8 +46,9 @@ body {
 
 .page H1 {
   font-size: 60px;
+  font-weight: bold;;
+  line-height: 60px;
   border-bottom: none;
-  text-align: center;
   margin-bottom: 40px;
 }
 
@@ -58,6 +59,11 @@ body {
   font-size: 35px;
   line-height: 40px;
   text-transform: none;
+}
+
+.page h3 {
+  font-size: 22px;
+  line-height: 26px;
 }
 
 .page .section {
