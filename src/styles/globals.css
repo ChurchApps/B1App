@@ -46,8 +46,9 @@ body {
 
 .page H1 {
   font-size: 60px;
+  font-weight: bold;;
+  line-height: 60px;
   border-bottom: none;
-  text-align: center;
   margin-bottom: 40px;
 }
 
@@ -58,6 +59,11 @@ body {
   font-size: 35px;
   line-height: 40px;
   text-transform: none;
+}
+
+.page h3 {
+  font-size: 22px;
+  line-height: 26px;
 }
 
 .page .section {
@@ -1400,7 +1406,7 @@ a.dropdown-toggle::after {
   border-top: none;
 }
 
-.note {
+.note, .conversation {
   margin-top: 10px;
   border-bottom: 1px solid #ddd;
   display: flex;
@@ -1408,17 +1414,17 @@ a.dropdown-toggle::after {
   padding: 0 10px;
 }
 
-.note:last-child {
+.note:last-child, .conversation:last-child {
   border-bottom: none;
 }
 
-.note .postedBy {
+.note .postedBy, .conversation .postedBy {
   color: #999;
   justify-content: space-between;
   align-items: baseline;
 }
 
-.note .postedBy img {
+.note .postedBy img, .conversation .postedBy img {
   width: 60px;
   height: 45px;
   margin-right: 15px;
