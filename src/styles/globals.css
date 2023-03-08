@@ -1400,7 +1400,7 @@ a.dropdown-toggle::after {
   border-top: none;
 }
 
-.note {
+.note, .conversation {
   margin-top: 10px;
   border-bottom: 1px solid #ddd;
   display: flex;
@@ -1408,17 +1408,17 @@ a.dropdown-toggle::after {
   padding: 0 10px;
 }
 
-.note:last-child {
+.note:last-child, .conversation:last-child {
   border-bottom: none;
 }
 
-.note .postedBy {
+.note .postedBy, .conversation .postedBy {
   color: #999;
   justify-content: space-between;
   align-items: baseline;
 }
 
-.note .postedBy img {
+.note .postedBy img, .conversation .postedBy img {
   width: 60px;
   height: 45px;
   margin-right: 15px;
