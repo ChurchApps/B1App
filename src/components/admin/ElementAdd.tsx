@@ -51,6 +51,7 @@ export function ElementAdd(props: Props) {
           <AddableElement dndType="element" elementType="video" icon="play_circle" label="Video" />
           <AddableElement dndType="element" elementType="rawHTML" icon="code" label="HTML" />
           <AddableElement dndType="element" elementType="form" icon="format_align_left" label="Form" />
+          <AddableElement dndType="element" elementType="faq" icon="quiz" label="FAQ" />
         </Grid>
 
         {props.includeBlocks && (<>
