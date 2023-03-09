@@ -81,6 +81,7 @@ export const FormElement = (props: Props) => {
         personId={PersonHelper?.person?.id}
         updatedFunction={handleUpdate}
         showHeader={false}
+        noBackground={true}
       />
     </>
   );
