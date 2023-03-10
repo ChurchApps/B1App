@@ -119,7 +119,7 @@ export function RowEdit(props: Props) {
     <>
       <FormControl fullWidth>
         <InputLabel>Common Options</InputLabel>
-        <Select name="columns" fullWidth label={"Common Options"} value={commonValue} onChange={handleChange}>
+        <Select name="columns" fullWidth label={"Common Options"} size="small" value={commonValue} onChange={handleChange}>
           <MenuItem value="6,6">Halves</MenuItem>
           <MenuItem value="4,4,4">Thirds</MenuItem>
           <MenuItem value="3,3,3,3">Quarters</MenuItem>
