@@ -112,7 +112,7 @@ export function SectionEdit(props: Props) {
     let result: JSX.Element[] = [
       <FormControl fullWidth>
         <InputLabel>Background Type</InputLabel>
-        <Select fullWidth label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange}>
+        <Select fullWidth size="small" label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange}>
           <MenuItem value="color">Color</MenuItem>
           <MenuItem value="image">Image</MenuItem>
           <MenuItem value="youtube">Youtube Video</MenuItem>
@@ -123,12 +123,12 @@ export function SectionEdit(props: Props) {
     if (backgroundType === "color") {
       result.push(<SliderPicker key="sliderPicker" color={section.background} onChangeComplete={(color) => { if (color.hex !== "#000000") { let s = { ...section }; s.background = color.hex; setSection(s); } }} />);
       result.push(getGrayOptions())
-      result.push(<TextField key="backgroundText" fullWidth label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />)
+      result.push(<TextField key="backgroundText" fullWidth size="small" label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />)
     } else if (backgroundType === "youtube") {
       const parts = section.background.split(":");
       const youtubeId = (parts.length > 1) ? parts[1] : "";
       result.push(<>
-        <TextField fullWidth label="Youtube ID" name="youtubeId" value={youtubeId} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <TextField fullWidth size="small" label="Youtube ID" name="youtubeId" value={youtubeId} onChange={handleChange} onKeyDown={handleKeyDown} />
       </>)
     } else if (backgroundType === "image") {
       result.push(<>
@@ -149,7 +149,7 @@ export function SectionEdit(props: Props) {
       {getBackgroundField()}
       <FormControl fullWidth>
         <InputLabel>Text Color</InputLabel>
-        <Select fullWidth label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
+        <Select fullWidth size="small" label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
           <MenuItem value="light">Light</MenuItem>
           <MenuItem value="dark">Dark</MenuItem>
         </Select>
