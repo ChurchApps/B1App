@@ -6,6 +6,12 @@ import {
   Stack,
   Button,
   InputLabel,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
+  Typography,
 } from "@mui/material";
 import { MarkdownEditor } from "..";
 
@@ -21,8 +27,10 @@ export const FaqEdit = ({
   handleMarkdownChange,
 }: Props) => {
   const [elements, setElements] = useState([]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [faqTitle, setFaqTitle] = useState("");
+  const [faqDescription, setFaqDescription] = useState("");
+
+  const changeHandler = () => {}
 
   const addElement = () => {
     console.log("add got clicked!");
@@ -31,6 +39,10 @@ export const FaqEdit = ({
     newArray.push(obj);
     setElements(newArray);
   };
+
+  // if (elements.length !== 0) {
+  //   parsedData["lists"] = elements;
+  // }
   // elements.forEach((e) => {
   //   console.log("eeeeeeeeeeeeeeeee: ", e);
 
@@ -40,9 +52,42 @@ export const FaqEdit = ({
 
   // console.log("parsed data: ", parsedData);
 
+  const getRows = () => {
+    return (
+      <Table size="small">
+        <TableHead>
+          <TableRow sx={{ textAlign: "left" }}>
+            <th>Value</th>
+            <th>Action</th>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {parsedData?.list?.map((element) => (
+            <TableRow>
+              <TableCell>
+                <Typography>{element.title}</Typography>
+              </TableCell>
+              <TableCell>
+                <Button>Remove</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  };
+
   return (
     <>
-      <div>{JSON.stringify(elements)}</div>
+    <TextField fullWidth label="Title" name="faqTitle" value={faqTitle} onChange={changeHandler} />
+    <Box sx={{ marginTop: 2 }}>
+      <MarkdownEditor
+      value={faqDescription}
+      onChange={changeHandler}
+      style={{ maxHeight: 200, overflowY: "scroll" }}
+      />
+    </Box>
+    {/* {getRows()}
       <TextField
         fullWidth
         label="Title"
@@ -57,14 +102,9 @@ export const FaqEdit = ({
           style={{ maxHeight: 200, overflowY: "scroll" }}
         />
       </Box>
-      <Stack direction="row" spacing={3}>
-        <Button fullWidth variant="contained">
-          Remove
-        </Button>
-        <Button fullWidth variant="contained" onClick={addElement}>
+        <Button sx={{marginTop: 2}} fullWidth variant="contained" onClick={addElement}>
           Add
-        </Button>
-      </Stack>
+        </Button> */}
     </>
   );
 };
