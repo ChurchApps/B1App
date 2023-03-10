@@ -52,6 +52,7 @@ export const FormEdit = ({ parsedData, handleChange }: Props) => {
         <InputLabel>Select</InputLabel>
         <Select
           fullWidth
+          size="small"
           label="Select"
           name="formId"
           onChange={handleChange}

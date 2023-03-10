@@ -76,7 +76,7 @@ export function ElementEdit(props: Props) {
   const selectTextAlignment = (
     <FormControl fullWidth>
       <InputLabel>Text Alignment</InputLabel>
-      <Select fullWidth label="Text Alignment" name="textAlignment" value={parsedData.textAlignment || "left"} onChange={handleChange}>
+      <Select fullWidth size="small" label="Text Alignment" name="textAlignment" value={parsedData.textAlignment || "left"} onChange={handleChange}>
         <MenuItem value="left">Left</MenuItem>
         <MenuItem value="center">Center</MenuItem>
         <MenuItem value="right">Right</MenuItem>
@@ -90,7 +90,7 @@ export function ElementEdit(props: Props) {
     }
   };
 
-  const getJsonFields = () => (<TextField fullWidth label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
+  const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
   const getTextFields = () => (
     <>
       {selectTextAlignment}
@@ -104,10 +104,10 @@ export function ElementEdit(props: Props) {
   const getTextWithPhotoFields = () => (<>
     {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
     <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
-    <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     <FormControl fullWidth>
       <InputLabel>Photo Position</InputLabel>
-      <Select fullWidth label="Photo Position" name="photoPosition" value={parsedData.photoPosition || ""} onChange={handleChange}>
+      <Select fullWidth size="small" label="Photo Position" name="photoPosition" value={parsedData.photoPosition || ""} onChange={handleChange}>
         <MenuItem value="left">Left</MenuItem>
         <MenuItem value="right">Right</MenuItem>
         <MenuItem value="top">Top</MenuItem>
@@ -124,9 +124,9 @@ export function ElementEdit(props: Props) {
   const getCardFields = () => (<>
     {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
     <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
-    <TextField fullWidth label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
-    <TextField fullWidth label="Link Url" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
-    <TextField fullWidth label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth size="small" label="Link Url" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth size="small" label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     {selectTextAlignment}
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
@@ -134,7 +134,7 @@ export function ElementEdit(props: Props) {
   </>);
 
   const getLogoFields = () => (<>
-    <TextField fullWidth label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
   </>);
 
   const getStreamFields = () => {
@@ -144,7 +144,7 @@ export function ElementEdit(props: Props) {
       blocks?.forEach(b => { options.push(<MenuItem value={b.id}>{b.name}</MenuItem>) });
       blockField = (<FormControl fullWidth>
           <InputLabel>Block</InputLabel>
-          <Select fullWidth label="Block" name="targetBlockId" value={parsedData.targetBlockId || ""} onChange={handleChange}>
+          <Select fullWidth size="small" label="Block" name="targetBlockId" value={parsedData.targetBlockId || ""} onChange={handleChange}>
             {options}
           </Select>
         </FormControl>);
@@ -153,14 +153,14 @@ export function ElementEdit(props: Props) {
       <>
         <FormControl fullWidth>
           <InputLabel>Mode</InputLabel>
-          <Select fullWidth label="Mode" name="mode" value={parsedData.mode || "video"} onChange={handleChange}>
+          <Select fullWidth size="small" label="Mode" name="mode" value={parsedData.mode || "video"} onChange={handleChange}>
             <MenuItem value="video">Video Only</MenuItem>
             <MenuItem value="interaction">Video and Interaction</MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth>
           <InputLabel>Offline Content</InputLabel>
-          <Select fullWidth label="Offline Content" name="offlineContent" value={parsedData.offlineContent || "countdown"} onChange={handleChange}>
+          <Select fullWidth size="small" label="Offline Content" name="offlineContent" value={parsedData.offlineContent || "countdown"} onChange={handleChange}>
             <MenuItem value="countdown">Next Service Time</MenuItem>
             <MenuItem value="hide">Hide</MenuItem>
             <MenuItem value="block">Block</MenuItem>
@@ -174,8 +174,8 @@ export function ElementEdit(props: Props) {
   const getIframeFields = () => {
     return (
       <>
-        <TextField fullWidth label="Source" name="iframeSrc" value={parsedData.iframeSrc || ""} onChange={handleChange} />
-        <TextField fullWidth label="Height (px)" name="iframeHeight" value={parsedData.iframeHeight || ""} placeholder="1000" onChange={handleChange} />
+        <TextField fullWidth size="small" label="Source" name="iframeSrc" value={parsedData.iframeSrc || ""} onChange={handleChange} />
+        <TextField fullWidth size="small" label="Height (px)" name="iframeHeight" value={parsedData.iframeHeight || ""} placeholder="1000" onChange={handleChange} />
       </>
     )
   }
@@ -183,18 +183,18 @@ export function ElementEdit(props: Props) {
   const getButtonLink = () => {
     return (
       <>
-        <TextField fullWidth label="Text" name="buttonLinkText" value={parsedData.buttonLinkText || ""} onChange={handleChange} />
-        <TextField fullWidth label="url" name="buttonLinkUrl" value={parsedData.buttonLinkUrl || ""} onChange={handleChange} />
+        <TextField fullWidth size="small" label="Text" name="buttonLinkText" value={parsedData.buttonLinkText || ""} onChange={handleChange} />
+        <TextField fullWidth size="small" label="url" name="buttonLinkUrl" value={parsedData.buttonLinkUrl || ""} onChange={handleChange} />
         <FormControl fullWidth>
           <InputLabel>Variant</InputLabel>
-          <Select fullWidth label="Button Type" name="buttonLinkVariant" value={parsedData.buttonLinkVariant || "contained"} onChange={handleChange}>
+          <Select fullWidth size="small" label="Button Type" name="buttonLinkVariant" value={parsedData.buttonLinkVariant || "contained"} onChange={handleChange}>
             <MenuItem value="contained">Contained</MenuItem>
             <MenuItem value="outlined">Outlined</MenuItem>
           </Select>
         </FormControl>
         <FormControl fullWidth>
           <InputLabel>Color</InputLabel>
-          <Select fullWidth label="Button Type" name="buttonLinkColor" value={parsedData.buttonLinkColor || "primary"} onChange={handleChange}>
+          <Select fullWidth size="small" label="Button Type" name="buttonLinkColor" value={parsedData.buttonLinkColor || "primary"} onChange={handleChange}>
             <MenuItem value="primary">Primary</MenuItem>
             <MenuItem value="secondary">Secondary</MenuItem>
             <MenuItem value="error">Error</MenuItem>
@@ -216,12 +216,12 @@ export function ElementEdit(props: Props) {
       <>
         <FormControl fullWidth>
           <InputLabel>Type</InputLabel>
-          <Select fullWidth label="Type" name="videoType" onChange={handleChange} value={parsedData.videoType || "youtube"}>
+          <Select fullWidth size="small" label="Type" name="videoType" onChange={handleChange} value={parsedData.videoType || "youtube"}>
             <MenuItem value="youtube">Youtube</MenuItem>
             <MenuItem value="vimeo">Vimeo</MenuItem>
           </Select>
         </FormControl>
-        <TextField fullWidth label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange}/>
+        <TextField fullWidth size="small" label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange}/>
         {(!parsedData.videoType || parsedData.videoType === "youtube") && (
           <Typography fontSize="12px" fontStyle="italic">
             video url - https://www.youtube.com/watch?v=dQw4w9WgXcQ <br /> id - dQw4w9WgXcQ
