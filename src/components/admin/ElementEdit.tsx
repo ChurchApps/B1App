@@ -7,6 +7,7 @@ import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
 import { RowEdit } from "./RowEdit";
 import { FormEdit } from "./FormEdit"
+import { FaqEdit } from "./FaqEdit"
 
 type Props = {
   element: ElementInterface;
@@ -258,6 +259,7 @@ export function ElementEdit(props: Props) {
       case "video": result = getVideoFields(); break;
       case "rawHTML": result = getRawHTML(); break;
       case "form": result = <FormEdit parsedData={parsedData} handleChange={handleChange} />; break;
+      case "faq": result = <FaqEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />; break;
     }
     return result;
   }
