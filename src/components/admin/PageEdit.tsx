@@ -30,7 +30,7 @@ export function PageEdit(props: Props) {
   const validate = () => {
     let errors = [];
     if (!page.url || page.url === "") errors.push("Please enter a path.");
-    if(page?.url !== page?.url?.toLocaleLowerCase()) errors.push("Please enter URL Path as shown.")
+    if(page?.url !== page?.url?.toLocaleLowerCase()) errors.push("Please enter lowercase letters in URL Path.")
     if (!page.title || page.title === "") errors.push("Please enter a title.");
     setErrors(errors);
     return errors.length === 0;
@@ -65,7 +65,7 @@ export function PageEdit(props: Props) {
       <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
         <ErrorMessages errors={errors} />
         <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} onKeyDown={handleKeyDown} helperText="Example: /camper-registration" />
+        <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} onKeyDown={handleKeyDown} helperText="ex: /camper-registration" />
         <div>
           <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`} target="_blank" rel="noopener noreferrer">
             {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
