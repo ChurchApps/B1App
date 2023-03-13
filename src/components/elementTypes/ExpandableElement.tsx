@@ -45,7 +45,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   marginLeft: theme.spacing(1),
 }));
 
-export const FaqElement = ({ element }: Props) => {
+export const ExpandableElement = ({ element }: Props) => {
   return (
     <>
       <Accordion>
