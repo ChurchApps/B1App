@@ -14,6 +14,7 @@ export const FaqEdit = ({ parsedData, handleChange, handleMarkdownChange }: Prop
         fullWidth
         label="Title"
         name="title"
+        size="small"
         value={parsedData.title || ""}
         onChange={handleChange}
       />
