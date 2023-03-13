@@ -15,7 +15,7 @@ import { StreamElement } from "./elementTypes/StreamElement";
 import { VideoElement } from "./elementTypes/VideoElement";
 import { RawHTMLElement } from "./elementTypes/RawHTMLElement";
 import { FormElement } from "./elementTypes/FormElement";
-import { ExpandableElement } from "./elementTypes/ExpandableElement";
+import { FaqElement } from "./elementTypes/FaqElement";
 
 interface Props {
   element: ElementInterface;
@@ -93,8 +93,8 @@ export const Element: React.FC<Props> = props => {
     case "form":
       result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
       break;
-    case "expandable":
-      result = <ExpandableElement key={props.element.id} element={props.element as ElementInterface} />
+    case "faq":
+      result = <FaqElement key={props.element.id} element={props.element as ElementInterface} />
       break;
   }
 

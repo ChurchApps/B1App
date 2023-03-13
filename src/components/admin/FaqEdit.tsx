@@ -7,7 +7,7 @@ type Props = {
   handleMarkdownChange: (field: string, newValue: string) => void;
 };
 
-export const ExpandableEdit = ({ parsedData, handleChange, handleMarkdownChange }: Props) => {
+export const FaqEdit = ({ parsedData, handleChange, handleMarkdownChange }: Props) => {
   return (
     <>
       <TextField
