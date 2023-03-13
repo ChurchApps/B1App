@@ -93,7 +93,7 @@ export const Element: React.FC<Props> = props => {
     case "form":
       result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
       break;
-    case "expandable":
+    case "faq":
       result = <ExpandableElement key={props.element.id} element={props.element as ElementInterface} />
       break;
   }

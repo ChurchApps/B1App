@@ -259,7 +259,7 @@ export function ElementEdit(props: Props) {
       case "video": result = getVideoFields(); break;
       case "rawHTML": result = getRawHTML(); break;
       case "form": result = <FormEdit parsedData={parsedData} handleChange={handleChange} />; break;
-      case "expandable": result = <ExpandableEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />; break;
+      case "faq": result = <ExpandableEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />; break;
     }
     return result;
   }
