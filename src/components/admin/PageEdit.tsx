@@ -35,15 +35,9 @@ export function PageEdit(props: Props) {
     return errors.length === 0;
   };
 
-  const camelToKebab = (str: string) => {
-    return str?.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-  }
-
   const handleSave = () => {
     if (validate()) {
-      let p = {...page};
-      p.url = camelToKebab(p.url)
-      ApiHelper.post("/pages", [p], "ContentApi").then((data) => {
+      ApiHelper.post("/pages", [page], "ContentApi").then((data) => {
         setPage(data);
         props.updatedCallback(data);
       });
