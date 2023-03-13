@@ -21,7 +21,7 @@ export function PageEdit(props: Props) {
     const val = e.target.value;
     switch (e.target.name) {
       case "title": p.title = val; break;
-      case "url": p.url = val; break;
+      case "url": p.url = val.toLowerCase(); break;
       case "layout": p.layout = val; break;
     }
     setPage(p);
@@ -30,7 +30,6 @@ export function PageEdit(props: Props) {
   const validate = () => {
     let errors = [];
     if (!page.url || page.url === "") errors.push("Please enter a path.");
-    if(page?.url !== page?.url?.toLocaleLowerCase()) errors.push("Please enter lowercase letters in URL Path.")
     if (!page.title || page.title === "") errors.push("Please enter a title.");
     setErrors(errors);
     return errors.length === 0;
