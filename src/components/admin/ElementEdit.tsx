@@ -244,6 +244,15 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getMapFields = () => {
+    return (
+      <>
+        <TextField fullWidth size="small" label="Address" name="mapAddress" onChange={handleChange} value={parsedData.mapAddress || ""} helperText="ex: City Hall, New York, NY" />
+        <TextField fullWidth size="small" type="number" label="Zoom-Level" name="mapZoom" onChange={handleChange} value={parsedData.mapZoom || ""} helperText="ex: 0(the whole world) & 21(individual buildings)" />
+      </>
+    )
+  }
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -260,6 +269,7 @@ export function ElementEdit(props: Props) {
       case "rawHTML": result = getRawHTML(); break;
       case "form": result = <FormEdit parsedData={parsedData} handleChange={handleChange} />; break;
       case "faq": result = <FaqEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />; break;
+      case "map": result = getMapFields(); break;
     }
     return result;
   }
