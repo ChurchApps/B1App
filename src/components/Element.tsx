@@ -15,6 +15,8 @@ import { StreamElement } from "./elementTypes/StreamElement";
 import { VideoElement } from "./elementTypes/VideoElement";
 import { RawHTMLElement } from "./elementTypes/RawHTMLElement";
 import { FormElement } from "./elementTypes/FormElement";
+import { FaqElement } from "./elementTypes/FaqElement";
+import { MapElement } from "./elementTypes/MapElement";
 
 interface Props {
   element: ElementInterface;
@@ -69,7 +71,7 @@ export const Element: React.FC<Props> = props => {
       result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
       break;
     case "map":
-      result = <h2 key={props.element.id}>Google Map Goes Here</h2>
+      result = <MapElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "donation":
       result = <NonAuthDonation key={props.element.id} churchId={props.church?.id ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
@@ -91,6 +93,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "form":
       result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "faq":
+      result = <FaqElement key={props.element.id} element={props.element as ElementInterface} />
       break;
   }
 

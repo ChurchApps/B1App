@@ -15,5 +15,7 @@ NEXT_PUBLIC_CHURCH_APPS_URL=https://staging.churchapps.org
 NEXT_PUBLIC_STREAMINGLIVE_URL=https://{key}.staging.streaminglive.church
 NEXT_PUBLIC_LESSONS_URL=https://staging.lessons.church
 
+NEXT_PUBLIC_GOOGLE_API_KEY=
+
 #Optional - UA-123456789-1
 NEXT_PUBLIC_GOOGLE_ANALYTICS=

@@ -6,6 +6,7 @@ import { useRouter } from "next/router"
 import { Themes, UserHelper } from "@/appBase/helpers";
 import { EnvironmentHelper, PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { Permissions } from "@/helpers/interfaces";
 
 interface Props { config: ConfigurationInterface, pageTitle?: string, children: React.ReactNode }
 
@@ -76,7 +77,8 @@ export const Wrapper: React.FC<Props> = props => {
     }
   })
 
-  tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
+  const adminAccess = UserHelper.checkAccess(Permissions.contentApi.settings.edit);
+  if (adminAccess) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
 
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 

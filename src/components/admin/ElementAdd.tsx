@@ -53,6 +53,8 @@ export function ElementAdd(props: Props) {
               <AddableElement dndType="element" elementType="rawHTML" icon="code" label="HTML" />
               <AddableElement dndType="element" elementType="video" icon="play_circle" label="Video" />
               <AddableElement dndType="element" elementType="buttonLink" icon="smart_button" label="Button" />
+              <AddableElement dndType="element" elementType="faq" icon="quiz" label="Expandable" />
+              <AddableElement dndType="element" elementType="map" icon="add_location_alt" label="Location" />
             </Grid>
           </AccordionDetails>
         </Accordion>
