@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { ElementInterface } from "@/helpers";
 import { Loading } from "@/components";
 
@@ -35,16 +35,18 @@ export const MapElement = ({ element }: Props) => {
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
-          zoom={element.answers.mapZoom}
+          zoom={element.answers.mapZoom || 15}
         >
-          <MarkerF
-            position={center}
-            label={{
-              text: element.answers.mapLabel,
-              fontWeight: "600",
-              fontSize: "20px",
-            }}
-          />
+          {center && element.answers.mapLabel ? (
+            <Marker
+              position={center}
+              label={{
+                text: element.answers.mapLabel,
+                fontWeight: "600",
+                fontSize: "20px",
+              }}
+            />
+          ) : null}
         </GoogleMap>
       ) : (
         <Loading />
