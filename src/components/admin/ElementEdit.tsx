@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ArrayHelper, BlockInterface, ElementInterface } from "@/helpers";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider } from "@mui/material";
 import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
@@ -248,7 +248,10 @@ export function ElementEdit(props: Props) {
     return (
       <>
         <TextField fullWidth size="small" label="Address" name="mapAddress" onChange={handleChange} value={parsedData.mapAddress || ""} helperText="ex: City Hall, New York, NY" />
-        <TextField fullWidth size="small" type="number" label="Zoom-Level" name="mapZoom" onChange={handleChange} value={parsedData.mapZoom || ""} helperText="ex: 0(the whole world) & 21(individual buildings)" />
+        <TextField fullWidth size="small" label="Label" name="mapLabel" onChange={handleChange} value={parsedData.mapLabel || ""} helperText="ex: First Baptist Church" />
+        <Typography fontSize="13px" sx={{marginTop: 1}}>Zoom-level</Typography>
+        <Slider defaultValue={15} valueLabelDisplay="auto" step={1} min={8} max={20} name="mapZoom" value={parsedData.mapZoom || 15} onChange={(e: any) => handleChange(e)} />
+        <Typography fontSize="12px" fontStyle="italic">Ex: 0(the whole world) & 21(individual buildings)</Typography>
       </>
     )
   }
