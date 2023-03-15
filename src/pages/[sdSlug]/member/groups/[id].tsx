@@ -1,33 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  GroupInterface,
-  ApiHelper,
-  UserHelper,
-  ConfigHelper,
-  WrapperPageProps,
-} from "@/helpers";
-import {
-  Wrapper,
-  MarkdownPreview,
-  Conversations,
-  Loading,
-  DisplayBox,
-} from "@/components";
+import { GroupInterface, ApiHelper, UserHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { Wrapper, MarkdownPreview, Conversations, Loading, DisplayBox } from "@/components";
 import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
-import {
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PersonHelper } from "@/appBase/helpers";
-import dynamic from "next/dynamic";
-
 import { Person } from "@/components/member/directory/Person";
 
 export default function GroupPage(props: WrapperPageProps) {
@@ -121,36 +100,20 @@ export default function GroupPage(props: WrapperPageProps) {
           {group ? (
             <>
               <h1>{group.name}</h1>
-              {group.photoUrl && (
-                <img
-                  id="tabImage"
-                  src={group.photoUrl}
-                  alt={group.name}
-                  style={{ maxHeight: 300 }}
-                />
+              {group.photoUrl && ( 
+                <img id="tabImage" src={group.photoUrl} alt={group.name} style={{ maxHeight: 300 }} />
               )}
               <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
                 <MarkdownPreview value={group.about} />
               </div>
-              <Conversations
-                context={context}
-                contentType="group"
-                contentId={group.id}
-                groupId={group.id}
-              />
+              <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
             </>
           ) : (
             <p>No group data found</p>
           )}
         </Grid>
         <Grid item md={3} xs={12} sx={{mt: 11}}>
-          <DisplayBox
-            id="groupMembersBox"
-            data-cy="group-members-tab"
-            headerText="Group Members"
-            headerIcon="group"
-            editContent={false}
-          >
+          <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false} >
             {getTable()}
           </DisplayBox>
         </Grid>
