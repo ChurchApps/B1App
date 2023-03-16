@@ -161,7 +161,16 @@ export function YourSiteSettings() {
         <Links />
         <DisplayBox headerIcon="link" headerText="External Resources" editContent={false} help="accounts/appearance">
           <table className="table">
-            <tbody>{churchSettings}</tbody>
+            <tbody>
+              <tr>
+                <td>
+                  <Link href={"/admin/site/files"} style={{ display: "flex" }}>
+                    <Icon sx={{ marginRight: "5px" }}>description</Icon>Manage Files
+                  </Link>
+                </td>
+              </tr>
+              {churchSettings}
+            </tbody>
           </table>
         </DisplayBox>
       </Grid>

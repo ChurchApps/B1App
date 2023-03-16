@@ -111,3 +111,13 @@ export interface ChatEventsInterface {
   videoChatInviteHandler: (roomName: string) => void,
   disconnectHandler: () => void,
 }
+
+export interface FileInterface {
+  id?: string;
+  fileName?: string;
+  contentPath?: string;
+  fileType?: string;
+  size?: number;
+  dateModified?: Date;
+  fileContents?: string;
+}
