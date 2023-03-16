@@ -4,16 +4,20 @@ import router from "next/router";
 import { ApiHelper, ConfigHelper, EnvironmentHelper, FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
-import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { DisplayBox, InputBox } from "@/components";
 import { SmallButton } from "@/appBase/components";
 import Link from "next/link";
+import LinearProgress from '@mui/material/LinearProgress';
 
 export default function Files(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [pendingFileSave, setPendingFileSave] = useState(false);
   const [files, setFiles] = useState<FileInterface[]>(null);
   
+  let usedSpace = 0;
+  files?.forEach(f => usedSpace += f.size);
+
   const handleFileSaved = (file: FileInterface) => {
     setPendingFileSave(false);
     loadData();
@@ -24,7 +28,7 @@ export default function Files(props: WrapperPageProps) {
   }
 
   const loadData = () => {
-    ApiHelper.get("/files", "ContentApi").then(d => setFiles(d))
+    ApiHelper.get("/files", "ContentApi").then(d => setFiles(d));
   }
 
   const handleDelete = async (file:FileInterface) => {
@@ -35,6 +39,33 @@ export default function Files(props: WrapperPageProps) {
     }
   }
 
+  const formatSize = (bytes:number) => {
+    let result = bytes.toString() + "b";
+    if (bytes > 1000000) result = (Math.round(bytes / 10000) / 100).toString() + "MB";
+    else if (bytes > 1000) result = (Math.round(bytes / 10) / 100).toString() + "KB";
+    return result;
+  }
+
+  const getStorage = () => {
+    
+    const percent = usedSpace / 100000000;
+    return (
+      <>
+        <div>Used space: { formatSize(usedSpace) } / 100MB</div>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ width: '100%', mr: 1 }}>
+            <LinearProgress variant="determinate" value={percent} />
+          </Box>
+          <Box sx={{ minWidth: 35 }}>
+            <Typography variant="body2" color="text.secondary">{`${Math.round(
+              percent,
+            )}%`}</Typography>
+          </Box>
+        </Box>
+      </>
+    );
+  }
+
   useEffect(() => { 
     if (!isAuthenticated) router.push("/login"); 
     else ApiHelper.get("/files", "ContentApi").then(d => setFiles(d));
@@ -43,7 +74,10 @@ export default function Files(props: WrapperPageProps) {
   const fileRows = files?.map((file) => (
     <TableRow key={file.id}>
       <TableCell>
-        <Link href={file.contentPath}>{file.fileName}</Link>
+        <Link href={file.contentPath} target="_blank">{file.fileName}</Link>
+      </TableCell>
+      <TableCell>
+        {formatSize(file.size)}
       </TableCell>
       <TableCell align="right">
         <SmallButton icon="delete" onClick={() => { handleDelete(file) }} />
@@ -62,6 +96,7 @@ export default function Files(props: WrapperPageProps) {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell></TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>{fileRows}</TableBody>
@@ -70,7 +105,9 @@ export default function Files(props: WrapperPageProps) {
         </Grid>
         <Grid item md={4} xs={12}>
           <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload">
-            <FileUpload pendingSave={pendingFileSave} saveCallback={handleFileSaved} />
+            { getStorage() }
+            <p>100 MB of storage space is provided for free for storing PDFs and other documents commonly needed for church websites.  We suggest using Google Drive or Dropbox to store files if additional space is needed.</p>
+            { (usedSpace < 100000000) && <FileUpload pendingSave={pendingFileSave} saveCallback={handleFileSaved} /> }
           </InputBox>
         </Grid>
       </Grid>

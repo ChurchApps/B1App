@@ -40,7 +40,8 @@ export function FileUpload(props: Props) {
     const data: FileInterface[] = await ApiHelper.post("/files", [f], "ContentApi");
     setFile({});
     setUploadedFile({} as File);
-    document.getElementById("fileUpload").value="";
+    const el:any = document.getElementById("fileUpload");
+    el.value = "";
     props.saveCallback(data[0]);
   };
 
