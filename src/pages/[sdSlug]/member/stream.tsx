@@ -8,7 +8,7 @@ export default function Stream(props: WrapperPageProps) {
       <iframe
         title="content"
         className="full-frame"
-        src={EnvironmentHelper.Common.B1Root.replace("{key}", props.config.church.subDomain) + "/stream"}
+        src={EnvironmentHelper.Common.B1Root.replace("{key}", props.config.church.subDomain) + "/stream?hideHeader=1"}
       />
     </Wrapper>
   );

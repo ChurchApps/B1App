@@ -39,12 +39,15 @@ export class EnvironmentHelper {
   };
 
   static shouldHideYourSite = (churchId: string) => {
+    return false; //Opening up for now.  May have to hide again.
+    /*
     let result = EnvironmentHelper.HideYoursite;
     if (result) {
       const exceptions = ["40", "IbZzogNKDzr"];
       if (exceptions.indexOf(churchId) > -1) result = false;
     }
     return result;
+    */
   }
 
 }
