@@ -17,6 +17,7 @@ import { RawHTMLElement } from "./elementTypes/RawHTMLElement";
 import { FormElement } from "./elementTypes/FormElement";
 import { FaqElement } from "./elementTypes/FaqElement";
 import { MapElement } from "./elementTypes/MapElement";
+import { SermonElement } from "./elementTypes/SermonElement";
 
 interface Props {
   element: ElementInterface;
@@ -96,6 +97,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "faq":
       result = <FaqElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "sermons":
+      result = <SermonElement key={props.element.id} />
       break;
   }
 
