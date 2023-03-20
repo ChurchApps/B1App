@@ -56,4 +56,7 @@ module.exports = {
       },
     ]
   },
+  images:{
+    domains: ["content.staging.churchapps.org"]
+  }
 };

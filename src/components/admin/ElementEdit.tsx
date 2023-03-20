@@ -273,6 +273,7 @@ export function ElementEdit(props: Props) {
       case "form": result = <FormEdit parsedData={parsedData} handleChange={handleChange} />; break;
       case "faq": result = <FaqEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />; break;
       case "map": result = getMapFields(); break;
+      case "sermons": result = <></>; break;
     }
     return result;
   }
