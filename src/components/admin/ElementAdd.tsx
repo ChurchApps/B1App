@@ -32,6 +32,7 @@ export function ElementAdd(props: Props) {
     return <Grid container spacing={1}>{result.length > 0 ? result : <p>No blocks found</p>}</Grid>
   }
 
+  //<AddableElement dndType="element" elementType="buttonLink" icon="smart_button" label="Button" />
   return (
     <>
       <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article" >
@@ -52,7 +53,6 @@ export function ElementAdd(props: Props) {
               <AddableElement dndType="element" elementType="iframe" icon="crop_free" label="Embed Page" />
               <AddableElement dndType="element" elementType="rawHTML" icon="code" label="HTML" />
               <AddableElement dndType="element" elementType="video" icon="play_circle" label="Video" />
-              <AddableElement dndType="element" elementType="buttonLink" icon="smart_button" label="Button" />
               <AddableElement dndType="element" elementType="faq" icon="quiz" label="Expandable" />
               <AddableElement dndType="element" elementType="map" icon="add_location_alt" label="Location" />
             </Grid>
