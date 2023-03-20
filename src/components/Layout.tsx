@@ -50,7 +50,7 @@ export function Layout(props: Props) {
           {getDescription()}
           {getImage()}
         </Head>
-        {!props.withoutNavbar && <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} />}
+        {!props.withoutNavbar && <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={false} />}
         <main>{props.children}</main>
         {!props.withoutFooter && <Footer church={props.church} churchSettings={props.churchSettings} />}
       </div>
