@@ -8,17 +8,21 @@ type Props = {
   church: ChurchInterface;
   churchSettings: any;
   navLinks?: LinkInterface[];
+  overlayContent: boolean;
 };
 
 export function Header(props: Props) {
-  const [transparent, setTransparent] = useState(true);
+  const [transparent, setTransparent] = useState(props.overlayContent);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   useEffect(() => {
     const handleScroll = () => {
-      const show = window.scrollY > 100
-      setTransparent(!show);
+      if (props.overlayContent)
+      {
+        const show = window.scrollY > 100
+        setTransparent(!show);
+      }
     }
     document.addEventListener('scroll', handleScroll)
     return () => {

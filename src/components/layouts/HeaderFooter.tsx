@@ -16,6 +16,8 @@ type Props = {
 };
 
 export function HeaderFooter(props: Props) {
+  console.log("********************" + props.pageData?.url)
+  console.log("********************" + props.pageData?.url)
   const getDescription = () => {
     if (props.metaDescription) return (<>
       <meta name="description" content={props.metaDescription}></meta>
@@ -43,10 +45,9 @@ export function HeaderFooter(props: Props) {
           <title>{props.pageTitle || props.church?.name}</title>
           {getDescription()}
         </Head>
-        <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} />
+        <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={props.pageData?.url === "/"} />
         <main>
           <div className="page">
-            <Zone church={props.church} sections={props.pageData.sections} zone="header" churchSettings={props.churchSettings} />
             <Zone church={props.church} sections={props.pageData.sections} zone="main" churchSettings={props.churchSettings} />
             <Zone church={props.church} sections={props.pageData.sections} zone="footer" churchSettings={props.churchSettings} />
           </div>
