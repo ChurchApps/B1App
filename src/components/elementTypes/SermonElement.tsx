@@ -7,7 +7,11 @@ import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { PlaylistInterface, SermonInterface, ApiHelper } from "@/helpers";
 import { Loading } from "@/components";
 
-export const SermonElement = () => {
+interface Props {
+  churchId: string,
+}
+
+export const SermonElement = ({ churchId }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActive, setIsActive] = useState<string>("playlists");
   const [playlists, setPlaylists] = useState<PlaylistInterface[]>([]);
@@ -17,12 +21,12 @@ export const SermonElement = () => {
   const [activeVideo, setActiveVideo] = useState<SermonInterface>();
 
   useEffect(() => {
-    ApiHelper.get("/playlists", "ContentApi").then((data) => {
+    ApiHelper.getAnonymous("/playlists/public/" + churchId, "ContentApi").then((data) => {
       setPlaylists(data);
       setIsLoading(false);
     });
 
-    ApiHelper.get("/sermons", "ContentApi").then((data) => {
+    ApiHelper.getAnonymous("/sermons/public/" + churchId, "ContentApi").then((data) => {
       setSermons(data);
     });
   }, []);
@@ -83,7 +87,7 @@ export const SermonElement = () => {
           <Grid container spacing={3} style={{ paddingBottom: 20, paddingTop: 20 }} >
             {playlists.map((item) => {
               return (
-                <Grid item md={6} xs={12}>
+                <Grid item md={4} xs={12}>
                   <Card
                     key={item.id}
                     sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}
@@ -118,7 +122,7 @@ export const SermonElement = () => {
           <Grid container spacing={3} style={{ paddingBottom: 20, paddingTop: 20 }}>
             {activeSermons.map((item) => {
               return (
-                <Grid item md={6} xs={12}>
+                <Grid item md={4} xs={12}>
                   <Card
                     key={item.id}
                     sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}
