@@ -73,10 +73,10 @@ export function ElementEdit(props: Props) {
     }
   };
 
-  const selectTextAlignment = (
+  const getTextAlignment = (fieldName:string, label:string="Text Alignment") => (
     <FormControl fullWidth>
-      <InputLabel>Text Alignment</InputLabel>
-      <Select fullWidth size="small" label="Text Alignment" name="textAlignment" value={parsedData.textAlignment || "left"} onChange={handleChange}>
+      <InputLabel>{label}</InputLabel>
+      <Select fullWidth size="small" label="Text Alignment" name={fieldName} value={parsedData[fieldName] || "left"} onChange={handleChange}>
         <MenuItem value="left">Left</MenuItem>
         <MenuItem value="center">Center</MenuItem>
         <MenuItem value="right">Right</MenuItem>
@@ -93,7 +93,7 @@ export function ElementEdit(props: Props) {
   const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
   const getTextFields = () => (
     <>
-      {selectTextAlignment}
+      {getTextAlignment("textAlignment")}
       <Box sx={{ marginTop: 2 }}>
         <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
       </Box>
@@ -114,7 +114,7 @@ export function ElementEdit(props: Props) {
         <MenuItem value="bottom">Bottom</MenuItem>
       </Select>
     </FormControl>
-    {selectTextAlignment}
+    {getTextAlignment("textAlignment")}
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
     </Box>
@@ -125,9 +125,10 @@ export function ElementEdit(props: Props) {
     {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
     <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
     <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
-    <TextField fullWidth size="small" label="Link Url" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    {getTextAlignment("titleAlignment", "Title Alignment")}
     <TextField fullWidth size="small" label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
-    {selectTextAlignment}
+    {getTextAlignment("textAlignment")}
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
     </Box>
