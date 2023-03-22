@@ -195,15 +195,8 @@ body {
   border-color: var(--light-bg-link-color);
 }
 
-.btn-primary,
-.btn-primary:disabled {
-  background-color: #03a9f4;
-  border-color: #03a9f4;
-}
-
 .btn-primary:hover {
-  background-color: #0099e4;
-  border-color: #0099e4;
+  filter: brightness(90%);
 }
 
 .btn-success {
@@ -312,10 +305,6 @@ a.dropdown-toggle::after {
   display: none;
 }
 
-.b1 .play {
-  padding-inline-start: 10px;
-}
-
 .modalMarkdown textarea {
   height: 75vh !important;
   overflow-y: scroll !important;
@@ -353,7 +342,7 @@ a.dropdown-toggle::after {
 }
 
 .sectionDark {
-  color: var(--light-bg-text-color);
+  color: var(--dark-bg-text-color);
 }
 
 .sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {

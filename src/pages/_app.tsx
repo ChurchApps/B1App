@@ -1,5 +1,5 @@
 import "react-activity/dist/Dots.css";
-import "@/styles/globals.css";
+import "@/styles/pages.css";
 import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/appBase/components/markdownEditor/editor.css";
