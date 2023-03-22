@@ -3,6 +3,7 @@ import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
 import { Grid, TextField } from "@mui/material";
 import React from "react";
 import { InputBox } from "..";
+import { TempImageEditor } from "./TempImageEditor";
 
 interface Props {
   updatedFunction?: () => void,
@@ -46,7 +47,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
   const getLogoEditor = (logoName: string) => {
     if (!editLogo) return null;
-    else return <ImageEditor settings={currentSettings} name={logoName} updatedFunction={(dataUrl) => imageUpdated(dataUrl, logoName)} aspectRatio={4} />
+    else return <TempImageEditor settings={currentSettings} name={logoName} updatedFunction={(dataUrl) => imageUpdated(dataUrl, logoName)} aspectRatio={4} />
   }
 
   const getLogoLink = (name: string, backgroundColor: string) => {
