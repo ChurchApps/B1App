@@ -16,7 +16,7 @@ export const CardElement: React.FC<Props> = (props) => {
 
   let result: JSX.Element[] = [];
   if (props.element.answers?.title) {
-    const title = <h3>{props.element.answers?.title}</h3>;
+    const title = <h3 style={{textAlign:props.element.answers?.titleAlignment || "center"}}>{props.element.answers?.title}</h3>;
     if (props.element.answers?.url) result.push(<a href={props.element.answers?.url}>{title}</a>);
     else result.push(title);
   }

@@ -16,8 +16,6 @@ type Props = {
 };
 
 export function HeaderFooter(props: Props) {
-  console.log("********************" + props.pageData?.url)
-  console.log("********************" + props.pageData?.url)
   const getDescription = () => {
     if (props.metaDescription) return (<>
       <meta name="description" content={props.metaDescription}></meta>

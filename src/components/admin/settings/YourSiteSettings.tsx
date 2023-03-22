@@ -7,8 +7,8 @@ import { Links } from "@/components/admin/Links";
 import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import { SmallButton } from "@/appBase/components";
-import { BlockInterface, PageInterface, UserHelper, ApiHelper, EnvironmentHelper } from "@/helpers";
-import { Permissions } from "@/appBase/interfaces";
+import { BlockInterface, PageInterface, ApiHelper } from "@/helpers";
+import { Appearance } from "../Appearance";
 
 export function YourSiteSettings() {
   const { isAuthenticated } = ApiHelper;
@@ -60,20 +60,6 @@ export function YourSiteSettings() {
     />
   );
 
-  let churchSettings = null;
-  if (UserHelper.checkAccess(Permissions.membershipApi.settings.edit)) {
-    const jwt = ApiHelper.getConfig("MembershipApi")?.jwt;
-    const url = `${EnvironmentHelper.Common.ChumsRoot}/login?jwt=${jwt}&returnUrl=/${UserHelper.currentUserChurch?.church?.id}/manage`;
-    churchSettings = (
-      <tr>
-        <td>
-          <a href={url} style={{ display: "flex" }}>
-            <Icon sx={{ marginRight: "5px" }}>edit</Icon>Customize Appearance
-          </a>
-        </td>
-      </tr>
-    );
-  }
 
   const pagesUi = pages.map((page) => (
     <TableRow key={page.id}>
@@ -149,9 +135,7 @@ export function YourSiteSettings() {
             }}
           />
         )}
-        {editBlock && (
-          <BlockEdit
-            block={editBlock}
+        {editBlock && (<BlockEdit block={editBlock}
             updatedCallback={() => {
               setEditBlock(null);
               loadData();
@@ -159,7 +143,8 @@ export function YourSiteSettings() {
           />
         )}
         <Links />
-        <DisplayBox headerIcon="link" headerText="External Resources" editContent={false} help="accounts/appearance">
+        <Appearance />
+        <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="accounts/appearance">
           <table className="table">
             <tbody>
               <tr>
@@ -169,7 +154,6 @@ export function YourSiteSettings() {
                   </Link>
                 </td>
               </tr>
-              {churchSettings}
             </tbody>
           </table>
         </DisplayBox>
