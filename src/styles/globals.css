@@ -1,10 +1,16 @@
+
 :root {
   scroll-behavior: auto;
+  --light-bg-text-color: #333;
+  --light-bg-link-color: #24b8ff;
+  --dark-bg-text-color: #EEEEEE;
+  --dark-bg-link-color: #FFFFFF;
+  --nav-bg-color: #FFFFFF;
 }
 
 body {
   font-family: "Roboto", sans-serif;
-  color: #333;
+  color: var(--light-bg-text-color);
 }
 
 .table {
@@ -26,7 +32,7 @@ body {
 }
 
 a {
-  color: #24b8ff;
+  color: var(--light-bg-link-color);
   text-decoration: none;
 }
 
@@ -53,7 +59,6 @@ body {
 }
 
 .page h2 {
-  /*border-bottom: 1px solid #ccc;*/
   padding-bottom: 10px;
   margin-bottom: 25px;
   font-size: 35px;
@@ -75,16 +80,16 @@ body {
 }
 
 .page .videoDark {
-  color: #FFFFFF;
+  color: var(--dark-bg-text-color);
 }
 
 .page .sectionDark {
-  color: #FFFFFF;
+  color: var(--dark-bg-text-color);
 }
 
 
 .page .sectionDark .editor-link {
-  color: #FFFFFF;
+  color: var(--dark-bg-link-color);
   font-weight: bold;
 }
 
@@ -121,10 +126,8 @@ body {
 }
 
 #navbar.transparent a {
-  color: #FFF;
+  color: var(--dark-bg-link-color);
 }
-
-
 
 
 .capitalize {
@@ -148,7 +151,7 @@ body {
 }
 
 #navbar {
-  background-color: #fff !important;
+  background-color: var(--nav-bg-color) !important;
   padding: 11px 0;
   margin-bottom: 20px;
   box-shadow: 0px 3px 3px 0px #999;
@@ -175,17 +178,6 @@ body {
 
 #navbar .active {
   border-bottom: 2px solid #03a9f4;
-}
-
-.navbar-brand {
-  margin-top: 5px;
-  display: block;
-}
-
-.navbar-brand img {
-  max-height: 35px;
-  max-width: 100%;
-  margin-bottom: 5px;
 }
 
 #navRight {
@@ -359,13 +351,9 @@ body {
   width: 100%;
 }
 
-/*
-.btn-primary { background-color:#77cc00; border-color:#70db86; }
-.btn-primary:hover { background-color:#55aa00; border-color:#55aa00; }
-*/
 .btn-info {
-  background-color: #03a9f4;
-  border-color: #03a9f4;
+  background-color: var(--light-bg-link-color);
+  border-color: var(--light-bg-link-color);
 }
 
 .btn-primary,
@@ -409,23 +397,6 @@ body {
 
 .addableForm span {
   color: #999;
-}
-
-@media (min-width: 1200px) {
-  .col-lg-2-5 {
-    flex: 0 0 20.8%;
-    max-width: 20.8%;
-    position: relative;
-    width: 100%;
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-}
-
-@media (max-width: 425px) {
-  .navbar-brand {
-    padding-top: 12px;
-  }
 }
 
 #footer {
@@ -496,13 +467,6 @@ label .description {
   height: 100%;
 }
 
-/*.role {font-weight: bold;}*/
-/*.role {font-weight: bold; text-align: center;}*/
-
-/*.part {border-bottom: 1px solid #ccc;padding-bottom: 20px;padding-top:20px}
-.part:last-child { border-bottom: 0px;}
-*/
-
 dropdown-menu a {
   color: #03a9f4;
 }
@@ -530,35 +494,6 @@ dropdown-menu a {
   margin-bottom: 0px;
   margin-top: 0px
 }
-
-/*
-#adminTree .programRow td:last-child {
-  text-align: right;
-}
-#adminTree .programRow td:last-child a {
-  color: #77cc00;
-}
-
-#adminTree .studyRow td:first-child {
-  padding-left: 20px;
-}
-#adminTree .studyRow td:last-child {
-  text-align: right;
-}
-#adminTree .studyRow td:last-child a {
-  color: #77cc00;
-}
-
-#adminTree .lessonRow td:first-child {
-  padding-left: 40px;
-}
-#adminTree .lessonRow td:last-child {
-  text-align: right;
-}
-#adminTree .lessonRow td:last-child a {
-  color: #77cc00;
-}
-*/
 
 #adminTree .sectionRow td:last-child {
   text-align: right;
@@ -637,51 +572,11 @@ dropdown-menu a {
   border-bottom: 1px solid #990000;
 }
 
-/*
-#resourceTree .bundleRow td:last-child {
-  text-align: right;
-}
-#resourceTree .bundleRow td:last-child a {
-  color: #77cc00;
-}
-#resourceTree .bundleRow td:last-child a i {
-  margin-right: 1px;
-}
-
-#resourceTree .resourceRow td:last-child {
-  text-align: right;
-}
-#resourceTree .resourceRow td:last-child a {
-  color: #77cc00;
-}
-#resourceTree .resourceRow td:last-child .dropdown-menu a {
-  color: #333;
-}
-#resourceTree .resourceRow td:first-child {
-  padding-left: 15px;
-}
-#resourceTree .variantRow td:first-child {
-  padding-left: 30px;
-}
-#resourceTree .assetRow td:first-child {
-  padding-left: 30px;
-}*/
-
-.venueRow td:last-child {
-  text-align: right;
-}
-
-.venueRow td:last-child a {
-  color: #77cc00;
-}
-
 .scrollingList {
   max-height: 80vh;
   overflow-y: scroll;
   overflow-x: hidden;
 }
-
-
 
 .accordion .card {
   background-color: #f3f3f6;
@@ -821,8 +716,6 @@ dropdown-menu a {
 .btn-light {
   border: 1px solid #333;
 }
-
-/*blockquote {padding-left:20px;border-left:2px solid #24b8ff;margin-bottom: 10px;}*/
 
 @media screen {
   .printOnly {
@@ -972,12 +865,6 @@ dropdown-menu a {
   padding: 0;
 }
 
-/*
-.dropdown-menu button {
-  padding: 0.5rem 1rem;
-}*/
-
-
 .dropdown-menu .btn {
   min-width: 90px;
 }
@@ -1007,47 +894,6 @@ dropdown-menu a {
 
 .no-caret:after {
   display: none;
-}
-
-.green {
-  color: #77cc00;
-}
-
-.downloadAccordion .card {
-  margin-bottom: 0px;
-  border-top: none;
-  border-bottom: none;
-}
-
-.downloadAccordion .card>button {
-  border: none;
-  text-align: left;
-  background-color: #03a9f4;
-  color: #FFF;
-  padding-left: 5px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #FFF;
-}
-
-.downloadAccordion .collapse,
-.downloadAccordion .collapsing {
-  margin-bottom: 0px;
-  margin-top: 0px;
-  border-top: none;
-  border-bottom: none;
-}
-
-.downloadAccordion .card-body {
-  background-color: #FFF;
-}
-
-.downloadsDropDown .dropdown-menu.show .dropdown-menu.show {
-  width: inherit !important;
-}
-
-.downloadResource {
-  padding: 5px 10px;
 }
 
 a.dropdown-toggle::after {
@@ -1109,11 +955,11 @@ a.dropdown-toggle::after {
 }
 
 .b1 .accordion .card-header.active {
-  background-color: #1c75bc;
+  background-color: var(--light-bg-link-color);
 }
 
 .b1 .accordion .collapsing {
-  border: 1px solid #1c75bc;
+  border: 1px solid var(--light-bg-link-color);
 }
 
 .adminAccordion .card {
@@ -1154,24 +1000,6 @@ a.dropdown-toggle::after {
   padding-left: 0px;
   padding-right: 0px;
 }
-
-
-.lessonDiv,
-.assetDiv,
-.variantDiv {
-  border-top: 1px solid #EEE;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  ;
-}
-
-.lessonDiv {
-  padding-right: 60px;
-  clear: both;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
 
 .reportTable> :not(:first-child) {
   border-top: 1px solid #ccc;
@@ -1223,7 +1051,7 @@ a.dropdown-toggle::after {
 }
 
 .sectionDark {
-  color: #EEE;
+  color: var(--light-bg-text-color);
 }
 
 .sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
@@ -1477,3 +1305,4 @@ a.dropdown-toggle::after {
 
 .b1Frame { width:100%; height:80vh; }
 .b1Frame iframe { width:100%; height:100%; }
+
