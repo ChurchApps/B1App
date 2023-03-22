@@ -1,0 +1,391 @@
+:root {
+  scroll-behavior: auto;
+  --light-bg-text-color: #333;
+  --light-bg-link-color: #24b8ff;
+  --dark-bg-text-color: #EEEEEE;
+  --dark-bg-link-color: #FFFFFF;
+  --nav-bg-color: #FFFFFF;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  color: var(--light-bg-text-color);
+}
+
+.table {
+  color: #333;
+  width: 100%;
+}
+
+.table thead tr th {
+  text-align: left;
+}
+
+.d-block {
+  display: block;
+}
+
+a {
+  color: var(--light-bg-link-color);
+  text-decoration: none;
+}
+
+img {
+  width: 100%;
+}
+
+body {
+  background-color: #f3f3f6;
+  margin: 0px;
+}
+
+#headerLogo {
+  max-width: 400px;
+  max-height: 65px;
+}
+
+.page H1 {
+  font-size: 60px;
+  font-weight: bold;;
+  line-height: 60px;
+  border-bottom: none;
+  margin-bottom: 40px;
+}
+
+.page h2 {
+  padding-bottom: 10px;
+  margin-bottom: 25px;
+  font-size: 35px;
+  line-height: 40px;
+  text-transform: none;
+}
+
+.page h3 {
+  font-size: 22px;
+  line-height: 26px;
+}
+
+.page .section {
+  min-height: 100px;
+}
+
+.page .sectionFirst {
+  padding-top: 60px;
+}
+
+.page .videoDark {
+  color: var(--dark-bg-text-color);
+}
+
+.page .sectionDark {
+  color: var(--dark-bg-text-color);
+}
+
+
+.page .sectionDark .editor-link {
+  color: var(--dark-bg-link-color);
+  font-weight: bold;
+}
+
+.page .sectionBG {
+  background-attachment: fixed;
+  background-position-x: 50%;
+  background-position-y: 50%;
+  background-size: cover;
+  position: relative;
+}
+
+.page .sectionBG:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: .55;
+  box-sizing: inherit;
+}
+
+.section {
+  color: #333;
+}
+
+
+#navbar.transparent {
+  background-color: rgba(0, 0, 0, 0) !important;
+  box-shadow: none;
+}
+
+#navbar.transparent a {
+  color: var(--dark-bg-link-color);
+}
+
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.btn-warning,
+.btn-warning:hover {
+  color: #fff;
+}
+
+.logo {
+  display: flex;
+  width: 200px;
+  margin-right: 15px;
+}
+
+#navbar {
+  background-color: var(--nav-bg-color) !important;
+  padding: 11px 0;
+  margin-bottom: 20px;
+  box-shadow: 0px 3px 3px 0px #999;
+}
+
+#navbar .nav-item {
+  font-size: 14px;
+}
+
+#navbar .nav-link {
+  color: #555;
+  height: 55px;
+  vertical-align: middle;
+  line-height: 45px;
+  max-width: 150px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#navbar svg {
+  height: 15px;
+  width: 15px;
+}
+
+#navbar .active {
+  border-bottom: 2px solid #03a9f4;
+}
+
+#navRight {
+  white-space: nowrap;
+}
+
+#navRight img {
+  width: 32px;
+  height: 24px;
+  margin-top: -3px;
+  margin-right: 8px;
+}
+
+
+#navSpacer {
+  height: 57px;
+  margin-bottom: 25px;
+}
+
+.blue {
+  color: #03a9f4;
+}
+
+.btn-info {
+  background-color: var(--light-bg-link-color);
+  border-color: var(--light-bg-link-color);
+}
+
+.btn-primary:hover {
+  filter: brightness(90%);
+}
+
+.btn-success {
+  background-color: #77cc00;
+  border-color: #70db86;
+}
+
+.btn-success:hover {
+  background-color: #55aa00;
+  border-color: #55aa00;
+}
+
+.btn-danger {
+  background-color: #cc0011;
+  border-color: #cc0011;
+}
+
+.btn-danger:hover {
+  background-color: #bb0000;
+  border-color: #bb0000;
+}
+
+#footer {
+  background-color: #333;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  color: #eee;
+}
+
+#footer img {
+  max-width: 450px;
+  margin-bottom: 20px;
+}
+
+.form-control::placeholder {
+  color: #ccc;
+}
+
+label .description {
+  font-size: 12px;
+  padding-left: 10px;
+}
+
+.alert p {
+  margin-bottom: 0;
+}
+
+.no-default-style {
+  border: none;
+  background: none;
+}
+
+.lead {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+dropdown-menu a {
+  color: #03a9f4;
+}
+
+.btn-light {
+  border: 1px solid #333;
+}
+
+.smallCenterBlock {
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#loginBox {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+#loginBox .form-group {
+  margin-bottom: 1rem;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.form-control.is-invalid {
+  background-image: none;
+}
+
+a.dropdown-toggle::after {
+  display: none;
+}
+
+.modalMarkdown textarea {
+  height: 75vh !important;
+  overflow-y: scroll !important;
+}
+
+#markdownPreview table {
+  border-spacing: 0px;
+}
+
+#markdownPreview table td,
+#markdownPreview table th {
+  border: 1px solid #DDD;
+  margin: 0px;
+  padding: 2px
+}
+
+.sectionEditButton,
+.elementEditButton {
+  float: right;
+  background-color: "#FFF";
+  border-radius: 5px;
+  background-color: #FFF;
+}
+
+.columnWrapper:hover {
+  background-color: #FF9999;
+}
+
+.elementWrapper:hover {
+  background-color: #28a745;
+}
+
+.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
+  background-color: #9999FF !important;
+}
+
+.sectionDark {
+  color: var(--dark-bg-text-color);
+}
+
+.sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
+  background-color: #007bff !important;
+}
+
+.sectionDark .columnWrapper:hover {
+  background-color: #990000;
+}
+
+.sectionDark .elementWrapper:hover {
+  background-color: #009900;
+}
+
+.sectionActions {
+  display: none;
+  position: absolute;
+  top: 10;
+  right: 0;
+}
+
+.sectionActions.alwaysVisible {
+  display: block;
+  z-index: 9999;
+}
+
+.sectionWrapper:not(:has(.elementWrapper:hover)):hover .sectionActions {
+  display: block;
+}
+
+.elementActions {
+  display: none;
+  position: absolute;
+  top: 10;
+  right: 0;
+}
+
+.elementWrapper:hover .elementActions {
+  display: block;
+  z-index: 2;
+}
+
+#embeddedLayout { height: 100vh; background-color: #FFFFFF;}
+#embeddedLayout .page .sectionFirst {
+  padding-top:0px;
+}

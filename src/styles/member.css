@@ -1,0 +1,334 @@
+
+/*Start Checkin*/
+
+.bigLinkButton {
+  background-color: #FFF;
+  color: #24b9ff;
+  font-weight: bold;
+  text-align: center;
+  font-size: 35px;
+  padding: 10px;
+  border: 2px solid #999;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 30px;
+  display: block;
+}
+
+.bigLinkButton:hover {
+  text-decoration: none;
+}
+
+.checkinPerson {
+  text-align: left;
+}
+
+.checkinPerson .col-1 {
+  text-align: center;
+  margin-right: 0px;
+}
+
+.checkinPerson i {
+  font-size: 50px;
+  line-height: 60px;
+  color: #CCC;
+  vertical-align: middle;
+}
+
+.checkinPerson .groups {
+  font-size: 14px;
+}
+
+.checkinPerson span {
+  font-size: 14px;
+  padding-right: 15px;
+}
+
+.checkinServiceTime {
+  color: #24b9ff;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #CCC;
+}
+
+.checkinServiceTime .col-4 {
+  line-height: 60px;
+  vertical-align: middle;
+  font-size: 25px;
+}
+
+.serviceTimeButton {
+  margin-top: 0px;
+  background-color: #24b9ff;
+  color: #FFF;
+  font-size: 25px;
+}
+
+.checkinGroup {
+  color: #24b9ff;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #CCC;
+}
+
+.checkinGroup a {
+  padding-left: 20px;
+  font-size: 25px;
+}
+
+.personPhoto {
+  width: 60px;
+  height: 45px;
+  border-radius: 5px;
+}
+
+/*End Checkin*/
+
+
+
+/*Start Member Directory*/
+
+#peopleTable img {
+  width: 60px;
+  height: 45px;
+  border-radius: 5px;
+}
+
+#peopleTable td {
+  vertical-align: middle;
+}
+
+/*End Member Directory*/
+
+/* Start private messaging & notes */
+.messages {
+  clear: both;
+  margin-left: 60px;
+}
+
+.messages .note:first-of-type {
+  border-top: none;
+}
+
+.note, .conversation {
+  margin-top: 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.note:last-child, .conversation:last-child {
+  border-bottom: none;
+}
+
+.note .postedBy, .conversation .postedBy {
+  color: #999;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.note .postedBy img, .conversation .postedBy img {
+  width: 60px;
+  height: 45px;
+  margin-right: 15px;
+  border-radius: 5px;
+}
+
+.note-contents p:first-of-type {
+  margin-top: 0;
+}
+
+.note-contents p {
+  margin-bottom: 0;
+}
+
+.text-success {
+  color: #28a745
+}
+
+.text-danger {
+  color: #dc3545
+}
+
+/* End private messaging & notes */
+
+
+#userMenu {
+  position: absolute;
+  top: 55px;
+  z-index: 9999;
+  left: 0px;
+  right: 0px;
+}
+
+#userMenu div {
+  width: 223px;
+  max-width: 100%;
+  position: relative;
+  background-color: #fff;
+  color: #333;
+  float: right;
+  box-shadow: 3px 3px 3px #999;
+}
+
+#userMenu a,
+#userMenu .label {
+  display: block;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 20px;
+  color: #333;
+  padding-right: 10px;
+}
+
+#userMenu .label {
+  font-weight: 600;
+  color: #333;
+}
+
+#userMenu a:hover {
+  text-decoration: none;
+  background-color: #03a9f4;
+  color: #fff;
+}
+
+#userMenu .nav-item,
+#userMenu .divider {
+  border-top: 1px solid #f0f0f0;
+}
+
+
+.inputBox {
+  border: 1px solid #e7e7e7;
+  margin-bottom: 30px;
+}
+
+.inputBox .header {
+  border-top: 4px solid #03a9f4;
+  background-color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.inputBox .header i {
+  margin-right: 5px;
+}
+
+.inputBox .header .col-4 i {
+  color: #77cc00;
+}
+
+.inputBox .header .btn {
+  margin-top: -2px;
+}
+
+.inputBox .subhead {
+  background-color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 10px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.inputBox .content {
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+.inputBox .content p {
+  color: #666;
+}
+
+.inputBox .footer .btn {
+  border-radius: 0px;
+}
+
+.inputBox .footer .col {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.inputBox .footer .col:first-child {
+  padding-left: 12px;
+}
+
+.inputBox .footer .col:first-child .btn {
+  border-bottom-left-radius: 5px;
+}
+
+.inputBox .footer .col:last-child {
+  padding-right: 12px;
+}
+
+.inputBox .footer .col:last-child .btn {
+  border-bottom-right-radius: 5px;
+}
+
+.inputBox .content label {
+  color: #999;
+}
+
+.inputBox .section {
+  font-weight: 600;
+  font-size: 16px;
+  padding: 10px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+.inputBox .content {
+  overflow-x: hidden;
+}
+
+.inputBox .content ul {
+  padding-left: 0px;
+}
+
+.inputBox .content li {
+  list-style-type: none;
+  margin-bottom: 10px;
+}
+
+.inputBox .content li i {
+  margin-right: 5px;
+}
+
+.inputBox .content td i {
+  margin-right: 5px;
+}
+
+.inputBox .footer button {
+  width: 100%;
+}
+
+
+#searchResults {
+  margin-top: 10px;
+}
+
+#searchResults td:last-child {
+  text-align: center;
+}
+
+#searchResults img {
+  width: 60px;
+  height: 45px;
+  border-radius: 5px;
+}
+
+.full-frame {
+  width: 100%;
+  height: calc(100vh - 64px);
+  width: calc(100% + 48px);
+  margin-top: -32px;
+  margin-left: -24px;
+  border: none;
+}
+
+.b1Frame { width:100%; height:80vh; }
+.b1Frame iframe { width:100%; height:100%; }
