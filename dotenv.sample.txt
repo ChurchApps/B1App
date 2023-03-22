@@ -8,6 +8,8 @@ NEXT_PUBLIC_ATTENDANCE_API=https://attendanceapi.staging.churchapps.org
 NEXT_PUBLIC_GIVING_API=https://givingapi.staging.churchapps.org
 NEXT_PUBLIC_B1_API=https://api.staging.b1.church
 NEXT_PUBLIC_LESSONS_API=https://api.staging.lessons.church
+NEXT_PUBLIC_MESSAGING_API=https://messagingapi.staging.churchapps.org
+NEXT_PUBLIC_CONTENT_API=https://contentapi.staging.churchapps.org
 
 NEXT_PUBLIC_CONTENT_ROOT=https://content.staging.churchapps.org
 NEXT_PUBLIC_ACCOUNTS_APP_URL=https://accounts.staging.churchapps.org

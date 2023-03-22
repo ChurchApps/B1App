@@ -99,7 +99,7 @@ export const Element: React.FC<Props> = props => {
       result = <FaqElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "sermons":
-      result = <SermonElement key={props.element.id} />
+      result = <SermonElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} />
       break;
   }
 
