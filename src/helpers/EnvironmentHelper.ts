@@ -2,7 +2,6 @@ import { ApiHelper } from "./index";
 import { CommonEnvironmentHelper } from "../appBase/helpers/CommonEnvironmentHelper";
 
 export class EnvironmentHelper {
-  private static HideYoursite = false;
   static Common = CommonEnvironmentHelper;
 
   static init = () => {
@@ -25,29 +24,15 @@ export class EnvironmentHelper {
 
   static initDev = () => {
     this.initStaging();
-    if (process.env.NEXT_HIDE_YOURSITE === "1") EnvironmentHelper.HideYoursite = true;
   };
 
   //NOTE: None of these values are secret.
   static initStaging = () => {
-    EnvironmentHelper.HideYoursite = false;
   };
 
   //NOTE: None of these values are secret.
   static initProd = () => {
-    EnvironmentHelper.HideYoursite = true;
-  };
 
-  static shouldHideYourSite = (churchId: string) => {
-    return false; //Opening up for now.  May have to hide again.
-    /*
-    let result = EnvironmentHelper.HideYoursite;
-    if (result) {
-      const exceptions = ["40", "IbZzogNKDzr"];
-      if (exceptions.indexOf(churchId) > -1) result = false;
-    }
-    return result;
-    */
-  }
+  };
 
 }

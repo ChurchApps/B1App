@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Loading, PageLayout, Theme } from "@/components";
-import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
-import { useEffect } from "react";
+import { PageLayout, Theme } from "@/components";
+import { ApiHelper, ChurchInterface, LinkInterface, PageInterface } from "@/helpers";
 
 type Props = {
   pageData: any;
@@ -11,12 +10,7 @@ type Props = {
 };
 
 export default function Home(props: Props) {
-  useEffect(() => {
-    if (EnvironmentHelper.shouldHideYourSite(props.church.id) && typeof window !== undefined) window.location.href = window.location.origin + "/member";
-  }, []); //eslint-disable-line
-
-  if (EnvironmentHelper.shouldHideYourSite(props.church.id)) return <Loading />
-  else return (<>
+  return (<>
     <Theme appearance={props.churchSettings} />
     <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
   </>);

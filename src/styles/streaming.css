@@ -389,7 +389,7 @@ prayerSend {
 .btn-primary {
   color: var(--primaryContrast);
   background-color: var(--primaryColor);
-  border-color: var(--primaryContrast);
+  border-color: var(--primaryColor);
 }
 
 .btn-secondary {
