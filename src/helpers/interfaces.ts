@@ -33,6 +33,7 @@ export interface SectionInterface {
   textColor?: string;
   sort?: number;
   targetBlockId?: string;
+  jsonData?: string;
 
   sourceId?: string;
   sections?: SectionInterface[];
