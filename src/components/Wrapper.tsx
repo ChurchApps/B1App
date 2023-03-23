@@ -33,7 +33,7 @@ export const Wrapper: React.FC<Props> = props => {
 
   const selectedTab = getSelectedTab();
 
-  if (!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
   props.config.tabs?.forEach(tab => {
     switch (tab.linkType) {

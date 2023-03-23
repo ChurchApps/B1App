@@ -3,8 +3,8 @@ import UserContext from "../../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "../../appBase/components";
 import { useRouter } from "next/router";
-import { Themes, UserHelper } from "@/appBase/helpers";
-import { EnvironmentHelper, PersonHelper } from "@/helpers";
+import { Themes } from "@/appBase/helpers";
+import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props {
@@ -29,10 +29,10 @@ export const AdminWrapper: React.FC<Props> = (props) => {
 
   const selectedTab = getSelectedTab();
 
-  if (!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
   tabs.push(<NavItem key="sermons" url="/admin/video" label="Sermons" icon="live_tv" router={router} selected={selectedTab === "sermons"} />);
-    if (!EnvironmentHelper.shouldHideYourSite(UserHelper.currentUserChurch?.church?.id)) tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);
+  tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);
   tabs.push(<NavItem key="admin" url="/admin" label="Mobile" icon="phone_android" router={router} selected={selectedTab === "admin"} />);
 
   const navContent = (
