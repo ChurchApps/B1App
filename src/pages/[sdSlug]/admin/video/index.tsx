@@ -8,16 +8,16 @@ import { DisplayBox, ImageEditor } from "@/appBase/components";
 import { Sermons } from "@/components/admin/video/Sermons";
 import { Playlists } from "@/components/admin/video/Playlists";
 import Link from "next/link";
+import { Import } from "@/components/admin/video/Import";
 
 export default function Admin(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
 
-  useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
-  }, []);
+  useEffect(() => { if (!isAuthenticated) router.push("/login"); }, []);
 
   const [photoUrl, setPhotoUrl] = useState<string>(null);
   const [photoType, setPhotoType] = useState<string>(null);
+  const [importMode, setImportMode] = useState(false);
 
   const handlePhotoUpdated = (dataUrl: string) => {
     setPhotoUrl(dataUrl);
@@ -37,12 +37,16 @@ export default function Admin(props: WrapperPageProps) {
       </h1>
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
-          <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
+          {(importMode) 
+            ? <Import handleDone={() => { setImportMode(false); }} />
+            : <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
+          }
         </Grid>
         <Grid item md={4} xs={12}>
           {imageEditor}
           <DisplayBox headerIcon="settings" headerText="Settings">
-            <Link href="/admin/video/settings">Edit Times and Appearance</Link>
+            <div><Link href="/admin/video/settings">Edit Times and Appearance</Link></div>
+            { (!importMode) && <div><a href="about:blank" onClick={(e) => { e.preventDefault(); setImportMode(true); }}>Bulk Import from Youtube</a></div> }
           </DisplayBox>
           <Playlists showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "playlist" && photoUrl) || null} />
         </Grid>
