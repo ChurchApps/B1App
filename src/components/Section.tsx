@@ -107,5 +107,5 @@ export const Section: React.FC<Props> = props => {
     const youtubeId = props.section.background.split(":")[1];
     return (<YoutubeBackground videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
   }
-  else return (<div style={getStyle()} className={getClassName()} id={props?.section?.jsonData}>{contents}</div>);
+  else return (<div style={getStyle()} className={getClassName()} id={props?.section?.answersJSON}>{contents}</div>);
 }

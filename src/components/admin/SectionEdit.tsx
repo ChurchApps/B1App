@@ -39,7 +39,7 @@ export function SectionEdit(props: Props) {
       case "textColor": p.textColor = val; break;
       case "targetBlockId": p.targetBlockId = val; break;
       case "youtubeId": p.background = "youtube:" + val; break;
-      case "jsonData": p.jsonData = val; break;
+      case "answersJSON": p.answersJSON = val; break;
     }
     setSection(p);
   };
@@ -155,7 +155,7 @@ export function SectionEdit(props: Props) {
           <MenuItem value="dark">Dark</MenuItem>
         </Select>
       </FormControl>
-      <TextField fullWidth size="small" label="ID" name="jsonData" value={section.jsonData || ""} onChange={handleChange} />
+      <TextField fullWidth size="small" label="ID" name="answersJSON" value={section.answersJSON || ""} onChange={handleChange} />
     </>)
   }
 
