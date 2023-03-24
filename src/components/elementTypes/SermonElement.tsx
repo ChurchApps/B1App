@@ -132,7 +132,7 @@ export const SermonElement = ({ churchId }: Props) => {
                     }}
                   >
                     <CardContent>
-                      <Image
+                      <img
                         src={item.thumbnail || ""}
                         alt={item.title}
                         width={635}
