@@ -96,7 +96,7 @@ export default function GroupPage(props: WrapperPageProps) {
   return (
     <Wrapper config={props.config}>
       { personId ? <Person personId={personId} backHandler={handleBack} selectedHandler={null} /> : <Grid container spacing={3} alignItems="flex-start">
-        <Grid item md={9} xs={12}>
+        <Grid item md={8} xs={12}>
           {group ? (
             <>
               <h1>{group.name}</h1>
@@ -112,10 +112,13 @@ export default function GroupPage(props: WrapperPageProps) {
             <p>No group data found</p>
           )}
         </Grid>
-        <Grid item md={3} xs={12} sx={{mt: 11}}>
-          <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false} >
-            {getTable()}
-          </DisplayBox>
+        <Grid item container md={4} xs={12} sx={{mt: 11}}>
+          <Grid md={1} xs={12}><div></div></Grid>
+          <Grid md={11} xs={12}>
+            <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false} >
+              {getTable()}
+            </DisplayBox>
+          </Grid>
         </Grid>
       </Grid>}
     </Wrapper>
