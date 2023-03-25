@@ -2,6 +2,7 @@ import "react-activity/dist/Dots.css";
 import "@/styles/pages.css";
 import "@/styles/member.css";
 import "@/styles/streaming.css";
+import "@/styles/buttons.css";
 import "@/appBase/components/markdownEditor/editor.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
