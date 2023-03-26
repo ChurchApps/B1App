@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { PersonHelper } from "../../../appBase/helpers";
 import { PersonInterface } from "../../../appBase/interfaces"
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
@@ -16,7 +17,7 @@ export const PeopleSearchResults: React.FC<Props> = (props) => {
       const p = props.people[i];
       result.push(<TableRow key={p.id}>
         <TableCell><img src={PersonHelper.getPhotoUrl(p)} alt="avatar" /></TableCell>
-        <TableCell><a href="about:blank" onClick={(e) => { e.preventDefault(); props.selectedHandler(p.id) }}>{p.name.display}</a></TableCell>
+        <TableCell><Link href={"/member/directory/" + p.id}>{p.name.display}</Link></TableCell>
       </TableRow>);
     }
     return result;
