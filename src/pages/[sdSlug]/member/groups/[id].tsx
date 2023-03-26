@@ -38,7 +38,7 @@ export default function GroupPage(props: WrapperPageProps) {
       <Wrapper config={props.config}>
         <h1>Group</h1>
         <h3 className="text-center w-100">
-          Please <Link href="/login/?returnUrl=/directory">Login</Link> to view
+          Please <Link href={"/login/?returnUrl=/member/groups/" + groupId}>Login</Link> to view
           your groups.
         </h3>
       </Wrapper>
