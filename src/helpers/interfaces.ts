@@ -33,6 +33,8 @@ export interface SectionInterface {
   textColor?: string;
   sort?: number;
   targetBlockId?: string;
+  answersJSON?: string;
+  answers?: any;
 
   sourceId?: string;
   sections?: SectionInterface[];
