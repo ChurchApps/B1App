@@ -15,6 +15,8 @@ export function SectionEdit(props: Props) {
   const [section, setSection] = useState<SectionInterface>(null);
   const [errors, setErrors] = useState([]);
   const [selectPhotoField, setSelectPhotoField] = useState<string>(null);
+  var parsedData = (section?.answersJSON) ? JSON.parse(section.answersJSON) : {}
+
 
   const handleCancel = () => props.updatedCallback(section);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -39,7 +41,10 @@ export function SectionEdit(props: Props) {
       case "textColor": p.textColor = val; break;
       case "targetBlockId": p.targetBlockId = val; break;
       case "youtubeId": p.background = "youtube:" + val; break;
-      case "answersJSON": p.answersJSON = val; break;
+      default:
+        parsedData[e.target.name] = val;
+        p.answersJSON = JSON.stringify(parsedData);
+        break;
     }
     setSection(p);
   };
@@ -155,7 +160,7 @@ export function SectionEdit(props: Props) {
           <MenuItem value="dark">Dark</MenuItem>
         </Select>
       </FormControl>
-      <TextField fullWidth size="small" label="ID" name="answersJSON" value={section.answersJSON || ""} onChange={handleChange} />
+      <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
     </>)
   }
 

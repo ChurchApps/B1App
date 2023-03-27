@@ -34,6 +34,7 @@ export interface SectionInterface {
   sort?: number;
   targetBlockId?: string;
   answersJSON?: string;
+  answers?: any;
 
   sourceId?: string;
   sections?: SectionInterface[];
