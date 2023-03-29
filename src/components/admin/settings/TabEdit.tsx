@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent } from "@mui/material";
 import { B1LinkInterface, ApiHelper, UniqueIdHelper, PageInterface, ArrayHelper } from "@/helpers";
-import SearchIcons from "@/appBase/components/material/iconpicker/IconPicker";
+import SearchIcons from "@/appBase/components/material/iconPicker/IconPicker";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
 import { InputBox } from "@/components";
 
