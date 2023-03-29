@@ -26,7 +26,7 @@ export default function Donate(props: WrapperPageProps) {
                 Manage Donations
               </Typography>
               <p style={{ marginTop: 0 }}>Please login to manage donations</p>
-              <Link href="/login/?returnUrl=/donate">
+              <Link href="/login/?returnUrl=/member/donate">
                 <Button sx={{ fontSize: "16px", textTransform: "capitalize" }} fullWidth variant="contained">
                   Login
                 </Button>
