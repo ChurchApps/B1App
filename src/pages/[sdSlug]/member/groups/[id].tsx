@@ -7,13 +7,11 @@ import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PersonHelper } from "@/appBase/helpers";
-import { Person } from "@/components/member/directory/Person";
 
 export default function GroupPage(props: WrapperPageProps) {
   const [group, setGroup] = useState<GroupInterface>(null);
   const [groupMembers, setGroupMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [personId, setPersonId] = useState<string>('');
 
   const router = useRouter();
   const context = useContext(UserContext);
@@ -40,14 +38,12 @@ export default function GroupPage(props: WrapperPageProps) {
       <Wrapper config={props.config}>
         <h1>Group</h1>
         <h3 className="text-center w-100">
-          Please <Link href="/login/?returnUrl=/directory">Login</Link> to view
+          Please <Link href={"/login/?returnUrl=/member/groups/" + groupId}>Login</Link> to view
           your groups.
         </h3>
       </Wrapper>
     );
   }
-
-  const handleBack = () => { setPersonId(""); }
 
   const getRows = () => {
     let rows: JSX.Element[] = [];
@@ -73,7 +69,7 @@ export default function GroupPage(props: WrapperPageProps) {
             />
           </TableCell>
           <TableCell>
-            <Link href="about:blank" onClick={(e) => { e.preventDefault(); setPersonId(gm.person.id) }}>
+            <Link href={"/member/directory/" + gm.person.id}>
               {gm.person.name.display}
             </Link>
           </TableCell>
@@ -95,8 +91,8 @@ export default function GroupPage(props: WrapperPageProps) {
 
   return (
     <Wrapper config={props.config}>
-      { personId ? <Person personId={personId} backHandler={handleBack} selectedHandler={null} /> : <Grid container spacing={3} alignItems="flex-start">
-        <Grid item md={9} xs={12}>
+      <Grid container spacing={3} alignItems="flex-start">
+        <Grid item md={8} xs={12}>
           {group ? (
             <>
               <h1>{group.name}</h1>
@@ -112,12 +108,12 @@ export default function GroupPage(props: WrapperPageProps) {
             <p>No group data found</p>
           )}
         </Grid>
-        <Grid item md={3} xs={12} sx={{mt: 11}}>
+        <Grid item md={4} xs={12} sx={{mt: 11}}>
           <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false} >
             {getTable()}
           </DisplayBox>
         </Grid>
-      </Grid>}
+      </Grid>
     </Wrapper>
   );
 }

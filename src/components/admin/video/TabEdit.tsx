@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
-import SearchIcons from "./../../../appBase/components/material/iconpicker/IconPicker";
+import SearchIcons from "../../../appBase/components/material/iconPicker/IconPicker";
 import { InputBox, ErrorMessages } from "@/appBase/components";
 import { LinkInterface, PageInterface, ApiHelper, ArrayHelper } from "@/helpers";
 
