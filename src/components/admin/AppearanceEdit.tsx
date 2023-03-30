@@ -47,7 +47,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
   const getLogoEditor = (logoName: string) => {
     if (!editLogo) return null;
-    else return <TempImageEditor settings={currentSettings} name={logoName} updatedFunction={(dataUrl) => imageUpdated(dataUrl, logoName)} aspectRatio={4} />
+    else return <TempImageEditor settings={currentSettings} name={logoName} updatedFunction={(dataUrl) => imageUpdated(dataUrl, logoName)} aspectRatio={currentEditLogo !== "favicon" ? 4 : 1} />
   }
 
   const getLogoLink = (name: string, backgroundColor: string) => {
@@ -81,6 +81,14 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
         </div>
         <hr />
+
+        <div style={{ backgroundColor: "#bbdefb", padding: 10, color: "#FFF" }}>
+          <label>Favicon</label>
+          <p style={{ color: "#999", fontSize: 12 }}>Upload logo with a transparent background.</p>
+          {getLogoLink("favicon", "#bbdefb")}
+        </div>
+        <hr />
+
         <div className="section">Primary Colors</div>
         <Grid container spacing={3}>
           <Grid item xs={6}>
