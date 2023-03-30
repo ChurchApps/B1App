@@ -306,3 +306,18 @@
 .show > .btn-dark.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.5);
 }
+
+.btn-small {
+  font-size: 14px;
+  padding: 4px 8px;
+}
+
+.btn-medium {
+  font-size: 16px;
+  padding: 6px 12px;
+}
+
+.btn-large {
+  font-size: 18px;
+  padding: 7px 14px;
+}
