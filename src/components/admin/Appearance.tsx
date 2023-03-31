@@ -51,9 +51,11 @@ export const Appearance: React.FC<Props> = (props) => {
         {getLogo("logoDark")}
       </div>
 
-      <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF" }}>
-        {getLogo("favicon")}
-      </div>
+      {styles?.favicon &&
+        <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF" }}>
+          {getLogo("favicon")}
+        </div>
+      }
 
       <div style={{ backgroundColor: styles.primaryColor, color: styles.primaryContrast, padding: 5, fontWeight: "bold" }}>
         Primary Colors

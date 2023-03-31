@@ -1,8 +1,8 @@
-import { ImageEditor } from "@/appBase/components";
-import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
+import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
-import React from "react";
+import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
 import { InputBox } from "..";
+import { ImageEditor } from "@/appBase/components";
 import { TempImageEditor } from "./TempImageEditor";
 
 interface Props {
@@ -13,7 +13,8 @@ interface Props {
 export const AppearanceEdit: React.FC<Props> = (props) => {
   const [currentSettings, setCurrentSettings] = React.useState<GenericSettingInterface[]>([]);
   const [editLogo, setEditLogo] = React.useState(false);
-  const [currentEditLogo, setCurrentEditLogo] = React.useState<string>("")
+  const [currentEditLogo, setCurrentEditLogo] = React.useState<string>("");
+  const [currentUrl, setCurrentUrl] = useState("about:blank");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
@@ -29,6 +30,13 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     setCurrentSettings(settings);
   }
 
+  const init = () => {
+    let startingUrl = (ArrayHelper.getOne(props.settings, "keyName", currentEditLogo))?.value;
+    setCurrentUrl(startingUrl);
+  };
+
+  useEffect(init, [currentEditLogo]);
+
   const imageUpdated = (dataUrl: string, keyName: string) => {
     if (dataUrl !== null) {
       const settings = [...currentSettings];
@@ -41,13 +49,14 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
       }
 
       setCurrentSettings(settings);
+      setCurrentUrl(dataUrl);
     }
     setEditLogo(false);
   }
 
   const getLogoEditor = (logoName: string) => {
     if (!editLogo) return null;
-    else return <TempImageEditor settings={currentSettings} name={logoName} updatedFunction={(dataUrl) => imageUpdated(dataUrl, logoName)} aspectRatio={currentEditLogo !== "favicon" ? 4 : 1} />
+    else return <ImageEditor photoUrl={currentUrl} onUpdate={(dataUrl) => { imageUpdated(dataUrl, logoName) }} onCancel={() => setCurrentUrl(null)} aspectRatio={ currentEditLogo === "favicon" ? 1 : 4} outputWidth={currentEditLogo === "favicon" ? 400 : 1200} outputHeight={currentEditLogo === "favicon" ? 400 : 300} />
   }
 
   const getLogoLink = (name: string, backgroundColor: string) => {
