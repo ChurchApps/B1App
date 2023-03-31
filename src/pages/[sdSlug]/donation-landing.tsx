@@ -15,7 +15,7 @@ export default function DonationLanding(props: WrapperPageProps) {
 
   const logoSrc = AppearanceHelper.getLogoLight(props.config.appearance, "/images/logo.png");
   return (
-    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
+    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
       <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
         <Card>
           <Box sx={{ paddingTop: 8, paddingX: 10, paddingBottom: 3 }}>
@@ -44,7 +44,7 @@ export default function DonationLanding(props: WrapperPageProps) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
-  const paths = [];
+  const paths:any[] = [];
 
   return { paths, fallback: "blocking", };
 };

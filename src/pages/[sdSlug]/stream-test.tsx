@@ -14,8 +14,8 @@ type Props = {
 
 export default function StreamTest(props: Props) {
   return (<>
-    <Theme appearance={props.churchSettings} />    
-    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
+    <Theme appearance={props.churchSettings} />
+    <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
       <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
         <h1>Hi</h1>
         <Grid container spacing={3}>
@@ -23,8 +23,8 @@ export default function StreamTest(props: Props) {
             <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} includeHeader={false} includeInteraction={true} />
           </Grid>
         </Grid>
-        <br/><br/>
-        <br/><br/>
+        <br /><br />
+        <br /><br />
 
         <h2>Bottom of page</h2>
       </Box>
@@ -33,7 +33,7 @@ export default function StreamTest(props: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
 
   return { paths, fallback: "blocking", };
 };

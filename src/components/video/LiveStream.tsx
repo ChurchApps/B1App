@@ -9,8 +9,8 @@ import { AppearanceInterface } from "@/appBase/helpers";
 import { StreamingHeader } from "./StreamingHeader";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 
-interface Props { 
-  keyName:string, 
+interface Props {
+  keyName:string,
   appearance: AppearanceInterface,
   includeInteraction: boolean,
   includeHeader: boolean,
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const LiveStream: React.FC<Props> = (props) => {
-  
+
   const [config, setConfig] = React.useState<StreamConfigInterface>(null);
   const [chatState, setChatState] = React.useState<ChatStateInterface>(null);
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
@@ -31,14 +31,14 @@ export const LiveStream: React.FC<Props> = (props) => {
     if (props.includeInteraction) ChatHelper.initChat();
     setConfig(result);
   }
-   
+
   const checkJoinRooms = () => {
     if (props.includeInteraction && currentService && config) {
       StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId, currentService, setChatState);
       StreamChatManager.checkHost(config, currentService.id, chatState, setChatState);
     }
   }
-  
+
   useEffect(() => {
     if (props.includeInteraction)
     {
@@ -73,8 +73,8 @@ export const LiveStream: React.FC<Props> = (props) => {
       if (seconds>3600) showAlt = true;
     }
     if (showAlt) result = props.offlineContent;
-  } 
-  
+  }
+
   return result;
 
 }

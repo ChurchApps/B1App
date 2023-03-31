@@ -21,14 +21,14 @@ export function EventCalendar(props:Props) {
   }
 
   const handleEventClick = (event: EventInterface) => {
-    setEditEvent(event); 
+    setEditEvent(event);
   }
 
   return (
-      <div>
-        <Calendar localizer={localizer} events={props.events} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
-         {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ () => setEditEvent(null) } />}
-         {editEvent && !props.editGroupId && <EventDetailsModel event={editEvent} onDone={() => setEditEvent(null) } />}
-      </div>
+    <div>
+      <Calendar localizer={localizer} events={props.events} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
+      {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ () => setEditEvent(null) } />}
+      {editEvent && !props.editGroupId && <EventDetailsModel event={editEvent} onDone={() => setEditEvent(null) } />}
+    </div>
   );
 }

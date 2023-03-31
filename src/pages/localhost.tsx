@@ -24,15 +24,15 @@ export default function Localhost() {
       <GroupCalendar groupId="1234567890a" canEdit={false} />
       <br />
       <h3>Editor</h3>
-      <MarkdownEditor value={val} onChange={(v) => { 
+      <MarkdownEditor value={val} onChange={(v) => {
         console.log(v);
-        setVal(v) 
+        setVal(v)
       }} />
       <h3>Markdown</h3>
       <TextField multiline fullWidth value={val} />
       <h3>Preview</h3>
       <MarkdownPreview value={val} />
-      
+
     </Container>
 
   );

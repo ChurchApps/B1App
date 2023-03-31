@@ -9,9 +9,9 @@ interface Props {
 }
 
 export function EventDetailsModel(props: Props) {
-  
+
   return (
-    <Dialog open={true} onClose={props.onDone} >
+    <Dialog open={true} onClose={props.onDone}>
       <DialogTitle>{props.event.title}</DialogTitle>
       <DialogContent>
         <p>{props.event.description}</p>
@@ -19,6 +19,6 @@ export function EventDetailsModel(props: Props) {
       <DialogActions>
         <Button onClick={props.onDone}>Close</Button>
       </DialogActions>
-  </Dialog>
+    </Dialog>
   );
 }

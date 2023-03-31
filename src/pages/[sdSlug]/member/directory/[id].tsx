@@ -9,38 +9,38 @@ export default function MemberPage(props: WrapperPageProps) {
   const router = useRouter();
   const { id: personId } = router.query;
 
-  const getContent = () => {
-    return (
-      <Person
-        personId={personId as string}
-        backHandler={() => {}}
-        selectedHandler={() => {}}
-      />
-    );
-  };
+  const getContent = () => (
+    <Person
+      personId={personId as string}
+      backHandler={() => {}}
+      selectedHandler={() => {}}
+    />
+  );
 
   return (
     <Wrapper config={props.config}>
-      {UserHelper.user?.firstName ? (
-        getContent()
-      ) : (
-        <>
-          <h1>Member Directory</h1>
-          <h3 className="text-center w-100">
+      {UserHelper.user?.firstName
+        ? (
+          getContent()
+        )
+        : (
+          <>
+            <h1>Member Directory</h1>
+            <h3 className="text-center w-100">
             Please{" "}
-            <Link href={"/login/?returnUrl=/member/directory/" + personId}>
+              <Link href={"/login/?returnUrl=/member/directory/" + personId}>
               Login
-            </Link>{" "}
+              </Link>{" "}
             to view Directory.
-          </h3>
-        </>
-      )}
+            </h3>
+          </>
+        )}
     </Wrapper>
   );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any = [];
   return { paths, fallback: "blocking" };
 };
 

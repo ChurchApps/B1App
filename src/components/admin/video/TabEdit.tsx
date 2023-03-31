@@ -35,13 +35,13 @@ export const TabEdit: React.FC<Props> = (props) => {
   const checkDelete = currentTab?.id ? handleDelete : undefined;
   const handleCancel = () => { props.updatedFunction(); }
   const loadPages = () => {
-    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => { 
-      let filteredPages = [];
+    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => {
+      let filteredPages:PageInterface[] = [];
       _pages.forEach(p => { if (p.url.startsWith("/stream")) filteredPages.push(p); });
-      setPages(filteredPages || []) 
+      setPages(filteredPages || [])
     });
   };
-  
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const val = e.target.value;
@@ -130,7 +130,7 @@ export const TabEdit: React.FC<Props> = (props) => {
       </FormControl>
       {getUrl()}
       {
-      getPage()
+        getPage()
       }
 
       <Dialog open={isModalOpen}>

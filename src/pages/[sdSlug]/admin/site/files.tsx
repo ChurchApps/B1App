@@ -14,7 +14,7 @@ export default function Files(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [pendingFileSave, setPendingFileSave] = useState(false);
   const [files, setFiles] = useState<FileInterface[]>(null);
-  
+
   let usedSpace = 0;
   files?.forEach(f => usedSpace += f.size);
 
@@ -47,7 +47,7 @@ export default function Files(props: WrapperPageProps) {
   }
 
   const getStorage = () => {
-    
+
     const percent = usedSpace / 100000000;
     return (
       <>
@@ -66,8 +66,8 @@ export default function Files(props: WrapperPageProps) {
     );
   }
 
-  useEffect(() => { 
-    if (!isAuthenticated) router.push("/login"); 
+  useEffect(() => {
+    if (!isAuthenticated) router.push("/login");
     else ApiHelper.get("/files", "ContentApi").then(d => setFiles(d));
   }, []);
 
@@ -111,15 +111,15 @@ export default function Files(props: WrapperPageProps) {
           </InputBox>
         </Grid>
       </Grid>
-      
-      
-      
+
+
+
     </AdminWrapper>
   );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking" };
 };
 

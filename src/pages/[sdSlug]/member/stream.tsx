@@ -16,7 +16,7 @@ export default function Stream(props: WrapperPageProps) {
 
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking", };
 };
 

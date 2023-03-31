@@ -7,7 +7,6 @@ export class StreamingServiceHelper {
   static currentService: StreamingServiceExtendedInterface | null;
   static timer: NodeJS.Timeout;
 
-  
   static checkService() {
     let cs;
     if (ChatConfigHelper.current !== undefined) {

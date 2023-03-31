@@ -10,23 +10,23 @@ export default function Admin(props: WrapperPageProps) {
 
   return (
     <Wrapper config={props.config}>
-      {UserHelper.user?.firstName ? (
-        getContent()
-      ) : (
-        <>
-          <h1>Member Directory</h1>
-          <h3 className="text-center w-100">
+      {UserHelper.user?.firstName
+        ? (getContent())
+        : (
+          <>
+            <h1>Member Directory</h1>
+            <h3 className="text-center w-100">
             Please <Link href="/login/?returnUrl=/member/directory">Login</Link>{" "}
             to view Directory.
-          </h3>
-        </>
-      )}
+            </h3>
+          </>
+        )}
     </Wrapper>
   );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any = [];
   return { paths, fallback: "blocking" };
 };
 

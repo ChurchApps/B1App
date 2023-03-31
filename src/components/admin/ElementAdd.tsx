@@ -21,7 +21,7 @@ export function ElementAdd(props: Props) {
      <p><b>Components:</b></p>
         <Grid container spacing={3}>
           <AddableElement dndType="elementBlock" elementType="row" icon="table_chart" label="3 Columns with Text" />
-        </Grid> 
+        </Grid>
   */
 
   const Blocks = () => {
@@ -35,7 +35,7 @@ export function ElementAdd(props: Props) {
   //<AddableElement dndType="element" elementType="buttonLink" icon="smart_button" label="Button" />
   return (
     <>
-      <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article" >
+      <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article">
         <p>Drag and drop onto page<br /></p>
         <Accordion sx={{ mt: 2 }}>
           <AccordionSummary

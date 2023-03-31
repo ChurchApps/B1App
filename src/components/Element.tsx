@@ -78,8 +78,8 @@ export const Element: React.FC<Props> = props => {
       result = <NonAuthDonation key={props.element.id} churchId={props.church?.id ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
       break;
     case "stream":
-        result = <StreamElement key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} church={props.church} editMode={ props.onEdit !== undefined } />
-        break;
+      result = <StreamElement key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} church={props.church} editMode={ props.onEdit !== undefined } />
+      break;
     case "iframe":
       result = <IframeElement key={props.element.id} element={props.element as ElementInterface} />
       break;
@@ -122,7 +122,7 @@ export const Element: React.FC<Props> = props => {
       </div>
       {result}
     </div>
-      {props.onEdit && getAddElement(props.element.sort + 0.1)}
+    {props.onEdit && getAddElement(props.element.sort + 0.1)}
     </>
   }
   return <div style={{ position: "relative" }}>{result}</div>;

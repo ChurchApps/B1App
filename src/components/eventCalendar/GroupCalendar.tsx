@@ -25,7 +25,7 @@ export function GroupCalendar(props: Props) {
       description: "Doors open 30 minutes before show"
     }
   ]
-  
+
   return (
     <EventCalendar events={events} editGroupId={(props.canEdit) ? props.groupId : "" } />
   );

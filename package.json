@@ -59,6 +59,7 @@
     "@types/draftjs-to-html": "^0.8.1",
     "@types/gtag.js": "0.0.8",
     "@types/html-to-draftjs": "^1.4.0",
+    "@types/js-cookie": "^3.0.3",
     "@types/markdown-draft-js": "^2.2.4",
     "@types/react": "^18.0.25",
     "@types/react-big-calendar": "^1.6.3",

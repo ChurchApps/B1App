@@ -23,23 +23,25 @@ export default function Checkin(props: WrapperPageProps) {
 
   return (
     <Wrapper config={props.config}>
-      {UserHelper.user?.firstName ? (
-        <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
-            {content}
+      {UserHelper.user?.firstName
+        ? (
+          <Grid container spacing={3}>
+            <Grid item md={8} xs={12}>
+              {content}
+            </Grid>
           </Grid>
-        </Grid>
-      ) : (
-        <h3 className="text-center w-100">
+        )
+        : (
+          <h3 className="text-center w-100">
           Please <Link href="/login/?returnUrl=/member/checkin">Login</Link> to checkin.
-        </h3>
-      )}
+          </h3>
+        )}
     </Wrapper>
   );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking", };
 };
 ;

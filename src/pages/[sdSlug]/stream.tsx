@@ -17,7 +17,7 @@ export default function Stream(props: Props) {
   const includeHeader = hideHeader !== "1";
 
   return (<>
-  <Theme appearance={props.churchSettings} />  
+    <Theme appearance={props.churchSettings} />
     <div id="streamRoot">
       <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} includeHeader={includeHeader} includeInteraction={true} />
     </div>
@@ -25,7 +25,7 @@ export default function Stream(props: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
 
   return { paths, fallback: "blocking", };
 };
@@ -37,7 +37,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
 
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi");
-  
+
 
 
   return {

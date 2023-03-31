@@ -29,49 +29,51 @@ export default function Groups(props: WrapperPageProps) {
     <Wrapper config={props.config}>
       <h1>My Groups</h1>
       <Grid container spacing={3}>
-        {groups?.length > 0 ? (
-          groups.map((group) => (
-            <Grid item md={4} xs={12}>
-              <Link href={"/member/groups/" + group.id}>
-                <div style={{ backgroundColor: "#000000", width: "100%", aspectRatio: "4" }}>
-                  <div style={{ position: "relative" }}>
-                    <div
-                      style={{
-                        textAlign: "center",
-                        position: "absolute",
-                        zIndex: 9999,
-                        width: "100%",
-                        aspectRatio: "4",
-                        paddingTop: 30,
-                      }}
-                    >
-                      <Typography sx={{ fontSize: 34, color: "#FFFFFF" }} style={{ color: "#FFF" }}>
-                        {group.name}
-                      </Typography>
+        {groups?.length > 0
+          ? (
+            groups.map((group) => (
+              <Grid item md={4} xs={12}>
+                <Link href={"/member/groups/" + group.id}>
+                  <div style={{ backgroundColor: "#000000", width: "100%", aspectRatio: "4" }}>
+                    <div style={{ position: "relative" }}>
+                      <div
+                        style={{
+                          textAlign: "center",
+                          position: "absolute",
+                          zIndex: 9999,
+                          width: "100%",
+                          aspectRatio: "4",
+                          paddingTop: 30,
+                        }}
+                      >
+                        <Typography sx={{ fontSize: 34, color: "#FFFFFF" }} style={{ color: "#FFF" }}>
+                          {group.name}
+                        </Typography>
+                      </div>
                     </div>
+                    {group.photoUrl && (
+                      <img
+                        id="tabImage"
+                        src={group.photoUrl}
+                        alt="tab"
+                        style={{ cursor: "pointer", opacity: 0.7, width: "100%" }}
+                      />
+                    )}
                   </div>
-                  {group.photoUrl && (
-                    <img
-                      id="tabImage"
-                      src={group.photoUrl}
-                      alt="tab"
-                      style={{ cursor: "pointer", opacity: 0.7, width: "100%" }}
-                    />
-                  )}
-                </div>
-              </Link>
-            </Grid>
-          ))
-        ) : (
-          <p>No groups found</p>
-        )}
+                </Link>
+              </Grid>
+            ))
+          )
+          : (
+            <p>No groups found</p>
+          )}
       </Grid>
     </Wrapper>
   );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking", };
 };
 

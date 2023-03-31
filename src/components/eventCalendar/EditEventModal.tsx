@@ -13,7 +13,7 @@ export function EditEventModal(props: Props) {
   const handleSave = () => {
     props.onDone();
   }
-  
+
   return (
     <Dialog open={true} onClose={props.onDone}>
       <DialogContent>
@@ -30,6 +30,6 @@ export function EditEventModal(props: Props) {
           </Grid>
         </InputBox>
       </DialogContent>
-  </Dialog>
+    </Dialog>
   );
 }

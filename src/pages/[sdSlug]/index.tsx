@@ -23,7 +23,7 @@ export default function Home(props: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
 
   return { paths, fallback: "blocking", };
 };
