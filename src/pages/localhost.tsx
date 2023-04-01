@@ -21,7 +21,7 @@ export default function Localhost() {
       <br />
       <Link href="http://ironwood.localhost:3000/admin">Admin</Link>
       <br />
-      <GroupCalendar groupId="1234567890a" canEdit={false} />
+      <GroupCalendar groupId="1234567890a" canEdit={true} />
       <br />
       <h3>Editor</h3>
       <MarkdownEditor value={val} onChange={(v) => {
