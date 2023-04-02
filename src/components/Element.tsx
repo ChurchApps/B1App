@@ -18,6 +18,7 @@ import { FormElement } from "./elementTypes/FormElement";
 import { FaqElement } from "./elementTypes/FaqElement";
 import { MapElement } from "./elementTypes/MapElement";
 import { SermonElement } from "./elementTypes/SermonElement";
+import { CarouselElement } from "./elementTypes/CarouselElement";
 
 interface Props {
   element: ElementInterface;
@@ -101,6 +102,9 @@ export const Element: React.FC<Props> = props => {
     case "sermons":
       result = <SermonElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} />
       break;
+    case "carousel":
+      result = <CarouselElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
+      break;  
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
