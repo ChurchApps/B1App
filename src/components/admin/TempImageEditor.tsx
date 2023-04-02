@@ -46,7 +46,7 @@ export const TempImageEditor: React.FC<Props> = (props) => {
       const data = cropper.current.getCropBoxData();
       const ratio = parseInt((300.0 / data.height).toString());
       const width = data.width * ratio;
-      let url = cropper.current.getCroppedCanvas({ width: props.name!== "favicon" ? width : 400, height: props.name !== "favicon" ? 300 : 400 }).toDataURL();
+      let url = cropper.current.getCroppedCanvas({ width: width, height: 300 }).toDataURL();
       setDataUrl(url);
     }
   }
