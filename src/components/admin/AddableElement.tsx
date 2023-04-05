@@ -1,4 +1,3 @@
-import { CenterFocusStrong } from "@mui/icons-material";
 import { Grid, Icon } from "@mui/material";
 import React from "react";
 import { useDrag } from 'react-dnd'
@@ -19,7 +18,7 @@ export function AddableElement(props: Props) {
       let result = {
         type: props.dndType,
         item: { elementType: props.elementType, blockId: props.blockId },
-        collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
+        collect: (monitor:any) => ({ isDragging: !!monitor.isDragging() }),
       }
       return result;
     },

@@ -59,10 +59,10 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
     let rows: JSX.Element[] = [];
     tabs.forEach((tab) => {
       const upLink = (idx === 0)
-        ? null 
+        ? null
         : (<a href="about:blank" data-idx={idx} onClick={moveUp}><Icon>arrow_upward</Icon></a>);
-      const downLink = (idx === tabs.length - 1) 
-        ? null 
+      const downLink = (idx === tabs.length - 1)
+        ? null
         : (<a href="about:blank" data-idx={idx} onClick={moveDown}><Icon>arrow_downward</Icon></a>);
       rows.push(
         <tr key={idx}>
@@ -76,7 +76,7 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
           <td style={{ textAlign: "right" }}>
             {upLink}
             {downLink}
-            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentTab(tab); }} >
+            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentTab(tab); }}>
               <Icon>edit</Icon>
             </a>
           </td>

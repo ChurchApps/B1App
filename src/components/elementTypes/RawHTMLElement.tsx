@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const RawHTMLElement = ({ element, onEdit }: Props) => {
-  
+
   const emptyStyle = { minHeight: 50 }
 
   return (

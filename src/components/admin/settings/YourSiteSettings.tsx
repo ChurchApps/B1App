@@ -30,12 +30,12 @@ export function YourSiteSettings() {
       return;
     }
 
-    ApiHelper.get("/pages", "ContentApi").then((_pages) => { 
-      let filteredPages = [];
-      _pages.forEach(p => { 
-        if (!p.url.startsWith("/stream/") && !p.url.startsWith("/member/")) filteredPages.push(p); 
+    ApiHelper.get("/pages", "ContentApi").then((_pages) => {
+      let filteredPages:PageInterface[] = [];
+      _pages.forEach((p:PageInterface) => {
+        if (!p.url.startsWith("/stream/") && !p.url.startsWith("/member/")) filteredPages.push(p);
       });
-      setPages(filteredPages || []) 
+      setPages(filteredPages || [])
     });
     ApiHelper.get("/blocks", "ContentApi").then((b) => setBlocks(b || []));
   };
@@ -136,11 +136,11 @@ export function YourSiteSettings() {
           />
         )}
         {editBlock && (<BlockEdit block={editBlock}
-            updatedCallback={() => {
-              setEditBlock(null);
-              loadData();
-            }}
-          />
+          updatedCallback={() => {
+            setEditBlock(null);
+            loadData();
+          }}
+        />
         )}
         <Links />
         <Appearance />

@@ -31,26 +31,30 @@ export const MapElement = ({ element }: Props) => {
   return (
     <>
       {" "}
-      {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={element.answers.mapZoom || 15}
-        >
-          {center && element.answers.mapLabel ? (
-            <Marker
-              position={center}
-              label={{
-                text: element.answers.mapLabel,
-                fontWeight: "600",
-                fontSize: "20px",
-              }}
-            />
-          ) : null}
-        </GoogleMap>
-      ) : (
-        <Loading />
-      )}
+      {isLoaded
+        ? (
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={element.answers.mapZoom || 15}
+          >
+            {center && element.answers.mapLabel
+              ? (
+                <Marker
+                  position={center}
+                  label={{
+                    text: element.answers.mapLabel,
+                    fontWeight: "600",
+                    fontSize: "20px",
+                  }}
+                />
+              )
+              : null}
+          </GoogleMap>
+        )
+        : (
+          <Loading />
+        )}
     </>
   );
 };

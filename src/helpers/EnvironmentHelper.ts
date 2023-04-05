@@ -32,7 +32,7 @@ export class EnvironmentHelper {
 
   //NOTE: None of these values are secret.
   static initProd = () => {
-
+    EnvironmentHelper.Common.GoogleAnalyticsTag = "G-XYCPBKWXB5";
   };
 
 }

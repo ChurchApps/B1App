@@ -9,7 +9,6 @@ import { ChatName } from "./chat";
 import { StreamingNavItems } from "./StreamingNavItems";
 import { Permissions } from "@/helpers/interfaces";
 
-
 interface Props {
   user: UserInterface,
   config?: StreamConfigInterface,
@@ -64,7 +63,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     else return null;
   }
 
-  let imgSrc = (props.appearance) 
+  let imgSrc = (props.appearance)
     ? AppearanceHelper.getLogo(props.appearance, "images/logo-header.png", "/images/logo.png", props.appearance?.primaryColor || "#FFF")
     : "";
 

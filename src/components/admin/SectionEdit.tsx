@@ -15,8 +15,7 @@ export function SectionEdit(props: Props) {
   const [section, setSection] = useState<SectionInterface>(null);
   const [errors, setErrors] = useState([]);
   const [selectPhotoField, setSelectPhotoField] = useState<string>(null);
-  var parsedData = (section?.answersJSON) ? JSON.parse(section.answersJSON) : {}
-
+  let parsedData = (section?.answersJSON) ? JSON.parse(section.answersJSON) : {}
 
   const handleCancel = () => props.updatedCallback(section);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -57,7 +56,7 @@ export function SectionEdit(props: Props) {
   }
 
   const validate = () => {
-    let errors = [];
+    let errors:string[] = [];
     setErrors(errors);
     return errors.length === 0;
   };
@@ -77,7 +76,7 @@ export function SectionEdit(props: Props) {
     }
   };
 
-  
+
   useEffect(() => {
     const loadBlocks = async () => {
       if (props.section.targetBlockId) {
@@ -148,21 +147,19 @@ export function SectionEdit(props: Props) {
     );
   }
 
-  const getStandardFields = () => {
-    return (<>
-      <ErrorMessages errors={errors} />
-      <br />
-      {getBackgroundField()}
-      <FormControl fullWidth>
-        <InputLabel>Text Color</InputLabel>
-        <Select fullWidth size="small" label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
-          <MenuItem value="light">Light</MenuItem>
-          <MenuItem value="dark">Dark</MenuItem>
-        </Select>
-      </FormControl>
-      <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
-    </>)
-  }
+  const getStandardFields = () => (<>
+    <ErrorMessages errors={errors} />
+    <br />
+    {getBackgroundField()}
+    <FormControl fullWidth>
+      <InputLabel>Text Color</InputLabel>
+      <Select fullWidth size="small" label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
+        <MenuItem value="light">Light</MenuItem>
+        <MenuItem value="dark">Dark</MenuItem>
+      </Select>
+    </FormControl>
+    <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
+  </>)
 
   const getBlockFields = () => {
     let options: JSX.Element[] = [];
@@ -182,7 +179,7 @@ export function SectionEdit(props: Props) {
   if (!section) return <></>
   else return (
     <>
-      <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
+      <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
         {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={4} />}

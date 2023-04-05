@@ -37,7 +37,7 @@ export default function Admin(props: WrapperPageProps) {
       </h1>
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
-          {(importMode) 
+          {(importMode)
             ? <Import handleDone={() => { setImportMode(false); }} />
             : <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
           }
@@ -56,7 +56,7 @@ export default function Admin(props: WrapperPageProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking" };
 };
 

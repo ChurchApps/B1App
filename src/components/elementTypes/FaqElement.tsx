@@ -45,19 +45,17 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   marginLeft: theme.spacing(1),
 }));
 
-export const FaqElement = ({ element }: Props) => {
-  return (
-    <>
-      <Accordion>
-        <AccordionSummary>
-          <Typography variant="h6" fontWeight={600}>
-            {element?.answers?.title}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <MarkdownPreview value={element?.answers?.description} />
-        </AccordionDetails>
-      </Accordion>
-    </>
-  );
-};
+export const FaqElement = ({ element }: Props) => (
+  <>
+    <Accordion>
+      <AccordionSummary>
+        <Typography variant="h6" fontWeight={600}>
+          {element?.answers?.title}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <MarkdownPreview value={element?.answers?.description} />
+      </AccordionDetails>
+    </Accordion>
+  </>
+);

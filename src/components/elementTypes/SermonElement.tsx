@@ -31,7 +31,7 @@ export const SermonElement = ({ churchId }: Props) => {
     });
   }, []);
 
-  const getFilteredData = (id) => {
+  const getFilteredData = (id:string) => {
     const filteredData = sermons.filter((item) => item.playlistId === id);
     setActiveSermons(filteredData);
   };
@@ -55,101 +55,97 @@ export const SermonElement = ({ churchId }: Props) => {
         </Button>
         {activePlaylist?.title && (
           <Button
-          size="small"
-          startIcon={<TopicIcon />}
-          variant={isActive === "sermons" ? "contained" : "text"}
-          color={isActive === "sermons" ? "primary" : "secondary"}
-          sx={{ borderRadius: 3 }}
-          onClick={() => {
-            setIsActive("sermons");
-          }}
+            size="small"
+            startIcon={<TopicIcon />}
+            variant={isActive === "sermons" ? "contained" : "text"}
+            color={isActive === "sermons" ? "primary" : "secondary"}
+            sx={{ borderRadius: 3 }}
+            onClick={() => {
+              setIsActive("sermons");
+            }}
           >
-          {activePlaylist?.title}
+            {activePlaylist?.title}
           </Button>
         )}
         {activeVideo?.title && (
           <Button
-          size="small"
-          startIcon={<LiveTvIcon />}
-          variant={isActive === "video" ? "contained" : "text"}
-          color={isActive === "video" ? "primary" : "secondary"}
-          sx={{ borderRadius: 3 }}
-          onClick={() => {
-            setIsActive("video");
-          }}
+            size="small"
+            startIcon={<LiveTvIcon />}
+            variant={isActive === "video" ? "contained" : "text"}
+            color={isActive === "video" ? "primary" : "secondary"}
+            sx={{ borderRadius: 3 }}
+            onClick={() => {
+              setIsActive("video");
+            }}
           >
-          {activeVideo?.title}
+            {activeVideo?.title}
           </Button>
-          )}
+        )}
       </Breadcrumbs>
       <div style={{ marginTop: 15 }}>
         {isActive === "playlists" && (
-          <Grid container spacing={3} style={{ paddingBottom: 20, paddingTop: 20 }} >
-            {playlists.map((item) => {
-              return (
-                <Grid item md={4} xs={12}>
-                  <Card
-                    key={item.id}
-                    sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}
-                    onClick={() => {
-                      setActiveplaylist(item);
-                      setIsActive("sermons");
-                      getFilteredData(item.id);
-                    }}
-                  >
-                    <CardContent>
-                      <Image
-                        src={item.thumbnail || ""}
-                        alt={item.title}
-                        width={635}
-                        height={360}
-                        style={{ height: "auto" }}
-                      />
-                      <Typography
-                        component="h3"
-                        sx={{ fontSize: "24px", fontWeight: 500, marginBottom: "2px", marginTop: "6px", color: "#333", overflowY: "hidden", maxHeight: 30 }}
-                      >
-                        {item.title}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            })}
+          <Grid container spacing={3} style={{ paddingBottom: 20, paddingTop: 20 }}>
+            {playlists.map((item) => (
+              <Grid item md={4} xs={12}>
+                <Card
+                  key={item.id}
+                  sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}
+                  onClick={() => {
+                    setActiveplaylist(item);
+                    setIsActive("sermons");
+                    getFilteredData(item.id);
+                  }}
+                >
+                  <CardContent>
+                    <Image
+                      src={item.thumbnail || ""}
+                      alt={item.title}
+                      width={635}
+                      height={360}
+                      style={{ height: "auto" }}
+                    />
+                    <Typography
+                      component="h3"
+                      sx={{ fontSize: "24px", fontWeight: 500, marginBottom: "2px", marginTop: "6px", color: "#333", overflowY: "hidden", maxHeight: 30 }}
+                    >
+                      {item.title}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
         )}
         {isActive === "sermons" && activeSermons && (
           <Grid container spacing={3} style={{ paddingBottom: 20, paddingTop: 20 }}>
-            {activeSermons.map((item) => {
-              return (
-                <Grid item md={4} xs={12}>
-                  <Card
-                    key={item.id}
-                    sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}
-                    onClick={() => {
-                      setIsActive("video");
-                      setActiveVideo(item);
-                    }}
-                  >
-                    <CardContent>
-                      <img
-                        src={item.thumbnail || ""}
-                        alt={item.title}
-                        width={635}
-                        height={360}
-                        style={{ height: "auto" }}
-                      />
-                      <Typography
-                        component="h3"
-                        sx={{ fontSize: "24px", fontWeight: 500, marginBottom: "2px", marginTop: "6px", color: "#333", overflowY: "hidden", maxHeight: 30 }}
-                      >
-                        {item.title}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            })}
+            {activeSermons.map((item) => (
+              <Grid item md={4} xs={12}>
+                <Card
+                  key={item.id}
+                  sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}
+                  onClick={() => {
+                    setIsActive("video");
+                    setActiveVideo(item);
+                  }}
+                >
+                  <CardContent>
+                    <img
+                      src={item.thumbnail || ""}
+                      alt={item.title}
+                      width={635}
+                      height={360}
+                      style={{ height: "auto" }}
+                    />
+                    <Typography
+                      component="h3"
+                      sx={{ fontSize: "24px", fontWeight: 500, marginBottom: "2px", marginTop: "6px", color: "#333", overflowY: "hidden", maxHeight: 30 }}
+                    >
+                      {item.title}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
         )}
         {isActive === "video" && activeVideo && (

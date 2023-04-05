@@ -18,14 +18,12 @@ export function FileUpload(props: Props) {
     setUploadedFile(e.target.files[0]);
   };
 
-  const convertBase64 = () => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(uploadedFile);
-      fileReader.onload = () => { resolve(fileReader.result); };
-      fileReader.onerror = (error) => { reject(error); };
-    });
-  };
+  const convertBase64 = () => new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(uploadedFile);
+    fileReader.onload = () => { resolve(fileReader.result); };
+    fileReader.onerror = (error) => { reject(error); };
+  });
 
   const handleSave = async () => {
     const f = { ...file };
