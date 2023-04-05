@@ -16,7 +16,7 @@ EnvironmentHelper.init();
 function MyApp({ Component, pageProps }: AppProps) {
   const location = (typeof(window) === "undefined") ? null : window.location;
   AnalyticsHelper.init();
-  React.useEffect(() => { AnalyticsHelper.logPageView }, [location]);
+  React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
   return (
     <UserProvider>
