@@ -7,6 +7,7 @@ import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PersonHelper } from "@/appBase/helpers";
+import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 
 export default function GroupPage(props: WrapperPageProps) {
   const [group, setGroup] = useState<GroupInterface>(null);
@@ -103,6 +104,11 @@ export default function GroupPage(props: WrapperPageProps) {
                 <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
                   <MarkdownPreview value={group.about} />
                 </div>
+                {(false) && <DisplayBox headerText="Group Calendar">
+                  <GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={true} />
+                </DisplayBox>
+                }
+                <br />
                 <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
               </>
             )
