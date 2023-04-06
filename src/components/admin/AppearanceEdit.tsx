@@ -1,13 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
+import Resizer from "react-image-file-resizer";
 import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
 import { InputBox } from "..";
 import { ImageEditor } from "@/appBase/components";
-import { TempImageEditor } from "./TempImageEditor";
 
 interface Props {
   updatedFunction?: () => void,
   settings?: GenericSettingInterface[],
+}
+
+async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File> {
+  const res: Response = await fetch(dataUrl);
+  const blob: Blob = await res.blob();
+  return new File([blob], fileName, { type: 'image/png' });
+}
+
+function populateFavicon ( settings?: GenericSettingInterface[] ) {
+  const favicon_16x16_keySetting = settings.filter(s => s.keyName === "favicon_16x16");
+  const favicon_400x400_keySetting = settings.filter(s => s.keyName === "favicon_400x400");
+
+  //Resize only if the Favicon_400x400 is available
+  if (favicon_400x400_keySetting[0].value !== ""){
+    dataUrlToFile(favicon_400x400_keySetting[0].value, "favicon_16x16").then((data: File) => {
+      Resizer.imageFileResizer(
+        data,
+        16,
+        16,
+        "PNG",
+        16,
+        0,
+        (uri) => {
+          //Create Favicon_16x16 object, if not there
+          if(favicon_16x16_keySetting.length === 0){
+            settings.push({keyName: "favicon_16x16", value: uri.toString(), public: 1})
+          } else {
+            //Insert resized value, if already there
+            favicon_16x16_keySetting[0].value = uri.toString();
+          }
+        },
+        "base64",
+        16,
+        16,
+      )
+    })
+  }
+
+  //Remove if Favicon_400x400 is empty
+  if (favicon_400x400_keySetting[0].value === ""){
+    favicon_16x16_keySetting[0].value = ""
+  }
 }
 
 export const AppearanceEdit: React.FC<Props> = (props) => {
@@ -44,19 +86,25 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
       if (keySetting.length === 0) {
         settings.push({ keyName, value: dataUrl, public: 1 });
+        if (keyName === "favicon_400x400"){
+          populateFavicon(settings)
+        }
       } else {
         keySetting[0].value = dataUrl;
+        if(keySetting[0].keyName === "favicon_400x400"){
+          populateFavicon(settings)
+        }
       }
-
       setCurrentSettings(settings);
       setCurrentUrl(dataUrl);
     }
     setEditLogo(false);
+    setCurrentUrl(null)
   }
 
   const getLogoEditor = (logoName: string) => {
     if (!editLogo) return null;
-    else return <ImageEditor photoUrl={currentUrl} onUpdate={(dataUrl) => { imageUpdated(dataUrl, logoName) }} onCancel={() => setCurrentUrl(null)} aspectRatio={ currentEditLogo === "favicon" ? 1 : 4} outputWidth={currentEditLogo === "favicon" ? 400 : 1200} outputHeight={currentEditLogo === "favicon" ? 400 : 300} />
+    else return <ImageEditor photoUrl={currentUrl} onUpdate={(dataUrl) => { imageUpdated(dataUrl, logoName) }} onCancel={() => { setEditLogo(false); setCurrentUrl(null); }} aspectRatio={ currentEditLogo.includes("favicon") ? 1 : 4 } outputWidth={ currentEditLogo.includes("favicon") ? 400 : 1200 } outputHeight={ currentEditLogo.includes("favicon") ? 400 : 300 } />
   }
 
   const getLogoLink = (name: string, backgroundColor: string) => {
@@ -93,8 +141,8 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
         <div style={{ backgroundColor: "#bbdefb", padding: 10, color: "#FFF" }}>
           <label>Favicon</label>
-          <p style={{ color: "#999", fontSize: 12 }}>Upload logo with a transparent background.</p>
-          {getLogoLink("favicon", "#bbdefb")}
+          <p style={{ color: "#999", fontSize: 12 }}>Upload square logo with a transparent background.The ideal size is 400 pixels wide by 400 pixels high.</p>
+          {getLogoLink("favicon_400x400", "#bbdefb")}
         </div>
         <hr />
 

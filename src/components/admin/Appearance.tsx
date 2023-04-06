@@ -19,7 +19,7 @@ export const Appearance: React.FC<Props> = (props) => {
     let logoSrc;
     if(logoName === "logoLight") logoSrc = AppearanceHelper.getLogoLight(styles, "/images/sample-logo-header.png");
     if(logoName === "logoDark") logoSrc = AppearanceHelper.getLogoDark(styles, "/images/sample-logo-header.png");
-    if(logoName === "favicon") logoSrc = AppearanceHelper.getFavicon(styles, "/images/about-bg.jpg");
+    if(logoName === "favicon_400x400") logoSrc = AppearanceHelper.getFavicon(styles, "400");
     let logoImg = (styles && logoSrc !== null && logoSrc !== undefined) ? <img src={logoSrc} alt="logo" /> : null;
     return logoImg
   }
@@ -51,9 +51,9 @@ export const Appearance: React.FC<Props> = (props) => {
         {getLogo("logoDark")}
       </div>
 
-      {styles?.favicon &&
+      {styles?.favicon_400x400 &&
         <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF" }}>
-          {getLogo("favicon")}
+          {getLogo("favicon_400x400")}
         </div>
       }
 
