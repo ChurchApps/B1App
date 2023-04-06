@@ -76,7 +76,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
       <Carousel
         height={parseInt(element.answers.height) || 250}
         animation={element.answers.animationOptions}
-        autoPlay={element.answers.autoplay === "true" ? true : false}
+        autoPlay={element.answers.autoplay === "true" && !onEdit ? true : false}
         fullHeightHover={false}
         navButtonsAlwaysVisible
       >
