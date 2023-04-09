@@ -16,40 +16,26 @@ async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File
   return new File([blob], fileName, { type: 'image/png' });
 }
 
-function populateFavicon ( settings?: GenericSettingInterface[] ) {
-  const favicon_16x16_keySetting = settings.filter(s => s.keyName === "favicon_16x16");
-  const favicon_400x400_keySetting = settings.filter(s => s.keyName === "favicon_400x400");
-
-  //Resize only if the Favicon_400x400 is available
-  if (favicon_400x400_keySetting[0].value !== ""){
-    dataUrlToFile(favicon_400x400_keySetting[0].value, "favicon_16x16").then((data: File) => {
+function resizeTo16x16(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    try {
       Resizer.imageFileResizer(
-        data,
+        file,
         16,
         16,
         "PNG",
         16,
         0,
-        (uri) => {
-          //Create Favicon_16x16 object, if not there
-          if(favicon_16x16_keySetting.length === 0){
-            settings.push({keyName: "favicon_16x16", value: uri.toString(), public: 1})
-          } else {
-            //Insert resized value, if already there
-            favicon_16x16_keySetting[0].value = uri.toString();
-          }
-        },
+        (uri) => { resolve(uri.toString()) },
         "base64",
         16,
         16,
       )
-    })
-  }
-
-  //Remove if Favicon_400x400 is empty
-  if (favicon_400x400_keySetting[0].value === ""){
-    favicon_16x16_keySetting[0].value = ""
-  }
+    } catch (err) {
+      console.error("Error in resizing file")
+      reject()
+    }
+  })
 }
 
 export const AppearanceEdit: React.FC<Props> = (props) => {
@@ -79,32 +65,59 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
   useEffect(init, [currentEditLogo]);
 
-  const imageUpdated = (dataUrl: string, keyName: string) => {
+  const get16x16ImageUri = async (dataUrl: string) => {
+    const file = await dataUrlToFile(dataUrl, "favicon_16x16");
+    const uri = await resizeTo16x16(file);
+    return uri;
+  }
+
+  const imageUpdated = async (dataUrl: string, keyName: string) => {
     if (dataUrl !== null) {
       const settings = [...currentSettings];
       const keySetting = settings.filter(s => s.keyName === keyName);
 
       if (keySetting.length === 0) {
         settings.push({ keyName, value: dataUrl, public: 1 });
-        if (keyName === "favicon_400x400"){
-          populateFavicon(settings)
-        }
       } else {
         keySetting[0].value = dataUrl;
-        if(keySetting[0].keyName === "favicon_400x400"){
-          populateFavicon(settings)
+      }
+
+      if (keyName === "favicon_400x400") {
+        const index = settings.findIndex(s => s.keyName === "favicon_16x16");
+        const imageDataUrl = await get16x16ImageUri(dataUrl)
+        if (index !== -1) {
+          settings[index].value = imageDataUrl;
+        } else {
+          settings.push({ keyName: "favicon_16x16", value: imageDataUrl, public: 1 })
         }
       }
+
       setCurrentSettings(settings);
-      setCurrentUrl(dataUrl);
     }
     setEditLogo(false);
     setCurrentUrl(null)
   }
 
   const getLogoEditor = (logoName: string) => {
-    if (!editLogo) return null;
-    else return <ImageEditor photoUrl={currentUrl} onUpdate={(dataUrl) => { imageUpdated(dataUrl, logoName) }} onCancel={() => { setEditLogo(false); setCurrentUrl(null); }} aspectRatio={ currentEditLogo.includes("favicon") ? 1 : 4 } outputWidth={ currentEditLogo.includes("favicon") ? 400 : 1200 } outputHeight={ currentEditLogo.includes("favicon") ? 400 : 300 } />
+    if (!editLogo) {
+      return null
+    } else {
+      return (
+        <ImageEditor
+          photoUrl={currentUrl}
+          onUpdate={(dataUrl) => {
+            imageUpdated(dataUrl, logoName)
+          }}
+          onCancel={() => { 
+            setEditLogo(false);
+            setCurrentUrl(null);
+          }}
+          aspectRatio={currentEditLogo.includes("favicon") ? 1 : 4}
+          outputWidth={currentEditLogo.includes("favicon") ? 400 : 1200}
+          outputHeight={currentEditLogo.includes("favicon") ? 400 : 300}
+        />
+      )
+    }
   }
 
   const getLogoLink = (name: string, backgroundColor: string) => {
