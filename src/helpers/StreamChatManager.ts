@@ -16,7 +16,7 @@ export class StreamChatManager {
       ChatHelper.current.mainRoom.joined = true;
     }
   }
-  
+
   public static handleNameUpdate(displayName: string) {
     //const displayName = `${firstName} ${lastName}`
     const data = { socketId: SocketHelper.socketId, name: displayName };
@@ -27,7 +27,7 @@ export class StreamChatManager {
     ChatHelper.onChange();
   }
 
-  
+
   public static async checkHost(d: StreamConfigInterface, currentServiceId:string, chatState: ChatStateInterface, setChatState:(state: ChatStateInterface) => void) {
     if (chatState?.user?.isHost) {
       const hostChatDetails = await ApiHelper.get("/streamingServices/" + currentServiceId + "/hostChat", "ContentApi");

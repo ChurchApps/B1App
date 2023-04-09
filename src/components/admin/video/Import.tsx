@@ -40,20 +40,18 @@ export const Import = (props: Props) => {
     return rows;
   };
 
-  const getTable = () => {
-    return (
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Import</TableCell>
-            <TableCell>Title</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>{getRows()}</TableBody>
-      </Table>
-    );
-  };
-  
+  const getTable = () => (
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell>Import</TableCell>
+          <TableCell>Title</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>{getRows()}</TableBody>
+    </Table>
+  );
+
 
   React.useEffect(() => { loadData(); }, []);
 
@@ -85,9 +83,7 @@ export const Import = (props: Props) => {
         <FormControl fullWidth>
           <InputLabel>Import Into Playlist</InputLabel>
           <Select fullWidth label="Import Into Playlist" name="playlistId" value={playlistId} onChange={(e) => { setPlaylistId(e.target.value); }}>
-            {playlists.map((playlist) => {
-              return (<MenuItem key={playlist.id} value={playlist.id}>{playlist.title}</MenuItem>)
-            })}
+            {playlists.map((playlist) => (<MenuItem key={playlist.id} value={playlist.id}>{playlist.title}</MenuItem>))}
           </Select>
         </FormControl>
         {getTable()}

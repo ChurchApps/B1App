@@ -83,10 +83,10 @@ export const Wrapper: React.FC<Props> = props => {
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
 
-  return <ThemeProvider theme={Themes.BaseTheme} >
+  return <ThemeProvider theme={Themes.BaseTheme}>
     <CssBaseline />
     <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-      <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} appearance={props.config.appearance} >{props.children}</SiteWrapper>
+      <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} appearance={props.config.appearance}>{props.children}</SiteWrapper>
     </Box>
   </ThemeProvider>
 

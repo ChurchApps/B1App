@@ -7,6 +7,7 @@ import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PersonHelper } from "@/appBase/helpers";
+import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 
 export default function GroupPage(props: WrapperPageProps) {
   const [group, setGroup] = useState<GroupInterface>(null);
@@ -93,23 +94,30 @@ export default function GroupPage(props: WrapperPageProps) {
     <Wrapper config={props.config}>
       <Grid container spacing={3} alignItems="flex-start">
         <Grid item md={8} xs={12}>
-          {group ? (
-            <>
-              <h1>{group.name}</h1>
-              {group.photoUrl && ( 
-                <img id="tabImage" src={group.photoUrl} alt={group.name} style={{ maxHeight: 300 }} />
-              )}
-              <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
-                <MarkdownPreview value={group.about} />
-              </div>
-              <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
-            </>
-          ) : (
-            <p>No group data found</p>
-          )}
+          {group
+            ? (
+              <>
+                <h1>{group.name}</h1>
+                {group.photoUrl && (
+                  <img id="tabImage" src={group.photoUrl} alt={group.name} style={{ maxHeight: 300 }} />
+                )}
+                <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
+                  <MarkdownPreview value={group.about} />
+                </div>
+                {(false) && <DisplayBox headerText="Group Calendar">
+                  <GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={true} />
+                </DisplayBox>
+                }
+                <br />
+                <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
+              </>
+            )
+            : (
+              <p>No group data found</p>
+            )}
         </Grid>
         <Grid item md={4} xs={12} sx={{mt: 11}}>
-          <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false} >
+          <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false}>
             {getTable()}
           </DisplayBox>
         </Grid>
@@ -119,7 +127,7 @@ export default function GroupPage(props: WrapperPageProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking" };
 };
 

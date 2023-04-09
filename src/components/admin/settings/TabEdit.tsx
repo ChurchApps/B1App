@@ -38,10 +38,10 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
   };
 
   const onSelect = useCallback((iconName: string) => {
-      let t = { ...currentTab };
-      t.icon = iconName;
-      setCurrentTab(t);
-      setIsModalOpen(false);
+    let t = { ...currentTab };
+    t.icon = iconName;
+    setCurrentTab(t);
+    setIsModalOpen(false);
   }, [currentTab]);
 
   const handlePhotoSelected = (image: string) => {
@@ -62,10 +62,10 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
   };
 
   const loadPages = () => {
-    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => { 
-      let filteredPages = [];
+    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => {
+      let filteredPages:PageInterface[] = [];
       _pages.forEach(p => { if (p.url.startsWith("/member")) filteredPages.push(p); });
-      setPages(filteredPages || []) 
+      setPages(filteredPages || [])
     });
   };
 
@@ -91,9 +91,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
     } else return null;
   }
 
-  const isDisabled = (tabName: string) => {
-    return false;
-  };
+  const isDisabled = (tabName: string) => false;
 
   if (!currentTab) {
     return null;
@@ -101,7 +99,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
 
   return (
     <>
-      <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={updatedFunction} deleteFunction={!UniqueIdHelper.isMissing(currentTab?.id) ? handleDelete : null} >
+      <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={updatedFunction} deleteFunction={!UniqueIdHelper.isMissing(currentTab?.id) ? handleDelete : null}>
         <Typography sx={{ marginTop: 2, marginBottom: 1 }}>Tab Preview:</Typography>
         <div>
           <TabPreview tab={currentTab} />
@@ -120,7 +118,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
         </Stack>
         <FormControl fullWidth>
           <InputLabel id="type">Type</InputLabel>
-          <Select labelId="type" label="Type" id="tabType" name="type" value={currentTab?.linkType || ""} onChange={handleChange} >
+          <Select labelId="type" label="Type" id="tabType" name="type" value={currentTab?.linkType || ""} onChange={handleChange}>
             <MenuItem value="bible" disabled={isDisabled("bible")}>Bible</MenuItem>
             <MenuItem value="checkin" disabled={isDisabled("checkin")}>Checkin</MenuItem>
             <MenuItem value="donation" disabled={isDisabled("donation")}>Donation</MenuItem>
@@ -161,7 +159,7 @@ function TabPreview({ tab }: TabPreviewProps) {
 
   return (
     <div style={{ backgroundColor: "#000000", width: width, height: height, marginBottom: 10 }}>
-      <div style={{ textAlign: "center", position: "absolute", zIndex: 9999, width: width, height: height, paddingTop: (height - 38) / 2 }} >
+      <div style={{ textAlign: "center", position: "absolute", zIndex: 9999, width: width, height: height, paddingTop: (height - 38) / 2 }}>
         <Typography sx={{ fontSize: 34, color: "#FFFFFF" }} style={{ color: "#FFF" }}>
           {tab?.text}
         </Typography>

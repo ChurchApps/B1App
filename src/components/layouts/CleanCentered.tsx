@@ -42,7 +42,7 @@ export function CleanCentered(props: Props) {
           {getDescription()}
         </Head>
 
-        <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }} >
+        <Box sx={{ backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
           <Box sx={{ maxWidth: "930px", margin: "auto", paddingY: "72px" }}>
             <Card>
               <main>

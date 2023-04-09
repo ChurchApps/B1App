@@ -21,7 +21,7 @@ export function ElementEdit(props: Props) {
   const [element, setElement] = useState<ElementInterface>(null);
   const [errors, setErrors] = useState([]);
   const [innerErrors, setInnerErrors] = useState([]);
-  var parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
+  let parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
 
   const handleCancel = () => props.updatedCallback(element);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -144,11 +144,11 @@ export function ElementEdit(props: Props) {
       let options: JSX.Element[] = [];
       blocks?.forEach(b => { options.push(<MenuItem value={b.id}>{b.name}</MenuItem>) });
       blockField = (<FormControl fullWidth>
-          <InputLabel>Block</InputLabel>
-          <Select fullWidth size="small" label="Block" name="targetBlockId" value={parsedData.targetBlockId || ""} onChange={handleChange}>
-            {options}
-          </Select>
-        </FormControl>);
+        <InputLabel>Block</InputLabel>
+        <Select fullWidth size="small" label="Block" name="targetBlockId" value={parsedData.targetBlockId || ""} onChange={handleChange}>
+          {options}
+        </Select>
+      </FormControl>);
     }
     return (
       <>
@@ -172,90 +172,80 @@ export function ElementEdit(props: Props) {
     )
   }
 
-  const getIframeFields = () => {
-    return (
-      <>
-        <TextField fullWidth size="small" label="Source" name="iframeSrc" value={parsedData.iframeSrc || ""} onChange={handleChange} />
-        <TextField fullWidth size="small" label="Height (px)" name="iframeHeight" value={parsedData.iframeHeight || ""} placeholder="1000" onChange={handleChange} />
-      </>
-    )
-  }
+  const getIframeFields = () => (
+    <>
+      <TextField fullWidth size="small" label="Source" name="iframeSrc" value={parsedData.iframeSrc || ""} onChange={handleChange} />
+      <TextField fullWidth size="small" label="Height (px)" name="iframeHeight" value={parsedData.iframeHeight || ""} placeholder="1000" onChange={handleChange} />
+    </>
+  )
 
-  const getButtonLink = () => {
-    return (
-      <>
-        <TextField fullWidth size="small" label="Text" name="buttonLinkText" value={parsedData.buttonLinkText || ""} onChange={handleChange} />
-        <TextField fullWidth size="small" label="url" name="buttonLinkUrl" value={parsedData.buttonLinkUrl || ""} onChange={handleChange} />
-        <FormControl fullWidth>
-          <InputLabel>Variant</InputLabel>
-          <Select fullWidth size="small" label="Button Type" name="buttonLinkVariant" value={parsedData.buttonLinkVariant || "contained"} onChange={handleChange}>
-            <MenuItem value="contained">Contained</MenuItem>
-            <MenuItem value="outlined">Outlined</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel>Color</InputLabel>
-          <Select fullWidth size="small" label="Button Type" name="buttonLinkColor" value={parsedData.buttonLinkColor || "primary"} onChange={handleChange}>
-            <MenuItem value="primary">Primary</MenuItem>
-            <MenuItem value="secondary">Secondary</MenuItem>
-            <MenuItem value="error">Error</MenuItem>
-            <MenuItem value="warning">Warning</MenuItem>
-            <MenuItem value="info">Info</MenuItem>
-            <MenuItem value="success">Success</MenuItem>
-          </Select>
-        </FormControl>
-        <FormGroup sx={{ marginLeft: 1, marginY: 2 }}>
-          <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
-          <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.fullWidth === "true" ? true : false} />} name="fullWidth" label="Full width" />
-        </FormGroup>
-      </>
-    )
-  }
+  const getButtonLink = () => (
+    <>
+      <TextField fullWidth size="small" label="Text" name="buttonLinkText" value={parsedData.buttonLinkText || ""} onChange={handleChange} />
+      <TextField fullWidth size="small" label="url" name="buttonLinkUrl" value={parsedData.buttonLinkUrl || ""} onChange={handleChange} />
+      <FormControl fullWidth>
+        <InputLabel>Variant</InputLabel>
+        <Select fullWidth size="small" label="Button Type" name="buttonLinkVariant" value={parsedData.buttonLinkVariant || "contained"} onChange={handleChange}>
+          <MenuItem value="contained">Contained</MenuItem>
+          <MenuItem value="outlined">Outlined</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel>Color</InputLabel>
+        <Select fullWidth size="small" label="Button Type" name="buttonLinkColor" value={parsedData.buttonLinkColor || "primary"} onChange={handleChange}>
+          <MenuItem value="primary">Primary</MenuItem>
+          <MenuItem value="secondary">Secondary</MenuItem>
+          <MenuItem value="error">Error</MenuItem>
+          <MenuItem value="warning">Warning</MenuItem>
+          <MenuItem value="info">Info</MenuItem>
+          <MenuItem value="success">Success</MenuItem>
+        </Select>
+      </FormControl>
+      <FormGroup sx={{ marginLeft: 1, marginY: 2 }}>
+        <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
+        <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.fullWidth === "true" ? true : false} />} name="fullWidth" label="Full width" />
+      </FormGroup>
+    </>
+  )
 
-  const getVideoFields = () => {
-    return (
-      <>
-        <FormControl fullWidth>
-          <InputLabel>Type</InputLabel>
-          <Select fullWidth size="small" label="Type" name="videoType" onChange={handleChange} value={parsedData.videoType || "youtube"}>
-            <MenuItem value="youtube">Youtube</MenuItem>
-            <MenuItem value="vimeo">Vimeo</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField fullWidth size="small" label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange}/>
-        {(!parsedData.videoType || parsedData.videoType === "youtube") && (
-          <Typography fontSize="12px" fontStyle="italic">
+  const getVideoFields = () => (
+    <>
+      <FormControl fullWidth>
+        <InputLabel>Type</InputLabel>
+        <Select fullWidth size="small" label="Type" name="videoType" onChange={handleChange} value={parsedData.videoType || "youtube"}>
+          <MenuItem value="youtube">Youtube</MenuItem>
+          <MenuItem value="vimeo">Vimeo</MenuItem>
+        </Select>
+      </FormControl>
+      <TextField fullWidth size="small" label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange} />
+      {(!parsedData.videoType || parsedData.videoType === "youtube") && (
+        <Typography fontSize="12px" fontStyle="italic">
             video url - https://www.youtube.com/watch?v=dQw4w9WgXcQ <br /> id - dQw4w9WgXcQ
-          </Typography>
-        )}
-        {parsedData.videoType === "vimeo" && (
-          <Typography fontSize="12px" fontStyle="italic">
+        </Typography>
+      )}
+      {parsedData.videoType === "vimeo" && (
+        <Typography fontSize="12px" fontStyle="italic">
             video url - https://vimeo.com/751393851 <br /> id - 751393851
-          </Typography>
-        )}
-      </>
-    )
-  }
+        </Typography>
+      )}
+    </>
+  )
 
-  const getRawHTML = () => {
-    return (
-      <>
-        <TextField fullWidth label="HTML Content" name="rawHTML" onChange={handleChange} value={parsedData.rawHTML || ""} multiline minRows={7} maxRows={15} />
-      </>
-    )
-  }
+  const getRawHTML = () => (
+    <>
+      <TextField fullWidth label="HTML Content" name="rawHTML" onChange={handleChange} value={parsedData.rawHTML || ""} multiline minRows={7} maxRows={15} />
+    </>
+  )
 
-  const getMapFields = () => {
-    return (
-      <>
-        <TextField fullWidth size="small" label="Address" name="mapAddress" onChange={handleChange} value={parsedData.mapAddress || ""} helperText="ex: City Hall, New York, NY" />
-        <TextField fullWidth size="small" label="Label" name="mapLabel" onChange={handleChange} value={parsedData.mapLabel || ""} helperText="ex: First Baptist Church" />
-        <Typography fontSize="13px" sx={{marginTop: 1}}>Zoom-level</Typography>
-        <Slider defaultValue={15} valueLabelDisplay="auto" step={1} min={8} max={20} name="mapZoom" value={parsedData.mapZoom || 15} onChange={(e: any) => handleChange(e)} />
-        <Typography fontSize="12px" fontStyle="italic">Ex: 0(the whole world) & 21(individual buildings)</Typography>
-      </>
-    )
-  }
+  const getMapFields = () => (
+    <>
+      <TextField fullWidth size="small" label="Address" name="mapAddress" onChange={handleChange} value={parsedData.mapAddress || ""} helperText="ex: City Hall, New York, NY" />
+      <TextField fullWidth size="small" label="Label" name="mapLabel" onChange={handleChange} value={parsedData.mapLabel || ""} helperText="ex: First Baptist Church" />
+      <Typography fontSize="13px" sx={{marginTop: 1}}>Zoom-level</Typography>
+      <Slider defaultValue={15} valueLabelDisplay="auto" step={1} min={8} max={20} name="mapZoom" value={parsedData.mapZoom || 15} onChange={(e: any) => handleChange(e)} />
+      <Typography fontSize="12px" fontStyle="italic">Ex: 0(the whole world) & 21(individual buildings)</Typography>
+    </>
+  )
 
   const getFields = () => {
     let result = getJsonFields();
@@ -307,7 +297,7 @@ export function ElementEdit(props: Props) {
         }
       }
     }
- 
+
     loadBlocks();
   }, [element]);
 
@@ -335,12 +325,10 @@ export function ElementEdit(props: Props) {
   </FormControl>
   */
 
-  const getStandardFields = () => {
-    return (<>
-      <ErrorMessages errors={errors} />
-      {getFields()}
-    </>)
-  }
+  const getStandardFields = () => (<>
+    <ErrorMessages errors={errors} />
+    {getFields()}
+  </>)
 
   const getBlockFields = () => {
     let options: JSX.Element[] = [];
@@ -360,7 +348,7 @@ export function ElementEdit(props: Props) {
   if (!element) return <></>
   else return (
     <>
-      <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
+      <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
         {(element?.elementType === "block") ? getBlockFields() : getStandardFields()}
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}

@@ -69,14 +69,16 @@ export default function Admin(props: Props) {
     else if (e) setEditElement(e);
   }
 
-  const rightBarStyle: CSSProperties = (scrollTop < 180) ? {} : {
-    width: document.getElementById("editorBar")?.clientWidth,
-    position: "fixed",
-    marginTop: -180
-  };
+  const rightBarStyle: CSSProperties = (scrollTop < 180)
+    ? {}
+    : {
+      width: document.getElementById("editorBar")?.clientWidth,
+      position: "fixed",
+      marginTop: -180
+    };
 
   useEffect(() => {
-    const onScroll = e => {
+    const onScroll = (e:any) => {
       setScrollTop(e.target.documentElement.scrollTop);
     };
     window.addEventListener("scroll", onScroll);
@@ -106,7 +108,7 @@ export default function Admin(props: Props) {
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
-            <DisplayBox headerText="Block Preview" headerIcon="article"  >
+            <DisplayBox headerText="Block Preview" headerIcon="article">
               <div id="block" style={{ height: 500, overflowY: "scroll" }}>
                 <div className="page">
                   {getSections()}
@@ -130,7 +132,7 @@ export default function Admin(props: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking", };
 };
 

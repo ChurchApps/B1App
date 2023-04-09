@@ -15,13 +15,13 @@ export function EmbeddablePages(props:Props) {
   const [pages, setPages] = useState<PageInterface[]>([]);
 
   const loadData = () => {
-    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => { 
-      let filteredPages = [];
+    ApiHelper.get("/pages", "ContentApi").then((_pages:PageInterface[]) => {
+      let filteredPages:PageInterface[] = [];
       _pages.forEach(p => { if (p.url.startsWith(props.pathPrefix)) filteredPages.push(p); });
-      setPages(filteredPages || []) 
+      setPages(filteredPages || [])
     });
   };
-  
+
   useEffect(loadData, [props.refreshKey]);
 
   const pagesUi = pages.map((page) => (

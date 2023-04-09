@@ -86,7 +86,7 @@ export interface WrapperPageProps {
 }
 
 export class Permissions extends BasePermissions {
-  
+
 }
 
 export interface StreamingButtonInterface { text: string, url: string }

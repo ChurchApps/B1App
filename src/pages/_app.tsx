@@ -8,10 +8,15 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { EnvironmentHelper } from "@/helpers";
 import { UserProvider } from "@/context/UserContext";
+import { AnalyticsHelper } from "@/appBase/helpers";
+import React from "react";
 
 EnvironmentHelper.init();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const location = (typeof(window) === "undefined") ? null : window.location;
+  AnalyticsHelper.init();
+  React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
   return (
     <UserProvider>

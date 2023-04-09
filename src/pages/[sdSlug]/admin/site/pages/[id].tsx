@@ -30,7 +30,7 @@ export default function Admin(props: Props) {
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id?.toString() || "";
 
-  const zones = {
+  const zones:any = {
     cleanCentered: ["main"],
     embed: ["main"],
     headerFooter: ["main", "footer"],
@@ -96,7 +96,7 @@ export default function Admin(props: Props) {
 
   /*Todo: affix the sidebar with CSS instead*/
   useEffect(() => {
-    const onScroll = e => { setScrollTop(e.target.documentElement.scrollTop); };
+    const onScroll = (e:any) => { setScrollTop(e.target.documentElement.scrollTop); };
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [scrollTop]);
@@ -118,12 +118,12 @@ export default function Admin(props: Props) {
   }
 
   const getZoneBoxes = () => {
-    let result = [];
+    let result:any[] = [];
     let idx = 0;
     zones[page?.layout]?.forEach((z: string) => {
       const sections = ArrayHelper.getAll(page?.sections, "zone", z);
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
-      result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article"  >
+      result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article">
         <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
           <div className="page">
             {getSections(z)}
@@ -162,7 +162,7 @@ export default function Admin(props: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = [];
+  const paths:any[] = [];
   return { paths, fallback: "blocking", };
 };
 

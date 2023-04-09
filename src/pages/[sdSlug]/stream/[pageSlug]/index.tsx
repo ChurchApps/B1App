@@ -24,7 +24,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   // leaving it empty as we don't know what routes could be.
   // as we've fallback as "blocking" it doesn't matter. The first time a route it called
   // it'll run as SSR and then cached - https://nextjs.org/docs/api-reference/data-fetching/get-static-paths#fallback-blocking
-  const paths = [
+  const paths:any[] = [
 
   ];
 

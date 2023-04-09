@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  ApiHelper,
-  ServiceInterface,
-  CheckinHelper,
-  PersonHelper,
-  ArrayHelper,
-  GroupServiceTimeInterface,
-  GroupInterface,
-} from "@/helpers";
+import { ApiHelper, ServiceInterface, CheckinHelper, PersonHelper, ArrayHelper, GroupServiceTimeInterface, GroupInterface } from "@/helpers";
 import { Loading } from "@/components";
 
 interface Props {
@@ -46,12 +38,12 @@ export function Services({ selectedHandler }: Props) {
     ];
     await Promise.all(promises);
     const peopleIds: number[] = ArrayHelper.getUniqueValues(CheckinHelper.householdMembers, "id");
-    const url =
-      "/visits/checkin?serviceId=" +
-      CheckinHelper.serviceId +
-      "&peopleIds=" +
-      escape(peopleIds.join(",")) +
-      "&include=visitSessions";
+    const url
+      = "/visits/checkin?serviceId="
+      + CheckinHelper.serviceId
+      + "&peopleIds="
+      + escape(peopleIds.join(","))
+      + "&include=visitSessions";
     CheckinHelper.existingVisits = await ApiHelper.get(url, "AttendanceApi");
     CheckinHelper.pendingVisits = [...CheckinHelper.existingVisits];
 

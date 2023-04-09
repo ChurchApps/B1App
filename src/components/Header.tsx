@@ -90,7 +90,7 @@ export function Header(props: Props) {
             >
               {props.navLinks?.map((l) => (
                 <Link key={l.id} href={l.url} style={{ textDecoration: "none", color: "inherit" }}>
-                  <MenuItem >
+                  <MenuItem>
                     {l.text}
                   </MenuItem>
                 </Link>
@@ -99,7 +99,7 @@ export function Header(props: Props) {
           </Stack>
         </Container>
       </AppBar>
-    </div >
+    </div>
   );
 
 }
