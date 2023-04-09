@@ -1,19 +1,48 @@
-import { ImageEditor } from "@/appBase/components";
-import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
+import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
-import React from "react";
+import Resizer from "react-image-file-resizer";
+import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
 import { InputBox } from "..";
-import { TempImageEditor } from "./TempImageEditor";
+import { ImageEditor } from "@/appBase/components";
 
 interface Props {
   updatedFunction?: () => void,
   settings?: GenericSettingInterface[],
 }
 
+async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File> {
+  const res: Response = await fetch(dataUrl);
+  const blob: Blob = await res.blob();
+  return new File([blob], fileName, { type: 'image/png' });
+}
+
+function resizeTo16x16(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    try {
+      Resizer.imageFileResizer(
+        file,
+        16,
+        16,
+        "PNG",
+        16,
+        0,
+        (uri) => { resolve(uri.toString()) },
+        "base64",
+        16,
+        16,
+      )
+    } catch (err) {
+      console.error("Error in resizing file")
+      reject()
+    }
+  })
+}
+
 export const AppearanceEdit: React.FC<Props> = (props) => {
   const [currentSettings, setCurrentSettings] = React.useState<GenericSettingInterface[]>([]);
   const [editLogo, setEditLogo] = React.useState(false);
-  const [currentEditLogo, setCurrentEditLogo] = React.useState<string>("")
+  const [currentEditLogo, setCurrentEditLogo] = React.useState<string>("");
+  const [currentUrl, setCurrentUrl] = useState("about:blank");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
@@ -29,7 +58,20 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     setCurrentSettings(settings);
   }
 
-  const imageUpdated = (dataUrl: string, keyName: string) => {
+  const init = () => {
+    let startingUrl = (ArrayHelper.getOne(props.settings, "keyName", currentEditLogo))?.value;
+    setCurrentUrl(startingUrl);
+  };
+
+  useEffect(init, [currentEditLogo]);
+
+  const get16x16ImageUri = async (dataUrl: string) => {
+    const file = await dataUrlToFile(dataUrl, "favicon_16x16");
+    const uri = await resizeTo16x16(file);
+    return uri;
+  }
+
+  const imageUpdated = async (dataUrl: string, keyName: string) => {
     if (dataUrl !== null) {
       const settings = [...currentSettings];
       const keySetting = settings.filter(s => s.keyName === keyName);
@@ -40,14 +82,42 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         keySetting[0].value = dataUrl;
       }
 
+      if (keyName === "favicon_400x400") {
+        const index = settings.findIndex(s => s.keyName === "favicon_16x16");
+        const imageDataUrl = await get16x16ImageUri(dataUrl)
+        if (index !== -1) {
+          settings[index].value = imageDataUrl;
+        } else {
+          settings.push({ keyName: "favicon_16x16", value: imageDataUrl, public: 1 })
+        }
+      }
+
       setCurrentSettings(settings);
     }
     setEditLogo(false);
+    setCurrentUrl(null)
   }
 
   const getLogoEditor = (logoName: string) => {
-    if (!editLogo) return null;
-    else return <TempImageEditor settings={currentSettings} name={logoName} updatedFunction={(dataUrl) => imageUpdated(dataUrl, logoName)} aspectRatio={4} />
+    if (!editLogo) {
+      return null
+    } else {
+      return (
+        <ImageEditor
+          photoUrl={currentUrl}
+          onUpdate={(dataUrl) => {
+            imageUpdated(dataUrl, logoName)
+          }}
+          onCancel={() => { 
+            setEditLogo(false);
+            setCurrentUrl(null);
+          }}
+          aspectRatio={currentEditLogo.includes("favicon") ? 1 : 4}
+          outputWidth={currentEditLogo.includes("favicon") ? 400 : 1200}
+          outputHeight={currentEditLogo.includes("favicon") ? 400 : 300}
+        />
+      )
+    }
   }
 
   const getLogoLink = (name: string, backgroundColor: string) => {
@@ -81,6 +151,14 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
         </div>
         <hr />
+
+        <div style={{ backgroundColor: "#bbdefb", padding: 10, color: "#FFF" }}>
+          <label>Favicon</label>
+          <p style={{ color: "#999", fontSize: 12 }}>Upload square logo with a transparent background.The ideal size is 400 pixels wide by 400 pixels high.</p>
+          {getLogoLink("favicon_400x400", "#bbdefb")}
+        </div>
+        <hr />
+
         <div className="section">Primary Colors</div>
         <Grid container spacing={3}>
           <Grid item xs={6}>
