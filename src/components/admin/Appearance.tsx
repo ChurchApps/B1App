@@ -16,9 +16,10 @@ export const Appearance: React.FC<Props> = (props) => {
   const handleUpdate = () => { setMode("display"); loadData(); }
 
   const getLogo = (logoName: string) => {
-    const logoSrc = (logoName === "logoLight")
-      ? AppearanceHelper.getLogoLight(styles, "/images/sample-logo-header.png")
-      : AppearanceHelper.getLogoDark(styles, "/images/sample-logo-header.png");
+    let logoSrc;
+    if(logoName === "logoLight") logoSrc = AppearanceHelper.getLogoLight(styles, "/images/sample-logo-header.png");
+    if(logoName === "logoDark") logoSrc = AppearanceHelper.getLogoDark(styles, "/images/sample-logo-header.png");
+    if(logoName === "favicon_400x400") logoSrc = AppearanceHelper.getFavicon(styles, "400");
     let logoImg = (styles && logoSrc !== null && logoSrc !== undefined) ? <img src={logoSrc} alt="logo" /> : null;
     return logoImg
   }
@@ -49,6 +50,12 @@ export const Appearance: React.FC<Props> = (props) => {
       <div style={{ padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#333", color: "#FFF" }}>
         {getLogo("logoDark")}
       </div>
+
+      {styles?.favicon_400x400 &&
+        <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF" }}>
+          {getLogo("favicon_400x400")}
+        </div>
+      }
 
       <div style={{ backgroundColor: styles.primaryColor, color: styles.primaryContrast, padding: 5, fontWeight: "bold" }}>
         Primary Colors

@@ -88,7 +88,7 @@ body {
 }
 
 .page .sectionBG {
-  background-attachment: fixed;
+  /*background-attachment: fixed;*/
   background-position-x: 50%;
   background-position-y: 50%;
   background-size: cover;
