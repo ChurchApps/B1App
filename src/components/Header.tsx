@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Container, AppBar, Stack, Box, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { ChurchInterface, LinkInterface } from "@/helpers";
+import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 
 type Props = {
   church: ChurchInterface;
@@ -10,6 +11,21 @@ type Props = {
   navLinks?: LinkInterface[];
   overlayContent: boolean;
 };
+
+//structure navLinks based on their parentId
+const getNestedChildren = (arr: LinkInterface[], parent: string) => {
+  const result: LinkInterface[] = [];
+  for(const i in arr) {
+    if(arr[i].parentId == parent) {
+      const children = getNestedChildren(arr, arr[i].id);
+      if(children.length) {
+        arr[i].children = children;
+      }
+      result.push(arr[i]);
+    }
+  }
+  return result;
+}
 
 export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
@@ -40,13 +56,10 @@ export function Header(props: Props) {
     else return "#333";
   }
 
-  const getLinks = () => {
-    const result: JSX.Element[] = [];
-    props.navLinks?.forEach(l => {
-      result.push(<Link key={l.id} href={l.url} style={{ paddingLeft: 15, paddingRight: 15 }}>{l.text}</Link>);
-    });
-    return result;
-  }
+  //structured navLinks based on their parentId
+  const structuredData = props.navLinks && getNestedChildren(props.navLinks, undefined);
+
+  const getLinks = () => structuredData && structuredData.map((item) => <CascadingHoverMenus link={item} />);
 
   const handleClose = () => {
     setAnchorEl(null);
