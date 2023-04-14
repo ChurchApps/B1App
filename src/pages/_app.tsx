@@ -6,7 +6,7 @@ import "@/styles/buttons.css";
 import "@/appBase/components/markdownEditor/editor.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { EnvironmentHelper } from "@/helpers";
+import { EnvironmentHelper, AppearanceHelper } from "@/helpers";
 import { UserProvider } from "@/context/UserContext";
 import { AnalyticsHelper } from "@/appBase/helpers";
 import React from "react";
@@ -18,9 +18,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   AnalyticsHelper.init();
   React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
+  const favicon = pageProps?.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(pageProps?.config?.appearance, "16");
+
   return (
     <UserProvider>
       <Head>
+        {favicon
+          ? <link rel="shortcut icon" type="image/png" href={favicon} />
+          : <link rel="icon" href="/favicon.ico" />
+        }
       </Head>
       <Component {...pageProps} />
     </UserProvider>
