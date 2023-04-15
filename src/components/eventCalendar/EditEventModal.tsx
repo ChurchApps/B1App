@@ -13,6 +13,8 @@ export function EditEventModal(props: Props) {
   const [event, setEvent] = useState(props.event);
 
   const handleSave = () => {
+    const ev = {...event};
+
     ApiHelper.post("/events", [event], "ContentApi").then(data => {
       props.onDone();
     });
@@ -29,6 +31,7 @@ export function EditEventModal(props: Props) {
   }
 
   const getDates = () => {
+    console.log(event, DateHelper.formatHtml5DateTime(event.start))
     if (event.allDay) return (<>
       <Grid item xs={6}>
         <TextField name="start" type="date" value={(event.start) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.start)) : ""} fullWidth label="Start Time" onChange={handleChange} />
@@ -57,7 +60,7 @@ export function EditEventModal(props: Props) {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <FormGroup>
-                <FormControlLabel control={<Checkbox defaultChecked />} label="All Day" name="allDay" onChange={(e, checked) => { setEvent({...event, allDay:checked}); }} />
+                <FormControlLabel control={<Checkbox checked={event.allDay} />}  label="All Day" name="allDay" onChange={(e, checked) => { setEvent({...event, allDay:checked}); }} />
               </FormGroup>
             </Grid>
             {getDates()}

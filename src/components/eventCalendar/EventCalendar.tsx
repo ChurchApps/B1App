@@ -9,6 +9,7 @@ import { EventDetailsModel } from "./EventDetailsModel";
 interface Props {
   events: EventInterface[];
   editGroupId?: string;
+  onRequestRefresh?: () => void;
 }
 
 export function EventCalendar(props:Props) {
@@ -16,19 +17,29 @@ export function EventCalendar(props:Props) {
   const [editEvent, setEditEvent] = useState<EventInterface | null>(null);
 
   const handleAddEvent = (slotInfo: any) => {
-    console.log("handleAddEvent");
-    alert("You clicked on " + slotInfo.start.toLocaleString() + " - " + slotInfo.end.toLocaleString());
+    setEditEvent({ start: slotInfo.start, end: slotInfo.end, allDay:true, groupId: props.editGroupId, visibility: "public" })
   }
 
   const handleEventClick = (event: EventInterface) => {
-    setEditEvent(event);
+    const ev = { ...event };
+    let tz = new Date().getTimezoneOffset();
+    ev.start = new Date(ev.start);
+    ev.end = new Date(ev.end);
+    ev.start.setMinutes(ev.start.getMinutes() - tz);
+    ev.end.setMinutes(ev.end.getMinutes() - tz);
+    setEditEvent(ev);
+  }
+
+  const handleDone = () => {
+    setEditEvent(null);
+    if (props.onRequestRefresh) props.onRequestRefresh();
   }
 
   return (
     <div>
       <Calendar localizer={localizer} events={props.events} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
-      {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ () => setEditEvent(null) } />}
-      {editEvent && !props.editGroupId && <EventDetailsModel event={editEvent} onDone={() => setEditEvent(null) } />}
+      {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
+      {editEvent && !props.editGroupId && <EventDetailsModel event={editEvent} onDone={ handleDone } />}
     </div>
   );
 }
