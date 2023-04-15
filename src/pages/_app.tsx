@@ -5,7 +5,6 @@ import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@/appBase/components/markdownEditor/editor.css";
 import type { AppProps } from "next/app";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import { EnvironmentHelper, AppearanceHelper, ConfigHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -17,20 +16,22 @@ EnvironmentHelper.init();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [config, setConfig] = React.useState<ConfigurationInterface>(null);
-  const router = useRouter();
   
   const location = (typeof(window) === "undefined") ? null : window.location;
   AnalyticsHelper.init();
   React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
   React.useEffect(() => {
+    const subdomain = location.hostname.split(".")?.[0]?.toString();
     const getConfig = async () => {
-      const response = await ConfigHelper.load(router.query?.sdSlug?.toString());
+      const response = await ConfigHelper.load(subdomain);
       response && setConfig(response);
       return response;
     }
-    getConfig();
-  }, [])
+    if (subdomain) {
+      getConfig();
+    }
+  }, [location])
 
   const favicon = config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(config.appearance, "16");
 
