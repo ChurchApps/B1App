@@ -1,5 +1,5 @@
-import { GenericSettingInterface } from "@/helpers";
 import React, { useState } from "react";
+import { GenericSettingInterface } from "@/helpers";
 import { DisplayBox } from "..";
 import { ApiHelper, AppearanceHelper, AppearanceInterface } from "../../appBase/helpers"
 import { AppearanceEdit } from "./AppearanceEdit";
@@ -52,8 +52,10 @@ export const Appearance: React.FC<Props> = (props) => {
       </div>
 
       {styles?.favicon_400x400 &&
-        <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF" }}>
-          {getLogo("favicon_400x400")}
+        <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div style={{maxWidth: 150, maxHeight: 150}}>
+            {getLogo("favicon_400x400")}
+          </div>
         </div>
       }
 

@@ -91,8 +91,8 @@ export function YoutubeBackground({
         className={styles.videoContainer}
         style={{
           width: videoWidth + "px",
-          height: videoHeight + "px",
-          top: videoY + "px",
+          height: (videoHeight + 130) + "px",
+          top: (videoY + -65) + "px",
           left: videoX + "px",
         }}
       >
