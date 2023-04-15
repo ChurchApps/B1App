@@ -84,11 +84,15 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
       if (keyName === "favicon_400x400") {
         const index = settings.findIndex(s => s.keyName === "favicon_16x16");
-        const imageDataUrl = await get16x16ImageUri(dataUrl)
-        if (index !== -1) {
-          settings[index].value = imageDataUrl;
+        if (dataUrl !== ""){
+          const imageDataUrl = await get16x16ImageUri(dataUrl)
+          if (index !== -1) {
+            settings[index].value = imageDataUrl;
+          } else {
+            settings.push({ keyName: "favicon_16x16", value: imageDataUrl, public: 1 })
+          }
         } else {
-          settings.push({ keyName: "favicon_16x16", value: imageDataUrl, public: 1 })
+          settings[index].value = "";
         }
       }
 
@@ -155,7 +159,11 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         <div style={{ backgroundColor: "#bbdefb", padding: 10, color: "#FFF" }}>
           <label>Favicon</label>
           <p style={{ color: "#999", fontSize: 12 }}>Upload square logo with a transparent background.The ideal size is 400 pixels wide by 400 pixels high.</p>
-          {getLogoLink("favicon_400x400", "#bbdefb")}
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div style={{maxWidth: 150, maxHeight: 150}}>
+            {getLogoLink("favicon_400x400", "#bbdefb")}
+          </div>
+          </div>
         </div>
         <hr />
 
