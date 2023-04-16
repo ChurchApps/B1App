@@ -117,7 +117,7 @@ const CascadingHoverMenus = ({ link }: MenuInterface) => {
       <Link
         key={link.id}
         href={link.url}
-        style={{ paddingLeft: 15, paddingRight: 15 }}
+        style={{ paddingLeft: 15, paddingRight: 15, paddingBottom: 8 }}
         {...bindHover(popupState)}
         {...bindFocus(popupState)}
       >
