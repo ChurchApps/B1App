@@ -59,33 +59,39 @@ export const LinkEdit: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       <TextField fullWidth label="Text" name="text" type="text" value={currentLink?.text || ""} onChange={handleChange} />
       <TextField fullWidth label="Url" name="url" type="text" value={currentLink?.url || ""} onChange={handleChange} />
-      {subName && toggleSubName === true
-        ? <Typography fontSize="13px" marginTop={1} marginBottom={0.5}>This link is under submenu: <span style={{fontWeight: 800}}>{subName}</span></Typography>
-        : <Typography fontSize="13px" marginTop={1} marginBottom={0.5}>Create this link inside submenu:</Typography>
-      }
-      <div>
-        <ToggleButtonGroup
-          exclusive
-          value={currentLink?.parentId}
-          onChange={toggleChange}
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-          }}
-        >
-          {links?.map((link: LinkInterface) => (
-            <ToggleButton
-              sx={{marginTop: 0.5}}
-              value={link.id}
-              size="small"
-              color="primary"
-              onClick={() => setToggleSubName(!toggleSubName)}
+      {links?.length > 0 &&
+        <>
+          <div>
+            {subName && toggleSubName === true
+              ? <Typography fontSize="13px" marginTop={1} marginBottom={0.5}>This link is under submenu: <span style={{fontWeight: 800}}>{subName}</span></Typography>
+              : <Typography fontSize="13px" marginTop={1} marginBottom={0.5}>Create this link inside submenu:</Typography>
+            }
+          </div>
+          <div>
+            <ToggleButtonGroup
+              exclusive
+              value={currentLink?.parentId}
+              onChange={toggleChange}
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+              }}
             >
-              {link.text}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
-      </div>
+              {links.map((link: LinkInterface) => (
+                <ToggleButton
+                  sx={{marginTop: 0.5}}
+                  value={link.id}
+                  size="small"
+                  color="primary"
+                  onClick={() => setToggleSubName(!toggleSubName)}
+                >
+                  {link.text}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </div>
+        </>
+      }
     </InputBox>
   );
 }

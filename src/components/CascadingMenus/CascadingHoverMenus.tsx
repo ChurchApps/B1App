@@ -123,14 +123,16 @@ const CascadingHoverMenus = ({ link }: MenuInterface) => {
       >
         {link.text}
       </Link>
+      {link?.children &&
       <CascadingMenu
-        popupState={popupState}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        transformOrigin={{ vertical: "top", horizontal: "left" }}
-        id="stage-1"
+      popupState={popupState}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      transformOrigin={{ vertical: "top", horizontal: "left" }}
+      id="stage-1"
       >
-        {link?.children && <RecursiveMenus links={link?.children} />}
+        <RecursiveMenus links={link?.children} />
       </CascadingMenu>
+      }
     </div>
   );
 };
