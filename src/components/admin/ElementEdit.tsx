@@ -266,6 +266,15 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getImageFields = () => (
+    <>
+      {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
+      <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+      <TextField fullWidth size="small" label="Photo Label" name="photoAlt"  value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    </>
+  )
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -285,6 +294,7 @@ export function ElementEdit(props: Props) {
       case "map": result = getMapFields(); break;
       case "sermons": result = <></>; break;
       case "carousel": result = getCarouselFields(); break;
+      case "image": result = getImageFields(); break;
     }
     return result;
   }
