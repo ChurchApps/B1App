@@ -266,6 +266,13 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getWhiteSpaceFields = () => (
+    <>
+      <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "25"} />
+    </>
+  )
+  
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -285,6 +292,7 @@ export function ElementEdit(props: Props) {
       case "map": result = getMapFields(); break;
       case "sermons": result = <></>; break;
       case "carousel": result = getCarouselFields(); break;
+      case "whiteSpace": result = getWhiteSpaceFields(); break;
     }
     return result;
   }

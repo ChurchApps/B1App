@@ -19,6 +19,7 @@ import { FaqElement } from "./elementTypes/FaqElement";
 import { MapElement } from "./elementTypes/MapElement";
 import { SermonElement } from "./elementTypes/SermonElement";
 import { CarouselElement } from "./elementTypes/CarouselElement";
+import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 
 interface Props {
   element: ElementInterface;
@@ -104,7 +105,10 @@ export const Element: React.FC<Props> = props => {
       break;
     case "carousel":
       result = <CarouselElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
-      break;  
+      break;
+    case "whiteSpace":
+      result = <WhiteSpaceElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
+      break;
   }
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
