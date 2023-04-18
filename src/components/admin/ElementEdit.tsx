@@ -272,6 +272,9 @@ export function ElementEdit(props: Props) {
       <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
       <TextField fullWidth size="small" label="Photo Label" name="photoAlt"  value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
       <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <FormGroup sx={{ marginLeft: 0.5}}>
+        <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
+      </FormGroup>
     </>
   )
 

@@ -16,7 +16,7 @@ export const ImageElement = ({ element }: Props) => {
       />
     );
     if (element.answers?.url)
-      photoContent = <a href={element.answers?.url}>{photo}</a>;
+      photoContent = <a target={element.answers?.external === "true" ? "_blank" : "_self"} href={element.answers?.url}>{photo}</a>;
     else photoContent = photo;
   }
   return <>{photoContent}</>;
