@@ -20,6 +20,7 @@ import { MapElement } from "./elementTypes/MapElement";
 import { SermonElement } from "./elementTypes/SermonElement";
 import { CarouselElement } from "./elementTypes/CarouselElement";
 import { ImageElement } from "./elementTypes/ImageElement";
+import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 
 interface Props {
   element: ElementInterface;
@@ -108,6 +109,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "image":
       result = <ImageElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "whiteSpace":
+      result = <WhiteSpaceElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
   }
 
