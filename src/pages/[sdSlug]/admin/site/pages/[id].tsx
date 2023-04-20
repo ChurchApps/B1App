@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
-import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps, ApiConfig, RolePermissionInterface } from "@/helpers";
 import { DisplayBox, Theme } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
@@ -21,7 +21,7 @@ interface Props extends WrapperPageProps {
 };
 
 export default function Admin(props: Props) {
-  const { isAuthenticated } = ApiHelper
+  const { isAuthenticated, apiConfigs } = ApiHelper
   const router = useRouter();
   const [page, setPage] = useState<PageInterface>(null);
   const [editSection, setEditSection] = useState<SectionInterface>(null);
@@ -30,6 +30,9 @@ export default function Admin(props: Props) {
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id?.toString() || "";
 
+  const contentApiPermissions = apiConfigs.length > 0 && apiConfigs?.filter((a:ApiConfig) => a.keyName === "ContentApi");
+  const pageEditPermission = contentApiPermissions.length > 0 && contentApiPermissions[0].permisssions.filter((p: RolePermissionInterface) => p.contentType === "Pages" && p.action === "Edit")
+
   const zones:any = {
     cleanCentered: ["main"],
     embed: ["main"],
@@ -37,11 +40,17 @@ export default function Admin(props: Props) {
   }
 
   useEffect(() => {
+    if(pageEditPermission.length <= 0){
+      router.push("/admin/site")
+    }
+  }, [id]);
+
+  useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); }
   }, []);
 
   const loadData = () => {
-    if (isAuthenticated) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
+    if (isAuthenticated && pageEditPermission.length > 0) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
   }
 
   useEffect(loadData, [id]);
