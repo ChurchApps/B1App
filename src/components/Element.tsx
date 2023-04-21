@@ -18,6 +18,9 @@ import { FormElement } from "./elementTypes/FormElement";
 import { FaqElement } from "./elementTypes/FaqElement";
 import { MapElement } from "./elementTypes/MapElement";
 import { SermonElement } from "./elementTypes/SermonElement";
+import { CarouselElement } from "./elementTypes/CarouselElement";
+import { ImageElement } from "./elementTypes/ImageElement";
+import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 
 interface Props {
   element: ElementInterface;
@@ -100,6 +103,15 @@ export const Element: React.FC<Props> = props => {
       break;
     case "sermons":
       result = <SermonElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} />
+      break;
+    case "carousel":
+      result = <CarouselElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
+      break;
+    case "image":
+      result = <ImageElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "whiteSpace":
+      result = <WhiteSpaceElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
   }
 

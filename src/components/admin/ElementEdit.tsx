@@ -247,6 +247,43 @@ export function ElementEdit(props: Props) {
     </>
   )
 
+  const getCarouselFields = () => {
+    return (
+      <>
+        <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "250"} />
+        <TextField fullWidth size="small" type="number" label="Slides" name="slides" onChange={handleChange} value={parsedData.slides || ""} />
+        <FormControl fullWidth>
+          <InputLabel>Animation Options</InputLabel>
+          <Select fullWidth size="small" label="Animation Options" name="animationOptions" onChange={handleChange} value={parsedData.animationOptions || "fade"}>
+            <MenuItem value="fade">Fade</MenuItem>
+            <MenuItem value="slide">Slide</MenuItem>
+          </Select>
+        </FormControl>
+        <FormGroup>
+          <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.autoplay === "true" ? true : false} />} name="autoplay" label="Autoplay" />
+        </FormGroup>
+      </>
+    )
+  }
+
+  const getImageFields = () => (
+    <>
+      {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
+      <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+      <TextField fullWidth size="small" label="Photo Label" name="photoAlt"  value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <FormGroup sx={{ marginLeft: 0.5}}>
+        <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
+      </FormGroup>
+    </>
+  )
+
+  const getWhiteSpaceFields = () => (
+    <>
+      <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "25"} />
+    </>
+  )
+  
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -265,6 +302,9 @@ export function ElementEdit(props: Props) {
       case "faq": result = <FaqEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />; break;
       case "map": result = getMapFields(); break;
       case "sermons": result = <></>; break;
+      case "carousel": result = getCarouselFields(); break;
+      case "image": result = getImageFields(); break;
+      case "whiteSpace": result = getWhiteSpaceFields(); break;
     }
     return result;
   }
