@@ -54,6 +54,7 @@
     "react-to-print": "^2.14.3",
     "react-tooltip": "^4.2.21",
     "react-youtube": "^10.0.0",
+    "rrule": "^2.7.2",
     "stripe": "^8.195.0",
     "yup": "^0.32.11"
   },
