@@ -1,5 +1,5 @@
-import { Icon } from "@mui/material";
 import React from "react";
+import { Icon } from "@mui/material";
 import { LinkEdit } from "./LinkEdit";
 import { ApiHelper, UserHelper } from "../../appBase/helpers";
 import { LinkInterface } from "../../appBase/interfaces";
@@ -73,7 +73,7 @@ export const Links: React.FC = () => {
   }
   React.useEffect(() => { loadData(); }, []);
 
-  if (currentLink !== null) return <LinkEdit currentLink={currentLink} updatedFunction={handleUpdated} />;
+  if (currentLink !== null) return <LinkEdit links={links} currentLink={currentLink} updatedFunction={handleUpdated} />;
   else return (
     <DisplayBox headerIcon="link" headerText="Navigation Links" editContent={getEditContent()}>
       {getTable()}
