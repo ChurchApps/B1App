@@ -69,13 +69,19 @@ export default function Admin(props: Props) {
     else if (e) setEditElement(e);
   }
 
-  const rightBarStyle: CSSProperties = (scrollTop < 180)
-    ? {}
-    : {
-      width: document.getElementById("editorBar")?.clientWidth,
-      position: "fixed",
-      marginTop: -180
-    };
+  let rightBarStyle: CSSProperties = {};
+
+  if(typeof window !== "undefined"){
+    if(window.innerWidth > 900){
+      rightBarStyle = (scrollTop < 180)
+      ? {}
+      : {
+        width: document.getElementById("editorBar")?.clientWidth,
+        position: "fixed",
+        marginTop: -180
+      };
+    }
+  }
 
   useEffect(() => {
     const onScroll = (e:any) => {
