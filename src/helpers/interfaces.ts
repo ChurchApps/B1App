@@ -86,6 +86,15 @@ export interface WrapperPageProps {
 }
 
 export class Permissions extends BasePermissions {
+  static contentApi = {
+    ...super.contentApi,
+    links: {
+      edit: { api: "ContentApi", contentType: "Links", action: "Edit" }
+    },
+    content: {
+      edit: { api: "ContentApi", contentType: "Content", action: "Edit" }
+    }
+  }
 
 }
 

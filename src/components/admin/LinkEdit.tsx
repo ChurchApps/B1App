@@ -3,6 +3,7 @@ import { TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/mat
 import { ApiHelper } from "../../appBase/helpers";
 import { LinkInterface } from "../../appBase/interfaces";
 import { InputBox, ErrorMessages } from "../../appBase/components";
+import { Permissions, UserHelper } from "@/helpers";
 
 interface Props {
   currentLink: LinkInterface,
@@ -42,6 +43,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
     let errors: string[] = [];
     if (!currentLink.text.trim()) errors.push("Please enter valid text");
     if (!currentLink.url.trim()) errors.push("Please enter link");
+    if (!UserHelper.checkAccess(Permissions.contentApi.links.edit)) errors.push("Unauthorized to create links");
 
     if (errors.length > 0) {
       setErrors(errors);
