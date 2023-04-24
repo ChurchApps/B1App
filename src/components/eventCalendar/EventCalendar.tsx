@@ -5,7 +5,7 @@ import { EventInterface } from "@/helpers";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { EventDetailsModel } from "./EventDetailsModel";
-import {RRule, Weekday, datetime, rrulestr} from "rrule";
+import { EventHelper } from "@/appBase/helpers/EventHelper";
 
 interface Props {
   events: EventInterface[];
@@ -44,14 +44,15 @@ export function EventCalendar(props:Props) {
 
   props.events.forEach((event) => {
     if (event.recurrenceRule) {
-      const rrule = RRule.fromString(event.recurrenceRule);
-      rrule.options.dtstart = new Date(event.start);
-      rrule.between(startRange, endRange).forEach((date) => {
+      const dates = EventHelper.getRange(event, startRange, endRange);
+      dates.forEach((date) => {
         const ev = { ...event };
+        const diff = new Date(ev.end).getTime() - new Date(ev.start).getTime();
         ev.start = date;
-        ev.end = new Date(date.getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime()));
+        ev.end = new Date(date.getTime() + diff);
         expandedEvents.push(ev);
       });
+      EventHelper.removeExcludeDates(expandedEvents);
     }
     else expandedEvents.push(event);
   });

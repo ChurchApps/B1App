@@ -1,9 +1,11 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ApiHelper, DateHelper, EventInterface } from "@/helpers";
+import { ApiHelper, DateHelper, EventExceptionInterface, EventInterface } from "@/helpers";
 import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography } from "@mui/material";
 import { MarkdownEditor } from "..";
 import { useState } from "react";
 import { RRuleEditor } from "./RRuleEditor";
+import { EditRecurringModal } from "./EditRecurringModal";
+import { EventHelper } from "@/appBase/helpers/EventHelper";
 
 interface Props {
   event: EventInterface;
@@ -13,6 +15,37 @@ interface Props {
 export function EditEventModal(props: Props) {
   const [event, setEvent] = useState(props.event);
   const [rRule, setRRule] = useState(event.recurrenceRule);
+  const [recurrenceModalType, setRecurrenceModalType] = useState("");
+
+  const handleRecurringDelete = (editType:string) => {
+    switch (editType){
+      case "this":
+        const exception: EventExceptionInterface = { eventId: event.id, exceptionDate: event.start };
+        ApiHelper.post("/eventExceptions", [exception], "ContentApi").then(() => { props.onDone(); });
+        break;
+      case "future":
+        const ev = {...event};
+        const rrule = EventHelper.getFullRRule(ev);
+        rrule.options.until = new Date(ev.start);
+        ev.start = props.event.start; //Keep the original start date, not this instance's start date
+        event.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);
+        ApiHelper.post("/events", [event], "ContentApi").then(() => { props.onDone(); });
+        break;
+      case "all":
+        ApiHelper.delete("/events/" + event.id, "ContentApi").then(() => { props.onDone(); });
+        break;
+    }
+    setRecurrenceModalType("");
+  }
+
+  const handleRecurringSave = (editType:string) => {
+    setRecurrenceModalType("");
+  }
+
+  const handleDelete = () => {
+    if (props.event.recurrenceRule) setRecurrenceModalType("delete");
+    else if (confirm("Are you sure you wish to delete this event?")) ApiHelper.delete("/events/" + event.id, "ContentApi").then(() => { props.onDone(); });
+  }
 
   const handleSave = () => {
     const ev = {...event};
@@ -58,45 +91,51 @@ export function EditEventModal(props: Props) {
   }
 
   return (
-    <Dialog open={true} onClose={props.onDone} fullScreen>
-      <AppBar sx={{ position: 'relative' }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label="close">
-            <Icon>close</Icon>
-          </IconButton>
-          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+    <>
+      <Dialog open={true} onClose={props.onDone} fullScreen>
+        <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label="close">
+              <Icon>close</Icon>
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Edit Event
-          </Typography>
-          <Button autoFocus color="inherit" onClick={handleSave}>
+            </Typography>
+            <Button autoFocus color="inherit" onClick={handleDelete}>
+              Delete
+            </Button>
+            <Button autoFocus color="inherit" onClick={handleSave}>
               Save
-          </Button>
-        </Toolbar>
-      </AppBar>
-      <DialogContent>
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox checked={event.allDay} />}  label="All Day" name="allDay" onChange={(e, checked) => { setEvent({...event, allDay:checked}); }} />
-            </FormGroup>
-          </Grid>
-          <Grid item xs={6}>
-            <FormGroup>
-              <FormControlLabel control={<Checkbox checked={event.recurrenceRule?.length>0} />}  label="Recurring" name="recurring" onChange={(e, checked) => { handleToggleRecurring(checked); }} />
-            </FormGroup>
-          </Grid>
-          {getDates()}
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <DialogContent>
+          <Grid container spacing={1}>
+            <Grid item xs={6}>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox checked={event.allDay} />}  label="All Day" name="allDay" onChange={(e, checked) => { setEvent({...event, allDay:checked}); }} />
+              </FormGroup>
+            </Grid>
+            <Grid item xs={6}>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox checked={event.recurrenceRule?.length>0} />}  label="Recurring" name="recurring" onChange={(e, checked) => { handleToggleRecurring(checked); }} />
+              </FormGroup>
+            </Grid>
+            {getDates()}
 
-          {(event?.recurrenceRule?.length>0) && <RRuleEditor start={event.start} rRule={event.recurrenceRule || ""} onChange={(rRule:string) => { setRRule(rRule); }} /> }
+            {(event?.recurrenceRule?.length>0) && <RRuleEditor start={event.start} rRule={event.recurrenceRule || ""} onChange={(rRule:string) => { setRRule(rRule); }} /> }
 
-          <Grid item xs={12}>
-            <TextField name="title" value={event.title} fullWidth label="Title" onChange={handleChange} size="small" />
+            <Grid item xs={12}>
+              <TextField name="title" value={event.title} fullWidth label="Title" onChange={handleChange} size="small" />
+            </Grid>
+            <Grid item xs={12}>
+              <MarkdownEditor value={event.description || ""} onChange={val => setEvent({...event, description: val})} style={{ maxHeight: 200, overflowY: "scroll" }} />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <MarkdownEditor value={event.description || ""} onChange={val => setEvent({...event, description: val})} style={{ maxHeight: 200, overflowY: "scroll" }} />
-          </Grid>
-        </Grid>
 
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+      {recurrenceModalType && <EditRecurringModal action={recurrenceModalType} onDone={(editType) => { (recurrenceModalType==="delete") ? handleRecurringDelete(editType) : handleRecurringSave(editType) }} /> }
+    </>
   );
 }

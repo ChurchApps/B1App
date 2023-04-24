@@ -3,6 +3,7 @@ import { DateHelper } from "@/helpers";
 import { Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import {RRule, Weekday, rrulestr} from "rrule";
 import { ChangeEvent, useEffect, useState } from "react";
+import { EventHelper } from "@/appBase/helpers/EventHelper";
 
 interface Props {
   start: Date;
@@ -95,7 +96,6 @@ export function RRuleEditor(props: Props) {
         const dayOfMonth = props.start.getDate() || 1;
         const dayOfWeek = props.start.getDay() || 0;
         const ordinal = Math.floor((dayOfMonth - 1) / 7);
-        console.log("DAY OF WEEK", dayOfWeek, ordinal);
         result = (<>
           <InputLabel>On</InputLabel>
           <Select name="on" value={(rRuleOptions.bymonthday?.length>0) ? "monthDay" : "nthWeekday"} onChange={(e) => { handleMonthOptionChange(e.target.value, dayOfMonth, ordinal, dayOfWeek) }} label="On">
@@ -153,9 +153,7 @@ export function RRuleEditor(props: Props) {
   }
 
   useEffect(() => {
-    const parts = new RRule(rRuleOptions).toString().split("RRULE:");
-    const result = parts.length===2 ? parts[1] : ""
-    console.log("RRULE", result);
+    const result = EventHelper.getPartialRRuleString(rRuleOptions);
     props.onChange(result);
   }, [rRuleOptions]);
 
