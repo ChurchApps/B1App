@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
-import { ApiHelper, BlockInterface, UserHelper } from "@/helpers";
+import { ApiHelper, BlockInterface, UserHelper, Permissions } from "@/helpers";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
@@ -28,6 +28,7 @@ export function BlockEdit(props: Props) {
   const validate = () => {
     let errors = [];
     if (block.name === "") errors.push("Please enter a name.");
+    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to create blocks")
     setErrors(errors);
     return errors.length === 0;
   };
