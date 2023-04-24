@@ -18,7 +18,17 @@ export const LinkEdit: React.FC<Props> = (props) => {
   const [subName, setSubName] = useState<string>(null);
   const [toggleSubName, setToggleSubName] = useState<boolean>(false);
 
-  const handleDelete = () => { ApiHelper.delete("/links/" + currentLink.id, "ContentApi").then(() => { setCurrentLink(null); props.updatedFunction(); }); }
+  const handleDelete = () => {
+    let errors: string[] = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.links.edit)) errors.push("Unauthorized to delete links");
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    ApiHelper.delete("/links/" + currentLink.id, "ContentApi").then(() => { setCurrentLink(null); props.updatedFunction(); });
+  }
   const checkDelete = currentLink?.id ? handleDelete : undefined;
   const handleCancel = () => { props.updatedFunction(); }
 

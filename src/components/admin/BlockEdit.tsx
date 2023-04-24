@@ -43,6 +43,14 @@ export function BlockEdit(props: Props) {
   };
 
   const handleDelete = () => {
+    let errors = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to delete blocks");
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+
     if (window.confirm("Are you sure you wish to permanently delete this block?")) {
       ApiHelper.delete("/blocks/" + block.id.toString(), "ContentApi").then(() => props.updatedCallback(null));
     }
