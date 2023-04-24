@@ -266,6 +266,24 @@ export function ElementEdit(props: Props) {
     )
   }
 
+  const getImageFields = () => (
+    <>
+      {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
+      <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+      <TextField fullWidth size="small" label="Photo Label" name="photoAlt"  value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <FormGroup sx={{ marginLeft: 0.5}}>
+        <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
+      </FormGroup>
+    </>
+  )
+
+  const getWhiteSpaceFields = () => (
+    <>
+      <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "25"} />
+    </>
+  )
+  
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -285,6 +303,8 @@ export function ElementEdit(props: Props) {
       case "map": result = getMapFields(); break;
       case "sermons": result = <></>; break;
       case "carousel": result = getCarouselFields(); break;
+      case "image": result = getImageFields(); break;
+      case "whiteSpace": result = getWhiteSpaceFields(); break;
     }
     return result;
   }

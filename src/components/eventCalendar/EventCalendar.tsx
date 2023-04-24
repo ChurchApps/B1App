@@ -5,6 +5,7 @@ import { EventInterface } from "@/helpers";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { EventDetailsModel } from "./EventDetailsModel";
+import {RRule, Weekday, datetime, rrulestr} from "rrule";
 
 interface Props {
   events: EventInterface[];
@@ -35,9 +36,29 @@ export function EventCalendar(props:Props) {
     if (props.onRequestRefresh) props.onRequestRefresh();
   }
 
+  const expandedEvents:EventInterface[] = [];
+  const startRange = new Date();
+  const endRange = new Date();
+  startRange.setFullYear(startRange.getFullYear() - 1);
+  endRange.setFullYear(endRange.getFullYear() + 1);
+
+  props.events.forEach((event) => {
+    if (event.recurrenceRule) {
+      const rrule = RRule.fromString(event.recurrenceRule);
+      rrule.options.dtstart = new Date(event.start);
+      rrule.between(startRange, endRange).forEach((date) => {
+        const ev = { ...event };
+        ev.start = date;
+        ev.end = new Date(date.getTime() + (new Date(event.end).getTime() - new Date(event.start).getTime()));
+        expandedEvents.push(ev);
+      });
+    }
+    else expandedEvents.push(event);
+  });
+
   return (
     <div>
-      <Calendar localizer={localizer} events={props.events} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
+      <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
       {editEvent && !props.editGroupId && <EventDetailsModel event={editEvent} onDone={ handleDone } />}
     </div>

@@ -104,7 +104,7 @@ export default function GroupPage(props: WrapperPageProps) {
                 <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
                   <MarkdownPreview value={group.about} />
                 </div>
-                {(false) && <DisplayBox headerText="Group Calendar">
+                {(true) && <DisplayBox headerText="Group Calendar">
                   <GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={true} />
                 </DisplayBox>
                 }
