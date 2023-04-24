@@ -17,7 +17,7 @@ export function EditEventModal(props: Props) {
   const handleSave = () => {
     const ev = {...event};
     ev.recurrenceRule = rRule;
-    ApiHelper.post("/events", [event], "ContentApi").then(data => {
+    ApiHelper.post("/events", [ev], "ContentApi").then(data => {
       props.onDone();
     });
   }
