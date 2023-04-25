@@ -4,7 +4,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { EventInterface } from "@/helpers";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
-import { EventDetailsModel } from "./EventDetailsModel";
+import { EventHelper } from "@/appBase/helpers/EventHelper";
+import { DisplayEventModal } from "./DisplayEventModal";
 
 interface Props {
   events: EventInterface[];
@@ -15,9 +16,14 @@ interface Props {
 export function EventCalendar(props:Props) {
   const localizer = momentLocalizer(moment)
   const [editEvent, setEditEvent] = useState<EventInterface | null>(null);
+  const [displayEvent, setDisplayEvent] = useState<EventInterface | null>(null);
 
   const handleAddEvent = (slotInfo: any) => {
-    setEditEvent({ start: slotInfo.start, end: slotInfo.end, allDay:true, groupId: props.editGroupId, visibility: "public" })
+    const startTime = new Date(slotInfo.start);
+    startTime.setHours(12);
+    const endTime = new Date(slotInfo.start);
+    endTime.setHours(13);
+    setEditEvent({ start: startTime, end: endTime, allDay:false, groupId: props.editGroupId, visibility: "public" })
   }
 
   const handleEventClick = (event: EventInterface) => {
@@ -27,19 +33,42 @@ export function EventCalendar(props:Props) {
     ev.end = new Date(ev.end);
     ev.start.setMinutes(ev.start.getMinutes() - tz);
     ev.end.setMinutes(ev.end.getMinutes() - tz);
-    setEditEvent(ev);
+    setDisplayEvent(ev);
+    //setEditEvent(ev);
   }
 
   const handleDone = () => {
+    setDisplayEvent(null);
     setEditEvent(null);
     if (props.onRequestRefresh) props.onRequestRefresh();
   }
 
+  const expandedEvents:EventInterface[] = [];
+  const startRange = new Date();
+  const endRange = new Date();
+  startRange.setFullYear(startRange.getFullYear() - 1);
+  endRange.setFullYear(endRange.getFullYear() + 1);
+
+  props.events.forEach((event) => {
+    if (event.recurrenceRule) {
+      const dates = EventHelper.getRange(event, startRange, endRange);
+      dates.forEach((date) => {
+        const ev = { ...event };
+        const diff = new Date(ev.end).getTime() - new Date(ev.start).getTime();
+        ev.start = date;
+        ev.end = new Date(date.getTime() + diff);
+        expandedEvents.push(ev);
+      });
+      EventHelper.removeExcludeDates(expandedEvents);
+    }
+    else expandedEvents.push(event);
+  });
+
   return (
     <div>
-      <Calendar localizer={localizer} events={props.events} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
+      <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
-      {editEvent && !props.editGroupId && <EventDetailsModel event={editEvent} onDone={ handleDone } />}
+      {displayEvent && <DisplayEventModal event={displayEvent} onDone={ handleDone } canEdit={props.editGroupId!==""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}
     </div>
   );
 }
