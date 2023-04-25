@@ -66,7 +66,7 @@ export default function GroupPage(props: WrapperPageProps) {
             <img
               src={PersonHelper.getPhotoUrl(gm.person)}
               alt="avatar"
-              style={{ width: "80px", height: "64px", borderRadius: 8 }}
+              style={{ width: "50px", height: "40px", borderRadius: 8 }}
             />
           </TableCell>
           <TableCell>
@@ -84,7 +84,7 @@ export default function GroupPage(props: WrapperPageProps) {
     if (isLoading) return <Loading />;
     else
       return (
-        <Table id="groupMemberTable">
+        <Table id="groupMemberTable" size="small">
           <TableBody>{getRows()}</TableBody>
         </Table>
       );
@@ -93,7 +93,7 @@ export default function GroupPage(props: WrapperPageProps) {
   return (
     <Wrapper config={props.config}>
       <Grid container spacing={3} alignItems="flex-start">
-        <Grid item md={8} xs={12}>
+        <Grid item md={9} xs={12}>
           {group
             ? (
               <>
@@ -116,7 +116,7 @@ export default function GroupPage(props: WrapperPageProps) {
               <p>No group data found</p>
             )}
         </Grid>
-        <Grid item md={4} xs={12} sx={{mt: 11}}>
+        <Grid item md={3} xs={12} sx={{mt: 11}}>
           <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false}>
             {getTable()}
           </DisplayBox>

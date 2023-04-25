@@ -29,6 +29,9 @@ export function RRuleEditor(props: Props) {
           options.bymonthday = [];
           options.bynweekday = [];
           options.byweekday = [];
+          let startDay = props.start.getDay() - 1;
+          if (startDay===-1) startDay=6;
+          options.byweekday = [startDay];
         } else if (options.freq === RRule.MONTHLY) {
           options.bymonthday = [props.start.getDate() || 1];
           options.bynweekday = [];
