@@ -91,6 +91,12 @@ export class Permissions extends BasePermissions {
     pages: {
       edit: { api: "ContentApi", contentType: "Pages", action: "Edit" }
     },
+    links: {
+      edit: { api: "ContentApi", contentType: "Links", action: "Edit" }
+    },
+    content: {
+      edit: { api: "ContentApi", contentType: "Content", action: "Edit" }
+    }
   }
 }
 
