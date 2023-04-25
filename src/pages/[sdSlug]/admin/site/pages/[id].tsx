@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
-import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps, Permissions } from "@/helpers";
 import { DisplayBox, Theme } from "@/components";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
@@ -37,11 +37,17 @@ export default function Admin(props: Props) {
   }
 
   useEffect(() => {
+    if(!UserHelper.checkAccess(Permissions.contentApi.pages.edit)){
+      router.push("/admin/site");
+    }
+  }, []);
+
+  useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); }
   }, []);
 
   const loadData = () => {
-    if (isAuthenticated) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
+    if (isAuthenticated && UserHelper.checkAccess(Permissions.contentApi.pages.edit)) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
   }
 
   useEffect(loadData, [id]);
