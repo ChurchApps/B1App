@@ -38,7 +38,36 @@ export function EditEventModal(props: Props) {
     setRecurrenceModalType("");
   }
 
-  const handleRecurringSave = (editType:string) => {
+  const handleRecurringSave = async (editType:string) => {
+    switch (editType){
+      case "this":
+        const exception: EventExceptionInterface = { eventId: event.id, exceptionDate: event.start };
+        ApiHelper.post("/eventExceptions", [exception], "ContentApi").then(() => {
+          const oneEv = {...event};
+          oneEv.id=null;
+          oneEv.recurrenceRule = null;
+          ApiHelper.post("/events", [oneEv], "ContentApi").then(() => { props.onDone(); });
+        });
+        break;
+      case "future":
+        const newEvent = {...event};
+        newEvent.id = null;
+        newEvent.recurrenceRule = rRule;
+
+        const originalEv = await ApiHelper.get("/events/" + props.event.id, "ContentApi");
+        const rrule = EventHelper.getFullRRule(originalEv);
+        rrule.options.until = new Date(newEvent.start);
+        EventHelper.cleanRule(rrule.options);
+        originalEv.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);
+        console.log("EVENTS", "Original", originalEv, "New", newEvent);
+        ApiHelper.post("/events", [originalEv, newEvent], "ContentApi").then(() => { props.onDone(); });
+        break;
+      case "all":
+        const allEv = {...event};
+        allEv.recurrenceRule = rRule;
+        ApiHelper.post("/events", [allEv], "ContentApi").then(() => { props.onDone(); });
+        break;
+    }
     setRecurrenceModalType("");
   }
 
@@ -48,11 +77,14 @@ export function EditEventModal(props: Props) {
   }
 
   const handleSave = () => {
-    const ev = {...event};
-    ev.recurrenceRule = rRule;
-    ApiHelper.post("/events", [ev], "ContentApi").then(data => {
-      props.onDone();
-    });
+    if (props.event.recurrenceRule) setRecurrenceModalType("save");
+    else {
+      const ev = {...event};
+      ev.recurrenceRule = rRule;
+      ApiHelper.post("/events", [ev], "ContentApi").then(data => {
+        props.onDone();
+      });
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
