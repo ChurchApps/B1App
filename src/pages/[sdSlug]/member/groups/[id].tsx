@@ -90,6 +90,11 @@ export default function GroupPage(props: WrapperPageProps) {
       );
   };
 
+  let isLeader = false;
+  UserHelper.currentUserChurch.groups?.forEach((g) => {
+    if (g.id === groupId && g.leader) isLeader = true;
+  });
+
   return (
     <Wrapper config={props.config}>
       <Grid container spacing={3} alignItems="flex-start">
@@ -105,7 +110,7 @@ export default function GroupPage(props: WrapperPageProps) {
                   <MarkdownPreview value={group.about} />
                 </div>
                 {(true) && <DisplayBox headerText="Group Calendar">
-                  <GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={true} />
+                  <GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={isLeader} />
                 </DisplayBox>
                 }
                 <br />
