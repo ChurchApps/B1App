@@ -7,6 +7,7 @@ import { Loading, SmallButton, DisplayBox } from "../../appBase/components";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
+  nestedIndex?: number;
 }
 
 const getNestedChildren = (arr: LinkInterface[], parent: string) => {
@@ -62,42 +63,50 @@ export const Links: React.FC = () => {
     saveChanges();
   }
 
-  const RecursiveLinks = ({childrenLinks}: RecursiveInterface) => {
+  const RecursiveLinks = ({childrenLinks, nestedIndex}: RecursiveInterface) => {
+    //nestedIndex shows the level of recursion based on which styling is done.
+    nestedIndex = nestedIndex + 1;
     let idx = 0;
     return (
-      <div style={{marginLeft: "15px"}}>
+      <>
         {childrenLinks.map((link) => {
           const upLink = (idx === 0) ? null : <a href="about:blank" data-idx={idx} onClick={(e: React.MouseEvent) => moveUp(e, childrenLinks)}><Icon>arrow_upward</Icon></a>
           const downLink = (idx === childrenLinks.length - 1) ? null : <a href="about:blank" data-idx={idx} onClick={(e: React.MouseEvent) => moveDown(e, childrenLinks)}><Icon>arrow_downward</Icon></a>
           idx++
           return (
-            <div>
+            <>
               {link.children ? (
-                <div>
-                  <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                    <a href={link.url}>{link.text}</a>
-                    <div>
+                <>
+                  <tr>
+                    <td>
+                      <a href={link.url} style={{marginLeft: (nestedIndex * 20) + "px"}}>{link.text}</a>
+                    </td>
+                    <td style={{textAlign: "right"}}>
                       {upLink}
                       {downLink}
                       <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentLink(link); }}><Icon>edit</Icon></a>
-                    </div>
-                  </div>
-                  <RecursiveLinks childrenLinks={link.children} />
-                </div>
+                    </td>
+                  </tr>
+                  <>
+                    <RecursiveLinks childrenLinks={link.children} nestedIndex={nestedIndex} />
+                  </>
+                </>
                 ) : (
-                <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}} key={idx}>
-                  <a href={link.url}>{link.text}</a>
-                  <div>
+                <tr>
+                  <td >
+                    <a href={link.url} style={{marginLeft: (nestedIndex * 20) + "px"}}>{link.text}</a>
+                  </td>
+                  <td style={{textAlign: "right"}}>
                     {upLink}
                     {downLink}
                     <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentLink(link); }}><Icon>edit</Icon></a>
-                  </div>
-                </div>
+                  </td>
+                </tr>
               )}
-            </div>
+            </>
           )
         })}
-      </div>
+      </>
     )
   }
 
@@ -117,7 +126,7 @@ export const Links: React.FC = () => {
               <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentLink(link); }}><Icon>edit</Icon></a>
             </td>
           </tr>
-          {link.children && <RecursiveLinks childrenLinks={link.children} />}
+          {link.children && <RecursiveLinks childrenLinks={link.children} nestedIndex={0} />}
         </>
       );
       idx++;
