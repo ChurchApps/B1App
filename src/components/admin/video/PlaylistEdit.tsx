@@ -1,7 +1,7 @@
-import { InputBox } from "@/appBase/components";
-import { ApiHelper, DateHelper, PlaylistInterface, UniqueIdHelper } from "@/helpers";
-import { TextField, SelectChangeEvent } from "@mui/material";
 import React from "react";
+import { TextField, SelectChangeEvent } from "@mui/material";
+import { InputBox, ErrorMessages } from "@/appBase/components";
+import { ApiHelper, DateHelper, PlaylistInterface, UniqueIdHelper, UserHelper, Permissions } from "@/helpers";
 
 interface Props {
   currentPlaylist: PlaylistInterface,
@@ -11,11 +11,20 @@ interface Props {
 }
 
 export const PlaylistEdit: React.FC<Props> = (props) => {
+  const [errors, setErrors] = React.useState<string[]>([]);
   const [currentPlaylist, setCurrentPlaylist] = React.useState<PlaylistInterface>(null);
   const checkDelete = () => { if (!UniqueIdHelper.isMissing(currentPlaylist?.id)) return handleDelete; else return null; }
   const handleCancel = () => { props.updatedFunction(); }
 
   const handleDelete = () => {
+    let errors = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to delete playlists");
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+
     if (window.confirm("Are you sure you wish to delete this playlist?")) {
       ApiHelper.delete("/playlists/" + currentPlaylist.id, "ContentApi").then(() => { setCurrentPlaylist(null); props.updatedFunction(); });
     }
@@ -42,6 +51,14 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
   }
 
   const handleSave = () => {
+    let errors = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to create playlists");
+
+    if (errors.length > 0){
+      setErrors(errors);
+      return;
+    }
+
     ApiHelper.post("/playlists", [currentPlaylist], "ContentApi").then(props.updatedFunction);
   }
 
@@ -50,6 +67,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
 
   return (
     <InputBox headerIcon="calendar_month" headerText="Edit Playlist" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="streaminglive/playlists">
+      <ErrorMessages errors={errors} />
       <>
         <TextField fullWidth label="Title" name="title" value={currentPlaylist?.title || ""} onChange={handleChange} />
         <TextField fullWidth multiline label="Description" name="description" value={currentPlaylist?.description || ""} onChange={handleChange} />

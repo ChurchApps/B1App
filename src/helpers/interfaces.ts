@@ -96,6 +96,9 @@ export class Permissions extends BasePermissions {
     },
     content: {
       edit: { api: "ContentApi", contentType: "Content", action: "Edit" }
+    },
+    services: {
+      edit: { api: "ContentApi", contentType: "StreamingServices", action: "Edit" },
     }
   }
 }
