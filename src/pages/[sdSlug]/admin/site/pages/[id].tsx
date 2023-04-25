@@ -40,7 +40,7 @@ export default function Admin(props: Props) {
     if(!UserHelper.checkAccess(Permissions.contentApi.pages.edit)){
       router.push("/admin/site");
     }
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); }
