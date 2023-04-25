@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox } from "../index";
-import { ApiHelper, PageInterface, UserHelper } from "@/helpers";
+import { ApiHelper, PageInterface, UserHelper, Permissions } from "@/helpers";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
@@ -31,6 +31,7 @@ export function PageEdit(props: Props) {
     let errors = [];
     if (!page.url || page.url === "") errors.push("Please enter a path.");
     if (!page.title || page.title === "") errors.push("Please enter a title.");
+    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to create pages");
     setErrors(errors);
     return errors.length === 0;
   };
@@ -45,6 +46,14 @@ export function PageEdit(props: Props) {
   };
 
   const handleDelete = () => {
+    let errors = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to delete pages");
+    
+    if (errors.length > 0) {
+      setErrors(errors);
+      return ;
+    }
+
     if (window.confirm("Are you sure you wish to permanently delete this page?")) {
       ApiHelper.delete("/pages/" + page.id.toString(), "ContentApi").then(() => props.updatedCallback(null));
     }

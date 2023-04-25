@@ -86,13 +86,21 @@ export interface WrapperPageProps {
 }
 
 export class Permissions extends BasePermissions {
-  static contentApi = {
+  static contentApi= {
     ...super.contentApi,
+    pages: {
+      edit: { api: "ContentApi", contentType: "Pages", action: "Edit" }
+    },
+    links: {
+      edit: { api: "ContentApi", contentType: "Links", action: "Edit" }
+    },
+    content: {
+      edit: { api: "ContentApi", contentType: "Content", action: "Edit" }
+    },
     services: {
       edit: { api: "ContentApi", contentType: "StreamingServices", action: "Edit" },
     }
   }
-
 }
 
 export interface StreamingButtonInterface { text: string, url: string }
