@@ -7,7 +7,7 @@ import { Links } from "@/components/admin/Links";
 import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import { SmallButton } from "@/appBase/components";
-import { BlockInterface, PageInterface, ApiHelper } from "@/helpers";
+import { BlockInterface, PageInterface, ApiHelper, UserHelper, Permissions } from "@/helpers";
 import { Appearance } from "../Appearance";
 
 export function YourSiteSettings() {
@@ -99,32 +99,34 @@ export function YourSiteSettings() {
 
   return (
     <Grid container spacing={3}>
-      <Grid item md={8} xs={12}>
-        <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Path</TableCell>
-                <TableCell>Title</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{pagesUi}</TableBody>
-          </Table>
-        </DisplayBox>
-        <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Type</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>{blocksUi}</TableBody>
-          </Table>
-        </DisplayBox>
-      </Grid>
+      {UserHelper.checkAccess(Permissions.contentApi.content.edit) &&
+        <Grid item md={8} xs={12}>
+          <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Path</TableCell>
+                  <TableCell>Title</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{pagesUi}</TableBody>
+            </Table>
+          </DisplayBox>
+          <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Type</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{blocksUi}</TableBody>
+            </Table>
+          </DisplayBox>
+        </Grid>
+      }
       <Grid item md={4} xs={12}>
         {editPage && (
           <PageEdit
@@ -142,7 +144,7 @@ export function YourSiteSettings() {
           }}
         />
         )}
-        <Links />
+        {UserHelper.checkAccess(Permissions.contentApi.links.edit) && <Links />}
         <Appearance />
         <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="accounts/appearance">
           <table className="table">
