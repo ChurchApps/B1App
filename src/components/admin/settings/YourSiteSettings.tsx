@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon } from "@mui/material";
-import { DisplayBox } from "@/components";
+import { useWindowWidth } from "@react-hook/window-size";
+import { DisplayBox, ErrorMessages } from "@/components";
 import { Links } from "@/components/admin/Links";
 import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
@@ -12,11 +13,13 @@ import { Appearance } from "../Appearance";
 
 export function YourSiteSettings() {
   const { isAuthenticated } = ApiHelper;
+  const [errors, setErrors] = useState<string[]>([]);
   const [pages, setPages] = useState<PageInterface[]>([]);
   const [blocks, setBlocks] = useState<BlockInterface[]>([]);
   const [editPage, setEditPage] = useState<PageInterface>(null);
   const [editBlock, setEditBlock] = useState<BlockInterface>(null);
   const router = useRouter();
+  const windowWidth = useWindowWidth();
 
   // redirect to login when not authenticated
   useEffect(() => {
@@ -61,44 +64,82 @@ export function YourSiteSettings() {
   );
 
 
-  const pagesUi = pages.map((page) => (
-    <TableRow key={page.id}>
-      <TableCell>
-        <Link href={"/admin/site/pages/" + page.id}>{page.url}</Link>
-      </TableCell>
-      <TableCell>
-        <Link href={"/admin/site/pages/" + page.id}>{page.title}</Link>
-      </TableCell>
-      <TableCell align="right">
-        <SmallButton
-          icon="edit"
-          onClick={() => {
-            setEditPage(page);
-          }}
-        />
-      </TableCell>
-    </TableRow>
-  ));
+  const pagesUi = pages.map((page) => {
 
-  const blocksUi = blocks.map((block) => (
-    <TableRow key={block.id}>
-      <TableCell>
-        <Link href={"/admin/site/blocks/" + block.id}>{block.name}</Link>
-      </TableCell>
-      <TableCell>{block.blockType === "elementBlock" ? "Element(s)" : "Section(s)"}</TableCell>
-      <TableCell align="right">
-        <SmallButton
-          icon="edit"
-          onClick={() => {
-            setEditBlock(block);
-          }}
-        />
-      </TableCell>
-    </TableRow>
-  ));
+    const clickHandler = () => {
+      let errors: string[] = [];
+
+      if (windowWidth > 1000){
+        router.push("/admin/site/pages/" + page.id);
+      } else {
+        errors.push("Page editor is only accessible on desktop");
+      }
+  
+      if (errors.length > 0) {
+        setErrors(errors);
+        return;
+      }
+    }
+
+    return (
+      <TableRow key={page.id}>
+          <TableCell>
+            <a onClick={clickHandler} style={{cursor: "pointer"}}>{page.url}</a>
+          </TableCell>
+          <TableCell>
+            <a onClick={clickHandler} style={{cursor: "pointer"}}>{page.title}</a>
+          </TableCell>
+          <TableCell align="right">
+            <SmallButton
+              icon="edit"
+              onClick={() => {
+                setEditPage(page);
+              }}
+            />
+          </TableCell>
+        </TableRow>
+    )
+  });
+
+  const blocksUi = blocks.map((block) => {
+
+    const clickHandler = () => {
+      let errors: string[] = [];
+
+      if (windowWidth > 1000) {
+        router.push("/admin/site/blocks/" + block.id);
+      } else {
+        errors.push("Block editor is only accessible on desktop");
+      }
+
+      if (errors.length > 0) {
+        setErrors(errors);
+        return;
+      }
+
+    }
+
+    return (
+      <TableRow key={block.id}>
+        <TableCell>
+          <a onClick={clickHandler} style={{cursor: "pointer"}}>{block.name}</a>
+        </TableCell>
+        <TableCell>{block.blockType === "elementBlock" ? "Element(s)" : "Section(s)"}</TableCell>
+        <TableCell align="right">
+          <SmallButton
+            icon="edit"
+            onClick={() => {
+              setEditBlock(block);
+            }}
+          />
+        </TableCell>
+      </TableRow>
+    )
+  });
 
   return (
     <Grid container spacing={3}>
+      <ErrorMessages errors={errors} />
       <Grid item md={8} xs={12}>
         <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent}>
           <Table>
