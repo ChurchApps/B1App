@@ -1,22 +1,25 @@
-import { useEffect, useState } from "react";
-import { B1Settings, DisplayBox, Loading } from "@/components";
+import { useState } from "react";
+import { DisplayBox, Loading } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ConfigHelper, CuratedCalendarInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Grid, Icon, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import React from "react";
 import { SmallButton } from "@/appBase/components";
+import { CalendarEdit } from "@/components/admin/calendar/CalendarEdit";
 
 export default function Calendars(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
-  /*
-  const [calendars, setCalendars] = useState<CuratedCalendarInterface[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [calendars, setCalendars] = useState<CuratedCalendarInterface[]>(null);
+  const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
 
   const loadData = () => {
     if (!isAuthenticated) router.push("/login");
-    ApiHelper.get("/curatedCalendars", "ContentApi").then(data => { setCalendars(data); });
+    ApiHelper.get("/curatedCalendars", "ContentApi").then(data => {
+      setCalendars(data);
+    });
   }
 
 
@@ -28,7 +31,8 @@ export default function Calendars(props: WrapperPageProps) {
         <TableRow key={calendar.id}>
           <TableCell>{calendar.name}</TableCell>
           <TableCell style={{ textAlign: "right" }}>
-            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentSermon(video); }}><Icon>edit</Icon></a>
+            <SmallButton icon="calendar_month" toolTip="Manage Events" />
+            <SmallButton icon="edit" toolTip="Edit" onClick={() => { setCurrentCalendar(calendar); }} />
           </TableCell>
         </TableRow>
       );
@@ -38,7 +42,7 @@ export default function Calendars(props: WrapperPageProps) {
   }
 
   const getTable = () => {
-    if (isLoading) return <Loading />
+    if (calendars===null) return <Loading />
     else return (<Table>
       <TableHead>
         <TableRow>
@@ -54,7 +58,7 @@ export default function Calendars(props: WrapperPageProps) {
 
 
   const getEditContent = () => (<>
-    <SmallButton icon="add" />
+    <SmallButton icon="add" onClick={() => { setCurrentCalendar({}) }} />
   </>)
 
 
@@ -70,19 +74,17 @@ export default function Calendars(props: WrapperPageProps) {
           </DisplayBox>
         </Grid>
         <Grid item md={4} xs={12}>
-          <h3>About Curated Calendars</h3>
-          <p>Each group has it's own calendar which can be managed by group leaders from the group page. However, you can also create curated calendars which can be shared with the entire church.</p>
-          <p>For example, you might want to create a calendar for all of the church's small groups, or a calendar for all of the church's youth events.  You may also wish to create a whole church events calendar which highlights the bigger events without including minor events from each group.</p>
-          <p>You can create as many curated calendars as you like, and you can add events from any group to any curated calendar.</p>
+          {currentCalendar && (<CalendarEdit calendar={currentCalendar} updatedCallback={() => { setCurrentCalendar(null); loadData(); } } />)}
         </Grid>
       </Grid>
-
+      <h3>About Curated Calendars</h3>
+      <p>Each group has it's own calendar which can be managed by group leaders from the group page. However, you can also create curated calendars which can be shared with the entire church.</p>
+      <p>For example, you might want to create a calendar for all of the church's small groups, or a calendar for all of the church's youth events.  You may also wish to create a whole church events calendar which highlights the bigger events without including minor events from each group.</p>
+      <p>You can create as many curated calendars as you like, and you can add events from any group to any curated calendar.</p>
 
 
     </AdminWrapper>
-  );*/
-
-  return <></>
+  );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
