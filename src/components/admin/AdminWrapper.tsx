@@ -24,6 +24,7 @@ export const AdminWrapper: React.FC<Props> = (props) => {
     let result = "admin";
     if (path.startsWith("/admin/site")) result = "site";
     else if (path.startsWith("/admin/video")) result = "sermons";
+    else if (path.startsWith("/admin/calendar")) result = "calendar";
     return result;
   };
 
@@ -31,9 +32,10 @@ export const AdminWrapper: React.FC<Props> = (props) => {
 
   tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
 
-  tabs.push(<NavItem key="sermons" url="/admin/video" label="Sermons" icon="live_tv" router={router} selected={selectedTab === "sermons"} />);
-  tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);
   tabs.push(<NavItem key="admin" url="/admin" label="Mobile" icon="phone_android" router={router} selected={selectedTab === "admin"} />);
+  tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);
+  tabs.push(<NavItem key="sermons" url="/admin/video" label="Sermons" icon="live_tv" router={router} selected={selectedTab === "sermons"} />);
+  tabs.push(<NavItem key="calendar" url="/admin/calendars" label="Calendars" icon="calendar_month" router={router} selected={selectedTab === "calendar"} />);
 
   const navContent = (
     <>
