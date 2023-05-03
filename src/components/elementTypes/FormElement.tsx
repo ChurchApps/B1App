@@ -20,6 +20,7 @@ export const FormElement = (props: Props) => {
   const [addFormId, setAddFormId] = useState<string>("");
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
+  const [formName, setFormName] = useState<string>("");
   const router = useRouter();
   const formId = props.element.answers.formId;
 
@@ -43,6 +44,7 @@ export const FormElement = (props: Props) => {
       "/forms/standalone/" + formId + "?churchId=" + config.church.id,
       "MembershipApi"
     ).then((data) => {
+      setFormName(data.name)
       if (data.restricted) setAddFormId(formId);
       else setUnRestrictedFormId(formId);
     });
@@ -82,6 +84,7 @@ export const FormElement = (props: Props) => {
         updatedFunction={handleUpdate}
         showHeader={false}
         noBackground={true}
+        formName={formName}
       />
     </>
   );
