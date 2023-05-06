@@ -18,9 +18,17 @@ export const LinkEdit: React.FC<Props> = (props) => {
   const [subName, setSubName] = useState<string>(null);
   const [toggleSubName, setToggleSubName] = useState<boolean>(false);
 
+  const filteredGroupLinks = links && links.filter((link) => link.id !== currentLink.id);
+
   const handleDelete = () => {
     let errors: string[] = [];
+    let i = 0;
+    links.forEach(link => {
+      if (currentLink.id === link.parentId) {i++;} 
+    });
+
     if (!UserHelper.checkAccess(Permissions.contentApi.links.edit)) errors.push("Unauthorized to delete links");
+    if (i > 0) errors.push("Delete nested links first");
 
     if (errors.length > 0) {
       setErrors(errors);
@@ -71,7 +79,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       <TextField fullWidth label="Text" name="text" type="text" value={currentLink?.text || ""} onChange={handleChange} />
       <TextField fullWidth label="Url" name="url" type="text" value={currentLink?.url || ""} onChange={handleChange} />
-      {links?.length > 0 &&
+      {filteredGroupLinks?.length > 0 &&
         <>
           <div>
             {subName && toggleSubName === true
@@ -89,7 +97,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
                 flexWrap: "wrap",
               }}
             >
-              {links.map((link: LinkInterface) => (
+              {filteredGroupLinks.map((link: LinkInterface) => (
                 <ToggleButton
                   sx={{marginTop: 0.5}}
                   value={link.id}
