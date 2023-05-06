@@ -63,23 +63,25 @@ export function YourSiteSettings() {
     />
   );
 
+  const navigationHandler = (errorMessage: string, url: string) => {
+    let errors: string[] = [];
+
+    if (windowWidth > 882){
+      router.push(url);
+    } else {
+      errors.push(errorMessage);
+    }
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+  }
+
 
   const pagesUi = pages.map((page) => {
 
-    const clickHandler = () => {
-      let errors: string[] = [];
-
-      if (windowWidth > 1000){
-        router.push("/admin/site/pages/" + page.id);
-      } else {
-        errors.push("Page editor is only accessible on desktop");
-      }
-  
-      if (errors.length > 0) {
-        setErrors(errors);
-        return;
-      }
-    }
+    const clickHandler = () => navigationHandler("Page editor is only accessible on desktop", "/admin/site/pages/" + page.id);
 
     return (
       <TableRow key={page.id}>
@@ -103,21 +105,7 @@ export function YourSiteSettings() {
 
   const blocksUi = blocks.map((block) => {
 
-    const clickHandler = () => {
-      let errors: string[] = [];
-
-      if (windowWidth > 1000) {
-        router.push("/admin/site/blocks/" + block.id);
-      } else {
-        errors.push("Block editor is only accessible on desktop");
-      }
-
-      if (errors.length > 0) {
-        setErrors(errors);
-        return;
-      }
-
-    }
+    const clickHandler = () => navigationHandler("Block editor is only accessible on desktop", "/admin/site/blocks/" + block.id)
 
     return (
       <TableRow key={block.id}>

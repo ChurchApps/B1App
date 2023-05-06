@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
+import { useWindowWidth } from "@react-hook/window-size";
 import { ApiHelper, ElementInterface, BlockInterface, SectionInterface, UserHelper, ConfigHelper, WrapperPageProps, ChurchInterface } from "@/helpers";
 import { DisplayBox, Theme } from "@/components";
 import { Section } from "@/components/Section";
@@ -27,6 +28,7 @@ export default function Admin(props: Props) {
   const [editElement, setEditElement] = useState<ElementInterface>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id?.toString() || "";
+  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     if (!isAuthenticated) { router.push("/login"); }
@@ -37,6 +39,13 @@ export default function Admin(props: Props) {
   }
 
   useEffect(loadData, [id]);
+
+  //block editor only available for desktop
+  useEffect(() => {
+    if (windowWidth < 883){
+      router.push("/admin/site");
+    }
+  }, [windowWidth]);
 
   const handleDrop = (data: any, sort: number) => {
     if (data.data) {

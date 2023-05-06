@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
+import { useWindowWidth } from "@react-hook/window-size";
 import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps, Permissions } from "@/helpers";
 import { DisplayBox, Theme } from "@/components";
 import { Section } from "@/components/Section";
@@ -29,6 +30,7 @@ export default function Admin(props: Props) {
   const [editorBarHeight, setEditorBarHeight] = useState(400);
   const [scrollTop, setScrollTop] = useState(0);
   const id = router.query.id?.toString() || "";
+  const windowWidth = useWindowWidth();
 
   const zones:any = {
     cleanCentered: ["main"],
@@ -51,6 +53,13 @@ export default function Admin(props: Props) {
   }
 
   useEffect(loadData, [id]);
+
+  //page editor only available for desktop
+  useEffect(() => {
+    if (windowWidth < 883){
+      router.push("/admin/site");
+    }
+  }, [windowWidth]);
 
   const handleDrop = (data: any, sort: number, zone: string) => {
     console.log("handleDrop", zone, sort);
