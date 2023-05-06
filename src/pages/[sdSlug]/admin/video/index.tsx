@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ConfigHelper, WrapperPageProps, UserHelper, Permissions } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
 import { DisplayBox, ImageEditor } from "@/appBase/components";
@@ -39,7 +39,7 @@ export default function Admin(props: WrapperPageProps) {
         <Grid item md={8} xs={12}>
           {(importMode)
             ? <Import handleDone={() => { setImportMode(false); }} />
-            : <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
+            : <>{UserHelper.checkAccess(Permissions.contentApi.services.edit) && <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />}</>
           }
         </Grid>
         <Grid item md={4} xs={12}>
@@ -48,7 +48,9 @@ export default function Admin(props: WrapperPageProps) {
             <div><Link href="/admin/video/settings">Edit Times and Appearance</Link></div>
             { (!importMode) && <div><a href="about:blank" onClick={(e) => { e.preventDefault(); setImportMode(true); }}>Bulk Import from Youtube</a></div> }
           </DisplayBox>
-          <Playlists showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "playlist" && photoUrl) || null} />
+          {UserHelper.checkAccess(Permissions.contentApi.services.edit) &&
+            <Playlists showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "playlist" && photoUrl) || null} />
+          }
         </Grid>
       </Grid>
     </AdminWrapper>
