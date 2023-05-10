@@ -85,6 +85,7 @@ export const FormElement = (props: Props) => {
         showHeader={false}
         noBackground={true}
         formName={formName}
+        sendEmail={true}
       />
     </>
   );

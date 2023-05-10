@@ -49,6 +49,7 @@ export default function Form(props: WrapperPageProps) {
       updatedFunction={handleUpdate}
       cancelFunction={() => router.push("/")}
       formName={formName}
+      sendEmail={true}
     />
   );
 
