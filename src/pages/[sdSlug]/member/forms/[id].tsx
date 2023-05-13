@@ -46,6 +46,7 @@ export default function Form(props: WrapperPageProps) {
       personId={PersonHelper?.person?.id}
       updatedFunction={handleUpdate}
       cancelFunction={() => router.push("/")}
+      sendEmail={true}
     />
   );
 
