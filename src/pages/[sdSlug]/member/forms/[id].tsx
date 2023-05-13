@@ -13,7 +13,6 @@ export default function Form(props: WrapperPageProps) {
   const [late, setLate] = useState<Date>(null);
   const [addFormId, setAddFormId] = useState<string>("");
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
-  const [formName, setFormName] = useState<string>("");
   const router = useRouter();
   const formId = router.query.id as string;
 
@@ -21,7 +20,6 @@ export default function Form(props: WrapperPageProps) {
     setIsLoading(true);
     ApiHelper.get("/forms/standalone/" + formId + "?churchId=" + props.config.church.id, "MembershipApi").then(
       (data) => {
-        setFormName(data.name)
         let now = new Date().setHours(0, 0, 0, 0);
         let start = data.accessStartTime ? new Date(data.accessStartTime) : null;
         let end = data.accessEndTime ? new Date(data.accessEndTime) : null;
