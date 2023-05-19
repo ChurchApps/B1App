@@ -51,7 +51,6 @@ export function EventCalendar(props:Props) {
 
   props.events.forEach((event) => {
     const ev = {...event};
-    // TODO: check for TimeZone.
     ev.start = new Date(ev.start);
     ev.end = new Date(ev.end);
     if (event.recurrenceRule) {
