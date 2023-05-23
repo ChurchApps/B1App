@@ -31,7 +31,7 @@ export default function Calendars(props: WrapperPageProps) {
         <TableRow key={calendar.id}>
           <TableCell>{calendar.name}</TableCell>
           <TableCell style={{ textAlign: "right" }}>
-            <SmallButton icon="calendar_month" toolTip="Manage Events" />
+            <SmallButton icon="calendar_month" toolTip="Manage Events" onClick={() => { router.push("/admin/calendars/" + calendar.id) }} />
             <SmallButton icon="edit" toolTip="Edit" onClick={() => { setCurrentCalendar(calendar); }} />
           </TableCell>
         </TableRow>
