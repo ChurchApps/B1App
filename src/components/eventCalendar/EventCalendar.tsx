@@ -50,6 +50,9 @@ export function EventCalendar(props:Props) {
   endRange.setFullYear(endRange.getFullYear() + 1);
 
   props.events.forEach((event) => {
+    const ev = {...event};
+    ev.start = new Date(ev.start);
+    ev.end = new Date(ev.end);
     if (event.recurrenceRule) {
       const dates = EventHelper.getRange(event, startRange, endRange);
       dates.forEach((date) => {
@@ -61,7 +64,7 @@ export function EventCalendar(props:Props) {
       });
       EventHelper.removeExcludeDates(expandedEvents);
     }
-    else expandedEvents.push(event);
+    else expandedEvents.push(ev);
   });
 
   return (
