@@ -1,7 +1,7 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { ApiHelper, DateHelper, EventExceptionInterface, EventInterface } from "@/helpers";
 import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography } from "@mui/material";
-import { MarkdownEditor } from "..";
+import { MarkdownEditor, ErrorMessages } from "..";
 import { useState } from "react";
 import { RRuleEditor } from "./RRuleEditor";
 import { EditRecurringModal } from "./EditRecurringModal";
@@ -16,6 +16,7 @@ export function EditEventModal(props: Props) {
   const [event, setEvent] = useState(props.event);
   const [rRule, setRRule] = useState(event.recurrenceRule);
   const [recurrenceModalType, setRecurrenceModalType] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleRecurringDelete = (editType:string) => {
     switch (editType){
@@ -79,7 +80,16 @@ export function EditEventModal(props: Props) {
   const handleSave = () => {
     if (props.event.recurrenceRule) setRecurrenceModalType("save");
     else {
+      let errors: string[] = [];
       const ev = {...event};
+      
+      if (!ev.title || ev.title === "") errors.push("Please enter a title");
+
+      if (errors.length > 0) {
+        setErrors(errors);
+        return;
+      }
+
       ev.recurrenceRule = rRule;
       ApiHelper.post("/events", [ev], "ContentApi").then(data => {
         props.onDone();
@@ -124,6 +134,7 @@ export function EditEventModal(props: Props) {
 
   return (
     <>
+      <ErrorMessages errors={errors} />
       <Dialog open={true} onClose={props.onDone} fullScreen>
         <AppBar sx={{ position: 'relative' }}>
           <Toolbar>
