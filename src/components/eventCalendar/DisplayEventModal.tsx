@@ -25,8 +25,12 @@ export function DisplayEventModal(props: Props) {
       else result = `${prettyStartDate} - ${prettyEndDate}`;
     } else {
       const prettyStart = DateHelper.prettyDateTime(props.event.start)
-      const prettyEnd = DateHelper.prettyTime(props.event.end)
-      result = `${prettyStart} - ${prettyEnd}`;
+      const prettyEnd = DateHelper.prettyDateTime(props.event.end)
+      const prettyEndTime = DateHelper.prettyTime(props.event.end);
+      const startDate = DateHelper.prettyDate(new Date(prettyStart))
+      const endDate = DateHelper.prettyDate(new Date(prettyEnd))
+      if (startDate === endDate) result = `${prettyStart} - ${prettyEndTime}`
+      else result = `${prettyStart} - ${prettyEnd}`;
     }
     return result;
   }
