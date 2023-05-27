@@ -51,7 +51,7 @@ export function CalendarEdit(props: Props) {
     }
 
     if (window.confirm("Are you sure you wish to permanently delete this calendar?")) {
-      ApiHelper.delete("/calendars/" + calendar.id.toString(), "ContentApi").then(() => props.updatedCallback(null));
+      ApiHelper.delete("/curatedCalendars/" + calendar.id.toString(), "ContentApi").then(() => props.updatedCallback(null));
     }
   };
 
