@@ -33,19 +33,23 @@ export default function CalendarPage(props: WrapperPageProps) {
   const loadData = () => {
     if (!isAuthenticated) router.push("/login");
     ApiHelper.get("/curatedCalendars/" + curatedCalendarId, "ContentApi").then((data) => setCurrentCalendar(data));
-  };
 
-  const loadGroups = () => {
-    setIsLoading(true);
-    ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoading(false); });
-  };
-  
-  const loadCuratedEvents = () => {
-    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId, "ContentApi").then((data) => setCuratedEvents(data));
-  };
-  
-  const loadEvents = () => {
-    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "/events", "ContentApi").then((data) => setEvents(data));
+    const loadGroups = () => {
+      setIsLoading(true);
+      ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoading(false); });
+    };
+
+    const loadCuratedEvents = () => {
+      ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?with=eventData", "ContentApi").then((data) => {
+        setCuratedEvents(data);
+        let newArray: EventInterface[] = [];
+        data.forEach((d: CuratedEventInterface) => { newArray.push(d?.eventData); setEvents(newArray); });
+      });
+    };
+
+    loadGroups();
+    loadCuratedEvents();
+
   };
   
   const handleSave = () => {
@@ -53,18 +57,12 @@ export default function CalendarPage(props: WrapperPageProps) {
     ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
       setSelectedGroupId("");
       setOpen(false);
-      loadCuratedEvents();
-      loadEvents();
+      loadData();
     });
   };
   
-  const filteredGroups = groups.filter((g) => {
-    return !curatedEvents.find((crtEv) => {
-      return crtEv.groupId === g.id;
-    });
-  });
 
-  useEffect(() => { loadData(); loadCuratedEvents(); loadEvents(); }, []);
+  useEffect(() => { loadData(); }, []);
   
   return (
     <AdminWrapper config={props.config}>
@@ -73,7 +71,7 @@ export default function CalendarPage(props: WrapperPageProps) {
         <Box
           sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
           <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
-          <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); loadGroups(); }}>Add</Button>
+          <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
         </Box>
         <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end" style={{ height: 500 }} />
       </DisplayBox>
@@ -84,15 +82,15 @@ export default function CalendarPage(props: WrapperPageProps) {
             <Loading />
           ) : (
             <>
-              {filteredGroups?.length > 0 ? (
+              {groups?.length > 0 ? (
                 <FormControl fullWidth>
                   <InputLabel>Select a Group</InputLabel>
                   <Select fullWidth label="Select a Group" value={selectedGroupId} onChange={(e: SelectChangeEvent) => setSelectedGroupId(e.target.value as string)}>
-                    {filteredGroups.map((group) => <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)}
+                    {groups.map((group) => <MenuItem disabled={curatedEvents.some((crtEv) => crtEv.groupId.includes(group.id))} key={group.id} value={group.id}>{group.name}</MenuItem>)}
                   </Select>
                 </FormControl>
               ) : (
-                <Typography>You've added all the available groups.</Typography>
+                <Typography>No groups found.</Typography>
               )}
             </>
           )}
