@@ -18,7 +18,7 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [groups, setGroups] = useState<GroupInterface[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingGroups, setIsLoadingGroups] = useState<boolean>(false);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [curatedEvents, setCuratedEvents] = useState<CuratedEventInterface[]>([]);
   const [events, setEvents] = useState<EventInterface[]>([]);
@@ -34,22 +34,14 @@ export default function CalendarPage(props: WrapperPageProps) {
     if (!isAuthenticated) router.push("/login");
     ApiHelper.get("/curatedCalendars/" + curatedCalendarId, "ContentApi").then((data) => setCurrentCalendar(data));
 
-    const loadGroups = () => {
-      setIsLoading(true);
-      ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoading(false); });
-    };
+    setIsLoadingGroups(true);
+    ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoadingGroups(false); });
 
-    const loadCuratedEvents = () => {
-      ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?with=eventData", "ContentApi").then((data) => {
-        setCuratedEvents(data);
-        let newArray: EventInterface[] = [];
-        data.forEach((d: CuratedEventInterface) => { newArray.push(d?.eventData); setEvents(newArray); });
-      });
-    };
-
-    loadGroups();
-    loadCuratedEvents();
-
+    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?with=eventData", "ContentApi").then((data: CuratedEventInterface[]) => {
+      setCuratedEvents(data);
+      const newEvents: EventInterface[] = data?.map(d => d.eventData) ?? [];
+      setEvents(newEvents);
+    });
   };
   
   const handleSave = () => {
@@ -78,7 +70,7 @@ export default function CalendarPage(props: WrapperPageProps) {
       <Dialog open={open} onClose={() => { setOpen(false); setSelectedGroupId(""); }} fullWidth scroll="body" fullScreen={fullScreen}>
         <DialogTitle>Add a Group</DialogTitle>
         <DialogContent>
-          {isLoading ? (
+          {isLoadingGroups ? (
             <Loading />
           ) : (
             <>
@@ -86,7 +78,7 @@ export default function CalendarPage(props: WrapperPageProps) {
                 <FormControl fullWidth>
                   <InputLabel>Select a Group</InputLabel>
                   <Select fullWidth label="Select a Group" value={selectedGroupId} onChange={(e: SelectChangeEvent) => setSelectedGroupId(e.target.value as string)}>
-                    {groups.map((group) => <MenuItem disabled={curatedEvents.some((crtEv) => crtEv.groupId.includes(group.id))} key={group.id} value={group.id}>{group.name}</MenuItem>)}
+                    {groups.map((group) => <MenuItem disabled={curatedEvents.some((curatedEvent) => curatedEvent.groupId.includes(group.id))} key={group.id} value={group.id}>{group.name}</MenuItem>)}
                   </Select>
                 </FormControl>
               ) : (
