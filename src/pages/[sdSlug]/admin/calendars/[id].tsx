@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Stack, Grid, RadioGroup, Radio, FormControlLabel, FormGroup, Checkbox } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -22,6 +22,9 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [curatedEvents, setCuratedEvents] = useState<CuratedEventInterface[]>([]);
   const [events, setEvents] = useState<EventInterface[]>([]);
+  const [addType, setAddType] = useState<string>("group");
+  const [groupEvents, setGroupEvents] = useState<EventInterface[]>([]);
+  const [eventIdsList, setEventIdsList] = useState<string[]>([]);
 
   const router = useRouter();
   const curatedCalendarId = router.query?.id;
@@ -43,17 +46,52 @@ export default function CalendarPage(props: WrapperPageProps) {
       setEvents(newEvents);
     });
   };
+
+  const getGroupEvents = () => {
+    selectedGroupId && ApiHelper.get("/events/public/group/" + props.config.church.id + "/" + selectedGroupId, "ContentApi").then((data) => setGroupEvents(data));
+  }
+
+  const handleDone = () => {
+    setOpen(false);
+    setSelectedGroupId("");
+    setAddType("group");
+    setGroupEvents([]);
+    setEventIdsList([])
+  }
   
   const handleSave = () => {
-    const data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
-    ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
-      setSelectedGroupId("");
-      setOpen(false);
-      loadData();
-    });
-  };
-  
+    if (addType === "group") {
+      const data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
+      ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
+        handleDone();
+        loadData();
+      });
+    }
 
+    if (addType === "events" && eventIdsList.length > 0) {
+      const data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string, eventIds: eventIdsList };
+      ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
+        handleDone();
+        loadData();
+      })
+    }
+  };
+
+  const handleEventsListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checkedName = e.target.name;
+    const checkedIndex = eventIdsList.indexOf(checkedName);
+    const list = [...eventIdsList];
+
+    if (checkedIndex === -1) {
+      list.push(checkedName);
+    } else {
+      list.splice(checkedIndex, 1);
+    }
+  
+    setEventIdsList(list);
+  }
+
+  useEffect(() => { getGroupEvents(); }, [selectedGroupId]);
   useEffect(() => { loadData(); }, []);
   
   return (
@@ -67,7 +105,7 @@ export default function CalendarPage(props: WrapperPageProps) {
         </Box>
         <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end" style={{ height: 500 }} />
       </DisplayBox>
-      <Dialog open={open} onClose={() => { setOpen(false); setSelectedGroupId(""); }} fullWidth scroll="body" fullScreen={fullScreen}>
+      <Dialog open={open} onClose={handleDone} fullWidth scroll="body" fullScreen={fullScreen}>
         <DialogTitle>Add a Group</DialogTitle>
         <DialogContent>
           {isLoadingGroups ? (
@@ -86,9 +124,26 @@ export default function CalendarPage(props: WrapperPageProps) {
               )}
             </>
           )}
+          {selectedGroupId && (
+            <FormControl fullWidth>
+              <RadioGroup value={addType} onChange={(e) => { setAddType(e.target.value); }}>
+                <Stack direction={{ xs: "column", sm: "row" }}>
+                  <FormControlLabel control={<Radio size="small" />} value="group" label="Add all the events of the group" />
+                  <FormControlLabel control={<Radio size="small" />} value="events" label="Add specific Events" />
+                </Stack>
+              </RadioGroup>
+            </FormControl>
+          )}
+          {(addType === "events" && groupEvents.length > 0) && (
+            <FormGroup>
+              <Grid container spacing={1}>
+                {groupEvents.map((event) => <Grid item md={4} sm={6} xs={12}><FormControlLabel control={<Checkbox size="small" onChange={handleEventsListChange} />} name={event.id} label={event.title} /></Grid>)}
+              </Grid>
+            </FormGroup>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button variant="text" onClick={() => { setOpen(false); setSelectedGroupId(""); }}>cancel</Button>
+          <Button variant="text" onClick={handleDone}>cancel</Button>
           <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId}>Save</Button>
         </DialogActions>
       </Dialog>
