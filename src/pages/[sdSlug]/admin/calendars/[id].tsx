@@ -57,12 +57,12 @@ export default function CalendarPage(props: WrapperPageProps) {
 
   const handleGroupDelete = (groupId: string) => {
     if(confirm("Are you sure you wish to delete this group?")) {
-      ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/" + groupId, "ContentApi").then(() => { loadData(); })
+      ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => { loadData(); })
     }
   }
 
   const handleGroupSync = (groupId: string) => {
-    ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/" + groupId, "ContentApi").then(() => {
+    ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => {
       ApiHelper.post("/curatedEvents", [{ curatedCalendarId: curatedCalendarId, groupId: groupId as string }], "ContentApi").then(() => {
         loadData();
       })
