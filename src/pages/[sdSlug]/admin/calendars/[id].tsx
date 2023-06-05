@@ -60,21 +60,14 @@ export default function CalendarPage(props: WrapperPageProps) {
   }
   
   const handleSave = () => {
-    if (addType === "group") {
-      const data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
-      ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
-        handleDone();
-        loadData();
-      });
-    }
+    let data;
+    if (addType === "group") data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
+    if (addType === "events" && eventIdsList.length > 0) data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string, eventIds: eventIdsList };
 
-    if (addType === "events" && eventIdsList.length > 0) {
-      const data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string, eventIds: eventIdsList };
-      ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
-        handleDone();
-        loadData();
-      })
-    }
+    ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
+      handleDone();
+      loadData();
+    });
   };
 
   const handleEventsListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
