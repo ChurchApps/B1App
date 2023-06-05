@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material/styles";
 import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, CuratedEventInterface, GroupInterface, EventInterface } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { DisplayBox, Loading } from "@/components";
+import { DisplayCalendarEventModal } from "@/components/admin/calendar/DisplayCalendarEventModal";
 
 export default function CalendarPage(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -22,6 +23,7 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [curatedEvents, setCuratedEvents] = useState<CuratedEventInterface[]>([]);
   const [events, setEvents] = useState<EventInterface[]>([]);
+  const [displayCalendarEvent, setDisplayCalendarEvent] = useState<EventInterface | null>(null);
 
   const router = useRouter();
   const curatedCalendarId = router.query?.id;
@@ -43,6 +45,16 @@ export default function CalendarPage(props: WrapperPageProps) {
       setEvents(newEvents);
     });
   };
+
+  const handleEventClick = (event: EventInterface) => {
+    const ev = {...event};
+    let tz = new Date().getTimezoneOffset();
+    ev.start = new Date(ev.start);
+    ev.end = new Date(ev.end);
+    ev.start.setMinutes(ev.start.getMinutes() - tz);
+    ev.end.setMinutes(ev.end.getMinutes() - tz);
+    setDisplayCalendarEvent(ev);
+  }
   
   const handleSave = () => {
     const data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
@@ -65,8 +77,9 @@ export default function CalendarPage(props: WrapperPageProps) {
           <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
           <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
         </Box>
-        <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end" style={{ height: 500 }} />
+        <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
       </DisplayBox>
+      {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} handleDone={() => { setDisplayCalendarEvent(null); loadData(); }} />}
       <Dialog open={open} onClose={() => { setOpen(false); setSelectedGroupId(""); }} fullWidth scroll="body" fullScreen={fullScreen}>
         <DialogTitle>Add a Group</DialogTitle>
         <DialogContent>
