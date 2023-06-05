@@ -4,8 +4,10 @@ import { useRouter } from "next/router";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SyncIcon from '@mui/icons-material/Sync';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, CuratedEventInterface, GroupInterface, EventInterface } from "@/helpers";
@@ -66,6 +68,60 @@ export default function CalendarPage(props: WrapperPageProps) {
     });
   };
 
+  const handleGroupDelete = (groupId: string) => {
+    if(confirm("Are you sure you wish to delete this group?")) {
+      ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => { loadData(); })
+    }
+  }
+
+  const handleGroupSync = (groupId: string) => {
+    ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => {
+      ApiHelper.post("/curatedEvents", [{ curatedCalendarId: curatedCalendarId, groupId: groupId as string }], "ContentApi").then(() => {
+        loadData();
+      })
+    })
+  }
+
+  const addedGroups = groups.filter((g) => {
+    return curatedEvents.find((crtEv) => {
+      return crtEv.groupId === g.id
+    });
+  });
+
+  const getRows = () => {
+    let rows: JSX.Element[] = [];
+
+    if (addedGroups.length === 0) {
+      rows.push(
+        <TableRow key="0">
+          <TableCell>No Groups Found.</TableCell>
+        </TableRow>
+      )
+    }
+
+    addedGroups.map((g, index) => {
+      rows.push(
+        <TableRow key={index}>
+          <TableCell>{g.name}</TableCell>
+          <TableCell>
+            <Tooltip title="Sync: All new group events will be added to the calendar" arrow>
+              <IconButton color="primary" size="small" onClick={() => { handleGroupSync(g.id) }}>
+                <SyncIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Remove Group" arrow>
+              <IconButton color="primary" size="small" onClick={() => { handleGroupDelete(g.id) }}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </TableCell>
+        </TableRow>
+      )
+    })
+
+    return rows;
+  }
+  
   const expandedEvents:EventInterface[] = [];
   const startRange = new Date();
   const endRange = new Date();
@@ -94,14 +150,29 @@ export default function CalendarPage(props: WrapperPageProps) {
   return (
     <AdminWrapper config={props.config}>
       <h1>{currentCalendar?.name}</h1>
-      <DisplayBox headerText="">
-        <Box
-          sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
-          <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
-          <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
-        </Box>
-        <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
-      </DisplayBox>
+      <Grid container spacing={3}>
+        <Grid item md={9} xs={12}>
+          <DisplayBox headerText="">
+            <Box
+              sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
+              <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
+              <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
+            </Box>
+            <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
+          </DisplayBox>
+        </Grid>
+        <Grid item md={3} xs={12}>
+          <DisplayBox headerText="Groups" headerIcon="backup_table">
+            {isLoadingGroups ? (
+              <Loading />
+            ) : (
+              <Table size="small">
+                <TableBody>{getRows()}</TableBody>
+              </Table>
+            )}
+          </DisplayBox>
+        </Grid>
+      </Grid>
       {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} handleDone={() => { setDisplayCalendarEvent(null); loadData(); }} />}
       <Dialog open={open} onClose={() => { setOpen(false); setSelectedGroupId(""); }} fullWidth scroll="body" fullScreen={fullScreen}>
         <DialogTitle>Add a Group</DialogTitle>
