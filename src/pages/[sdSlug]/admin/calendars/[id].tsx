@@ -60,9 +60,8 @@ export default function CalendarPage(props: WrapperPageProps) {
   }
   
   const handleSave = () => {
-    let data;
-    if (addType === "group") data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
-    if (addType === "events" && eventIdsList.length > 0) data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string, eventIds: eventIdsList };
+    let data: any = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
+    if (addType === "events" && eventIdsList.length > 0) data.eventIds = eventIdsList;
 
     ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
       handleDone();
