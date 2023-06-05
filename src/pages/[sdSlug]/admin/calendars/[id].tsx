@@ -102,7 +102,7 @@ export default function CalendarPage(props: WrapperPageProps) {
         </Box>
         <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
       </DisplayBox>
-      {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} handleDone={() => { setDisplayCalendarEvent(null); loadData(); }} />}
+      {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} curatedCalendarId={curatedCalendarId as string} handleDone={() => { setDisplayCalendarEvent(null); loadData(); }} />}
       <Dialog open={open} onClose={() => { setOpen(false); setSelectedGroupId(""); }} fullWidth scroll="body" fullScreen={fullScreen}>
         <DialogTitle>Add a Group</DialogTitle>
         <DialogContent>
