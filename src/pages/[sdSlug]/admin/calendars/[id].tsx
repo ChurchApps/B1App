@@ -9,6 +9,7 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, CuratedEventInterface, GroupInterface, EventInterface } from "@/helpers";
+import { EventHelper } from "@/appBase/helpers/EventHelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { DisplayBox, Loading } from "@/components";
 import { DisplayCalendarEventModal } from "@/components/admin/calendar/DisplayCalendarEventModal";
@@ -64,7 +65,29 @@ export default function CalendarPage(props: WrapperPageProps) {
       loadData();
     });
   };
-  
+
+  const expandedEvents:EventInterface[] = [];
+  const startRange = new Date();
+  const endRange = new Date();
+  startRange.setFullYear(startRange.getFullYear() - 1);
+  endRange.setFullYear(endRange.getFullYear() + 1);
+
+  events.forEach((event) => {
+    const ev = {...event};
+    ev.start = new Date(ev.start);
+    ev.end = new Date(ev.end);
+    if (ev.recurrenceRule) {
+      const dates = EventHelper.getRange(ev, startRange, endRange);
+      dates.forEach((date) => {
+        const evt = { ...event };
+        const diff = new Date(evt.end).getTime() - new Date(evt.start).getTime();
+        evt.start = date;
+        evt.end = new Date(date.getTime() + diff);
+        expandedEvents.push(evt);
+      });
+    }
+    else expandedEvents.push(ev);
+  });
 
   useEffect(() => { loadData(); }, []);
   
@@ -77,7 +100,7 @@ export default function CalendarPage(props: WrapperPageProps) {
           <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
           <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
         </Box>
-        <Calendar localizer={localizer} events={events} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
+        <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
       </DisplayBox>
       {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} handleDone={() => { setDisplayCalendarEvent(null); loadData(); }} />}
       <Dialog open={open} onClose={() => { setOpen(false); setSelectedGroupId(""); }} fullWidth scroll="body" fullScreen={fullScreen}>
