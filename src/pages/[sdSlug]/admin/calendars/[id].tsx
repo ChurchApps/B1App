@@ -4,8 +4,10 @@ import { useRouter } from "next/router";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton, Stack, RadioGroup, Radio, FormControlLabel, FormGroup, Checkbox } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SyncIcon from '@mui/icons-material/Sync';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, CuratedEventInterface, GroupInterface, EventInterface } from "@/helpers";
@@ -24,6 +26,9 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
   const [curatedEvents, setCuratedEvents] = useState<CuratedEventInterface[]>([]);
   const [events, setEvents] = useState<EventInterface[]>([]);
+  const [addType, setAddType] = useState<string>("group");
+  const [groupEvents, setGroupEvents] = useState<EventInterface[]>([]);
+  const [eventIdsList, setEventIdsList] = useState<string[]>([]);
   const [displayCalendarEvent, setDisplayCalendarEvent] = useState<EventInterface | null>(null);
 
   const router = useRouter();
@@ -47,6 +52,18 @@ export default function CalendarPage(props: WrapperPageProps) {
     });
   };
 
+  const getGroupEvents = () => {
+    selectedGroupId && ApiHelper.get("/events/public/group/" + props.config.church.id + "/" + selectedGroupId, "ContentApi").then((data) => setGroupEvents(data));
+  }
+
+  const handleDone = () => {
+    setOpen(false);
+    setSelectedGroupId("");
+    setAddType("group");
+    setGroupEvents([]);
+    setEventIdsList([])
+  }
+
   const handleEventClick = (event: EventInterface) => {
     const ev = {...event};
     let tz = new Date().getTimezoneOffset();
@@ -58,14 +75,83 @@ export default function CalendarPage(props: WrapperPageProps) {
   }
   
   const handleSave = () => {
-    const data = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
+    let data: any = { curatedCalendarId: curatedCalendarId, groupId: selectedGroupId as string };
+    if (addType === "events" && eventIdsList.length > 0) data.eventIds = eventIdsList;
+
     ApiHelper.post("/curatedEvents", [data], "ContentApi").then(() => {
-      setSelectedGroupId("");
-      setOpen(false);
+      handleDone();
       loadData();
     });
   };
 
+  const handleEventsListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checkedName = e.target.name;
+    const checkedIndex = eventIdsList.indexOf(checkedName);
+    const list = [...eventIdsList];
+
+    if (checkedIndex === -1) {
+      list.push(checkedName);
+    } else {
+      list.splice(checkedIndex, 1);
+    }
+  
+    setEventIdsList(list);
+  }
+
+  const handleGroupDelete = (groupId: string) => {
+    if(confirm("Are you sure you wish to delete this group?")) {
+      ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => { loadData(); })
+    }
+  }
+
+  const handleGroupSync = (groupId: string) => {
+    ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => {
+      ApiHelper.post("/curatedEvents", [{ curatedCalendarId: curatedCalendarId, groupId: groupId as string }], "ContentApi").then(() => {
+        loadData();
+      })
+    })
+  }
+
+  const addedGroups = groups.filter((g) => {
+    return curatedEvents.find((crtEv) => {
+      return crtEv.groupId === g.id
+    });
+  });
+
+  const getRows = () => {
+    let rows: JSX.Element[] = [];
+
+    if (addedGroups.length === 0) {
+      rows.push(
+        <TableRow key="0">
+          <TableCell>No Groups Found.</TableCell>
+        </TableRow>
+      )
+    }
+
+    addedGroups.map((g, index) => {
+      rows.push(
+        <TableRow key={index}>
+          <TableCell>{g.name}</TableCell>
+          <TableCell>
+            <Tooltip title="Sync: All new group events will be added to the calendar" arrow>
+              <IconButton color="primary" size="small" onClick={() => { handleGroupSync(g.id) }}>
+                <SyncIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Remove Group" arrow>
+              <IconButton color="primary" size="small" onClick={() => { handleGroupDelete(g.id) }}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </TableCell>
+        </TableRow>
+      )
+    })
+
+    return rows;
+  }
+  
   const expandedEvents:EventInterface[] = [];
   const startRange = new Date();
   const endRange = new Date();
@@ -89,21 +175,37 @@ export default function CalendarPage(props: WrapperPageProps) {
     else expandedEvents.push(ev);
   });
 
+  useEffect(() => { getGroupEvents(); }, [selectedGroupId]);
   useEffect(() => { loadData(); }, []);
   
   return (
     <AdminWrapper config={props.config}>
       <h1>{currentCalendar?.name}</h1>
-      <DisplayBox headerText="">
-        <Box
-          sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
-          <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
-          <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
-        </Box>
-        <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
-      </DisplayBox>
+      <Grid container spacing={3}>
+        <Grid item md={9} xs={12}>
+          <DisplayBox headerText="">
+            <Box
+              sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
+              <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
+              <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
+            </Box>
+            <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
+          </DisplayBox>
+        </Grid>
+        <Grid item md={3} xs={12}>
+          <DisplayBox headerText="Groups" headerIcon="backup_table">
+            {isLoadingGroups ? (
+              <Loading />
+            ) : (
+              <Table size="small">
+                <TableBody>{getRows()}</TableBody>
+              </Table>
+            )}
+          </DisplayBox>
+        </Grid>
+      </Grid>
       {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} curatedCalendarId={curatedCalendarId as string} handleDone={() => { setDisplayCalendarEvent(null); loadData(); }} />}
-      <Dialog open={open} onClose={() => { setOpen(false); setSelectedGroupId(""); }} fullWidth scroll="body" fullScreen={fullScreen}>
+      <Dialog open={open} onClose={handleDone} fullWidth scroll="body" fullScreen={fullScreen}>
         <DialogTitle>Add a Group</DialogTitle>
         <DialogContent>
           {isLoadingGroups ? (
@@ -122,9 +224,26 @@ export default function CalendarPage(props: WrapperPageProps) {
               )}
             </>
           )}
+          {selectedGroupId && (
+            <FormControl fullWidth>
+              <RadioGroup value={addType} onChange={(e) => { setAddType(e.target.value); }}>
+                <Stack direction={{ xs: "column", sm: "row" }}>
+                  <FormControlLabel control={<Radio size="small" />} value="group" label="Add all the events of the group" />
+                  <FormControlLabel control={<Radio size="small" />} value="events" label="Add specific Events" />
+                </Stack>
+              </RadioGroup>
+            </FormControl>
+          )}
+          {(addType === "events" && groupEvents.length > 0) && (
+            <FormGroup>
+              <Grid container spacing={1}>
+                {groupEvents.map((event) => <Grid item md={4} sm={6} xs={12}><FormControlLabel control={<Checkbox size="small" onChange={handleEventsListChange} />} name={event.id} label={event.title} /></Grid>)}
+              </Grid>
+            </FormGroup>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button variant="text" onClick={() => { setOpen(false); setSelectedGroupId(""); }}>cancel</Button>
+          <Button variant="text" onClick={handleDone}>cancel</Button>
           <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId}>Save</Button>
         </DialogActions>
       </Dialog>
