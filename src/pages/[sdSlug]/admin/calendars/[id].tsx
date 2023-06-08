@@ -7,7 +7,6 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton, Stack, RadioGroup, Radio, FormControlLabel, FormGroup, Checkbox } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import DeleteIcon from '@mui/icons-material/Delete';
-import SyncIcon from '@mui/icons-material/Sync';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, CuratedEventInterface, GroupInterface, EventInterface } from "@/helpers";
@@ -104,13 +103,6 @@ export default function CalendarPage(props: WrapperPageProps) {
     }
   }
 
-  const handleGroupSync = (groupId: string) => {
-    ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => {
-      ApiHelper.post("/curatedEvents", [{ curatedCalendarId: curatedCalendarId, groupId: groupId as string }], "ContentApi").then(() => {
-        loadData();
-      })
-    })
-  }
 
   const addedGroups = groups.filter((g) => {
     return curatedEvents.find((crtEv) => {
@@ -134,11 +126,6 @@ export default function CalendarPage(props: WrapperPageProps) {
         <TableRow key={index}>
           <TableCell>{g.name}</TableCell>
           <TableCell>
-            <Tooltip title="Sync: All new group events will be added to the calendar" arrow>
-              <IconButton color="primary" size="small" onClick={() => { handleGroupSync(g.id) }}>
-                <SyncIcon />
-              </IconButton>
-            </Tooltip>
             <Tooltip title="Remove Group" arrow>
               <IconButton color="primary" size="small" onClick={() => { handleGroupDelete(g.id) }}>
                 <DeleteIcon />
