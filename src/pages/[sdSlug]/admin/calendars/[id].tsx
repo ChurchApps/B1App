@@ -24,7 +24,6 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [groups, setGroups] = useState<GroupInterface[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState<boolean>(false);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
-  const [curatedEvents, setCuratedEvents] = useState<CuratedEventInterface[]>([]);
   const [events, setEvents] = useState<EventInterface[]>([]);
   const [addType, setAddType] = useState<string>("group");
   const [groupEvents, setGroupEvents] = useState<EventInterface[]>([]);
@@ -46,9 +45,7 @@ export default function CalendarPage(props: WrapperPageProps) {
     ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoadingGroups(false); });
 
     ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?with=eventData", "ContentApi").then((data: CuratedEventInterface[]) => {
-      setCuratedEvents(data);
-      const newEvents: EventInterface[] = data?.map(d => d.eventData) ?? [];
-      setEvents(newEvents);
+      setEvents(data);
     });
   };
 
@@ -113,8 +110,8 @@ export default function CalendarPage(props: WrapperPageProps) {
   }
 
   const addedGroups = groups.filter((g) => {
-    return curatedEvents.find((crtEv) => {
-      return crtEv.groupId === g.id
+    return events.find((event) => {
+      return event.groupId === g.id
     });
   });
 
