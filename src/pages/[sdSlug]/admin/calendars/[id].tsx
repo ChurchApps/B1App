@@ -162,8 +162,6 @@ export default function CalendarPage(props: WrapperPageProps) {
     else expandedEvents.push(ev);
   });
   
-  const addedGroupEvents = events.filter((event) => event.groupId === selectedGroupId);
-
   useEffect(() => { getGroupEvents(); }, [selectedGroupId]);
   useEffect(() => { loadData(); }, []);
   
@@ -217,8 +215,8 @@ export default function CalendarPage(props: WrapperPageProps) {
             <FormControl fullWidth>
               <RadioGroup value={addType} onChange={(e) => { setAddType(e.target.value); }}>
                 <Stack direction={{ xs: "column", sm: "row" }}>
-                  <FormControlLabel control={<Radio size="small" disabled={groupEvents.length === addedGroupEvents.length || (addedGroupEvents.length > 0 && groupEvents.length > addedGroupEvents.length)} />} value="group" label="Add all the events of the group" />
-                  <FormControlLabel control={<Radio size="small" disabled={groupEvents.length === addedGroupEvents.length} />} value="events" label="Add specific Events" />
+                  <FormControlLabel control={<Radio size="small" />} value="group" label="Add all the events of the group" />
+                  <FormControlLabel control={<Radio size="small" />} value="events" label="Add specific Events" />
                 </Stack>
               </RadioGroup>
             </FormControl>
@@ -226,14 +224,14 @@ export default function CalendarPage(props: WrapperPageProps) {
           {(addType === "events" && groupEvents.length > 0) && (
             <FormGroup>
               <Grid container spacing={1}>
-                {groupEvents.map((event) => <Grid item md={4} sm={6} xs={12}><FormControlLabel control={<Checkbox size="small" onChange={handleEventsListChange} disabled={events.some((ev) => ev.id === event.id)} />} name={event.id} label={event.title} /></Grid>)}
+                {groupEvents.map((event) => <Grid item md={4} sm={6} xs={12}><FormControlLabel control={<Checkbox size="small" onChange={handleEventsListChange} />} name={event.id} label={event.title} /></Grid>)}
               </Grid>
             </FormGroup>
           )}
         </DialogContent>
         <DialogActions>
           <Button variant="text" onClick={handleDone}>cancel</Button>
-          <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId || ( addType === "events" && eventIdsList.length === 0) || groupEvents.length === addedGroupEvents.length}>Save</Button>
+          <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId || ( addType === "events" && eventIdsList.length === 0)}>Save</Button>
         </DialogActions>
       </Dialog>
     </AdminWrapper>
