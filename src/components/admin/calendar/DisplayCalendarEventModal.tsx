@@ -1,8 +1,10 @@
 import { Dialog, DialogContent, DialogActions, Typography, Box, Button } from "@mui/material";
-import { DateHelper, EventInterface, ApiHelper } from "@/helpers";
+import { DateHelper, EventInterface, CuratedEventInterface, ApiHelper } from "@/helpers";
+
+interface EventBody extends EventInterface, CuratedEventInterface {}
 
 interface Props {
-  event: EventInterface;
+  event: EventBody;
   curatedCalendarId?: string;
   handleDone?: () => void;
 }
@@ -46,7 +48,7 @@ export function DisplayCalendarEventModal(props: Props) {
       </DialogContent>
       <DialogActions>
         <Button variant="text" onClick={props.handleDone}>Cancel</Button>
-        <Button variant="contained" onClick={handleDelete}>Delete</Button>
+        {props.event.eventId && <Button variant="contained" onClick={handleDelete}>Delete</Button>}
       </DialogActions>
     </Dialog>
   );
