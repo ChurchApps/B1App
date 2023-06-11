@@ -9,7 +9,7 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import DeleteIcon from '@mui/icons-material/Delete';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, CuratedEventInterface, GroupInterface, EventInterface } from "@/helpers";
+import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, GroupInterface, EventInterface, CuratedEventWithEventInterface } from "@/helpers";
 import { EventHelper } from "@/appBase/helpers/EventHelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { DisplayBox, Loading } from "@/components";
@@ -23,12 +23,11 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [groups, setGroups] = useState<GroupInterface[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState<boolean>(false);
   const [selectedGroupId, setSelectedGroupId] = useState<string>("");
-  const [curatedEvents, setCuratedEvents] = useState<CuratedEventInterface[]>([]);
-  const [events, setEvents] = useState<EventInterface[]>([]);
+  const [events, setEvents] = useState<CuratedEventWithEventInterface[]>([]);
   const [addType, setAddType] = useState<string>("group");
   const [groupEvents, setGroupEvents] = useState<EventInterface[]>([]);
   const [eventIdsList, setEventIdsList] = useState<string[]>([]);
-  const [displayCalendarEvent, setDisplayCalendarEvent] = useState<EventInterface | null>(null);
+  const [displayCalendarEvent, setDisplayCalendarEvent] = useState<CuratedEventWithEventInterface | null>(null);
 
   const router = useRouter();
   const curatedCalendarId = router.query?.id;
@@ -44,10 +43,8 @@ export default function CalendarPage(props: WrapperPageProps) {
     setIsLoadingGroups(true);
     ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoadingGroups(false); });
 
-    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?with=eventData", "ContentApi").then((data: CuratedEventInterface[]) => {
-      setCuratedEvents(data);
-      const newEvents: EventInterface[] = data?.map(d => d.eventData) ?? [];
-      setEvents(newEvents);
+    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId, "ContentApi").then((data: CuratedEventWithEventInterface[]) => {
+      setEvents(data);
     });
   };
 
@@ -63,7 +60,7 @@ export default function CalendarPage(props: WrapperPageProps) {
     setEventIdsList([])
   }
 
-  const handleEventClick = (event: EventInterface) => {
+  const handleEventClick = (event: CuratedEventWithEventInterface) => {
     const ev = {...event};
     let tz = new Date().getTimezoneOffset();
     ev.start = new Date(ev.start);
@@ -105,8 +102,8 @@ export default function CalendarPage(props: WrapperPageProps) {
 
 
   const addedGroups = groups.filter((g) => {
-    return curatedEvents.find((crtEv) => {
-      return crtEv.groupId === g.id
+    return events.find((event) => {
+      return event.groupId === g.id
     });
   });
 
@@ -139,7 +136,7 @@ export default function CalendarPage(props: WrapperPageProps) {
     return rows;
   }
   
-  const expandedEvents:EventInterface[] = [];
+  const expandedEvents:CuratedEventWithEventInterface[] = [];
   const startRange = new Date();
   const endRange = new Date();
   startRange.setFullYear(startRange.getFullYear() - 1);
