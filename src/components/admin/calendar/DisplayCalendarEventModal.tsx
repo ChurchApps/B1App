@@ -1,12 +1,10 @@
 import { Dialog, DialogContent, DialogActions, Typography, Box, Button } from "@mui/material";
-import { DateHelper, EventInterface, CuratedEventInterface, ApiHelper } from "@/helpers";
-
-interface EventBody extends EventInterface, CuratedEventInterface {}
+import { DateHelper, CuratedEventWithEventInterface, ApiHelper } from "@/helpers";
 
 interface Props {
-  event: EventBody;
+  event: CuratedEventWithEventInterface;
   curatedCalendarId?: string;
-  handleDone?: () => void;
+  onDone?: () => void;
 }
 
 export function DisplayCalendarEventModal(props: Props) {
@@ -32,13 +30,13 @@ export function DisplayCalendarEventModal(props: Props) {
   const handleDelete = () => {
     if (confirm("Are you sure you wish to delete this event?")) {
       ApiHelper.delete("/curatedEvents/calendar/" + props.curatedCalendarId + "/event/" + props.event.id, "ContentApi").then(() => {
-        props.handleDone();
+        props.onDone();
       })
     }
   }
 
   return (
-    <Dialog open={true} onClose={props.handleDone} fullWidth scroll="body">
+    <Dialog open={true} onClose={props.onDone} fullWidth scroll="body">
       <DialogContent>
         <Box borderLeft={5} borderRadius={1} borderColor="#1976d2" padding={2} paddingBottom={0}>
           <Typography variant="h5" fontWeight={550} marginBottom={1}>{props.event.title}</Typography>
@@ -47,7 +45,7 @@ export function DisplayCalendarEventModal(props: Props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button variant="text" onClick={props.handleDone}>Cancel</Button>
+        <Button variant="text" onClick={props.onDone}>Cancel</Button>
         {props.event.eventId && <Button variant="contained" onClick={handleDelete}>Delete</Button>}
       </DialogActions>
     </Dialog>
