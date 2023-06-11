@@ -80,18 +80,30 @@ export default function CalendarPage(props: WrapperPageProps) {
     });
   };
 
-  const handleEventsListChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checkedName = e.target.name;
-    const checkedIndex = eventIdsList.indexOf(checkedName);
+  const handleEventsListChange = (slotInfo: EventInterface) => {
+    const selectedEvent = slotInfo.id;
+    const selectedIndex = eventIdsList.indexOf(selectedEvent);
     const list = [...eventIdsList];
 
-    if (checkedIndex === -1) {
-      list.push(checkedName);
+    if (selectedIndex === -1) {
+      list.push(selectedEvent);
     } else {
-      list.splice(checkedIndex, 1);
+     list.splice(selectedIndex, 1);
     }
   
     setEventIdsList(list);
+  }
+
+  const selectedEventStyle = (event: EventInterface) => {
+    const id = eventIdsList.find(id => id === event.id);
+    const backgroundColor = id ? "green" : "#3174ad";
+    const borderColor = id ? "white" : "#3174ad";
+    return { 
+      style: {
+        backgroundColor: backgroundColor,
+        borderColor: borderColor
+      }
+    }
   }
 
   const handleGroupDelete = (groupId: string) => {
@@ -135,29 +147,37 @@ export default function CalendarPage(props: WrapperPageProps) {
 
     return rows;
   }
-  
-  const expandedEvents:CuratedEventWithEventInterface[] = [];
-  const startRange = new Date();
-  const endRange = new Date();
-  startRange.setFullYear(startRange.getFullYear() - 1);
-  endRange.setFullYear(endRange.getFullYear() + 1);
 
-  events.forEach((event) => {
-    const ev = {...event};
-    ev.start = new Date(ev.start);
-    ev.end = new Date(ev.end);
-    if (ev.recurrenceRule) {
-      const dates = EventHelper.getRange(ev, startRange, endRange);
-      dates.forEach((date) => {
-        const evt = { ...event };
-        const diff = new Date(evt.end).getTime() - new Date(evt.start).getTime();
-        evt.start = date;
-        evt.end = new Date(date.getTime() + diff);
-        expandedEvents.push(evt);
-      });
-    }
-    else expandedEvents.push(ev);
-  });
+  const getExpandedEvents = (eventsList: EventInterface[]) => {
+    const expandedEvents:EventInterface[] = [];
+    const startRange = new Date();
+    const endRange = new Date();
+    startRange.setFullYear(startRange.getFullYear() - 1);
+    endRange.setFullYear(endRange.getFullYear() + 1);
+
+    eventsList.forEach((event) => {
+      const ev = {...event};
+      ev.start = new Date(ev.start);
+      ev.end = new Date(ev.end);
+      if (ev.recurrenceRule) {
+        const dates = EventHelper.getRange(ev, startRange, endRange);
+        dates.forEach((date) => {
+          const evt = { ...event };
+          const diff = new Date(evt.end).getTime() - new Date(evt.start).getTime();
+          evt.start = date;
+          evt.end = new Date(date.getTime() + diff);
+          expandedEvents.push(evt);
+        });
+      }
+      else expandedEvents.push(ev);
+    });
+
+    return expandedEvents;
+
+  }
+
+  const expandedEvents = getExpandedEvents(events);
+  const expandedGroupEvents = getExpandedEvents(groupEvents);  
   
   useEffect(() => { getGroupEvents(); }, [selectedGroupId]);
   useEffect(() => { loadData(); }, []);
@@ -219,11 +239,10 @@ export default function CalendarPage(props: WrapperPageProps) {
             </FormControl>
           )}
           {(addType === "events" && groupEvents.length > 0) && (
-            <FormGroup>
-              <Grid container spacing={1}>
-                {groupEvents.map((event) => <Grid item md={4} sm={6} xs={12}><FormControlLabel control={<Checkbox size="small" onChange={handleEventsListChange} />} name={event.id} label={event.title} /></Grid>)}
-              </Grid>
-            </FormGroup>
+            <div style={{ marginTop: 11 }}>
+              <Typography align="center" fontSize="15px" fontStyle="italic" marginBottom={3} color="#757575">*Click on an event to add it to the Curated Calendar.*</Typography>
+              <Calendar localizer={localizer} views={["month", "week", "day"]} events={expandedGroupEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventsListChange} eventPropGetter={selectedEventStyle} />
+            </div>
           )}
         </DialogContent>
         <DialogActions>
