@@ -7,7 +7,6 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton, Stack, RadioGroup, Radio, FormControlLabel, FormGroup, Checkbox } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import DeleteIcon from '@mui/icons-material/Delete';
-import SyncIcon from '@mui/icons-material/Sync';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, CuratedEventInterface, GroupInterface, EventInterface } from "@/helpers";
@@ -104,13 +103,6 @@ export default function CalendarPage(props: WrapperPageProps) {
     }
   }
 
-  const handleGroupSync = (groupId: string) => {
-    ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => {
-      ApiHelper.post("/curatedEvents", [{ curatedCalendarId: curatedCalendarId, groupId: groupId as string }], "ContentApi").then(() => {
-        loadData();
-      })
-    })
-  }
 
   const addedGroups = groups.filter((g) => {
     return curatedEvents.find((crtEv) => {
@@ -134,11 +126,6 @@ export default function CalendarPage(props: WrapperPageProps) {
         <TableRow key={index}>
           <TableCell>{g.name}</TableCell>
           <TableCell>
-            <Tooltip title="Sync: All new group events will be added to the calendar" arrow>
-              <IconButton color="primary" size="small" onClick={() => { handleGroupSync(g.id) }}>
-                <SyncIcon />
-              </IconButton>
-            </Tooltip>
             <Tooltip title="Remove Group" arrow>
               <IconButton color="primary" size="small" onClick={() => { handleGroupDelete(g.id) }}>
                 <DeleteIcon />
@@ -175,8 +162,6 @@ export default function CalendarPage(props: WrapperPageProps) {
     else expandedEvents.push(ev);
   });
   
-  const addedGroupEvents = events.filter((event) => event.groupId === selectedGroupId);
-
   useEffect(() => { getGroupEvents(); }, [selectedGroupId]);
   useEffect(() => { loadData(); }, []);
   
@@ -230,8 +215,8 @@ export default function CalendarPage(props: WrapperPageProps) {
             <FormControl fullWidth>
               <RadioGroup value={addType} onChange={(e) => { setAddType(e.target.value); }}>
                 <Stack direction={{ xs: "column", sm: "row" }}>
-                  <FormControlLabel control={<Radio size="small" disabled={groupEvents.length === addedGroupEvents.length || (addedGroupEvents.length > 0 && groupEvents.length > addedGroupEvents.length)} />} value="group" label="Add all the events of the group" />
-                  <FormControlLabel control={<Radio size="small" disabled={groupEvents.length === addedGroupEvents.length} />} value="events" label="Add specific Events" />
+                  <FormControlLabel control={<Radio size="small" />} value="group" label="Add all the events of the group" />
+                  <FormControlLabel control={<Radio size="small" />} value="events" label="Add specific Events" />
                 </Stack>
               </RadioGroup>
             </FormControl>
@@ -239,14 +224,14 @@ export default function CalendarPage(props: WrapperPageProps) {
           {(addType === "events" && groupEvents.length > 0) && (
             <FormGroup>
               <Grid container spacing={1}>
-                {groupEvents.map((event) => <Grid item md={4} sm={6} xs={12}><FormControlLabel control={<Checkbox size="small" onChange={handleEventsListChange} disabled={events.some((ev) => ev.id === event.id)} />} name={event.id} label={event.title} /></Grid>)}
+                {groupEvents.map((event) => <Grid item md={4} sm={6} xs={12}><FormControlLabel control={<Checkbox size="small" onChange={handleEventsListChange} />} name={event.id} label={event.title} /></Grid>)}
               </Grid>
             </FormGroup>
           )}
         </DialogContent>
         <DialogActions>
           <Button variant="text" onClick={handleDone}>cancel</Button>
-          <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId || ( addType === "events" && eventIdsList.length === 0) || groupEvents.length === addedGroupEvents.length}>Save</Button>
+          <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId || ( addType === "events" && eventIdsList.length === 0)}>Save</Button>
         </DialogActions>
       </Dialog>
     </AdminWrapper>
