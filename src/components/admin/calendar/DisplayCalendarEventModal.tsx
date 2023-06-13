@@ -1,3 +1,4 @@
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Dialog, DialogContent, DialogActions, Typography, Box, Button } from "@mui/material";
 import { DateHelper, CuratedEventWithEventInterface, ApiHelper } from "@/helpers";
 
