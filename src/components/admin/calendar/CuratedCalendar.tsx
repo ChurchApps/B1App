@@ -15,7 +15,7 @@ export function CuratedCalendar(props: Props) {
 
   const loadData = () => {
     if (ApiHelper.isAuthenticated) ApiHelper.get("/curatedEvents/calendar/" + props.curatedCalendarId, "ContentApi").then((data) => { setEvents(data); if (props.updatedCallback) props.updatedCallback(); });
-    else ApiHelper.get("/curatedEvents/public/calendar/" + props.churchId + "/" + props.curatedCalendarId, "ContentApi").then((data) => { setEvents(data); });
+    else ApiHelper.getAnonymous("/curatedEvents/public/calendar/" + props.churchId + "/" + props.curatedCalendarId, "ContentApi").then((data) => { setEvents(data); });
   };
 
   useEffect(loadData, [props.curatedCalendarId, props?.refresh]);
