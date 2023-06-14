@@ -11,7 +11,7 @@ import { EventHelper } from "@/appBase/helpers/EventHelper";
 
 interface Props {
   churchId: string;
-  curatedCalendarId?: string;
+  curatedCalendarId: string;
   onDone?: () => void;
 }
 
