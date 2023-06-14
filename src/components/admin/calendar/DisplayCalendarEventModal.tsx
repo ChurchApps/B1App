@@ -3,7 +3,7 @@ import { DateHelper, CuratedEventWithEventInterface, ApiHelper } from "@/helpers
 
 interface Props {
   event: CuratedEventWithEventInterface;
-  canEdit?: boolean;
+  mode: "view" | "edit";
   curatedCalendarId?: string;
   onDone?: () => void;
 }
@@ -47,7 +47,7 @@ export function DisplayCalendarEventModal(props: Props) {
       </DialogContent>
       <DialogActions>
         <Button variant="text" onClick={props.onDone}>Cancel</Button>
-        {props.event.eventId && props.canEdit && <Button variant="contained" onClick={handleDelete}>Delete</Button>}
+        {props.event.eventId && props.mode === "edit" && <Button variant="contained" onClick={handleDelete}>Delete</Button>}
       </DialogActions>
     </Dialog>
   );

@@ -11,7 +11,8 @@ import { DisplayCalendarEventModal } from "./DisplayCalendarEventModal";
 
 interface Props {
   events: CuratedEventWithEventInterface[];
-  editCuratedCalendarId?: string;
+  mode: "view" | "edit";
+  curatedCalendarId?: string;
   churchId?: string;
   onRequestRefresh?: () => void;
 }
@@ -63,15 +64,15 @@ export function CuratedEventCalendar(props: Props) {
 
   return (
     <div>
-      {props.editCuratedCalendarId &&
+      {props.mode === "edit" &&
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 17 }}>
           <div></div>
           <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
         </div>
       }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
-      {open && props.editCuratedCalendarId && <EditCalendarEventModal onDone={handleDone} churchId={props.churchId} curatedCalendarId={props.editCuratedCalendarId} />}
-      {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} curatedCalendarId={props.editCuratedCalendarId} canEdit={props.editCuratedCalendarId !== ""} onDone={handleDone} />}
+      {open && props.mode === "edit" && <EditCalendarEventModal onDone={handleDone} churchId={props.churchId} curatedCalendarId={props.curatedCalendarId} />}
+      {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} curatedCalendarId={props.curatedCalendarId} mode={props.mode} onDone={handleDone} />}
     </div>
   );
 }

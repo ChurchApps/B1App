@@ -82,7 +82,7 @@ export default function CalendarPage(props: WrapperPageProps) {
         <Grid item md={9} xs={12}>
           <DisplayBox headerText="">
             <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
-            <CuratedCalendar curatedCalendarId={curatedCalendarId as string} churchId={props.config.church.id} canEdit={true} updatedCallback={loadData} refresh={refresh} />
+            <CuratedCalendar curatedCalendarId={curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} />
           </DisplayBox>
         </Grid>
         <Grid item md={3} xs={12}>
