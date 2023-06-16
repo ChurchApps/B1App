@@ -1,6 +1,6 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { ApiHelper, DateHelper, EventExceptionInterface, EventInterface } from "@/helpers";
-import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography, Switch, Stack } from "@mui/material";
 import { MarkdownEditor, ErrorMessages } from "..";
 import { useState } from "react";
 import { RRuleEditor } from "./RRuleEditor";
@@ -168,6 +168,19 @@ export function EditEventModal(props: Props) {
 
             {(event?.recurrenceRule?.length>0) && <RRuleEditor start={event.start} rRule={event.recurrenceRule || ""} onChange={(rRule:string) => { setRRule(rRule); }} /> }
 
+            <Grid item xs={12}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography>Private: </Typography>
+                <Switch
+                  size="small"
+                  checked={event.visibility === "private"}
+                  onChange={(e) => { 
+                    if (e.target.checked === true) setEvent({...event, visibility: "private"});
+                    else setEvent({...event, visibility: "public"});
+                  }}
+                />
+              </Stack>
+            </Grid>
             <Grid item xs={12}>
               <TextField name="title" value={event.title} fullWidth label="Title" onChange={handleChange} size="small" />
             </Grid>
