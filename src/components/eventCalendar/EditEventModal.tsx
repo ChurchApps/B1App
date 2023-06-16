@@ -170,7 +170,7 @@ export function EditEventModal(props: Props) {
 
             <Grid item xs={12}>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography>Public</Typography>
+                <Typography>Private: </Typography>
                 <Switch
                   size="small"
                   checked={event.visibility === "private"}
@@ -179,7 +179,6 @@ export function EditEventModal(props: Props) {
                     else setEvent({...event, visibility: "public"});
                   }}
                 />
-                <Typography>Private</Typography>
               </Stack>
             </Grid>
             <Grid item xs={12}>
