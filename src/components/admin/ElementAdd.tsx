@@ -74,6 +74,7 @@ export function ElementAdd(props: Props) {
               <AddableElement dndType="element" elementType="stream" icon="live_tv" label="Stream" />
               <AddableElement dndType="element" elementType="form" icon="format_align_left" label="Form" />
               <AddableElement dndType="element" elementType="sermons" icon="video_library" label="Sermons" />
+              <AddableElement dndType="element" elementType="calendar" icon="calendar_month" label="Calendar" />
             </Grid>
           </AccordionDetails>
         </Accordion>
