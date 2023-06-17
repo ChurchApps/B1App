@@ -9,7 +9,7 @@ interface Props {
 
 export const CalendarElement = ({ element, churchId }: Props) => {
   return (
-    <div>
+    <div style={{ backgroundColor: "white", padding: 50, borderRadius: 15 }}>
       {element.answers.calendarType === "group" ? (
         <GroupCalendar churchId={churchId} groupId={element.answers.calendarId} canEdit={false} />
       ) : (
