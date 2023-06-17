@@ -1,7 +1,7 @@
-import { Loading, InputBox } from "@/appBase/components";
-import { SermonInterface, PlaylistInterface, ApiHelper, UniqueIdHelper, DateHelper } from "@/helpers";
-import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button } from "@mui/material";
 import React from "react";
+import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button } from "@mui/material";
+import { Loading, InputBox, ErrorMessages } from "@/appBase/components";
+import { SermonInterface, PlaylistInterface, ApiHelper, UniqueIdHelper, DateHelper, UserHelper, Permissions } from "@/helpers";
 import { Duration } from "./Duration";
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
 
 export const SermonEdit: React.FC<Props> = (props) => {
 
+  const [errors, setErrors] = React.useState<string[]>([]);
   const [currentSermon, setCurrentSermon] = React.useState<SermonInterface>(null);
   const [playlists, setPlaylists] = React.useState<PlaylistInterface[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -37,6 +38,14 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   const handleDelete = () => {
+    let errors = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to delete sermons");
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+
     if (window.confirm("Are you sure you wish to delete this sermon?")) {
       ApiHelper.delete("/sermons/" + currentSermon.id, "ContentApi").then(() => { setCurrentSermon(null); props.updatedFunction(); });
     }
@@ -92,6 +101,14 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   const handleSave = () => {
+    let errors: string[] = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to create sermons");
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+
     setSermonUrl();
     ApiHelper.post("/sermons", [currentSermon], "ContentApi").then(props.updatedFunction);
   }
@@ -164,6 +181,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
   if (isLoading) return <Loading />
   else return (<InputBox headerIcon="calendar_month" headerText={(currentSermon?.permanentUrl) ? "Edit Permanent Live Url" : "Edit Sermon"} saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="streaminglive/sermons">
+    <ErrorMessages errors={errors} />
     <>
       {!currentSermon?.permanentUrl && (
         <FormControl fullWidth>

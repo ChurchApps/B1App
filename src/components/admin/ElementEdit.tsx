@@ -6,8 +6,9 @@ import { MarkdownEditor } from "@/appBase/components";
 import React from "react";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
 import { RowEdit } from "./RowEdit";
-import { FormEdit } from "./FormEdit"
-import { FaqEdit } from "./FaqEdit"
+import { FormEdit } from "./FormEdit";
+import { FaqEdit } from "./FaqEdit";
+import { CalendarElementEdit } from "./CalendarElementEdit";
 
 type Props = {
   element: ElementInterface;
@@ -305,6 +306,7 @@ export function ElementEdit(props: Props) {
       case "carousel": result = getCarouselFields(); break;
       case "image": result = getImageFields(); break;
       case "whiteSpace": result = getWhiteSpaceFields(); break;
+      case "calendar": result = <CalendarElementEdit parsedData={parsedData} handleChange={handleChange} />; break;
     }
     return result;
   }

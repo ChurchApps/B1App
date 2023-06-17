@@ -3,6 +3,7 @@ import { TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/mat
 import { ApiHelper } from "../../appBase/helpers";
 import { LinkInterface } from "../../appBase/interfaces";
 import { InputBox, ErrorMessages } from "../../appBase/components";
+import { Permissions, UserHelper } from "@/helpers";
 
 interface Props {
   currentLink: LinkInterface,
@@ -17,7 +18,25 @@ export const LinkEdit: React.FC<Props> = (props) => {
   const [subName, setSubName] = useState<string>(null);
   const [toggleSubName, setToggleSubName] = useState<boolean>(false);
 
-  const handleDelete = () => { ApiHelper.delete("/links/" + currentLink.id, "ContentApi").then(() => { setCurrentLink(null); props.updatedFunction(); }); }
+  const filteredGroupLinks = links && links.filter((link) => link.id !== currentLink.id);
+
+  const handleDelete = () => {
+    let errors: string[] = [];
+    let i = 0;
+    links.forEach(link => {
+      if (currentLink.id === link.parentId) {i++;} 
+    });
+
+    if (!UserHelper.checkAccess(Permissions.contentApi.links.edit)) errors.push("Unauthorized to delete links");
+    if (i > 0) errors.push("Delete nested links first");
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    ApiHelper.delete("/links/" + currentLink.id, "ContentApi").then(() => { setCurrentLink(null); props.updatedFunction(); });
+  }
   const checkDelete = currentLink?.id ? handleDelete : undefined;
   const handleCancel = () => { props.updatedFunction(); }
 
@@ -42,6 +61,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
     let errors: string[] = [];
     if (!currentLink.text.trim()) errors.push("Please enter valid text");
     if (!currentLink.url.trim()) errors.push("Please enter link");
+    if (!UserHelper.checkAccess(Permissions.contentApi.links.edit)) errors.push("Unauthorized to create links");
 
     if (errors.length > 0) {
       setErrors(errors);
@@ -59,7 +79,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       <TextField fullWidth label="Text" name="text" type="text" value={currentLink?.text || ""} onChange={handleChange} />
       <TextField fullWidth label="Url" name="url" type="text" value={currentLink?.url || ""} onChange={handleChange} />
-      {links?.length > 0 &&
+      {filteredGroupLinks?.length > 0 &&
         <>
           <div>
             {subName && toggleSubName === true
@@ -77,7 +97,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
                 flexWrap: "wrap",
               }}
             >
-              {links.map((link: LinkInterface) => (
+              {filteredGroupLinks.map((link: LinkInterface) => (
                 <ToggleButton
                   sx={{marginTop: 0.5}}
                   value={link.id}
