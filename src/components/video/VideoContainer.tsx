@@ -31,7 +31,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
         if (cs?.sermon?.videoType === "youtube") videoUrl += "&start=" + seconds.toString();
         if (cs?.sermon?.videoType === "vimeo") videoUrl += "#t=" + seconds.toString() + "s";
       } else {
-        if (cs?.sermon?.videoType === "youtube") videoUrl += "&start=0";
+        if (cs?.sermon?.videoType === "youtube") videoUrl += "&start=1";
         if (cs?.sermon?.videoType === "vimeo") videoUrl += "#t=0m0s";
       }
     }
