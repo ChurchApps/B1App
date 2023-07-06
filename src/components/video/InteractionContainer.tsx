@@ -48,7 +48,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
   const getIframe = (tab: StreamingTabInterface, i: number, visible: boolean) => (
     <div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-      <iframe src={tab.url} frameBorder="0" title={"frame" + i.toString()} /> :
+      <iframe src={tab.url} frameBorder="0" title={"frame" + i.toString()} sandbox="" /> :
     </div>)
 
   const getPage = (tab: StreamingTabInterface, i: number, visible: boolean) => {
