@@ -18,7 +18,7 @@ export default function Donate(props: WrapperPageProps) {
           <>
             <Grid container spacing={3}>
               <Grid item md={8} xs={12}>
-                <NonAuthDonation churchId={props.config.church.id} />
+                <NonAuthDonation churchId={props.config.church.id} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} />
               </Grid>
               <Grid item md={4} xs={12}>
                 <Typography

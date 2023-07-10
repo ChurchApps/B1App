@@ -79,7 +79,7 @@ export const Element: React.FC<Props> = props => {
       result = <MapElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "donation":
-      result = <NonAuthDonation key={props.element.id} churchId={props.church?.id ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      result = <NonAuthDonation key={props.element.id} churchId={props.church?.id ?? props.element.churchId} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
       break;
     case "stream":
       result = <StreamElement key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} church={props.church} editMode={ props.onEdit !== undefined } />
