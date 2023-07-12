@@ -13,6 +13,7 @@ export function GiveNowPanel(props: Props) {
       </Typography>
       <NonAuthDonation
         churchId={props.churchId}
+        recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}
         mainContainerCssProps={{ sx: { boxShadow: "none", paddingY: 3 } }}
         showHeader={false}
       />
