@@ -1,4 +1,5 @@
 import { Wrapper } from "@/components";
+import { Timeline } from "@/components/member/timeline/Timeline";
 import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { GetStaticPaths, GetStaticProps } from "next";
 
@@ -7,6 +8,7 @@ export default function Member(props: WrapperPageProps) {
     <Wrapper config={props.config}>
       <h1>Member Portal</h1>
       <p>Select and option on the left</p>
+      <Timeline />
     </Wrapper>
   );
 }
