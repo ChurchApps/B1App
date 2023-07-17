@@ -9,7 +9,7 @@ export class TimelineHelper {
       p.conversation = null;
     });
     if (conversationIds.length > 0) {
-      const allConversations: TimelineConversationInterface[] = await ApiHelper.get("/conversations/social/ids?ids=" + conversationIds.join(","), "MessagingApi");
+      const allConversations: TimelineConversationInterface[] = await ApiHelper.get("/conversations/timeline/ids?ids=" + conversationIds.join(","), "MessagingApi");
       allPosts.forEach(p => {
         p.conversation = ArrayHelper.getOne(allConversations, "conversationId", p.conversationId);
       });
