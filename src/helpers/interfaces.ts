@@ -138,30 +138,16 @@ export interface FileInterface {
   fileContents?: string;
 }
 
-export interface TimelineMessageInterface {
-  personId: string;
-  displayName: string;
-  message: string;
-  timeSent: Date;
-}
 
-export interface TimelineConversationInterface {
-  conversationId: string;
-  postCount: number;
-  firstPost: TimelineMessageInterface;
-  lastPost: TimelineMessageInterface;
-}
 
 export interface TimelinePostInterface {
   postType: string;
   postId: string;
-  posterId?: string;
-  posterName?: string;
-  message?: string;
-  conversationId?: string;
   timeSent?: Date;
   timeUpdated?: Date;
-  conversation: TimelineConversationInterface;
+  conversationId?: string;
+  conversation?: ConversationInterface;
+  data?: any;
 }
 
 
