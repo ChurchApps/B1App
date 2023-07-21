@@ -45,7 +45,7 @@ export const Timeline: React.FC<Props> = (props) => {
       if (conv.contentType==="task" && taskIds.indexOf(conv.contentId)===-1) taskIds.push(conv.contentId);
       if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
     });
-    promises.push(ApiHelper.get("/tasks/posts?ids=" + taskIds.join(","), "DoingApi"));
+    promises.push(ApiHelper.get("/tasks/timeline?taskIds=" + taskIds.join(","), "DoingApi"));
     promises.push(ApiHelper.get("/events/timeline?eventIds=" + eventIds.join(","), "ContentApi"));
     const results = await Promise.all(promises);
     console.log("RESULTS", results)

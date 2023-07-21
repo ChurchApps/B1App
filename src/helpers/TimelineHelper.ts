@@ -11,6 +11,14 @@ export class TimelineHelper {
       });
       if (p.postType==="group" && p.conversation.contentId && groupIds.indexOf(p.conversation.contentId) === -1) groupIds.push(p.conversation.contentId);
       if (p.postType==="event" && p.data.groupId && groupIds.indexOf(p.data.groupId) === -1) groupIds.push(p.data.groupId);
+      if (p.postType==="task") {
+        if (p.data.associatedWithType==="person" && peopleIds.indexOf(p.data.associatedWithId) === -1) peopleIds.push(p.data.associatedWithId);
+        if (p.data.createdByType==="person" && peopleIds.indexOf(p.data.createdById) === -1) peopleIds.push(p.data.createdById);
+        if (p.data.assignedToType==="person" && peopleIds.indexOf(p.data.assignedToId) === -1) peopleIds.push(p.data.assignedToId);
+        if (p.data.associatedWithType==="group" && peopleIds.indexOf(p.data.associatedWithId) === -1) groupIds.push(p.data.associatedWithId);
+        if (p.data.createdByType==="group" && peopleIds.indexOf(p.data.createdById) === -1) groupIds.push(p.data.createdById);
+        if (p.data.assignedToType==="group" && peopleIds.indexOf(p.data.assignedToId) === -1) groupIds.push(p.data.assignedToId);
+      }
     });
 
     let data:any = {};

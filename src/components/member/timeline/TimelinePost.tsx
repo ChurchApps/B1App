@@ -24,7 +24,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
     switch (props.post.postType)
     {
       case "task":
-        result=<>{displayTime} - <b>Task: </b> </>
+        result = getTaskDetails();
         break;
       case "event":
         result = getEventDetails();
@@ -36,6 +36,31 @@ export const TimelinePost: React.FC<Props> = (props) => {
         result=<>{displayTime} - <b>Message: </b> </>
         break;
     }
+    return result;
+  }
+
+  const getEntity = (entityType:string, entityId:string, fallback:string) => {
+    let result = <>{fallback}</>
+    if (entityType==="person") {
+      const person = ArrayHelper.getOne(props.people, "id", entityId);
+      if (person) result = <Link href={"/member/directory/" + entityId}>{person.name.display}</Link>
+    }
+    else if (entityType==="group") {
+      const group = ArrayHelper.getOne(props.groups, "id", entityId);
+      if (group) result = <Link href={"/member/groups/" + entityId}>{group.name}</Link>
+    }
+    return result;
+  }
+
+  const getTaskDetails = () => {
+    const creator = getEntity(props.post.data.createdByType, props.post.data.createdById, props.post.data.createdByLabel);
+    const assignedTo = getEntity(props.post.data.assignedToType, props.post.data.assignedToId, props.post.data.assignedToLabel);
+    const associatedWith = getEntity(props.post.data.associatedWithType, props.post.data.associatedWithId, props.post.data.associatedWithLabel);
+
+    const result=(<>
+      {getIntroLine(<><b>Task: {props.post.data.title}</b></>)}
+      <p>{creator} has requested this from {assignedTo} on behalf of {associatedWith}</p>
+    </>);
     return result;
   }
 
@@ -58,7 +83,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
     const group = ArrayHelper.getOne(props.groups, "id", props.post.conversation.contentId);
     const result=(<>
       <Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{width:"100%" }} />
-      {getIntroLine(<>Conversation for the <Link href={"/member/groups/" + group.id}>{group?.name}</Link> Group</>)}
+      {getIntroLine(<>Conversation for the {getEntity("group", group.id, group.name)} group</>)}
     </>);
     return result;
   }
