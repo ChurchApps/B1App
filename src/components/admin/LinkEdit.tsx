@@ -24,10 +24,10 @@ export const LinkEdit: React.FC<Props> = (props) => {
     let errors: string[] = [];
     let i = 0;
     links.forEach(link => {
-      if (currentLink.id === link.parentId) {i++;} 
+      if (currentLink.id === link.parentId) {i++;}
     });
 
-    if (!UserHelper.checkAccess(Permissions.contentApi.links.edit)) errors.push("Unauthorized to delete links");
+    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to delete links");
     if (i > 0) errors.push("Delete nested links first");
 
     if (errors.length > 0) {
@@ -61,7 +61,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
     let errors: string[] = [];
     if (!currentLink.text.trim()) errors.push("Please enter valid text");
     if (!currentLink.url.trim()) errors.push("Please enter link");
-    if (!UserHelper.checkAccess(Permissions.contentApi.links.edit)) errors.push("Unauthorized to create links");
+    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to create links");
 
     if (errors.length > 0) {
       setErrors(errors);
@@ -79,8 +79,8 @@ export const LinkEdit: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       <TextField fullWidth label="Text" name="text" type="text" value={currentLink?.text || ""} onChange={handleChange} />
       <TextField fullWidth label="Url" name="url" type="text" value={currentLink?.url || ""} onChange={handleChange} />
-      {filteredGroupLinks?.length > 0 &&
-        <>
+      {filteredGroupLinks?.length > 0
+        && <>
           <div>
             {subName && toggleSubName === true
               ? <Typography fontSize="13px" marginTop={1} marginBottom={0.5}>This link is under submenu: <span style={{fontWeight: 800}}>{subName}</span></Typography>

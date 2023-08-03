@@ -39,7 +39,7 @@ export default function Admin(props: Props) {
   }
 
   useEffect(() => {
-    if(!UserHelper.checkAccess(Permissions.contentApi.pages.edit)){
+    if(!UserHelper.checkAccess(Permissions.contentApi.content.edit)){
       router.push("/admin/site");
     }
   }, []);
@@ -49,7 +49,7 @@ export default function Admin(props: Props) {
   }, []);
 
   const loadData = () => {
-    if (isAuthenticated && UserHelper.checkAccess(Permissions.contentApi.pages.edit)) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
+    if (isAuthenticated && UserHelper.checkAccess(Permissions.contentApi.content.edit)) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
   }
 
   useEffect(loadData, [id]);
@@ -102,12 +102,12 @@ export default function Admin(props: Props) {
   if (typeof window !== "undefined") {
     const editorBar = document.getElementById("editorBar");
     if(window.innerWidth > 900){
-    if (window?.innerHeight) {
-      const editorBarOffset = (editorBarHeight > window.innerHeight) ? (editorBarHeight - window.innerHeight) : 0;
-      const bottomMargin = editorBarOffset === 0 ? 0 : 50;
-      if (scrollTop >= 180 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -180 - bottomMargin };
-    }
-    if (editorBar && editorBar.clientHeight !== editorBarHeight && editorBar.clientHeight > 0) setEditorBarHeight(editorBar.clientHeight)
+      if (window?.innerHeight) {
+        const editorBarOffset = (editorBarHeight > window.innerHeight) ? (editorBarHeight - window.innerHeight) : 0;
+        const bottomMargin = editorBarOffset === 0 ? 0 : 50;
+        if (scrollTop >= 180 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -180 - bottomMargin };
+      }
+      if (editorBar && editorBar.clientHeight !== editorBarHeight && editorBar.clientHeight > 0) setEditorBarHeight(editorBar.clientHeight)
     }
   }
 

@@ -39,7 +39,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
   const handleDelete = () => {
     let errors = [];
-    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to delete sermons");
+    if (!UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) errors.push("Unauthorized to delete sermons");
 
     if (errors.length > 0) {
       setErrors(errors);
@@ -102,7 +102,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
   const handleSave = () => {
     let errors: string[] = [];
-    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to create sermons");
+    if (!UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) errors.push("Unauthorized to create sermons");
 
     if (errors.length > 0) {
       setErrors(errors);

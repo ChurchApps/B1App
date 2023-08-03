@@ -41,7 +41,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     }
   }
   const getSettingLink = () => {
-    if (UserHelper.checkAccess(Permissions.contentApi.settings.edit)) return (
+    if (UserHelper.checkAccess(Permissions.contentApi.content.edit) || UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) return (
       <li className="nav-item"><Link href="/admin" className="nav-link">Admin Dashboard</Link></li>
     );
   }
