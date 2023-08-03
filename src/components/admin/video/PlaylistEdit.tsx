@@ -18,7 +18,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
 
   const handleDelete = () => {
     let errors = [];
-    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to delete playlists");
+    if (!UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) errors.push("Unauthorized to delete playlists");
 
     if (errors.length > 0) {
       setErrors(errors);
@@ -52,7 +52,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
 
   const handleSave = () => {
     let errors = [];
-    if (!UserHelper.checkAccess(Permissions.contentApi.services.edit)) errors.push("Unauthorized to create playlists");
+    if (!UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) errors.push("Unauthorized to create playlists");
 
     if (errors.length > 0){
       setErrors(errors);

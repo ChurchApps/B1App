@@ -77,7 +77,7 @@ export const Wrapper: React.FC<Props> = props => {
     }
   })
 
-  const adminAccess = UserHelper.checkAccess(Permissions.contentApi.settings.edit);
+  const adminAccess = UserHelper.checkAccess(Permissions.contentApi.content.edit);
   if (adminAccess) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
 
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>

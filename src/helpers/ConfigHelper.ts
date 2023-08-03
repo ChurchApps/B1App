@@ -22,7 +22,7 @@ export class ConfigHelper {
     const firstTab = config.tabs[0]
 
     if (!firstTab) {
-      return UserHelper.checkAccess(Permissions.contentApi.settings.edit) ? "/admin/settings" : "/"
+      return (UserHelper.checkAccess(Permissions.contentApi.content.edit) || UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) ? "/admin/settings" : "/"
     }
 
     let route = ""

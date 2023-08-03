@@ -86,21 +86,7 @@ export interface WrapperPageProps {
 }
 
 export class Permissions extends BasePermissions {
-  static contentApi= {
-    ...super.contentApi,
-    pages: {
-      edit: { api: "ContentApi", contentType: "Pages", action: "Edit" }
-    },
-    links: {
-      edit: { api: "ContentApi", contentType: "Links", action: "Edit" }
-    },
-    content: {
-      edit: { api: "ContentApi", contentType: "Content", action: "Edit" }
-    },
-    services: {
-      edit: { api: "ContentApi", contentType: "StreamingServices", action: "Edit" },
-    }
-  }
+
 }
 
 export interface StreamingButtonInterface { text: string, url: string }
@@ -137,3 +123,17 @@ export interface FileInterface {
   dateModified?: Date;
   fileContents?: string;
 }
+
+
+
+export interface TimelinePostInterface {
+  postType: string;
+  postId: string;
+  timeSent?: Date;
+  timeUpdated?: Date;
+  conversationId?: string;
+  conversation?: ConversationInterface;
+  data?: any;
+}
+
+

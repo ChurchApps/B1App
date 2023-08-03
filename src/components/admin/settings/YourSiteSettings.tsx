@@ -85,21 +85,21 @@ export function YourSiteSettings() {
 
     return (
       <TableRow key={page.id}>
-          <TableCell>
-            <a onClick={clickHandler} style={{cursor: "pointer"}}>{page.url}</a>
-          </TableCell>
-          <TableCell>
-            <a onClick={clickHandler} style={{cursor: "pointer"}}>{page.title}</a>
-          </TableCell>
-          <TableCell align="right">
-            <SmallButton
-              icon="edit"
-              onClick={() => {
-                setEditPage(page);
-              }}
-            />
-          </TableCell>
-        </TableRow>
+        <TableCell>
+          <a onClick={clickHandler} style={{cursor: "pointer"}}>{page.url}</a>
+        </TableCell>
+        <TableCell>
+          <a onClick={clickHandler} style={{cursor: "pointer"}}>{page.title}</a>
+        </TableCell>
+        <TableCell align="right">
+          <SmallButton
+            icon="edit"
+            onClick={() => {
+              setEditPage(page);
+            }}
+          />
+        </TableCell>
+      </TableRow>
     )
   });
 
@@ -127,9 +127,9 @@ export function YourSiteSettings() {
 
   return (
     <Grid container spacing={3}>
-     <ErrorMessages errors={errors} />
-      {UserHelper.checkAccess(Permissions.contentApi.content.edit) &&
-        <Grid item md={8} xs={12}>
+      <ErrorMessages errors={errors} />
+      {UserHelper.checkAccess(Permissions.contentApi.content.edit)
+        && <Grid item md={8} xs={12}>
           <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent}>
             <Table>
               <TableHead>
@@ -173,7 +173,7 @@ export function YourSiteSettings() {
           }}
         />
         )}
-        {UserHelper.checkAccess(Permissions.contentApi.links.edit) && <Links />}
+        {UserHelper.checkAccess(Permissions.contentApi.content.edit) && <Links />}
         <Appearance />
         <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="accounts/appearance">
           <table className="table">
