@@ -28,12 +28,14 @@ export const Wrapper: React.FC<Props> = props => {
     else if (path.startsWith("/member/bible")) result = "bible";
     else if (path.startsWith("/member/pages")) result = "page";
     else if (path.startsWith("/member/votd")) result = "votd";
+    else if (path.match("/member")) result = "member";
     return result;
   }
 
   const selectedTab = getSelectedTab();
 
   tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={router} selected={selectedTab === "member"} />)
 
   props.config.tabs?.forEach(tab => {
     switch (tab.linkType) {
