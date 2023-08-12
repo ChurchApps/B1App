@@ -182,7 +182,7 @@ export function SectionEdit(props: Props) {
       <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
         {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
       </InputBox>
-      {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={4} />}
+      {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}
     </>
   );
 }
