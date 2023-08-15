@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent } from "@mui/material";
+import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
 import { B1LinkInterface, ApiHelper, UniqueIdHelper, PageInterface, ArrayHelper } from "@/helpers";
 import SearchIcons from "@/appBase/components/material/iconPicker/IconPicker";
 import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
@@ -158,13 +158,10 @@ function TabPreview({ tab }: TabPreviewProps) {
   const imageUrl = tab?.photo || "/images/dashboard/storm.png";
 
   return (
-    <div style={{ backgroundColor: "#000000", width: width, height: height, marginBottom: 10 }}>
-      <div style={{ textAlign: "center", position: "absolute", zIndex: 9999, width: width, height: height, paddingTop: (height - 38) / 2 }}>
-        <Typography sx={{ fontSize: 34, color: "#FFFFFF" }} style={{ color: "#FFF" }}>
-          {tab?.text}
-        </Typography>
-      </div>
-      <img id="tabImage" src={imageUrl} alt="tab" style={{ cursor: "pointer", opacity: 0.7 }} />
-    </div>
+    <Box id="tabImage" sx={{ backgroundImage: `url(${imageUrl})`, backgroundBlendMode: "overlay", backgroundColor: "#616161", backgroundRepeat: "no-repeat", backgroundSize: `${width}px ${height}px`, cursor: "pointer", color: "white", textAlign: "center", height: height, width: width, display: "flex", justifyContent: "center", alignItems: "center" }} marginBottom={1}>
+      <Typography sx={{ fontSize: 34, color: "#FFFFFF" }} style={{ color: "#FFF" }}>
+        {tab?.text}
+      </Typography>
+    </Box>
   );
 }
