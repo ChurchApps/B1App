@@ -159,7 +159,7 @@ function TabPreview({ tab }: TabPreviewProps) {
 
   return (
     <Box id="tabImage" sx={{ backgroundImage: `url(${imageUrl})`, backgroundBlendMode: "overlay", backgroundColor: "#616161", backgroundRepeat: "no-repeat", backgroundSize: `${width}px ${height}px`, cursor: "pointer", color: "white", textAlign: "center", height: height, width: width, display: "flex", justifyContent: "center", alignItems: "center" }} marginBottom={1}>
-      <Typography sx={{ fontSize: 34, color: "#FFFFFF" }} style={{ color: "#FFF" }}>
+      <Typography noWrap sx={{ fontSize: 34, color: "#FFFFFF", padding: 2 }} style={{ color: "#FFF" }}>
         {tab?.text}
       </Typography>
     </Box>
