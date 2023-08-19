@@ -23,7 +23,16 @@ export class SocketHelper {
       };
       SocketHelper.socket.onclose = async (e) => {
         //SocketHelper.events.disconnectHandler();
-        SocketHelper.handleMessage({ action: "disconnect", data: null })
+        setTimeout(() => {
+          //Silently reconnect
+          if (SocketHelper.socket.readyState === SocketHelper.socket.CLOSED) {
+            SocketHelper.init().then(() => {
+              SocketHelper.handleMessage({ action: "reconnect", data: null })
+            });
+          }
+        }, 1000);
+
+        //SocketHelper.handleMessage({ action: "disconnect", data: null })
       }
     });
   }

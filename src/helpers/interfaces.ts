@@ -96,7 +96,7 @@ export interface StreamConfigInterface { keyName?: string, churchId?: string, bu
 
 
 export interface SocketActionHandlerInterface { action:string, id:string, handleMessage:(data:any) => void }
-export type SocketPayloadAction = "message" | "deleteMessage" | "callout" | "attendance" | "prayerRequest" | "socketId" | "privateMessage" | "privateRoomAdded" | "videoChatInvite" | "disconnect";
+export type SocketPayloadAction = "message" | "deleteMessage" | "callout" | "attendance" | "prayerRequest" | "socketId" | "privateMessage" | "privateRoomAdded" | "videoChatInvite" | "reconnect";
 export interface SocketPayloadInterface {  action: SocketPayloadAction, data: any }
 
 

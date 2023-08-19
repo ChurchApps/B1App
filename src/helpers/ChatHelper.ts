@@ -25,20 +25,13 @@ export class ChatHelper {
     SocketHelper.addHandler("privateMessage", "chatPrivateMessage", ChatHelper.handlePrivateMessage);
     SocketHelper.addHandler("privateRoomAdded", "chatPrivateRoomAdded", ChatHelper.handlePrivateRoomAdded);
     SocketHelper.addHandler("videoChatInvite", "chatVideoChatInvite", ChatHelper.handleVideoChatInvite);
-    SocketHelper.addHandler("disconnect", "chatDisconnect", ChatHelper.handleDisconnect);
+    SocketHelper.addHandler("reconnect", "chatReconnect", ChatHelper.handleReconnect);
     SocketHelper.init();
   }
 
-  static handleDisconnect = () => {
-    setTimeout(() => {
-      //Silently reconnect
-      if (SocketHelper.socket.readyState === SocketHelper.socket.CLOSED) {
-        ChatHelper.initChat().then(() => {
-          const mRoom = ChatHelper.current.mainRoom;
-          ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
-        });
-      }
-    }, 1000);
+  static handleReconnect = () => {
+    const mRoom = ChatHelper.current.mainRoom;
+    ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
   }
 
   static handleAttendance = (attendance: ChatAttendanceInterface) => {
