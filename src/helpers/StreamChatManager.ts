@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { ApiHelper, UserHelper } from ".";
 import { ChatHelper } from "./ChatHelper";
 import { ChatStateInterface, ConversationInterface, StreamConfigInterface, StreamingServiceExtendedInterface, StreamingServiceInterface } from "./interfaces";
-import { SocketHelper } from "./SocketHelper";
+import { SocketHelper } from "../appBase/helpers/SocketHelper";
 
 export class StreamChatManager {
 

@@ -1,7 +1,7 @@
 export * from "@/appBase/interfaces";
 import { SermonInterface } from "@/appBase/interfaces/Content";
 import { Permissions as BasePermissions } from "@/appBase/interfaces/Permissions"
-import { ConversationInterface, MessageInterface } from ".";
+import { ConversationInterface, MessageInterface, SocketPayloadInterface } from ".";
 import { ConfigurationInterface } from "./ConfigHelper";
 
 export interface ColumnInterface {
@@ -93,13 +93,6 @@ export interface StreamingButtonInterface { text: string, url: string }
 export interface StreamingTabInterface { text: string, url: string, icon: string, type: string, data: string, updated?: boolean }
 export interface StreamingServiceExtendedInterface { videoUrl: string, serviceTime: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string, id?: string, sermon?: SermonInterface }
 export interface StreamConfigInterface { keyName?: string, churchId?: string, buttons?: StreamingButtonInterface[], tabs?: StreamingTabInterface[], services?: StreamingServiceExtendedInterface[], switchToConversationId: string, jitsiRoom: string }
-
-
-export interface SocketActionHandlerInterface { action:string, id:string, handleMessage:(data:any) => void }
-export type SocketPayloadAction = "message" | "deleteMessage" | "callout" | "attendance" | "prayerRequest" | "socketId" | "privateMessage" | "privateRoomAdded" | "videoChatInvite" | "reconnect";
-export interface SocketPayloadInterface {  action: SocketPayloadAction, data: any }
-
-
 
 export interface ChatPayloadInterface extends SocketPayloadInterface { churchId: string, conversationId: string }
 export interface ChatViewerInterface { displayName: string, id: string }

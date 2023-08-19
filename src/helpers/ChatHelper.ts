@@ -1,4 +1,4 @@
-import { SocketHelper } from "./SocketHelper";
+import { SocketHelper } from "../appBase/helpers/SocketHelper";
 import Cookies from "js-cookie";
 import { ApiHelper, ChatAttendanceInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface, ConnectionInterface, ConversationInterface, MessageInterface } from "."
 import { ChatConfigHelper } from "./ChatConfigHelper";
