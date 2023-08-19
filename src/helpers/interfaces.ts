@@ -95,11 +95,13 @@ export interface StreamingServiceExtendedInterface { videoUrl: string, serviceTi
 export interface StreamConfigInterface { keyName?: string, churchId?: string, buttons?: StreamingButtonInterface[], tabs?: StreamingTabInterface[], services?: StreamingServiceExtendedInterface[], switchToConversationId: string, jitsiRoom: string }
 
 
-export interface SocketActionHandlerInterface { action:string, handleMessage:(data:any) => void }
+export interface SocketActionHandlerInterface { action:string, id:string, handleMessage:(data:any) => void }
+export type SocketPayloadAction = "message" | "deleteMessage" | "callout" | "attendance" | "prayerRequest" | "socketId" | "privateMessage" | "privateRoomAdded" | "videoChatInvite" | "disconnect";
+export interface SocketPayloadInterface {  action: SocketPayloadAction, data: any }
 
 
-export type ChatPayloadAction = "message" | "deleteMessage" | "callout" | "attendance" | "prayerRequest" | "socketId" | "privateMessage" | "privateRoomAdded" | "videoChatInvite" | "disconnect";
-export interface ChatPayloadInterface { churchId: string, conversationId: string, action: ChatPayloadAction, data: any }
+
+export interface ChatPayloadInterface extends SocketPayloadInterface { churchId: string, conversationId: string }
 export interface ChatViewerInterface { displayName: string, id: string }
 export interface ChatAttendanceInterface { viewers?: ChatViewerInterface[], totalViewers?: number, conversationId: string }
 export interface ChatRoomInterface { conversation: ConversationInterface, attendance: ChatAttendanceInterface, messages: MessageInterface[], callout: MessageInterface, prayerRequests?: ConversationInterface[], joined: boolean }
