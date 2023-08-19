@@ -1,38 +1,48 @@
-import { ChatEventsInterface, ChatPayloadInterface, EnvironmentHelper } from "."
+import { ArrayHelper, ChatEventsInterface, ChatPayloadInterface, EnvironmentHelper, SocketActionHandlerInterface } from "."
 
 
 export class SocketHelper {
   static socket: WebSocket;
   static socketId: string;
 
-  static events: ChatEventsInterface;
+  //static events: ChatEventsInterface;
 
-  static init = async (events: ChatEventsInterface) => {
-    SocketHelper.events = events;
+  static actionHandlers: SocketActionHandlerInterface[] = [];
+
+  static init = async () => {
+    //SocketHelper.events = events;
     if (SocketHelper.socket !== undefined) {
+      console.log("SOCKET EXISTS", SocketHelper.socket, SocketHelper.socket.readyState);
       try { SocketHelper.socket.close(); } catch (e) { console.log(e); }
     }
 
     await new Promise((resolve) => {
       SocketHelper.socket = new WebSocket(EnvironmentHelper.Common.MessagingApiSocket);
       SocketHelper.socket.onmessage = (event) => {
+        console.log("***MESSAGE");
         const payload = JSON.parse(event.data);
         SocketHelper.handleMessage(payload);
       };
       SocketHelper.socket.onopen = async (e) => {
+        console.log("***ONOPEN");
         SocketHelper.socket.send("getId");
-        setTimeout(() => {
-          resolve(null);
-        }, 500);
+        setTimeout(() => { resolve(null); }, 500);
       };
       SocketHelper.socket.onclose = async (e) => {
-        SocketHelper.events.disconnectHandler();
+        console.log("***ONCLOSE");
+        //SocketHelper.events.disconnectHandler();
+        SocketHelper.handleMessage({ action: "disconnect", data: null, churchId:null, conversationId:null })
       }
     });
   }
 
   static handleMessage = (payload: ChatPayloadInterface) => {
-    console.log("payload", payload)
+    console.log("payload", payload);
+
+    ArrayHelper.getAll(SocketHelper.actionHandlers, "action", payload.action).forEach((handler) => {
+      handler.handleMessage(payload.data);
+    });
+    /*
     switch (payload.action) {
       case "attendance": SocketHelper.events.attendanceHandler(payload.data); break;
       case "callout": SocketHelper.events.calloutHandler(payload.data); break;
@@ -45,7 +55,7 @@ export class SocketHelper {
       case "socketId":
         SocketHelper.socketId = payload.data;
         break;
-    }
+    }*/
 
   }
 

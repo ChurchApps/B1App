@@ -19,31 +19,54 @@ export class ChatHelper {
     joined: false
   })
 
-  static initChat = async () => SocketHelper.init({
-    attendanceHandler: ChatHelper.handleAttendance,
-    calloutHandler: ChatHelper.handleCallout,
-    deleteHandler: ChatHelper.handleDelete,
-    messageHandler: ChatHelper.handleMessage,
-    prayerRequestHandler: ChatHelper.handlePrayerRequest,
-    disconnectHandler: ChatHelper.handleDisconnect,
-    privateMessageHandler: ChatHelper.handlePrivateMessage,
-    privateRoomAddedHandler: ChatHelper.handlePrivateRoomAdded,
-    videoChatInviteHandler: ChatHelper.handleVideoChatInvite
+  static initChat = async () => {
 
-  })
+    SocketHelper.actionHandlers.push({ action: "attendance", handleMessage: ChatHelper.handleAttendance });
+    SocketHelper.actionHandlers.push({ action: "callout", handleMessage: ChatHelper.handleCallout });
+    SocketHelper.actionHandlers.push({ action: "delete", handleMessage: ChatHelper.handleDelete });
+    SocketHelper.actionHandlers.push({ action: "message", handleMessage: ChatHelper.handleMessage });
+    SocketHelper.actionHandlers.push({ action: "prayerRequest", handleMessage: ChatHelper.handlePrayerRequest });
+    SocketHelper.actionHandlers.push({ action: "privateMessage", handleMessage: ChatHelper.handlePrivateMessage });
+    SocketHelper.actionHandlers.push({ action: "privateRoomAdded", handleMessage: ChatHelper.handlePrivateRoomAdded });
+    SocketHelper.actionHandlers.push({ action: "videoChatInvite", handleMessage: ChatHelper.handleVideoChatInvite });
+    SocketHelper.actionHandlers.push({ action: "disconnect", handleMessage: ChatHelper.handleDisconnect });
+    SocketHelper.init();
+    /*
+    {
+      attendanceHandler: ChatHelper.handleAttendance,
+      calloutHandler: ChatHelper.handleCallout,
+      deleteHandler: ChatHelper.handleDelete,
+      messageHandler: ChatHelper.handleMessage,
+      prayerRequestHandler: ChatHelper.handlePrayerRequest,
+      disconnectHandler: ChatHelper.handleDisconnect,
+      privateMessageHandler: ChatHelper.handlePrivateMessage,
+      privateRoomAddedHandler: ChatHelper.handlePrivateRoomAdded,
+      videoChatInviteHandler: ChatHelper.handleVideoChatInvite
+    }*/
+  }
 
   static handleDisconnect = () => {
     setTimeout(() => {
       console.log("RECONNECTING");
       //Silently reconnect
+      console.log(SocketHelper.socket.readyState, SocketHelper.socket.CLOSED)
       if (SocketHelper.socket.readyState === SocketHelper.socket.CLOSED) {
+        console.log("TRYING?")
         ChatHelper.initChat().then(() => {
+          console.log("JOINING ROOM")
           const mRoom = ChatHelper.current.mainRoom;
           ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
         });
+      } else if (SocketHelper.socket.readyState === SocketHelper.socket.OPEN) {
+        console.log("JOINING ROOM")
+        const mRoom = ChatHelper.current.mainRoom;
+        ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
       }
     }, 1000);
 
+  }
+
+  static joinRooms = () => {
   }
 
   static handleAttendance = (attendance: ChatAttendanceInterface) => {
