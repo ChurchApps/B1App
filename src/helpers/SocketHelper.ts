@@ -39,9 +39,15 @@ export class SocketHelper {
   static handleMessage = (payload: ChatPayloadInterface) => {
     console.log("payload", payload);
 
-    ArrayHelper.getAll(SocketHelper.actionHandlers, "action", payload.action).forEach((handler) => {
-      handler.handleMessage(payload.data);
-    });
+    if (payload.action==="socketId") {
+      SocketHelper.socketId = payload.data;
+    }
+    else {
+      ArrayHelper.getAll(SocketHelper.actionHandlers, "action", payload.action).forEach((handler) => {
+        console.log("handler", handler)
+        handler.handleMessage(payload.data);
+      });
+    }
     /*
     switch (payload.action) {
       case "attendance": SocketHelper.events.attendanceHandler(payload.data); break;

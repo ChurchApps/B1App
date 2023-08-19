@@ -21,6 +21,7 @@ export class ChatHelper {
 
   static initChat = async () => {
 
+    SocketHelper.actionHandlers = [];
     SocketHelper.actionHandlers.push({ action: "attendance", handleMessage: ChatHelper.handleAttendance });
     SocketHelper.actionHandlers.push({ action: "callout", handleMessage: ChatHelper.handleCallout });
     SocketHelper.actionHandlers.push({ action: "delete", handleMessage: ChatHelper.handleDelete });
@@ -57,17 +58,11 @@ export class ChatHelper {
           const mRoom = ChatHelper.current.mainRoom;
           ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
         });
-      } else if (SocketHelper.socket.readyState === SocketHelper.socket.OPEN) {
-        console.log("JOINING ROOM")
-        const mRoom = ChatHelper.current.mainRoom;
-        ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
       }
     }, 1000);
 
   }
 
-  static joinRooms = () => {
-  }
 
   static handleAttendance = (attendance: ChatAttendanceInterface) => {
     const room = ChatHelper.getRoom(attendance.conversationId);
