@@ -5,9 +5,10 @@ import React, { useEffect } from "react";
 import { InteractionContainer } from "./InteractionContainer";
 import { VideoContainer } from "./VideoContainer";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
-import { AppearanceInterface } from "@/appBase/helpers";
+import { AppearanceInterface, UserHelper } from "@/appBase/helpers";
 import { StreamingHeader } from "./StreamingHeader";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
+import { Permissions } from "../../helpers/interfaces";
 
 interface Props {
   keyName:string,
@@ -56,7 +57,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
 
   let result = (<div id="liveContainer">
-    {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={chatState?.user?.isHost} />}
+    {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}
     <div id="liveBody">
       <VideoContainer currentService={currentService} embedded={!props.includeHeader} />
       {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} />}

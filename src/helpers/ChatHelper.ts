@@ -19,7 +19,7 @@ export class ChatHelper {
   static initChat = async () => {
     SocketHelper.addHandler("attendance", "chatAttendance", ChatHelper.handleAttendance);
     SocketHelper.addHandler("callout", "chatCallout", ChatHelper.handleCallout);
-    SocketHelper.addHandler("delete", "chatDelete", ChatHelper.handleDelete);
+    SocketHelper.addHandler("deleteMessage", "chatDelete", ChatHelper.handleDelete);
     SocketHelper.addHandler("message", "chatMessage", ChatHelper.handleMessage);
     SocketHelper.addHandler("prayerRequest", "chatPrayerRequest", ChatHelper.handlePrayerRequest);
     SocketHelper.addHandler("privateMessage", "chatPrivateMessage", ChatHelper.handlePrivateMessage);
