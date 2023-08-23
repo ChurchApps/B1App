@@ -9,16 +9,39 @@ import Head from "next/head";
 import { EnvironmentHelper, AppearanceHelper, ConfigHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { UserProvider } from "@/context/UserContext";
-import { AnalyticsHelper } from "@/appBase/helpers";
+import { AnalyticsHelper, UserHelper } from "@/appBase/helpers";
 import React from "react";
+import { ErrorHelper } from "@/appBase/helpers/ErrorHelper";
+import { ErrrorAppDataInterface, ErrorLogInterface } from "@/appBase/interfaces/Error";
+import { ErrorMessages } from "@/appBase/components";
 
 EnvironmentHelper.init();
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [config, setConfig] = React.useState<ConfigurationInterface>(null);
-  
+  const [errors, setErrors] = React.useState([]);
   const location = (typeof(window) === "undefined") ? null : window.location;
+
+
+  const getErrorAppData = () => {
+    const result: ErrrorAppDataInterface = {
+      churchId: UserHelper.currentUserChurch?.church?.id || "",
+      userId: UserHelper.user?.id || "",
+      originUrl: location?.toString(),
+      application: "CHUMS"
+    }
+    return result;
+  }
+
+  const customErrorHandler = (error: ErrorLogInterface) => {
+    switch (error.errorType) {
+      case "401": setErrors(["Access denied when loading " + error.message]); break;
+      case "500": setErrors(["Server error when loading " + error.message]); break;
+    }
+  }
+
   AnalyticsHelper.init();
+  ErrorHelper.init(getErrorAppData, customErrorHandler);
   React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
   React.useEffect(() => {
@@ -43,6 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           : <link rel="icon" href="/favicon.ico" />
         }
       </Head>
+      <ErrorMessages errors={errors} />
       <Component {...pageProps} />
     </UserProvider>
   );

@@ -15,7 +15,6 @@ type Props = {
 
 export function PageLayout(props: Props) {
   let result = <></>
-  console.log(props.pageData)
   if (props.pageData) {
     switch (props.pageData?.layout) {
       case "cleanCentered":

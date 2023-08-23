@@ -65,7 +65,6 @@ export const TimelinePost: React.FC<Props> = (props) => {
   }
 
   const getEventDetails = () => {
-    console.log("EVENT", props.post)
     const group = ArrayHelper.getOne(props.groups, "id", props.post.data.groupId);
     let start = new Date(props.post.data.start);
     const displayStart = DateHelper.prettyDateTime(start);
@@ -78,8 +77,6 @@ export const TimelinePost: React.FC<Props> = (props) => {
   }
 
   const getGroupDetails = () => {
-    console.log("GROUP", props.post)
-
     const group = ArrayHelper.getOne(props.groups, "id", props.post.conversation.contentId);
     const result=(<>
       <Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{width:"100%" }} />

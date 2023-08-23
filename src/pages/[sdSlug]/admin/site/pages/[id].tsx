@@ -62,7 +62,6 @@ export default function Admin(props: Props) {
   }, [windowWidth]);
 
   const handleDrop = (data: any, sort: number, zone: string) => {
-    console.log("handleDrop", zone, sort);
     if (data.data) {
       const section: SectionInterface = data.data;
       section.sort = sort;

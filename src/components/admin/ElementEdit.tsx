@@ -248,24 +248,22 @@ export function ElementEdit(props: Props) {
     </>
   )
 
-  const getCarouselFields = () => {
-    return (
-      <>
-        <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "250"} />
-        <TextField fullWidth size="small" type="number" label="Slides" name="slides" onChange={handleChange} value={parsedData.slides || ""} />
-        <FormControl fullWidth>
-          <InputLabel>Animation Options</InputLabel>
-          <Select fullWidth size="small" label="Animation Options" name="animationOptions" onChange={handleChange} value={parsedData.animationOptions || "fade"}>
-            <MenuItem value="fade">Fade</MenuItem>
-            <MenuItem value="slide">Slide</MenuItem>
-          </Select>
-        </FormControl>
-        <FormGroup>
-          <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.autoplay === "true" ? true : false} />} name="autoplay" label="Autoplay" />
-        </FormGroup>
-      </>
-    )
-  }
+  const getCarouselFields = () => (
+    <>
+      <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "250"} />
+      <TextField fullWidth size="small" type="number" label="Slides" name="slides" onChange={handleChange} value={parsedData.slides || ""} />
+      <FormControl fullWidth>
+        <InputLabel>Animation Options</InputLabel>
+        <Select fullWidth size="small" label="Animation Options" name="animationOptions" onChange={handleChange} value={parsedData.animationOptions || "fade"}>
+          <MenuItem value="fade">Fade</MenuItem>
+          <MenuItem value="slide">Slide</MenuItem>
+        </Select>
+      </FormControl>
+      <FormGroup>
+        <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.autoplay === "true" ? true : false} />} name="autoplay" label="Autoplay" />
+      </FormGroup>
+    </>
+  )
 
   const getImageFields = () => (
     <>
@@ -284,7 +282,7 @@ export function ElementEdit(props: Props) {
       <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "25"} />
     </>
   )
-  
+
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
@@ -329,11 +327,9 @@ export function ElementEdit(props: Props) {
 
   useEffect(() => {
     const loadBlocks = async () => {
-      console.log(props.element, parsedData);
       if (blocks===null)
       {
         if (props.element.elementType === "block" || (props.element.elementType==="stream" && parsedData?.offlineContent==="block")) {
-          console.log("MADE IT");
           let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
           setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
         }

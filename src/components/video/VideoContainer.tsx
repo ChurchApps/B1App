@@ -44,7 +44,6 @@ export const VideoContainer: React.FC<Props> = (props) => {
   }
 
   const getContents = () => {
-    //console.log("GET CONTENTS")
     let cs = props.currentService;
     if (cs === undefined || cs === null || cs.localEndTime === undefined) return <div id="noVideoContent"><h2>Check back for new services</h2></div>;
     else if (new Date() > cs.localEndTime) return <div id="noVideoContent"><h2>The current service has ended.</h2></div>;

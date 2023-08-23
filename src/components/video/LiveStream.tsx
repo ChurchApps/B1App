@@ -65,12 +65,9 @@ export const LiveStream: React.FC<Props> = (props) => {
   </div>);
 
   if (props.offlineContent) {
-    console.log("check offline")
-    console.log(currentService);
     let showAlt = !currentService;
     if (!showAlt) {
       const seconds = (currentService.localCountdownTime.getTime() - new Date().getTime()) / 1000;
-      console.log(seconds);
       if (seconds>3600) showAlt = true;
     }
     if (showAlt) result = props.offlineContent;

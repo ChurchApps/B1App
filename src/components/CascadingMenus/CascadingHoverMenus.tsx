@@ -38,7 +38,6 @@ const CascadingSubmenu = ({ title, popupId, ...props }: any) => {
 };
 
 const CascadingMenu = ({ popupState, ...props }: any) => {
-  console.log;
   const { rootPopupState } = useContext(CascadingContext);
   const context = useMemo(
     () => ({

@@ -21,17 +21,14 @@ export const Timeline: React.FC<Props> = (props) => {
     if (ApiHelper.isAuthenticated) {
 
       const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts", "MessagingApi");
-      console.log("INITIAL POSTS", initialConversations);
       const allPosts:TimelinePostInterface[] = await loadDetails(initialConversations);
       await TimelineHelper.populateConversations(allPosts);
       const data = await TimelineHelper.populateEntities(allPosts);
-      console.log("DATA", data)
       if (data.people) setPeople(data.people);
       if (data.groups) setGroups(data.groups);
 
       TimelineHelper.standardizePosts(allPosts, data.people);
 
-      console.log("ALL POSTS", allPosts);
       setPosts(allPosts);
     }
   }
@@ -48,23 +45,18 @@ export const Timeline: React.FC<Props> = (props) => {
     promises.push(ApiHelper.get("/tasks/timeline?taskIds=" + taskIds.join(","), "DoingApi"));
     promises.push(ApiHelper.get("/events/timeline?eventIds=" + eventIds.join(","), "ContentApi"));
     const results = await Promise.all(promises);
-    console.log("RESULTS", results)
     let allPosts:TimelinePostInterface[] = [];
     results.forEach((result:any[]) => {
-      console.log("RESULT", result)
       result.forEach((r) => {
-        console.log("R", r)
         allPosts.push({ postId:r.postId, postType:r.postType, data:r})
       });
     });
-    console.log("ALL POSTS", allPosts)
     allPosts.forEach(p => { p.conversation={} })
     initialConversations.forEach((conv) => {
       if (conv.contentType==="task" || conv.contentType==="event") {
         let existingPost = ArrayHelper.getOne(allPosts, "postId", conv.contentId);
         if (existingPost) {
           existingPost.conversation = conv;
-          console.log("FOUND IT", existingPost, existingPost.conversation, JSON.stringify(existingPost))
         }
       }
       else {

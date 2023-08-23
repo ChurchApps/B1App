@@ -33,7 +33,6 @@ export function Embedded(props: Props) {
     }
   });
 
-  console.log("***EMBEDDED")
   return (
     <ThemeProvider theme={mdTheme}>
       <CssBaseline />

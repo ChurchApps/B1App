@@ -60,7 +60,6 @@ export function EditEventModal(props: Props) {
         rrule.options.until = new Date(newEvent.start);
         EventHelper.cleanRule(rrule.options);
         originalEv.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);
-        console.log("EVENTS", "Original", originalEv, "New", newEvent);
         ApiHelper.post("/events", [originalEv, newEvent], "ContentApi").then(() => { props.onDone(); });
         break;
       case "all":
@@ -82,7 +81,7 @@ export function EditEventModal(props: Props) {
     else {
       let errors: string[] = [];
       const ev = {...event};
-      
+
       if (!ev.title || ev.title === "") errors.push("Please enter a title");
 
       if (errors.length > 0) {
@@ -174,7 +173,7 @@ export function EditEventModal(props: Props) {
                 <Switch
                   size="small"
                   checked={event.visibility === "private"}
-                  onChange={(e) => { 
+                  onChange={(e) => {
                     if (e.target.checked === true) setEvent({...event, visibility: "private"});
                     else setEvent({...event, visibility: "public"});
                   }}

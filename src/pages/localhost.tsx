@@ -24,7 +24,6 @@ export default function Localhost() {
       <br />
       <h3>Editor</h3>
       <MarkdownEditor value={val} onChange={(v) => {
-        console.log(v);
         setVal(v)
       }} />
       <h3>Markdown</h3>

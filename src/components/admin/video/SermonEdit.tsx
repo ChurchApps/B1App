@@ -139,7 +139,6 @@ export const SermonEdit: React.FC<Props> = (props) => {
       v.description = d.description;
       v.thumbnail = d.thumbnail;
       v.duration = d.duration;
-      console.log(v);
       setCurrentSermon(v);
     });
   }
