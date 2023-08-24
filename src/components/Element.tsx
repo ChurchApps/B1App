@@ -100,7 +100,7 @@ export const Element: React.FC<Props> = props => {
       result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "faq":
-      result = <FaqElement key={props.element.id} element={props.element as ElementInterface} />
+      result = <FaqElement key={props.element.id} element={props.element as ElementInterface} textColor={props.textColor} />
       break;
     case "sermons":
       result = <SermonElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} churchSettings={props.churchSettings} />
