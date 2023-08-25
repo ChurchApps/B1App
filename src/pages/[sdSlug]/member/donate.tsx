@@ -12,7 +12,7 @@ export default function Donate(props: WrapperPageProps) {
       </h1>
       {PersonHelper.person?.id
         ? (
-          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" churchName={props.config.church.name} />
+          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" church={props.config.church} />
         )
         : (
           <>
