@@ -3,7 +3,7 @@ import { GetStaticProps, GetStaticPaths } from "next";
 import { useRouter } from "next/router";
 import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, GroupInterface, CuratedEventWithEventInterface } from "@/helpers";
+import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { DisplayBox, Loading } from "@/components";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
@@ -14,7 +14,7 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
   const [groups, setGroups] = useState<GroupInterface[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState<boolean>(false);
-  const [events, setEvents] = useState<CuratedEventWithEventInterface[]>([]);
+  const [events, setEvents] = useState<CuratedEventInterface[]>([]);
   const [refresh, refresher] = useState({});
 
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function CalendarPage(props: WrapperPageProps) {
     setIsLoadingGroups(true);
     ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoadingGroups(false); });
 
-    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId, "ContentApi").then((data: CuratedEventWithEventInterface[]) => {
+    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?withoutEvents=1", "ContentApi").then((data: CuratedEventInterface[]) => {
       setEvents(data);
     });
   };
