@@ -15,7 +15,7 @@ export function DraggableIcon(props: Props) {
       item: { elementType: props.elementType, data: props.data },
       collect: (monitor) => ({ isDragging: !!monitor.isDragging() }),
     }),
-    [],
+    [props.data],
   )
 
   drag(dragRef);
