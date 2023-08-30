@@ -12,7 +12,7 @@ export default function Member(props: WrapperPageProps) {
   return (
     <Wrapper config={props.config}>
       <h1>Member Portal</h1>
-      <p>Select and option on the left</p>
+      <p>Select an option on the left</p>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Timeline context={context} />
