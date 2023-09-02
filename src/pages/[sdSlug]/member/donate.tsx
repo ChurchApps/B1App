@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icon, Grid, Typography, Button } from "@mui/material";
-import { PersonHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps, UserHelper } from "@/helpers";
 import { DonationPage as BaseDonationPage, NonAuthDonation, Wrapper } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
 
@@ -10,9 +10,9 @@ export default function Donate(props: WrapperPageProps) {
       <h1>
         <Icon>volunteer_activism</Icon>Give
       </h1>
-      {PersonHelper.person?.id
+      {UserHelper.currentUserChurch?.person?.id
         ? (
-          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" church={props.config.church} />
+          <BaseDonationPage personId={UserHelper.currentUserChurch?.person?.id} appName="B1App" church={props.config.church} />
         )
         : (
           <>
