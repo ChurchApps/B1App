@@ -1,5 +1,6 @@
 import { Section } from "@/components/Section";
-import { ArrayHelper, ChurchInterface, SectionInterface } from "@/helpers";
+import { SectionInterface } from "@/helpers";
+import { ArrayHelper, ChurchInterface } from "@churchapps/apphelper";
 import { SectionBlock } from "../SectionBlock";
 
 type Props = {

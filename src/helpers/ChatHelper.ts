@@ -1,6 +1,6 @@
-import { SocketHelper } from "./SocketHelper";
+import { SocketHelper, ApiHelper, ConnectionInterface, ConversationInterface, MessageInterface } from "@churchapps/apphelper";
 import Cookies from "js-cookie";
-import { ApiHelper, ChatAttendanceInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface, ConnectionInterface, ConversationInterface, MessageInterface } from "."
+import { ChatAttendanceInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface } from "."
 import { ChatConfigHelper } from "./ChatConfigHelper";
 
 export class ChatHelper {
@@ -9,41 +9,29 @@ export class ChatHelper {
   static onChange: () => void;
 
   static createRoom = (conversation: ConversationInterface): ChatRoomInterface => ({
-    //title: title,
     messages: [],
     attendance: { conversationId: conversation.id, totalViewers: 0, viewers: [] },
     callout: { content: "" },
-    //conversationId: conversationId,
-    //contentId: contentId || "",
     conversation: conversation,
     joined: false
   })
 
-  static initChat = async () => SocketHelper.init({
-    attendanceHandler: ChatHelper.handleAttendance,
-    calloutHandler: ChatHelper.handleCallout,
-    deleteHandler: ChatHelper.handleDelete,
-    messageHandler: ChatHelper.handleMessage,
-    prayerRequestHandler: ChatHelper.handlePrayerRequest,
-    disconnectHandler: ChatHelper.handleDisconnect,
-    privateMessageHandler: ChatHelper.handlePrivateMessage,
-    privateRoomAddedHandler: ChatHelper.handlePrivateRoomAdded,
-    videoChatInviteHandler: ChatHelper.handleVideoChatInvite
+  static initChat = async () => {
+    SocketHelper.addHandler("attendance", "chatAttendance", ChatHelper.handleAttendance);
+    SocketHelper.addHandler("callout", "chatCallout", ChatHelper.handleCallout);
+    SocketHelper.addHandler("deleteMessage", "chatDelete", ChatHelper.handleDelete);
+    SocketHelper.addHandler("message", "chatMessage", ChatHelper.handleMessage);
+    SocketHelper.addHandler("prayerRequest", "chatPrayerRequest", ChatHelper.handlePrayerRequest);
+    SocketHelper.addHandler("privateMessage", "chatPrivateMessage", ChatHelper.handlePrivateMessage);
+    SocketHelper.addHandler("privateRoomAdded", "chatPrivateRoomAdded", ChatHelper.handlePrivateRoomAdded);
+    SocketHelper.addHandler("videoChatInvite", "chatVideoChatInvite", ChatHelper.handleVideoChatInvite);
+    SocketHelper.addHandler("reconnect", "chatReconnect", ChatHelper.handleReconnect);
+    SocketHelper.init();
+  }
 
-  })
-
-  static handleDisconnect = () => {
-    setTimeout(() => {
-      console.log("RECONNECTING");
-      //Silently reconnect
-      if (SocketHelper.socket.readyState === SocketHelper.socket.CLOSED) {
-        ChatHelper.initChat().then(() => {
-          const mRoom = ChatHelper.current.mainRoom;
-          ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
-        });
-      }
-    }, 1000);
-
+  static handleReconnect = () => {
+    const mRoom = ChatHelper.current.mainRoom;
+    ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
   }
 
   static handleAttendance = (attendance: ChatAttendanceInterface) => {

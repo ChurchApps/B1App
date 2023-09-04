@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Icon, Box } from "@mui/material";
-import useMountedState from "../../appBase/hooks/useMountedState";
+import { useMountedState } from "@churchapps/apphelper";
 import { StreamingTabInterface, EnvironmentHelper, StreamConfigInterface, ChatStateInterface } from "@/helpers";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { HostChat, ReceivePrayer } from "./chat/host";

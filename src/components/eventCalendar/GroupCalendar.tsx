@@ -1,5 +1,5 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ApiHelper, EventInterface } from "@/helpers";
+import { ApiHelper, EventInterface } from "@churchapps/apphelper";
 import { EventCalendar } from "./EventCalendar";
 import { useEffect, useState } from "react";
 

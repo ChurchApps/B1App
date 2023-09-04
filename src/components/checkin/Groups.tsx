@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Icon, Grid } from "@mui/material";
-import { GroupInterface, CheckinHelper } from "@/helpers";
+import { CheckinHelper } from "@/helpers";
+import { GroupInterface } from "@churchapps/apphelper";
 
 interface GroupCategoryInterface {
   key: number;

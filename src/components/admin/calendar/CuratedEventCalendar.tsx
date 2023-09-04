@@ -4,8 +4,7 @@ import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Button } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import { EventHelper } from "@/appBase/helpers/EventHelper";
-import { CuratedEventWithEventInterface } from "@/helpers";
+import { EventHelper, CuratedEventWithEventInterface } from "@churchapps/apphelper";
 import { EditCalendarEventModal } from "./EditCalendarEventModal";
 import { DisplayCalendarEventModal } from "./DisplayCalendarEventModal";
 
@@ -53,8 +52,8 @@ export function CuratedEventCalendar(props: Props) {
       const dates = EventHelper.getRange(ev, startRange, endRange);
       dates.forEach((date) => {
         const evt = { ...event };
-        const diff =
-          new Date(evt.end).getTime() - new Date(evt.start).getTime();
+        const diff
+          = new Date(evt.end).getTime() - new Date(evt.start).getTime();
         evt.start = date;
         evt.end = new Date(date.getTime() + diff);
         expandedEvents.push(evt);
@@ -64,8 +63,8 @@ export function CuratedEventCalendar(props: Props) {
 
   return (
     <div>
-      {props.mode === "edit" &&
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 17 }}>
+      {props.mode === "edit"
+        && <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 17 }}>
           <div></div>
           <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
         </div>

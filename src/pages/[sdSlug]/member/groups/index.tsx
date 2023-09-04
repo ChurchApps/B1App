@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import { Wrapper } from "@/components";
-import { ApiHelper, ConfigHelper, GroupInterface, UserHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, GroupInterface, UserHelper } from "@churchapps/apphelper";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 export default function Groups(props: WrapperPageProps) {
@@ -32,34 +33,29 @@ export default function Groups(props: WrapperPageProps) {
         {groups?.length > 0
           ? (
             groups.map((group) => (
-              <Grid item md={4} xs={12}>
+              <Grid item md={4} sm={6} xs={12}>
                 <Link href={"/member/groups/" + group.id}>
-                  <div style={{ backgroundColor: "#000000", width: "100%", aspectRatio: "4" }}>
-                    <div style={{ position: "relative" }}>
-                      <div
-                        style={{
-                          textAlign: "center",
-                          position: "absolute",
-                          zIndex: 9999,
-                          width: "100%",
-                          aspectRatio: "4",
-                          paddingTop: 30,
-                        }}
-                      >
-                        <Typography sx={{ fontSize: 34, color: "#FFFFFF" }} style={{ color: "#FFF" }}>
-                          {group.name}
-                        </Typography>
-                      </div>
-                    </div>
-                    {group.photoUrl && (
-                      <img
-                        id="tabImage"
-                        src={group.photoUrl}
-                        alt="tab"
-                        style={{ cursor: "pointer", opacity: 0.7, width: "100%" }}
-                      />
-                    )}
-                  </div>
+                  <Box
+                    id="tabImage"
+                    sx={{
+                      backgroundImage: `url(${group.photoUrl})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "100% 100%",
+                      backgroundColor: group.photoUrl ? "#616161" : "#000000",
+                      backgroundBlendMode: group.photoUrl ? "overlay" : "",
+                      aspectRatio: "4",
+                      width: "100%",
+                      color: "white",
+                      textAlign: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                  >
+                    <Typography noWrap sx={{ fontSize: { lg: 34, md: 26, xs: 24 }, color: "#FFFFFF", padding: 2 }} style={{ color: "#FFF" }}>
+                      {group.name}
+                    </Typography>
+                  </Box>
                 </Link>
               </Grid>
             ))

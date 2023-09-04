@@ -1,4 +1,5 @@
-import { ApiHelper, ArrayHelper, ConversationInterface, PersonInterface, TimelinePostInterface } from ".";
+import { ApiHelper, ArrayHelper, ConversationInterface, PersonInterface } from "@churchapps/apphelper";
+import { TimelinePostInterface } from ".";
 
 export class TimelineHelper {
 
@@ -46,11 +47,9 @@ export class TimelineHelper {
     const defaultDate = new Date();
     defaultDate.setDate(defaultDate.getDate() - 7);
     allPosts.forEach(p => {
-      console.log("Message Count", p.conversation?.messages?.length || -1)
       p.conversation?.messages?.forEach(m => {
         if (m.timeSent) m.timeSent = new Date(m.timeSent);
         m.person = ArrayHelper.getOne(people, "id", m.personId);
-        console.log("PERSON", m.personId, m.person);
       });
 
       if (p.timeSent) p.timeSent = new Date(p.timeSent);
@@ -65,10 +64,7 @@ export class TimelineHelper {
 
     });
 
-
-
     ArrayHelper.sortBy(allPosts, "timeUpdated", true);
-    console.log("AFTER", allPosts)
   }
 
 }

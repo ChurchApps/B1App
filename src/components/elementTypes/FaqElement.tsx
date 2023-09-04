@@ -5,10 +5,11 @@ import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreview } from "..";
+import { MarkdownPreview } from "@churchapps/apphelper";
 
 interface Props {
   element: ElementInterface;
+  textColor: string;
 }
 
 const Accordion = styled((props: AccordionProps) => (
@@ -41,19 +42,20 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   },
 }));
 
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme, color }) => ({
   marginLeft: theme.spacing(1),
+  color: color,
 }));
 
-export const FaqElement = ({ element }: Props) => (
+export const FaqElement = ({ element, textColor }: Props) => (
   <>
     <Accordion>
       <AccordionSummary>
-        <Typography variant="h6" fontWeight={600}>
+        <Typography variant="h6" fontWeight={600} color={textColor === "dark" ? "#444" : "#eee"}>
           {element?.answers?.title}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails>
+      <AccordionDetails color={textColor === "dark" ? "#444" : "#eee"}>
         <MarkdownPreview value={element?.answers?.description} />
       </AccordionDetails>
     </Accordion>

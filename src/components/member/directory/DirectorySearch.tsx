@@ -1,7 +1,6 @@
 import { Button, TextField, Icon, Box } from "@mui/material";
 import React from "react";
-import { ApiHelper } from "../../../helpers"
-import { DisplayBox } from "../../";
+import { ApiHelper, DisplayBox } from "@churchapps/apphelper"
 import { PeopleSearchResults } from "./PeopleSearchResults"
 
 interface Props { selectedHandler: (personId: string) => void }

@@ -1,7 +1,6 @@
 import React from "react";
-import { ApiHelper, EnvironmentHelper } from "../../../helpers"
-import { Loading } from "../../";
-import { PersonInterface } from "../../../appBase/interfaces"
+import { EnvironmentHelper } from "../../../helpers"
+import { PersonInterface, Loading, ApiHelper } from "@churchapps/apphelper"
 import { Grid } from "@mui/material";
 
 interface Props { person: PersonInterface, selectedHandler: (personId: string) => void }

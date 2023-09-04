@@ -1,12 +1,10 @@
 import React from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
-import { SiteWrapper, NavItem } from "../appBase/components";
 import { useRouter } from "next/router"
-import { Themes, UserHelper } from "@/appBase/helpers";
-import { EnvironmentHelper, PersonHelper } from "@/helpers"
+import { Themes, UserHelper, Permissions, SiteWrapper, NavItem } from "@churchapps/apphelper";
+import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { Permissions } from "@/helpers/interfaces";
 
 interface Props { config: ConfigurationInterface, pageTitle?: string, children: React.ReactNode }
 
@@ -28,12 +26,15 @@ export const Wrapper: React.FC<Props> = props => {
     else if (path.startsWith("/member/bible")) result = "bible";
     else if (path.startsWith("/member/pages")) result = "page";
     else if (path.startsWith("/member/votd")) result = "votd";
+    else if (path.startsWith("/member/groups")) result = "groups";
+    else if (path.match("/member")) result = "member";
     return result;
   }
 
   const selectedTab = getSelectedTab();
 
   tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={router} selected={selectedTab === "member"} />)
 
   props.config.tabs?.forEach(tab => {
     switch (tab.linkType) {

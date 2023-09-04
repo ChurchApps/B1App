@@ -1,5 +1,5 @@
-import { SmallButton, Loading, DisplayBox } from "@/appBase/components";
-import { LinkInterface, ApiHelper, UserHelper } from "@/helpers";
+import { SmallButton, Loading, DisplayBox } from "@churchapps/apphelper";
+import { LinkInterface, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { Icon } from "@mui/material";
 import React from "react";
 import { TabEdit } from "./TabEdit";

@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
-import SearchIcons from "../../../appBase/components/material/iconPicker/IconPicker";
-import { InputBox, ErrorMessages } from "@/appBase/components";
-import { LinkInterface, PageInterface, ApiHelper, ArrayHelper } from "@/helpers";
+import { IconPicker } from "@churchapps/apphelper";
+import { InputBox, ErrorMessages } from "@churchapps/apphelper";
+import { PageInterface } from "@/helpers";
+import { LinkInterface, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }
 
@@ -49,7 +50,7 @@ export const TabEdit: React.FC<Props> = (props) => {
     switch (e.target.name) {
       case "text": t.text = val; break;
       case "type": t.linkType = val; break;
-      case "page": t.linkData = val; t.url=ArrayHelper.getOne(pages, "id", val).url; console.log(t.url); break;
+      case "page": t.linkData = val; t.url=ArrayHelper.getOne(pages, "id", val).url; break;
       case "url": t.url = val; break;
     }
     setCurrentTab(t);
@@ -91,7 +92,6 @@ export const TabEdit: React.FC<Props> = (props) => {
         });
         if (currentTab.linkData === "") currentTab.linkData = pages[0]?.url;
       }
-      console.log("PAGE - " + currentTab?.linkData)
       return (
         <FormControl fullWidth>
           <InputLabel id="page">Page</InputLabel>
@@ -134,7 +134,7 @@ export const TabEdit: React.FC<Props> = (props) => {
       }
 
       <Dialog open={isModalOpen}>
-        <SearchIcons onSelect={onSelect} />
+        <IconPicker onSelect={onSelect} />
       </Dialog>
     </InputBox>
   );

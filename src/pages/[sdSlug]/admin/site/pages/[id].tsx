@@ -2,8 +2,9 @@ import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
-import { ApiHelper, ArrayHelper, ChurchInterface, ConfigHelper, ElementInterface, PageInterface, SectionInterface, UserHelper, WrapperPageProps, Permissions } from "@/helpers";
-import { DisplayBox, Theme } from "@/components";
+import {  ConfigHelper, ElementInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
+import { Theme } from "@/components";
+import { DisplayBox, ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { ElementEdit } from "@/components/admin/ElementEdit";
@@ -62,7 +63,6 @@ export default function Admin(props: Props) {
   }, [windowWidth]);
 
   const handleDrop = (data: any, sort: number, zone: string) => {
-    console.log("handleDrop", zone, sort);
     if (data.data) {
       const section: SectionInterface = data.data;
       section.sort = sort;

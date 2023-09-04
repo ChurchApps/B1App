@@ -1,18 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button, Icon, Grid, Box } from "@mui/material";
-import { Loading } from "@/components";
+import { CheckinHelper, EnvironmentHelper } from "@/helpers";
 import { Groups } from "./Groups";
-import {
-  CheckinHelper,
-  VisitInterface,
-  GroupInterface,
-  PersonInterface,
-  EnvironmentHelper,
-  ArrayHelper,
-  ServiceTimeInterface,
-  VisitSessionInterface,
-  ApiHelper,
-} from "@/helpers";
+import { VisitInterface, GroupInterface, PersonInterface, ArrayHelper, ServiceTimeInterface, VisitSessionInterface, ApiHelper, Loading } from "@churchapps/apphelper";
 
 interface Props {
   completeHandler: () => void;

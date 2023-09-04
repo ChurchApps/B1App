@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox } from "../index";
-import { ApiHelper, PageInterface, UserHelper, Permissions } from "@/helpers";
+import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
+import { PageInterface } from "@/helpers";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
@@ -48,7 +48,7 @@ export function PageEdit(props: Props) {
   const handleDelete = () => {
     let errors = [];
     if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to delete pages");
-    
+
     if (errors.length > 0) {
       setErrors(errors);
       return ;

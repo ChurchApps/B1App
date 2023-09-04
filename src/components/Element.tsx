@@ -1,11 +1,10 @@
-import { SmallButton } from "@/appBase/components";
-import { ApiHelper, ChurchInterface, ElementInterface, SectionInterface } from "@/helpers";
+import { SmallButton, ChurchInterface, NonAuthDonation } from "@churchapps/apphelper";
+import { ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
-import { NonAuthDonation } from "@/appBase/donationComponents/components"
 import { ElementBlock } from "./elementTypes/ElementBlock";
 import { CardElement } from "./elementTypes/CardElement";
 import { LogoElement } from "./elementTypes/LogoElement";
@@ -22,6 +21,7 @@ import { CarouselElement } from "./elementTypes/CarouselElement";
 import { ImageElement } from "./elementTypes/ImageElement";
 import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 import { CalendarElement } from "./elementTypes/CalendarElement";
+import { ApiHelper } from "@churchapps/apphelper";
 
 interface Props {
   element: ElementInterface;
@@ -51,7 +51,7 @@ export const Element: React.FC<Props> = props => {
 
   const getAddElement = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} dndDeps={props.element} />);
   }
 
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>
@@ -100,10 +100,10 @@ export const Element: React.FC<Props> = props => {
       result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "faq":
-      result = <FaqElement key={props.element.id} element={props.element as ElementInterface} />
+      result = <FaqElement key={props.element.id} element={props.element as ElementInterface} textColor={props.textColor} />
       break;
     case "sermons":
-      result = <SermonElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} />
+      result = <SermonElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} churchSettings={props.churchSettings} />
       break;
     case "carousel":
       result = <CarouselElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />

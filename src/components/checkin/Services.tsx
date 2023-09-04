@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { ApiHelper, ServiceInterface, CheckinHelper, PersonHelper, ArrayHelper, GroupServiceTimeInterface, GroupInterface } from "@/helpers";
-import { Loading } from "@/components";
+import { CheckinHelper, PersonHelper } from "@/helpers";
+import { Loading, ApiHelper, ServiceInterface, ArrayHelper, GroupServiceTimeInterface, GroupInterface } from "@churchapps/apphelper";
 
 interface Props {
   selectedHandler: () => void;

@@ -1,9 +1,9 @@
 import React from "react";
 import UserContext from "../../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
-import { SiteWrapper, NavItem } from "../../appBase/components";
+import { SiteWrapper, NavItem } from "@churchapps/apphelper";
 import { useRouter } from "next/router";
-import { Themes } from "@/appBase/helpers";
+import { Themes } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
@@ -31,6 +31,7 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   const selectedTab = getSelectedTab();
 
   tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+  tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={router} />)
 
   tabs.push(<NavItem key="admin" url="/admin" label="Mobile" icon="phone_android" router={router} selected={selectedTab === "admin"} />);
   tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);

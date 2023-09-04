@@ -1,4 +1,4 @@
-import { ApiHelper, LoginResponseInterface, UserInterface } from "@/helpers";
+import { ApiHelper, LoginResponseInterface, UserInterface } from "@churchapps/apphelper";
 
 type Payload = UserInterface | { jwt: string } | { authGuid: string };
 

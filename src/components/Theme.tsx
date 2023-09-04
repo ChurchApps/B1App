@@ -1,7 +1,6 @@
-import { AppearanceInterface } from "@/appBase/helpers";
+import { AppearanceInterface } from "@churchapps/apphelper";
 import React from "react";
 import { Helmet } from "react-helmet"
-import { ConfigHelper } from "../helpers";
 
 interface Props { appearance?: AppearanceInterface }
 

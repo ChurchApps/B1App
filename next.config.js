@@ -58,5 +58,6 @@ module.exports = {
   },
   images:{
     domains: ["content.staging.churchapps.org", "content.churchapps.org"]
-  }
+  },
+  transpilePackages: ["@churchapps/apphelper"]
 };

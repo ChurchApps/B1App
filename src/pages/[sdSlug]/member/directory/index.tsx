@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { ConfigHelper, UserHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { DirectorySearch } from "@/components/member/directory/DirectorySearch";
 import { Wrapper } from "@/components/Wrapper";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { UserHelper } from "@churchapps/apphelper";
 
 export default function Admin(props: WrapperPageProps) {
   const getContent = () => <DirectorySearch selectedHandler={() => {}} />;

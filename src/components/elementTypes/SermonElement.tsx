@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Typography, Breadcrumbs, Button, Grid, Card, CardContent } from "@mui/material";
+import { Typography, Breadcrumbs, Button, Grid, Card, CardContent, Box } from "@mui/material";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import TopicIcon from "@mui/icons-material/Topic";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { PlaylistInterface, SermonInterface, ApiHelper } from "@/helpers";
-import { Loading } from "@/components";
+import { PlaylistInterface, SermonInterface, ApiHelper, AppearanceHelper, Loading, AppearanceInterface } from "@churchapps/apphelper";
 
 interface Props {
   churchId: string,
+  churchSettings: AppearanceInterface,
 }
 
-export const SermonElement = ({ churchId }: Props) => {
+export const SermonElement = ({ churchId, churchSettings }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActive, setIsActive] = useState<string>("playlists");
   const [playlists, setPlaylists] = useState<PlaylistInterface[]>([]);
@@ -86,7 +85,7 @@ export const SermonElement = ({ churchId }: Props) => {
         {isActive === "playlists" && (
           <Grid container spacing={3} style={{ paddingBottom: 20, paddingTop: 20 }}>
             {playlists.map((item) => (
-              <Grid item md={4} xs={12}>
+              <Grid item md={4} xs={12} sm={6}>
                 <Card
                   key={item.id}
                   sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}
@@ -97,12 +96,13 @@ export const SermonElement = ({ churchId }: Props) => {
                   }}
                 >
                   <CardContent>
-                    <Image
-                      src={item.thumbnail || ""}
-                      alt={item.title}
-                      width={635}
-                      height={360}
-                      style={{ height: "auto" }}
+                    <Box
+                      component="img"
+                      alt={item?.title}
+                      src={item.thumbnail ? item.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", churchSettings?.primaryColor || "#FFF")}
+                      height={190}
+                      minHeight={{ xs: 230, sm: 'auto' }}
+                      sx={{ objectFit: 'cover', objectPosition: 'center' }}
                     />
                     <Typography
                       component="h3"
@@ -129,12 +129,13 @@ export const SermonElement = ({ churchId }: Props) => {
                   }}
                 >
                   <CardContent>
-                    <img
-                      src={item.thumbnail || ""}
-                      alt={item.title}
-                      width={635}
-                      height={360}
-                      style={{ height: "auto" }}
+                    <Box
+                      component="img"
+                      alt={item?.title}
+                      src={item.thumbnail ? item.thumbnail : (activePlaylist?.thumbnail ? activePlaylist.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", churchSettings?.primaryColor || "#FFF"))}
+                      height={190}
+                      minHeight={{ xs: 230, sm: 'auto' }}
+                      sx={{ objectFit: 'cover', objectPosition: 'center' }}
                     />
                     <Typography
                       component="h3"

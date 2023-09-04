@@ -1,7 +1,6 @@
 import { Icon } from "@mui/material";
 import React from "react";
-import { DisplayBox, Loading, SmallButton } from "../../../appBase/components";
-import { ApiHelper, DateHelper, StreamingServiceInterface, UserHelper } from "../../../helpers";
+import { ApiHelper, DateHelper, StreamingServiceInterface, UserHelper, DisplayBox, Loading, SmallButton } from "@churchapps/apphelper";
 import { ServiceEdit } from "./ServiceEdit";
 
 export const Services: React.FC = () => {

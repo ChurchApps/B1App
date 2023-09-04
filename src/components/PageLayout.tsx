@@ -1,4 +1,4 @@
-import { ChurchInterface, LinkInterface } from "@/helpers";
+import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import { HeaderFooter } from "./layouts/HeaderFooter";
 import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";
@@ -15,7 +15,6 @@ type Props = {
 
 export function PageLayout(props: Props) {
   let result = <></>
-  console.log(props.pageData)
   if (props.pageData) {
     switch (props.pageData?.layout) {
       case "cleanCentered":

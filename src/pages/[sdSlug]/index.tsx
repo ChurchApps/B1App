@@ -1,7 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Loading, PageLayout, Theme } from "@/components";
-import { ApiHelper, ChurchInterface, LinkInterface, PageInterface } from "@/helpers";
+import { PageLayout, Theme } from "@/components";
+import { PageInterface } from "@/helpers";
 import { useEffect } from "react";
+import { ApiHelper, ChurchInterface, LinkInterface, Loading } from "@churchapps/apphelper";
 
 type Props = {
   pageData: any;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MenuItem } from "@mui/material";
 import { usePopupState, bindHover, bindFocus, bindMenu } from "material-ui-popup-state/hooks";
 import HoverMenu from "material-ui-popup-state/HoverMenu";
-import { LinkInterface } from "@/helpers";
+import { LinkInterface } from "@churchapps/apphelper";
 
 interface MenuInterface {
   links?: LinkInterface[];
@@ -38,7 +38,6 @@ const CascadingSubmenu = ({ title, popupId, ...props }: any) => {
 };
 
 const CascadingMenu = ({ popupState, ...props }: any) => {
-  console.log;
   const { rootPopupState } = useContext(CascadingContext);
   const context = useMemo(
     () => ({

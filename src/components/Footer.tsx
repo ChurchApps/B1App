@@ -1,5 +1,5 @@
-import { ChurchInterface } from "@/helpers";
-import { Box, Container, Grid } from "@mui/material";
+import { ChurchInterface } from "@churchapps/apphelper";
+import { Container, Grid } from "@mui/material";
 
 
 type Props = {

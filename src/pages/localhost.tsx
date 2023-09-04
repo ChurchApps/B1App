@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
-import { MarkdownEditor, MarkdownPreview } from "@/components";
+import { MarkdownEditor, MarkdownPreview } from "@churchapps/apphelper";
 import { useState } from "react";
-import { EventCalendar } from "@/components/eventCalendar/EventCalendar";
-import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 
 export default function Localhost() {
   const [val, setVal] = useState("");
@@ -24,7 +22,6 @@ export default function Localhost() {
       <br />
       <h3>Editor</h3>
       <MarkdownEditor value={val} onChange={(v) => {
-        console.log(v);
         setVal(v)
       }} />
       <h3>Markdown</h3>

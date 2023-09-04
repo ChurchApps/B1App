@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Icon, Grid, Typography, Button } from "@mui/material";
 import { PersonHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
-import { DonationPage as BaseDonationPage, NonAuthDonation, Wrapper } from "@/components";
+import { Wrapper } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { DonationPage as BaseDonationPage, NonAuthDonation } from "@churchapps/apphelper";
 
 export default function Donate(props: WrapperPageProps) {
   return (
@@ -12,7 +13,7 @@ export default function Donate(props: WrapperPageProps) {
       </h1>
       {PersonHelper.person?.id
         ? (
-          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" />
+          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" church={props.config.church} />
         )
         : (
           <>

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { ConfigHelper, WrapperPageProps, UserHelper } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { Wrapper } from "@/components/Wrapper";
 import { Person } from "@/components/member/directory/Person";
+import { UserHelper } from "@churchapps/apphelper";
 
 export default function MemberPage(props: WrapperPageProps) {
   const router = useRouter();

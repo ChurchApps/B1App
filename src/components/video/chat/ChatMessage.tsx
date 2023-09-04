@@ -1,6 +1,8 @@
 import { ChatHelper } from "@/helpers/ChatHelper";
 import React from "react";
-import { MessageInterface, ChatUserInterface, ApiHelper } from "../../../helpers";
+import { ChatUserInterface } from "../../../helpers";
+import { Permissions, MessageInterface, ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { Icon } from "@mui/material";
 
 interface Props { message: MessageInterface, conversationId: string, user: ChatUserInterface }
 
@@ -13,9 +15,9 @@ export const ChatMessage: React.FC<Props> = (props) => {
   }
 
   const getDeleteLink = () => {
-    if (!props.user.isHost) return null;
+    if (!UserHelper.checkAccess(Permissions.contentApi.chat.host)) return null;
     else {
-      return <span className="delete"><a href="about:blank" onClick={handleDelete}><i className="delete"></i></a></span>
+      return <span className="delete"><a href="about:blank" onClick={handleDelete}><Icon>delete</Icon></a></span>
     }
 
   }

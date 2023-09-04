@@ -3,8 +3,7 @@ import { useRouter } from "next/router";
 import { useCookies } from "react-cookie";
 import { PaperProps } from "@mui/material"
 import { Layout } from "@/components";
-import { LoginPage } from "@/appBase/pageComponents/LoginPage";
-import { ApiHelper, UserHelper } from "@/appBase/helpers";
+import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext"
 
 interface Props {

@@ -3,9 +3,9 @@ import { GetStaticProps, GetStaticPaths } from "next";
 import { useRouter } from "next/router";
 import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, GroupInterface, CuratedEventWithEventInterface } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { DisplayBox, Loading } from "@/components";
+import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/apphelper";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 
 export default function CalendarPage(props: WrapperPageProps) {
@@ -14,7 +14,7 @@ export default function CalendarPage(props: WrapperPageProps) {
   const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
   const [groups, setGroups] = useState<GroupInterface[]>([]);
   const [isLoadingGroups, setIsLoadingGroups] = useState<boolean>(false);
-  const [events, setEvents] = useState<CuratedEventWithEventInterface[]>([]);
+  const [events, setEvents] = useState<CuratedEventInterface[]>([]);
   const [refresh, refresher] = useState({});
 
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function CalendarPage(props: WrapperPageProps) {
     setIsLoadingGroups(true);
     ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoadingGroups(false); });
 
-    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId, "ContentApi").then((data: CuratedEventWithEventInterface[]) => {
+    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?withoutEvents=1", "ContentApi").then((data: CuratedEventInterface[]) => {
       setEvents(data);
     });
   };
@@ -38,11 +38,7 @@ export default function CalendarPage(props: WrapperPageProps) {
     }
   }
 
-  const addedGroups = groups.filter((g) => {
-    return events.find((event) => {
-      return event.groupId === g.id
-    });
-  });
+  const addedGroups = groups.filter((g) => events.find((event) => event.groupId === g.id));
 
   const getRows = () => {
     let rows: JSX.Element[] = [];
@@ -74,7 +70,7 @@ export default function CalendarPage(props: WrapperPageProps) {
   }
 
   useEffect(() => { loadData(); }, []);
-  
+
   return (
     <AdminWrapper config={props.config}>
       <h1>{currentCalendar?.name}</h1>
@@ -87,13 +83,15 @@ export default function CalendarPage(props: WrapperPageProps) {
         </Grid>
         <Grid item md={3} xs={12}>
           <DisplayBox headerText="Groups" headerIcon="backup_table">
-            {isLoadingGroups ? (
-              <Loading />
-            ) : (
-              <Table size="small">
-                <TableBody>{getRows()}</TableBody>
-              </Table>
-            )}
+            {isLoadingGroups
+              ? (
+                <Loading />
+              )
+              : (
+                <Table size="small">
+                  <TableBody>{getRows()}</TableBody>
+                </Table>
+              )}
           </DisplayBox>
         </Grid>
       </Grid>

@@ -6,7 +6,8 @@ type Props = {
   children?: React.ReactNode,
   accept: any,
   text?: string
-  onDrop: (data: any) => void
+  onDrop: (data: any) => void,
+  dndDeps?: any
 };
 
 export function DroppableArea(props: Props) {
@@ -20,7 +21,7 @@ export function DroppableArea(props: Props) {
         canDrop: !!monitor.canDrop(),
         item: monitor.getDropResult()
       }),
-    })
+    }), [props?.dndDeps]
   );
 
   if (canDrop) return (

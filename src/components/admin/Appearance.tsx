@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { GenericSettingInterface } from "@/helpers";
-import { DisplayBox } from "..";
-import { ApiHelper, AppearanceHelper, AppearanceInterface } from "../../appBase/helpers"
+import { ApiHelper, AppearanceHelper, AppearanceInterface, DisplayBox, GenericSettingInterface } from "@churchapps/apphelper"
 import { AppearanceEdit } from "./AppearanceEdit";
 
 interface Props { }
@@ -51,8 +49,8 @@ export const Appearance: React.FC<Props> = (props) => {
         {getLogo("logoDark")}
       </div>
 
-      {styles?.favicon_400x400 &&
-        <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      {styles?.favicon_400x400
+        && <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF", display: "flex", justifyContent: "center", alignItems: "center" }}>
           <div style={{maxWidth: 150, maxHeight: 150}}>
             {getLogo("favicon_400x400")}
           </div>

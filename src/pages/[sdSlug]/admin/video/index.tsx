@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, WrapperPageProps, UserHelper, Permissions } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
-import { DisplayBox, ImageEditor } from "@/appBase/components";
+import { DisplayBox, ImageEditor, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Sermons } from "@/components/admin/video/Sermons";
 import { Playlists } from "@/components/admin/video/Playlists";
 import Link from "next/link";

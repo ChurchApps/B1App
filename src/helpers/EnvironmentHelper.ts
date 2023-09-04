@@ -1,11 +1,12 @@
-import { ApiHelper } from "./index";
-import { CommonEnvironmentHelper } from "../appBase/helpers/CommonEnvironmentHelper";
+import { ApiHelper, CommonEnvironmentHelper } from "@churchapps/apphelper";
 
 export class EnvironmentHelper {
   static Common = CommonEnvironmentHelper;
 
   static init = () => {
     let stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
+
+    //stage="prod"
     switch (stage) {
       case "staging": EnvironmentHelper.initStaging(); break;
       case "prod": EnvironmentHelper.initProd(); break;
