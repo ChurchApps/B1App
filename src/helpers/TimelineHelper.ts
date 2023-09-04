@@ -1,4 +1,5 @@
-import { ApiHelper, ArrayHelper, ConversationInterface, PersonInterface, TimelinePostInterface } from ".";
+import { ApiHelper, ArrayHelper, ConversationInterface, PersonInterface } from "@churchapps/apphelper";
+import { TimelinePostInterface } from ".";
 
 export class TimelineHelper {
 

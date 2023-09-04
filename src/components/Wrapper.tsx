@@ -1,12 +1,10 @@
 import React from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
-import { SiteWrapper, NavItem } from "@churchapps/apphelper";
 import { useRouter } from "next/router"
-import { Themes, UserHelper } from "@churchapps/apphelper";
+import { Themes, UserHelper, Permissions, SiteWrapper, NavItem } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { Permissions } from "@/helpers/interfaces";
 
 interface Props { config: ConfigurationInterface, pageTitle?: string, children: React.ReactNode }
 

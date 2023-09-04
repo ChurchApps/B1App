@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
-import { ApiHelper, LinkInterface, InputBox, ErrorMessages, UserHelper } from "@churchapps/apphelper";
-import { Permissions  } from "@/helpers";
+import { ApiHelper, LinkInterface, InputBox, ErrorMessages, UserHelper, Permissions } from "@churchapps/apphelper";
 
 interface Props {
   currentLink: LinkInterface,

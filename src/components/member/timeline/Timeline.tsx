@@ -1,5 +1,6 @@
 import React from "react";
-import { ApiHelper, ArrayHelper, ConversationInterface, GroupInterface, PersonInterface, TimelinePostInterface, UserContextInterface } from "../../../helpers";
+import { TimelinePostInterface } from "../../../helpers";
+import { ApiHelper, ArrayHelper, ConversationInterface, GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/apphelper";
 import { TimelinePost } from "./TimelinePost";
 import { TimelineHelper } from "@/helpers/TimelineHelper";
 

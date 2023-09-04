@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { B1Settings } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
+import { ApiHelper } from "@churchapps/apphelper";
 
 export default function Admin(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;

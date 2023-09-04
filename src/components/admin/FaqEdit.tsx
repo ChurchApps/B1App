@@ -1,5 +1,5 @@
 import { TextField, Box, SelectChangeEvent } from "@mui/material";
-import { MarkdownEditor } from "..";
+import { MarkdownEditor } from "@churchapps/apphelper";
 
 type Props = {
   parsedData: any;

@@ -1,6 +1,6 @@
 import { ElementInterface } from "@/helpers";
 import { Grid } from "@mui/material";
-import { MarkdownPreview } from "@/components";
+import { MarkdownPreview } from "@churchapps/apphelper";
 
 interface Props { element: ElementInterface }
 

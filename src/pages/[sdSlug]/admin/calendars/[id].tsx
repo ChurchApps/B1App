@@ -3,9 +3,9 @@ import { GetStaticProps, GetStaticPaths } from "next";
 import { useRouter } from "next/router";
 import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ConfigHelper, ApiHelper, WrapperPageProps, CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { DisplayBox, Loading } from "@/components";
+import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/apphelper";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 
 export default function CalendarPage(props: WrapperPageProps) {

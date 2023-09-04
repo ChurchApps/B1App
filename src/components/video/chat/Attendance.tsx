@@ -1,9 +1,10 @@
 import React from "react";
-import { ConversationInterface, ChatRoomInterface, ApiHelper, UniqueIdHelper, ChatAttendanceInterface, ChatUserInterface } from "../../../helpers";
+import { ChatRoomInterface, ChatAttendanceInterface, ChatUserInterface } from "../../../helpers";
 import { Menu, Item, useContextMenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
+import { ConversationInterface, ApiHelper, UniqueIdHelper } from "@churchapps/apphelper";
 
 interface Props {
   attendance: ChatAttendanceInterface;

@@ -3,9 +3,7 @@ import { Typography, Breadcrumbs, Button, Grid, Card, CardContent, Box } from "@
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import TopicIcon from "@mui/icons-material/Topic";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { PlaylistInterface, SermonInterface, ApiHelper, AppearanceHelper } from "@/helpers";
-import { AppearanceInterface } from "@churchapps/apphelper";
-import { Loading } from "@/components";
+import { PlaylistInterface, SermonInterface, ApiHelper, AppearanceHelper, Loading, AppearanceInterface } from "@churchapps/apphelper";
 
 interface Props {
   churchId: string,

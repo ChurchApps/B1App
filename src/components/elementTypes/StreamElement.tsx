@@ -1,4 +1,6 @@
-import { ChurchInterface, ElementInterface } from "@/helpers";
+import { ChurchInterface } from "@churchapps/apphelper";
+import { ElementInterface } from "@/helpers";
+
 import { LiveStream } from "../video/LiveStream";
 import { ElementBlock } from "./ElementBlock";
 
@@ -16,3 +18,4 @@ export const StreamElement: React.FC<Props> = (props) => {
 
   return <LiveStream includeHeader={false} includeInteraction={includeInteraction} keyName={props.church?.subDomain} appearance={props.churchSettings} offlineContent={offlineContent} />;
 }
+
