@@ -1,4 +1,4 @@
-import { ChurchInterface, LinkInterface } from "@/helpers";
+import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import { HeaderFooter } from "./layouts/HeaderFooter";
 import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";

@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { DisplayBox } from "@/components";
-import { SmallButton } from "@/appBase/components";
-import { PageInterface, ApiHelper } from "@/helpers";
+import { SmallButton, DisplayBox, ApiHelper } from "@churchapps/apphelper";
+import { PageInterface } from "@/helpers";
 
 type Props = {
   onSelected: (page:PageInterface) => void,

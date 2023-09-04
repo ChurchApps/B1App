@@ -3,17 +3,16 @@ import "@/styles/pages.css";
 import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
-import "@/appBase/components/markdownEditor/editor.css";
+//import "@chuchapps/apiHelper/components/markdownEditor/editor.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { EnvironmentHelper, AppearanceHelper, ConfigHelper } from "@/helpers";
+import { EnvironmentHelper, ConfigHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { UserProvider } from "@/context/UserContext";
-import { AnalyticsHelper, UserHelper } from "@/appBase/helpers";
+import { AnalyticsHelper, UserHelper, ErrrorAppDataInterface, ErrorLogInterface } from "@churchapps/apphelper";
 import React from "react";
-import { ErrorHelper } from "@/appBase/helpers/ErrorHelper";
-import { ErrrorAppDataInterface, ErrorLogInterface } from "@/appBase/interfaces/Error";
-import { ErrorMessages } from "@/appBase/components";
+import { ErrorHelper, AppearanceHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
 
 EnvironmentHelper.init();
 

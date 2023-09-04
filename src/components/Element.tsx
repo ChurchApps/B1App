@@ -1,11 +1,10 @@
-import { SmallButton } from "@/appBase/components";
-import { ApiHelper, ChurchInterface, ElementInterface, SectionInterface } from "@/helpers";
+import { SmallButton, ChurchInterface, NonAuthDonation } from "@churchapps/apphelper";
+import { ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
-import { NonAuthDonation } from "@/appBase/donationComponents/components"
 import { ElementBlock } from "./elementTypes/ElementBlock";
 import { CardElement } from "./elementTypes/CardElement";
 import { LogoElement } from "./elementTypes/LogoElement";
@@ -22,6 +21,7 @@ import { CarouselElement } from "./elementTypes/CarouselElement";
 import { ImageElement } from "./elementTypes/ImageElement";
 import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 import { CalendarElement } from "./elementTypes/CalendarElement";
+import { ApiHelper } from "@churchapps/apphelper";
 
 interface Props {
   element: ElementInterface;

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox } from "../index";
-import { ApiHelper, ArrayHelper, BlockInterface, SectionInterface } from "@/helpers";
-import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
-import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
+import { ErrorMessages, InputBox, GalleryModal, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
+import { BlockInterface, SectionInterface } from "@/helpers";
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { SliderPicker } from 'react-color'
 
 type Props = {
@@ -186,3 +185,4 @@ export function SectionEdit(props: Props) {
     </>
   );
 }
+

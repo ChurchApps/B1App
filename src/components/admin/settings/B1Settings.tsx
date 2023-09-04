@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Grid } from "@mui/material";
 import { Tabs } from "./Tabs";
-import { PageInterface, UserHelper, Permissions } from "@/helpers";
+import { PageInterface } from "@/helpers";
+import { UserHelper, Permissions } from "@churchapps/apphelper";
 import { EmbeddablePages } from "../EmbeddablePages";
 import { PageEdit } from "@/components/admin/PageEdit";
 

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
 import Resizer from "react-image-file-resizer";
-import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
-import { InputBox } from "..";
-import { ImageEditor } from "@/appBase/components";
+import { GenericSettingInterface, ArrayHelper, ApiHelper, InputBox, ImageEditor } from "@churchapps/apphelper";
 
 interface Props {
   updatedFunction?: () => void,
@@ -112,7 +110,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
           onUpdate={(dataUrl) => {
             imageUpdated(dataUrl, logoName)
           }}
-          onCancel={() => { 
+          onCancel={() => {
             setEditLogo(false);
             setCurrentUrl(null);
           }}
@@ -160,9 +158,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
           <label>Favicon</label>
           <p style={{ color: "#999", fontSize: 12 }}>Upload square logo with a transparent background.The ideal size is 400 pixels wide by 400 pixels high.</p>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <div style={{maxWidth: 150, maxHeight: 150}}>
-            {getLogoLink("favicon_400x400", "#bbdefb")}
-          </div>
+            <div style={{maxWidth: 150, maxHeight: 150}}>
+              {getLogoLink("favicon_400x400", "#bbdefb")}
+            </div>
           </div>
         </div>
         <hr />

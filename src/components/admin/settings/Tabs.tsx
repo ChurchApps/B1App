@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Icon, Box } from "@mui/material";
-import { DisplayBox } from "@/components";
-import { B1LinkInterface, UserHelper, ApiHelper } from "@/helpers";
+import { DisplayBox, UserHelper, ApiHelper } from "@churchapps/apphelper";
+import { B1LinkInterface } from "@/helpers";
 import { TabEdit } from "./TabEdit";
 
 interface Props {

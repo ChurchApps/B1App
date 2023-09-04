@@ -1,5 +1,5 @@
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreview } from "@/components";
+import { MarkdownPreview } from "@churchapps/apphelper";
 import { Card, CardContent } from "@mui/material";
 
 

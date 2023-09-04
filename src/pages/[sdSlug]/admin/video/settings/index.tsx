@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
 import { Links } from "@/components/admin/Links";
@@ -10,6 +10,7 @@ import { Services } from "@/components/admin/video/Services";
 import { Tabs } from "@/components/admin/video/Tabs";
 import { EmbeddablePages } from "@/components/admin/EmbeddablePages";
 import { PageEdit } from "@/components/admin/PageEdit";
+import { ApiHelper } from "@churchapps/apphelper";
 
 export default function Admin(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;

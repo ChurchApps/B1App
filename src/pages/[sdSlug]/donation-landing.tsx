@@ -1,8 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { GiveNowPanel, SignInPanel } from "@/components";
-import { AppearanceHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { TabContext, TabPanel } from "@mui/lab";
 import { Box, Card, Tabs, Tab } from "@mui/material";
+import { AppearanceHelper } from "@churchapps/apphelper";
 import { useState } from "react";
 
 export default function DonationLanding(props: WrapperPageProps) {

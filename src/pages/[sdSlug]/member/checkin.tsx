@@ -2,8 +2,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { Grid } from "@mui/material";
 import { Wrapper, Household, CheckinComplete, Services } from "@/components";
-import { ConfigHelper, UserHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { UserHelper } from "@churchapps/apphelper";
 
 export default function Checkin(props: WrapperPageProps) {
   const [currentStep, setCurrentStep] = useState<"household" | "complete">();

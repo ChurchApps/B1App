@@ -5,7 +5,7 @@ import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreview } from "..";
+import { MarkdownPreview } from "@churchapps/apphelper";
 
 interface Props {
   element: ElementInterface;

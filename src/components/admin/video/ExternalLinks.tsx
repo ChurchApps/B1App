@@ -1,8 +1,7 @@
 import React from "react";
 import { Icon } from "@mui/material";
-import { DisplayBox } from "@/appBase/components";
-import { ApiHelper, EnvironmentHelper } from "@/helpers";
-import { Permissions } from "../../../helpers/interfaces";
+import { DisplayBox, ApiHelper, Permissions } from "@churchapps/apphelper";
+import { EnvironmentHelper } from "@/helpers";
 import Link from "next/link";
 
 interface Props { updatedFunction?: () => void, churchId:string }

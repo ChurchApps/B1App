@@ -1,6 +1,6 @@
-import { SocketHelper } from "../appBase/helpers/SocketHelper";
+import { SocketHelper, ApiHelper, ConnectionInterface, ConversationInterface, MessageInterface } from "@churchapps/apphelper";
 import Cookies from "js-cookie";
-import { ApiHelper, ChatAttendanceInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface, ConnectionInterface, ConversationInterface, MessageInterface } from "."
+import { ChatAttendanceInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface } from "."
 import { ChatConfigHelper } from "./ChatConfigHelper";
 
 export class ChatHelper {

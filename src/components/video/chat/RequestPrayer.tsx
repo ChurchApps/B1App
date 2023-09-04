@@ -1,4 +1,5 @@
-import { ChatStateInterface, ConversationInterface, ApiHelper } from "@/helpers";
+import { ChatStateInterface } from "@/helpers";
+import { ConversationInterface, ApiHelper } from "@churchapps/apphelper";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import React from "react";

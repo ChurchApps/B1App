@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { ApiHelper, GroupInterface, CuratedCalendarInterface } from "@/helpers";
-import { Loading } from "..";
+import { ApiHelper, GroupInterface, CuratedCalendarInterface, Loading } from "@churchapps/apphelper";
 
 interface Props {
   parsedData: any;
@@ -34,18 +33,20 @@ export const CalendarElementEdit = ({ parsedData, handleChange }: Props) => {
       <div style={{ marginTop: 15 }}>
         {parsedData.calendarType && (
           <>
-            {calendars?.length > 0 ? (
-              <>
-                <FormControl fullWidth>
-                  <InputLabel>Select Calendar</InputLabel>
-                  <Select fullWidth size="small" label="Select Calendar" name="calendarId" onChange={handleChange} value={parsedData.calendarId || ""}>
-                    {calendars.map((calendar) => <MenuItem value={calendar.id}>{calendar.name}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </>
-            ) : (
-              <Loading />
-            )}
+            {calendars?.length > 0
+              ? (
+                <>
+                  <FormControl fullWidth>
+                    <InputLabel>Select Calendar</InputLabel>
+                    <Select fullWidth size="small" label="Select Calendar" name="calendarId" onChange={handleChange} value={parsedData.calendarId || ""}>
+                      {calendars.map((calendar) => <MenuItem value={calendar.id}>{calendar.name}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                </>
+              )
+              : (
+                <Loading />
+              )}
           </>
         )}
       </div>

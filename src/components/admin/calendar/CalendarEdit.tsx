@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox } from "../../index";
-import { ApiHelper, CuratedCalendarInterface, UserHelper, Permissions } from "@/helpers";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { ErrorMessages, InputBox, ApiHelper, CuratedCalendarInterface, UserHelper, Permissions } from "@churchapps/apphelper";
+import { SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {
   calendar: CuratedCalendarInterface;

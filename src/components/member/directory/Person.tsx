@@ -1,7 +1,6 @@
 import React from "react";
-import { ApiHelper, PersonHelper } from "../../../helpers";
-import { DisplayBox } from "../..";
-import { PersonInterface } from "../../../appBase/interfaces"
+import { PersonHelper } from "../../../helpers";
+import { PersonInterface, DisplayBox, ApiHelper } from "@churchapps/apphelper"
 import { Household } from "./Household";
 import { Grid, Icon } from "@mui/material";
 

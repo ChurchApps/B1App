@@ -3,8 +3,8 @@ import { ChatHelper } from "@/helpers/ChatHelper";
 import { Button, FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import React, { KeyboardEvent } from "react";
 import { Emojis } from ".";
-import { UserHelper } from "../../../appBase/helpers";
-import { ApiHelper, ChatRoomInterface, MessageInterface } from "../../../helpers"
+import { UserHelper, ApiHelper, MessageInterface } from "@churchapps/apphelper";
+import { ChatRoomInterface } from "../../../helpers"
 
 interface Props { room: ChatRoomInterface }
 

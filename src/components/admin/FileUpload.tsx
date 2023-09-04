@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { LinearProgress } from "@mui/material";
-import { ApiHelper, FileInterface } from "@/helpers";
+import { ApiHelper } from "@churchapps/apphelper";
+import { FileInterface } from "@/helpers";
 
 type Props = {
   pendingSave: boolean;
@@ -95,3 +96,4 @@ export function FileUpload(props: Props) {
     </>
   );
 }
+

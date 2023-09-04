@@ -1,5 +1,5 @@
-import { AppearanceInterface } from "../appBase/helpers/AppearanceHelper";
-import { EnvironmentHelper, SermonInterface, StreamConfigInterface } from "."
+import { AppearanceInterface, SermonInterface } from "@churchapps/apphelper";
+import { EnvironmentHelper, StreamConfigInterface } from "."
 import { ChatHelper } from "./ChatHelper";
 import { StreamingServiceHelper } from "./StreamingServiceHelper";
 

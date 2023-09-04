@@ -1,11 +1,12 @@
-import { SmallButton } from "@/appBase/components";
-import { ApiHelper, ChurchInterface, ElementInterface, SectionInterface } from "@/helpers";
+import { SmallButton } from "@churchapps/apphelper";
+import { ElementInterface, SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
 import { CSSProperties } from "react";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
+import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 
 interface Props {
   first?: boolean,

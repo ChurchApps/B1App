@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogActions, Typography, Box, Button } from "@mui/material";
-import { DateHelper, CuratedEventWithEventInterface, ApiHelper } from "@/helpers";
+import { DateHelper, CuratedEventWithEventInterface, ApiHelper } from "@churchapps/apphelper";
 
 interface Props {
   event: CuratedEventWithEventInterface;

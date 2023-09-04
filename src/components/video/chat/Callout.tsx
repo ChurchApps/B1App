@@ -2,7 +2,8 @@ import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { Button, FormControl, Icon, InputLabel, OutlinedInput } from "@mui/material";
 import React from "react";
-import { ApiHelper, ChatRoomInterface, ChatUserInterface, MessageInterface } from "../../../helpers";
+import { ChatRoomInterface, ChatUserInterface } from "../../../helpers";
+import { ApiHelper, MessageInterface } from "@churchapps/apphelper";
 
 interface Props { room: ChatRoomInterface, user: ChatUserInterface }
 

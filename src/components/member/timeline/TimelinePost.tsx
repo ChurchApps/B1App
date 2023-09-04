@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { ArrayHelper, DateHelper, EnvironmentHelper, GroupInterface, PersonInterface, TimelinePostInterface, UserContextInterface, UserHelper } from "../../../helpers";
+import { EnvironmentHelper, TimelinePostInterface } from "../../../helpers";
 import Image from "next/image";
 import { Card, CardContent, Grid } from "@mui/material";
-import { Conversation } from "@/appBase/components/notes/Conversation";
-import { AddNote } from "@/appBase/components/notes/AddNote";
+import { Conversation, AddNote, ArrayHelper, DateHelper, GroupInterface, PersonInterface, UserContextInterface, UserHelper } from "@churchapps/apphelper";
 import Link from "next/link";
 
 interface Props {

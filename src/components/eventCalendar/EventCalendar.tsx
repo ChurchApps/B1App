@@ -1,10 +1,9 @@
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { EventInterface } from "@/helpers";
+import { EventInterface, EventHelper } from "@churchapps/apphelper";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
-import { EventHelper } from "@/appBase/helpers/EventHelper";
 import { DisplayEventModal } from "./DisplayEventModal";
 
 interface Props {

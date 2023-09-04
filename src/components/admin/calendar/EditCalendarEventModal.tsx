@@ -5,9 +5,9 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, FormControl, FormControlLabel, InputLabel, Select, SelectChangeEvent, MenuItem, RadioGroup, Radio, Stack, Button } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { GroupInterface, EventInterface, ApiHelper } from "@/helpers";
-import { Loading } from "@/appBase/components";
-import { EventHelper } from "@/appBase/helpers/EventHelper";
+import {  } from "@/helpers";
+import { Loading } from "@churchapps/apphelper";
+import { EventHelper, GroupInterface, EventInterface, ApiHelper } from "@churchapps/apphelper";
 
 interface Props {
   churchId: string;
@@ -94,8 +94,8 @@ export function EditCalendarEventModal(props: Props) {
       const dates = EventHelper.getRange(ev, startRange, endRange);
       dates.forEach((date) => {
         const evt = { ...event };
-        const diff =
-          new Date(evt.end).getTime() - new Date(evt.start).getTime();
+        const diff
+          = new Date(evt.end).getTime() - new Date(evt.start).getTime();
         evt.start = date;
         evt.end = new Date(date.getTime() + diff);
         expandedGroupEvents.push(evt);
@@ -110,22 +110,26 @@ export function EditCalendarEventModal(props: Props) {
     <Dialog open={true} onClose={handleDone} fullWidth scroll="body" fullScreen={fullScreen}>
       <DialogTitle>Add a Group</DialogTitle>
       <DialogContent>
-        {isLoadingGroups ? (
-          <Loading />
-        ) : (
-          <>
-            {groups?.length > 0 ? (
-              <FormControl fullWidth>
-                <InputLabel>Select a Group</InputLabel>
-                <Select fullWidth label="Select a Group" value={selectedGroupId} onChange={(e: SelectChangeEvent) => setSelectedGroupId(e.target.value as string)}>
-                  {groups.map((group) => <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)}
-                </Select>
-              </FormControl>
-            ) : (
-              <Typography>No groups found.</Typography>
-            )}
-          </>
-        )}
+        {isLoadingGroups
+          ? (
+            <Loading />
+          )
+          : (
+            <>
+              {groups?.length > 0
+                ? (
+                  <FormControl fullWidth>
+                    <InputLabel>Select a Group</InputLabel>
+                    <Select fullWidth label="Select a Group" value={selectedGroupId} onChange={(e: SelectChangeEvent) => setSelectedGroupId(e.target.value as string)}>
+                      {groups.map((group) => <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                )
+                : (
+                  <Typography>No groups found.</Typography>
+                )}
+            </>
+          )}
         {selectedGroupId && (
           <FormControl fullWidth>
             <RadioGroup value={addType} onChange={(e) => { setAddType(e.target.value); }}>

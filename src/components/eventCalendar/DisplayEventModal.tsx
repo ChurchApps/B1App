@@ -1,7 +1,6 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { DateHelper, EventInterface } from "@/helpers";
+import { DateHelper, EventInterface, Conversations, MarkdownPreview } from "@churchapps/apphelper";
 import { AppBar, Button, Dialog, DialogContent, Icon, IconButton, Toolbar, Typography } from "@mui/material";
-import { Conversations, MarkdownPreview } from "..";
 import { useContext } from "react";
 import UserContext from "@/context/UserContext";
 
