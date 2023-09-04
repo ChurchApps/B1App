@@ -1,5 +1,5 @@
 import { SmallButton, Loading, DisplayBox } from "@churchapps/apphelper";
-import { ApiHelper, PlaylistInterface, UserHelper } from "@/helpers";
+import { ApiHelper, PlaylistInterface, UserHelper } from "@churchapps/apphelper";
 import { Icon } from "@mui/material";
 import React from "react";
 import { PlaylistEdit } from "./PlaylistEdit";

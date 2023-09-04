@@ -3,12 +3,12 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
-import { DisplayBox, ErrorMessages } from "@/components";
+import { DisplayBox, ErrorMessages, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Links } from "@/components/admin/Links";
 import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import { SmallButton } from "@churchapps/apphelper";
-import { BlockInterface, PageInterface, ApiHelper, UserHelper, Permissions } from "@/helpers";
+import { BlockInterface, PageInterface } from "@/helpers";
 import { Appearance } from "../Appearance";
 
 export function YourSiteSettings() {

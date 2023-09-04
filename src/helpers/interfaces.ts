@@ -1,4 +1,4 @@
-import { ConversationInterface, MessageInterface, SocketPayloadInterface, SermonInterface, Permissions as BasePermissions } from "@churchapps/apphelper";
+import { ConversationInterface, MessageInterface, SocketPayloadInterface, SermonInterface } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "./ConfigHelper";
 
 export interface ColumnInterface {
@@ -80,10 +80,6 @@ export interface B1LinkInterface {
 
 export interface WrapperPageProps {
   config: ConfigurationInterface
-}
-
-export class Permissions extends BasePermissions {
-
 }
 
 export interface StreamingButtonInterface { text: string, url: string }

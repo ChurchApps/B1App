@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button } from "@mui/material";
 import { Loading, InputBox, ErrorMessages } from "@churchapps/apphelper";
-import { SermonInterface, PlaylistInterface, ApiHelper, UniqueIdHelper, DateHelper, UserHelper, Permissions } from "@/helpers";
+import { SermonInterface, PlaylistInterface, ApiHelper, UniqueIdHelper, DateHelper, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Duration } from "./Duration";
 
 interface Props {

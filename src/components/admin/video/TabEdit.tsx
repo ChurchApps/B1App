@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
-import SearchIcons from "../../../appBase/components/material/iconPicker/IconPicker";
+import { IconPicker } from "@churchapps/apphelper";
 import { InputBox, ErrorMessages } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
 import { LinkInterface, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
@@ -134,7 +134,7 @@ export const TabEdit: React.FC<Props> = (props) => {
       }
 
       <Dialog open={isModalOpen}>
-        <SearchIcons onSelect={onSelect} />
+        <IconPicker onSelect={onSelect} />
       </Dialog>
     </InputBox>
   );

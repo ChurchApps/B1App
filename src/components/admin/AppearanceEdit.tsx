@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
 import Resizer from "react-image-file-resizer";
-import { GenericSettingInterface, ArrayHelper, ApiHelper } from "@/helpers";
-import { InputBox } from "..";
-import { ImageEditor } from "@churchapps/apphelper";
+import { GenericSettingInterface, ArrayHelper, ApiHelper, InputBox, ImageEditor } from "@churchapps/apphelper";
 
 interface Props {
   updatedFunction?: () => void,
