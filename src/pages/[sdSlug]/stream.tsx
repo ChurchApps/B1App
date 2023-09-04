@@ -1,8 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Theme } from "@/components";
-import { ApiHelper, ChurchInterface, LinkInterface, PageInterface } from "@/helpers";
+import { PageInterface } from "@/helpers";
 import { LiveStream } from "@/components/video/LiveStream";
 import { useRouter } from "next/router";
+import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 
 type Props = {
   pageData: any;

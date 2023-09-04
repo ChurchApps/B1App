@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { GroupInterface, ApiHelper, UserHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
-import { Wrapper, MarkdownPreview, Conversations, Loading, DisplayBox } from "@/components";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
+import { Wrapper } from "@/components";
+import { MarkdownPreview, Conversations, Loading, DisplayBox, GroupInterface, ApiHelper, UserHelper, PersonHelper } from "@churchapps/apphelper"
 import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { PersonHelper } from "@churchapps/apphelper";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 
 export default function GroupPage(props: WrapperPageProps) {

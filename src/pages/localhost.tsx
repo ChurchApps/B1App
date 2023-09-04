@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
-import { MarkdownEditor, MarkdownPreview } from "@/components";
+import { MarkdownEditor, MarkdownPreview } from "@churchapps/apphelper";
 import { useState } from "react";
 
 export default function Localhost() {

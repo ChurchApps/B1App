@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid, Typography, Box } from "@mui/material";
 import { Wrapper } from "@/components";
-import { ApiHelper, ConfigHelper, GroupInterface, UserHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, GroupInterface, UserHelper } from "@churchapps/apphelper";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 export default function Groups(props: WrapperPageProps) {
