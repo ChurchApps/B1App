@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
-import { B1LinkInterface, ApiHelper, UniqueIdHelper, PageInterface, ArrayHelper } from "@/helpers";
+import { B1LinkInterface,  PageInterface } from "@/helpers";
 import SearchIcons from "@/appBase/components/material/iconPicker/IconPicker";
-import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
-import { InputBox } from "@/components";
+import { InputBox, GalleryModal, ApiHelper, UniqueIdHelper, ArrayHelper } from "@churchapps/apphelper";
 
 interface Props {
   currentTab: B1LinkInterface;

@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox } from "../index";
 import { ApiHelper, ArrayHelper, BlockInterface, ElementInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider } from "@mui/material";
-import { MarkdownEditor } from "@/appBase/components";
+import { MarkdownEditor, ErrorMessages, InputBox } from "@churchapps/apphelper";
 import React from "react";
-import { GalleryModal } from "@/appBase/components/gallery/GalleryModal";
+import { GalleryModal } from "@churchapps/apphelper";
 import { RowEdit } from "./RowEdit";
 import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";

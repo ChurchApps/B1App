@@ -1,7 +1,7 @@
 import React from "react";
 
 import { StreamingServiceExtendedInterface } from "@/helpers";
-import useMountedState from "@/appBase/hooks/useMountedState";
+import { useMountedState } from "@churchapps/apphelper";
 
 interface Props { currentService: StreamingServiceExtendedInterface | null, embedded:boolean }
 

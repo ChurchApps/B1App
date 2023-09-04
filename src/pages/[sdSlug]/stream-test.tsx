@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Loading, PageLayout, Theme } from "@/components";
-import { ApiHelper, ChurchInterface, EnvironmentHelper, LinkInterface, PageInterface } from "@/helpers";
-import { useEffect } from "react";
+import { Theme } from "@/components";
+import { ApiHelper, ChurchInterface, LinkInterface, PageInterface } from "@/helpers";
 import { Box, Grid } from "@mui/material";
 import { LiveStream } from "@/components/video/LiveStream";
 

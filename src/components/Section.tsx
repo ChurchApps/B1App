@@ -1,4 +1,4 @@
-import { SmallButton } from "@/appBase/components";
+import { SmallButton } from "@churchapps/apphelper";
 import { ApiHelper, ChurchInterface, ElementInterface, SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
 import { CSSProperties } from "react";

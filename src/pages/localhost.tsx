@@ -2,8 +2,6 @@ import Link from "next/link";
 import { Container, TextField } from "@mui/material";
 import { MarkdownEditor, MarkdownPreview } from "@/components";
 import { useState } from "react";
-import { EventCalendar } from "@/components/eventCalendar/EventCalendar";
-import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 
 export default function Localhost() {
   const [val, setVal] = useState("");

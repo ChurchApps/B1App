@@ -1,6 +1,5 @@
-import { SmallButton } from "@/appBase/components";
+import { SmallButton } from "@churchapps/apphelper";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { Container } from "@mui/material";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { Section } from "./Section";
 

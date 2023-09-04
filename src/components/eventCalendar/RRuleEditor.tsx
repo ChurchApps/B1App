@@ -3,7 +3,7 @@ import { DateHelper } from "@/helpers";
 import { Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import {RRule, Weekday, rrulestr} from "rrule";
 import { ChangeEvent, useEffect, useState } from "react";
-import { EventHelper } from "@/appBase/helpers/EventHelper";
+import { EventHelper } from "@churchapps/apphelper";
 
 interface Props {
   start: Date;

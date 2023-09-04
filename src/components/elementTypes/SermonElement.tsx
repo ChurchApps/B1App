@@ -4,7 +4,7 @@ import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import TopicIcon from "@mui/icons-material/Topic";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { PlaylistInterface, SermonInterface, ApiHelper, AppearanceHelper } from "@/helpers";
-import { AppearanceInterface } from "@/appBase/helpers";
+import { AppearanceInterface } from "@churchapps/apphelper";
 import { Loading } from "@/components";
 
 interface Props {

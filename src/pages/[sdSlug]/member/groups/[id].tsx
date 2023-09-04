@@ -6,7 +6,7 @@ import { Wrapper, MarkdownPreview, Conversations, Loading, DisplayBox } from "@/
 import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { PersonHelper } from "@/appBase/helpers";
+import { PersonHelper } from "@churchapps/apphelper";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 
 export default function GroupPage(props: WrapperPageProps) {

@@ -1,2 +1,6 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.codeActionsOnSave.rules": null
 }

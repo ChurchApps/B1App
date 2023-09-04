@@ -1,4 +1,4 @@
-import { SmallButton, Loading, DisplayBox } from "@/appBase/components";
+import { SmallButton, Loading, DisplayBox } from "@churchapps/apphelper";
 import { ApiHelper, PlaylistInterface, UserHelper } from "@/helpers";
 import { Icon } from "@mui/material";
 import React from "react";

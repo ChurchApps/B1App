@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Accordion, AccordionSummary, Typography, AccordionDetails } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
-import { DisplayBox } from "@/appBase/components/DisplayBox";
-import { ApiHelper, ArrayHelper, BlockInterface, UserHelper } from "@/helpers";
+import { DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper, BlockInterface } from "@/helpers";
 import { AddableElement } from "./AddableElement";
 
 type Props = {

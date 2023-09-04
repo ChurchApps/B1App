@@ -1,7 +1,4 @@
-export * from "@/appBase/interfaces";
-import { SermonInterface } from "@/appBase/interfaces/Content";
-import { Permissions as BasePermissions } from "@/appBase/interfaces/Permissions"
-import { ConversationInterface, MessageInterface, SocketPayloadInterface } from ".";
+import { ConversationInterface, MessageInterface, SocketPayloadInterface, SermonInterface, Permissions as BasePermissions } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "./ConfigHelper";
 
 export interface ColumnInterface {
@@ -134,5 +131,7 @@ export interface TimelinePostInterface {
   conversation?: ConversationInterface;
   data?: any;
 }
+
+
 
 

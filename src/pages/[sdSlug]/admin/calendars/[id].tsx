@@ -38,11 +38,7 @@ export default function CalendarPage(props: WrapperPageProps) {
     }
   }
 
-  const addedGroups = groups.filter((g) => {
-    return events.find((event) => {
-      return event.groupId === g.id
-    });
-  });
+  const addedGroups = groups.filter((g) => events.find((event) => event.groupId === g.id));
 
   const getRows = () => {
     let rows: JSX.Element[] = [];
@@ -74,7 +70,7 @@ export default function CalendarPage(props: WrapperPageProps) {
   }
 
   useEffect(() => { loadData(); }, []);
-  
+
   return (
     <AdminWrapper config={props.config}>
       <h1>{currentCalendar?.name}</h1>
@@ -87,13 +83,15 @@ export default function CalendarPage(props: WrapperPageProps) {
         </Grid>
         <Grid item md={3} xs={12}>
           <DisplayBox headerText="Groups" headerIcon="backup_table">
-            {isLoadingGroups ? (
-              <Loading />
-            ) : (
-              <Table size="small">
-                <TableBody>{getRows()}</TableBody>
-              </Table>
-            )}
+            {isLoadingGroups
+              ? (
+                <Loading />
+              )
+              : (
+                <Table size="small">
+                  <TableBody>{getRows()}</TableBody>
+                </Table>
+              )}
           </DisplayBox>
         </Grid>
       </Grid>

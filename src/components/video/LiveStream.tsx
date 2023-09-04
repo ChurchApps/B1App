@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { InteractionContainer } from "./InteractionContainer";
 import { VideoContainer } from "./VideoContainer";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
-import { AppearanceInterface, UserHelper } from "@/appBase/helpers";
+import { AppearanceInterface, UserHelper } from "@churchapps/apphelper";
 import { StreamingHeader } from "./StreamingHeader";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 import { Permissions } from "../../helpers/interfaces";

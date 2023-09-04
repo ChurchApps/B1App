@@ -1,6 +1,5 @@
 import React from "react";
-import { Loading } from ".";
-import { AppearanceHelper } from "../appBase/helpers/AppearanceHelper";
+import { Loading, AppearanceHelper } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props { config: ConfigurationInterface }

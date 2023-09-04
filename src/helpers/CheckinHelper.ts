@@ -1,12 +1,5 @@
-import { ArrayHelper } from "@/appBase/helpers";
-import {
-  GroupInterface,
-  GroupServiceTimeInterface,
-  PersonInterface,
-  ServiceTimeInterface,
-  VisitInterface,
-  VisitSessionInterface,
-} from "@/appBase/interfaces";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { GroupInterface, GroupServiceTimeInterface, PersonInterface, ServiceTimeInterface, VisitInterface, VisitSessionInterface } from "@churchapps/apphelper";
 
 export class CheckinHelper {
   static pendingVisits: VisitInterface[] = [];

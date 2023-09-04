@@ -7,7 +7,7 @@ import { DisplayBox, ErrorMessages } from "@/components";
 import { Links } from "@/components/admin/Links";
 import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
-import { SmallButton } from "@/appBase/components";
+import { SmallButton } from "@churchapps/apphelper";
 import { BlockInterface, PageInterface, ApiHelper, UserHelper, Permissions } from "@/helpers";
 import { Appearance } from "../Appearance";
 

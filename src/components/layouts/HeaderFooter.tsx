@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { Header } from "../Header";
-import { Footer } from "../Footer";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@/helpers";
 import Zone from "./Zone";

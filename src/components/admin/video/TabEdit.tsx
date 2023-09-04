@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
 import SearchIcons from "../../../appBase/components/material/iconPicker/IconPicker";
-import { InputBox, ErrorMessages } from "@/appBase/components";
-import { LinkInterface, PageInterface, ApiHelper, ArrayHelper } from "@/helpers";
+import { InputBox, ErrorMessages } from "@churchapps/apphelper";
+import { PageInterface } from "@/helpers";
+import { LinkInterface, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }
 

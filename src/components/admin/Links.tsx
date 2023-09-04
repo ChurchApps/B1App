@@ -1,9 +1,7 @@
 import React from "react";
 import { Icon } from "@mui/material";
 import { LinkEdit } from "./LinkEdit";
-import { ApiHelper, UserHelper } from "../../appBase/helpers";
-import { LinkInterface } from "../../appBase/interfaces";
-import { Loading, SmallButton, DisplayBox } from "../../appBase/components";
+import { ApiHelper, UserHelper, LinkInterface, Loading, SmallButton, DisplayBox } from "@churchapps/apphelper";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -75,8 +73,25 @@ export const Links: React.FC = () => {
           idx++
           return (
             <>
-              {link.children ? (
-                <>
+              {link.children
+                ? (
+                  <>
+                    <tr>
+                      <td>
+                        <a href={link.url} style={{marginLeft: (nestedLevel * 20) + "px"}}>{link.text}</a>
+                      </td>
+                      <td style={{textAlign: "right"}}>
+                        {upLink}
+                        {downLink}
+                        <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentLink(link); }}><Icon>edit</Icon></a>
+                      </td>
+                    </tr>
+                    <>
+                      <RecursiveLinks childrenLinks={link.children} nestedLevel={nestedLevel} />
+                    </>
+                  </>
+                )
+                : (
                   <tr>
                     <td>
                       <a href={link.url} style={{marginLeft: (nestedLevel * 20) + "px"}}>{link.text}</a>
@@ -87,22 +102,7 @@ export const Links: React.FC = () => {
                       <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentLink(link); }}><Icon>edit</Icon></a>
                     </td>
                   </tr>
-                  <>
-                    <RecursiveLinks childrenLinks={link.children} nestedLevel={nestedLevel} />
-                  </>
-                </>
-                ) : (
-                <tr>
-                  <td >
-                    <a href={link.url} style={{marginLeft: (nestedLevel * 20) + "px"}}>{link.text}</a>
-                  </td>
-                  <td style={{textAlign: "right"}}>
-                    {upLink}
-                    {downLink}
-                    <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentLink(link); }}><Icon>edit</Icon></a>
-                  </td>
-                </tr>
-              )}
+                )}
             </>
           )
         })}

@@ -1,11 +1,10 @@
-import { SmallButton } from "@/appBase/components";
-import { ApiHelper, ChurchInterface, ElementInterface, SectionInterface } from "@/helpers";
+import { SmallButton, ChurchInterface, NonAuthDonation } from "@churchapps/apphelper";
+import { ApiHelper, ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
-import { NonAuthDonation } from "@/appBase/donationComponents/components"
 import { ElementBlock } from "./elementTypes/ElementBlock";
 import { CardElement } from "./elementTypes/CardElement";
 import { LogoElement } from "./elementTypes/LogoElement";

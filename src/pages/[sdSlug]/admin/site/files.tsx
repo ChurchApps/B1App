@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
-import { ApiHelper, ConfigHelper, EnvironmentHelper, FileInterface, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ConfigHelper, FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { DisplayBox, InputBox } from "@/components";
-import { SmallButton } from "@/appBase/components";
+import { SmallButton } from "@churchapps/apphelper";
 import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
 

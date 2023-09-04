@@ -1,11 +1,9 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ApiHelper, DateHelper, EventExceptionInterface, EventInterface } from "@/helpers";
+import { ApiHelper, DateHelper, EventExceptionInterface, EventInterface, MarkdownEditor, ErrorMessages, EventHelper } from "@churchapps/apphelper";
 import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography, Switch, Stack } from "@mui/material";
-import { MarkdownEditor, ErrorMessages } from "..";
 import { useState } from "react";
 import { RRuleEditor } from "./RRuleEditor";
 import { EditRecurringModal } from "./EditRecurringModal";
-import { EventHelper } from "@/appBase/helpers/EventHelper";
 
 interface Props {
   event: EventInterface;

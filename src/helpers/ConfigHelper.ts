@@ -1,6 +1,4 @@
-import { AppearanceHelper, AppearanceInterface } from "@/appBase/helpers";
-import { ChurchInterface } from "../appBase/interfaces";
-import { ApiHelper, LinkInterface, Permissions, UserHelper } from "@/helpers";
+import { AppearanceInterface, ChurchInterface, ApiHelper, LinkInterface, UserHelper, Permissions} from "@churchapps/apphelper";
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }

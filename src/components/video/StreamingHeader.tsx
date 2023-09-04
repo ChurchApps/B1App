@@ -1,4 +1,4 @@
-import { AppearanceInterface, UserHelper } from "@/appBase/helpers";
+import { AppearanceInterface, UserHelper } from "@churchapps/apphelper";
 import { UserInterface, ApiHelper, EnvironmentHelper, AppearanceHelper, StreamConfigInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamChatManager } from "@/helpers/StreamChatManager";

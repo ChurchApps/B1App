@@ -34,18 +34,20 @@ export const CalendarElementEdit = ({ parsedData, handleChange }: Props) => {
       <div style={{ marginTop: 15 }}>
         {parsedData.calendarType && (
           <>
-            {calendars?.length > 0 ? (
-              <>
-                <FormControl fullWidth>
-                  <InputLabel>Select Calendar</InputLabel>
-                  <Select fullWidth size="small" label="Select Calendar" name="calendarId" onChange={handleChange} value={parsedData.calendarId || ""}>
-                    {calendars.map((calendar) => <MenuItem value={calendar.id}>{calendar.name}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </>
-            ) : (
-              <Loading />
-            )}
+            {calendars?.length > 0
+              ? (
+                <>
+                  <FormControl fullWidth>
+                    <InputLabel>Select Calendar</InputLabel>
+                    <Select fullWidth size="small" label="Select Calendar" name="calendarId" onChange={handleChange} value={parsedData.calendarId || ""}>
+                      {calendars.map((calendar) => <MenuItem value={calendar.id}>{calendar.name}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                </>
+              )
+              : (
+                <Loading />
+              )}
           </>
         )}
       </div>

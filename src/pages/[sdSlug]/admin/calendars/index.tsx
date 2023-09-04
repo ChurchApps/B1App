@@ -4,9 +4,9 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
 import { ApiHelper, ConfigHelper, CuratedCalendarInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { Grid, Icon, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import React from "react";
-import { SmallButton } from "@/appBase/components";
+import { SmallButton } from "@churchapps/apphelper";
 import { CalendarEdit } from "@/components/admin/calendar/CalendarEdit";
 
 export default function Calendars(props: WrapperPageProps) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { YourSiteSettings } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";

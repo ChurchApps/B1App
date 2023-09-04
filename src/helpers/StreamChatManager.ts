@@ -1,8 +1,7 @@
 import Cookies from "js-cookie";
-import { ApiHelper, UserHelper } from ".";
 import { ChatHelper } from "./ChatHelper";
-import { ChatStateInterface, ConversationInterface, StreamConfigInterface, StreamingServiceExtendedInterface, StreamingServiceInterface } from "./interfaces";
-import { SocketHelper } from "../appBase/helpers/SocketHelper";
+import { ChatStateInterface, StreamConfigInterface, StreamingServiceExtendedInterface } from "./interfaces";
+import { SocketHelper, ConversationInterface, ApiHelper, UserHelper } from "@churchapps/apphelper";
 
 export class StreamChatManager {
 

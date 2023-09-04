@@ -48,7 +48,7 @@ export function PageEdit(props: Props) {
   const handleDelete = () => {
     let errors = [];
     if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to delete pages");
-    
+
     if (errors.length > 0) {
       setErrors(errors);
       return ;
