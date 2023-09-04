@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
 import { B1LinkInterface,  PageInterface } from "@/helpers";
-import IconPicker from "@churchapps/apphelper";
+import { IconPicker } from "@churchapps/apphelper";
 import { InputBox, GalleryModal, ApiHelper, UniqueIdHelper, ArrayHelper } from "@churchapps/apphelper";
 
 interface Props {
