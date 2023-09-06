@@ -3,7 +3,7 @@ import "@/styles/pages.css";
 import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
-//import "@chuchapps/apiHelper/components/markdownEditor/editor.css";
+import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { EnvironmentHelper, ConfigHelper } from "@/helpers";
