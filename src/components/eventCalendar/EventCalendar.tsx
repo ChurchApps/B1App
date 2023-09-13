@@ -24,8 +24,8 @@ export function EventCalendar(props:Props) {
     startTime.setSeconds(0);
     const endTime = new Date(slotInfo.start);
     endTime.setHours(13);
-    startTime.setMinutes(0);
-    startTime.setSeconds(0);
+    endTime.setMinutes(0);
+    endTime.setSeconds(0);
     setEditEvent({ start: startTime, end: endTime, allDay:false, groupId: props.editGroupId, visibility: "public" })
   }
 
