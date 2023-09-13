@@ -1,7 +1,7 @@
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { EventInterface, EventHelper } from "@churchapps/apphelper";
+import { EventInterface, EventHelper, SmallButton } from "@churchapps/apphelper";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { DisplayEventModal } from "./DisplayEventModal";
@@ -68,6 +68,7 @@ export function EventCalendar(props:Props) {
 
   return (
     <div>
+      {props.editGroupId && <SmallButton icon="event_note" text="Add" onClick={() => { handleAddEvent({ start:new Date(), end: new Date() }) }} /> }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
       {displayEvent && <DisplayEventModal event={displayEvent} onDone={ handleDone } canEdit={props.editGroupId!==""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}
