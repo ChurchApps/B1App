@@ -3,7 +3,7 @@ import { Icon, Grid, Typography, Button } from "@mui/material";
 import { PersonHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
 import { Wrapper } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { DonationPage as BaseDonationPage, NonAuthDonation } from "@churchapps/apphelper";
+import { DonationPage as BaseDonationPage, NonAuthDonation, AppearanceHelper } from "@churchapps/apphelper";
 
 export default function Donate(props: WrapperPageProps) {
   return (
@@ -13,13 +13,13 @@ export default function Donate(props: WrapperPageProps) {
       </h1>
       {PersonHelper.person?.id
         ? (
-          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" church={props.config.church} appearance={props.config.appearance} />
+          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" church={props.config.church} churchLogo={AppearanceHelper.getLogo(props?.config?.appearance, "", "", props?.config?.appearance?.primaryColor || "#FFF")} />
         )
         : (
           <>
             <Grid container spacing={3}>
               <Grid item md={8} xs={12}>
-                <NonAuthDonation churchId={props.config.church.id} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} appearance={props.config.appearance} />
+                <NonAuthDonation churchId={props.config.church.id} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} churchLogo={AppearanceHelper.getLogo(props?.config?.appearance, "", "", props?.config?.appearance?.primaryColor || "#FFF")} />
               </Grid>
               <Grid item md={4} xs={12}>
                 <Typography
