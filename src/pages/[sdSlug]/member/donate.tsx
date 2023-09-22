@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Icon, Grid, Typography, Button } from "@mui/material";
-import { PersonHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { Wrapper } from "@/components";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { DonationPage as BaseDonationPage, NonAuthDonation, AppearanceHelper } from "@churchapps/apphelper";
+import { DonationPage as BaseDonationPage, NonAuthDonation, UserHelper, AppearanceHelper } from "@churchapps/apphelper";
+
 
 export default function Donate(props: WrapperPageProps) {
   return (
@@ -11,9 +12,9 @@ export default function Donate(props: WrapperPageProps) {
       <h1>
         <Icon>volunteer_activism</Icon>Give
       </h1>
-      {PersonHelper.person?.id
+      {UserHelper.currentUserChurch?.person?.id
         ? (
-          <BaseDonationPage personId={PersonHelper.person.id} appName="B1App" church={props.config.church} churchLogo={AppearanceHelper.getLogo(props?.config?.appearance, "", "", props?.config?.appearance?.primaryColor || "#FFF")} />
+          <BaseDonationPage personId={UserHelper.currentUserChurch?.person?.id} appName="B1App" church={props.config.church} churchLogo={AppearanceHelper.getLogo(props?.config?.appearance, "", "", props?.config?.appearance?.primaryColor || "#FFF")} />
         )
         : (
           <>
