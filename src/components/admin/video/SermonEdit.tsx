@@ -160,7 +160,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
   switch (currentSermon?.videoType) {
     case "youtube_channel":
-      keyLabel = <>YouTube Channel ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}><a target="blank" rel="noreferrer noopener" href="https://support.google.com/youtube/answer/6180214">Get Your Channel Id</a></span></>;
+      keyLabel = <>YouTube Channel ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}><a target="blank" rel="noreferrer noopener" href="https://support.churchapps.org/b1/streaming/youtube-channel-id.html">Get Your Channel Id</a></span></>;
       keyPlaceholder = "UCfiDl90gAfZMkgbeCqX1Wi0 - This is not your channel url";
       break;
     case "youtube":
