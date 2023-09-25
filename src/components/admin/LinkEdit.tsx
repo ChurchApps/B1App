@@ -72,7 +72,7 @@ export const LinkEdit: React.FC<Props> = (props) => {
   React.useEffect(() => { setLinks(props.links); }, [props.links]);
 
   return (
-    <InputBox headerIcon="link" headerText="Edit Link" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="streaminglive/header-links">
+    <InputBox headerIcon="link" headerText="Edit Link" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="b1/streaming/header-links">
       <ErrorMessages errors={errors} />
       <TextField fullWidth label="Text" name="text" type="text" value={currentLink?.text || ""} onChange={handleChange} />
       <TextField fullWidth label="Url" name="url" type="text" value={currentLink?.url || ""} onChange={handleChange} />

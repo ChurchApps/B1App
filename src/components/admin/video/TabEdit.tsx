@@ -107,7 +107,7 @@ export const TabEdit: React.FC<Props> = (props) => {
 
   if (!currentTab) return <></>
   else return (
-    <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="streaminglive/pages-tabs">
+    <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="b1/streaming/pages-tabs">
       <ErrorMessages errors={errors} />
       <Stack direction="row" pt={2}>
         <TextField fullWidth margin="none" label="Text" name="text" type="text" value={currentTab?.text} onChange={handleChange} InputProps={{

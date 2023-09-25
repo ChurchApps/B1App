@@ -175,7 +175,7 @@ export function YourSiteSettings() {
         )}
         {UserHelper.checkAccess(Permissions.contentApi.content.edit) && <Links />}
         <Appearance />
-        <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="accounts/appearance">
+        <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance">
           <table className="table">
             <tbody>
               <tr>

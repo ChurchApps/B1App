@@ -1,7 +1,7 @@
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { EventInterface, EventHelper } from "@churchapps/apphelper";
+import { EventInterface, EventHelper, SmallButton } from "@churchapps/apphelper";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { DisplayEventModal } from "./DisplayEventModal";
@@ -20,8 +20,12 @@ export function EventCalendar(props:Props) {
   const handleAddEvent = (slotInfo: any) => {
     const startTime = new Date(slotInfo.start);
     startTime.setHours(12);
+    startTime.setMinutes(0);
+    startTime.setSeconds(0);
     const endTime = new Date(slotInfo.start);
     endTime.setHours(13);
+    endTime.setMinutes(0);
+    endTime.setSeconds(0);
     setEditEvent({ start: startTime, end: endTime, allDay:false, groupId: props.editGroupId, visibility: "public" })
   }
 
@@ -68,6 +72,7 @@ export function EventCalendar(props:Props) {
 
   return (
     <div>
+      {props.editGroupId && <div style={{textAlign:"right", marginBottom:20}}><SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start:new Date(), end: new Date() }) }} /></div> }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
       {displayEvent && <DisplayEventModal event={displayEvent} onDone={ handleDone } canEdit={props.editGroupId!==""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}

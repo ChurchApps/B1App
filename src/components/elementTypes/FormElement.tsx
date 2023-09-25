@@ -76,7 +76,6 @@ export const FormElement = (props: Props) => {
         updatedFunction={handleUpdate}
         showHeader={false}
         noBackground={true}
-        sendEmail={true}
       />
     </>
   );

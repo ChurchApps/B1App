@@ -22,7 +22,7 @@ export const ExternalLinks: React.FC<Props> = (props) => {
   }
 
   return (
-    <DisplayBox headerIcon="link" headerText="External Resources" editContent={false} help="accounts/appearance">
+    <DisplayBox headerIcon="link" headerText="External Resources" editContent={false} help="b1/streaming/appearance">
       <table className="table">
         <tbody>
           {getChurchEditSetting()}
