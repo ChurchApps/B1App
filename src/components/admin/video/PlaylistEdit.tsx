@@ -66,7 +66,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
   React.useEffect(handlePhotoUpdated, [props.updatedPhoto, currentPlaylist]); //eslint-disable-line
 
   return (
-    <InputBox headerIcon="calendar_month" headerText="Edit Playlist" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="streaminglive/playlists">
+    <InputBox headerIcon="calendar_month" headerText="Edit Playlist" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/playlists">
       <ErrorMessages errors={errors} />
       <>
         <TextField fullWidth label="Title" name="title" value={currentPlaylist?.title || ""} onChange={handleChange} />

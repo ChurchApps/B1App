@@ -179,7 +179,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   if (isLoading) return <Loading />
-  else return (<InputBox headerIcon="calendar_month" headerText={(currentSermon?.permanentUrl) ? "Edit Permanent Live Url" : "Edit Sermon"} saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="streaminglive/sermons">
+  else return (<InputBox headerIcon="calendar_month" headerText={(currentSermon?.permanentUrl) ? "Edit Permanent Live Url" : "Edit Sermon"} saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/sermons">
     <ErrorMessages errors={errors} />
     <>
       {!currentSermon?.permanentUrl && (
