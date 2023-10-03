@@ -119,7 +119,7 @@ body {
   box-shadow: none;
 }
 
-#navbar.transparent a {
+#navbar.transparent:not(.light) a {
   color: var(--dark-bg-link-color);
 }
 
