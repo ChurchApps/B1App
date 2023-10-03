@@ -81,8 +81,8 @@ export function Header(props: Props) {
   let appBarClass = "";
   if (transparent) {
     appBarClass = (getFirstSectionTextColor()==="dark")
-      ?  "transparent"
-      :  "transparent light";
+      ?  "transparent light"
+      :  "transparent";
   }
 
   return (
