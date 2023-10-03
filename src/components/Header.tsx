@@ -48,15 +48,18 @@ export function Header(props: Props) {
     }
   }, []);
 
+  const getFirstSectionTextColor = () => {
+    let result = "light";
+    if (props.sections?.length > 0) result = props.sections[0].textColor;
+    return result;
+  }
+
   const getLogo = () => {
     if (transparent) {
-      let result = props.churchSettings?.logoDark || "";
-      if (props.sections?.length > 0) {
-        const tc = props.sections[0].textColor;
-        if (tc === "dark") result = props.churchSettings?.logoLight || result;
-        return result;
-      }
-      return result; //return "https://content.churchapps.org/3/settings/logoDark.png?dt=1638219047334";
+      let result = (getFirstSectionTextColor()==="dark")
+        ?  props.churchSettings?.logoDark || ""
+        :  props.churchSettings?.logoLight || "";
+      return result;
     }
     else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
   }
@@ -75,9 +78,16 @@ export function Header(props: Props) {
     setAnchorEl(null);
   };
 
+  let appBarClass = "";
+  if (transparent) {
+    let result = (getFirstSectionTextColor()==="dark")
+      ?  "transparent"
+      :  "transparent light";
+  }
+
   return (
     <div>
-      <AppBar id="navbar" position="fixed" className={(transparent) ? "transparent" : ""}>
+      <AppBar id="navbar" position="fixed" className={appBarClass}>
         <Container>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
