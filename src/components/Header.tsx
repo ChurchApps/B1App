@@ -4,12 +4,14 @@ import { Container, AppBar, Stack, Box, IconButton, Menu, MenuItem } from "@mui/
 import MenuIcon from '@mui/icons-material/Menu';
 import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
+import { SectionInterface } from "@/helpers";
 
 type Props = {
   church: ChurchInterface;
   churchSettings: any;
   navLinks?: LinkInterface[];
   overlayContent: boolean;
+  sections?: SectionInterface[];
 };
 
 //structure navLinks based on their parentId
@@ -47,7 +49,15 @@ export function Header(props: Props) {
   }, []);
 
   const getLogo = () => {
-    if (transparent) return props.churchSettings?.logoDark || ""; //return "https://content.churchapps.org/3/settings/logoDark.png?dt=1638219047334";
+    if (transparent) {
+      let result = props.churchSettings?.logoDark || "";
+      if (props.sections?.length > 0) {
+        const tc = props.sections[0].textColor;
+        if (tc === "light") result = props.churchSettings?.logoLight || result;
+        return result;
+      }
+      return result; //return "https://content.churchapps.org/3/settings/logoDark.png?dt=1638219047334";
+    }
     else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
   }
 

@@ -42,7 +42,7 @@ export function HeaderFooter(props: Props) {
           <title>{props.pageTitle || props.church?.name}</title>
           {getDescription()}
         </Head>
-        <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={props.pageData?.url === "/"} />
+        <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} />
         <main>
           <div className="page">
             <Zone church={props.church} sections={props.pageData.sections} zone="main" churchSettings={props.churchSettings} />
