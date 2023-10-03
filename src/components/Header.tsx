@@ -57,8 +57,8 @@ export function Header(props: Props) {
   const getLogo = () => {
     if (transparent) {
       let result = (getFirstSectionTextColor()==="dark")
-        ?  props.churchSettings?.logoDark || ""
-        :  props.churchSettings?.logoLight || "";
+        ?  props.churchSettings?.logoLight || ""
+        :  props.churchSettings?.logoDark || "";
       return result;
     }
     else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
@@ -80,7 +80,7 @@ export function Header(props: Props) {
 
   let appBarClass = "";
   if (transparent) {
-    let result = (getFirstSectionTextColor()==="dark")
+    appBarClass = (getFirstSectionTextColor()==="dark")
       ?  "transparent"
       :  "transparent light";
   }
