@@ -53,7 +53,7 @@ export function Header(props: Props) {
       let result = props.churchSettings?.logoDark || "";
       if (props.sections?.length > 0) {
         const tc = props.sections[0].textColor;
-        if (tc === "light") result = props.churchSettings?.logoLight || result;
+        if (tc === "dark") result = props.churchSettings?.logoLight || result;
         return result;
       }
       return result; //return "https://content.churchapps.org/3/settings/logoDark.png?dt=1638219047334";
