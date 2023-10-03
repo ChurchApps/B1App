@@ -11,7 +11,7 @@ type Props = {
   churchSettings: any;
   navLinks?: LinkInterface[];
   overlayContent: boolean;
-  sections: SectionInterface[];
+  sections?: SectionInterface[];
 };
 
 //structure navLinks based on their parentId
