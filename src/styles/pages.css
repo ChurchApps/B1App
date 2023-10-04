@@ -123,8 +123,12 @@ body {
   color: var(--dark-bg-link-color);
 }
 
-#navbar.transparent.light a, #navbar.transparent.light button {
-  color: var(--light-bg-link-color);
+#navbar:not(.transparent) button, #navbar.transparent.light button {
+  color: #333;
+}
+
+#navbar.transparent:not(.light) button {
+  color: #FFF;
 }
 
 .capitalize {
