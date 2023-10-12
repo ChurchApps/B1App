@@ -67,6 +67,7 @@ body {
 
 .page .section {
   min-height: 100px;
+  padding-top: 60px;
 }
 
 .page .sectionFirst {
@@ -346,6 +347,10 @@ a.dropdown-toggle::after {
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   background-color: #9999FF !important;
+}
+
+.sectionWrapper {
+  padding-top: 0 !important;
 }
 
 .sectionDark {
