@@ -261,6 +261,9 @@ export function ElementEdit(props: Props) {
       <FormGroup>
         <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.autoplay === "true" ? true : false} />} name="autoplay" label="Autoplay" />
       </FormGroup>
+      {parsedData.autoplay === "true" && (
+        <TextField fullWidth size="small" type="number" label="Slides Interval (ms)" name="interval" onChange={handleChange} value={parsedData.interval || "4000"} />
+      )}
     </>
   )
 
