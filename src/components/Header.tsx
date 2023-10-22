@@ -118,7 +118,7 @@ export function Header(props: Props) {
             >
               {props.navLinks?.map((l) => (
                 <Link key={l.id} href={l.url} style={{ textDecoration: "none", color: "inherit" }}>
-                  <MenuItem>
+                  <MenuItem onClick={handleClose}>
                     {l.text}
                   </MenuItem>
                 </Link>
