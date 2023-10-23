@@ -74,6 +74,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
     <>
       {onEdit && <div style={{ height: 40 }}></div>}
       <Carousel
+        interval={(parseInt(element.answers.interval) || 4) * 1000}
         height={parseInt(element.answers.height) || 250}
         animation={element.answers.animationOptions}
         autoPlay={element.answers.autoplay === "true" && !onEdit ? true : false}
