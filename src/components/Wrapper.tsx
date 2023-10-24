@@ -2,7 +2,7 @@ import React from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { useRouter } from "next/router"
-import { Themes, UserHelper, Permissions, SiteWrapper, NavItem } from "@churchapps/apphelper";
+import { Themes, SiteWrapper, NavItem, UserHelper, Permissions } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
@@ -11,7 +11,7 @@ interface Props { config: ConfigurationInterface, pageTitle?: string, children: 
 export const Wrapper: React.FC<Props> = props => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
-  const tabs = []
+  const tabs:any = []
   const router = useRouter();
 
   const getSelectedTab = () => {
