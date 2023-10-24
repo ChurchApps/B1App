@@ -21,8 +21,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
 
   if (!returnUrl) returnUrl = "/member"
 
-  console.log("Login", UserHelper.currentUserChurch);
-  //if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) router.push(`${returnUrl}`);
+  if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) router.push(`${returnUrl}`);
 
   const appUrl = process.browser ? window.location.href : "";
   let jwt: string = "",
