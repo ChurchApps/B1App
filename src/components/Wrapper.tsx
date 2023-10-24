@@ -2,7 +2,7 @@ import React from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { useRouter } from "next/router"
-import { Themes } from "@churchapps/apphelper";
+import { Themes, SiteWrapper, NavItem, UserHelper, Permissions } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
@@ -14,7 +14,6 @@ export const Wrapper: React.FC<Props> = props => {
   const tabs:any = []
   const router = useRouter();
 
-  /*
   const getSelectedTab = () => {
     const path = (typeof window !== "undefined") ? window?.location?.pathname : "";
     let result = "";
@@ -81,14 +80,14 @@ export const Wrapper: React.FC<Props> = props => {
 
   const adminAccess = UserHelper.checkAccess(Permissions.contentApi.content.edit);
   if (adminAccess) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
-*/
+
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
 
   return <ThemeProvider theme={Themes.BaseTheme}>
     <CssBaseline />
     <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-      {props.children}
+      <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} appearance={props.config.appearance}>{props.children}</SiteWrapper>
     </Box>
   </ThemeProvider>
 
