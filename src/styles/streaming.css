@@ -106,7 +106,8 @@
 
 #chatReceive,
 #prayerReceive {
-  flex: 1 0 0;
+  height: 10vh;
+  flex: auto;
   padding: 10px;
   overflow-y: scroll;
 }
