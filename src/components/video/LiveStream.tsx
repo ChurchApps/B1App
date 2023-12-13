@@ -59,7 +59,7 @@ export const LiveStream: React.FC<Props> = (props) => {
     {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}
     <div id="liveBody">
       <VideoContainer currentService={currentService} embedded={!props.includeHeader} />
-      {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} />}
+      {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} embedded={!props.includeHeader} />}
     </div>
   </div>);
 
