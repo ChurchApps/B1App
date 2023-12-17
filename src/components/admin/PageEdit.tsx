@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
+import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions, SlugHelper } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 
 type Props = {
   page: PageInterface;
@@ -12,6 +13,7 @@ type Props = {
 export function PageEdit(props: Props) {
   const [page, setPage] = useState<PageInterface>(null);
   const [errors, setErrors] = useState([]);
+  const [checked, setChecked] = useState<boolean>();
 
   const handleCancel = () => props.updatedCallback(page);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -32,6 +34,7 @@ export function PageEdit(props: Props) {
     if (!page.url || page.url === "") errors.push("Please enter a path.");
     if (!page.title || page.title === "") errors.push("Please enter a title.");
     if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to create pages");
+    if (!checked) errors.push("Please check Url Path");
     setErrors(errors);
     return errors.length === 0;
   };
@@ -59,7 +62,14 @@ export function PageEdit(props: Props) {
     }
   };
 
-  useEffect(() => { setPage(props.page); }, [props.page]);
+  const handleSlugValidation = () => {
+    const p = { ...page };
+    p.url = SlugHelper.slugifyString(p.url, "urlPath");
+    setPage(p);
+    setChecked(true);
+  }
+
+  useEffect(() => { setPage(props.page); if (props.page.url) { setChecked(true); } }, [props.page]);
 
   if (!page) return <></>
   else return (
@@ -67,12 +77,25 @@ export function PageEdit(props: Props) {
       <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
         <ErrorMessages errors={errors} />
         <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
-        <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} onKeyDown={handleKeyDown} helperText="ex: /camper-registration" />
-        <div>
-          <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`} target="_blank" rel="noopener noreferrer">
-            {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
-          </a>
-        </div>
+        {checked ? (
+          <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
+            <Paper elevation={0}>
+              <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Typography>{page.url}</Typography>
+                <IconButton color="primary" onClick={() => setChecked(false)}><EditIcon /></IconButton>
+              </Stack>
+            </Paper>
+            <div>
+              <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`} target="_blank" rel="noopener noreferrer">
+                {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
+              </a>
+            </div>
+          </div>
+        ) : (
+          <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} helperText="ex: /camper-registration  (**Make sure to check before saving)"
+            InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation}>Check</Button> }}
+          />
+        )}
         {!props.embedded && (
           <FormControl fullWidth>
             <InputLabel>Layout</InputLabel>
