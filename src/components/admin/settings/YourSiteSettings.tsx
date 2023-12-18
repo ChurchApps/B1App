@@ -9,7 +9,6 @@ import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import { SmallButton } from "@churchapps/apphelper";
 import { BlockInterface, PageInterface } from "@/helpers";
-import { Appearance } from "../Appearance";
 
 export function YourSiteSettings() {
   const { isAuthenticated } = ApiHelper;
@@ -174,10 +173,17 @@ export function YourSiteSettings() {
         />
         )}
         {UserHelper.checkAccess(Permissions.contentApi.content.edit) && <Links />}
-        <Appearance />
+
         <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance">
           <table className="table">
             <tbody>
+              <tr>
+                <td>
+                  <Link href={"/admin/site/colors"} style={{ display: "flex" }}>
+                    <Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Colors
+                  </Link>
+                </td>
+              </tr>
               <tr>
                 <td>
                   <Link href={"/admin/site/files"} style={{ display: "flex" }}>

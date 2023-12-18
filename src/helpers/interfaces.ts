@@ -129,5 +129,11 @@ export interface TimelinePostInterface {
 }
 
 
-
+export interface GlobalStyleInterface {
+  id?: string,
+  churchId?: string,
+  fonts?: string,
+  pallette?: string,
+  customCss?: string
+}
 
