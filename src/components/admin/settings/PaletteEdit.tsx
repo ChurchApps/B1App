@@ -58,6 +58,13 @@ export function PaletteEdit(props: Props) {
       dark: "#000000"
     },
     {
+      light: "#ffffff",
+      lightAccent: "#beccae",
+      accent: "#506545",
+      darkAccent: "#314f20",
+      dark: "#000000"
+    },
+    {
       light: "#F5F5F5",
       lightAccent: "#FFD700",
       accent: "#4CAF50",
@@ -97,7 +104,7 @@ export function PaletteEdit(props: Props) {
 
   useEffect(() => {
     console.log("SET PALETTE", props.globalStyle)
-    if (props.globalStyle) setPalette(JSON.parse(props.globalStyle.pallette));
+    if (props.globalStyle) setPalette(JSON.parse(props.globalStyle.palette));
   }, [props.globalStyle]);
 
   const handleSave = () => { props.updatedFunction(JSON.stringify(palette)); };

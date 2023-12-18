@@ -133,7 +133,7 @@ export interface GlobalStyleInterface {
   id?: string,
   churchId?: string,
   fonts?: string,
-  pallette?: string,
+  palette?: string,
   customCss?: string
 }
 

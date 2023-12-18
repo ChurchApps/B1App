@@ -18,7 +18,7 @@ export default function Colors(props: WrapperPageProps) {
     ApiHelper.get("/globalStyles", "ContentApi").then(gs => {
       if (gs.palette) setGlobalStyle(gs);
       else setGlobalStyle({
-        pallette: JSON.stringify({ light: "#FFFFFF", lightAccent: "#DDDDDD", accent: "#DD0000", darkAccent: "#DD9999", dark: "#000000" })
+        palette: JSON.stringify({ light: "#FFFFFF", lightAccent: "#DDDDDD", accent: "#DD0000", darkAccent: "#DD9999", dark: "#000000" })
       })
     });
   }
@@ -26,7 +26,7 @@ export default function Colors(props: WrapperPageProps) {
   const handlePaletteUpdate = (paletteJson:string) => {
     if (paletteJson) {
       let gs = {...globalStyle};
-      gs.pallette = paletteJson;
+      gs.palette = paletteJson;
       ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
     }
     setSection("");
