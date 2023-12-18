@@ -43,62 +43,22 @@ export function PaletteEdit(props: Props) {
   ]
 
   const suggestions = [
-    {
-      light: "#dfe1e6",
-      lightAccent: "#7db8d6",
-      accent: "#a77b60",
-      darkAccent: "#37515e",
-      dark: "#19191b"
-    },
-    {
-      light: "#ffffff",
-      lightAccent: "#e2dbe9",
-      accent: "#5a4565",
-      darkAccent: "#3e204f",
-      dark: "#000000"
-    },
-    {
-      light: "#ffffff",
-      lightAccent: "#beccae",
-      accent: "#506545",
-      darkAccent: "#314f20",
-      dark: "#000000"
-    },
-    {
-      light: "#F5F5F5",
-      lightAccent: "#FFD700",
-      accent: "#4CAF50",
-      darkAccent: "#FF5722",
-      dark: "#263238"
-    },
-    {
-      light: "#E0E0E0",
-      lightAccent: "#FF4081",
-      accent: "#2196F3",
-      darkAccent: "#FF9800",
-      dark: "#455A64"
-    },
-    {
-      light: "#FAFAFA",
-      lightAccent: "#FF5252",
-      accent: "#03A9F4",
-      darkAccent: "#FFC107",
-      dark: "#37474F"
-    },
-    {
-      light: "#F8F8F8",
-      lightAccent: "#FFAB00",
-      accent: "#00BCD4",
-      darkAccent: "#FF5722",
-      dark: "#607D8B"
-    },
-    {
-      light: "#F0F0F0",
-      lightAccent: "#FFC107",
-      accent: "#8BC34A",
-      darkAccent: "#03A9F4",
-      dark: "#333333"
-    }
+    { light: "#ffffff", lightAccent: "#dddddd", accent: "#dd0000", darkAccent: "#dd9999", dark: "#000000" },
+    { light: "#faffff", lightAccent: "#7db8d6", accent: "#a77b60", darkAccent: "#37515e", dark: "#19191b" },
+    { light: "#ffffff", lightAccent: "#e2dbe9", accent: "#5a4565", darkAccent: "#3e204f", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#beccae", accent: "#506545", darkAccent: "#314f20", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#aecccc", accent: "#455f65", darkAccent: "#20474f", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#aebdcc", accent: "#454f65", darkAccent: "#20304f", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#e4b0db", accent: "#925b7e", darkAccent: "#88366d", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#de95a1", accent: "#944946", darkAccent: "#901e1e", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#28c4f4", accent: "#f25822", darkAccent: "#0b4a7f", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#efb302", accent: "#da3a2a", darkAccent: "#2f5095", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#d4eb76", accent: "#5cb772", darkAccent: "#2f65af", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#d6edfb", accent: "#5bc5ed", darkAccent: "#019cdf", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#f6e43a", accent: "#328a3c", darkAccent: "#c70922", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#ff9900", accent: "#cd0104", darkAccent: "#010066", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#9cbe2b", accent: "#6ea501", darkAccent: "#004300", dark: "#000000" },
+    { light: "#ffffff", lightAccent: "#ffb516", accent: "#ff640a", darkAccent: "#c90217", dark: "#000000" }
   ]
 
 
