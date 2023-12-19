@@ -7,13 +7,16 @@ import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material
 import { DisplayBox, ApiHelper } from "@churchapps/apphelper";
 import { PaletteEdit } from "@/components/admin/settings/PaletteEdit";
 import { FontsEdit } from "@/components/admin/settings/FontEdit";
+import { Preview } from "@/components/admin/settings/Preview";
+import { CssEdit } from "@/components/admin/settings/CssEdit";
+import { Appearance } from "@/components/admin/Appearance";
 
 
 
 export default function Colors(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
-  const [section, setSection] = useState<string>("palette");
+  const [section, setSection] = useState<string>("");
 
   const loadData = () => {
     ApiHelper.get("/globalStyles", "ContentApi").then(gs => {
@@ -42,6 +45,11 @@ export default function Colors(props: WrapperPageProps) {
     setSection("");
   }
 
+  const handleUpdate = (gs:GlobalStyleInterface) => {
+    if (gs) ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
+    setSection("");
+  }
+
   useEffect(() => {
     if (!isAuthenticated) router.push("/login");
     else loadData();
@@ -56,6 +64,9 @@ export default function Colors(props: WrapperPageProps) {
         <Grid item md={8} xs={12}>
           {section==="palette" && <PaletteEdit globalStyle={globalStyle} updatedFunction={handlePaletteUpdate} />}
           {section==="fonts" && <FontsEdit globalStyle={globalStyle} updatedFunction={handleFontsUpdate} />}
+          {section==="css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
+          {section==="logo" && <Appearance />}
+          {section==="" && <Preview globalStyle={globalStyle} churchSettings={props.config.church} churchName={props.config.church.name} />}
         </Grid>
         <Grid item md={4} xs={12}>
           <DisplayBox headerIcon="link" headerText="Style Settings" editContent={false}>
@@ -64,6 +75,7 @@ export default function Colors(props: WrapperPageProps) {
                 <TableRow><TableCell><a href="#" onClick={(e) => { e.preventDefault(); setSection("palette"); }}><Icon sx={{ marginRight: "5px" }}>palette</Icon>Color Palette</a></TableCell></TableRow>
                 <TableRow><TableCell><a href="#" onClick={(e) => { e.preventDefault(); setSection("fonts"); }}><Icon sx={{ marginRight: "5px" }}>text_fields</Icon>Fonts</a></TableCell></TableRow>
                 <TableRow><TableCell><a href="#" onClick={(e) => { e.preventDefault(); setSection("css"); }}><Icon sx={{ marginRight: "5px" }}>css</Icon>Custom CSS</a></TableCell></TableRow>
+                <TableRow><TableCell><a href="#" onClick={(e) => { e.preventDefault(); setSection("logo"); }}><Icon sx={{ marginRight: "5px" }}>image</Icon>Logo</a></TableCell></TableRow>
               </TableBody>
             </Table>
           </DisplayBox>

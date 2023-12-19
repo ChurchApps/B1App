@@ -134,6 +134,7 @@ export interface GlobalStyleInterface {
   churchId?: string,
   fonts?: string,
   palette?: string,
-  customCss?: string
+  customCss?: string,
+  customJS?: string
 }
 
