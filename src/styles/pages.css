@@ -355,8 +355,21 @@ a.dropdown-toggle::after {
 }
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
-  background-color: #9999FF !important;
+  /*background-color: #9999FF !important;*/
+  border: 3px solid #3333FF;
 }
+
+
+.sectionWrapper:not(:has(.elementWrapper:hover)):hover:before {
+  content: "SECTION";
+  background-color: #3333FF;
+  color:#FFF;
+  display: block;
+  width:100%;
+  position: relative;
+  text-align: center;
+}
+
 
 .sectionWrapper {
   padding-top: 0 !important;
@@ -381,8 +394,9 @@ a.dropdown-toggle::after {
 .sectionActions {
   display: none;
   position: absolute;
-  top: 10;
+  top: 1;
   right: 0;
+  margin-top: -40px;
 }
 
 .sectionActions.alwaysVisible {
