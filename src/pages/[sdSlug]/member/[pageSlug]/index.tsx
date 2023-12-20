@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { PageLayout, Theme } from "@/components";
-import { PageInterface } from "@/helpers";
+import { GlobalStyleInterface, PageInterface } from "@/helpers";
 import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 
 type Props = {
@@ -8,11 +8,12 @@ type Props = {
   church: ChurchInterface,
   churchSettings: any,
   navLinks: LinkInterface[],
+  globalStyles: GlobalStyleInterface
 };
 
 export default function Home(props: Props) {
   return (<>
-    <Theme appearance={props.churchSettings} />
+    <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
     <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
   </>);
 }
@@ -36,11 +37,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
-
+  const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=" + escape("/member/") + params.pageSlug, "ContentApi");
 
   return {
-    props: { pageData, church, churchSettings, navLinks },
+    props: { pageData, church, churchSettings, navLinks, globalStyles },
     revalidate: 30,
   };
 };

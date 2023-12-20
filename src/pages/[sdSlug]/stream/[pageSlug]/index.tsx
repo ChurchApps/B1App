@@ -12,7 +12,7 @@ type Props = {
 
 export default function Home(props: Props) {
   return (<>
-    <Theme appearance={props.churchSettings} />
+    <Theme appearance={props.churchSettings} globalStyles={{}} />
     <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
   </>);
 }
