@@ -36,6 +36,7 @@ export const Section: React.FC<Props> = props => {
     } else {
       result = { background: props.section.background };
     }
+    if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
     return result;
   }
 

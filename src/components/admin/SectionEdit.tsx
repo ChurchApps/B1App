@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, GalleryModal, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
-import { BlockInterface, SectionInterface } from "@/helpers";
+import { BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { SliderPicker } from 'react-color'
 
 type Props = {
   section: SectionInterface;
   updatedCallback: (section: SectionInterface) => void;
+  globalStyles: GlobalStyleInterface;
 };
 
 export function SectionEdit(props: Props) {
@@ -90,11 +91,25 @@ export function SectionEdit(props: Props) {
 
   const getGrayOptions = () => {
     let colors = ["#FFFFFF", "#CCCCCC", "#888888", "#444444", "#000000"]
+    return getManualOptions(colors, colors, "background");
+  }
+
+  const getThemeOptions = (field:"background" | "textColor" =  "background") => {
+    if (props.globalStyles?.palette)
+    {
+      const palette = JSON.parse(props.globalStyles.palette);
+      let colors = [palette.light, palette.lightAccent, palette.accent, palette.darkAccent, palette.dark]
+      return getManualOptions(colors, ["var(--light)", "var(--lightAccent)", "var(--accent)", "var(--darkAccent)", "var(--dark)"], field);
+    }
+  }
+
+  const getManualOptions = (colors:string[], values:string[], field:"background" | "textColor") => {
     let result: JSX.Element[] = [];
-    colors.forEach(c => {
-      const style: any = { backgroundColor: c, width: "100%", height: (section.background === c) ? 20 : 12, display: "block" }
-      if (c === "#FFFFFF") style.border = "1px solid #999";
-      result.push(<td><a href="about:blank" style={style} onClick={(e) => { e.preventDefault(); let s = { ...section }; s.background = c; setSection(s); }}>&nbsp;</a></td>);
+    colors.forEach((c, i) => {
+      const v = values[i];
+      const style: any = { backgroundColor: c, width: "100%", height: (section[field] === v) ? 20 : 12, display: "block" }
+      if (c === "#FFFFFF" || v === "var(--light)") style.border = "1px solid #999";
+      result.push(<td><a href="about:blank" style={style} onClick={(e) => { e.preventDefault(); let s = { ...section }; s[field] = v; setSection(s); }}>&nbsp;</a></td>);
     })
     return (<table style={{ width: "100%", marginTop: 10 }} key="grayColors">
       <tbody>
@@ -110,7 +125,7 @@ export function SectionEdit(props: Props) {
     //<Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
 
     let backgroundType = "image";
-    if (section.background?.startsWith("#")) backgroundType = "color";
+    if (section.background?.startsWith("#") || section.background?.startsWith("var(") ) backgroundType = "color";
     else if (section.background?.startsWith("youtube")) backgroundType = "youtube"
 
     let result: JSX.Element[] = [
@@ -127,6 +142,7 @@ export function SectionEdit(props: Props) {
     if (backgroundType === "color") {
       result.push(<SliderPicker key="sliderPicker" color={section.background} onChangeComplete={(color) => { if (color.hex !== "#000000") { let s = { ...section }; s.background = color.hex; setSection(s); } }} />);
       result.push(getGrayOptions())
+      result.push(getThemeOptions())
       result.push(<TextField key="backgroundText" fullWidth size="small" label="Background" name="background" value={section.background} onChange={handleChange} onKeyDown={handleKeyDown} />)
     } else if (backgroundType === "youtube") {
       const parts = section.background.split(":");
@@ -150,13 +166,10 @@ export function SectionEdit(props: Props) {
     <ErrorMessages errors={errors} />
     <br />
     {getBackgroundField()}
-    <FormControl fullWidth>
+    <div>
       <InputLabel>Text Color</InputLabel>
-      <Select fullWidth size="small" label="Text Color" name="textColor" value={section.textColor || ""} onChange={handleChange}>
-        <MenuItem value="light">Light</MenuItem>
-        <MenuItem value="dark">Dark</MenuItem>
-      </Select>
-    </FormControl>
+    </div>
+    {getThemeOptions("textColor")}
     <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
   </>)
 

@@ -19,18 +19,18 @@ export const Theme: React.FC<Props> = (props) => {
   let fontLink = <></>;
 
   if (props.appearance?.primaryColor) {
-    const lines:string[] = [
-      "--primaryColor: " + props.appearance?.primaryColor || defaultColors.primaryColor + ";",
-      "--primaryContrast: " + props.appearance?.primaryContrast || defaultColors.primaryContrast + ";",
-      "--primaryContrast: " + props.appearance?.primaryContrast || defaultColors.primaryContrast + ";",
-      "--secondaryColor: " + props.appearance?.secondaryColor || defaultColors.secondaryColor + ";",
-      "--secondaryContrast: " + props.appearance?.secondaryContrast || defaultColors.secondaryContrast + ";",
-    ];
+    const lines:string[] = []
+    lines.push("--primaryColor: " + (props.appearance?.primaryColor || defaultColors.primaryColor) + ";");
+    lines.push("--primaryContrast: " + (props.appearance?.primaryContrast || defaultColors.primaryContrast) + ";");
+    lines.push("--primaryContrast: " + (props.appearance?.primaryContrast || defaultColors.primaryContrast) + ";");
+    lines.push("--secondaryColor: " + (props.appearance?.secondaryColor || defaultColors.secondaryColor) + ";");
+    lines.push("--secondaryContrast: " + (props.appearance?.secondaryContrast || defaultColors.secondaryContrast) + ";");
+
 
     if (props.globalStyles?.palette) {
       const palette = JSON.parse(props.globalStyles?.palette);
       lines.push("--light: " + palette.light + ";");
-      lines.push("--lightAccent: " + palette.lightAcceny + ";");
+      lines.push("--lightAccent: " + palette.lightAccent + ";");
       lines.push("--accent: " + palette.accent + ";");
       lines.push("--darkAccent: " + palette.darkAccent + ";");
       lines.push("--dark: " + palette.dark + ";");
@@ -60,6 +60,8 @@ export const Theme: React.FC<Props> = (props) => {
       fontLink = <link href={"https://fonts.googleapis.com/css2?family=" + fontList.join("&") + "&display=swap"} rel="stylesheet"></link>
     }
   }
+
+
 
   return (<>
     {fontLink}
