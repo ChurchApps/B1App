@@ -22,7 +22,7 @@ export default function Colors(props: WrapperPageProps) {
     ApiHelper.get("/globalStyles", "ContentApi").then(gs => {
       if (gs.palette) setGlobalStyle(gs);
       else setGlobalStyle({
-        palette: JSON.stringify({ light: "#FFFFFF", lightAccent: "#DDDDDD", accent: "#DD0000", darkAccent: "#DD9999", dark: "#000000" })
+        palette: JSON.stringify({ light: "#FFFFFF", lightAccent: "#DDDDDD", accent: "#0000DD", darkAccent: "#9999DD", dark: "#000000" })
       })
     });
   }
