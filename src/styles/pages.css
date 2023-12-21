@@ -426,3 +426,8 @@ a.dropdown-toggle::after {
 #embeddedLayout .page .sectionFirst {
   padding-top:0px;
 }
+
+.no-resize {
+  width:auto;
+  max-width: 100%;
+}
