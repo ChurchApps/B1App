@@ -368,6 +368,7 @@ a.dropdown-toggle::after {
   width:100%;
   position: relative;
   text-align: center;
+  margin-bottom: -28px;
 }
 
 
@@ -397,6 +398,7 @@ a.dropdown-toggle::after {
   top: 1;
   right: 0;
   margin-top: -40px;
+  z-index: 999;
 }
 
 .sectionActions.alwaysVisible {
