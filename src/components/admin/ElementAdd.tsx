@@ -17,13 +17,6 @@ export function ElementAdd(props: Props) {
 
   useEffect(loadData, []);
 
-  /*
-     <p><b>Components:</b></p>
-        <Grid container spacing={3}>
-          <AddableElement dndType="elementBlock" elementType="row" icon="table_chart" label="3 Columns with Text" />
-        </Grid>
-  */
-
   const Blocks = () => {
     let result: JSX.Element[] = []
     blocks.forEach((b) => {
@@ -47,6 +40,7 @@ export function ElementAdd(props: Props) {
             <Grid container spacing="1">
               {props.includeSection && (<AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" />)}
               <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" />
+              <AddableElement dndType="element" elementType="box" icon="check_box_outline_blank" label="Box" />
               <AddableElement dndType="element" elementType="text" icon="article" label="Text" />
               <AddableElement dndType="element" elementType="textWithPhoto" icon="photo" label="Text with Photo" />
               <AddableElement dndType="element" elementType="card" icon="badge" label="Card" />

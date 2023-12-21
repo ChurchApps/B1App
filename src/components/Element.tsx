@@ -22,6 +22,7 @@ import { ImageElement } from "./elementTypes/ImageElement";
 import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 import { CalendarElement } from "./elementTypes/CalendarElement";
 import { ApiHelper } from "@churchapps/apphelper";
+import { BoxElement } from "./elementTypes/BoxElement";
 
 interface Props {
   element: ElementInterface;
@@ -74,6 +75,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "row":
       result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
+      break;
+    case "box":
+      result = <BoxElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
       break;
     case "map":
       result = <MapElement key={props.element.id} element={props.element as ElementInterface} />

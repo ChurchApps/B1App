@@ -138,7 +138,7 @@ export default function Admin(props: Props) {
               <div style={rightBarStyle}>
                 {!editSection && !editElement && <ElementAdd includeBlocks={false} includeSection={block?.blockType === "sectionBlock"} />}
                 {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
-                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} />}
+                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
               </div>
             </div>
           </Grid>
