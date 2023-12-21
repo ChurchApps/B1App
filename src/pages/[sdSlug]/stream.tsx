@@ -18,7 +18,7 @@ export default function Stream(props: Props) {
   const includeHeader = hideHeader !== "1";
 
   return (<>
-    <Theme appearance={props.churchSettings} />
+    <Theme appearance={props.churchSettings} globalStyles={{}} />
     <div id="streamRoot">
       <LiveStream keyName={props.church.subDomain} appearance={props.churchSettings} includeHeader={includeHeader} includeInteraction={true} />
     </div>

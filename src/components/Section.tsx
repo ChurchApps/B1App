@@ -36,6 +36,7 @@ export const Section: React.FC<Props> = props => {
     } else {
       result = { background: props.section.background };
     }
+    if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
     return result;
   }
 
@@ -53,6 +54,13 @@ export const Section: React.FC<Props> = props => {
     if (props.section.textColor === "light") result += " sectionDark"
     if (props.first) result += " sectionFirst";
     if (props.onEdit) result += " sectionWrapper";
+
+    let hc = props.section.headingColor;
+    if (hc) {
+      hc = hc.replace("var(--", "").replace(")", "");
+      result += " headings" + hc[0].toUpperCase() + hc.slice(1);
+    }
+
     return result;
   }
 
@@ -88,6 +96,7 @@ export const Section: React.FC<Props> = props => {
       const element: ElementInterface = { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId };
       if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
       else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
+      else if (data.elementType === "box") element.answersJSON = JSON.stringify({ background: "var(--light)", text: "var(--dark)" });
       props.onEdit(null, element);
     }
   }

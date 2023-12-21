@@ -44,7 +44,15 @@ body {
   max-height: 65px;
 }
 
-.page H1 {
+.page {
+  font-family: var(--bodyFont), "Roboto", sans-serif;
+}
+
+.page h1, .page h2, .page h3, .page h4 {
+  font-family: var(--headingFont), "Roboto", sans-serif;
+}
+
+.page h1 {
   font-size: 60px;
   font-weight: bold;;
   line-height: 60px;
@@ -110,10 +118,11 @@ body {
   box-sizing: inherit;
 }
 
+/*
 .section {
   color: #333;
 }
-
+*/
 
 #navbar.transparent {
   background-color: rgba(0, 0, 0, 0) !important;
@@ -346,8 +355,22 @@ a.dropdown-toggle::after {
 }
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
-  background-color: #9999FF !important;
+  /*background-color: #9999FF !important;*/
+  border: 3px solid #3333FF;
 }
+
+
+.sectionWrapper:not(:has(.elementWrapper:hover)):hover:before {
+  content: "SECTION";
+  background-color: #3333FF;
+  color:#FFF;
+  display: block;
+  width:100%;
+  position: relative;
+  text-align: center;
+  margin-bottom: -28px;
+}
+
 
 .sectionWrapper {
   padding-top: 0 !important;
@@ -372,8 +395,10 @@ a.dropdown-toggle::after {
 .sectionActions {
   display: none;
   position: absolute;
-  top: 10;
+  top: 1;
   right: 0;
+  margin-top: -40px;
+  z-index: 999;
 }
 
 .sectionActions.alwaysVisible {
@@ -400,4 +425,9 @@ a.dropdown-toggle::after {
 #embeddedLayout { height: 100vh; background-color: #FFFFFF;}
 #embeddedLayout .page .sectionFirst {
   padding-top:0px;
+}
+
+.no-resize {
+  width:auto;
+  max-width: 100%;
 }

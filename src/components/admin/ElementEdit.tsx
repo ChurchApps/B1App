@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BlockInterface, ElementInterface } from "@/helpers";
+import { BlockInterface, ElementInterface, GlobalStyleInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider } from "@mui/material";
 import { MarkdownEditor, ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import React from "react";
@@ -8,9 +8,11 @@ import { RowEdit } from "./RowEdit";
 import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";
 import { CalendarElementEdit } from "./CalendarElementEdit";
+import { PickColors } from "./PickColors";
 
 type Props = {
   element: ElementInterface;
+  globalStyles: GlobalStyleInterface;
   updatedCallback: (element: ElementInterface) => void;
   onRealtimeChange: (element: ElementInterface) => void;
 };
@@ -91,6 +93,25 @@ export function ElementEdit(props: Props) {
   };
 
   const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
+
+  const selectColors = (background:string, textColor:string, headingColor:string) => {
+    let p = { ...element };
+    parsedData["background"] = background;
+    parsedData["textColor"] = textColor;
+    parsedData["headingColor"] = headingColor;
+    p.answersJSON = JSON.stringify(parsedData);
+    setElement(p);
+  }
+
+  const getBoxFields = () => (
+    <>
+      <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.rounded === "true" ? true : false} />} name="rounded" label="Rounded Corners" />
+      <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.translucent === "true" ? true : false} />} name="translucent" label="Translucent" />
+      <br />
+      <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
+    </>
+  );
+
   const getTextFields = () => (
     <>
       {getTextAlignment("textAlignment")}
@@ -274,7 +295,8 @@ export function ElementEdit(props: Props) {
       <TextField fullWidth size="small" label="Photo Label" name="photoAlt"  value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
       <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
       <FormGroup sx={{ marginLeft: 0.5}}>
-        <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
+        <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open link in new tab" />
+        <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.noResize === "true" ? true : false} />} name="noResize" label="Do not resize image" />
       </FormGroup>
     </>
   )
@@ -289,6 +311,7 @@ export function ElementEdit(props: Props) {
     let result = getJsonFields();
     switch (element?.elementType) {
       case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />; break;
+      case "box": result = getBoxFields(); break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
       case "card": result = getCardFields(); break;
@@ -341,29 +364,6 @@ export function ElementEdit(props: Props) {
     loadBlocks();
   }, [element]);
 
-  /*
-  useEffect(() => {
-    if (element && JSON.stringify(element) !== JSON.stringify(props.element)) props.onRealtimeChange(element);
-
-  }, [element]);
-  */
-
-  /*
-  <FormControl fullWidth>
-        <InputLabel>Element Type</InputLabel>
-        <Select fullWidth label="Element Type" value={element.elementType} name="elementType" onChange={handleChange}>
-          <MenuItem value="row">Row</MenuItem>
-          <MenuItem value="text">Text</MenuItem>
-          <MenuItem value="textWithPhoto">Text with Photo</MenuItem>
-          <MenuItem value="card">Card</MenuItem>
-          <MenuItem value="logo">Logo</MenuItem>
-          <MenuItem value="donation">Donation</MenuItem>
-          <MenuItem value="stream">Stream</MenuItem>
-          <MenuItem value="iframe">Embed Page</MenuItem>
-          <MenuItem value="buttonLink">Button</MenuItem>
-        </Select>
-  </FormControl>
-  */
 
   const getStandardFields = () => (<>
     <ErrorMessages errors={errors} />

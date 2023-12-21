@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ApiHelper, AppearanceHelper, AppearanceInterface, DisplayBox, GenericSettingInterface } from "@churchapps/apphelper"
 import { AppearanceEdit } from "./AppearanceEdit";
+import { Grid } from "@mui/material";
 
 interface Props { }
 
@@ -41,13 +42,18 @@ export const Appearance: React.FC<Props> = (props) => {
   else return (
     <DisplayBox headerIcon="palette" headerText="Church Appearance" editFunction={handleEdit}>
 
-      <div style={{ padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#EEE" }}>
-        {getLogo("logoLight")}
-      </div>
-
-      <div style={{ padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#333", color: "#FFF" }}>
-        {getLogo("logoDark")}
-      </div>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <div style={{ padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#EEE" }}>
+            {getLogo("logoLight")}
+          </div>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <div style={{ padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#333", color: "#FFF" }}>
+            {getLogo("logoDark")}
+          </div>
+        </Grid>
+      </Grid>
 
       {styles?.favicon_400x400
         && <div style={{padding: 10, fontWeight: "bold", textAlign: "center", backgroundColor: "#bbdefb", color: "#FFF", display: "flex", justifyContent: "center", alignItems: "center" }}>

@@ -7,12 +7,19 @@ interface Props {
 export const ImageElement = ({ element }: Props) => {
   let photoContent = <></>;
 
+  const getClass = () => {
+    let result = "";
+    if (element.answers?.noResize === "true") result = "no-resize";
+    return result
+  }
+
   if (element.answers?.photo) {
     const photo = (
       <img
         src={element.answers?.photo || "about:blank"}
         alt={element.answers?.photoAlt || ""}
-        style={{ borderRadius: 3, width: "100%" }}
+        style={{ borderRadius: (element.answers?.noResize === "true") ? 0 : 3 }}
+        className={getClass()}
       />
     );
     if (element.answers?.url)
