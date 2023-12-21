@@ -14,6 +14,7 @@ export function SectionEdit(props: Props) {
   const [blocks, setBlocks] = useState<BlockInterface[]>(null);
   const [section, setSection] = useState<SectionInterface>(null);
   const [errors, setErrors] = useState([]);
+  const [customColors, setCustomColors] = useState(false);
   const [selectPhotoField, setSelectPhotoField] = useState<string>(null);
   let parsedData = (section?.answersJSON) ? JSON.parse(section.answersJSON) : {}
 
@@ -162,15 +163,88 @@ export function SectionEdit(props: Props) {
     );
   }
 
-  const getStandardFields = () => (<>
-    <ErrorMessages errors={errors} />
-    <br />
+  const selectPairing = ( pair:string[]) => {
+    let s = { ...section };
+    s.background = "var(--" + pair[0] + ")";
+    s.textColor = "var(--" + pair[1] + ")";
+    setSection(s);
+
+  }
+
+  const getRGB = (hex:string) => {
+    const r = parseInt(hex.substring(1, 3), 16);
+    const g = parseInt(hex.substring(3, 5), 16);
+    const b = parseInt(hex.substring(5, 7), 16);
+    return {r:r, g:g, b:b};
+  }
+
+  const enoughContrast = (rgb1:any, rgb2:any) => {
+    const contrastR = Math.abs(rgb1.r - rgb2.r);
+    const contrastG = Math.abs(rgb1.r - rgb2.r);
+    const contrastB = Math.abs(rgb1.r - rgb2.r);
+    return ((contrastR + contrastG + contrastB) > 250 );
+  }
+
+  const getSuggestedColors = () => {
+    const colors = JSON.parse(props.globalStyles.palette);
+    const pairings:any[] = []
+    const names = ["light", "lightAccent", "accent", "darkAccent", "dark"];
+    names.forEach(nb => {
+      names.forEach(nt => {
+        const rgbB = getRGB(colors[nb]);
+        const rgbT = getRGB(colors[nt]);
+        if (enoughContrast(rgbB, rgbT)) pairings.push([nb, nt]);
+      });
+
+    });
+    /*
+    const pairings = [
+      ["light", "dark"],
+      ["light", "darkAccent"],
+      ["light", "accent"],
+      ["lightAccent", "dark"],
+      ["lightAccent", "darkAccent"],
+      ["lightAccent", "accent"],
+      ["accent", "dark"],
+      ["accent", "darkAccent"],
+      ["accent", "accent"],
+      ["darkAccent", "dark"],
+      ["darkAccent", "darkAccent"],
+      ["darkAccent", "accent"]
+    ];*/
+    const suggestions:JSX.Element[] = [];
+
+    pairings.forEach(p => {
+      const b = colors[p[0]]
+      const t = colors[p[1]]
+      suggestions.push(<a href="about:blank" onClick={(e) => {e.preventDefault(); selectPairing(p); }} style={{display:"block", backgroundColor:b, color:t, border:"1px solid " + t, borderRadius:5, padding:5, marginBottom:3 }}>Sample Text</a>);
+    });
+
+
+    return (<>
+      <a href="about:blank" onClick={(e) => { e.preventDefault(); setCustomColors(true); }}>Manually Select Colors</a><br />
+      <h4>Current Colors</h4>
+      <div style={{display:"block", backgroundColor:section?.background, color:section?.textColor, border:"1px solid " + section?.textColor, borderRadius:5, padding:5, marginBottom:10 }}>Sample Text</div>
+
+      <h4>Suggestions</h4>
+      {suggestions}
+    </>)
+  }
+
+  const getManualColors = () => (<>
+    <a href="about:blank" onClick={(e) => { e.preventDefault(); setCustomColors(false); }}>Browse Suggested Colors</a><br />
     {getBackgroundField()}
     <div>
       <InputLabel>Text Color</InputLabel>
     </div>
     {getThemeOptions("textColor")}
     <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
+  </>)
+
+  const getStandardFields = () => (<>
+    <ErrorMessages errors={errors} />
+    <br />
+    {(customColors) ? getManualColors() : getSuggestedColors() }
   </>)
 
   const getBlockFields = () => {
