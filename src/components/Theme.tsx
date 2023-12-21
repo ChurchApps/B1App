@@ -17,6 +17,7 @@ export const Theme: React.FC<Props> = (props) => {
   let css = null;
   const googleFonts = [];
   let fontLink = <></>;
+  let customJs = <></>;
 
   if (props.appearance?.primaryColor) {
     const lines:string[] = []
@@ -59,13 +60,18 @@ export const Theme: React.FC<Props> = (props) => {
 
       fontLink = <link href={"https://fonts.googleapis.com/css2?family=" + fontList.join("&") + "&display=swap"} rel="stylesheet"></link>
     }
+
+    if (props?.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{__html:props.globalStyles.customJS}} />
   }
 
 
 
   return (<>
     {fontLink}
-    <Helmet>{css}</Helmet>
+    <Helmet>
+      {css}
+    </Helmet>
+    {customJs}
   </>);
 }
 
