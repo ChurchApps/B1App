@@ -28,6 +28,7 @@ export interface SectionInterface {
   zone?: string;
   background?: string;
   textColor?: string;
+  headingColor?: string;
   sort?: number;
   targetBlockId?: string;
   answersJSON?: string;

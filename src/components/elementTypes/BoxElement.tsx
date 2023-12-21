@@ -14,10 +14,12 @@ export function BoxElement(props: Props) {
   }
 
   const getElements = () => {
+    const textColor = props.element.answers?.textColor || props.textColor;
+
     const result: JSX.Element[] = []
     if (props.onEdit) result.push(getAddElement(0))
     props.element.elements?.forEach(c => {
-      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />)
+      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} />)
     });
     return result;
   }
@@ -39,9 +41,19 @@ export function BoxElement(props: Props) {
     return result;
   }
 
+  const getClass = () => {
+    let result = "";
+    let hc = props.element.answers?.headingColor;
+    if (hc) {
+      hc = hc.replace("var(--", "").replace(")", "");
+      result = "headings" + hc[0].toUpperCase() + hc.slice(1)
+    }
+    return result;
+  }
+
   let result = (<>
     {props.onEdit && <div style={{ height: 40 }}></div>}
-    <div style={getStyle()}>
+    <div style={getStyle()} className={getClass()}>
       {props.onEdit && !(props.element.elements || props.element.elements?.length===0) && <p>Box: Add elements</p>}
       {getElements()}
     </div>

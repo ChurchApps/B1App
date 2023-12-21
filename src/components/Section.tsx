@@ -54,6 +54,13 @@ export const Section: React.FC<Props> = props => {
     if (props.section.textColor === "light") result += " sectionDark"
     if (props.first) result += " sectionFirst";
     if (props.onEdit) result += " sectionWrapper";
+
+    let hc = props.section.headingColor;
+    if (hc) {
+      hc = hc.replace("var(--", "").replace(")", "");
+      result += " headings" + hc[0].toUpperCase() + hc.slice(1);
+    }
+
     return result;
   }
 

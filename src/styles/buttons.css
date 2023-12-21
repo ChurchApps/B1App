@@ -408,3 +408,9 @@
   font-size: 18px;
   padding: 7px 14px;
 }
+
+.headingsLight h1, .headingsLight h2, .headingsLight h3, .headingsLight h4 { color: var(--light); }
+.headingsLightAccent h1, .headingsLightAccent h2, .headingsLightAccent h3, .headingsLightAccent h4 { color: var(--lightAccent); }
+.headingsAccent h1, .headingsAccent h2, .headingsAccent h3, .headingsAccent h4 { color: var(--accent); }
+.headingsDarkAccent h1, .headingsDarkAccent h2, .headingsDarkAccent h3, .headingsDarkAccent h4 { color: var(--darkAccent); }
+.headingsDark h1, .headingsDark h2, .headingsDark h3, .headingsDark h4 { color: var(--dark); }
