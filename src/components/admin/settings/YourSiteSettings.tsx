@@ -179,8 +179,8 @@ export function YourSiteSettings() {
             <tbody>
               <tr>
                 <td>
-                  <Link href={"/admin/site/colors"} style={{ display: "flex" }}>
-                    <Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Colors
+                  <Link href={"/admin/site/styles"} style={{ display: "flex" }}>
+                    <Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Appearance
                   </Link>
                 </td>
               </tr>
