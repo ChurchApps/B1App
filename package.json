@@ -45,6 +45,7 @@
     "@types/react-color": "^3.0.6",
     "@types/react-helmet": "^6.1.6",
     "eslint-config-next": "^13.4.19",
-    "eslint-plugin-unused-imports": "^3.0.0"
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "typescript": "^5.3.3"
   }
 }
