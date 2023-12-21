@@ -27,7 +27,7 @@ export default function Pages(props: WrapperPageProps) {
   else return (
     <Wrapper config={props.config}>
       <div style={{ backgroundColor: "#FFF", height: "100vh" }}>
-        <Theme />
+        <Theme globalStyles={{}} />
         <div dangerouslySetInnerHTML={{ __html: content }} style={{ padding: 5 }} />
       </div>
       );

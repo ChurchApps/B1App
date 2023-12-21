@@ -10,7 +10,8 @@ import { Chat } from "./chat/Chat";
 
 interface Props {
   config: StreamConfigInterface,
-  chatState: ChatStateInterface
+  chatState: ChatStateInterface,
+  embedded: boolean,
 }
 
 export const InteractionContainer: React.FC<Props> = (props) => {
@@ -97,7 +98,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
         switch (t.type) {
           case "chat":
-            if (props.chatState !== null && props.chatState?.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={true} />);
+            if (props.chatState !== null && props.chatState?.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={true} embedded={props.embedded} />);
             break;
           case "hostchat":
             if (props.chatState !== null && props.chatState?.hostRoom !== null) result.push(<HostChat key={i} chatState={props.chatState} visible={visible} />);

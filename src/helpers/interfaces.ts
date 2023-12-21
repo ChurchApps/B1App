@@ -28,6 +28,7 @@ export interface SectionInterface {
   zone?: string;
   background?: string;
   textColor?: string;
+  headingColor?: string;
   sort?: number;
   targetBlockId?: string;
   answersJSON?: string;
@@ -129,5 +130,12 @@ export interface TimelinePostInterface {
 }
 
 
-
+export interface GlobalStyleInterface {
+  id?: string,
+  churchId?: string,
+  fonts?: string,
+  palette?: string,
+  customCss?: string,
+  customJS?: string
+}
 

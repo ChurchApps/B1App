@@ -2,7 +2,7 @@ import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Grid } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
-import { ElementInterface, BlockInterface, SectionInterface, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ElementInterface, BlockInterface, SectionInterface, ConfigHelper, WrapperPageProps, GlobalStyleInterface } from "@/helpers";
 import { Theme } from "@/components";
 import { DisplayBox, UserHelper, ChurchInterface, ApiHelper } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
@@ -19,6 +19,7 @@ import { AdminWrapper } from "@/components/admin/AdminWrapper";
 interface Props extends WrapperPageProps {
   church: ChurchInterface,
   churchSettings: any,
+  globalStyles: GlobalStyleInterface
 };
 
 export default function Admin(props: Props) {
@@ -119,7 +120,7 @@ export default function Admin(props: Props) {
 
   return (
     <AdminWrapper config={props.config}>
-      <Theme appearance={props.churchSettings} />
+      <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
       <h1>Edit Block</h1>
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
@@ -136,8 +137,8 @@ export default function Admin(props: Props) {
             <div id="editorBar">
               <div style={rightBarStyle}>
                 {!editSection && !editElement && <ElementAdd includeBlocks={false} includeSection={block?.blockType === "sectionBlock"} />}
-                {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} />}
-                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} />}
+                {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
+                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
               </div>
             </div>
           </Grid>
@@ -156,5 +157,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const config = await ConfigHelper.load(params.sdSlug.toString());
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
-  return { props: { config, churchSettings }, revalidate: 30 };
+  const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
+  return { props: { config, churchSettings, globalStyles }, revalidate: 30 };
 };

@@ -46,7 +46,7 @@ export const ChatSend: React.FC<Props> = (props) => {
       {emojiContent}
       <div id="sendPublic" style={(size==="medium") ? { marginLeft: 5, marginRight:  5 } : {} }>
 
-        <FormControl fullWidth variant="outlined" size={size}>
+        <FormControl fullWidth variant="outlined" size={size} sx={{ marginTop: "2px", marginBottom: "1px" }}>
           <InputLabel htmlFor="searchText">{(size === "medium") ? "Send Message" : "Message"}</InputLabel>
           <OutlinedInput id="sendChatText" name="sendChatText" type="text" label={(size === "medium") ? "Send Message" : "Message"} value={message} onChange={handleChange}
             onKeyDown={handleKeyDown} autoComplete="off"

@@ -3,6 +3,7 @@ import React from "react";
 import { ChatSend, Callout, Attendance } from ".";
 import { ChatRoomInterface, ChatUserInterface } from "../../../helpers"
 import { ChatReceive } from "./ChatReceive";
+import { EmbeddedChatName } from "./EmbeddedChatName";
 
 interface Props {
     room: ChatRoomInterface,
@@ -10,6 +11,7 @@ interface Props {
     visible: boolean,
     enableCallout?: boolean,
     enableAttendance?: boolean,
+    embedded?: boolean,
 }
 
 export const Chat: React.FC<Props> = (props) => {
@@ -35,6 +37,7 @@ export const Chat: React.FC<Props> = (props) => {
       {(props.enableAttendance) ? <Attendance user={props.user} attendance={props.room.attendance} /> : null}
       {(props.enableCallout) ? <Callout room={props.room} user={props.user} /> : null}
       <ChatReceive room={props.room} user={props.user} />
+      {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
       <ChatSend room={props.room} />
     </div>
   );
