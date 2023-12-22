@@ -40,6 +40,7 @@ export function PickColors(props: Props) {
             props.updatedCallback("#000000", props.textColor, props.headingColor)
             break;
         }
+        break;
       case "textColor": props.updatedCallback(props.background, val, props.headingColor); break;
       case "headingColor": props.updatedCallback(props.background, props.textColor, val); break;
       case "youtubeId": props.updatedCallback("youtube:" + val, props.textColor, props.headingColor); break;
