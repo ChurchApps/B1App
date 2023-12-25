@@ -15,7 +15,7 @@ export function RowElement(props: Props) {
 
   const getElements = (column: ElementInterface, elements: ElementInterface[]) => {
     const result: JSX.Element[] = []
-    if (props.onEdit) result.push(getAddElement(column, 0))
+    if (props.onEdit) result.push(getAddElement(column, 1))
     elements?.forEach(c => {
       result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />)
     });
