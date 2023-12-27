@@ -2,14 +2,27 @@ import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
+import { ApiHelper } from "@churchapps/apphelper";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
 
 export function RowElement(props: Props) {
 
+  const handleDrop = (data: any, sort: number, column: ElementInterface) => {
+    if (data.data) {
+      const element: ElementInterface = data.data;
+      element.sort = sort;
+      // element.sectionId = props.element.sectionId;
+      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
+    } else {
+      const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: props.element.blockId }
+      props.onEdit(null, element);
+    }
+  }
+
   const getAddElement = (column: ElementInterface, s: number, droppableAreaText?: string) => {
     const sort = s;
-    return (<DroppableArea key={"add" + column.id} accept={["element", "elementBlock"]} text={droppableAreaText} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: props.element.blockId })} dndDeps={column} />);
+    return (<DroppableArea key={"add" + column.id} accept={["element", "elementBlock"]} text={droppableAreaText} onDrop={(data) => handleDrop(data, sort, column)} dndDeps={column} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.element.sectionId, elementType: "textWithPhoto", sort, parentId: column.id })} toolTip="Add Element" /></div>)
   }
 
