@@ -339,3 +339,5 @@
   padding-bottom: 20px;
   margin-bottom: 20px;
 }
+
+#smallPeopleTable img { max-height: 50px; }
