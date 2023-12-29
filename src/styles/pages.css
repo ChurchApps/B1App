@@ -379,7 +379,7 @@ a.dropdown-toggle::after {
 .elementWrapper.text:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT" !important; }
 .elementWrapper.textWithPhoto:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT WITH PHOTO" !important; }
 .elementWrapper.video:not(:has(.elementWrapper:hover)):hover:before { content: "VIDEO" !important; }
-.elementWrapper.whitespace:not(:has(.elementWrapper:hover)):hover:before { content: "WHITE SPACE" !important; }
+.elementWrapper.whiteSpace:not(:has(.elementWrapper:hover)):hover:before { content: "WHITE SPACE" !important; }
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   /*background-color: #9999FF !important;*/

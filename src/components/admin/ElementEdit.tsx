@@ -9,6 +9,7 @@ import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";
 import { CalendarElementEdit } from "./CalendarElementEdit";
 import { PickColors } from "./PickColors";
+import { StyleList } from "./StyleList";
 
 type Props = {
   element: ElementInterface;
@@ -24,6 +25,7 @@ export function ElementEdit(props: Props) {
   const [errors, setErrors] = useState([]);
   const [innerErrors, setInnerErrors] = useState([]);
   let parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
+  let parsedStyles = (element?.stylesJSON) ? JSON.parse(element.stylesJSON) : {}
 
   const handleCancel = () => props.updatedCallback(element);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -64,6 +66,13 @@ export function ElementEdit(props: Props) {
     if (p.answersJSON !== element.answersJSON) setElement(p);
   };
 
+  const handleStyleChange = (styles: { name: string, value: string }[]) => {
+    let p = { ...element };
+    p.styles = styles;
+    p.stylesJSON = JSON.stringify(styles);
+    setElement(p);
+  }
+
   const handleSave = () => {
     if (innerErrors.length === 0) {
       ApiHelper.post("/elements", [element], "ContentApi").then((data) => {
@@ -74,6 +83,8 @@ export function ElementEdit(props: Props) {
       setErrors(innerErrors);
     }
   };
+
+
 
   const getTextAlignment = (fieldName:string, label:string="Text Alignment") => (
     <FormControl fullWidth>
@@ -103,12 +114,15 @@ export function ElementEdit(props: Props) {
     setElement(p);
   }
 
+  const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
+
   const getBoxFields = () => (
     <>
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.rounded === "true" ? true : false} />} name="rounded" label="Rounded Corners" />
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.translucent === "true" ? true : false} />} name="translucent" label="Translucent" />
       <br />
       <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
+      {getAppearanceFields(["font"])}
     </>
   );
 
@@ -118,6 +132,7 @@ export function ElementEdit(props: Props) {
       <Box sx={{ marginTop: 2 }}>
         <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
       </Box>
+      {getAppearanceFields(["font"])}
     </>
   );
 

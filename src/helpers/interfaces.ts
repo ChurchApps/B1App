@@ -15,6 +15,8 @@ export interface ElementInterface {
   size?: number;
   answersJSON?: string;
   answers?: any;
+  stylesJSON?: string;
+  styles?: any;
   sort?: number;
   elementType: string;
   elements?: ElementInterface[];
@@ -33,6 +35,8 @@ export interface SectionInterface {
   targetBlockId?: string;
   answersJSON?: string;
   answers?: any;
+  stylesJSON?: string;
+  styles?: any;
 
   sourceId?: string;
   sections?: SectionInterface[];
@@ -137,5 +141,13 @@ export interface GlobalStyleInterface {
   palette?: string,
   customCss?: string,
   customJS?: string
+}
+
+export interface StyleOption {
+  label: string,
+  key: string,
+  type: "color" | "px" | "select" | "text",
+  default: string | number,
+  options?: string[]
 }
 
