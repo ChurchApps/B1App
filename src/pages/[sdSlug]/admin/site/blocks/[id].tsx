@@ -84,12 +84,12 @@ export default function Admin(props: Props) {
 
   if(typeof window !== "undefined"){
     if(window.innerWidth > 900){
-      rightBarStyle = (scrollTop < 180)
+      rightBarStyle = (scrollTop < 160)
         ? {}
         : {
           width: document.getElementById("editorBar")?.clientWidth,
           position: "fixed",
-          marginTop: -180
+          marginTop: -160
         };
     }
   }
