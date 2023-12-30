@@ -173,10 +173,10 @@ export function PickColors(props: Props) {
   const getManualColors = () => (<>
     <a href="about:blank" onClick={(e) => { e.preventDefault(); setCustomColors(false); }}>Browse Suggested Colors</a><br />
     {getBackgroundField()}
-    <div><InputLabel>Text Color</InputLabel></div>
-    {getThemeOptions("textColor")}
     <div><InputLabel>Heading Color</InputLabel></div>
     {getThemeOptions("headingColor")}
+    <div><InputLabel>Text Color</InputLabel></div>
+    {getThemeOptions("textColor")}
   </>)
 
   return <>

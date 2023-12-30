@@ -106,7 +106,7 @@ export default function Admin(props: Props) {
       if (window?.innerHeight) {
         const editorBarOffset = (editorBarHeight > window.innerHeight) ? (editorBarHeight - window.innerHeight) : 0;
         const bottomMargin = editorBarOffset === 0 ? 0 : 50;
-        if (scrollTop >= 180 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -180 - bottomMargin };
+        if (scrollTop >= 160 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -160 - bottomMargin };
       }
       if (editorBar && editorBar.clientHeight !== editorBarHeight && editorBar.clientHeight > 0) setEditorBarHeight(editorBar.clientHeight)
     }

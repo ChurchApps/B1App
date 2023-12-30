@@ -126,7 +126,7 @@ export const Element: React.FC<Props> = props => {
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
   if (props.onEdit) {
-    result = <><div className="elementWrapper">
+    result = <><div className={"elementWrapper " + props.element.elementType }>
       <div className="elementActions">
         <table style={{ float: "right" }}>
           <tbody>

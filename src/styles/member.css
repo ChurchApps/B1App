@@ -339,3 +339,10 @@
   padding-bottom: 20px;
   margin-bottom: 20px;
 }
+
+#smallPeopleTable img { max-height: 50px; }
+
+#editorBar>div>div {
+  height:98vh;
+  overflow-y: scroll;
+}
