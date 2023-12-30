@@ -31,6 +31,7 @@ interface Props {
   textColor: string;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
   onMove?: () => void;
+  parentId?: string;
 }
 
 export const Element: React.FC<Props> = props => {
@@ -43,7 +44,7 @@ export const Element: React.FC<Props> = props => {
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
     }
     else {
-      const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId };
+      const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId, parentId: props.parentId ? props.parentId : null };
       if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
       else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
       props.onEdit(null, element);
@@ -74,7 +75,7 @@ export const Element: React.FC<Props> = props => {
       result = <TextWithPhoto key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "row":
-      result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
+      result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} onMove={props.onMove} />
       break;
     case "box":
       result = <BoxElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
