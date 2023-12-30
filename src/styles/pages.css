@@ -44,6 +44,10 @@ body {
   max-height: 65px;
 }
 
+.page .editor-input {
+  font-size:inherit;
+}
+
 .page {
   font-family: var(--bodyFont), "Roboto", sans-serif;
 }
@@ -53,24 +57,35 @@ body {
 }
 
 .page h1 {
-  font-size: 60px;
-  font-weight: bold;;
-  line-height: 60px;
+  font-size: 3em;
+  line-height: 1em;
   border-bottom: none;
-  margin-bottom: 40px;
+  /*margin-bottom: 40px;*/
 }
 
 .page h2 {
+  /*
   padding-bottom: 10px;
   margin-bottom: 25px;
   font-size: 35px;
-  line-height: 40px;
+  line-height: 40px;*/
+  font-size: 2.2em;
+  line-height: 1em;
   text-transform: none;
 }
 
 .page h3 {
-  font-size: 22px;
-  line-height: 26px;
+  /*font-size: 22px;
+  line-height: 26px;*/
+  font-size: 1.6em;
+  line-height: 1em;
+}
+
+.page h4 {
+  /*font-size: 22px;
+  line-height: 26px;*/
+  font-size: 1.3em;
+  line-height: 1em;
 }
 
 .page .section {
@@ -379,7 +394,7 @@ a.dropdown-toggle::after {
 .elementWrapper.text:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT" !important; }
 .elementWrapper.textWithPhoto:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT WITH PHOTO" !important; }
 .elementWrapper.video:not(:has(.elementWrapper:hover)):hover:before { content: "VIDEO" !important; }
-.elementWrapper.whitespace:not(:has(.elementWrapper:hover)):hover:before { content: "WHITE SPACE" !important; }
+.elementWrapper.whiteSpace:not(:has(.elementWrapper:hover)):hover:before { content: "WHITE SPACE" !important; }
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   /*background-color: #9999FF !important;*/

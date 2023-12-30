@@ -2,6 +2,7 @@ import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
+import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
 
@@ -40,9 +41,11 @@ export function RowElement(props: Props) {
 
   let result = (<>
     {props.onEdit && <div style={{ height: 40 }}></div>}
-    <Grid container columnSpacing={3}>
-      {getColumns()}
-    </Grid>
+    <div style={StyleHelper.getStyles(props.element)}>
+      <Grid container columnSpacing={3}>
+        {getColumns()}
+      </Grid>
+    </div>
   </>);
 
   return result;
