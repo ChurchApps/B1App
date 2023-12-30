@@ -18,7 +18,7 @@ export const SectionBlock: React.FC<Props> = props => {
   const getEdit = () => {
     if (props.onEdit) {
       return (
-        <div className="sectionActions alwaysVisible">
+        <div className="sectionActions">
           <table style={{ float: "right" }}>
             <tbody>
               <tr>
@@ -44,7 +44,13 @@ export const SectionBlock: React.FC<Props> = props => {
     return result;
   }
 
-  return (<div style={{ minHeight: 30, position: "relative" }}>
+  const getClassName = () => {
+    let result = "";
+    if (props.onEdit) result += "sectionBlock sectionWrapper";
+    return result;
+  }
+
+  return (<div style={{ minHeight: 30, position: "relative" }} className={getClassName()}>
     {getEdit()}
     {getSections()}
   </div>);

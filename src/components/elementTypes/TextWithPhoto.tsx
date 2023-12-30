@@ -1,6 +1,7 @@
 import { ElementInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { MarkdownPreview } from "@churchapps/apphelper";
+import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props { element: ElementInterface }
 
@@ -48,5 +49,5 @@ export const TextWithPhoto: React.FC<Props> = props => {
       )
       break;
   }
-  return <div style={{ marginBottom: 30 }}>{result}</div>;
+  return <div style={{ marginBottom: 30, ...StyleHelper.getStyles(props.element) }}>{result}</div>;
 }

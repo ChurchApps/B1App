@@ -44,6 +44,10 @@ body {
   max-height: 65px;
 }
 
+.page .editor-input {
+  font-size:inherit;
+}
+
 .page {
   font-family: var(--bodyFont), "Roboto", sans-serif;
 }
@@ -53,24 +57,35 @@ body {
 }
 
 .page h1 {
-  font-size: 60px;
-  font-weight: bold;;
-  line-height: 60px;
+  font-size: 3em;
+  line-height: 1em;
   border-bottom: none;
-  margin-bottom: 40px;
+  /*margin-bottom: 40px;*/
 }
 
 .page h2 {
+  /*
   padding-bottom: 10px;
   margin-bottom: 25px;
   font-size: 35px;
-  line-height: 40px;
+  line-height: 40px;*/
+  font-size: 2.2em;
+  line-height: 1em;
   text-transform: none;
 }
 
 .page h3 {
-  font-size: 22px;
-  line-height: 26px;
+  /*font-size: 22px;
+  line-height: 26px;*/
+  font-size: 1.6em;
+  line-height: 1em;
+}
+
+.page h4 {
+  /*font-size: 22px;
+  line-height: 26px;*/
+  font-size: 1.3em;
+  line-height: 1em;
 }
 
 .page .section {
@@ -350,9 +365,36 @@ a.dropdown-toggle::after {
   background-color: #FF9999;
 }
 
-.elementWrapper:hover {
-  background-color: #28a745;
+.elementWrapper:not(:has(.elementWrapper:hover)):hover {
+  /*background-color: #28a745;*/
+  border: 3px solid #28a745;
 }
+
+.elementWrapper:not(:has(.elementWrapper:hover)):hover:before {
+  content: "ELEMENT";
+  background-color: #28a745;
+  color:#FFF;
+  display: block;
+  width:100%;
+  position: relative;
+  text-align: center;
+  height:25px;
+  margin-bottom: -29px;
+}
+
+.elementWrapper.box:not(:has(.elementWrapper:hover)):hover:before { content: "BOX" !important; }
+.elementWrapper.card:not(:has(.elementWrapper:hover)):hover:before { content: "CARD" !important; }
+.elementWrapper.carousel:not(:has(.elementWrapper:hover)):hover:before { content: "CAROUSEL" !important; }
+.elementWrapper.embed:not(:has(.elementWrapper:hover)):hover:before { content: "EMBED" !important; }
+.elementWrapper.expandable:not(:has(.elementWrapper:hover)):hover:before { content: "EXPANDABLE" !important; }
+.elementWrapper.html:not(:has(.elementWrapper:hover)):hover:before { content: "HTML" !important; }
+.elementWrapper.image:not(:has(.elementWrapper:hover)):hover:before { content: "IMAGE" !important; }
+.elementWrapper.location:not(:has(.elementWrapper:hover)):hover:before { content: "LOCATION" !important; }
+.elementWrapper.row:not(:has(.elementWrapper:hover)):hover:before { content: "ROW" !important; }
+.elementWrapper.text:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT" !important; }
+.elementWrapper.textWithPhoto:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT WITH PHOTO" !important; }
+.elementWrapper.video:not(:has(.elementWrapper:hover)):hover:before { content: "VIDEO" !important; }
+.elementWrapper.whiteSpace:not(:has(.elementWrapper:hover)):hover:before { content: "WHITE SPACE" !important; }
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   /*background-color: #9999FF !important;*/
@@ -368,8 +410,11 @@ a.dropdown-toggle::after {
   width:100%;
   position: relative;
   text-align: center;
-  margin-bottom: -28px;
+  height:25px;
+  margin-bottom: -29px;
 }
+
+.sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important;  }
 
 
 .sectionWrapper {
@@ -379,19 +424,19 @@ a.dropdown-toggle::after {
 .sectionDark {
   color: var(--dark-bg-text-color);
 }
-
+/*
 .sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   background-color: #007bff !important;
-}
+}*/
 
 .sectionDark .columnWrapper:hover {
   background-color: #990000;
 }
-
+/*
 .sectionDark .elementWrapper:hover {
   background-color: #009900;
 }
-
+*/
 .sectionActions {
   display: none;
   position: absolute;
@@ -405,6 +450,8 @@ a.dropdown-toggle::after {
   display: block;
   z-index: 9999;
 }
+
+.sectionBlock .sectionActions {margin-top:30px;}
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover .sectionActions {
   display: block;
