@@ -2,6 +2,7 @@ import { StyleOption } from "@/helpers";
 import { InputBox } from "@churchapps/apphelper";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect } from "react";
+import { ColorPicker } from "./ColorPicker";
 
 interface Props {
   fieldOptions: StyleOption[],
@@ -32,6 +33,9 @@ export const StyleEdit: React.FC<Props> = (props) => {
         break;
       case "px":
         result = <TextField fullWidth size="small" label={field.label + " - px"} name="value" value={value} onChange={(e:any) => { setValue(e.target.value) }} type="number" />
+        break;
+      case "color":
+        result = <ColorPicker color={value} updatedCallback={(c) => setValue(c)} globalStyles={null} />
         break;
     }
     return result;

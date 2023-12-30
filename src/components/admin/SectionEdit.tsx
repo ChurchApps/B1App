@@ -3,6 +3,7 @@ import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/app
 import { BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { PickColors } from "./PickColors";
+import { StyleList } from "./StyleList";
 
 type Props = {
   section: SectionInterface;
@@ -15,6 +16,7 @@ export function SectionEdit(props: Props) {
   const [section, setSection] = useState<SectionInterface>(null);
   const [errors, setErrors] = useState([]);
   let parsedData = (section?.answersJSON) ? JSON.parse(section.answersJSON) : {}
+  let parsedStyles = (section?.stylesJSON) ? JSON.parse(section.stylesJSON) : {}
 
   const handleCancel = () => props.updatedCallback(section);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
@@ -78,7 +80,7 @@ export function SectionEdit(props: Props) {
     <ErrorMessages errors={errors} />
     <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
     <PickColors background={section?.background} textColor={section?.textColor} headingColor={section?.headingColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
-
+    {getAppearanceFields(["border", "color", "font", "height", "line", "margin", "padding", "width"])}
   </>)
 
   const getBlockFields = () => {
@@ -95,6 +97,15 @@ export function SectionEdit(props: Props) {
       </FormControl>
     </>)
   }
+
+  const handleStyleChange = (styles: { name: string, value: string }[]) => {
+    let p = { ...section };
+    p.styles = styles;
+    p.stylesJSON = JSON.stringify(styles);
+    setSection(p);
+  }
+
+  const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
 
   if (!section) return <></>
   else return (

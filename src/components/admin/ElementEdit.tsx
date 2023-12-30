@@ -122,7 +122,7 @@ export function ElementEdit(props: Props) {
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.translucent === "true" ? true : false} />} name="translucent" label="Translucent" />
       <br />
       <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
-      {getAppearanceFields(["font"])}
+      {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
     </>
   );
 
@@ -132,7 +132,7 @@ export function ElementEdit(props: Props) {
       <Box sx={{ marginTop: 2 }}>
         <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
       </Box>
-      {getAppearanceFields(["font"])}
+      {getAppearanceFields(["font", "color", "line"])}
     </>
   );
 
@@ -154,6 +154,7 @@ export function ElementEdit(props: Props) {
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
     </Box>
+    {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
   </>);
 
   // TODO: add alt field while saving image and use it here, in image tage.
@@ -168,10 +169,12 @@ export function ElementEdit(props: Props) {
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll", zindex: -1 }} textAlign={parsedData.textAlignment} />
     </Box>
+    {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
   </>);
 
   const getLogoFields = () => (<>
     <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    {getAppearanceFields(["border", "background", "height", "margin", "padding", "width"])}
   </>);
 
   const getStreamFields = () => {
@@ -204,6 +207,7 @@ export function ElementEdit(props: Props) {
           </Select>
         </FormControl>
         {blockField}
+        {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
       </>
     )
   }
@@ -241,6 +245,7 @@ export function ElementEdit(props: Props) {
         <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
         <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.fullWidth === "true" ? true : false} />} name="fullWidth" label="Full width" />
       </FormGroup>
+      {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
     </>
   )
 
@@ -264,7 +269,9 @@ export function ElementEdit(props: Props) {
             video url - https://vimeo.com/751393851 <br /> id - 751393851
         </Typography>
       )}
+      {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
     </>
+
   )
 
   const getRawHTML = () => (
@@ -313,6 +320,7 @@ export function ElementEdit(props: Props) {
         <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open link in new tab" />
         <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.noResize === "true" ? true : false} />} name="noResize" label="Do not resize image" />
       </FormGroup>
+      {getAppearanceFields(["border", "background", "color", "height", "margin", "padding", "width"])}
     </>
   )
 
@@ -325,7 +333,7 @@ export function ElementEdit(props: Props) {
   const getFields = () => {
     let result = getJsonFields();
     switch (element?.elementType) {
-      case "row": result = <RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />; break;
+      case "row": result = <><RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
       case "box": result = getBoxFields(); break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;
@@ -337,14 +345,14 @@ export function ElementEdit(props: Props) {
       case "buttonLink": result = getButtonLink(); break;
       case "video": result = getVideoFields(); break;
       case "rawHTML": result = getRawHTML(); break;
-      case "form": result = <FormEdit parsedData={parsedData} handleChange={handleChange} />; break;
-      case "faq": result = <FaqEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />; break;
+      case "form": result = <><FormEdit parsedData={parsedData} handleChange={handleChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
+      case "faq": result = <><FaqEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
       case "map": result = getMapFields(); break;
       case "sermons": result = <></>; break;
       case "carousel": result = getCarouselFields(); break;
       case "image": result = getImageFields(); break;
       case "whiteSpace": result = getWhiteSpaceFields(); break;
-      case "calendar": result = <CalendarElementEdit parsedData={parsedData} handleChange={handleChange} />; break;
+      case "calendar": result = <><CalendarElementEdit parsedData={parsedData} handleChange={handleChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
     }
     return result;
   }

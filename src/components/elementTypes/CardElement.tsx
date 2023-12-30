@@ -1,4 +1,5 @@
 import { ElementInterface } from "@/helpers";
+import { StyleHelper } from "@/helpers/StyleHelper";
 import { MarkdownPreview } from "@churchapps/apphelper";
 import { Card, CardContent } from "@mui/material";
 
@@ -22,7 +23,7 @@ export const CardElement: React.FC<Props> = (props) => {
   }
   if (props.element.answers?.text) result.push(<MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />);
 
-  return <Card>
+  return <Card style={StyleHelper.getStyles(props.element)}>
     {photoContent}
     <CardContent>
       {result}

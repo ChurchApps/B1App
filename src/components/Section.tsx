@@ -7,6 +7,7 @@ import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
+import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   first?: boolean,
@@ -37,6 +38,9 @@ export const Section: React.FC<Props> = props => {
       result = { background: props.section.background };
     }
     if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
+
+    result = { ...result, ...StyleHelper.getStyles(props.section) };
+    console.log("SECTION STYLE", result)
     return result;
   }
 
