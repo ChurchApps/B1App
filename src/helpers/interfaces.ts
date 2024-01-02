@@ -143,6 +143,13 @@ export interface GlobalStyleInterface {
   customJS?: string
 }
 
+export interface InlineStylesInterface {
+  all: any,
+  desktop: any,
+  mobile: any
+}
+
+
 export interface StyleOption {
   label: string,
   key: string,

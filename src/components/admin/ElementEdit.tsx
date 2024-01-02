@@ -69,7 +69,8 @@ export function ElementEdit(props: Props) {
   const handleStyleChange = (styles: { name: string, value: string }[]) => {
     let p = { ...element };
     p.styles = styles;
-    p.stylesJSON = JSON.stringify(styles);
+    p.stylesJSON = Object.keys(styles).length>0 ? JSON.stringify(styles) : null;
+
     setElement(p);
   }
 

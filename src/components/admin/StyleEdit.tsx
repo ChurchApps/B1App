@@ -6,8 +6,8 @@ import { ColorPicker } from "./ColorPicker";
 
 interface Props {
   fieldOptions: StyleOption[],
-  style: {name:string, value:any}
-  onSave: (name:string, value:any) => void;
+  style: {platform:string, name:string, value:any},
+  onSave: (platform:string, name:string, value:any) => void;
 }
 
 
@@ -46,7 +46,7 @@ export const StyleEdit: React.FC<Props> = (props) => {
     else setValue(props.fieldOptions.find(o => o.key === name).default);
   }, [name]);
 
-  return <InputBox saveFunction={() => { props.onSave(name, value) }} saveText="Update" headerText="Edit Style" cancelFunction={() => { props.onSave("", "") }} deleteFunction={(props.style.name) ? () => { props.onSave(props.style.name, null )} : null}>
+  return <InputBox saveFunction={() => { props.onSave(props.style.platform, name, value) }} saveText="Update" headerText="Edit Style" cancelFunction={() => { props.onSave("", "", "") }} deleteFunction={(props.style.name) ? () => { props.onSave(props.style.platform, props.style.name, null )} : null}>
     <FormControl fullWidth>
       <InputLabel>Property</InputLabel>
       <Select size="small" fullWidth label="Property" name="name" value={name} onChange={(e) => {setName(e.target.value)}}>
