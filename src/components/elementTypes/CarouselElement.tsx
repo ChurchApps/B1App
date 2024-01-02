@@ -8,9 +8,10 @@ interface Props {
   churchSettings: any;
   textColor: string;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
+  onMove?: () => void;
 }
 
-export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: Props) => {
+export const CarouselElement = ({ element, churchSettings, textColor, onEdit, onMove }: Props) => {
 
   const getClassName = () => {
     if (onEdit) return "columnWrapper";
@@ -50,6 +51,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
           churchSettings={churchSettings}
           textColor={textColor}
           parentId={column.id}
+          onMove={onMove}
         />
       );
     });
