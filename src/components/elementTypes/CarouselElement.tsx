@@ -34,13 +34,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
   const getAddElement = (column: ElementInterface, s: number, droppableAreaText?: string) => {
     const sort = s;
     return (
-      <DroppableArea
-        key={"add" + column.id}
-        accept={["element", "elementBlock"]}
-        text={droppableAreaText}
-        onDrop={(data) => handleDrop(data, sort, column)}
-        dndDeps={column}
-      />
+      <DroppableArea key={"add" + column.id} accept={["element", "elementBlock"]} text={droppableAreaText} onDrop={(data) => handleDrop(data, sort, column)} dndDeps={column} />
     );
   };
 
@@ -49,15 +43,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
     if (onEdit) result.push(getAddElement(column, 1));
     elements?.forEach((c) => {
       result.push(
-        <Element
-          key={c.id}
-          element={c}
-          onEdit={onEdit}
-          churchSettings={churchSettings}
-          textColor={textColor}
-          parentId={column.id}
-          onMove={onMove}
-        />
+        <Element key={c.id} element={c} onEdit={onEdit} churchSettings={churchSettings} textColor={textColor} parentId={column.id} onMove={onMove} />
       );
     });
     return result;
@@ -68,11 +54,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
     const result: JSX.Element[] = [];
     element.elements?.forEach((c) => {
       result.push(
-        <div
-          key={c.id}
-          className={getClassName()}
-          style={c?.elements?.length > 0 || !onEdit ? {} : emptyStyle}
-        >
+        <div key={c.id} className={getClassName()} style={c?.elements?.length > 0 || !onEdit ? {} : emptyStyle}>
           <div style={{ minHeight: "inherit" }}>
             {getElements(c, c.elements)}
           </div>
