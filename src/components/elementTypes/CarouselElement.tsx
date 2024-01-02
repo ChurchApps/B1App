@@ -1,5 +1,6 @@
 import Carousel from "react-material-ui-carousel";
 import { ElementInterface, SectionInterface } from "@/helpers";
+import { ApiHelper } from "@churchapps/apphelper";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 
@@ -18,6 +19,17 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
     else return "";
   };
 
+  const handleDrop = (data: any, sort: number, column: ElementInterface) => {
+    if (data.data) {
+      const e: ElementInterface = data.data;
+      e.sort = sort;
+      ApiHelper.post("/elements", [e], "ContentApi").then(() => { onMove() });
+    } else {
+      const e: ElementInterface = { sectionId: element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: element.blockId };
+      onEdit(null, e);
+    }
+  }
+
   const getAddElement = (column: ElementInterface, s: number, droppableAreaText?: string) => {
     const sort = s;
     return (
@@ -25,15 +37,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
         key={"add" + column.id}
         accept={["element", "elementBlock"]}
         text={droppableAreaText}
-        onDrop={(data) =>
-          onEdit(null, {
-            sectionId: element.sectionId,
-            elementType: data.elementType,
-            sort,
-            parentId: column.id,
-            blockId: element.blockId,
-          })
-        }
+        onDrop={(data) => handleDrop(data, sort, column)}
         dndDeps={column}
       />
     );
