@@ -23,6 +23,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
     if (data.data) {
       const e: ElementInterface = data.data;
       e.sort = sort;
+      e.parentId = column.id;
       ApiHelper.post("/elements", [e], "ContentApi").then(() => { onMove() });
     } else {
       const e: ElementInterface = { sectionId: element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: element.blockId };
