@@ -17,12 +17,13 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
     else return "";
   };
 
-  const getAddElement = (column: ElementInterface, s: number) => {
+  const getAddElement = (column: ElementInterface, s: number, droppableAreaText?: string) => {
     const sort = s;
     return (
       <DroppableArea
         key={"add" + column.id}
         accept={["element", "elementBlock"]}
+        text={droppableAreaText}
         onDrop={(data) =>
           onEdit(null, {
             sectionId: element.sectionId,
@@ -32,6 +33,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
             blockId: element.blockId,
           })
         }
+        dndDeps={column}
       />
     );
   };
@@ -64,7 +66,10 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
           className={getClassName()}
           style={c?.elements?.length > 0 || !onEdit ? {} : emptyStyle}
         >
-          {getElements(c, c.elements)}
+          <div style={{ minHeight: "inherit" }}>
+            {getElements(c, c.elements)}
+          </div>
+          {onEdit && <div style={{ height: "31px", paddingTop: "31px", paddingBottom: "31px" }}>{getAddElement(c, c?.elements?.[c?.elements.length - 1]?.sort + 0.1, "Drop at the bottom of slide")}</div>}
         </div>
       );
     });
