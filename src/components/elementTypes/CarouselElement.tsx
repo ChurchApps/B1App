@@ -38,7 +38,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
 
   const getElements = ( column: ElementInterface, elements: ElementInterface[] ) => {
     const result: JSX.Element[] = [];
-    if (onEdit) result.push(getAddElement(column, 0));
+    if (onEdit) result.push(getAddElement(column, 1));
     elements?.forEach((c) => {
       result.push(
         <Element
