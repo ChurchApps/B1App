@@ -47,6 +47,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
           onEdit={onEdit}
           churchSettings={churchSettings}
           textColor={textColor}
+          parentId={column.id}
         />
       );
     });
