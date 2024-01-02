@@ -29,6 +29,7 @@ export const Section: React.FC<Props> = props => {
   }
 
   const getStyle = () => {
+
     let result: CSSProperties = {}
     if (props.section.background.indexOf("/") > -1) {
       result = {
@@ -39,7 +40,7 @@ export const Section: React.FC<Props> = props => {
     }
     if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
 
-    result = { ...result, ...StyleHelper.getStyles(props.section) };
+    result = { ...result, paddingTop: 40, paddingBottom: 40, position: "relative", ...StyleHelper.getStyles(props.section) };
     console.log("SECTION STYLE", result)
     return result;
   }
@@ -111,7 +112,7 @@ export const Section: React.FC<Props> = props => {
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 
-  let contents = (<Container style={{ paddingTop: 40, paddingBottom: 40, position: "relative" }}>
+  let contents = (<Container>
     {props.onEdit && getAddElement(0)}
     {getEdit()}
     {getElements()}
