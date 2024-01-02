@@ -89,33 +89,10 @@ export function Header(props: Props) {
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap",  }}>
               {getLinks()}
             </Box>
-            <IconButton
-              size="large"
-              color="inherit"
-              aria-label="menu"
-              id="nav-menu"
-              aria-controls={open ? 'long-menu' : undefined}
-              aria-expanded={open ? 'true' : undefined}
-              aria-haspopup="true"
-              sx={{ display: { xs: "flex", md: "none" } }}
-              onClick={(e) => setAnchorEl(e.currentTarget)}
-            >
+            <IconButton size="large" color="inherit" aria-label="menu" id="nav-menu" aria-controls={open ? 'long-menu' : undefined} aria-expanded={open ? 'true' : undefined} aria-haspopup="true" sx={{ display: { xs: "flex", md: "none" } }} onClick={(e) => setAnchorEl(e.currentTarget)}>
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="nav-menu"
-              MenuListProps={{
-                'aria-labelledby': 'long-button',
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              PaperProps={{
-                style: {
-                  width: '20ch',
-                },
-              }}
-            >
+            <Menu id="nav-menu" MenuListProps={{ 'aria-labelledby': 'long-button' }} anchorEl={anchorEl} open={open} onClose={handleClose} PaperProps={{ style: { width: '20ch' } }}>
               {props.navLinks?.map((l) => (
                 <Link key={l.id} href={l.url} style={{ textDecoration: "none", color: "inherit" }}>
                   <MenuItem onClick={handleClose}>
