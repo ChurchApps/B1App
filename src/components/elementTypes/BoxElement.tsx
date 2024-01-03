@@ -4,7 +4,7 @@ import { Element } from "../Element";
 import { CSSProperties } from "react";
 import { StyleHelper } from "@/helpers/StyleHelper";
 
-interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
+interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
 
 export function BoxElement(props: Props) {
 
@@ -20,7 +20,7 @@ export function BoxElement(props: Props) {
     const result: JSX.Element[] = []
     if (props.onEdit) result.push(getAddElement(1))
     props.element.elements?.forEach(c => {
-      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} parentId={props.element.id} />)
+      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} parentId={props.element.id} onMove={props.onMove} />)
     });
     return result;
   }
