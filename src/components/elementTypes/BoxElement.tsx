@@ -20,7 +20,7 @@ export function BoxElement(props: Props) {
     const result: JSX.Element[] = []
     if (props.onEdit) result.push(getAddElement(1))
     props.element.elements?.forEach(c => {
-      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} />)
+      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} parentId={props.element.id} />)
     });
     return result;
   }
