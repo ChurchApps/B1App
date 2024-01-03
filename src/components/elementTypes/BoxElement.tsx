@@ -18,7 +18,7 @@ export function BoxElement(props: Props) {
     const textColor = props.element.answers?.textColor || props.textColor;
 
     const result: JSX.Element[] = []
-    if (props.onEdit) result.push(getAddElement(0))
+    if (props.onEdit) result.push(getAddElement(1))
     props.element.elements?.forEach(c => {
       result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} />)
     });
