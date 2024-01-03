@@ -16,7 +16,7 @@ export interface ElementInterface {
   answersJSON?: string;
   answers?: any;
   stylesJSON?: string;
-  styles?: any;
+  styles?: { all?:any, desktop?:any, mobile?:any };
   sort?: number;
   elementType: string;
   elements?: ElementInterface[];

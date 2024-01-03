@@ -71,7 +71,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
   };
 
   return (
-    <>
+    <div id={"el-" + element.id}>
       {onEdit && <div style={{ height: 40 }}></div>}
       <Carousel
         interval={(parseInt(element.answers.interval) || 4) * 1000}
@@ -83,6 +83,6 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit }: 
       >
         {getColumns()}
       </Carousel>
-    </>
+    </div>
   );
 };

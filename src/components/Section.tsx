@@ -7,7 +7,6 @@ import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   first?: boolean,
@@ -40,8 +39,8 @@ export const Section: React.FC<Props> = props => {
     }
     if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
 
-    result = { ...result, paddingTop: 40, paddingBottom: 40, position: "relative", ...StyleHelper.getStyles(props.section) };
-    console.log("SECTION STYLE", result)
+    result = { ...result, paddingTop: 40, paddingBottom: 40, position: "relative" };
+    //console.log("SECTION STYLE", result)
     return result;
   }
 
@@ -120,7 +119,7 @@ export const Section: React.FC<Props> = props => {
 
   if (props.section.background.indexOf("youtube:") > -1) {
     const youtubeId = props.section.background.split(":")[1];
-    return (<YoutubeBackground videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
+    return (<YoutubeBackground id={props.section.answers?.sectionId || "section-" + props.section.id} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
   }
-  else return (<div style={getStyle()} className={getClassName()} id={props.section.answers?.sectionId}>{contents}</div>);
+  else return (<div style={getStyle()} className={getClassName()} id={props.section.answers?.sectionId || "section-" + props.section.id}>{contents}</div>);
 }
