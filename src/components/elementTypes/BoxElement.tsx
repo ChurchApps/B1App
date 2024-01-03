@@ -9,9 +9,9 @@ interface Props { element: ElementInterface, churchSettings: any, textColor: str
 export function BoxElement(props: Props) {
 
 
-  const getAddElement = (s: number) => {
+  const getAddElement = (s: number, droppableAreaText?: string) => {
     const sort = s;
-    return (<DroppableArea key={"addToBox"} accept={["element", "elementBlock"]} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id, blockId: props.element.blockId })} />);
+    return (<DroppableArea key={"addToBox"} accept={["element", "elementBlock"]} text={droppableAreaText} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id, blockId: props.element.blockId })} dndDeps={props.element?.elements} />);
   }
 
   const getElements = () => {
@@ -58,8 +58,9 @@ export function BoxElement(props: Props) {
   let result = (<>
     {props.onEdit && <div style={{ height: 40 }}></div>}
     <div style={getStyle()} className={getClass()}>
-      {props.onEdit && !(props.element.elements || props.element.elements?.length===0) && <p>Box: Add elements</p>}
       {getElements()}
+      {props.onEdit && !(props.element.elements || props.element.elements?.length===0) && <p>Box: Add elements</p>}
+      {props.onEdit && <div style={{ height: "31px" }}>{getAddElement(props.element?.elements?.[props.element?.elements.length - 1]?.sort + 0.1, "Drop at the bottom of box")}</div>}
     </div>
   </>);
 
