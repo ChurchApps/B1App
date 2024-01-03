@@ -13,6 +13,7 @@ export function BoxElement(props: Props) {
     if (data.data) {
       const e: ElementInterface = data.data;
       e.sort = sort;
+      e.parentId = props.element.id;
       ApiHelper.post("/elements", [e], "ContentApi").then(() => { props.onMove() });
     } else {
       const e: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id, blockId: props.element.blockId };
