@@ -172,6 +172,6 @@ export const allStyleOptions:StyleOption[] = [
   { label: "Padding Left", key: "padding-left", type: "px", default: 0 },
   { label: "Padding Right", key: "padding-right", type: "px", default: 0 },
   { label: "Padding Top", key: "padding-top", type: "px", default: 0 },
-  { label: "Padding Bottom", key: "padding-nottom", type: "px", default: 0 },
+  { label: "Padding Bottom", key: "padding-bottom", type: "px", default: 0 },
   { label: "Width", key: "width", type: "px", default: 500 }
 ]
