@@ -47,35 +47,37 @@ export const DirectorySearch: React.FC<Props> = (props) => {
     <>
       <h1><Box sx={{ display: "flex", alignItems: "center" }}><Icon sx={{ marginRight: "5px" }}>person</Icon>Member Directory</Box></h1>
       <DisplayBox id="peopleBox" headerIcon="person" headerText="Search">
-        {searchCategory === "people" ? (
-          <TextField
-            fullWidth
-            label="Name"
-            id="searchText"
-            data-cy="search-input"
-            name="searchText"
-            type="text"
-            placeholder="Name"
-            value={searchText}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            InputProps={{ endAdornment: <EndAdornment /> }}
-          />
-        ) : (
-          <FormControl fullWidth>
-            <InputLabel>Groups</InputLabel>
-            <Select
+        {searchCategory === "people"
+          ? (
+            <TextField
               fullWidth
-              label="Groups"
-              name="searchGroupId"
-              value={searchGroupId}
+              label="Name"
+              id="searchText"
+              data-cy="search-input"
+              name="searchText"
+              type="text"
+              placeholder="Name"
+              value={searchText}
               onChange={handleChange}
-              endAdornment={<EndAdornment />}
-            >
-              {groups?.map((g: GroupInterface) => (<MenuItem key={g.id} value={g.id}>{g.name}</MenuItem>))}
-            </Select>
-          </FormControl>
-        )}
+              onKeyDown={handleKeyDown}
+              InputProps={{ endAdornment: <EndAdornment /> }}
+            />
+          )
+          : (
+            <FormControl fullWidth>
+              <InputLabel>Groups</InputLabel>
+              <Select
+                fullWidth
+                label="Groups"
+                name="searchGroupId"
+                value={searchGroupId}
+                onChange={handleChange}
+                endAdornment={<EndAdornment />}
+              >
+                {groups?.map((g: GroupInterface) => (<MenuItem key={g.id} value={g.id}>{g.name}</MenuItem>))}
+              </Select>
+            </FormControl>
+          )}
         <br />
         <PeopleSearchResults people={searchResults} selectedHandler={props.selectedHandler} />
       </DisplayBox>
