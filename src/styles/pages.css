@@ -442,7 +442,7 @@ a.dropdown-toggle::after {
   position: absolute;
   top: 1;
   right: 0;
-  margin-top: -40px;
+  /*margin-top: -40px;*/
   z-index: 999;
 }
 
