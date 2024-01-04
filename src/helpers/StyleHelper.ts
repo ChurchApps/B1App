@@ -45,9 +45,11 @@ export class StyleHelper {
     return {all, desktop, mobile};
   }
 
-  static getCss = (sections: SectionInterface[]) => {
+  static getCss = (sections: SectionInterface[], forceDevice?:string) => {
     const {all, desktop, mobile} = this.getAllStyles(sections);
-    return `
+    if (forceDevice === "desktop") return all.join("\n") + "\n" + desktop.join("\n");
+    else if (forceDevice === "mobile") return all.join("\n") + "\n" + mobile.join("\n");
+    else return `
       ${all.join("\n")}
       @media (min-width: 768px) {
         ${desktop.join("\n")}
