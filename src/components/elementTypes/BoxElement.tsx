@@ -2,7 +2,7 @@ import { ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 import { CSSProperties } from "react";
-import { StyleHelper } from "@/helpers/StyleHelper";
+
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
 
@@ -40,8 +40,6 @@ export function BoxElement(props: Props) {
     if (props.element.answers?.rounded==="true") result.borderRadius = 15;
     if (props.element.answers?.translucent==="true") result.opacity = 0.9;
 
-    result = { ...result, ...StyleHelper.getStyles(props.element) };
-
     return result;
   }
 
@@ -57,7 +55,7 @@ export function BoxElement(props: Props) {
 
   let result = (<>
     {props.onEdit && <div style={{ height: 40 }}></div>}
-    <div style={getStyle()} className={getClass()}>
+    <div id={"el-" + props.element.id} style={getStyle()} className={getClass()}>
       {props.onEdit && !(props.element.elements || props.element.elements?.length===0) && <p>Box: Add elements</p>}
       {getElements()}
     </div>

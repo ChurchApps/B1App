@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Grid } from "@mui/material";
+import { Grid, Icon, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  ConfigHelper, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
@@ -16,6 +16,8 @@ import { DroppableArea } from "@/components/admin/DroppableArea";
 import { SectionBlock } from "@/components/SectionBlock";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
+import { Helmet } from "react-helmet";
+import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props extends WrapperPageProps {
   church: ChurchInterface,
@@ -31,6 +33,7 @@ export default function Admin(props: Props) {
   const [editElement, setEditElement] = useState<ElementInterface>(null);
   const [editorBarHeight, setEditorBarHeight] = useState(400);
   const [scrollTop, setScrollTop] = useState(0);
+  const [deviceType, setDeviceType] = useState("desktop");
   const id = router.query.id?.toString() || "";
   const windowWidth = useWindowWidth();
 
@@ -143,7 +146,7 @@ export default function Admin(props: Props) {
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
       result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article">
         <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
-          <div className="page">
+          <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
             {getSections(z)}
           </div>
         </div>
@@ -157,8 +160,24 @@ export default function Admin(props: Props) {
 
   return (<>
     <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
+    <Helmet><style>{StyleHelper.getCss(page?.sections || [], deviceType)}</style></Helmet>
     <AdminWrapper config={props.config}>
-      <h1>Edit Page</h1>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <h1>Edit Page</h1>
+        </Grid>
+        <Grid item xs={6} style={{textAlign:"right"}}>
+          <ToggleButtonGroup value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }} style={{backgroundColor:"#FFF"}}>
+            <ToggleButton value="desktop">
+              <Icon>computer</Icon>
+            </ToggleButton>
+            <ToggleButton value="mobile">
+              <Icon>smartphone</Icon>
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+      </Grid>
+
       <DndProvider backend={HTML5Backend}>
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>

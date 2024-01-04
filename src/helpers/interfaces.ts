@@ -16,7 +16,7 @@ export interface ElementInterface {
   answersJSON?: string;
   answers?: any;
   stylesJSON?: string;
-  styles?: any;
+  styles?: { all?:any, desktop?:any, mobile?:any };
   sort?: number;
   elementType: string;
   elements?: ElementInterface[];
@@ -142,6 +142,13 @@ export interface GlobalStyleInterface {
   customCss?: string,
   customJS?: string
 }
+
+export interface InlineStylesInterface {
+  all: any,
+  desktop: any,
+  mobile: any
+}
+
 
 export interface StyleOption {
   label: string,

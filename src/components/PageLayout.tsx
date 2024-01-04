@@ -2,6 +2,8 @@ import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import { HeaderFooter } from "./layouts/HeaderFooter";
 import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";
+import { StyleHelper } from "@/helpers/StyleHelper";
+import { Helmet } from "react-helmet";
 
 type Props = {
   pageData: any;
@@ -13,7 +15,13 @@ type Props = {
   navLinks?: LinkInterface[];
 };
 
+//add helmet here
+
 export function PageLayout(props: Props) {
+
+
+  StyleHelper.getAllStyles(props.pageData.sections);
+
   let result = <></>
   if (props.pageData) {
     switch (props.pageData?.layout) {
@@ -29,6 +37,8 @@ export function PageLayout(props: Props) {
         break;
     }
   }
-  return result;
+  const css = StyleHelper.getCss(props.pageData.sections);
+  console.log("CSS", css);
+  return <><Helmet><style>{css}</style></Helmet>{result}</>;
 
 }

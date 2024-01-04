@@ -3,7 +3,6 @@ import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 import { ApiHelper } from "@churchapps/apphelper";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
 
@@ -57,7 +56,7 @@ export function RowElement(props: Props) {
 
   let result = (<>
     {props.onEdit && <div style={{ height: 40 }}></div>}
-    <div style={StyleHelper.getStyles(props.element)}>
+    <div id={"el-" + props.element.id}>
       <Grid container columnSpacing={3}>
         {getColumns()}
       </Grid>
