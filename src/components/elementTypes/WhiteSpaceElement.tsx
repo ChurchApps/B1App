@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   element: ElementInterface;
@@ -14,8 +13,8 @@ export const WhiteSpaceElement = ({ element, onEdit }: Props) => (
         height: (parseInt(element.answers?.height) || 25),
         backgroundColor: onEdit ? "#9e9e9e" : "",
         opacity: 0.7,
-        ...StyleHelper.getStyles(element)
       }}
+      id={"el-" + element.id}
     />
   </>
 );

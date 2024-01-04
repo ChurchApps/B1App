@@ -1,5 +1,4 @@
 import { ElementInterface } from "@/helpers";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   element: ElementInterface;
@@ -19,8 +18,9 @@ export const ImageElement = ({ element }: Props) => {
       <img
         src={element.answers?.photo || "about:blank"}
         alt={element.answers?.photoAlt || ""}
-        style={{ borderRadius: (element.answers?.noResize === "true") ? 0 : 3, ...StyleHelper.getStyles(element) }}
+        style={{ borderRadius: (element.answers?.noResize === "true") ? 0 : 3 }}
         className={getClass()}
+        id={"el-" + element.id}
       />
     );
     if (element.answers?.url)

@@ -1,7 +1,6 @@
 import { ElementInterface } from "@/helpers";
 import { GroupCalendar } from "../eventCalendar/GroupCalendar";
 import { CuratedCalendar } from "../admin/calendar/CuratedCalendar";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   element: ElementInterface;
@@ -9,7 +8,7 @@ interface Props {
 }
 
 export const CalendarElement = ({ element, churchId }: Props) => (
-  <div style={{ backgroundColor: "white", padding: 50, borderRadius: 15, ...StyleHelper.getStyles(element) }}>
+  <div  id={"el-" + element.id} style={{ backgroundColor: "white", padding: 50, borderRadius: 15 }}>
     {element.answers.calendarType === "group"
       ? (
         <GroupCalendar churchId={churchId} groupId={element.answers.calendarId} canEdit={false} />

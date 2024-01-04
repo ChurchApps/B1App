@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BlockInterface, ElementInterface, GlobalStyleInterface } from "@/helpers";
+import { BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider } from "@mui/material";
 import { MarkdownEditor, ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import React from "react";
@@ -66,10 +66,11 @@ export function ElementEdit(props: Props) {
     if (p.answersJSON !== element.answersJSON) setElement(p);
   };
 
-  const handleStyleChange = (styles: { name: string, value: string }[]) => {
+  const handleStyleChange = (styles: InlineStylesInterface) => {
     let p = { ...element };
     p.styles = styles;
-    p.stylesJSON = JSON.stringify(styles);
+    p.stylesJSON = Object.keys(styles).length>0 ? JSON.stringify(styles) : null;
+
     setElement(p);
   }
 

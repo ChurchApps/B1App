@@ -6,7 +6,6 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import { ElementInterface } from "@/helpers";
 import { MarkdownPreview } from "@churchapps/apphelper";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   element: ElementInterface;
@@ -50,7 +49,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme, color }) => ({
 
 export const FaqElement = ({ element, textColor }: Props) => (
   <>
-    <Accordion style={StyleHelper.getStyles(element)}>
+    <Accordion id={"el-" + element.id}>
       <AccordionSummary>
         <Typography variant="h6" fontWeight={600} color={textColor === "dark" ? "#444" : "#eee"}>
           {element?.answers?.title}
