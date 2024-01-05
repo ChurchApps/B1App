@@ -39,7 +39,7 @@ export const Section: React.FC<Props> = props => {
     }
     if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
 
-    result = { ...result, paddingTop: 40, paddingBottom: 40, position: "relative" };
+    result = { ...result };
     //console.log("SECTION STYLE", result)
     return result;
   }
