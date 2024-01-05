@@ -9,13 +9,10 @@ interface Props {
 }
 
 export function DuplicateIcon(props: Props) {
-  const removeId = (data: ElementInterface) => {
-    const { id, ...rest } = data;
-    return rest;
-  };
 
   const handleDuplicate = () => {
-    const duplicateElement: ElementInterface = removeId(props.data);
+    const { id, ...rest } = props.data;
+    const duplicateElement = { ...rest };
     duplicateElement.sort = duplicateElement.sort + 0.1;
     ApiHelper.post("/elements?duplicate=1", [duplicateElement], "ContentApi").then(() => { props?.onDuplicate(); });
   };
