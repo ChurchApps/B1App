@@ -2,6 +2,7 @@ import { SmallButton, ChurchInterface, NonAuthDonation } from "@churchapps/apphe
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
+import { DuplicateIcon } from "./admin/DuplicateIcon";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
 import { TextWithPhoto } from "./elementTypes/TextWithPhoto";
@@ -132,6 +133,7 @@ export const Element: React.FC<Props> = props => {
           <tbody>
             <tr>
               <td><DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} /></td>
+              <td><DuplicateIcon data={props.element} onDuplicate={props.onMove} /></td>
               <td>
                 <div className="elementEditButton">
                   <SmallButton icon="edit" onClick={() => props.onEdit(null, props.element)} toolTip={props.element.elementType} />
