@@ -12,7 +12,7 @@ export function RowElement(props: Props) {
     if (data.data) {
       const element: ElementInterface = data.data;
       element.sort = sort;
-      // element.sectionId = props.element.sectionId;
+      element.parentId = column.id;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
     } else {
       const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: props.element.blockId }

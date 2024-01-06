@@ -41,6 +41,7 @@ export const Element: React.FC<Props> = props => {
       const element: ElementInterface = data.data;
       element.sort = sort;
       element.sectionId = props.element.sectionId;
+      element.parentId = props.element.parentId;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
     }
     else {
