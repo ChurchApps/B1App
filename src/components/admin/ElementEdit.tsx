@@ -133,7 +133,7 @@ export function ElementEdit(props: Props) {
       <Box sx={{ marginTop: 2 }}>
         <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
       </Box>
-      {getAppearanceFields(["font", "color", "line"])}
+      {getAppearanceFields(["font", "color", "line", "margin", "padding"])}
     </>
   );
 
