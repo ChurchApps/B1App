@@ -40,14 +40,18 @@ export function RowElement(props: Props) {
     else return "";
   }
 
+  const getMobileOrder = (c:ElementInterface, idx:number) => {
+    if (c.answers?.mobileOrder) return {xs: c.answers?.mobileOrder, md: idx};
+  }
+
   const getColumns = () => {
     const emptyStyle = { minHeight: 100, border: "1px solid #999" }
     const result: JSX.Element[] = []
-    props.element.elements?.forEach(c => {
+    props.element.elements?.forEach((c:ElementInterface, idx:number) => {
       let xs = 12;
       if (c.answers?.mobileSize) xs = c.answers?.mobileSize;
 
-      result.push(<Grid key={c.id} item md={c.answers.size} xs={xs} className={getClassName()} style={(c.elements?.length > 0 || !props.onEdit ? {} : emptyStyle)}>
+      result.push(<Grid key={c.id} item md={c.answers.size} xs={xs} order={getMobileOrder(c,idx)} className={getClassName()} style={(c.elements?.length > 0 || !props.onEdit ? {} : emptyStyle)}>
         <div style={{ minHeight: "inherit" }}>
           {getElements(c, c.elements)}
         </div>
