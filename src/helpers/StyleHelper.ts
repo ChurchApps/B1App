@@ -34,14 +34,13 @@ export class StyleHelper {
     let desktop:string[] = [];
     let mobile:string[] = [];
 
-    sections.forEach((section:SectionInterface) => {
+    sections?.forEach((section:SectionInterface) => {
       this.getSectionCss(section, all, desktop, mobile);
-      section.elements.forEach((element:ElementInterface) => {
+      section.elements?.forEach((element:ElementInterface) => {
         this.getElementCss(element, all, desktop, mobile);
       });
     });
 
-    console.log("STYLES ARE: ", {all, desktop, mobile});
     return {all, desktop, mobile};
   }
 

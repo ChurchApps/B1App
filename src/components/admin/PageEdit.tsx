@@ -69,12 +69,23 @@ export function PageEdit(props: Props) {
     setChecked(true);
   }
 
+  const handleDuplicate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (confirm("Are you sure you wish to make a copy of this page and all of it's contents?")) {
+      ApiHelper.post("/pages/duplicate/" + page.id, {}, "ContentApi").then((data) => {
+        setPage(null);
+        props.updatedCallback(data);
+      });
+    }
+  }
+
+
   useEffect(() => { setPage(props.page); if (props.page.url) { setChecked(true); } }, [props.page]);
 
   if (!page) return <></>
   else return (
     <>
-      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
+      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         <ErrorMessages errors={errors} />
         <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
         {checked

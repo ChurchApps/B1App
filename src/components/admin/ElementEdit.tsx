@@ -123,7 +123,7 @@ export function ElementEdit(props: Props) {
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.translucent === "true" ? true : false} />} name="translucent" label="Translucent" />
       <br />
       <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
-      {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
+      {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
     </>
   );
 
@@ -155,7 +155,7 @@ export function ElementEdit(props: Props) {
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
     </Box>
-    {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
+    {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
   </>);
 
   // TODO: add alt field while saving image and use it here, in image tage.
@@ -170,12 +170,12 @@ export function ElementEdit(props: Props) {
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll", zindex: -1 }} textAlign={parsedData.textAlignment} />
     </Box>
-    {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
+    {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
   </>);
 
   const getLogoFields = () => (<>
     <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
-    {getAppearanceFields(["border", "background", "height", "margin", "padding", "width"])}
+    {getAppearanceFields(["border", "background", "height", "min", "max", "margin", "padding", "width"])}
   </>);
 
   const getStreamFields = () => {
@@ -208,7 +208,7 @@ export function ElementEdit(props: Props) {
           </Select>
         </FormControl>
         {blockField}
-        {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
+        {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
       </>
     )
   }
@@ -246,7 +246,7 @@ export function ElementEdit(props: Props) {
         <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open in new Tab" />
         <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.fullWidth === "true" ? true : false} />} name="fullWidth" label="Full width" />
       </FormGroup>
-      {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
+      {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
     </>
   )
 
@@ -270,7 +270,7 @@ export function ElementEdit(props: Props) {
             video url - https://vimeo.com/751393851 <br /> id - 751393851
         </Typography>
       )}
-      {getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}
+      {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
     </>
 
   )
@@ -409,10 +409,19 @@ export function ElementEdit(props: Props) {
     </>)
   }
 
+  const handleDuplicate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (confirm("Are you sure you wish to make a copy of this element and all of it's children?")) {
+      ApiHelper.post("/elements/duplicate/" + props.element.id, {}, "ContentApi").then((data) => {
+        props.updatedCallback(data);
+      });
+    }
+  }
+
   if (!element) return <></>
   else return (
     <>
-      <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
+      <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.element.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         {(element?.elementType === "block") ? getBlockFields() : getStandardFields()}
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}
