@@ -413,15 +413,17 @@ a.dropdown-toggle::after {
   position: relative;
   text-align: center;
   height:25px;
-  margin-bottom: -29px;
+  /*margin-bottom: -29px;*/
+  margin-top:-40px !important;
+  margin-bottom:40px;
 }
 
-.sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important;  }
+.sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important; }
 
-
+/*
 .sectionWrapper {
   padding-top: 0 !important;
-}
+}*/
 
 .sectionDark {
   color: var(--dark-bg-text-color);
@@ -444,7 +446,7 @@ a.dropdown-toggle::after {
   position: absolute;
   top: 1;
   right: 0;
-  /*margin-top: -40px;*/
+  margin-top: -70px;
   z-index: 999;
 }
 
