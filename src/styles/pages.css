@@ -95,6 +95,10 @@ body {
   position: relative;
 }
 
+.page .sectionVideo {
+  padding-top:40px;
+}
+
 .page .sectionFirst {
   padding-top: 160px;
 }
