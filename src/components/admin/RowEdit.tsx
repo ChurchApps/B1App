@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import React from "react";
+import { RowMobileSizes } from "./RowMobileSizes";
 
 type Props = {
   parsedData: any;
@@ -10,6 +11,7 @@ type Props = {
 export function RowEdit(props: Props) {
   const cols: number[] = []
   props.parsedData.columns?.split(",").forEach((c: string) => cols.push(parseInt(c)));
+  const [showMobileSizes, setShowMobileSizes] = React.useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     e.preventDefault();
@@ -113,6 +115,16 @@ export function RowEdit(props: Props) {
       </Table><br /></>);
   }
 
+  const getMobileSize = () => {
+    if (!showMobileSizes) return <a href="about:blank" style={{marginTop:10, display:"block"}} onClick={(e) => {e.preventDefault(); setShowMobileSizes(true)}}>Show Mobile Sizes</a>
+    else {
+      return <>
+        <a href="about:blank" style={{marginTop:10, display:"block"}} onClick={(e) => {e.preventDefault(); setShowMobileSizes(false)}}>Hide Mobile Sizes</a>
+        <RowMobileSizes cols={cols} parsedData={props.parsedData} onRealtimeChange={props.onRealtimeChange} />
+      </>
+    }
+  }
+
   let commonValue = props.parsedData?.columns || "custom";
   if (["6,6", "4,4,4", "3,3,3,3"].indexOf(commonValue) === -1) commonValue = "custom";
   return (
@@ -129,6 +141,8 @@ export function RowEdit(props: Props) {
       {(commonValue === "custom") && getCustomSizes()}
       <div><b>Preview</b> - <small>Numbers represent twelfths of page.</small></div>
       {getPreviewTable()}
+      {getMobileSize()}
+
     </>
   );
 

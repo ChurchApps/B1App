@@ -44,11 +44,11 @@ export function BoxElement(props: Props) {
   }
 
   const getClass = () => {
-    let result = "";
+    let result = "elBox";
     let hc = props.element.answers?.headingColor;
     if (hc) {
       hc = hc.replace("var(--", "").replace(")", "");
-      result = "headings" + hc[0].toUpperCase() + hc.slice(1)
+      result += " headings" + hc[0].toUpperCase() + hc.slice(1)
     }
     return result;
   }

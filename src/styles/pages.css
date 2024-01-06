@@ -480,3 +480,7 @@ a.dropdown-toggle::after {
   width:auto;
   max-width: 100%;
 }
+
+.elBox {
+  margin-bottom: 20px;
+}

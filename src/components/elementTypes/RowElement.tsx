@@ -44,7 +44,10 @@ export function RowElement(props: Props) {
     const emptyStyle = { minHeight: 100, border: "1px solid #999" }
     const result: JSX.Element[] = []
     props.element.elements?.forEach(c => {
-      result.push(<Grid key={c.id} item md={c.answers.size} xs={12} className={getClassName()} style={(c.elements?.length > 0 || !props.onEdit ? {} : emptyStyle)}>
+      let xs = 12;
+      if (c.answers?.mobileSize) xs = c.answers?.mobileSize;
+
+      result.push(<Grid key={c.id} item md={c.answers.size} xs={xs} className={getClassName()} style={(c.elements?.length > 0 || !props.onEdit ? {} : emptyStyle)}>
         <div style={{ minHeight: "inherit" }}>
           {getElements(c, c.elements)}
         </div>
