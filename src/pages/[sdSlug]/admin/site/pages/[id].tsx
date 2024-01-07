@@ -145,7 +145,7 @@ export default function Admin(props: Props) {
       const sections = ArrayHelper.getAll(page?.sections, "zone", z);
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
       result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article">
-        <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
+        <div style={{ height: (idx === 0) ? 600 : 300, overflowY: "scroll" }}>
           <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
             {getSections(z)}
           </div>
@@ -164,7 +164,7 @@ export default function Admin(props: Props) {
     <AdminWrapper config={props.config}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <h1>Edit Page</h1>
+          <h1 style={{marginTop:0}}>Edit Page</h1>
         </Grid>
         <Grid item xs={6} style={{textAlign:"right"}}>
           <ToggleButtonGroup value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }} style={{backgroundColor:"#FFF"}}>

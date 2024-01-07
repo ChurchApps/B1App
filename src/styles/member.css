@@ -343,6 +343,6 @@
 #smallPeopleTable img { max-height: 50px; }
 
 #editorBar>div>div {
-  height:98vh;
+  height:90vh;
   overflow-y: scroll;
 }
