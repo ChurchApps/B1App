@@ -15,15 +15,15 @@ export class StyleHelper {
 
   private static getSectionCss = (section:SectionInterface, all:string[], desktop:string[], mobile:string[]) => {
     const id = section.answers?.sectionId || "section-" + section.id;
-    if (section.styles.all) all.push(this.getStyle(id, section.styles.all));
-    if (section.styles.desktop) desktop.push(this.getStyle(id, section.styles.desktop));
-    if (section.styles.mobile) mobile.push(this.getStyle(id, section.styles.mobile));
+    if (section.styles?.all) all.push(this.getStyle(id, section.styles.all));
+    if (section.styles?.desktop) desktop.push(this.getStyle(id, section.styles.desktop));
+    if (section.styles?.mobile) mobile.push(this.getStyle(id, section.styles.mobile));
   }
 
   private static getElementCss = (element:ElementInterface, all:string[], desktop:string[], mobile:string[]) => {
-    if (element.styles.all) all.push(this.getStyle("el-" + element.id, element.styles.all));
-    if (element.styles.desktop) desktop.push(this.getStyle("el-" + element.id, element.styles.desktop));
-    if (element.styles.mobile) mobile.push(this.getStyle("el-" + element.id, element.styles.mobile));
+    if (element.styles?.all) all.push(this.getStyle("el-" + element.id, element.styles.all));
+    if (element.styles?.desktop) desktop.push(this.getStyle("el-" + element.id, element.styles.desktop));
+    if (element.styles?.mobile) mobile.push(this.getStyle("el-" + element.id, element.styles.mobile));
     if (element.elements?.length > 0) {
       element.elements.forEach((e:ElementInterface) => this.getElementCss(e, all, desktop, mobile));
     }
