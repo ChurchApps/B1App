@@ -45,7 +45,7 @@ export const Section: React.FC<Props> = props => {
   }
 
   const getVideoClassName = () => {
-    let result = "";
+    let result = "sectionVideo";
     if (props.section.textColor === "light") result += " sectionDark"
     if (props.first) result += " sectionFirst"
     if (props.onEdit) result += " sectionWrapper";
