@@ -2,25 +2,37 @@ import { ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 import { CSSProperties } from "react";
+import { ApiHelper } from "@churchapps/apphelper";
+import { StyleHelper } from "@/helpers/StyleHelper";
 
-
-interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void }
+interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
 
 export function BoxElement(props: Props) {
 
+  const handleDrop = (data: any, sort: number) => {
+    if (data.data) {
+      const e: ElementInterface = data.data;
+      e.sort = sort;
+      e.parentId = props.element.id;
+      ApiHelper.post("/elements", [e], "ContentApi").then(() => { props.onMove() });
+    } else {
+      const e: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id, blockId: props.element.blockId };
+      props.onEdit(null, e);
+    }
+  }
 
-  const getAddElement = (s: number) => {
+  const getAddElement = (s: number, droppableAreaText?: string) => {
     const sort = s;
-    return (<DroppableArea key={"addToBox"} accept={["element", "elementBlock"]} onDrop={(data) => props.onEdit(null, { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: props.element.id, blockId: props.element.blockId })} />);
+    return (<DroppableArea key={"addToBox"} accept={["element", "elementBlock"]} text={droppableAreaText} onDrop={(data) => handleDrop(data, sort)} dndDeps={props.element?.elements} />);
   }
 
   const getElements = () => {
     const textColor = props.element.answers?.textColor || props.textColor;
 
     const result: JSX.Element[] = []
-    if (props.onEdit) result.push(getAddElement(0))
+    if (props.onEdit) result.push(getAddElement(1))
     props.element.elements?.forEach(c => {
-      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} />)
+      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} parentId={props.element.id} onMove={props.onMove} />)
     });
     return result;
   }
@@ -58,6 +70,7 @@ export function BoxElement(props: Props) {
     <div id={"el-" + props.element.id} style={getStyle()} className={getClass()}>
       {props.onEdit && !(props.element.elements || props.element.elements?.length===0) && <p>Box: Add elements</p>}
       {getElements()}
+      {props.onEdit && <div style={{ height: "31px" }}>{getAddElement(props.element?.elements?.[props.element?.elements.length - 1]?.sort + 0.1, "Drop at the bottom of box")}</div>}
     </div>
   </>);
 
