@@ -48,22 +48,24 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
   else
     return (
       <>
-        {currentUserName.trim() === "" || currentUserName === "Anonymous " ? (
-          <Button fullWidth size="small" startIcon={<DriveFileRenameOutlineIcon fontSize="small" />} onClick={() => setEdit(true)} sx={{ borderRadius: 0, height: "25px" }}>
+        {currentUserName.trim() === "" || currentUserName === "Anonymous "
+          ? (
+            <Button fullWidth size="small" startIcon={<DriveFileRenameOutlineIcon fontSize="small" />} onClick={() => setEdit(true)} sx={{ borderRadius: 0, height: "25px" }}>
             Change Name
-          </Button>
-        ) : (
-          <Paper elevation={0} sx={{ padding: "1px 10px" }}>
-            <Stack direction="row" alignItems="center" justifyContent="space-between">
-              <Typography fontSize={14} color={"#1976d2"}>{currentUserName}</Typography>
-              <Tooltip title="Update Name" arrow placement="left">
-                <IconButton size="small" color="primary" onClick={() => { setEdit(true); setDisplayName(currentUserName); }}>
+            </Button>
+          )
+          : (
+            <Paper elevation={0} sx={{ padding: "1px 10px" }}>
+              <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Typography fontSize={14} color={"#1976d2"}>{currentUserName}</Typography>
+                <Tooltip title="Update Name" arrow placement="left">
+                  <IconButton size="small" color="primary" onClick={() => { setEdit(true); setDisplayName(currentUserName); }}>
                     <DriveFileRenameOutlineIcon sx={{ fontSize: 18 }} />
-                </IconButton>
-              </Tooltip>
-            </Stack>
-          </Paper>
-        )}
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+            </Paper>
+          )}
       </>
     );
 };

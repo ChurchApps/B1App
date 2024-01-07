@@ -52,26 +52,24 @@ export function BoxElement(props: Props) {
     if (props.element.answers?.rounded==="true") result.borderRadius = 15;
     if (props.element.answers?.translucent==="true") result.opacity = 0.9;
 
-    result = { ...result, ...StyleHelper.getStyles(props.element) };
-
     return result;
   }
 
   const getClass = () => {
-    let result = "";
+    let result = "elBox";
     let hc = props.element.answers?.headingColor;
     if (hc) {
       hc = hc.replace("var(--", "").replace(")", "");
-      result = "headings" + hc[0].toUpperCase() + hc.slice(1)
+      result += " headings" + hc[0].toUpperCase() + hc.slice(1)
     }
     return result;
   }
 
   let result = (<>
     {props.onEdit && <div style={{ height: 40 }}></div>}
-    <div style={getStyle()} className={getClass()}>
-      {getElements()}
+    <div id={"el-" + props.element.id} style={getStyle()} className={getClass()}>
       {props.onEdit && !(props.element.elements || props.element.elements?.length===0) && <p>Box: Add elements</p>}
+      {getElements()}
       {props.onEdit && <div style={{ height: "31px" }}>{getAddElement(props.element?.elements?.[props.element?.elements.length - 1]?.sort + 0.1, "Drop at the bottom of box")}</div>}
     </div>
   </>);

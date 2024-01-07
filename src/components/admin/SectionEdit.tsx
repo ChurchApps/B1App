@@ -101,8 +101,17 @@ export function SectionEdit(props: Props) {
   const handleStyleChange = (styles: { name: string, value: string }[]) => {
     let p = { ...section };
     p.styles = styles;
-    p.stylesJSON = JSON.stringify(styles);
+    p.stylesJSON = Object.keys(styles).length>0 ? JSON.stringify(styles) : null;
     setSection(p);
+  }
+
+  const handleDuplicate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (confirm("Are you sure you wish to make a copy of this section and all of it's contents?")) {
+      ApiHelper.post("/sections/duplicate/" + props.section.id, {}, "ContentApi").then((data) => {
+        props.updatedCallback(data);
+      });
+    }
   }
 
   const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
@@ -110,7 +119,7 @@ export function SectionEdit(props: Props) {
   if (!section) return <></>
   else return (
     <>
-      <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
+      <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.section.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
       </InputBox>
 

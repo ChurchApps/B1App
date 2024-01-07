@@ -16,7 +16,7 @@ export interface ElementInterface {
   answersJSON?: string;
   answers?: any;
   stylesJSON?: string;
-  styles?: any;
+  styles?: { all?:any, desktop?:any, mobile?:any };
   sort?: number;
   elementType: string;
   elements?: ElementInterface[];
@@ -143,6 +143,13 @@ export interface GlobalStyleInterface {
   customJS?: string
 }
 
+export interface InlineStylesInterface {
+  all: any,
+  desktop: any,
+  mobile: any
+}
+
+
 export interface StyleOption {
   label: string,
   key: string,
@@ -168,6 +175,10 @@ export const allStyleOptions:StyleOption[] = [
   { label: "Margin Right", key: "margin-right", type: "px", default: 0 },
   { label: "Margin Top", key: "margin-top", type: "px", default: 0 },
   { label: "Margin Bottom", key: "margin-bottom", type: "px", default: 0 },
+  { label: "Max Width", key: "max-width", type: "px", default: 500 },
+  { label: "Max Height", key: "max-height", type: "px", default: 500 },
+  { label: "Min Width", key: "min-width", type: "px", default: 500 },
+  { label: "Min Height", key: "min-height", type: "px", default: 500 },
   { label: "Padding", key: "padding", type: "px", default: 0 },
   { label: "Padding Left", key: "padding-left", type: "px", default: 0 },
   { label: "Padding Right", key: "padding-right", type: "px", default: 0 },

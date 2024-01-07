@@ -14,6 +14,7 @@ export function IframeElement({ element }: Props) {
         height={element.answers?.iframeHeight || "1000"}
         width="100%"
         style={{border:"none", backgroundColor:"#FFFFFF"}}
+        id={"el-" + element.id}
       />
     </div>
   );

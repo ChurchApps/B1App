@@ -1,5 +1,4 @@
 import { ElementInterface } from "@/helpers";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   element: ElementInterface;
@@ -13,7 +12,7 @@ export const VideoElement: React.FC<Props> = (props) => {
       : `https://player.vimeo.com/video/${props.element.answers.videoId}`;
 
   return (
-    <div className="videoWrapper" style={{marginBottom: "20px", ...StyleHelper.getStyles(props.element)}}>
+    <div id={"el-" + props.element.id} className="videoWrapper" style={{marginBottom: "20px"}}>
       <iframe src={src} allowFullScreen style={{ border: 0 }} />
     </div>
   )

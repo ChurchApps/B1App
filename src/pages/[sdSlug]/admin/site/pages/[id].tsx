@@ -1,14 +1,11 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Grid } from "@mui/material";
+import { Button, Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  ConfigHelper, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
 import { DisplayBox, ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
-import { SectionEdit } from "@/components/admin/SectionEdit";
-import { ElementEdit } from "@/components/admin/ElementEdit";
-import { ElementAdd } from "@/components/admin/ElementAdd";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
@@ -16,6 +13,11 @@ import { DroppableArea } from "@/components/admin/DroppableArea";
 import { SectionBlock } from "@/components/SectionBlock";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
+import { Helmet } from "react-helmet";
+import { StyleHelper } from "@/helpers/StyleHelper";
+import { ElementAdd } from "@/components/admin/ElementAdd";
+import { ElementEdit } from "@/components/admin/ElementEdit";
+import { SectionEdit } from "@/components/admin/SectionEdit";
 
 interface Props extends WrapperPageProps {
   church: ChurchInterface,
@@ -31,8 +33,11 @@ export default function Admin(props: Props) {
   const [editElement, setEditElement] = useState<ElementInterface>(null);
   const [editorBarHeight, setEditorBarHeight] = useState(400);
   const [scrollTop, setScrollTop] = useState(0);
+  const [deviceType, setDeviceType] = useState("desktop");
   const id = router.query.id?.toString() || "";
   const windowWidth = useWindowWidth();
+  const [showDrawer, setShowDrawer] = useState(false);
+
 
   const zones:any = {
     cleanCentered: ["main"],
@@ -51,7 +56,9 @@ export default function Admin(props: Props) {
   }, []);
 
   const loadData = () => {
-    if (isAuthenticated && UserHelper.checkAccess(Permissions.contentApi.content.edit)) ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => setPage(p));
+    if (isAuthenticated && UserHelper.checkAccess(Permissions.contentApi.content.edit)) {
+      ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi").then(p => { setPage(p) });
+    }
   }
 
   useEffect(loadData, [id]);
@@ -135,17 +142,29 @@ export default function Admin(props: Props) {
     }
   }
 
+  const getTheme = () => {
+    //force mobile
+    if (deviceType==="mobile") return createTheme({
+      breakpoints: {
+        values: { xs: 0, sm: 2000, md: 3000, lg: 4000, xl: 5000 },
+      },
+    });
+    else return createTheme();
+  }
+
   const getZoneBoxes = () => {
     let result:any[] = [];
     let idx = 0;
     zones[page?.layout]?.forEach((z: string) => {
       const sections = ArrayHelper.getAll(page?.sections, "zone", z);
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
-      result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article">
-        <div style={{ height: (idx === 0) ? 500 : 300, overflowY: "scroll" }}>
-          <div className="page">
-            {getSections(z)}
-          </div>
+      result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article" editContent={<Button onClick={() => setShowDrawer(!showDrawer)}>Add Content</Button>}>
+        <div style={{ height: (idx === 0) ? 600 : 300, overflowY: "scroll" }}>
+          <ThemeProvider theme={getTheme()}>
+            <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
+              {getSections(z)}
+            </div>
+          </ThemeProvider>
         </div>
         <div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, z, "Drop at the bottom of page")}</div>
       </DisplayBox>);
@@ -155,25 +174,48 @@ export default function Admin(props: Props) {
 
   }
 
+  useEffect(() => {
+    if (!showDrawer)
+    {
+      if (editSection || editElement) setShowDrawer(true);
+    }
+  }, [editSection,editElement]);
+
+
   return (<>
     <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
+    <Helmet><style>{StyleHelper.getCss(page?.sections || [], deviceType)}</style></Helmet>
+
     <AdminWrapper config={props.config}>
-      <h1>Edit Page</h1>
       <DndProvider backend={HTML5Backend}>
-        <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
-            {getZoneBoxes()}
-          </Grid>
-          <Grid item md={4} xs={12}>
-            <div id="editorBar">
-              <div style={rightBarStyle}>
-                {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} />}
-                {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
-                {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
-              </div>
+        <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}}>
+          <div id="editorBar" style={{width:"28vw", paddingTop:60}}>
+            <div style={rightBarStyle}>
+              {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowDrawer(false); }} />}
+              {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); setShowDrawer(false); loadData(); }} globalStyles={props.globalStyles} />}
+              {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); setShowDrawer(false); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
             </div>
+          </div>
+        </Drawer>
+        <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <h1 style={{marginTop:0}}>Edit Page</h1>
+            </Grid>
+            <Grid item xs={6} style={{textAlign:"right"}}>
+              <ToggleButtonGroup value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }} style={{backgroundColor:"#FFF"}}>
+                <ToggleButton value="desktop">
+                  <Icon>computer</Icon>
+                </ToggleButton>
+                <ToggleButton value="mobile">
+                  <Icon>smartphone</Icon>
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
           </Grid>
-        </Grid>
+
+          {getZoneBoxes()}
+        </div>
       </DndProvider>
     </AdminWrapper>
   </>);

@@ -6,19 +6,21 @@ import { ColorPicker } from "./ColorPicker";
 
 interface Props {
   fieldOptions: StyleOption[],
-  style: {name:string, value:any}
-  onSave: (name:string, value:any) => void;
+  style: {platform:string, name:string, value:any},
+  onSave: (platform:string, name:string, value:any) => void;
 }
 
 
 export const StyleEdit: React.FC<Props> = (props) => {
 
   const [name, setName] = React.useState(props.style.name || props.fieldOptions[0].key);
-  const [value, setValue] = React.useState(props.style.value || props.fieldOptions[0].default);
+  const [value, setValue] = React.useState(props.style.value.replace("px", "") || props.fieldOptions[0].default);
+  const field = props.fieldOptions.find(o => o.key === name);
 
   const getInputField = () => {
     let result = <></>;
-    const field = props.fieldOptions.find(o => o.key === name);
+    console.log("GET INPUT FIELD", field, value)
+
     switch (field.type) {
       case "text":
         result = <TextField fullWidth size="small" label={field.label} name="value" value={value} onChange={(e:any) => { setValue(e.target.value) }}  />
@@ -32,6 +34,7 @@ export const StyleEdit: React.FC<Props> = (props) => {
         </FormControl>
         break;
       case "px":
+        console.log("PX", value)
         result = <TextField fullWidth size="small" label={field.label + " - px"} name="value" value={value} onChange={(e:any) => { setValue(e.target.value) }} type="number" />
         break;
       case "color":
@@ -42,11 +45,17 @@ export const StyleEdit: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    if (name===props.style.name) setValue(props.style.value);
+    if (name===props.style.name) setValue(props.style.value.replace("px", ""));
     else setValue(props.fieldOptions.find(o => o.key === name).default);
   }, [name]);
 
-  return <InputBox saveFunction={() => { props.onSave(name, value) }} saveText="Update" headerText="Edit Style" cancelFunction={() => { props.onSave("", "") }} deleteFunction={(props.style.name) ? () => { props.onSave(props.style.name, null )} : null}>
+  const handleSave = () => {
+    let storedValue = value;
+    if (field.type==="px") storedValue = value + "px";
+    props.onSave(props.style.platform, name, storedValue);
+  }
+
+  return <InputBox saveFunction={handleSave} saveText="Update" headerText="Edit Style" cancelFunction={() => { props.onSave("", "", "") }} deleteFunction={(props.style.name) ? () => { props.onSave(props.style.platform, props.style.name, null )} : null}>
     <FormControl fullWidth>
       <InputLabel>Property</InputLabel>
       <Select size="small" fullWidth label="Property" name="name" value={name} onChange={(e) => {setName(e.target.value)}}>

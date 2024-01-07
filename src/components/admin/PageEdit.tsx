@@ -69,33 +69,46 @@ export function PageEdit(props: Props) {
     setChecked(true);
   }
 
+  const handleDuplicate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (confirm("Are you sure you wish to make a copy of this page and all of it's contents?")) {
+      ApiHelper.post("/pages/duplicate/" + page.id, {}, "ContentApi").then((data) => {
+        setPage(null);
+        props.updatedCallback(data);
+      });
+    }
+  }
+
+
   useEffect(() => { setPage(props.page); if (props.page.url) { setChecked(true); } }, [props.page]);
 
   if (!page) return <></>
   else return (
     <>
-      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
+      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         <ErrorMessages errors={errors} />
         <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
-        {checked ? (
-          <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
-            <Paper elevation={0}>
-              <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography>{page.url}</Typography>
-                <IconButton color="primary" onClick={() => setChecked(false)}><EditIcon /></IconButton>
-              </Stack>
-            </Paper>
-            <div>
-              <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`} target="_blank" rel="noopener noreferrer">
-                {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
-              </a>
+        {checked
+          ? (
+            <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
+              <Paper elevation={0}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  <Typography>{page.url}</Typography>
+                  <IconButton color="primary" onClick={() => setChecked(false)}><EditIcon /></IconButton>
+                </Stack>
+              </Paper>
+              <div>
+                <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`} target="_blank" rel="noopener noreferrer">
+                  {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
+                </a>
+              </div>
             </div>
-          </div>
-        ) : (
-          <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} helperText="ex: /camper-registration  (**Make sure to check before saving)"
-            InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation}>Check</Button> }}
-          />
-        )}
+          )
+          : (
+            <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} helperText="ex: /camper-registration  (**Make sure to check before saving)"
+              InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation}>Check</Button> }}
+            />
+          )}
         {!props.embedded && (
           <FormControl fullWidth>
             <InputLabel>Layout</InputLabel>
