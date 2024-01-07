@@ -112,7 +112,7 @@ export const Element: React.FC<Props> = props => {
       result = <SermonElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} churchSettings={props.churchSettings} />
       break;
     case "carousel":
-      result = <CarouselElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} />
+      result = <CarouselElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} onMove={props.onMove} />
       break;
     case "image":
       result = <ImageElement key={props.element.id} element={props.element as ElementInterface} />
