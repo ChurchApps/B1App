@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Drawer, Grid, Icon, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Button, Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  ConfigHelper, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
@@ -37,6 +37,7 @@ export default function Admin(props: Props) {
   const id = router.query.id?.toString() || "";
   const windowWidth = useWindowWidth();
   const [showDrawer, setShowDrawer] = useState(false);
+
 
   const zones:any = {
     cleanCentered: ["main"],
@@ -141,6 +142,16 @@ export default function Admin(props: Props) {
     }
   }
 
+  const getTheme = () => {
+    //force mobile
+    if (deviceType==="mobile") return createTheme({
+      breakpoints: {
+        values: { xs: 0, sm: 2000, md: 3000, lg: 4000, xl: 5000 },
+      },
+    });
+    else return createTheme();
+  }
+
   const getZoneBoxes = () => {
     let result:any[] = [];
     let idx = 0;
@@ -149,9 +160,11 @@ export default function Admin(props: Props) {
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
       result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article" editContent={<Button onClick={() => setShowDrawer(!showDrawer)}>Add Content</Button>}>
         <div style={{ height: (idx === 0) ? 600 : 300, overflowY: "scroll" }}>
-          <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
-            {getSections(z)}
-          </div>
+          <ThemeProvider theme={getTheme()}>
+            <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
+              {getSections(z)}
+            </div>
+          </ThemeProvider>
         </div>
         <div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, z, "Drop at the bottom of page")}</div>
       </DisplayBox>);

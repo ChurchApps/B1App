@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Drawer, Grid, Icon, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Button, Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import { ElementInterface, BlockInterface, SectionInterface, ConfigHelper, WrapperPageProps, GlobalStyleInterface } from "@/helpers";
 import { Theme } from "@/components";
@@ -121,6 +121,18 @@ export default function Admin(props: Props) {
     }
   }
 
+
+  const getTheme = () => {
+    //force mobile
+    if (deviceType==="mobile") return createTheme({
+      breakpoints: {
+        values: { xs: 0, sm: 2000, md: 3000, lg: 4000, xl: 5000 },
+      },
+    });
+    else return createTheme();
+  }
+
+
   useEffect(() => {
     if (!showDrawer)
     {
@@ -162,9 +174,11 @@ export default function Admin(props: Props) {
           </Grid>
           <DisplayBox headerText="Block Preview" headerIcon="article" editContent={<Button onClick={() => setShowDrawer(!showDrawer)}>Add Content</Button>}>
             <div id="block" style={{ height: 500, overflowY: "scroll" }}>
-              <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
-                {getSections()}
-              </div>
+              <ThemeProvider theme={getTheme()}>
+                <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
+                  {getSections()}
+                </div>
+              </ThemeProvider>
             </div>
           </DisplayBox>
         </div>
