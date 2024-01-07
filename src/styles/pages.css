@@ -58,7 +58,7 @@ body {
 
 .page h1 {
   font-size: 3em;
-  line-height: 1em;
+  line-height: 1.2em;
   border-bottom: none;
   /*margin-bottom: 40px;*/
 }
@@ -70,7 +70,7 @@ body {
   font-size: 35px;
   line-height: 40px;*/
   font-size: 2.2em;
-  line-height: 1em;
+  line-height: 1.2em;
   text-transform: none;
 }
 
@@ -78,14 +78,14 @@ body {
   /*font-size: 22px;
   line-height: 26px;*/
   font-size: 1.6em;
-  line-height: 1em;
+  line-height: 1.2em;
 }
 
 .page h4 {
   /*font-size: 22px;
   line-height: 26px;*/
   font-size: 1.3em;
-  line-height: 1em;
+  line-height: 1.2em;
 }
 
 .page .section {
@@ -93,6 +93,10 @@ body {
   padding-top: 40px;
   padding-bottom: 40px;
   position: relative;
+}
+
+.page .sectionVideo {
+  padding-top:40px;
 }
 
 .page .sectionFirst {
@@ -413,15 +417,17 @@ a.dropdown-toggle::after {
   position: relative;
   text-align: center;
   height:25px;
-  margin-bottom: -29px;
+  /*margin-bottom: -29px;*/
+  margin-top:-40px !important;
+  margin-bottom:40px;
 }
 
-.sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important;  }
+.sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important; }
 
-
+/*
 .sectionWrapper {
   padding-top: 0 !important;
-}
+}*/
 
 .sectionDark {
   color: var(--dark-bg-text-color);
@@ -444,7 +450,7 @@ a.dropdown-toggle::after {
   position: absolute;
   top: 1;
   right: 0;
-  /*margin-top: -40px;*/
+  margin-top: -70px;
   z-index: 999;
 }
 
@@ -479,4 +485,8 @@ a.dropdown-toggle::after {
 .no-resize {
   width:auto;
   max-width: 100%;
+}
+
+.elBox {
+  margin-bottom: 20px;
 }

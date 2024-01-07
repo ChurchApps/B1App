@@ -12,7 +12,7 @@ export function RowElement(props: Props) {
     if (data.data) {
       const element: ElementInterface = data.data;
       element.sort = sort;
-      // element.sectionId = props.element.sectionId;
+      element.parentId = column.id;
       ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
     } else {
       const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, parentId: column.id, blockId: props.element.blockId }
@@ -40,11 +40,18 @@ export function RowElement(props: Props) {
     else return "";
   }
 
+  const getMobileOrder = (c:ElementInterface, idx:number) => {
+    if (c.answers?.mobileOrder) return {xs: c.answers?.mobileOrder, md: idx};
+  }
+
   const getColumns = () => {
     const emptyStyle = { minHeight: 100, border: "1px solid #999" }
     const result: JSX.Element[] = []
-    props.element.elements?.forEach(c => {
-      result.push(<Grid key={c.id} item md={c.answers.size} xs={12} className={getClassName()} style={(c.elements?.length > 0 || !props.onEdit ? {} : emptyStyle)}>
+    props.element.elements?.forEach((c:ElementInterface, idx:number) => {
+      let xs = 12;
+      if (c.answers?.mobileSize) xs = c.answers?.mobileSize;
+
+      result.push(<Grid key={c.id} item md={c.answers.size} xs={xs} order={getMobileOrder(c,idx)} className={getClassName()} style={(c.elements?.length > 0 || !props.onEdit ? {} : emptyStyle)}>
         <div style={{ minHeight: "inherit" }}>
           {getElements(c, c.elements)}
         </div>

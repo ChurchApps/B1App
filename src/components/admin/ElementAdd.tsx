@@ -8,6 +8,7 @@ import { AddableElement } from "./AddableElement";
 type Props = {
   includeBlocks: boolean
   includeSection: boolean
+  updateCallback: () => void
 };
 
 export function ElementAdd(props: Props) {
@@ -27,13 +28,11 @@ export function ElementAdd(props: Props) {
 
   //<AddableElement dndType="element" elementType="buttonLink" icon="smart_button" label="Button" />
   return (
-    <>
-      <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article">
+    <div>
+      <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article" editContent={<a href="about:blank" onClick={e => { e.preventDefault(); props.updateCallback() }}>Close</a>}>
         <p>Drag and drop onto page<br /></p>
         <Accordion sx={{ mt: 2 }}>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-          >
+          <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography>Simple Elements</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -56,9 +55,7 @@ export function ElementAdd(props: Props) {
           </AccordionDetails>
         </Accordion>
         <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-          >
+          <AccordionSummary expandIcon={<ExpandMore />}>
             <Typography>Church Specific</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -74,9 +71,7 @@ export function ElementAdd(props: Props) {
         </Accordion>
         {props.includeBlocks && (
           <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-            >
+            <AccordionSummary expandIcon={<ExpandMore />}>
               <Typography>Blocks</Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -85,6 +80,6 @@ export function ElementAdd(props: Props) {
           </Accordion>
         )}
       </DisplayBox>
-    </>
+    </div>
   );
 }

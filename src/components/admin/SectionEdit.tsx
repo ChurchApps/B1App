@@ -105,12 +105,21 @@ export function SectionEdit(props: Props) {
     setSection(p);
   }
 
+  const handleDuplicate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (confirm("Are you sure you wish to make a copy of this section and all of it's contents?")) {
+      ApiHelper.post("/sections/duplicate/" + props.section.id, {}, "ContentApi").then((data) => {
+        props.updatedCallback(data);
+      });
+    }
+  }
+
   const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
 
   if (!section) return <></>
   else return (
     <>
-      <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
+      <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.section.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
       </InputBox>
 
