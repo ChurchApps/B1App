@@ -3,7 +3,6 @@ import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 import { CSSProperties } from "react";
 import { ApiHelper } from "@churchapps/apphelper";
-import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
 
