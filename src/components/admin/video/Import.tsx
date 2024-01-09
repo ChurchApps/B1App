@@ -14,6 +14,7 @@ export const Import = (props: Props) => {
   const [playlistId, setPlaylistId] = React.useState("");
   const [playlists, setPlaylists] = React.useState<PlaylistInterface[]>([]);
   const [errors, setErrors] = React.useState([]);
+  const [isFetching, setIsFetching] = React.useState(false);
 
   const loadData = () => {
     ApiHelper.get("/playlists", "ContentApi").then((data) => { setPlaylists(data); });
@@ -56,7 +57,8 @@ export const Import = (props: Props) => {
   React.useEffect(() => { loadData(); }, []);
 
   const handleFetch = () => {
-    ApiHelper.get("/sermons/youtubeImport/" + channelId, "ContentApi").then((data) => { setSermons(data); });
+    setIsFetching(true);
+    ApiHelper.get("/sermons/youtubeImport/" + channelId, "ContentApi").then((data) => { setSermons(data); setIsFetching(false); });
   }
 
   const handleSave = () => {
@@ -71,7 +73,7 @@ export const Import = (props: Props) => {
   if (!sermons) {
     return (<>
       <ErrorMessages errors={errors} />
-      <InputBox headerIcon="video_library" headerText="Import" saveText="Fetch" saveFunction={handleFetch} cancelFunction={props.handleDone}>
+      <InputBox headerIcon="video_library" headerText="Import" saveText={isFetching ? "Fetching..." : "Fetch"} saveFunction={handleFetch} cancelFunction={props.handleDone} isSubmitting={isFetching}>
         <TextField fullWidth label="Youtube Channel ID" name="channelId" value={channelId} onChange={(e) => { setChannelId(e.target.value); }} placeholder="UCfiDl90gAfZMkgbeCqX1WiA" />
       </InputBox>
     </>);
