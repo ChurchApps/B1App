@@ -147,7 +147,7 @@ export default function Admin(props: Props) {
       <Helmet><style>{StyleHelper.getCss(block?.sections || [], deviceType)}</style></Helmet>
 
       <DndProvider backend={HTML5Backend}>
-        <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}}>
+        <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}} PaperProps={{sx:{zIndex:0}}}>
           <div id="editorBar" style={{width:"28vw", paddingTop:60}}>
             <div style={rightBarStyle}>
               {!editSection && !editElement && <ElementAdd includeBlocks={false} includeSection={block?.blockType === "sectionBlock"} updateCallback={() => { setShowDrawer(false); }} />}
