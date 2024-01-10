@@ -7,7 +7,7 @@ interface Props {
   handleDone: () => void;
 }
 
-export const Import = (props: Props) => {
+export const YouTubeImport = (props: Props) => {
   const [selectedSermons, setSelectedSermons] = React.useState<SermonInterface[]>([]);
   const [sermons, setSermons] = React.useState<SermonInterface[]>(null);
   const [channelId, setChannelId] = React.useState("");
