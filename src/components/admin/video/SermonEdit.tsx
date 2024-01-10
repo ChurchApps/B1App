@@ -133,26 +133,15 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   const fetchVideo = (videoType: "youtube" | "vimeo") => {
-    if (videoType === "youtube") {
-      ApiHelper.getAnonymous("/sermons/lookup?videoType=youtube&videoData=" + currentSermon.videoData, "ContentApi").then(d => {
-        let v = { ...currentSermon };
-        v.title = d.title;
-        v.description = d.description;
-        v.thumbnail = d.thumbnail;
-        v.duration = d.duration;
-        setCurrentSermon(v);
-      });
-    } else {
-      ApiHelper.getAnonymous("/sermons/lookup?videoType=vimeo&videoData=" + currentSermon.videoData, "ContentApi").then(d => {
-        let v = { ...currentSermon };
-        v.title = d.title;
-        v.description = d.description;
-        v.thumbnail = d.thumbnail;
-        v.duration = d.duration;
-        v.publishDate = d.publishDate;
-        setCurrentSermon(v);
-      })
-    }
+    ApiHelper.getAnonymous(`/sermons/lookup?videoType=${videoType}&videoData=${currentSermon.videoData}`, "ContentApi").then(d => {
+      let v = { ...currentSermon };
+      v.title = d.title;
+      v.description = d.description;
+      v.thumbnail = d.thumbnail;
+      v.duration = d.duration;
+      v.publishDate = d.publishDate;
+      setCurrentSermon(v);
+    })
   }
 
   const getPlaylists = () => {
