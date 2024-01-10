@@ -155,6 +155,7 @@ export default function ContentEditor(props: Props) {
     else return createTheme();
   }
 
+  //<div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, keyName, "Drop at the bottom of page")}</div>
   const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <DisplayBox key={"zone-" + keyName} headerText={"Edit Zone: " + name} headerIcon="article" editContent={<Button onClick={() => setShowDrawer(!showDrawer)}>Add Content</Button>}>
     <div>
       <ThemeProvider theme={getTheme()}>
@@ -163,7 +164,7 @@ export default function ContentEditor(props: Props) {
         </div>
       </ThemeProvider>
     </div>
-    <div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, keyName, "Drop at the bottom of page")}</div>
+    <div style={{ height: "31px"}}></div>
   </DisplayBox>
 
   const getZoneBoxes = () => {

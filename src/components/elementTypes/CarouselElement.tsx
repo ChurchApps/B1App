@@ -53,12 +53,13 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
     const emptyStyle = { minHeight: 100, border: "1px solid #999" };
     const result: JSX.Element[] = [];
     element.elements?.forEach((c) => {
+      //{onEdit && <div style={{ height: "31px", paddingTop: "31px", paddingBottom: "31px" }}>{getAddElement(c, c?.elements?.[c?.elements.length - 1]?.sort + 0.1, "Drop at the bottom of slide")}</div>}
       result.push(
         <div key={c.id} className={getClassName()} style={c?.elements?.length > 0 || !onEdit ? {} : emptyStyle}>
           <div style={{ minHeight: "inherit" }}>
             {getElements(c, c.elements)}
           </div>
-          {onEdit && <div style={{ height: "31px", paddingTop: "31px", paddingBottom: "31px" }}>{getAddElement(c, c?.elements?.[c?.elements.length - 1]?.sort + 0.1, "Drop at the bottom of slide")}</div>}
+          {onEdit && <div style={{ height: "31px"}}></div>}
         </div>
       );
     });
