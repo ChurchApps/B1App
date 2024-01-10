@@ -1,4 +1,5 @@
 import { Icon, Box } from "@mui/material";
+import { CSSProperties } from "@mui/material/styles/createMixins";
 import React from "react";
 import { useDrop } from 'react-dnd'
 
@@ -24,10 +25,12 @@ export function DroppableArea(props: Props) {
     }), [props?.dndDeps]
   );
 
+  let droppableStyle:CSSProperties = { position: "absolute", top: 0, left: 0, height: 30, width: "100%", zIndex: 1, backgroundColor: (isOver) ? "#00FF00" : "#28a745" }
+
   if (canDrop) return (
     <div style={{ position: "relative" }}>
-      <div style={{ position: "absolute", top: 0, left: 0, height: 30, width: "100%", zIndex: 1, backgroundColor: (isOver) ? "#00FF00" : "#CCCCCC" }}>
-        <div style={{ textAlign: "center", color: "#000099", width: "100%" }} ref={drop}>
+      <div style={droppableStyle}>
+        <div style={{ textAlign: "center", color: "#FFFFFF", width: "100%" }} ref={drop}>
           {props.children || props.text
             ? (
               <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: "4px" }}>
