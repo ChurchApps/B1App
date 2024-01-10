@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, createTheme } from "@mui/material";
+import { Button, Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  ConfigHelper, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
@@ -112,10 +112,11 @@ export default function Admin(props: Props) {
     if(window.innerWidth > 900){
       if (window?.innerHeight) {
         const editorBarOffset = (editorBarHeight > window.innerHeight) ? (editorBarHeight - window.innerHeight) : 0;
-        const bottomMargin = editorBarOffset === 0 ? 0 : 50;
-        if (scrollTop >= 160 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -160 - bottomMargin };
+        //const bottomMargin = editorBarOffset === 0 ? 0 : 50;
+        //if (scrollTop >= 64 + editorBarOffset) rightBarStyle = { width: editorBar?.clientWidth, position: "fixed", marginTop: -64 - bottomMargin };
+        if (scrollTop < 50) rightBarStyle = { paddingTop: 70 };
       }
-      if (editorBar && editorBar.clientHeight !== editorBarHeight && editorBar.clientHeight > 0) setEditorBarHeight(editorBar.clientHeight)
+      //if (editorBar && editorBar.clientHeight !== editorBarHeight && editorBar.clientHeight > 0) setEditorBarHeight(editorBar.clientHeight)
     }
   }
 
@@ -159,7 +160,7 @@ export default function Admin(props: Props) {
       const sections = ArrayHelper.getAll(page?.sections, "zone", z);
       const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
       result.push(<DisplayBox key={"zone-" + z} headerText={"Edit Zone: " + name} headerIcon="article" editContent={<Button onClick={() => setShowDrawer(!showDrawer)}>Add Content</Button>}>
-        <div style={{ height: (idx === 0) ? 600 : 300, overflowY: "scroll" }}>
+        <div>
           <ThemeProvider theme={getTheme()}>
             <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
               {getSections(z)}
@@ -174,12 +175,6 @@ export default function Admin(props: Props) {
 
   }
 
-  useEffect(() => {
-    if (!showDrawer)
-    {
-      if (editSection || editElement) setShowDrawer(true);
-    }
-  }, [editSection,editElement]);
 
 
   return (<>
@@ -187,9 +182,10 @@ export default function Admin(props: Props) {
     <Helmet><style>{StyleHelper.getCss(page?.sections || [], deviceType)}</style></Helmet>
 
     <AdminWrapper config={props.config}>
+
       <DndProvider backend={HTML5Backend}>
         <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}} PaperProps={{sx:{zIndex:0}}}>
-          <div id="editorBar" style={{width:"28vw", paddingTop:60}}>
+          <div id="editorBar" style={{width:"28vw", position:"sticky", top:0}}>
             <div style={rightBarStyle}>
               {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowDrawer(false); }} />}
               {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); setShowDrawer(false); loadData(); }} globalStyles={props.globalStyles} />}
@@ -198,22 +194,45 @@ export default function Admin(props: Props) {
           </div>
         </Drawer>
         <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <h1 style={{marginTop:0}}>Edit Page</h1>
-            </Grid>
-            <Grid item xs={6} style={{textAlign:"right"}}>
-              <ToggleButtonGroup value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }} style={{backgroundColor:"#FFF"}}>
-                <ToggleButton value="desktop">
-                  <Icon>computer</Icon>
-                </ToggleButton>
-                <ToggleButton value="mobile">
-                  <Icon>smartphone</Icon>
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
-          </Grid>
+          <div style={{position:"sticky", top:0, zIndex:1000}}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
 
+              </Grid>
+              <Grid item xs={6} style={{textAlign:"right"}}>
+                <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
+                  <ToggleButtonGroup value={showDrawer.toString()} exclusive>
+
+                    <ToggleButton value="true" onClick={() => setShowDrawer(!showDrawer)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}>
+                      <Tooltip title="Add Content" placement="top">
+                        <Icon>add</Icon>
+                      </Tooltip>
+                    </ToggleButton>
+
+                  </ToggleButtonGroup>
+                  <ToggleButtonGroup value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }}>
+                    {deviceType==="desktop" && <ToggleButton value="mobile" style={{color:"#FFF"}}>
+                      <Tooltip title="Desktop" placement="top">
+                        <Icon>computer</Icon>
+                      </Tooltip>
+                    </ToggleButton>
+                    }
+
+                    {deviceType==="mobile" && <ToggleButton value="desktop" style={{color:"#FFF"}}>
+                      <Tooltip title="Mobile" placement="top">
+                        <Icon>smartphone</Icon>
+                      </Tooltip>
+                    </ToggleButton>
+                    }
+
+                  </ToggleButtonGroup>
+
+                </div>
+
+              </Grid>
+            </Grid>
+          </div>
+          <h1 style={{marginTop:-50}}>Edit Page</h1>
           {getZoneBoxes()}
         </div>
       </DndProvider>
