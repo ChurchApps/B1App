@@ -8,7 +8,7 @@ import { DisplayBox, ImageEditor, ApiHelper, UserHelper, Permissions } from "@ch
 import { Sermons } from "@/components/admin/video/Sermons";
 import { Playlists } from "@/components/admin/video/Playlists";
 import Link from "next/link";
-import { Import } from "@/components/admin/video/Import";
+import { YouTubeImport } from "@/components/admin/video/YouTubeImport";
 import { VimeoImport } from "@/components/admin/video/VimeoImport";
 
 export default function Admin(props: WrapperPageProps) {
@@ -40,7 +40,7 @@ export default function Admin(props: WrapperPageProps) {
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
           {(importMode)
-            ? <>{(importType === "youtube") ? <Import handleDone={() => { setImportType(null); setImportMode(false); }} /> : <VimeoImport handleDone={() => { setImportType(null); setImportMode(false); }} />}</>
+            ? <>{(importType === "youtube") ? <YouTubeImport handleDone={() => { setImportType(null); setImportMode(false); }} /> : <VimeoImport handleDone={() => { setImportType(null); setImportMode(false); }} />}</>
             : <>{UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />}</>
           }
         </Grid>
