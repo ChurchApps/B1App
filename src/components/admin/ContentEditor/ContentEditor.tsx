@@ -17,6 +17,7 @@ import { StyleHelper } from "@/helpers/StyleHelper";
 import { ElementAdd } from "@/components/admin/ElementAdd";
 import { ElementEdit } from "@/components/admin/ElementEdit";
 import { SectionEdit } from "@/components/admin/SectionEdit";
+import { DroppableScroll } from "../DroppableScroll";
 
 interface Props extends WrapperPageProps {
   church: ChurchInterface,
@@ -204,44 +205,32 @@ export default function ContentEditor(props: Props) {
           </div>
         </Drawer>
         <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
+          <div style={{position:"fixed", bottom:30, zIndex:1000, width:500, marginLeft:300}}>
+            <DroppableScroll key={"scrollDown"} text={"Scroll Down"} direction="down"  />
+          </div>
+          {scrollTop>150 && <div style={{position:"fixed", top: 50, zIndex:1000, width:500, marginLeft:300}}>
+            <DroppableScroll key={"scrollUp"} text={"Scroll Up"} direction="up" />
+          </div> }
           <div style={{position:"sticky", top:0, zIndex:1000}}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
+
 
               </Grid>
               <Grid item xs={6} style={{textAlign:"right"}}>
                 <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
                   <ToggleButtonGroup value={showDrawer.toString()} exclusive>
-
-                    <ToggleButton value="true" onClick={() => setShowDrawer(!showDrawer)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}>
-                      <Tooltip title="Add Content" placement="top">
-                        <Icon>add</Icon>
-                      </Tooltip>
-                    </ToggleButton>
-
+                    <ToggleButton value="true" onClick={() => setShowDrawer(!showDrawer)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
                   </ToggleButtonGroup>
                   <ToggleButtonGroup value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }}>
-                    {deviceType==="desktop" && <ToggleButton value="mobile" style={{color:"#FFF"}}>
-                      <Tooltip title="Desktop" placement="top">
-                        <Icon>computer</Icon>
-                      </Tooltip>
-                    </ToggleButton>
-                    }
-
-                    {deviceType==="mobile" && <ToggleButton value="desktop" style={{color:"#FFF"}}>
-                      <Tooltip title="Mobile" placement="top">
-                        <Icon>smartphone</Icon>
-                      </Tooltip>
-                    </ToggleButton>
-                    }
-
+                    {deviceType==="desktop" && <ToggleButton value="mobile" style={{color:"#FFF"}}><Tooltip title="Desktop" placement="top"><Icon>computer</Icon></Tooltip></ToggleButton>}
+                    {deviceType==="mobile" && <ToggleButton value="desktop" style={{color:"#FFF"}}><Tooltip title="Mobile" placement="top"><Icon>smartphone</Icon></Tooltip></ToggleButton>}
                   </ToggleButtonGroup>
-
                 </div>
-
               </Grid>
             </Grid>
           </div>
+
           <h1 style={{marginTop:-50}}>Edit Page</h1>
           {getZoneBoxes()}
         </div>
