@@ -132,15 +132,27 @@ export const SermonEdit: React.FC<Props> = (props) => {
     return currentSermon.videoUrl = result;
   }
 
-  const fetchYoutube = () => {
-    ApiHelper.getAnonymous("/sermons/lookup?videoType=youtube&videoData=" + currentSermon.videoData, "ContentApi").then(d => {
-      let v = { ...currentSermon };
-      v.title = d.title;
-      v.description = d.description;
-      v.thumbnail = d.thumbnail;
-      v.duration = d.duration;
-      setCurrentSermon(v);
-    });
+  const fetchVideo = (videoType: "youtube" | "vimeo") => {
+    if (videoType === "youtube") {
+      ApiHelper.getAnonymous("/sermons/lookup?videoType=youtube&videoData=" + currentSermon.videoData, "ContentApi").then(d => {
+        let v = { ...currentSermon };
+        v.title = d.title;
+        v.description = d.description;
+        v.thumbnail = d.thumbnail;
+        v.duration = d.duration;
+        setCurrentSermon(v);
+      });
+    } else {
+      ApiHelper.getAnonymous("/sermons/lookup?videoType=vimeo&videoData=" + currentSermon.videoData, "ContentApi").then(d => {
+        let v = { ...currentSermon };
+        v.title = d.title;
+        v.description = d.description;
+        v.thumbnail = d.thumbnail;
+        v.duration = d.duration;
+        v.publishDate = d.publishDate;
+        setCurrentSermon(v);
+      })
+    }
   }
 
   const getPlaylists = () => {
@@ -166,11 +178,12 @@ export const SermonEdit: React.FC<Props> = (props) => {
     case "youtube":
       keyLabel = <>YouTube ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}>https://youtube.com/watch?v=<b style={{ color: "#24b8ff" }}>abcd1234</b></span></>;
       keyPlaceholder = "abcd1234";
-      endAdornment = <Button variant="contained" onClick={fetchYoutube}>Fetch</Button>
+      endAdornment = <Button variant="contained" onClick={() => fetchVideo("youtube")}>Fetch</Button>
       break;
     case "vimeo":
-      keyLabel = <>Vimeo ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}>https://vimeo.com/<b>123456789</b></span></>;
+      keyLabel = <>Vimeo ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}>https://vimeo.com/<b style={{ color: "#24b8ff" }}>123456789</b></span></>;
       keyPlaceholder = "123456789";
+      endAdornment = <Button variant="contained" onClick={() => fetchVideo("vimeo")}>Fetch</Button>
       break;
     case "facebook":
       keyLabel = <>Sermon ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}>https://facebook.com/video.php?v=<b>123456789</b></span></>;
