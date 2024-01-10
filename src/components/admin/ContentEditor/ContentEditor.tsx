@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
+import { Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
@@ -157,7 +157,7 @@ export default function ContentEditor(props: Props) {
   }
 
   //<div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, keyName, "Drop at the bottom of page")}</div>
-  const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <DisplayBox key={"zone-" + keyName} headerText={"Edit Zone: " + name} headerIcon="article" editContent={<Button onClick={() => setShowDrawer(!showDrawer)}>Add Content</Button>}>
+  const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <DisplayBox key={"zone-" + keyName} headerText={"Edit Zone: " + name} headerIcon="article">
     <div>
       <ThemeProvider theme={getTheme()}>
         <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
@@ -205,9 +205,10 @@ export default function ContentEditor(props: Props) {
           </div>
         </Drawer>
         <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
-          <div style={{position:"fixed", bottom:30, zIndex:1000, width:500, marginLeft:300}}>
+          {scrollTop>150
+          && <div style={{position:"fixed", bottom:30, zIndex:1000, width:500, marginLeft:300}}>
             <DroppableScroll key={"scrollDown"} text={"Scroll Down"} direction="down"  />
-          </div>
+          </div>}
           {scrollTop>150 && <div style={{position:"fixed", top: 50, zIndex:1000, width:500, marginLeft:300}}>
             <DroppableScroll key={"scrollUp"} text={"Scroll Up"} direction="up" />
           </div> }
