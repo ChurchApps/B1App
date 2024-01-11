@@ -8,7 +8,8 @@ import { DisplayBox, ImageEditor, ApiHelper, UserHelper, Permissions } from "@ch
 import { Sermons } from "@/components/admin/video/Sermons";
 import { Playlists } from "@/components/admin/video/Playlists";
 import Link from "next/link";
-import { Import } from "@/components/admin/video/Import";
+import { YouTubeImport } from "@/components/admin/video/YouTubeImport";
+import { VimeoImport } from "@/components/admin/video/VimeoImport";
 
 export default function Admin(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -18,6 +19,7 @@ export default function Admin(props: WrapperPageProps) {
   const [photoUrl, setPhotoUrl] = useState<string>(null);
   const [photoType, setPhotoType] = useState<string>(null);
   const [importMode, setImportMode] = useState(false);
+  const [importType, setImportType] = useState<"youtube" | "vimeo">();
 
   const handlePhotoUpdated = (dataUrl: string) => {
     setPhotoUrl(dataUrl);
@@ -38,7 +40,7 @@ export default function Admin(props: WrapperPageProps) {
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
           {(importMode)
-            ? <Import handleDone={() => { setImportMode(false); }} />
+            ? <>{(importType === "youtube") ? <YouTubeImport handleDone={() => { setImportType(null); setImportMode(false); }} /> : <VimeoImport handleDone={() => { setImportType(null); setImportMode(false); }} />}</>
             : <>{UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />}</>
           }
         </Grid>
@@ -46,7 +48,8 @@ export default function Admin(props: WrapperPageProps) {
           {imageEditor}
           <DisplayBox headerIcon="settings" headerText="Settings">
             <div><Link href="/admin/video/settings">Edit Times and Appearance</Link></div>
-            { (!importMode) && <div><a href="about:blank" onClick={(e) => { e.preventDefault(); setImportMode(true); }}>Bulk Import from Youtube</a></div> }
+            { (!importMode || importType === "vimeo") && <div><a href="about:blank" onClick={(e) => { e.preventDefault(); setImportType("youtube"); setImportMode(true); }}>Bulk Import from Youtube</a></div> }
+            { (!importMode || importType === "youtube") && <div><a href="about:blank" onClick={(e) => { e.preventDefault(); setImportType("vimeo"); setImportMode(true); }}>Bulk Import from Vimeo</a></div> }
           </DisplayBox>
           {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)
             && <Playlists showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "playlist" && photoUrl) || null} />
