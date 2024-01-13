@@ -50,6 +50,7 @@ export function ElementAdd(props: Props) {
               <AddableElement dndType="element" elementType="map" icon="add_location_alt" label="Location" />
               <AddableElement dndType="element" elementType="carousel" icon="view_carousel" label="Carousel" />
               <AddableElement dndType="element" elementType="image" icon="add_photo_alternate" label="Image" />
+              <AddableElement dndType="element" elementType="table" icon="data_table" label="Table" />
               <AddableElement dndType="element" elementType="whiteSpace" icon="rectangle" label="White Space" />
             </Grid>
           </AccordionDetails>
