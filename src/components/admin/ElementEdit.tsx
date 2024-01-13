@@ -106,11 +106,12 @@ export function ElementEdit(props: Props) {
 
   const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
 
-  const selectColors = (background:string, textColor:string, headingColor:string) => {
+  const selectColors = (background:string, textColor:string, headingColor:string, linkColor:string) => {
     let p = { ...element };
     parsedData["background"] = background;
     parsedData["textColor"] = textColor;
     parsedData["headingColor"] = headingColor;
+    parsedData["linkColor"] = linkColor;
     p.answersJSON = JSON.stringify(parsedData);
     setElement(p);
   }
@@ -122,7 +123,7 @@ export function ElementEdit(props: Props) {
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.rounded === "true" ? true : false} />} name="rounded" label="Rounded Corners" />
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.translucent === "true" ? true : false} />} name="translucent" label="Translucent" />
       <br />
-      <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
+      <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} linkColor={parsedData?.linkColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
       {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
     </>
   );

@@ -33,11 +33,12 @@ export function SectionEdit(props: Props) {
     setSection(p);
   };
 
-  const selectColors = ( background:string, textColor:string, headingColor:string ) => {
+  const selectColors = ( background:string, textColor:string, headingColor:string, linkColor:string) => {
     let s = { ...section };
     s.background = background;
     s.textColor = textColor;
     s.headingColor = headingColor;
+    s.linkColor = linkColor;
     setSection(s);
   }
 
@@ -79,7 +80,7 @@ export function SectionEdit(props: Props) {
   const getStandardFields = () => (<>
     <ErrorMessages errors={errors} />
     <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
-    <PickColors background={section?.background} textColor={section?.textColor} headingColor={section?.headingColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
+    <PickColors background={section?.background} textColor={section?.textColor} headingColor={section?.headingColor} linkColor={section?.linkColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
     {getAppearanceFields(["border", "color", "font", "height", "line", "margin", "padding", "width"])}
   </>)
 

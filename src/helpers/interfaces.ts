@@ -31,6 +31,7 @@ export interface SectionInterface {
   background?: string;
   textColor?: string;
   headingColor?: string;
+  linkColor?: string;
   sort?: number;
   targetBlockId?: string;
   answersJSON?: string;
