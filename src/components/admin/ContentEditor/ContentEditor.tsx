@@ -14,8 +14,8 @@ import { SectionBlock } from "@/components/SectionBlock";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Helmet } from "react-helmet";
 import { StyleHelper } from "@/helpers/StyleHelper";
-import { ElementAdd } from "@/components/admin/ElementAdd";
-import { ElementEdit } from "@/components/admin/ElementEdit";
+import { ElementAdd } from "@/components/admin/elements/ElementAdd";
+import { ElementEdit } from "@/components/admin/elements/ElementEdit";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { DroppableScroll } from "../DroppableScroll";
 

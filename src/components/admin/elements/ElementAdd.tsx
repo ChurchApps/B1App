@@ -3,7 +3,7 @@ import { Grid, Accordion, AccordionSummary, Typography, AccordionDetails } from 
 import { ExpandMore } from "@mui/icons-material";
 import { DisplayBox, ApiHelper } from "@churchapps/apphelper";
 import { BlockInterface } from "@/helpers";
-import { AddableElement } from "./AddableElement";
+import { AddableElement } from "../AddableElement";
 
 type Props = {
   includeBlocks: boolean
@@ -27,6 +27,7 @@ export function ElementAdd(props: Props) {
   }
 
   //<AddableElement dndType="element" elementType="buttonLink" icon="smart_button" label="Button" />
+  //<AddableElement dndType="element" elementType="whiteSpace" icon="rectangle" label="White Space" />
   return (
     <div>
       <DisplayBox id="elementAddBox" headerText="Add" headerIcon="article" editContent={<a href="about:blank" onClick={e => { e.preventDefault(); props.updateCallback() }}>Close</a>}>
@@ -50,8 +51,8 @@ export function ElementAdd(props: Props) {
               <AddableElement dndType="element" elementType="map" icon="add_location_alt" label="Location" />
               <AddableElement dndType="element" elementType="carousel" icon="view_carousel" label="Carousel" />
               <AddableElement dndType="element" elementType="image" icon="add_photo_alternate" label="Image" />
-              <AddableElement dndType="element" elementType="table" icon="data_table" label="Table" />
-              <AddableElement dndType="element" elementType="whiteSpace" icon="rectangle" label="White Space" />
+              <AddableElement dndType="element" elementType="table" icon="table_chart" label="Table" />
+
             </Grid>
           </AccordionDetails>
         </Accordion>
