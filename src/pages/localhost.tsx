@@ -18,6 +18,12 @@ export default function Localhost() {
       <br />
       <br />
       <Link href="http://ironwood.localhost:3000/admin">Admin</Link>
+      <table>
+        <tr>
+          <td>Hello</td>
+          <td>World</td>
+        </tr>
+      </table>
 
       <br />
       <h3>Editor</h3>

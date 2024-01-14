@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import { BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
-import { PickColors } from "./PickColors";
-import { StyleList } from "./StyleList";
+import { PickColors } from "./elements/PickColors";
+import { StyleList } from "./elements/StyleList";
 
 type Props = {
   section: SectionInterface;

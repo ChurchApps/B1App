@@ -506,3 +506,5 @@ a.dropdown-toggle::after {
 .editor-list-ul li {
   list-style-type: disc !important;
 }
+
+.page th { font-weight: bold;}
