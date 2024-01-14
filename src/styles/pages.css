@@ -490,3 +490,21 @@ a.dropdown-toggle::after {
 .elBox {
   margin-bottom: 20px;
 }
+
+.editor-list-ul, .editor-list-ol
+{
+  padding-left:0px;
+  margin-left:40px;
+}
+
+.editor-list-ol li {
+  list-style-type: decimal !important;
+  margin-bottom: 0px;
+}
+
+
+.editor-list-ul li {
+  list-style-type: disc !important;
+}
+
+.page th { font-weight: bold;}

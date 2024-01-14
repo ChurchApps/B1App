@@ -414,3 +414,9 @@
 .headingsAccent h1, .headingsAccent h2, .headingsAccent h3, .headingsAccent h4 { color: var(--accent); }
 .headingsDarkAccent h1, .headingsDarkAccent h2, .headingsDarkAccent h3, .headingsDarkAccent h4 { color: var(--darkAccent); }
 .headingsDark h1, .headingsDark h2, .headingsDark h3, .headingsDark h4 { color: var(--dark); }
+
+.linksLight a { color: var(--light); }
+.linksLightAccent a { color: var(--lightAccent); }
+.linksAccent a { color: var(--accent); }
+.linksDarkAccent a { color: var(--darkAccent); }
+.linksDark a { color: var(--dark); }

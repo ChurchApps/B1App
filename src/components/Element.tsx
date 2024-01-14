@@ -23,6 +23,7 @@ import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 import { CalendarElement } from "./elementTypes/CalendarElement";
 import { ApiHelper } from "@churchapps/apphelper";
 import { BoxElement } from "./elementTypes/BoxElement";
+import { TableElement } from "./elementTypes/TableElement";
 
 interface Props {
   element: ElementInterface;
@@ -122,6 +123,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "calendar":
       result = <CalendarElement key={props.element.id} element={props.element as ElementInterface} churchId={props.church?.id ?? props.element.churchId} />
+      break;
+    case "table":
+      result = <TableElement key={props.element.id} element={props.element as ElementInterface} />
       break;
   }
 

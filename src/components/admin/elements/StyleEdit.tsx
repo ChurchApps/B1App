@@ -2,7 +2,7 @@ import { StyleOption } from "@/helpers";
 import { InputBox } from "@churchapps/apphelper";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect } from "react";
-import { ColorPicker } from "./ColorPicker";
+import { ColorPicker } from "../ColorPicker";
 
 interface Props {
   fieldOptions: StyleOption[],

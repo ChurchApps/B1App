@@ -10,6 +10,7 @@ import { FaqEdit } from "./FaqEdit";
 import { CalendarElementEdit } from "./CalendarElementEdit";
 import { PickColors } from "./PickColors";
 import { StyleList } from "./StyleList";
+import { TableEdit } from "./TableEdit";
 
 type Props = {
   element: ElementInterface;
@@ -106,11 +107,12 @@ export function ElementEdit(props: Props) {
 
   const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
 
-  const selectColors = (background:string, textColor:string, headingColor:string) => {
+  const selectColors = (background:string, textColor:string, headingColor:string, linkColor:string) => {
     let p = { ...element };
     parsedData["background"] = background;
     parsedData["textColor"] = textColor;
     parsedData["headingColor"] = headingColor;
+    parsedData["linkColor"] = linkColor;
     p.answersJSON = JSON.stringify(parsedData);
     setElement(p);
   }
@@ -122,7 +124,7 @@ export function ElementEdit(props: Props) {
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.rounded === "true" ? true : false} />} name="rounded" label="Rounded Corners" />
       <FormControlLabel control={<Checkbox onChange={handleCheck} checked={parsedData.translucent === "true" ? true : false} />} name="translucent" label="Translucent" />
       <br />
-      <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
+      <PickColors background={parsedData?.background} textColor={parsedData?.textColor} headingColor={parsedData?.headingColor || parsedData?.textColor} linkColor={parsedData?.linkColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
       {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
     </>
   );
@@ -335,6 +337,7 @@ export function ElementEdit(props: Props) {
     let result = getJsonFields();
     switch (element?.elementType) {
       case "row": result = <><RowEdit parsedData={parsedData} onRealtimeChange={handleRowChange} setErrors={setInnerErrors} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
+      case "table": result = <><TableEdit parsedData={parsedData} onRealtimeChange={handleRowChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
       case "box": result = getBoxFields(); break;
       case "text": result = getTextFields(); break;
       case "textWithPhoto": result = getTextWithPhotoFields(); break;

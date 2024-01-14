@@ -8,7 +8,8 @@ type Props = {
   background:string;
   textColor:string;
   headingColor:string;
-  updatedCallback: (background:string, textColor:string, headingColor:string) => void;
+  linkColor:string;
+  updatedCallback: (background:string, textColor:string, headingColor:string, linkColor:string) => void;
   globalStyles: GlobalStyleInterface;
 };
 
@@ -18,7 +19,7 @@ export function PickColors(props: Props) {
 
 
   const handlePhotoSelected = (image: string) => {
-    props.updatedCallback(image, props.textColor, props.headingColor);
+    props.updatedCallback(image, props.textColor, props.headingColor, props.linkColor);
     setSelectPhotoField(null);
   }
 
@@ -27,23 +28,23 @@ export function PickColors(props: Props) {
     e.preventDefault();
     const val = e.target.value;
     switch (e.target.name) {
-      case "background": props.updatedCallback(val, props.textColor, props.headingColor); break;
+      case "background": props.updatedCallback(val, props.textColor, props.headingColor, props.linkColor); break;
       case "backgroundType":
         switch (val) {
           case "image":
-            props.updatedCallback("https://content.churchapps.org/stockPhotos/4/bible.png", props.textColor, props.headingColor)
+            props.updatedCallback("https://content.churchapps.org/stockPhotos/4/bible.png", props.textColor, props.headingColor, props.linkColor)
             break;
           case "youtube":
-            props.updatedCallback("youtube:3iXYciBTQ0c", props.textColor, props.headingColor)
+            props.updatedCallback("youtube:3iXYciBTQ0c", props.textColor, props.headingColor, props.linkColor)
             break;
           default:
-            props.updatedCallback("#000000", props.textColor, props.headingColor)
+            props.updatedCallback("#000000", props.textColor, props.headingColor, props.linkColor)
             break;
         }
         break;
-      case "textColor": props.updatedCallback(props.background, val, props.headingColor); break;
-      case "headingColor": props.updatedCallback(props.background, props.textColor, val); break;
-      case "youtubeId": props.updatedCallback("youtube:" + val, props.textColor, props.headingColor); break;
+      case "textColor": props.updatedCallback(props.background, val, props.headingColor, props.linkColor); break;
+      case "headingColor": props.updatedCallback(props.background, props.textColor, val, props.linkColor); break;
+      case "youtubeId": props.updatedCallback("youtube:" + val, props.textColor, props.headingColor, props.linkColor); break;
     }
 
   };
@@ -53,7 +54,8 @@ export function PickColors(props: Props) {
     return getManualOptions(colors, colors, "background");
   }
 
-  const getThemeOptions = (field:"background" | "textColor" | "headingColor" =  "background") => {
+  const getThemeOptions = (field:"background" | "textColor" | "headingColor" | "linkColor" =  "background") => {
+    if (field==="linkColor") console.log("LINK COLOR", props.linkColor);
     if (props.globalStyles?.palette)
     {
       const palette = JSON.parse(props.globalStyles.palette);
@@ -62,13 +64,23 @@ export function PickColors(props: Props) {
     }
   }
 
-  const getManualOptions = (colors:string[], values:string[], field:"background" | "textColor" | "headingColor") => {
+  const updateField = (field:"background" | "textColor" | "headingColor" | "linkColor", value:string) => {
+    console.log("UPDATE FIELD", field, value)
+    switch (field) {
+      case "background": props.updatedCallback(value, props.textColor, props.headingColor, props.linkColor); break;
+      case "textColor": props.updatedCallback(props.background, value, props.headingColor, props.linkColor); break;
+      case "headingColor": props.updatedCallback(props.background, props.textColor, value, props.linkColor); break;
+      case "linkColor": props.updatedCallback(props.background, props.textColor, props.headingColor, value); break;
+    }
+  }
+
+  const getManualOptions = (colors:string[], values:string[], field:"background" | "textColor" | "headingColor" | "linkColor") => {
     let result: JSX.Element[] = [];
     colors.forEach((c, i) => {
       const v = values[i];
       const style: any = { backgroundColor: c, width: "100%", height: (props[field] === v) ? 20 : 12, display: "block" }
       if (c === "#FFFFFF" || v === "var(--light)") style.border = "1px solid #999";
-      result.push(<td><a href="about:blank" style={style} onClick={(e) => { e.preventDefault(); if (field==="background") props.updatedCallback(v, props.textColor, props.headingColor); else if (field==="textColor") props.updatedCallback(props.background, v, props.headingColor); else props.updatedCallback(props.background, props.textColor, v); }}>&nbsp;</a></td>);
+      result.push(<td><a href="about:blank" style={style} onClick={(e) => { e.preventDefault(); updateField(field,v); }}>&nbsp;</a></td>);
     })
     return (<table style={{ width: "100%", marginTop: 10 }} key={field + "ManualColors"}>
       <tbody>
@@ -96,7 +108,7 @@ export function PickColors(props: Props) {
     ];
 
     if (backgroundType === "color") {
-      result.push(<SliderPicker key="sliderPicker" color={props.background} onChangeComplete={(color) => { if (color.hex !== "#000000") props.updatedCallback(color.hex, props.textColor, props.headingColor)  }} />);
+      result.push(<SliderPicker key="sliderPicker" color={props.background} onChangeComplete={(color) => { if (color.hex !== "#000000") props.updatedCallback(color.hex, props.textColor, props.headingColor, props.linkColor)  }} />);
       result.push(getGrayOptions())
       result.push(getThemeOptions())
       result.push(<TextField key="backgroundText" fullWidth size="small" label="Background" name="background" value={props.background} onChange={handleChange} />)
@@ -121,7 +133,7 @@ export function PickColors(props: Props) {
   //
 
   const selectPairing = ( pair:string[]) => {
-    props.updatedCallback("var(--" + pair[0] + ")", "var(--" + pair[1] + ")", "var(--" + pair[1] + ")");
+    props.updatedCallback("var(--" + pair[0] + ")", "var(--" + pair[1] + ")", "var(--" + pair[1] + ")", "var(--" + pair[2] + ")");
   }
 
   const getRGB = (hex:string) => {
@@ -138,6 +150,25 @@ export function PickColors(props: Props) {
     return ((contrastR + contrastG + contrastB) > 250 );
   }
 
+  const determineLinkColor = (background:string, text:string) => {
+    let name = "accent";
+    switch (background) {
+      case "light":
+      case "lightAccent":
+        name = (text === "darkAccent") ? "accent" : "darkAccent";
+        break;
+      case "accent":
+        name = (text === "lightAccent") ? "darkAccent" : "lightAccent";
+        break;
+      case "darkAccent":
+      case "dark":
+        name = (text === "lightAccent") ? "accent" : "lightAccent";
+        break;
+    }
+    return name;
+  }
+
+
   const getSuggestedColors = () => {
     const colors = JSON.parse(props.globalStyles.palette);
     const pairings:any[] = []
@@ -146,7 +177,10 @@ export function PickColors(props: Props) {
       names.forEach(nt => {
         const rgbB = getRGB(colors[nb]);
         const rgbT = getRGB(colors[nt]);
-        if (enoughContrast(rgbB, rgbT)) pairings.push([nb, nt]);
+        if (enoughContrast(rgbB, rgbT)) {
+          const linkColor = determineLinkColor(nb, nt);
+          pairings.push([nb, nt, linkColor]);
+        }
       });
 
     });
@@ -156,7 +190,8 @@ export function PickColors(props: Props) {
     pairings.forEach(p => {
       const b = colors[p[0]]
       const t = colors[p[1]]
-      suggestions.push(<a href="about:blank" onClick={(e) => {e.preventDefault(); selectPairing(p); }} style={{display:"block", backgroundColor:b, color:t, border:"1px solid " + t, borderRadius:5, padding:5, marginBottom:3 }}>Sample Text</a>);
+      const l = colors[p[2]]
+      suggestions.push(<a href="about:blank" onClick={(e) => {e.preventDefault(); selectPairing(p); }} style={{display:"block", backgroundColor:b, color:t, border:"1px solid " + t, borderRadius:5, padding:5, marginBottom:3 }}>Sample Text -  <span style={{color:l}}>Sample Link</span></a>);
     });
 
 
@@ -177,6 +212,8 @@ export function PickColors(props: Props) {
     {getThemeOptions("headingColor")}
     <div><InputLabel>Text Color</InputLabel></div>
     {getThemeOptions("textColor")}
+    <div><InputLabel>Link Color</InputLabel></div>
+    {getThemeOptions("linkColor")}
   </>)
 
   return <>

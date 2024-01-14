@@ -64,6 +64,11 @@ export const Section: React.FC<Props> = props => {
       hc = hc.replace("var(--", "").replace(")", "");
       result += " headings" + hc[0].toUpperCase() + hc.slice(1);
     }
+    let lc = props.section.linkColor;
+    if (lc) {
+      lc = lc.replace("var(--", "").replace(")", "");
+      result += " links" + lc[0].toUpperCase() + lc.slice(1);
+    }
 
     return result;
   }
