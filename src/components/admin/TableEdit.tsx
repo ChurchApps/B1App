@@ -1,4 +1,5 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { MarkdownEditor, MarkdownPreview } from "@churchapps/apphelper";
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import React from "react";
 
 type Props = {
@@ -10,6 +11,8 @@ export function TableEdit(props: Props) {
   const contents:string[][] = props.parsedData.contents || [["",""],["",""],["",""],["",""]];
   const rows = contents.length;
   const cols = (contents.length>0) ? contents[0].length : 0;
+  const markdown = props.parsedData.markdown || false;
+  const [editCellIdx, setEditCellIdx] = React.useState<number[]>(null);
 
   const updateRows = (newRows: number) => {
     let c = [...contents];
@@ -35,6 +38,7 @@ export function TableEdit(props: Props) {
     if (e.target.name === "rows") data.contents = updateRows(parseInt(e.target.value));
     if (e.target.name === "columns") data.contents = updateCols(parseInt(e.target.value));
     if (e.target.name === "head") data.head = (e.target.value === "true");
+    if (e.target.name === "markdown") data.markdown = (e.target.value === "true");
     if (e.target.name === "size") data.size = e.target.value;
     if (e.target.name.startsWith("cell-")) {
       const parts = e.target.name.split("-");
@@ -47,30 +51,66 @@ export function TableEdit(props: Props) {
     props.onRealtimeChange(data)
   };
 
+  const getMarkdownEditor = () => {
+    const row = editCellIdx[0];
+    const col = editCellIdx[1];
+    return (<>
+      <MarkdownEditor value={contents[row][col]} onChange={val => {
+        const c = [...contents];
+        c[row][col] = val;
+        const data = { ...props.parsedData };
+        data.contents = c;
+        props.onRealtimeChange({ ...props.parsedData, contents: c });
+      }} />
+      <Button style={{float:"right"}} onClick={() => { setEditCellIdx(null) }}>Done</Button>
+      <br />
+    </>)
+  }
+
   const getGrid = () => {
     let result: JSX.Element[] = [];
     for (let i = 0; i < rows; i++) {
       let row: JSX.Element[] = [];
       for (let j = 0; j < cols; j++) {
-        row.push(<td key={j}><TextField fullWidth size="small" label="" style={{margin:0}} name={"cell-" + i + "-" + j} value={contents[i][j]} onChange={handleChange} /></td>);
+        if (markdown) row.push(<TableCell key={j} style={{cursor:"pointer"}} onClick={() => { setEditCellIdx([i,j]) }}><MarkdownPreview value={contents[i][j] || "(empty)"} /></TableCell>);
+        else row.push(<TableCell key={j}><TextField fullWidth size="small" label="" style={{margin:0}} name={"cell-" + i + "-" + j} value={contents[i][j]} onChange={handleChange} /></TableCell>);
       }
-      result.push(<tr key={i}>{row}</tr>);
+      result.push(<TableRow key={i}>{row}</TableRow>);
     }
-    return (<table><tbody>{result}</tbody></table>);
+    return (<Table size="small"><TableBody>{result}</TableBody></Table>);
   }
-
 
   return (
     <>
-      <TextField fullWidth size="small" label="Rows" name="rows" value={rows} onChange={handleChange} />
-      <TextField fullWidth size="small" label="Columns" name="columns" value={cols} onChange={handleChange} />
-      <FormControl fullWidth size="small">
-        <InputLabel>First Row is Header</InputLabel>
-        <Select fullWidth label="First Row is Header" size="small" name="head" value={props.parsedData.head?.toString() || "false"} onChange={handleChange}>
-          <MenuItem value="true">Yes</MenuItem>
-          <MenuItem value="false">No</MenuItem>
-        </Select>
-      </FormControl>
+      <Grid container columnSpacing={3}>
+        <Grid item md={6} xs={12}>
+          <TextField fullWidth size="small" label="Rows" name="rows" value={rows} onChange={handleChange} />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <TextField fullWidth size="small" label="Columns" name="columns" value={cols} onChange={handleChange} />
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <FormControl fullWidth size="small">
+            <InputLabel>First Row is Header</InputLabel>
+            <Select fullWidth label="First Row is Header" size="small" name="head" value={props.parsedData.head?.toString() || "false"} onChange={handleChange}>
+              <MenuItem value="true">Yes</MenuItem>
+              <MenuItem value="false">No</MenuItem>
+            </Select>
+          </FormControl>
+
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <FormControl fullWidth size="small">
+            <InputLabel>Allow Markdown</InputLabel>
+            <Select fullWidth label="Allow Markdown" size="small" name="markdown" value={props.parsedData.markdown?.toString() || "false"} onChange={handleChange}>
+              <MenuItem value="true">Yes</MenuItem>
+              <MenuItem value="false">No</MenuItem>
+            </Select>
+          </FormControl>
+
+        </Grid>
+      </Grid>
+
       <FormControl fullWidth size="small">
         <InputLabel>Size</InputLabel>
         <Select fullWidth label="Size" size="small" name="size" value={props.parsedData.size?.toString() || "medium"} onChange={handleChange}>
@@ -78,7 +118,8 @@ export function TableEdit(props: Props) {
           <MenuItem value="small">Small</MenuItem>
         </Select>
       </FormControl>
-      {getGrid()}
+      {editCellIdx && getMarkdownEditor()}
+      {!editCellIdx && getGrid()}
     </>
   );
 
