@@ -1,4 +1,4 @@
-import { TextField, Box, SelectChangeEvent } from "@mui/material";
+import { TextField, Box, SelectChangeEvent, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { MarkdownEditor } from "@churchapps/apphelper";
 
 type Props = {
@@ -9,6 +9,13 @@ type Props = {
 
 export const FaqEdit = ({ parsedData, handleChange, handleMarkdownChange }: Props) => (
   <>
+    <FormControl fullWidth>
+      <InputLabel>Heading Type</InputLabel>
+      <Select fullWidth label="Heading Type" name="headingType" value={parsedData.headingType} onChange={handleChange}>
+        <MenuItem value="h6">Heading</MenuItem>
+        <MenuItem value="link">Link</MenuItem>
+      </Select>
+    </FormControl>
     <TextField fullWidth label="Title" name="title" size="small" value={parsedData.title || ""} onChange={handleChange} />
     <Box sx={{ marginTop: 2 }}>
       <MarkdownEditor

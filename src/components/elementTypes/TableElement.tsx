@@ -33,7 +33,7 @@ export const TableElement = ({ element }: Props) => {
     return result;
   }
 
-  const getTable = () => (<Table size={element.answers.size}>
+  const getTable = () => (<Table size={element.answers.size} className="pageTable">
     {hasHead && getHead()}
     <TableBody>{getBody()}</TableBody>
   </Table>)

@@ -48,5 +48,5 @@ export const TextWithPhoto: React.FC<Props> = props => {
       )
       break;
   }
-  return <div id={"el-" + props.element.id} style={{ marginBottom: 30 }}>{result}</div>;
+  return <div id={"el-" + props.element.id} className="elTextWithPhoto">{result}</div>;
 }
