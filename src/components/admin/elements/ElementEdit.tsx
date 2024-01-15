@@ -280,6 +280,7 @@ export function ElementEdit(props: Props) {
   const getRawHTML = () => (
     <>
       <TextField fullWidth label="HTML Content" name="rawHTML" onChange={handleChange} value={parsedData.rawHTML || ""} multiline minRows={7} maxRows={15} />
+      <TextField fullWidth label="Javascript (exlude <script> tag)" name="javascript" onChange={handleChange} value={parsedData.javascript || ""} multiline minRows={7} maxRows={15} />
     </>
   )
 
