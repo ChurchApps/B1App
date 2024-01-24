@@ -50,7 +50,7 @@ export const AdminWrapper: React.FC<Props> = (props) => {
     <ThemeProvider theme={Themes.BaseTheme}>
       <CssBaseline />
       <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-        <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} appearance={props.config.appearance}>
+        <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} appearance={props.config.appearance} omitOverflow={true}>
           {props.children}
         </SiteWrapper>
       </Box>
