@@ -95,7 +95,9 @@ body {
 }
 
 .page .sectionVideo {
+  min-height: 100px;
   padding-top:40px;
+  padding-bottom: 40px;
 }
 
 .page .sectionFirst {
