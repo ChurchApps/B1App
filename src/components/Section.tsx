@@ -1,7 +1,7 @@
 import { SmallButton } from "@churchapps/apphelper";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Container } from "@mui/material";
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
@@ -18,6 +18,7 @@ interface Props {
 }
 
 export const Section: React.FC<Props> = props => {
+  const [isDragging, setIsDragging] = useState(false);
 
   const getElements = () => {
     const result: JSX.Element[] = []
@@ -112,7 +113,7 @@ export const Section: React.FC<Props> = props => {
 
   const getAddElement = (s: number) => {
     const sort = s;
-    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} />);
+    return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} updateIsDragging={(dragging) => setIsDragging(dragging)} />);
     //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 
@@ -124,7 +125,7 @@ export const Section: React.FC<Props> = props => {
 
   if (props.section.background.indexOf("youtube:") > -1) {
     const youtubeId = props.section.background.split(":")[1];
-    return (<YoutubeBackground id={props.section.answers?.sectionId || "section-" + props.section.id} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
+    return (<YoutubeBackground isDragging={isDragging} id={props.section.answers?.sectionId || "section-" + props.section.id} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
   }
   else return (<div style={getStyle()} className={getClassName()} id={props.section.answers?.sectionId || "section-" + props.section.id}>{contents}</div>);
 }

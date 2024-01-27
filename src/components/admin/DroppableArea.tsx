@@ -1,6 +1,6 @@
 import { Icon, Box } from "@mui/material";
 import { CSSProperties } from "@mui/material/styles/createMixins";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDrop } from 'react-dnd'
 
 type Props = {
@@ -8,10 +8,13 @@ type Props = {
   accept: any,
   text?: string
   onDrop: (data: any) => void,
-  dndDeps?: any
+  dndDeps?: any,
+  updateIsDragging?: (isDragging: boolean) => void
 };
 
 export function DroppableArea(props: Props) {
+
+  const [isDragging, setIsDragging] = React.useState(false);
 
   const [{ isOver, canDrop, item }, drop] = useDrop(
     () => ({
@@ -24,6 +27,10 @@ export function DroppableArea(props: Props) {
       }),
     }), [props?.dndDeps]
   );
+
+  if (canDrop!==isDragging) setIsDragging(canDrop);
+
+  useEffect(() => { if (props.updateIsDragging) props.updateIsDragging(isDragging) }, [isDragging]);
 
   let droppableStyle:CSSProperties = { position: "absolute", top: 0, left: 0, height: 30, width: "100%", zIndex: 1, backgroundColor: (isOver) ? "#00FF00" : "#28a745" }
 

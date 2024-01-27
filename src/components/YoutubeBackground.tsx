@@ -9,6 +9,7 @@ interface Props extends YouTubeProps {
   aspectRatio?: any;
   noCookie?: boolean;
   contentClassName?: string;
+  isDragging: boolean;
 }
 
 export function YoutubeBackground({
@@ -20,6 +21,7 @@ export function YoutubeBackground({
   className,
   aspectRatio = "16:9",
   contentClassName,
+  isDragging = false,
   ...rest
 }: Props) {
   const [videoHeight, setVideoHeight] = useState(10);
@@ -33,16 +35,6 @@ export function YoutubeBackground({
     aspectRatio = parseInt(split[0]) / parseInt(split[1]);
   }
 
-  /*
-  const [{ canDrop }] = useDrop(
-    () => ({
-      accept: ["element", "elementBlock"],
-      collect: (monitor) => ({
-        canDrop: !!monitor.canDrop(),
-      }),
-    }), []
-  );
-  */
 
 
   useEffect(() => {
@@ -109,7 +101,7 @@ export function YoutubeBackground({
         }}
       >
         {overlay && <div className={styles.overlay} style={{ backgroundColor: overlay }}></div>}
-        {<YouTube
+        {!isDragging && <YouTube
           {...rest}
           onReady={(e) => {
             e.target.playVideo();
