@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, ReactNode } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import styles from "styles/youtubeBackground.module.css";
+import { useDrop } from "react-dnd";
 
 interface Props extends YouTubeProps {
   children?: ReactNode;
@@ -32,6 +33,16 @@ export function YoutubeBackground({
     const split = aspectRatio.split(":");
     aspectRatio = parseInt(split[0]) / parseInt(split[1]);
   }
+
+  const [{ canDrop }] = useDrop(
+    () => ({
+      accept: ["element", "elementBlock"],
+      collect: (monitor) => ({
+        canDrop: !!monitor.canDrop(),
+      }),
+    }), []
+  );
+
 
   useEffect(() => {
     updateDimensions();
@@ -97,7 +108,7 @@ export function YoutubeBackground({
         }}
       >
         {overlay && <div className={styles.overlay} style={{ backgroundColor: overlay }}></div>}
-        <YouTube
+        {!canDrop && <YouTube
           {...rest}
           onReady={(e) => {
             e.target.playVideo();
@@ -110,8 +121,7 @@ export function YoutubeBackground({
           opts={videoOptions}
           className={styles.videoInnerContainer}
           iframeClassName={styles.videoIframe}
-
-        />
+        />}
       </div>
     </div>
   );
