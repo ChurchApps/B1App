@@ -54,6 +54,18 @@ export function Header(props: Props) {
     return result;
   }
 
+  const getLinkClass = () => {
+    let result = "";
+    if (props.sections?.length > 0) {
+      let lc = props.sections[0].linkColor;
+      if (lc) {
+        lc = lc.replace("var(--", "").replace(")", "");
+        result = "links" + lc[0].toUpperCase() + lc.slice(1);
+      }
+    }
+    return result;
+  }
+
   const getLogo = () => {
     if (transparent) {
       let result = (getFirstSectionTextColor()==="dark")
@@ -75,9 +87,10 @@ export function Header(props: Props) {
 
   let appBarClass = "";
   if (transparent) {
-    appBarClass = (getFirstSectionTextColor()==="dark")
-      ?  "transparent light"
-      :  "transparent";
+    appBarClass = "transparent " + getLinkClass();
+    //appBarClass = (getFirstSectionTextColor()==="dark")
+    //?  "transparent light"
+    //:  "transparent";
   }
 
   return (
