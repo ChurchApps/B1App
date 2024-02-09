@@ -56,6 +56,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [location])
 
   const favicon = config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(config.appearance, "16");
+  const ogImage = config?.appearance?.favicon_400x400 && AppearanceHelper.getFavicon(config.appearance, "400");
 
   return (
     <UserProvider>
@@ -64,6 +65,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           ? <link rel="shortcut icon" type="image/png" href={favicon} />
           : <link rel="icon" href="/favicon.ico" />
         }
+        {ogImage && <meta property="og:image" content={ogImage}></meta>}
       </Head>
       <ErrorMessages errors={errors} />
       <Component {...pageProps} />
