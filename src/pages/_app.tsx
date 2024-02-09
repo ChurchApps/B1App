@@ -5,19 +5,16 @@ import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
 import type { AppProps } from "next/app";
-import Head from "next/head";
-import { EnvironmentHelper, ConfigHelper } from "@/helpers";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { EnvironmentHelper } from "@/helpers";
 import { UserProvider } from "@/context/UserContext";
 import { AnalyticsHelper, UserHelper, ErrrorAppDataInterface, ErrorLogInterface } from "@churchapps/apphelper";
 import React from "react";
-import { ErrorHelper, AppearanceHelper } from "@churchapps/apphelper";
+import { ErrorHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
 
 EnvironmentHelper.init();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [config, setConfig] = React.useState<ConfigurationInterface>(null);
   const [errors, setErrors] = React.useState([]);
   const location = (typeof(window) === "undefined") ? null : window.location;
 
@@ -43,30 +40,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   ErrorHelper.init(getErrorAppData, customErrorHandler);
   React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
-  React.useEffect(() => {
-    const subdomain = location.hostname.split(".")?.[0]?.toString();
-    const getConfig = async () => {
-      const response = await ConfigHelper.load(subdomain);
-      response && setConfig(response);
-      return response;
-    }
-    if (subdomain) {
-      getConfig();
-    }
-  }, [location])
-
-  const favicon = config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(config.appearance, "16");
-  const ogImage = config?.appearance?.favicon_400x400 && AppearanceHelper.getFavicon(config.appearance, "400");
-
   return (
     <UserProvider>
-      <Head>
-        {favicon
-          ? <link rel="shortcut icon" type="image/png" href={favicon} />
-          : <link rel="icon" href="/favicon.ico" />
-        }
-        {ogImage && <meta property="og:image" content={ogImage}></meta>}
-      </Head>
       <ErrorMessages errors={errors} />
       <Component {...pageProps} />
     </UserProvider>

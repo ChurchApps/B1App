@@ -1,15 +1,17 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { PageLayout, Theme } from "@/components";
-import { GlobalStyleInterface, PageInterface } from "@/helpers";
+import { ConfigHelper, GlobalStyleInterface, PageInterface } from "@/helpers";
 import { useEffect } from "react";
 import { ApiHelper, ChurchInterface, LinkInterface, Loading } from "@churchapps/apphelper";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 type Props = {
   pageData: any;
   church: ChurchInterface,
   churchSettings: any,
   navLinks: LinkInterface[],
-  globalStyles: GlobalStyleInterface
+  globalStyles: GlobalStyleInterface,
+  config: ConfigurationInterface
 };
 
 export default function Home(props: Props) {
@@ -19,7 +21,7 @@ export default function Home(props: Props) {
 
   if (!props.pageData?.url) return <Loading />
   else return (<>
-    <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
+    <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} config={props.config} />
     <PageLayout church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
   </>);
 }
@@ -38,11 +40,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
 
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi");
+  const config = await ConfigHelper.load(church.subDomain);
 
   console.log("GLOBAL", globalStyles);
 
   return {
-    props: { pageData, church, churchSettings, navLinks, globalStyles },
+    props: { pageData, church, churchSettings, navLinks, globalStyles, config },
     revalidate: 30,
   };
 };

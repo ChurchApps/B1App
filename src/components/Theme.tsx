@@ -1,9 +1,10 @@
 import { GlobalStyleInterface } from "@/helpers";
-import { AppearanceInterface } from "@churchapps/apphelper";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { AppearanceHelper, AppearanceInterface } from "@churchapps/apphelper";
 import React from "react";
 import { Helmet } from "react-helmet"
 
-interface Props { appearance?: AppearanceInterface, globalStyles: GlobalStyleInterface }
+interface Props { appearance?: AppearanceInterface, globalStyles: GlobalStyleInterface, config?:ConfigurationInterface }
 
 export const Theme: React.FC<Props> = (props) => {
 
@@ -64,14 +65,20 @@ export const Theme: React.FC<Props> = (props) => {
 
   if (props?.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{__html:props.globalStyles.customJS}} />
 
-
-
+  //These really belong in the head, but if we use Helmet, it won't be rendered in the server side html
+  const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
+  const ogImage = props.config?.appearance?.favicon_400x400 && AppearanceHelper.getFavicon(props.config.appearance, "400");
 
   return (<>
     {fontLink}
     <Helmet>
       {css}
     </Helmet>
+    {favicon
+      ? <link rel="shortcut icon" type="image/png" href={favicon} />
+      : <link rel="icon" href="/favicon.ico" />
+    }
+    {ogImage && <meta property="og:image" content={ogImage}></meta>}
     {customJs}
   </>);
 }
