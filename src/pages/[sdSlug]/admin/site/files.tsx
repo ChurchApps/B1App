@@ -107,7 +107,7 @@ export default function Files(props: WrapperPageProps) {
           <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload">
             { getStorage() }
             <p>100 MB of storage space is provided for free for storing PDFs and other documents commonly needed for church websites.  We suggest using Google Drive or Dropbox to store files if additional space is needed.</p>
-            { (usedSpace < 100000000) && <FileUpload pendingSave={pendingFileSave} saveCallback={handleFileSaved} /> }
+            { (usedSpace < 100000000) && <FileUpload contentType="website" contentId="" pendingSave={pendingFileSave} saveCallback={handleFileSaved} /> }
           </InputBox>
         </Grid>
       </Grid>

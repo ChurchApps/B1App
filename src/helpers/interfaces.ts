@@ -114,6 +114,8 @@ export interface ChatEventsInterface {
 
 export interface FileInterface {
   id?: string;
+  contentType?: string;
+  contentId?: string;
   fileName?: string;
   contentPath?: string;
   fileType?: string;
