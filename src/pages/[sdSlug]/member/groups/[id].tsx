@@ -6,13 +6,17 @@ import { Wrapper } from "@/components";
 import { MarkdownPreview, Conversations, Loading, DisplayBox, GroupInterface, ApiHelper, UserHelper, PersonHelper } from "@churchapps/apphelper"
 import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Grid, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Box, Grid, Tab, Table, TableBody, TableCell, TableRow, Tabs } from "@mui/material";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
+import { TabContext, TabPanel } from "@mui/lab";
+import { GroupTimeline } from "@/components/member/timeline/GroupTimeline";
+import { GroupFiles } from "@/components/groups/GroupFiles";
 
 export default function GroupPage(props: WrapperPageProps) {
   const [group, setGroup] = useState<GroupInterface>(null);
   const [groupMembers, setGroupMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [tabIndex, setTabIndex] = useState("0");
 
   const router = useRouter();
   const context = useContext(UserContext);
@@ -95,10 +99,11 @@ export default function GroupPage(props: WrapperPageProps) {
     if (g.id === groupId && g.leader) isLeader = true;
   });
 
+
   return (
     <Wrapper config={props.config}>
       <Grid container spacing={3} alignItems="flex-start">
-        <Grid item md={9} xs={12}>
+        <Grid item md={8} xs={12}>
           {group
             ? (
               <>
@@ -109,19 +114,40 @@ export default function GroupPage(props: WrapperPageProps) {
                 <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
                   <MarkdownPreview value={group.about} />
                 </div>
-                {(true) && <DisplayBox headerText="Group Calendar">
-                  <GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={isLeader} />
-                </DisplayBox>
-                }
-                <br />
-                <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
+
+                <TabContext value={tabIndex}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <Tabs value={tabIndex} onChange={(e, newValue) => { setTabIndex(newValue); }} aria-label="actions" centered>
+                      <Tab label="Feed" sx={{ textTransform: "unset" }} value="0" />
+                      <Tab label="Group Calendar" sx={{ textTransform: "unset" }} value="1" />
+                      <Tab label="Conversations" sx={{ textTransform: "unset" }} value="2" />
+                      <Tab label="Files" sx={{ textTransform: "unset" }} value="3" />
+                    </Tabs>
+                  </Box>
+                  <TabPanel value="0">
+                    <div style={{maxWidth: 750, marginLeft:"auto", marginRight:"auto"}}>
+                      <GroupTimeline context={context} groupId={group.id} />
+                    </div>
+                  </TabPanel>
+                  <TabPanel value="1">
+                    <DisplayBox headerText="Group Calendar">
+                      <GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={isLeader} />
+                    </DisplayBox>
+                  </TabPanel>
+                  <TabPanel value="2">
+                    <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
+                  </TabPanel>
+                  <TabPanel value="3">
+                    <GroupFiles context={context} groupId={group.id} />
+                  </TabPanel>
+                </TabContext>
               </>
             )
             : (
               <p>No group data found</p>
             )}
         </Grid>
-        <Grid item md={3} xs={12} sx={{mt: 11}}>
+        <Grid item md={4} xs={12} sx={{mt: 11}}>
           <DisplayBox id="groupMembersBox" data-cy="group-members-tab" headerText="Group Members" headerIcon="group" editContent={false}>
             {getTable()}
           </DisplayBox>

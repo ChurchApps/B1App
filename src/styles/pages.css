@@ -151,9 +151,11 @@ body {
   box-shadow: none;
 }
 
+/*
 #navbar.transparent:not(.light) a {
   color: var(--dark-bg-link-color);
 }
+*/
 
 #navbar:not(.transparent) button, #navbar.transparent.light button {
   color: #333;

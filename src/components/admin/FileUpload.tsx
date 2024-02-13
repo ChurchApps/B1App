@@ -7,6 +7,8 @@ import { FileInterface } from "@/helpers";
 type Props = {
   pendingSave: boolean;
   saveCallback: (file: FileInterface) => void;
+  contentType:string;
+  contentId:string;
 };
 
 export function FileUpload(props: Props) {
@@ -31,6 +33,8 @@ export function FileUpload(props: Props) {
     f.size = uploadedFile.size;
     f.fileType = uploadedFile.type;
     f.fileName = uploadedFile.name;
+    f.contentType = props.contentType;
+    f.contentId = props.contentId;
     const preUploaded: boolean = await preUpload();
     if (!preUploaded) {
       const base64 = await convertBase64();
@@ -52,7 +56,7 @@ export function FileUpload(props: Props) {
   };
 
   const preUpload = async () => {
-    const params = { fileName: uploadedFile.name };
+    const params = { fileName: uploadedFile.name, contentType:props.contentType, contentId:props.contentId };
     const presigned = await ApiHelper.post("/files/postUrl", params, "ContentApi");
     const doUpload = presigned.key !== undefined;
     if (doUpload) await postPresignedFile(presigned);

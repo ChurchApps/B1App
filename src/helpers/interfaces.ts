@@ -114,6 +114,8 @@ export interface ChatEventsInterface {
 
 export interface FileInterface {
   id?: string;
+  contentType?: string;
+  contentId?: string;
   fileName?: string;
   contentPath?: string;
   fileType?: string;
@@ -139,7 +141,7 @@ export interface GlobalStyleInterface {
   id?: string,
   churchId?: string,
   fonts?: string,
-  palette?: string,
+  palette?: any,
   customCss?: string,
   customJS?: string
 }

@@ -3,6 +3,7 @@ import { Header } from "../Header";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import Zone from "./Zone";
+import { GlobalStyleInterface } from "@/helpers";
 
 type Props = {
   pageData: any;
@@ -12,6 +13,7 @@ type Props = {
   churchSettings?: any;
   church?: ChurchInterface;
   navLinks?: LinkInterface[];
+  globalStyles: GlobalStyleInterface;
 };
 
 export function HeaderFooter(props: Props) {
@@ -42,7 +44,7 @@ export function HeaderFooter(props: Props) {
           <title>{props.pageTitle || props.church?.name}</title>
           {getDescription()}
         </Head>
-        <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} />
+        <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} globalStyles={props.globalStyles} />
         <main>
           <div className="page">
             <Zone church={props.church} sections={props.pageData.sections} zone="main" churchSettings={props.churchSettings} />
