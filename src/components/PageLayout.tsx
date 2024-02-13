@@ -4,6 +4,7 @@ import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { Helmet } from "react-helmet";
+import { GlobalStyleInterface } from "@/helpers";
 
 type Props = {
   pageData: any;
@@ -13,6 +14,7 @@ type Props = {
   churchSettings?: any;
   church?: ChurchInterface;
   navLinks?: LinkInterface[];
+  globalStyles: GlobalStyleInterface;
 };
 
 //add helmet here
@@ -33,7 +35,7 @@ export function PageLayout(props: Props) {
         break;
       case "headerFooter":
       default:
-        result = <HeaderFooter church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+        result = <HeaderFooter church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} globalStyles={props.globalStyles} />
         break;
     }
   }

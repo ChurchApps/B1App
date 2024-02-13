@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Container, AppBar, Stack, Box, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import { AppearanceHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
-import { SectionInterface } from "@/helpers";
+import { GlobalStyleInterface, SectionInterface } from "@/helpers";
 
 type Props = {
   church: ChurchInterface;
@@ -12,6 +12,7 @@ type Props = {
   navLinks?: LinkInterface[];
   overlayContent: boolean;
   sections?: SectionInterface[];
+  globalStyles?: GlobalStyleInterface;
 };
 
 //structure navLinks based on their parentId
@@ -48,12 +49,6 @@ export function Header(props: Props) {
     }
   }, []);
 
-  const getFirstSectionTextColor = () => {
-    let result = "light";
-    if (props.sections?.length > 0) result = props.sections[0].textColor;
-    return result;
-  }
-
   const getLinkClass = () => {
     let result = "";
     if (props.sections?.length > 0) {
@@ -68,9 +63,14 @@ export function Header(props: Props) {
 
   const getLogo = () => {
     if (transparent) {
-      let result = (getFirstSectionTextColor()==="dark")
-        ?  props.churchSettings?.logoLight || ""
-        :  props.churchSettings?.logoDark || "";
+      let textColor = props.sections[0].textColor || "#FFF";
+      if (textColor.indexOf("var(--") > -1) {
+        const palette = JSON.parse(props.globalStyles.palette);
+        textColor = textColor.replace("var(--", "").replace(")", "");
+        textColor = palette[textColor];
+        if (!textColor) textColor = "#FFF"
+      }
+      let result = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || "", props.churchSettings?.logoDark || "", textColor)
       return result;
     }
     else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";

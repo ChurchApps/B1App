@@ -141,7 +141,7 @@ export interface GlobalStyleInterface {
   id?: string,
   churchId?: string,
   fonts?: string,
-  palette?: string,
+  palette?: any,
   customCss?: string,
   customJS?: string
 }
