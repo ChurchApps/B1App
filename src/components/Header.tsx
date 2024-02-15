@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Container, AppBar, Stack, Box, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppearanceHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import { AppearanceHelper, ArrayHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import { GlobalStyleInterface, SectionInterface } from "@/helpers";
 
@@ -50,9 +50,10 @@ export function Header(props: Props) {
   }, []);
 
   const getLinkClass = () => {
+    const sections = ArrayHelper.getAll(props.sections, "zone", "main");
     let result = "";
-    if (props.sections?.length > 0) {
-      let lc = props.sections[0].linkColor;
+    if (sections?.length > 0) {
+      let lc = sections[0].linkColor;
       if (lc) {
         lc = lc.replace("var(--", "").replace(")", "");
         result = "links" + lc[0].toUpperCase() + lc.slice(1);
