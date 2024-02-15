@@ -12,6 +12,10 @@ body {
   color: var(--light-bg-text-color);
 }
 
+:target {
+  scroll-margin-top: 80px;
+}
+
 .table {
   width: 100%;
 }
