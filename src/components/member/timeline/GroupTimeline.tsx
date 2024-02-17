@@ -22,6 +22,7 @@ export const GroupTimeline: React.FC<Props> = (props) => {
     if (ApiHelper.isAuthenticated) {
 
       const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts/group/" + props.groupId, "MessagingApi");
+      //console.log("INITIAL CONVERSATIONS", initialConversations)
       const allPosts:TimelinePostInterface[] = await loadDetails(initialConversations);
       await TimelineHelper.populateConversations(allPosts);
       const data = await TimelineHelper.populateEntities(allPosts);
@@ -71,7 +72,7 @@ export const GroupTimeline: React.FC<Props> = (props) => {
     <>
       <h1>Latest Updates</h1>
       {posts.map((post) => (
-        <TimelinePost condensed={true} post={post} key={post.postId} context={props.context} people={people} groups={groups} />
+        <TimelinePost condensed={true} post={post} key={post.postId} context={props.context} people={people} groups={groups} onUpdate={loadData} />
       ))}
     </>
   );
