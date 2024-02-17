@@ -42,7 +42,7 @@ export const GroupTimeline: React.FC<Props> = (props) => {
     initialConversations.forEach((conv) => {
       if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
     });
-    promises.push(ApiHelper.get("/events/timeline?eventIds=" + eventIds.join(","), "ContentApi"));
+    promises.push(ApiHelper.get("/events/timeline/group/" + props.groupId + "?eventIds=" + eventIds.join(","), "ContentApi"));
     const results = await Promise.all(promises);
     let allPosts:TimelinePostInterface[] = [];
     results.forEach((result:any[]) => {

@@ -99,6 +99,8 @@ export default function GroupPage(props: WrapperPageProps) {
     if (g.id === groupId && g.leader) isLeader = true;
   });
 
+  console.log("IS LEADER", isLeader)
+
 
   return (
     <Wrapper config={props.config}>

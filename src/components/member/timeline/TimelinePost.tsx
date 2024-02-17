@@ -107,7 +107,6 @@ export const TimelinePost: React.FC<Props> = (props) => {
   }
 
   const getConverstation = () => {
-    console.log("GET CONVERSATION", props.post.conversation)
     if (props.post.conversation?.messages) return (<Conversation context={props.context} conversation={props.post.conversation} key={props.post.conversation.id} noWrapper />)
     else return <AddNote context={props.context} conversationId={props.post.conversationId} key={props.post.conversationId} onUpdate={props.onUpdate} createConversation={createConversation} />
   }
