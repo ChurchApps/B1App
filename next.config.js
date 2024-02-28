@@ -57,7 +57,7 @@ module.exports = {
     ]
   },
   images:{
-    domains: ["content.staging.churchapps.org", "content.churchapps.org"]
+    domains: ["content.staging.churchapps.org", "content.churchapps.org", "content.lessons.church"]
   },
   transpilePackages: ["@churchapps/apphelper", "mui-tel-input"]
 };

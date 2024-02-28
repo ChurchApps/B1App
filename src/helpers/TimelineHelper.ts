@@ -12,9 +12,13 @@ export class TimelineHelper {
   }
 
   static async loadForGroup(groupId:string) {
+    //Recent conversations for the group
     const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts/group/" + groupId, "MessagingApi");
+    //Posts for events and tasks
     const allPosts = await TimelineHelper.loadRelatedData(initialConversations, groupId);
+    //Add conversations to the posts when possible and create new posts when not.
     TimelineHelper.mergeConversations(allPosts, initialConversations);
+    //Fill in the people and groups for the posts
     const {people, groups} = await TimelineHelper.populatePostsAndPeople(allPosts);
     return {posts: allPosts, people, groups};
   }
@@ -31,9 +35,12 @@ export class TimelineHelper {
     const promises = [];
     const taskIds:string[] = [];
     const eventIds:string[] = [];
+    const venueIds:string[] = [];
     initialConversations.forEach((conv) => {
+      console.log(conv.contentType, conv.contentId)
       if (conv.contentType==="task" && taskIds.indexOf(conv.contentId)===-1) taskIds.push(conv.contentId);
       if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
+      if (conv.contentType==="venue" && venueIds.indexOf(conv.contentId)===-1) venueIds.push(conv.contentId);
     });
     if (groupId) {
       promises.push(ApiHelper.get("/events/timeline/group/" + groupId + "?eventIds=" + eventIds.join(","), "ContentApi"));
@@ -41,6 +48,7 @@ export class TimelineHelper {
       promises.push(ApiHelper.get("/tasks/timeline?taskIds=" + taskIds.join(","), "DoingApi"));
       promises.push(ApiHelper.get("/events/timeline?eventIds=" + eventIds.join(","), "ContentApi"));
     }
+    if (venueIds.length > 0) promises.push(ApiHelper.get("/venues/timeline?venueIds=" + venueIds.join(","), "LessonsApi"));
     const results = await Promise.all(promises);
     let allPosts:TimelinePostInterface[] = [];
     results.forEach((result:any[]) => {
@@ -67,8 +75,9 @@ export class TimelineHelper {
       p.conversation?.messages?.forEach(m => {
         if (m.personId && peopleIds.indexOf(m.personId) === -1) peopleIds.push(m.personId);
       });
+      console.log(p)
       if (p.postType==="group" && p.conversation.contentId && groupIds.indexOf(p.conversation.contentId) === -1) groupIds.push(p.conversation.contentId);
-      if (p.postType==="event" && p.data.groupId && groupIds.indexOf(p.data.groupId) === -1) groupIds.push(p.data.groupId);
+      if (p.postType==="event" && p.data && p.data.groupId && groupIds.indexOf(p.data.groupId) === -1) groupIds.push(p.data.groupId);
       if (p.postType==="task") {
         if (p.data.associatedWithType==="person" && peopleIds.indexOf(p.data.associatedWithId) === -1) peopleIds.push(p.data.associatedWithId);
         if (p.data.createdByType==="person" && peopleIds.indexOf(p.data.createdById) === -1) peopleIds.push(p.data.createdById);
