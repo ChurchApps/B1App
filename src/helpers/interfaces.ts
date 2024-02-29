@@ -129,6 +129,7 @@ export interface FileInterface {
 export interface TimelinePostInterface {
   postType: string;
   postId: string;
+  groupId: string;
   timeSent?: Date;
   timeUpdated?: Date;
   conversationId?: string;

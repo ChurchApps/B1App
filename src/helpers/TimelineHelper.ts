@@ -56,7 +56,7 @@ export class TimelineHelper {
     let allPosts:TimelinePostInterface[] = [];
     results.forEach((result:any[]) => {
       result.forEach((r) => {
-        allPosts.push({ postId:r.postId, postType:r.postType, data:r})
+        allPosts.push({ postId:r.postId, postType:r.postType, groupId:r.groupId, data:r})
       });
     });
     return allPosts;
@@ -67,7 +67,7 @@ export class TimelineHelper {
     initialConversations.forEach((conv) => {
       let existingPost = ArrayHelper.getOne(allPosts, "postId", conv.contentId);
       if (existingPost) existingPost.conversation = conv;
-      else allPosts.push({postId: conv.contentId, postType:conv.contentType, conversation: conv} );
+      else allPosts.push({postId: conv.contentId, postType:conv.contentType, groupId:conv.groupId, conversation: conv} );
     });
   }
 

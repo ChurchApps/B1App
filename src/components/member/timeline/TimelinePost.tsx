@@ -136,8 +136,16 @@ export const TimelinePost: React.FC<Props> = (props) => {
     else return <AddNote context={props.context} conversationId={props.post.conversationId} key={props.post.conversationId} onUpdate={props.onUpdate} createConversation={createConversation} />
   }
 
+  const getGroupHeader = () => {
+    if (props.condensed) return null;
+    const group = ArrayHelper.getOne(props.groups, "id", props.post.groupId);
+    console.log("Get Group Header", props.condensed, group, props.post.conversation.groupId, props.groups, props.post)
+    if (group) return (<div style={{backgroundColor:"#1976d2", color: "#FFFFFF", textAlign:"center"}}>{group.name}</div>);
+  }
+
   return (
     <Card key={props.post.postId} className="socialPost">
+      {getGroupHeader()}
       <CardContent>
         {getPostDetails()}
         <div>
