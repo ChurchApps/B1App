@@ -1,6 +1,5 @@
 import React from "react";
-import { TimelinePostInterface } from "../../../helpers";
-import { ApiHelper, ArrayHelper, ConversationInterface, GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/apphelper";
+import { ApiHelper, GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/apphelper";
 import { TimelinePost } from "./TimelinePost";
 import { TimelineHelper } from "@/helpers/TimelineHelper";
 
@@ -20,49 +19,23 @@ export const GroupTimeline: React.FC<Props> = (props) => {
 
   const loadData = async () => {
     if (ApiHelper.isAuthenticated) {
-
-      const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts/group/" + props.groupId, "MessagingApi");
-      const allPosts:TimelinePostInterface[] = await loadDetails(initialConversations);
+      /*
+      const allPosts:TimelinePostInterface[] = await TimelineHelper.loadForGroup(props.groupId);
       await TimelineHelper.populateConversations(allPosts);
       const data = await TimelineHelper.populateEntities(allPosts);
       if (data.people) setPeople(data.people);
       if (data.groups) setGroups(data.groups);
 
       TimelineHelper.standardizePosts(allPosts, data.people);
-
-      setPosts(allPosts);
+      */
+      const {posts, people, groups} = await TimelineHelper.loadForGroup(props.groupId);
+      setPeople(people);
+      setGroups(groups);
+      setPosts(posts);
     }
   }
 
 
-  const loadDetails = async (initialConversations:ConversationInterface[]) => {
-    const promises = [];
-    const eventIds:string[] = [];
-    initialConversations.forEach((conv) => {
-      if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
-    });
-    promises.push(ApiHelper.get("/events/timeline?eventIds=" + eventIds.join(","), "ContentApi"));
-    const results = await Promise.all(promises);
-    let allPosts:TimelinePostInterface[] = [];
-    results.forEach((result:any[]) => {
-      result.forEach((r) => {
-        allPosts.push({ postId:r.postId, postType:r.postType, data:r})
-      });
-    });
-    allPosts.forEach(p => { p.conversation={} })
-    initialConversations.forEach((conv) => {
-      if (conv.contentType==="task" || conv.contentType==="event") {
-        let existingPost = ArrayHelper.getOne(allPosts, "postId", conv.contentId);
-        if (existingPost) {
-          existingPost.conversation = conv;
-        }
-      }
-      else {
-        allPosts.push({postId: conv.contentId, postType:conv.contentType, conversation: conv} );
-      }
-    });
-    return allPosts;
-  }
 
 
   React.useEffect(() => { loadData() }, [ApiHelper.isAuthenticated]);
@@ -71,7 +44,7 @@ export const GroupTimeline: React.FC<Props> = (props) => {
     <>
       <h1>Latest Updates</h1>
       {posts.map((post) => (
-        <TimelinePost condensed={true} post={post} key={post.postId} context={props.context} people={people} groups={groups} />
+        <TimelinePost condensed={true} post={post} key={post.postId} context={props.context} people={people} groups={groups} onUpdate={loadData} />
       ))}
     </>
   );

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { EnvironmentHelper, TimelinePostInterface } from "../../../helpers";
+import React from "react";
+import { TimelinePostInterface } from "../../../helpers";
 import Image from "next/image";
 import { Card, CardContent, Grid } from "@mui/material";
 import { Conversation, AddNote, ArrayHelper, DateHelper, GroupInterface, PersonInterface, UserContextInterface, UserHelper, ConversationInterface, ApiHelper } from "@churchapps/apphelper";
@@ -10,12 +10,13 @@ interface Props {
   context: UserContextInterface,
   people: PersonInterface[],
   groups: GroupInterface[],
-  condensed?:boolean
+  condensed?:boolean,
+  onUpdate:()=>void
  }
 
 export const TimelinePost: React.FC<Props> = (props) => {
 
-  const [photoUrl, setPhotoUrl] = useState((props.post.conversation?.messages?.length>0) ? EnvironmentHelper.Common.ContentRoot + "/" + UserHelper.currentUserChurch.church.id + "/membership/people/" + props.post.conversation.messages[0].personId + ".png" : "/images/sample-profile.png");
+  //const [photoUrl, setPhotoUrl] = useState((props.post.conversation?.messages?.length>0) ? EnvironmentHelper.Common.ContentRoot + "/" + UserHelper.currentUserChurch.church.id + "/membership/people/" + props.post.conversation.messages[0].personId + ".png" : "/images/sample-profile.png");
 
   const getPostDetails = () => {
     const displayTime = DateHelper.getDisplayDuration(props.post.timeSent);
@@ -31,6 +32,12 @@ export const TimelinePost: React.FC<Props> = (props) => {
         break;
       case "group":
         result = getGroupDetails();
+        break;
+      case "venue":
+        result = getVenueDetails();
+        break;
+      case "sermon":
+        result = getSermonDetails();
         break;
       default:
         result=<>{displayTime} - <b>Message: </b> </>
@@ -65,12 +72,31 @@ export const TimelinePost: React.FC<Props> = (props) => {
   }
 
   const getEventDetails = () => {
+    if (!props.post.data) return (<></>);
     const group = ArrayHelper.getOne(props.groups, "id", props.post.data.groupId);
     let start = new Date(props.post.data.start);
     const displayStart = DateHelper.prettyDateTime(start);
     const result=(<>
       {!props.condensed && group?.photoUrl && (<Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{width:"100%" }} />)}
       {getIntroLine(<><b>Event: {props.post.data.title}</b> - {displayStart}</>)}
+      <p>{props.post.data.description}</p>
+    </>);
+    return result;
+  }
+
+  const getVenueDetails = () => {
+    const result=(<>
+      <a href={"https://lessons.church" + props.post.data.slug} target="_blank"><Image src={props.post.data.image} width="600" height="300" alt={props.post.data.name} style={{aspectRatio:2, height:"auto" }} /></a>
+      {getIntroLine(<><b>{props.post.data.studyName}: <a href={"https://lessons.church" + props.post.data.slug} target="_blank">{props.post.data.name}</a></b></>)}
+      <p>{props.post.data.description}</p>
+    </>);
+    return result;
+  }
+
+  const getSermonDetails = () => {
+    const result=(<>
+      <a href={"/sermons"} target="_blank"><img src={props.post.data.thumbnail} width="600" height="338" alt={props.post.data.name} style={{aspectRatio:1.778, height:"auto" }} /></a>
+      {getIntroLine(<><b><a href={"/sermons"} target="_blank">{props.post.data.title}</a></b></>)}
       <p>{props.post.data.description}</p>
     </>);
     return result;
@@ -99,14 +125,15 @@ export const TimelinePost: React.FC<Props> = (props) => {
   }
 
   const createConversation = async () => {
-    const conv:ConversationInterface = { churchId:UserHelper.currentUserChurch.church.id, contentType:props.post.postType, contentId:props.post.postId, title:props.post.postType + " #" + props.post.postId + " Conversation", messages:[] };
+    const conv:ConversationInterface = { churchId:UserHelper.currentUserChurch.church.id, contentType:props.post.postType, contentId:props.post.postId, title:props.post.postType + " #" + props.post.postId + " Conversation", messages:[], groupId:props.post.data.groupId };
     const result = await ApiHelper.post("/conversations", [conv], "MessagingApi");
+    props.post.conversation
     return result[0].id;
   }
 
   const getConverstation = () => {
     if (props.post.conversation?.messages) return (<Conversation context={props.context} conversation={props.post.conversation} key={props.post.conversation.id} noWrapper />)
-    else return <AddNote context={props.context} conversationId={props.post.conversationId} key={props.post.conversationId} onUpdate={() => { } } createConversation={createConversation} />
+    else return <AddNote context={props.context} conversationId={props.post.conversationId} key={props.post.conversationId} onUpdate={props.onUpdate} createConversation={createConversation} />
   }
 
   return (

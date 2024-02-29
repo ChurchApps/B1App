@@ -1,7 +1,75 @@
-import { ApiHelper, ArrayHelper, ConversationInterface, PersonInterface } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, ConversationInterface, GroupInterface, PersonInterface } from "@churchapps/apphelper";
 import { TimelinePostInterface } from ".";
 
 export class TimelineHelper {
+
+  static async loadForUser() {
+    const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts", "MessagingApi");
+    const allPosts = await TimelineHelper.loadRelatedData(initialConversations, null);
+    TimelineHelper.mergeConversations(allPosts, initialConversations);
+    const {people, groups} = await TimelineHelper.populatePostsAndPeople(allPosts);
+    return {posts: allPosts, people, groups};
+  }
+
+  static async loadForGroup(groupId:string) {
+    //Recent conversations for the group
+    const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts/group/" + groupId, "MessagingApi");
+    //Posts for events and tasks
+    const allPosts = await TimelineHelper.loadRelatedData(initialConversations, groupId);
+    //Add conversations to the posts when possible and create new posts when not.
+    TimelineHelper.mergeConversations(allPosts, initialConversations);
+    //Fill in the people and groups for the posts
+    const {people, groups} = await TimelineHelper.populatePostsAndPeople(allPosts);
+    return {posts: allPosts, people, groups};
+  }
+
+  static async populatePostsAndPeople(allPosts:TimelinePostInterface[])
+  {
+    await TimelineHelper.populateConversations(allPosts);
+    const {people, groups} = await TimelineHelper.populateEntities(allPosts);
+    TimelineHelper.standardizePosts(allPosts, people);
+    return {people, groups};
+  }
+
+  static async loadRelatedData(initialConversations: ConversationInterface[], groupId?:string) {
+    const promises = [];
+    const taskIds:string[] = [];
+    const eventIds:string[] = [];
+    const venueIds:string[] = [];
+    const sermonIds:string[] = [];
+    initialConversations.forEach((conv) => {
+      console.log(conv.contentType, conv.contentId)
+      if (conv.contentType==="task" && taskIds.indexOf(conv.contentId)===-1) taskIds.push(conv.contentId);
+      if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
+      if (conv.contentType==="venue" && venueIds.indexOf(conv.contentId)===-1) venueIds.push(conv.contentId);
+      if (conv.contentType==="sermon" && venueIds.indexOf(conv.contentId)===-1) sermonIds.push(conv.contentId);
+    });
+    if (groupId) {
+      promises.push(ApiHelper.get("/events/timeline/group/" + groupId + "?eventIds=" + eventIds.join(","), "ContentApi"));
+    } else {
+      promises.push(ApiHelper.get("/tasks/timeline?taskIds=" + taskIds.join(","), "DoingApi"));
+      promises.push(ApiHelper.get("/events/timeline?eventIds=" + eventIds.join(","), "ContentApi"));
+    }
+    if (venueIds.length > 0) promises.push(ApiHelper.get("/venues/timeline?venueIds=" + venueIds.join(","), "LessonsApi"));
+    if (sermonIds.length > 0) promises.push(ApiHelper.get("/sermons/timeline?sermonIds=" + sermonIds.join(","), "ContentApi"));
+    const results = await Promise.all(promises);
+    let allPosts:TimelinePostInterface[] = [];
+    results.forEach((result:any[]) => {
+      result.forEach((r) => {
+        allPosts.push({ postId:r.postId, postType:r.postType, data:r})
+      });
+    });
+    return allPosts;
+  }
+
+  static mergeConversations(allPosts:TimelinePostInterface[], initialConversations:ConversationInterface[]) {
+    allPosts.forEach(p => { p.conversation={} })
+    initialConversations.forEach((conv) => {
+      let existingPost = ArrayHelper.getOne(allPosts, "postId", conv.contentId);
+      if (existingPost) existingPost.conversation = conv;
+      else allPosts.push({postId: conv.contentId, postType:conv.contentType, conversation: conv} );
+    });
+  }
 
   static async populateEntities(allPosts:TimelinePostInterface[]) {
     const peopleIds:string[] = [];
@@ -10,8 +78,9 @@ export class TimelineHelper {
       p.conversation?.messages?.forEach(m => {
         if (m.personId && peopleIds.indexOf(m.personId) === -1) peopleIds.push(m.personId);
       });
+      console.log(p)
       if (p.postType==="group" && p.conversation.contentId && groupIds.indexOf(p.conversation.contentId) === -1) groupIds.push(p.conversation.contentId);
-      if (p.postType==="event" && p.data.groupId && groupIds.indexOf(p.data.groupId) === -1) groupIds.push(p.data.groupId);
+      if (p.postType==="event" && p.data && p.data.groupId && groupIds.indexOf(p.data.groupId) === -1) groupIds.push(p.data.groupId);
       if (p.postType==="task") {
         if (p.data.associatedWithType==="person" && peopleIds.indexOf(p.data.associatedWithId) === -1) peopleIds.push(p.data.associatedWithId);
         if (p.data.createdByType==="person" && peopleIds.indexOf(p.data.createdById) === -1) peopleIds.push(p.data.createdById);
@@ -22,12 +91,16 @@ export class TimelineHelper {
       }
     });
 
-    let data:any = {};
+    let people:PersonInterface[] = []
+    let groups:GroupInterface[] = []
 
     if (peopleIds.length > 0 || groupIds.length > 0) {
-      data = await ApiHelper.get("/people/timeline?personIds=" + peopleIds.join(",") + "&groupIds=" + groupIds.join(","), "MembershipApi");
+      const data = await ApiHelper.get("/people/timeline?personIds=" + peopleIds.join(",") + "&groupIds=" + groupIds.join(","), "MembershipApi");
+      if (data.people) people = data.people;
+      if (data.groups) groups = data.groups;
     }
-    return data;
+
+    return {people, groups};
   }
 
   static async populateConversations(allPosts:TimelinePostInterface[]) {
