@@ -45,7 +45,6 @@ export const Timeline: React.FC<Props> = (props) => {
 
   if (posts?.length > 0) return (
     <>
-      <h1>Latest Updates</h1>
       {posts.map((post) => (
         <TimelinePost post={post} key={post.postId} context={props.context} people={people} groups={groups} onUpdate={loadData} />
       ))}

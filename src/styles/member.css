@@ -153,6 +153,12 @@
 
 /* End private messaging & notes */
 
+.understated {
+  color:#777;
+  font-style:"italic";
+  font-size:14px;
+}
+
 
 #userMenu {
   position: absolute;

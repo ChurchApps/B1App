@@ -66,7 +66,10 @@ export class TimelineHelper {
     allPosts.forEach(p => { p.conversation={} })
     initialConversations.forEach((conv) => {
       let existingPost = ArrayHelper.getOne(allPosts, "postId", conv.contentId);
-      if (existingPost) existingPost.conversation = conv;
+      if (existingPost) {
+        existingPost.conversation = conv;
+        if (conv.groupId) existingPost.groupId = conv.groupId;
+      }
       else allPosts.push({postId: conv.contentId, postType:conv.contentType, groupId:conv.groupId, conversation: conv} );
     });
   }
