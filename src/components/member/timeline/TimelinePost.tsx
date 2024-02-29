@@ -105,8 +105,9 @@ export const TimelinePost: React.FC<Props> = (props) => {
   const getGroupDetails = () => {
     if (props.condensed) return null;
     const group = ArrayHelper.getOne(props.groups, "id", props.post.conversation.contentId);
+    const lines = [];
     const result=(<>
-      <Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{width:"100%" }} />
+      {group?.photoUrl && (<Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{width:"100%" }} />)}
       {getIntroLine(<>Conversation for the {getEntity("group", group.id, group.name)} group</>)}
     </>);
     return result;
