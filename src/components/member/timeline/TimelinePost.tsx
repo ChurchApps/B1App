@@ -36,6 +36,9 @@ export const TimelinePost: React.FC<Props> = (props) => {
       case "venue":
         result = getVenueDetails();
         break;
+      case "sermon":
+        result = getSermonDetails();
+        break;
       default:
         result=<>{displayTime} - <b>Message: </b> </>
         break;
@@ -85,6 +88,15 @@ export const TimelinePost: React.FC<Props> = (props) => {
     const result=(<>
       <a href={"https://lessons.church" + props.post.data.slug} target="_blank"><Image src={props.post.data.image} width="600" height="300" alt={props.post.data.name} style={{aspectRatio:2, height:"auto" }} /></a>
       {getIntroLine(<><b>{props.post.data.studyName}: <a href={"https://lessons.church" + props.post.data.slug} target="_blank">{props.post.data.name}</a></b></>)}
+      <p>{props.post.data.description}</p>
+    </>);
+    return result;
+  }
+
+  const getSermonDetails = () => {
+    const result=(<>
+      <a href={"/sermons"} target="_blank"><img src={props.post.data.thumbnail} width="600" height="338" alt={props.post.data.name} style={{aspectRatio:1.778, height:"auto" }} /></a>
+      {getIntroLine(<><b><a href={"/sermons"} target="_blank">{props.post.data.title}</a></b></>)}
       <p>{props.post.data.description}</p>
     </>);
     return result;

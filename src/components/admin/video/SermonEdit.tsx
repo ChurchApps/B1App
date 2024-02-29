@@ -1,8 +1,9 @@
 import React from "react";
-import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button } from "@mui/material";
+import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button, Icon } from "@mui/material";
 import { Loading, InputBox, ErrorMessages } from "@churchapps/apphelper";
 import { SermonInterface, PlaylistInterface, ApiHelper, UniqueIdHelper, DateHelper, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Duration } from "./Duration";
+import { B1ShareModal } from "@churchapps/apphelper";
 
 interface Props {
   currentSermon: SermonInterface,
@@ -17,6 +18,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   const [currentSermon, setCurrentSermon] = React.useState<SermonInterface>(null);
   const [playlists, setPlaylists] = React.useState<PlaylistInterface[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [showB1Share, setShowB1Share] = React.useState(false);
 
   const loadData = () => {
     ApiHelper.get("/playlists", "ContentApi").then(data => {
@@ -152,6 +154,8 @@ export const SermonEdit: React.FC<Props> = (props) => {
     return result;
   }
 
+  const getShareIcon = () => (<a href="about:blank" onClick={(e) => { e.preventDefault(); setShowB1Share(true); }}><Icon style={{fontSize:18, paddingTop:7, height:30, paddingRight:20}}>share</Icon></a>)
+
   React.useEffect(() => { setCurrentSermon(props.currentSermon); loadData(); }, [props.currentSermon]);
   React.useEffect(handlePhotoUpdated, [props.updatedPhoto, currentSermon]); //eslint-disable-line
 
@@ -181,7 +185,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   if (isLoading) return <Loading />
-  else return (<InputBox headerIcon="calendar_month" headerText={(currentSermon?.permanentUrl) ? "Edit Permanent Live Url" : "Edit Sermon"} saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/sermons">
+  else return (<><InputBox headerIcon="calendar_month" headerText={(currentSermon?.permanentUrl) ? "Edit Permanent Live Url" : "Edit Sermon"} saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/sermons" headerActionContent={getShareIcon()}>
     <ErrorMessages errors={errors} />
     <>
       {!currentSermon?.permanentUrl && (
@@ -239,5 +243,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
         </Grid>
       </Grid>
     </>
-  </InputBox>);
+  </InputBox>
+  {showB1Share && <B1ShareModal contentDisplayName={currentSermon.title} contentType="sermon" contentId={currentSermon.id} onClose={() => { setShowB1Share(false); }} /> }
+  </>);
 }

@@ -36,11 +36,13 @@ export class TimelineHelper {
     const taskIds:string[] = [];
     const eventIds:string[] = [];
     const venueIds:string[] = [];
+    const sermonIds:string[] = [];
     initialConversations.forEach((conv) => {
       console.log(conv.contentType, conv.contentId)
       if (conv.contentType==="task" && taskIds.indexOf(conv.contentId)===-1) taskIds.push(conv.contentId);
       if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
       if (conv.contentType==="venue" && venueIds.indexOf(conv.contentId)===-1) venueIds.push(conv.contentId);
+      if (conv.contentType==="sermon" && venueIds.indexOf(conv.contentId)===-1) sermonIds.push(conv.contentId);
     });
     if (groupId) {
       promises.push(ApiHelper.get("/events/timeline/group/" + groupId + "?eventIds=" + eventIds.join(","), "ContentApi"));
@@ -49,6 +51,7 @@ export class TimelineHelper {
       promises.push(ApiHelper.get("/events/timeline?eventIds=" + eventIds.join(","), "ContentApi"));
     }
     if (venueIds.length > 0) promises.push(ApiHelper.get("/venues/timeline?venueIds=" + venueIds.join(","), "LessonsApi"));
+    if (sermonIds.length > 0) promises.push(ApiHelper.get("/sermons/timeline?sermonIds=" + sermonIds.join(","), "ContentApi"));
     const results = await Promise.all(promises);
     let allPosts:TimelinePostInterface[] = [];
     results.forEach((result:any[]) => {
