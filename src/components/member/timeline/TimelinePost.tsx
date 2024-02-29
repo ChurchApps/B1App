@@ -88,7 +88,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
     const result=(<>
       <a href={"https://lessons.church" + props.post.data.slug} target="_blank"><Image src={props.post.data.image} width="600" height="300" alt={props.post.data.name} style={{aspectRatio:2, height:"auto" }} /></a>
       {getIntroLine(<><b>{props.post.data.studyName}: <a href={"https://lessons.church" + props.post.data.slug} target="_blank">{props.post.data.name}</a></b></>)}
-      <p>{props.post.data.description}</p>
+      <p className="understated">{props.post.data.description}</p>
     </>);
     return result;
   }
@@ -97,7 +97,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
     const result=(<>
       <a href={"/sermons"} target="_blank"><img src={props.post.data.thumbnail} width="600" height="338" alt={props.post.data.name} style={{aspectRatio:1.778, height:"auto" }} /></a>
       {getIntroLine(<><b><a href={"/sermons"} target="_blank">{props.post.data.title}</a></b></>)}
-      <p>{props.post.data.description}</p>
+      <p className="understated">{props.post.data.description}</p>
     </>);
     return result;
   }
@@ -139,7 +139,6 @@ export const TimelinePost: React.FC<Props> = (props) => {
   const getGroupHeader = () => {
     if (props.condensed) return null;
     const group = ArrayHelper.getOne(props.groups, "id", props.post.groupId);
-    console.log("Get Group Header", props.condensed, group, props.post.conversation.groupId, props.groups, props.post)
     if (group) return (<div style={{backgroundColor:"#1976d2", color: "#FFFFFF", textAlign:"center"}}>{group.name}</div>);
   }
 
