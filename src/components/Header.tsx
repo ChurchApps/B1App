@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Container, AppBar, Stack, Box, IconButton, Menu, MenuItem } from "@mui/material";
+import { Container, AppBar, Stack, Box, IconButton, Popper, Paper, ClickAwayListener, Grow, List } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppearanceHelper, ArrayHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
+import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { GlobalStyleInterface, SectionInterface } from "@/helpers";
 
 type Props = {
@@ -32,8 +33,8 @@ const getNestedChildren = (arr: LinkInterface[], parent: string) => {
 
 export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,10 +81,14 @@ export function Header(props: Props) {
   //structured navLinks based on their parentId
   const structuredData = props.navLinks && getNestedChildren(props.navLinks, undefined);
 
-  const getLinks = () => structuredData && structuredData.map((item) => <CascadingHoverMenus link={item} />);
+  const getLinks = () => structuredData && structuredData.map((item) => <CascadingHoverMenus key={item.id} link={item} />);
+  const getListMenu = () => structuredData && <List sx={{ width: '20ch', maxHeight: '70ch', overflow: "auto" }} component="nav" aria-labelledby="nav-menu" id="long-menu">{structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={handleClose} />)}</List>;
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = (event: Event | React.SyntheticEvent) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+    setOpen(false);
   };
 
   let appBarClass = "";
@@ -103,18 +108,24 @@ export function Header(props: Props) {
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap",  }}>
               {getLinks()}
             </Box>
-            <IconButton size="large" color="inherit" aria-label="menu" id="nav-menu" aria-controls={open ? 'long-menu' : undefined} aria-expanded={open ? 'true' : undefined} aria-haspopup="true" sx={{ display: { xs: "flex", md: "none" } }} onClick={(e) => setAnchorEl(e.currentTarget)}>
-              <MenuIcon />
-            </IconButton>
-            <Menu id="nav-menu" MenuListProps={{ 'aria-labelledby': 'long-button' }} anchorEl={anchorEl} open={open} onClose={handleClose} PaperProps={{ style: { width: '20ch' } }}>
-              {props.navLinks?.map((l) => (
-                <Link key={l.id} href={l.url} style={{ textDecoration: "none", color: "inherit" }}>
-                  <MenuItem onClick={handleClose}>
-                    {l.text}
-                  </MenuItem>
-                </Link>
-              ))}
-            </Menu>
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+              <IconButton size="large" color="inherit" id="nav-menu" ref={anchorRef} aria-label="menu" aria-controls={open ? 'long-menu' : undefined} aria-expanded={open ? 'true' : undefined} aria-haspopup="true" onClick={() => { setOpen((prevOpen) => !prevOpen); }}>
+                <MenuIcon />
+              </IconButton>
+              <Popper open={open} anchorEl={anchorRef.current} role={undefined} placement="bottom-end" transition disablePortal>
+                {({ TransitionProps, placement }) => (
+                  <Grow {...TransitionProps} style={{ transformOrigin: placement === "bottom-end" ? "right top" : "left top", }}>
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <Box>
+                          {getListMenu()}
+                        </Box>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </Box>
           </Stack>
         </Container>
       </AppBar>
