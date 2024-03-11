@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Container, AppBar, Stack, Box, IconButton, Popper, Paper, ClickAwayListener, Grow, List } from "@mui/material";
+import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { AppearanceHelper, ArrayHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
@@ -34,7 +35,10 @@ const getNestedChildren = (arr: LinkInterface[], parent: string) => {
 export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
   const [open, setOpen] = useState(false);
-  const anchorRef = useRef<HTMLButtonElement>(null);
+
+  const toggleDrawer = () => {
+    setOpen(!open);
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,14 +86,7 @@ export function Header(props: Props) {
   const structuredData = props.navLinks && getNestedChildren(props.navLinks, undefined);
 
   const getLinks = () => structuredData && structuredData.map((item) => <CascadingHoverMenus key={item.id} link={item} />);
-  const getListMenu = () => structuredData && <List sx={{ width: '20ch', maxHeight: '70ch', overflow: "auto" }} component="nav" aria-labelledby="nav-menu" id="long-menu">{structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={handleClose} />)}</List>;
-
-  const handleClose = (event: Event | React.SyntheticEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
-      return;
-    }
-    setOpen(false);
-  };
+  const getListMenu = () => structuredData && <List component="nav" id="long-menu">{structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={() => toggleDrawer()} />)}</List>;
 
   let appBarClass = "";
   if (transparent) {
@@ -109,22 +106,15 @@ export function Header(props: Props) {
               {getLinks()}
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton size="large" color="inherit" id="nav-menu" ref={anchorRef} aria-label="menu" aria-controls={open ? 'long-menu' : undefined} aria-expanded={open ? 'true' : undefined} aria-haspopup="true" onClick={() => { setOpen((prevOpen) => !prevOpen); }}>
+              <IconButton size="large" color="inherit" id="nav-menu" onClick={toggleDrawer}>
                 <MenuIcon />
               </IconButton>
-              <Popper open={open} anchorEl={anchorRef.current} role={undefined} placement="bottom-end" transition disablePortal>
-                {({ TransitionProps, placement }) => (
-                  <Grow {...TransitionProps} style={{ transformOrigin: placement === "bottom-end" ? "right top" : "left top", }}>
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <Box>
-                          {getListMenu()}
-                        </Box>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
+              <Drawer open={open} onClose={toggleDrawer} anchor="right">
+                <Toolbar disableGutters><IconButton onClick={toggleDrawer}><ChevronRightIcon /></IconButton></Toolbar>
+                <Box sx={{ width: { xs: '100vw', sm: '50vw' } }}>
+                  {getListMenu()}
+                </Box>
+              </Drawer>
             </Box>
           </Stack>
         </Container>
