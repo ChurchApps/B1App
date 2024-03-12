@@ -1,11 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
-import Resizer from "react-image-file-resizer";
+// @ts-ignore
+import Resizer from "@meghoshpritam/react-image-file-resizer";
 import { GenericSettingInterface, ArrayHelper, ApiHelper, InputBox, ImageEditor } from "@churchapps/apphelper";
 
 interface Props {
   updatedFunction?: () => void,
   settings?: GenericSettingInterface[],
+}
+
+function callback (img: any) {
+  return new Promise<string>((resolve, reject) => {
+    img.onload = function(){
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
+      let dataURL;
+      canvas.width = 1200;
+      canvas.height = 630;
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 6, 6);
+      dataURL = canvas.toDataURL();
+      resolve(dataURL.toString());
+    }
+  })
+}
+
+async function getOgImage (src: string) {
+  let image = new Image();
+  image.src = src;
+  const base64Url = await callback(image);
+  return base64Url;
 }
 
 async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File> {
@@ -14,21 +39,22 @@ async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File
   return new File([blob], fileName, { type: 'image/png' });
 }
 
-function resizeTo16x16(file: File) {
+function resizeImage(file: File, width: number, height: number) {
   return new Promise<string>((resolve, reject) => {
     try {
-      Resizer.imageFileResizer(
+      Resizer.imageFileResizer({
         file,
-        16,
-        16,
-        "PNG",
-        16,
-        0,
-        (uri) => { resolve(uri.toString()) },
-        "base64",
-        16,
-        16,
-      )
+        maxWidth: width,
+        maxHeight: height,
+        compressFormat: "PNG",
+        quality: 100,
+        rotation: 0,
+        responseUriFunc: (uri: any) => { resolve(uri.toString()) },
+        outputType: "base64",
+        minWidth: width,
+        minHeight: height,
+        keepAspectRatio: false
+      })
     } catch (err) {
       console.error("Error in resizing file")
       reject()
@@ -63,9 +89,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
   useEffect(init, [currentEditLogo]);
 
-  const get16x16ImageUri = async (dataUrl: string) => {
-    const file = await dataUrlToFile(dataUrl, "favicon_16x16");
-    const uri = await resizeTo16x16(file);
+  const getImageUri = async (dataUrl: string, fileName: string, width: number, height: number) => {
+    const file = await dataUrlToFile(dataUrl, fileName);
+    const uri = await resizeImage(file, width, height);
     return uri;
   }
 
@@ -80,10 +106,25 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         keySetting[0].value = dataUrl;
       }
 
+      if (keyName === "logoLight") {
+        const index = settings.findIndex(s => s.keyName === "ogImage");
+        if (dataUrl !== ""){
+          const imageDataUrl = await getImageUri(dataUrl, "ogImage", 1188, 618);
+          const ogImageURL = await getOgImage(imageDataUrl);
+          if (index !== -1) {
+            settings[index].value = ogImageURL;
+          } else {
+            settings.push({ keyName: "ogImage", value: ogImageURL, public: 1 });
+          }
+        } else {
+          settings[index].value = "";
+        }
+      }
+
       if (keyName === "favicon_400x400") {
         const index = settings.findIndex(s => s.keyName === "favicon_16x16");
         if (dataUrl !== ""){
-          const imageDataUrl = await get16x16ImageUri(dataUrl)
+          const imageDataUrl = await getImageUri(dataUrl, "favicon_16x16", 16, 16)
           if (index !== -1) {
             settings[index].value = imageDataUrl;
           } else {
@@ -115,8 +156,8 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
             setCurrentUrl(null);
           }}
           aspectRatio={currentEditLogo.includes("favicon") ? 1 : 4}
-          outputWidth={currentEditLogo.includes("favicon") ? 400 : 1200}
-          outputHeight={currentEditLogo.includes("favicon") ? 400 : 300}
+          outputWidth={currentEditLogo.includes("favicon") ? 400 : 1280}
+          outputHeight={currentEditLogo.includes("favicon") ? 400 : 320}
         />
       )
     }
