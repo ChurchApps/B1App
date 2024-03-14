@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
-// @ts-ignore
-import Resizer from "@meghoshpritam/react-image-file-resizer";
+import Resizer from "react-image-file-resizer";
 import { GenericSettingInterface, ArrayHelper, ApiHelper, InputBox, ImageEditor } from "@churchapps/apphelper";
 
 interface Props {
@@ -42,19 +41,18 @@ async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File
 function resizeImage(file: File, width: number, height: number) {
   return new Promise<string>((resolve, reject) => {
     try {
-      Resizer.imageFileResizer({
+      Resizer.imageFileResizer(
         file,
-        maxWidth: width,
-        maxHeight: height,
-        compressFormat: "PNG",
-        quality: 100,
-        rotation: 0,
-        responseUriFunc: (uri: any) => { resolve(uri.toString()) },
-        outputType: "base64",
-        minWidth: width,
-        minHeight: height,
-        keepAspectRatio: false
-      })
+        width,
+        height,
+        "PNG",
+        100,
+        0,
+        (uri: any) => { resolve(uri.toString()) },
+        "base64",
+        width,
+        height,
+      )
     } catch (err) {
       console.error("Error in resizing file")
       reject()
@@ -106,20 +104,6 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         keySetting[0].value = dataUrl;
       }
 
-      if (keyName === "logoLight") {
-        const index = settings.findIndex(s => s.keyName === "ogImage");
-        if (dataUrl !== ""){
-          const imageDataUrl = await getImageUri(dataUrl, "ogImage", 1188, 618);
-          const ogImageURL = await getOgImage(imageDataUrl);
-          if (index !== -1) {
-            settings[index].value = ogImageURL;
-          } else {
-            settings.push({ keyName: "ogImage", value: ogImageURL, public: 1 });
-          }
-        } else {
-          settings[index].value = "";
-        }
-      }
 
       if (keyName === "favicon_400x400") {
         const index = settings.findIndex(s => s.keyName === "favicon_16x16");
@@ -145,6 +129,17 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     if (!editLogo) {
       return null
     } else {
+      let aspectRatio: number, outputWidth: number, outputHeight: number;
+      if (currentEditLogo.includes("favicon")) {
+        aspectRatio = 1;
+        outputWidth = 400;
+        outputHeight = 400;
+      } else {
+        aspectRatio = 4;
+        outputWidth = 1280;
+        outputHeight = 320;
+      }
+
       return (
         <ImageEditor
           photoUrl={currentUrl}
@@ -155,9 +150,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
             setEditLogo(false);
             setCurrentUrl(null);
           }}
-          aspectRatio={currentEditLogo.includes("favicon") ? 1 : 4}
-          outputWidth={currentEditLogo.includes("favicon") ? 400 : 1280}
-          outputHeight={currentEditLogo.includes("favicon") ? 400 : 320}
+          aspectRatio={aspectRatio}
+          outputWidth={outputWidth}
+          outputHeight={outputHeight}
         />
       )
     }
