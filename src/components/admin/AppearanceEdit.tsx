@@ -1,36 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
-// @ts-ignore
-import Resizer from "@meghoshpritam/react-image-file-resizer";
+import Resizer from "react-image-file-resizer";
 import { GenericSettingInterface, ArrayHelper, ApiHelper, InputBox, ImageEditor } from "@churchapps/apphelper";
 
 interface Props {
   updatedFunction?: () => void,
   settings?: GenericSettingInterface[],
-}
-
-function callback (img: any) {
-  return new Promise<string>((resolve, reject) => {
-    img.onload = function(){
-      let canvas = document.createElement('canvas');
-      let ctx = canvas.getContext('2d');
-      let dataURL;
-      canvas.width = 1200;
-      canvas.height = 630;
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 6, 6);
-      dataURL = canvas.toDataURL();
-      resolve(dataURL.toString());
-    }
-  })
-}
-
-async function getOgImage (src: string) {
-  let image = new Image();
-  image.src = src;
-  const base64Url = await callback(image);
-  return base64Url;
 }
 
 async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File> {
@@ -42,19 +17,18 @@ async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File
 function resizeImage(file: File, width: number, height: number) {
   return new Promise<string>((resolve, reject) => {
     try {
-      Resizer.imageFileResizer({
+      Resizer.imageFileResizer(
         file,
-        maxWidth: width,
-        maxHeight: height,
-        compressFormat: "PNG",
-        quality: 100,
-        rotation: 0,
-        responseUriFunc: (uri: any) => { resolve(uri.toString()) },
-        outputType: "base64",
-        minWidth: width,
-        minHeight: height,
-        keepAspectRatio: false
-      })
+        width,
+        height,
+        "PNG",
+        100,
+        0,
+        (uri: any) => { resolve(uri.toString()) },
+        "base64",
+        width,
+        height,
+      )
     } catch (err) {
       console.error("Error in resizing file")
       reject()
@@ -67,6 +41,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
   const [editLogo, setEditLogo] = React.useState(false);
   const [currentEditLogo, setCurrentEditLogo] = React.useState<string>("");
   const [currentUrl, setCurrentUrl] = useState("about:blank");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
@@ -106,20 +81,6 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         keySetting[0].value = dataUrl;
       }
 
-      if (keyName === "logoLight") {
-        const index = settings.findIndex(s => s.keyName === "ogImage");
-        if (dataUrl !== ""){
-          const imageDataUrl = await getImageUri(dataUrl, "ogImage", 1188, 618);
-          const ogImageURL = await getOgImage(imageDataUrl);
-          if (index !== -1) {
-            settings[index].value = ogImageURL;
-          } else {
-            settings.push({ keyName: "ogImage", value: ogImageURL, public: 1 });
-          }
-        } else {
-          settings[index].value = "";
-        }
-      }
 
       if (keyName === "favicon_400x400") {
         const index = settings.findIndex(s => s.keyName === "favicon_16x16");
@@ -145,6 +106,21 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     if (!editLogo) {
       return null
     } else {
+      let aspectRatio: number, outputWidth: number, outputHeight: number;
+      if (currentEditLogo.includes("favicon")) {
+        aspectRatio = 1;
+        outputWidth = 400;
+        outputHeight = 400;
+      } else if (currentEditLogo.includes("ogImage")) {
+        aspectRatio = 40/21;
+        outputWidth = 1200;
+        outputHeight = 630;
+      } else {
+        aspectRatio = 4;
+        outputWidth = 1280;
+        outputHeight = 320;
+      }
+
       return (
         <ImageEditor
           photoUrl={currentUrl}
@@ -155,9 +131,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
             setEditLogo(false);
             setCurrentUrl(null);
           }}
-          aspectRatio={currentEditLogo.includes("favicon") ? 1 : 4}
-          outputWidth={currentEditLogo.includes("favicon") ? 400 : 1280}
-          outputHeight={currentEditLogo.includes("favicon") ? 400 : 320}
+          aspectRatio={aspectRatio}
+          outputWidth={outputWidth}
+          outputHeight={outputHeight}
         />
       )
     }
@@ -169,7 +145,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     return <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setEditLogo(true); setCurrentEditLogo(name) }}>{logoImg}</a>
   }
 
-  const handleSave = () => { ApiHelper.post("/settings", currentSettings, "MembershipApi").then(props.updatedFunction); }
+  const handleSave = () => { setIsSubmitting(true); ApiHelper.post("/settings", currentSettings, "MembershipApi").then(() => { props.updatedFunction(); setIsSubmitting(false); }); }
   const handleCancel = () => { props.updatedFunction(); }
 
   React.useEffect(() => { setCurrentSettings(props.settings); }, [props.settings]);
@@ -177,7 +153,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
   return (
     <>
       {getLogoEditor(currentEditLogo)}
-      <InputBox headerIcon="palette" headerText="Church Appearance" saveFunction={handleSave} cancelFunction={handleCancel}>
+      <InputBox headerIcon="palette" headerText="Church Appearance" saveFunction={handleSave} cancelFunction={handleCancel} isSubmitting={isSubmitting}>
         <div style={{ backgroundColor: "#EEE", padding: 10 }}>
 
           <label>Logo - Light background</label><br />
@@ -192,6 +168,17 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
           <p style={{ color: "#999", fontSize: 12 }}>Upload horizontal logo with a transparent background suitable for use of dark backrounds. The ideal size is 1280 pixels wide by 320 pixels high.</p>
           {getLogoLink("logoDark", "#333")}
 
+        </div>
+        <hr />
+
+        <div style={{ backgroundColor: "#3f51b5", padding: 10, color: "#FFF" }}>
+          <label style={{ color: "whitesmoke" }}>Open Graph Image</label>
+          <p style={{ color: "whitesmoke", fontSize: 12 }}>Upload horizontal image suitable for use of SEO purposes. The ideal size is 1200 pixels wide by 630 pixels high.</p>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div style={{ maxWidth: 600, maxHeight: 315 }}>
+              {getLogoLink("ogImage", "#3f51b5")}
+            </div>
+          </div>
         </div>
         <hr />
 
