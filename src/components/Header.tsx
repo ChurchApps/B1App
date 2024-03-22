@@ -98,7 +98,7 @@ export function Header(props: Props) {
 
   return (
     <div>
-      <AppBar id="navbar" position="fixed" className={appBarClass}>
+      <AppBar id="navbar" position="fixed" className={appBarClass} style={{height:82}}>
         <Container>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>

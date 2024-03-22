@@ -14,20 +14,20 @@ async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File
   return new File([blob], fileName, { type: 'image/png' });
 }
 
-function resizeTo16x16(file: File) {
+function resizeImage(file: File, width: number, height: number) {
   return new Promise<string>((resolve, reject) => {
     try {
       Resizer.imageFileResizer(
         file,
-        16,
-        16,
+        width,
+        height,
         "PNG",
-        16,
+        100,
         0,
-        (uri) => { resolve(uri.toString()) },
+        (uri: any) => { resolve(uri.toString()) },
         "base64",
-        16,
-        16,
+        width,
+        height,
       )
     } catch (err) {
       console.error("Error in resizing file")
@@ -41,6 +41,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
   const [editLogo, setEditLogo] = React.useState(false);
   const [currentEditLogo, setCurrentEditLogo] = React.useState<string>("");
   const [currentUrl, setCurrentUrl] = useState("about:blank");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
@@ -63,9 +64,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
   useEffect(init, [currentEditLogo]);
 
-  const get16x16ImageUri = async (dataUrl: string) => {
-    const file = await dataUrlToFile(dataUrl, "favicon_16x16");
-    const uri = await resizeTo16x16(file);
+  const getImageUri = async (dataUrl: string, fileName: string, width: number, height: number) => {
+    const file = await dataUrlToFile(dataUrl, fileName);
+    const uri = await resizeImage(file, width, height);
     return uri;
   }
 
@@ -80,10 +81,11 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         keySetting[0].value = dataUrl;
       }
 
+
       if (keyName === "favicon_400x400") {
         const index = settings.findIndex(s => s.keyName === "favicon_16x16");
         if (dataUrl !== ""){
-          const imageDataUrl = await get16x16ImageUri(dataUrl)
+          const imageDataUrl = await getImageUri(dataUrl, "favicon_16x16", 16, 16)
           if (index !== -1) {
             settings[index].value = imageDataUrl;
           } else {
@@ -104,6 +106,21 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     if (!editLogo) {
       return null
     } else {
+      let aspectRatio: number, outputWidth: number, outputHeight: number;
+      if (currentEditLogo.includes("favicon")) {
+        aspectRatio = 1;
+        outputWidth = 400;
+        outputHeight = 400;
+      } else if (currentEditLogo.includes("ogImage")) {
+        aspectRatio = 40/21;
+        outputWidth = 1200;
+        outputHeight = 630;
+      } else {
+        aspectRatio = 4;
+        outputWidth = 1280;
+        outputHeight = 320;
+      }
+
       return (
         <ImageEditor
           photoUrl={currentUrl}
@@ -114,9 +131,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
             setEditLogo(false);
             setCurrentUrl(null);
           }}
-          aspectRatio={currentEditLogo.includes("favicon") ? 1 : 4}
-          outputWidth={currentEditLogo.includes("favicon") ? 400 : 1200}
-          outputHeight={currentEditLogo.includes("favicon") ? 400 : 300}
+          aspectRatio={aspectRatio}
+          outputWidth={outputWidth}
+          outputHeight={outputHeight}
         />
       )
     }
@@ -128,7 +145,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     return <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setEditLogo(true); setCurrentEditLogo(name) }}>{logoImg}</a>
   }
 
-  const handleSave = () => { ApiHelper.post("/settings", currentSettings, "MembershipApi").then(props.updatedFunction); }
+  const handleSave = () => { setIsSubmitting(true); ApiHelper.post("/settings", currentSettings, "MembershipApi").then(() => { props.updatedFunction(); setIsSubmitting(false); }); }
   const handleCancel = () => { props.updatedFunction(); }
 
   React.useEffect(() => { setCurrentSettings(props.settings); }, [props.settings]);
@@ -136,7 +153,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
   return (
     <>
       {getLogoEditor(currentEditLogo)}
-      <InputBox headerIcon="palette" headerText="Church Appearance" saveFunction={handleSave} cancelFunction={handleCancel}>
+      <InputBox headerIcon="palette" headerText="Church Appearance" saveFunction={handleSave} cancelFunction={handleCancel} isSubmitting={isSubmitting}>
         <div style={{ backgroundColor: "#EEE", padding: 10 }}>
 
           <label>Logo - Light background</label><br />
@@ -151,6 +168,17 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
           <p style={{ color: "#999", fontSize: 12 }}>Upload horizontal logo with a transparent background suitable for use of dark backrounds. The ideal size is 1280 pixels wide by 320 pixels high.</p>
           {getLogoLink("logoDark", "#333")}
 
+        </div>
+        <hr />
+
+        <div style={{ backgroundColor: "#3f51b5", padding: 10, color: "#FFF" }}>
+          <label style={{ color: "whitesmoke" }}>Open Graph Image</label>
+          <p style={{ color: "whitesmoke", fontSize: 12 }}>Upload horizontal image suitable for use of SEO purposes. The ideal size is 1200 pixels wide by 630 pixels high.</p>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div style={{ maxWidth: 600, maxHeight: 315 }}>
+              {getLogoLink("ogImage", "#3f51b5")}
+            </div>
+          </div>
         </div>
         <hr />
 
