@@ -98,8 +98,8 @@ export function Header(props: Props) {
 
   return (
     <div>
-      <AppBar id="navbar" position="fixed" className={appBarClass} style={{height:93}}>
-        <Container>
+      <AppBar id="navbar" position="fixed" className={appBarClass}>
+        <Container style={{height:71}}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap",  }}>
