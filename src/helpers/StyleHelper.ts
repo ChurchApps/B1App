@@ -14,7 +14,8 @@ export class StyleHelper {
   }
 
   private static getSectionCss = (section:SectionInterface, all:string[], desktop:string[], mobile:string[]) => {
-    const id = section.answers?.sectionId || "section-" + section.id;
+    const id = (section.answers?.sectionId) ? "section-" + section.answers?.sectionId : "section-" + section.id;
+
     if (section.styles?.all) all.push(this.getStyle(id, section.styles.all));
     if (section.styles?.desktop) desktop.push(this.getStyle(id, section.styles.desktop));
     if (section.styles?.mobile) mobile.push(this.getStyle(id, section.styles.mobile));

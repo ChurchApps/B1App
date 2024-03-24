@@ -20,6 +20,8 @@ interface Props {
 export const Section: React.FC<Props> = props => {
   const [isDragging, setIsDragging] = useState(false);
 
+  console.log("SECTION", props.section)
+
   const getElements = () => {
     const result: JSX.Element[] = []
     props.section.elements.forEach(e => {
@@ -123,9 +125,20 @@ export const Section: React.FC<Props> = props => {
     {getElements()}
   </Container>);
 
+
+  const getSectionAnchor = () => {
+    if (props.section.answers?.sectionId) return <a id={props.section.answers?.sectionId} className="sectionAnchor"></a>;
+    else return <></>;
+  }
+
+  const getId = () => {
+    if (props.section.answers?.sectionId) return "section-" + props.section.answers?.sectionId;
+    else return "section-" + props.section.id;
+  }
+
   if (props.section.background.indexOf("youtube:") > -1) {
     const youtubeId = props.section.background.split(":")[1];
-    return (<YoutubeBackground isDragging={isDragging} id={props.section.answers?.sectionId || "section-" + props.section.id} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground>);
+    return (<>{getSectionAnchor()}<YoutubeBackground isDragging={isDragging} id={getId()} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground></>);
   }
-  else return (<div style={getStyle()} className={getClassName()} id={props.section.answers?.sectionId || "section-" + props.section.id}>{contents}</div>);
+  else return (<>{getSectionAnchor()}<div style={getStyle()} className={getClassName()} id={getId()}>{contents}</div></>);
 }
