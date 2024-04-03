@@ -1,0 +1,95 @@
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { AssignmentInterface, ConfigHelper, PlanInterface, PositionInterface, TimeInterface, WrapperPageProps } from "@/helpers";
+import { Wrapper } from "@/components";
+import { ApiHelper, ArrayHelper, Loading, PersonInterface, UserHelper } from "@churchapps/apphelper"
+import { GetStaticPaths, GetStaticProps } from "next";
+import { Grid, Icon } from "@mui/material";
+import { Team } from "@/components/plans/Team";
+import { PositionDetails } from "@/components/plans/PositionDetails";
+
+export default function PlanPage(props: WrapperPageProps) {
+  const [plan, setPlan] = useState<PlanInterface>(null);
+  const [positions, setPositions] = useState<PositionInterface[]>([]);
+  const [assignments, setAssignments] = useState<AssignmentInterface[]>([]);
+  const [times, setTimes] = useState<TimeInterface[]>([]);
+  const [people, setPeople] = useState<PersonInterface[]>([]);
+  const [isLoading, setLoading] = useState(false);
+
+  const router = useRouter();
+  const {id} = router.query;
+
+  const loadData = async () => {
+    setLoading(true);
+    const config = ApiHelper.getConfig("DoingApi");
+    console.log("Loading CONFIG", config, ApiHelper.apiConfigs);
+    const tempPlan = await ApiHelper.get("/plans/" + id, "DoingApi");
+    ApiHelper.get("/times/plan/" + id, "DoingApi").then((data) => setTimes(data));
+    setPlan(tempPlan);
+    const tempPositions = await ApiHelper.get("/positions/plan/" + id, "DoingApi");
+    const tempAssignments = await ApiHelper.get("/assignments/plan/" + id, "DoingApi");
+    const peopleIds = ArrayHelper.getIds(tempAssignments, "personId");
+    const tempPeople = await ApiHelper.get("/people/ids?ids=" + escape(peopleIds.join(",")), "MembershipApi");
+
+    setPositions(tempPositions);
+    setAssignments(tempAssignments);
+    setPeople(tempPeople);
+    setLoading(false);
+  };
+
+  const getTeams = () => {
+    const rows:JSX.Element[] = [];
+    ArrayHelper.getUniqueValues(positions, "categoryName").forEach((category) => {
+      const pos = ArrayHelper.getAll(positions, "categoryName", category);
+      rows.push(<Team positions={pos} assignments={assignments} people={people} name={category} />)
+    });
+    return rows;
+  }
+
+  const getPositionDetails = () => {
+    const rows:JSX.Element[] = [];
+    const myAssignments = ArrayHelper.getAll(assignments, "personId", UserHelper.currentUserChurch.person.id);
+    myAssignments.forEach((assignment) => {
+      const position = ArrayHelper.getOne(positions, "id", assignment.positionId);
+      const posTimes:TimeInterface[] = [];
+      times.forEach((time) => { if (time.teams?.indexOf(position.categoryName)>-1) posTimes.push(time); });
+      rows.push(<PositionDetails position={position} assignment={assignment} times={posTimes} onUpdate={loadData}  />);
+    });
+    return rows;
+  }
+
+
+  useEffect(() => { loadData() }, [id]);
+
+  if (!UserHelper.currentUserChurch?.person?.id) return (<Wrapper config={props.config}>
+    <h1>Group</h1>
+    <h3 className="text-center w-100">Please <Link href={"/login/?returnUrl=/member/plans/" + id}>Login</Link> to view your plans.</h3>
+  </Wrapper>);
+
+
+  if (isLoading || !plan) return (<Wrapper config={props.config}><Loading /></Wrapper>);
+  return (
+    <Wrapper config={props.config}>
+      <h1><Icon>assignment</Icon> {plan.name}</h1>
+      <Grid container spacing={3} alignItems="flex-start">
+        <Grid item md={8} xs={12}>
+          {getPositionDetails()}
+        </Grid>
+        <Grid item md={4} xs={12}>
+          {getTeams()}
+        </Grid>
+      </Grid>
+    </Wrapper>
+  );
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths:any[] = [];
+  return { paths, fallback: "blocking" };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const config = await ConfigHelper.load(params.sdSlug.toString());
+  return { props: { config }, revalidate: 30 };
+};

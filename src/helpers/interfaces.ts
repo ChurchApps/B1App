@@ -190,3 +190,9 @@ export const allStyleOptions:StyleOption[] = [
   { label: "Padding Bottom", key: "padding-bottom", type: "px", default: 0 },
   { label: "Width", key: "width", type: "px", default: 500 }
 ]
+
+
+export interface PlanInterface { id?: string, churchId?:string, name?: string, serviceDate?: Date, notes?: string }
+export interface PositionInterface { id?: string, churchId?:string, planId?:string, categoryName?:string, name?: string, count?:number, groupId?:string }
+export interface AssignmentInterface { id?: string, churchId?:string, positionId?:string, personId?:string, status?:string }
+export interface TimeInterface { id?: string, churchId?:string, planId?:string, displayName?:string, startTime?:Date, endTime?:Date, teams?:string, teamList?:string[] }
