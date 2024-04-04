@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AssignmentInterface, ConfigHelper, PlanInterface, PositionInterface, TimeInterface, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { Wrapper } from "@/components";
-import { ApiHelper, ArrayHelper, Loading, PersonInterface, UserHelper } from "@churchapps/apphelper"
+import { ApiHelper, ArrayHelper, AssignmentInterface, Loading, PersonInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper"
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Icon } from "@mui/material";
 import { Team } from "@/components/plans/Team";

@@ -1,6 +1,5 @@
 import React from "react";
-import { ApiHelper, InputBox } from "@churchapps/apphelper";
-import { AssignmentInterface, PositionInterface, TimeInterface } from "@/helpers";
+import { ApiHelper, AssignmentInterface, InputBox, PositionInterface, TimeInterface } from "@churchapps/apphelper";
 import { Alert } from "@mui/material";
 import { DateHelper } from "@churchapps/helpers";
 
@@ -40,7 +39,14 @@ export const PositionDetails: React.FC<Props> = (props) => {
     ApiHelper.post("/assignments/decline/" + props.assignment.id, [], "DoingApi").then(() => { props.onUpdate(); });
   }
 
-  return (<InputBox headerIcon="event" headerText={"Position: " + props.position.name} saveText="Accept" saveFunction={handleAccept} deleteFunction={handleDecline}>
+  let latestTime = new Date();
+  props.times.forEach((time) => {
+    if (new Date(time.endTime) > latestTime) latestTime = new Date(time.endTime);
+  });
+
+  const canRespond = props.assignment.status==="Unconfirmed" && (props.times.length===0 || new Date() < latestTime);
+
+  return (<InputBox headerIcon="event" headerText={"Position: " + props.position.name} saveText="Accept" saveFunction={canRespond && handleAccept} deleteFunction={canRespond && handleDecline} deleteText="Decline">
     {getStatus()}
     <br />
     <b>Needed Times:</b>

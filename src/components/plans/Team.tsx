@@ -1,6 +1,6 @@
 import React from "react";
-import { DisplayBox, PersonInterface } from "@churchapps/apphelper";
-import { AssignmentInterface, EnvironmentHelper, PositionInterface } from "@/helpers";
+import { AssignmentInterface, DisplayBox, PersonInterface, PositionInterface } from "@churchapps/apphelper";
+import { EnvironmentHelper } from "@/helpers";
 import { TableRow, TableCell, Table, TableBody } from "@mui/material";
 import Link from "next/link";
 

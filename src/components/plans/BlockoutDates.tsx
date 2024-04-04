@@ -9,7 +9,7 @@ interface Props {
   times: TimeInterface[];
 }
 
-export const UpcomingDates: React.FC<Props> = (props) => {
+export const BlockoutDates: React.FC<Props> = (props) => {
 
   const getData = () => {
     if (props.times?.length === 0) return [];
@@ -52,8 +52,8 @@ export const UpcomingDates: React.FC<Props> = (props) => {
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>Event</TableCell>
-          <TableCell>Start Time</TableCell>
+          <TableCell>Start Date</TableCell>
+          <TableCell>End Date</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

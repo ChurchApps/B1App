@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Wrapper } from "@/components";
-import { AssignmentInterface, ConfigHelper, PlanInterface, PositionInterface, TimeInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper, ArrayHelper, DisplayBox, UserHelper } from "@churchapps/apphelper";
+import { ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ApiHelper, ArrayHelper, AssignmentInterface, DisplayBox, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { ServingTimes } from "@/components/plans/ServingTimes";
@@ -52,16 +52,7 @@ export default function Groups(props: WrapperPageProps) {
         </Grid>
         <Grid item md={4} xs={12}>
           <UpcomingDates assignments={assignments} plans={plans} positions={positions} times={times} />
-          <DisplayBox headerIcon="event" headerText="Upcoming Dates">
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Event</TableCell>
-                  <TableCell>Date</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </DisplayBox>
+
           <DisplayBox headerIcon="block" headerText="Block out Dates">
             <Table>
               <TableBody>
