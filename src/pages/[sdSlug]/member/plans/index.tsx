@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Wrapper } from "@/components";
 import { ConfigHelper, WrapperPageProps } from "@/helpers";
-import { ApiHelper, ArrayHelper, AssignmentInterface, DisplayBox, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, AssignmentInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
+import { Grid, Icon } from "@mui/material";
 import { ServingTimes } from "@/components/plans/ServingTimes";
 import { UpcomingDates } from "@/components/plans/UpcomingDates";
+import { BlockoutDates } from "@/components/plans/BlockoutDates";
 
 export default function Groups(props: WrapperPageProps) {
   const [assignments, setAssignments] = useState<AssignmentInterface[]>([]);
@@ -52,23 +53,9 @@ export default function Groups(props: WrapperPageProps) {
         </Grid>
         <Grid item md={4} xs={12}>
           <UpcomingDates assignments={assignments} plans={plans} positions={positions} times={times} />
-
-          <DisplayBox headerIcon="block" headerText="Block out Dates">
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Block Out Date</TableCell>
-                  <TableCell>Reason</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </DisplayBox>
+          <BlockoutDates />
         </Grid>
       </Grid>
-
-
-
-
     </Wrapper>
   );
 }

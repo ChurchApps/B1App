@@ -1,65 +1,62 @@
-import React from "react";
-import { ArrayHelper, AssignmentInterface, DateHelper, DisplayBox, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper";
-import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";
+import React, { useEffect } from "react";
+import { ApiHelper, DateHelper, DisplayBox } from "@churchapps/apphelper";
+import { TableRow, TableCell, Table, TableHead, TableBody, IconButton, Icon } from "@mui/material";
+import { BlockoutDateInterface } from "@/helpers";
+import { BlockoutDateEdit } from "./BlockoutDateEdit";
 
 interface Props {
-  plans: PlanInterface[];
-  positions: PositionInterface[];
-  assignments: AssignmentInterface[];
-  times: TimeInterface[];
 }
 
 export const BlockoutDates: React.FC<Props> = (props) => {
+  const [blockoutDates, setBlockoutDates] = React.useState<BlockoutDateInterface[]>([]);
+  const [blockoutDate, setBlockoutDate] = React.useState<BlockoutDateInterface>(null);
 
-  const getData = () => {
-    if (props.times?.length === 0) return [];
-    const data:any[] = [];
-    props.assignments.forEach((assignment) => {
-      const position = props.positions.find(p => p.id === assignment.positionId);
-      const plan = props.plans.find(p => p.id === position.planId);
-      const times:TimeInterface[] = ArrayHelper.getAll(props.times, "planId", plan.id);
-      times.forEach(t => {
-        if (new Date(t.endTime) > new Date()) {
-          if (t.teams.indexOf(position.categoryName) > -1) {
-            data.push({ timeId: t.id, timeName:t.displayName, startTime:new Date(t.startTime), status:"Unconfirmed" });
-          }
-        }
-      });
-
-    });
-    console.log("DATA", data)
-    ArrayHelper.sortBy(data, "startTime", false)
-
-    return data;
+  const loadData = () => {
+    ApiHelper.get("/blockoutDates/my", "DoingApi").then((data) => setBlockoutDates(data));
+    setBlockoutDate(null);
   }
 
+  useEffect(() => { loadData(); }, []);
+
+
   const getRows = () => {
-    const data = getData();
 
     const rows:JSX.Element[] = [];
-    data.forEach((d) => {
+    blockoutDates.forEach((d) => {
       rows.push(
-        <TableRow key={d.timeId}>
-          <TableCell>{d.timeName}</TableCell>
-          <TableCell>{DateHelper.prettyDateTime(d.startTime)}</TableCell>
+        <TableRow key={d.id}>
+          <TableCell>{DateHelper.prettyDate(new Date(d.startDate))}</TableCell>
+          <TableCell>{DateHelper.prettyDate(new Date(d.endDate))}</TableCell>
+          <TableCell>
+            <IconButton onClick={() => setBlockoutDate(d)}><Icon>edit</Icon></IconButton>
+          </TableCell>
         </TableRow>
       );
     });
     return rows;
   }
 
-  return (<DisplayBox headerIcon="event" headerText="Upcoming Dates">
-    <Table>
+  const handleAdd = () => {
+    setBlockoutDate({ startDate: new Date(), endDate: new Date() });
+  }
+
+  const addLink = <IconButton onClick={handleAdd}><Icon color="primary">add</Icon></IconButton>
+
+  if (blockoutDate !== null) return (<BlockoutDateEdit blockoutDate={blockoutDate} onUpdate={loadData} />);
+  else return (<DisplayBox headerIcon="block" headerText="Blockout Dates" editContent={addLink}>
+    {blockoutDates.length === 0 && <div>No blockout dates.</div>}
+    {blockoutDates.length > 0 && (<Table>
       <TableHead>
         <TableRow>
           <TableCell>Start Date</TableCell>
           <TableCell>End Date</TableCell>
+          <TableCell></TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {getRows()}
       </TableBody>
-    </Table>
+    </Table>)}
   </DisplayBox>);
 }
 

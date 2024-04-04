@@ -190,3 +190,6 @@ export const allStyleOptions:StyleOption[] = [
   { label: "Padding Bottom", key: "padding-bottom", type: "px", default: 0 },
   { label: "Width", key: "width", type: "px", default: 500 }
 ]
+
+
+export interface BlockoutDateInterface { id?: string; churchId?: string; personId?: string; startDate?: Date; endDate?: Date; }
