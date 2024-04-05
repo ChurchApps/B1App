@@ -14,7 +14,7 @@ export const ServingTimes: React.FC<Props> = (props) => {
   const getStatusLabel = (status:string) => {
     let result = <div style={{color:"#ed6c02", fontWeight:"bold"}}>{status}</div>
     if (status==="Accepted") result = (<div style={{color:"#2e7d32", fontWeight:"bold"}}>{status}</div>);
-    else if (status==="Declined") result = (<div style={{color:"#2e7d32", fontWeight:"bold"}}>{status}</div>);
+    else if (status==="Declined") result = (<div style={{color:"#d32f2f", fontWeight:"bold"}}>{status}</div>);
     return result;
   }
 

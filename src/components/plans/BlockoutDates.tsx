@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { ApiHelper, DateHelper, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper, BlockoutDateInterface, DateHelper, DisplayBox } from "@churchapps/apphelper";
 import { TableRow, TableCell, Table, TableHead, TableBody, IconButton, Icon } from "@mui/material";
-import { BlockoutDateInterface } from "@/helpers";
 import { BlockoutDateEdit } from "./BlockoutDateEdit";
 
 interface Props {
