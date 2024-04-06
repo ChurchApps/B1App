@@ -24,7 +24,7 @@ export const YouTubeImport = (props: Props) => {
   
   const loadSettings = () => {
     if (playlistId && channelId) {
-      ApiHelper.get(`/settings/imports?playlistId=${playlistId}&channelId=${channelId}`, "ContentApi").then((data) => {
+      ApiHelper.get(`/settings/imports?type=youtube&playlistId=${playlistId}&channelId=${channelId}`, "ContentApi").then((data) => {
         if (data.length === 1) { setAutoImportSettings(data[0]); setAutoImportSermons(true); }
         else { setAutoImportSettings(null); setAutoImportSermons(false); }
       });
@@ -80,7 +80,7 @@ export const YouTubeImport = (props: Props) => {
         ApiHelper.post("/settings", [{...autoImportSettings, value: "", public: 1}], "ContentApi");
       }
       if (!autoImportSettings && autoImportSermons === true) {
-        ApiHelper.post("/settings", [{ keyName: "channelId", value: channelId, public: 1 }], "ContentApi").then((data: any) => {
+        ApiHelper.post("/settings", [{ keyName: "youtubeChannelId", value: channelId, public: 1 }], "ContentApi").then((data: any) => {
           ApiHelper.post("/settings", [{ keyName: "autoImportSermons", value: `${playlistId}|#${data[0].id}`, public: 1 }], "ContentApi");
         })
       }
