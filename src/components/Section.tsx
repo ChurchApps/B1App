@@ -132,8 +132,10 @@ export const Section: React.FC<Props> = props => {
   }
 
   const getId = () => {
-    if (props.section.answers?.sectionId) return "section-" + props.section.answers?.sectionId;
-    else return "section-" + props.section.id;
+    let result = "section-" + props.section.answers?.sectionId?.toString()
+    if (result==="section-undefined") result = "section-" + props.section.id;
+    console.log("SECTION ID2", result, result==="section-undefined");
+    return result;
   }
 
   if (props.section.background.indexOf("youtube:") > -1) {
