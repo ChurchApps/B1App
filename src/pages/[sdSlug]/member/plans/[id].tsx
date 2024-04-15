@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { Wrapper } from "@/components";
-import { ApiHelper, ArrayHelper, AssignmentInterface, Loading, PersonInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper"
+import { ApiHelper, ArrayHelper, AssignmentInterface, DisplayBox, Loading, PersonInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper"
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Grid, Icon } from "@mui/material";
 import { Team } from "@/components/plans/Team";
@@ -59,6 +59,13 @@ export default function PlanPage(props: WrapperPageProps) {
     return rows;
   }
 
+  const getNotes = () => {
+    if (!plan.notes) return null;
+    return (<DisplayBox headerText="Notes">
+      {plan.notes.replace("\n", "<br />")}
+    </DisplayBox>)
+  }
+
 
   useEffect(() => { loadData() }, [id]);
 
@@ -75,6 +82,7 @@ export default function PlanPage(props: WrapperPageProps) {
       <Grid container spacing={3} alignItems="flex-start">
         <Grid item md={8} xs={12}>
           {getPositionDetails()}
+          {getNotes()}
         </Grid>
         <Grid item md={4} xs={12}>
           {getTeams()}

@@ -25,61 +25,83 @@ export const Wrapper: React.FC<Props> = props => {
     else if (path.startsWith("/member/url")) result = "url";
     else if (path.startsWith("/member/bible")) result = "bible";
     else if (path.startsWith("/member/pages")) result = "page";
+    else if (path.startsWith("/member/plans")) result = "plans";
     else if (path.startsWith("/member/votd")) result = "votd";
     else if (path.startsWith("/member/groups")) result = "groups";
     else if (path.match("/member")) result = "member";
     return result;
   }
 
-  const selectedTab = getSelectedTab();
 
-  tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
-  tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={router} selected={selectedTab === "member"} />)
 
-  props.config.tabs?.forEach(tab => {
-    switch (tab.linkType) {
-      case "donation":
-        tabs.push(<NavItem key="/member/donate" url="/member/donate" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
-        break;
-      case "donationLanding":
-        tabs.push(<NavItem key="/member/donation-landing" url="/member/donation-landing" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
-        break;
-      case "checkin":
-        tabs.push(<NavItem key="/member/checkin" url="/member/checkin" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "checkin"} />)
-        break
-      case "stream":
-        tabs.push(<NavItem key="/member/stream" url="/member/stream" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "stream"} />)
-        break
-      case "lessons":
-        tabs.push(<NavItem key="/member/lessons" url="/member/lessons" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "lessons"} />)
-        break
-      case "directory":
-        tabs.push(<NavItem key="/member/directory" url="/member/directory" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "directory"} />)
-        break
-      case "url":
-        tabs.push(<NavItem key={`/member/url/${tab.id}`} url={`/member/url/${tab.id}`} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "url" && window?.location?.href?.indexOf(tab.id) > -1} />)
-        break
-      case "bible":
-        tabs.push(<NavItem key="/member/bible" url="/member/bible" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "bible"} />)
-        break
-      case "page":
-        let url = `/member/pages/${tab.churchId}/${tab.linkData}`;
-        if (tab.url) url += "?url=" + tab.url;
-        tabs.push(<NavItem key={url} url={url} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "page"} />)
-        break
-      case "votd":
-        tabs.push(<NavItem key="/member/votd" url="/member/votd" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "votd"} />)
-        break
-      case "groups":
-        tabs.push(<NavItem key="/member/groups" url="/member/groups" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "groups"} />)
-        break
-      default:
-        break
+  const getTabs = () => {
+    tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
+    tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={router} selected={selectedTab === "member"} />)
+
+    props.config.tabs?.forEach(tab => {
+      switch (tab.linkType) {
+        case "donation":
+          tabs.push(<NavItem key="/member/donate" url="/member/donate" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
+          break;
+        case "donationLanding":
+          tabs.push(<NavItem key="/member/donation-landing" url="/member/donation-landing" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "donation"} />)
+          break;
+        case "checkin":
+          tabs.push(<NavItem key="/member/checkin" url="/member/checkin" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "checkin"} />)
+          break
+        case "stream":
+          tabs.push(<NavItem key="/member/stream" url="/member/stream" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "stream"} />)
+          break
+        case "lessons":
+          tabs.push(<NavItem key="/member/lessons" url="/member/lessons" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "lessons"} />)
+          break
+        case "directory":
+          tabs.push(<NavItem key="/member/directory" url="/member/directory" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "directory"} />)
+          break
+        case "url":
+          tabs.push(<NavItem key={`/member/url/${tab.id}`} url={`/member/url/${tab.id}`} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "url" && window?.location?.href?.indexOf(tab.id) > -1} />)
+          break
+        case "bible":
+          tabs.push(<NavItem key="/member/bible" url="/member/bible" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "bible"} />)
+          break
+        case "page":
+          let url = `/member/pages/${tab.churchId}/${tab.linkData}`;
+          if (tab.url) url += "?url=" + tab.url;
+          tabs.push(<NavItem key={url} url={url} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "page"} />)
+          break
+        case "votd":
+          tabs.push(<NavItem key="/member/votd" url="/member/votd" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "votd"} />)
+          break
+        case "groups":
+          tabs.push(<NavItem key="/member/groups" url="/member/groups" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "groups"} />)
+          break
+        default:
+          break
+      }
+    })
+  }
+
+  const getSpecialTabs = () => {
+    const adminAccess = UserHelper.checkAccess(Permissions.contentApi.content.edit);
+    if (adminAccess) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
+
+    if (context.userChurch)
+    {
+      let showPlans = false;
+      context.userChurch.groups.forEach(group => {
+        console.log("TAGS", group.tags)
+        if (group.tags.indexOf("team")>-1) showPlans = true;
+      });
+      if (showPlans) tabs.push(<NavItem key="/member/plans" url="/member/plans" label="Plans" icon="event" router={router} />);
     }
-  })
+  }
 
-  const adminAccess = UserHelper.checkAccess(Permissions.contentApi.content.edit);
-  if (adminAccess) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
+  const selectedTab = getSelectedTab();
+  getTabs();
+  getSpecialTabs();
+
+
+
 
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
