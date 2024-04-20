@@ -7,11 +7,13 @@ export default function Url(props: WrapperPageProps) {
   const router = useRouter();
   const urlId = router.query.id as string;
 
-  const linkObject = props.config.tabs.filter((t) => t.id === urlId)[0];
+  const url = (urlId==="chums")
+    ? "https://app.chums.org/"
+    : props.config.tabs.filter((t) => t.id === urlId)[0].url;
 
   return (
     <Wrapper config={props.config}>
-      <iframe title="content" className="full-frame" src={linkObject.url} />
+      <iframe title="content" className="full-frame" src={url} />
     </Wrapper>
   );
 }
