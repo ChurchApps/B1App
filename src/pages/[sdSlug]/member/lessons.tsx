@@ -1,5 +1,6 @@
 import { Wrapper } from "@/components";
 import { EnvironmentHelper, ConfigHelper, WrapperPageProps } from "@/helpers";
+import { UserHelper } from "@churchapps/helpers";
 import { GetStaticPaths, GetStaticProps } from "next";
 
 export default function Lessons(props: WrapperPageProps) {
@@ -8,7 +9,7 @@ export default function Lessons(props: WrapperPageProps) {
       <iframe
         title="content"
         className="full-frame"
-        src={EnvironmentHelper.Common.LessonsRoot + "/b1/" + props.config.church.id}
+        src={EnvironmentHelper.Common.LessonsRoot + "/login?returnUrl=/b1/person&churchId=" + UserHelper.currentUserChurch?.church?.id }
       />
     </Wrapper>
   );

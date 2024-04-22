@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, Divider, List, ThemeProvider } from "@mui/material";
 import { useRouter } from "next/router"
-import { Themes, SiteWrapper, NavItem, UserHelper, Permissions } from "@churchapps/apphelper";
+import { Themes, SiteWrapper, NavItem, UserHelper, Permissions, ApiHelper } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
@@ -13,6 +13,7 @@ export const Wrapper: React.FC<Props> = props => {
   PersonHelper.person = context.person;
   const tabs:any = []
   const router = useRouter();
+  const [classRoooms, setClassrooms] = React.useState([])
 
   const getSelectedTab = () => {
     const path = (typeof window !== "undefined") ? window?.location?.pathname : "";
@@ -30,6 +31,11 @@ export const Wrapper: React.FC<Props> = props => {
     else if (path.startsWith("/member/groups")) result = "groups";
     else if (path.match("/member")) result = "member";
     return result;
+  }
+
+
+  const loadData = () => {
+    if (UserHelper.currentUserChurch) ApiHelper.get("/classrooms/person", "LessonsApi").then(data => setClassrooms(data));
   }
 
 
@@ -95,11 +101,14 @@ export const Wrapper: React.FC<Props> = props => {
       if (props.config.allowDonations) tabs.push(<NavItem key="/member/donate" url="/member/donate" label="Donate" icon="volunteer_activism" router={router} selected={selectedTab === "donation"} />)
       if (isMember) tabs.push(<NavItem key="/member/directory" url="/member/directory" label="Member Directory" icon="groups" router={router} selected={selectedTab === "directory"} />);
       if (showPlans) tabs.push(<NavItem key="/member/plans" url="/member/plans" label="Plans" icon="event" router={router} selected={selectedTab === "plans"} />);
+      if (classRoooms.length>0) tabs.push(<NavItem key="/member/lessons" url="/member/lessons" label="Lessons" icon="school" router={router} selected={selectedTab === "lessons"} />)
     }
 
     if (editPeopleAccess) tabs.push(<NavItem key="/chums" url="/member/url/chums" label="Chums" icon="account_circle" router={router} />);
     if (adminAccess) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={router} />);
   }
+
+  useEffect(() => { loadData() }, [context.userChurch])
 
   const selectedTab = getSelectedTab();
   getTabs();
