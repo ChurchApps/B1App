@@ -77,7 +77,7 @@ export const Wrapper: React.FC<Props> = props => {
     let showWebsite = props.config.hasWebsite,
       showDonations = props.config.allowDonations,
       showMyGroups = false, showPlans = false,
-      showDirectory = context.userChurch.person?.membershipStatus?.toLowerCase() === "member",
+      showDirectory = context.userChurch?.person?.membershipStatus?.toLowerCase() === "member",
       showLessons = classRoooms.length>0,
       showCheckin = campuses.length>0,
       showChums = UserHelper.checkAccess(Permissions.membershipApi.people.edit),
