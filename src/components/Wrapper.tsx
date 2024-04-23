@@ -54,9 +54,9 @@ export const Wrapper: React.FC<Props> = props => {
         case "stream":
           tabs.push(<NavItem key="/member/stream" url="/member/stream" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "stream"} />)
           break
-        case "lessons":
-          tabs.push(<NavItem key="/member/lessons" url="/member/lessons" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "lessons"} />)
-          break
+        //case "lessons":
+          //tabs.push(<NavItem key="/member/lessons" url="/member/lessons" label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "lessons"} />)
+          //break
         case "url":
           tabs.push(<NavItem key={`/member/url/${tab.id}`} url={`/member/url/${tab.id}`} label={tab.text} icon={tab.icon} router={router} selected={selectedTab === "url" && window?.location?.href?.indexOf(tab.id) > -1} />)
           break
@@ -89,11 +89,9 @@ export const Wrapper: React.FC<Props> = props => {
 
     if (context.userChurch)
     {
-      console.log("USER CHURCH", context.userChurch)
       const isMember = context.userChurch.person?.membershipStatus?.toLowerCase() === "member";
       let showPlans = false;
       context.userChurch.groups.forEach(group => {
-        console.log("TAGS", group.tags)
         if (group.tags.indexOf("team")>-1) showPlans = true;
       });
       if (props.config.hasWebsite) tabs.push(<NavItem key="/" url="/" label="Website" icon="home" router={router} />);
