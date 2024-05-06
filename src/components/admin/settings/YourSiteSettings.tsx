@@ -19,6 +19,7 @@ export function YourSiteSettings() {
   const [editPage, setEditPage] = useState<PageInterface>(null);
   const [editBlock, setEditBlock] = useState<BlockInterface>(null);
   const [refresh, refresher] = useState({});
+  const [creatingPages, setCreatingPages] = useState<boolean>(false);
   const router = useRouter();
   const windowWidth = useWindowWidth();
 
@@ -49,16 +50,18 @@ export function YourSiteSettings() {
   const editContent = (
     <>
       {pages.length === 0 && 
-        <Button variant="outlined" size="small" sx={{ marginRight: 2 }} 
-          onClick={async () => { 
+        <Button variant="outlined" size="small" sx={{ marginRight: 2 }}
+          onClick={async () => {
+            setCreatingPages(true);
             await TemplateHelper.createDefaultLinks(); 
             await TemplateHelper.createDefaultFooter(); 
             await TemplateHelper.createDefaultPages(); 
             loadData(); 
-            refresher({}); 
+            refresher({});
+            setCreatingPages(false); 
           }}
         >
-          Create Default Pages
+          {creatingPages === true ? 'Creating...' : 'Create Default Pages'}
         </Button>
       }
       <SmallButton icon="add" onClick={() => { setEditPage({}); }} />

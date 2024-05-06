@@ -213,10 +213,12 @@ export class TemplateHelper {
   }
 
   static async createDefaultPages() {
-    await this.createHomePage();
-    await this.createVisitPage();
-    await this.createSermonsPage();
-    await this.createAboutUsPage();
-    await this.createDonatePage();
+    const promises = [];
+    promises.push(this.createHomePage());
+    promises.push(this.createVisitPage());
+    promises.push(this.createSermonsPage());
+    promises.push(this.createAboutUsPage());
+    promises.push(this.createDonatePage());
+    await Promise.all(promises);
   }
 }
