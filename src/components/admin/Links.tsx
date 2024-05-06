@@ -8,6 +8,10 @@ interface RecursiveInterface {
   nestedLevel?: number;
 }
 
+interface Props {
+  refresh?: any;
+}
+
 const getNestedChildren = (arr: LinkInterface[], parent: string) => {
   const result: LinkInterface[] = [];
   for(const i in arr) {
@@ -22,7 +26,7 @@ const getNestedChildren = (arr: LinkInterface[], parent: string) => {
   return result;
 }
 
-export const Links: React.FC = () => {
+export const Links: React.FC<Props> = (props) => {
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
   const [currentLink, setCurrentLink] = React.useState<LinkInterface>(null);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -142,7 +146,7 @@ export const Links: React.FC = () => {
       </tbody>
     </table>)
   }
-  React.useEffect(() => { loadData(); }, []);
+  React.useEffect(() => { loadData(); }, [props?.refresh]);
 
   if (currentLink !== null) return <LinkEdit links={links} currentLink={currentLink} updatedFunction={handleUpdated} />;
   else return (

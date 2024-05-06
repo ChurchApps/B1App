@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon, Button } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import { DisplayBox, ErrorMessages, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Links } from "@/components/admin/Links";
@@ -9,6 +9,7 @@ import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import { SmallButton } from "@churchapps/apphelper";
 import { BlockInterface, PageInterface } from "@/helpers";
+import { TemplateHelper } from "@/helpers/TemplateHelper";
 
 export function YourSiteSettings() {
   const { isAuthenticated } = ApiHelper;
@@ -17,6 +18,7 @@ export function YourSiteSettings() {
   const [blocks, setBlocks] = useState<BlockInterface[]>([]);
   const [editPage, setEditPage] = useState<PageInterface>(null);
   const [editBlock, setEditBlock] = useState<BlockInterface>(null);
+  const [refresh, refresher] = useState({});
   const router = useRouter();
   const windowWidth = useWindowWidth();
 
@@ -45,12 +47,22 @@ export function YourSiteSettings() {
   useEffect(loadData, [isAuthenticated]);
 
   const editContent = (
-    <SmallButton
-      icon="add"
-      onClick={() => {
-        setEditPage({});
-      }}
-    />
+    <>
+      {pages.length === 0 && 
+        <Button variant="outlined" size="small" sx={{ marginRight: 2 }} 
+          onClick={async () => { 
+            await TemplateHelper.createDefaultLinks(); 
+            await TemplateHelper.createDefaultFooter(); 
+            await TemplateHelper.createDefaultPages(); 
+            loadData(); 
+            refresher({}); 
+          }}
+        >
+          Create Default Pages
+        </Button>
+      }
+      <SmallButton icon="add" onClick={() => { setEditPage({}); }} />
+    </>
   );
 
   const editBlockContent = (
@@ -172,7 +184,7 @@ export function YourSiteSettings() {
           }}
         />
         )}
-        {UserHelper.checkAccess(Permissions.contentApi.content.edit) && <Links />}
+        {UserHelper.checkAccess(Permissions.contentApi.content.edit) && <Links refresh={refresh} />}
 
         <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance">
           <table className="table">
