@@ -162,11 +162,18 @@ export class TemplateHelper {
     if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.home.footer, pageId: page.id, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
-  static async createVisitPage() {
+  static async createVisitPage(pageId?: string) {
+    let PAGE_ID;
+    if (!pageId) {
+      const p: PageInterface[] = await ApiHelper.post("/pages", [this.visit.page], "ContentApi");
+      const page = p[0];
+      PAGE_ID = page.id;
+    } else {
+      PAGE_ID = pageId;
+    }
+
     const currentChurch = UserHelper.currentUserChurch.church;
-    const p: PageInterface[] = await ApiHelper.post("/pages", [this.visit.page], "ContentApi");
-    const page = p[0];
-    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.visit.section, pageId: page.id }], "ContentApi");
+    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.visit.section, pageId: PAGE_ID }], "ContentApi");
     const section = s[0];
     await ApiHelper.post(
       "/elements",
@@ -182,34 +189,55 @@ export class TemplateHelper {
       ],
       "ContentApi"
     );
-    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.visit.footer, pageId: page.id, targetBlockId: this.targetBlockId }], "ContentApi");
+    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.visit.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
-  static async createSermonsPage() {
-    const p: PageInterface[] = await ApiHelper.post("/pages", [this.sermons.page], "ContentApi");
-    const page = p[0];
-    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.sermons.section, pageId: page.id }], "ContentApi");
+  static async createSermonsPage(pageId?: string) {
+    let PAGE_ID;
+    if (!pageId) {
+      const p: PageInterface[] = await ApiHelper.post("/pages", [this.sermons.page], "ContentApi");
+      const page = p[0];
+      PAGE_ID = page.id;
+    } else {
+      PAGE_ID = pageId;
+    }
+
+    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.sermons.section, pageId: PAGE_ID }], "ContentApi");
     const section = s[0];
     await ApiHelper.post("/elements",[{ ...this.sermons.liveStream, sectionId: section.id }, { ...this.sermons.heading, sectionId: section.id }, { ...this.sermons.sermons, sectionId: section.id }], "ContentApi");
-    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.sermons.footer, pageId: page.id, targetBlockId: this.targetBlockId }], "ContentApi");
+    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.sermons.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
-  static async createAboutUsPage() {
-    const p: PageInterface[] = await ApiHelper.post("/pages", [this.aboutUs.page], "ContentApi");
-    const page = p[0];
-    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.aboutUs.section, pageId: page.id }], "ContentApi");
+  static async createAboutUsPage(pageId?: string) {
+    let PAGE_ID;
+    if (!pageId) {
+      const p: PageInterface[] = await ApiHelper.post("/pages", [this.aboutUs.page], "ContentApi");
+      const page = p[0];
+      PAGE_ID = page.id;
+    } else {
+      PAGE_ID = pageId;
+    }
+
+    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.aboutUs.section, pageId: PAGE_ID }], "ContentApi");
     const section = s[0];
     await ApiHelper.post("/elements", [{ ...this.aboutUs.heading, sectionId: section.id }, { ...this.aboutUs.text1, sectionId: section.id }, { ...this.aboutUs.text2, sectionId: section.id }, { ...this.aboutUs.text3, sectionId: section.id }], "ContentApi");
-    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.aboutUs.footer, pageId: page.id, targetBlockId: this.targetBlockId }], "ContentApi");
+    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.aboutUs.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
-  static async createDonatePage() {
-    const p: PageInterface[] = await ApiHelper.post("/pages", [this.donate.page], "ContentApi");
-    const page = p[0];
-    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.donate.section, pageId: page.id }], "ContentApi");
+  static async createDonatePage(pageId?: string) {
+    let PAGE_ID;
+    if (!pageId) {
+      const p: PageInterface[] = await ApiHelper.post("/pages", [this.donate.page], "ContentApi");
+      const page = p[0];
+      PAGE_ID = page.id;
+    } else {
+      PAGE_ID = pageId;
+    }
+
+    const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.donate.section, pageId: PAGE_ID }], "ContentApi");
     const section = s[0];
     await ApiHelper.post("/elements", [{ ...this.donate.heading, sectionId: section.id }, { ...this.donate.form, sectionId: section.id }], "ContentApi");
-    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.donate.footer, pageId: page.id, targetBlockId: this.targetBlockId }], "ContentApi");
+    if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.donate.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
   static async createDefaultPages() {
