@@ -1,9 +1,10 @@
 import { AppearanceInterface, ChurchInterface, ApiHelper, LinkInterface, UserHelper, Permissions} from "@churchapps/apphelper";
+import { PageInterface } from "./interfaces";
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
 export interface ServiceInterface { videoUrl: string, serviceTime: string, duration: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string }
-export interface ConfigurationInterface { keyName?: string, tabs?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface }
+export interface ConfigurationInterface { keyName?: string, tabs?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean }
 
 export class ConfigHelper {
 
@@ -11,7 +12,10 @@ export class ConfigHelper {
     const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi")
     let appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
     const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=b1Tab", "ContentApi");
-    let result: ConfigurationInterface = { appearance: appearance, church: church, tabs: tabs }
+    const gateway = await ApiHelper.getAnonymous("/gateways/churchId/" + church.id, "GivingApi");
+    const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi");
+
+    let result: ConfigurationInterface = { appearance: appearance, church: church, tabs: tabs, allowDonations:gateway!==null, hasWebsite: Boolean(homePage?.url) }
     result.keyName = keyName;
     return result;
   }

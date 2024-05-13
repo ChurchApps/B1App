@@ -96,6 +96,15 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
     return null;
   }
 
+  /*
+    <MenuItem value="checkin" disabled={isDisabled("checkin")}>Checkin</MenuItem>
+    <MenuItem value="donation" disabled={isDisabled("donation")}>Donation</MenuItem>
+    <MenuItem value="donationLanding" disabled={isDisabled("donationLanding")}>Donation Landing</MenuItem>
+    <MenuItem value="directory" disabled={isDisabled("directory")}>Member Directory</MenuItem>
+    <MenuItem value="groups" disabled={isDisabled("groups")}>My Groups</MenuItem>
+    <MenuItem value="lessons" disabled={isDisabled("lessons")}>Lessons.church</MenuItem>
+  */
+
   return (
     <>
       <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={updatedFunction} deleteFunction={!UniqueIdHelper.isMissing(currentTab?.id) ? handleDelete : null}>
@@ -119,14 +128,9 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
           <InputLabel id="type">Type</InputLabel>
           <Select labelId="type" label="Type" id="tabType" name="type" value={currentTab?.linkType || ""} onChange={handleChange}>
             <MenuItem value="bible" disabled={isDisabled("bible")}>Bible</MenuItem>
-            <MenuItem value="checkin" disabled={isDisabled("checkin")}>Checkin</MenuItem>
-            <MenuItem value="donation" disabled={isDisabled("donation")}>Donation</MenuItem>
-            <MenuItem value="donationLanding" disabled={isDisabled("donationLanding")}>Donation Landing</MenuItem>
-            <MenuItem value="directory" disabled={isDisabled("directory")}>Member Directory</MenuItem>
+
             <MenuItem value="stream" disabled={isDisabled("stream")}>Live Stream</MenuItem>
-            <MenuItem value="lessons" disabled={isDisabled("lessons")}>Lessons.church</MenuItem>
             <MenuItem value="votd" disabled={isDisabled("votd")}>Verse of the Day</MenuItem>
-            <MenuItem value="groups" disabled={isDisabled("groups")}>My Groups</MenuItem>
             <MenuItem value="url">External Url</MenuItem>
             <MenuItem value="page">Page</MenuItem>
           </Select>

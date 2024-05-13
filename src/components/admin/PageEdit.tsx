@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions, SlugHelper } from "@churchapps/apphelper";
+import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
 import { Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,6 +15,8 @@ export function PageEdit(props: Props) {
   const [page, setPage] = useState<PageInterface>(null);
   const [errors, setErrors] = useState([]);
   const [checked, setChecked] = useState<boolean>();
+  const [pageTemplate, setPageTemplate] = useState<string>("blank");
+  const [showPageTemplate, setShowPageTemplate] = useState<boolean>(true);
 
   const handleCancel = () => props.updatedCallback(page);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -39,10 +42,21 @@ export function PageEdit(props: Props) {
     return errors.length === 0;
   };
 
+  const createTemplate = async(type: string, pageId: string) => {
+    switch (type) {
+      case "blank": ; break;
+      case "sermons": await TemplateHelper.createSermonsPage(pageId); break;
+      case "about": await TemplateHelper.createAboutUsPage(pageId); break;
+      case "donate": await TemplateHelper.createDonatePage(pageId); break;
+      case "location": await TemplateHelper.createVisitPage(pageId); break;
+    }
+  }
+
   const handleSave = () => {
     if (validate()) {
       ApiHelper.post("/pages", [page], "ContentApi").then((data) => {
         setPage(data);
+        createTemplate(pageTemplate, data[0].id);
         props.updatedCallback(data);
       });
     }
@@ -80,7 +94,11 @@ export function PageEdit(props: Props) {
   }
 
 
-  useEffect(() => { setPage(props.page); if (props.page.url) { setChecked(true); } }, [props.page]);
+  useEffect(() => {
+    setPage(props.page);
+    if (props.page.url) { setChecked(true); };
+    if (Object.keys(props.page).length > 0) { setShowPageTemplate(false) };
+  }, [props.page]);
 
   if (!page) return <></>
   else return (
@@ -115,6 +133,18 @@ export function PageEdit(props: Props) {
             <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange}>
               <MenuItem value="headerFooter">Header & Footer</MenuItem>
               <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+        {!props.embedded && showPageTemplate === true && (
+          <FormControl fullWidth>
+            <InputLabel>Page Template</InputLabel>
+            <Select fullWidth label="Page Template" name="pageTemplate" value={pageTemplate} onChange={(e) => setPageTemplate(e.target.value)}>
+              <MenuItem value="blank">Blank</MenuItem>
+              <MenuItem value="sermons">Sermons</MenuItem>
+              <MenuItem value="about">About Us</MenuItem>
+              <MenuItem value="donate">Donate</MenuItem>
+              <MenuItem value="location">Location</MenuItem>
             </Select>
           </FormControl>
         )}
