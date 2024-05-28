@@ -1,6 +1,6 @@
 import { GlobalStyleInterface } from '@/helpers';
 import { GalleryModal } from '@churchapps/apphelper';
-import { FormControl, InputLabel, Select, MenuItem, TextField, Button, SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, TextField, Tabs, Tab, Button, SelectChangeEvent } from '@mui/material';
 import { useState } from 'react';
 import { SliderPicker } from 'react-color';
 
@@ -14,8 +14,8 @@ type Props = {
 };
 
 export function PickColors(props: Props) {
-  const [customColors, setCustomColors] = useState(false);
   const [selectPhotoField, setSelectPhotoField] = useState<string>(null);
+  const [tabValue, setTabValue] = useState<string>("suggested");
 
 
   const handlePhotoSelected = (image: string) => {
@@ -196,17 +196,11 @@ export function PickColors(props: Props) {
 
 
     return (<>
-      <a href="about:blank" onClick={(e) => { e.preventDefault(); setCustomColors(true); }}>Manually Select Colors</a><br />
-      <h4>Current Colors</h4>
-      <div style={{display:"block", backgroundColor:props.background, color:props.textColor, border:"1px solid " + props.textColor, borderRadius:5, padding:5, marginBottom:10 }}>Sample Text</div>
-
-      <h4>Suggestions</h4>
       {suggestions}
     </>)
   }
 
   const getManualColors = () => (<>
-    <a href="about:blank" onClick={(e) => { e.preventDefault(); setCustomColors(false); }}>Browse Suggested Colors</a><br />
     {getBackgroundField()}
     <div><InputLabel>Heading Color</InputLabel></div>
     {getThemeOptions("headingColor")}
@@ -216,8 +210,22 @@ export function PickColors(props: Props) {
     {getThemeOptions("linkColor")}
   </>)
 
+  let currentTab = null;
+  switch(tabValue) {
+    case "suggested": currentTab = getSuggestedColors(); break;
+    case "custom": currentTab = getManualColors(); break;
+  }
+
   return <>
-    {(customColors) ? getManualColors() : getSuggestedColors() }
+    <h4>Current Colors</h4>
+    <div style={{display:"block", backgroundColor:props.background, color:props.textColor, border:"1px solid " + props.textColor, borderRadius:5, padding:5, marginBottom:10 }}>Sample Text</div>
+    <Tabs value={tabValue} onChange={(event: React.SyntheticEvent, newValue: string) => setTabValue(newValue)}>
+      <Tab value="suggested" label="Suggested" />
+      <Tab value="custom" label="Custom" />
+    </Tabs>
+    <div style={{ marginTop: 10 }}>
+      {currentTab}
+    </div>
     {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}
   </>;
 }
