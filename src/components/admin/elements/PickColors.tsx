@@ -14,7 +14,6 @@ type Props = {
 };
 
 export function PickColors(props: Props) {
-  const [customColors, setCustomColors] = useState(false);
   const [selectPhotoField, setSelectPhotoField] = useState<string>(null);
   const [tabValue, setTabValue] = useState<string>("suggested");
 
