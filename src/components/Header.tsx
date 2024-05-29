@@ -21,10 +21,12 @@ type Props = {
 const getNestedChildren = (arr: LinkInterface[], parent: string) => {
   const result: LinkInterface[] = [];
   for(const i in arr) {
-    if(arr[i].parentId && parent && arr[i].parentId == parent) {
-      const children = getNestedChildren(arr, arr[i].id);
-      if(children.length) {
-        arr[i].children = children;
+    if(arr[i].parentId == parent) {
+      if (arr[i].id) {
+        const children = getNestedChildren(arr, arr[i].id);
+        if(children.length) {
+          arr[i].children = children;
+        }
       }
       result.push(arr[i]);
     }
