@@ -72,12 +72,12 @@ export const Theme: React.FC<Props> = (props) => {
   return (<>
     {fontLink}
     <Helmet>
-      {ogImage && <meta property="og:image" content={ogImage}></meta>}
       {css}
       {favicon
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
         : <link rel="icon" href="/favicon.ico" />
       }
+      {ogImage && <meta property="og:image" content={ogImage}></meta>}
     </Helmet>
     {customJs}
   </>);
