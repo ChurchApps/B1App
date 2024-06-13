@@ -1,8 +1,9 @@
 import React from "react";
-import { PersonHelper } from "../../../helpers";
-import { PersonInterface, DisplayBox, ApiHelper } from "@churchapps/apphelper"
-import { Household } from "./Household";
 import { Grid, Icon } from "@mui/material";
+import { PersonInterface, DisplayBox, ApiHelper } from "@churchapps/apphelper"
+import { PersonHelper } from "../../../helpers";
+import { Household } from "./Household";
+import { ModifyProfile } from "./ModifyProfile";
 
 interface Props { backHandler: () => void, personId: string, selectedHandler: (personId: string) => void }
 
@@ -34,7 +35,7 @@ export const Person: React.FC<Props> = (props) => {
 
   return (
     <>
-      <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information">
+      <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={<ModifyProfile personId={props.personId} person={person} />}>
         <Grid container spacing={3}>
           <Grid item xs={4}>
             <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
