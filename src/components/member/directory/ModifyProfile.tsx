@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ApiHelper, ArrayHelper, DateHelper, ImageEditor, PersonInterface } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, DateHelper, ImageEditor, PersonInterface, TaskInterface } from "@churchapps/apphelper";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
 import { PersonHelper } from "../../../helpers";
-import { TaskInterface } from "./Doing";
 
 interface Props { personId: string; person: PersonInterface; }
 
