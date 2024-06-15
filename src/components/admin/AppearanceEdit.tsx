@@ -8,6 +8,23 @@ interface Props {
   settings?: GenericSettingInterface[],
 }
 
+function getOgImage (img: any) {
+  return new Promise<string>((resolve, reject) => {
+    img.onload = function(){
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
+      let dataURL;
+      canvas.width = 1200;
+      canvas.height = 630;
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 15, 15);
+      dataURL = canvas.toDataURL();
+      resolve(dataURL.toString());
+    }
+  });
+}
+
 async function dataUrlToFile ( dataUrl: string, fileName: string ): Promise<File> {
   const res: Response = await fetch(dataUrl);
   const blob: Blob = await res.blob();
@@ -64,6 +81,17 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
 
   useEffect(init, [currentEditLogo]);
 
+  const getValue = async (keyName: string, dataURL: string) => {
+    let url = dataURL;
+    //add padding to the ogImage
+    if (keyName === "ogImage") {
+      let image = new Image();
+      image.src = dataURL;
+      url = await getOgImage(image);
+    }
+    return url;
+  }
+
   const getImageUri = async (dataUrl: string, fileName: string, width: number, height: number) => {
     const file = await dataUrlToFile(dataUrl, fileName);
     const uri = await resizeImage(file, width, height);
@@ -76,9 +104,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
       const keySetting = settings.filter(s => s.keyName === keyName);
 
       if (keySetting.length === 0) {
-        settings.push({ keyName, value: dataUrl, public: 1 });
+        settings.push({ keyName, value: await getValue(keyName, dataUrl), public: 1 });
       } else {
-        keySetting[0].value = dataUrl;
+        keySetting[0].value = await getValue(keyName, dataUrl);
       }
 
 
@@ -112,9 +140,9 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         outputWidth = 400;
         outputHeight = 400;
       } else if (currentEditLogo.includes("ogImage")) {
-        aspectRatio = 40/21;
-        outputWidth = 1200;
-        outputHeight = 630;
+        aspectRatio = 1170/600;
+        outputWidth = 1170;
+        outputHeight = 600;
       } else {
         aspectRatio = 4;
         outputWidth = 1280;
