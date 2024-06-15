@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ApiHelper, ArrayHelper, DateHelper, ImageEditor, PersonInterface, TaskInterface } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, DateHelper, ImageEditor, PersonInterface, RoleMemberInterface, TaskInterface, UserHelper } from "@churchapps/apphelper";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
@@ -15,7 +15,6 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   const [changes, setChanges] = useState<{ field: string; label: string; value: string }[]>([]);
 
   const task: TaskInterface = {
-    taskType: "directoryUpdate",
     dateCreated: new Date(),
     associatedWithType: "person",
     associatedWithId: props.personId,
@@ -147,8 +146,19 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const handleRequest = async () => {
+    //get domain Admin, so task can be assigned
+    const roles = await ApiHelper.get("/roles/church/" + UserHelper.currentUserChurch.church.id, "MembershipApi");
+    const domainRole = ArrayHelper.getOne(roles, "name", "Domain Admins");
+    const domainAdmins: RoleMemberInterface[] = await ApiHelper.get(`/rolemembers/roles/${domainRole.id}?include=users`, "MembershipApi");
+    if (domainAdmins.length > 0) {
+      //currently assignning the task to just one domain admin (which has been added first)
+      task.assignedToType = "person";
+      task.assignedToId = domainAdmins[0].personId;
+      task.assignedToLabel = domainAdmins[0].user.firstName + domainAdmins[0].user?.lastName;
+    }
+
     task.data = JSON.stringify(changes);
-    await ApiHelper.post("/tasks", [task], "DoingApi");
+    await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
     handleClose();
   };
 
