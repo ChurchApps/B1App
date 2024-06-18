@@ -5,7 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
 import { PersonHelper } from "../../../helpers";
 
-interface Props { personId: string; person: PersonInterface; }
+interface Props { personId: string; person: PersonInterface; onSave?: () => void }
 
 export const ModifyProfile: React.FC<Props> = (props) => {
   const [householdMembers, setHouseholdMembers] = useState<PersonInterface[]>(null);
@@ -160,6 +160,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     task.data = JSON.stringify(changes);
     await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
     handleClose();
+    props.onSave();
   };
 
   const loadData = () => {
