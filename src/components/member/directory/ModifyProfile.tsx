@@ -147,14 +147,11 @@ export const ModifyProfile: React.FC<Props> = (props) => {
 
   const handleRequest = async () => {
     //get domain Admin, so task can be assigned
-    const roles = await ApiHelper.get("/roles/church/" + UserHelper.currentUserChurch.church.id, "MembershipApi");
-    const domainRole = ArrayHelper.getOne(roles, "name", "Domain Admins");
-    const domainAdmins: RoleMemberInterface[] = await ApiHelper.get(`/rolemembers/roles/${domainRole.id}?include=users`, "MembershipApi");
-    if (domainAdmins.length > 0) {
-      //currently assignning the task to just one domain admin (which has been added first)
+    const domainAdmin: RoleMemberInterface = await ApiHelper.get(`/churches/${UserHelper.currentUserChurch.church.id}/getDomainAdmin`, "MembershipApi");
+    if (domainAdmin) {
       task.assignedToType = "person";
-      task.assignedToId = domainAdmins[0].personId;
-      task.assignedToLabel = domainAdmins[0].user.firstName + domainAdmins[0].user?.lastName;
+      task.assignedToId = domainAdmin.personId;
+      task.assignedToLabel = domainAdmin.user.firstName + " " + domainAdmin.user?.lastName;
     }
 
     task.data = JSON.stringify(changes);
