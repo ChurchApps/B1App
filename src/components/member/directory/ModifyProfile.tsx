@@ -22,7 +22,6 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     createdByType: "person",
     createdById: PersonHelper.person.id,
     createdByLabel: PersonHelper.person.name.display,
-    // assignedTo
     title: `Profile changes for ${props.person?.name?.display}`,
     status: "Open",
     data: "",
