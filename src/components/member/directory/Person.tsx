@@ -1,13 +1,15 @@
 import React from "react";
+import { Grid, Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import { PersonInterface, DisplayBox, ApiHelper, TaskInterface } from "@churchapps/apphelper"
 import { PersonHelper } from "../../../helpers";
-import { PersonInterface, DisplayBox, ApiHelper } from "@churchapps/apphelper"
 import { Household } from "./Household";
-import { Grid, Icon } from "@mui/material";
+import { ModifyProfile } from "./ModifyProfile";
 
 interface Props { backHandler: () => void, personId: string, selectedHandler: (personId: string) => void }
 
 export const Person: React.FC<Props> = (props) => {
   const [person, setPerson] = React.useState<PersonInterface>(null);
+  const [requestedChanges, setRequestedChanges] = React.useState<TaskInterface[]>([]);
 
   const getContactMethods = () => {
     let contactMethods = [];
@@ -28,13 +30,49 @@ export const Person: React.FC<Props> = (props) => {
     return contactMethods;
   }
 
-  const loadData = () => { ApiHelper.get("/people/" + props.personId, "MembershipApi").then(data => setPerson(data)); }
+  const showChanges = () => {
+    let result: JSX.Element[] = [];
+    requestedChanges.map((t) => {
+      const changes = JSON.parse(t.data);
+      result.push (
+        <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText="Profile Changes">
+          <Typography fontSize="13px" fontStyle="italic" sx={{ textIndent: "10px" }}>Requested by {t.createdByLabel}</Typography>
+          <Table size="small" sx={{ width: "80%", textIndent: "20px", marginTop: 2 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "1000 !important" }}>Field</TableCell>
+                <TableCell sx={{ fontWeight: "1000 !important" }}>Value</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {changes.map((c: any) => {
+                let val = c.value;
+                if (c.field === "photo") val = <img src={c.value} style={{ maxWidth: "70px", maxHeight: "70px" }} />
+                return (
+                  <TableRow>
+                    <TableCell>{c.label}</TableCell>
+                    <TableCell>{val}</TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </DisplayBox>
+      )
+    });
+    return result;
+  }
+
+  const loadData = () => {
+    ApiHelper.get("/people/" + props.personId, "MembershipApi").then(data => setPerson(data));
+    ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then(data => setRequestedChanges(data));
+  }
 
   React.useEffect(loadData, [props.personId]);
 
   return (
     <>
-      <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information">
+      <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={<ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />}>
         <Grid container spacing={3}>
           <Grid item xs={4}>
             <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
@@ -45,6 +83,7 @@ export const Person: React.FC<Props> = (props) => {
           </Grid>
         </Grid>
       </DisplayBox>
+      {requestedChanges.length > 0 && showChanges()}
       <Household person={person} selectedHandler={props.selectedHandler} />
     </>
   )
