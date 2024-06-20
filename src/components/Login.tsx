@@ -5,6 +5,7 @@ import { PaperProps } from "@mui/material"
 import { Layout } from "@/components";
 import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext"
+import { PersonHelper } from "@/helpers";
 
 interface Props {
   showLogo?: boolean;
@@ -21,7 +22,10 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
 
   if (!returnUrl) returnUrl = "/member"
 
-  if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) router.push(`${returnUrl}`);
+  if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) {
+    PersonHelper.person = context.person;
+    router.push(`${returnUrl}`);
+  }
 
   const appUrl = process.browser ? window.location.href : "";
   let jwt: string = "",
