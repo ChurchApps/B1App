@@ -59,6 +59,8 @@ export function Header(props: Props) {
   }, []);
 
   const pathName = usePathname();
+  console.log("pathName", pathName);
+  console.log("window", typeof window !== undefined && window.location);
   const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
 
   const memberPortal = <MenuItem component="a" href="/member" dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
