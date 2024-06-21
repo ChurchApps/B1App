@@ -61,12 +61,12 @@ export function Header(props: Props) {
   const pathName = usePathname();
   const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
 
-  const memberPortal = <MenuItem component="a" href="/testing24/login?returnUrl=/testing24/member" dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
+  const memberPortal = <MenuItem component="a" href="/member" dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
   const adminPortal = UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
-    <MenuItem component="a" href="/testing24/login?returnUrl=/testing24/admin" dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
+    <MenuItem component="a" href="/admin" dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
-  const editProfile = <MenuItem component="a" href={`/testing24/login?returnUrl=/testing24/member/directory/${PersonHelper?.person?.id}`} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
+  const editProfile = <MenuItem component="a" href={`/member/directory/${PersonHelper?.person?.id}`} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
 
   const userAction = ApiHelper.isAuthenticated
     ? (
@@ -92,7 +92,7 @@ export function Header(props: Props) {
       <Box sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
         <Chip
           component="a"
-          href={"/testing24/login" + returnUrl}
+          href={"/login" + returnUrl}
           clickable
           id="loginButton"
           label="Login"
@@ -104,21 +104,21 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton href="/testing24/login?returnUrl=/testing24/member">
+      <ListItemButton href="/member">
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
     </ListItem>
     {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (<>
       <ListItem disablePadding>
-        <ListItemButton href="/testing24/login?returnUrl=/testing24/admin">
+        <ListItemButton href="/admin">
           <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
           <ListItemText primary="Admin Portal" />
         </ListItemButton>
       </ListItem>
     </>)}
     <ListItem disablePadding>
-      <ListItemButton href={`/testing24/login?returnUrl=/testing24/member/directory/${PersonHelper?.person?.id}`}>
+      <ListItemButton href={`/member/directory/${PersonHelper?.person?.id}`}>
         <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>
