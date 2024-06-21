@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ClickAwayListener } from "@mui/material";
+import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ClickAwayListener, ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ApiHelper, AppearanceHelper, ArrayHelper, ChurchInterface, LinkInterface, Permissions, UserHelper } from "@churchapps/apphelper";
@@ -70,13 +70,13 @@ export function Header(props: Props) {
 
   const userAction = ApiHelper.isAuthenticated
     ? (
-      <Box component="div" sx={{ ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
+      <Box component="div" sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
         <ClickAwayListener onClickAway={() => setMenuAnchor(null)}>
           <Chip
             id="userMenuLink"
             label={`${UserHelper.user.firstName} ${UserHelper.user.lastName}`}
             icon={<Icon id="userIcon" sx={{ color: "#36547e !important" }}>account_circle</Icon>}
-            sx={{ borderColor: "#36547e", color: "#36547e" }}
+            sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
             onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.target); }}
           />
         </ClickAwayListener>
@@ -89,7 +89,7 @@ export function Header(props: Props) {
       </Box>
     )
     : (
-      <Box sx={{ marginRight: "15px", fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
+      <Box sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
         <Chip
           component="a"
           href={"/testing24/login" + returnUrl}
@@ -97,10 +97,33 @@ export function Header(props: Props) {
           id="loginButton"
           label="Login"
           icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
-          sx={{ borderColor: "#36547e", color: "#36547e" }}
+          sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
         />
       </Box>
     )
+
+  const userActionList = ApiHelper.isAuthenticated && (<>
+    <ListItem disablePadding>
+      <ListItemButton href="/testing24/login?returnUrl=/testing24/member">
+        <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
+        <ListItemText primary="Member Portal" />
+      </ListItemButton>
+    </ListItem>
+    {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (<>
+      <ListItem disablePadding>
+        <ListItemButton href="/testing24/login?returnUrl=/testing24/admin">
+          <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
+          <ListItemText primary="Admin Portal" />
+        </ListItemButton>
+      </ListItem>
+    </>)}
+    <ListItem disablePadding>
+      <ListItemButton href={`/testing24/login?returnUrl=/testing24/member/directory/${PersonHelper?.person?.id}`}>
+        <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
+        <ListItemText primary="Edit Profile" />
+      </ListItemButton>
+    </ListItem>
+  </>)
 
   const getLinkClass = () => {
     const sections = ArrayHelper.getAll(props.sections, "zone", "main");
@@ -134,7 +157,18 @@ export function Header(props: Props) {
   const structuredData = props.navLinks && getNestedChildren(props.navLinks, undefined);
 
   const getLinks = () => structuredData && structuredData.map((item) => <CascadingHoverMenus key={item.id} link={item} />);
-  const getListMenu = () => structuredData && <List component="nav" id="long-menu">{structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={() => toggleDrawer()} />)}</List>;
+  const getListMenu = () => structuredData && <List component="nav" id="long-menu">
+    {userActionList}
+    {structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={() => toggleDrawer()} />)}
+    {ApiHelper.isAuthenticated && (
+      <ListItem disablePadding sx={{ color: "#d32f2f" }}>
+        <ListItemButton href="/logout">
+          <ListItemIcon><Icon sx={{ color: "#d32f2f" }}>logout</Icon></ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItemButton>
+      </ListItem>
+    )}
+  </List>;
 
   let appBarClass = "";
   if (transparent) {
@@ -161,6 +195,7 @@ export function Header(props: Props) {
               <Drawer open={open} onClose={toggleDrawer} anchor="right">
                 <Toolbar disableGutters><IconButton onClick={toggleDrawer}><ChevronRightIcon /></IconButton></Toolbar>
                 <Box sx={{ width: { xs: '100vw', sm: '50vw' } }}>
+                  {userAction}
                   {getListMenu()}
                 </Box>
               </Drawer>
