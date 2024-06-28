@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ApiHelper, ArrayHelper, DateHelper, ImageEditor, PersonInterface, RoleMemberInterface, TaskInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, DateHelper, GroupInterface, ImageEditor, PersonInterface, TaskInterface, UserHelper } from "@churchapps/apphelper";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
@@ -145,12 +145,13 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const handleRequest = async () => {
-    //get domain Admin, so task can be assigned
-    const domainAdmin: RoleMemberInterface = await ApiHelper.get(`/churches/${UserHelper.currentUserChurch.church.id}/getDomainAdmin`, "MembershipApi");
-    if (domainAdmin) {
-      task.assignedToType = "person";
-      task.assignedToId = domainAdmin.personId;
-      task.assignedToLabel = domainAdmin.user.firstName + " " + domainAdmin.user?.lastName;
+    //get directory approval group Id from settings, so task can be assigned
+    const publicSettings = await ApiHelper.get(`/settings/public/${UserHelper.currentUserChurch.church.id}`, "MembershipApi");
+    if (publicSettings?.directoryApprovalGroupId) {
+      const group: GroupInterface = await ApiHelper.get(`/groups/${publicSettings?.directoryApprovalGroupId}`, "MembershipApi");
+      task.assignedToType = "group";
+      task.assignedToId = publicSettings.directoryApprovalGroupId;
+      task.assignedToLabel = group?.name;
     }
 
     task.data = JSON.stringify(changes);
