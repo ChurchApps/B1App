@@ -25,9 +25,9 @@ export function Layout(props: Props) {
     </>);
   }
 
-  const getImage = () => {
-    if (props.image) return (<meta property="og:image" content={props.image}></meta>);
-  }
+  // const getImage = () => {
+  //   if (props.image) return (<meta property="og:image" content={props.image}></meta>);
+  // }
 
   const mdTheme = createTheme({
     palette: {
@@ -48,7 +48,7 @@ export function Layout(props: Props) {
         <Head>
           <title>{props.pageTitle || props.church?.name}</title>
           {getDescription()}
-          {getImage()}
+          {/* {getImage()} */}
         </Head>
         {!props.withoutNavbar && <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={false} />}
         <main>{props.children}</main>

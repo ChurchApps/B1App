@@ -15,9 +15,9 @@ export const UpcomingDates: React.FC<Props> = (props) => {
     if (props.times?.length === 0) return [];
     const data:any[] = [];
     props.assignments.forEach((assignment) => {
-      const position = props.positions.find(p => p.id === assignment.positionId);
-      const plan = props.plans.find(p => p.id === position.planId);
-      const times:TimeInterface[] = ArrayHelper.getAll(props.times, "planId", plan.id);
+      const position = props?.positions.find(p => p.id === assignment.positionId);
+      const plan = props?.plans.find(p => p.id === position?.planId);
+      const times:TimeInterface[] = ArrayHelper.getAll(props.times, "planId", plan?.id);
       times.forEach(t => {
         if (new Date(t.endTime) > new Date()) {
           if (t.teams.indexOf(position.categoryName) > -1) {
