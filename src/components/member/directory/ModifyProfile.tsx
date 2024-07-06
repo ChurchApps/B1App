@@ -75,23 +75,26 @@ export const ModifyProfile: React.FC<Props> = (props) => {
       case "photo":
         option = (
           <div style={{ marginTop: "10px" }}>
-            {showPhotoEditor === true ? (
-              <ImageEditor
-                aspectRatio={4 / 3}
-                photoUrl={currentField.value || PersonHelper.getPhotoUrl(props.person)}
-                onCancel={() => setShowPhotoEditor(false)}
-                onUpdate={(dataUrl: string) => {
-                  const cf = { ...currentField };
-                  cf.value = dataUrl;
-                  setCurrentField(cf);
-                  setShowPhotoEditor(false);
-                }}
-              />
-            ) : (
-              <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setShowPhotoEditor(true); }}>
-                <img src={currentField.value || PersonHelper.getPhotoUrl(props.person)} />
-              </a>
-            )}
+            {showPhotoEditor === true
+              ? (
+                <ImageEditor
+                  aspectRatio={4 / 3}
+                  photoUrl={currentField.value || PersonHelper.getPhotoUrl(props.person)}
+                  onCancel={() => setShowPhotoEditor(false)}
+                  onUpdate={(dataUrl: string) => {
+                    const cf = { ...currentField };
+                    cf.value = dataUrl;
+                    setCurrentField(cf);
+                    setShowPhotoEditor(false);
+                  }}
+                />
+              )
+              : (
+                <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setShowPhotoEditor(true); }}>
+                  <img src={currentField.value || PersonHelper.getPhotoUrl(props.person)} alt="" />
+                </a>
+              )
+            }
           </div>
         );
         break;
@@ -110,7 +113,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     changes?.forEach((ch) => {
       let val: any = ch.value;
       if (ch.field === "birthDate") val = DateHelper.formatHtml5Date(new Date(ch.value));
-      if (ch.field === "photo") val =  <img src={ch.value} style={{ maxWidth: "70px", maxHeight: "70px" }} />
+      if (ch.field === "photo") val =  <img src={ch.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />
       rows.push(
         <TableRow>
           <TableCell>{ch.label}</TableCell>
@@ -168,14 +171,15 @@ export const ModifyProfile: React.FC<Props> = (props) => {
 
   return (
     <>
-      {(PersonHelper.person.id === props.personId ||
-        householdMembers?.some((m) => m.id === props.personId)) && (
-        <Tooltip title="Modify Profile" arrow>
-          <IconButton color="primary" size="medium" onClick={() => setOpen(true)}>
-            <AssignmentReturnIcon fontSize="medium" sx={{ transform: "scaleX(-1)" }} />
-          </IconButton>
-        </Tooltip>
-      )}
+      {(PersonHelper.person.id === props.personId || householdMembers?.some((m) => m.id === props.personId))
+        && (
+          <Tooltip title="Modify Profile" arrow>
+            <IconButton color="primary" size="medium" onClick={() => setOpen(true)}>
+              <AssignmentReturnIcon fontSize="medium" sx={{ transform: "scaleX(-1)" }} />
+            </IconButton>
+          </Tooltip>
+        )
+      }
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Modify Profile</DialogTitle>
         <DialogContent>
