@@ -49,20 +49,20 @@ export function YourSiteSettings() {
 
   const editContent = (
     <>
-      {pages.length === 0 && 
-        <Button variant="outlined" size="small" sx={{ marginRight: 2 }}
+      {pages.length === 0
+        && (<Button variant="outlined" size="small" sx={{ marginRight: 2 }}
           onClick={async () => {
             setCreatingPages(true);
-            await TemplateHelper.createDefaultLinks(); 
-            await TemplateHelper.createDefaultFooter(); 
-            await TemplateHelper.createDefaultPages(); 
-            loadData(); 
+            await TemplateHelper.createDefaultLinks();
+            await TemplateHelper.createDefaultFooter();
+            await TemplateHelper.createDefaultPages();
+            loadData();
             refresher({});
-            setCreatingPages(false); 
+            setCreatingPages(false);
           }}
         >
           {creatingPages === true ? 'Creating...' : 'Create Default Pages'}
-        </Button>
+        </Button>)
       }
       <SmallButton icon="add" onClick={() => { setEditPage({}); }} />
     </>
