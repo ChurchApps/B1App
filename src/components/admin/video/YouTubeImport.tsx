@@ -21,7 +21,7 @@ export const YouTubeImport = (props: Props) => {
   const loadData = () => {
     ApiHelper.get("/playlists", "ContentApi").then((data) => { setPlaylists(data); });
   };
-  
+
   const loadSettings = () => {
     if (playlistId && channelId) {
       ApiHelper.get(`/settings/imports?type=youtube&playlistId=${playlistId}&channelId=${channelId}`, "ContentApi").then((data) => {

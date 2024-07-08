@@ -47,7 +47,7 @@ export const Person: React.FC<Props> = (props) => {
             <TableBody>
               {changes.map((c: any) => {
                 let val = c.value;
-                if (c.field === "photo") val = <img src={c.value} style={{ maxWidth: "70px", maxHeight: "70px" }} />
+                if (c.field === "photo") val = <img src={c.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />
                 return (
                   <TableRow>
                     <TableCell>{c.label}</TableCell>

@@ -4,11 +4,11 @@ import { BlockInterface, ElementInterface, PageInterface, SectionInterface } fro
 
 export class TemplateHelper {
   static targetBlockId: string;
-  static demoText: string =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget est lorem ipsum dolor." +
-    " At lectus urna duis convallis convallis tellus id interdum velit. Amet cursus sit amet dictum. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed." +
-    " Risus sed vulputate odio ut. Interdum velit laoreet id donec. Ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a. Proin sagittis nisl rhoncus mattis rhoncus." +
-    " Nunc sed augue lacus viverra vitae congue eu consequat. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat in.`";
+  static demoText: string
+    = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget est lorem ipsum dolor."
+    + " At lectus urna duis convallis convallis tellus id interdum velit. Amet cursus sit amet dictum. Tortor vitae purus faucibus ornare suspendisse sed nisi lacus sed."
+    + " Risus sed vulputate odio ut. Interdum velit laoreet id donec. Ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a. Proin sagittis nisl rhoncus mattis rhoncus."
+    + " Nunc sed augue lacus viverra vitae congue eu consequat. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat in.`";
 
   static links: LinkInterface[] = [
     { text: "Home", url: "/", linkType: "url", linkData: "", category: "website", icon: "" },
@@ -116,12 +116,12 @@ export class TemplateHelper {
           blockId: block.id,
           parentId: row.elements[1].id,
           sectionId: section.id,
-          answersJSON: 
+          answersJSON:
             `{\"text\":\"#### **${currentChurch.name}**\\n\\n${currentChurch?.address1}${ currentChurch?.address2 ? `\\n\\n${currentChurch.address2}` : "" }\\n\\n${currentChurch?.city}, ${currentChurch?.state} ${currentChurch?.zip}\\n\\n${currentChurch?.country}\\n\\n\",
             \"textAlignment\":\"center\"}`,
           answers: {
             textAlignment: "center",
-            text: 
+            text:
               `#### **${currentChurch.name}**\n\n${currentChurch?.address1}${ currentChurch?.address2 ? `\n\n${currentChurch.address2}` : "" }\n\n${currentChurch?.city}, ${currentChurch?.state} ${currentChurch?.zip}\n\n${currentChurch?.country}\n\n`,
           },
         },
