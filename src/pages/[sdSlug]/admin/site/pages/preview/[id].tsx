@@ -16,8 +16,7 @@ interface Props extends WrapperPageProps {
 };
 
 export default function Preview(props: Props) {
-  const isDev = false;
-  const url = (isDev) ? "/" + props.church.subDomain + "/" + props.pageData.url : "/" + props.pageData.url;
+  const url = "/" + props.pageData.url;
   const [showSettings, setShowSettings] = React.useState(false);
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -28,9 +27,10 @@ export default function Preview(props: Props) {
     if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then(data => { setLink(data); });
   }
 
-  const handlePageUpdated = (page: PageInterface) => {
+  const handlePageUpdated = (page: PageInterface, link:LinkInterface) => {
     setShowSettings(false);
-    router.refresh();
+    if (!page) router.push("/admin/site/pages");
+    else router.refresh();
   }
 
   useEffect(loadData, [searchParams.get("linkId")]);

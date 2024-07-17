@@ -92,9 +92,18 @@ export function PageLinkEdit(props: Props) {
       return ;
     }
 
-    if (window.confirm("Are you sure you wish to permanently delete this page?")) {
-      ApiHelper.delete("/pages/" + page.id.toString(), "ContentApi").then(() => props.updatedCallback(null, link));
+    if (page) {
+      if (window.confirm("Are you sure you wish to permanently delete this page?")) {
+        ApiHelper.delete("/pages/" + page.id.toString(), "ContentApi").then(() => {
+          if (link) ApiHelper.delete("/links/" + link.id.toString(), "ContentApi").then(() => props.updatedCallback(null, null));
+          else props.updatedCallback(null, link)
+        });
+      }
+    } else {
+      if (link) ApiHelper.delete("/links/" + link.id.toString(), "ContentApi").then(() => props.updatedCallback(null, null));
+
     }
+
   };
 
   const handleSlugValidation = () => {

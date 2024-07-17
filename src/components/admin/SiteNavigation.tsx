@@ -64,7 +64,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
 
   return (
     <>
-      {editLink && <PageLinkEdit link={editLink} page={null} updatedCallback={() => { console.log("update callback"); setEditLink(null);  }} onDone={() => { console.log("done callback"); setEditLink(null); }} />}
+      {editLink && <PageLinkEdit link={editLink} page={null} updatedCallback={() => { setEditLink(null); props.refresh();  }} onDone={() => { console.log("done callback"); setEditLink(null); }} />}
       <table className="table">
         <tbody>
           <RecursiveLinks childrenLinks={structuredLinks} nestedLevel={-1} />
