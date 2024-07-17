@@ -1,7 +1,7 @@
 import React from "react";
 import { LinkInterface } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
-import { PageEdit } from "./PageEdit";
+import { PageLinkEdit } from "./site/PageLinkEdit";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -64,7 +64,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
 
   return (
     <>
-      {editLink && <PageEdit link={editLink} page={null} updatedCallback={() => { console.log("update callback"); setEditLink(null);  }} onDone={() => { console.log("done callback"); setEditLink(null); }} />}
+      {editLink && <PageLinkEdit link={editLink} page={null} updatedCallback={() => { console.log("update callback"); setEditLink(null);  }} onDone={() => { console.log("done callback"); setEditLink(null); }} />}
       <table className="table">
         <tbody>
           <RecursiveLinks childrenLinks={structuredLinks} nestedLevel={-1} />

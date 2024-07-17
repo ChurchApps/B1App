@@ -5,7 +5,6 @@ import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon, Button } 
 import { useWindowWidth } from "@react-hook/window-size";
 import { DisplayBox, ErrorMessages, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
 import { Links } from "@/components/admin/Links";
-import { PageEdit } from "@/components/admin/PageEdit";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import { SmallButton } from "@churchapps/apphelper";
 import { BlockInterface, PageInterface } from "@/helpers";
@@ -171,15 +170,7 @@ export function YourSiteSettings() {
         </Grid>
       }
       <Grid item md={4} xs={12}>
-        {editPage && (
-          <PageEdit
-            page={editPage}
-            updatedCallback={() => {
-              setEditPage(null);
-              loadData();
-            }}
-          />
-        )}
+
         {editBlock && (<BlockEdit block={editBlock}
           updatedCallback={() => {
             setEditBlock(null);
