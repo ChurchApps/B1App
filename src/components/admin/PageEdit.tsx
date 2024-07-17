@@ -1,24 +1,27 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions, SlugHelper } from "@churchapps/apphelper";
+import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions, SlugHelper, LinkInterface } from "@churchapps/apphelper";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
-import { Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
+import { Button, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 
 type Props = {
   page: PageInterface;
+  link: LinkInterface;
   embedded?: boolean;
-  updatedCallback: (page: PageInterface) => void;
+  updatedCallback: (page: PageInterface, link: LinkInterface) => void;
+  onDone: () => void;
 };
 
 export function PageEdit(props: Props) {
   const [page, setPage] = useState<PageInterface>(null);
+  const [link, setLink] = useState<LinkInterface>(null);
   const [errors, setErrors] = useState([]);
   const [checked, setChecked] = useState<boolean>();
   const [pageTemplate, setPageTemplate] = useState<string>("blank");
   const [showPageTemplate, setShowPageTemplate] = useState<boolean>(true);
 
-  const handleCancel = () => props.updatedCallback(page);
+  const handleCancel = () => props.updatedCallback(page, link);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     e.preventDefault();
@@ -26,10 +29,28 @@ export function PageEdit(props: Props) {
     const val = e.target.value;
     switch (e.target.name) {
       case "title": p.title = val; break;
-      case "url": p.url = val.toLowerCase(); break;
+      case "url":
+        p.url = val.toLowerCase();
+        if (link) {
+          let l = { ...link };
+          l.url = val.toLowerCase();
+          setLink(l);
+        }
+        break;
       case "layout": p.layout = val; break;
     }
     setPage(p);
+  };
+
+  const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
+    e.preventDefault();
+    let l = { ...link };
+    const val = e.target.value;
+    switch (e.target.name) {
+      case "linkText": l.text = val; break;
+      case "linkUrl": l.url = val; break;
+    }
+    setLink(l);
   };
 
   const validate = () => {
@@ -57,7 +78,7 @@ export function PageEdit(props: Props) {
       ApiHelper.post("/pages", [page], "ContentApi").then((data) => {
         setPage(data);
         createTemplate(pageTemplate, data[0].id);
-        props.updatedCallback(data);
+        props.updatedCallback(data, link);
       });
     }
   };
@@ -72,7 +93,7 @@ export function PageEdit(props: Props) {
     }
 
     if (window.confirm("Are you sure you wish to permanently delete this page?")) {
-      ApiHelper.delete("/pages/" + page.id.toString(), "ContentApi").then(() => props.updatedCallback(null));
+      ApiHelper.delete("/pages/" + page.id.toString(), "ContentApi").then(() => props.updatedCallback(null, link));
     }
   };
 
@@ -88,7 +109,7 @@ export function PageEdit(props: Props) {
     if (confirm("Are you sure you wish to make a copy of this page and all of it's contents?")) {
       ApiHelper.post("/pages/duplicate/" + page.id, {}, "ContentApi").then((data) => {
         setPage(null);
-        props.updatedCallback(data);
+        props.updatedCallback(data, link);
       });
     }
   }
@@ -96,47 +117,66 @@ export function PageEdit(props: Props) {
 
   useEffect(() => {
     setPage(props.page);
-    if (props.page.url) { setChecked(true); };
-    if (Object.keys(props.page).length > 0) { setShowPageTemplate(false) };
-  }, [props.page]);
+    setLink(props.link);
+    if (props.page?.url) { setChecked(true); };
+    if (props.page && Object.keys(props.page).length > 0) { setShowPageTemplate(false) };
+  }, [props.page, props.link]);
 
-  if (!page) return <></>
+  if (!page && !link) return <></>
   else return (
-    <>
-      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
+    <Dialog open={true} onClose={props.onDone} style={{minWidth:800}}>
+      <InputBox id="pageDetailsBox" headerText="Page Settings" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page?.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         <ErrorMessages errors={errors} />
-        <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
-        {checked
-          ? (
-            <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
-              <Paper elevation={0}>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Typography>{page.url}</Typography>
-                  <IconButton color="primary" onClick={() => setChecked(false)}><EditIcon /></IconButton>
-                </Stack>
-              </Paper>
-              <div>
-                <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`} target="_blank" rel="noopener noreferrer">
-                  {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
-                </a>
-              </div>
-            </div>
-          )
-          : (
-            <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} helperText="ex: /camper-registration  (**Make sure to check before saving)"
-              InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation}>Check</Button> }}
-            />
-          )}
-        {!props.embedded && (
-          <FormControl fullWidth>
-            <InputLabel>Layout</InputLabel>
-            <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange}>
-              <MenuItem value="headerFooter">Header & Footer</MenuItem>
-              <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-        {!props.embedded && showPageTemplate === true && (
+        <Grid container spacing={2} style={{minWidth:500}}>
+          {page && <Grid item xs={6}>
+            <TextField size="small" fullWidth label="Page Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
+          </Grid>
+          }
+          {link && <Grid item xs={6}>
+            <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
+          </Grid>
+          }
+          {page && <Grid item xs={6}>
+            {!props.embedded && (
+              <FormControl fullWidth size="small">
+                <InputLabel>Layout</InputLabel>
+                <Select size="small" fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange}>
+                  <MenuItem value="headerFooter">Header & Footer</MenuItem>
+                  <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
+                </Select>
+              </FormControl>
+            )}
+          </Grid>
+          }
+          {page && <Grid item xs={6}>
+            {checked
+              ? (
+                <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
+                  <Paper elevation={0}>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                      <Typography>{page.url}</Typography>
+                      <IconButton color="primary" onClick={() => setChecked(false)}><EditIcon /></IconButton>
+                    </Stack>
+                  </Paper>
+                </div>
+              )
+              : (
+                <TextField size="small" fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} helperText="ex: /camper-registration  (**Make sure to check before saving)"
+                  InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation}>Check</Button> }}
+                />
+              )}
+          </Grid>
+          }
+          {!page && link && <Grid item xs={6}>
+            <TextField size="small" fullWidth label="Url" name="linkUrl" value={link.url} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
+          </Grid>
+          }
+        </Grid>
+
+
+
+
+        {page && !props.embedded && showPageTemplate === true && (
           <FormControl fullWidth>
             <InputLabel>Page Template</InputLabel>
             <Select fullWidth label="Page Template" name="pageTemplate" value={pageTemplate} onChange={(e) => setPageTemplate(e.target.value)}>
@@ -149,6 +189,6 @@ export function PageEdit(props: Props) {
           </FormControl>
         )}
       </InputBox>
-    </>
+    </Dialog>
   );
 }

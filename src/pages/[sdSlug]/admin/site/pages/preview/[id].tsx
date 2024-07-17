@@ -1,8 +1,12 @@
 import {  ConfigHelper, GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
-import React from "react";
+import { ApiHelper, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import React, { useEffect } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
+import { Grid } from "@mui/material";
+import { PageEdit } from "@/components/admin/PageEdit";
+import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 interface Props extends WrapperPageProps {
   pageData: any;
@@ -14,11 +18,39 @@ interface Props extends WrapperPageProps {
 export default function Preview(props: Props) {
   const isDev = false;
   const url = (isDev) ? "/" + props.church.subDomain + "/" + props.pageData.url : "/" + props.pageData.url;
+  const [showSettings, setShowSettings] = React.useState(false);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [link, setLink] = React.useState<LinkInterface>(null);
+
+  const loadData = () => {
+    const linkId = searchParams.get("linkId");
+    if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then(data => { setLink(data); });
+  }
+
+  const handlePageUpdated = (page: PageInterface) => {
+    setShowSettings(false);
+    router.refresh();
+  }
+
+  useEffect(loadData, [searchParams.get("linkId")]);
 
   return <AdminSiteWrapper config={props.config}>
+    {showSettings && <PageEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
     <div style={{marginLeft:-22, marginTop:-30, marginRight:-22}}>
-      <div style={{background:"#FFF", height:60, paddingTop:15}}>
-      Edit Content
+      <div style={{background:"#FFF", padding:15}}>
+        <Grid container>
+          <Grid item xs={3}>
+            <SmallButton icon="edit" text="Edit Content" href={"../" + props.pageData.id} />
+          </Grid>
+          <Grid item xs={6} style={{textAlign:"center"}}>
+            <b>{props.pageData.title}</b><br />
+          </Grid>
+          <Grid item xs={3} style={{textAlign:"right"}}>
+            <SmallButton icon="settings" text="Page Settings" onClick={() => setShowSettings(true)} />
+          </Grid>
+        </Grid>
+
       </div>
       <iframe src={url} style={{width:"100%", height:"100vh"}} />
     </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { LinkInterface } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
+import { PageEdit } from "./PageEdit";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -18,6 +19,7 @@ interface Props {
 export const SiteNavigation: React.FC<Props> = (props) => {
 
   //const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} />
+  const [editLink, setEditLink] = React.useState<LinkInterface>(null);
 
 
   const getNestedChildren = (arr: LinkInterface[], parent: string) => {
@@ -40,13 +42,18 @@ export const SiteNavigation: React.FC<Props> = (props) => {
   const RecursiveLinks = ({childrenLinks, nestedLevel}: RecursiveInterface) => {
     //nestedLevel shows the level of recursion based on which styling is done.
     nestedLevel = nestedLevel + 1;
+    const style = {marginLeft: (nestedLevel * 20) + "px"}
     let idx = 0;
     return (
       <>
         {childrenLinks.map((link) => {
+          const page = props.pages.find(p => p.url === link.url);
+          const anchor = (page)
+            ? (<a href={"/admin/site/pages/preview/" + page.id + "?linkId=" + link.id} style={style}>{link.text}</a>)
+            : (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); console.log("set edit link to", link) }} style={style}>{link.text}</a>)
           idx++
           return (<>
-            <tr><td><a href={"/admin/site/pages/preview" + link.url} style={{marginLeft: (nestedLevel * 20) + "px"}}>{link.text}</a></td></tr>
+            <tr><td>{anchor}</td></tr>
             {link.children && (<RecursiveLinks childrenLinks={link.children} nestedLevel={nestedLevel} />)}
           </>)
         })}
@@ -56,10 +63,13 @@ export const SiteNavigation: React.FC<Props> = (props) => {
 
 
   return (
-    <table className="table">
-      <tbody>
-        <RecursiveLinks childrenLinks={structuredLinks} nestedLevel={-1} />
-      </tbody>
-    </table>
+    <>
+      {editLink && <PageEdit link={editLink} page={null} updatedCallback={() => { console.log("update callback"); setEditLink(null);  }} onDone={() => { console.log("done callback"); setEditLink(null); }} />}
+      <table className="table">
+        <tbody>
+          <RecursiveLinks childrenLinks={structuredLinks} nestedLevel={-1} />
+        </tbody>
+      </table>
+    </>
   );
 }
