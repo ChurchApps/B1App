@@ -16,7 +16,7 @@ interface Props extends WrapperPageProps {
 };
 
 export default function Preview(props: Props) {
-  const url = "/" + props.pageData.url;
+  const url = props.pageData.url;
   const [showSettings, setShowSettings] = React.useState(false);
   const router = useRouter()
   const searchParams = useSearchParams()
