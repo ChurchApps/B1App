@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import router from "next/router";
 import { BlockInterface, ConfigHelper, WrapperPageProps } from "@/helpers";
 import { ApiHelper, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
-import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Grid, Icon, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
 import { BlockEdit } from "@/components/admin/BlockEdit";
@@ -86,6 +86,26 @@ export default function Admin(props: WrapperPageProps) {
             }}
           />
           )}
+          <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance">
+            <table className="table">
+              <tbody>
+                <tr>
+                  <td>
+                    <Link href={"/admin/site/styles"} style={{ display: "flex" }}>
+                      <Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Appearance
+                    </Link>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Link href={"/admin/site/files"} style={{ display: "flex" }}>
+                      <Icon sx={{ marginRight: "5px" }}>description</Icon>Manage Files
+                    </Link>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </DisplayBox>
         </Grid>
       </Grid>
 

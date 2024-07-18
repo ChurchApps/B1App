@@ -41,7 +41,7 @@ export default function Preview(props: Props) {
       <div style={{background:"#FFF", padding:15}}>
         <Grid container>
           <Grid item xs={3}>
-            <SmallButton icon="edit" text="Edit Content" onClick={() => { router.push("../" + props.pageData.id)}} />
+            <SmallButton icon="edit" text="Edit Content" onClick={() => { router.push("../../" + props.pageData.id)}} />
           </Grid>
           <Grid item xs={6} style={{textAlign:"center"}}>
             <b>{props.pageData.title}</b><br />
