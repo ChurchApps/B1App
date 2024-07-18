@@ -134,7 +134,7 @@ export function PageLinkEdit(props: Props) {
   if (!page && !link) return <></>
   else return (
     <Dialog open={true} onClose={props.onDone} style={{minWidth:800}}>
-      <InputBox id="pageDetailsBox" headerText="Page Settings" headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page?.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
+      <InputBox id="pageDetailsBox" headerText={page ? "Page Settings" : "Link Settings"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page?.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         <ErrorMessages errors={errors} />
         <Grid container spacing={2} style={{minWidth:500}}>
           {page && <Grid item xs={6}>

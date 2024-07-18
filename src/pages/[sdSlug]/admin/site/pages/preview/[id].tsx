@@ -29,7 +29,7 @@ export default function Preview(props: Props) {
 
   const handlePageUpdated = (page: PageInterface, link:LinkInterface) => {
     setShowSettings(false);
-    if (!page) router.push("/admin/site/pages");
+    if (!page) router.push("/admin/site");
     else router.refresh();
   }
 
@@ -52,7 +52,7 @@ export default function Preview(props: Props) {
         </Grid>
 
       </div>
-      <iframe src={url} style={{width:"100%", height:"100vh"}} />
+      <iframe sandbox="allow-scripts" src={url} style={{width:"100%", height:"100vh"}} />
     </div>
   </AdminSiteWrapper>
 }
