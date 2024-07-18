@@ -19,11 +19,11 @@ export default function Preview(props: Props) {
   const [showSettings, setShowSettings] = React.useState(false);
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [link, setLink] = React.useState<LinkInterface>(null);
+  //const [link, setLink] = React.useState<LinkInterface>(null);
 
   const loadData = () => {
-    const linkId = searchParams.get("linkId");
-    if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then(data => { setLink(data); });
+    //const linkId = searchParams.get("linkId");
+    //if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then(data => { setLink(data); });
   }
 
   const handlePageUpdated = (page: PageInterface, link:LinkInterface) => {
