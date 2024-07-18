@@ -62,6 +62,7 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
   }
 
   const handleDrop = (index:number, parentId:string, page:PageInterface, link:LinkInterface) => {
+    if (parentId==="") parentId = null;
     if (parentId === "unlinked") {
       //delete link
       if (link) ApiHelper.delete("/links/" + link.id, "ContentApi").then(() => { loadData(); });
@@ -69,7 +70,6 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
       if (link) {
         //move link
         link.parentId = parentId;
-        if (link.parentId === "") link.parentId = null;
         link.sort = index;
         ApiHelper.post("/links", [link], "ContentApi").then(() => { loadData(); });
       } else {

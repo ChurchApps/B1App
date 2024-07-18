@@ -33,6 +33,8 @@ export default function Preview(props: Props) {
     else router.refresh();
   }
 
+  console.log("URL: " + url);
+
   useEffect(loadData, [searchParams.get("linkId")]);
 
   return <AdminSiteWrapper config={props.config}>
@@ -41,7 +43,7 @@ export default function Preview(props: Props) {
       <div style={{background:"#FFF", padding:15}}>
         <Grid container>
           <Grid item xs={3}>
-            <SmallButton icon="edit" text="Edit Content" href={"../" + props.pageData.id} />
+            <SmallButton icon="edit" text="Edit Content" onClick={() => { router.push("../" + props.pageData.id)}} />
           </Grid>
           <Grid item xs={6} style={{textAlign:"center"}}>
             <b>{props.pageData.title}</b><br />
@@ -52,10 +54,12 @@ export default function Preview(props: Props) {
         </Grid>
 
       </div>
-      <iframe sandbox="allow-scripts" src={url} style={{width:"100%", height:"100vh"}} />
+      <div>Url: {url}</div>
     </div>
   </AdminSiteWrapper>
 }
+
+//<iframe sandbox="allow-scripts" src={"https://ironwood.staging.b1.church" + url} style={{width:"100%", height:"100vh"}} />
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths:any[] = [];

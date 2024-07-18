@@ -100,9 +100,22 @@ export function AddPageModal(props: Props) {
     }
   };
 
+  const selectTemplate = (template:string) => {
+    const p = { ...page };
+    const l = { ...link };
+    const churchName = UserHelper.currentUserChurch.church.name || "";
+    switch (template) {
+      case "sermons": p.title = "View Sermons"; l.text = "Sermons"; break;
+      case "about": p.title = "About " + churchName; l.text = "About Us"; break;
+      case "donate": p.title = "Support " + churchName; l.text = "Donate"; break;
+      case "location": p.title = "Directions to " + churchName; l.text = "Location"; break;
+    }
+    setPageTemplate(template);
+  }
+
   const getTemplateButton = (key:string, icon:string, text:string) => (
     <Grid xs={3} item>
-      <Button variant={(pageTemplate.toLowerCase() === key) ? "contained" : "outlined"} startIcon={<Icon>{icon}</Icon>} onClick={() => {setPageTemplate(key)}} fullWidth>{text}</Button>
+      <Button variant={(pageTemplate.toLowerCase() === key) ? "contained" : "outlined"} startIcon={<Icon>{icon}</Icon>} onClick={() => {selectTemplate(key)}} fullWidth>{text}</Button>
     </Grid>
   )
 
