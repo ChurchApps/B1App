@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
 import { Grid } from "@mui/material";
-import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 
@@ -37,8 +36,9 @@ export default function Preview(props: Props) {
 
   useEffect(loadData, [searchParams.get("linkId")]);
 
+  //{showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
   return <AdminSiteWrapper config={props.config}>
-    {showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
+
     <div style={{marginLeft:-22, marginTop:-30, marginRight:-22}}>
       <div style={{background:"#FFF", padding:15}}>
         <Grid container>
