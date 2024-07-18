@@ -5,6 +5,7 @@ import { PageLinkEdit } from "./site/PageLinkEdit";
 import { DroppableWrapper } from "./DroppableWrapper";
 import { DraggableWrapper } from "./DraggableWrapper";
 import { Icon } from "@mui/material";
+import Link from "next/link";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -53,7 +54,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
         {childrenLinks.map((link) => {
           const page = props.pages.find(p => p.url === link.url);
           const anchor = (page)
-            ? (<a href={"/admin/site/pages/preview/" + page.id + "?linkId=" + link.id}>{link.text}</a>)
+            ? (<Link href={"/admin/site/pages/preview/" + page.id + "?linkId=" + link.id}>{link.text}</Link>)
             : (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); }}>{link.text}</a>)
           idx++
 

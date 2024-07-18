@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
 import { Grid } from "@mui/material";
+import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
 import { useRouter } from 'next/navigation'
 import { useSearchParams } from 'next/navigation'
 
@@ -19,11 +20,11 @@ export default function Preview(props: Props) {
   const [showSettings, setShowSettings] = React.useState(false);
   const router = useRouter()
   const searchParams = useSearchParams()
-  //const [link, setLink] = React.useState<LinkInterface>(null);
+  const [link, setLink] = React.useState<LinkInterface>(null);
 
   const loadData = () => {
-    //const linkId = searchParams.get("linkId");
-    //if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then(data => { setLink(data); });
+    const linkId = searchParams.get("linkId");
+    if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then(data => { setLink(data); });
   }
 
   const handlePageUpdated = (page: PageInterface, link:LinkInterface) => {
@@ -32,13 +33,10 @@ export default function Preview(props: Props) {
     else router.refresh();
   }
 
-  console.log("URL: " + url);
-
   useEffect(loadData, [searchParams.get("linkId")]);
 
-  //{showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
   return <AdminSiteWrapper config={props.config}>
-
+    {showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
     <div style={{marginLeft:-22, marginTop:-30, marginRight:-22}}>
       <div style={{background:"#FFF", padding:15}}>
         <Grid container>
@@ -54,12 +52,10 @@ export default function Preview(props: Props) {
         </Grid>
 
       </div>
-      <div>Url: {url}</div>
+      <iframe sandbox="allow-scripts" src={url} style={{width:"100%", height:"100vh"}} />
     </div>
   </AdminSiteWrapper>
 }
-
-//<iframe sandbox="allow-scripts" src={"https://ironwood.staging.b1.church" + url} style={{width:"100%", height:"100vh"}} />
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths:any[] = [];
