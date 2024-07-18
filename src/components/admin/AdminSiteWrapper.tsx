@@ -9,6 +9,10 @@ import { SiteNavigation } from "./SiteNavigation";
 import { useWindowWidth } from "@react-hook/window-size";
 import Link from "next/link";
 import { AddPageModal } from "./site/AddPageModal";
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DroppableWrapper } from "./DroppableWrapper";
+import { DraggableWrapper } from "./DraggableWrapper";
 
 interface Props {
   config: ConfigurationInterface;
@@ -57,6 +61,26 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
     }
   }
 
+  const handleDrop = (index:number, parentId:string, page:PageInterface, link:LinkInterface) => {
+    if (parentId === "unlinked") {
+      //delete link
+      if (link) ApiHelper.delete("/links/" + link.id, "ContentApi").then(() => { loadData(); });
+    } else {
+      if (link) {
+        //move link
+        link.parentId = parentId;
+        if (link.parentId === "") link.parentId = null;
+        link.sort = index;
+        ApiHelper.post("/links", [link], "ContentApi").then(() => { loadData(); });
+      } else {
+        //add link
+        const newLink:LinkInterface = {id:"", churchId:page.churchId, category:"website", url:page.url, linkType:"url", linkData:"", icon:"", text:page.title, sort:index, parentId:parentId};
+        ApiHelper.post("/links", [newLink], "ContentApi").then(() => { loadData(); });
+      }
+    }
+
+  }
+
   const getUnlinkedPages = () => {
     const unlinkedPages = pages.filter(p => !links.find(l => l.url === p.url));
     const result = unlinkedPages.map((page) =>
@@ -66,7 +90,9 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
       (
         <tr key={page.id}>
           <td>
-            <Link href={"/admin/site/pages/preview/" + page.id}>{page.title}</Link>
+            <DraggableWrapper dndType="navItemPage" data={{page, link:null}}>
+              <Link href={"/admin/site/pages/preview/" + page.id}>{page.title}</Link>
+            </DraggableWrapper>
           </td>
         </tr>
       )
@@ -89,20 +115,23 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
 
       <Grid container spacing={3}>
         <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", minHeight:"100vh", marginTop:-7}}>
-          <h2>Pages</h2>
-          <span style={{float:"right"}}>
-            <SmallButton icon="add" onClick={() => { setAddMode("navigation") }} />
-          </span>
-          <h3>Main Navigation</h3>
-          <SiteNavigation links={links} pages={pages} refresh={loadData} select={(link, page) => {}} />
+          <DndProvider backend={HTML5Backend}>
+            <h2 style={{marginTop:0}}>Pages</h2>
+            <span style={{float:"right"}}>
+              <SmallButton icon="add" onClick={() => { setAddMode("navigation") }} />
+            </span>
+            <h3>Main Navigation</h3>
+            <SiteNavigation links={links} pages={pages} refresh={loadData} select={(link, page) => {}} handleDrop={handleDrop} />
 
-          <span style={{float:"right", paddingTop:15}}>
-            <SmallButton icon="add" onClick={() => { setAddMode("unlinked") }} />
-          </span>
-          <h3>Not Linked</h3>
-          <table className="table">
-            {getUnlinkedPages() }
-          </table>
+            <span style={{float:"right", paddingTop:15}}>
+              <SmallButton icon="add" onClick={() => { setAddMode("unlinked") }} />
+            </span>
+            <h3>Not Linked</h3>
+            <table className="table">
+              {getUnlinkedPages() }
+            </table>
+            <DroppableWrapper accept={["navItemPage"]} onDrop={(item) => {handleDrop(0, "unlinked", item.data.page, item.data.link)}} hideWhenInactive={true}><div style={{height:5}}></div></DroppableWrapper>
+          </DndProvider>
         </Grid>
         <Grid item md={10} xs={12}>
           {props.children}
