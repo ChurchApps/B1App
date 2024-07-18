@@ -110,6 +110,8 @@ export function AddPageModal(props: Props) {
       case "donate": p.title = "Support " + churchName; l.text = "Donate"; break;
       case "location": p.title = "Directions to " + churchName; l.text = "Location"; break;
     }
+    setPage(p);
+    setLink(l);
     setPageTemplate(template);
   }
 

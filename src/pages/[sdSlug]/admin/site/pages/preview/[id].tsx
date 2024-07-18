@@ -30,7 +30,7 @@ export default function Preview(props: Props) {
   const handlePageUpdated = (page: PageInterface, link:LinkInterface) => {
     setShowSettings(false);
     if (!page) router.push("/admin/site");
-    else router.refresh();
+    //else router.refresh();
   }
 
   useEffect(loadData, [searchParams.get("linkId")]);
