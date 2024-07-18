@@ -354,3 +354,8 @@
   overflow-y: scroll;
 }
 */
+
+#dialogForm {
+  margin-bottom: 0px;
+  min-width: 500px;
+}
