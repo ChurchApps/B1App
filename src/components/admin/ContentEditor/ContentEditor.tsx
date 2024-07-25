@@ -77,10 +77,13 @@ export default function ContentEditor(props: Props) {
       const section: SectionInterface = data.data;
       section.sort = sort;
       section.zone = zone;
+      section.pageId = (zone==="footer") ? null : props.pageId;
       ApiHelper.post("/sections", [section], "ContentApi").then(() => { loadData() });
     }
     else {
-      setEditSection({ sort, background: "#FFF", textColor: "dark", pageId: props.pageId, blockId:props.blockId, targetBlockId: data.blockId, zone: zone });
+      const sec = { sort, background: "#FFF", textColor: "dark", pageId: props.pageId, blockId:props.blockId, targetBlockId: data.blockId, zone: zone }
+      if (sec.zone==="footer") sec.pageId = null;
+      setEditSection(sec);
     }
   }
 
