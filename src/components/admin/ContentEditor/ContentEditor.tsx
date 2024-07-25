@@ -4,14 +4,13 @@ import { Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Too
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
-import { DisplayBox, ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions, SmallButton } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
 import { SectionBlock } from "@/components/SectionBlock";
-import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Helmet } from "react-helmet";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ElementAdd } from "@/components/admin/elements/ElementAdd";
@@ -26,6 +25,7 @@ interface Props extends WrapperPageProps {
   loadData: (id:string) => Promise<any>,
   pageId?: string,
   blockId?: string
+  onDone?: () => void
 };
 
 export default function ContentEditor(props: Props) {
@@ -160,7 +160,8 @@ export default function ContentEditor(props: Props) {
   }
 
   //<div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, keyName, "Drop at the bottom of page")}</div>
-  const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <DisplayBox key={"zone-" + keyName} headerText={"Edit Zone: " + name} headerIcon="article">
+  const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <div key={"zone-" + keyName}>
+    <div style={{position:"absolute", backgroundColor:"#FFF", zIndex:100, padding:10, border:"1px solid #999", opacity:0.5  }}>Zone: {keyName}</div>
     <div>
       <ThemeProvider theme={getTheme()}>
         <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
@@ -169,7 +170,7 @@ export default function ContentEditor(props: Props) {
       </ThemeProvider>
     </div>
     <div style={{ height: "31px"}}></div>
-  </DisplayBox>
+  </div>
 
   const getZoneBoxes = () => {
     let result:any[] = [];
@@ -195,50 +196,55 @@ export default function ContentEditor(props: Props) {
     <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
     <Helmet><style>{StyleHelper.getCss(container?.sections || [], deviceType)}</style></Helmet>
 
-    <AdminWrapper config={props.config}>
-
-      <DndProvider backend={HTML5Backend}>
-        <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}} PaperProps={{sx:{zIndex:0}}}>
-          <div id="editorBar" style={{width:"28vw", position:"sticky", top:0}}>
-            <div style={rightBarStyle}>
-              {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowDrawer(false); }} />}
-              {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); setShowDrawer(false); loadData(); }} globalStyles={props.globalStyles} />}
-              {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); setShowDrawer(false); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
-            </div>
+    <div style={{backgroundColor:"#FFF", position:"sticky", top:0, width:"100%", zIndex:1000, boxShadow:"0px 2px 2px black"}}>
+      <Grid container spacing={2}>
+        <Grid item xs={4} style={{paddingLeft:40, paddingTop:8}}>
+          <SmallButton icon={"done"} text="Done" onClick={props.onDone} />
+        </Grid>
+        <Grid item xs={4} style={{textAlign:"center"}}>
+          <b>
+            {props.pageId && "Page: " + (container as PageInterface)?.title}
+            {props.blockId && "Block: " + (container as BlockInterface)?.name}
+          </b>
+        </Grid>
+        <Grid item xs={4} style={{textAlign:"right", paddingTop:5, paddingBottom:5, paddingRight:15}}>
+          <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
+            <ToggleButtonGroup value={showDrawer.toString()} exclusive size="small">
+              <ToggleButton value="true" onClick={() => setShowDrawer(!showDrawer)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
+            </ToggleButtonGroup>
+            <ToggleButtonGroup size="small" value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }}>
+              {deviceType==="desktop" && <ToggleButton size="small" value="mobile" style={{color:"#FFF"}}><Tooltip title="Desktop" placement="top"><Icon>computer</Icon></Tooltip></ToggleButton>}
+              {deviceType==="mobile" && <ToggleButton size="small" value="desktop" style={{color:"#FFF"}}><Tooltip title="Mobile" placement="top"><Icon>smartphone</Icon></Tooltip></ToggleButton>}
+            </ToggleButtonGroup>
           </div>
-        </Drawer>
-        <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
-          {scrollTop>150
+        </Grid>
+      </Grid>
+    </div>
+
+    <DndProvider backend={HTML5Backend}>
+      <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}} PaperProps={{sx:{zIndex:0}}}>
+        <div id="editorBar" style={{width:"28vw", position:"sticky", top:0}}>
+          <div style={rightBarStyle}>
+            {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowDrawer(false); }} />}
+            {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); setShowDrawer(false); loadData(); }} globalStyles={props.globalStyles} />}
+            {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); setShowDrawer(false); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
+          </div>
+        </div>
+      </Drawer>
+      <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
+        {scrollTop>150
           && <div style={{position:"fixed", bottom:30, zIndex:1000, width:500, marginLeft:300}}>
             <DroppableScroll key={"scrollDown"} text={"Scroll Down"} direction="down"  />
           </div>}
-          {scrollTop>150 && <div style={{position:"fixed", top: 50, zIndex:1000, width:500, marginLeft:300}}>
-            <DroppableScroll key={"scrollUp"} text={"Scroll Up"} direction="up" />
-          </div> }
-          <div style={{position:"sticky", top:0, zIndex:1000}}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
+        {scrollTop>150 && <div style={{position:"fixed", top: 50, zIndex:1000, width:500, marginLeft:300}}>
+          <DroppableScroll key={"scrollUp"} text={"Scroll Up"} direction="up" />
+        </div> }
 
 
-              </Grid>
-              <Grid item xs={6} style={{textAlign:"right"}}>
-                <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
-                  <ToggleButtonGroup value={showDrawer.toString()} exclusive>
-                    <ToggleButton value="true" onClick={() => setShowDrawer(!showDrawer)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
-                  </ToggleButtonGroup>
-                  <ToggleButtonGroup value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }}>
-                    {deviceType==="desktop" && <ToggleButton value="mobile" style={{color:"#FFF"}}><Tooltip title="Desktop" placement="top"><Icon>computer</Icon></Tooltip></ToggleButton>}
-                    {deviceType==="mobile" && <ToggleButton value="desktop" style={{color:"#FFF"}}><Tooltip title="Mobile" placement="top"><Icon>smartphone</Icon></Tooltip></ToggleButton>}
-                  </ToggleButtonGroup>
-                </div>
-              </Grid>
-            </Grid>
-          </div>
+        <h1 style={{marginTop:-50}}>Edit Page</h1>
+        {getZoneBoxes()}
+      </div>
+    </DndProvider>
 
-          <h1 style={{marginTop:-50}}>Edit Page</h1>
-          {getZoneBoxes()}
-        </div>
-      </DndProvider>
-    </AdminWrapper>
   </>);
 }

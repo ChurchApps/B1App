@@ -15,7 +15,12 @@ export default function Admin(props: Props) {
   const router = useRouter();
   const id = router.query.id?.toString() || "";
   const loadData = async (id:string) => await ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi")
-  return <ContentEditor loadData={loadData} church={props.church} churchSettings={props.churchSettings} globalStyles={props.globalStyles} pageId={id} config={props.config}  />
+
+  const handleDone = () => {
+    router.push("/admin/site/pages/preview/" + id)
+  }
+
+  return <ContentEditor loadData={loadData} church={props.church} churchSettings={props.churchSettings} globalStyles={props.globalStyles} pageId={id} config={props.config} onDone={handleDone}  />
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
