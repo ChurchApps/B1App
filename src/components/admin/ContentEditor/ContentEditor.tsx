@@ -40,6 +40,8 @@ export default function ContentEditor(props: Props) {
   const windowWidth = useWindowWidth();
   const [showDrawer, setShowDrawer] = useState(false);
 
+  const [showAdd, setShowAdd] = useState(false);
+
 
   const zones:any = {
     cleanCentered: ["main"],
@@ -210,7 +212,7 @@ export default function ContentEditor(props: Props) {
         <Grid item xs={4} style={{textAlign:"right", paddingTop:5, paddingBottom:5, paddingRight:15}}>
           <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
             <ToggleButtonGroup value={showDrawer.toString()} exclusive size="small">
-              <ToggleButton value="true" onClick={() => setShowDrawer(!showDrawer)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
+              <ToggleButton value="true" onClick={() => setShowAdd(!showAdd)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
             </ToggleButtonGroup>
             <ToggleButtonGroup size="small" value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }}>
               {deviceType==="desktop" && <ToggleButton size="small" value="mobile" style={{color:"#FFF"}}><Tooltip title="Desktop" placement="top"><Icon>computer</Icon></Tooltip></ToggleButton>}
@@ -221,17 +223,20 @@ export default function ContentEditor(props: Props) {
       </Grid>
     </div>
 
+
+
     <DndProvider backend={HTML5Backend}>
+      {showAdd && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
       <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}} PaperProps={{sx:{zIndex:0}}}>
         <div id="editorBar" style={{width:"28vw", position:"sticky", top:0}}>
           <div style={rightBarStyle}>
-            {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowDrawer(false); }} />}
+
             {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); setShowDrawer(false); loadData(); }} globalStyles={props.globalStyles} />}
             {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); setShowDrawer(false); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
           </div>
         </div>
       </Drawer>
-      <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
+      <div style={(showDrawer) ? {maxWidth: "71vw"} : {}}>
         {scrollTop>150
           && <div style={{position:"fixed", bottom:30, zIndex:1000, width:500, marginLeft:300}}>
             <DroppableScroll key={"scrollDown"} text={"Scroll Down"} direction="down"  />
