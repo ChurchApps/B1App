@@ -196,7 +196,7 @@ export default function ContentEditor(props: Props) {
     <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
     <Helmet><style>{StyleHelper.getCss(container?.sections || [], deviceType)}</style></Helmet>
 
-    <div style={{backgroundColor:"#FFF", position:"sticky", top:0, width:"100%", zIndex:1000, boxShadow:"0px 2px 2px black", marginBottom:4}}>
+    <div style={{backgroundColor:"#FFF", position:"sticky", top:0, width:"100%", zIndex:1000, boxShadow:"0px 2px 2px black", marginBottom:10}}>
       <Grid container spacing={2}>
         <Grid item xs={4} style={{paddingLeft:40, paddingTop:8}}>
           <SmallButton icon={"done"} text="Done" onClick={props.onDone} />

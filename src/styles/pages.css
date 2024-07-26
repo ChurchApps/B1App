@@ -393,15 +393,16 @@ a.dropdown-toggle::after {
 
 .elementWrapper:not(:has(.elementWrapper:hover)):hover:before {
   content: "ELEMENT";
+  font-size: 14px;
   background-color: #28a745;
   color:#FFF;
   display: block;
   width:100px;
   position: relative;
   text-align: center;
-  margin-top:-25px;
+  margin-top:-18px;
   margin-left:-3px;
-  height:25px;
+  height:18px;
   margin-bottom: 0px;
 }
 
@@ -434,10 +435,11 @@ a.dropdown-toggle::after {
   width:100px;
   position: relative;
   text-align: center;
-  height:25px;
+  font-size:14px;
+  height:18px;
   /*margin-bottom: -29px;*/
   margin-top:-40px !important;
-  margin-bottom:12px;
+  margin-bottom:19px;
 }
 
 .sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important; }
