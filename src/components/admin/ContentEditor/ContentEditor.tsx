@@ -1,6 +1,6 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
+import { Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
@@ -38,7 +38,6 @@ export default function ContentEditor(props: Props) {
   const [scrollTop, setScrollTop] = useState(0);
   const [deviceType, setDeviceType] = useState("desktop");
   const windowWidth = useWindowWidth();
-  const [showDrawer, setShowDrawer] = useState(false);
 
   const [showAdd, setShowAdd] = useState(false);
 
@@ -110,7 +109,6 @@ export default function ContentEditor(props: Props) {
   const handleSectionEdit = (s: SectionInterface, e: ElementInterface) => {
     if (s) setEditSection(s);
     else if (e) setEditElement(e);
-    setShowDrawer(true);
   }
 
   let rightBarStyle: CSSProperties = {}
@@ -211,7 +209,7 @@ export default function ContentEditor(props: Props) {
         </Grid>
         <Grid item xs={4} style={{textAlign:"right", paddingTop:5, paddingBottom:5, paddingRight:15}}>
           <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
-            <ToggleButtonGroup value={showDrawer.toString()} exclusive size="small">
+            <ToggleButtonGroup value={showAdd.toString()} exclusive size="small">
               <ToggleButton value="true" onClick={() => setShowAdd(!showAdd)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
             </ToggleButtonGroup>
             <ToggleButtonGroup size="small" value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }}>
@@ -227,16 +225,10 @@ export default function ContentEditor(props: Props) {
 
     <DndProvider backend={HTML5Backend}>
       {showAdd && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
-      <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}} PaperProps={{sx:{zIndex:0}}}>
-        <div id="editorBar" style={{width:"28vw", position:"sticky", top:0}}>
-          <div style={rightBarStyle}>
+      {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
+      {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
 
-            {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); setShowDrawer(false); loadData(); }} globalStyles={props.globalStyles} />}
-            {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); setShowDrawer(false); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
-          </div>
-        </div>
-      </Drawer>
-      <div style={(showDrawer) ? {maxWidth: "71vw"} : {}}>
+      <div>
         {scrollTop>150
           && <div style={{position:"fixed", bottom:30, zIndex:1000, width:500, marginLeft:300}}>
             <DroppableScroll key={"scrollDown"} text={"Scroll Down"} direction="down"  />
