@@ -133,7 +133,7 @@ export const Element: React.FC<Props> = props => {
   if (props.onEdit) {
     result = <>
       <DraggableWrapper dndType="element" elementType={props.element.elementType} data={props.element}>
-        <div className={"elementWrapper " + props.element.elementType } onDoubleClick={() => props.onEdit(null, props.element)}>
+        <div className={"elementWrapper " + props.element.elementType } onDoubleClick={(e) => { e.stopPropagation(); props.onEdit(null, props.element); }}>
           {result}
         </div>
       </DraggableWrapper>

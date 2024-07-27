@@ -4,6 +4,7 @@ import { useDrag } from 'react-dnd'
 type Props = {
   children?: React.ReactNode,
   dndType: string, elementType?: string, data: any
+  onDoubleClick?: () => void
 };
 
 export function DraggableWrapper(props: Props) {
@@ -23,7 +24,7 @@ export function DraggableWrapper(props: Props) {
   const opacity = isDragging ? 0.5 : 1
 
   return (
-    <div ref={dragRef} style={{ opacity }} className="dragButton">
+    <div ref={dragRef} style={{ opacity }} className="dragButton" onDoubleClick={props.onDoubleClick}>
       {props.children}
     </div>
   );
