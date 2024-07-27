@@ -1,10 +1,10 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
+import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
-import { ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions, SmallButton, DisplayBox } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -41,6 +41,7 @@ export default function ContentEditor(props: Props) {
   const windowWidth = useWindowWidth();
 
   const [showAdd, setShowAdd] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [navLinks, setNavLinks] = useState<any>(null);
 
 
@@ -111,6 +112,11 @@ export default function ContentEditor(props: Props) {
       else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });
+
+    if (sections.length===0)
+    {
+      result.push(<Container><p>Add a section to get started</p></Container>)
+    }
     return result;
   }
 
@@ -170,7 +176,7 @@ export default function ContentEditor(props: Props) {
   //<div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, keyName, "Drop at the bottom of page")}</div>
   const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <div key={"zone-" + keyName} style={{minHeight:100}}>
     <div style={{position:"absolute", backgroundColor:"#FFF", zIndex:100, padding:10, border:"1px solid #999", opacity:0.5  }}>Zone: {keyName}</div>
-    <div>
+    <div style={{minHeight:100}}>
       <ThemeProvider theme={getTheme()}>
         <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
           {getSections(keyName)}
@@ -199,6 +205,16 @@ export default function ContentEditor(props: Props) {
     return <>{result}</>
   }
 
+  const getHelp = () => (
+    <Dialog open={true} onClose={() => {setShowHelp(false)}} fullWidth maxWidth="sm">
+      <DisplayBox id="dialogForm" headerIcon="help" headerText="Help">
+        <p>Use the plus icon in the corner to add new sections and elements to a page.  All elements must go within a section.</p>
+        <p>Doubleclick any section or element to edit or remove it.</p>
+        <p>Click and drag and section or element to rearrange content.</p>
+      </DisplayBox>
+    </Dialog>
+  )
+
 
 
   return (<>
@@ -218,6 +234,9 @@ export default function ContentEditor(props: Props) {
         </Grid>
         <Grid item xs={4} style={{textAlign:"right", paddingTop:5, paddingBottom:5, paddingRight:15}}>
           <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
+            <ToggleButtonGroup value={showHelp.toString()} exclusive size="small">
+              <ToggleButton value="true" onClick={() => setShowHelp(!showHelp)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Help" placement="top"><Icon>help</Icon></Tooltip></ToggleButton>
+            </ToggleButtonGroup>
             <ToggleButtonGroup value={showAdd.toString()} exclusive size="small">
               <ToggleButton value="true" onClick={() => setShowAdd(!showAdd)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
             </ToggleButtonGroup>
@@ -233,6 +252,7 @@ export default function ContentEditor(props: Props) {
 
 
     <DndProvider backend={HTML5Backend}>
+      {showHelp && getHelp()}
       {showAdd && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
       {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
       {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
