@@ -1,10 +1,10 @@
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Drawer, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
+import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
-import { ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions, SmallButton, DisplayBox } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -17,6 +17,7 @@ import { ElementAdd } from "@/components/admin/elements/ElementAdd";
 import { ElementEdit } from "@/components/admin/elements/ElementEdit";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { DroppableScroll } from "../DroppableScroll";
+import { Header } from "@/components/Header";
 
 interface Props extends WrapperPageProps {
   church: ChurchInterface,
@@ -38,7 +39,11 @@ export default function ContentEditor(props: Props) {
   const [scrollTop, setScrollTop] = useState(0);
   const [deviceType, setDeviceType] = useState("desktop");
   const windowWidth = useWindowWidth();
-  const [showDrawer, setShowDrawer] = useState(false);
+
+  const [showAdd, setShowAdd] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [navLinks, setNavLinks] = useState<any>(null);
+
 
 
   const zones:any = {
@@ -63,7 +68,12 @@ export default function ContentEditor(props: Props) {
     }
   }
 
+  const loadLinks = () => {
+    if (props.church) ApiHelper.getAnonymous("/links/church/" + props.church.id + "?category=website", "ContentApi").then((data) => { setNavLinks(data) });
+  }
+
   useEffect(loadData, [props.pageId, props.blockId]);
+  useEffect(loadLinks, [props.church]);
 
   //page editor only available for desktop
   useEffect(() => {
@@ -102,13 +112,17 @@ export default function ContentEditor(props: Props) {
       else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });
+
+    if (sections.length===0)
+    {
+      result.push(<Container><p>Add a section to get started</p></Container>)
+    }
     return result;
   }
 
   const handleSectionEdit = (s: SectionInterface, e: ElementInterface) => {
     if (s) setEditSection(s);
     else if (e) setEditElement(e);
-    setShowDrawer(true);
   }
 
   let rightBarStyle: CSSProperties = {}
@@ -160,9 +174,9 @@ export default function ContentEditor(props: Props) {
   }
 
   //<div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, keyName, "Drop at the bottom of page")}</div>
-  const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <div key={"zone-" + keyName}>
+  const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <div key={"zone-" + keyName} style={{minHeight:100}}>
     <div style={{position:"absolute", backgroundColor:"#FFF", zIndex:100, padding:10, border:"1px solid #999", opacity:0.5  }}>Zone: {keyName}</div>
-    <div>
+    <div style={{minHeight:100}}>
       <ThemeProvider theme={getTheme()}>
         <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
           {getSections(keyName)}
@@ -177,6 +191,7 @@ export default function ContentEditor(props: Props) {
     let idx = 0;
     if (props.pageId) {
       const page = container as PageInterface;
+      if (page?.layout==="headerFooter") result.push(<Header church={props.church || {}} churchSettings={props.churchSettings} navLinks={navLinks} overlayContent={page?.url === "/"} sections={[]} globalStyles={props.globalStyles} editMode />)
       zones[page?.layout]?.forEach((z: string) => {
         const sections = ArrayHelper.getAll(page?.sections, "zone", z);
         const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
@@ -190,13 +205,23 @@ export default function ContentEditor(props: Props) {
     return <>{result}</>
   }
 
+  const getHelp = () => (
+    <Dialog open={true} onClose={() => {setShowHelp(false)}} fullWidth maxWidth="sm">
+      <DisplayBox id="dialogForm" headerIcon="help" headerText="Help">
+        <p>Use the plus icon in the corner to add new sections and elements to a page.  All elements must go within a section.</p>
+        <p>Doubleclick any section or element to edit or remove it.</p>
+        <p>Click and drag and section or element to rearrange content.</p>
+      </DisplayBox>
+    </Dialog>
+  )
+
 
 
   return (<>
     <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
     <Helmet><style>{StyleHelper.getCss(container?.sections || [], deviceType)}</style></Helmet>
 
-    <div style={{backgroundColor:"#FFF", position:"sticky", top:0, width:"100%", zIndex:1000, boxShadow:"0px 2px 2px black"}}>
+    <div style={{backgroundColor:"#FFF", position:"sticky", top:0, width:"100%", zIndex:1000, boxShadow:"0px 2px 2px black", marginBottom:10}}>
       <Grid container spacing={2}>
         <Grid item xs={4} style={{paddingLeft:40, paddingTop:8}}>
           <SmallButton icon={"done"} text="Done" onClick={props.onDone} />
@@ -209,8 +234,11 @@ export default function ContentEditor(props: Props) {
         </Grid>
         <Grid item xs={4} style={{textAlign:"right", paddingTop:5, paddingBottom:5, paddingRight:15}}>
           <div style={{float:"right", display:"flex", backgroundColor:"#1976d2" }}>
-            <ToggleButtonGroup value={showDrawer.toString()} exclusive size="small">
-              <ToggleButton value="true" onClick={() => setShowDrawer(!showDrawer)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
+            <ToggleButtonGroup value={showHelp.toString()} exclusive size="small">
+              <ToggleButton value="true" onClick={() => setShowHelp(!showHelp)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Help" placement="top"><Icon>help</Icon></Tooltip></ToggleButton>
+            </ToggleButtonGroup>
+            <ToggleButtonGroup value={showAdd.toString()} exclusive size="small">
+              <ToggleButton value="true" onClick={() => setShowAdd(!showAdd)} style={{borderRight:"1px solid #FFF", color:"#FFF"}}><Tooltip title="Add Content" placement="top"><Icon>add</Icon></Tooltip></ToggleButton>
             </ToggleButtonGroup>
             <ToggleButtonGroup size="small" value={deviceType} exclusive onChange={(e, newDeviceType) => { if (newDeviceType!==null) setDeviceType(newDeviceType) }}>
               {deviceType==="desktop" && <ToggleButton size="small" value="mobile" style={{color:"#FFF"}}><Tooltip title="Desktop" placement="top"><Icon>computer</Icon></Tooltip></ToggleButton>}
@@ -221,17 +249,15 @@ export default function ContentEditor(props: Props) {
       </Grid>
     </div>
 
+
+
     <DndProvider backend={HTML5Backend}>
-      <Drawer anchor="right" variant="persistent" open={showDrawer} onClose={() => {setShowDrawer(false)}} PaperProps={{sx:{zIndex:0}}}>
-        <div id="editorBar" style={{width:"28vw", position:"sticky", top:0}}>
-          <div style={rightBarStyle}>
-            {!editSection && !editElement && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowDrawer(false); }} />}
-            {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); setShowDrawer(false); loadData(); }} globalStyles={props.globalStyles} />}
-            {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); setShowDrawer(false); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
-          </div>
-        </div>
-      </Drawer>
-      <div style={(showDrawer) ? {maxWidth: "65vw"} : {}}>
+      {showHelp && getHelp()}
+      {showAdd && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
+      {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
+      {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
+
+      <div>
         {scrollTop>150
           && <div style={{position:"fixed", bottom:30, zIndex:1000, width:500, marginLeft:300}}>
             <DroppableScroll key={"scrollDown"} text={"Scroll Down"} direction="down"  />

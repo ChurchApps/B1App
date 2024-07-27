@@ -1,6 +1,5 @@
-import { SmallButton, ChurchInterface, NonAuthDonation } from "@churchapps/apphelper";
+import { ChurchInterface, NonAuthDonation } from "@churchapps/apphelper";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { DraggableIcon } from "./admin/DraggableIcon";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
 import { TextOnly } from "./elementTypes/TextOnly";
@@ -24,6 +23,7 @@ import { CalendarElement } from "./elementTypes/CalendarElement";
 import { ApiHelper } from "@churchapps/apphelper";
 import { BoxElement } from "./elementTypes/BoxElement";
 import { TableElement } from "./elementTypes/TableElement";
+import { DraggableWrapper } from "./admin/DraggableWrapper";
 
 interface Props {
   element: ElementInterface;
@@ -131,6 +131,16 @@ export const Element: React.FC<Props> = props => {
 
   /*<DraggableIcon dndType="element" elementType={props.element.elementType} data={props.element} />*/
   if (props.onEdit) {
+    result = <>
+      <DraggableWrapper dndType="element" elementType={props.element.elementType} data={props.element}>
+        <div className={"elementWrapper " + props.element.elementType } onDoubleClick={(e) => { e.stopPropagation(); props.onEdit(null, props.element); }}>
+          {result}
+        </div>
+      </DraggableWrapper>
+      {props.onEdit && getAddElement(props.element.sort + 0.1)}
+    </>
+
+    /*
     result = <><div className={"elementWrapper " + props.element.elementType }>
       <div className="elementActions">
         <table style={{ float: "right" }}>
@@ -150,6 +160,7 @@ export const Element: React.FC<Props> = props => {
     </div>
     {props.onEdit && getAddElement(props.element.sort + 0.1)}
     </>
+    */
   }
   return <div style={{ position: "relative" }}>{result}</div>;
 }

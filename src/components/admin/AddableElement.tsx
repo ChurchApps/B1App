@@ -1,5 +1,5 @@
 import { Grid, Icon } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDrag } from 'react-dnd'
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
   icon: string;
   label: string;
   blockId?: string;
+  draggingCallback?: () => void;
 };
 
 export function AddableElement(props: Props) {
@@ -25,6 +26,10 @@ export function AddableElement(props: Props) {
     [],
   )
 
+  useEffect(() => {
+    if (isDragging && props.draggingCallback) props.draggingCallback();
+  }, [isDragging]);
+
   drag(dragRef);
 
   const opacity = isDragging ? 0.5 : 1
@@ -34,7 +39,7 @@ export function AddableElement(props: Props) {
     : { ...baseStyle, border: "1px solid #28a745", backgroundColor: "#28a745" }
 
   return (
-    <Grid item xs={6}>
+    <Grid item xs={12}>
       <div ref={dragRef} style={style}>
         <div style={{ float: "left" }}><Icon>{props.icon}</Icon></div> <span style={{ paddingLeft: 10 }}>{props.label}</span>
       </div>
