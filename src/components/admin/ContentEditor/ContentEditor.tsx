@@ -17,6 +17,7 @@ import { ElementAdd } from "@/components/admin/elements/ElementAdd";
 import { ElementEdit } from "@/components/admin/elements/ElementEdit";
 import { SectionEdit } from "@/components/admin/SectionEdit";
 import { DroppableScroll } from "../DroppableScroll";
+import { Header } from "@/components/Header";
 
 interface Props extends WrapperPageProps {
   church: ChurchInterface,
@@ -40,6 +41,8 @@ export default function ContentEditor(props: Props) {
   const windowWidth = useWindowWidth();
 
   const [showAdd, setShowAdd] = useState(false);
+  const [navLinks, setNavLinks] = useState<any>(null);
+
 
 
   const zones:any = {
@@ -64,7 +67,12 @@ export default function ContentEditor(props: Props) {
     }
   }
 
+  const loadLinks = () => {
+    if (props.church) ApiHelper.getAnonymous("/links/church/" + props.church.id + "?category=website", "ContentApi").then((data) => { setNavLinks(data) });
+  }
+
   useEffect(loadData, [props.pageId, props.blockId]);
+  useEffect(loadLinks, [props.church]);
 
   //page editor only available for desktop
   useEffect(() => {
@@ -177,6 +185,7 @@ export default function ContentEditor(props: Props) {
     let idx = 0;
     if (props.pageId) {
       const page = container as PageInterface;
+      if (page?.layout==="headerFooter") result.push(<Header church={props.church || {}} churchSettings={props.churchSettings} navLinks={navLinks} overlayContent={page?.url === "/"} sections={[]} globalStyles={props.globalStyles} editMode />)
       zones[page?.layout]?.forEach((z: string) => {
         const sections = ArrayHelper.getAll(page?.sections, "zone", z);
         const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);

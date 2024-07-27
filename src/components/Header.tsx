@@ -16,6 +16,7 @@ type Props = {
   overlayContent: boolean;
   sections?: SectionInterface[];
   globalStyles?: GlobalStyleInterface;
+  editMode?: boolean;
 };
 
 //structure navLinks based on their parentId
@@ -181,7 +182,7 @@ export function Header(props: Props) {
 
   return (
     <div>
-      <AppBar id="navbar" position="fixed" className={appBarClass}>
+      <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? {marginBottom:0} : {} }>
         <Container style={{height:71}}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
