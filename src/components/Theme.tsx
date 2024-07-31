@@ -1,7 +1,7 @@
 import { GlobalStyleInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper, AppearanceInterface } from "@churchapps/apphelper";
-import React from "react";
+import React, { useEffect } from "react";
 import { Helmet } from "react-helmet"
 
 interface Props { appearance?: AppearanceInterface, globalStyles: GlobalStyleInterface, config?:ConfigurationInterface }
@@ -69,6 +69,23 @@ export const Theme: React.FC<Props> = (props) => {
   const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
   const ogImage = props.config?.appearance?.ogImage && props.config.appearance.ogImage;
 
+  useEffect(() => {
+    console.log("HERE!")
+    const oldVersion = document.querySelector('meta[property="og:image"]');
+    console.log("oldVersion", oldVersion);
+    if (oldVersion) {
+      console.log("IF");
+      return;
+    } else {
+      console.log("ELSE")
+      const meta = document.createElement("meta");
+      meta.setAttribute("property", "og:image");
+      meta.setAttribute("content", ogImage);
+      const head = document.querySelector("head");
+      head.insertBefore(meta, head.firstChild);
+    }
+  }, []);
+
   return (<>
     {fontLink}
     <Helmet>
@@ -77,7 +94,7 @@ export const Theme: React.FC<Props> = (props) => {
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
         : <link rel="icon" href="/favicon.ico" />
       }
-      {ogImage && <meta property="og:image" content={ogImage}></meta>}
+      {/* {ogImage && <meta property="og:image" content={ogImage}></meta>} */}
     </Helmet>
     {customJs}
   </>);
