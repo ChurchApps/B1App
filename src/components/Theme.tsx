@@ -71,19 +71,35 @@ export const Theme: React.FC<Props> = (props) => {
 
   useEffect(() => {
     console.log("HERE!")
-    const oldVersion = document.querySelector('meta[property="og:image"]');
-    console.log("oldVersion", oldVersion);
-    if (oldVersion) {
-      console.log("IF");
-      return;
-    } else {
-      console.log("ELSE")
-      const meta = document.createElement("meta");
-      meta.setAttribute("property", "og:image");
-      meta.setAttribute("content", ogImage);
-      const head = document.querySelector("head");
-      head.insertBefore(meta, head.firstChild);
-    }
+    const head = document.querySelector("head");
+    
+    const urlTag = document.createElement("meta");
+    urlTag.setAttribute("property", "og:url");
+    urlTag.setAttribute("content", document.URL);
+    head.insertBefore(urlTag, head.firstChild);
+
+    const imageTag = document.createElement("meta");
+    imageTag.setAttribute("property", "og:image");
+    imageTag.setAttribute("content", ogImage);
+    head.insertBefore(imageTag, head.firstChild);
+
+    const typeTag = document.createElement("meta");
+    typeTag.setAttribute("property", "og:type");
+    typeTag.setAttribute("content", "website");
+    head.insertBefore(typeTag, head.firstChild);
+
+    const titleTag = document.createElement("meta");
+    titleTag.setAttribute("property", "og:title");
+    titleTag.setAttribute("content", props.config.church?.name);
+    head.insertBefore(titleTag, head.firstChild);
+    // const oldVersion = document.querySelector('meta[property="og:image"]');
+    // console.log("oldVersion", oldVersion);
+    // if (oldVersion) {
+    //   console.log("IF");
+    //   return;
+    // } else {
+    //   console.log("ELSE");
+    // }
   }, []);
 
   return (<>
