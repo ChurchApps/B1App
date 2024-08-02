@@ -1,8 +1,7 @@
 import { GlobalStyleInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper, AppearanceInterface } from "@churchapps/apphelper";
-import React, { useEffect } from "react";
-import { Helmet } from "react-helmet"
+import React from "react";
 import Head from "next/head";
 
 interface Props { appearance?: AppearanceInterface, globalStyles: GlobalStyleInterface, config?:ConfigurationInterface }
@@ -73,7 +72,7 @@ export const Theme: React.FC<Props> = (props) => {
   // useEffect(() => {
   //   console.log("HERE!")
   //   const head = document.querySelector("head");
-    
+
   //   const urlTag = document.createElement("meta");
   //   urlTag.setAttribute("property", "og:url");
   //   urlTag.setAttribute("content", document.URL);
