@@ -1,4 +1,4 @@
-import { GlobalStyleInterface } from "@/helpers";
+import { EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper, AppearanceInterface } from "@churchapps/apphelper";
 import React from "react";
@@ -69,38 +69,6 @@ export const Theme: React.FC<Props> = (props) => {
   const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
   const ogImage = props.config?.appearance?.ogImage && props.config.appearance.ogImage;
 
-  // useEffect(() => {
-  //   console.log("HERE!")
-  //   const head = document.querySelector("head");
-
-  //   const urlTag = document.createElement("meta");
-  //   urlTag.setAttribute("property", "og:url");
-  //   urlTag.setAttribute("content", document.URL);
-  //   head.insertBefore(urlTag, head.firstChild);
-
-  //   const imageTag = document.createElement("meta");
-  //   imageTag.setAttribute("property", "og:image");
-  //   imageTag.setAttribute("content", ogImage);
-  //   head.insertBefore(imageTag, head.firstChild);
-
-  //   const typeTag = document.createElement("meta");
-  //   typeTag.setAttribute("property", "og:type");
-  //   typeTag.setAttribute("content", "website");
-  //   head.insertBefore(typeTag, head.firstChild);
-
-  //   const titleTag = document.createElement("meta");
-  //   titleTag.setAttribute("property", "og:title");
-  //   titleTag.setAttribute("content", props.config.church?.name);
-  //   head.insertBefore(titleTag, head.firstChild);
-  // }, []);
-  // const oldVersion = document.querySelector('meta[property="og:image"]');
-  // console.log("oldVersion", oldVersion);
-  // if (oldVersion) {
-  //   console.log("IF");
-  //   return;
-  // } else {
-  //   console.log("ELSE");
-  // }
 
   return (<>
     {fontLink}
@@ -111,6 +79,9 @@ export const Theme: React.FC<Props> = (props) => {
         : <link rel="icon" href="/favicon.ico" />
       }
       {ogImage && <meta property="og:image" content={ogImage}></meta>}
+      <meta property="og:url" content={EnvironmentHelper.Common.B1Root.replace("{key}", props.config.church.subDomain)} />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={props.config.church?.name} />
     </Head>
     {customJs}
   </>);
