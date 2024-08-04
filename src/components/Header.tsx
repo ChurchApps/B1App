@@ -142,7 +142,7 @@ export function Header(props: Props) {
 
   const getLogo = () => {
     if (transparent) {
-      let textColor = props.sections[0].textColor || "#FFF";
+      let textColor = props.sections[0]?.textColor || "#FFF";
       if (textColor.indexOf("var(--") > -1) {
         const palette = JSON.parse(props.globalStyles.palette);
         textColor = textColor.replace("var(--", "").replace(")", "");
