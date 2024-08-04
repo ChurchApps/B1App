@@ -79,9 +79,9 @@ export const Theme: React.FC<Props> = (props) => {
         : <link rel="icon" href="/favicon.ico" />
       }
       {ogImage && <meta property="og:image" content={ogImage}></meta>}
-      <meta property="og:url" content={EnvironmentHelper.Common.B1Root.replace("{key}", props.config.church.subDomain)} />
+      <meta property="og:url" content={EnvironmentHelper.Common.B1Root.replace("{key}", props.config?.church?.subDomain)} />
       <meta property="og:type" content="website" />
-      <meta property="og:title" content={props.config.church?.name} />
+      <meta property="og:title" content={props.config?.church?.name} />
     </Head>
     {customJs}
   </>);
