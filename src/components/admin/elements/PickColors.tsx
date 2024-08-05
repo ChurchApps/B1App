@@ -11,6 +11,8 @@ type Props = {
   linkColor:string;
   updatedCallback: (background:string, textColor:string, headingColor:string, linkColor:string) => void;
   globalStyles: GlobalStyleInterface;
+  backgroundOpacity?: any;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => void;
 };
 
 export function PickColors(props: Props) {
@@ -123,6 +125,11 @@ export function PickColors(props: Props) {
       result.push(<>
         <img src={props.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="background image" /><br />
         <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+        {props?.onChange && (
+          <TextField fullWidth size="small" label="Background Opacity" name="backgroundOpacity" value={props?.backgroundOpacity || "0.55"} onChange={props.onChange}
+            type="number" sx={{ marginTop: 2 }} helperText={<>The opacity of black gradient layer on top of the image.<br />Max value: 1</>} FormHelperTextProps={{ sx: { marginLeft: 1 } }} InputProps={{ inputProps: { min: "0", max: "1", step: "1" } }}
+          />
+        )}
       </>)
     }
 

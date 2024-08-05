@@ -1,5 +1,5 @@
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { CSSProperties, useState } from "react";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
@@ -142,7 +142,7 @@ export const Section: React.FC<Props> = props => {
     const youtubeId = props.section.background.split(":")[1];
     result = (<>{getSectionAnchor()}<YoutubeBackground isDragging={isDragging} id={getId()} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground></>);
   }
-  else result = (<>{getSectionAnchor()}<div style={getStyle()} className={getClassName()} id={getId()}>{contents}</div></>);
+  else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
 
   if (props.onEdit) {
     return (
