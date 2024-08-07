@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import { BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { PickColors } from "./elements/PickColors";
 import { StyleList } from "./elements/StyleList";
 
@@ -80,7 +80,7 @@ export function SectionEdit(props: Props) {
   const getStandardFields = () => (<>
     <ErrorMessages errors={errors} />
     <TextField fullWidth size="small" label="ID" name="sectionId" value={parsedData.sectionId || ""} onChange={handleChange} />
-    <PickColors background={section?.background} textColor={section?.textColor} headingColor={section?.headingColor} linkColor={section?.linkColor} updatedCallback={selectColors} globalStyles={props.globalStyles} />
+    <PickColors background={section?.background} backgroundOpacity={parsedData?.backgroundOpacity} textColor={section?.textColor} headingColor={section?.headingColor} linkColor={section?.linkColor} updatedCallback={selectColors} globalStyles={props.globalStyles} onChange={handleChange} />
     {getAppearanceFields(["border", "color", "font", "height", "line", "margin", "padding", "width"])}
   </>)
 
@@ -119,12 +119,14 @@ export function SectionEdit(props: Props) {
 
   if (!section) return <></>
   else return (
-    <>
+    <Dialog open={true} onClose={handleCancel} fullWidth maxWidth="md">
       <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.section.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
-        {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
+        <div id="dialogFormContent">
+          {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
+        </div>
       </InputBox>
 
-    </>
+    </Dialog>
   );
 }
 

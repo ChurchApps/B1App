@@ -393,14 +393,17 @@ a.dropdown-toggle::after {
 
 .elementWrapper:not(:has(.elementWrapper:hover)):hover:before {
   content: "ELEMENT";
+  font-size: 14px;
   background-color: #28a745;
   color:#FFF;
   display: block;
-  width:100%;
+  width:100px;
   position: relative;
   text-align: center;
-  height:25px;
-  margin-bottom: -29px;
+  margin-top:-18px;
+  margin-left:-3px;
+  height:18px;
+  margin-bottom: -2px;
 }
 
 .elementWrapper.box:not(:has(.elementWrapper:hover)):hover:before { content: "BOX" !important; }
@@ -421,21 +424,22 @@ a.dropdown-toggle::after {
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   /*background-color: #9999FF !important;*/
   border: 3px solid #3333FF;
+  padding-bottom: 38px;
 }
-
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover:before {
   content: "SECTION";
   background-color: #3333FF;
   color:#FFF;
   display: block;
-  width:100%;
+  width:100px;
   position: relative;
   text-align: center;
-  height:25px;
+  font-size:14px;
+  height:18px;
   /*margin-bottom: -29px;*/
   margin-top:-40px !important;
-  margin-bottom:40px;
+  margin-bottom:20px;
 }
 
 .sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important; }

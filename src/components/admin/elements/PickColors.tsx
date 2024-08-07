@@ -1,6 +1,6 @@
 import { GlobalStyleInterface } from '@/helpers';
 import { GalleryModal } from '@churchapps/apphelper';
-import { FormControl, InputLabel, Select, MenuItem, TextField, Tabs, Tab, Button, SelectChangeEvent } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, TextField, Tabs, Tab, Button, SelectChangeEvent, Grid } from '@mui/material';
 import { useState } from 'react';
 import { SliderPicker } from 'react-color';
 
@@ -11,6 +11,8 @@ type Props = {
   linkColor:string;
   updatedCallback: (background:string, textColor:string, headingColor:string, linkColor:string) => void;
   globalStyles: GlobalStyleInterface;
+  backgroundOpacity?: any;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => void;
 };
 
 export function PickColors(props: Props) {
@@ -111,6 +113,7 @@ export function PickColors(props: Props) {
       result.push(<SliderPicker key="sliderPicker" color={props.background} onChangeComplete={(color) => { if (color.hex !== "#000000") props.updatedCallback(color.hex, props.textColor, props.headingColor, props.linkColor)  }} />);
       result.push(getGrayOptions())
       result.push(getThemeOptions())
+      result.push(<br />)
       result.push(<TextField key="backgroundText" fullWidth size="small" label="Background" name="background" value={props.background} onChange={handleChange} />)
     } else if (backgroundType === "youtube") {
       const parts = props.background.split(":");
@@ -122,6 +125,11 @@ export function PickColors(props: Props) {
       result.push(<>
         <img src={props.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="background image" /><br />
         <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+        {props?.onChange && (
+          <TextField fullWidth size="small" label="Background Opacity" name="backgroundOpacity" value={props?.backgroundOpacity || "0.55"} onChange={props.onChange}
+            type="number" sx={{ marginTop: 2 }} helperText={<>The opacity of black gradient layer on top of the image.<br />Max value: 1</>} FormHelperTextProps={{ sx: { marginLeft: 1 } }} InputProps={{ inputProps: { min: "0", max: "1", step: "1" } }}
+          />
+        )}
       </>)
     }
 
@@ -191,24 +199,33 @@ export function PickColors(props: Props) {
       const b = colors[p[0]]
       const t = colors[p[1]]
       const l = colors[p[2]]
-      suggestions.push(<a href="about:blank" onClick={(e) => {e.preventDefault(); selectPairing(p); }} style={{display:"block", backgroundColor:b, color:t, border:"1px solid " + t, borderRadius:5, padding:5, marginBottom:3 }}>Sample Text -  <span style={{color:l}}>Sample Link</span></a>);
+      suggestions.push(<Grid item xs={4}>
+        <a href="about:blank" onClick={(e) => {e.preventDefault(); selectPairing(p); }} style={{display:"block", backgroundColor:b, color:t, border:"1px solid " + t, borderRadius:5, padding:5, marginBottom:3 }}>Sample Text -  <span style={{color:l}}>Sample Link</span></a>
+      </Grid>);
     });
 
 
-    return (<>
+    return (<Grid container spacing={0.2}>
       {suggestions}
-    </>)
+    </Grid>)
   }
 
-  const getManualColors = () => (<>
-    {getBackgroundField()}
-    <div><InputLabel>Heading Color</InputLabel></div>
-    {getThemeOptions("headingColor")}
-    <div><InputLabel>Text Color</InputLabel></div>
-    {getThemeOptions("textColor")}
-    <div><InputLabel>Link Color</InputLabel></div>
-    {getThemeOptions("linkColor")}
-  </>)
+  const getManualColors = () => (<Grid container spacing={1}>
+    <Grid item xs={6}>
+      <div style={{marginBottom:20}}><b>Background</b></div>
+      {getBackgroundField()}
+    </Grid>
+    <Grid item xs={6}>
+
+      <div style={{marginBottom:20}}><b>Content</b></div>
+      <div><InputLabel>Heading Color</InputLabel></div>
+      {getThemeOptions("headingColor")}
+      <div><InputLabel>Text Color</InputLabel></div>
+      {getThemeOptions("textColor")}
+      <div><InputLabel>Link Color</InputLabel></div>
+      {getThemeOptions("linkColor")}
+    </Grid>
+  </Grid>)
 
   let currentTab = null;
   switch(tabValue) {

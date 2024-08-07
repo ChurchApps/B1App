@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider, Dialog } from "@mui/material";
 import { MarkdownEditor, ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import React from "react";
 import { GalleryModal } from "@churchapps/apphelper";
@@ -424,11 +424,13 @@ export function ElementEdit(props: Props) {
 
   if (!element) return <></>
   else return (
-    <>
-      <InputBox id="elementDetailsBox" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.element.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
-        {(element?.elementType === "block") ? getBlockFields() : getStandardFields()}
+    <Dialog open={true} onClose={handleCancel} fullWidth maxWidth="md">
+      <InputBox id="dialogForm" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.element.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
+        <div id="dialogFormContent">
+          {(element?.elementType === "block") ? getBlockFields() : getStandardFields()}
+        </div>
       </InputBox>
       {selectPhotoField && <GalleryModal onClose={() => setSelectPhotoField(null)} onSelect={handlePhotoSelected} aspectRatio={0} />}
-    </>
+    </Dialog>
   );
 }

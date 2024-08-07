@@ -1,8 +1,8 @@
-import { GlobalStyleInterface } from "@/helpers";
+import { EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper, AppearanceInterface } from "@churchapps/apphelper";
 import React from "react";
-import { Helmet } from "react-helmet"
+import Head from "next/head";
 
 interface Props { appearance?: AppearanceInterface, globalStyles: GlobalStyleInterface, config?:ConfigurationInterface }
 
@@ -69,16 +69,20 @@ export const Theme: React.FC<Props> = (props) => {
   const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
   const ogImage = props.config?.appearance?.ogImage && props.config.appearance.ogImage;
 
+
   return (<>
     {fontLink}
-    <Helmet>
+    <Head>
       {css}
       {favicon
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
         : <link rel="icon" href="/favicon.ico" />
       }
       {ogImage && <meta property="og:image" content={ogImage}></meta>}
-    </Helmet>
+      <meta property="og:url" content={EnvironmentHelper.Common.B1Root.replace("{key}", props.config?.church?.subDomain)} />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={props.config?.church?.name} />
+    </Head>
     {customJs}
   </>);
 }

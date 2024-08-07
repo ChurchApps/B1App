@@ -15,7 +15,12 @@ export default function Admin(props: Props) {
   const router = useRouter();
   const id = router.query.id?.toString() || "";
   const loadData = async (id:string) => await ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi")
-  return <ContentEditor loadData={loadData} church={props.church} churchSettings={props.churchSettings} globalStyles={props.globalStyles} pageId={id} config={props.config}  />
+
+  const handleDone = () => {
+    router.push("/admin/site/pages/preview/" + id)
+  }
+
+  return <ContentEditor loadData={loadData} church={props.church} churchSettings={props.churchSettings} globalStyles={props.globalStyles} pageId={id} config={props.config} onDone={handleDone}  />
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -28,5 +33,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
-  return { props: { config, churchSettings, globalStyles }, revalidate: 30 };
+  return { props: { config, churchSettings, globalStyles, church }, revalidate: 30 };
 };

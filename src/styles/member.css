@@ -354,3 +354,13 @@
   overflow-y: scroll;
 }
 */
+
+#dialogForm {
+  
+  margin-bottom: 0px;
+  min-width: 500px;
+}
+
+#dialogFormContent {
+  padding-top:20px;
+}
