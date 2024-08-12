@@ -52,7 +52,7 @@ export default function Preview(props: Props) {
         </Grid>
 
       </div>
-      <iframe sandbox="allow-scripts" src={url} style={{width:"100%", height:"100vh"}} />
+      <iframe src={url} style={{width:"100%", height:"100vh"}} />
     </div>
   </AdminSiteWrapper>
 }
