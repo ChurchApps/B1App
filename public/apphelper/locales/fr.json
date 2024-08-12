@@ -1,0 +1,271 @@
+{
+  "b1Share": {
+    "comment": "Commentaire",
+    "commentPlaceholder": "Incluez un commentaire avec votre message.",
+    "contentShared": "Contenu partagé",
+    "group": "Groupe",
+    "sharingToGroup": "Partager {} avec le groupe B1",
+    "validate": {
+      "addComment": "Veuillez ajouter un commentaire.",
+      "loginFirst": "S'il vous plait Connectez-vous d'abord.",
+      "notMember": "Vous n’êtes actuellement membre d’aucun groupe sur B1.",
+      "selectGroup": "Veuillez sélectionner un groupe."
+    }
+  },
+  "common": {
+    "add": "Ajouter",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "date": "Date",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "error": "Erreur",
+    "pleaseWait": "S'il vous plaît, attendez...",
+    "save": "Sauvegarder",
+    "search": "Recherche",
+    "submit": "Soumettre",
+    "update": "Mise à jour"
+  },
+  "createPerson": {
+    "addNewPerson": "Ajouter une nouvelle personne",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "Numéro de compte",
+      "added": "Compte bancaire ajouté. ",
+      "company": "Entreprise",
+      "firstDeposit": "Premier dépôt",
+      "holderName": "Le nom du titulaire du compte est requis.",
+      "individual": "Individuel",
+      "name": "Nom du titulaire du compte",
+      "needVerified": "Les comptes bancaires devront être vérifiés avant de faire un don. ",
+      "routingNumber": "Numéro d'acheminement",
+      "secondDeposit": "Deuxième dépôt",
+      "twoDeposits": "Saisissez les deux dépôts que vous avez reçus sur votre compte pour terminer la vérification de votre compte bancaire.",
+      "updated": "Compte bancaire mis à jour.",
+      "verified": "Compte bancaire vérifié.",
+      "validate": {
+        "accountNumber": "Le routage et le numéro de compte sont requis.",
+        "holderName": "Le nom du titulaire du compte est requis."
+      }
+    },
+    "cardForm": {
+      "addNew": "Ajouter une nouvelle carte",
+      "added": "Carte ajoutée avec succès.",
+      "expirationMonth": "Mois d'expiration:",
+      "expirationYear": "Année d'expiration :",
+      "updated": "Carte mise à jour avec succès."
+    },
+    "donationForm": {
+      "annually": "Annuellement",
+      "biWeekly": "Bihebdomadaire",
+      "cancelled": "Don récurrent annulé.",
+      "confirmDelete": "Etes-vous sûr de vouloir supprimer ce don récurrent ?",
+      "cover": "J'ajouterai généreusement {} pour couvrir les frais de transaction afin que vous puissiez conserver 100 % de mon don.",
+      "donate": "Faire un don",
+      "editRecurring": "Modifier un don récurrent",
+      "fees": "Des frais de transaction de {} sont appliqués.",
+      "frequency": "Fréquence",
+      "fund": "Fonds",
+      "funds": "Fonds",
+      "make": "Faire un don",
+      "makeRecurring": "Faire un don récurrent",
+      "method": "Méthode",
+      "monthly": "Mensuel",
+      "notes": "Remarques",
+      "preview": "Aperçu du don",
+      "quarterly": "Trimestriel",
+      "recurringUpdated": "Don récurrent mis à jour.",
+      "startDate": "Date de début",
+      "thankYou": "Merci pour votre don!",
+      "tooLow": "Le montant du don doit être supérieur à 0,50 $",
+      "total": "Montant total du don",
+      "validate": {
+        "amount": "Le montant ne peut pas être de 0 $.",
+        "email": "Veuillez entrer votre adresse e-mail.",
+        "firstName": "Entrez votre prénom s'il vous plait.",
+        "lastName": "Veuillez entrer votre nom de famille.",
+        "validEmail": "S'il vous plaît, mettez une adresse email valide."
+      },
+      "weekly": "Hebdomadaire"
+    },
+    "fundDonations": {
+      "addMore": "Ajouter plus",
+      "amount": "Montant",
+      "fund": "Fonds"
+    },
+    "paymentMethods": {
+      "addBank": "Ajouter un compte bancaire",
+      "addCard": "Ajouter une carte",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce mode de paiement ?",
+      "deleted": "Mode de paiement supprimé.",
+      "noMethods": "Aucun mode de paiement.  ",
+      "verify": "vérifier le compte"
+    },
+    "page": {
+      "amount": "Montant",
+      "batch": "Lot",
+      "date": "Date",
+      "fund": "Fonds",
+      "method": "Méthode",
+      "willAppear": "Les dons apparaîtront une fois qu’un don aura été saisi."
+    },
+    "preview": {
+      "date": "Date du don",
+      "donate": "Faire un don",
+      "every": "Tout récurrent",
+      "fee": "Frais de transaction",
+      "funds": "Fonds",
+      "method": "Méthode de don",
+      "notes": "Remarques",
+      "startingOn": "À partir de",
+      "total": "Total",
+      "type": "Type de don"
+    },
+    "recurring": {
+      "amount": "Montant",
+      "every": "Chaque",
+      "interval": "Intervalle",
+      "notFound": "Mode de paiement introuvable.",
+      "paymentMethod": "Mode de paiement",
+      "startDate": "Date de début"
+    }
+  },
+  "formSubmissionEdit": {
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer les données de ce formulaire ?",
+    "editForm": "Modifier le formulaire",
+    "isRequired": "est requis",
+    "submit": "Soumettre"
+  },
+  "gallery": {
+    "aspectRatio": "Ratio d'aspect",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette image de la galerie ?",
+    "freeForm": "Forme libre"
+  },
+  "iconPicker": {
+    "iconsAvailable": "icônes disponibles",
+    "matchingResults": "résultats correspondants",
+    "search": "Icônes de recherche..."
+  },
+  "login": {
+    "createAccount": "Créer un compte",
+    "email": "E-mail",
+    "forgot": "Mot de passe oublié",
+    "goLogin": "Allez dans Connexion",
+    "login": "Se connecter",
+    "password": "Mot de passe",
+    "register": "Registre",
+    "registerThankYou": "Merci de votre inscription! ",
+    "reset": "Réinitialiser",
+    "resetInstructions": "Entrez votre adresse e-mail pour demander une réinitialisation du mot de passe.",
+    "resetPassword": "réinitialiser le mot de passe",
+    "resetSent": "E-mail de réinitialisation du mot de passe envoyé !",
+    "setPassword": "Définir le mot de passe",
+    "signIn": "Se connecter",
+    "signInTitle": "Veuillez vous connecter",
+    "verifyPassword": "vérifier le mot de passe",
+    "validate": {
+      "email": "S'il vous plaît, mettez une adresse email valide.",
+      "firstName": "Entrez votre prénom s'il vous plait.",
+      "invalid": "Identifiant invalide. ",
+      "lastName": "Veuillez entrer votre nom de famille.",
+      "password": "Veuillez entrer un mot de passe.",
+      "passwordLength": "Le mot de passe doit comporter au moins 8 caractères.",
+      "passwordMatch": "Les mots de passe ne correspondent pas.",
+      "selectingChurch": "Erreur lors de la sélection de l'église. "
+    },
+    "welcomeBack": "Content de te revoir",
+    "welcomeName": "Content de te revoir, <b>{}</b>!  "
+  },
+  "markdownEditor": {
+    "content": "Contenu",
+    "markdownEditor": "Éditeur de démarques",
+    "markdownGuide": "Guide de démarque"
+  },
+  "month": {
+    "april": "Avril",
+    "august": "Août",
+    "december": "Décembre",
+    "february": "Février",
+    "january": "Janvier",
+    "july": "Juillet",
+    "june": "Juin",
+    "march": "Mars",
+    "may": "Peut",
+    "november": "Novembre",
+    "october": "Octobre",
+    "september": "Septembre"
+  },
+  "notes": {
+    "comment": "commentaire",
+    "comments": "commentaires",
+    "notes": "Remarques",
+    "startConversation": "Commencer une conversation",
+    "validate": {
+      "content": "Veuillez saisir une note."
+    },
+    "viewAll": "Voir tout"
+  },
+  "person": {
+    "email": "E-mail",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "name": "Nom",
+    "person": "Personne",
+    "years": "années"
+  },
+  "reporting": {
+    "detailedSummary": "Résumé détaillé",
+    "downloadOptions": "Options de téléchargement",
+    "noData": "Il n'y a aucune donnée à afficher.",
+    "runReport": "Rapport d'exécution",
+    "useFilter": "Utilisez le filtre pour exécuter le rapport."
+  },
+  "selectChurch": {
+    "address1": "Adresse Ligne 1",
+    "address2": "Adresse Ligne 2",
+    "another": "Choisissez une autre église",
+    "city": "Ville",
+    "confirmRegister": "Etes-vous sûr de vouloir enregistrer une nouvelle église ?",
+    "country": "Pays",
+    "name": "Nom de l'église",
+    "noMatches": "Aucun résultat.",
+    "register": "Enregistrer une nouvelle église",
+    "selectChurch": "Sélectionnez une église",
+    "state": "État/Province",
+    "zip": "Zip / code postal",
+    "validate": {
+      "address": "L'adresse ne peut pas être vide.",
+      "city": "La ville ne peut pas être vide.",
+      "country": "Le pays ne peut pas être vide.",
+      "name": "Le nom de l’église ne peut pas être vide.",
+      "state": "L'État/la Province ne peut pas être vide.",
+      "zip": "Le code postal ne peut pas être vide."
+    }
+  },
+  "stockPhotos": {
+    "photoBy": "Photo par:",
+    "providedBy": "Photos d'archives fournies par"
+  },
+  "support": {
+    "email": "E-mail",
+    "knowledge base": "Base de connaissances",
+    "messenger": "Messager",
+    "phone": "Téléphone"
+  },
+  "wrapper": {
+    "chatWith": "Parler avec",
+    "deleteChurch": "Supprimer l'église de la liste",
+    "logout": "Se déconnecter",
+    "newPrivateMessage": "Nouveau message privé",
+    "privateMessage": "Message privé",
+    "profile": "Profil",
+    "searchForPerson": "Rechercher une personne",
+    "support": "Soutien",
+    "sureRemoveChurch": "Êtes-vous sûr de vouloir supprimer {} de la liste ?",
+    "switchApp": "Changer d'application",
+    "switchChurch": "Changer d'église"
+  }
+}

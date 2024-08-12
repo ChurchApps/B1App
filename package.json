@@ -6,10 +6,11 @@
     "dev": "next dev -p 3301",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.2.30",
+    "@churchapps/apphelper": "0.2.40",
     "@mui/icons-material": "^5.14.7",
     "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.14.7",
@@ -44,6 +45,7 @@
     "@types/react-big-calendar": "^1.6.4",
     "@types/react-color": "^3.0.6",
     "@types/react-helmet": "^6.1.6",
+    "copyfiles": "^2.4.1",
     "eslint-config-next": "^13.4.19",
     "eslint-plugin-unused-imports": "^3.0.0",
     "typescript": "^5.3.3"

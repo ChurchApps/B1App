@@ -1,0 +1,271 @@
+{
+  "b1Share": {
+    "comment": "Magkomento",
+    "commentPlaceholder": "Magsama ng komento sa iyong post.",
+    "contentShared": "Ibinahagi ang Nilalaman",
+    "group": "Grupo",
+    "sharingToGroup": "Ibinabahagi ang {} sa B1 Group",
+    "validate": {
+      "addComment": "Mangyaring magdagdag ng komento.",
+      "loginFirst": "Mangyaring mag-login muna.",
+      "notMember": "Kasalukuyan kang hindi miyembro ng anumang grupo sa B1.",
+      "selectGroup": "Mangyaring pumili ng isang pangkat."
+    }
+  },
+  "common": {
+    "add": "Idagdag",
+    "cancel": "Kanselahin",
+    "close": "Isara",
+    "date": "Petsa",
+    "delete": "Tanggalin",
+    "edit": "I-edit",
+    "error": "Error",
+    "pleaseWait": "Mangyaring maghintay...",
+    "save": "I-save",
+    "search": "Maghanap",
+    "submit": "Ipasa",
+    "update": "Update"
+  },
+  "createPerson": {
+    "addNewPerson": "Magdagdag ng Bagong Tao",
+    "firstName": "Pangalan",
+    "lastName": "Huling pangalan"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "Account Number",
+      "added": "Idinagdag ang bank account. ",
+      "company": "kumpanya",
+      "firstDeposit": "Unang Deposito",
+      "holderName": "Kinakailangan ang pangalan ng may-ari ng account.",
+      "individual": "Indibidwal",
+      "name": "Pangalan ng May-ari ng Account",
+      "needVerified": "Ang mga bank account ay kailangang ma-verify bago gumawa ng anumang mga donasyon. ",
+      "routingNumber": "Numero ng Pagruruta",
+      "secondDeposit": "Pangalawang Deposito",
+      "twoDeposits": "Ilagay ang dalawang deposito na natanggap mo sa iyong account para tapusin ang pag-verify sa iyong bank account.",
+      "updated": "Na-update ang bank account.",
+      "verified": "Na-verify ang bank account.",
+      "validate": {
+        "accountNumber": "Kinakailangan ang pagruruta at numero ng account.",
+        "holderName": "Kinakailangan ang pangalan ng may-ari ng account."
+      }
+    },
+    "cardForm": {
+      "addNew": "Magdagdag ng Bagong Card",
+      "added": "Matagumpay na naidagdag ang card.",
+      "expirationMonth": "Buwan ng Pag-expire:",
+      "expirationYear": "Taon ng Pag-expire:",
+      "updated": "Matagumpay na na-update ang card."
+    },
+    "donationForm": {
+      "annually": "Taun-taon",
+      "biWeekly": "Bi-Lingguhan",
+      "cancelled": "Kinansela ang umuulit na donasyon.",
+      "confirmDelete": "Sigurado ka bang gusto mong tanggalin itong umuulit na donasyon?",
+      "cover": "Sagana akong magdaragdag ng {} upang mabayaran ang mga bayarin sa transaksyon upang mapanatili mo ang 100% ng aking donasyon.",
+      "donate": "Mag-donate",
+      "editRecurring": "I-edit ang Paulit-ulit na Donasyon",
+      "fees": "Inilapat ang mga bayarin sa transaksyon ng {}.",
+      "frequency": "Dalas",
+      "fund": "Pondo",
+      "funds": "Mga pondo",
+      "make": "Magbigay ng Donasyon",
+      "makeRecurring": "Gumawa ng Paulit-ulit na Donasyon",
+      "method": "Pamamaraan",
+      "monthly": "Buwan-buwan",
+      "notes": "Mga Tala",
+      "preview": "Silipin ang Donasyon",
+      "quarterly": "quarterly",
+      "recurringUpdated": "Na-update ang umuulit na donasyon.",
+      "startDate": "Petsa ng Pagsisimula",
+      "thankYou": "Salamat sa iyong donasyon!",
+      "tooLow": "Ang halaga ng donasyon ay dapat na higit sa $0.50",
+      "total": "Kabuuang Halaga ng Donasyon",
+      "validate": {
+        "amount": "Ang halaga ay hindi maaaring $0.",
+        "email": "Pakilagay ang iyong email address.",
+        "firstName": "Pakilagay ang iyong pangalan.",
+        "lastName": "Pakilagay ang iyong apelyido.",
+        "validEmail": "Mangyaring magpasok ng wastong email address."
+      },
+      "weekly": "Linggu-linggo"
+    },
+    "fundDonations": {
+      "addMore": "Magdagdag pa",
+      "amount": "Halaga",
+      "fund": "Pondo"
+    },
+    "paymentMethods": {
+      "addBank": "Magdagdag ng Bank Account",
+      "addCard": "Magdagdag ng Card",
+      "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang paraan ng pagbabayad na ito?",
+      "deleted": "Ang paraan ng pagbabayad ay tinanggal.",
+      "noMethods": "Walang paraan ng pagbabayad.  ",
+      "verify": "I-verify ang Account"
+    },
+    "page": {
+      "amount": "Halaga",
+      "batch": "Batch",
+      "date": "Petsa",
+      "fund": "Pondo",
+      "method": "Pamamaraan",
+      "willAppear": "Lalabas ang mga donasyon kapag naipasok na ang donasyon."
+    },
+    "preview": {
+      "date": "Petsa ng Donasyon",
+      "donate": "Mag-donate",
+      "every": "Paulit-ulit na Lahat",
+      "fee": "Bayad sa Transaksyon",
+      "funds": "Mga pondo",
+      "method": "Paraan ng Donasyon",
+      "notes": "Mga Tala",
+      "startingOn": "Simula Sa",
+      "total": "Kabuuan",
+      "type": "Uri ng Donasyon"
+    },
+    "recurring": {
+      "amount": "Halaga",
+      "every": "Bawat",
+      "interval": "Pagitan",
+      "notFound": "Hindi nakita ang paraan ng pagbabayad.",
+      "paymentMethod": "Paraan ng Pagbayad",
+      "startDate": "Petsa ng Pagsisimula"
+    }
+  },
+  "formSubmissionEdit": {
+    "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang data ng form na ito?",
+    "editForm": "I-edit ang Form",
+    "isRequired": "ay kinakailangan",
+    "submit": "Ipasa"
+  },
+  "gallery": {
+    "aspectRatio": "Aspect Ratio",
+    "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang larawang ito mula sa gallery?",
+    "freeForm": "Libreng Form"
+  },
+  "iconPicker": {
+    "iconsAvailable": "magagamit ang mga icon",
+    "matchingResults": "pagtutugma ng mga resulta",
+    "search": "Mga icon ng paghahanap..."
+  },
+  "login": {
+    "createAccount": "Gumawa ng account",
+    "email": "Email",
+    "forgot": "Nakalimutan ang password",
+    "goLogin": "Pumunta sa Login",
+    "login": "Mag log in",
+    "password": "Password",
+    "register": "Magrehistro",
+    "registerThankYou": "Salamat sa pagpaparehistro! ",
+    "reset": "I-reset",
+    "resetInstructions": "Ilagay ang iyong email address upang humiling ng pag-reset ng password.",
+    "resetPassword": "I-reset ang Password",
+    "resetSent": "Naipadala ang email sa pag-reset ng password!",
+    "setPassword": "Itakda ang Password",
+    "signIn": "Mag-sign In",
+    "signInTitle": "Mangyaring Mag-sign In",
+    "verifyPassword": "I-verify ang Password",
+    "validate": {
+      "email": "Mangyaring magpasok ng wastong email address.",
+      "firstName": "Pakilagay ang iyong pangalan.",
+      "invalid": "Di-wastong pag-login. ",
+      "lastName": "Pakilagay ang iyong apelyido.",
+      "password": "Mangyaring magpasok ng password.",
+      "passwordLength": "Dapat na hindi bababa sa 8 character ang haba ng password.",
+      "passwordMatch": "Hindi tugma ang mga password.",
+      "selectingChurch": "Error sa pagpili ng simbahan. "
+    },
+    "welcomeBack": "Maligayang pagbabalik",
+    "welcomeName": "Maligayang pagbabalik, <b>{}</b>!  "
+  },
+  "markdownEditor": {
+    "content": "Nilalaman",
+    "markdownEditor": "Markdown Editor",
+    "markdownGuide": "Gabay sa Markdown"
+  },
+  "month": {
+    "april": "Abril",
+    "august": "Agosto",
+    "december": "Disyembre",
+    "february": "Pebrero",
+    "january": "Enero",
+    "july": "Hulyo",
+    "june": "Hunyo",
+    "march": "Marso",
+    "may": "May",
+    "november": "Nobyembre",
+    "october": "Oktubre",
+    "september": "Setyembre"
+  },
+  "notes": {
+    "comment": "komento",
+    "comments": "mga komento",
+    "notes": "Mga Tala",
+    "startConversation": "Magsimula ng pag-uusap",
+    "validate": {
+      "content": "Mangyaring maglagay ng tala."
+    },
+    "viewAll": "Tingnan lahat"
+  },
+  "person": {
+    "email": "Email",
+    "firstName": "Pangalan",
+    "lastName": "Huling pangalan",
+    "name": "Pangalan",
+    "person": "Tao",
+    "years": "taon"
+  },
+  "reporting": {
+    "detailedSummary": "Detalyadong Buod",
+    "downloadOptions": "Mga Opsyon sa Pag-download",
+    "noData": "Walang data na ipapakita.",
+    "runReport": "Patakbuhin ang Ulat",
+    "useFilter": "Gamitin ang filter upang patakbuhin ang ulat."
+  },
+  "selectChurch": {
+    "address1": "Linya ng Address 1",
+    "address2": "Linya ng Address 2",
+    "another": "Pumili ng ibang simbahan",
+    "city": "lungsod",
+    "confirmRegister": "Sigurado ka bang gusto mong magparehistro ng bagong simbahan?",
+    "country": "Bansa",
+    "name": "Pangalan ng Simbahan",
+    "noMatches": "Walang nakitang tugma.",
+    "register": "Magrehistro ng Bagong Simbahan",
+    "selectChurch": "Pumili ng Simbahan",
+    "state": "Estado / Lalawigan",
+    "zip": "Zip / Postal Code",
+    "validate": {
+      "address": "Hindi maaaring blangko ang address.",
+      "city": "Hindi maaaring blangko ang lungsod.",
+      "country": "Hindi maaaring blangko ang bansa.",
+      "name": "Hindi maaaring blangko ang pangalan ng simbahan.",
+      "state": "Hindi maaaring blangko ang Estado/Lalawigan.",
+      "zip": "Hindi maaaring blangko ang Zip/Postal code."
+    }
+  },
+  "stockPhotos": {
+    "photoBy": "Larawan ni:",
+    "providedBy": "Mga stock na larawan na ibinigay ni"
+  },
+  "support": {
+    "email": "Email",
+    "knowledge base": "Base ng Kaalaman",
+    "messenger": "Messenger",
+    "phone": "Telepono"
+  },
+  "wrapper": {
+    "chatWith": "Makipag-usap kay",
+    "deleteChurch": "Tanggalin ang simbahan sa listahan",
+    "logout": "Mag-logout",
+    "newPrivateMessage": "Bagong Pribadong Mensahe",
+    "privateMessage": "Pribadong Mensahe",
+    "profile": "Profile",
+    "searchForPerson": "Maghanap ng isang tao",
+    "support": "Suporta",
+    "sureRemoveChurch": "Sigurado ka bang gusto mong tanggalin ang {} mula sa listahan?",
+    "switchApp": "Lumipat ng App",
+    "switchChurch": "Lumipat ng Simbahan"
+  }
+}

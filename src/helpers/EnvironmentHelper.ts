@@ -1,10 +1,10 @@
-import { ApiHelper, CommonEnvironmentHelper } from "@churchapps/apphelper";
+import { ApiHelper, CommonEnvironmentHelper, Locale } from "@churchapps/apphelper";
 
 export class EnvironmentHelper {
   static Common = CommonEnvironmentHelper;
   public static LessonsApi = "";
 
-  static init = () => {
+  static init = async () => {
     let stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
 
     //stage="prod"
@@ -24,6 +24,12 @@ export class EnvironmentHelper {
       { keyName: "DoingApi", url: EnvironmentHelper.Common.DoingApi, jwt: "", permisssions: [] },
       { keyName: "LessonsApi", url: EnvironmentHelper.LessonsApi, jwt: "", permisssions: [] }
     ];
+
+    let baseUrl = "https://ironwood.staging.b1.church";
+    if (typeof window !== "undefined") {
+      baseUrl = window.location.origin;
+    }
+    await Locale.init([`https://ironwood.staging.b1.church/apphelper/locales/{{lng}}.json`])
   };
 
   static initDev = () => {
