@@ -29,7 +29,7 @@ export class EnvironmentHelper {
     if (typeof window !== "undefined") {
       baseUrl = window.location.origin;
     }
-    await Locale.init([`{baseUrl}/apphelper/locales/{{lng}}.json`])
+    await Locale.init([baseUrl + `/apphelper/locales/{{lng}}.json`])
   };
 
   static initDev = () => {
