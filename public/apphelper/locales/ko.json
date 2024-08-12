@@ -1,0 +1,271 @@
+{
+  "b1Share": {
+    "comment": "논평",
+    "commentPlaceholder": "게시물에 댓글을 포함하세요.",
+    "contentShared": "콘텐츠 공유",
+    "group": "그룹",
+    "sharingToGroup": "B1 그룹에 {} 공유",
+    "validate": {
+      "addComment": "의견을 추가해 주세요.",
+      "loginFirst": "먼저 로그인을 해주세요.",
+      "notMember": "귀하는 현재 B1 그룹의 회원이 아닙니다.",
+      "selectGroup": "그룹을 선택하세요."
+    }
+  },
+  "common": {
+    "add": "추가하다",
+    "cancel": "취소",
+    "close": "닫다",
+    "date": "날짜",
+    "delete": "삭제",
+    "edit": "편집하다",
+    "error": "오류",
+    "pleaseWait": "기다리세요...",
+    "save": "구하다",
+    "search": "찾다",
+    "submit": "제출하다",
+    "update": "업데이트"
+  },
+  "createPerson": {
+    "addNewPerson": "새 사람 추가",
+    "firstName": "이름",
+    "lastName": "성"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "계좌 번호",
+      "added": "은행 계좌가 추가되었습니다. ",
+      "company": "회사",
+      "firstDeposit": "첫 입금",
+      "holderName": "계좌 소유자 이름이 필요합니다.",
+      "individual": "개인",
+      "name": "계좌 소유자 이름",
+      "needVerified": "기부하기 전에 은행 계좌를 확인해야 합니다. ",
+      "routingNumber": "라우팅 번호",
+      "secondDeposit": "두 번째 입금",
+      "twoDeposits": "계좌에 입금된 2건의 입금액을 입력하여 은행계좌 확인을 완료하세요.",
+      "updated": "은행 계좌가 업데이트되었습니다.",
+      "verified": "은행 계좌가 확인되었습니다.",
+      "validate": {
+        "accountNumber": "라우팅 번호와 계좌 번호가 필요합니다.",
+        "holderName": "계좌 소유자 이름이 필요합니다."
+      }
+    },
+    "cardForm": {
+      "addNew": "새 카드 추가",
+      "added": "카드가 성공적으로 추가되었습니다.",
+      "expirationMonth": "만기 월:",
+      "expirationYear": "만료 연도:",
+      "updated": "카드가 성공적으로 업데이트되었습니다."
+    },
+    "donationForm": {
+      "annually": "매년",
+      "biWeekly": "격주 간행물",
+      "cancelled": "정기 기부가 취소되었습니다.",
+      "confirmDelete": "이 반복 기부를 삭제하시겠습니까?",
+      "cover": "귀하가 제 기부금을 100% 유지할 수 있도록 거래 수수료를 충당하기 위해 {}를 아낌없이 추가하겠습니다.",
+      "donate": "기부",
+      "editRecurring": "반복 기부 편집",
+      "fees": "{}의 거래 수수료가 적용됩니다.",
+      "frequency": "빈도",
+      "fund": "축적",
+      "funds": "자금",
+      "make": "기부 해주세요",
+      "makeRecurring": "정기 기부하기",
+      "method": "방법",
+      "monthly": "월간 간행물",
+      "notes": "노트",
+      "preview": "미리보기 기부",
+      "quarterly": "계간지",
+      "recurringUpdated": "정기 기부가 업데이트되었습니다.",
+      "startDate": "시작일",
+      "thankYou": "기부해 주셔서 감사합니다!",
+      "tooLow": "기부 금액은 $0.50보다 커야 합니다.",
+      "total": "총 기부 금액",
+      "validate": {
+        "amount": "금액은 $0일 수 없습니다.",
+        "email": "당신의 이메일 주소를 입력하십시오.",
+        "firstName": "이름을 입력하세요.",
+        "lastName": "당신의 성을 입력하세요.",
+        "validEmail": "유효한 이메일 주소를 입력하세요."
+      },
+      "weekly": "주간"
+    },
+    "fundDonations": {
+      "addMore": "더 추가",
+      "amount": "양",
+      "fund": "축적"
+    },
+    "paymentMethods": {
+      "addBank": "은행 계좌 추가",
+      "addCard": "카드 추가",
+      "confirmDelete": "이 결제 수단을 삭제하시겠습니까?",
+      "deleted": "결제 수단이 삭제되었습니다.",
+      "noMethods": "결제 수단이 없습니다.  ",
+      "verify": "계정 확인"
+    },
+    "page": {
+      "amount": "양",
+      "batch": "일괄",
+      "date": "날짜",
+      "fund": "축적",
+      "method": "방법",
+      "willAppear": "기부금을 입력하면 기부금이 표시됩니다."
+    },
+    "preview": {
+      "date": "기부일자",
+      "donate": "기부",
+      "every": "반복되는 모든 것",
+      "fee": "거래 수수료",
+      "funds": "자금",
+      "method": "기부방법",
+      "notes": "노트",
+      "startingOn": "시작일",
+      "total": "총",
+      "type": "기부 유형"
+    },
+    "recurring": {
+      "amount": "양",
+      "every": "모든",
+      "interval": "간격",
+      "notFound": "결제 수단을 찾을 수 없습니다.",
+      "paymentMethod": "결제 방법",
+      "startDate": "시작일"
+    }
+  },
+  "formSubmissionEdit": {
+    "confirmDelete": "이 양식 데이터를 삭제하시겠습니까?",
+    "editForm": "양식 편집",
+    "isRequired": "필수",
+    "submit": "제출하다"
+  },
+  "gallery": {
+    "aspectRatio": "종횡비",
+    "confirmDelete": "갤러리에서 이 이미지를 삭제하시겠습니까?",
+    "freeForm": "자유 형식"
+  },
+  "iconPicker": {
+    "iconsAvailable": "사용 가능한 아이콘",
+    "matchingResults": "일치하는 결과",
+    "search": "아이콘 검색..."
+  },
+  "login": {
+    "createAccount": "계정 만들기",
+    "email": "이메일",
+    "forgot": "비밀번호를 잊으 셨나요",
+    "goLogin": "로그인으로 이동",
+    "login": "로그인",
+    "password": "비밀번호",
+    "register": "등록하다",
+    "registerThankYou": "등록해주셔서 감사합니다! ",
+    "reset": "초기화",
+    "resetInstructions": "비밀번호 재설정을 요청하려면 이메일 주소를 입력하세요.",
+    "resetPassword": "암호를 재설정",
+    "resetSent": "비밀번호 재설정 메일이 발송되었습니다!",
+    "setPassword": "암호를 설정하세요",
+    "signIn": "로그인",
+    "signInTitle": "로그인 해주세요",
+    "verifyPassword": "비밀번호 확인",
+    "validate": {
+      "email": "유효한 이메일 주소를 입력하세요.",
+      "firstName": "이름을 입력하세요.",
+      "invalid": "로그인 오류. ",
+      "lastName": "당신의 성을 입력하세요.",
+      "password": "비밀번호를 입력해주세요.",
+      "passwordLength": "비밀번호는 8자 이상이어야 합니다.",
+      "passwordMatch": "비밀번호가 일치하지 않습니다.",
+      "selectingChurch": "교회선택에 오류가 있습니다. "
+    },
+    "welcomeBack": "돌아온 것을 환영합니다",
+    "welcomeName": "돌아온 것을 환영합니다. <b>{}</b>!  "
+  },
+  "markdownEditor": {
+    "content": "콘텐츠",
+    "markdownEditor": "마크다운 편집기",
+    "markdownGuide": "마크다운 가이드"
+  },
+  "month": {
+    "april": "4월",
+    "august": "팔월",
+    "december": "12월",
+    "february": "2월",
+    "january": "1월",
+    "july": "칠월",
+    "june": "6월",
+    "march": "3월",
+    "may": "5월",
+    "november": "십일월",
+    "october": "십월",
+    "september": "구월"
+  },
+  "notes": {
+    "comment": "논평",
+    "comments": "코멘트",
+    "notes": "노트",
+    "startConversation": "대화 시작",
+    "validate": {
+      "content": "메모를 입력하세요."
+    },
+    "viewAll": "모두보기"
+  },
+  "person": {
+    "email": "이메일",
+    "firstName": "이름",
+    "lastName": "성",
+    "name": "이름",
+    "person": "사람",
+    "years": "연령"
+  },
+  "reporting": {
+    "detailedSummary": "자세한 요약",
+    "downloadOptions": "다운로드 옵션",
+    "noData": "표시할 데이터가 없습니다.",
+    "runReport": "보고서 실행",
+    "useFilter": "필터를 사용하여 보고서를 실행하세요."
+  },
+  "selectChurch": {
+    "address1": "주소 라인 1",
+    "address2": "주소 2",
+    "another": "다른 교회를 선택하세요",
+    "city": "도시",
+    "confirmRegister": "정말로 새 교회를 등록하시겠습니까?",
+    "country": "국가",
+    "name": "교회 이름",
+    "noMatches": "검색 결과가 없습니다.",
+    "register": "새 교회 등록",
+    "selectChurch": "교회를 선택하세요",
+    "state": "주/도",
+    "zip": "우편번호",
+    "validate": {
+      "address": "주소는 비워둘 수 없습니다.",
+      "city": "도시는 비워둘 수 없습니다.",
+      "country": "국가는 비워둘 수 없습니다.",
+      "name": "교회 이름은 비워둘 수 없습니다.",
+      "state": "시/도는 비워둘 수 없습니다.",
+      "zip": "우편번호는 비워둘 수 없습니다."
+    }
+  },
+  "stockPhotos": {
+    "photoBy": "의 사진:",
+    "providedBy": "스톡 사진 제공:"
+  },
+  "support": {
+    "email": "이메일",
+    "knowledge base": "기술 자료",
+    "messenger": "전령",
+    "phone": "핸드폰"
+  },
+  "wrapper": {
+    "chatWith": "채팅",
+    "deleteChurch": "목록에서 교회 삭제",
+    "logout": "로그 아웃",
+    "newPrivateMessage": "새 비공개 메시지",
+    "privateMessage": "사신",
+    "profile": "프로필",
+    "searchForPerson": "사람 검색",
+    "support": "지원하다",
+    "sureRemoveChurch": "목록에서 {}을(를) 삭제하시겠습니까?",
+    "switchApp": "앱 전환",
+    "switchChurch": "스위치교회"
+  }
+}

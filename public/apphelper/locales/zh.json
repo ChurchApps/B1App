@@ -1,0 +1,271 @@
+{
+  "b1Share": {
+    "comment": "评论",
+    "commentPlaceholder": "在您的帖子中添加评论。",
+    "contentShared": "共享内容",
+    "group": "团体",
+    "sharingToGroup": "与 B1 组共享 {}",
+    "validate": {
+      "addComment": "请添加评论。",
+      "loginFirst": "请先登录。",
+      "notMember": "您当前不是 B1 上任何群组的成员。",
+      "selectGroup": "请选择一个组。"
+    }
+  },
+  "common": {
+    "add": "添加",
+    "cancel": "取消",
+    "close": "关闭",
+    "date": "日期",
+    "delete": "删除",
+    "edit": "编辑",
+    "error": "错误",
+    "pleaseWait": "请稍等...",
+    "save": "节省",
+    "search": "搜索",
+    "submit": "提交",
+    "update": "更新"
+  },
+  "createPerson": {
+    "addNewPerson": "添加新人",
+    "firstName": "名",
+    "lastName": "姓"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "帐号",
+      "added": "银行账户已添加。",
+      "company": "公司",
+      "firstDeposit": "首次存款",
+      "holderName": "帐户持有人姓名为必填项。",
+      "individual": "个人",
+      "name": "账户持有人姓名",
+      "needVerified": "在进行任何捐赠之前，需要验证银行账户。",
+      "routingNumber": "路由号码",
+      "secondDeposit": "第二次存款",
+      "twoDeposits": "输入您帐户中收到的两笔存款以完成验证您的银行帐户。",
+      "updated": "银行账户已更新。",
+      "verified": "银行账户已验证。",
+      "validate": {
+        "accountNumber": "需要路由和帐号。",
+        "holderName": "帐户持有人姓名为必填项。"
+      }
+    },
+    "cardForm": {
+      "addNew": "添加新卡",
+      "added": "卡添加成功。",
+      "expirationMonth": "到期月份：",
+      "expirationYear": "到期年份：",
+      "updated": "卡更新成功。"
+    },
+    "donationForm": {
+      "annually": "每年",
+      "biWeekly": "双周刊",
+      "cancelled": "经常性捐款已取消。",
+      "confirmDelete": "您确定要删除此定期捐赠吗？",
+      "cover": "我将慷慨地添加 {} 来支付交易费用，以便您可以保留我的 100% 捐款。",
+      "donate": "捐",
+      "editRecurring": "编辑经常性捐赠",
+      "fees": "应用 {} 的交易费用。",
+      "frequency": "频率",
+      "fund": "基金",
+      "funds": "资金",
+      "make": "做捐献",
+      "makeRecurring": "定期捐款",
+      "method": "方法",
+      "monthly": "每月",
+      "notes": "笔记",
+      "preview": "预览捐赠",
+      "quarterly": "季刊",
+      "recurringUpdated": "经常性捐款已更新。",
+      "startDate": "开始日期",
+      "thankYou": "感谢您的捐赠！",
+      "tooLow": "捐款金额必须大于 0.50 美元",
+      "total": "捐款总额",
+      "validate": {
+        "amount": "金额不能为 0 美元。",
+        "email": "请输入您的电子邮件地址。",
+        "firstName": "请输入您的名字。",
+        "lastName": "请输入您的姓氏。",
+        "validEmail": "请输入有效的电子邮件地址。"
+      },
+      "weekly": "每周"
+    },
+    "fundDonations": {
+      "addMore": "添加更多",
+      "amount": "数量",
+      "fund": "基金"
+    },
+    "paymentMethods": {
+      "addBank": "添加银行账户",
+      "addCard": "添加卡",
+      "confirmDelete": "您确定要删除此付款方式吗？",
+      "deleted": "付款方式已删除。",
+      "noMethods": "没有付款方式。  ",
+      "verify": "验证账户"
+    },
+    "page": {
+      "amount": "数量",
+      "batch": "批",
+      "date": "日期",
+      "fund": "基金",
+      "method": "方法",
+      "willAppear": "一旦输入捐款，捐款就会出现。"
+    },
+    "preview": {
+      "date": "捐赠日期",
+      "donate": "捐",
+      "every": "一切重复",
+      "fee": "手续费",
+      "funds": "资金",
+      "method": "捐赠方式",
+      "notes": "笔记",
+      "startingOn": "开始于",
+      "total": "全部的",
+      "type": "捐赠类型"
+    },
+    "recurring": {
+      "amount": "数量",
+      "every": "每一个",
+      "interval": "间隔",
+      "notFound": "未找到付款方式。",
+      "paymentMethod": "付款方式",
+      "startDate": "开始日期"
+    }
+  },
+  "formSubmissionEdit": {
+    "confirmDelete": "您确定要删除此表单数据吗？",
+    "editForm": "编辑表格",
+    "isRequired": "是必须的",
+    "submit": "提交"
+  },
+  "gallery": {
+    "aspectRatio": "纵横比",
+    "confirmDelete": "您确定要从图库中删除此图片吗？",
+    "freeForm": "自由形式"
+  },
+  "iconPicker": {
+    "iconsAvailable": "可用图标",
+    "matchingResults": "匹配结果",
+    "search": "搜索图标..."
+  },
+  "login": {
+    "createAccount": "创建一个帐户",
+    "email": "电子邮件",
+    "forgot": "忘记密码",
+    "goLogin": "前往登录",
+    "login": "登录",
+    "password": "密码",
+    "register": "登记",
+    "registerThankYou": "感谢您注册！",
+    "reset": "重置",
+    "resetInstructions": "输入您的电子邮件地址以请求重置密码。",
+    "resetPassword": "重设密码",
+    "resetSent": "密码重置电子邮件已发送！",
+    "setPassword": "设置密码",
+    "signIn": "登入",
+    "signInTitle": "请登录",
+    "verifyPassword": "验证密码",
+    "validate": {
+      "email": "请输入有效的电子邮件地址。",
+      "firstName": "请输入您的名字。",
+      "invalid": "登录无效。",
+      "lastName": "请输入您的姓氏。",
+      "password": "请输入密码。",
+      "passwordLength": "密码长度必须至少为 8 个字符。",
+      "passwordMatch": "密码不匹配。",
+      "selectingChurch": "选择教堂时出错。"
+    },
+    "welcomeBack": "欢迎回来",
+    "welcomeName": "欢迎回来， <b>{}</b>！  "
+  },
+  "markdownEditor": {
+    "content": "内容",
+    "markdownEditor": "降价编辑器",
+    "markdownGuide": "降价指南"
+  },
+  "month": {
+    "april": "四月",
+    "august": "八月",
+    "december": "十二月",
+    "february": "二月",
+    "january": "一月",
+    "july": "七月",
+    "june": "六月",
+    "march": "行进",
+    "may": "可能",
+    "november": "十一月",
+    "october": "十月",
+    "september": "九月"
+  },
+  "notes": {
+    "comment": "评论",
+    "comments": "评论",
+    "notes": "笔记",
+    "startConversation": "开始对话",
+    "validate": {
+      "content": "请输入注释。"
+    },
+    "viewAll": "查看全部"
+  },
+  "person": {
+    "email": "电子邮件",
+    "firstName": "名",
+    "lastName": "姓",
+    "name": "姓名",
+    "person": "人",
+    "years": "年"
+  },
+  "reporting": {
+    "detailedSummary": "详细总结",
+    "downloadOptions": "下载选项",
+    "noData": "没有数据可显示。",
+    "runReport": "运行报告",
+    "useFilter": "使用过滤器运行报告。"
+  },
+  "selectChurch": {
+    "address1": "地址第一行",
+    "address2": "地址行 2",
+    "another": "选择另一个教堂",
+    "city": "城市",
+    "confirmRegister": "您确定要注册一个新教会吗？",
+    "country": "国家",
+    "name": "教会名称",
+    "noMatches": "未找到匹配项。",
+    "register": "注册新教会",
+    "selectChurch": "选择一个教堂",
+    "state": "州/省",
+    "zip": "邮编/邮政编码",
+    "validate": {
+      "address": "地址不能为空。",
+      "city": "城市不能为空。",
+      "country": "国家不能为空。",
+      "name": "教会名称不能为空。",
+      "state": "州/省不能为空。",
+      "zip": "邮政编码不能为空。"
+    }
+  },
+  "stockPhotos": {
+    "photoBy": "拍摄者：",
+    "providedBy": "库存照片由提供"
+  },
+  "support": {
+    "email": "电子邮件",
+    "knowledge base": "知识库",
+    "messenger": "信使",
+    "phone": "电话"
+  },
+  "wrapper": {
+    "chatWith": "和...聊天",
+    "deleteChurch": "从列表中删除教堂",
+    "logout": "登出",
+    "newPrivateMessage": "新私信",
+    "privateMessage": "私人信息",
+    "profile": "轮廓",
+    "searchForPerson": "寻找一个人",
+    "support": "支持",
+    "sureRemoveChurch": "您确定要从列表中删除 {} 吗？",
+    "switchApp": "切换应用程序",
+    "switchChurch": "开关教堂"
+  }
+}

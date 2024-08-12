@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       churchId: UserHelper.currentUserChurch?.church?.id || "",
       userId: UserHelper.user?.id || "",
       originUrl: location?.toString(),
-      application: "CHUMS"
+      application: "B1"
     }
     return result;
   }
