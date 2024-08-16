@@ -20,7 +20,7 @@ export const UpcomingDates: React.FC<Props> = (props) => {
       const times:TimeInterface[] = ArrayHelper.getAll(props.times, "planId", plan?.id);
       times.forEach(t => {
         if (new Date(t.endTime) > new Date()) {
-          if (t.teams.indexOf(position.categoryName) > -1) {
+          if (t.teams?.indexOf(position.categoryName) > -1) {
             data.push({ timeId: t.id, timeName:t.displayName, startTime:new Date(t.startTime), status:"Unconfirmed" });
           }
         }
