@@ -1,6 +1,5 @@
 import React from "react";
-import { AssignmentInterface, DisplayBox, PersonInterface, PositionInterface } from "@churchapps/apphelper";
-import { EnvironmentHelper } from "@/helpers";
+import { AssignmentInterface, DisplayBox, PersonHelper, PersonInterface, PositionInterface } from "@churchapps/apphelper";
 import { TableRow, TableCell, Table, TableBody } from "@mui/material";
 import Link from "next/link";
 
@@ -23,7 +22,7 @@ export const Team: React.FC<Props> = (props) => {
         rows.push(
           <TableRow key={assignment.id}>
             <TableCell style={{width:70}}>
-              <img src={EnvironmentHelper.Common.ContentRoot + person?.photo} alt="avatar" style={{maxWidth: "50px"}} />
+              <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" style={{maxWidth: "50px"}} />
             </TableCell>
             <TableCell>
               <Link href={"/member/directory/" + person?.id}>{person?.name?.display}</Link>
