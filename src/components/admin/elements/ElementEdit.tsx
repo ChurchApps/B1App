@@ -424,7 +424,7 @@ export function ElementEdit(props: Props) {
 
   if (!element) return <></>
   else return (
-    <Dialog open={true} onClose={handleCancel} fullWidth maxWidth="md">
+    <Dialog open={true} onClose={handleCancel} fullWidth maxWidth="md" id="elementEditDialog">
       <InputBox id="dialogForm" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.element.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         <div id="dialogFormContent">
           {(element?.elementType === "block") ? getBlockFields() : getStandardFields()}
