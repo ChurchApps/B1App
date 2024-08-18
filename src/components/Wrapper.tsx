@@ -74,10 +74,12 @@ export const Wrapper: React.FC<Props> = props => {
   const getSpecialTabs = () => {
     tabs.push(<Divider />)
 
+    const memberStatus = context.userChurch?.person?.membershipStatus?.toLowerCase();
+
     let showWebsite = props.config.hasWebsite,
       showDonations = props.config.allowDonations,
       showMyGroups = false, showPlans = false,
-      showDirectory = context.userChurch?.person?.membershipStatus?.toLowerCase() === "member",
+      showDirectory = memberStatus === "member" || memberStatus==="staff",
       showLessons = classRoooms.length>0,
       showCheckin = campuses.length>0,
       showChums = UserHelper.checkAccess(Permissions.membershipApi.people.edit),
