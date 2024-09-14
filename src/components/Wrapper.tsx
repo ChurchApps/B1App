@@ -74,10 +74,12 @@ export const Wrapper: React.FC<Props> = props => {
   const getSpecialTabs = () => {
     tabs.push(<Divider />)
 
+    const memberStatus = context.userChurch?.person?.membershipStatus?.toLowerCase();
+
     let showWebsite = props.config.hasWebsite,
       showDonations = props.config.allowDonations,
       showMyGroups = false, showPlans = false,
-      showDirectory = context.userChurch?.person?.membershipStatus?.toLowerCase() === "member",
+      showDirectory = memberStatus === "member" || memberStatus==="staff",
       showLessons = classRoooms.length>0,
       showCheckin = campuses.length>0,
       showChums = UserHelper.checkAccess(Permissions.membershipApi.people.edit),
@@ -93,7 +95,7 @@ export const Wrapper: React.FC<Props> = props => {
 
     if (showWebsite) tabs.push(<NavItem key="/" url="/" label="Website" icon="home" router={router} />);
     if (showMyGroups) tabs.push(<NavItem key="/member" url="/member" label="My Groups" icon="group" router={router} selected={selectedTab === "groups"} />);
-    if (showCheckin) tabs.push(<NavItem key="/member/checkin" url="/member/checkin" label="Checkin" icon="check_box" router={router} selected={selectedTab === "checkin"} />)
+    if (showCheckin) tabs.push(<NavItem key="/member/checkin" url="/member/checkin" label="Check In" icon="check_box" router={router} selected={selectedTab === "checkin"} />)
     if (showDonations) tabs.push(<NavItem key="/member/donate" url="/member/donate" label="Donate" icon="volunteer_activism" router={router} selected={selectedTab === "donation"} />)
     if (showDirectory) tabs.push(<NavItem key="/member/directory" url="/member/directory" label="Member Directory" icon="groups" router={router} selected={selectedTab === "directory"} />);
     if (showPlans) tabs.push(<NavItem key="/member/plans" url="/member/plans" label="Plans" icon="event" router={router} selected={selectedTab === "plans"} />);
