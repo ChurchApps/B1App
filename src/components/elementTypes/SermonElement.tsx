@@ -30,7 +30,7 @@ export const SermonElement = ({ churchId, churchSettings }: Props) => {
     });
   }, []);
 
-  const getFilteredData = (id:string) => {
+  const getFilteredData = (id: string) => {
     const filteredData = sermons.filter((item) => item.playlistId === id);
     setActiveSermons(filteredData);
   };
@@ -152,7 +152,7 @@ export const SermonElement = ({ churchId, churchSettings }: Props) => {
         {isActive === "video" && activeVideo && (
           <div className="videoWrapper">
             <iframe
-              src={activeVideo.videoUrl}
+              src={activeVideo.videoUrl.replace("controls=0", "controls=1")}
               allowFullScreen
               style={{ border: 0 }}
             />
