@@ -104,7 +104,7 @@ export const Element: React.FC<Props> = props => {
       result = <RawHTMLElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
     case "form":
-      result = <FormElement key={props.element.id} element={props.element as ElementInterface} />
+      result = <FormElement church={props.church} key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "faq":
       result = <FaqElement key={props.element.id} element={props.element as ElementInterface} textColor={props.textColor} />
