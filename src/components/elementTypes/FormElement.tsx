@@ -1,40 +1,29 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { Button } from "@mui/material";
-import { ElementInterface, ConfigHelper, PersonHelper } from "@/helpers";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { Loading, FormSubmissionEdit, ApiHelper } from "@churchapps/apphelper";
+import { ElementInterface, PersonHelper } from "@/helpers";
+import { Loading, FormSubmissionEdit, ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 
 interface Props {
   element: ElementInterface;
+  church: ChurchInterface
 }
 
 export const FormElement = (props: Props) => {
-  const [config, setConfig] = useState<ConfigurationInterface>(null);
   const [addFormId, setAddFormId] = useState<string>("");
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
-  const router = useRouter();
   const formId = props.element.answers.formId;
 
-  useEffect(() => {
-    const getConfig = async () => {
-      const response = await ConfigHelper.load(router.query.sdSlug.toString());
-      response && setConfig(response);
-      return response;
-    };
-    getConfig();
-  }, []);
 
   useEffect(() => {
-    if (formId && config) {
+    if (formId && props.church) {
       loadData();
     }
-  }, [formId, config]);
+  }, [formId, props.church]);
 
   const loadData = () => {
     ApiHelper.get(
-      "/forms/standalone/" + formId + "?churchId=" + config.church.id,
+      "/forms/standalone/" + formId + "?churchId=" + props.church.id,
       "MembershipApi"
     ).then((data) => {
       if (data.restricted) setAddFormId(formId);
@@ -44,7 +33,7 @@ export const FormElement = (props: Props) => {
 
   const handleUpdate = () => setIsFormSubmitted(true);
 
-  if (!(config && formId && (addFormId || unRestrictedFormId))) {
+  if (!(props.church && formId && (addFormId || unRestrictedFormId))) {
     return <Loading />;
   }
 
@@ -66,7 +55,7 @@ export const FormElement = (props: Props) => {
   return (
     <>
       <FormSubmissionEdit
-        churchId={config.church.id}
+        churchId={props.church.id}
         addFormId={addFormId}
         unRestrictedFormId={unRestrictedFormId}
         contentType="form"
