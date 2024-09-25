@@ -31,8 +31,8 @@ export default function Preview(props: Props) {
     setShowSettings(false);
     if (!page) router.push("/admin/site");
 
-    if (link) router.push(`/admin/site/pages/preview/${page.id}?linkId=${link.id}`);
-    else router.push(`/admin/site/pages/preview/${page.id}`);
+    if (link) { router.push(`/admin/site/pages/preview/${page.id}?linkId=${link.id}`); loadData(); router.refresh(); }
+    else { router.push(`/admin/site/pages/preview/${page.id}`); loadData(); router.refresh(); }
     //else router.refresh();
   }
 
