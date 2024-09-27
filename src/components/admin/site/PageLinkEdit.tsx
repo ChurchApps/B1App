@@ -77,7 +77,7 @@ export function PageLinkEdit(props: Props) {
     if (validate()) {
       let pageData = page;
       let linkData = link;
-      
+
       [pageData] = await ApiHelper.post("/pages", [page], "ContentApi");
 
 
