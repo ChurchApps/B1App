@@ -8,7 +8,7 @@ export class StyleHelper {
       const val = styles[key];
       const noQuote = val.endsWith("px") || val.endsWith("em") || val.endsWith("pt") || val.startsWith("#") || val.startsWith("--");
       if (noQuote) result.push(`${key}: ${styles[key]};`);
-      else result.push(`${key}: '${styles[key]}';`);
+      else result.push(`${key}: ${styles[key]};`);
     });
     if (result.length > 0) return `#${id} { ${result.join(" ")} }`;
   }
