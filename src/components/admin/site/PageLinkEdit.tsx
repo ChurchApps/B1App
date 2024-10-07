@@ -73,13 +73,21 @@ export function PageLinkEdit(props: Props) {
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (validate()) {
-      ApiHelper.post("/pages", [page], "ContentApi").then((data) => {
-        setPage(data);
-        createTemplate(pageTemplate, data[0].id);
-        props.updatedCallback(data, link);
-      });
+      let pageData = page;
+      let linkData = link;
+
+      [pageData] = await ApiHelper.post("/pages", [page], "ContentApi");
+
+
+      if (link) {
+        [linkData] = await ApiHelper.post("/links", [link], "ContentApi");
+      }
+
+      setPage(pageData);
+      await createTemplate(pageTemplate, pageData.id);
+      props.updatedCallback(pageData, linkData);
     }
   };
 

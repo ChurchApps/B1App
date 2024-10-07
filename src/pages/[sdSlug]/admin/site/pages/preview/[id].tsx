@@ -28,8 +28,12 @@ export default function Preview(props: Props) {
   }
 
   const handlePageUpdated = (page: PageInterface, link:LinkInterface) => {
+    loadData();
     setShowSettings(false);
     if (!page) router.push("/admin/site");
+
+    if (link) router.push(`/admin/site/pages/preview/${page.id}?linkId=${link.id}`);
+    else router.push(`/admin/site/pages/preview/${page.id}`);
     //else router.refresh();
   }
 

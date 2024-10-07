@@ -18,7 +18,6 @@ export const ImageElement = ({ element }: Props) => {
       <img
         src={element.answers?.photo || "about:blank"}
         alt={element.answers?.photoAlt || ""}
-        style={{ borderRadius: (element.answers?.noResize === "true") ? 0 : 3 }}
         className={getClass()}
         id={"el-" + element.id}
       />
