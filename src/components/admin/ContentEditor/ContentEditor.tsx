@@ -109,7 +109,7 @@ export default function ContentEditor(props: Props) {
     const sections = (zone==="block") ? container?.sections : ArrayHelper.getAll(container?.sections, "zone", zone);
     sections?.forEach(section => {
       if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
-      else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
+      else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} church={props.church} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });
 
