@@ -1,6 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ClickAwayListener, ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -8,6 +9,7 @@ import { ApiHelper, AppearanceHelper, ArrayHelper, ChurchInterface, LinkInterfac
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { GlobalStyleInterface, PersonHelper, SectionInterface } from "@/helpers";
+import { redirect } from "next/navigation";
 
 type Props = {
   church: ChurchInterface;
@@ -37,7 +39,6 @@ const getNestedChildren = (arr: LinkInterface[], parent: string) => {
 }
 
 export function Header(props: Props) {
-  const router = useRouter();
   const [transparent, setTransparent] = useState(props.overlayContent);
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
@@ -63,12 +64,12 @@ export function Header(props: Props) {
   // const pathName = usePathname();
   // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
 
-  const memberPortal = <MenuItem onClick={() => { router.push("/member") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
+  const memberPortal = <MenuItem onClick={() => { redirect("/member") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
   const adminPortal = UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
-    <MenuItem onClick={() => { router.push("/admin") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
+    <MenuItem onClick={() => { redirect("/admin") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
-  const editProfile = <MenuItem onClick={() => { router.push(`/member/directory/${PersonHelper?.person?.id}`) }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
+  const editProfile = <MenuItem onClick={() => { redirect(`/member/directory/${PersonHelper?.person?.id}`) }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
 
   const userAction = ApiHelper.isAuthenticated
     ? (
@@ -86,7 +87,7 @@ export function Header(props: Props) {
           {memberPortal}
           {adminPortal}
           {editProfile}
-          <MenuItem onClick={() => { router.push("/logout") }} sx={{ color: "#d32f2f" }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> Logout</MenuItem>
+          <MenuItem onClick={() => { redirect("/logout") }} sx={{ color: "#d32f2f" }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> Logout</MenuItem>
         </Menu>
       </Box>
     )
@@ -106,21 +107,21 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { router.push("/member") }}>
+      <ListItemButton onClick={() => { redirect("/member") }}>
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
     </ListItem>
     {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (<>
       <ListItem disablePadding>
-        <ListItemButton onClick={() => { router.push("/admin") }}>
+        <ListItemButton onClick={() => { redirect("/admin") }}>
           <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
           <ListItemText primary="Admin Portal" />
         </ListItemButton>
       </ListItem>
     </>)}
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { router.push(`/member/directory/${PersonHelper?.person?.id}`) }}>
+      <ListItemButton onClick={() => { redirect(`/member/directory/${PersonHelper?.person?.id}`) }}>
         <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>
@@ -164,7 +165,7 @@ export function Header(props: Props) {
     {structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={() => toggleDrawer()} />)}
     {ApiHelper.isAuthenticated && (
       <ListItem disablePadding sx={{ color: "#d32f2f" }}>
-        <ListItemButton onClick={() => { router.push("/logout") }}>
+        <ListItemButton onClick={() => { redirect("/logout") }}>
           <ListItemIcon><Icon sx={{ color: "#d32f2f" }}>logout</Icon></ListItemIcon>
           <ListItemText primary="Logout" />
         </ListItemButton>

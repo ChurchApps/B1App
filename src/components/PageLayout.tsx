@@ -3,8 +3,8 @@ import { HeaderFooter } from "./layouts/HeaderFooter";
 import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";
 import { StyleHelper } from "@/helpers/StyleHelper";
-import { Helmet } from "react-helmet";
 import { GlobalStyleInterface } from "@/helpers";
+import Head from "next/head";
 
 type Props = {
   pageData: any;
@@ -42,7 +42,7 @@ export function PageLayout(props: Props) {
   const css = StyleHelper.getCss(props.pageData.sections);
   console.log("CSS", css);
   return <>
-    <Helmet><style>{css}</style></Helmet>
+    <Head><style>{css}</style></Head>
     {result}
   </>;
 
