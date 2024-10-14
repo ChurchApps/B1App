@@ -1,5 +1,5 @@
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreview } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 interface Props {
@@ -14,7 +14,7 @@ export const TableElement = ({ element }: Props) => {
   const appendRow = (result:JSX.Element[], rowArray:string[], key:string) => {
     let row: JSX.Element[] = [];
     for (let j = 0; j < rowArray.length; j++) {
-      if (markdown) row.push(<TableCell key={j}><MarkdownPreview value={rowArray[j]} /></TableCell>);
+      if (markdown) row.push(<TableCell key={j}><MarkdownPreviewLight value={rowArray[j]} /></TableCell>);
       else row.push(<TableCell key={j}>{rowArray[j]}</TableCell>);
     }
     result.push(<TableRow key={key}>{row}</TableRow>);

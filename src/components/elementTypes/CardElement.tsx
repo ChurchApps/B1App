@@ -1,5 +1,5 @@
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreview } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper";
 import { Card, CardContent } from "@mui/material";
 
 
@@ -20,7 +20,7 @@ export const CardElement: React.FC<Props> = (props) => {
     if (props.element.answers?.url) result.push(<a href={props.element.answers?.url}>{title}</a>);
     else result.push(title);
   }
-  if (props.element.answers?.text) result.push(<MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />);
+  if (props.element.answers?.text) result.push(<MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />);
 
   return <Card id={"el-" + props.element.id}>
     {photoContent}

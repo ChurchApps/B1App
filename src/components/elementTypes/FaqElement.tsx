@@ -5,7 +5,7 @@ import MuiAccordion, { AccordionProps } from "@mui/material/Accordion";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreview } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper";
 
 interface Props {
   element: ElementInterface;
@@ -53,7 +53,7 @@ export const FaqElement = ({ element, textColor }: Props) => {
         </AccordionSummary>}
         {simple && <SimpleAccordionSummary><a style={{display:"block", textAlign:"center", width:"100%"}}>{element?.answers?.title}</a></SimpleAccordionSummary>}
         <AccordionDetails color={textColor === "dark" ? "#444" : "#eee"}>
-          <MarkdownPreview value={element?.answers?.description} />
+          <MarkdownPreviewLight value={element?.answers?.description} />
         </AccordionDetails>
       </Accordion>
     </>);

@@ -3,9 +3,9 @@ import UserContext from "../../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "@churchapps/apphelper";
 import { useRouter } from "next/router";
-import { Themes } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { Themes } from "@/helpers/Themes";
 
 interface Props {
   config: ConfigurationInterface;
