@@ -1,5 +1,5 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { DateHelper, EventInterface, Conversations, MarkdownPreview } from "@churchapps/apphelper";
+import { DateHelper, EventInterface, Conversations, MarkdownPreviewLight } from "@churchapps/apphelper";
 import { AppBar, Button, Dialog, DialogContent, Icon, IconButton, Toolbar, Typography } from "@mui/material";
 import { useContext } from "react";
 import UserContext from "@/context/UserContext";
@@ -53,7 +53,7 @@ export function DisplayEventModal(props: Props) {
         <DialogContent>
           <h1>{props.event.title}</h1>
           <i>{getDisplayTime()}</i>
-          <MarkdownPreview value={props.event.description || ""} />
+          <MarkdownPreviewLight value={props.event.description || ""} />
           <h2>Discussion</h2>
           <Conversations context={context} contentType="event" contentId={props.event.id} groupId={props.event.groupId} />
 

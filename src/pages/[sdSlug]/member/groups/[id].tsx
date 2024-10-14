@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ConfigHelper, WrapperPageProps } from "@/helpers";
 import { Wrapper } from "@/components";
-import { MarkdownPreview, Conversations, Loading, DisplayBox, GroupInterface, ApiHelper, UserHelper, PersonHelper } from "@churchapps/apphelper"
+import { MarkdownPreviewLight, Conversations, Loading, DisplayBox, GroupInterface, ApiHelper, UserHelper, PersonHelper } from "@churchapps/apphelper"
 import UserContext from "@/context/UserContext";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Box, Grid, Tab, Table, TableBody, TableCell, TableRow, Tabs } from "@mui/material";
@@ -114,7 +114,7 @@ export default function GroupPage(props: WrapperPageProps) {
                   <img id="tabImage" src={group.photoUrl} alt={group.name} style={{ maxHeight: 300 }} />
                 )}
                 <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
-                  <MarkdownPreview value={group.about} />
+                  <MarkdownPreviewLight value={group.about} />
                 </div>
 
                 <TabContext value={tabIndex}>

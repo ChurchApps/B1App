@@ -1,4 +1,4 @@
-import { MarkdownEditor, MarkdownPreview } from "@churchapps/apphelper";
+import { MarkdownEditor, MarkdownPreviewLight } from "@churchapps/apphelper";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import React from "react";
 
@@ -72,7 +72,7 @@ export function TableEdit(props: Props) {
     for (let i = 0; i < rows; i++) {
       let row: JSX.Element[] = [];
       for (let j = 0; j < cols; j++) {
-        if (markdown) row.push(<TableCell key={j} style={{cursor:"pointer"}} onClick={() => { setEditCellIdx([i,j]) }}><MarkdownPreview value={contents[i][j] || "(empty)"} /></TableCell>);
+        if (markdown) row.push(<TableCell key={j} style={{cursor:"pointer"}} onClick={() => { setEditCellIdx([i,j]) }}><MarkdownPreviewLight value={contents[i][j] || "(empty)"} /></TableCell>);
         else row.push(<TableCell key={j}><TextField fullWidth size="small" label="" style={{margin:0}} name={"cell-" + i + "-" + j} value={contents[i][j]} onChange={handleChange} /></TableCell>);
       }
       result.push(<TableRow key={i}>{row}</TableRow>);

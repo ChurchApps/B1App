@@ -1,3 +1,5 @@
+"use client";
+
 import { SmallButton } from "@churchapps/apphelper";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";

@@ -1,3 +1,5 @@
+"use client";
+
 import { EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper, AppearanceInterface } from "@churchapps/apphelper";
@@ -50,11 +52,13 @@ export const Theme: React.FC<Props> = (props) => {
 
   if (props.globalStyles?.customCss) lines.push(props.globalStyles?.customCss);
 
+  /*
   css = (<style type="text/css">{`
-      :root { 
+      :root {
         ${lines.join("\n")}
       }
-      `}</style>);
+      `}</style>);*/
+  css = ":root { " + lines.join("\n") + " }";
 
   if (googleFonts.length > 0) {
     const fontList:string[] = [];
@@ -72,8 +76,11 @@ export const Theme: React.FC<Props> = (props) => {
 
   return (<>
     {fontLink}
-    <Head>
+    <style jsx>
       {css}
+    </style>
+    <Head>
+
       {favicon
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
         : <link rel="icon" href="/favicon.ico" />

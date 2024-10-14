@@ -10,7 +10,7 @@
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.2.46",
+    "@churchapps/apphelper": "0.2.54",
     "@mui/icons-material": "^5.14.7",
     "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.14.7",
@@ -20,7 +20,7 @@
     "js-cookie": "^3.0.5",
     "material-ui-popup-state": "^5.0.9",
     "moment": "^2.29.4",
-    "next": "^14.0.4",
+    "next": "^14.2.15",
     "react": "^18.2.0",
     "react-activity": "^2.1.3",
     "react-big-calendar": "^1.8.2",

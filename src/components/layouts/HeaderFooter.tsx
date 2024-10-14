@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { Header } from "../Header";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import Zone from "./Zone";
 import { GlobalStyleInterface } from "@/helpers";
@@ -23,7 +23,7 @@ export function HeaderFooter(props: Props) {
       <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
     </>);
   }
-
+  /*
   const mdTheme = createTheme({
     palette: {
       secondary: {
@@ -35,9 +35,10 @@ export function HeaderFooter(props: Props) {
       MuiFormControl: { defaultProps: { margin: "normal" } }
     }
   });
-
+*/
+  //<ThemeProvider theme={mdTheme}></ThemeProvider>
   return (
-    <ThemeProvider theme={mdTheme}>
+    <>
       <CssBaseline />
       <div>
         <Head>
@@ -52,6 +53,6 @@ export function HeaderFooter(props: Props) {
           </div>
         </main>
       </div>
-    </ThemeProvider>
+    </>
   );
 }

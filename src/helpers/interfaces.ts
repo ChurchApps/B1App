@@ -1,4 +1,4 @@
-import { ConversationInterface, MessageInterface, SocketPayloadInterface, SermonInterface } from "@churchapps/apphelper";
+import { ConversationInterface, MessageInterface, SocketPayloadInterface, SermonInterface } from "@churchapps/apphelper/dist/helpers";
 import { ConfigurationInterface } from "./ConfigHelper";
 
 export interface ColumnInterface {

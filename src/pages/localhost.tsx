@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
-import { MarkdownEditor, MarkdownPreview } from "@churchapps/apphelper";
+import { MarkdownEditor, MarkdownPreviewLight } from "@churchapps/apphelper";
 import { useState } from "react";
 
 export default function Localhost() {
@@ -33,7 +33,7 @@ export default function Localhost() {
       <h3>Markdown</h3>
       <TextField multiline fullWidth value={val} />
       <h3>Preview</h3>
-      <MarkdownPreview value={val} />
+      <MarkdownPreviewLight value={val} />
 
     </Container>
 

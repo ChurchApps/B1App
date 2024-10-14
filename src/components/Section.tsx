@@ -1,3 +1,5 @@
+"use client";
+
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Box, Container } from "@mui/material";
 import { CSSProperties, useState } from "react";
