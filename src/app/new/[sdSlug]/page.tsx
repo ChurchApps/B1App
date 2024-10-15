@@ -4,9 +4,12 @@ import { ConfigHelper } from "@/helpers/ConfigHelper";
 import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper/dist/helpers";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
+import { unstable_cache } from "next/cache";
+import { Metadata } from "next";
+import { MetaHelper } from "@/helpers/MetaHelper";
 
 type Props = {
   pageData: any;
@@ -18,6 +21,17 @@ type Props = {
 };
 
 type PageParams = {sdSlug:string }
+
+
+const loadSharedData = (sdSlug:string) => {
+  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all"]});
+  return result(sdSlug);
+}
+
+export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
+  const props = await loadSharedData(params.sdSlug);
+  return MetaHelper.getMetaData(props.pageData.title + " - " + props.church.name, props.pageData.title, props.churchSettings.ogImage);
+}
 
 const loadData = async (sdSlug:string) => {
   await EnvironmentHelper.init();

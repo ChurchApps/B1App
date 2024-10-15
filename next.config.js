@@ -11,7 +11,7 @@ module.exports = {
             value: "(?<subdomain>.*?)\\..*",
           },
         ],
-        destination: "/:subdomain",
+        destination: "/new/:subdomain",
       },
       {
         source: "/:path*",
@@ -22,7 +22,7 @@ module.exports = {
             value: "(?<subdomain>.*?)\\..*",
           },
         ],
-        destination: "/:subdomain/:path*",
+        destination: "/new/:subdomain/:path*",
       },
       {
         source: "/",
@@ -42,7 +42,7 @@ module.exports = {
             value: "(?<subdomain>.*?)\\..*",
           },
         ],
-        destination: "/:subdomain",
+        destination: "/new/:subdomain",
       },
       {
         source: "/:path*",
@@ -52,7 +52,7 @@ module.exports = {
             value: "(?<subdomain>.*?)\\..*",
           },
         ],
-        destination: "/:subdomain/:path*",
+        destination: "/new/:subdomain/:path*",
       },
     ]
   },
