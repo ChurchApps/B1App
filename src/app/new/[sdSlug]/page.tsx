@@ -6,7 +6,6 @@ import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
-import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { unstable_cache } from "next/cache";
 import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
@@ -34,7 +33,6 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
 }
 
 const loadData = async (sdSlug:string) => {
-  await EnvironmentHelper.init();
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");

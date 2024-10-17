@@ -12,6 +12,7 @@ import React from "react";
 import { ErrorHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
 
+EnvironmentHelper.initLocale();
 EnvironmentHelper.init();
 
 function MyApp({ Component, pageProps }: AppProps) {
