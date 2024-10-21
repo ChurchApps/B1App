@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AdminWrapper } from "./AdminWrapper";
-import { ApiHelper, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
 import router from "next/router";
 import { SiteNavigation } from "./SiteNavigation";
@@ -26,7 +26,9 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
   const [pages, setPages] = useState<PageInterface[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [addMode, setAddMode] = useState<string>("");
+  const [showLogin, setShowLogin] = useState<GenericSettingInterface>();
   const windowWidth = useWindowWidth();
+  const checked = showLogin?.value === "true" ? true : false;
 
   const loadData = () => {
     if (!isAuthenticated) return;
@@ -40,6 +42,10 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
     });
 
     ApiHelper.get("/links?category=website", "ContentApi").then(data => { setLinks(data); });
+    ApiHelper.get("/settings", "ContentApi").then((data: GenericSettingInterface[]) => {
+      const loginSetting = data.filter(d => d.keyName === "showLogin");
+      loginSetting && setShowLogin(loginSetting[0])
+    });
   };
 
 
@@ -59,6 +65,12 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
       setErrors(errors);
       return;
     }
+  }
+
+  const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const setting: GenericSettingInterface = showLogin ? { ...showLogin, value: `${e.target.checked}` } : { keyName: "showLogin", value: `${e.target.checked}`, public: 1 }
+    console.log("setting", setting);
+    ApiHelper.post("/settings", [setting], "ContentApi").then(data => { setShowLogin(data[0]); });
   }
 
   const handleDrop = (index:number, parentId:string, page:PageInterface, link:LinkInterface) => {
@@ -117,10 +129,21 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
         <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", minHeight:"100vh", marginTop:-7}}>
           <DndProvider backend={HTML5Backend}>
             <h2 style={{marginTop:0}}>Pages</h2>
-            <span style={{float:"right"}}>
-              <SmallButton icon="add" onClick={() => { setAddMode("navigation") }} />
-            </span>
-            <h3>Main Navigation</h3>
+            <div>
+              <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" spacing={0.5}>
+                  <Typography sx={{ fontSize: "13.5px", fontStyle: "italic" }}>Show Login</Typography>
+                  <Tooltip title="Show login button in the navigation bar" arrow><Icon color="primary" sx={{ fontSize: "18px !important", cursor: "pointer" }}>info</Icon></Tooltip>
+                </Stack>
+                <Switch onChange={handleSwitchChange} checked={showLogin ? checked : true} inputProps={{ 'aria-label': "controlled" }} />
+              </Stack>
+            </div>
+            <div>
+              <span style={{float:"right"}}>
+                <SmallButton icon="add" onClick={() => { setAddMode("navigation") }} />
+              </span>
+              <h3>Main Navigation</h3>
+            </div>
             <SiteNavigation links={links} pages={pages} refresh={loadData} select={(link, page) => {}} handleDrop={handleDrop} />
 
             <span style={{float:"right", paddingTop:15}}>
