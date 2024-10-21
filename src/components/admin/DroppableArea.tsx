@@ -1,3 +1,5 @@
+"use client";
+
 import { Icon, Box } from "@mui/material";
 import { CSSProperties } from "@mui/material/styles/createMixins";
 import React, { useEffect } from "react";
@@ -58,7 +60,7 @@ export function DroppableArea(props: Props) {
   if (canDrop) return (
     <div style={{ position: "relative" }}>
       <div style={droppableStyle}>
-        <div style={{ textAlign: "center", color: "#FFFFFF", width: "100%" }} ref={drop}>
+        <div style={{ textAlign: "center", color: "#FFFFFF", width: "100%" }} ref={drop as any}>
           {(props.minimal) ? getMinimalDisplay() : getFullDisplay()}
         </div>
       </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import UserContext from "../../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";

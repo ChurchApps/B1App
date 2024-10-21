@@ -1,3 +1,5 @@
+"use client";
+
 import { Box } from "@mui/material";
 import { CSSProperties } from "@mui/material/styles/createMixins";
 import React from "react";
@@ -68,7 +70,7 @@ export function DroppableScroll(props: Props) {
   if (canDrop) return (
     <div style={{ position: "relative" }}>
       <div style={droppableStyle}>
-        <div style={{ textAlign: "center", color: "#FFFFFF", width: "100%" }} ref={drop}>
+        <div style={{ textAlign: "center", color: "#FFFFFF", width: "100%" }} ref={drop as any}>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: "4px" }} onDragEnter={handleMouseOver} onDragLeave={handleMouseOut} onDrop={handleMouseOut}>
             <span>{props.text}</span>
           </Box>
