@@ -36,7 +36,7 @@ export function DroppableWrapper(props: Props) {
   if (canDrop) return (
     <div style={{ position: "relative" }}>
       <div style={droppableStyle}>
-        <div style={{ width: "100%" }} ref={drop}>
+        <div style={{ width: "100%" }} ref={drop as any}>
           {props.children}
         </div>
       </div>

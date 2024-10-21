@@ -4,6 +4,7 @@ import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
+import { EnvironmentHelper } from "@/helpers";
 
 export const metadata = {
   title: 'Next.js',
@@ -11,6 +12,8 @@ export const metadata = {
 }
 
 export default async function RootLayout({children}: { children: React.ReactNode}) {
+  EnvironmentHelper.initLocale();
+  EnvironmentHelper.init();
   return (
     <html lang="en">
       <head>

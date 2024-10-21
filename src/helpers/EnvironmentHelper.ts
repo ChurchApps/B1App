@@ -4,7 +4,7 @@ export class EnvironmentHelper {
   static Common = CommonEnvironmentHelper;
   public static LessonsApi = "";
 
-  static init = async () => {
+  static init = () => {
     let stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
 
     //stage="prod"
@@ -24,13 +24,15 @@ export class EnvironmentHelper {
       { keyName: "DoingApi", url: EnvironmentHelper.Common.DoingApi, jwt: "", permisssions: [] },
       { keyName: "LessonsApi", url: EnvironmentHelper.LessonsApi, jwt: "", permisssions: [] }
     ];
+  };
 
+  static initLocale = async () => {
     let baseUrl = "https://ironwood.staging.b1.church";
     if (typeof window !== "undefined") {
       baseUrl = window.location.origin;
     }
     await Locale.init([baseUrl + `/apphelper/locales/{{lng}}.json`])
-  };
+  }
 
   static initDev = () => {
     this.initStaging();

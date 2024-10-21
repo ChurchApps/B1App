@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Grid } from "@mui/material";
 import { Tabs } from "./Tabs";
