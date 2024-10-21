@@ -44,7 +44,7 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
     ApiHelper.get("/links?category=website", "ContentApi").then(data => { setLinks(data); });
     ApiHelper.get("/settings", "ContentApi").then((data: GenericSettingInterface[]) => {
       const loginSetting = data.filter(d => d.keyName === "showLogin");
-      loginSetting && setShowLogin(loginSetting[0])
+      if (loginSetting) setShowLogin(loginSetting[0]);
     });
   };
 
@@ -69,7 +69,6 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const setting: GenericSettingInterface = showLogin ? { ...showLogin, value: `${e.target.checked}` } : { keyName: "showLogin", value: `${e.target.checked}`, public: 1 }
-    console.log("setting", setting);
     ApiHelper.post("/settings", [setting], "ContentApi").then(data => { setShowLogin(data[0]); });
   }
 
