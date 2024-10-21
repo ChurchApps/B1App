@@ -42,12 +42,19 @@ export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
+  const [showLogin, setShowLogin] = useState<boolean>(true);
 
   const toggleDrawer = () => {
     setOpen(!open);
   }
 
   useEffect(() => {
+    ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+      if (data.showLogin) {
+        if (data.showLogin === "true") setShowLogin(true);
+        else setShowLogin(false);
+      }
+    })
     const handleScroll = () => {
       if (props.overlayContent)
       {
@@ -92,17 +99,21 @@ export function Header(props: Props) {
       </Box>
     )
     : (
-      <Box sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-        <Chip
-          component="a"
-          href={"/login"}
-          clickable
-          id="loginButton"
-          label="Login"
-          icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
-          sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
-        />
-      </Box>
+      <>
+        {showLogin ? (
+          <Box sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
+            <Chip
+              component="a"
+              href={"/login"}
+              clickable
+              id="loginButton"
+              label="Login"
+              icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
+              sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
+            />
+          </Box>
+        ) : null}
+      </>
     )
 
   const userActionList = ApiHelper.isAuthenticated && (<>
