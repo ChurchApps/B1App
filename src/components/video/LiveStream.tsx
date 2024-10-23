@@ -1,3 +1,4 @@
+"use client";
 import { ChatStateInterface, EnvironmentHelper, StreamConfigInterface, StreamingServiceExtendedInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";

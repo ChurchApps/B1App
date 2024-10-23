@@ -1,11 +1,13 @@
+"use client";
 import { useContext } from "react"
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { PaperProps } from "@mui/material"
 import { Layout } from "@/components";
 import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext"
 import { PersonHelper } from "@/helpers";
+import { useSearchParams } from "next/navigation"; 
 
 interface Props {
   showLogo?: boolean;
@@ -16,7 +18,8 @@ interface Props {
 
 export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps, keyName }: Props) {
   const router = useRouter();
-  let returnUrl:string = router.query.returnUrl as string;
+  const searchParams = useSearchParams();
+  let returnUrl: string | null = searchParams.get("returnUrl");
   const [cookies] = useCookies();
   const context = useContext(UserContext)
 
@@ -29,9 +32,8 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
 
   const appUrl = process.browser ? window.location.href : "";
   let jwt: string = "",
-    auth: string = "";
+  auth: string | null = searchParams.get("auth");
   if (!ApiHelper.isAuthenticated) {
-    auth = router.query.auth as string;
     let search = new URLSearchParams(process.browser ? window.location.search : "");
     jwt = search.get("jwt") || cookies.jwt;
   }

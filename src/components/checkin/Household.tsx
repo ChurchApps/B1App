@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect } from "react";
 import { Button, Icon, Grid, Box } from "@mui/material";
 import { CheckinHelper, EnvironmentHelper } from "@/helpers";

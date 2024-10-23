@@ -1,7 +1,8 @@
+"use client"
 import React, { useEffect } from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, Divider, List, ThemeProvider } from "@mui/material";
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { SiteWrapper, NavItem, UserHelper, Permissions, ApiHelper } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -12,7 +13,7 @@ interface Props { config: ConfigurationInterface, pageTitle?: string, children: 
 export const Wrapper: React.FC<Props> = props => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
-  const tabs:any = []
+  const tabs: any = []
   const router = useRouter();
   const [classRoooms, setClassrooms] = React.useState([]);
   const [campuses, setCampuses] = React.useState([]);
@@ -80,17 +81,16 @@ export const Wrapper: React.FC<Props> = props => {
     let showWebsite = props.config.hasWebsite,
       showDonations = props.config.allowDonations,
       showMyGroups = false, showPlans = false,
-      showDirectory = memberStatus === "member" || memberStatus==="staff",
-      showLessons = classRoooms.length>0,
-      showCheckin = campuses.length>0,
+      showDirectory = memberStatus === "member" || memberStatus === "staff",
+      showLessons = classRoooms.length > 0,
+      showCheckin = campuses.length > 0,
       showChums = UserHelper.checkAccess(Permissions.membershipApi.people.edit),
       showAdmin = UserHelper.checkAccess(Permissions.contentApi.content.edit);
 
-    if (context.userChurch)
-    {
+    if (context.userChurch) {
       showMyGroups = context.userChurch?.groups?.length > 0;
       context.userChurch.groups.forEach(group => {
-        if (group.tags.indexOf("team")>-1) showPlans = true;
+        if (group.tags.indexOf("team") > -1) showPlans = true;
       });
     }
 
