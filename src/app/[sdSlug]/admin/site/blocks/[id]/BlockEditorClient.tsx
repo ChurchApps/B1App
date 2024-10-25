@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
+import { GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, ChurchInterface, UserHelper } from "@churchapps/apphelper";
 import React from "react";
 import ContentEditor from "@/components/admin/ContentEditor/ContentEditor";
@@ -17,9 +17,7 @@ export function BlockEditorClient(props: Props) {
   const router = useRouter();
   const id = props.blockId;
 
-  const loadData = async (id: string) => {
-    return await ApiHelper.get("/blocks/" + UserHelper.currentUserChurch.church.id + "/tree/" + id, "ContentApi");
-  };
+  const loadData = async (id: string) => await ApiHelper.get("/blocks/" + UserHelper.currentUserChurch.church.id + "/tree/" + id, "ContentApi");
 
   const handleDone = () => {
     router.push("/admin/site/pages/preview/" + id);

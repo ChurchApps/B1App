@@ -3,7 +3,7 @@ import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { ContentEditorClient } from "./ContentEditorClient";
 
 export default async function PageEditor({ params }: { params: { sdSlug: string; id: string } }) {
-    const {sdSlug} = await params
+  const {sdSlug} = await params
   const config = await ConfigHelper.load(sdSlug.toString());
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");

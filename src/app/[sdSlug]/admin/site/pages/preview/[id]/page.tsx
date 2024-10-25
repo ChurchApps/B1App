@@ -3,7 +3,7 @@ import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { PreviewClientWrapper } from "./PreviewClientWrapper";
 
 export default async function PreviewPage({ params }: { params: { sdSlug: string; id: string } }) {
-    const {sdSlug, id}= params
+  const {sdSlug, id}= params
   const config = await ConfigHelper.load(sdSlug.toString());
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");

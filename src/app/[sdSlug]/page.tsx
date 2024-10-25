@@ -45,7 +45,7 @@ const loadData = async (sdSlug:string) => {
   return { pageData, church, churchSettings, navLinks, globalStyles, config }
 }
 
-export default async function Home({params}: {params:PageParams}) {
+export default async function Home({params}: {params:Promise<PageParams>}) {
 
   const { sdSlug } =  await params;
   const props = await loadData(sdSlug);

@@ -1,5 +1,5 @@
 import { PageLayout, Theme } from "@/components";
-import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { ConfigHelper, GlobalStyleInterface, PageInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
