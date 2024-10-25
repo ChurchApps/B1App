@@ -13,7 +13,7 @@ interface Props { config: ConfigurationInterface, pageTitle?: string, children: 
 export const Wrapper: React.FC<Props> = props => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
-  const tabs: any = []
+  const tabs: any[] = []
   const router = useRouter();
   const [classRoooms, setClassrooms] = React.useState([]);
   const [campuses, setCampuses] = React.useState([]);
@@ -74,7 +74,8 @@ export const Wrapper: React.FC<Props> = props => {
   //tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={router} selected={selectedTab === "member"} />)
 
   const getSpecialTabs = () => {
-    tabs.push(<Divider />)
+    // tabs.push(<Divider />)
+    tabs.push(<Divider key="divider-1" />);
 
     const memberStatus = context.userChurch?.person?.membershipStatus?.toLowerCase();
 

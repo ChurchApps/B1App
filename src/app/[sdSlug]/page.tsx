@@ -28,12 +28,13 @@ const loadSharedData = (sdSlug:string) => {
 }
 
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
-  const props = await loadSharedData(params.sdSlug);
+  const { sdSlug } =  await params;
+  const props = await loadSharedData(sdSlug);
   return MetaHelper.getMetaData(props.pageData.title + " - " + props.church.name, props.pageData.title, props.churchSettings.ogImage);
 }
 
 const loadData = async (sdSlug:string) => {
-  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
+  const church: ChurchInterface | null = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
@@ -41,22 +42,18 @@ const loadData = async (sdSlug:string) => {
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi");
   const config = await ConfigHelper.load(church.subDomain);
 
-  console.log("GLOBAL", globalStyles);
-
   return { pageData, church, churchSettings, navLinks, globalStyles, config }
 }
 
 export default async function Home({params}: {params:PageParams}) {
 
-
-  const props = await loadData(params.sdSlug);
+  const { sdSlug } =  await params;
+  const props = await loadData(sdSlug);
   /*
   useEffect(() => {
     if (!props.pageData?.url && typeof window !== undefined) window.location.href = window.location.origin + "/member";
   }, []); //eslint-disable-line
   */
-  console.log("Appearance is", props.churchSettings);
-  console.log("Global Styles", props.globalStyles);
 
   if (!props.pageData?.url) return <Loading />
   else return (<>

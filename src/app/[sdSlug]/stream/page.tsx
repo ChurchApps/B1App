@@ -13,10 +13,14 @@ interface Props {
 }
 
 export default async function StreamPage({ params, searchParams }: { params: { sdSlug: string }, searchParams: { hideHeader?: string } }) {
-  const hideHeader = searchParams?.hideHeader || "0";
-  const includeHeader = hideHeader !== "1";
+  const {sdSlug} = await params
+  const {hideHeader} = await searchParams
+  
+  const hideHeaders = hideHeader || "0";
+  const includeHeader = hideHeaders !== "1";
 
-  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + params.sdSlug, "MembershipApi");
+  
+  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi");

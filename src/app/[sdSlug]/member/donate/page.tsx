@@ -8,7 +8,8 @@ interface Props {
 }
 
 export default async function DonatePage({ params }: Props) {
-  const config = await ConfigHelper.load(params.sdSlug.toString());
+    const {sdSlug}= await params
+  const config = await ConfigHelper.load(sdSlug.toString());
 
   return (
     <Wrapper config={config}>

@@ -1,3 +1,5 @@
+
+"use client"
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
 import { MarkdownEditor, MarkdownPreviewLight } from "@churchapps/apphelper";
@@ -7,7 +9,6 @@ export default function Localhost() {
   const [val, setVal] = useState("");
 
   return (
-
     <Container>
       <p>Select a site:</p>
       <Link href="http://crcc.localhost:3000">CRCC</Link>
@@ -18,24 +19,23 @@ export default function Localhost() {
       <br />
       <br />
       <Link href="http://ironwood.localhost:3000/admin">Admin</Link>
+
       <table>
-        <tr>
-          <td>Hello</td>
-          <td>World</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>Hello</td>
+            <td>World</td>
+          </tr>
+        </tbody>
       </table>
 
       <br />
       <h3>Editor</h3>
-      <MarkdownEditor value={val} onChange={(v) => {
-        setVal(v)
-      }} />
+      <MarkdownEditor value={val} onChange={(v) => setVal(v)} />
       <h3>Markdown</h3>
       <TextField multiline fullWidth value={val} />
       <h3>Preview</h3>
       <MarkdownPreviewLight value={val} />
-
     </Container>
-
   );
 }

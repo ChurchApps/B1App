@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { ApiHelper } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { B1Settings } from "@/components";
@@ -10,7 +10,7 @@ import { WrapperPageProps } from "@/helpers";
 export function AdminClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
 
-  const router = useRouter(); 
+  const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated) {

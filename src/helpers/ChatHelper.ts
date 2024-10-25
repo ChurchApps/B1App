@@ -30,8 +30,15 @@ export class ChatHelper {
   }
 
   static handleReconnect = () => {
-    const mRoom = ChatHelper.current.mainRoom;
-    ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
+    const mRoom = ChatHelper.current?.mainRoom;
+
+    if (mRoom?.conversation?.id) {
+      ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
+    } else {
+      console.error("mRoom or conversation is null or undefined.");
+
+    }
+    // ChatHelper.joinRoom(mRoom.conversation.id, ChatConfigHelper.current.churchId);
   }
 
   static handleAttendance = (attendance: ChatAttendanceInterface) => {

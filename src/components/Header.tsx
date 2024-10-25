@@ -49,12 +49,20 @@ export function Header(props: Props) {
   }
 
   useEffect(() => {
-    ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
-      if (data.showLogin) {
-        if (data.showLogin === "true") setShowLogin(true);
-        else setShowLogin(false);
-      }
-    })
+    // ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+    //   if (data.showLogin) {
+    //     if (data.showLogin === "true") setShowLogin(true);
+    //     else setShowLogin(false);
+    //   }
+    // })
+
+    if (typeof window !== "undefined" && props.church?.id && UserHelper.user?.jwt) {
+      // Fetch settings from the API
+      ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+        if (data.showLogin) {
+          setShowLogin(data.showLogin === "true");
+        }
+      });}
     const handleScroll = () => {
       if (props.overlayContent)
       {
@@ -66,7 +74,7 @@ export function Header(props: Props) {
     return () => {
       document.removeEventListener('scroll', handleScroll)
     }
-  }, []);
+  }, [props.church?.id, props.overlayContent]);
 
   // const pathName = usePathname();
   // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
@@ -159,13 +167,29 @@ export function Header(props: Props) {
         const palette = JSON.parse(props.globalStyles.palette);
         textColor = textColor.replace("var(--", "").replace(")", "");
         textColor = palette[textColor];
-        if (!textColor) textColor = "#FFF"
+        if (!textColor) textColor = "#FFF";
       }
-      let result = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || "", props.churchSettings?.logoDark || "", textColor)
-      return result;
+      const logo = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || null, props.churchSettings?.logoDark || null, textColor);
+      return logo !== "" ? logo : null; 
+    } else {
+      return props.churchSettings?.logoLight || null;
     }
-    else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
-  }
+  };
+
+  // const getLogo = () => {
+  //   if (transparent) {
+  //     let textColor = props.sections[0]?.textColor || "#FFF";
+  //     if (textColor.indexOf("var(--") > -1) {
+  //       const palette = JSON.parse(props.globalStyles.palette);
+  //       textColor = textColor.replace("var(--", "").replace(")", "");
+  //       textColor = palette[textColor];
+  //       if (!textColor) textColor = "#FFF"
+  //     }
+  //     let result = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || "", props.churchSettings?.logoDark || "", textColor)
+  //     return result;
+  //   }
+  //   else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
+  // }
 
   //structured navLinks based on their parentId
   const structuredData = props.navLinks && getNestedChildren(props.navLinks, undefined);

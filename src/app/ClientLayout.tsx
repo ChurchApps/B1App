@@ -5,13 +5,14 @@ import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
-import type { AppProps } from "next/app";
-import { EnvironmentHelper } from "@/helpers";
+
 import { UserProvider } from "@/context/UserContext";
 import { AnalyticsHelper, UserHelper, ErrrorAppDataInterface, ErrorLogInterface } from "@churchapps/apphelper";
-import React from "react";
+import React, { useEffect } from "react";
 import { ErrorHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
+import { EnvironmentHelper } from "@/helpers";
+
 
 EnvironmentHelper.initLocale();
 EnvironmentHelper.init();
@@ -19,6 +20,12 @@ EnvironmentHelper.init();
 function ClientLayout({ children}: {children: React.ReactNode}) {
   const [errors, setErrors] = React.useState([]);
   const location = (typeof(window) === "undefined") ? null : window.location;
+
+
+  useEffect(()=>{
+    EnvironmentHelper.initLocale();
+    EnvironmentHelper.init();
+  },[])
 
 
   const getErrorAppData = () => {

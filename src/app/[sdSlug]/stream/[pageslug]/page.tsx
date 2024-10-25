@@ -7,11 +7,12 @@ interface Props {
 }
 
 export default async function Home({ params }: Props) {
-  const church: ChurchInterface = await ApiHelper.getAnonymous(`/churches/lookup?subDomain=${params.sdSlug}`, "MembershipApi");
+    const {sdSlug, pageSlug}= await params
+  const church: ChurchInterface = await ApiHelper.getAnonymous(`/churches/lookup?subDomain=${sdSlug}`, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous(`/settings/public/${church.id}`, "MembershipApi");
   const navLinks: LinkInterface[] = await ApiHelper.getAnonymous(`/links/church/${church.id}?category=website`, "ContentApi");
   const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous(`/globalStyles/church/${church.id}`, "ContentApi");
-  const pageData: PageInterface = await ApiHelper.getAnonymous(`/pages/${church.id}/tree?url=${encodeURIComponent("/stream/")}${params.pageSlug}`, "ContentApi");
+  const pageData: PageInterface = await ApiHelper.getAnonymous(`/pages/${church.id}/tree?url=${encodeURIComponent("/stream/")}${pageSlug}`, "ContentApi");
 
   return (
     <>

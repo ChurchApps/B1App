@@ -2,7 +2,8 @@ import { ConfigHelper } from "@/helpers";
 import { AdminClientWrapper } from "./AdminClientWrapper";
 
 export default async function AdminPage({ params }: { params: { sdSlug: string } }) {
-  const config = await ConfigHelper.load(params.sdSlug.toString());
+    const {sdSlug} = await params
+  const config = await ConfigHelper.load(sdSlug.toString());
 
   return <AdminClientWrapper config={config} />;
 }
