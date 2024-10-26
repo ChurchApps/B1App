@@ -1,6 +1,6 @@
 "use client";
 
-import {  GlobalStyleInterface, WrapperPageProps } from "@/helpers";
+import { GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, ChurchInterface, UserHelper } from "@churchapps/apphelper";
 import React from "react";
 import ContentEditor from "@/components/admin/ContentEditor/ContentEditor";

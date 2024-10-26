@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import {  GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
+import { GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
 import { Grid } from "@mui/material";
