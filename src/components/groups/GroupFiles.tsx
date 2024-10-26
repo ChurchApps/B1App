@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { ApiHelper, DisplayBox, InputBox, SmallButton, UserContextInterface, UserHelper } from "@churchapps/apphelper";
 import { FileInterface } from "@/helpers";

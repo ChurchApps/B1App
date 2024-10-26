@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { BlockInterface, WrapperPageProps } from "@/helpers";
+import { BlockInterface, EnvironmentHelper, WrapperPageProps } from "@/helpers";
 import { ApiHelper, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
 import { Grid, Icon, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -18,6 +18,7 @@ export function AdminClientWrapper(props: WrapperPageProps) {
   const windowWidth = useWindowWidth();
   const router = useRouter();
 
+  EnvironmentHelper.initLocale();
   const loadData = () => {
     if (!isAuthenticated) return;
     ApiHelper.get("/blocks", "ContentApi").then((b) => setBlocks(b || []));

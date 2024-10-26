@@ -3,17 +3,17 @@ import { ConfigHelper } from "@/helpers";
 import { PlanClient } from "./PlanClient";
 
 
-interface Props {
-  params: { sdSlug: string; id: string };
-}
 
-export default async function PlanPage({ params }: Props) {
-    const {sdSlug}= await params
+
+type Params = Promise<{ sdSlug: string; id: string }>;
+
+export default async function PlanPage({ params }: { params: Params }) {
+  const { sdSlug, id } = await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (
     <Wrapper config={config}>
-      <PlanClient config={config} planId={params.id} />
+      <PlanClient config={config} planId={id} />
     </Wrapper>
   );
 }

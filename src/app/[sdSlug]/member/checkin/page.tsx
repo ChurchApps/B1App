@@ -3,11 +3,10 @@ import { Wrapper } from "@/components";
 import { CheckinClient } from "./CheckinClient";
 
 
-interface Props {
-  params: { sdSlug: string };
-}
 
-export default async function CheckinPage({ params }: Props) {
+type Params = Promise<{ sdSlug: string }>;
+
+export default async function CheckinPage({ params }: {params:Params}) {
     const {sdSlug}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 

@@ -11,6 +11,7 @@ import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { GlobalStyleInterface, PersonHelper, SectionInterface } from "@/helpers";
 import { redirect } from "next/navigation";
 
+
 type Props = {
   church: ChurchInterface;
   churchSettings: any;
@@ -24,11 +25,11 @@ type Props = {
 //structure navLinks based on their parentId
 const getNestedChildren = (arr: LinkInterface[], parent: string) => {
   const result: LinkInterface[] = [];
-  for(const i in arr) {
-    if(arr[i].parentId == parent) {
+  for (const i in arr) {
+    if (arr[i].parentId == parent) {
       if (arr[i].id) {
         const children = getNestedChildren(arr, arr[i].id);
-        if(children.length) {
+        if (children.length) {
           arr[i].children = children;
         }
       }
@@ -62,14 +63,15 @@ export function Header(props: Props) {
         if (data.showLogin) {
           setShowLogin(data.showLogin === "true");
         }
-      });}
+      });
+    }
     const handleScroll = () => {
-      if (props.overlayContent)
-      {
+      if (props.overlayContent) {
         const show = window.scrollY > 100
         setTransparent(!show);
       }
     }
+
     document.addEventListener('scroll', handleScroll)
     return () => {
       document.removeEventListener('scroll', handleScroll)
@@ -88,7 +90,7 @@ export function Header(props: Props) {
 
   const userAction = ApiHelper.isAuthenticated
     ? (
-      <Box component="div" sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
+      <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
         <ClickAwayListener onClickAway={() => setMenuAnchor(null)}>
           <Chip
             id="userMenuLink"
@@ -109,7 +111,7 @@ export function Header(props: Props) {
     : (
       <>
         {showLogin ? (
-          <Box sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
+          <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
             <Chip
               component="a"
               href={"/login"}
@@ -170,7 +172,7 @@ export function Header(props: Props) {
         if (!textColor) textColor = "#FFF";
       }
       const logo = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || null, props.churchSettings?.logoDark || null, textColor);
-      return logo !== "" ? logo : null; 
+      return logo !== "" ? logo : null;
     } else {
       return props.churchSettings?.logoLight || null;
     }
@@ -218,11 +220,11 @@ export function Header(props: Props) {
 
   return (
     <div>
-      <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? {marginBottom:0} : {} }>
-        <Container style={{height:71}}>
+      <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? { marginBottom: 0 } : {}}>
+        <Container style={{ height: 71 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
-            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap",  }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap", }}>
               {getLinks()}
               {userAction}
             </Box>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { WrapperPageProps, EnvironmentHelper } from "@/helpers";
 import { Theme, Wrapper } from "@/components";
 

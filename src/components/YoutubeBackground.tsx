@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useRef, ReactNode } from "react";
 import YouTube, { YouTubeProps } from "react-youtube";
 import styles from "styles/youtubeBackground.module.css";

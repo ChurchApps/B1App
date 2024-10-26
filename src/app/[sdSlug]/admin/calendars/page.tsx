@@ -1,8 +1,14 @@
+"use client";
 import { ConfigHelper } from "@/helpers";
 import { CalendarsClientWrapper } from "./CalendarsClientWrapper";
 
-export default async function CalendarsPage({ params }: { params: { sdSlug: string } }) {
-    const {sdSlug} = await params
+type Params = Promise<{ sdSlug: string }>;
+
+
+export default async function CalendarPage({ params }: { params: Params }) {
+
+  const { sdSlug } = await params;
+
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (

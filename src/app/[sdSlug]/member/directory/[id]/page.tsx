@@ -3,11 +3,12 @@ import { ConfigHelper } from "@/helpers";
 import { MemberClient } from "./MemberClient";
 
 
-interface Props {
-  params: { sdSlug: string; id: string };
-}
 
-export default async function MemberPage({ params }: Props) {
+
+type Params = Promise<{ sdSlug: string; id:string }>;
+
+
+export default async function MemberPage({ params }: {params:Params}) {
     const {sdSlug,id}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 

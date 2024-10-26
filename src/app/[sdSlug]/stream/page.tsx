@@ -12,14 +12,19 @@ interface Props {
   pageData: any,
 }
 
-export default async function StreamPage({ params, searchParams }: { params: { sdSlug: string }, searchParams: { hideHeader?: string } }) {
-  const {sdSlug} = await params
-  const {hideHeader} = await searchParams
-  
+type Params = Promise<{ sdSlug: string; }>;
+type searchParams = Promise<{ hideHeader?: string }>;
+
+
+
+export default async function StreamPage({ params, searchParams }: { params: Params, searchParams: searchParams }) {
+  const { sdSlug } = await params
+  const { hideHeader } = await searchParams
+
   const hideHeaders = hideHeader || "0";
   const includeHeader = hideHeaders !== "1";
 
-  
+
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");

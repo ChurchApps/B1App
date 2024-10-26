@@ -1,12 +1,12 @@
 import { Wrapper } from "@/components";
-import { ConfigHelper, WrapperPageProps } from "@/helpers";
+import { ConfigHelper } from "@/helpers";
 import { EnvironmentHelper } from "@/helpers";
 
-interface Props {
-  params: { sdSlug: string };
-}
 
-export default async function StreamPage({ params }: Props) {
+type Params = Promise<{ sdSlug: string; }>;
+
+
+export default async function StreamPage({ params }: {params:Params}) {
     const {sdSlug}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 

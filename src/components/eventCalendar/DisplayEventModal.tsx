@@ -1,3 +1,4 @@
+"use client";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { DateHelper, EventInterface, Conversations, MarkdownPreviewLight } from "@churchapps/apphelper";
 import { AppBar, Button, Dialog, DialogContent, Icon, IconButton, Toolbar, Typography } from "@mui/material";

@@ -3,17 +3,17 @@ import { ConfigHelper } from "@/helpers";
 import { FormClient } from "./FormClient";
 
 
-interface Props {
-  params: { id: string; sdSlug: string };
-}
 
-export default async function FormPage({ params }: Props) {
-    const {sdSlug}= await params
+type Params = Promise<{ sdSlug: string; id:string }>;
+
+
+export default async function FormPage({ params }: {params:Params}) {
+    const {sdSlug, id}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (
     <Wrapper config={config}>
-      <FormClient config={config} formId={params.id} />
+      <FormClient config={config} formId={id} />
     </Wrapper>
   );
 }

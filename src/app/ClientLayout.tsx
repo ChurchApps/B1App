@@ -14,18 +14,26 @@ import { ErrorMessages } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers";
 
 
-EnvironmentHelper.initLocale();
-EnvironmentHelper.init();
+
 
 function ClientLayout({ children}: {children: React.ReactNode}) {
   const [errors, setErrors] = React.useState([]);
   const location = (typeof(window) === "undefined") ? null : window.location;
 
 
-  useEffect(()=>{
+
+  useEffect(() => {
+    // Initialize EnvironmentHelper and AnalyticsHelper on the client
     EnvironmentHelper.initLocale();
     EnvironmentHelper.init();
-  },[])
+    AnalyticsHelper.init();
+
+    // Log the page view (only on client side)
+    AnalyticsHelper.logPageView();
+
+    // Error handling configuration
+    ErrorHelper.init(getErrorAppData, customErrorHandler);
+  }, []);
 
 
   const getErrorAppData = () => {

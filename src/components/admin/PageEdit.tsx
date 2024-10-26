@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions, SlugHelper } from "@churchapps/apphelper";
 import { TemplateHelper } from "@/helpers/TemplateHelper";

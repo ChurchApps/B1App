@@ -6,7 +6,9 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { B1Settings } from "@/components/admin/settings/B1Settings";
 
 
-type PageParams = {sdSlug:string }
+// type PageParams = {sdSlug:string }
+type PageParams = Promise<{ sdSlug: string;  }>
+
 
 const loadData = async (sdSlug:string) => {
   const config = await ConfigHelper.load(sdSlug.toString());

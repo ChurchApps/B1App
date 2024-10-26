@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider, Dialog } from "@mui/material";

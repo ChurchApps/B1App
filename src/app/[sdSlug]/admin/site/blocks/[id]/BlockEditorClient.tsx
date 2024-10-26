@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
+import { GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, ChurchInterface, UserHelper } from "@churchapps/apphelper";
 import React from "react";
 import ContentEditor from "@/components/admin/ContentEditor/ContentEditor";

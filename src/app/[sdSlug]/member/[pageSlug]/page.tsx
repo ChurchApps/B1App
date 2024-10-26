@@ -1,12 +1,13 @@
 import { PageLayout, Theme } from "@/components";
 import { GlobalStyleInterface, PageInterface } from "@/helpers";
-import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 
-interface Props {
-  params: { sdSlug: string; pageSlug: string };
-}
 
-export default async function Home({ params }: Props) {
+
+type Params = Promise<{ sdSlug: string; pageSlug:string}>;
+
+
+export default async function Home({ params }: {params:Params}) {
     const {sdSlug, pageSlug}= await params
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");

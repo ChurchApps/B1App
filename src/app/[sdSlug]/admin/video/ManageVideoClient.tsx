@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ConfigHelper, WrapperPageProps } from "@/helpers";
+import {  WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
 import { DisplayBox, ImageEditor, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ConfigHelper, FileInterface, WrapperPageProps } from "@/helpers";
+import {   FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
@@ -15,6 +15,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
   const [pendingFileSave, setPendingFileSave] = useState(false);
   const [files, setFiles] = useState<FileInterface[]>(null);
   const router = useRouter();
+
 
   let usedSpace = 0;
   files?.forEach((f) => (usedSpace += f.size));

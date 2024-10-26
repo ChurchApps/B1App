@@ -3,11 +3,13 @@ import { ConfigHelper } from "@/helpers";
 import { DirectoryClient } from "./DirectoryClient";
 
 
-interface Props {
-  params: { sdSlug: string };
-}
 
-export default async function DirectoryPage({ params }: Props) {
+
+type Params = Promise<{ sdSlug: string;  }>;
+
+
+
+export default async function DirectoryPage({ params }: {params:Params}) {
     const {sdSlug}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 

@@ -1,3 +1,4 @@
+"use client";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { Button, FormControl, InputLabel, OutlinedInput } from "@mui/material";

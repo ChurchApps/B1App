@@ -1,25 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { WrapperPageProps } from "@/helpers";
+import { EnvironmentHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/apphelper";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 
 export function CalendarClientWrapper(props: WrapperPageProps) {
     const { isAuthenticated } = ApiHelper;
-
+    EnvironmentHelper.initLocale();
     const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
     const [groups, setGroups] = useState<GroupInterface[]>([]);
     const [isLoadingGroups, setIsLoadingGroups] = useState<boolean>(false);
     const [events, setEvents] = useState<CuratedEventInterface[]>([]);
     const [refresh, refresher] = useState({});
 
+
+    const searchparams = useSearchParams()
     const router = useRouter();
-    const curatedCalendarId = router.query?.id;
+    const curatedCalendarId = searchparams.get("query.id")
+    // const curatedCalendarId = router.query?.id;
 
     const loadData = () => {
         if (!isAuthenticated) {

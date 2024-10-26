@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button, Icon } from "@mui/material";
 import { Loading, InputBox, ErrorMessages } from "@churchapps/apphelper";

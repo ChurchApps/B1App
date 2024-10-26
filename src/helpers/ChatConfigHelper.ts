@@ -1,3 +1,4 @@
+"use client";
 import { AppearanceInterface, SermonInterface } from "@churchapps/apphelper";
 import { EnvironmentHelper, StreamConfigInterface } from "."
 import { ChatHelper } from "./ChatHelper";

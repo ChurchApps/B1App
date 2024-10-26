@@ -1,25 +1,14 @@
-
 import { GlobalStyleInterface, PageInterface } from "@/helpers/interfaces";
 import { ConfigHelper } from "@/helpers/ConfigHelper";
-import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper/dist/helpers";
+import { ApiHelper, ChurchInterface } from "@churchapps/apphelper/dist/helpers";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
 import { unstable_cache } from "next/cache";
 import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
 
-type Props = {
-  pageData: any;
-  church: ChurchInterface,
-  churchSettings: any,
-  navLinks: LinkInterface[],
-  globalStyles: GlobalStyleInterface,
-  config: ConfigurationInterface
-};
-
-type PageParams = {sdSlug:string }
+type PageParams = Promise<{ sdSlug: string;  }>
 
 
 const loadSharedData = (sdSlug:string) => {

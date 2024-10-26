@@ -1,11 +1,10 @@
 import { Wrapper } from "@/components";
 import { ConfigHelper } from "@/helpers";
 
-interface Props {
-  params: { sdSlug: string };
-}
 
-export default async function BiblePage({ params }: Props) {
+type Params = Promise<{ sdSlug: string }>;
+
+export default async function BiblePage({ params }: {params:Params}) {
     const {sdSlug}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 

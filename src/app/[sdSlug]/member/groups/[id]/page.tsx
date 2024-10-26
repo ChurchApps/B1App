@@ -3,17 +3,18 @@ import { ConfigHelper } from "@/helpers";
 import { GroupClient } from "./GroupClient";
 
 
-interface Props {
-  params: { sdSlug: string; id: string };
-}
 
-export default async function GroupPage({ params }: Props) {
-    const {sdSlug}= await params
+
+type Params = Promise<{ sdSlug: string; id:string }>;
+
+
+export default async function GroupPage({ params }: {params:Params}) {
+    const {sdSlug, id}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (
     <Wrapper config={config}>
-      <GroupClient config={config} groupId={params.id} />
+      <GroupClient config={config} groupId={id} />
     </Wrapper>
   );
 }

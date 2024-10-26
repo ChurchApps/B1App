@@ -1,16 +1,19 @@
+"use client";
 import { PageLayout, Theme } from "@/components";
-import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { ConfigHelper, GlobalStyleInterface, PageInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
-interface Props {
-  params: {
-    sdSlug: string;
-    pageSlug: string;
-  };
-}
+// interface Props {
+//   params: {
+//     sdSlug: string;
+//     pageSlug: string;
+//   };
+// }
 
-export default async function Home({ params }: Props) {
+type Params = Promise<{ sdSlug: string;  pageSlug: string; }>
+
+export default async function Home({ params }: { params: Params }) {
 
   const { sdSlug, pageSlug } = await params;
 
