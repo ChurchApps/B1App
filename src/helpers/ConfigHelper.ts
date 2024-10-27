@@ -1,4 +1,3 @@
-"use client";
 import { AppearanceInterface, ChurchInterface, ApiHelper, LinkInterface, UserHelper, Permissions} from "@churchapps/apphelper";
 import { PageInterface } from "./interfaces";
 export interface ColorsInterface { primary: string, contrast: string, header: string }

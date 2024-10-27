@@ -5,6 +5,7 @@ import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
 import ClientLayout from "./ClientLayout";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 
 
@@ -14,6 +15,8 @@ export const metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  EnvironmentHelper.init();
+  await EnvironmentHelper.initLocale();
 
   return (
     <html>

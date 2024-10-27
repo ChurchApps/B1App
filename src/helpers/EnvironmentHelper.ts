@@ -1,4 +1,3 @@
-"use client";
 import { ApiHelper, CommonEnvironmentHelper, Locale } from "@churchapps/apphelper";
 
 export class EnvironmentHelper {
