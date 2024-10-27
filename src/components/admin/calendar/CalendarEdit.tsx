@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, CuratedCalendarInterface, UserHelper, Permissions } from "@churchapps/apphelper";
 import { SelectChangeEvent, TextField } from "@mui/material";

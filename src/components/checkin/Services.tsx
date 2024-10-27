@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect } from "react";
 import { CheckinHelper, PersonHelper } from "@/helpers";
 import { Loading, ApiHelper, ServiceInterface, ArrayHelper, GroupServiceTimeInterface, GroupInterface } from "@churchapps/apphelper";

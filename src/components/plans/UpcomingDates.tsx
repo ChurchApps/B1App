@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { ArrayHelper, AssignmentInterface, DateHelper, DisplayBox, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper";
 import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";

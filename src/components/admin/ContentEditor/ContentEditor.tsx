@@ -1,3 +1,4 @@
+"use client";
 import { CSSProperties, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";

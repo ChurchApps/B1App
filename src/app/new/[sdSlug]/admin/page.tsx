@@ -6,7 +6,9 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { B1Settings } from "@/components/admin/settings/B1Settings";
 
 
-type PageParams = {sdSlug:string }
+// type PageParams = {sdSlug:string }
+type PageParams = Promise<{ sdSlug: string;  }>
+
 
 const loadData = async (sdSlug:string) => {
   const config = await ConfigHelper.load(sdSlug.toString());
@@ -20,15 +22,16 @@ const loadSharedData = (sdSlug:string) => {
 
 
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
-  const props = await loadSharedData(params.sdSlug);
+  const {sdSlug}= await params
+  const props = await loadSharedData(sdSlug);
   return MetaHelper.getMetaData(props.config.church.name + " - Mobile App Settings");
 }
 
 export default async function Admin({params}: {params:PageParams}) {
   //const { isAuthenticated } = ApiHelper;
   //useEffect(() => { if (!isAuthenticated) router.redirect("/login"); }, []);
-
-  const props = await loadData(params.sdSlug);
+  const {sdSlug}= await params
+  const props = await loadData(sdSlug);
 
   return (
     <AdminWrapper config={props.config}>

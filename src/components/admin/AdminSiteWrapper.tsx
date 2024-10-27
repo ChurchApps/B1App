@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";

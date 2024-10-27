@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { Grid, TextField } from "@mui/material";
 import Resizer from "react-image-file-resizer";

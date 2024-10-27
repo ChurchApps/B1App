@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, UserHelper, Permissions, ApiHelper } from "@churchapps/apphelper";
 import { BlockInterface } from "@/helpers";

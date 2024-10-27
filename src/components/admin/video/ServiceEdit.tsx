@@ -1,3 +1,4 @@
+"use client";
 import { InputBox } from "@churchapps/apphelper";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent } from "@mui/material";
 import React from "react";

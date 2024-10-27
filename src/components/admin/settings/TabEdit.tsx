@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
 import { B1LinkInterface,  PageInterface } from "@/helpers";

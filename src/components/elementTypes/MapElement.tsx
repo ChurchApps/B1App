@@ -36,7 +36,7 @@ export const MapElement = ({ element }: Props) => {
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
-            zoom={element.answers.mapZoom || 15}
+            zoom={element.answers?.mapZoom || 15}
           >
             {center && element.answers.mapLabel
               ? (
