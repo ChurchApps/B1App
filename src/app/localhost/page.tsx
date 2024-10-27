@@ -1,9 +1,19 @@
-
 "use client"
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
-import { MarkdownEditor, MarkdownPreviewLight } from "@churchapps/apphelper";
+// import { MarkdownEditor, MarkdownPreviewLight } from "@churchapps/apphelper";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const MarkdownEditor = dynamic(
+  () => import("@churchapps/apphelper").then((mod) => mod.MarkdownEditor),
+  { ssr: false } // disable server-side rendering if needed
+);
+
+const MarkdownPreviewLight = dynamic(
+  () => import("@churchapps/apphelper").then((mod) => mod.MarkdownPreviewLight),
+  { ssr: false }
+);
 
 export default function Localhost() {
   const [val, setVal] = useState("");
