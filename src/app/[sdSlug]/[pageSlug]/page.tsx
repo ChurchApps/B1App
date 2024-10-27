@@ -1,4 +1,3 @@
-"use client";
 import { PageLayout, Theme } from "@/components";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { ConfigHelper, GlobalStyleInterface, PageInterface } from "@/helpers";
