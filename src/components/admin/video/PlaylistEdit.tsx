@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { TextField, SelectChangeEvent } from "@mui/material";
 import { InputBox, ErrorMessages } from "@churchapps/apphelper";

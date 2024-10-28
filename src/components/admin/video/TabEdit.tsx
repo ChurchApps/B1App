@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
 import { IconPicker } from "@churchapps/apphelper";

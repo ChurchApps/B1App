@@ -1,3 +1,4 @@
+"use client";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { useEffect } from "react";
 

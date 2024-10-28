@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { ChatRoomInterface, ChatAttendanceInterface, ChatUserInterface } from "../../../helpers";
 import { Menu, Item, useContextMenu } from "react-contexify";

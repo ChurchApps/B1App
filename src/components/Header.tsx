@@ -11,6 +11,7 @@ import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { GlobalStyleInterface, PersonHelper, SectionInterface } from "@/helpers";
 import { redirect } from "next/navigation";
 
+
 type Props = {
   church: ChurchInterface;
   churchSettings: any;
@@ -24,11 +25,11 @@ type Props = {
 //structure navLinks based on their parentId
 const getNestedChildren = (arr: LinkInterface[], parent: string) => {
   const result: LinkInterface[] = [];
-  for(const i in arr) {
-    if(arr[i].parentId == parent) {
+  for (const i in arr) {
+    if (arr[i].parentId == parent) {
       if (arr[i].id) {
         const children = getNestedChildren(arr, arr[i].id);
-        if(children.length) {
+        if (children.length) {
           arr[i].children = children;
         }
       }
@@ -49,24 +50,33 @@ export function Header(props: Props) {
   }
 
   useEffect(() => {
-    ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
-      if (data.showLogin) {
-        if (data.showLogin === "true") setShowLogin(true);
-        else setShowLogin(false);
-      }
-    })
+    // ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+    //   if (data.showLogin) {
+    //     if (data.showLogin === "true") setShowLogin(true);
+    //     else setShowLogin(false);
+    //   }
+    // })
+
+    if (typeof window !== "undefined" && props.church?.id && UserHelper.user?.jwt) {
+      // Fetch settings from the API
+      ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+        if (data.showLogin) {
+          setShowLogin(data.showLogin === "true");
+        }
+      });
+    }
     const handleScroll = () => {
-      if (props.overlayContent)
-      {
+      if (props.overlayContent) {
         const show = window.scrollY > 100
         setTransparent(!show);
       }
     }
+
     document.addEventListener('scroll', handleScroll)
     return () => {
       document.removeEventListener('scroll', handleScroll)
     }
-  }, []);
+  }, [props.church?.id, props.overlayContent]);
 
   // const pathName = usePathname();
   // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
@@ -80,7 +90,7 @@ export function Header(props: Props) {
 
   const userAction = ApiHelper.isAuthenticated
     ? (
-      <Box component="div" sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
+      <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
         <ClickAwayListener onClickAway={() => setMenuAnchor(null)}>
           <Chip
             id="userMenuLink"
@@ -101,7 +111,7 @@ export function Header(props: Props) {
     : (
       <>
         {showLogin ? (
-          <Box sx={{ marginRight: "15px", marginLeft: {xs: "15px", md: 0}, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
+          <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
             <Chip
               component="a"
               href={"/login"}
@@ -159,13 +169,29 @@ export function Header(props: Props) {
         const palette = JSON.parse(props.globalStyles.palette);
         textColor = textColor.replace("var(--", "").replace(")", "");
         textColor = palette[textColor];
-        if (!textColor) textColor = "#FFF"
+        if (!textColor) textColor = "#FFF";
       }
-      let result = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || "", props.churchSettings?.logoDark || "", textColor)
-      return result;
+      const logo = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || null, props.churchSettings?.logoDark || null, textColor);
+      return logo !== "" ? logo : null;
+    } else {
+      return props.churchSettings?.logoLight || null;
     }
-    else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
-  }
+  };
+
+  // const getLogo = () => {
+  //   if (transparent) {
+  //     let textColor = props.sections[0]?.textColor || "#FFF";
+  //     if (textColor.indexOf("var(--") > -1) {
+  //       const palette = JSON.parse(props.globalStyles.palette);
+  //       textColor = textColor.replace("var(--", "").replace(")", "");
+  //       textColor = palette[textColor];
+  //       if (!textColor) textColor = "#FFF"
+  //     }
+  //     let result = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || "", props.churchSettings?.logoDark || "", textColor)
+  //     return result;
+  //   }
+  //   else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
+  // }
 
   //structured navLinks based on their parentId
   const structuredData = props.navLinks && getNestedChildren(props.navLinks, undefined);
@@ -194,11 +220,11 @@ export function Header(props: Props) {
 
   return (
     <div>
-      <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? {marginBottom:0} : {} }>
-        <Container style={{height:71}}>
+      <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? { marginBottom: 0 } : {}}>
+        <Container style={{ height: 71 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
-            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap",  }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap", }}>
               {getLinks()}
               {userAction}
             </Box>
