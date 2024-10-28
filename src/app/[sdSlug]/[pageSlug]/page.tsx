@@ -16,6 +16,7 @@ import { Metadata } from "next";
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
+  EnvironmentHelper.init();
   const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all"]});
   return result(sdSlug, pageSlug);
 }
@@ -27,7 +28,7 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
-  EnvironmentHelper.init();
+
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
   const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
