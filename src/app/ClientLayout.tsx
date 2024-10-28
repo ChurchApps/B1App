@@ -27,13 +27,11 @@ function ClientLayout({ children}: {children: React.ReactNode}) {
     EnvironmentHelper.initLocale();
     EnvironmentHelper.init();
     AnalyticsHelper.init();
-
-    // Log the page view (only on client side)
-    AnalyticsHelper.logPageView();
-
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
+
+  useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
 
   const getErrorAppData = () => {
