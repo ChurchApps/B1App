@@ -5,7 +5,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AdminWrapper } from "./AdminWrapper";
 import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
-import router from "next/router";
+import router from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
 import { useWindowWidth } from "@react-hook/window-size";
 import Link from "next/link";
