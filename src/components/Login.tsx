@@ -67,7 +67,6 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { PaperProps } from "@mui/material";
 import { Layout } from "@/components";
@@ -75,6 +74,7 @@ import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { PersonHelper } from "@/helpers";
 import { useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 
 interface Props {
   showLogo?: boolean;
@@ -101,7 +101,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
       PersonHelper.person = context.person;
       redirect(`${returnUrl}`);
     }
-  }, [context.person, returnUrl, router]);
+  }, [context.person, returnUrl]);
 
   useEffect(() => {
     // Client-side only logic

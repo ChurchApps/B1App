@@ -29,14 +29,15 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   };
 
   const selectedTab = getSelectedTab();
+  const dummyRouter = {}
 
-  tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={router} />);
-  tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={router} />)
+  tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={dummyRouter} />);
+  tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={dummyRouter} />)
 
-  tabs.push(<NavItem key="admin" url="/admin" label="Mobile" icon="phone_android" router={router} selected={selectedTab === "admin"} />);
-  tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={router} selected={selectedTab === "site"} />);
-  tabs.push(<NavItem key="sermons" url="/admin/video" label="Sermons" icon="live_tv" router={router} selected={selectedTab === "sermons"} />);
-  tabs.push(<NavItem key="calendar" url="/admin/calendars" label="Calendars" icon="calendar_month" router={router} selected={selectedTab === "calendar"} />);
+  tabs.push(<NavItem key="admin" url="/admin" label="Mobile" icon="phone_android" router={dummyRouter} selected={selectedTab === "admin"} />);
+  tabs.push(<NavItem key="site" url="/admin/site" label="Website" icon="web" router={dummyRouter} selected={selectedTab === "site"} />);
+  tabs.push(<NavItem key="sermons" url="/admin/video" label="Sermons" icon="live_tv" router={dummyRouter} selected={selectedTab === "sermons"} />);
+  tabs.push(<NavItem key="calendar" url="/admin/calendars" label="Calendars" icon="calendar_month" router={dummyRouter} selected={selectedTab === "calendar"} />);
 
   const navContent = (
     <>
@@ -50,7 +51,7 @@ export const AdminWrapper: React.FC<Props> = (props) => {
     <ThemeProvider theme={Themes.BaseTheme}>
       <CssBaseline />
       <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-        <SiteWrapper navContent={navContent} context={context} appName="B1" router={router} appearance={props.config.appearance} omitOverflow={true}>
+        <SiteWrapper navContent={navContent} context={context} appName="B1" router={dummyRouter} appearance={props.config.appearance} omitOverflow={true}>
           {props.children}
         </SiteWrapper>
       </Box>
