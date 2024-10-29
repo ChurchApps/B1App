@@ -4,7 +4,6 @@ import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { GlobalStyleInterface } from "@/helpers";
-import Head from "next/head";
 
 type Props = {
   pageData: any;
@@ -42,7 +41,7 @@ export function PageLayout(props: Props) {
   const css = StyleHelper.getCss(props.pageData.sections);
   console.log("CSS", css);
   return <>
-    <Head><style>{css}</style></Head>
+    <style>{css}</style>
     {result}
   </>;
 

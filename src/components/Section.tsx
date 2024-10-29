@@ -21,7 +21,6 @@ interface Props {
 export const Section: React.FC<Props> = props => {
   const [isDragging, setIsDragging] = useState(false);
 
-  console.log("SECTION", props.section)
 
   const getElements = () => {
     const result: JSX.Element[] = []
@@ -135,7 +134,6 @@ export const Section: React.FC<Props> = props => {
   const getId = () => {
     let result = "section-" + props.section.answers?.sectionId?.toString()
     if (result==="section-undefined") result = "section-" + props.section.id;
-    console.log("SECTION ID2", result, result==="section-undefined");
     return result;
   }
 
