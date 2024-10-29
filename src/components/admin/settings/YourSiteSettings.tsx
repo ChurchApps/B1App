@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon, Button } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
