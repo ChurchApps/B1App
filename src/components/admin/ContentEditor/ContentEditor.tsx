@@ -1,6 +1,6 @@
 "use client";
 import { CSSProperties, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
@@ -32,7 +32,6 @@ interface Props extends WrapperPageProps {
 
 export default function ContentEditor(props: Props) {
   const { isAuthenticated } = ApiHelper
-  const router = useRouter();
   const [container, setContainer] = useState<PageInterface | BlockInterface>(null);
   const [editSection, setEditSection] = useState<SectionInterface>(null);
   const [editElement, setEditElement] = useState<ElementInterface>(null);
@@ -55,12 +54,12 @@ export default function ContentEditor(props: Props) {
 
   useEffect(() => {
     if(!UserHelper.checkAccess(Permissions.contentApi.content.edit)){
-      router.push("/admin/site");
+      redirect("/admin/site");
     }
   }, []);
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push("/login"); }
+    if (!isAuthenticated) { redirect("/login"); }
   }, []);
 
   const loadData = () => {
@@ -79,7 +78,7 @@ export default function ContentEditor(props: Props) {
   //page editor only available for desktop
   useEffect(() => {
     if (windowWidth < 883){
-      router.push("/admin/site");
+      redirect("/admin/site");
     }
   }, [windowWidth]);
 

@@ -5,7 +5,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AdminWrapper } from "./AdminWrapper";
 import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
-import router from "next/navigation";
+import { redirect } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
 import { useWindowWidth } from "@react-hook/window-size";
 import Link from "next/link";
@@ -50,14 +50,14 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
   };
 
 
-  useEffect(() => { if (!isAuthenticated) router.push("/login"); }, []);
+  useEffect(() => { if (!isAuthenticated) redirect("/login"); }, []);
   useEffect(loadData, [isAuthenticated]);
 
   const navigationHandler = (errorMessage: string, url: string) => {
     let errors: string[] = [];
 
     if (windowWidth > 882){
-      router.push(url);
+      redirect(url);
     } else {
       errors.push(errorMessage);
     }
@@ -116,8 +116,8 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
     loadData();
     setAddMode("");
     if (page) {
-      if (link) router.push("/admin/site/pages/preview/" + page.id + "?linkId=" + link.id);
-      else router.push("/admin/site/pages/preview/" + page.id);
+      if (link) redirect("/admin/site/pages/preview/" + page.id + "?linkId=" + link.id);
+      else redirect("/admin/site/pages/preview/" + page.id);
     }
   }
 

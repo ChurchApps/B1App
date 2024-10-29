@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
@@ -14,7 +14,6 @@ export function FilesClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [pendingFileSave, setPendingFileSave] = useState(false);
   const [files, setFiles] = useState<FileInterface[]>(null);
-  const router = useRouter();
 
 
   let usedSpace = 0;
@@ -65,7 +64,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
+    if (!isAuthenticated) redirect("/login");
     else ApiHelper.get("/files", "ContentApi").then((d) => setFiles(d));
   }, []);
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { PersonHelper, WrapperPageProps } from "@/helpers";
 import { Loading, FormSubmissionEdit, DateHelper, ApiHelper } from "@churchapps/apphelper";
 
@@ -18,7 +18,6 @@ export function FormClient({ config, formId }: Props) {
   const [late, setLate] = useState<Date>(null);
   const [addFormId, setAddFormId] = useState<string>("");
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
-  const router = useRouter();
 
   const loadData = () => {
     setIsLoading(true);
@@ -48,7 +47,7 @@ export function FormClient({ config, formId }: Props) {
       formSubmissionId=""
       personId={PersonHelper?.person?.id}
       updatedFunction={handleUpdate}
-      cancelFunction={() => router.push("/")}
+      cancelFunction={() => redirect("/")}
     />
   );
 
@@ -73,11 +72,13 @@ export function FormClient({ config, formId }: Props) {
 
   return (
     <>
-      {isFormSubmitted ? (
-        <h3 className="text-center">Your form has been successfully submitted.</h3>
-      ) : (
-        getForm()
-      )}
+      {isFormSubmitted
+        ? (
+          <h3 className="text-center">Your form has been successfully submitted.</h3>
+        )
+        : (
+          getForm()
+        )}
     </>
   );
 }

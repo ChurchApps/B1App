@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon, Button } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -20,13 +20,12 @@ export function YourSiteSettings() {
   const [editBlock, setEditBlock] = useState<BlockInterface>(null);
   const [refresh, refresher] = useState({});
   const [creatingPages, setCreatingPages] = useState<boolean>(false);
-  const router = useRouter();
   const windowWidth = useWindowWidth();
 
   // redirect to login when not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push("/login");
+      redirect("/login");
     }
   }, [isAuthenticated]);
 
@@ -81,7 +80,7 @@ export function YourSiteSettings() {
     let errors: string[] = [];
 
     if (windowWidth > 882){
-      router.push(url);
+      redirect(url);
     } else {
       errors.push(errorMessage);
     }
