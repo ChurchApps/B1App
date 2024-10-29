@@ -18,18 +18,18 @@ import { EnvironmentHelper } from "@/helpers";
 
 function ClientLayout({ children}: {children: React.ReactNode}) {
   const [errors, setErrors] = React.useState([]);
+  const [localeInit, setLocaleInit] = React.useState(false);
   const location = (typeof(window) === "undefined") ? null : window.location;
 
-
-
   useEffect(() => {
-    // Initialize EnvironmentHelper and AnalyticsHelper on the client
-    EnvironmentHelper.initLocale();
     EnvironmentHelper.init();
+    EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
+    console.log("ENVIRONMENT HAD BEEN INIT")
     AnalyticsHelper.init();
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
+  EnvironmentHelper.init();
 
   useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
