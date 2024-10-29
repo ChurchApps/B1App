@@ -15,8 +15,7 @@ export const metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  EnvironmentHelper.init();
-  await EnvironmentHelper.initLocale();
+  await EnvironmentHelper.initServerSide();
 
   return (
     <html>

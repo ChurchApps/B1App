@@ -1,14 +1,12 @@
 import { Wrapper } from "@/components";
-import { ConfigHelper } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { FormClient } from "./FormClient";
-
-
 
 type Params = Promise<{ sdSlug: string; id:string }>;
 
-
 export default async function FormPage({ params }: {params:Params}) {
-    const {sdSlug, id}= await params
+  await EnvironmentHelper.initServerSide();
+  const {sdSlug, id}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (

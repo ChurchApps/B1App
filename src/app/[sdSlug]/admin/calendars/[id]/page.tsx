@@ -1,5 +1,5 @@
-"use client";
-import { ConfigHelper } from "@/helpers";
+
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { CalendarClientWrapper } from "./CalendarClientWrapper";
 
 
@@ -8,8 +8,8 @@ import { CalendarClientWrapper } from "./CalendarClientWrapper";
 
 
 export default async function CalendarPage({ params }: { params: Params }) {
-
-    const {sdSlug} = await params
+  await EnvironmentHelper.initServerSide();
+  const {sdSlug} = await params
 
   const config = await ConfigHelper.load(sdSlug.toString());
   return <CalendarClientWrapper config={config} />;
