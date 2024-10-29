@@ -1,4 +1,3 @@
-"use client";
 import { ConfigHelper } from "@/helpers";
 import { AdminClientWrapper } from "./AdminClientWrapper";
 

@@ -7,6 +7,7 @@ export class EnvironmentHelper {
 
   static init = () => {
     if (this.hasInit) return;
+    this.hasInit = true;
     let stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
 
     //stage="prod"
