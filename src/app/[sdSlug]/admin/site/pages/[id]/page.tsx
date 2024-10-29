@@ -6,7 +6,7 @@ type Params = Promise<{ sdSlug: string;  id: string; }>
 
 
 export default async function PageEditor({ params }: { params: Params }) {
-    const {sdSlug,id} = await params
+  const {sdSlug,id} = await params
   const config = await ConfigHelper.load(sdSlug.toString());
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
   const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
