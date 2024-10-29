@@ -4,7 +4,7 @@ import { GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, ChurchInterface, UserHelper } from "@churchapps/apphelper";
 import React from "react";
 import ContentEditor from "@/components/admin/ContentEditor/ContentEditor";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 interface Props extends WrapperPageProps {
   church: ChurchInterface;
@@ -14,14 +14,13 @@ interface Props extends WrapperPageProps {
 }
 
 export function ContentEditorClient(props: Props) {
-  const router = useRouter();
   const id = props.pageId;
 
   const loadData = async (id: string) =>
     await ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi");
 
   const handleDone = () => {
-    router.push("/admin/site/pages/preview/" + id);
+    redirect("/admin/site/pages/preview/" + id);
   };
 
   return (

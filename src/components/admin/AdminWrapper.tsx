@@ -4,7 +4,6 @@ import React from "react";
 import UserContext from "../../context/UserContext";
 import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
 import { SiteWrapper, NavItem } from "@churchapps/apphelper";
-import { useRouter } from "next/navigation";
 import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Themes } from "@/helpers/Themes";
@@ -19,7 +18,6 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
   const tabs = [];
-  const router = useRouter();
 
   const getSelectedTab = () => {
     const path = typeof window !== "undefined" ? window?.location?.pathname : "";

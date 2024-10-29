@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import UserContext from "../context/UserContext";
 import { Box, CssBaseline, Divider, List, ThemeProvider } from "@mui/material";
-import { useRouter } from "next/navigation"
 import { SiteWrapper, NavItem, UserHelper, Permissions, ApiHelper } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -14,7 +13,6 @@ export const Wrapper: React.FC<Props> = props => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
   const tabs: any[] = []
-  const router = useRouter();
   const [classRoooms, setClassrooms] = React.useState([]);
   const [campuses, setCampuses] = React.useState([]);
 

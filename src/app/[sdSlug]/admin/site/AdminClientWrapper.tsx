@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { BlockInterface, EnvironmentHelper, WrapperPageProps } from "@/helpers";
 import { ApiHelper, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
 import { Grid, Icon, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
@@ -16,7 +16,6 @@ export function AdminClientWrapper(props: WrapperPageProps) {
   const [editBlock, setEditBlock] = useState<BlockInterface>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const windowWidth = useWindowWidth();
-  const router = useRouter();
 
   EnvironmentHelper.initLocale();
   const loadData = () => {
@@ -53,7 +52,7 @@ export function AdminClientWrapper(props: WrapperPageProps) {
   ));
 
   useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
+    if (!isAuthenticated) redirect("/login");
   }, [isAuthenticated]);
 
   useEffect(loadData, [isAuthenticated]);

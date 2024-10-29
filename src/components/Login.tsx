@@ -8,7 +8,7 @@
 // import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 // import UserContext from "@/context/UserContext"
 // import { PersonHelper } from "@/helpers";
-// import { useSearchParams } from "next/navigation"; 
+// import { useSearchParams } from "next/navigation";
 
 // interface Props {
 //   showLogo?: boolean;
@@ -67,7 +67,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { PaperProps } from "@mui/material";
 import { Layout } from "@/components";
@@ -84,7 +84,6 @@ interface Props {
 }
 
 export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps, keyName }: Props) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [returnUrl, setReturnUrl] = useState<string | null>(null);
   const [cookies] = useCookies();
@@ -100,7 +99,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
   useEffect(() => {
     if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) {
       PersonHelper.person = context.person;
-      router.push(`${returnUrl}`);
+      redirect(`${returnUrl}`);
     }
   }, [context.person, returnUrl, router]);
 

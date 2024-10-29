@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
@@ -18,7 +18,6 @@ interface Props extends WrapperPageProps {
 export function PreviewClientWrapper(props: Props) {
   const url = props.pageData.url;
   const [showSettings, setShowSettings] = useState(false);
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [link, setLink] = useState<LinkInterface>(null);
 
@@ -30,10 +29,10 @@ export function PreviewClientWrapper(props: Props) {
   const handlePageUpdated = (page: PageInterface, link: LinkInterface) => {
     loadData();
     setShowSettings(false);
-    if (!page) router.push("/admin/site");
+    if (!page) redirect("/admin/site");
 
-    if (link) router.push(`/admin/site/pages/preview/${page.id}?linkId=${link.id}`);
-    else router.push(`/admin/site/pages/preview/${page.id}`);
+    if (link) redirect(`/admin/site/pages/preview/${page.id}?linkId=${link.id}`);
+    else redirect(`/admin/site/pages/preview/${page.id}`);
   };
 
   useEffect(() => {
@@ -47,7 +46,7 @@ export function PreviewClientWrapper(props: Props) {
         <div style={{ background: "#FFF", padding: 15 }}>
           <Grid container>
             <Grid item xs={3}>
-              <SmallButton icon="edit" text="Edit Content" onClick={() => router.push("/admin/site/pages/" + props.pageData.id)} />
+              <SmallButton icon="edit" text="Edit Content" onClick={() => redirect("/admin/site/pages/" + props.pageData.id)} />
             </Grid>
             <Grid item xs={6} style={{ textAlign: "center" }}>
               <b>{props.pageData.title}</b>

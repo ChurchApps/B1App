@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import {  PageInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
@@ -17,10 +17,9 @@ export function StreamSettingsClient(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [editPage, setEditPage] = useState<PageInterface>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
+    if (!isAuthenticated) redirect("/login");
   }, [isAuthenticated]);
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import {  WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Icon, Grid } from "@mui/material";
@@ -14,10 +14,9 @@ import { VimeoImport } from "@/components/admin/video/VimeoImport";
 
 export function ManageVideoClient(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
-  const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
+    if (!isAuthenticated) redirect("/login");
   }, [isAuthenticated]);
 
   const [photoUrl, setPhotoUrl] = useState<string>(null);
@@ -52,21 +51,25 @@ export function ManageVideoClient(props: WrapperPageProps) {
       </h1>
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
-          {importMode ? (
-            <>
-              {importType === "youtube" ? (
-                <YouTubeImport handleDone={() => setImportMode(false)} />
-              ) : (
-                <VimeoImport handleDone={() => setImportMode(false)} />
-              )}
-            </>
-          ) : (
-            <>
-              {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && (
-                <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
-              )}
-            </>
-          )}
+          {importMode
+            ? (
+              <>
+                {importType === "youtube"
+                  ? (
+                    <YouTubeImport handleDone={() => setImportMode(false)} />
+                  )
+                  : (
+                    <VimeoImport handleDone={() => setImportMode(false)} />
+                  )}
+              </>
+            )
+            : (
+              <>
+                {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && (
+                  <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
+                )}
+              </>
+            )}
         </Grid>
         <Grid item md={4} xs={12}>
           {imageEditor}

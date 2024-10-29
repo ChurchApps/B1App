@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -16,7 +16,6 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
   const [section, setSection] = useState<string>("");
-  const router = useRouter();
 
   const loadData = () => {
     ApiHelper.get("/globalStyles", "ContentApi").then((gs) => {
@@ -58,7 +57,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) router.push("/login");
+    if (!isAuthenticated) redirect("/login");
     else loadData();
   }, []);
 
