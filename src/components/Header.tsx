@@ -43,7 +43,7 @@ export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
-  const [showLogin, setShowLogin] = useState<boolean>(true);
+  const [showLogin, setShowLogin] = useState<boolean>(false);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -57,9 +57,12 @@ export function Header(props: Props) {
     //   }
     // })
 
-    if (typeof window !== "undefined" && props.church?.id && UserHelper.user?.jwt) {
+    console.log("USE EFFECT")
+    if (typeof window !== "undefined" && props.church?.id) {
+      console.log("ITS A BROWSER")
       // Fetch settings from the API
-      ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+      ApiHelper.getAnonymous("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+        console.log("SETTINGS ARE", data)
         if (data.showLogin) {
           setShowLogin(data.showLogin === "true");
         }
@@ -110,19 +113,21 @@ export function Header(props: Props) {
     )
     : (
       <>
-        {showLogin ? (
-          <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-            <Chip
-              component="a"
-              href={"/login"}
-              clickable
-              id="loginButton"
-              label="Login"
-              icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
-              sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
-            />
-          </Box>
-        ) : null}
+        {showLogin
+          ? (
+            <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
+              <Chip
+                component="a"
+                href={"/login"}
+                clickable
+                id="loginButton"
+                label="Login"
+                icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
+                sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
+              />
+            </Box>
+          )
+          : null}
       </>
     )
 

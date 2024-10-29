@@ -21,16 +21,24 @@ function ClientLayout({ children}: {children: React.ReactNode}) {
   const [localeInit, setLocaleInit] = React.useState(false);
   const location = (typeof(window) === "undefined") ? null : window.location;
 
+  const initClient = () => {
+    if (!EnvironmentHelper.hasInit) {
+      // Initialize EnvironmentHelper and AnalyticsHelper on the client
+      EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
+      EnvironmentHelper.init();
+
+    }
+  }
 
 
   useEffect(() => {
-    // Initialize EnvironmentHelper and AnalyticsHelper on the client
-    EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
-    EnvironmentHelper.init();
+    initClient();
+    console.log("ENVIRONMENT HAD BEEN INIT")
     AnalyticsHelper.init();
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
+  initClient();
 
   useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
