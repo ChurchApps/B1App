@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { ConfigHelper } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { unstable_cache } from "next/cache";
 import { MetaHelper } from "@/helpers/MetaHelper";
@@ -28,6 +28,7 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
 }
 
 export default async function Admin({params}: {params:PageParams}) {
+  await EnvironmentHelper.initServerSide();
   //const { isAuthenticated } = ApiHelper;
   //useEffect(() => { if (!isAuthenticated) router.redirect("/login"); }, []);
   const {sdSlug}= await params

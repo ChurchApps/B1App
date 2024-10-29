@@ -1,14 +1,12 @@
 import { Wrapper } from "@/components";
-import { ConfigHelper } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { PagesClient } from "./PagesClient";
-
-
 
 type Params = Promise<{ sdSlug: string;  churchId: string; linkId: string; url?: string }>;
 
-
 export default async function Pages({ params }: {params:Params}) {
-    const {sdSlug, churchId, linkId, url}= await params
+  await EnvironmentHelper.initServerSide();
+  const {sdSlug, churchId, linkId, url}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (

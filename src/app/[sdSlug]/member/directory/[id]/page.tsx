@@ -1,5 +1,5 @@
 import { Wrapper } from "@/components/Wrapper";
-import { ConfigHelper } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { MemberClient } from "./MemberClient";
 
 
@@ -9,7 +9,8 @@ type Params = Promise<{ sdSlug: string; id:string }>;
 
 
 export default async function MemberPage({ params }: {params:Params}) {
-    const {sdSlug,id}= await params
+  await EnvironmentHelper.initServerSide();
+  const {sdSlug,id}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (

@@ -40,7 +40,7 @@ const loadData = async (sdSlug:string, pageSlug:string) => {
 }
 
 export default async function Home({ params }: { params: PageParams }) {
-
+  await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug } = await params;
   const { church, churchSettings, globalStyles, navLinks, pageData, config } = await loadSharedData(sdSlug, pageSlug);
 

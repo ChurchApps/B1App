@@ -1,4 +1,4 @@
-import { ConfigHelper } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { MemberClientWrapper } from "./MemberClientWrapper";
 
 
@@ -6,7 +6,8 @@ import { MemberClientWrapper } from "./MemberClientWrapper";
 type Params = Promise<{ sdSlug: string;  }>;
 
 export default async function MemberPage({ params }: { params: Params }) {
-    const {sdSlug}= await params
+  await EnvironmentHelper.initServerSide();
+  const {sdSlug}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (

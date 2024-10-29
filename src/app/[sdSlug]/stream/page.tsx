@@ -1,9 +1,8 @@
 import { Theme } from "@/components";
 import { LiveStream } from "@/components/video/LiveStream";
 import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
-import { PageInterface } from "@/helpers";
+import { EnvironmentHelper, PageInterface } from "@/helpers";
 import { Suspense } from "react";
-
 
 interface Props {
   church: ChurchInterface,
@@ -18,6 +17,7 @@ type searchParams = Promise<{ hideHeader?: string }>;
 
 
 export default async function StreamPage({ params, searchParams }: { params: Params, searchParams: searchParams }) {
+  await EnvironmentHelper.initServerSide();
   const { sdSlug } = await params
   const { hideHeader } = await searchParams
 

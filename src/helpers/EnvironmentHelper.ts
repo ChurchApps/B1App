@@ -5,6 +5,13 @@ export class EnvironmentHelper {
   public static LessonsApi = "";
   static hasInit = false;
 
+  static initServerSide = async () => {
+    if (!this.hasInit) {
+      this.init();
+      await this.initLocale();
+    }
+  }
+
   static init = () => {
     if (this.hasInit) return;
     this.hasInit = true;

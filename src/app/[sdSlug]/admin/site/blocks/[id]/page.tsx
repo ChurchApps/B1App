@@ -1,11 +1,11 @@
-"use client";
-import { ConfigHelper, GlobalStyleInterface } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { BlockEditorClient } from "./BlockEditorClient";
 
 type Params = Promise<{ sdSlug: string;  id: string; }>
 
 export default async function BlockEditor({ params }: { params: Params }) {
+  await EnvironmentHelper.initServerSide();
   const { sdSlug,id } = await params
   const config = await ConfigHelper.load(sdSlug.toString());
   const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");

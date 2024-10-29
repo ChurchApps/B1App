@@ -1,11 +1,12 @@
 import { Wrapper } from "@/components";
-import { ConfigHelper } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 
 
 type Params = Promise<{ sdSlug: string }>;
 
 export default async function BiblePage({ params }: {params:Params}) {
-    const {sdSlug}= await params
+  await EnvironmentHelper.initServerSide();
+  const {sdSlug}= await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (

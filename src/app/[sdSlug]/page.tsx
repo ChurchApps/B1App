@@ -7,6 +7,7 @@ import { PageLayout } from "@/components/PageLayout";
 import { unstable_cache } from "next/cache";
 import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 type PageParams = Promise<{ sdSlug: string;  }>
 
@@ -35,6 +36,7 @@ const loadData = async (sdSlug:string) => {
 }
 
 export default async function Home({params}: {params:Promise<PageParams>}) {
+  await EnvironmentHelper.initServerSide();
 
   const { sdSlug } =  await params;
   const props = await loadData(sdSlug);
