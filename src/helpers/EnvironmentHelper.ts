@@ -3,8 +3,10 @@ import { ApiHelper, CommonEnvironmentHelper, Locale } from "@churchapps/apphelpe
 export class EnvironmentHelper {
   static Common = CommonEnvironmentHelper;
   public static LessonsApi = "";
+  static hasInit = false;
 
   static init = () => {
+    if (this.hasInit) return;
     let stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
 
     //stage="prod"
