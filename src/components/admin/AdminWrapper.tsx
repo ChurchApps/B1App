@@ -7,6 +7,7 @@ import { SiteWrapper, NavItem } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Themes } from "@/helpers/Themes";
+import { useRouter } from "next/navigation";
 
 interface Props {
   config: ConfigurationInterface;
@@ -29,7 +30,8 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   };
 
   const selectedTab = getSelectedTab();
-  const dummyRouter = {}
+  const dummyRouter = useRouter();
+
 
   tabs.push(<NavItem key="/" url="/" label="Home" icon="home" router={dummyRouter} />);
   tabs.push(<NavItem key="/member" url="/member" label="Member" icon="person" router={dummyRouter} />)
