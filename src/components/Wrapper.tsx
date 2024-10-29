@@ -6,6 +6,7 @@ import { SiteWrapper, NavItem, UserHelper, Permissions, ApiHelper } from "@churc
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Themes } from "@/helpers/Themes";
+import { useRouter } from "next/navigation";
 
 interface Props { config: ConfigurationInterface, pageTitle?: string, children: React.ReactNode }
 
@@ -42,7 +43,7 @@ export const Wrapper: React.FC<Props> = props => {
     }
   }
 
-  const dummyRouter = {}
+  const dummyRouter = useRouter();
   const getTabs = () => {
     props.config.tabs?.forEach(tab => {
       switch (tab.linkType) {
