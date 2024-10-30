@@ -35,8 +35,8 @@ export function CssEdit(props: Props) {
     <>
 
       <InputBox headerIcon="text_fields" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)}>
-        <TextField multiline rows={5} label="Custom CSS" name="css" value={globalStyle.customCss || ""} onChange={handleChange} fullWidth />
-        <TextField multiline rows={5} label="Custom Javascript" name="js" value={globalStyle.customJS || ""} onChange={handleChange} fullWidth />
+        <TextField multiline rows={5} label="Custom CSS" name="css" value={globalStyle.customCss || ""} onChange={handleChange} fullWidth placeholder="a { text-decoration:underline; }" />
+        <TextField multiline rows={5} label="Custom Javascript" name="js" value={globalStyle.customJS || ""} onChange={handleChange} fullWidth placeholder="<script>console.log('Hello World');</script>" />
       </InputBox>
     </>
   );

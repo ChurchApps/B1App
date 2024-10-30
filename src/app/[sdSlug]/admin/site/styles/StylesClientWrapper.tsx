@@ -105,7 +105,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
                 <TableRow>
                   <TableCell>
                     <a href="#" onClick={(e) => { e.preventDefault(); setSection("css"); }}>
-                      <Icon sx={{ marginRight: "5px" }}>css</Icon>Custom CSS
+                      <Icon sx={{ marginRight: "5px" }}>css</Icon>CSS and Javascript
                     </a>
                   </TableCell>
                 </TableRow>
