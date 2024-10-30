@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Button, Grid, SelectChangeEvent } from "@mui/material";
 import { GlobalStyleInterface } from "@/helpers";
 import { DisplayBox, InputBox } from "@churchapps/apphelper";
+import { CustomFontModal } from "@/app/[sdSlug]/admin/site/styles/CustomFontModal";
 
 interface Props {
   globalStyle?: GlobalStyleInterface;
@@ -15,6 +16,7 @@ export interface FontsInterface {
 
 export function FontsEdit(props: Props) {
   const [fonts, setFonts] = useState<FontsInterface>(null);
+  const [showFont, setShowFont] = useState("");
 
   const fontList = ["Open Sans", "Montserrat", "Oswald", "Roboto", "Poppins", "Playfair Display", "Lato", "Raleway", "Inter"]
 
@@ -33,6 +35,13 @@ export function FontsEdit(props: Props) {
     }
     setFonts(f);
   };
+
+  const updateFont = (font:string) => {
+    let f = { ...fonts };
+    if (showFont === "body") f.body = font;
+    else f.heading = font;
+    setFonts(f);
+  }
 
 
   const getPairings = () => {
@@ -54,29 +63,26 @@ export function FontsEdit(props: Props) {
     return <Grid container spacing={1}>{result}</Grid>
   }
 
+
+  const getFont = () => {
+    if (showFont) return <CustomFontModal onClose={() => { setShowFont("") }} updateValue={(val) => { setShowFont(""); updateFont(val) }} />
+  }
+
   if (!fonts) return "Fonts null";
 
 
   return (
     <>
-
+      {getFont()}
       <InputBox headerIcon="text_fields" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
-            <FormControl fullWidth>
-              <InputLabel>Heading Font</InputLabel>
-              <Select fullWidth label="Heading Font" name="heading" value={fonts.heading || ""} onChange={handleChange}>
-                {fontList.map(f => <MenuItem value={f}>{f}</MenuItem>)}
-              </Select>
-            </FormControl>
+            <div><label>Heading Font</label></div>
+            <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("heading"); }}>{fonts.heading || "Roboto"}</Button>
           </Grid>
           <Grid item xs={12} md={4}>
-            <FormControl fullWidth>
-              <InputLabel>Body Font</InputLabel>
-              <Select fullWidth label="Body Font" name="body" value={fonts.body || ""} onChange={handleChange}>
-                {fontList.map(f => <MenuItem value={f}>{f}</MenuItem>)}
-              </Select>
-            </FormControl>
+            <div><label>Body Font</label></div>
+            <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("body"); }}>{fonts.body || "Roboto"}</Button>
           </Grid>
           <Grid item xs={12} md={4}>
 

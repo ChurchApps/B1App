@@ -12,6 +12,7 @@ import { Preview } from "@/components/admin/settings/Preview";
 import { CssEdit } from "@/components/admin/settings/CssEdit";
 import { Appearance } from "@/components/admin/Appearance";
 
+
 export function StylesClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
@@ -69,10 +70,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   return (
     <AdminWrapper config={props.config}>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Lato&family=Montserrat:wght@500&family=Open+Sans:wght@500&family=Oswald:wght@500&family=Playfair+Display:wght@500&family=Poppins:wght@500&family=Raleway:wght@500&family=Roboto:wght@500&display=swap"
-        rel="stylesheet"
-      ></link>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Lato&family=Montserrat:wght@500&family=Open+Sans:wght@500&family=Oswald:wght@500&family=Playfair+Display:wght@500&family=Poppins:wght@500&family=Raleway:wght@500&family=Roboto:wght@500&display=swap" rel="stylesheet"></link>
       <h1>Manage Global Styles</h1>
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
