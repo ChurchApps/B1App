@@ -12,7 +12,7 @@ export class ConfigHelper {
 
   static clearCache(sdKey: string) {
     startTransition(async () => {
-      revalidate(sdKey);
+      await revalidate(sdKey);
     })
   }
 
