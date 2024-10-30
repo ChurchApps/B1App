@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
-import { GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
 import { Grid } from "@mui/material";
@@ -27,6 +27,7 @@ export function PreviewClientWrapper(props: Props) {
   };
 
   const handlePageUpdated = (page: PageInterface, link: LinkInterface) => {
+    ConfigHelper.clearCache(props.church.subDomain);
     loadData();
     setShowSettings(false);
     if (!page) redirect("/admin/site");

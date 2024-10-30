@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AdminWrapper } from "./AdminWrapper";
 import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
@@ -90,7 +90,7 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
         ApiHelper.post("/links", [newLink], "ContentApi").then(() => { loadData(); });
       }
     }
-
+    ConfigHelper.clearCache(props.config.keyName);
   }
 
   const getUnlinkedPages = () => {
@@ -113,12 +113,14 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
   }
 
   const addLinkCallback = (page:PageInterface, link:LinkInterface) => {
+    ConfigHelper.clearCache(props.config.keyName);
     loadData();
     setAddMode("");
     if (page) {
       if (link) redirect("/admin/site/pages/preview/" + page.id + "?linkId=" + link.id);
       else redirect("/admin/site/pages/preview/" + page.id);
     }
+
   }
 
   return (
@@ -144,7 +146,7 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
               </span>
               <h3>Main Navigation</h3>
             </div>
-            <SiteNavigation links={links} pages={pages} refresh={loadData} select={(link, page) => {}} handleDrop={handleDrop} />
+            <SiteNavigation keyName={props.config.keyName} links={links} pages={pages} refresh={loadData} select={(link, page) => {}} handleDrop={handleDrop} />
 
             <span style={{float:"right", paddingTop:15}}>
               <SmallButton icon="add" onClick={() => { setAddMode("unlinked") }} />
