@@ -1,6 +1,6 @@
 import React from "react";
 import { LinkInterface } from "@churchapps/apphelper";
-import { PageInterface } from "@/helpers";
+import { ConfigHelper, PageInterface } from "@/helpers";
 import { PageLinkEdit } from "./site/PageLinkEdit";
 import { DroppableWrapper } from "./DroppableWrapper";
 import { DraggableWrapper } from "./DraggableWrapper";
@@ -13,6 +13,7 @@ interface RecursiveInterface {
 }
 
 interface Props {
+  keyName: string;
   links: LinkInterface[];
   pages: PageInterface[];
   refresh: () => void;
@@ -88,7 +89,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
 
   return (
     <>
-      {editLink && <PageLinkEdit link={editLink} page={null} updatedCallback={() => { setEditLink(null); props.refresh();  }} onDone={() => { setEditLink(null); }} />}
+      {editLink && <PageLinkEdit link={editLink} page={null} updatedCallback={() => { ConfigHelper.clearCache(props.keyName); setEditLink(null); props.refresh();  }} onDone={() => { setEditLink(null); }} />}
       <table className="table">
         <tbody>
           <RecursiveLinks childrenLinks={structuredLinks} nestedLevel={-1} />

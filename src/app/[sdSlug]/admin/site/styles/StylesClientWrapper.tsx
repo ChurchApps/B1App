@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { GlobalStyleInterface, WrapperPageProps } from "@/helpers";
+import { ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { DisplayBox, ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { PaletteEdit } from "@/components/admin/settings/PaletteEdit";
 import { FontsEdit } from "@/components/admin/settings/FontEdit";
 import { Preview } from "@/components/admin/settings/Preview";
@@ -16,6 +16,8 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
   const [section, setSection] = useState<string>("");
+
+
 
   const loadData = () => {
     ApiHelper.get("/globalStyles", "ContentApi").then((gs) => {
@@ -39,6 +41,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
       gs.palette = paletteJson;
       ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
     }
+    ConfigHelper.clearCache(UserHelper.currentUserChurch.church.subDomain);
     setSection("");
   };
 
@@ -48,11 +51,13 @@ export function StylesClientWrapper(props: WrapperPageProps) {
       gs.fonts = fontsJson;
       ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
     }
+    ConfigHelper.clearCache(UserHelper.currentUserChurch.church.subDomain);
     setSection("");
   };
 
   const handleUpdate = (gs: GlobalStyleInterface) => {
     if (gs) ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
+    ConfigHelper.clearCache(UserHelper.currentUserChurch.church.subDomain);
     setSection("");
   };
 
