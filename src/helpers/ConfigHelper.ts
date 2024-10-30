@@ -11,7 +11,7 @@ export interface ConfigurationInterface { keyName?: string, tabs?: LinkInterface
 export class ConfigHelper {
 
   static clearCache(sdKey: string) {
-    startTransition(async () => {
+    startTransition(() => {
       revalidate(sdKey);
     })
   }
