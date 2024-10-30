@@ -1,6 +1,6 @@
 import React from "react";
 import { EnvironmentHelper } from "../../../helpers"
-import { PersonInterface, Loading, ApiHelper } from "@churchapps/apphelper"
+import { PersonInterface, Loading, ApiHelper, DisplayBox } from "@churchapps/apphelper"
 import { Grid } from "@mui/material";
 
 interface Props { person: PersonInterface, selectedHandler: (personId: string) => void }
@@ -11,7 +11,7 @@ export const Household: React.FC<Props> = (props) => {
 
   const getMember = (member: PersonInterface) => {
     const m = member;
-    return (<a href="about:blank" className="bigLinkButton householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id) }}>
+    return (<a href="about:blank" className="householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id) }}>
       <Grid container spacing={3}>
         <Grid item xs={2}><img src={EnvironmentHelper.Common.ContentRoot + member?.photo} alt="avatar" /></Grid>
         <Grid item xs={10}>
@@ -44,5 +44,9 @@ export const Household: React.FC<Props> = (props) => {
 
   React.useEffect(loadMembers, [props.person]);
 
-  return (<><h4>Household</h4>{getMembers()}</>)
+  return (
+    <DisplayBox id="householdBox" headerIcon="people" headerText="Household">
+      {getMembers()}
+    </DisplayBox>
+  )
 }

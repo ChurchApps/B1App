@@ -18,20 +18,14 @@ export function MemberClient(props: Props) {
 
   return (
     <>
-      {UserHelper.user?.firstName ? (
-        getContent()
-      ) : (
-        <>
-          <h1>Member Directory</h1>
-          <h3 className="text-center w-100">
-            Please{" "}
-            <Link href={`/login/?returnUrl=/member/directory/${personId}`}>
-              Login
-            </Link>{" "}
-            to view Directory.
-          </h3>
-        </>
-      )}
+      {UserHelper.user?.firstName
+        ? ( getContent() )
+        : (
+          <>
+            <h1>Member Directory</h1>
+            <h3 className="text-center w-100">Please{" "} <Link href={`/login/?returnUrl=/member/directory/${personId}`}>Login</Link>{" "} to view Directory.</h3>
+          </>
+        )}
     </>
   );
 }

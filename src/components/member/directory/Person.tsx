@@ -1,15 +1,19 @@
-import React from "react";
-import { Grid, Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import React, { useContext } from "react";
+import { Grid, Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
 import { PersonInterface, DisplayBox, ApiHelper, TaskInterface } from "@churchapps/apphelper"
 import { PersonHelper } from "../../../helpers";
 import { Household } from "./Household";
 import { ModifyProfile } from "./ModifyProfile";
+import { DirectMessageModal } from "./DirectMessageModal";
+import UserContext from "@/context/UserContext";
 
 interface Props { backHandler: () => void, personId: string, selectedHandler: (personId: string) => void }
 
 export const Person: React.FC<Props> = (props) => {
   const [person, setPerson] = React.useState<PersonInterface>(null);
   const [requestedChanges, setRequestedChanges] = React.useState<TaskInterface[]>([]);
+  const [showPM, setShowPM] = React.useState(false);
+  const context = useContext(UserContext);
 
   const getContactMethods = () => {
     let contactMethods = [];
@@ -68,23 +72,39 @@ export const Person: React.FC<Props> = (props) => {
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then(data => setRequestedChanges(data));
   }
 
+  const getEditContent = () => {
+    if (props.personId===PersonHelper.person.id) return <ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />;
+    else return <Button variant="contained" color="primary" onClick={() => {setShowPM(true)}}>Message</Button>
+  }
+
+  const getPM = () => {
+    if (showPM) return (<DirectMessageModal onBack={() => {setShowPM(false)}} context={context} person={person} />)
+  }
+
   React.useEffect(loadData, [props.personId]);
 
   return (
-    <>
-      <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={<ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />}>
-        <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
+    <Grid container spacing={3}>
+      <Grid item xs={8}>
+        <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()}>
+          <Grid container spacing={3}>
+            <Grid item xs={4}>
+              <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
+            </Grid>
+            <Grid item xs={8}>
+              <h2>{person?.name.display}</h2>
+              {getContactMethods()}
+            </Grid>
           </Grid>
-          <Grid item xs={8}>
-            <h2>{person?.name.display}</h2>
-            {getContactMethods()}
-          </Grid>
-        </Grid>
-      </DisplayBox>
-      {requestedChanges.length > 0 && showChanges()}
-      <Household person={person} selectedHandler={props.selectedHandler} />
-    </>
+        </DisplayBox>
+        {requestedChanges.length > 0 && showChanges()}
+      </Grid>
+      <Grid item xs={4}>
+
+        <Household person={person} selectedHandler={props.selectedHandler} />
+      </Grid>
+      {getPM()}
+    </Grid>
+
   )
 }

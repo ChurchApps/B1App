@@ -409,6 +409,26 @@
   padding: 7px 14px;
 }
 
+.btn-xl {
+  font-size: 24px;
+  padding: 8px 16px;
+}
+
+.btn-2x {
+  font-size: 36px;
+  padding: 10px 20px;
+}
+
+.btn-3x {
+  font-size: 50px;
+  padding: 12px 24px;
+}
+
+.btn-4x {
+  font-size: 750px;
+  padding: 16px 32px;
+}
+
 .headingsLight h1, .headingsLight h2, .headingsLight h3, .headingsLight h4 { color: var(--light); }
 .headingsLightAccent h1, .headingsLightAccent h2, .headingsLightAccent h3, .headingsLightAccent h4 { color: var(--lightAccent); }
 .headingsAccent h1, .headingsAccent h2, .headingsAccent h3, .headingsAccent h4 { color: var(--accent); }
