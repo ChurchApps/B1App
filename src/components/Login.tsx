@@ -22,7 +22,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
   const [returnUrl, setReturnUrl] = useState<string | null>(null);
   const [cookies] = useCookies();
   const context = useContext(UserContext);
-  const [jwt, setJwt] = useState<string>("");
+  //const [jwt, setJwt] = useState<string>("");
 
   useEffect(() => {
     // Set returnUrl from searchParams or default to "/member"
@@ -37,14 +37,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
     }
   }, [context.person, returnUrl]);
 
-  useEffect(() => {
-    // Client-side only logic
-    if (typeof window !== "undefined") {
-      //const search = new URLSearchParams(window.location.search);
-      const jwtFromUrl = searchParams.get("jwt") || cookies.jwt;
-      setJwt(jwtFromUrl || "");
-    }
-  }, [cookies.jwt, searchParams]);
+  const jwt = searchParams.get("jwt") || cookies.jwt;
 
   return (
     <Layout withoutNavbar withoutFooter>
