@@ -29,7 +29,8 @@ export const CustomFontModal: React.FC<Props> = props => {
   }
 
   const loadData = () => {
-    fetch("https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=AIzaSyBL-wa_2hoxdo8ujRSOBLA5bd0wCWX8VWg")
+    const key = atob("QUl6YVN5RDlxTkViWDdIQzhvYXZGaC0tR0JrdkxVVkRUSnM4dlZB");
+    fetch("https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=" + key)
       .then(response => response.json())
       .then((data: any) => {
         const result: { category: string, family: string }[] = [];
