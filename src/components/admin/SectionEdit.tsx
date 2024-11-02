@@ -4,7 +4,7 @@ import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/app
 import { BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { PickColors } from "./elements/PickColors";
-import { StyleList } from "./elements/StyleList";
+import { StylesAnimations } from "./elements/StylesAnimations";
 
 type Props = {
   section: SectionInterface;
@@ -116,7 +116,7 @@ export function SectionEdit(props: Props) {
     }
   }
 
-  const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
+  const getAppearanceFields = (fields:string[]) => <StylesAnimations fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
 
   if (!section) return <></>
   else return (

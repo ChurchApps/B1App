@@ -10,8 +10,8 @@ import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";
 import { CalendarElementEdit } from "./CalendarElementEdit";
 import { PickColors } from "./PickColors";
-import { StyleList } from "./StyleList";
 import { TableEdit } from "./TableEdit";
+import { StylesAnimations } from "./StylesAnimations";
 
 type Props = {
   element: ElementInterface;
@@ -118,7 +118,7 @@ export function ElementEdit(props: Props) {
     setElement(p);
   }
 
-  const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
+  const getAppearanceFields = (fields:string[]) => <StylesAnimations fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
 
   const getBoxFields = () => (
     <>
