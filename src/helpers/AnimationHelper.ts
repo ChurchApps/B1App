@@ -4,12 +4,10 @@ export class AnimationHelper {
 
   static setupAnimations = () => {
     const elements = document.querySelectorAll('.animated');
-    console.log("ELEMENTS ARE", elements)
     elements.forEach((element) => this.observer.observe(element));
   }
 
   static init = () => {
-    console.log("INIT ANIMATIONS");
     const observerOptions = { rootMargin: '0px 10000px' };
     this.observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {

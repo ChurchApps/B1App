@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
-import { BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
+import { AnimationsInterface, BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { PickColors } from "./elements/PickColors";
 import { StylesAnimations } from "./elements/StylesAnimations";
@@ -108,7 +108,7 @@ export function SectionEdit(props: Props) {
     setSection(p);
   }
 
-  const handleAnimationChange = (animations: { name: string, value: string }[]) => {
+  const handleAnimationChange = (animations: AnimationsInterface) => {
     let p = { ...section };
     p.animations = animations;
     p.animationsJSON = Object.keys(animations).length>0 ? JSON.stringify(animations) : null;
