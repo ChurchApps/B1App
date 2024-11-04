@@ -17,6 +17,8 @@ export interface ElementInterface {
   answers?: any;
   stylesJSON?: string;
   styles?: { all?:any, desktop?:any, mobile?:any };
+  animationsJSON?: string;
+  animations?: { onShow: string, onShowSpeed: string };
   sort?: number;
   elementType: string;
   elements?: ElementInterface[];
@@ -38,6 +40,8 @@ export interface SectionInterface {
   answers?: any;
   stylesJSON?: string;
   styles?: any;
+  animationsJSON?: string;
+  animations?: any;
 
   sourceId?: string;
   sections?: SectionInterface[];
@@ -151,6 +155,11 @@ export interface InlineStylesInterface {
   all: any,
   desktop: any,
   mobile: any
+}
+
+export interface AnimationsInterface {
+  onShow: string,
+  onShowSpeed: string
 }
 
 
