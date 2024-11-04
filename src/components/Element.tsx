@@ -58,6 +58,10 @@ export const Element: React.FC<Props> = props => {
     return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} dndDeps={props.element} />);
   }
 
+  const getAnimationClasses = () => {
+    if (props.element.animations?.onShow) return "animated " + props.element.animations.onShow + " " + props.element.animations.onShowSpeed;
+  }
+
   let result = <div style={{ minHeight: 100 }}>Unknown type: {props.element.elementType}</div>
 
   switch (props.element.elementType) {
@@ -162,5 +166,5 @@ export const Element: React.FC<Props> = props => {
     </>
     */
   }
-  return <div style={{ position: "relative" }}>{result}</div>;
+  return <div style={{ position: "relative" }} className={getAnimationClasses()}>{result}</div>;
 }

@@ -26,7 +26,7 @@ export const StyleEdit: React.FC<Props> = (props) => {
         result = <TextField fullWidth size="small" label={field.label} name="value" value={value} onChange={(e:any) => { setValue(e.target.value) }}  />
         break;
       case "select":
-        result = <FormControl fullWidth>
+        result = <FormControl size="small" fullWidth style={{marginTop:10}}>
           <InputLabel>{field.label}</InputLabel>
           <Select size="small" fullWidth label={field.label} name="value" value={value} onChange={(e) => { setValue(e.target.value) }}>
             {field.options.map(o => <MenuItem value={o}>{o}</MenuItem>)}
@@ -35,7 +35,7 @@ export const StyleEdit: React.FC<Props> = (props) => {
         break;
       case "px":
         console.log("PX", value)
-        result = <TextField fullWidth size="small" label={field.label + " - px"} name="value" value={value} onChange={(e:any) => { setValue(e.target.value) }} type="number" />
+        result = <TextField fullWidth style={{marginTop:10}} size="small" label={field.label + " - px"} name="value" value={value} onChange={(e:any) => { setValue(e.target.value) }} type="number" />
         break;
       case "color":
         result = <ColorPicker color={value} updatedCallback={(c) => setValue(c)} globalStyles={null} />
@@ -56,7 +56,7 @@ export const StyleEdit: React.FC<Props> = (props) => {
   }
 
   return <InputBox saveFunction={handleSave} saveText="Update" headerText="Edit Style" cancelFunction={() => { props.onSave("", "", "") }} deleteFunction={(props.style.name) ? () => { props.onSave(props.style.platform, props.style.name, null )} : null}>
-    <FormControl fullWidth>
+    <FormControl size="small" fullWidth>
       <InputLabel>Property</InputLabel>
       <Select size="small" fullWidth label="Property" name="name" value={name} onChange={(e) => {setName(e.target.value)}}>
         {props.fieldOptions.map(o => <MenuItem value={o.key}>{o.label}</MenuItem>)}

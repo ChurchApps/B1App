@@ -4,7 +4,7 @@ import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/app
 import { BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { PickColors } from "./elements/PickColors";
-import { StyleList } from "./elements/StyleList";
+import { StylesAnimations } from "./elements/StylesAnimations";
 
 type Props = {
   section: SectionInterface;
@@ -18,6 +18,7 @@ export function SectionEdit(props: Props) {
   const [errors, setErrors] = useState([]);
   let parsedData = (section?.answersJSON) ? JSON.parse(section.answersJSON) : {}
   let parsedStyles = (section?.stylesJSON) ? JSON.parse(section.stylesJSON) : {}
+  let parsedAnimations = (section?.animationsJSON) ? JSON.parse(section.animationsJSON) : {}
 
   const handleCancel = () => props.updatedCallback(section);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
@@ -107,6 +108,13 @@ export function SectionEdit(props: Props) {
     setSection(p);
   }
 
+  const handleAnimationChange = (animations: { name: string, value: string }[]) => {
+    let p = { ...section };
+    p.animations = animations;
+    p.animationsJSON = Object.keys(animations).length>0 ? JSON.stringify(animations) : null;
+    setSection(p);
+  }
+
   const handleDuplicate = (e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm("Are you sure you wish to make a copy of this section and all of it's contents?")) {
@@ -116,7 +124,7 @@ export function SectionEdit(props: Props) {
     }
   }
 
-  const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
+  const getAppearanceFields = (fields:string[]) => <StylesAnimations fields={fields} styles={parsedStyles} animations={parsedAnimations} onStylesChange={handleStyleChange} onAnimationsChange={handleAnimationChange} />
 
   if (!section) return <></>
   else return (

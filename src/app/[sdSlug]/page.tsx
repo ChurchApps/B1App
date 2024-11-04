@@ -8,6 +8,8 @@ import { unstable_cache } from "next/cache";
 import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
+import "@/styles/animations.css";
+import { Animate } from "@/components/Animate";
 
 type PageParams = Promise<{ sdSlug: string;  }>
 
@@ -50,5 +52,6 @@ export default async function Home({params}: {params:Promise<PageParams>}) {
   else return (<>
     <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} config={props.config} />
     <PageLayout globalStyles={props.globalStyles} church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+    <Animate />
   </>);
 }

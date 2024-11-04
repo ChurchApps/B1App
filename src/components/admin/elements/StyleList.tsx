@@ -1,6 +1,7 @@
 import { InlineStylesInterface, StyleOption, allStyleOptions } from "@/helpers";
 import React from "react";
 import { StyleEdit } from "./StyleEdit";
+import { Grid } from "@mui/material";
 
 interface Props {
   fields: string[],
@@ -9,7 +10,6 @@ interface Props {
 }
 
 export const StyleList: React.FC<Props> = (props) => {
-  const [showList, setShowList] = React.useState(props.styles && Object.keys(props.styles).length > 0);
   const [editStyle, setEditStyle] = React.useState<{platform:string, name:string, value:any}>(null);
 
   const options:StyleOption[] = [];
@@ -20,13 +20,14 @@ export const StyleList: React.FC<Props> = (props) => {
 
   const getCurrentStyles = () => {
     const result:JSX.Element[] = [];
-    getPlatformStyles("all", "All", result);
-    getPlatformStyles("desktop", "Desktop Only", result);
-    getPlatformStyles("mobile", "Mobile Only", result);
+    result.push(getPlatformStyles("all", "All"));
+    result.push(getPlatformStyles("desktop", "Desktop Only"));
+    result.push(getPlatformStyles("mobile", "Mobile Only"));
     return result;
   }
 
-  const getPlatformStyles = (platformKey:string, displayName:string, result:JSX.Element[]) => {
+  const getPlatformStyles = (platformKey:string, displayName:string) => {
+    let result = [];
     result.push(<div>{displayName}:</div>)
     const platform:any = props.styles[platformKey as keyof InlineStylesInterface] || {};
     Object.keys(platform).forEach((key:string) => {
@@ -35,6 +36,7 @@ export const StyleList: React.FC<Props> = (props) => {
       if (field) result.push(<div style={{marginBottom:5}}><a href="about:blank" style={{color:"#999", textDecoration:"underline"}} onClick={(e) => {e.preventDefault(); setEditStyle({platform:platformKey, name:key, value})}}>{field.label}: {value}</a></div>)
     })
     result.push(<a href="about:blank" style={{marginBottom:15, display:"block" }} onClick={(e) => {e.preventDefault(); setEditStyle({platform:platformKey, name:"", value:""})}}>Add a style</a>)
+    return <Grid item lg={4}>{result}</Grid>
   }
 
   const handleSave = (platform:string, name:string, value:any) => {
@@ -54,14 +56,14 @@ export const StyleList: React.FC<Props> = (props) => {
   }
 
 
-  if (!showList) return <a href="about:blank" style={{marginTop:10, display:"block"}} onClick={(e) => {e.preventDefault(); setShowList(true)}}>Show Style Editor</a>;
-  else if (editStyle) return <StyleEdit style={editStyle} fieldOptions={options} onSave={handleSave} />
+  if (editStyle) return <StyleEdit style={editStyle} fieldOptions={options} onSave={handleSave} />
   else return <>
-    <a href="about:blank" style={{marginTop:10, display:"block"}} onClick={(e) => {e.preventDefault(); setShowList(false)}}>Hide Style Editor</a>
     <hr />
     <p style={{color:"#999999", fontSize:12}}>Use these fields to customize the style of a single element.  For sitewide changes use the site appearance editor.</p>
     <div><b>Platform:</b></div>
-    {getCurrentStyles()}
+    <Grid container spacing={2}>
+      {getCurrentStyles()}
+    </Grid>
   </>
 
 }

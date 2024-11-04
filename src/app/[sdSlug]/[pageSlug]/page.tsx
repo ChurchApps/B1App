@@ -5,6 +5,8 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { unstable_cache } from "next/cache";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
+import "@/styles/animations.css";
+import { Animate } from "@/components/Animate";
 
 // interface Props {
 //   params: {
@@ -54,6 +56,7 @@ export default async function Home({ params }: { params: PageParams }) {
         navLinks={navLinks}
         pageData={pageData}
       />
+      <Animate />
     </>
   );
 }

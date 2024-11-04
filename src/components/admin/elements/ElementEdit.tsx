@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
+import { AnimationsInterface, BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider, Dialog } from "@mui/material";
 import { MarkdownEditor, ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import React from "react";
@@ -10,8 +10,8 @@ import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";
 import { CalendarElementEdit } from "./CalendarElementEdit";
 import { PickColors } from "./PickColors";
-import { StyleList } from "./StyleList";
 import { TableEdit } from "./TableEdit";
+import { StylesAnimations } from "./StylesAnimations";
 
 type Props = {
   element: ElementInterface;
@@ -28,6 +28,7 @@ export function ElementEdit(props: Props) {
   const [innerErrors, setInnerErrors] = useState([]);
   let parsedData = (element?.answersJSON) ? JSON.parse(element.answersJSON) : {}
   let parsedStyles = (element?.stylesJSON) ? JSON.parse(element.stylesJSON) : {}
+  let parsedAnimations = (element?.animationsJSON) ? JSON.parse(element.animationsJSON) : {}
 
   const handleCancel = () => props.updatedCallback(element);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -76,6 +77,14 @@ export function ElementEdit(props: Props) {
     setElement(p);
   }
 
+  const handleAnimationChange = (animations: AnimationsInterface) => {
+    let p = { ...element };
+    p.animations = animations;
+    p.animationsJSON = Object.keys(animations).length>0 ? JSON.stringify(animations) : null;
+
+    setElement(p);
+  }
+
   const handleSave = () => {
     if (innerErrors.length === 0) {
       ApiHelper.post("/elements", [element], "ContentApi").then((data) => {
@@ -118,7 +127,7 @@ export function ElementEdit(props: Props) {
     setElement(p);
   }
 
-  const getAppearanceFields = (fields:string[]) => <StyleList fields={fields} styles={parsedStyles} onChange={handleStyleChange} />
+  const getAppearanceFields = (fields:string[]) => <StylesAnimations fields={fields} styles={parsedStyles} onStylesChange={handleStyleChange} animations={parsedAnimations} onAnimationsChange={handleAnimationChange} />
 
   const getBoxFields = () => (
     <>
