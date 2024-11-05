@@ -28,7 +28,11 @@ export const AnimationsEdit: React.FC<Props> = (props) => {
     switch (e.target.name) {
       case "onShow":
         a.onShow = val;
+        console.log("VAL", val);
+        console.log("A", a);
+        console.log(val && !a.onShowSpeed);
         if (val && !a.onShowSpeed) a.onShowSpeed = "normal";
+        console.log("A", a);
         break;
       case "onShowSpeed": a.onShowSpeed=val; break;
     }
@@ -40,7 +44,7 @@ export const AnimationsEdit: React.FC<Props> = (props) => {
       <Grid item xs={6}>
         <FormControl size="small" fullWidth style={{marginTop:10}}>
           <InputLabel>On Show Animation</InputLabel>
-          <Select size="small" fullWidth label="On Show Animation" name="onShow" value={animations.onShow} onChange={handleChange}>
+          <Select size="small" fullWidth label="On Show Animation" name="onShow" value={animations?.onShow || ""} onChange={handleChange}>
             <MenuItem value="">None</MenuItem>
             <MenuItem value="slideLeft">Slide Left</MenuItem>
             <MenuItem value="slideRight">Slide Right</MenuItem>
@@ -58,7 +62,7 @@ export const AnimationsEdit: React.FC<Props> = (props) => {
       <Grid item xs={6}>
         <FormControl size="small" fullWidth style={{marginTop:10}}>
           <InputLabel>On Show Speed</InputLabel>
-          <Select size="small" fullWidth label="On Show Speed" name="onShowSpeed" value={animations.onShowSpeed} onChange={handleChange}>
+          <Select size="small" fullWidth label="On Show Speed" name="onShowSpeed" value={animations?.onShowSpeed || "normal"} onChange={handleChange}>
             <MenuItem value="slow">Slow</MenuItem>
             <MenuItem value="normal">Normal</MenuItem>
             <MenuItem value="fast">Fast</MenuItem>

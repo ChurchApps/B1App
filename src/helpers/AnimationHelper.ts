@@ -4,6 +4,7 @@ export class AnimationHelper {
 
   static setupAnimations = () => {
     const elements = document.querySelectorAll('.animated');
+    console.log("ANIMATED ELEMENTS", elements);
     elements.forEach((element) => this.observer.observe(element));
   }
 
