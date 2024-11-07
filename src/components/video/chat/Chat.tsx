@@ -4,6 +4,7 @@ import { ChatSend, Callout, Attendance } from ".";
 import { ChatRoomInterface, ChatUserInterface } from "../../../helpers"
 import { ChatReceive } from "./ChatReceive";
 import { EmbeddedChatName } from "./EmbeddedChatName";
+import { StreamChatManager } from "@/helpers/StreamChatManager";
 
 interface Props {
     room: ChatRoomInterface,
@@ -17,6 +18,7 @@ interface Props {
 export const Chat: React.FC<Props> = (props) => {
 
   const [chatEnabled, setChatEnabled] = React.useState(false);
+  const [isBlocked, setIsBlocked] = React.useState(false);
 
   const updateChatEnabled = React.useCallback(() => {
     let cs = StreamingServiceHelper.currentService;
@@ -26,6 +28,7 @@ export const Chat: React.FC<Props> = (props) => {
       result = currentTime >= (cs.localChatStart || new Date()) && currentTime <= (cs.localChatEnd || new Date());
     }
     if (result !== chatEnabled) setChatEnabled(result);
+    setIsBlocked(StreamChatManager.isIpBlocked(cs?.id || "", props.user.ipAddress));
   }, [chatEnabled]);
 
   React.useEffect(() => { setInterval(updateChatEnabled, 1000); }, [updateChatEnabled]);
@@ -38,7 +41,7 @@ export const Chat: React.FC<Props> = (props) => {
       {(props.enableCallout) ? <Callout room={props.room} user={props.user} /> : null}
       <ChatReceive room={props.room} user={props.user} />
       {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
-      <ChatSend room={props.room} />
+      {isBlocked ? "Your access to the chat has been restricted" : <ChatSend room={props.room} user={props.user} />}
     </div>
   );
 }

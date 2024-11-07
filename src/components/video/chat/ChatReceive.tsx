@@ -10,7 +10,7 @@ export const ChatReceive: React.FC<Props> = (props) => {
     let result = [];
     if (props.room?.messages !== undefined) {
       for (let i = 0; i < props.room.messages.length; i++) {
-        result.push(<ChatMessage key={i} message={props.room.messages[i]} conversationId={props.room.conversation.id} user={props.user} />);
+        result.push(<ChatMessage key={i} room={props.room} message={props.room.messages[i]} conversationId={props.room.conversation.id} user={props.user} />);
       }
     }
     setTimeout(() => {

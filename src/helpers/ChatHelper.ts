@@ -1,11 +1,13 @@
-import { SocketHelper, ApiHelper, ConnectionInterface, ConversationInterface, MessageInterface } from "@churchapps/apphelper";
+import { SocketHelper, ApiHelper, ConnectionInterface, ConversationInterface } from "@churchapps/apphelper";
 import Cookies from "js-cookie";
 import { ChatAttendanceInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface } from "."
 import { ChatConfigHelper } from "./ChatConfigHelper";
+import { MessageInterface } from "./Messaging";
+import { StreamChatManager } from "./StreamChatManager";
 
 export class ChatHelper {
 
-  static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { firstName: "Anonymous", lastName: "", isHost: false } };
+  static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { firstName: "Anonymous", lastName: "", isHost: false, ipAddress: "", isBlocked: false } };
   static onChange: () => void;
 
   static createRoom = (conversation: ConversationInterface): ChatRoomInterface => ({
@@ -26,6 +28,7 @@ export class ChatHelper {
     SocketHelper.addHandler("privateRoomAdded", "chatPrivateRoomAdded", ChatHelper.handlePrivateRoomAdded);
     SocketHelper.addHandler("videoChatInvite", "chatVideoChatInvite", ChatHelper.handleVideoChatInvite);
     SocketHelper.addHandler("reconnect", "chatReconnect", ChatHelper.handleReconnect);
+    StreamChatManager.initBlockedIpsHandler()
     SocketHelper.init();
   }
 
@@ -163,7 +166,7 @@ export class ChatHelper {
     let name = Cookies.get("displayName");
     if (name === undefined || name === null || name === "") { name = "Anonymous"; Cookies.set("displayName", name); }
     const [firstName, lastName] = name.split(" ");
-    let result: ChatUserInterface = { firstName, lastName: lastName || "", isHost: false };
+    let result: ChatUserInterface = { firstName, lastName: lastName || "", isHost: false, ipAddress: "", isBlocked: false };
     ChatHelper.current.user = result;
     return result;
   }

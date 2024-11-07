@@ -5,6 +5,62 @@ import { SocketHelper, ConversationInterface, ApiHelper, UserHelper } from "@chu
 
 export class StreamChatManager {
 
+  private static blockedIps: Map<string, Set<string>> = new Map();
+
+  public static blockIp(serviceId: string, ipAddress: string) {
+    if (!this.blockedIps.has(serviceId)) {
+      this.blockedIps.set(serviceId, new Set());
+    }
+    this.blockedIps.get(serviceId).add(ipAddress);
+
+    const payload = { action: "updatedBlockedIps", data: { serviceId, blockedIps: Array.from(this.blockedIps.get(serviceId)) } };
+    SocketHelper.socket.send(JSON.stringify(payload))
+    ChatHelper.onChange();
+  }
+
+  public static unBlockIp(serviceId: string, ipAddress: string) {
+    if (this.blockedIps.has(serviceId)) {
+      this.blockedIps.get(serviceId).delete(ipAddress);
+
+      const payload = { action: "updatedBlockedIps", data: {serviceId, blockedIps: Array.from(this.blockedIps.get(serviceId)) } };
+      SocketHelper.socket.send(JSON.stringify(payload));
+      ChatHelper.onChange();
+    }
+  }
+
+  public static getBlockedIps(serviceId: string): string[] {
+    return Array.from(this.blockedIps.get(serviceId) || new Set());
+  }
+
+  private static async getIpAddress(): Promise<string> {
+    try {
+      const response = await fetch("https://api.ipify.org/?format=json");
+      const data = await response.json();
+      return data.ip;
+    } catch (error) {
+      console.log("Error fetching IP Address: ", error);
+      return "";
+    }
+  }
+
+  public static isIpBlocked(serviceId: string, ipAdress: string): boolean {
+    return this.blockedIps.get(serviceId)?.has(ipAdress) || false;
+  }
+
+  public static initBlockedIpsHandler() {
+    SocketHelper.addHandler("updatedBlockedIps", "chatBlockedIps", (data) => {
+      if (Array.isArray(data)) {
+        data.forEach(({ serviceId, blockedIps }) => {
+          this.blockedIps.set(serviceId, new Set(blockedIps));
+        });
+      } else {
+        const { serviceId, blockedIps } = data;
+        this.blockedIps.set(serviceId, new Set(blockedIps));
+      }
+      ChatHelper.onChange();
+    })
+  }
+
   public static async joinMainRoom(churchId: string, currentService: StreamingServiceExtendedInterface, setChatState:(state:ChatStateInterface) => void) {
     if (currentService) {
       const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/current/" + churchId + "/streamingLive/" + currentService.id, "MessagingApi");
@@ -44,8 +100,9 @@ export class StreamChatManager {
     }
   }
 
-  public static initUser () {
+  public static async initUser () {
     const chatUser = ChatHelper.getUser();
+    chatUser.ipAddress = await this.getIpAddress();
     if (ApiHelper.isAuthenticated) {
       const { firstName, lastName } = UserHelper.user;
       chatUser.firstName = firstName || "Anonymous";
