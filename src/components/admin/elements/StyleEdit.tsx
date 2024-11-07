@@ -3,6 +3,7 @@ import { InputBox } from "@churchapps/apphelper";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import { ColorPicker } from "../ColorPicker";
+import { StyleTextShadow } from "./StyleTextShadow";
 
 interface Props {
   fieldOptions: StyleOption[],
@@ -39,6 +40,9 @@ export const StyleEdit: React.FC<Props> = (props) => {
         break;
       case "color":
         result = <ColorPicker color={value} updatedCallback={(c) => setValue(c)} globalStyles={null} />
+        break;
+      case "text-shadow":
+        result = <StyleTextShadow value={value} onChange={(v) => setValue(v)} />
         break;
     }
     return result;
