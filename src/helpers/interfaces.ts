@@ -166,7 +166,7 @@ export interface AnimationsInterface {
 export interface StyleOption {
   label: string,
   key: string,
-  type: "color" | "px" | "select" | "text",
+  type: "color" | "px" | "select" | "text" | "text-shadow",
   default: string | number,
   options?: string[]
 }
@@ -197,5 +197,6 @@ export const allStyleOptions:StyleOption[] = [
   { label: "Padding Right", key: "padding-right", type: "px", default: 0 },
   { label: "Padding Top", key: "padding-top", type: "px", default: 0 },
   { label: "Padding Bottom", key: "padding-bottom", type: "px", default: 0 },
+  { label: "Text Shadow", key: "text-shadow", type: "text-shadow", default: "1px 1px 2px black;" },
   { label: "Width", key: "width", type: "px", default: 500 }
 ]
