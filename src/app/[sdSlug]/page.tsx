@@ -1,7 +1,6 @@
 import { GlobalStyleInterface, PageInterface } from "@/helpers/interfaces";
 import { ConfigHelper } from "@/helpers/ConfigHelper";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper/dist/helpers";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
 import { unstable_cache } from "next/cache";
@@ -10,6 +9,7 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
+import { redirect } from "next/navigation";
 
 type PageParams = Promise<{ sdSlug: string;  }>
 
@@ -48,7 +48,7 @@ export default async function Home({params}: {params:Promise<PageParams>}) {
   }, []); //eslint-disable-line
   */
 
-  if (!props.pageData?.url) return <Loading />
+  if (!props.pageData?.url) redirect("/member"); //return <Loading />
   else return (<>
     <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} config={props.config} />
     <PageLayout globalStyles={props.globalStyles} church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />

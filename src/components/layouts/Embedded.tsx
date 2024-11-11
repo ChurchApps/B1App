@@ -1,3 +1,5 @@
+"use client";
+
 import Head from "next/head";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
