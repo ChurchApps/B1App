@@ -219,7 +219,9 @@
 		"noRec": "Don't have a person record?"
 	},
 	"reporting": {
-		"detailedSummary": "Detailed Summary",
+		"detailed": "Detailed Report",
+		"summary": "Summary",
+		"sampleTemplate": "Sample Word Template",
 		"downloadOptions": "Download Options",
 		"noData": "There is no data to display.",
 		"runReport": "Run Report",

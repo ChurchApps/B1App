@@ -217,7 +217,6 @@
     "years": "연령"
   },
   "reporting": {
-    "detailedSummary": "자세한 요약",
     "downloadOptions": "다운로드 옵션",
     "noData": "표시할 데이터가 없습니다.",
     "runReport": "보고서 실행",
