@@ -15,7 +15,7 @@ interface Props {
 export const StylesAnimations: React.FC<Props> = (props) => {
   //const [showStyles, setShowStyles] = React.useState(props.styles && Object.keys(props.styles).length > 0);
   //const [showAnimations, setShowAnimations] = React.useState(props.animations && Object.keys(props.animations).length > 0);
-  const [expanded, setExpanded] = React.useState<string | false>("styles");
+  const [expanded, setExpanded] = React.useState<string | false>("");
   /*
 
     <div style={{marginTop:10}}>
