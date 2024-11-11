@@ -9,7 +9,11 @@ import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/apphelper";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 
-export function CalendarClientWrapper(props: WrapperPageProps) {
+interface Props extends WrapperPageProps {
+  curatedCalendarId: string;
+}
+
+export function CalendarClientWrapper(props: Props) {
   const { isAuthenticated } = ApiHelper;
   EnvironmentHelper.initLocale();
   const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
@@ -20,13 +24,12 @@ export function CalendarClientWrapper(props: WrapperPageProps) {
 
 
   const searchparams = useSearchParams()
-  const curatedCalendarId = searchparams.get("query.id")
+  //const curatedCalendarId = searchparams.get("query.id")
   // const curatedCalendarId = router.query?.id;
 
   const loadData = () => {
     if (!isAuthenticated) {
       redirect("/login");
-      return;
     }
 
     setIsLoadingGroups(true);
@@ -35,14 +38,14 @@ export function CalendarClientWrapper(props: WrapperPageProps) {
       setIsLoadingGroups(false);
     });
 
-    ApiHelper.get("/curatedEvents/calendar/" + curatedCalendarId + "?withoutEvents=1", "ContentApi").then((data: CuratedEventInterface[]) => {
+    ApiHelper.get("/curatedEvents/calendar/" + props.curatedCalendarId + "?withoutEvents=1", "ContentApi").then((data: CuratedEventInterface[]) => {
       setEvents(data);
     });
   };
 
   const handleGroupDelete = (groupId: string) => {
     if (confirm("Are you sure you wish to delete this group?")) {
-      ApiHelper.delete("/curatedEvents/calendar/" + curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => {
+      ApiHelper.delete("/curatedEvents/calendar/" + props.curatedCalendarId + "/group/" + groupId, "ContentApi").then(() => {
         loadData();
         refresher({});
       });
@@ -91,7 +94,7 @@ export function CalendarClientWrapper(props: WrapperPageProps) {
         <Grid item md={9} xs={12}>
           <DisplayBox headerText="">
             <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
-            <CuratedCalendar curatedCalendarId={curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} />
+            <CuratedCalendar curatedCalendarId={props.curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} />
           </DisplayBox>
         </Grid>
         <Grid item md={3} xs={12}>
