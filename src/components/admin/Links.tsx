@@ -10,6 +10,7 @@ interface RecursiveInterface {
 
 interface Props {
   refresh?: any;
+  category?: string;
 }
 
 const getNestedChildren = (arr: LinkInterface[], parent: string) => {
@@ -30,10 +31,11 @@ export const Links: React.FC<Props> = (props) => {
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
   const [currentLink, setCurrentLink] = React.useState<LinkInterface>(null);
   const [isLoading, setIsLoading] = React.useState(true);
+  let cat = props.category ? props.category : "website";
 
   const handleUpdated = () => { setCurrentLink(null); loadData(); }
   const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} />
-  const loadData = () => { ApiHelper.get("/links?category=website", "ContentApi").then(data => { setLinks(data); setIsLoading(false); }); }
+  const loadData = () => { ApiHelper.get("/links?category=" + cat, "ContentApi").then(data => { setLinks(data); setIsLoading(false); }); }
   const saveChanges = () => { ApiHelper.post("/links", links, "ContentApi").then(loadData); }
 
   const handleAdd = () => {
