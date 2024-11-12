@@ -15,7 +15,7 @@ type PageParams = Promise<{ sdSlug: string;  }>
 
 
 const loadSharedData = (sdSlug:string) => {
-  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all"]});
+  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all","sdSlug=" + sdSlug]});
   return result(sdSlug);
 }
 

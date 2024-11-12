@@ -27,7 +27,7 @@ export function PreviewClientWrapper(props: Props) {
   };
 
   const handlePageUpdated = (page: PageInterface, link: LinkInterface) => {
-    ConfigHelper.clearCache(props.church.subDomain);
+    ConfigHelper.clearCache("sdSlug=" + props.church.subDomain);
     loadData();
     setShowSettings(false);
     if (!page) redirect("/admin/site");

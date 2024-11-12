@@ -42,7 +42,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
       gs.palette = paletteJson;
       ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
     }
-    ConfigHelper.clearCache(UserHelper.currentUserChurch.church.subDomain);
+    ConfigHelper.clearCache("sdSlug=" + UserHelper.currentUserChurch.church.subDomain);
     setSection("");
   };
 
@@ -52,13 +52,13 @@ export function StylesClientWrapper(props: WrapperPageProps) {
       gs.fonts = fontsJson;
       ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
     }
-    ConfigHelper.clearCache(UserHelper.currentUserChurch.church.subDomain);
+    ConfigHelper.clearCache("sdSlug=" + UserHelper.currentUserChurch.church.subDomain);
     setSection("");
   };
 
   const handleUpdate = (gs: GlobalStyleInterface) => {
     if (gs) ApiHelper.post("/globalStyles", [gs], "ContentApi").then(() => loadData());
-    ConfigHelper.clearCache(UserHelper.currentUserChurch.church.subDomain);
+    ConfigHelper.clearCache("sdSlug=" + UserHelper.currentUserChurch.church.subDomain);
     setSection("");
   };
 
