@@ -90,7 +90,7 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
         ApiHelper.post("/links", [newLink], "ContentApi").then(() => { loadData(); });
       }
     }
-    ConfigHelper.clearCache(props.config.keyName);
+    ConfigHelper.clearCache("sdSlug=" + props.config.keyName);
   }
 
   const getUnlinkedPages = () => {
@@ -113,7 +113,7 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
   }
 
   const addLinkCallback = (page:PageInterface, link:LinkInterface) => {
-    ConfigHelper.clearCache(props.config.keyName);
+    ConfigHelper.clearCache("sdSlug=" + props.config.keyName);
     loadData();
     setAddMode("");
     if (page) {

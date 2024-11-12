@@ -22,7 +22,7 @@ export function B1Settings() {
       <Grid item md={4} xs={12}>
         {editPage && (<PageEdit page={editPage} updatedCallback={() => { setEditPage(null); setRefreshKey(Math.random()) }} embedded={true} /> )}
         {UserHelper.checkAccess(Permissions.contentApi.content.edit)
-          && <Tabs updatedFunction={ () => {ConfigHelper.clearCache(UserHelper.currentUserChurch.church.subDomain);} } />
+          && <Tabs updatedFunction={ () => {ConfigHelper.clearCache("sdSlug=" + UserHelper.currentUserChurch.church.subDomain);} } />
         }
       </Grid>
     </Grid>

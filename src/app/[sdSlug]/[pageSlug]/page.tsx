@@ -19,7 +19,7 @@ type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
-  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all"]});
+  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all", "sdSlug=" + sdSlug]});
   return result(sdSlug, pageSlug);
 }
 
