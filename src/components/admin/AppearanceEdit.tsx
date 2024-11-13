@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Grid, TextField } from "@mui/material";
 import Resizer from "react-image-file-resizer";
 import { GenericSettingInterface, ArrayHelper, ApiHelper, InputBox, ImageEditor } from "@churchapps/apphelper";
 
@@ -222,24 +221,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
         </div>
         <hr />
 
-        <div className="section">Primary Colors</div>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <TextField type="color" label="Color" fullWidth name="primaryColor" value={(ArrayHelper.getOne(currentSettings, "keyName", "primaryColor"))?.value || "#08A0CC"} onChange={handleChange} />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField type="color" label="Contrast" fullWidth name="primaryContrast" value={(ArrayHelper.getOne(currentSettings, "keyName", "primaryContrast"))?.value || "#FFFFFF"} onChange={handleChange} />
-          </Grid>
-        </Grid>
-        <div className="section">Secondary Colors</div>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <TextField type="color" label="Color" fullWidth name="secondaryColor" value={(ArrayHelper.getOne(currentSettings, "keyName", "secondaryColor"))?.value || "#FFBA1A"} onChange={handleChange} />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField type="color" label="Contrast" fullWidth name="secondaryContrast" value={(ArrayHelper.getOne(currentSettings, "keyName", "secondaryContrast"))?.value || "#000000"} onChange={handleChange} />
-          </Grid>
-        </Grid>
+
       </InputBox>
     </>
   );

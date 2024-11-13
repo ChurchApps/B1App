@@ -25,10 +25,6 @@ export const Appearance: React.FC<Props> = (props) => {
   }
 
   const getDefaultStyles = () => ({
-    primaryColor: "#08A0CC",
-    primaryContrast: "#FFFFFF",
-    secondaryColor: "#FFBA1A",
-    secondaryContrast: "#000000"
   })
 
   const configureStyles = (settings: GenericSettingInterface[]) => {
@@ -76,14 +72,7 @@ export const Appearance: React.FC<Props> = (props) => {
           </Grid>
         )}
       </Grid>
-
-      <div style={{ backgroundColor: styles.primaryColor, color: styles.primaryContrast, padding: 5, fontWeight: "bold" }}>
-        Primary Colors
-      </div>
-      <div style={{ backgroundColor: styles.secondaryColor, color: styles.secondaryContrast, padding: 5, fontWeight: "bold" }}>
-        Secondary Colors
-      </div>
-
+      <br /><br />
     </DisplayBox>
   );
 }
