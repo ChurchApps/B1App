@@ -126,7 +126,7 @@ export const TabEdit: React.FC<Props> = (props) => {
           <MenuItem value="url">External Url</MenuItem>
           <MenuItem value="page">Page</MenuItem>
           <MenuItem value="chat">Chat</MenuItem>
-          <MenuItem value="prayer">PagePrayer</MenuItem>
+          <MenuItem value="prayer">Prayer</MenuItem>
         </Select>
       </FormControl>
       {getUrl()}

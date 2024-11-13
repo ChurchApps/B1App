@@ -3,7 +3,6 @@ import { ConfigHelper } from "@/helpers/ConfigHelper";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper/dist/helpers";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
-import { unstable_cache } from "next/cache";
 import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
@@ -14,10 +13,11 @@ import { redirect } from "next/navigation";
 type PageParams = Promise<{ sdSlug: string;  }>
 
 
-const loadSharedData = (sdSlug:string) => {
-  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all","sdSlug=" + sdSlug]});
-  return result(sdSlug);
-}
+const loadSharedData = (sdSlug:string) =>
+  //const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all","sdSlug=" + sdSlug]});
+  //return result(sdSlug);
+  loadData(sdSlug)
+
 
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
   const { sdSlug } =  await params;

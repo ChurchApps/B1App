@@ -377,10 +377,10 @@ prayerSend {
 }
 
 #liveButtons a {
-  color: var(--light);
+  color: var(--dark);
   padding-left: 20px;
   padding-right: 20px;
-  border-right: 1px solid var(--light);
+  border-right: 1px solid var(--dark);
 }
 
 #liveButtons li:last-child a {
