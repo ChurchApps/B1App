@@ -70,13 +70,13 @@
   text-align: left;
   padding-top: 5px;
   padding-bottom: 5px;
-  color: var(--secondaryContrast);
-  background-color: var(--secondaryColor);
+  color: var(--light);
+  background-color: var(--darkAccent);
 }
 
 .streamingTab:hover {
   text-decoration: none;
-  color: var(--secondaryContrast);
+  color: var(--light);
 }
 
 .streamingTab i {
@@ -85,11 +85,11 @@
 }
 
 .streamingTab.childTab {
-  color: var(--primaryContrast);
-  background-color: var(--primaryColor);
+  color: var(--light);
+  background-color: var(--darkAccent);
 }
 
-/*#tabs > *:not(:first-child) {border-left:1px solid var(--primaryColor);}*/
+/*#tabs > *:not(:first-child) {border-left:1px solid var(--darkAccent);}*/
 .frame {
   flex: 1;
   display: flex;
@@ -213,7 +213,7 @@ prayerSend {
 
 #chatTabs a.active,
 #chatTabs a:hover {
-  color: var(--primaryColor);
+  color: var(--darkAccent);
   background-color: #fff;
 }
 
@@ -241,8 +241,8 @@ prayerSend {
 }
 
 .streamingAltTab {
-  color: var(--primaryContrast);
-  background-color: var(--primaryColor);
+  color: var(--light);
+  background-color: var(--darkAccent);
   display: block;
   width: 100%;
   padding-top: 5px;
@@ -257,12 +257,12 @@ prayerSend {
 
 .streamingAltTab:hover {
   text-decoration: none;
-  color: var(--primaryContrast);
+  color: var(--light);
 }
 
 .streamingAltTab.active {
-  color: var(--primaryColor);
-  background-color: var(--primaryContrast);
+  color: var(--darkAccent);
+  background-color: var(--light);
 }
 
 #streamingHeader {
@@ -270,7 +270,8 @@ prayerSend {
   min-height: 55px;
   display: flex;
   align-items: center;
-  background-color: var(--primaryColor);
+  background-color: var(--lightAccent);
+  color: var(--dark);
   padding-top: 3px;
   padding-bottom: 3px;
   box-shadow: 0px 3px 3px 0px #000;
@@ -317,7 +318,7 @@ prayerSend {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  color: var(--primaryContrast);
+  color: var(--dark);
 }
 
 #userLink div a:hover {
@@ -336,20 +337,20 @@ prayerSend {
   width: 250px;
   max-width: 100%;
   position: relative;
-  background-color: var(--primaryColor);
+  background-color: var(--lightAccent);
   float: right;
   box-shadow: -3px 3px 3px #999;
-  color: var(--primaryContrast);
+  color: var(--dark);
   padding: 8px;
 }
 
 #userMenu a {
-  color: var(--primaryContrast);
+  color: var(--dark);
 }
 
 #userMenu .nav-item,
 #userMenu .divider {
-  border-bottom: 1px solid var(--primaryContrast);
+  border-bottom: 1px solid var(--dark);
 }
 
 #userMenu .nav:last-child .nav-item:last-child {
@@ -376,10 +377,10 @@ prayerSend {
 }
 
 #liveButtons a {
-  color: var(--primaryContrast);
+  color: var(--light);
   padding-left: 20px;
   padding-right: 20px;
-  border-right: 1px solid var(--primaryContrast);
+  border-right: 1px solid var(--light);
 }
 
 #liveButtons li:last-child a {
@@ -388,21 +389,21 @@ prayerSend {
 
 
 .btn-primary {
-  color: var(--primaryContrast);
-  background-color: var(--primaryColor);
-  border-color: var(--primaryColor);
+  color: var(--light);
+  background-color: var(--darkAccent);
+  border-color: var(--darkAccent);
 }
 
 .btn-secondary {
-  color: var(--primaryColor);
-  background-color: var(--primaryContrast);
-  border-color: var(--primaryColor);
+  color: var(--darkAccent);
+  background-color: var(--light);
+  border-color: var(--darkAccent);
 }
 
 .btn-secondary:hover {
-  color: var(--primaryContrast);
-  background-color: var(--primaryColor);
-  border-color: var(--primaryContrast);
+  color: var(--light);
+  background-color: var(--darkAccent);
+  border-color: var(--light);
 }
 
 #liveButtons .nav {
@@ -416,7 +417,7 @@ prayerSend {
 }
 
 #userMenu .nav {
-  border-bottom: 1px solid var(--primaryContrast);
+  border-bottom: 1px solid var(--light);
   padding-left: 0px;
   margin-top: 0px;
   margin-bottom: 0px;

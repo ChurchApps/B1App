@@ -39,7 +39,7 @@ export function StreamSettingsClient(props: WrapperPageProps) {
               setRefreshKey(Math.random());
             }} embedded={true} />
           )}
-          <Links category="streamingTab" />
+          <Links category="streamingLink" />
           <Tabs />
           <ExternalLinks churchId={props.config.church.id} />
         </Grid>
