@@ -39,7 +39,7 @@ export const Links: React.FC<Props> = (props) => {
   const saveChanges = () => { ApiHelper.post("/links", links, "ContentApi").then(loadData); }
 
   const handleAdd = () => {
-    let link: LinkInterface = { churchId: UserHelper.currentUserChurch.church.id, sort: links.length, text: "Home", url: "/", linkType: "url", linkData: "", category: "website", icon: "" }
+    let link: LinkInterface = { churchId: UserHelper.currentUserChurch.church.id, sort: links.length, text: "Home", url: "/", linkType: "url", linkData: "", category: cat, icon: "" }
     setCurrentLink(link);
   }
 
