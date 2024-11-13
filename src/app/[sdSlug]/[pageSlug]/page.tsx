@@ -2,7 +2,6 @@ import { PageLayout, Theme } from "@/components";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface, PageInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { unstable_cache } from "next/cache";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/animations.css";
@@ -19,8 +18,9 @@ type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
-  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all", "sdSlug=" + sdSlug]});
-  return result(sdSlug, pageSlug);
+  //const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all", "sdSlug=" + sdSlug]});
+  //return result(sdSlug, pageSlug);
+  return loadData(sdSlug, pageSlug);
 }
 
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
