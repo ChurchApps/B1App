@@ -1,9 +1,19 @@
 import Cookies from "js-cookie";
 import { ChatHelper } from "./ChatHelper";
 import { ChatStateInterface, StreamConfigInterface, StreamingServiceExtendedInterface } from "./interfaces";
-import { SocketHelper, ConversationInterface, ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { SocketHelper, ConversationInterface, BlockedIpInterface, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
 
 export class StreamChatManager {
+
+  public static async handleBlockAction(ipAddress: string, conversationId: string, serviceId: string) {
+    const data: BlockedIpInterface = { conversationId, ipAddress, serviceId };
+    await ApiHelper.post("/blockedIps", [data], "MessagingApi");
+  }
+
+  public static isIpBlocked(ipAddress: string) {
+    if (ChatHelper.current.mainRoom.blockedIps.indexOf(ipAddress) > -1) return true;
+    else return false;
+  }
 
   public static async joinMainRoom(churchId: string, currentService: StreamingServiceExtendedInterface, setChatState:(state:ChatStateInterface) => void) {
     if (currentService) {
@@ -50,8 +60,20 @@ export class StreamChatManager {
       const { firstName, lastName } = UserHelper.user;
       chatUser.firstName = firstName || "Anonymous";
       chatUser.lastName = lastName || "";
+      chatUser.isHost = UserHelper.checkAccess(Permissions.contentApi.chat.host)
       ChatHelper.current.user = chatUser;
       ChatHelper.onChange();
+    }
+  }
+
+  public static async getIpAddress(): Promise<string> {
+    try {
+      const response = await fetch("https://api.ipify.org/?format=json");
+      const data = await response.json();
+      return data.ip;
+    } catch (error) {
+      console.log("Error fetching IP Address: ", error);
+      return "";
     }
   }
 

@@ -38,7 +38,7 @@ export const Chat: React.FC<Props> = (props) => {
       {(props.enableCallout) ? <Callout room={props.room} user={props.user} /> : null}
       <ChatReceive room={props.room} user={props.user} />
       {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
-      <ChatSend room={props.room} />
+      {props.user.isBlocked ? "Your access to the chat has been restricted" : <ChatSend room={props.room} />}
     </div>
   );
 }

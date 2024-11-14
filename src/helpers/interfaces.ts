@@ -98,11 +98,12 @@ export interface StreamingServiceExtendedInterface { videoUrl: string, serviceTi
 export interface StreamConfigInterface { keyName?: string, churchId?: string, buttons?: StreamingButtonInterface[], tabs?: StreamingTabInterface[], services?: StreamingServiceExtendedInterface[], switchToConversationId: string, jitsiRoom: string }
 
 export interface ChatPayloadInterface extends SocketPayloadInterface { churchId: string, conversationId: string }
-export interface ChatViewerInterface { displayName: string, id: string }
+export interface ChatViewerInterface { displayName: string, id: string, ipAddress?: string }
 export interface ChatAttendanceInterface { viewers?: ChatViewerInterface[], totalViewers?: number, conversationId: string }
-export interface ChatRoomInterface { conversation: ConversationInterface, attendance: ChatAttendanceInterface, messages: MessageInterface[], callout: MessageInterface, prayerRequests?: ConversationInterface[], joined: boolean }
+export interface ChatRoomInterface { conversation: ConversationInterface, attendance: ChatAttendanceInterface, messages: MessageInterface[], callout: MessageInterface, prayerRequests?: ConversationInterface[], joined: boolean, blockedIps?: string[] }
 export interface ChatStateInterface { mainRoom: ChatRoomInterface, hostRoom: ChatRoomInterface, privateRooms: ChatRoomInterface[], chatEnabled: boolean, user: ChatUserInterface }
-export interface ChatUserInterface { firstName: string, lastName: string, isHost: boolean }
+export interface ChatUserInterface { firstName: string, lastName: string, isHost: boolean, isBlocked?: boolean }
+export interface ChatBlockedInterface { conversationId?: string, ipAddresses?: string[] }
 
 export interface ChatEventsInterface {
   messageHandler: (message: MessageInterface) => void,

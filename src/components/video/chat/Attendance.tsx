@@ -2,10 +2,12 @@
 import React from "react";
 import { ChatRoomInterface, ChatAttendanceInterface, ChatUserInterface } from "../../../helpers";
 import { Menu, Item, useContextMenu } from "react-contexify";
+import { Icon } from "@mui/material";
 import "react-contexify/dist/ReactContexify.css";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { ConversationInterface, ApiHelper, UniqueIdHelper } from "@churchapps/apphelper";
+import { StreamChatManager } from "@/helpers/StreamChatManager";
 
 interface Props {
   attendance: ChatAttendanceInterface;
@@ -78,6 +80,27 @@ export const Attendance: React.FC<Props> = (props) => {
     return result;
   }
 
+  const getBlockIcon = (ipAddress: string) => {
+    let result: JSX.Element = null;
+
+    const handleClick = (e: React.MouseEvent, type: "block" | "unblock") => {
+      e.preventDefault();
+      if (ipAddress && ipAddress !== "") {
+        StreamChatManager.handleBlockAction(ipAddress, props.attendance.conversationId, ChatHelper.current.mainRoom.conversation.contentId);
+        if (type === "block") alert("User has been blocked.");
+        else alert("User has been unblocked.")
+      } else {
+        alert("Couldn't block the sender.")
+      }
+    }
+
+    if (props.user.isHost) {
+      if (StreamChatManager.isIpBlocked(ipAddress)) result = <a about="href:blank" title="unblock" style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "unblock") }}><Icon sx={{ color: "#999" }}><img src="/images/icons/unblock.svg" /></Icon></a>;
+      else result = <a about="href:blank" title="block" style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "block") }}><Icon>block</Icon></a>
+    }
+    return result;
+  }
+
   const getPeopleCondensed = () => {
     let people = [];
     const combinedPeople = getCombinedPeople();
@@ -98,7 +121,7 @@ export const Attendance: React.FC<Props> = (props) => {
       else {
         for (let i = 0; i < props.attendance.viewers.length; i++) {
           const c = props.attendance.viewers[i];
-          if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)}><i className="person"></i>{v.displayName}{getPMIcon(c.id)}</div>);
+          if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)}><i className="person"></i>{v.displayName}{getPMIcon(c.id)}{getBlockIcon(c.ipAddress)}</div>);
         }
       }
 
