@@ -52,32 +52,32 @@ export function ElementAdd(props: Props) {
 
               <Grid container spacing={0.5}>
                 {props.includeSection && (<AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" draggingCallback={props.draggingCallback} />)}
-                <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="box" icon="check_box_outline_blank" label="Box" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="text" icon="article" label="Text" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="textWithPhoto" icon="photo" label="Text with Photo" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="image" icon="add_photo_alternate" label="Image" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="video" icon="play_circle" label="Video" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="card" icon="badge" label="Card" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="iframe" icon="crop_free" label="Embed Page" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="map" icon="add_location_alt" label="Location" draggingCallback={props.draggingCallback} />
               </Grid>
             </Grid>
             <Grid item xs={3}>
               <Grid container spacing={0.5}>
-                <AddableElement dndType="element" elementType="rawHTML" icon="code" label="HTML" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="video" icon="play_circle" label="Video" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="faq" icon="quiz" label="Expandable" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="map" icon="add_location_alt" label="Location" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="carousel" icon="view_carousel" label="Carousel" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="image" icon="add_photo_alternate" label="Image" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="table" icon="table_chart" label="Table" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="box" icon="check_box_outline_blank" label="Box" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="carousel" icon="view_carousel" label="Carousel" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="rawHTML" icon="code" label="HTML" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="iframe" icon="crop_free" label="Embed Page" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="faq" icon="quiz" label="Expandable" draggingCallback={props.draggingCallback} />
               </Grid>
             </Grid>
             <Grid item xs={3}>
               <Grid container spacing={0.5}>
                 <AddableElement dndType="element" elementType="logo" icon="home_app_logo" label="Logo" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="stream" icon="live_tv" label="Stream" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="form" icon="format_align_left" label="Form" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="sermons" icon="video_library" label="Sermons" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="stream" icon="live_tv" label="Stream" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="form" icon="format_align_left" label="Form" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="calendar" icon="calendar_month" label="Calendar" draggingCallback={props.draggingCallback} />
               </Grid>
             </Grid>

@@ -23,9 +23,10 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   const getSelectedTab = () => {
     const path = typeof window !== "undefined" ? window?.location?.pathname : "";
     let result = "admin";
-    if (path.startsWith("/admin/site")) result = "site";
-    else if (path.startsWith("/admin/video")) result = "sermons";
+
+    if (path.startsWith("/admin/video")) result = "sermons";
     else if (path.startsWith("/admin/calendar")) result = "calendar";
+    else if (path.startsWith("/admin/site")) result = "site";
     return result;
   };
 
