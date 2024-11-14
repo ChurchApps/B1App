@@ -121,7 +121,10 @@ export const Attendance: React.FC<Props> = (props) => {
       else {
         for (let i = 0; i < props.attendance.viewers.length; i++) {
           const c = props.attendance.viewers[i];
-          if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)}><i className="person"></i>{v.displayName}{getPMIcon(c.id)}{getBlockIcon(c.ipAddress)}</div>);
+          if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <p style={{ margin: 0 }}>{v.displayName}</p>
+            <div>{getPMIcon(c.id)}{getBlockIcon(c.ipAddress)}</div>
+          </div>);
         }
       }
 
