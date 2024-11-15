@@ -23,20 +23,7 @@ export function HeaderFooter(props: Props) {
       <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
     </>);
   }
-  /*
-  const mdTheme = createTheme({
-    palette: {
-      secondary: {
-        main: "#444444"
-      }
-    },
-    components: {
-      MuiTextField: { defaultProps: { margin: "normal" } },
-      MuiFormControl: { defaultProps: { margin: "normal" } }
-    }
-  });
-*/
-  //<ThemeProvider theme={mdTheme}></ThemeProvider>
+
   return (
     <>
       <CssBaseline />

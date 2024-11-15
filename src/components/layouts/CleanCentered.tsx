@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, Card, CssBaseline } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import Zone from "./Zone";
 
@@ -21,20 +21,8 @@ export function CleanCentered(props: Props) {
     </>);
   }
 
-  const mdTheme = createTheme({
-    palette: {
-      secondary: {
-        main: "#444444"
-      }
-    },
-    components: {
-      MuiTextField: { defaultProps: { margin: "normal" } },
-      MuiFormControl: { defaultProps: { margin: "normal" } }
-    }
-  });
-
   return (
-    <ThemeProvider theme={mdTheme}>
+    <>
       <CssBaseline />
       <div>
         <Head>
@@ -55,6 +43,6 @@ export function CleanCentered(props: Props) {
         </Box>
 
       </div>
-    </ThemeProvider>
+    </>
   );
 }

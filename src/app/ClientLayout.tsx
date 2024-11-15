@@ -12,6 +12,7 @@ import React, { useEffect } from "react";
 import { ErrorHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 
 
@@ -55,11 +56,26 @@ function ClientLayout({ children}: {children: React.ReactNode}) {
   ErrorHelper.init(getErrorAppData, customErrorHandler);
   React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
+
+  const mdTheme = createTheme({
+    palette: {
+      secondary: {
+        main: "#444444"
+      }
+    },
+    components: {
+      MuiTextField: { defaultProps: { margin: "normal" } },
+      MuiFormControl: { defaultProps: { margin: "normal" } }
+    }
+  });
+
   return (
-    <UserProvider>
-      <ErrorMessages errors={errors} />
-      <>{children}</>
-    </UserProvider>
+    <ThemeProvider theme={mdTheme}>
+      <UserProvider>
+        <ErrorMessages errors={errors} />
+        <>{children}</>
+      </UserProvider>
+    </ThemeProvider>
   );
 }
 export default ClientLayout;

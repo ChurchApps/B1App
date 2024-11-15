@@ -1,7 +1,7 @@
 "use client";
 import { CSSProperties, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
+import { Container, Dialog, Grid, Icon, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
@@ -177,11 +177,11 @@ export default function ContentEditor(props: Props) {
   const getZoneBox = (sections:SectionInterface[], name:string, keyName:string) => <div key={"zone-" + keyName} style={{minHeight:100}}>
     <div style={{position:"absolute", backgroundColor:"#FFF", zIndex:100, padding:10, border:"1px solid #999", opacity:0.5  }}>Zone: {keyName}</div>
     <div style={{minHeight:100}}>
-      <ThemeProvider theme={getTheme()}>
+      <>
         <div className="page" style={(deviceType==="mobile" ? {width:400, marginLeft:"auto", marginRight:"auto"} : {})}>
           {getSections(keyName)}
         </div>
-      </ThemeProvider>
+      </>
     </div>
     <div style={{ height: "31px"}}></div>
   </div>

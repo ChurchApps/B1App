@@ -1,7 +1,7 @@
 "use client";
 
 import Head from "next/head";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme, CssBaseline } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import Zone from "./Zone";
 
@@ -36,7 +36,7 @@ export function Embedded(props: Props) {
   });
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <>
       <CssBaseline />
       <div id="embeddedLayout">
         <Head>
@@ -51,6 +51,6 @@ export function Embedded(props: Props) {
         </main>
 
       </div>
-    </ThemeProvider>
+    </>
   );
 }

@@ -2,7 +2,7 @@
 
 import React from "react";
 import UserContext from "../../context/UserContext";
-import { Box, CssBaseline, List, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, List } from "@mui/material";
 import { SiteWrapper, NavItem } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -51,13 +51,13 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   );
 
   return (
-    <ThemeProvider theme={Themes.BaseTheme}>
+    <>
       <CssBaseline />
       <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
         <SiteWrapper navContent={navContent} context={context} appName="B1" router={dummyRouter} appearance={props.config.appearance} omitOverflow={true}>
           {props.children}
         </SiteWrapper>
       </Box>
-    </ThemeProvider>
+    </>
   );
 };
