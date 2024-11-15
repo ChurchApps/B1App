@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { createTheme, CssBaseline } from "@mui/material";
 import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 
 type Props = {
@@ -42,7 +42,7 @@ export function Layout(props: Props) {
   });
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <>
       <CssBaseline />
       <div>
         <Head>
@@ -54,6 +54,6 @@ export function Layout(props: Props) {
         <main>{props.children}</main>
         {!props.withoutFooter && <Footer church={props.church} churchSettings={props.churchSettings} />}
       </div>
-    </ThemeProvider>
+    </>
   );
 }

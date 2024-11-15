@@ -66,9 +66,9 @@ export function ElementAdd(props: Props) {
                 <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="box" icon="check_box_outline_blank" label="Box" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="carousel" icon="view_carousel" label="Carousel" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="faq" icon="quiz" label="Expandable" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="rawHTML" icon="code" label="HTML" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="iframe" icon="crop_free" label="Embed Page" draggingCallback={props.draggingCallback} />
-                <AddableElement dndType="element" elementType="faq" icon="quiz" label="Expandable" draggingCallback={props.draggingCallback} />
               </Grid>
             </Grid>
             <Grid item xs={3}>

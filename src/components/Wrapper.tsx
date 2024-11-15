@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect } from "react";
 import UserContext from "../context/UserContext";
-import { Box, CssBaseline, Divider, List, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, Divider, List } from "@mui/material";
 import { SiteWrapper, NavItem, UserHelper, Permissions, ApiHelper } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -118,12 +118,12 @@ export const Wrapper: React.FC<Props> = props => {
   const navContent = <><List component="nav" sx={Themes.NavBarStyle}>{tabs}</List></>
 
 
-  return <ThemeProvider theme={Themes.BaseTheme}>
+  return <>
     <CssBaseline />
     <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
       <SiteWrapper navContent={navContent} context={context} appName="B1" router={dummyRouter} appearance={props.config.appearance}>{props.children}</SiteWrapper>
     </Box>
-  </ThemeProvider>
+  </>
 
 
 };
