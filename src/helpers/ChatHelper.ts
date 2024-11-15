@@ -1,11 +1,12 @@
 import { SocketHelper, ApiHelper, ConnectionInterface, ConversationInterface, MessageInterface } from "@churchapps/apphelper";
 import Cookies from "js-cookie";
-import { ChatAttendanceInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface } from "."
+import { ChatAttendanceInterface, ChatBlockedInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface } from "."
 import { ChatConfigHelper } from "./ChatConfigHelper";
+import { StreamChatManager } from "./StreamChatManager";
 
 export class ChatHelper {
 
-  static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { firstName: "Anonymous", lastName: "", isHost: false } };
+  static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { firstName: "Anonymous", lastName: "", isHost: false, isBlocked: false } };
   static onChange: () => void;
 
   static createRoom = (conversation: ConversationInterface): ChatRoomInterface => ({
@@ -13,7 +14,8 @@ export class ChatHelper {
     attendance: { conversationId: conversation.id, totalViewers: 0, viewers: [] },
     callout: { content: "" },
     conversation: conversation,
-    joined: false
+    joined: false,
+    blockedIps: []
   })
 
   static initChat = async () => {
@@ -26,6 +28,7 @@ export class ChatHelper {
     SocketHelper.addHandler("privateRoomAdded", "chatPrivateRoomAdded", ChatHelper.handlePrivateRoomAdded);
     SocketHelper.addHandler("videoChatInvite", "chatVideoChatInvite", ChatHelper.handleVideoChatInvite);
     SocketHelper.addHandler("reconnect", "chatReconnect", ChatHelper.handleReconnect);
+    SocketHelper.addHandler("blockedIp", "chatBlockedIp", ChatHelper.handleBlockedIps);
     SocketHelper.init();
   }
 
@@ -145,6 +148,16 @@ export class ChatHelper {
     }
   }
 
+  static async handleBlockedIps(blockedIps: ChatBlockedInterface) {
+    const room = ChatHelper.getRoom(blockedIps.conversationId);
+    if (room !== null) {
+      room.blockedIps = blockedIps.ipAddresses
+      const currentUserIp = await StreamChatManager.getIpAddress();
+      ChatHelper.current.user.isBlocked = StreamChatManager.isIpBlocked(currentUserIp);
+      ChatHelper.onChange();
+    }
+  }
+
   static getRoom = (conversationId: string): ChatRoomInterface => {
     const c = ChatHelper.current;
     let result: ChatRoomInterface = null;
@@ -168,10 +181,16 @@ export class ChatHelper {
     return result;
   }
 
-  static joinRoom(conversationId: string, churchId: string) {
+  static async joinRoom(conversationId: string, churchId: string) {
     const { firstName, lastName } = ChatHelper.current.user;
-    const connection: ConnectionInterface = { conversationId: conversationId, churchId: churchId, displayName: `${firstName} ${lastName}`, socketId: SocketHelper.socketId }
-    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi");
+    const ipAddress = await StreamChatManager.getIpAddress();
+    const connection: ConnectionInterface = { conversationId: conversationId, churchId: churchId, displayName: `${firstName} ${lastName}`, socketId: SocketHelper.socketId, ipAddress: ipAddress }
+    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi").then((c) => {
+      if (connection.displayName.includes("Anonymous ")) {
+        ChatHelper.current.user.firstName = c[0].displayName;
+        ChatHelper.onChange();
+      }
+    });
     ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversationId, "MessagingApi").then(messages => { ChatHelper.handleCatchup(messages) });
   }
 
