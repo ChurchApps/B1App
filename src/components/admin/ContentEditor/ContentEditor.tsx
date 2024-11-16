@@ -1,7 +1,7 @@
 "use client";
 import { CSSProperties, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { Container, Dialog, Grid, Icon, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
+import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
 import {  BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
@@ -268,7 +268,9 @@ export default function ContentEditor(props: Props) {
 
 
         <h1 style={{marginTop:-50}}>Edit Page</h1>
-        {getZoneBoxes()}
+        <ThemeProvider theme={getTheme()}>
+          {getZoneBoxes()}
+        </ThemeProvider>
       </div>
     </DndProvider>
 
