@@ -8,6 +8,7 @@ import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 import { DraggableWrapper } from "./admin/DraggableWrapper";
+import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
   first?: boolean,
@@ -25,7 +26,8 @@ export const Section: React.FC<Props> = props => {
   const getElements = () => {
     const result: JSX.Element[] = []
     props.section.elements.forEach(e => {
-      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={props.section.textColor} />)
+      const textColor = StyleHelper.getTextColor(props.section?.textColor, {}, props.churchSettings);
+      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={textColor} />)
     });
     return result;
   }
