@@ -1,6 +1,23 @@
+
 import { ElementInterface, SectionInterface } from "./interfaces";
 
 export class StyleHelper {
+
+  static getTextColor = (textColor:string, globalStyles:any, churchSettings:any) => {
+    if (!textColor) textColor = "#FFF";
+    if (textColor.indexOf("var(--") > -1) {
+      if (globalStyles.palette) {
+        const palette = JSON.parse(globalStyles.palette);
+        textColor = textColor.replace("var(--", "").replace(")", "");
+        textColor = palette[textColor];
+      } else {
+        textColor="light";
+        if (textColor.indexOf("dark")>-1 || textColor.indexOf("darkAccent")>-1 || textColor.indexOf("accent")>-1) textColor="dark";
+      }
+      if (!textColor) textColor = "#FFF";
+    }
+    return textColor;
+  };
 
   private static getStyle = (id:string, styles:any) => {
     let result:string[] = [];

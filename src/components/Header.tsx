@@ -10,6 +10,7 @@ import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { GlobalStyleInterface, PersonHelper, SectionInterface } from "@/helpers";
 import { redirect } from "next/navigation";
+import { StyleHelper } from "@/helpers/StyleHelper";
 
 
 type Props = {
@@ -169,6 +170,16 @@ export function Header(props: Props) {
 
   const getLogo = () => {
     if (transparent) {
+      const textColor=StyleHelper.getTextColor(props.sections[0]?.textColor, props.globalStyles, props.churchSettings);
+      const logo = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || null, props.churchSettings?.logoDark || null, textColor);
+      return logo !== "" ? logo : null;
+    }
+    else return props.churchSettings?.logoLight || null;
+  }
+
+  /*
+  const getLogo = () => {
+    if (transparent) {
       let textColor = props.sections[0]?.textColor || "#FFF";
       if (textColor.indexOf("var(--") > -1) {
         const palette = JSON.parse(props.globalStyles.palette);
@@ -181,7 +192,7 @@ export function Header(props: Props) {
     } else {
       return props.churchSettings?.logoLight || null;
     }
-  };
+  };*/
 
   // const getLogo = () => {
   //   if (transparent) {
