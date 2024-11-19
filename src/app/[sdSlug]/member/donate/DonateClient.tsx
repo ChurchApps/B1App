@@ -4,7 +4,17 @@ import Link from "next/link";
 import { Icon, Grid, Typography, Button } from "@mui/material";
 import { WrapperPageProps } from "@/helpers";
 import { DonationPage as BaseDonationPage, NonAuthDonation, UserHelper, AppearanceHelper } from "@churchapps/apphelper";
-
+/* <BaseDonationPage
+            personId={UserHelper.currentUserChurch?.person?.id}
+            appName="B1App"
+            church={props.config.church}
+            churchLogo={AppearanceHelper.getLogo(
+              props?.config?.appearance,
+              "",
+              "",
+              props?.config?.appearance?.primaryColor || "#FFF"
+            )}
+          /> */
 export function DonateClient(props: WrapperPageProps) {
   return (
     <>
@@ -12,17 +22,10 @@ export function DonateClient(props: WrapperPageProps) {
         <Icon>volunteer_activism</Icon> Give
       </h1>
       {UserHelper.currentUserChurch?.person?.id ? (
-        <BaseDonationPage
-          personId={UserHelper.currentUserChurch?.person?.id}
-          appName="B1App"
-          church={props.config.church}
-          churchLogo={AppearanceHelper.getLogo(
-            props?.config?.appearance,
-            "",
-            "",
-            props?.config?.appearance?.primaryColor || "#FFF"
-          )}
-        />
+        <>
+
+          <Link href="/member/donate/print">Print</Link>
+        </>
       ) : (
         <>
           <Grid container spacing={3}>
