@@ -19,8 +19,9 @@ export function ContentEditorClient(props: Props) {
   const loadData = async (id: string) =>
     await ApiHelper.get("/pages/" + UserHelper.currentUserChurch.church.id + "/tree?id=" + id, "ContentApi");
 
-  const handleDone = () => {
-    redirect("/admin/site/pages/preview/" + id);
+  const handleDone = (url?: string) => {
+    if (url && url !== '') redirect(url);
+    else redirect("/admin/site/pages/preview/" + id);
   };
 
   return (

@@ -67,7 +67,7 @@ export function FileUpload(props: Props) {
   //This will throw a CORS error if ran from localhost
   const postPresignedFile = (presigned: any) => {
     const formData = new FormData();
-    formData.append("key", presigned.key);
+    //formData.append("key", presigned.key);
     formData.append("acl", "public-read");
     formData.append("Content-Type", uploadedFile.type);
     for (const property in presigned.fields)
