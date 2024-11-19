@@ -3,7 +3,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper, CurrencyHelper, UserHelper } from "@churchapps/helpers";
+import { ArrayHelper, CurrencyHelper, DateHelper, UserHelper } from "@churchapps/helpers";
 import { useContext, useEffect, useState } from "react";
 
 type Params = Promise<{ sdSlug: string; }>;
@@ -20,8 +20,8 @@ export default function PrintPage({ params }: { params: Params }) {
         //const { isAuthenticated } = ApiHelper;
         //if (!isAuthenticated) return;
         ApiHelper.get("/funds", "GivingApi").then((f) => { setFunds(f) });
-        ApiHelper.get("/fundDonations?personId=" + context.person.id, "GivingApi").then((fd) => { setFundDonations(fd) });
-        ApiHelper.get("/donations?personId=" + context.person.id, "GivingApi").then((d) => { setDonations(d) });
+        ApiHelper.get("/fundDonations/my", "GivingApi").then((fd) => { setFundDonations(fd) });
+        ApiHelper.get("/donations/my", "GivingApi").then((d) => { setDonations(d) });
 
 
         //window.print();
@@ -29,10 +29,42 @@ export default function PrintPage({ params }: { params: Params }) {
 
     const getTotalContributions = () => {
         let result = 0;
-        donations.forEach((d) => {
+        fundDonations.forEach((d) => {
             result += d.amount;
         });
         return CurrencyHelper.formatCurrency(result);
+    }
+
+    const tableFundTotal = () => {
+        const fundArray = getFundArray();
+        console.log(fundArray);
+        const result: any[] = [];
+        fundArray.forEach((fd) => {
+            const existing = ArrayHelper.getOne(result, "fund", fd.fund);
+            if (existing) {
+                existing.total += fd.amount;
+            } else {
+                result.push({ fund: fd.fund, total: fd.amount });
+            }
+        });
+        const tableValues: JSX.Element[] = [];
+
+        result.forEach((tv) => {
+            tableValues.push(<tr style={{ height: "24px" }}>
+                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "70%", paddingLeft: "5px" }}>{tv.fund}</td>
+                <td style={{ borderBottom: "2px solid #1976D2", borderLeft: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "right", width: "30%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrency(tv.total)}</td>
+            </tr>);
+        });
+        return tableValues;
+    }
+
+    const getFundArray = () => {
+        const result: any[] = fundDonations.map((fd) => {
+            const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
+
+            return { fund: fund?.name, amount: fd.amount };
+        });
+        return result;
     }
 
     const tableDonations = () => {
@@ -41,10 +73,10 @@ export default function PrintPage({ params }: { params: Params }) {
             const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
             const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
             result.push(<tr style={{ height: "28px" }}>
-                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{donation?.donationDate.toString()}</td>
+                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.formatHtml5Date(donation?.donationDate).toString()}</td>
                 <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>{donation?.method}</td>
                 <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>{fund?.name}</td>
-                <td style={{ borderBottom: "2px solid #1976D2", borderLeft: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{fd.amount}</td>
+                <td style={{ borderBottom: "2px solid #1976D2", borderLeft: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrency(fd.amount)}</td>
             </tr>);
         });
         return result;
@@ -101,10 +133,7 @@ export default function PrintPage({ params }: { params: Params }) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr style={{ height: "24px" }}>
-                                        <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "70%", paddingLeft: "5px" }}>Fund Name</td>
-                                        <td style={{ borderBottom: "2px solid #1976D2", borderLeft: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "right", width: "30%", paddingRight: "5px" }}>$000.00</td>
-                                    </tr>
+                                    {tableFundTotal()}
                                 </tbody>
                             </table>
                             {/* Table End */}
@@ -125,12 +154,6 @@ export default function PrintPage({ params }: { params: Params }) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style={{ height: "28px" }}>
-                                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>Jan 1, 2024</td>
-                                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>Cash</td>
-                                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>Fund Name</td>
-                                <td style={{ borderBottom: "2px solid #1976D2", borderLeft: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>$000.00</td>
-                            </tr>
                             {tableDonations()}
                             <tr style={{ height: "28px" }}>
                                 <td style={{ borderTop: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}></td>
