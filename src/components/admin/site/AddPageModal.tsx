@@ -157,17 +157,17 @@ export function AddPageModal(props: Props) {
         <Grid container spacing={2}>
           {(pageTemplate !== "link")
           && <Grid xs={(props.mode === "navigation") ? 6 : 12} item>
-            <TextField size="small" fullWidth label="Page Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
+            <TextField size="small" fullWidth label="Page Title" name="title" value={page.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
           </Grid>
           }
           {(pageTemplate === "link")
             && <Grid xs={(props.mode === "navigation") ? 6 : 12} item>
-              <TextField size="small" fullWidth label="Link Url" name="linkUrl" value={link.url} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
+              <TextField size="small" fullWidth label="Link Url" name="linkUrl" value={link.url || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
             </Grid>
           }
           {(props.mode === "navigation")
           && <Grid xs={6} item>
-            <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
+            <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
           </Grid>
           }
         </Grid>
