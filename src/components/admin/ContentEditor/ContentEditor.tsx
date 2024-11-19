@@ -27,7 +27,7 @@ interface Props extends WrapperPageProps {
   loadData: (id:string) => Promise<any>,
   pageId?: string,
   blockId?: string
-  onDone?: () => void
+  onDone?: (url?: string) => void
 };
 
 export default function ContentEditor(props: Props) {
@@ -140,6 +140,18 @@ export default function ContentEditor(props: Props) {
     }
   }
 
+  const handleDone = () => {
+    let url = '';
+    if (props.pageId) {
+      const page = container as PageInterface;
+      if (page.layout === "embed") {
+        if (page.url.includes("/member")) url = '/admin';
+        else if (page.url.includes("/stream")) url='/admin/video/settings';
+      }
+    }
+    props.onDone(url);
+  }
+
   /*Todo: affix the sidebar with CSS instead*/
   useEffect(() => {
     const onScroll = (e:any) => { setScrollTop(e.target.documentElement.scrollTop); };
@@ -224,7 +236,7 @@ export default function ContentEditor(props: Props) {
     <div style={{backgroundColor:"#FFF", position:"sticky", top:0, width:"100%", zIndex:1000, boxShadow:"0px 2px 2px black", marginBottom:10}}>
       <Grid container spacing={2}>
         <Grid item xs={4} style={{paddingLeft:40, paddingTop:8}}>
-          <SmallButton icon={"done"} text="Done" onClick={props.onDone} />
+          <SmallButton icon={"done"} text="Done" onClick={handleDone} />
         </Grid>
         <Grid item xs={4} style={{textAlign:"center"}}>
           <b>
