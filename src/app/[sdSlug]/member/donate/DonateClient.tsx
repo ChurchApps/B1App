@@ -24,7 +24,8 @@ export function DonateClient(props: WrapperPageProps) {
       {UserHelper.currentUserChurch?.person?.id ? (
         <>
 
-          <Link href="/member/donate/print">Print</Link>
+          <Link href="/member/donate/print">Print</Link><br></br>
+          <Link href="/member/donate/print?prev=1">Print Last</Link>
         </>
       ) : (
         <>
