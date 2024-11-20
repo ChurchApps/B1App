@@ -10,7 +10,7 @@
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.2.74",
+    "@churchapps/apphelper": "0.2.76",
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.4.1",
