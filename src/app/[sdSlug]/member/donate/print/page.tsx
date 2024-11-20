@@ -4,12 +4,16 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ArrayHelper, CurrencyHelper, DateHelper, UserHelper } from "@churchapps/helpers";
+import { useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 type Params = Promise<{ sdSlug: string; }>;
 
 export default function PrintPage({ params }: { params: Params }) {
     // const { sdSlug } = await params
+    let currYear = new Date().getFullYear();
+    const searchparams = useSearchParams();
+    //searchparams.get("previous");
     const context = useContext(UserContext);
 
     const [funds, setFunds] = useState<FundInterface[]>([]);
@@ -21,18 +25,89 @@ export default function PrintPage({ params }: { params: Params }) {
         //if (!isAuthenticated) return;
         ApiHelper.get("/funds", "GivingApi").then((f) => { setFunds(f) });
         ApiHelper.get("/fundDonations/my", "GivingApi").then((fd) => { setFundDonations(fd) });
-        ApiHelper.get("/donations/my", "GivingApi").then((d) => { setDonations(d) });
+        ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
+            const result: DonationInterface[] = []
+            d.forEach((don) => {
+                don.donationDate = new Date(don.donationDate);
+                console.log(don);
+                console.log(don.donationDate.getFullYear());
+                if (don.donationDate.getFullYear() === currYear) {
+                    result.push(don);
+                }
+            });
+            setDonations(result)
+        });
 
 
         //window.print();
     };
 
+    const filterYear = () => {
+
+
+        const result: JSX.Element[] = [];
+        fundDonations.forEach((fd) => {
+            const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
+            const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
+
+            // let donYear = donation?.donationDate?.getFullYear();
+        });
+    }
+
+    const getEarliest = () => {
+        console.log("earliest date");
+    }
+
+    const getLatest = () => {
+        console.log("latest date");
+    }
+
+    const getDate = () => {
+        let date = DateHelper.formatHtml5Date(new Date());
+        let time = DateHelper.formatHtml5Time(new Date());
+        let dateTime = `${date} ${time}`;
+        return dateTime;
+    }
+
     const getTotalContributions = () => {
         let result = 0;
         fundDonations.forEach((d) => {
-            result += d.amount;
+            const donation = ArrayHelper.getOne(donations, "id", d.donationId);
+            if (donation) {
+                result += d.amount;
+            }
         });
         return CurrencyHelper.formatCurrency(result);
+    }
+
+    const getFundArray = () => {
+        const result: any[] = [];
+        fundDonations.forEach((fd) => {
+            const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
+            const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
+            if (donation) {
+
+                result.push({ fund: fund?.name, amount: fd.amount });
+            }
+        });
+        return result;
+    }
+
+    const tableDonations = () => {
+        const result: JSX.Element[] = [];
+        fundDonations.forEach((fd) => {
+            const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
+            const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
+            if (donation) {
+                result.push(<tr style={{ height: "28px" }}>
+                    <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.formatHtml5Date(donation?.donationDate).toString()}</td>
+                    <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>{donation?.method}</td>
+                    <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>{fund?.name}</td>
+                    <td style={{ borderBottom: "2px solid #1976D2", borderLeft: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrency(fd.amount)}</td>
+                </tr>);
+            }
+        });
+        return result;
     }
 
     const tableFundTotal = () => {
@@ -58,41 +133,18 @@ export default function PrintPage({ params }: { params: Params }) {
         return tableValues;
     }
 
-    const getFundArray = () => {
-        const result: any[] = fundDonations.map((fd) => {
-            const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
-
-            return { fund: fund?.name, amount: fd.amount };
-        });
-        return result;
-    }
-
-    const tableDonations = () => {
-        const result: JSX.Element[] = [];
-        fundDonations.forEach((fd) => {
-            const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
-            const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
-            result.push(<tr style={{ height: "28px" }}>
-                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.formatHtml5Date(donation?.donationDate).toString()}</td>
-                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>{donation?.method}</td>
-                <td style={{ borderBottom: "2px solid #1976D2", borderRight: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>{fund?.name}</td>
-                <td style={{ borderBottom: "2px solid #1976D2", borderLeft: "2px solid #1976D2", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrency(fd.amount)}</td>
-            </tr>);
-        });
-        return result;
-    }
-
     useEffect(loadData, []);
 
     return (
         <>
+            {filterYear()}
             <div style={{ margin: "0px", padding: "0px", height: "100%", width: "100%", backgroundColor: "white", fontFamily: "Roboto, sans-serif" }}>
                 <div style={{ margin: "0px", padding: "0px", borderTop: "24px solid #1976D2", width: "100%" }}></div>
 
                 <div style={{ margin: "0px", padding: "0px", width: "100%" }}>
                     <h1>2024 Annual Giving Statement</h1>
                     <p>Period: Jan 1 - Jan 1, 2024</p>
-                    <p>Issued: Jan 1, 2024 12:00PM</p>
+                    <p>Issued: {getDate()}</p>
                 </div>
                 <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid #1976D2", width: "80%" }}></div>
 
