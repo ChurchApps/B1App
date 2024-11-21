@@ -44,7 +44,8 @@ export default function ContentEditor(props: Props) {
   const [showHelp, setShowHelp] = useState(false);
   const [navLinks, setNavLinks] = useState<any>(null);
 
-
+  let elementOnlyMode = false;
+  if (props.blockId && container?.sections?.length===1 && container?.sections[0]?.id==="") elementOnlyMode = true;
 
   const zones:any = {
     cleanCentered: ["main"],
@@ -265,7 +266,7 @@ export default function ContentEditor(props: Props) {
 
     <DndProvider backend={HTML5Backend}>
       {showHelp && getHelp()}
-      {showAdd && <ElementAdd includeBlocks={true} includeSection={true} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
+      {showAdd && <ElementAdd includeBlocks={!elementOnlyMode} includeSection={!elementOnlyMode} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
       {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
       {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
 
