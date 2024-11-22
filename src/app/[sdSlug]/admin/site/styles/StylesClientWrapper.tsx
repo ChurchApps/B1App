@@ -17,10 +17,11 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
   const [section, setSection] = useState<string>("");
-
-
+  const [churchSettings, setChurchSettings] = useState<any>(null);
 
   const loadData = () => {
+    ApiHelper.getAnonymous("/settings/public/" + props.config.church.id, "MembershipApi").then(s => setChurchSettings(s));
+
     ApiHelper.get("/globalStyles", "ContentApi").then((gs) => {
       if (gs.palette) setGlobalStyle(gs);
       else
@@ -79,7 +80,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
           {section === "css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
           {section === "logo" && <Appearance />}
           {section === "" && (
-            <Preview globalStyle={globalStyle} churchSettings={props.config.church} churchName={props.config.church.name} />
+            <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
           )}
         </Grid>
         <Grid item md={4} xs={12}>
