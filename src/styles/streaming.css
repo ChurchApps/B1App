@@ -47,9 +47,10 @@
   position: relative;
 }
 
-#videoContainer.embedded iframe, #videoContainer.embedded #noVideoContent {
+#videoContainer.embedded iframe,
+#videoContainer.embedded #noVideoContent {
   position: absolute;
-  align-self:auto;
+  align-self: auto;
 }
 
 #interactionContainer {
@@ -70,13 +71,13 @@
   text-align: left;
   padding-top: 5px;
   padding-bottom: 5px;
-  color: var(--light);
+  color: white;
   background-color: var(--darkAccent);
 }
 
 .streamingTab:hover {
   text-decoration: none;
-  color: var(--light);
+  color: white;
 }
 
 .streamingTab i {
@@ -85,7 +86,7 @@
 }
 
 .streamingTab.childTab {
-  color: var(--light);
+  color: white;
   background-color: var(--darkAccent);
 }
 
@@ -430,7 +431,7 @@ prayerSend {
 #userMenu .nav-item {
   list-style: none;
   border-top: none;
-  border-bottom: none; 
+  border-bottom: none;
 }
 
 
