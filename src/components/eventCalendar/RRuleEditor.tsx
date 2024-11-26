@@ -69,7 +69,8 @@ export function RRuleEditor(props: Props) {
         break;
       case "nthWeekday":
         options.bymonthday = [];
-        options.bynweekday = [[nthWeekday, weekday]];
+        options.byweekday = [weekday === 0 ? 6 : weekday - 1]; //to handle (MO, TU, We..) day of the week
+        options.bysetpos = [nthWeekday + 1]; //to hanle (first, second, third..) nth day of the week
         break;
     }
     setRRuleOptions(options);
