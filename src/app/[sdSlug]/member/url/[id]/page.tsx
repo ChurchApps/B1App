@@ -1,4 +1,3 @@
-import { Wrapper } from "@/components";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { UrlClient } from "./UrlClient";
 
@@ -10,8 +9,8 @@ export default async function UrlPage({ params }: {params:Params}) {
   const config = await ConfigHelper.load(sdSlug.toString());
 
   return (
-    <Wrapper config={config}>
-      <UrlClient config={config} urlId={id} />
-    </Wrapper>
+
+    <UrlClient config={config} urlId={id} />
+
   );
 }

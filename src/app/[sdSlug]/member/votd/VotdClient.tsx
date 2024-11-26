@@ -41,7 +41,7 @@ export function VotdClient(props: WrapperPageProps) {
   return (
     <Wrapper config={props.config}>
       <img
-        src={"https://livechurchsolutions.github.io/VotdContent/v1/" + day + "/" + shape + ".jpg"}
+        src={"https://votd.org/v1/" + day + "/" + shape + ".jpg"}
         className="full-frame"
         alt="Verse of the Day"
       />

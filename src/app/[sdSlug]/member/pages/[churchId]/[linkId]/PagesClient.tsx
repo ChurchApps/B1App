@@ -28,8 +28,10 @@ export function PagesClient({ config, churchId, linkId,url }: Props) {
   if (url) {
     return (
       <Wrapper config={config}>
-        <div className="b1Frame">
-          <iframe src={url.toString()} frameBorder="0" />
+        <div style={{marginLeft:-25, marginRight:-25, marginTop: -64}}>
+          <div className="b1Frame">
+            <iframe src={url.toString()} frameBorder="0" />
+          </div>
         </div>
       </Wrapper>
     );
