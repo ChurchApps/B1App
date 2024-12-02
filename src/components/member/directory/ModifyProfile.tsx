@@ -43,6 +43,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     { key: "contactInfo.homePhone", label: "Home Phone" },
     { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
     { key: "contactInfo.workPhone", label: "Work Phone" },
+    { key: "familyMember", label: "Add a Family Member" }
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
@@ -64,7 +65,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   const fieldOptions = () => {
     let options: JSX.Element[] = [];
     categories.forEach((c) => {
-      options.push(<MenuItem value={c.key} disabled={changes?.some((ch) => ch.field === c.key)}>{c.label}</MenuItem>);
+      options.push(<MenuItem value={c.key} disabled={changes?.some((ch) => c.key !== "familyMember" && ch.field === c.key)}>{c.label}</MenuItem>);
     });
     return options;
   };
@@ -103,7 +104,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
           <TextField fullWidth label="Birthdate" name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(new Date(currentField.value))} onChange={handleChange} />
         );
         break;
-      default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} />); break;
+      default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? '*Enter First Name only' : null} />); break;
     }
     return option;
   };
