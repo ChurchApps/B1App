@@ -26,13 +26,14 @@ We have a great community for end-users on [Facebook](https://www.facebook.com/c
 
 ### ⚠️ Report an Issue
 
-If you discover an issue or have a feature request, simply submit it to our [issues log](https://github.com/ChurchApps/ChurchAppsSupport). Don't be shy, that's how the program gets better.
+If you discover an issue or have a feature request, simply submit it to our [issues log](https://github.com/ChurchApps/ChurchAppsSupport/issues). Don't be shy, that's how the program gets better.
 
 ### 💬 Join us on Slack
 
 If you would like to contribute in any way, head over to our [Slack Channel](https://join.slack.com/t/livechurchsolutions/shared_invite/zt-i88etpo5-ZZhYsQwQLVclW12DKtVflg) and introduce yourself. We'd love to hear from you.
 
 ### 🏗️ Start Coding
+
 If you'd like to set up the project locally, see our [development guide](https://churchapps.org/dev).  The short version is:
 
 1. Copy `dotenv.sample.txt` to `.env` and updated it to point to the appropriate API urls.
