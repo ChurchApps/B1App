@@ -31,11 +31,11 @@ export function EventCalendar(props:Props) {
 
   const handleEventClick = (event: EventInterface) => {
     const ev = { ...event };
-    let tz = new Date().getTimezoneOffset();
-    ev.start = new Date(ev.start);
-    ev.end = new Date(ev.end);
-    ev.start.setMinutes(ev.start.getMinutes() - tz);
-    ev.end.setMinutes(ev.end.getMinutes() - tz);
+    // let tz = new Date().getTimezoneOffset();
+    // ev.start = new Date(ev.start);
+    // ev.end = new Date(ev.end);
+    // ev.start.setMinutes(ev.start.getMinutes() - tz);
+    // ev.end.setMinutes(ev.end.getMinutes() - tz);
     setDisplayEvent(ev);
     //setEditEvent(ev);
   }
