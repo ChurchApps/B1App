@@ -20,14 +20,13 @@ export default function Localhost() {
   return (
     <Container>
       <p>Select a site:</p>
-      <Link href="http://crcc.localhost:3000">CRCC</Link>
+      <Link href="http://crcc.localhost:3301">CRCC</Link>
       <br />
-      <Link href="http://ironwood.localhost:3000">Ironwood</Link>
+      <Link href="http://ironwood.localhost:3301">Ironwood</Link>
       <br />
-      <Link href="http://crcc.localhost:3000">LiveCS Home</Link>
+      <Link href="http://ironwood.localhost:3301/member">Member</Link>
       <br />
-      <br />
-      <Link href="http://ironwood.localhost:3000/admin">Admin</Link>
+      <Link href="http://ironwood.localhost:3301/admin">Admin</Link>
 
       <table>
         <tbody>
