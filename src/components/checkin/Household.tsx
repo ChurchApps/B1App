@@ -1,9 +1,9 @@
 "use client"
 import { useState, useEffect } from "react";
 import { Button, Icon, Grid, Box } from "@mui/material";
-import { CheckinHelper, EnvironmentHelper } from "@/helpers";
+import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
-import { VisitInterface, GroupInterface, PersonInterface, ArrayHelper, ServiceTimeInterface, VisitSessionInterface, ApiHelper, Loading } from "@churchapps/apphelper";
+import { VisitInterface, GroupInterface, PersonInterface, ArrayHelper, ServiceTimeInterface, VisitSessionInterface, ApiHelper, Loading, PersonHelper } from "@churchapps/apphelper";
 
 interface Props {
   completeHandler: () => void;
@@ -132,7 +132,7 @@ export function Household({ completeHandler = () => { } }: Props) {
               {arrow}
             </Grid>
             <Grid item xs={2}>
-              <img src={EnvironmentHelper.Common.ContentRoot + member.photo} alt="avatar" />
+              <img src={PersonHelper.getPhotoUrl(member)} alt="avatar" />
             </Grid>
             <Grid item xs={9}>
               {member.name.display}
