@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { Button, Icon, Grid, Box } from "@mui/material";
-import { CheckinHelper, EnvironmentHelper } from "@/helpers";
+import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
 import { VisitInterface, GroupInterface, PersonInterface, ArrayHelper, ServiceTimeInterface, VisitSessionInterface, ApiHelper, Loading, PersonHelper } from "@churchapps/apphelper";
 
