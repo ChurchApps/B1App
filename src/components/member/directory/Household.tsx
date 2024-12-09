@@ -1,6 +1,5 @@
 import React from "react";
-import { EnvironmentHelper } from "../../../helpers"
-import { PersonInterface, Loading, ApiHelper, DisplayBox } from "@churchapps/apphelper"
+import { PersonInterface, Loading, ApiHelper, DisplayBox, PersonHelper } from "@churchapps/apphelper"
 import { Grid } from "@mui/material";
 
 interface Props { person: PersonInterface, selectedHandler: (personId: string) => void }
@@ -13,7 +12,7 @@ export const Household: React.FC<Props> = (props) => {
     const m = member;
     return (<a href="about:blank" className="householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id) }}>
       <Grid container spacing={3}>
-        <Grid item xs={2}><img src={EnvironmentHelper.Common.ContentRoot + member?.photo} alt="avatar" /></Grid>
+        <Grid item xs={2}><img src={PersonHelper.getPhotoUrl(member)} alt="avatar" /></Grid>
         <Grid item xs={10}>
           {member?.name?.display}
           <div><span>{member?.householdRole}</span></div>

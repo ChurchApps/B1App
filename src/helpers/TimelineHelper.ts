@@ -56,6 +56,14 @@ export class TimelineHelper {
     let allPosts:TimelinePostInterface[] = [];
     results.forEach((result:any[]) => {
       result.forEach((r) => {
+        if (r.postType === "event") {
+          let data = { ...r };
+          let tz = new Date().getTimezoneOffset();
+          r.start = new Date(r.start);
+          r.end = new Date(r.end);
+          r.start.setMinutes(r.start.getMinutes() - tz);
+          r.end.setMinutes(r.end.getMinutes() - tz);
+        }
         allPosts.push({ postId:r.postId, postType:r.postType, groupId:r.groupId, data:r})
       });
     });

@@ -16,19 +16,24 @@
 
 ## Get Involved
 
-#### Help Support Us
+### 🤝 Help Support Us
+
 The only reason this program is free is because of the generous support from users. If you want to support us to keep this free, please head over to [ChurchApps](https://churchapps/partner) or [sponsor us on GitHub](https://github.com/sponsors/ChurchApps/). Thank you so much!
 
-#### Join the Community
-We have a great community for end-users on [Facebook](https://www.facebook.com/churchapps.org).  It's a good way to ask questions, get tips and follow new updates.  Come join us!
+### 🏘️ Join the Community
 
-#### Report and Issue
-If you discover an issue or have a feature request, simply submit it to our [issues log](https://github.com/ChurchApps/ChurchAppsSupport).  Don't be shy, that's how the program gets better.
+We have a great community for end-users on [Facebook](https://www.facebook.com/churchapps.org). It's a good way to ask questions, get tips and follow new updates. Come join us!
 
-#### Join us on Slack
-If you would like to get involved contributing in any way, head over to our [Slack Channel](https://join.slack.com/t/livechurchsolutions/shared_invite/zt-i88etpo5-ZZhYsQwQLVclW12DKtVflg) and introduce yourself.  We'd love to hear from you.
+### ⚠️ Report an Issue
 
-#### Start Coding
+If you discover an issue or have a feature request, simply submit it to our [issues log](https://github.com/ChurchApps/ChurchAppsSupport/issues). Don't be shy, that's how the program gets better.
+
+### 💬 Join us on Slack
+
+If you would like to contribute in any way, head over to our [Slack Channel](https://join.slack.com/t/livechurchsolutions/shared_invite/zt-i88etpo5-ZZhYsQwQLVclW12DKtVflg) and introduce yourself. We'd love to hear from you.
+
+### 🏗️ Start Coding
+
 If you'd like to set up the project locally, see our [development guide](https://churchapps.org/dev).  The short version is:
 
 1. Copy `dotenv.sample.txt` to `.env` and updated it to point to the appropriate API urls.
