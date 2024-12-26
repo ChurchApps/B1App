@@ -1,7 +1,9 @@
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { EventInterface, EventHelper, SmallButton } from "@churchapps/apphelper";
+import { Stack } from "@mui/material";
+import { saveAs } from "file-saver";
+import { EventInterface, EventHelper, SmallButton, ApiHelper } from "@churchapps/apphelper";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { DisplayEventModal } from "./DisplayEventModal";
@@ -16,6 +18,17 @@ export function EventCalendar(props:Props) {
   const localizer = momentLocalizer(moment)
   const [editEvent, setEditEvent] = useState<EventInterface | null>(null);
   const [displayEvent, setDisplayEvent] = useState<EventInterface | null>(null);
+
+  const handleSubscribe = () => {
+    ApiHelper.get(`/events/subscribe?groupId=${props.editGroupId}`, "ContentApi").then((result) => {
+      if (result.error) {
+        alert("Error while converting the file!");
+      } else {
+        const blob = new Blob([result.value], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, "group_calendar.ics");
+      }
+    });
+  }
 
   const handleAddEvent = (slotInfo: any) => {
     const startTime = new Date(slotInfo.start);
@@ -72,7 +85,12 @@ export function EventCalendar(props:Props) {
 
   return (
     <div>
-      {props.editGroupId && <div style={{textAlign:"right", marginBottom:20}}><SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start:new Date(), end: new Date() }) }} /></div> }
+      {props.editGroupId &&
+        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
+          <SmallButton icon="description" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe() }} toolTip="Download an ICS file which can be uploaded to the Google Calendar" />
+          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start:new Date(), end: new Date() }) }} />
+        </Stack>
+      }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
       {displayEvent && <DisplayEventModal event={displayEvent} onDone={ handleDone } canEdit={props.editGroupId!==""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}

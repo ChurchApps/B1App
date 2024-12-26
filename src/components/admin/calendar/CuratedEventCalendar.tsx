@@ -2,9 +2,10 @@ import { useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Button } from "@mui/material";
+import { Button, Icon, Stack } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import { EventHelper, CuratedEventWithEventInterface } from "@churchapps/apphelper";
+import { saveAs } from "file-saver";
+import { EventHelper, CuratedEventWithEventInterface, ApiHelper } from "@churchapps/apphelper";
 import { EditCalendarEventModal } from "./EditCalendarEventModal";
 import { DisplayCalendarEventModal } from "./DisplayCalendarEventModal";
 
@@ -21,6 +22,17 @@ export function CuratedEventCalendar(props: Props) {
   const [displayCalendarEvent, setDisplayCalendarEvent] = useState<CuratedEventWithEventInterface | null>(null);
 
   const localizer = momentLocalizer(moment);
+
+  const handleSubscribe = () => {
+    ApiHelper.get("/events/subscribe?curatedCalendarId=" + props.curatedCalendarId, "ContentApi").then((result) => {
+      if (result.error) {
+        alert("Error while converting the file!");
+      } else {
+        const blob = new Blob([result.value], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, "curated_calendar.ics");
+      }
+    })
+  }
 
   const handleEventClick = (event: CuratedEventWithEventInterface) => {
     const ev = { ...event };
@@ -63,12 +75,10 @@ export function CuratedEventCalendar(props: Props) {
 
   return (
     <div>
-      {props.mode === "edit"
-        && <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 17 }}>
-          <div></div>
-          <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>
-        </div>
-      }
+      <Stack direction="row" justifyContent="space-between" alignItems="center" marginBottom={"17px"} marginTop={"12px"}>
+        <Button startIcon={<Icon>description</Icon>} title="Download an ICS file which can be uploaded to the Google Calendar" size="small" variant="contained" onClick={(e) => { e.preventDefault(); handleSubscribe(); }}>Subscribe</Button>
+        {props.mode === "edit" && <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>}
+      </Stack>
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
       {open && props.mode === "edit" && <EditCalendarEventModal onDone={handleDone} churchId={props.churchId} curatedCalendarId={props.curatedCalendarId} />}
       {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} curatedCalendarId={props.curatedCalendarId} mode={props.mode} onDone={handleDone} />}
