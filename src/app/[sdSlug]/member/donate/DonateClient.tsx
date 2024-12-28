@@ -24,7 +24,7 @@ export function DonateClient(props: WrapperPageProps) {
                 props?.config?.appearance,
                 "",
                 "",
-                props?.config?.appearance?.primaryColor || "#FFF"
+                "#FFF"
               )}
             />
           </>
@@ -40,7 +40,7 @@ export function DonateClient(props: WrapperPageProps) {
                     props?.config?.appearance,
                     "",
                     "",
-                    props?.config?.appearance?.primaryColor || "#FFF"
+                    "#FFF"
                   )}
                 />
               </Grid>

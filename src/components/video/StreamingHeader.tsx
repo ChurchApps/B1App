@@ -64,7 +64,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   }
 
   let imgSrc = (props.appearance)
-    ? AppearanceHelper.getLogo(props.appearance, "images/logo-header.png", "/images/logo.png", props.appearance?.primaryColor || "#FFF")
+    ? AppearanceHelper.getLogo(props.appearance, "images/logo-header.png", "/images/logo.png", "#FFF")
     : "";
 
   if (!props.appearance) {
