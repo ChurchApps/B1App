@@ -2,10 +2,9 @@ import { useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Button, Icon, Stack } from "@mui/material";
+import { Button, Icon, Snackbar, Stack } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import { saveAs } from "file-saver";
-import { EventHelper, CuratedEventWithEventInterface, ApiHelper } from "@churchapps/apphelper";
+import { EventHelper, CuratedEventWithEventInterface, CommonEnvironmentHelper, UserHelper } from "@churchapps/apphelper";
 import { EditCalendarEventModal } from "./EditCalendarEventModal";
 import { DisplayCalendarEventModal } from "./DisplayCalendarEventModal";
 
@@ -20,18 +19,13 @@ interface Props {
 export function CuratedEventCalendar(props: Props) {
   const [open, setOpen] = useState<boolean>(false);
   const [displayCalendarEvent, setDisplayCalendarEvent] = useState<CuratedEventWithEventInterface | null>(null);
+  const [ShowCopy, setShowCopy] = useState<boolean>(false);
 
   const localizer = momentLocalizer(moment);
 
   const handleSubscribe = () => {
-    ApiHelper.get("/events/subscribe?curatedCalendarId=" + props.curatedCalendarId, "ContentApi").then((result) => {
-      if (result.error) {
-        alert("Error while converting the file!");
-      } else {
-        const blob = new Blob([result.value], { type: "text/plain;charset=utf-8" });
-        saveAs(blob, "curated_calendar.ics");
-      }
-    })
+    setShowCopy(true);
+    navigator.clipboard.writeText(`${CommonEnvironmentHelper.ContentApi}/events/subscribe?curatedCalendarId=${props.curatedCalendarId}&churchId=${UserHelper.currentUserChurch.church.id}`);
   }
 
   const handleEventClick = (event: CuratedEventWithEventInterface) => {
@@ -76,12 +70,13 @@ export function CuratedEventCalendar(props: Props) {
   return (
     <div>
       <Stack direction="row" justifyContent="space-between" alignItems="center" marginBottom={"17px"} marginTop={"12px"}>
-        <Button startIcon={<Icon>description</Icon>} title="Download an ICS file which can be uploaded to the Google Calendar" size="small" variant="contained" onClick={(e) => { e.preventDefault(); handleSubscribe(); }}>Subscribe</Button>
+        <Button startIcon={<Icon>link</Icon>} title="Copy the URL and add this to your Google Calendar (or other)" size="small" variant="contained" onClick={(e) => { e.preventDefault(); handleSubscribe(); }}>Subscribe</Button>
         {props.mode === "edit" && <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>}
       </Stack>
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
       {open && props.mode === "edit" && <EditCalendarEventModal onDone={handleDone} churchId={props.churchId} curatedCalendarId={props.curatedCalendarId} />}
       {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} curatedCalendarId={props.curatedCalendarId} mode={props.mode} onDone={handleDone} />}
+      <Snackbar open={ShowCopy} onClose={() => setShowCopy(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ "vertical": "bottom", "horizontal": "center" }} ContentProps={{ sx: { background: "green" } }} />
     </div>
   );
 }

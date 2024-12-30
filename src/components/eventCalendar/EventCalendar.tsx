@@ -1,9 +1,8 @@
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Stack } from "@mui/material";
-import { saveAs } from "file-saver";
-import { EventInterface, EventHelper, SmallButton, ApiHelper } from "@churchapps/apphelper";
+import { Snackbar, Stack } from "@mui/material";
+import { EventInterface, EventHelper, SmallButton, CommonEnvironmentHelper, UserHelper } from "@churchapps/apphelper";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { DisplayEventModal } from "./DisplayEventModal";
@@ -18,16 +17,11 @@ export function EventCalendar(props:Props) {
   const localizer = momentLocalizer(moment)
   const [editEvent, setEditEvent] = useState<EventInterface | null>(null);
   const [displayEvent, setDisplayEvent] = useState<EventInterface | null>(null);
+  const [open, setOpen] = useState<boolean>(false);
 
   const handleSubscribe = () => {
-    ApiHelper.get(`/events/subscribe?groupId=${props.editGroupId}`, "ContentApi").then((result) => {
-      if (result.error) {
-        alert("Error while converting the file!");
-      } else {
-        const blob = new Blob([result.value], { type: "text/plain;charset=utf-8" });
-        saveAs(blob, "group_calendar.ics");
-      }
-    });
+    setOpen(true);
+    navigator.clipboard.writeText(`${CommonEnvironmentHelper.ContentApi}/events/subscribe?groupId=${props.editGroupId}&churchId=${UserHelper.currentUserChurch.church.id}`);
   }
 
   const handleAddEvent = (slotInfo: any) => {
@@ -87,13 +81,14 @@ export function EventCalendar(props:Props) {
     <div>
       {props.editGroupId &&
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
-          <SmallButton icon="description" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe() }} toolTip="Download an ICS file which can be uploaded to the Google Calendar" />
+          <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe() }} toolTip="Copy the URL and add this to your Google Calendar (or other)" />
           <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start:new Date(), end: new Date() }) }} />
         </Stack>
       }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
       {displayEvent && <DisplayEventModal event={displayEvent} onDone={ handleDone } canEdit={props.editGroupId!==""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}
+      <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ "vertical": "bottom", "horizontal": "center" }} ContentProps={{ sx: { background: "green" } }} />
     </div>
   );
 }
