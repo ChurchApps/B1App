@@ -99,7 +99,7 @@ export const SermonElement = ({ churchId, churchSettings }: Props) => {
                     <Box
                       component="img"
                       alt={item?.title}
-                      src={item.thumbnail ? item.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", churchSettings?.primaryColor || "#FFF")}
+                      src={item.thumbnail ? item.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", "#FFF")}
                       height={190}
                       minHeight={{ xs: 230, sm: 'auto' }}
                       sx={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -132,7 +132,7 @@ export const SermonElement = ({ churchId, churchSettings }: Props) => {
                     <Box
                       component="img"
                       alt={item?.title}
-                      src={item.thumbnail ? item.thumbnail : (activePlaylist?.thumbnail ? activePlaylist.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", churchSettings?.primaryColor || "#FFF"))}
+                      src={item.thumbnail ? item.thumbnail : (activePlaylist?.thumbnail ? activePlaylist.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", "#FFF"))}
                       height={190}
                       minHeight={{ xs: 230, sm: 'auto' }}
                       sx={{ objectFit: 'cover', objectPosition: 'center' }}

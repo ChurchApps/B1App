@@ -43,26 +43,28 @@ export const Wrapper: React.FC<Props> = props => {
     }
   }
 
-  const dummyRouter = useRouter();
+  const router = useRouter();
+  const handleNavClick = (url: string) => { router.push(url) }
+
   const getTabs = () => {
     props.config.tabs?.forEach(tab => {
       switch (tab.linkType) {
         case "stream":
-          tabs.push(<NavItem key="/member/stream" url="/member/stream" label={tab.text} icon={tab.icon} router={dummyRouter} selected={selectedTab === "stream"} />)
+          tabs.push(<NavItem key="/member/stream" url="/member/stream" label={tab.text} icon={tab.icon} onNavigate={handleNavClick} selected={selectedTab === "stream"} />)
           break
         case "url":
-          tabs.push(<NavItem key={`/member/url/${tab.id}`} url={`/member/url/${tab.id}`} label={tab.text} icon={tab.icon} router={dummyRouter} selected={selectedTab === "url" && window?.location?.href?.indexOf(tab.id) > -1} />)
+          tabs.push(<NavItem key={`/member/url/${tab.id}`} url={`/member/url/${tab.id}`} label={tab.text} icon={tab.icon} onNavigate={handleNavClick} selected={selectedTab === "url" && window?.location?.href?.indexOf(tab.id) > -1} />)
           break
         case "bible":
-          tabs.push(<NavItem key="/member/bible" url="/member/bible" label={tab.text} icon={tab.icon} router={dummyRouter} selected={selectedTab === "bible"} />)
+          tabs.push(<NavItem key="/member/bible" url="/member/bible" label={tab.text} icon={tab.icon} onNavigate={handleNavClick} selected={selectedTab === "bible"} />)
           break
         case "page":
           let url = `/member/pages/${tab.churchId}/${tab.linkData}`;
           if (tab.url) url += "?url=" + tab.url;
-          tabs.push(<NavItem key={url} url={url} label={tab.text} icon={tab.icon} router={dummyRouter} selected={selectedTab === "page"} />)
+          tabs.push(<NavItem key={url} url={url} label={tab.text} icon={tab.icon} onNavigate={handleNavClick} selected={selectedTab === "page"} />)
           break
         case "votd":
-          tabs.push(<NavItem key="/member/votd" url="/member/votd" label={tab.text} icon={tab.icon} router={dummyRouter} selected={selectedTab === "votd"} />)
+          tabs.push(<NavItem key="/member/votd" url="/member/votd" label={tab.text} icon={tab.icon} onNavigate={handleNavClick} selected={selectedTab === "votd"} />)
           break
         default:
           break
@@ -95,15 +97,15 @@ export const Wrapper: React.FC<Props> = props => {
       });
     }
 
-    if (showWebsite) tabs.push(<NavItem key="/" url="/" label="Website" icon="home" router={dummyRouter} />);
-    if (showMyGroups) tabs.push(<NavItem key="/member" url="/member" label="My Groups" icon="group" router={dummyRouter} selected={selectedTab === "groups"} />);
-    if (showCheckin) tabs.push(<NavItem key="/member/checkin" url="/member/checkin" label="Check In" icon="check_box" router={dummyRouter} selected={selectedTab === "checkin"} />)
-    if (showDonations) tabs.push(<NavItem key="/member/donate" url="/member/donate" label="Donate" icon="volunteer_activism" router={dummyRouter} selected={selectedTab === "donation"} />)
-    if (showDirectory) tabs.push(<NavItem key="/member/directory" url="/member/directory" label="Member Directory" icon="groups" router={dummyRouter} selected={selectedTab === "directory"} />);
-    if (showPlans) tabs.push(<NavItem key="/member/plans" url="/member/plans" label="Plans" icon="event" router={dummyRouter} selected={selectedTab === "plans"} />);
-    if (showLessons) tabs.push(<NavItem key="/member/lessons" url="/member/lessons" label="Lessons" icon="school" router={dummyRouter} selected={selectedTab === "lessons"} />)
-    if (showChums) tabs.push(<NavItem key="/chums" url="/member/url/chums" label="Chums" icon="account_circle" router={dummyRouter} />);
-    if (showAdmin) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" router={dummyRouter} />);
+    if (showWebsite) tabs.push(<NavItem key="/" url="/" label="Website" icon="home" onNavigate={handleNavClick} />);
+    if (showMyGroups) tabs.push(<NavItem key="/member" url="/member" label="My Groups" icon="group" onNavigate={handleNavClick} selected={selectedTab === "groups"} />);
+    if (showCheckin) tabs.push(<NavItem key="/member/checkin" url="/member/checkin" label="Check In" icon="check_box" onNavigate={handleNavClick} selected={selectedTab === "checkin"} />)
+    if (showDonations) tabs.push(<NavItem key="/member/donate" url="/member/donate" label="Donate" icon="volunteer_activism" onNavigate={handleNavClick} selected={selectedTab === "donation"} />)
+    if (showDirectory) tabs.push(<NavItem key="/member/directory" url="/member/directory" label="Member Directory" icon="groups" onNavigate={handleNavClick} selected={selectedTab === "directory"} />);
+    if (showPlans) tabs.push(<NavItem key="/member/plans" url="/member/plans" label="Plans" icon="event" onNavigate={handleNavClick} selected={selectedTab === "plans"} />);
+    if (showLessons) tabs.push(<NavItem key="/member/lessons" url="/member/lessons" label="Lessons" icon="school" onNavigate={handleNavClick} selected={selectedTab === "lessons"} />)
+    if (showChums) tabs.push(<NavItem key="/chums" url="/member/url/chums" label="Chums" icon="account_circle" onNavigate={handleNavClick} />);
+    if (showAdmin) tabs.push(<NavItem key="/admin" url="/admin" label="Admin" icon="settings" onNavigate={handleNavClick} />);
   }
 
   useEffect(() => { loadData() }, [context.userChurch])
@@ -121,7 +123,7 @@ export const Wrapper: React.FC<Props> = props => {
   return <>
     <CssBaseline />
     <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-      <SiteWrapper navContent={navContent} context={context} appName="B1" router={dummyRouter} appearance={props.config.appearance}>{props.children}</SiteWrapper>
+      <SiteWrapper navContent={navContent} context={context} appName="B1" onNavigate={handleNavClick} appearance={props.config.appearance}>{props.children}</SiteWrapper>
     </Box>
   </>
 

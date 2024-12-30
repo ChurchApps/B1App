@@ -10,13 +10,14 @@
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.2.76",
+    "@churchapps/apphelper": "0.2.94",
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.4.1",
     "@react-google-maps/api": "^2.19.2",
     "@react-hook/window-size": "^3.1.1",
     "axios": "^1.5.0",
+    "file-saver": "^2.0.5",
     "js-cookie": "^3.0.5",
     "material-ui-popup-state": "^5.0.9",
     "moment": "^2.29.4",
@@ -41,6 +42,7 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/js-cookie": "^3.0.3",
     "@types/react": "^18.2.21",
     "@types/react-big-calendar": "^1.6.4",

@@ -10,26 +10,11 @@ interface Props { appearance?: AppearanceInterface, globalStyles: GlobalStyleInt
 
 export const Theme: React.FC<Props> = (props) => {
 
-  const defaultColors = {
-    primaryColor: "#08A0CC",
-    primaryContrast: "#FFFFFF",
-    secondaryColor: "#FFBA1A",
-    secondaryContrast: "#000000"
-  }
-
   let css = null;
   const googleFonts = [];
   let fontLink = <></>;
   let customJs = <></>;
   const lines:string[] = []
-
-  if (props.appearance?.primaryColor) {
-    lines.push("--primaryColor: " + (props.appearance?.primaryColor || defaultColors.primaryColor) + ";");
-    lines.push("--primaryContrast: " + (props.appearance?.primaryContrast || defaultColors.primaryContrast) + ";");
-    lines.push("--primaryContrast: " + (props.appearance?.primaryContrast || defaultColors.primaryContrast) + ";");
-    lines.push("--secondaryColor: " + (props.appearance?.secondaryColor || defaultColors.secondaryColor) + ";");
-    lines.push("--secondaryContrast: " + (props.appearance?.secondaryContrast || defaultColors.secondaryContrast) + ";");
-  }
 
 
   if (props.globalStyles?.palette) {

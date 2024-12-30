@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { Header } from "../Header";
 import { CssBaseline } from "@mui/material";
-import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import { ArrayHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import Zone from "./Zone";
 import { GlobalStyleInterface } from "@/helpers";
+import { Footer } from "./Footer";
 
 type Props = {
   pageData: any;
@@ -16,6 +17,7 @@ type Props = {
   globalStyles: GlobalStyleInterface;
 };
 
+//<Zone church={props.church} sections={props.pageData.sections} zone="footer" churchSettings={props.churchSettings} />
 export function HeaderFooter(props: Props) {
   const getDescription = () => {
     if (props.metaDescription) return (<>
@@ -23,6 +25,9 @@ export function HeaderFooter(props: Props) {
       <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
     </>);
   }
+
+  const footerSections = ArrayHelper.getAll(props.pageData.sections, "zone", "siteFooter");
+  console.log("Footer Sections", footerSections);
 
   return (
     <>
@@ -36,9 +41,9 @@ export function HeaderFooter(props: Props) {
         <main>
           <div className="page">
             <Zone church={props.church} sections={props.pageData.sections} zone="main" churchSettings={props.churchSettings} />
-            <Zone church={props.church} sections={props.pageData.sections} zone="footer" churchSettings={props.churchSettings} />
           </div>
         </main>
+        <Footer church={props.church} churchSettings={props.churchSettings} footerSections={footerSections} />
       </div>
     </>
   );

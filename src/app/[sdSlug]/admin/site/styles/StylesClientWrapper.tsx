@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
+import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { DisplayBox, ApiHelper, UserHelper } from "@churchapps/apphelper";
@@ -68,6 +68,17 @@ export function StylesClientWrapper(props: WrapperPageProps) {
     else loadData();
   }, []);
 
+  const getFooter = async () => {
+    const existing = await ApiHelper.get("/blocks/blockType/footerBlock", "ContentApi");
+    if (existing.length > 0) redirect("/admin/site/blocks/" + existing[0].id);
+    else {
+      const block:BlockInterface = { name: "Site Footer", blockType: "footerBlock" };
+      ApiHelper.post("/blocks", [block], "ContentApi").then((data) => {
+        redirect("/admin/site/blocks/" + data[0].id);
+      });
+    }
+  }
+
   return (
     <AdminWrapper config={props.config}>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -112,6 +123,13 @@ export function StylesClientWrapper(props: WrapperPageProps) {
                   <TableCell>
                     <a href="#" onClick={(e) => { e.preventDefault(); setSection("logo"); }}>
                       <Icon sx={{ marginRight: "5px" }}>image</Icon>Logo
+                    </a>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <a href="#" onClick={(e) => { e.preventDefault(); getFooter(); }}>
+                      <Icon sx={{ marginRight: "5px" }}>smart_button</Icon>Site Footer
                     </a>
                   </TableCell>
                 </TableRow>

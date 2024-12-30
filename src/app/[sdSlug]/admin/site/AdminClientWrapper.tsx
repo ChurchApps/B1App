@@ -20,7 +20,10 @@ export function AdminClientWrapper(props: WrapperPageProps) {
   EnvironmentHelper.initLocale();
   const loadData = () => {
     if (!isAuthenticated) return;
-    ApiHelper.get("/blocks", "ContentApi").then((b) => setBlocks(b || []));
+    ApiHelper.get("/blocks", "ContentApi").then((b) => {
+      const filtered = b.filter((block:BlockInterface) => block.blockType !== "footerBlock");
+      setBlocks(filtered || [])
+    });
   };
 
   const editBlockContent = (

@@ -25,7 +25,7 @@ export const Section: React.FC<Props> = props => {
 
   const getElements = () => {
     const result: JSX.Element[] = []
-    props.section.elements.forEach(e => {
+    props.section?.elements?.forEach(e => {
       const textColor = StyleHelper.getTextColor(props.section?.textColor, {}, props.churchSettings);
       result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={textColor} />)
     });
@@ -145,6 +145,8 @@ export const Section: React.FC<Props> = props => {
     result = (<>{getSectionAnchor()}<YoutubeBackground isDragging={isDragging} id={getId()} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground></>);
   }
   else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
+
+  console.log("SECTION CONTENT", props.section.blockId, getElements().length)
 
   if (props.onEdit) {
     return (
