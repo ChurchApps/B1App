@@ -76,7 +76,7 @@ export function CuratedEventCalendar(props: Props) {
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
       {open && props.mode === "edit" && <EditCalendarEventModal onDone={handleDone} churchId={props.churchId} curatedCalendarId={props.curatedCalendarId} />}
       {displayCalendarEvent && <DisplayCalendarEventModal event={displayCalendarEvent} curatedCalendarId={props.curatedCalendarId} mode={props.mode} onDone={handleDone} />}
-      <Snackbar open={ShowCopy} onClose={() => setShowCopy(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ "vertical": "bottom", "horizontal": "center" }} ContentProps={{ sx: { background: "green" } }} />
+      <Snackbar open={ShowCopy} onClose={() => setShowCopy(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} ContentProps={{ sx: { background: "green" } }} />
     </div>
   );
 }

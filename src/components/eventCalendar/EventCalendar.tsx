@@ -88,7 +88,7 @@ export function EventCalendar(props:Props) {
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
       {displayEvent && <DisplayEventModal event={displayEvent} onDone={ handleDone } canEdit={props.editGroupId!==""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}
-      <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ "vertical": "bottom", "horizontal": "center" }} ContentProps={{ sx: { background: "green" } }} />
+      <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} ContentProps={{ sx: { background: "green" } }} />
     </div>
   );
 }
