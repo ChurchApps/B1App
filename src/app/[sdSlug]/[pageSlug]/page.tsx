@@ -6,6 +6,9 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
+import { VotdPage } from "./components/VotdPage";
+import { DefaultPageWrapper } from "./components/DefaultPageWrapper";
+import { notFound } from "next/navigation";
 
 // interface Props {
 //   params: {
@@ -46,16 +49,28 @@ export default async function Home({ params }: { params: PageParams }) {
   const { sdSlug, pageSlug } = await params;
   const { church, churchSettings, globalStyles, navLinks, pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
+  const getPageContent = () => {
+    let result = <PageLayout globalStyles={globalStyles} church={church} churchSettings={churchSettings} navLinks={navLinks} pageData={pageData} />
+    console.log("Page Data", pageData);
+    console.log("Page Slug", pageSlug);
+    if (!pageData?.url) {
+      switch (pageSlug)
+      {
+        case "votd": result = wrapDefaultPage("Verse of the Day", "Verse of the Day", <VotdPage />); break;
+        default: return notFound();
+      }
+    }
+    return result;
+  }
+
+  const wrapDefaultPage = (title:string, description:string, content:JSX.Element) => <DefaultPageWrapper pageTitle={title} metaDescription={description} ogDescription={description} churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+    {content}
+  </DefaultPageWrapper>
+
   return (
     <>
       <Theme appearance={churchSettings} globalStyles={globalStyles} config={config} />
-      <PageLayout
-        globalStyles={globalStyles}
-        church={church}
-        churchSettings={churchSettings}
-        navLinks={navLinks}
-        pageData={pageData}
-      />
+      {getPageContent()}
       <Animate />
     </>
   );
