@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "church.b1.mobile",
+      "sha256_cert_fingerprints":
+      ["F4:C6:51:71:08:16:C9:4E:75:68:49:A5:28:DB:50:14:F5:95:14:B1:7F:B0:17:D6:5E:3F:CA:0C:34:19:FE:70"]
+    }
+  }]
