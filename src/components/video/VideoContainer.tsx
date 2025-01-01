@@ -40,13 +40,13 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getCountdown = (cs: StreamingServiceExtendedInterface) => {
     let displayTime = getCountdownTime(cs.localCountdownTime || new Date());
-    return <div id="noVideoContent"><h2>Next Service Time</h2>{displayTime}</div>
+    return <div id="noVideoContent"><h3>Next Service Time</h3>{displayTime}</div>
   }
 
   const getContents = () => {
     let cs = props.currentService;
-    if (cs === undefined || cs === null || cs.localEndTime === undefined) return <div id="noVideoContent"><h2>Check back for new services</h2></div>;
-    else if (new Date() > cs.localEndTime) return <div id="noVideoContent"><h2>The current service has ended.</h2></div>;
+    if (cs === undefined || cs === null || cs.localEndTime === undefined) return <div id="noVideoContent"><h3>Check back for new services</h3></div>;
+    else if (new Date() > cs.localEndTime) return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
     else {
       if (cs.localStartTime !== undefined && new Date() <= cs.localStartTime) return getCountdown(cs);
       else return getVideo(cs);

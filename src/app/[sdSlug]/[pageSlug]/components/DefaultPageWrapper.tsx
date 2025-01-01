@@ -3,11 +3,8 @@ import { Footer } from "@/components/layouts/Footer";
 import { GlobalStyleInterface } from "@/helpers";
 import { ApiHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import { CssBaseline } from "@mui/material";
-import Head from "next/head";
 
 type Props = {
-  pageTitle?: string;
-  metaDescription?: string;
   ogDescription?: string;
   churchSettings?: any;
   church?: ChurchInterface;
@@ -24,22 +21,9 @@ export async function DefaultPageWrapper(props: Props) {
 
   const footerSections = await ApiHelper.getAnonymous("/blocks/public/footer/" + props.church.id, "ContentApi");
 
-  const getDescription = () => {
-    if (props.metaDescription) return (<>
-      <meta name="description" content={props.metaDescription}></meta>
-      <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
-    </>);
-  }
-
-
-
   return (<>
     <CssBaseline />
     <div>
-      <Head>
-        <title>{props.pageTitle || props.church?.name}</title>
-        {getDescription()}
-      </Head>
       <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={false} sections={[]} globalStyles={props.globalStyles} />
       <main>
         <div className="page">
