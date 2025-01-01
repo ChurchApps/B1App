@@ -7,8 +7,10 @@ import { Metadata } from "next";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
 import { VotdPage } from "./components/VotdPage";
+import { BiblePage } from "./components/BiblePage";
 import { DefaultPageWrapper } from "./components/DefaultPageWrapper";
 import { notFound } from "next/navigation";
+
 
 // interface Props {
 //   params: {
@@ -57,6 +59,7 @@ export default async function Home({ params }: { params: PageParams }) {
       switch (pageSlug)
       {
         case "votd": result = wrapDefaultPage("Verse of the Day", "Verse of the Day", <VotdPage />); break;
+        case "bible": result = wrapDefaultPage("Bible", "Bible", <BiblePage />); break;
         default: return notFound();
       }
     }
