@@ -7,8 +7,12 @@ import { Metadata } from "next";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
 import { VotdPage } from "./components/VotdPage";
+import { BiblePage } from "./components/BiblePage";
+import { StreamPage } from "./components/StreamPage";
 import { DefaultPageWrapper } from "./components/DefaultPageWrapper";
 import { notFound } from "next/navigation";
+
+
 
 // interface Props {
 //   params: {
@@ -29,7 +33,15 @@ const loadSharedData = (sdSlug:string, pageSlug:string) => {
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
   const { sdSlug, pageSlug } =  await params;
   const props = await loadSharedData(sdSlug, pageSlug);
-  return MetaHelper.getMetaData(props.pageData.title + " - " + props.church.name, props.pageData.title, props.churchSettings.ogImage);
+  let title = props.pageData.title;
+  if (!title) {
+    switch (pageSlug)
+    {
+      case "votd": title = "Verse of the Day"; break;
+      case "bible": title = "Bible"; break;
+    }
+  }
+  return MetaHelper.getMetaData(title + " - " + props.church.name, props.pageData.title, props.churchSettings.ogImage);
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
@@ -56,14 +68,16 @@ export default async function Home({ params }: { params: PageParams }) {
     if (!pageData?.url) {
       switch (pageSlug)
       {
-        case "votd": result = wrapDefaultPage("Verse of the Day", "Verse of the Day", <VotdPage />); break;
+        case "votd": result = wrapDefaultPage(<VotdPage />); break;
+        case "bible": result = wrapDefaultPage(<BiblePage />); break;
+        case "stream": result = wrapDefaultPage(<StreamPage churchSettings={churchSettings} church={church} />); break;
         default: return notFound();
       }
     }
     return result;
   }
 
-  const wrapDefaultPage = (title:string, description:string, content:JSX.Element) => <DefaultPageWrapper pageTitle={title} metaDescription={description} ogDescription={description} churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
     {content}
   </DefaultPageWrapper>
 
