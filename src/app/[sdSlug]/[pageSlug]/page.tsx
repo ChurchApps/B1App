@@ -11,6 +11,7 @@ import { BiblePage } from "./components/BiblePage";
 import { StreamPage } from "./components/StreamPage";
 import { DefaultPageWrapper } from "./components/DefaultPageWrapper";
 import { notFound } from "next/navigation";
+import { SermonsPage } from "./components/SermonsPage";
 
 
 
@@ -71,6 +72,7 @@ export default async function Home({ params }: { params: PageParams }) {
         case "votd": result = wrapDefaultPage(<VotdPage />); break;
         case "bible": result = wrapDefaultPage(<BiblePage />); break;
         case "stream": result = wrapDefaultPage(<StreamPage churchSettings={churchSettings} church={church} />); break;
+        case "sermons": result = wrapDefaultPage(<SermonsPage churchSettings={churchSettings} church={church} />); break;
         default: return notFound();
       }
     }
