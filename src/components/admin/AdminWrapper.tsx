@@ -2,12 +2,13 @@
 
 import React from "react";
 import UserContext from "../../context/UserContext";
-import { Box, CssBaseline, List } from "@mui/material";
-import { SiteWrapper, NavItem } from "@churchapps/apphelper";
+import { CssBaseline, List } from "@mui/material";
+import { NavItem } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Themes } from "@/helpers/Themes";
 import { useRouter } from "next/navigation";
+import { AdminHeader } from "./AdminHeader";
 
 interface Props {
   config: ConfigurationInterface;
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export const AdminWrapper: React.FC<Props> = (props) => {
+
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
   const tabs = [];
@@ -54,14 +56,20 @@ export const AdminWrapper: React.FC<Props> = (props) => {
     </>
   );
 
+  /*<SiteWrapper navContent={navContent} context={context} appName="B1" onNavigate={handleNavClick} appearance={props.config.appearance} omitOverflow={true}>
+  </SiteWrapper>*/
+
   return (
     <>
       <CssBaseline />
-      <Box sx={{ display: "flex", backgroundColor: "#EEE" }}>
-        <SiteWrapper navContent={navContent} context={context} appName="B1" onNavigate={handleNavClick} appearance={props.config.appearance} omitOverflow={true}>
-          {props.children}
-        </SiteWrapper>
-      </Box>
+
+      <AdminHeader />
+      <div style={{width:"100%"}}>
+        <div id="appBarSpacer"></div>
+        {props.children}
+      </div>
+
+
     </>
   );
 };

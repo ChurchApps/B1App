@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { BlockInterface, EnvironmentHelper, WrapperPageProps } from "@/helpers";
-import { ApiHelper, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper, Banner, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
 import { Grid, Icon, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
-import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import Link from "next/link";
+import { AdminWrapper } from "@/components/admin/AdminWrapper";
+import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
 
 export function AdminClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -65,59 +66,71 @@ export function AdminClientWrapper(props: WrapperPageProps) {
   }
 
   return (
-    <AdminSiteWrapper config={props.config}>
-      <ErrorMessages errors={errors} />
-      <Grid container spacing={3}>
-        <Grid item md={8} xs={12}>
-          <DisplayBox headerText="Pages" headerIcon="article">
-            <p>Use the left navigation to edit pages and links.</p>
-          </DisplayBox>
+    <>
 
-          <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>{blocksUi}</TableBody>
-            </Table>
-          </DisplayBox>
-        </Grid>
-        <Grid item md={4} xs={12}>
-          {editBlock && (
-            <BlockEdit
-              block={editBlock}
-              updatedCallback={() => {
-                setEditBlock(null);
-                loadData();
-              }}
-            />
-          )}
-          <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance">
-            <table className="table">
-              <tbody>
-                <tr>
-                  <td>
-                    <Link href={"/admin/site/styles"} style={{ display: "flex" }}>
-                      <Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Appearance
-                    </Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <Link href={"/admin/site/files"} style={{ display: "flex" }}>
-                      <Icon sx={{ marginRight: "5px" }}>description</Icon>Manage Files
-                    </Link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </DisplayBox>
-        </Grid>
-      </Grid>
-    </AdminSiteWrapper>
+      <AdminWrapper config={props.config}>
+
+        <Banner><h1>Website</h1></Banner>
+
+        <AdminSiteWrapper config={props.config}>
+          <div id="mainContent">
+            <ErrorMessages errors={errors} />
+            <Grid container spacing={3}>
+              <Grid item md={8} xs={12}>
+                <DisplayBox headerText="Pages" headerIcon="article">
+                  <p>Use the left navigation to edit pages and links.</p>
+                </DisplayBox>
+
+                <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Type</TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>{blocksUi}</TableBody>
+                  </Table>
+                </DisplayBox>
+              </Grid>
+              <Grid item md={4} xs={12}>
+                {editBlock && (
+                  <BlockEdit
+                    block={editBlock}
+                    updatedCallback={() => {
+                      setEditBlock(null);
+                      loadData();
+                    }}
+                  />
+                )}
+                <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance">
+                  <table className="table">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Link href={"/admin/site/styles"} style={{ display: "flex" }}>
+                            <Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Appearance
+                          </Link>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Link href={"/admin/site/files"} style={{ display: "flex" }}>
+                            <Icon sx={{ marginRight: "5px" }}>description</Icon>Manage Files
+                          </Link>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </DisplayBox>
+              </Grid>
+            </Grid>
+          </div>
+        </AdminSiteWrapper>
+
+      </AdminWrapper>
+
+    </>
   );
 }
