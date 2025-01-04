@@ -19,6 +19,7 @@ body {
   visibility: hidden;
 
 }
+
 /*
 :target {
   scroll-margin-top: 80px;
@@ -56,14 +57,17 @@ body {
 }
 
 .page .editor-input {
-  font-size:inherit;
+  font-size: inherit;
 }
 
 .page {
   font-family: var(--bodyFont), "Roboto", sans-serif;
 }
 
-.page h1, .page h2, .page h3, .page h4 {
+.page h1,
+.page h2,
+.page h3,
+.page h4 {
   font-family: var(--headingFont), "Roboto", sans-serif;
 }
 
@@ -108,7 +112,7 @@ body {
 
 .page .sectionVideo {
   min-height: 100px;
-  padding-top:40px;
+  padding-top: 40px;
   padding-bottom: 40px;
 }
 
@@ -169,7 +173,8 @@ body {
 }
 */
 
-#navbar:not(.transparent) button, #navbar.transparent.light button {
+#navbar:not(.transparent) button,
+#navbar.transparent.light button {
   color: #333;
 }
 
@@ -395,31 +400,72 @@ a.dropdown-toggle::after {
   content: "ELEMENT";
   font-size: 14px;
   background-color: #28a745;
-  color:#FFF;
+  color: #FFF;
   display: block;
-  width:100px;
+  width: 100px;
   position: relative;
   text-align: center;
-  margin-top:-18px;
-  margin-left:-3px;
-  height:18px;
+  margin-top: -18px;
+  margin-left: -3px;
+  height: 18px;
   margin-bottom: -2px;
 }
 
-.elementWrapper.box:not(:has(.elementWrapper:hover)):hover:before { content: "BOX" !important; }
-.elementWrapper.card:not(:has(.elementWrapper:hover)):hover:before { content: "CARD" !important; }
-.elementWrapper.carousel:not(:has(.elementWrapper:hover)):hover:before { content: "CAROUSEL" !important; }
-.elementWrapper.embed:not(:has(.elementWrapper:hover)):hover:before { content: "EMBED" !important; }
-.elementWrapper.expandable:not(:has(.elementWrapper:hover)):hover:before { content: "EXPANDABLE" !important; }
-.elementWrapper.html:not(:has(.elementWrapper:hover)):hover:before { content: "HTML" !important; }
-.elementWrapper.image:not(:has(.elementWrapper:hover)):hover:before { content: "IMAGE" !important; }
-.elementWrapper.location:not(:has(.elementWrapper:hover)):hover:before { content: "LOCATION" !important; }
-.elementWrapper.row:not(:has(.elementWrapper:hover)):hover:before { content: "ROW" !important; }
-.elementWrapper.table:not(:has(.elementWrapper:hover)):hover:before { content: "TABLE" !important; }
-.elementWrapper.text:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT" !important; }
-.elementWrapper.textWithPhoto:not(:has(.elementWrapper:hover)):hover:before { content: "TEXT WITH PHOTO" !important; }
-.elementWrapper.video:not(:has(.elementWrapper:hover)):hover:before { content: "VIDEO" !important; }
-.elementWrapper.whiteSpace:not(:has(.elementWrapper:hover)):hover:before { content: "WHITE SPACE" !important; }
+.elementWrapper.box:not(:has(.elementWrapper:hover)):hover:before {
+  content: "BOX" !important;
+}
+
+.elementWrapper.card:not(:has(.elementWrapper:hover)):hover:before {
+  content: "CARD" !important;
+}
+
+.elementWrapper.carousel:not(:has(.elementWrapper:hover)):hover:before {
+  content: "CAROUSEL" !important;
+}
+
+.elementWrapper.embed:not(:has(.elementWrapper:hover)):hover:before {
+  content: "EMBED" !important;
+}
+
+.elementWrapper.expandable:not(:has(.elementWrapper:hover)):hover:before {
+  content: "EXPANDABLE" !important;
+}
+
+.elementWrapper.html:not(:has(.elementWrapper:hover)):hover:before {
+  content: "HTML" !important;
+}
+
+.elementWrapper.image:not(:has(.elementWrapper:hover)):hover:before {
+  content: "IMAGE" !important;
+}
+
+.elementWrapper.location:not(:has(.elementWrapper:hover)):hover:before {
+  content: "LOCATION" !important;
+}
+
+.elementWrapper.row:not(:has(.elementWrapper:hover)):hover:before {
+  content: "ROW" !important;
+}
+
+.elementWrapper.table:not(:has(.elementWrapper:hover)):hover:before {
+  content: "TABLE" !important;
+}
+
+.elementWrapper.text:not(:has(.elementWrapper:hover)):hover:before {
+  content: "TEXT" !important;
+}
+
+.elementWrapper.textWithPhoto:not(:has(.elementWrapper:hover)):hover:before {
+  content: "TEXT WITH PHOTO" !important;
+}
+
+.elementWrapper.video:not(:has(.elementWrapper:hover)):hover:before {
+  content: "VIDEO" !important;
+}
+
+.elementWrapper.whiteSpace:not(:has(.elementWrapper:hover)):hover:before {
+  content: "WHITE SPACE" !important;
+}
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   /*background-color: #9999FF !important;*/
@@ -430,19 +476,21 @@ a.dropdown-toggle::after {
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover:before {
   content: "SECTION";
   background-color: #3333FF;
-  color:#FFF;
+  color: #FFF;
   display: block;
-  width:100px;
+  width: 100px;
   position: relative;
   text-align: center;
-  font-size:14px;
-  height:18px;
+  font-size: 14px;
+  height: 18px;
   /*margin-bottom: -29px;*/
-  margin-top:-40px !important;
-  margin-bottom:20px;
+  margin-top: -40px !important;
+  margin-bottom: 20px;
 }
 
-.sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before { content:"BLOCK" !important; }
+.sectionWrapper.sectionBlock:not(:has(.elementWrapper:hover)):hover:before {
+  content: "BLOCK" !important;
+}
 
 /*
 .sectionWrapper {
@@ -452,6 +500,7 @@ a.dropdown-toggle::after {
 .sectionDark {
   color: var(--dark-bg-text-color);
 }
+
 /*
 .sectionDark.sectionWrapper:not(:has(.elementWrapper:hover)):hover {
   background-color: #007bff !important;
@@ -460,6 +509,7 @@ a.dropdown-toggle::after {
 .sectionDark .columnWrapper:hover {
   background-color: #990000;
 }
+
 /*
 .sectionDark .elementWrapper:hover {
   background-color: #009900;
@@ -479,7 +529,9 @@ a.dropdown-toggle::after {
   z-index: 9999;
 }
 
-.sectionBlock .sectionActions {margin-top:30px;}
+.sectionBlock .sectionActions {
+  margin-top: 30px;
+}
 
 .sectionWrapper:not(:has(.elementWrapper:hover)):hover .sectionActions {
   display: block;
@@ -497,24 +549,36 @@ a.dropdown-toggle::after {
   z-index: 2;
 }
 
-#embeddedLayout { height: 100vh; background-color: #FFFFFF;}
+#embeddedLayout {
+  height: 100vh;
+  background-color: #FFFFFF;
+}
+
 #embeddedLayout .page .sectionFirst {
-  padding-top:0px;
+  padding-top: 0px;
 }
 
 .no-resize {
-  width:auto;
+  width: auto;
   max-width: 100%;
 }
 
-.elBox { margin-bottom: 20px; }
-.elTextWithPhoto { margin-bottom: 20px; }
-.elText { margin-bottom: 20px;}
+.elBox {
+  margin-bottom: 20px;
+}
 
-.editor-list-ul, .editor-list-ol
-{
-  padding-left:0px;
-  margin-left:40px;
+.elTextWithPhoto {
+  margin-bottom: 20px;
+}
+
+.elText {
+  margin-bottom: 20px;
+}
+
+.editor-list-ul,
+.editor-list-ol {
+  padding-left: 0px;
+  margin-left: 40px;
 }
 
 .editor-list-ol li {
@@ -527,14 +591,29 @@ a.dropdown-toggle::after {
   list-style-type: disc !important;
 }
 
-.page th { font-weight: bold; }
-
-.pageTable { width:100%; }
-.pageTable th { text-align: left; }
-.pageTable td, .pageTable th {
-  border-bottom:1px solid;
-  color:inherit;
+.page th {
+  font-weight: bold;
 }
 
-code { color:#000; }
+.pageTable {
+  width: 100%;
+}
 
+.pageTable th {
+  text-align: left;
+}
+
+.pageTable td,
+.pageTable th {
+  border-bottom: 1px solid;
+  color: inherit;
+}
+
+#gpn {
+  color: var(--dark-bg-text-color);
+  background-color: var(--light-bg-text-color);
+}
+
+code {
+  color: #000;
+}
