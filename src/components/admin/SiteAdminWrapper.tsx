@@ -20,7 +20,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const AdminSiteWrapper: React.FC<Props> = (props) => {
+export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const { isAuthenticated } = ApiHelper;
   const [links, setLinks] = useState<LinkInterface[]>([]);
   const [pages, setPages] = useState<PageInterface[]>([]);
@@ -127,7 +127,7 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
       {(addMode!=="") && <AddPageModal updatedCallback={addLinkCallback} onDone={() => { setAddMode("") } } mode={addMode} />}
 
       <Grid container spacing={3}>
-        <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", minHeight:"100vh", marginTop:25, paddingLeft:40}}>
+        <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", marginTop:25, paddingLeft:40}}>
           <DndProvider backend={HTML5Backend}>
             <h2 style={{marginTop:0}}>Pages</h2>
             <div>

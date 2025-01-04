@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import { ConfigHelper, GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper, Banner, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
-import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
+import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { Grid } from "@mui/material";
 import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
@@ -44,7 +44,7 @@ export function PreviewClientWrapper(props: Props) {
   return (
     <AdminWrapper config={props.config}>
       <Banner><h1>Website</h1></Banner>
-      <AdminSiteWrapper config={props.config}>
+      <SiteAdminWrapper config={props.config}>
         {showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
         <div style={{ marginLeft: -22 }}>
           <div style={{ background: "#FFF", padding: 15 }}>
@@ -63,7 +63,7 @@ export function PreviewClientWrapper(props: Props) {
           </div>
           <iframe src={url} style={{ width: "100%", height: "100vh" }} />
         </div>
-      </AdminSiteWrapper>
+      </SiteAdminWrapper>
     </AdminWrapper>
   );
 }

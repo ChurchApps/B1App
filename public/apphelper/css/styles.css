@@ -67,6 +67,11 @@
   margin-right:15px;
 }
 
+#primaryNavButton h2 {
+	text-wrap: nowrap;
+	line-height: 1;
+}
+
 #banner {
   background-color:var(--c1l2);
   color: #FFF;

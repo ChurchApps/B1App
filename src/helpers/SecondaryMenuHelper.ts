@@ -11,6 +11,7 @@ export class SecondaryMenuHelper {
     let result:{menuItems:MenuItem[], label:string} = {menuItems:[], label:""};
 
     if (path.startsWith("/people") || path.startsWith("/groups") || path.startsWith("/attendance")) result = this.getPeopleMenu(path);
+    else if (path.startsWith("/admin")) result = this.getMobileMenu(path);
     else if (path===("/")) result = this.getDashboardMenu(path);
     return result;
   }
@@ -29,45 +30,18 @@ export class SecondaryMenuHelper {
     return {menuItems, label};
   }
 
-  static getSettingsMenu = (path:string, data:any) => {
+  static getMobileMenu = (path:string) => {
     const menuItems:MenuItem[] = []
     let label:string = "";
-    if (UserHelper.checkAccess(Permissions.membershipApi.roles.view)) menuItems.push({url: "/settings", label: Locale.label("components.wrapper.set") });
-    if (UserHelper.checkAccess(Permissions.membershipApi.server.admin)) menuItems.push({url: "/admin", label: Locale.label("components.wrapper.servAdmin") });
-    if (data.formPermission) menuItems.push({ url:"/forms", label: Locale.label("components.wrapper.forms") });
+    menuItems.push({url: "/admin", label: "Navigation" });
+    menuItems.push({url: "/admin/pages", label: "Pages" });
 
-    if (path.startsWith("/settings")) label = Locale.label("components.wrapper.set");
-    else if (path.startsWith("/admin")) label = Locale.label("components.wrapper.servAdmin");
-    else if (path.startsWith("/forms")) label = Locale.label("components.wrapper.forms");
+    if (path.startsWith("/admin/pages")) label = "Pages";
+    else if (path.startsWith("/admin")) label = "Navigation";
 
     return {menuItems, label};
   }
 
-  static getServingMenu = (path:string) => {
-    const menuItems:MenuItem[] = []
-    let label:string = "";
-    if (UserHelper.checkAccess(Permissions.membershipApi.plans.edit)) menuItems.push({url: "/plans", label: Locale.label("components.wrapper.plans") });
-    menuItems.push({url: "/tasks", label: Locale.label("components.wrapper.tasks") });
-
-    if (path.startsWith("/plans")) label = Locale.label("components.wrapper.plans");
-    else if (path.startsWith("/tasks")) label = Locale.label("components.wrapper.tasks");
-
-    return {menuItems, label};
-  }
-
-  static getDonationsMenu = (path:string) => {
-    const menuItems:MenuItem[] = []
-    let label:string = "";
-    if (UserHelper.checkAccess(Permissions.givingApi.donations.viewSummary)) menuItems.push({url: "/donations", label: Locale.label("donations.donations.summary") });
-    if (UserHelper.checkAccess(Permissions.givingApi.donations.viewSummary)) menuItems.push({url: "/donations/batches", label: Locale.label("donations.donations.batches") });
-    if (UserHelper.checkAccess(Permissions.givingApi.donations.viewSummary)) menuItems.push({url: "/donations/funds", label: Locale.label("donations.donations.funds") });
-
-    if (path.startsWith("/donations/funds")) label = Locale.label("donations.donations.funds");
-    else if (path.startsWith("/donations/batches")) label = Locale.label("donations.donations.batches");
-    else if (path.startsWith("/donations")) label = Locale.label("donations.donations.summary");
-
-    return {menuItems, label};
-  }
 
   static getDashboardMenu = (path:string) => {
     const menuItems:MenuItem[] = []

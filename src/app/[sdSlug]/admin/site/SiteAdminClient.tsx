@@ -9,9 +9,9 @@ import { useWindowWidth } from "@react-hook/window-size";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 import Link from "next/link";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
+import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 
-export function AdminClientWrapper(props: WrapperPageProps) {
+export function SiteAdminClient(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
   const [blocks, setBlocks] = useState<BlockInterface[]>([]);
   const [editBlock, setEditBlock] = useState<BlockInterface>(null);
@@ -27,14 +27,7 @@ export function AdminClientWrapper(props: WrapperPageProps) {
     });
   };
 
-  const editBlockContent = (
-    <SmallButton
-      icon="add"
-      onClick={() => {
-        setEditBlock({ blockType: "elementBlock" });
-      }}
-    />
-  );
+  const editBlockContent = (<SmallButton icon="add" onClick={() => { setEditBlock({ blockType: "elementBlock" }); }} />);
 
   const blocksUi = blocks.map((block) => (
     <TableRow key={block.id}>
@@ -72,7 +65,7 @@ export function AdminClientWrapper(props: WrapperPageProps) {
 
         <Banner><h1>Website</h1></Banner>
 
-        <AdminSiteWrapper config={props.config}>
+        <SiteAdminWrapper config={props.config}>
           <div id="mainContent">
             <ErrorMessages errors={errors} />
             <Grid container spacing={3}>
@@ -127,7 +120,7 @@ export function AdminClientWrapper(props: WrapperPageProps) {
               </Grid>
             </Grid>
           </div>
-        </AdminSiteWrapper>
+        </SiteAdminWrapper>
 
       </AdminWrapper>
 
