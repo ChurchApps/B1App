@@ -6,16 +6,17 @@ import { SiteHeader } from "@churchapps/apphelper";
 
 import UserContext from "@/context/UserContext";
 import { SecondaryMenuHelper } from "@/helpers/SecondaryMenuHelper";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname  } from "next/navigation";
 
 export function AdminHeader() {
   const context = React.useContext(UserContext);
   const router = useRouter();
+  const pathname = usePathname();
   const [primaryLabel, setPrimaryLabel] = React.useState<string>("Dashboard");
 
   useEffect(() => {
     getPrimaryLabel();
-  }, [window.location.pathname]);
+  }, [pathname]);
 
 
   const getPrimaryMenu = () => {
