@@ -6,7 +6,7 @@ import { FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { DisplayBox, InputBox, ApiHelper, SmallButton } from "@churchapps/apphelper";
+import { DisplayBox, InputBox, ApiHelper, SmallButton, Banner } from "@churchapps/apphelper";
 import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -84,35 +84,37 @@ export function FilesClientWrapper(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      <h1>Manage Your Files</h1>
-      <Grid container spacing={3}>
-        <Grid item md={8} xs={12}>
-          <DisplayBox headerText="Files" headerIcon="description">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>{fileRows}</TableBody>
-            </Table>
-          </DisplayBox>
+      <Banner><h1>Manage Your Files</h1></Banner>
+      <div id="mainContent">
+        <Grid container spacing={3}>
+          <Grid item md={8} xs={12}>
+            <DisplayBox headerText="Files" headerIcon="description">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>{fileRows}</TableBody>
+              </Table>
+            </DisplayBox>
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload">
+              {getStorage()}
+              <p>
+                100 MB of storage space is provided for free for storing PDFs and other documents commonly needed for
+                church websites. We suggest using Google Drive or Dropbox to store files if additional space is needed.
+              </p>
+              {usedSpace < 100000000 && (
+                <FileUpload contentType="website" contentId="" pendingSave={pendingFileSave} saveCallback={handleFileSaved} />
+              )}
+            </InputBox>
+          </Grid>
         </Grid>
-        <Grid item md={4} xs={12}>
-          <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload">
-            {getStorage()}
-            <p>
-              100 MB of storage space is provided for free for storing PDFs and other documents commonly needed for
-              church websites. We suggest using Google Drive or Dropbox to store files if additional space is needed.
-            </p>
-            {usedSpace < 100000000 && (
-              <FileUpload contentType="website" contentId="" pendingSave={pendingFileSave} saveCallback={handleFileSaved} />
-            )}
-          </InputBox>
-        </Grid>
-      </Grid>
+      </div>
     </AdminWrapper>
   );
 }
