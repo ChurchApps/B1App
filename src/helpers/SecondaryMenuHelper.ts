@@ -12,6 +12,7 @@ export class SecondaryMenuHelper {
 
     if (path.startsWith("/admin/site")) result = this.getWebMenu(path);
     if (path.startsWith("/admin/video")) result = this.getSermonsMenu(path);
+    if (path.startsWith("/admin/calendars")) result = this.getCalendarsMenu(path);
     else if (path==="/admin" || path==="/admin/pages") result = this.getMobileMenu(path);
     else if (path===("/")) result = this.getDashboardMenu(path);
     return result;
@@ -57,6 +58,16 @@ export class SecondaryMenuHelper {
     else if (path.startsWith("/admin/video/settings")) label = "Times";
     else if (path.startsWith("/admin/video/playlists")) label = "Playlists";
     else if (path.startsWith("/admin/video")) label = "Sermons";
+
+    return {menuItems, label};
+  }
+
+  static getCalendarsMenu = (path:string) => {
+    const menuItems:MenuItem[] = []
+    let label:string = "";
+    menuItems.push({url: "/admin/calendars", label: "Curated Calendars" });
+
+    if (path.startsWith("/admin/calendars")) label = "Curated Calendars";
 
     return {menuItems, label};
   }
