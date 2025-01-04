@@ -1,4 +1,4 @@
-import { Locale, UserHelper, Permissions } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 
 interface MenuItem {
   url: string;

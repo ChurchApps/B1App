@@ -2,7 +2,7 @@
 
 import React from "react";
 import UserContext from "../../context/UserContext";
-import { CssBaseline, List } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AdminHeader } from "./AdminHeader";

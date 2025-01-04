@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { redirect, useParams } from "next/navigation";
-import { ApiHelper, Banner, ImageEditor, Permissions, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Banner, Permissions, UserHelper } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Playlists } from "@/components/admin/video/Playlists";
-
 
 type PageParams = {sdSlug:string }
 
