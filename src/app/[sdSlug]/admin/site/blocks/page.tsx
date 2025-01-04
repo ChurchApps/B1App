@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { redirect, useParams } from "next/navigation";
-import { ApiHelper, Banner, UserHelper, Permissions, SmallButton, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper, Banner, SmallButton, DisplayBox } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { Tabs } from "@/components/admin/settings/Tabs";
 import { BlockInterface } from "@/helpers";
 import { TableRow, TableCell, Table, TableBody, TableHead } from "@mui/material";
 import Link from "next/link";

@@ -11,7 +11,7 @@ import { Services } from "@/components/admin/video/Services";
 import { Tabs } from "@/components/admin/video/Tabs";
 import { EmbeddablePages } from "@/components/admin/EmbeddablePages";
 import { PageEdit } from "@/components/admin/PageEdit";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Banner } from "@churchapps/apphelper";
 
 export function StreamSettingsClient(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -24,9 +24,8 @@ export function StreamSettingsClient(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      <h1>
-        <Icon>live_tv</Icon> Stream Settings
-      </h1>
+      <Banner><h1>Stream Settings</h1></Banner>
+      <div id="mainContent">
       <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
           <Services />
@@ -44,6 +43,7 @@ export function StreamSettingsClient(props: WrapperPageProps) {
           <ExternalLinks churchId={props.config.church.id} />
         </Grid>
       </Grid>
+      </div>
     </AdminWrapper>
   );
 }
