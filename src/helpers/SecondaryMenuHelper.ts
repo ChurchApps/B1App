@@ -10,24 +10,10 @@ export class SecondaryMenuHelper {
   static getSecondaryMenu = (path:string) => {
     let result:{menuItems:MenuItem[], label:string} = {menuItems:[], label:""};
 
-    if (path.startsWith("/people") || path.startsWith("/groups") || path.startsWith("/attendance")) result = this.getPeopleMenu(path);
-    else if (path.startsWith("/admin")) result = this.getMobileMenu(path);
+    if (path.startsWith("/admin/site")) result = this.getWebMenu(path);
+    else if (path==="/admin" || path==="/admin/pages") result = this.getMobileMenu(path);
     else if (path===("/")) result = this.getDashboardMenu(path);
     return result;
-  }
-
-  static getPeopleMenu = (path:string) => {
-    const menuItems:MenuItem[] = []
-    let label:string = "";
-    menuItems.push({url: "/groups", label: Locale.label("components.wrapper.groups")});
-    menuItems.push({url: "/people", label: Locale.label("components.wrapper.ppl")});
-    if (UserHelper.checkAccess(Permissions.attendanceApi.attendance.viewSummary)) menuItems.push({url:"/attendance", label: Locale.label("components.wrapper.att")});
-
-    if (path.startsWith("/groups")) label = Locale.label("components.wrapper.groups");
-    else if (path.startsWith("/people")) label = Locale.label("components.wrapper.ppl");
-    else if (path.startsWith("/attendance")) label = Locale.label("components.wrapper.att");
-
-    return {menuItems, label};
   }
 
   static getMobileMenu = (path:string) => {
@@ -38,6 +24,22 @@ export class SecondaryMenuHelper {
 
     if (path.startsWith("/admin/pages")) label = "Pages";
     else if (path.startsWith("/admin")) label = "Navigation";
+
+    return {menuItems, label};
+  }
+
+  static getWebMenu = (path:string) => {
+    const menuItems:MenuItem[] = []
+    let label:string = "";
+    menuItems.push({url: "/admin/site", label: "Pages" });
+    menuItems.push({url: "/admin/site/blocks", label: "Blocks" });
+    menuItems.push({url: "/admin/site/styles", label: "Appearance" });
+    menuItems.push({url: "/admin/site/files", label: "Files" });
+
+    if (path.startsWith("/admin/site/blocks")) label = "Blocks";
+    else if (path.startsWith("/admin/site/styles")) label = "Appearance";
+    else if (path.startsWith("/admin/site/files")) label = "Files";
+    else if (path.startsWith("/admin/site")) label = "Pages";
 
     return {menuItems, label};
   }

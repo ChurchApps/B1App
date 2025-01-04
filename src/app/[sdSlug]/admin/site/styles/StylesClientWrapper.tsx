@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { DisplayBox, ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { DisplayBox, ApiHelper, UserHelper, Banner } from "@churchapps/apphelper";
 import { PaletteEdit } from "@/components/admin/settings/PaletteEdit";
 import { FontsEdit } from "@/components/admin/settings/FontEdit";
 import { Preview } from "@/components/admin/settings/Preview";
@@ -83,61 +83,63 @@ export function StylesClientWrapper(props: WrapperPageProps) {
     <AdminWrapper config={props.config}>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Lato&family=Montserrat:wght@500&family=Open+Sans:wght@500&family=Oswald:wght@500&family=Playfair+Display:wght@500&family=Poppins:wght@500&family=Raleway:wght@500&family=Roboto:wght@500&display=swap" rel="stylesheet"></link>
-      <h1>Manage Global Styles</h1>
-      <Grid container spacing={3}>
-        <Grid item md={8} xs={12}>
-          {section === "palette" && <PaletteEdit globalStyle={globalStyle} updatedFunction={handlePaletteUpdate} />}
-          {section === "fonts" && <FontsEdit globalStyle={globalStyle} updatedFunction={handleFontsUpdate} />}
-          {section === "css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
-          {section === "logo" && <Appearance />}
-          {section === "" && (
-            <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
-          )}
+      <Banner><h1>Manage Global Styles</h1></Banner>
+      <div id="mainContent">
+        <Grid container spacing={3}>
+          <Grid item md={8} xs={12}>
+            {section === "palette" && <PaletteEdit globalStyle={globalStyle} updatedFunction={handlePaletteUpdate} />}
+            {section === "fonts" && <FontsEdit globalStyle={globalStyle} updatedFunction={handleFontsUpdate} />}
+            {section === "css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
+            {section === "logo" && <Appearance />}
+            {section === "" && (
+              <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
+            )}
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <DisplayBox headerIcon="link" headerText="Style Settings" editContent={false}>
+              <Table size="small">
+                <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("palette"); }}>
+                        <Icon sx={{ marginRight: "5px" }}>palette</Icon>Color Palette
+                      </a>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("fonts"); }}>
+                        <Icon sx={{ marginRight: "5px" }}>text_fields</Icon>Fonts
+                      </a>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("css"); }}>
+                        <Icon sx={{ marginRight: "5px" }}>css</Icon>CSS and Javascript
+                      </a>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("logo"); }}>
+                        <Icon sx={{ marginRight: "5px" }}>image</Icon>Logo
+                      </a>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <a href="#" onClick={(e) => { e.preventDefault(); getFooter(); }}>
+                        <Icon sx={{ marginRight: "5px" }}>smart_button</Icon>Site Footer
+                      </a>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </DisplayBox>
+          </Grid>
         </Grid>
-        <Grid item md={4} xs={12}>
-          <DisplayBox headerIcon="link" headerText="Style Settings" editContent={false}>
-            <Table size="small">
-              <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setSection("palette"); }}>
-                      <Icon sx={{ marginRight: "5px" }}>palette</Icon>Color Palette
-                    </a>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setSection("fonts"); }}>
-                      <Icon sx={{ marginRight: "5px" }}>text_fields</Icon>Fonts
-                    </a>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setSection("css"); }}>
-                      <Icon sx={{ marginRight: "5px" }}>css</Icon>CSS and Javascript
-                    </a>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <a href="#" onClick={(e) => { e.preventDefault(); setSection("logo"); }}>
-                      <Icon sx={{ marginRight: "5px" }}>image</Icon>Logo
-                    </a>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <a href="#" onClick={(e) => { e.preventDefault(); getFooter(); }}>
-                      <Icon sx={{ marginRight: "5px" }}>smart_button</Icon>Site Footer
-                    </a>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </DisplayBox>
-        </Grid>
-      </Grid>
+      </div>
     </AdminWrapper>
   );
 }
