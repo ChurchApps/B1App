@@ -609,7 +609,8 @@ a.dropdown-toggle::after {
   color: inherit;
 }
 
-#gpn {
+#gpn,
+.calbox {
   color: var(--dark-bg-text-color);
   background-color: var(--light-bg-text-color);
 }
