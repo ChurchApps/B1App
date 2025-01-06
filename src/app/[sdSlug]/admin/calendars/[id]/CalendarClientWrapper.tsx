@@ -6,7 +6,7 @@ import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconB
 import DeleteIcon from '@mui/icons-material/Delete';
 import { EnvironmentHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/apphelper";
+import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, GroupInterface, CuratedEventInterface, Banner } from "@churchapps/apphelper";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 
 interface Props extends WrapperPageProps {
@@ -33,6 +33,10 @@ export function CalendarClientWrapper(props: Props) {
     }
 
     setIsLoadingGroups(true);
+    ApiHelper.get("/curatedCalendars/" + props.curatedCalendarId, "ContentApi").then((data) => {
+      setCurrentCalendar(data);
+    });
+
     ApiHelper.get("/groups/my", "MembershipApi").then((data) => {
       setGroups(data);
       setIsLoadingGroups(false);
@@ -69,7 +73,7 @@ export function CalendarClientWrapper(props: Props) {
       rows.push(
         <TableRow key={index}>
           <TableCell>{g.name}</TableCell>
-          <TableCell>
+          <TableCell style={{textAlign:"right"}}>
             <Tooltip title="Remove Group" arrow>
               <IconButton color="primary" size="small" onClick={() => handleGroupDelete(g.id)}>
                 <DeleteIcon />
@@ -89,28 +93,30 @@ export function CalendarClientWrapper(props: Props) {
 
   return (
     <AdminWrapper config={props.config}>
-      <h1>{currentCalendar?.name}</h1>
-      <Grid container spacing={3}>
-        <Grid item md={9} xs={12}>
-          <DisplayBox headerText="">
-            <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
-            <CuratedCalendar curatedCalendarId={props.curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} />
-          </DisplayBox>
+      <Banner><h1>{currentCalendar?.name}</h1></Banner>
+      <div id="mainContent">
+        <Grid container spacing={3}>
+          <Grid item md={8} xs={12}>
+            <DisplayBox headerText="">
+              <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
+              <CuratedCalendar curatedCalendarId={props.curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} />
+            </DisplayBox>
+          </Grid>
+          <Grid item md={4} xs={12}>
+            <DisplayBox headerText="Groups" headerIcon="backup_table">
+              {isLoadingGroups
+                ? (
+                  <Loading />
+                )
+                : (
+                  <Table size="small">
+                    <TableBody>{getRows()}</TableBody>
+                  </Table>
+                )}
+            </DisplayBox>
+          </Grid>
         </Grid>
-        <Grid item md={3} xs={12}>
-          <DisplayBox headerText="Groups" headerIcon="backup_table">
-            {isLoadingGroups
-              ? (
-                <Loading />
-              )
-              : (
-                <Table size="small">
-                  <TableBody>{getRows()}</TableBody>
-                </Table>
-              )}
-          </DisplayBox>
-        </Grid>
-      </Grid>
+      </div>
     </AdminWrapper>
   );
 }

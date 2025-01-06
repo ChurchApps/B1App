@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import { ConfigHelper, GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
-import { AdminSiteWrapper } from "@/components/admin/AdminSiteWrapper";
+import { ApiHelper, Banner, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { Grid } from "@mui/material";
 import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
+import { AdminWrapper } from "@/components/admin/AdminWrapper";
 
 interface Props extends WrapperPageProps {
   pageData: any;
@@ -41,25 +42,28 @@ export function PreviewClientWrapper(props: Props) {
   }, [searchParams.get("linkId")]);
 
   return (
-    <AdminSiteWrapper config={props.config}>
-      {showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
-      <div style={{ marginLeft: -22, marginTop: -30, marginRight: -22 }}>
-        <div style={{ background: "#FFF", padding: 15 }}>
-          <Grid container>
-            <Grid item xs={3}>
-              <SmallButton icon="edit" text="Edit Content" onClick={() => redirect("/admin/site/pages/" + props.pageData.id)} />
+    <AdminWrapper config={props.config}>
+      <Banner><h1>Website</h1></Banner>
+      <SiteAdminWrapper config={props.config}>
+        {showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
+        <div style={{ marginLeft: -22 }}>
+          <div style={{ background: "#FFF", padding: 15 }}>
+            <Grid container>
+              <Grid item xs={3}>
+                <SmallButton icon="edit" text="Edit Content" onClick={() => redirect("/admin/site/pages/" + props.pageData.id)} />
+              </Grid>
+              <Grid item xs={6} style={{ textAlign: "center" }}>
+                <b>{props.pageData.title}</b>
+                <br />
+              </Grid>
+              <Grid item xs={3} style={{ textAlign: "right" }}>
+                <SmallButton icon="settings" text="Page Settings" onClick={() => setShowSettings(true)} />
+              </Grid>
             </Grid>
-            <Grid item xs={6} style={{ textAlign: "center" }}>
-              <b>{props.pageData.title}</b>
-              <br />
-            </Grid>
-            <Grid item xs={3} style={{ textAlign: "right" }}>
-              <SmallButton icon="settings" text="Page Settings" onClick={() => setShowSettings(true)} />
-            </Grid>
-          </Grid>
+          </div>
+          <iframe src={url} style={{ width: "100%", height: "100vh" }} />
         </div>
-        <iframe src={url} style={{ width: "100%", height: "100vh" }} />
-      </div>
-    </AdminSiteWrapper>
+      </SiteAdminWrapper>
+    </AdminWrapper>
   );
 }

@@ -9,7 +9,6 @@ export { Login } from "./Login";
 
 // Settings
 export { YourSiteSettings } from "./admin/settings/YourSiteSettings";
-export { B1Settings } from "./admin/settings/B1Settings";
 
 // donate
 export { AuthLanding } from "./donate/AuthLanding";

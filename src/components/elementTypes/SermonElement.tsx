@@ -85,7 +85,7 @@ export const SermonElement = ({ churchId, churchSettings }: Props) => {
         {isActive === "playlists" && (
           <Grid container spacing={3} style={{ paddingBottom: 20, paddingTop: 20 }}>
             {playlists.map((item) => (
-              <Grid item md={4} xs={12} sm={6}>
+              <Grid item md={4} xs={12} sm={6} key={item.id}>
                 <Card
                   key={item.id}
                   sx={{ maxWidth: 635, borderRadius: 0, boxShadow: 5, cursor: "pointer" }}

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { AdminWrapper } from "./AdminWrapper";
 import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
 import { redirect } from "next/navigation";
@@ -21,7 +20,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const AdminSiteWrapper: React.FC<Props> = (props) => {
+export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const { isAuthenticated } = ApiHelper;
   const [links, setLinks] = useState<LinkInterface[]>([]);
   const [pages, setPages] = useState<PageInterface[]>([]);
@@ -124,11 +123,11 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
   }
 
   return (
-    <AdminWrapper config={props.config}>
+    <>
       {(addMode!=="") && <AddPageModal updatedCallback={addLinkCallback} onDone={() => { setAddMode("") } } mode={addMode} />}
 
       <Grid container spacing={3}>
-        <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", minHeight:"100vh", marginTop:-7}}>
+        <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", marginTop:25, paddingLeft:40}}>
           <DndProvider backend={HTML5Backend}>
             <h2 style={{marginTop:0}}>Pages</h2>
             <div>
@@ -163,6 +162,6 @@ export const AdminSiteWrapper: React.FC<Props> = (props) => {
         </Grid>
       </Grid>
 
-    </AdminWrapper>
+    </>
   );
 };

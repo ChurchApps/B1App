@@ -22,6 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <link rel="stylesheet" href="/apphelper/css/styles.css"  />
       </head>
       <body>
         <ClientLayout>{children}</ClientLayout>
