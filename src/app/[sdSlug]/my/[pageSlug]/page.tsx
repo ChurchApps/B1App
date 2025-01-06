@@ -1,13 +1,12 @@
-import { PageLayout, Theme } from "@/components";
+import { Theme } from "@/components";
 import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
-import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface, PageInterface } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
 
-import { notFound } from "next/navigation";
 import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapper";
 import { Grid } from "@mui/material";
 import { TimelinePage } from "./components/TimelinePage";
