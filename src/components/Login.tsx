@@ -27,7 +27,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
   useEffect(() => {
     // Set returnUrl from searchParams or default to "/member"
     const urlParam = searchParams.get("returnUrl");
-    setReturnUrl(urlParam || "/member");
+    setReturnUrl(urlParam || "/my");
   }, [searchParams]);
 
   useEffect(() => {

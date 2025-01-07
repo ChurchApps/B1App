@@ -3,16 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid, Icon } from "@mui/material";
-import { WrapperPageProps } from "@/helpers";
 import { ApiHelper, ArrayHelper, AssignmentInterface, DisplayBox, Loading, PersonInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
 import { Team } from "@/components/plans/Team";
 import { PositionDetails } from "@/components/plans/PositionDetails";
 
-interface Props extends WrapperPageProps {
+interface Props  {
   planId: string;
 }
 
-export function PlanClient({ config, planId }: Props) {
+export function PlanClient({ planId }: Props) {
   const [plan, setPlan] = useState<PlanInterface>(null);
   const [positions, setPositions] = useState<PositionInterface[]>([]);
   const [assignments, setAssignments] = useState<AssignmentInterface[]>([]);
@@ -77,7 +76,7 @@ export function PlanClient({ config, planId }: Props) {
       <>
         <h1>Group</h1>
         <h3 className="text-center w-100">
-          Please <Link href={`/login/?returnUrl=/member/plans/${planId}`}>Login</Link> to view your plans.
+          Please <Link href={`/login/?returnUrl=/my/plans/${planId}`}>Login</Link> to view your plans.
         </h3>
       </>
     );

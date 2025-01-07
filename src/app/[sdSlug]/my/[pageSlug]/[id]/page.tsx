@@ -7,12 +7,12 @@ import { Metadata } from "next";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
 
-import { TimelinePage } from "./components/TimelinePage";
-import { GroupsPage } from "./components/GroupsPage";
-import { PlansPage } from "./components/PlansPage";
-import { MyWrapper } from "./components/MyWrapper";
+import { TimelinePage } from "../components/TimelinePage";
+import { GroupsPage } from "../components/GroupsPage";
+import { MyWrapper } from "../components/MyWrapper";
+import { PlanClient } from "@/app/[sdSlug]/member/plans/[id]/PlanClient";
 
-type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
+type PageParams = Promise<{ sdSlug: string;  pageSlug: string; id:string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
@@ -40,13 +40,13 @@ const loadData = async (sdSlug:string, pageSlug:string) => {
 
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
-  const { sdSlug, pageSlug } = await params;
+  const { sdSlug, pageSlug, id } = await params;
   const { church, churchSettings, globalStyles, navLinks, config } = await loadSharedData(sdSlug, pageSlug);
 
   const getPageContent = () => {
     switch (pageSlug)
     {
-      case "plans": return <PlansPage />;
+      case "plans": return <PlanClient planId={id} />;
       case "groups": return <GroupsPage />;
       default: return <TimelinePage />;
       //default: return notFound();

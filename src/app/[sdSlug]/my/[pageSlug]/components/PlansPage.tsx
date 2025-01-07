@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Grid, Icon } from "@mui/material";
-import { WrapperPageProps } from "@/helpers";
+import { Grid } from "@mui/material";
 import { ApiHelper, ArrayHelper, AssignmentInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
 import { ServingTimes } from "@/components/plans/ServingTimes";
 import { UpcomingDates } from "@/components/plans/UpcomingDates";
 import { BlockoutDates } from "@/components/plans/BlockoutDates";
 
-export function PlansClient({ config }: WrapperPageProps) {
+export function PlansPage() {
   const [assignments, setAssignments] = useState<AssignmentInterface[]>([]);
   const [positions, setPositions] = useState<PositionInterface[]>([]);
   const [plans, setPlans] = useState<PlanInterface[]>([]);
@@ -40,7 +39,7 @@ export function PlansClient({ config }: WrapperPageProps) {
       <>
         <h1>Plans</h1>
         <h3 className="text-center w-100">
-          Please <Link href="/login/?returnUrl=/my/groups">Login</Link> to view your plans.
+          Please <Link href="/login/?returnUrl=/member/groups">Login</Link> to view your plans.
         </h3>
       </>
     );
@@ -48,7 +47,7 @@ export function PlansClient({ config }: WrapperPageProps) {
 
   return (
     <>
-      <h1><Icon>assignment</Icon> Plans</h1>
+      <h1>My Plans</h1>
       <Grid container spacing={3} alignItems="flex-start">
         <Grid item md={8} xs={12}>
           <ServingTimes assignments={assignments} plans={plans} positions={positions} />

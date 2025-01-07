@@ -12,7 +12,7 @@ export default async function PlanPage({ params }: { params: Params }) {
 
   return (
     <Wrapper config={config}>
-      <PlanClient config={config} planId={id} />
+      <PlanClient planId={id} />
     </Wrapper>
   );
 }
