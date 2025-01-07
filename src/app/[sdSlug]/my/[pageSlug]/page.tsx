@@ -47,6 +47,7 @@ export default async function Home({ params }: { params: PageParams }) {
   const { church, churchSettings, globalStyles, navLinks, config } = await loadSharedData(sdSlug, pageSlug);
 
   const getPageContent = () => {
+    console.log("NOT PAGESLUG", !pageSlug, pageSlug);
     switch (pageSlug)
     {
       case "checkin": return <CheckinPage />;
@@ -62,7 +63,7 @@ export default async function Home({ params }: { params: PageParams }) {
   return (
     <>
       <Theme appearance={churchSettings} globalStyles={globalStyles} config={config} />
-      <MyWrapper churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+      <MyWrapper pageSlug={pageSlug} root={pageSlug==="timeline"} churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
         {getPageContent()}
       </MyWrapper>
 
