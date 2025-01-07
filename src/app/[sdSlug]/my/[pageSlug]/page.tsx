@@ -11,6 +11,8 @@ import { TimelinePage } from "./components/TimelinePage";
 import { GroupsPage } from "./components/GroupsPage";
 import { PlansPage } from "./components/PlansPage";
 import { MyWrapper } from "./components/MyWrapper";
+import { CheckinPage } from "./components/CheckinPage";
+import { LessonsPage } from "./components/LessonsPage";
 
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
 
@@ -46,8 +48,10 @@ export default async function Home({ params }: { params: PageParams }) {
   const getPageContent = () => {
     switch (pageSlug)
     {
+      case "checkin": return <CheckinPage />;
       case "plans": return <PlansPage />;
       case "groups": return <GroupsPage />;
+      case "lessons": return <LessonsPage />;
       default: return <TimelinePage />;
       //default: return notFound();
     }
