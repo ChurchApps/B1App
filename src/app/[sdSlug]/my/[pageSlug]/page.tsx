@@ -13,6 +13,7 @@ import { PlansPage } from "./components/PlansPage";
 import { MyWrapper } from "./components/MyWrapper";
 import { CheckinPage } from "./components/CheckinPage";
 import { LessonsPage } from "./components/LessonsPage";
+import { DirectoryPage } from "./components/DirectoryPage";
 
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
 
@@ -52,6 +53,7 @@ export default async function Home({ params }: { params: PageParams }) {
       case "plans": return <PlansPage />;
       case "groups": return <GroupsPage />;
       case "lessons": return <LessonsPage />;
+      case "community": return <DirectoryPage />
       default: return <TimelinePage />;
       //default: return notFound();
     }

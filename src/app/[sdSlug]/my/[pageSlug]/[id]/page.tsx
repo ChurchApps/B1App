@@ -8,9 +8,9 @@ import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
 
 import { TimelinePage } from "../components/TimelinePage";
-import { GroupsPage } from "../components/GroupsPage";
 import { MyWrapper } from "../components/MyWrapper";
 import { PlanClient } from "@/app/[sdSlug]/member/plans/[id]/PlanClient";
+import { PersonPage } from "../components/PersonPage";
 
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; id:string; }>
 
@@ -47,7 +47,7 @@ export default async function Home({ params }: { params: PageParams }) {
     switch (pageSlug)
     {
       case "plans": return <PlanClient planId={id} />;
-      case "groups": return <GroupsPage />;
+      case "community": return <PersonPage personId={id}  />;
       default: return <TimelinePage />;
       //default: return notFound();
     }

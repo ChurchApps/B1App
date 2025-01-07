@@ -25,9 +25,11 @@ export async function MyWrapper(props:Props) {
     const tabs: {url: string, label: string}[] = [];
     tabs.push({url:"/my/timeline", label:"Timeline"});
     tabs.push({url:"/my/groups", label:"Groups"});
+    tabs.push({url:"/my/community", label:"Community"});
     tabs.push({url:"/my/plans", label:"Plans"});
     tabs.push({url:"/my/checkin", label:"Check-in"});
     tabs.push({url:"/my/lessons", label:"Lessons"});
+
     return tabs;
   }
 

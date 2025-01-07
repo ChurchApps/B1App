@@ -85,12 +85,12 @@ export function Header(props: Props) {
   // const pathName = usePathname();
   // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
 
-  const memberPortal = <MenuItem onClick={() => { redirect("/member") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
+  const memberPortal = <MenuItem onClick={() => { redirect("/my") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
   const adminPortal = UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
     <MenuItem onClick={() => { redirect("/admin") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
-  const editProfile = <MenuItem onClick={() => { redirect(`/member/directory/${PersonHelper?.person?.id}`) }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
+  const editProfile = <MenuItem onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`) }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
 
   const userAction = ApiHelper.isAuthenticated
     ? (

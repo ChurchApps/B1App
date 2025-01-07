@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { Person } from "@/components/member/directory/Person";
-import { WrapperPageProps } from "@/helpers";
 import { UserHelper } from "@churchapps/apphelper";
 
-interface Props extends WrapperPageProps {
+interface Props {
   personId: string;
 }
 
-export function MemberClient(props: Props) {
+export function PersonPage(props: Props) {
   const { personId } = props;
 
   const getContent = () => (

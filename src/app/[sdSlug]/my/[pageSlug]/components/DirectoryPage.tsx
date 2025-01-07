@@ -3,10 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { DirectorySearch } from "@/components/member/directory/DirectorySearch";
-import { WrapperPageProps } from "@/helpers";
 import { UserHelper } from "@churchapps/apphelper";
 
-export function DirectoryClient(props: WrapperPageProps) {
+export function DirectoryPage() {
   const getContent = () => <DirectorySearch selectedHandler={() => {}} />;
 
   return (
