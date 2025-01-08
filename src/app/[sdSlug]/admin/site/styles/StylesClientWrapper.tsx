@@ -82,7 +82,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   return (
     <AdminWrapper config={props.config}>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Lato&family=Montserrat:wght@500&family=Open+Sans:wght@500&family=Oswald:wght@500&family=Playfair+Display:wght@500&family=Poppins:wght@500&family=Raleway:wght@500&family=Roboto:wght@500&display=swap" rel="stylesheet"></link>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato&family=Montserrat:wght@400&family=Open+Sans:wght@400&family=Oswald:wght@400&family=Playfair+Display:wght@400&family=Poppins:wght@400&family=Raleway:wght@400&family=Roboto:wght@400&display=swap" rel="stylesheet"></link>
       <Banner><h1>Manage Global Styles</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
