@@ -47,9 +47,9 @@ export const Theme: React.FC<Props> = (props) => {
 
   if (googleFonts.length > 0) {
     const fontList:string[] = [];
-    googleFonts.forEach(f => fontList.push(f.replace(" ","+") + ":wght@500"));
+    googleFonts.forEach(f => fontList.push(f.replace(" ","+") + ":wght@400"));
 
-    fontLink = <link href={"https://fonts.googleapis.com/css2?family=" + fontList.join("&") + "&display=swap"} rel="stylesheet"></link>
+    fontLink = <link href={"https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap"} rel="stylesheet"></link>
   }
 
   if (props?.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{__html:props.globalStyles.customJS}} />
@@ -58,6 +58,7 @@ export const Theme: React.FC<Props> = (props) => {
   const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
   const ogImage = props.config?.appearance?.ogImage && props.config.appearance.ogImage;
 
+  console.log("************FONTLINK", fontLink);
 
   return (<>
     {fontLink}
