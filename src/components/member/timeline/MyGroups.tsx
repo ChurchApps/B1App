@@ -18,7 +18,7 @@ export default function MyGroups() {
         ? (
           groups.map((group) => (
             <Grid item xs={12}>
-              <Link href={"/member/groups/" + group.id}>
+              <Link href={"/groups/" + group.id}>
                 <Box
                   id="tabImage"
                   sx={{

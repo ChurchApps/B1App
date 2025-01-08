@@ -30,41 +30,43 @@ export function GroupsClient(props: WrapperPageProps) {
     <>
       <h1>My Groups</h1>
       <Grid container spacing={3}>
-        {groups?.length > 0 ? (
-          groups.map((group) => (
-            <Grid item md={4} sm={6} xs={12} key={group.id}>
-              <Link href={"/member/groups/" + group.id}>
-                <Box
-                  id="tabImage"
-                  sx={{
-                    backgroundImage: `url(${group.photoUrl})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "100% 100%",
-                    backgroundColor: group.photoUrl ? "#616161" : "#000000",
-                    backgroundBlendMode: group.photoUrl ? "overlay" : "",
-                    aspectRatio: "4",
-                    width: "100%",
-                    color: "white",
-                    textAlign: "center",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Typography
-                    noWrap
-                    sx={{ fontSize: { lg: 34, md: 26, xs: 24 }, color: "#FFFFFF", padding: 2 }}
-                    style={{ color: "#FFF" }}
+        {groups?.length > 0
+          ? (
+            groups.map((group) => (
+              <Grid item md={4} sm={6} xs={12} key={group.id}>
+                <Link href={"/groups/" + group.id}>
+                  <Box
+                    id="tabImage"
+                    sx={{
+                      backgroundImage: `url(${group.photoUrl})`,
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "100% 100%",
+                      backgroundColor: group.photoUrl ? "#616161" : "#000000",
+                      backgroundBlendMode: group.photoUrl ? "overlay" : "",
+                      aspectRatio: "4",
+                      width: "100%",
+                      color: "white",
+                      textAlign: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
                   >
-                    {group.name}
-                  </Typography>
-                </Box>
-              </Link>
-            </Grid>
-          ))
-        ) : (
-          <p>No groups found</p>
-        )}
+                    <Typography
+                      noWrap
+                      sx={{ fontSize: { lg: 34, md: 26, xs: 24 }, color: "#FFFFFF", padding: 2 }}
+                      style={{ color: "#FFF" }}
+                    >
+                      {group.name}
+                    </Typography>
+                  </Box>
+                </Link>
+              </Grid>
+            ))
+          )
+          : (
+            <p>No groups found</p>
+          )}
       </Grid>
     </>
   );

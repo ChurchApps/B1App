@@ -43,6 +43,13 @@ export default async function Home({ params }: { params: PageParams }) {
   const { sdSlug, pageSlug, id } = await params;
   const { church, churchSettings, globalStyles, navLinks, config } = await loadSharedData(sdSlug, pageSlug);
 
+  let label = "Plan Details";
+  switch (pageSlug)
+  {
+    case "plans": label = "Plan Details"; break;
+    case "community": label = "Community Details"; break;
+  }
+
   const getPageContent = () => {
     switch (pageSlug)
     {
@@ -56,7 +63,7 @@ export default async function Home({ params }: { params: PageParams }) {
   return (
     <>
       <Theme appearance={churchSettings} globalStyles={globalStyles} config={config} />
-      <MyWrapper churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+      <MyWrapper pageSlug={pageSlug} idLabel={label} churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
         {getPageContent()}
       </MyWrapper>
 

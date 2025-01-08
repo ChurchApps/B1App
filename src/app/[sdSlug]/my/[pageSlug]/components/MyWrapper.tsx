@@ -18,6 +18,7 @@ interface Props {
   globalStyles: GlobalStyleInterface;
   root?: boolean;
   pageSlug?: string;
+  idLabel?: string;
 }
 
 export async function MyWrapper(props:Props) {
@@ -71,13 +72,19 @@ export async function MyWrapper(props:Props) {
 
   const getPageLabel = () => {
     const pageLink = getPageLink(props.pageSlug);
-    return <span>{pageLink.label}</span>
+    if (props.idLabel) return <Link href={pageLink.url}>{pageLink.label}</Link>
+    else return <span>{pageLink.label}</span>
+  }
+
+  const getIdLabel = () => {
+    if (props.idLabel) return <span>{props.idLabel}</span>
   }
 
   const getChildLayout = () => <Container>
-    <Breadcrumbs separator="›" aria-label="breadcrumb" style={{marginTop:30}}>
-      <Link href="/my">My Ironwood Church</Link>
-      <span>{getPageLabel()}</span>
+    <Breadcrumbs separator="›" aria-label="breadcrumb" style={{marginTop:30, marginBottom:30}}>
+      <Link href="/my/timeline">My {props.church?.name}</Link>
+      {getPageLabel()}
+      {getIdLabel()}
     </Breadcrumbs>
     {props.children}
 
