@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Grid, Typography, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import { ApiHelper, GroupInterface } from "@churchapps/apphelper";
+import GroupCard from "@/components/groups/GroupCard";
 
 export default function MyGroups() {
   const [groups, setGroups] = useState<GroupInterface[]>([]);
@@ -17,30 +17,8 @@ export default function MyGroups() {
       {groups?.length > 0
         ? (
           groups.map((group) => (
-            <Grid item xs={12}>
-              <Link href={"/groups/" + group.id}>
-                <Box
-                  id="tabImage"
-                  sx={{
-                    backgroundImage: `url(${group.photoUrl})`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "100% 100%",
-                    backgroundColor: group.photoUrl ? "#616161" : "#000000",
-                    backgroundBlendMode: group.photoUrl ? "overlay" : "",
-                    aspectRatio: "4",
-                    width: "100%",
-                    color: "white",
-                    textAlign: "center",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Typography noWrap sx={{ fontSize: { lg: 34, md: 26, xs: 24 }, color: "#FFFFFF", padding: 2 }} style={{ color: "#FFF" }}>
-                    {group.name}
-                  </Typography>
-                </Box>
-              </Link>
+            <Grid item xs={4}>
+              <GroupCard group={group} />
             </Grid>
           ))
         )
