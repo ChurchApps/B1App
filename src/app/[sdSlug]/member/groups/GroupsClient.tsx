@@ -34,7 +34,7 @@ export function GroupsClient(props: WrapperPageProps) {
           ? (
             groups.map((group) => (
               <Grid item md={4} sm={6} xs={12} key={group.id}>
-                <Link href={"/groups/" + group.id}>
+                <Link href={"/groups/details/" + group.id}>
                   <Box
                     id="tabImage"
                     sx={{

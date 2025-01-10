@@ -34,7 +34,7 @@ export function GroupClient({ config, groupId }: Props) {
 
   const loadData = () => {
     setIsLoading(true);
-    ApiHelper.get("/groups/" + groupId, "MembershipApi").then((data) => setGroup(data));
+    ApiHelper.get("/groups/details/" + groupId, "MembershipApi").then((data) => setGroup(data));
 
     ApiHelper.get(`/groupmembers?groupId=${groupId}`, "MembershipApi")
       .then((data) => setGroupMembers(data))
@@ -106,44 +106,46 @@ export function GroupClient({ config, groupId }: Props) {
     <>
       <Grid container spacing={3} alignItems="flex-start">
         <Grid item md={8} xs={12}>
-          {group ? (
-            <>
-              <h1>{group.name}</h1>
-              {group.photoUrl && <img id="tabImage" src={group.photoUrl} alt={group.name} style={{ maxHeight: 300 }} />}
-              <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
-                <MarkdownPreviewLight value={group.about} />
-              </div>
+          {group
+            ? (
+              <>
+                <h1>{group.name}</h1>
+                {group.photoUrl && <img id="tabImage" src={group.photoUrl} alt={group.name} style={{ maxHeight: 300 }} />}
+                <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
+                  <MarkdownPreviewLight value={group.about} />
+                </div>
 
-              <TabContext value={tabIndex}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} aria-label="actions" centered>
-                    <Tab label="Feed" sx={{ textTransform: "unset" }} value="0" />
-                    <Tab label="Group Calendar" sx={{ textTransform: "unset" }} value="1" />
-                    <Tab label="Conversations" sx={{ textTransform: "unset" }} value="2" />
-                    <Tab label="Files" sx={{ textTransform: "unset" }} value="3" />
-                  </Tabs>
-                </Box>
-                <TabPanel value="0">
-                  <div style={{ maxWidth: 750, marginLeft: "auto", marginRight: "auto" }}>
-                    <GroupTimeline context={context} groupId={group.id} />
-                  </div>
-                </TabPanel>
-                <TabPanel value="1">
-                  <DisplayBox headerText="Group Calendar">
-                    <GroupCalendar groupId={group.id} churchId={config.church.id} canEdit={isLeader} />
-                  </DisplayBox>
-                </TabPanel>
-                <TabPanel value="2">
-                  <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
-                </TabPanel>
-                <TabPanel value="3">
-                  <GroupFiles context={context} groupId={group.id} />
-                </TabPanel>
-              </TabContext>
-            </>
-          ) : (
-            <p>No group data found</p>
-          )}
+                <TabContext value={tabIndex}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} aria-label="actions" centered>
+                      <Tab label="Feed" sx={{ textTransform: "unset" }} value="0" />
+                      <Tab label="Group Calendar" sx={{ textTransform: "unset" }} value="1" />
+                      <Tab label="Conversations" sx={{ textTransform: "unset" }} value="2" />
+                      <Tab label="Files" sx={{ textTransform: "unset" }} value="3" />
+                    </Tabs>
+                  </Box>
+                  <TabPanel value="0">
+                    <div style={{ maxWidth: 750, marginLeft: "auto", marginRight: "auto" }}>
+                      <GroupTimeline context={context} groupId={group.id} />
+                    </div>
+                  </TabPanel>
+                  <TabPanel value="1">
+                    <DisplayBox headerText="Group Calendar">
+                      <GroupCalendar groupId={group.id} churchId={config.church.id} canEdit={isLeader} />
+                    </DisplayBox>
+                  </TabPanel>
+                  <TabPanel value="2">
+                    <Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} />
+                  </TabPanel>
+                  <TabPanel value="3">
+                    <GroupFiles context={context} groupId={group.id} />
+                  </TabPanel>
+                </TabContext>
+              </>
+            )
+            : (
+              <p>No group data found</p>
+            )}
         </Grid>
         <Grid item md={4} xs={12} sx={{ mt: 11 }}>
           <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">

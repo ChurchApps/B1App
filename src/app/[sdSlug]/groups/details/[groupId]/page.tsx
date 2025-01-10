@@ -1,10 +1,11 @@
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
-import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapper";
+import { DefaultPageWrapper } from "../../../[pageSlug]/components/DefaultPageWrapper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { ApiHelper, GroupInterface, GroupMemberInterface, EventInterface } from "@churchapps/apphelper";
 import { Metadata } from "next";
 import { Button } from "@mui/material";
+import { Theme } from "@/components";
 
 type PageParams = Promise<{ sdSlug: string; groupId: string; }>
 
@@ -108,7 +109,8 @@ export default async function GroupPage({ params }: { params: PageParams }) {
     return result;
   }
 
-  return (
+  return (<>
+    <Theme appearance={config.appearance} globalStyles={config.globalStyles} config={config} />
     <DefaultPageWrapper churchSettings={config.appearance} church={config.church} navLinks={config.navLinks} globalStyles={config.globalStyles}>
       <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={mainData.photoUrl} /></div>
       <div style={{ display: "flex" }}>
@@ -134,5 +136,5 @@ export default async function GroupPage({ params }: { params: PageParams }) {
         <Button style={{ fontWeight: "bold", fontSize: "26px" }}>Request to Join Group</Button>
       </div>
     </DefaultPageWrapper>
-  );
+  </>);
 }
