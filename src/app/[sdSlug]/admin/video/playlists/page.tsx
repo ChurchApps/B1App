@@ -18,7 +18,6 @@ export default function AdminPagesClient() {
 
   const loadData = () => {
     ConfigHelper.load(params.sdSlug).then((data) => { setConfig(data); });
-    
   };
 
   useEffect(() => {

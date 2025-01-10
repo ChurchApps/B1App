@@ -32,12 +32,12 @@ export default function AdminPagesClient() {
     <AdminWrapper config={config}>
       <Banner><h1>Mobile App Settings</h1></Banner>
       <div id="mainContent">
-      {editPage && (<PageEdit page={editPage} updatedCallback={() => { setEditPage(null); setRefreshKey(Math.random()) }} embedded={true} /> )}
-      {UserHelper.checkAccess(Permissions.contentApi.content.edit)
+        {editPage && (<PageEdit page={editPage} updatedCallback={() => { setEditPage(null); setRefreshKey(Math.random()) }} embedded={true} /> )}
+        {UserHelper.checkAccess(Permissions.contentApi.content.edit)
         && <Grid item md={8} xs={12}>
           <EmbeddablePages onSelected={(page:PageInterface) => { setEditPage(page); } } pathPrefix="/member" refreshKey={refreshKey} />
         </Grid>
-      }
+        }
       </div>
     </AdminWrapper>
   );

@@ -1,6 +1,6 @@
-import { GlobalStyleInterface, PageInterface } from "@/helpers/interfaces";
+import { PageInterface } from "@/helpers/interfaces";
 import { ConfigHelper } from "@/helpers/ConfigHelper";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper/dist/helpers";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
 import { Metadata } from "next";
@@ -22,19 +22,15 @@ const loadSharedData = (sdSlug:string) =>
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
   const { sdSlug } =  await params;
   const props = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData(props.pageData.title + " - " + props.church.name, props.pageData.title, props.churchSettings.ogImage);
+  return MetaHelper.getMetaData(props.pageData.title + " - " + props.config.church.name, props.pageData.title, props.config.appearance.ogImage);
 }
 
 const loadData = async (sdSlug:string) => {
-  const church: ChurchInterface | null = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
-  const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
-  const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
-  const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
+  const config = await ConfigHelper.load(sdSlug, "website");
+  const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?url=/", "ContentApi");
 
-  const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi");
-  const config = await ConfigHelper.load(church.subDomain);
 
-  return { pageData, church, churchSettings, navLinks, globalStyles, config }
+  return { pageData, config }
 }
 
 export default async function Home({params}: {params:Promise<PageParams>}) {
@@ -50,8 +46,8 @@ export default async function Home({params}: {params:Promise<PageParams>}) {
 
   if (!props.pageData?.url) redirect("/member"); //return <Loading />
   else return (<>
-    <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} config={props.config} />
-    <PageLayout globalStyles={props.globalStyles} church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+    <Theme appearance={props.config.appearance} globalStyles={props.config.globalStyles} config={props.config} />
+    <PageLayout globalStyles={props.config.globalStyles} church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />
     <Animate />
   </>);
 }

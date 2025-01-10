@@ -1,8 +1,8 @@
-import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
-import { ChurchInterface, ApiHelper, GroupInterface, GroupMemberInterface, EventInterface, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, GroupInterface, GroupMemberInterface, EventInterface } from "@churchapps/apphelper";
 import { Metadata } from "next";
 import { Button } from "@mui/material";
 
@@ -18,24 +18,19 @@ const loadSharedData = (sdSlug: string, groupId: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug, groupId } = await params;
   const props = await loadSharedData(sdSlug, groupId);
-  return MetaHelper.getMetaData("Hello World" + " - " + props.church.name, "Hello World", props.churchSettings.ogImage);
+  return MetaHelper.getMetaData("Hello World" + " - " + props.config.church.name, "Hello World", props.config.appearance.ogImage);
 }
 
 const loadData = async (sdSlug: string, groupId: string) => {
-  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
-  const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
-  const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
-  const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
-  const mainData: GroupInterface = await ApiHelper.get("/groups/public/" + church.id + "/" + groupId, "MembershipApi");
-  const events: EventInterface[] = await ApiHelper.get("/events/public/group/" + church.id + "/" + groupId, "ContentApi");
-  const leaders: GroupMemberInterface[] = await ApiHelper.get("/groupMembers/public/leaders/" + church.id + "/" + groupId, "MembershipApi");
-
-  const config: ConfigurationInterface = await ConfigHelper.load(church.subDomain);
+  const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
+  const mainData: GroupInterface = await ApiHelper.get("/groups/public/" + config.church.id + "/" + groupId, "MembershipApi");
+  const events: EventInterface[] = await ApiHelper.get("/events/public/group/" + config.church.id + "/" + groupId, "ContentApi");
+  const leaders: GroupMemberInterface[] = await ApiHelper.get("/groupMembers/public/leaders/" + config.church.id + "/" + groupId, "MembershipApi");
 
   // console.log("Events:", events);
   // console.log("Leaders:", leaders);
 
-  return { church, churchSettings, navLinks, globalStyles, config, mainData, events, leaders }
+  return { config, mainData, events, leaders }
 }
 
 /* RESOLVED, here for temporary example:
@@ -43,17 +38,17 @@ const loadData = async (sdSlug: string, groupId: string) => {
     const mainData: any = ApiHelper.get("/groups/public/:churchId/:groupId", "MembershipApi");
     console.log(mainData);
     return { mainData }
-} 
+}
     RESOLVED */
 
-/* FOREACH EXAMPLE: 
+/* FOREACH EXAMPLE:
 const getFundArray = () => {
     const result: any[] = [];
     fundDonations.forEach((fd) => {
       const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
       const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
       if (donation) {
- 
+
         result.push({ fund: fund?.name, amount: fd.amount });
       }
     });
@@ -64,7 +59,7 @@ const getFundArray = () => {
 export default async function GroupPage({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, groupId } = await params
-  const { church, churchSettings, globalStyles, navLinks, mainData, events, leaders } = await loadSharedData(sdSlug, groupId);
+  const { mainData, events, leaders, config } = await loadSharedData(sdSlug, groupId);
 
   const getLeaders = () => {
     const result: JSX.Element[] = [];
@@ -114,7 +109,7 @@ export default async function GroupPage({ params }: { params: PageParams }) {
   }
 
   return (
-    <DefaultPageWrapper churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+    <DefaultPageWrapper churchSettings={config.appearance} church={config.church} navLinks={config.navLinks} globalStyles={config.globalStyles}>
       <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={mainData.photoUrl} /></div>
       <div style={{ display: "flex" }}>
         <div style={{ textAlign: "center", width: "60%" }}>

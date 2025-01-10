@@ -1,6 +1,5 @@
 import { Theme } from "@/components";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
-import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
@@ -24,24 +23,18 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
   const props = await loadSharedData(sdSlug, pageSlug);
 
   const title = "My....";
-  return MetaHelper.getMetaData(title + " - " + props.church.name, "My", props.churchSettings.ogImage);
+  return MetaHelper.getMetaData(title + " - " + props.config.church.name, "My", props.config.appearance.ogImage);
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
-
-  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
-  const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
-  const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
-  const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
-  const config: ConfigurationInterface = await ConfigHelper.load(church.subDomain);
-
-  return { church, churchSettings, navLinks, globalStyles, config }
+  const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
+  return { config }
 }
 
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug, id } = await params;
-  const { church, churchSettings, globalStyles, navLinks, config } = await loadSharedData(sdSlug, pageSlug);
+  const { config } = await loadSharedData(sdSlug, pageSlug);
 
   let label = "Plan Details";
   switch (pageSlug)
@@ -62,8 +55,8 @@ export default async function Home({ params }: { params: PageParams }) {
 
   return (
     <>
-      <Theme appearance={churchSettings} globalStyles={globalStyles} config={config} />
-      <MyWrapper pageSlug={pageSlug} idLabel={label} churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+      <Theme appearance={config.appearance} globalStyles={config.globalStyles} config={config} />
+      <MyWrapper pageSlug={pageSlug} idLabel={label} churchSettings={config.appearance} church={config.church} navLinks={config.navLinks} globalStyles={config.globalStyles}>
         {getPageContent()}
       </MyWrapper>
 
