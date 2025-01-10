@@ -79,6 +79,7 @@ export function ElementAdd(props: Props) {
                 <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="form" icon="format_align_left" label="Form" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="calendar" icon="calendar_month" label="Calendar" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="groupList" icon="people" label="Group List" draggingCallback={props.draggingCallback} />
               </Grid>
             </Grid>
             {showBlocks && (

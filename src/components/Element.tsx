@@ -24,6 +24,7 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { BoxElement } from "./elementTypes/BoxElement";
 import { TableElement } from "./elementTypes/TableElement";
 import { DraggableWrapper } from "./admin/DraggableWrapper";
+import { GroupListElement } from "./elementTypes/GroupListElement";
 
 interface Props {
   element: ElementInterface;
@@ -130,6 +131,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "table":
       result = <TableElement key={props.element.id} element={props.element as ElementInterface} />
+      break;
+    case "groupList":
+      result = <GroupListElement key={props.element.id} churchId={props.church?.id ?? props.element.churchId} element={props.element as ElementInterface} />
       break;
   }
 
