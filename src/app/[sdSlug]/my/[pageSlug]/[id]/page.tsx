@@ -8,8 +8,9 @@ import { Animate } from "@/components/Animate";
 
 import { TimelinePage } from "../components/TimelinePage";
 import { MyWrapper } from "../components/MyWrapper";
-import { PlanClient } from "@/app/[sdSlug]/member/plans/[id]/PlanClient";
+
 import { PersonPage } from "../components/PersonPage";
+import { PlanClient } from "../components/PlanClient";
 
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; id:string; }>
 
