@@ -2,7 +2,7 @@ import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface } from "@/helpers
 import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
-import { ChurchInterface, ApiHelper, GroupInterface, GroupMemberInterface, EventInterface } from "@churchapps/apphelper";
+import { ChurchInterface, ApiHelper, GroupInterface, GroupMemberInterface, EventInterface, DateHelper } from "@churchapps/apphelper";
 import { Metadata } from "next";
 import { Button } from "@mui/material";
 
@@ -32,8 +32,8 @@ const loadData = async (sdSlug: string, groupId: string) => {
 
   const config: ConfigurationInterface = await ConfigHelper.load(church.subDomain);
 
-  console.log("Events:", events);
-  console.log("Leaders:", leaders);
+  // console.log("Events:", events);
+  // console.log("Leaders:", leaders);
 
   return { church, churchSettings, navLinks, globalStyles, config, mainData, events, leaders }
 }
@@ -62,93 +62,82 @@ const getFundArray = () => {
  END EXAMPLE */
 
 export default async function GroupPage({ params }: { params: PageParams }) {
-    await EnvironmentHelper.initServerSide();
-    const { sdSlug, groupId } = await params
-    const { church, churchSettings, globalStyles, navLinks, mainData, events, leaders } = await loadSharedData(sdSlug, groupId);
+  await EnvironmentHelper.initServerSide();
+  const { sdSlug, groupId } = await params
+  const { church, churchSettings, globalStyles, navLinks, mainData, events, leaders } = await loadSharedData(sdSlug, groupId);
 
-    const getLeaders = () => {
-        const result: JSX.Element[] = [];
-        leaders.forEach((l) => {
-            // const leader = ArrayHelper.getOne(leaders, "id", l.id);
-            console.log("name:", l.person.name.display, "photo:", l.person.photo);
-        });
-        return result;
-    }
+  const getLeaders = () => {
+    const result: JSX.Element[] = [];
+    leaders.forEach((l) => {
+      // console.log("name:", l.person.name.display, "photo:", l.person.photo);
+      // console.log("photo:", l.person.photo ? l.person.photo : "public/images/sample-profile.png");
+      result.push(<div style={{ display: "flex", width: "20%", height: "30px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px" }}>
+        <div style={{ width: "30%", lineHeight: "30px" }}>
+          <img src={l.person.photo ? l.person.photo : "public/images/sample-profile.png"} />
+        </div>
+        <div style={{ width: "70%", lineHeight: "30px" }}>{l.person.name.display}</div>
+      </div>);
+      // console.log("RESULT:", result);
+    });
+    return result;
+  }
 
-    const getEvents = () => {
-        const result: JSX.Element[] = [];
-        events.forEach((e) => {
-            console.log("name:", e.title, "desc:", e.description);
-        });
-        return result;
-    }
+  const getEvents = () => {
+    const result: JSX.Element[] = [];
+    const currDate = new Date();
 
-    return (
-      <DefaultPageWrapper churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
-        <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={mainData.photoUrl} /></div>
-        <div style={{ display: "flex" }}>
-          <div style={{ textAlign: "center", width: "60%" }}>
-              <h1 id="gpn" style={{ padding: "20px 0px", margin: "0px" }}>{mainData.name}</h1>
-              <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>About Us: </span>{mainData.about}</p>
+    events.forEach((e) => {
+      // console.log("name:", e.title, "desc:", e.description, e.start);
+      const startDate = new Date(e.start);
+      const monthAbb = startDate.toLocaleString('en-US', { month: 'short' });
 
-              <div style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", display: "flex" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Leader(s): </span>
-                  <div style={{ display: "flex", width: "20%", height: "30px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px" }}>
-                      <div style={{ width: "30%", lineHeight: "30px" }}>Photo</div>
-                      <div style={{ width: "70%", lineHeight: "30px" }}>{getLeaders()}</div>
-                  </div>
-              </div>
-
-              <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Schedule: </span>Consistent Time?</p>
-              <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Located: </span>Online/Campus</p>
-          </div>
-          {/* CALENDAR */}
-          <div style={{ textAlign: "center", width: "40%" }}>
-            <h2 style={{ padding: "20px 0px", margin: "0px" }}>Calendar Events:</h2>
-            <div style={{ display: "flex" }}>
-              <div style={{ display: "flex", width: "40%", height: "80px", marginBottom: "5px" }}>
-                <div style={{ width: "70%" }}></div>
-                <div className="calbox" style={{ width: "30%", lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
-                  <p style={{ lineHeight: "16px" }}>Month</p>
-                  <p style={{ lineHeight: "16px" }}>Day</p>
-                </div>
-              </div>
-              <div style={{ width: "60%", textAlign: "left", lineHeight: "40px", paddingLeft: "5px" }}>
-                <div style={{ fontWeight: "bold" }}>Event Name 1{getEvents()}</div>
-                <div style={{ fontStyle: "italic" }}>Event description 1</div>
-              </div>
-            </div>
-            <div style={{ display: "flex" }}>
-              <div style={{ display: "flex", width: "40%", height: "80px", marginBottom: "5px" }}>
-                <div style={{ width: "70%" }}></div>
-                <div className="calbox" style={{ width: "30%", lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
-                  <p style={{ lineHeight: "16px" }}>Month</p>
-                  <p style={{ lineHeight: "16px" }}>Day</p>
-                </div>
-              </div>
-              <div style={{ width: "60%", textAlign: "left", lineHeight: "40px", paddingLeft: "5px" }}>
-                <div style={{ fontWeight: "bold" }}>Event Name 2</div>
-                <div style={{ fontStyle: "italic" }}>Event description 2</div>
-              </div>
-            </div>
-            <div style={{ display: "flex" }}>
-              <div style={{ display: "flex", width: "40%", height: "80px", marginBottom: "5px" }}>
-                <div style={{ width: "70%" }}></div>
-                <div className="calbox" style={{ width: "30%", lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
-                  <p style={{ lineHeight: "16px" }}>Month</p>
-                  <p style={{ lineHeight: "16px" }}>Day</p>
-                </div>
-              </div>
-              <div style={{ width: "60%", textAlign: "left", lineHeight: "40px", paddingLeft: "5px" }}>
-                <div style={{ fontWeight: "bold" }}>Event Name 3</div>
-                <div style={{ fontStyle: "italic" }}>Event description 3</div>
-              </div>
+      if (result.length < 3 && startDate > currDate) {
+        // console.log("start date:", startDate);
+        result.push(<div style={{ display: "flex" }}>
+          <div style={{ display: "flex", width: "40%", height: "80px", marginBottom: "5px" }}>
+            <div style={{ width: "70%" }}></div>
+            <div className="calbox" style={{ width: "30%", lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
+              <p style={{ lineHeight: "16px" }}>{monthAbb}</p>
+              <p style={{ lineHeight: "16px" }}>{startDate.getDay().toString()}</p>
             </div>
           </div>
-          {/* CALENDAR END */}
+          <div style={{ width: "60%", textAlign: "left", lineHeight: "40px", paddingLeft: "5px" }}>
+            <div style={{ fontWeight: "bold" }}>{e.title}</div>
+            <div style={{ fontStyle: "italic" }}>{e.description}</div>
+          </div>
+        </div>)
+      } else if (result.length === 0) {
+        result.push(<div style={{ fontStyle: "italic", height: "80px", lineHeight: "80px", fontSize: "18px" }}>No upcoming events found for selected group.</div>);
+      }
+    });
+    return result;
+  }
+
+  return (
+    <DefaultPageWrapper churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+      <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={mainData.photoUrl} /></div>
+      <div style={{ display: "flex" }}>
+        <div style={{ textAlign: "center", width: "60%" }}>
+          <h1 id="gpn" style={{ padding: "20px 0px", margin: "0px" }}>{mainData.name}</h1>
+          <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>About Us: </span>{mainData.about}</p>
+
+          <div style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", display: "flex" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Leader(s): </span>
+            {getLeaders()}
+          </div>
+
+          <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Schedule: </span>{mainData.meetingTime}</p>
+          <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Located: </span>{mainData.meetingLocation}</p>
         </div>
-        <div style={{ margin: "40px 0px", textAlign: "center" }}>
-          <Button style={{ fontWeight: "bold", fontSize: "26px" }}>Request to Join Group</Button>
+        {/* CALENDAR */}
+        <div style={{ textAlign: "center", width: "40%" }}>
+          <h2 style={{ padding: "20px 0px", margin: "0px" }}>Calendar Events:</h2>
+          {getEvents()}
         </div>
-      </DefaultPageWrapper>
-    );
+        {/* CALENDAR END */}
+      </div>
+      <div style={{ margin: "40px 0px", textAlign: "center" }}>
+        <Button style={{ fontWeight: "bold", fontSize: "26px" }}>Request to Join Group</Button>
+      </div>
+    </DefaultPageWrapper>
+  );
 }
