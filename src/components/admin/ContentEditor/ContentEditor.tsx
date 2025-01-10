@@ -3,9 +3,9 @@ import { CSSProperties, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createTheme } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
-import { BlockInterface, ElementInterface, GlobalStyleInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
+import { BlockInterface, ElementInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
-import { ApiHelper, ArrayHelper, ChurchInterface, UserHelper, Permissions, SmallButton, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, UserHelper, Permissions, SmallButton, DisplayBox } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -21,9 +21,6 @@ import { DroppableScroll } from "../DroppableScroll";
 import { Header } from "@/components/Header";
 
 interface Props extends WrapperPageProps {
-  church: ChurchInterface,
-  churchSettings: any,
-  globalStyles: GlobalStyleInterface,
   loadData: (id: string) => Promise<any>,
   pageId?: string,
   blockId?: string
@@ -70,11 +67,11 @@ export default function ContentEditor(props: Props) {
   }
 
   const loadLinks = () => {
-    if (props.church) ApiHelper.getAnonymous("/links/church/" + props.church.id + "?category=website", "ContentApi").then((data) => { setNavLinks(data) });
+    if (props.config?.church) ApiHelper.getAnonymous("/links/church/" + props.config?.church.id + "?category=website", "ContentApi").then((data) => { setNavLinks(data) });
   }
 
   useEffect(loadData, [props.pageId, props.blockId]);
-  useEffect(loadLinks, [props.church]);
+  useEffect(loadLinks, [props.config?.church]);
 
   //page editor only available for desktop
   useEffect(() => {
@@ -110,7 +107,7 @@ export default function ContentEditor(props: Props) {
     const sections = (zone === "block") ? container?.sections : ArrayHelper.getAll(container?.sections, "zone", zone);
     sections?.forEach(section => {
       if (section.targetBlockId) result.push(<SectionBlock key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} />)
-      else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} church={props.church} />)
+      else result.push(<Section key={section.id} section={section} churchSettings={props.config.appearance} onEdit={handleSectionEdit} onMove={() => { loadData() }} church={props.config?.church} />)
       result.push(getAddSection(section.sort + 0.1, zone));
     });
 
@@ -212,7 +209,7 @@ export default function ContentEditor(props: Props) {
     let idx = 0;
     if (props.pageId) {
       const page = container as PageInterface;
-      if (page?.layout === "headerFooter") result.push(<Header church={props.church || {}} churchSettings={props.churchSettings} navLinks={navLinks} overlayContent={page?.url === "/"} sections={[]} globalStyles={props.globalStyles} editMode />)
+      if (page?.layout === "headerFooter") result.push(<Header config={props.config} overlayContent={page?.url === "/"} sections={[]} editMode />)
       zones[page?.layout]?.forEach((z: string) => {
         const sections = ArrayHelper.getAll(page?.sections, "zone", z);
         const name = z.substring(0, 1).toUpperCase() + z.substring(1, z.length);
@@ -239,7 +236,7 @@ export default function ContentEditor(props: Props) {
 
 
   return (<>
-    <Theme appearance={props.churchSettings} globalStyles={props.globalStyles} />
+    <Theme config={props.config} />
     <Helmet><style>{StyleHelper.getCss(container?.sections || [], deviceType)}</style></Helmet>
 
     <div style={{ backgroundColor: "#FFF", position: "sticky", top: 0, width: "100%", zIndex: 1000, boxShadow: "0px 2px 2px black", marginBottom: 10 }}>
@@ -275,8 +272,8 @@ export default function ContentEditor(props: Props) {
     <DndProvider backend={HTML5Backend}>
       {showHelp && getHelp()}
       {showAdd && <ElementAdd includeBlocks={!elementOnlyMode} includeSection={!elementOnlyMode} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
-      {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.globalStyles} />}
-      {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.globalStyles} />}
+      {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.config?.globalStyles} />}
+      {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.config?.globalStyles} />}
 
       <div>
         {scrollTop > 150

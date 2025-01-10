@@ -3,14 +3,14 @@ import { Typography, Breadcrumbs, Button, Grid, Card, CardContent, Box } from "@
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import TopicIcon from "@mui/icons-material/Topic";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { PlaylistInterface, SermonInterface, ApiHelper, AppearanceHelper, Loading, AppearanceInterface } from "@churchapps/apphelper";
+import { PlaylistInterface, SermonInterface, ApiHelper, AppearanceHelper, Loading } from "@churchapps/apphelper";
 
 interface Props {
-  churchId: string,
-  churchSettings: AppearanceInterface,
+  churchId: string;
+  appearance: any;
 }
 
-export const SermonElement = ({ churchId, churchSettings }: Props) => {
+export const SermonElement = ({ churchId, appearance }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActive, setIsActive] = useState<string>("playlists");
   const [playlists, setPlaylists] = useState<PlaylistInterface[]>([]);
@@ -99,7 +99,7 @@ export const SermonElement = ({ churchId, churchSettings }: Props) => {
                     <Box
                       component="img"
                       alt={item?.title}
-                      src={item.thumbnail ? item.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", "#FFF")}
+                      src={item.thumbnail ? item.thumbnail : AppearanceHelper.getLogo(appearance, "/images/logo.png", "/images/logo.png", "#FFF")}
                       height={190}
                       minHeight={{ xs: 230, sm: 'auto' }}
                       sx={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -132,7 +132,7 @@ export const SermonElement = ({ churchId, churchSettings }: Props) => {
                     <Box
                       component="img"
                       alt={item?.title}
-                      src={item.thumbnail ? item.thumbnail : (activePlaylist?.thumbnail ? activePlaylist.thumbnail : AppearanceHelper.getLogo(churchSettings, "/images/logo.png", "/images/logo.png", "#FFF"))}
+                      src={item.thumbnail ? item.thumbnail : (activePlaylist?.thumbnail ? activePlaylist.thumbnail : AppearanceHelper.getLogo(appearance, "/images/logo.png", "/images/logo.png", "#FFF"))}
                       height={190}
                       minHeight={{ xs: 230, sm: 'auto' }}
                       sx={{ objectFit: 'cover', objectPosition: 'center' }}

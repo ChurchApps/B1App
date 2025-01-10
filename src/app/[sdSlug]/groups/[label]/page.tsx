@@ -44,8 +44,8 @@ export default async function GroupPage({ params }: { params: PageParams }) {
 
   return (
     <>
-      <Theme appearance={config.appearance} globalStyles={config.globalStyles} config={config} />
-      <DefaultPageWrapper churchSettings={config.appearance} church={config.church} navLinks={config.navLinks} globalStyles={config.globalStyles}>
+      <Theme config={config} />
+      <DefaultPageWrapper config={config}>
 
         <Container>
           <div id="mainContent">

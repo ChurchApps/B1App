@@ -54,11 +54,10 @@ export default async function Home({ params }: { params: PageParams }) {
 
   return (
     <>
-      <Theme appearance={config.appearance} globalStyles={config.globalStyles} config={config} />
-      <MyWrapper pageSlug={pageSlug} root={pageSlug==="timeline"} churchSettings={config.appearance} church={config.church} navLinks={config.navLinks} globalStyles={config.globalStyles}>
+      <Theme config={config} />
+      <MyWrapper pageSlug={pageSlug} root={pageSlug==="timeline"} config={config}>
         {getPageContent()}
       </MyWrapper>
-
       <Animate />
     </>
   );

@@ -17,7 +17,7 @@ export function UrlClient({ config, urlId }: Props) {
   const url
     = urlId === "chums"
       ? `https://app.chums.org/login?jwt=${jwt}&churchId=${churchId}`
-      : config.tabs.find((t) => t.id === urlId)?.url;
+      : config.navLinks.find((t) => t.id === urlId)?.url;
 
   return (
     <Wrapper config={config}>

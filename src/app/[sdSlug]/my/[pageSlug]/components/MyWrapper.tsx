@@ -1,5 +1,3 @@
-import { ChurchInterface } from "@churchapps/apphelper";
-import { GlobalStyleInterface } from "@/helpers";
 import "@/styles/animations.css";
 
 import { Breadcrumbs, Container, Grid } from "@mui/material";
@@ -7,13 +5,11 @@ import { Breadcrumbs, Container, Grid } from "@mui/material";
 import Link from "next/link";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/[pageSlug]/components/DefaultPageWrapper";
 import { TabsClient } from "./TabsClient";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props {
   children: JSX.Element;
-  churchSettings: any;
-  church: ChurchInterface;
-  navLinks: any;
-  globalStyles: GlobalStyleInterface;
+  config: ConfigurationInterface;
   root?: boolean;
   pageSlug?: string;
   idLabel?: string;
@@ -60,7 +56,7 @@ export async function MyWrapper(props:Props) {
 
   const getChildLayout = () => <Container>
     <Breadcrumbs separator="›" aria-label="breadcrumb" style={{marginTop:30, marginBottom:30}}>
-      <Link href="/my/timeline">My {props.church?.name}</Link>
+      <Link href="/my/timeline">My {props.config?.church?.name}</Link>
       {getPageLabel()}
       {getIdLabel()}
     </Breadcrumbs>
@@ -69,7 +65,7 @@ export async function MyWrapper(props:Props) {
   </Container>
 
   return (
-    <DefaultPageWrapper churchSettings={props.churchSettings} church={props.church} navLinks={props.navLinks} globalStyles={props.globalStyles}>
+    <DefaultPageWrapper config={props.config}>
       {props.root && getRootLayout()}
       {!props.root && getChildLayout()}
     </DefaultPageWrapper>

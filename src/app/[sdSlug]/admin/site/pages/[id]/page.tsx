@@ -9,5 +9,5 @@ export default async function PageEditor({ params }: { params: Params }) {
   const {sdSlug,id} = await params
   const config = await ConfigHelper.load(sdSlug.toString());
 
-  return <ContentEditorClient config={config} church={config.church} churchSettings={config.appearance} globalStyles={config.globalStyles} pageId={id} />;
+  return <ContentEditorClient config={config} pageId={id} />;
 }

@@ -47,7 +47,7 @@ export const Wrapper: React.FC<Props> = props => {
   const handleNavClick = (url: string) => { router.push(url) }
 
   const getTabs = () => {
-    props.config.tabs?.forEach(tab => {
+    props.config.navLinks?.forEach(tab => {
       switch (tab.linkType) {
         case "stream":
           tabs.push(<NavItem key="/member/stream" url="/member/stream" label={tab.text} icon={tab.icon} onNavigate={handleNavClick} selected={selectedTab === "stream"} />)

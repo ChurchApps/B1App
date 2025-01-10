@@ -1,13 +1,13 @@
 import { SectionInterface } from "@/helpers";
-import { AppearanceHelper, ChurchInterface } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
 import Zone from "./Zone";
 import { Grid } from "@mui/material";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 
 type Props = {
   footerSections?: SectionInterface[];
-  churchSettings?: any;
-  church?: ChurchInterface;
+  config?: ConfigurationInterface;
 };
 
 export function Footer(props: Props) {
@@ -15,11 +15,11 @@ export function Footer(props: Props) {
   if (props.footerSections?.length>0) {
     console.log("Footer Sections", props.footerSections.length, props.footerSections[0].elements?.length);
 
-    return <Zone church={props.church} sections={props.footerSections} zone="siteFooter" churchSettings={props.churchSettings} />
+    return <Zone church={props.config?.church} sections={props.footerSections} zone="siteFooter" churchSettings={props.config?.appearance} />
   }
   else {
-    let logoUrl = AppearanceHelper.getLogoDark(props.churchSettings.appearance ?? props.churchSettings, "/images/logo.png");
-    const photo = <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.church.name} />
+    let logoUrl = AppearanceHelper.getLogoDark(props.config?.appearance, "/images/logo.png");
+    const photo = <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.config?.church.name} />
 
     return (
       <>
@@ -29,10 +29,10 @@ export function Footer(props: Props) {
               {photo}
             </Grid>
             <Grid item xs={12} md={6}>
-              <h2>{props.church.name}</h2>
+              <h2>{props.config?.church.name}</h2>
               <p>
-                {props.church.address1}<br />
-                {props.church.city && <>{props.church.city}, {props.church.state} {props.church.zip}</>}
+                {props.config?.church.address1}<br />
+                {props.config?.church.city && <>{props.config?.church.city}, {props.config?.church.state} {props.config?.church.zip}</>}
               </p>
             </Grid>
           </Grid>

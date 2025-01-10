@@ -40,7 +40,7 @@ export function PagesClient({ config, churchId, linkId,url }: Props) {
   return (
     <Wrapper config={config}>
       <div style={{ backgroundColor: "#FFF", height: "100vh" }}>
-        <Theme globalStyles={{}} />
+        <Theme />
         <div dangerouslySetInnerHTML={{ __html: content }} style={{ padding: 5 }} />
       </div>
     </Wrapper>

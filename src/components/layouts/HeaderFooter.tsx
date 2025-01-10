@@ -1,20 +1,17 @@
 import Head from "next/head";
 import { Header } from "../Header";
 import { CssBaseline } from "@mui/material";
-import { ArrayHelper, ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import Zone from "./Zone";
-import { GlobalStyleInterface } from "@/helpers";
 import { Footer } from "./Footer";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 type Props = {
   pageData: any;
   pageTitle?: string;
   metaDescription?: string;
   ogDescription?: string;
-  churchSettings?: any;
-  church?: ChurchInterface;
-  navLinks?: LinkInterface[];
-  globalStyles: GlobalStyleInterface;
+  config?: ConfigurationInterface;
 };
 
 //<Zone church={props.church} sections={props.pageData.sections} zone="footer" churchSettings={props.churchSettings} />
@@ -34,16 +31,16 @@ export function HeaderFooter(props: Props) {
       <CssBaseline />
       <div>
         <Head>
-          <title>{props.pageTitle || props.church?.name}</title>
+          <title>{props.pageTitle || props.config?.church?.name}</title>
           {getDescription()}
         </Head>
-        <Header church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} globalStyles={props.globalStyles} />
+        <Header config={props.config} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} />
         <main>
           <div className="page">
-            <Zone church={props.church} sections={props.pageData.sections} zone="main" churchSettings={props.churchSettings} />
+            <Zone church={props.config?.church} sections={props.pageData.sections} zone="main" churchSettings={props.config?.appearance} />
           </div>
         </main>
-        <Footer church={props.church} churchSettings={props.churchSettings} footerSections={footerSections} />
+        <Footer config={props.config} footerSections={footerSections} />
       </div>
     </>
   );

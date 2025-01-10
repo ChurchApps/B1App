@@ -46,8 +46,8 @@ export default async function Home({params}: {params:Promise<PageParams>}) {
 
   if (!props.pageData?.url) redirect("/member"); //return <Loading />
   else return (<>
-    <Theme appearance={props.config.appearance} globalStyles={props.config.globalStyles} config={props.config} />
-    <PageLayout globalStyles={props.config.globalStyles} church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />
+    <Theme config={props.config} />
+    <PageLayout config={props.config} pageData={props.pageData} />
     <Animate />
   </>);
 }

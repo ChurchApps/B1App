@@ -57,28 +57,28 @@ export default async function Home({ params }: { params: PageParams }) {
   const { pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
   const getPageContent = () => {
-    let result = <PageLayout globalStyles={config.globalStyles} church={config.church} churchSettings={config.appearance} navLinks={config.navLinks} pageData={pageData} />
+    let result = <PageLayout config={config} pageData={pageData} />
 
     if (!pageData?.url) {
       switch (pageSlug)
       {
         case "votd": result = wrapDefaultPage(<VotdPage />); break;
         case "bible": result = wrapDefaultPage(<BiblePage />); break;
-        case "stream": result = wrapDefaultPage(<StreamPage churchSettings={config.appearance} church={config.church} />); break;
-        case "sermons": result = wrapDefaultPage(<SermonsPage churchSettings={config.appearance} church={config.church} />); break;
+        case "stream": result = wrapDefaultPage(<StreamPage config={config} />); break;
+        case "sermons": result = wrapDefaultPage(<SermonsPage config={config} />); break;
         default: return notFound();
       }
     }
     return result;
   }
 
-  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper churchSettings={config.appearance} church={config.church} navLinks={config.navLinks} globalStyles={config.globalStyles}>
+  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper config={config}>
     {content}
   </DefaultPageWrapper>
 
   return (
     <>
-      <Theme appearance={config.appearance} globalStyles={config.globalStyles} config={config} />
+      <Theme config={config} />
       {getPageContent()}
       <Animate />
     </>

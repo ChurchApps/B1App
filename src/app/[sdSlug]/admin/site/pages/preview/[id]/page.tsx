@@ -10,5 +10,5 @@ export default async function PreviewPage({ params }: { params: Params }) {
   const config = await ConfigHelper.load(sdSlug.toString());
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?id=" + id, "ContentApi");
 
-  return <PreviewClientWrapper config={config} church={config.church} churchSettings={config.appearance} globalStyles={config.globalStyles} pageData={pageData} />;
+  return <PreviewClientWrapper config={config} pageData={pageData} />;
 }

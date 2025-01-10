@@ -1,15 +1,12 @@
 "use client";
 
 import { redirect } from "next/navigation";
-import { GlobalStyleInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper, ChurchInterface, UserHelper } from "@churchapps/apphelper";
+import { WrapperPageProps } from "@/helpers";
+import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import React from "react";
 import ContentEditor from "@/components/admin/ContentEditor/ContentEditor";
 
 interface Props extends WrapperPageProps {
-  church: ChurchInterface;
-  churchSettings: any;
-  globalStyles: GlobalStyleInterface;
   blockId: string;
 }
 
@@ -25,9 +22,6 @@ export function BlockEditorClient(props: Props) {
   return (
     <ContentEditor
       loadData={loadData}
-      church={props.church}
-      churchSettings={props.churchSettings}
-      globalStyles={props.globalStyles}
       blockId={id}
       config={props.config}
       onDone={handleDone}
