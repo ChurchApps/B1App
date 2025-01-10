@@ -14,5 +14,5 @@ interface Props {
 
 export function GroupClient(props: Props) {
   if (!UserHelper.currentUserChurch?.person?.id) return <UnauthenticatedView config={props.config} group={props.group} events={props.events} leaders={props.leaders}   />
-  else return <AuthenticatedView />
+  else return <AuthenticatedView config={props.config} group={props.group} />
 }
