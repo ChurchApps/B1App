@@ -130,7 +130,7 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect("/member") }}>
+      <ListItemButton onClick={() => { redirect("/my") }}>
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
@@ -144,7 +144,7 @@ export function Header(props: Props) {
       </ListItem>
     </>)}
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect(`/member/directory/${PersonHelper?.person?.id}`) }}>
+      <ListItemButton onClick={() => { redirect(`/my/directory/${PersonHelper?.person?.id}`) }}>
         <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>
