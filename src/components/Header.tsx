@@ -9,7 +9,7 @@ import { ApiHelper, AppearanceHelper, ArrayHelper, LinkInterface, Permissions, U
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { PersonHelper, SectionInterface } from "@/helpers";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
@@ -43,6 +43,8 @@ export function Header(props: Props) {
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const pathname = usePathname()
+  
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -115,12 +117,7 @@ export function Header(props: Props) {
         {showLogin
           ? (
             <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-              <Chip
-                component="a"
-                href={"/login"}
-                clickable
-                id="loginButton"
-                label="Login"
+              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(pathname) } clickable id="loginButton" label="Login"
                 icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
                 sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
               />
