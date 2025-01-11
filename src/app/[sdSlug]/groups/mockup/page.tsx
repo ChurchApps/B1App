@@ -9,6 +9,7 @@ import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapp
 import { Button, Container, Grid } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { GroupHero } from "../details/[groupId]/components/GroupHero";
 
 type PageParams = Promise<{ sdSlug: string;  }>
 
@@ -37,29 +38,18 @@ export default async function GroupPage({ params }: { params: PageParams }) {
   const { sdSlug } = await params
   const { config } = await loadSharedData(sdSlug);
   
+  const group: GroupInterface = {
+    name: "Discipleship",
+    meetingLocation: "Johnson House",
+    meetingTime: "Tuesdays at 7:30 pm",
+    photoUrl: "https://content.staging.churchapps.org/stockPhotos/4/baptize.png",
+  }
 
 
   return (<>
     <Theme config={config} />
     <DefaultPageWrapper config={config} overlayContent={true} linkColor="light">
-    <div id="groupHero">
-      <div className="content">
-        <Container fixed>
-          
-          <Grid container spacing={2}>
-            <Grid item md={7} xs={12}>
-              <h1>Discipleship</h1>
-              <div style={{paddingTop:15}}>Tuesdays at 7:30 pm</div>
-              <div style={{paddingTop:15}}>Johnson House</div>
-            </Grid>
-          </Grid>
-
-          <div style={{height:30}}></div>
-          <Image className="badge" src={"https://content.staging.churchapps.org/stockPhotos/4/baptize.png"} alt={"Test"} width={320} height={180} style={{width:320}} />
-        </Container>
-        <div style={{height:10}}></div>
-      </div>
-    </div>
+    <GroupHero group={group} />
     <div style={{paddingTop:30}}>
       <Container>
         <Grid container spacing={2}>
