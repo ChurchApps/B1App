@@ -7,19 +7,19 @@ import { Layout } from "@/components";
 import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { PersonHelper } from "@/helpers";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { redirect } from "next/navigation";
 
 interface Props {
   showLogo?: boolean;
-  redirectAfterLogin?: boolean;
+  redirectAfterLogin?: string;
   loginContainerCssProps?: PaperProps;
   keyName?: string;
 }
 
-export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssProps, keyName }: Props) {
+export function Login({ showLogo, redirectAfterLogin, loginContainerCssProps, keyName }: Props) {
   const searchParams = useSearchParams();
-  const [returnUrl, setReturnUrl] = useState<string | null>(null);
+  const [returnUrl, setReturnUrl] = useState<string | null>(redirectAfterLogin);
   const [cookies] = useCookies();
   const context = useContext(UserContext);
   //const [jwt, setJwt] = useState<string>("");
@@ -27,7 +27,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
   useEffect(() => {
     // Set returnUrl from searchParams or default to "/member"
     const urlParam = searchParams.get("returnUrl");
-    setReturnUrl(urlParam || "/my");
+    setReturnUrl(urlParam || redirectAfterLogin || "/my");
   }, [searchParams]);
 
   useEffect(() => {
@@ -39,6 +39,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
 
   const jwt = searchParams.get("jwt") || cookies.jwt;
 
+
   return (
     <Layout withoutNavbar withoutFooter>
       <LoginPage
@@ -49,7 +50,7 @@ export function Login({ showLogo, redirectAfterLogin = true, loginContainerCssPr
         showLogo={showLogo}
         loginContainerCssProps={loginContainerCssProps}
         keyName={keyName}
-        returnUrl={returnUrl || "/member"}
+        returnUrl={returnUrl || "/my"}
       />
     </Layout>
   );

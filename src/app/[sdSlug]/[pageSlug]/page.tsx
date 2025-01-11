@@ -12,6 +12,7 @@ import { StreamPage } from "./components/StreamPage";
 import { DefaultPageWrapper } from "./components/DefaultPageWrapper";
 import { notFound } from "next/navigation";
 import { SermonsPage } from "./components/SermonsPage";
+import { DonatePage } from "./components/DonatePage";
 
 
 
@@ -64,6 +65,7 @@ export default async function Home({ params }: { params: PageParams }) {
       {
         case "votd": result = wrapDefaultPage(<VotdPage />); break;
         case "bible": result = wrapDefaultPage(<BiblePage />); break;
+        case "donate": result = wrapDefaultPage(<DonatePage config={config} />); break;
         case "stream": result = wrapDefaultPage(<StreamPage config={config} />); break;
         case "sermons": result = wrapDefaultPage(<SermonsPage config={config} />); break;
         default: return notFound();

@@ -45,6 +45,7 @@ export const TabsClient = () => {
     if (showPlans) tabs.push({url:"/my/plans", label:"Plans"});
     if (showCheckin) tabs.push({url:"/my/checkin", label:"Check-in"});
     if (showLessons) tabs.push({url:"/my/lessons", label:"Lessons"});
+    tabs.push({url:"/my/donate", label:"Donations"});
     return tabs;
   }
 

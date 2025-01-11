@@ -25,6 +25,7 @@ export async function MyWrapper(props:Props) {
       case "plans": return {url: "/my/plans", label: "Plans"};
       case "checkin": return {url: "/my/checkin", label: "Check-in"};
       case "lessons": return {url: "/my/lessons", label: "Lessons"};
+      case "donate": return {url: "/my/donate", label: "Donations"};
       default: return {url: "/my/timeline", label: "Timeline"};
     }
   }
