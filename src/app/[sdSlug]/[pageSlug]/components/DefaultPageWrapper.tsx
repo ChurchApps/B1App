@@ -27,7 +27,7 @@ export async function DefaultPageWrapper(props: Props) {
       <main>
         <div className="page">
           {!props.overlayContent && <div style={{ paddingTop: 90 }}></div>}
-          
+
           {props.children}
 
         </div>

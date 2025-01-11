@@ -45,7 +45,7 @@ export function Header(props: Props) {
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const pathname = usePathname()
-  
+
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -154,13 +154,13 @@ export function Header(props: Props) {
   const getLinkClass = () => {
     const sections = ArrayHelper.getAll(props.sections, "zone", "main");
     let result = "";
-    
+
     let lc = props.linkColor || (sections.length > 0 ? sections[0].linkColor : null);
     if (lc) {
       lc = lc.replace("var(--", "").replace(")", "");
       result = "links" + lc[0].toUpperCase() + lc.slice(1);
     }
-    
+
     return result;
   }
 

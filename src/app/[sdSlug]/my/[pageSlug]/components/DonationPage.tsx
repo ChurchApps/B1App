@@ -16,10 +16,10 @@ export function DonationsPage(props: Props) {
   return (<>
     <h1>My Donations</h1>
     <BaseDonationPage
-            personId={UserHelper.currentUserChurch?.person?.id}
-            appName="B1App"
-            church={props.config?.church}
-            churchLogo={AppearanceHelper.getLogo( props.config?.appearance, "", "", "#FFF")}
-          />
+      personId={UserHelper.currentUserChurch?.person?.id}
+      appName="B1App"
+      church={props.config?.church}
+      churchLogo={AppearanceHelper.getLogo( props.config?.appearance, "", "", "#FFF")}
+    />
   </>);
 }

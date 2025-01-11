@@ -1,15 +1,14 @@
 "use client";
 
-import { BaseDonationPage } from "@/components/donate/BaseDonationPage";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { AppearanceHelper, NonAuthDonation, UserHelper } from "@churchapps/apphelper";
+import { NonAuthDonation, UserHelper } from "@churchapps/apphelper";
 import { Button, Container,  Grid,  Icon,  Link,  Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 
 type Props = { config?: ConfigurationInterface; };
 
 export function DonatePage(props:Props) {
-  
+
 
   if (UserHelper.currentUserChurch?.person?.id) redirect("/my/donate");
   return <>
@@ -34,5 +33,5 @@ export function DonatePage(props:Props) {
     </Container>
   </>
 
-  
+
 }

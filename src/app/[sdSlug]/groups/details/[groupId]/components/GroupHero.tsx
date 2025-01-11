@@ -12,7 +12,6 @@ export function GroupHero(props: Props) {
   return ( <div id="groupHero">
     <div className="content">
       <Container fixed>
-        
         <Grid container spacing={2}>
           <Grid item md={7} xs={12}>
             <h1>{props.group.name}</h1>

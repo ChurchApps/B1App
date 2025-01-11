@@ -26,23 +26,23 @@ export function StreamSettingsClient(props: WrapperPageProps) {
     <AdminWrapper config={props.config}>
       <Banner><h1>Stream Settings</h1></Banner>
       <div id="mainContent">
-      <Grid container spacing={3}>
-        <Grid item md={8} xs={12}>
-          <Services />
-          <EmbeddablePages onSelected={(page: PageInterface) => setEditPage(page)} pathPrefix="/stream" refreshKey={refreshKey} />
+        <Grid container spacing={3}>
+          <Grid item md={8} xs={12}>
+            <Services />
+            <EmbeddablePages onSelected={(page: PageInterface) => setEditPage(page)} pathPrefix="/stream" refreshKey={refreshKey} />
+          </Grid>
+          <Grid item md={4} xs={12}>
+            {editPage && (
+              <PageEdit page={editPage} updatedCallback={() => {
+                setEditPage(null);
+                setRefreshKey(Math.random());
+              }} embedded={true} />
+            )}
+            <Links category="streamingLink" />
+            <Tabs />
+            <ExternalLinks churchId={props.config.church.id} />
+          </Grid>
         </Grid>
-        <Grid item md={4} xs={12}>
-          {editPage && (
-            <PageEdit page={editPage} updatedCallback={() => {
-              setEditPage(null);
-              setRefreshKey(Math.random());
-            }} embedded={true} />
-          )}
-          <Links category="streamingLink" />
-          <Tabs />
-          <ExternalLinks churchId={props.config.church.id} />
-        </Grid>
-      </Grid>
       </div>
     </AdminWrapper>
   );

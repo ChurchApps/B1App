@@ -13,8 +13,6 @@ import { MyWrapper } from "./components/MyWrapper";
 import { CheckinPage } from "./components/CheckinPage";
 import { LessonsPage } from "./components/LessonsPage";
 import { DirectoryPage } from "./components/DirectoryPage";
-import { BaseDonationPage } from "@/components/donate/BaseDonationPage";
-import { UserHelper, AppearanceHelper } from "@churchapps/apphelper";
 import { DonationsPage } from "./components/DonationPage";
 
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>

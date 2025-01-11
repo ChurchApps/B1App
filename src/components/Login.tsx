@@ -7,7 +7,7 @@ import { Layout } from "@/components";
 import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { PersonHelper } from "@/helpers";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { redirect } from "next/navigation";
 
 interface Props {
