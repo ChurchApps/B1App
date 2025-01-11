@@ -35,7 +35,7 @@ export async function MyWrapper(props:Props) {
       <Grid container spacing={2}>
         <Grid item xs={12} md={2}>
           <div className="sideNav" style={{height:"100vh", borderRight:"1px solid #CCC" }}>
-            <TabsClient />
+            <TabsClient config={props.config} />
           </div>
         </Grid>
         <Grid item xs={12} md={10}>

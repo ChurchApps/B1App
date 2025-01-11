@@ -5,12 +5,10 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
+import { FormPage } from "./components/FormPage";
+import { notFound } from "next/navigation";
+import { DefaultPageWrapper } from "../components/DefaultPageWrapper";
 
-import { TimelinePage } from "../components/TimelinePage";
-import { MyWrapper } from "../components/MyWrapper";
-
-import { PersonPage } from "../components/PersonPage";
-import { PlanClient } from "../components/PlanClient";
 
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; id:string; }>
 
@@ -23,7 +21,7 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
   const { sdSlug, pageSlug } =  await params;
   const props = await loadSharedData(sdSlug, pageSlug);
 
-  const title = "My....";
+  const title = "Forms";
   return MetaHelper.getMetaData(title + " - " + props.config.church.name, "My", props.config.appearance.ogImage);
 }
 
@@ -40,28 +38,25 @@ export default async function Home({ params }: { params: PageParams }) {
   let label = "Plan Details";
   switch (pageSlug)
   {
-    case "plans": label = "Plan Details"; break;
-    case "community": label = "Community Details"; break;
     case "forms": label = "Form"; break;
   }
 
   const getPageContent = () => {
     switch (pageSlug)
     {
-      case "plans": return <PlanClient planId={id} />;
-      case "community": return <PersonPage personId={id}  />;
-      default: return <TimelinePage />;
-      //default: return notFound();
+      case "forms": return wrapDefaultPage(<FormPage config={config} formId={id} />);
+      default: return notFound();
     }
   }
+
+  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper config={config}>
+    {content}
+  </DefaultPageWrapper>
 
   return (
     <>
       <Theme config={config} />
-      <MyWrapper pageSlug={pageSlug} idLabel={label} config={config}>
-        {getPageContent()}
-      </MyWrapper>
-
+      {getPageContent()}
       <Animate />
     </>
   );
