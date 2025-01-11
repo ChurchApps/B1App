@@ -19,6 +19,7 @@ type Props = {
   overlayContent: boolean;
   sections?: SectionInterface[];
   editMode?: boolean;
+  linkColor?: string;
 };
 
 //structure navLinks based on their parentId
@@ -153,13 +154,13 @@ export function Header(props: Props) {
   const getLinkClass = () => {
     const sections = ArrayHelper.getAll(props.sections, "zone", "main");
     let result = "";
-    if (sections?.length > 0) {
-      let lc = sections[0].linkColor;
-      if (lc) {
-        lc = lc.replace("var(--", "").replace(")", "");
-        result = "links" + lc[0].toUpperCase() + lc.slice(1);
-      }
+    
+    let lc = props.linkColor || (sections.length > 0 ? sections[0].linkColor : null);
+    if (lc) {
+      lc = lc.replace("var(--", "").replace(")", "");
+      result = "links" + lc[0].toUpperCase() + lc.slice(1);
     }
+    
     return result;
   }
 
