@@ -1,8 +1,9 @@
-"use server";
+"use client";
 
+import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
-import { Button } from "@mui/material";
+import { GroupContact } from "./GroupContact";
 
 interface Props {
   config: ConfigurationInterface
@@ -11,16 +12,17 @@ interface Props {
   leaders: GroupMemberInterface[];
 }
 
-export async function UnauthenticatedView(props: Props) {
+export function UnauthenticatedView(props: Props) {
 
+  EnvironmentHelper.init();
   const getLeaders = () => {
     const result: JSX.Element[] = [];
     props.leaders.forEach((l) => {
       // console.log("name:", l.person.name.display, "photo:", l.person.photo);
       // console.log("photo:", l.person.photo ? l.person.photo : "public/images/sample-profile.png");
-      result.push(<div style={{ display: "flex", width: "20%", height: "30px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px" }}>
+      result.push(<div key={l.person.id} style={{ display: "flex", width: "20%", height: "30px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px" }}>
         <div style={{ width: "30%", lineHeight: "30px" }}>
-          <img src={l.person.photo ? l.person.photo : "public/images/sample-profile.png"} />
+          <img src={l.person.photo ? EnvironmentHelper.Common.ContentRoot + l.person.photo : EnvironmentHelper.Common.ContentRoot + "/public/images/sample-profile.png"} />
         </div>
         <div style={{ width: "70%", lineHeight: "30px" }}>{l.person.name.display}</div>
       </div>);
@@ -28,6 +30,8 @@ export async function UnauthenticatedView(props: Props) {
     });
     return result;
   }
+
+
 
   const getEvents = () => {
     const result: JSX.Element[] = [];
@@ -53,10 +57,15 @@ export async function UnauthenticatedView(props: Props) {
             <div style={{ fontStyle: "italic" }}>{e.description}</div>
           </div>
         </div>)
-      } else if (result.length === 0) {
-        result.push(<div style={{ fontStyle: "italic", height: "80px", lineHeight: "80px", fontSize: "18px" }}>No upcoming events found for selected group.</div>);
+      } else {
+        return result;
       }
     });
+    if (result.length === 0) {
+      result.push(<div style={{ fontStyle: "italic", height: "80px", lineHeight: "80px", fontSize: "18px" }}>No upcoming events found for selected group.</div>);
+    } else {
+      return result;
+    }
     return result;
   }
 
@@ -81,9 +90,18 @@ export async function UnauthenticatedView(props: Props) {
       </div>
 
     </div>
+    <GroupContact group={props.group} leaders={props.leaders} />
+    {/* <div>
+      <Form>
+        <Form.Group>
+          <Form.Label>Woah</Form.Label>
+          <Form.Control type="email"></Form.Control>
+        </Form.Group>
+      </Form>
+    </div> 
     <div style={{ margin: "40px 0px", textAlign: "center" }}>
       <Button style={{ fontWeight: "bold", fontSize: "26px" }}>Request to Join Group</Button>
-    </div>
+    </div>*/}
   </>
 
 

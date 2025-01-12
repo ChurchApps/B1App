@@ -615,6 +615,17 @@ a.dropdown-toggle::after {
   background-color: var(--light-bg-text-color);
 }
 
+.formItem {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.formInputs {
+  height: 60px;
+  width: 800px;
+  font-size: 30px;
+}
+
 code {
   color: #000;
 }
