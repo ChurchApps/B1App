@@ -41,6 +41,7 @@ export function UnauthenticatedView(props: Props) {
       // console.log("name:", e.title, "desc:", e.description, e.start);
       const startDate = new Date(e.start);
       const monthAbb = startDate.toLocaleString('en-US', { month: 'short' });
+      const dayShort = startDate.toLocaleString('en-Us', { day: '2-digit' });
 
       if (result.length < 3 && startDate > currDate) {
         // console.log("start date:", startDate);
@@ -49,7 +50,7 @@ export function UnauthenticatedView(props: Props) {
             <div style={{ width: "70%" }}></div>
             <div className="calbox" style={{ width: "30%", lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
               <p style={{ lineHeight: "16px" }}>{monthAbb}</p>
-              <p style={{ lineHeight: "16px" }}>{startDate.getDay().toString()}</p>
+              <p style={{ lineHeight: "16px" }}>{dayShort}</p>
             </div>
           </div>
           <div style={{ width: "60%", textAlign: "left", lineHeight: "40px", paddingLeft: "5px" }}>
