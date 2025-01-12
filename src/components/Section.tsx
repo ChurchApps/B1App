@@ -146,8 +146,6 @@ export const Section: React.FC<Props> = props => {
   }
   else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
 
-  console.log("SECTION CONTENT", props.section.blockId, getElements().length)
-
   if (props.onEdit) {
     return (
       <DraggableWrapper  dndType="section" elementType="section" data={props.section} onDoubleClick={() => props.onEdit(props.section, null)}>

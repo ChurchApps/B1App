@@ -13,8 +13,6 @@ type Props = {
 export function Footer(props: Props) {
 
   if (props.footerSections?.length>0) {
-    console.log("Footer Sections", props.footerSections.length, props.footerSections[0].elements?.length);
-
     return <Zone church={props.config?.church} sections={props.footerSections} zone="siteFooter" churchSettings={props.config?.appearance} />
   }
   else {

@@ -13,6 +13,7 @@ import { MyWrapper } from "./components/MyWrapper";
 import { CheckinPage } from "./components/CheckinPage";
 import { LessonsPage } from "./components/LessonsPage";
 import { DirectoryPage } from "./components/DirectoryPage";
+import { DonationsPage } from "./components/DonationPage";
 
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
 
@@ -47,6 +48,7 @@ export default async function Home({ params }: { params: PageParams }) {
       case "groups": return <GroupsPage />;
       case "lessons": return <LessonsPage />;
       case "community": return <DirectoryPage />
+      case "donate": return <DonationsPage config={config} />
       default: return <TimelinePage />;
       //default: return notFound();
     }

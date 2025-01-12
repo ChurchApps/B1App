@@ -36,7 +36,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
     ApiHelper.get("/pages", "ContentApi").then((_pages) => {
       let filteredPages:PageInterface[] = [];
       _pages.forEach((p:PageInterface) => {
-        if (!p.url?.startsWith("/stream/") && !p.url?.startsWith("/member/")) filteredPages.push(p);
+        if (!p.url?.startsWith("/stream/")) filteredPages.push(p);
       });
       setPages(filteredPages || [])
     });

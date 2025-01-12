@@ -24,7 +24,6 @@ export function HeaderFooter(props: Props) {
   }
 
   const footerSections = ArrayHelper.getAll(props.pageData.sections, "zone", "siteFooter");
-  console.log("Footer Sections", footerSections);
 
   return (
     <>

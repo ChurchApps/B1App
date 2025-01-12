@@ -5,9 +5,11 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { CssBaseline } from "@mui/material";
 
 type Props = {
+  overlayContent?: boolean;
   ogDescription?: string;
   config?: ConfigurationInterface
   children: JSX.Element | JSX.Element[];
+  linkColor?: string;
 };
 
 
@@ -21,11 +23,11 @@ export async function DefaultPageWrapper(props: Props) {
   return (<>
     <CssBaseline />
     <div>
-      <Header config={props.config} overlayContent={false} sections={[]} />
+      <Header config={props.config} overlayContent={props.overlayContent} sections={[]} linkColor={props.linkColor} />
       <main>
         <div className="page">
-          <div style={{paddingTop:90}}>
-          </div>
+          {!props.overlayContent && <div style={{ paddingTop: 90 }}></div>}
+
           {props.children}
 
         </div>

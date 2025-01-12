@@ -6,9 +6,13 @@ import { UserHelper, ApiHelper } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
+interface Props {
+  config: ConfigurationInterface;
+}
 
-export const TabsClient = () => {
+export const TabsClient = (props: Props) => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
   const tabs: any[] = []
@@ -27,6 +31,7 @@ export const TabsClient = () => {
     const memberStatus = context.userChurch?.person?.membershipStatus?.toLowerCase();
 
     let showMyGroups = false,
+      showDonations = props.config.allowDonations,
       showPlans = false,
       showDirectory = memberStatus === "member" || memberStatus === "staff",
       showLessons = classRoooms.length > 0,
@@ -45,6 +50,7 @@ export const TabsClient = () => {
     if (showPlans) tabs.push({url:"/my/plans", label:"Plans"});
     if (showCheckin) tabs.push({url:"/my/checkin", label:"Check-in"});
     if (showLessons) tabs.push({url:"/my/lessons", label:"Lessons"});
+    if (showDonations) tabs.push({url:"/my/donate", label:"Donations"});
     return tabs;
   }
 

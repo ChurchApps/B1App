@@ -9,7 +9,7 @@ import { ApiHelper, AppearanceHelper, ArrayHelper, LinkInterface, Permissions, U
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { PersonHelper, SectionInterface } from "@/helpers";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
@@ -19,6 +19,7 @@ type Props = {
   overlayContent: boolean;
   sections?: SectionInterface[];
   editMode?: boolean;
+  linkColor?: string;
 };
 
 //structure navLinks based on their parentId
@@ -43,6 +44,8 @@ export function Header(props: Props) {
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const pathname = usePathname()
+
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -115,12 +118,7 @@ export function Header(props: Props) {
         {showLogin
           ? (
             <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-              <Chip
-                component="a"
-                href={"/login"}
-                clickable
-                id="loginButton"
-                label="Login"
+              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(pathname) } clickable id="loginButton" label="Login"
                 icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
                 sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
               />
@@ -132,7 +130,7 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect("/member") }}>
+      <ListItemButton onClick={() => { redirect("/my") }}>
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
@@ -146,7 +144,7 @@ export function Header(props: Props) {
       </ListItem>
     </>)}
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect(`/member/directory/${PersonHelper?.person?.id}`) }}>
+      <ListItemButton onClick={() => { redirect(`/my/directory/${PersonHelper?.person?.id}`) }}>
         <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>
@@ -156,13 +154,13 @@ export function Header(props: Props) {
   const getLinkClass = () => {
     const sections = ArrayHelper.getAll(props.sections, "zone", "main");
     let result = "";
-    if (sections?.length > 0) {
-      let lc = sections[0].linkColor;
-      if (lc) {
-        lc = lc.replace("var(--", "").replace(")", "");
-        result = "links" + lc[0].toUpperCase() + lc.slice(1);
-      }
+
+    let lc = props.linkColor || (sections.length > 0 ? sections[0].linkColor : null);
+    if (lc) {
+      lc = lc.replace("var(--", "").replace(")", "");
+      result = "links" + lc[0].toUpperCase() + lc.slice(1);
     }
+
     return result;
   }
 

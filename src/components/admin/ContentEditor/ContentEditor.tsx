@@ -142,8 +142,7 @@ export default function ContentEditor(props: Props) {
     if (props.pageId) {
       const page = container as PageInterface;
       if (page.layout === "embed") {
-        if (page.url.includes("/member")) url = '/admin';
-        else if (page.url.includes("/stream")) url = '/admin/video/settings';
+        if (page.url.includes("/stream")) url = '/admin/video/settings';
       }
     }
     props.onDone(url);
