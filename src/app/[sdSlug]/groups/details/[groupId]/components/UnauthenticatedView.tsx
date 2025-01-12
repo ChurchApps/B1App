@@ -90,18 +90,8 @@ export function UnauthenticatedView(props: Props) {
       </div>
 
     </div>
-    <GroupContact group={props.group} leaders={props.leaders} />
-    {/* <div>
-      <Form>
-        <Form.Group>
-          <Form.Label>Woah</Form.Label>
-          <Form.Control type="email"></Form.Control>
-        </Form.Group>
-      </Form>
-    </div> 
-    <div style={{ margin: "40px 0px", textAlign: "center" }}>
-      <Button style={{ fontWeight: "bold", fontSize: "26px" }}>Request to Join Group</Button>
-    </div>*/}
+    <GroupContact group={props.group} leaders={props.leaders} config={props.config} />
+
   </>
 
 

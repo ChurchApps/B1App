@@ -1,19 +1,50 @@
 "use client";
 
-import { GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
-import { Button, FormControl } from "@mui/material";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { ApiHelper, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { useState } from "react";
 
 interface Props {
     leaders: GroupMemberInterface[];
     group: GroupInterface;
+    config: ConfigurationInterface;
 }
 
 export function GroupContact(props: Props) {
 
+    const [formData, setFormData] = useState<any>({ churchId: props.config.church.id });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
+        const val = e.target.value;
+        const fd = { ...formData }
+        switch (e.target.name) {
+            case "personId": fd.personId = val; break;
+            case "firstName": fd.firstName = val; break;
+            case "lastName": fd.lastName = val; break;
+            case "email": fd.email = val; break;
+            case "phone": fd.phone = val; break;
+            case "message": fd.message = val; break;
+        }
+        setFormData(fd);
+        console.log(fd);
+    }
+
+    const handleSubmit = (e: React.MouseEvent) => {
+        if (e !== null) e.preventDefault();
+        const email = {
+            churchId: formData.churchId,
+            personId: formData.personId,
+            subject: "Contact Request For " + props.group.name,
+            body: formData.message
+        }
+        ApiHelper.post("/people/public/email", email, "MembershipApi");
+    }
+
     const getSelectLeaders = () => {
         const result: JSX.Element[] = [];
         props.leaders.forEach((l) => {
-            result.push(<option value={l.personId} key={l.personId}>{l.person.name.display}</option>);
+            result.push(<MenuItem value={l.personId} key={l.personId}>{l.person.name.display}</MenuItem>);
         });
         return result;
     }
@@ -22,35 +53,18 @@ export function GroupContact(props: Props) {
         <div style={{ marginLeft: "20px" }}>
             <h2>Contact Group Leader:</h2>
             <form>
-                <FormControl>
-                    <label className="formItem">Contact:</label>
-                    <select id="contact" name="contact" className="formInputs">
+                <FormControl fullWidth>
+                    <InputLabel>Contact</InputLabel>
+                    <Select fullWidth label="Contact" name="personId" value={formData.personId || ""} onChange={handleChange}>
                         {getSelectLeaders()}
-                    </select>
-                </FormControl><br />
-                <FormControl>
-                    <label className="formItem">First Name:</label>
-                    <input type="text" id="first" name="first" className="formInputs"></input>
-                </FormControl><br />
-                <FormControl>
-                    <label className="formItem">Last Name:</label>
-                    <input type="text" id="last" name="last" className="formInputs"></input>
-                </FormControl><br />
-                <FormControl>
-                    <label className="formItem">Email Address:</label>
-                    <input type="email" id="email" name="email" className="formInputs"></input>
-                </FormControl><br />
-                <FormControl>
-                    <label className="formItem">Phone Number:</label>
-                    <input type="number" id="phone" name="phone" className="formInputs"></input>
-                </FormControl><br />
-                <FormControl>
-                    <label className="formItem">Message:</label>
-                    <textarea id="message" name="message" className="formInputs"></textarea>
-                </FormControl><br />
-                <FormControl>
-                    <Button>Submit</Button>
+                    </Select>
                 </FormControl>
+                <TextField fullWidth label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} />
+                <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} />
+                <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} />
+                <TextField fullWidth label="Phone Number" name="phone" value={formData.phone} onChange={handleChange} />
+                <TextField fullWidth label="Message" name="message" value={formData.message} onChange={handleChange} multiline />
+                <Button onClick={handleSubmit}>Submit</Button>
             </form>
         </div>
     </>
