@@ -4,6 +4,8 @@ import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
 import { GroupContact } from "./GroupContact";
+import { GroupHero } from "./GroupHero";
+import { Avatar } from "@mui/material";
 
 interface Props {
   config: ConfigurationInterface
@@ -22,7 +24,7 @@ export function UnauthenticatedView(props: Props) {
       // console.log("photo:", l.person.photo ? l.person.photo : "public/images/sample-profile.png");
       result.push(<div key={l.person.id} style={{ display: "flex", width: "20%", height: "30px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px" }}>
         <div style={{ width: "30%", lineHeight: "30px" }}>
-          <img src={l.person.photo ? EnvironmentHelper.Common.ContentRoot + l.person.photo : EnvironmentHelper.Common.ContentRoot + "/public/images/sample-profile.png"} />
+          <Avatar src={l.person.photo ? EnvironmentHelper.Common.ContentRoot + l.person.photo : EnvironmentHelper.Common.ContentRoot + "/public/images/sample-profile.png"} />
         </div>
         <div style={{ width: "70%", lineHeight: "30px" }}>{l.person.name.display}</div>
       </div>);
@@ -45,7 +47,7 @@ export function UnauthenticatedView(props: Props) {
 
       if (result.length < 3 && startDate > currDate) {
         // console.log("start date:", startDate);
-        result.push(<div style={{ display: "flex" }}>
+        result.push(<div style={{ display: "flex" }} key={e.id}>
           <div style={{ display: "flex", width: "40%", height: "80px", marginBottom: "5px" }}>
             <div style={{ width: "70%" }}></div>
             <div className="calbox" style={{ width: "30%", lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
@@ -71,18 +73,19 @@ export function UnauthenticatedView(props: Props) {
   }
 
   return <>
-    <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={props.group.photoUrl} /></div>
-    <div style={{ display: "flex" }}>
+    <GroupHero group={props.group} />
+    {/* <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={props.group.photoUrl} /></div> */}
+    <div style={{ display: "flex", marginTop: "5px" }}>
       <div style={{ textAlign: "center", width: "60%" }}>
-        <h1 id="gpn" style={{ padding: "20px 0px", margin: "0px" }}>{props.group.name}</h1>
+        {/* <h1 id="gpn" style={{ padding: "20px 0px", margin: "0px" }}>{props.group.name}</h1> */}
         <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>About Us: </span>{props.group.about}</p>
 
         <div style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", display: "flex" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Leader(s): </span>
           {getLeaders()}
         </div>
 
-        <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Schedule: </span>{props.group.meetingTime}</p>
-        <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Located: </span>{props.group.meetingLocation}</p>
+        {/* <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Schedule: </span>{props.group.meetingTime}</p>
+        <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Located: </span>{props.group.meetingLocation}</p> */}
       </div>
 
       <div style={{ textAlign: "center", width: "40%" }}>
