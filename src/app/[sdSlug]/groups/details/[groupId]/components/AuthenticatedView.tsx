@@ -10,6 +10,8 @@ import { TabContext, TabPanel } from "@mui/lab";
 import { GroupTimeline } from "@/components/member/timeline/GroupTimeline";
 import { GroupFiles } from "@/components/groups/GroupFiles";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { GroupHero } from "./GroupHero";
+import { GroupTabs } from "./GroupTabs";
 
 interface Props {
   config: ConfigurationInterface;
@@ -73,56 +75,67 @@ export function AuthenticatedView(props: Props) {
   });
 
   return (
-    <Container>
-      <Grid container spacing={3} alignItems="flex-start">
-        <Grid item md={8} xs={12}>
-          {props.group
-            ? (
-              <>
-                <h1>{props.group.name}</h1>
-                {props.group.photoUrl && <img id="tabImage" src={props.group.photoUrl} alt={props.group.name} style={{ maxHeight: 300 }} />}
-                <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
-                  <MarkdownPreviewLight value={props.group.about} />
-                </div>
-
-                <TabContext value={tabIndex}>
-                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} aria-label="actions" centered>
-                      <Tab label="Feed" sx={{ textTransform: "unset" }} value="0" />
-                      <Tab label="Group Calendar" sx={{ textTransform: "unset" }} value="1" />
-                      <Tab label="Conversations" sx={{ textTransform: "unset" }} value="2" />
-                      <Tab label="Files" sx={{ textTransform: "unset" }} value="3" />
-                    </Tabs>
-                  </Box>
-                  <TabPanel value="0">
-                    <div style={{ maxWidth: 750, marginLeft: "auto", marginRight: "auto" }}>
-                      <GroupTimeline context={context} groupId={props.group.id} />
+    <>
+      <GroupHero group={props.group} />
+      <Container>
+        <div id="mainContent">
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={2}>
+              <div className="sideNav" style={{height:"100vh", borderRight:"1px solid #CCC" }}>
+                <GroupTabs config={props.config} />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={10}>
+              {props.group
+                ? (
+                  <>
+                    <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
+                      <MarkdownPreviewLight value={props.group.about} />
                     </div>
-                  </TabPanel>
-                  <TabPanel value="1">
-                    <DisplayBox headerText="Group Calendar">
-                      <GroupCalendar groupId={props.group.id} churchId={props.config.church.id} canEdit={isLeader} />
-                    </DisplayBox>
-                  </TabPanel>
-                  <TabPanel value="2">
-                    <Conversations context={context} contentType="group" contentId={props.group.id} groupId={props.group.id} />
-                  </TabPanel>
-                  <TabPanel value="3">
-                    <GroupFiles context={context} groupId={props.group.id} />
-                  </TabPanel>
-                </TabContext>
-              </>
-            )
-            : (
-              <p>No group data found</p>
-            )}
-        </Grid>
-        <Grid item md={4} xs={12} sx={{ mt: 11 }}>
-          <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">
-            {getTable()}
-          </DisplayBox>
-        </Grid>
-      </Grid>
-    </Container>
+
+                    <TabContext value={tabIndex}>
+                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} aria-label="actions" centered>
+                          <Tab label="Feed" sx={{ textTransform: "unset" }} value="0" />
+                          <Tab label="Group Calendar" sx={{ textTransform: "unset" }} value="1" />
+                          <Tab label="Conversations" sx={{ textTransform: "unset" }} value="2" />
+                          <Tab label="Files" sx={{ textTransform: "unset" }} value="3" />
+                        </Tabs>
+                      </Box>
+                      <TabPanel value="0">
+                        <div style={{ maxWidth: 750, marginLeft: "auto", marginRight: "auto" }}>
+                          <GroupTimeline context={context} groupId={props.group.id} />
+                        </div>
+                      </TabPanel>
+                      <TabPanel value="1">
+                        <DisplayBox headerText="Group Calendar">
+                          <GroupCalendar groupId={props.group.id} churchId={props.config.church.id} canEdit={isLeader} />
+                        </DisplayBox>
+                      </TabPanel>
+                      <TabPanel value="2">
+                        <Conversations context={context} contentType="group" contentId={props.group.id} groupId={props.group.id} />
+                      </TabPanel>
+                      <TabPanel value="3">
+                        <GroupFiles context={context} groupId={props.group.id} />
+                      </TabPanel>
+                    </TabContext>
+                  </>
+                )
+                : (
+                  <p>No group data found</p>
+                )}
+
+
+              <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">
+                {getTable()}
+              </DisplayBox>
+            </Grid>
+          </Grid>
+        </div>
+
+
+
+      </Container>
+    </>
   );
 }
