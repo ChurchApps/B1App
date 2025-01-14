@@ -2,8 +2,8 @@
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
-import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
-import { useState } from "react";
+import { Alert, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
 
 interface Props {
     leaders: GroupMemberInterface[];
@@ -30,7 +30,9 @@ export function GroupContact(props: Props) {
         console.log(fd);
     }
 
-    const handleSubmit = (e: React.MouseEvent) => {
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const handleSubmit = async (e: React.MouseEvent) => {
         if (e !== null) e.preventDefault();
         const email = {
             churchId: formData.churchId,
@@ -43,7 +45,13 @@ export function GroupContact(props: Props) {
                 "Phone Number: " + formData.phone + "<br />" +
                 "Message: " + formData.message
         }
-        ApiHelper.post("/people/public/email", email, "MembershipApi");
+
+        try {
+            await ApiHelper.post("/people/public/email", email, "MembershipApi");
+            setIsSubmitted(true);
+        } catch (error) {
+            console.error("Error sending email:", error);
+        }
     }
 
     const getSelectLeaders = () => {
@@ -54,23 +62,38 @@ export function GroupContact(props: Props) {
         return result;
     }
 
-    return <>
-        <div style={{ marginLeft: "20px" }}>
+    useEffect(() => {
+        if (props.leaders?.length > 0) {
+            const fd = { ...formData }
+            fd.personId = props.leaders[0].personId;
+            setFormData(fd);
+        }
+    }, [props.leaders])
+
+    if (props.leaders?.length < 1) return <></>
+    else return <>
+        <div>
             <h2>Contact Group Leader:</h2>
             <form>
-                <FormControl fullWidth>
+                {(props.leaders?.length > 1) && <FormControl fullWidth>
                     <InputLabel>Contact</InputLabel>
                     <Select fullWidth label="Contact" name="personId" value={formData.personId || ""} onChange={handleChange}>
                         {getSelectLeaders()}
                     </Select>
-                </FormControl>
+                </FormControl>}
                 <TextField fullWidth label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} />
                 <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} />
                 <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} />
                 <TextField fullWidth label="Phone Number" name="phone" value={formData.phone} onChange={handleChange} />
                 <TextField fullWidth label="Message" name="message" value={formData.message} onChange={handleChange} multiline />
-                <Button onClick={handleSubmit}>Submit</Button>
+                <Button onClick={handleSubmit} id="conbtn" style={{ height: "50px", fontWeight: "bold", width: "40%", marginBottom: "10px" }}>Submit</Button>
             </form>
+
+            {isSubmitted && (
+                <Alert sx={{ align: "center", fontSize: "18px", fontStyle: "italic", marginBottom: "10px" }} severity="success">
+                    Your message has been sent!&nbsp;
+                </Alert>
+            )}
         </div>
     </>
 }

@@ -609,10 +609,16 @@ a.dropdown-toggle::after {
   color: inherit;
 }
 
-#gpn,
-.calbox {
-  color: var(--dark-bg-text-color);
-  background-color: var(--light-bg-text-color);
+.calbox,
+#conbtn {
+  color: #FFFFFF;
+  background: linear-gradient(rgb(0, 0, 0), var(--darkAccent));
+}
+
+@media (max-width: 768px) {
+  #calEntity {
+    order: -1;
+  }
 }
 
 code {

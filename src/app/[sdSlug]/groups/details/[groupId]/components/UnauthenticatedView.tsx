@@ -5,7 +5,8 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
 import { GroupContact } from "./GroupContact";
 import { GroupHero } from "./GroupHero";
-import { Avatar } from "@mui/material";
+import { Avatar, Container, Grid } from "@mui/material";
+import { useEffect, useState } from "react";
 
 interface Props {
   config: ConfigurationInterface
@@ -22,79 +23,85 @@ export function UnauthenticatedView(props: Props) {
     props.leaders.forEach((l) => {
       // console.log("name:", l.person.name.display, "photo:", l.person.photo);
       // console.log("photo:", l.person.photo ? l.person.photo : "public/images/sample-profile.png");
-      result.push(<div key={l.person.id} style={{ display: "flex", width: "20%", height: "30px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px" }}>
-        <div style={{ width: "30%", lineHeight: "30px" }}>
+      result.push(<Grid container item xs={6} md={2} key={l.person.id} style={{ height: "50px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px", borderRadius: "40px" }}>
+        <Grid item md={4} style={{ padding: "5px" }}>
           <Avatar src={l.person.photo ? EnvironmentHelper.Common.ContentRoot + l.person.photo : EnvironmentHelper.Common.ContentRoot + "/public/images/sample-profile.png"} />
-        </div>
-        <div style={{ width: "70%", lineHeight: "30px" }}>{l.person.name.display}</div>
-      </div>);
+        </Grid>
+        <Grid item md={8} style={{ lineHeight: "50px" }}><a href={"/my/community/" + l.person.id} style={{ color: "black" }}>{l.person.name.display}</a></Grid>
+      </Grid>);
       // console.log("RESULT:", result);
     });
     return result;
   }
 
+  const [hidden, setHidden] = useState("block");
+  const [shift, setShift] = useState(8);
+  const [events, setEvents] = useState<JSX.Element[]>([]);
 
-
-  const getEvents = () => {
+  useEffect(() => {
     const result: JSX.Element[] = [];
     const currDate = new Date();
 
     props.events.forEach((e) => {
-      // console.log("name:", e.title, "desc:", e.description, e.start);
       const startDate = new Date(e.start);
       const monthAbb = startDate.toLocaleString('en-US', { month: 'short' });
       const dayShort = startDate.toLocaleString('en-Us', { day: '2-digit' });
 
       if (result.length < 3 && startDate > currDate) {
-        // console.log("start date:", startDate);
-        result.push(<div style={{ display: "flex" }} key={e.id}>
-          <div style={{ display: "flex", width: "40%", height: "80px", marginBottom: "5px" }}>
-            <div style={{ width: "70%" }}></div>
-            <div className="calbox" style={{ width: "30%", lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
+        result.push(<Grid container key={e.id}>
+          <Grid container item xs={4} md={4} style={{ height: "80px", marginBottom: "10px" }}>
+            <Grid item xs={5} md={5}></Grid>
+            <Grid item xs={7} md={7} className="calbox" style={{ lineHeight: "80px", borderRadius: "15%", fontWeight: "bold" }}>
               <p style={{ lineHeight: "16px" }}>{monthAbb}</p>
               <p style={{ lineHeight: "16px" }}>{dayShort}</p>
-            </div>
-          </div>
-          <div style={{ width: "60%", textAlign: "left", lineHeight: "40px", paddingLeft: "5px" }}>
+            </Grid>
+          </Grid>
+          <Grid item xs={8} md={8} style={{ textAlign: "left", lineHeight: "40px", paddingLeft: "5px" }}>
             <div style={{ fontWeight: "bold" }}>{e.title}</div>
             <div style={{ fontStyle: "italic" }}>{e.description}</div>
-          </div>
-        </div>)
-      } else {
-        return result;
+          </Grid>
+        </Grid>);
       }
     });
+
     if (result.length === 0) {
-      result.push(<div style={{ fontStyle: "italic", height: "80px", lineHeight: "80px", fontSize: "18px" }}>No upcoming events found for selected group.</div>);
+      setHidden("none");
+      setShift(12);
     } else {
-      return result;
+      setHidden("block");
+      setShift(8);
     }
-    return result;
-  }
+
+    setEvents(result);
+  }, [props.events]);
 
   return <>
+
+
     <GroupHero group={props.group} />
-    {/* <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={props.group.photoUrl} /></div> */}
-    <div style={{ display: "flex", marginTop: "5px" }}>
-      <div style={{ textAlign: "center", width: "60%" }}>
-        {/* <h1 id="gpn" style={{ padding: "20px 0px", margin: "0px" }}>{props.group.name}</h1> */}
-        <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>About Us: </span>{props.group.about}</p>
+    <Container>
+      {/* <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={props.group.photoUrl} /></div> */}
+      <div style={{ marginTop: "40px", textAlign: "center" }}>
+        <p style={{ padding: "0px 20px", fontSize: "22px", textAlign: "left" }}>{props.group.about}</p>
 
-        <div style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", display: "flex" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Leader(s): </span>
+        <Grid container style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", lineHeight: "50px" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Leader(s): </span>
           {getLeaders()}
-        </div>
-
-        {/* <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Schedule: </span>{props.group.meetingTime}</p>
-        <p style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Located: </span>{props.group.meetingLocation}</p> */}
+        </Grid>
       </div>
 
-      <div style={{ textAlign: "center", width: "40%" }}>
-        <h2 style={{ padding: "20px 0px", margin: "0px" }}>Calendar Events:</h2>
-        {getEvents()}
-      </div>
+      <Grid container spacing={4}>
+        <Grid item md={shift} xs={12} style={{ textAlign: "center" }}>
+          <GroupContact group={props.group} leaders={props.leaders} config={props.config} />
+        </Grid>
 
-    </div>
-    <GroupContact group={props.group} leaders={props.leaders} config={props.config} />
+        <Grid item md={4} xs={12} style={{ display: hidden, textAlign: "center" }} id="calEntity">
+          <h2 style={{ padding: "20px 0px", margin: "15px 0px" }}>Calendar Events:</h2>
+          {events}
+        </Grid>
+      </Grid>
+
+
+    </Container>
 
   </>
 
