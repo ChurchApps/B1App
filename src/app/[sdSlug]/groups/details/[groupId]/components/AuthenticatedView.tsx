@@ -2,12 +2,10 @@
 
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
-import { Grid, Box, Table, TableBody, TableCell, TableRow, Tab, Tabs, Container } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableRow, Container } from "@mui/material";
 import { GroupInterface, ApiHelper, UserHelper, PersonHelper, MarkdownPreviewLight, Conversations, DisplayBox, Loading } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
-import { TabContext, TabPanel } from "@mui/lab";
-import { GroupTimeline } from "@/components/member/timeline/GroupTimeline";
 import { GroupFiles } from "@/components/groups/GroupFiles";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { GroupHero } from "./GroupHero";
@@ -21,7 +19,7 @@ interface Props {
 export function AuthenticatedView(props: Props) {
   const [groupMembers, setGroupMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [tabIndex, setTabIndex] = useState("0");
+  const [tab, setTab] = useState("details");
 
   const context = useContext(UserContext);
 
@@ -74,6 +72,29 @@ export function AuthenticatedView(props: Props) {
     if (g.id === props.group?.id && g.leader) isLeader = true;
   });
 
+  const getTabContent = () => {
+    console.log("Tab is", tab)
+    let result = <></>
+    switch (tab) {
+      case "details":
+        result = <><h2>Details</h2><div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}><MarkdownPreviewLight value={props.group.about} /></div></>
+        break;
+      case "calendar":
+        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={props.group.id} churchId={props.config.church.id} canEdit={isLeader} /></DisplayBox></>
+        break;
+      case "conversations":
+        result = <><h2>Conversations</h2><Conversations context={context} contentType="group" contentId={props.group.id} groupId={props.group.id} /></>
+        break;
+      case "files":
+        result = <><h2>Files</h2><GroupFiles context={context} groupId={props.group.id} /></>
+        break;
+      case "members":
+        result = <><h2>Members</h2><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></>
+        break;
+    }
+    return result;
+  }
+
   return (
     <>
       <GroupHero group={props.group} />
@@ -82,53 +103,16 @@ export function AuthenticatedView(props: Props) {
           <Grid container spacing={2}>
             <Grid item xs={12} md={2}>
               <div className="sideNav" style={{height:"100vh", borderRight:"1px solid #CCC" }}>
-                <GroupTabs config={props.config} />
+                <GroupTabs config={props.config} onTabChange={(val:string) => { setTab(val) }} />
               </div>
             </Grid>
             <Grid item xs={12} md={10}>
               {props.group
-                ? (
-                  <>
-                    <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
-                      <MarkdownPreviewLight value={props.group.about} />
-                    </div>
-
-                    <TabContext value={tabIndex}>
-                      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                        <Tabs value={tabIndex} onChange={(e, newValue) => setTabIndex(newValue)} aria-label="actions" centered>
-                          <Tab label="Feed" sx={{ textTransform: "unset" }} value="0" />
-                          <Tab label="Group Calendar" sx={{ textTransform: "unset" }} value="1" />
-                          <Tab label="Conversations" sx={{ textTransform: "unset" }} value="2" />
-                          <Tab label="Files" sx={{ textTransform: "unset" }} value="3" />
-                        </Tabs>
-                      </Box>
-                      <TabPanel value="0">
-                        <div style={{ maxWidth: 750, marginLeft: "auto", marginRight: "auto" }}>
-                          <GroupTimeline context={context} groupId={props.group.id} />
-                        </div>
-                      </TabPanel>
-                      <TabPanel value="1">
-                        <DisplayBox headerText="Group Calendar">
-                          <GroupCalendar groupId={props.group.id} churchId={props.config.church.id} canEdit={isLeader} />
-                        </DisplayBox>
-                      </TabPanel>
-                      <TabPanel value="2">
-                        <Conversations context={context} contentType="group" contentId={props.group.id} groupId={props.group.id} />
-                      </TabPanel>
-                      <TabPanel value="3">
-                        <GroupFiles context={context} groupId={props.group.id} />
-                      </TabPanel>
-                    </TabContext>
-                  </>
-                )
-                : (
-                  <p>No group data found</p>
-                )}
+                ? (<>{getTabContent()}</>)
+                : (<p>No group data found</p>)}
 
 
-              <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">
-                {getTable()}
-              </DisplayBox>
+
             </Grid>
           </Grid>
         </div>
