@@ -16,6 +16,10 @@
   --c1d7: #050C37;
 }
 
+.sideNav {
+  height: 100vh;
+  border-right: 1px solid #CCC
+}
 
 .sideNav ul {
   padding-left: 0px;
@@ -101,6 +105,11 @@
   #primaryNavButton>span {margin-left:0px;}
   #appBarSpacer { height:60px;}
   #secondaryMenu { display:none; }
+  
+  .sideNav {
+    height: auto;
+    border-right: none;
+  }
 }
 
 @media (min-width: 741px) {

@@ -24,7 +24,7 @@ export default function Localhost() {
       <br />
       <Link href="http://ironwood.localhost:3301">Ironwood</Link>
       <br />
-      <Link href="http://ironwood.localhost:3301/member">Member</Link>
+      <Link href="http://ironwood.localhost:3301/my">My</Link>
       <br />
       <Link href="http://ironwood.localhost:3301/admin">Admin</Link>
 

@@ -79,8 +79,8 @@ export function EventCalendar(props:Props) {
 
   return (
     <div>
-      {props.editGroupId &&
-        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
+      {props.editGroupId
+        && <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
           <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe() }} toolTip="Copy the URL and add this to your Google Calendar (or other)" />
           <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start:new Date(), end: new Date() }) }} />
         </Stack>

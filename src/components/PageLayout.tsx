@@ -1,19 +1,15 @@
-import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import { HeaderFooter } from "./layouts/HeaderFooter";
 import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";
 import { StyleHelper } from "@/helpers/StyleHelper";
-import { GlobalStyleInterface } from "@/helpers";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 type Props = {
   pageData: any;
   pageTitle?: string;
   metaDescription?: string;
   ogDescription?: string;
-  churchSettings?: any;
-  church?: ChurchInterface;
-  navLinks?: LinkInterface[];
-  globalStyles: GlobalStyleInterface;
+  config: ConfigurationInterface;
 };
 
 //add helmet here
@@ -27,14 +23,14 @@ export function PageLayout(props: Props) {
   if (props.pageData) {
     switch (props.pageData?.layout) {
       case "cleanCentered":
-        result = <CleanCentered church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+        result = <CleanCentered church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />
         break;
       case "embed":
-        result = <Embedded church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} />
+        result = <Embedded church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />
         break;
       case "headerFooter":
       default:
-        result = <HeaderFooter church={props.church} churchSettings={props.churchSettings} navLinks={props.navLinks} pageData={props.pageData} globalStyles={props.globalStyles} />
+        result = <HeaderFooter config={props.config} pageData={props.pageData} />
         break;
     }
   }

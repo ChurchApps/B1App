@@ -304,6 +304,12 @@ export function ElementEdit(props: Props) {
     </>
   )
 
+  const getGroupListFields = () => (
+    <>
+      <TextField fullWidth size="small" label="Label" name="label" onChange={handleChange} value={parsedData.label || ""} helperText="ex: Small Groups, Sunday School" />
+    </>
+  )
+
   const getCarouselFields = () => (
     <>
       <TextField fullWidth size="small" type="number" label="Height(Px)" name="height" onChange={handleChange} value={parsedData.height || "250"} />
@@ -368,6 +374,7 @@ export function ElementEdit(props: Props) {
       case "image": result = getImageFields(); break;
       case "whiteSpace": result = getWhiteSpaceFields(); break;
       case "calendar": result = <><CalendarElementEdit parsedData={parsedData} handleChange={handleChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
+      case "groupList": result = getGroupListFields(); break;
     }
     return result;
   }

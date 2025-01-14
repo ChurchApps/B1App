@@ -16,7 +16,7 @@ export const PeopleSearchResults: React.FC<Props> = (props) => {
       const p = props.people[i];
       result.push(<TableRow key={p.id}>
         <TableCell><img src={PersonHelper.getPhotoUrl(p)} alt="avatar" /></TableCell>
-        <TableCell><Link href={"/member/directory/" + p.id}>{p.name.display}</Link></TableCell>
+        <TableCell><Link href={"/my/community/" + p.id}>{p.name.display}</Link></TableCell>
       </TableRow>);
     }
     return result;

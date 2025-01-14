@@ -1,13 +1,12 @@
 "use client";
 
 import { SermonElement } from "@/components/elementTypes/SermonElement";
-import { ChurchInterface } from "@churchapps/apphelper";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Container } from "@mui/material";
 
 
 type Props = {
-  churchSettings?: any;
-  church?: ChurchInterface;
+  config?: ConfigurationInterface;
 };
 
 export function SermonsPage(props:Props) {
@@ -17,7 +16,7 @@ export function SermonsPage(props:Props) {
   return (
     <Container>
       <h1 style={{textAlign:"center"}}>Sermons</h1>
-      <SermonElement key={"sermons"} churchId={props.church?.id} churchSettings={props.churchSettings} />
+      <SermonElement key={"sermons"} churchId={props.config?.church?.id} appearance={props.config?.appearance}  />
     </Container>
   );
 }
