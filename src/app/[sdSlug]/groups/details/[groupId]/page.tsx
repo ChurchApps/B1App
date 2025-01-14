@@ -19,7 +19,7 @@ const loadSharedData = (sdSlug: string, groupId: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug, groupId } = await params;
   const props = await loadSharedData(sdSlug, groupId);
-  return MetaHelper.getMetaData("Hello World" + " - " + props.config.church.name, "Hello World", props.config.appearance.ogImage);
+  return MetaHelper.getMetaData(props.group?.name + " - " + props.config.church.name, props.group?.about, props.config.appearance.ogImage);
 }
 
 const loadData = async (sdSlug: string, groupId: string) => {

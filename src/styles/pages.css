@@ -615,12 +615,6 @@ a.dropdown-toggle::after {
   background: linear-gradient(rgb(0, 0, 0), var(--darkAccent));
 }
 
-@media (max-width: 768px) {
-  #calEntity {
-    order: -1;
-  }
-}
-
 code {
   color: #000;
 }
@@ -656,4 +650,19 @@ code {
   position: relative;
   z-index: 1000;
 
+}
+
+
+@media (max-width: 768px) {
+  #calEntity {
+    order: -1;
+  }
+
+  #groupHero .badge {
+    float: left;
+    margin-top: 15px;
+    width:100%;
+    height:auto;
+    margin-bottom: 15px;
+  }
 }
