@@ -87,7 +87,13 @@ export function AuthenticatedView(props: Props) {
     let result = <></>
     switch (tab) {
       case "details":
-        result = <><LeaderEdit group={group} config={props.config} onChange={handleChange} /><h2>Details</h2><div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}><MarkdownPreviewLight value={group.about} /></div></>
+        result = <>
+          {isLeader && <LeaderEdit group={group} config={props.config} onChange={handleChange} />}
+          <h2>Details</h2>
+          <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
+            <MarkdownPreviewLight value={group.about} />
+          </div>
+        </>
         break;
       case "calendar":
         result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={isLeader} /></DisplayBox></>

@@ -37,7 +37,6 @@ export function LeaderEdit(props: Props) {
         const val = e.target.value;
         const fe = { ...formEdits }
         switch (e.target.name) {
-            case "catergoryName": fe.categoryName = val; break;
             case "name": fe.name = val; break;
             case "meetingTime": fe.meetingTime = val; break;
             case "meetingLocation": fe.meetingLocation = val; break;
@@ -55,14 +54,13 @@ export function LeaderEdit(props: Props) {
     }
 
     return <>
-        <div style={{ textAlign: "right", marginTop: "20px" }}>
+        <div style={{ textAlign: "right", float: "right", marginTop: 20 }}>
             <Button onClick={hideForm}><EditIcon /></Button>
         </div>
 
         <div>
-            <form style={{ display: hidden }}>
+            <form style={{ display: hidden, marginTop: 20 }}>
                 <InputBox saveFunction={handleSubmit} cancelFunction={hideForm}>
-                    <TextField fullWidth label="Category Name" name="categoryName" value={formEdits.categoryName || ""} onChange={handleChange} />
                     <TextField fullWidth label="Group Name" name="name" value={formEdits.name || ""} onChange={handleChange} />
                     <TextField fullWidth label="Meeting Time" name="meetingTime" value={formEdits.meetingTime || ""} onChange={handleChange} />
                     <TextField fullWidth label="Meeting Location" name="meetingLocation" value={formEdits.meetingLocation || ""} onChange={handleChange} />
