@@ -19,10 +19,10 @@ export function ManageVideoClient(props: WrapperPageProps) {
 
   const handlePhotoUpdated = (dataUrl: string) => {
     setPhotoUrl(dataUrl);
-    setPhotoType(null);
+    setPhotoType(photoType);
   };
 
-  const imageEditor = photoUrl && (
+  const imageEditor = (photoUrl || photoUrl === "") && (
     <ImageEditor
       aspectRatio={16 / 9}
       photoUrl={photoUrl}
