@@ -1,13 +1,15 @@
 import { ApiHelper, GroupInterface } from "@churchapps/apphelper";
-
-interface PageLink {
-  title: string;
-  url: string;
-  custom: boolean;
-  children?: PageLink[];
-}
+import { PageLink } from "./interfaces";
 
 export class PageHelper {
+
+  static sortLevel(items: PageLink[]) {
+    return items.sort((a, b) => {
+      if (a.url < b.url) return -1;
+      if (a.url > b.url) return 1;
+      return 0;
+    });
+  }
 
   static loadPageTree = async () => {
     const customPages = await ApiHelper.get("/pages", "ContentApi");
@@ -16,17 +18,19 @@ export class PageHelper {
 
     const groupPage = result.find((p) => p.url === "/groups");
     customPages.forEach((p: any) => {
-      const page: PageLink = { title: p.title, url: p.url, custom: true };
+      const page: PageLink = { pageId: p.id, title: p.title, url: p.url, custom: true };
       if (p.url.indexOf("/groups") === -1) {
         let existing = result.find((r) => r.url === p.url);
-        if (existing) { existing.title = p.title; existing.custom = true; }
+        if (existing) { existing.title = p.title; existing.custom = true; existing.pageId = p.id; }
         else result.push(page);
       } else {
         let existing = groupPage.children.find((r) => r.url === p.url);
-        if (existing) { existing.title = p.title; existing.custom = true; }
+        if (existing) { existing.title = p.title; existing.custom = true; existing.pageId = p.id; }
         else groupPage.children.push(page);
       }
     });
+    groupPage.children = PageHelper.sortLevel(groupPage.children);
+    result = PageHelper.sortLevel(result);
     return result;
   }
 
