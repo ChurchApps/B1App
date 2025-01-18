@@ -7,6 +7,7 @@ import { ApiHelper, Banner, DisplayBox, ErrorMessages } from "@churchapps/apphel
 import { useWindowWidth } from "@react-hook/window-size";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
+import { PageHelper } from "@/helpers/PageHelper";
 
 export function SiteAdminClient(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -17,6 +18,7 @@ export function SiteAdminClient(props: WrapperPageProps) {
 
   useEffect(() => {
     if (!isAuthenticated) redirect("/login");
+    else PageHelper.loadPageTree().then((data) => { console.log("PAGE TREE", data); });
   }, [isAuthenticated]);
 
 
