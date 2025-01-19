@@ -10,6 +10,7 @@ import { GroupFiles } from "@/components/groups/GroupFiles";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { GroupHero } from "./GroupHero";
 import { GroupTabs } from "./GroupTabs";
+import { LeaderEdit } from "./LeaderEdit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -20,6 +21,7 @@ export function AuthenticatedView(props: Props) {
   const [groupMembers, setGroupMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [tab, setTab] = useState("details");
+  const [group, setGroup] = useState(props.group);
 
   const context = useContext(UserContext);
 
@@ -31,7 +33,11 @@ export function AuthenticatedView(props: Props) {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(() => { loadData(); }, [props.group]);
+  useEffect(() => {
+    loadData();
+    setGroup(props.group);
+  }, [props.group]);
+
 
 
   const getRows = () => {
@@ -69,24 +75,34 @@ export function AuthenticatedView(props: Props) {
 
   let isLeader = false;
   UserHelper.currentUserChurch.groups?.forEach((g) => {
-    if (g.id === props.group?.id && g.leader) isLeader = true;
+    if (g.id === group?.id && g.leader) isLeader = true;
   });
+
+  const handleChange = (g: GroupInterface) => {
+    setGroup(g);
+  }
 
   const getTabContent = () => {
     console.log("Tab is", tab)
     let result = <></>
     switch (tab) {
       case "details":
-        result = <><h2>Details</h2><div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}><MarkdownPreviewLight value={props.group.about} /></div></>
+        result = <>
+          {isLeader && <LeaderEdit group={group} config={props.config} onChange={handleChange} updatedFunction={handleChange} />}
+          <h2>Details</h2>
+          <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
+            <MarkdownPreviewLight value={group.about} />
+          </div>
+        </>
         break;
       case "calendar":
-        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={props.group.id} churchId={props.config.church.id} canEdit={isLeader} /></DisplayBox></>
+        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={isLeader} /></DisplayBox></>
         break;
       case "conversations":
-        result = <><h2>Conversations</h2><Conversations context={context} contentType="group" contentId={props.group.id} groupId={props.group.id} /></>
+        result = <><h2>Conversations</h2><Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} /></>
         break;
       case "files":
-        result = <><h2>Files</h2><GroupFiles context={context} groupId={props.group.id} /></>
+        result = <><h2>Files</h2><GroupFiles context={context} groupId={group.id} /></>
         break;
       case "members":
         result = <><h2>Members</h2><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></>
@@ -97,17 +113,17 @@ export function AuthenticatedView(props: Props) {
 
   return (
     <>
-      <GroupHero group={props.group} />
+      <GroupHero group={group} />
       <Container>
         <div id="mainContent">
           <Grid container spacing={2}>
             <Grid item xs={12} md={2}>
               <div className="sideNav">
-                <GroupTabs config={props.config} onTabChange={(val:string) => { setTab(val) }} />
+                <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val) }} />
               </div>
             </Grid>
             <Grid item xs={12} md={10}>
-              {props.group
+              {group
                 ? (<>{getTabContent()}</>)
                 : (<p>No group data found</p>)}
 
