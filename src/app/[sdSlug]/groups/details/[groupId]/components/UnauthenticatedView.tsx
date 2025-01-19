@@ -5,10 +5,8 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
 import { GroupContact } from "./GroupContact";
 import { GroupHero } from "./GroupHero";
-import { Avatar, Button, Container, Grid, TextField } from "@mui/material";
+import { Avatar, Container, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import EditIcon from '@mui/icons-material/Edit';
-import { LeaderEdit } from "./LeaderEdit";
 
 interface Props {
   config: ConfigurationInterface
