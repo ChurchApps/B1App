@@ -1,25 +1,30 @@
 "use client";
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper, EventInterface, GroupInterface, GroupMemberInterface, InputBox } from "@churchapps/apphelper";
-import { Button, SelectChangeEvent, TextField } from "@mui/material";
+import { ApiHelper, EventInterface, GalleryModal, GroupInterface, GroupMemberInterface, InputBox, Locale } from "@churchapps/apphelper";
+import { Button, InputLabel, SelectChangeEvent, TextField } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from "react";
+import React from "react";
+import { EnvironmentHelper } from "@/helpers";
 
 interface Props {
     config: ConfigurationInterface
     group: GroupInterface;
     onChange: (group: GroupInterface) => void;
+    updatedFunction: (group: GroupInterface) => void;
 }
 
 export function LeaderEdit(props: Props) {
 
     const [formEdits, setFormEdits] = useState<GroupInterface>(props.group);
     let [hidden, setHidden] = useState("none");
+    const [selectPhotoField, setSelectPhotoField] = React.useState<string>(null);
 
     useEffect(() => {
         setFormEdits(props.group);
         console.log("group is", props.group);
+        EnvironmentHelper.initLocale();
     }, [props.group])
 
     const hideForm = () => {
@@ -53,6 +58,14 @@ export function LeaderEdit(props: Props) {
         });
     }
 
+
+    const handlePhotoSelected = (image: string) => {
+        let fe = { ...formEdits };
+        fe.photoUrl = image;
+        setFormEdits(fe);
+        setSelectPhotoField(null);
+    };
+
     return <>
         <div style={{ textAlign: "right", float: "right", marginTop: 20 }}>
             <Button onClick={hideForm}><EditIcon /></Button>
@@ -65,7 +78,21 @@ export function LeaderEdit(props: Props) {
                     <TextField fullWidth label="Meeting Time" name="meetingTime" value={formEdits.meetingTime || ""} onChange={handleChange} />
                     <TextField fullWidth label="Meeting Location" name="meetingLocation" value={formEdits.meetingLocation || ""} onChange={handleChange} />
                     <TextField fullWidth label="Description" name="about" value={formEdits.about || ""} onChange={handleChange} multiline />
+                    {formEdits.photoUrl && (<>
+                        <img src={formEdits.photoUrl} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="group" />
+                        <br />
+                    </>)}
+                    {!formEdits.photoUrl && <InputLabel>Group Photo</InputLabel>}
+                    <Button variant="contained" onClick={() => setSelectPhotoField("photoUrl")}>Select Photo</Button>
                 </InputBox>
+
+                {selectPhotoField && (
+                    <GalleryModal
+                        onClose={() => setSelectPhotoField(null)}
+                        onSelect={handlePhotoSelected}
+                        aspectRatio={4}
+                    />
+                )}
             </form>
         </div>
     </>

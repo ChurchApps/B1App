@@ -88,7 +88,7 @@ export function AuthenticatedView(props: Props) {
     switch (tab) {
       case "details":
         result = <>
-          {isLeader && <LeaderEdit group={group} config={props.config} onChange={handleChange} />}
+          {isLeader && <LeaderEdit group={group} config={props.config} onChange={handleChange} updatedFunction={handleChange} />}
           <h2>Details</h2>
           <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
             <MarkdownPreviewLight value={group.about} />
