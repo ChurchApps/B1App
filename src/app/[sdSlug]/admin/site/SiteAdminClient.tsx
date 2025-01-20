@@ -8,8 +8,9 @@ import { useWindowWidth } from "@react-hook/window-size";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { PageHelper } from "@/helpers/PageHelper";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { AddPageModal } from "@/components/admin/site/AddPageModal";
+import { SiteNav } from "./SiteNav";
 
 export function SiteAdminClient(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
@@ -68,22 +69,32 @@ export function SiteAdminClient(props: WrapperPageProps) {
         <Banner><h1>Website</h1></Banner>
         <SiteAdminWrapper config={props.config}>
           <div id="mainContent">
-            <DisplayBox headerText="Pages" headerIcon="article" editContent={<SmallButton icon="add" onClick={() => { setAddMode("unlinked"); }} />}>
-              <p>Below is a list of custom and auto-generated pages.  You can add new pages, edit existing ones, or convert auto-generate pages to custom pages.</p>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell></TableCell>
-                    <TableCell><span style={{width:20, display:"inline-block"}}></span>Path</TableCell>
-                    <TableCell>Title</TableCell>
-                    <TableCell>Custom</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {getTreeLevel(pageTree, 0)}
-                </TableBody>
-              </Table>
-            </DisplayBox>
+            <Grid container spacing={2}>
+              <Grid item sm={8} xs={12}>
+                <DisplayBox headerText="Pages" headerIcon="article" editContent={<SmallButton icon="add" onClick={() => { setAddMode("unlinked"); }} />}>
+                  <p>Below is a list of custom and auto-generated pages.  You can add new pages, edit existing ones, or convert auto-generate pages to custom pages.</p>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell><span style={{width:20, display:"inline-block"}}></span>Path</TableCell>
+                        <TableCell>Title</TableCell>
+                        <TableCell>Custom</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {getTreeLevel(pageTree, 0)}
+                    </TableBody>
+                  </Table>
+                </DisplayBox>
+              </Grid>
+              <Grid item sm={4} xs={12}>
+                <DisplayBox headerText="Navigation" headerIcon="article">
+                  <SiteNav config={props.config} />
+                </DisplayBox>
+              </Grid>
+            </Grid>
+
           </div>
         </SiteAdminWrapper>
       </AdminWrapper>
