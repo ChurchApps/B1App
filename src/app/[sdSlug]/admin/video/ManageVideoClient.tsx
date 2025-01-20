@@ -16,13 +16,13 @@ export function ManageVideoClient(props: WrapperPageProps) {
 
   const [photoUrl, setPhotoUrl] = useState<string>(null);
   const [photoType, setPhotoType] = useState<string>(null);
-  
+
   const handlePhotoUpdated = (dataUrl: string) => {
     setPhotoUrl(dataUrl);
-    setPhotoType(null);
+    setPhotoType(photoType);
   };
 
-  const imageEditor = photoUrl && (
+  const imageEditor = (photoUrl || photoUrl === "") && (
     <ImageEditor
       aspectRatio={16 / 9}
       photoUrl={photoUrl}
@@ -42,10 +42,10 @@ export function ManageVideoClient(props: WrapperPageProps) {
     <AdminWrapper config={props.config}>
       <Banner><h1>Manage Sermons</h1></Banner>
       <div id="mainContent">
-          {imageEditor}
-          {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && (
-            <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
-          )}
+        {imageEditor}
+        {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && (
+          <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
+        )}
       </div>
     </AdminWrapper>
   );

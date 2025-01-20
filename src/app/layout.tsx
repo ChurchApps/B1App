@@ -7,8 +7,6 @@ import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
 import ClientLayout from "./ClientLayout";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
-
-
 export const metadata = {
   title: 'ChurchApps',
   description: 'Open Source Software for Churches',

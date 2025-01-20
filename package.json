@@ -10,7 +10,7 @@
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales && copyfiles -a -f node_modules/@churchapps/apphelper/public/css/** public/apphelper/css"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.2.97",
+    "@churchapps/apphelper": "0.3.6",
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.4.1",
@@ -48,6 +48,7 @@
     "@types/react-helmet": "^6.1.6",
     "@types/webfontloader": "^1.6.38",
     "copyfiles": "^2.4.1",
+    "eslint": "^9.18.0",
     "eslint-config-next": "15.0.0",
     "eslint-plugin-unused-imports": "4.1.4",
     "typescript": "^5.3.3"

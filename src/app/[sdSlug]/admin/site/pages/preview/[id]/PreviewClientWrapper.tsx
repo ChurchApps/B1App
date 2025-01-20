@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
-import { ConfigHelper, GlobalStyleInterface, PageInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper, Banner, ChurchInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import { ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
+import { ApiHelper, Banner, LinkInterface, SmallButton } from "@churchapps/apphelper";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { Grid } from "@mui/material";
 import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
@@ -11,9 +11,6 @@ import { AdminWrapper } from "@/components/admin/AdminWrapper";
 
 interface Props extends WrapperPageProps {
   pageData: any;
-  church: ChurchInterface;
-  churchSettings: any;
-  globalStyles: GlobalStyleInterface;
 }
 
 export function PreviewClientWrapper(props: Props) {
@@ -28,7 +25,7 @@ export function PreviewClientWrapper(props: Props) {
   };
 
   const handlePageUpdated = (page: PageInterface, link: LinkInterface) => {
-    ConfigHelper.clearCache("sdSlug=" + props.church.subDomain);
+    ConfigHelper.clearCache("sdSlug=" + props.config?.church.subDomain);
     loadData();
     setShowSettings(false);
     if (!page) redirect("/admin/site");

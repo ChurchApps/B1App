@@ -1,6 +1,6 @@
 import { PageLayout, Theme } from "@/components";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
-import { ConfigHelper, EnvironmentHelper, GlobalStyleInterface, PageInterface } from "@/helpers";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
@@ -12,6 +12,7 @@ import { StreamPage } from "./components/StreamPage";
 import { DefaultPageWrapper } from "./components/DefaultPageWrapper";
 import { notFound } from "next/navigation";
 import { SermonsPage } from "./components/SermonsPage";
+import { DonatePage } from "./components/DonatePage";
 
 
 
@@ -42,50 +43,44 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
       case "bible": title = "Bible"; break;
     }
   }
-  return MetaHelper.getMetaData(title + " - " + props.church.name, props.pageData.title, props.churchSettings.ogImage);
+  return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title, props.config.appearance.ogImage);
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
-
-  const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup?subDomain=" + sdSlug, "MembershipApi");
-  const churchSettings: any = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
-  const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
-  const navLinks: any = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=website", "ContentApi");
-  const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=" + pageSlug, "ContentApi");
-  const config: ConfigurationInterface = await ConfigHelper.load(church.subDomain);
-
-  return { pageData, church, churchSettings, navLinks, globalStyles, config }
+  const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
+  const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?url=" + pageSlug, "ContentApi");
+  return { pageData, config }
 }
 
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug } = await params;
-  const { church, churchSettings, globalStyles, navLinks, pageData, config } = await loadSharedData(sdSlug, pageSlug);
+  const { pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
   const getPageContent = () => {
-    let result = <PageLayout globalStyles={globalStyles} church={church} churchSettings={churchSettings} navLinks={navLinks} pageData={pageData} />
-    console.log("Page Data", pageData);
-    console.log("Page Slug", pageSlug);
+    let result = <PageLayout config={config} pageData={pageData} />
+
     if (!pageData?.url) {
       switch (pageSlug)
       {
         case "votd": result = wrapDefaultPage(<VotdPage />); break;
         case "bible": result = wrapDefaultPage(<BiblePage />); break;
-        case "stream": result = wrapDefaultPage(<StreamPage churchSettings={churchSettings} church={church} />); break;
-        case "sermons": result = wrapDefaultPage(<SermonsPage churchSettings={churchSettings} church={church} />); break;
+        case "donate": result = wrapDefaultPage(<DonatePage config={config} />); break;
+        case "stream": result = wrapDefaultPage(<StreamPage config={config} />); break;
+        case "sermons": result = wrapDefaultPage(<SermonsPage config={config} />); break;
         default: return notFound();
       }
     }
     return result;
   }
 
-  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper churchSettings={churchSettings} church={church} navLinks={navLinks} globalStyles={globalStyles}>
+  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper config={config}>
     {content}
   </DefaultPageWrapper>
 
   return (
     <>
-      <Theme appearance={churchSettings} globalStyles={globalStyles} config={config} />
+      <Theme config={config} />
       {getPageContent()}
       <Animate />
     </>

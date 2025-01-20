@@ -30,7 +30,7 @@ export const ServingTimes: React.FC<Props> = (props) => {
     data.forEach((d) => {
       rows.push(
         <TableRow key={d.planId}>
-          <TableCell><Link href={"/member/plans/" + d.planId}>{d.planName}</Link></TableCell>
+          <TableCell><Link href={"/my/plans/" + d.planId}>{d.planName}</Link></TableCell>
           <TableCell>{DateHelper.prettyDate(d.serviceDate)}</TableCell>
           <TableCell>{d.position}</TableCell>
           <TableCell>{getStatusLabel(d.status)}</TableCell>

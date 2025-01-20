@@ -17,10 +17,8 @@ export default function AdminPagesClient() {
   const params = useParams<PageParams>()
   const [importType, setImportType] = useState<"youtube" | "vimeo" | "">();
 
-
   const loadData = () => {
     ConfigHelper.load(params.sdSlug).then((data) => { setConfig(data); });
-    
   };
 
   useEffect(() => {
@@ -28,29 +26,29 @@ export default function AdminPagesClient() {
     else loadData();
   }, [isAuthenticated]);
 
-
-
   return (
     <AdminWrapper config={config}>
       <Banner><h1>Bulk Import</h1></Banner>
       <div id="mainContent">
-      {importType ? (<>
-        {importType === "youtube"
-          ? (<YouTubeImport handleDone={() => setImportType("")} />)
-          : (<VimeoImport handleDone={() => setImportType("")} />)
-        }
-      </>) : (<>
-        <DisplayBox headerText={"Import Source"}>
-          <Grid container spacing={3}>
-            <Grid item sm={6} textAlign={"center"} marginTop={5} marginBottom={5}>
-              <Button size="large" variant="contained" onClick={() => setImportType("youtube")}>Import from YouTube</Button>
-            </Grid>
-            <Grid item sm={6} textAlign={"center"} marginTop={5} marginBottom={5}>
-              <Button size="large" variant="contained" onClick={() => setImportType("vimeo")}>Import from Vimeo</Button>
-            </Grid>
-          </Grid>
-        </DisplayBox>
-      </>)}
+        {importType
+          ? (<>
+            {importType === "youtube"
+              ? (<YouTubeImport handleDone={() => setImportType("")} />)
+              : (<VimeoImport handleDone={() => setImportType("")} />)
+            }
+          </>)
+          : (<>
+            <DisplayBox headerText={"Import Source"}>
+              <Grid container spacing={3}>
+                <Grid item sm={6} textAlign={"center"} marginTop={5} marginBottom={5}>
+                  <Button size="large" variant="contained" onClick={() => setImportType("youtube")}>Import from YouTube</Button>
+                </Grid>
+                <Grid item sm={6} textAlign={"center"} marginTop={5} marginBottom={5}>
+                  <Button size="large" variant="contained" onClick={() => setImportType("vimeo")}>Import from Vimeo</Button>
+                </Grid>
+              </Grid>
+            </DisplayBox>
+          </>)}
       </div>
     </AdminWrapper>
   );

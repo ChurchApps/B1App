@@ -5,22 +5,21 @@ import Link from "next/link";
 import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ClickAwayListener, ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { ApiHelper, AppearanceHelper, ArrayHelper, ChurchInterface, LinkInterface, Permissions, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, AppearanceHelper, ArrayHelper, LinkInterface, Permissions, UserHelper } from "@churchapps/apphelper";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
-import { GlobalStyleInterface, PersonHelper, SectionInterface } from "@/helpers";
-import { redirect } from "next/navigation";
+import { PersonHelper, SectionInterface } from "@/helpers";
+import { redirect, usePathname } from "next/navigation";
 import { StyleHelper } from "@/helpers/StyleHelper";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 
 type Props = {
-  church: ChurchInterface;
-  churchSettings: any;
-  navLinks?: LinkInterface[];
+  config: ConfigurationInterface;
   overlayContent: boolean;
   sections?: SectionInterface[];
-  globalStyles?: GlobalStyleInterface;
   editMode?: boolean;
+  linkColor?: string;
 };
 
 //structure navLinks based on their parentId
@@ -45,6 +44,8 @@ export function Header(props: Props) {
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const pathname = usePathname()
+
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -59,10 +60,10 @@ export function Header(props: Props) {
     // })
 
     console.log("USE EFFECT")
-    if (typeof window !== "undefined" && props.church?.id) {
+    if (typeof window !== "undefined" && props.config?.church?.id) {
       console.log("ITS A BROWSER")
       // Fetch settings from the API
-      ApiHelper.getAnonymous("/settings/public/" + props.church.id, "ContentApi").then((data) => {
+      ApiHelper.getAnonymous("/settings/public/" + props.config?.church.id, "ContentApi").then((data) => {
         console.log("SETTINGS ARE", data)
         if (data.showLogin) {
           setShowLogin(data.showLogin === "true");
@@ -80,17 +81,17 @@ export function Header(props: Props) {
     return () => {
       document.removeEventListener('scroll', handleScroll)
     }
-  }, [props.church?.id, props.overlayContent]);
+  }, [props.config?.church?.id, props.overlayContent]);
 
   // const pathName = usePathname();
   // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
 
-  const memberPortal = <MenuItem onClick={() => { redirect("/member") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
+  const memberPortal = <MenuItem onClick={() => { redirect("/my") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
   const adminPortal = UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
     <MenuItem onClick={() => { redirect("/admin") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
-  const editProfile = <MenuItem onClick={() => { redirect(`/member/directory/${PersonHelper?.person?.id}`) }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
+  const editProfile = <MenuItem onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`) }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
 
   const userAction = ApiHelper.isAuthenticated
     ? (
@@ -117,12 +118,7 @@ export function Header(props: Props) {
         {showLogin
           ? (
             <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-              <Chip
-                component="a"
-                href={"/login"}
-                clickable
-                id="loginButton"
-                label="Login"
+              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(pathname) } clickable id="loginButton" label="Login"
                 icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
                 sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
               />
@@ -134,7 +130,7 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect("/member") }}>
+      <ListItemButton onClick={() => { redirect("/my") }}>
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
@@ -148,7 +144,7 @@ export function Header(props: Props) {
       </ListItem>
     </>)}
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect(`/member/directory/${PersonHelper?.person?.id}`) }}>
+      <ListItemButton onClick={() => { redirect(`/my/directory/${PersonHelper?.person?.id}`) }}>
         <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>
@@ -158,23 +154,23 @@ export function Header(props: Props) {
   const getLinkClass = () => {
     const sections = ArrayHelper.getAll(props.sections, "zone", "main");
     let result = "";
-    if (sections?.length > 0) {
-      let lc = sections[0].linkColor;
-      if (lc) {
-        lc = lc.replace("var(--", "").replace(")", "");
-        result = "links" + lc[0].toUpperCase() + lc.slice(1);
-      }
+
+    let lc = props.linkColor || (sections.length > 0 ? sections[0].linkColor : null);
+    if (lc) {
+      lc = lc.replace("var(--", "").replace(")", "");
+      result = "links" + lc[0].toUpperCase() + lc.slice(1);
     }
+
     return result;
   }
 
   const getLogo = () => {
     if (transparent) {
-      const textColor=StyleHelper.getTextColor(props.sections[0]?.textColor, props.globalStyles, props.churchSettings);
-      const logo = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || null, props.churchSettings?.logoDark || null, textColor);
+      const textColor=StyleHelper.getTextColor(props.sections[0]?.textColor, props.config?.globalStyles, props.config?.appearance);
+      const logo = AppearanceHelper.getLogoByTextColor(props.config?.appearance?.logoLight || null, props.config?.appearance?.logoDark || null, textColor);
       return logo !== "" ? logo : null;
     }
-    else return props.churchSettings?.logoLight || null;
+    else return props.config?.appearance?.logoLight || null;
   }
 
   /*
@@ -210,7 +206,7 @@ export function Header(props: Props) {
   // }
 
   //structured navLinks based on their parentId
-  const structuredData = props.navLinks && getNestedChildren(props.navLinks, undefined);
+  const structuredData = props.config?.navLinks && getNestedChildren(props.config?.navLinks, undefined);
 
   const getLinks = () => structuredData && structuredData.map((item) => <CascadingHoverMenus key={item.id} link={item} />);
   const getListMenu = () => structuredData && <List component="nav" id="long-menu">
@@ -239,7 +235,7 @@ export function Header(props: Props) {
       <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? { marginBottom: 0 } : {}}>
         <Container style={{ height: 71 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Link href="/"><img src={getLogo()} alt={props.church.name} id="headerLogo" /></Link>
+            <Link href="/"><img src={getLogo()} alt={props.config?.church.name} id="headerLogo" /></Link>
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap", }}>
               {getLinks()}
               {userAction}

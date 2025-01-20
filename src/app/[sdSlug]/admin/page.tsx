@@ -27,7 +27,7 @@ export default function AdminPagesClient() {
     <AdminWrapper config={config}>
       <Banner><h1>Mobile App Settings</h1></Banner>
       <div id="mainContent">
-      {UserHelper.checkAccess(Permissions.contentApi.content.edit)
+        {UserHelper.checkAccess(Permissions.contentApi.content.edit)
           && <Tabs updatedFunction={ () => {ConfigHelper.clearCache("sdSlug=" + UserHelper.currentUserChurch.church.subDomain);} } />
         }
       </div>

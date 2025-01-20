@@ -1,12 +1,12 @@
 "use client";
 
-import { EnvironmentHelper, GlobalStyleInterface } from "@/helpers";
+import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { AppearanceHelper, AppearanceInterface } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
 import React from "react";
 import Head from "next/head";
 
-interface Props { appearance?: AppearanceInterface, globalStyles: GlobalStyleInterface, config?:ConfigurationInterface }
+interface Props { config?:ConfigurationInterface }
 
 export const Theme: React.FC<Props> = (props) => {
 
@@ -17,8 +17,8 @@ export const Theme: React.FC<Props> = (props) => {
   const lines:string[] = []
 
 
-  if (props.globalStyles?.palette) {
-    const palette = JSON.parse(props.globalStyles?.palette);
+  if (props.config.globalStyles?.palette) {
+    const palette = JSON.parse(props.config.globalStyles?.palette);
     lines.push("--light: " + palette.light + ";");
     lines.push("--lightAccent: " + palette.lightAccent + ";");
     lines.push("--accent: " + palette.accent + ";");
@@ -27,15 +27,15 @@ export const Theme: React.FC<Props> = (props) => {
   }
 
 
-  if (props.globalStyles?.fonts) {
-    const fonts = JSON.parse(props.globalStyles?.fonts);
+  if (props.config.globalStyles?.fonts) {
+    const fonts = JSON.parse(props.config.globalStyles?.fonts);
     lines.push("--headingFont: '" + fonts.heading + "';");
     lines.push("--bodyFont: '" + fonts.body + "';");
     if (fonts.heading!=="Roboto") googleFonts.push(fonts.heading);
     if (fonts.body !== fonts.heading) googleFonts.push(fonts.body);
   }
 
-  if (props.globalStyles?.customCss) lines.push(props.globalStyles?.customCss);
+  if (props.config.globalStyles?.customCss) lines.push(props.config.globalStyles?.customCss);
 
   /*
   css = (<style type="text/css">{`
@@ -52,7 +52,7 @@ export const Theme: React.FC<Props> = (props) => {
     fontLink = <link href={"https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap"} rel="stylesheet"></link>
   }
 
-  if (props?.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{__html:props.globalStyles.customJS}} />
+  if (props?.config.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{__html:props.config.globalStyles.customJS}} />
 
   //These really belong in the head, but if we use Helmet, it won't be rendered in the server side html
   const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
