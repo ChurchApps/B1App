@@ -34,6 +34,18 @@ export class PageHelper {
     return result;
   }
 
+  static flatten = (tree: PageLink[]) => {
+    let result: PageLink[] = [];
+    tree.forEach((p) => {
+      result.push(p);
+      if (p.children) {
+        result = result.concat(PageHelper.flatten(p.children));
+        p.children = null;
+      }
+    });
+    return result;
+  }
+
   static getTemplatePages = async () => {
     const templatePages: PageLink[] = [
       { title: "Bible", url: "/bible", custom: false },

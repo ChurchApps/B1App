@@ -51,7 +51,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
     ApiHelper.post("/settings", [setting], "ContentApi").then(data => { setShowLogin(data[0]); });
   }
 
-  const handleDrop = (index:number, parentId:string, page:PageInterface, link:LinkInterface) => {
+  const handleDrop = (index:number, parentId:string, link:LinkInterface) => {
     if (parentId==="") parentId = null;
     if (parentId === "unlinked") {
       //delete link
@@ -64,7 +64,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
         ApiHelper.post("/links", [link], "ContentApi").then(() => { loadData(); });
       } else {
         //add link
-        const newLink:LinkInterface = {id:"", churchId:page.churchId, category:"website", url:page.url, linkType:"url", linkData:"", icon:"", text:page.title, sort:index, parentId:parentId};
+        const newLink:LinkInterface = {id:"", churchId:UserHelper.currentUserChurch.church.id, category:"website", url:"/new-page", linkType:"url", linkData:"", icon:"", text:"New Link", sort:index, parentId:parentId};
         ApiHelper.post("/links", [newLink], "ContentApi").then(() => { loadData(); });
       }
     }
@@ -100,7 +100,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
               </span>
               <h3>Main Navigation</h3>
             </div>
-            <SiteNavigation keyName={props.config.keyName} links={links} pages={pages} refresh={loadData} select={(link, page) => {}} handleDrop={handleDrop} />
+            <SiteNavigation keyName={props.config.keyName} links={links} refresh={loadData} select={(link) => {}} handleDrop={handleDrop} />
 
           </DndProvider>
         </Grid>

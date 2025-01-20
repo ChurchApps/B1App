@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions, LinkInterface } from "@churchapps/apphelper";
-import { Dialog, Grid, SelectChangeEvent, TextField } from "@mui/material";
+import { Autocomplete, Dialog, Grid, SelectChangeEvent, TextField } from "@mui/material";
+import { PageLink } from "@/helpers";
+import { PageHelper } from "@/helpers/PageHelper";
 
 type Props = {
   link: LinkInterface;
@@ -13,6 +15,7 @@ type Props = {
 export function NavLinkEdit(props: Props) {
   const [link, setLink] = useState<LinkInterface>(props.link);
   const [errors, setErrors] = useState([]);
+  const [pageTree, setPageTree] = useState<PageLink[]>([]);
 
   const handleCancel = () => props.updatedCallback(link);
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -62,22 +65,28 @@ export function NavLinkEdit(props: Props) {
 
   };
 
+  const getPageOptions = () => {
+    let options:string[] = [];
+    pageTree.forEach((p) => {
+      options.push(p.url);
+    });
+    return options;
+  }
 
-  useEffect(() => { setLink(props.link); console.log("INIT LINK", props.link) }, [props.link]);
+  useEffect(() => { setLink(props.link); }, [props.link]);
+  useEffect(() => { PageHelper.loadPageTree().then((data) => { setPageTree(PageHelper.flatten(data)); }); }, []);
+
+  console.log("Link url is", link?.url, link);
 
   if (!link) return <></>
   else return (
     <Dialog open={true} onClose={props.onDone} style={{minWidth:800}}>
       <InputBox id="pageDetailsBox" headerText={link?.id ? "Add Link" : "Link Settings"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} >
         <ErrorMessages errors={errors} />
-        <Grid container spacing={2} style={{minWidth:500}}>
-          <Grid item xs={6}>
-            <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField size="small" fullWidth label="Url" name="linkUrl" value={link.url} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
-          </Grid>
-        </Grid>
+        <Autocomplete disablePortal limitTags={3} freeSolo options={getPageOptions()} sx={{ width: 300 }} ListboxProps={{ style: { maxHeight:150 }}} value={link.url} renderInput={(params) => 
+          <TextField {...params} size="small" fullWidth label="Url" name="linkUrl" onChange={handleLinkChange} onKeyDown={handleKeyDown} />
+        } />
+        <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
       </InputBox>
     </Dialog>
   );
