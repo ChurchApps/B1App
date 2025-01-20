@@ -6,13 +6,9 @@ import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "
 import { PageInterface } from "@/helpers";
 import { redirect } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
-import { useWindowWidth } from "@react-hook/window-size";
-import Link from "next/link";
 import { AddPageModal } from "./site/AddPageModal";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DroppableWrapper } from "./DroppableWrapper";
-import { DraggableWrapper } from "./DraggableWrapper";
 
 interface Props {
   config: ConfigurationInterface;
@@ -24,10 +20,8 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const { isAuthenticated } = ApiHelper;
   const [links, setLinks] = useState<LinkInterface[]>([]);
   const [pages, setPages] = useState<PageInterface[]>([]);
-  const [errors, setErrors] = useState<string[]>([]);
   const [addMode, setAddMode] = useState<string>("");
   const [showLogin, setShowLogin] = useState<GenericSettingInterface>();
-  const windowWidth = useWindowWidth();
   const checked = showLogin?.value === "true" ? true : false;
 
   const loadData = () => {
@@ -52,21 +46,6 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   useEffect(() => { if (!isAuthenticated) redirect("/login"); }, []);
   useEffect(loadData, [isAuthenticated]);
 
-  const navigationHandler = (errorMessage: string, url: string) => {
-    let errors: string[] = [];
-
-    if (windowWidth > 882){
-      redirect(url);
-    } else {
-      errors.push(errorMessage);
-    }
-
-    if (errors.length > 0) {
-      setErrors(errors);
-      return;
-    }
-  }
-
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const setting: GenericSettingInterface = showLogin ? { ...showLogin, value: `${e.target.checked}` } : { keyName: "showLogin", value: `${e.target.checked}`, public: 1 }
     ApiHelper.post("/settings", [setting], "ContentApi").then(data => { setShowLogin(data[0]); });
@@ -90,25 +69,6 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
       }
     }
     ConfigHelper.clearCache("sdSlug=" + props.config.keyName);
-  }
-
-  const getUnlinkedPages = () => {
-    const unlinkedPages = pages.filter(p => !links.find(l => l.url === p.url));
-    const result = unlinkedPages.map((page) =>
-
-    //const clickHandler = () => navigationHandler("Page editor is only accessible on desktop", "/admin/site/pages/" + page.id);
-
-      (
-        <tr key={page.id}>
-          <td>
-            <DraggableWrapper dndType="navItemPage" data={{page, link:null}}>
-              <Link href={"/admin/site/pages/preview/" + page.id}>{page.title}</Link>
-            </DraggableWrapper>
-          </td>
-        </tr>
-      )
-    );
-    return result;
   }
 
   const addLinkCallback = (page:PageInterface, link:LinkInterface) => {
@@ -147,14 +107,6 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
             </div>
             <SiteNavigation keyName={props.config.keyName} links={links} pages={pages} refresh={loadData} select={(link, page) => {}} handleDrop={handleDrop} />
 
-            <span style={{float:"right", paddingTop:15}}>
-              <SmallButton icon="add" onClick={() => { setAddMode("unlinked") }} />
-            </span>
-            <h3>Not Linked</h3>
-            <table className="table">
-              {getUnlinkedPages() }
-            </table>
-            <DroppableWrapper accept={["navItemPage"]} onDrop={(item) => {handleDrop(0, "unlinked", item.data.page, item.data.link)}} hideWhenInactive={true}><div style={{height:5}}></div></DroppableWrapper>
           </DndProvider>
         </Grid>
         <Grid item md={10} xs={12}>
