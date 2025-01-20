@@ -6,6 +6,7 @@ import { DroppableWrapper } from "./DroppableWrapper";
 import { DraggableWrapper } from "./DraggableWrapper";
 import { Icon } from "@mui/material";
 import Link from "next/link";
+import { NavLinkEdit } from "./site/NavLinkEdit";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -54,9 +55,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
       <>
         {childrenLinks.map((link) => {
           const page = props.pages.find(p => p.url === link.url);
-          const anchor = (page)
-            ? (<Link href={"/admin/site/pages/preview/" + page.id + "?linkId=" + link.id}>{link.text}</Link>)
-            : (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); }}>{link.text}</a>)
+          const anchor = (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); }}>{link.text}</a>)
           idx++
 
           const index = idx-1
@@ -89,7 +88,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
 
   return (
     <>
-      {editLink && <PageLinkEdit link={editLink} page={null} updatedCallback={() => { ConfigHelper.clearCache("sdSlug=" + props.keyName); setEditLink(null); props.refresh();  }} onDone={() => { setEditLink(null); }} />}
+      {editLink && <NavLinkEdit link={editLink} updatedCallback={() => { ConfigHelper.clearCache("sdSlug=" + props.keyName); setEditLink(null); props.refresh();  }} onDone={() => { setEditLink(null); }} />}
       <table className="table">
         <tbody>
           <RecursiveLinks childrenLinks={structuredLinks} nestedLevel={-1} />

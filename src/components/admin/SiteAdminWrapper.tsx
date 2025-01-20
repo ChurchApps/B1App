@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton, UserHelper } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
 import { redirect } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
-import { AddPageModal } from "./site/AddPageModal";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { NavLinkEdit } from "./site/NavLinkEdit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -19,8 +19,8 @@ interface Props {
 export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const { isAuthenticated } = ApiHelper;
   const [links, setLinks] = useState<LinkInterface[]>([]);
+  const [editLink, setEditLink] = useState<LinkInterface>(null);
   const [pages, setPages] = useState<PageInterface[]>([]);
-  const [addMode, setAddMode] = useState<string>("");
   const [showLogin, setShowLogin] = useState<GenericSettingInterface>();
   const checked = showLogin?.value === "true" ? true : false;
 
@@ -71,20 +71,15 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
     ConfigHelper.clearCache("sdSlug=" + props.config.keyName);
   }
 
-  const addLinkCallback = (page:PageInterface, link:LinkInterface) => {
+  const addLinkCallback = (link:LinkInterface) => {
     ConfigHelper.clearCache("sdSlug=" + props.config.keyName);
     loadData();
-    setAddMode("");
-    if (page) {
-      if (link) redirect("/admin/site/pages/preview/" + page.id + "?linkId=" + link.id);
-      else redirect("/admin/site/pages/preview/" + page.id);
-    }
-
+    setEditLink(null);
   }
 
   return (
     <>
-      {(addMode!=="") && <AddPageModal updatedCallback={addLinkCallback} onDone={() => { setAddMode("") } } mode={addMode} />}
+      {(editLink) && <NavLinkEdit updatedCallback={addLinkCallback} onDone={() => { setEditLink(null); } } link={editLink} />}
 
       <Grid container spacing={3}>
         <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", marginTop:25, paddingLeft:40}}>
@@ -101,7 +96,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
             </div>
             <div>
               <span style={{float:"right"}}>
-                <SmallButton icon="add" onClick={() => { setAddMode("navigation") }} />
+                <SmallButton icon="add" onClick={() => { setEditLink({churchId: UserHelper.currentUserChurch.church.id, category:"website", linkType:"url", sort:99, linkData:"", icon:""} ) }} />
               </span>
               <h3>Main Navigation</h3>
             </div>
