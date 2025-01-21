@@ -8,7 +8,7 @@ import { useWindowWidth } from "@react-hook/window-size";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { PageHelper } from "@/helpers/PageHelper";
-import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { AddPageModal } from "@/components/admin/site/AddPageModal";
 
 export function SiteAdminClient(props: WrapperPageProps) {
