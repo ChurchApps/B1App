@@ -21,15 +21,12 @@ export function UnauthenticatedView(props: Props) {
   const getLeaders = () => {
     const result: JSX.Element[] = [];
     props.leaders.forEach((l) => {
-      // console.log("name:", l.person.name.display, "photo:", l.person.photo);
-      // console.log("photo:", l.person.photo ? l.person.photo : "public/images/sample-profile.png");
       result.push(<Grid container item xs={6} md={2} key={l.person.id} style={{ height: "50px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px", borderRadius: "40px" }}>
         <Grid item md={4} style={{ padding: "5px" }}>
           <Avatar src={l.person.photo ? EnvironmentHelper.Common.ContentRoot + l.person.photo : EnvironmentHelper.Common.ContentRoot + "/public/images/sample-profile.png"} />
         </Grid>
         <Grid item md={8} style={{ lineHeight: "50px" }}><a href={"/my/community/" + l.person.id} style={{ color: "black" }}>{l.person.name.display}</a></Grid>
       </Grid>);
-      // console.log("RESULT:", result);
     });
     return result;
   }
@@ -80,8 +77,9 @@ export function UnauthenticatedView(props: Props) {
 
     <GroupHero group={props.group} />
     <Container>
-      {/* <div style={{ textAlign: "center", marginBottom: "5px" }}><img src={props.group.photoUrl} /></div> */}
-      <div style={{ marginTop: "40px", textAlign: "center" }}>
+
+      <div style={{ textAlign: "center", marginTop: "40px" }}>
+
         <p style={{ padding: "0px 20px", fontSize: "22px", textAlign: "left" }}>{props.group.about}</p>
 
         <Grid container style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", lineHeight: "50px" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Leader(s): </span>
