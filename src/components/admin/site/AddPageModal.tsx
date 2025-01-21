@@ -8,6 +8,7 @@ type Props = {
   mode: string,
   updatedCallback: (page: PageInterface, link: LinkInterface) => void;
   onDone: () => void;
+  requestedSlug?: string;
 };
 
 export function AddPageModal(props: Props) {
@@ -16,7 +17,7 @@ export function AddPageModal(props: Props) {
   const [errors, setErrors] = useState([]);
   const [pageTemplate, setPageTemplate] = useState<string>("blank");
 
-  const handleCancel = () => props.updatedCallback(null, null);
+  const handleCancel = () => props.onDone();
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     e.preventDefault();
@@ -80,7 +81,7 @@ export function AddPageModal(props: Props) {
       if (pageTemplate !== "link") {
         let p = { ...page };
         const slugString = link?.text || page.title || "new-page";
-        p.url = SlugHelper.slugifyString("/" + slugString.toLowerCase().replace(" ", "-"), "urlPath");
+        p.url = props.requestedSlug || SlugHelper.slugifyString("/" + slugString.toLowerCase().replace(" ", "-"), "urlPath");
 
         pageData = await ApiHelper.post("/pages", [p], "ContentApi").then((data) => {
           setPage(data[0]);

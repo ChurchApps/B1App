@@ -95,7 +95,7 @@ export const Attendance: React.FC<Props> = (props) => {
     }
 
     if (props.user.isHost) {
-      if (StreamChatManager.isIpBlocked(ipAddress)) result = <a about="href:blank" title="unblock" style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "unblock") }}><Icon sx={{ color: "#999" }}><img src="/images/icons/unblock.svg" /></Icon></a>;
+      if (StreamChatManager.isIpBlocked(ipAddress)) result = <a about="href:blank" title="unblock" style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "unblock") }}><Icon sx={{ color: "#999" }}><img src="/images/icons/unblock.svg" alt="unblock" /></Icon></a>;
       else result = <a about="href:blank" title="block" style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "block") }}><Icon>block</Icon></a>
     }
     return result;
