@@ -29,7 +29,7 @@ export const Appearance: React.FC<Props> = (props) => {
 
   const configureStyles = (settings: GenericSettingInterface[]) => {
     let style: any = getDefaultStyles();
-    settings.map(s => { style[s.keyName] = s.value; return null });
+    settings.forEach(s => { style[s.keyName] = s.value; });
     setStyles(style);
   }
 
