@@ -46,7 +46,6 @@ export function NavLinkEdit(props: Props) {
       if (link) {
         [linkData] = await ApiHelper.post("/links", [link], "ContentApi");
       }
-      console.log("linkData", linkData);
 
       props.updatedCallback(linkData);
     }
@@ -61,7 +60,7 @@ export function NavLinkEdit(props: Props) {
       return ;
     }
 
-    if (link) ApiHelper.delete("/links/" + link.id.toString(), "ContentApi").then(() => {console.log("DELETED"); props.updatedCallback(null)});
+    if (link) ApiHelper.delete("/links/" + link.id.toString(), "ContentApi").then(() => { props.updatedCallback(null)});
 
   };
 
@@ -76,7 +75,6 @@ export function NavLinkEdit(props: Props) {
   useEffect(() => { setLink(props.link); }, [props.link]);
   useEffect(() => { PageHelper.loadPageTree().then((data) => { setPageTree(PageHelper.flatten(data)); }); }, []);
 
-  console.log("Link url is", link?.url, link);
 
   if (!link) return <></>
   else return (
