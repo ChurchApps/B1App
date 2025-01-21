@@ -2,17 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton, UserHelper } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
 import { redirect } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
-import { useWindowWidth } from "@react-hook/window-size";
-import Link from "next/link";
-import { AddPageModal } from "./site/AddPageModal";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DroppableWrapper } from "./DroppableWrapper";
-import { DraggableWrapper } from "./DraggableWrapper";
+import { NavLinkEdit } from "./site/NavLinkEdit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -23,11 +19,9 @@ interface Props {
 export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const { isAuthenticated } = ApiHelper;
   const [links, setLinks] = useState<LinkInterface[]>([]);
+  const [editLink, setEditLink] = useState<LinkInterface>(null);
   const [pages, setPages] = useState<PageInterface[]>([]);
-  const [errors, setErrors] = useState<string[]>([]);
-  const [addMode, setAddMode] = useState<string>("");
   const [showLogin, setShowLogin] = useState<GenericSettingInterface>();
-  const windowWidth = useWindowWidth();
   const checked = showLogin?.value === "true" ? true : false;
 
   const loadData = () => {
@@ -52,27 +46,12 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   useEffect(() => { if (!isAuthenticated) redirect("/login"); }, []);
   useEffect(loadData, [isAuthenticated]);
 
-  const navigationHandler = (errorMessage: string, url: string) => {
-    let errors: string[] = [];
-
-    if (windowWidth > 882){
-      redirect(url);
-    } else {
-      errors.push(errorMessage);
-    }
-
-    if (errors.length > 0) {
-      setErrors(errors);
-      return;
-    }
-  }
-
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const setting: GenericSettingInterface = showLogin ? { ...showLogin, value: `${e.target.checked}` } : { keyName: "showLogin", value: `${e.target.checked}`, public: 1 }
     ApiHelper.post("/settings", [setting], "ContentApi").then(data => { setShowLogin(data[0]); });
   }
 
-  const handleDrop = (index:number, parentId:string, page:PageInterface, link:LinkInterface) => {
+  const handleDrop = (index:number, parentId:string, link:LinkInterface) => {
     if (parentId==="") parentId = null;
     if (parentId === "unlinked") {
       //delete link
@@ -85,46 +64,22 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
         ApiHelper.post("/links", [link], "ContentApi").then(() => { loadData(); });
       } else {
         //add link
-        const newLink:LinkInterface = {id:"", churchId:page.churchId, category:"website", url:page.url, linkType:"url", linkData:"", icon:"", text:page.title, sort:index, parentId:parentId};
+        const newLink:LinkInterface = {id:"", churchId:UserHelper.currentUserChurch.church.id, category:"website", url:"/new-page", linkType:"url", linkData:"", icon:"", text:"New Link", sort:index, parentId:parentId};
         ApiHelper.post("/links", [newLink], "ContentApi").then(() => { loadData(); });
       }
     }
     ConfigHelper.clearCache("sdSlug=" + props.config.keyName);
   }
 
-  const getUnlinkedPages = () => {
-    const unlinkedPages = pages.filter(p => !links.find(l => l.url === p.url));
-    const result = unlinkedPages.map((page) =>
-
-    //const clickHandler = () => navigationHandler("Page editor is only accessible on desktop", "/admin/site/pages/" + page.id);
-
-      (
-        <tr key={page.id}>
-          <td>
-            <DraggableWrapper dndType="navItemPage" data={{page, link:null}}>
-              <Link href={"/admin/site/pages/preview/" + page.id}>{page.title}</Link>
-            </DraggableWrapper>
-          </td>
-        </tr>
-      )
-    );
-    return result;
-  }
-
-  const addLinkCallback = (page:PageInterface, link:LinkInterface) => {
+  const addLinkCallback = (link:LinkInterface) => {
     ConfigHelper.clearCache("sdSlug=" + props.config.keyName);
     loadData();
-    setAddMode("");
-    if (page) {
-      if (link) redirect("/admin/site/pages/preview/" + page.id + "?linkId=" + link.id);
-      else redirect("/admin/site/pages/preview/" + page.id);
-    }
-
+    setEditLink(null);
   }
 
   return (
     <>
-      {(addMode!=="") && <AddPageModal updatedCallback={addLinkCallback} onDone={() => { setAddMode("") } } mode={addMode} />}
+      {(editLink) && <NavLinkEdit updatedCallback={addLinkCallback} onDone={() => { setEditLink(null); } } link={editLink} />}
 
       <Grid container spacing={3}>
         <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", marginTop:25, paddingLeft:40}}>
@@ -141,20 +96,12 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
             </div>
             <div>
               <span style={{float:"right"}}>
-                <SmallButton icon="add" onClick={() => { setAddMode("navigation") }} />
+                <SmallButton icon="add" onClick={() => { setEditLink({churchId: UserHelper.currentUserChurch.church.id, category:"website", linkType:"url", sort:99, linkData:"", icon:""} ) }} />
               </span>
               <h3>Main Navigation</h3>
             </div>
-            <SiteNavigation keyName={props.config.keyName} links={links} pages={pages} refresh={loadData} select={(link, page) => {}} handleDrop={handleDrop} />
+            <SiteNavigation keyName={props.config.keyName} links={links} refresh={loadData} select={(link) => {}} handleDrop={handleDrop} />
 
-            <span style={{float:"right", paddingTop:15}}>
-              <SmallButton icon="add" onClick={() => { setAddMode("unlinked") }} />
-            </span>
-            <h3>Not Linked</h3>
-            <table className="table">
-              {getUnlinkedPages() }
-            </table>
-            <DroppableWrapper accept={["navItemPage"]} onDrop={(item) => {handleDrop(0, "unlinked", item.data.page, item.data.link)}} hideWhenInactive={true}><div style={{height:5}}></div></DroppableWrapper>
           </DndProvider>
         </Grid>
         <Grid item md={10} xs={12}>

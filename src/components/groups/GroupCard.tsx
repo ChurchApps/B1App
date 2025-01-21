@@ -9,7 +9,7 @@ interface Props {
 export default function GroupCard(props: Props) {
 
   return (
-    <Link href={"/groups/details/" + props.group.id}>
+    <Link href={"/groups/details/" + props.group.slug}>
       <Card>
         <CardMedia component="img" image={props.group.photoUrl} alt={props.group.name} />
         <CardContent>

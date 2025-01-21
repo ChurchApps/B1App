@@ -16,7 +16,7 @@ export interface ElementInterface {
   answersJSON?: string;
   answers?: any;
   stylesJSON?: string;
-  styles?: { all?:any, desktop?:any, mobile?:any };
+  styles?: { all?: any, desktop?: any, mobile?: any };
   animationsJSON?: string;
   animations?: { onShow: string, onShowSpeed: string };
   sort?: number;
@@ -172,7 +172,7 @@ export interface StyleOption {
   options?: string[]
 }
 
-export const allStyleOptions:StyleOption[] = [
+export const allStyleOptions: StyleOption[] = [
   { label: "Border Color", key: "border-color", type: "color", default: "#FF0000" },
   { label: "Border Radius", key: "border-radius", type: "px", default: "5" },
   { label: "Border Style", key: "border-style", type: "select", default: "solid", options: ["none", "solid", "dotted", "dashed", "double", "groove", "ridge", "inset", "outset"] },
@@ -201,3 +201,13 @@ export const allStyleOptions:StyleOption[] = [
   { label: "Text Shadow", key: "text-shadow", type: "text-shadow", default: "1px 1px 2px black;" },
   { label: "Width", key: "width", type: "px", default: 500 }
 ]
+
+
+export interface PageLink {
+  pageId?: string;
+  title: string;
+  url: string;
+  custom: boolean;
+  children?: PageLink[];
+  expanded?: boolean;
+}
