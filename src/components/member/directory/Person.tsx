@@ -5,6 +5,7 @@ import { PersonHelper } from "../../../helpers";
 import { Household } from "./Household";
 import { ModifyProfile } from "./ModifyProfile";
 import { DirectMessageModal } from "./DirectMessageModal";
+import { VisibilityPreferences } from "./VisibilityPreferences";
 import UserContext from "@/context/UserContext";
 
 interface Props { backHandler: () => void, personId: string, selectedHandler: (personId: string) => void }
@@ -84,27 +85,30 @@ export const Person: React.FC<Props> = (props) => {
   React.useEffect(loadData, [props.personId]);
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={8}>
-        <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()}>
-          <Grid container spacing={3}>
-            <Grid item xs={4}>
-              <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
+    <>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={8}>
+          <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()}>
+            <Grid container spacing={3}>
+              <Grid item xs={4}>
+                <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
+              </Grid>
+              <Grid item xs={8}>
+                <h2>{person?.name.display}</h2>
+                {getContactMethods()}
+              </Grid>
             </Grid>
-            <Grid item xs={8}>
-              <h2>{person?.name.display}</h2>
-              {getContactMethods()}
-            </Grid>
-          </Grid>
-        </DisplayBox>
-        {requestedChanges.length > 0 && showChanges()}
-      </Grid>
-      <Grid item xs={4}>
+          </DisplayBox>
+          {requestedChanges.length > 0 && showChanges()}
+        </Grid>
+        <Grid item xs={12} md={4}>
 
-        <Household person={person} selectedHandler={props.selectedHandler} />
+          <Household person={person} selectedHandler={props.selectedHandler} />
+        </Grid>
+        {getPM()}
       </Grid>
-      {getPM()}
-    </Grid>
+      <VisibilityPreferences />
+    </>
 
   )
 }
