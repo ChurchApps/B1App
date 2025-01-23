@@ -107,7 +107,7 @@ export const Person: React.FC<Props> = (props) => {
         </Grid>
         {getPM()}
       </Grid>
-      <VisibilityPreferences />
+      {props.personId === PersonHelper.person.id && <VisibilityPreferences />}
     </>
 
   )
