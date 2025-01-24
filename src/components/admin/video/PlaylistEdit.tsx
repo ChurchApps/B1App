@@ -75,7 +75,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
         <label style={{ width: "100%" }}>Publish Date</label>
         <TextField fullWidth type="date" name="publishDate" value={(currentPlaylist?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentPlaylist?.publishDate)) : ""} onChange={handleChange} />
         <a href="about:blank" onClick={(e) => { e.preventDefault(); props.showPhotoEditor("playlist", currentPlaylist?.thumbnail || ""); }}>
-          <img src={currentPlaylist?.thumbnail || "/images/no-image.png"} className="img-fluid" style={{ marginTop: 20 }} alt="thumbnail"></img>
+          <img src={currentPlaylist?.thumbnail || "/images/no-image.png"} className="img-fluid" style={{ marginTop: 20, maxWidth: "500px" }} alt="thumbnail"></img>
         </a>
       </>
     </InputBox>
