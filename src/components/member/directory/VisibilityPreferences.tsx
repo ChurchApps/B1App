@@ -4,6 +4,7 @@ import { ApiHelper, InputBox, VisibilityPreferenceInterface } from "@churchapps/
 
 export const VisibilityPreferences = () => {
   const [pref, setPref] = useState<VisibilityPreferenceInterface>({ address: "", phoneNumber: "", email: "" } as VisibilityPreferenceInterface);
+  console.log("here")
 
   const initData = () => {
     ApiHelper.get("/visibilityPreferences/my", "MembershipApi").then((data) => setPref(data));
