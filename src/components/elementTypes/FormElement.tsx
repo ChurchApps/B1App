@@ -14,6 +14,11 @@ export const FormElement = (props: Props) => {
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
   const formId = props.element.answers.formId;
 
+  console.log("church: ", props.church);
+  console.log("formId: ", formId);
+  console.log("addFormId: ", addFormId);
+  console.log("unRestrictedFormId: ", unRestrictedFormId);
+
 
   useEffect(() => {
     if (formId && props.church) {
