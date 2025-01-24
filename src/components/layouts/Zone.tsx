@@ -24,6 +24,7 @@ type Props = {
 
 
 export default function Zone(props: Props) {
+  console.log("ZONE props.church", props.church);
   const result: JSX.Element[] = []
   let first = true;
   const sections = ArrayHelper.getAll(props.sections, "zone", props.zone);

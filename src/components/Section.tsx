@@ -21,6 +21,7 @@ interface Props {
 
 export const Section: React.FC<Props> = props => {
   const [isDragging, setIsDragging] = useState(false);
+  console.log("SECTION props.church", props.church)
 
 
   const getElements = () => {
