@@ -19,6 +19,7 @@ export const FormElement = (props: Props) => {
   console.log("formId: ", formId);
   console.log("addFormId: ", addFormId);
   console.log("unRestrictedFormId: ", unRestrictedFormId);
+  console.log("currentChurch: ", currentChurch);
 
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export const FormElement = (props: Props) => {
 
   const loadData = () => {
     ApiHelper.get(
-      "/forms/standalone/" + formId + "?churchId=" + props.church.id,
+      "/forms/standalone/" + formId + "?churchId=" + currentChurch.id,
       "MembershipApi"
     ).then((data) => {
       if (data.restricted) setAddFormId(formId);
@@ -45,7 +46,7 @@ export const FormElement = (props: Props) => {
 
   const handleUpdate = () => setIsFormSubmitted(true);
 
-  if (!(props.church && formId && (addFormId || unRestrictedFormId))) {
+  if (!(currentChurch && formId && (addFormId || unRestrictedFormId))) {
     return <Loading />;
   }
 
