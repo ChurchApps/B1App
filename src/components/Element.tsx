@@ -38,8 +38,6 @@ interface Props {
 
 export const Element: React.FC<Props> = props => {
 
-  console.log("ELEMENT props.church: ", props.church);
-
   const handleDrop = (data: any, sort: number) => {
     if (data.data) {
       const element: ElementInterface = data.data;
