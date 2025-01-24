@@ -16,7 +16,6 @@ interface Props {
 }
 
 export const SectionBlock: React.FC<Props> = props => {
-  console.log("SECTION BLOCK")
 
   const getEdit = () => {
     if (props.onEdit) {
