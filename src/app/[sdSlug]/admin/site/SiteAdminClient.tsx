@@ -63,7 +63,7 @@ export function SiteAdminClient(props: WrapperPageProps) {
 
   return (
     <>
-      {(addMode!=="") && <AddPageModal updatedCallback={loadData} onDone={() => { setAddMode(""); setRequestedSlug(""); } } mode={addMode} requestedSlug={requestedSlug} />}
+      {(addMode!=="") && <AddPageModal updatedCallback={() => { loadData(); setAddMode(""); setRequestedSlug(""); }} onDone={() => { setAddMode(""); setRequestedSlug(""); } } mode={addMode} requestedSlug={requestedSlug} />}
       <AdminWrapper config={props.config}>
         <Banner><h1>Website</h1></Banner>
         <SiteAdminWrapper config={props.config}>
