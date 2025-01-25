@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import { createTheme, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 type Props = {
