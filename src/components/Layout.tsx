@@ -27,17 +27,17 @@ export function Layout(props: Props) {
   //   if (props.image) return (<meta property="og:image" content={props.image}></meta>);
   // }
 
-  const mdTheme = createTheme({
-    palette: {
-      secondary: {
-        main: "#444444"
-      }
-    },
-    components: {
-      MuiTextField: { defaultProps: { margin: "normal" } },
-      MuiFormControl: { defaultProps: { margin: "normal" } }
-    }
-  });
+  // const mdTheme = createTheme({
+  //   palette: {
+  //     secondary: {
+  //       main: "#444444"
+  //     }
+  //   },
+  //   components: {
+  //     MuiTextField: { defaultProps: { margin: "normal" } },
+  //     MuiFormControl: { defaultProps: { margin: "normal" } }
+  //   }
+  // });
 
   return (
     <>
