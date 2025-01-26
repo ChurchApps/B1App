@@ -11,8 +11,8 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { GroupHero } from "./GroupHero";
 import { GroupTabs } from "./GroupTabs";
 import { LeaderEdit } from "./LeaderEdit";
-import { PersonAddAdvanced } from "./personAddAdvanced";
 import React from "react";
+import { PersonAdd } from "./PersonAdd";
 
 interface Props {
   config: ConfigurationInterface;
@@ -138,7 +138,7 @@ export function AuthenticatedView(props: Props) {
         break;
       case "members":
         result = <>{isLeader ?
-          <><h2>Members</h2><Grid container spacing={3}><Grid item md={8}><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></Grid><Grid item md={4}><PersonAddAdvanced addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} /></Grid></Grid></> :
+          <><h2>Members</h2><Grid container spacing={3}><Grid item md={7}><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></Grid><Grid item md={5}><PersonAdd addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} /></Grid></Grid></> :
           <><h2>Members</h2><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></>
         }</>
         break;

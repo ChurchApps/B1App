@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { PersonInterface } from "@churchapps/helpers"
 import { TextField, Button, Typography } from "@mui/material";
-import { ApiHelper, Locale, CreatePerson } from "@churchapps/apphelper";
+import { ApiHelper, Locale, CreatePerson, DisplayBox } from "@churchapps/apphelper";
 import { PersonAddResults } from "./PersonAddResults";
 
 
@@ -42,7 +42,7 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
       });
   }
   return (
-    <>
+    <DisplayBox key="displayBox" id="personAddBox" headerIcon="person" headerText={Locale.label("Add Person")}>
       <TextField fullWidth name="personAddText" label={Locale.label("person.person")} value={searchText} onChange={handleChange} onKeyDown={handleKeyDown}
         InputProps={{ endAdornment: <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSearch}>{Locale.label("common.search")}</Button> }}
       />
@@ -51,6 +51,6 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
       )}
       <PersonAddResults addFunction={addFunction} getPhotoUrl={getPhotoUrl} includeEmail={includeEmail} actionLabel={actionLabel} searchResults={searchResults} />
       {open && <CreatePerson showInModal onClose={() => { setOpen(false); }} navigateOnCreate={false} onCreate={person => { setSearchText(""); setSearchResults([person]) }} />}
-    </>
+    </DisplayBox>
   );
 }

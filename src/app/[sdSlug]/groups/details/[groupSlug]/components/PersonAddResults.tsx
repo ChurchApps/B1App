@@ -20,6 +20,8 @@ export const PersonAddResults: React.FC<Props> = (props: Props) => {
 
   useEffect(() => { setSearchResults(props.searchResults); }, [props.searchResults]);
 
+  if (!searchResults) return null;
+
   const handleAdd = (person: PersonInterface) => {
     let sr: PersonInterface[] = [...searchResults];
     const idx = sr.indexOf(person);
@@ -35,7 +37,7 @@ export const PersonAddResults: React.FC<Props> = (props: Props) => {
 
     rows.push(
       <TableRow key={sr.id}>
-        <TableCell><img src={props.getPhotoUrl(sr)} alt="avatar" /></TableCell>
+        <TableCell><img src={props.getPhotoUrl(sr)} alt="avatar" style={{width:50, height:40, borderRadius:8}} /></TableCell>
         <TableCell>{sr.name.display}{props.includeEmail && (<><br /><i style={{ color: "#999" }}>{sr.contactInfo.email}</i></>)}</TableCell>
         <TableCell>
           <SmallButton color="success" icon="person" text={props.actionLabel || "Add"} ariaLabel="addPerson" onClick={() => handleAdd(sr)} />
