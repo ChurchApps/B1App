@@ -17,9 +17,7 @@ interface Props {
   showCreatePersonOnNotFound?: boolean;
 }
 
-export const PersonAddAdvanced: React.FC<Props> = (props: Props) => {
-
-  return <DisplayBox key="displayBox" id="personAddBox" headerIcon="person" headerText={Locale.label("Add Person")}>
+export const PersonAddAdvanced: React.FC<Props> = (props: Props) =>
+  <DisplayBox key="displayBox" id="personAddBox" headerIcon="person" headerText={Locale.label("Add Person")}>
     <PersonAdd getPhotoUrl={PersonHelper.getPhotoUrl} addFunction={props.addFunction} showCreatePersonOnNotFound />
   </DisplayBox>
-}
