@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const PersonAddResults: React.FC<Props> = (props: Props) => {
-  const [searchResults, setSearchResults] = useState<PersonInterface[]>(props.searchResults);
+  const [searchResults, setSearchResults] = useState<PersonInterface[]>(null);
 
   useEffect(() => { setSearchResults(props.searchResults); }, [props.searchResults]);
 
