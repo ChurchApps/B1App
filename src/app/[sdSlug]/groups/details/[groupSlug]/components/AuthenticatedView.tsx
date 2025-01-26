@@ -17,7 +17,6 @@ import React from "react";
 interface Props {
   config: ConfigurationInterface;
   group: GroupInterface;
-  getPhotoUrl: (person: PersonInterface) => string;
   addedCallback?: () => void;
 }
 
