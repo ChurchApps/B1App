@@ -13,30 +13,17 @@ export const FormElement = (props: Props) => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
   const formId = props.element.answers.formId;
-  const [currentChurch, setCurrentChurch] = useState<ChurchInterface>(props.church);
-
-  console.log("church: ", props.church);
-  console.log("formId: ", formId);
-  console.log("addFormId: ", addFormId);
-  console.log("unRestrictedFormId: ", unRestrictedFormId);
-  console.log("currentChurch: ", currentChurch);
 
 
   useEffect(() => {
-    console.log("changing church:");
-    setCurrentChurch(props.church);
-  }, [props.church]);
-
-  useEffect(() => {
-    console.log("church prop changed: ")
-    if (formId && currentChurch) {
+    if (formId && props.church) {
       loadData();
     }
-  }, [formId, currentChurch]);
+  }, [formId, props.church]);
 
   const loadData = () => {
     ApiHelper.get(
-      "/forms/standalone/" + formId + "?churchId=" + currentChurch.id,
+      "/forms/standalone/" + formId + "?churchId=" + props.church.id,
       "MembershipApi"
     ).then((data) => {
       if (data.restricted) setAddFormId(formId);
@@ -46,7 +33,7 @@ export const FormElement = (props: Props) => {
 
   const handleUpdate = () => setIsFormSubmitted(true);
 
-  if (!(currentChurch && formId && (addFormId || unRestrictedFormId))) {
+  if (!(props.church && formId && (addFormId || unRestrictedFormId))) {
     return <Loading />;
   }
 

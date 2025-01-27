@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableRow, Container } from "@mui/material";
-import { GroupInterface, ApiHelper, UserHelper, PersonHelper, MarkdownPreviewLight, Conversations, DisplayBox, Loading } from "@churchapps/apphelper";
+import { GroupInterface, ApiHelper, UserHelper, PersonHelper, MarkdownPreviewLight, Conversations, DisplayBox, Loading, PersonInterface, SmallButton, GroupMemberInterface } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 import { GroupFiles } from "@/components/groups/GroupFiles";
@@ -11,10 +11,13 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { GroupHero } from "./GroupHero";
 import { GroupTabs } from "./GroupTabs";
 import { LeaderEdit } from "./LeaderEdit";
+import React from "react";
+import { PersonAdd } from "./PersonAdd";
 
 interface Props {
   config: ConfigurationInterface;
-  group: GroupInterface
+  group: GroupInterface;
+  addedCallback?: () => void;
 }
 
 export function AuthenticatedView(props: Props) {
@@ -38,7 +41,11 @@ export function AuthenticatedView(props: Props) {
     setGroup(props.group);
   }, [props.group]);
 
-
+  const getMemberByPersonId = React.useCallback((personId: string) => {
+    let result = null;
+    for (let i = 0; i < groupMembers.length; i++) if (groupMembers[i].personId === personId) result = groupMembers[i];
+    return result;
+  }, [groupMembers]);
 
   const getRows = () => {
     let rows: JSX.Element[] = [];
@@ -58,6 +65,10 @@ export function AuthenticatedView(props: Props) {
           <TableCell>
             <Link href={`/member/directory/${gm.person.id}`}>{gm.person.name.display}</Link>
           </TableCell>
+          {isLeader &&
+            <TableCell style={{ textAlign: "right" }}>
+              <SmallButton icon="person_remove" toolTip="Remove" onClick={() => handleRemove(gm)} color="error" />
+            </TableCell>}
         </TableRow>
       );
     }
@@ -80,6 +91,27 @@ export function AuthenticatedView(props: Props) {
 
   const handleChange = (g: GroupInterface) => {
     setGroup(g);
+  }
+
+  const handleAdd = (addedPerson: PersonInterface) => {
+    if (getMemberByPersonId(addedPerson.id) === null) {
+      let gm = { groupId: props.group.id, personId: addedPerson.id, person: addedPerson } as GroupMemberInterface
+      ApiHelper.post("/groupmembers", [gm], "MembershipApi").then((data) => {
+        gm.id = data[0].id;
+      });
+      let members = [...groupMembers];
+      members.push(gm);
+      setGroupMembers(members);
+      props.addedCallback();
+    }
+  }
+
+  const handleRemove = (member: GroupMemberInterface) => {
+    let members = [...groupMembers];
+    let idx = members.indexOf(member);
+    members.splice(idx, 1);
+    setGroupMembers(members);
+    ApiHelper.delete("/groupmembers/" + member.id, "MembershipApi");
   }
 
   const getTabContent = () => {
@@ -105,7 +137,13 @@ export function AuthenticatedView(props: Props) {
         result = <><h2>Files</h2><GroupFiles context={context} groupId={group.id} /></>
         break;
       case "members":
-        result = <><h2>Members</h2><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></>
+        result = <>{isLeader ?
+          <><h2>Members</h2><Grid container spacing={3}><Grid item md={7}><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></Grid><Grid item md={5}><PersonAdd addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} /></Grid></Grid></> :
+          <><h2>Members</h2><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></>
+        }</>
+        break;
+      case "attendance":
+        result = <><h2>Attendance</h2></>
         break;
     }
     return result;
@@ -126,14 +164,9 @@ export function AuthenticatedView(props: Props) {
               {group
                 ? (<>{getTabContent()}</>)
                 : (<p>No group data found</p>)}
-
-
-
             </Grid>
           </Grid>
         </div>
-
-
 
       </Container>
     </>
