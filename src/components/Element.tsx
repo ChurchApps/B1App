@@ -82,7 +82,7 @@ export const Element: React.FC<Props> = props => {
       result = <TextWithPhoto key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "row":
-      result = <RowElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} onMove={props.onMove} />
+      result = <RowElement key={props.element.id} church={props.church} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} onMove={props.onMove} />
       break;
     case "box":
       result = <BoxElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} onMove={props.onMove} />

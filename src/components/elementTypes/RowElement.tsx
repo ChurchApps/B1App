@@ -2,9 +2,9 @@ import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
 
-interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
+interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void, church?: ChurchInterface }
 
 export function RowElement(props: Props) {
 
@@ -30,7 +30,7 @@ export function RowElement(props: Props) {
     const result: JSX.Element[] = []
     if (props.onEdit) result.push(getAddElement(column, 1))
     elements?.forEach(c => {
-      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} parentId={column.id} onMove={props.onMove} />)
+      result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} parentId={column.id} onMove={props.onMove} church={props?.church} />)
     });
     return result;
   }
