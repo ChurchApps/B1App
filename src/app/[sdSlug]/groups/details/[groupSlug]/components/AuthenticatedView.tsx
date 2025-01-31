@@ -11,18 +11,13 @@ import { GroupHero } from "./GroupHero";
 import { GroupTabs } from "./GroupTabs";
 import { LeaderEdit } from "./LeaderEdit";
 import React from "react";
-import { GroupSessions } from "./GroupSessions";
-import { SessionAdd } from "./SessionAdd";
-import { MembersAdd } from "./MembersAdd";
 import { MembersTab } from "./MembersTab";
+import { AttendanceTab } from "./AttendanceTab";
 
 interface Props {
   config: ConfigurationInterface;
   group: GroupInterface;
   addedCallback?: () => void;
-  addedPerson?: PersonInterface,
-  addedSession?: SessionInterface,
-  sidebarVisibilityFunction: (name: string, visible: boolean) => void
 }
 
 export function AuthenticatedView(props: Props) {
@@ -69,7 +64,7 @@ export function AuthenticatedView(props: Props) {
         result = <MembersTab isLeader={isLeader} group={group} />
         break;
       case "attendance":
-        result = <><h2>Attendance</h2><Grid container spacing={3}><Grid item md={7}><GroupSessions group={group} sidebarVisibilityFunction={props.sidebarVisibilityFunction} addedSession={props.addedSession} addedPerson={props.addedPerson} /></Grid><Grid item md={5}><MembersAdd group={group} addFunction={() => { }} /></Grid><Grid item md={5}><SessionAdd group={group} updatedFunction={() => { }} /></Grid></Grid></>
+        result = <AttendanceTab group={group} />
         break;
     }
     return result;
