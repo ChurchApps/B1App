@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableRow, Container } from "@mui/material";
-import { GroupInterface, ApiHelper, UserHelper, PersonHelper, MarkdownPreviewLight, Conversations, DisplayBox, Loading, PersonInterface, SmallButton, GroupMemberInterface } from "@churchapps/apphelper";
+import { GroupInterface, ApiHelper, UserHelper, PersonHelper, MarkdownPreviewLight, Conversations, DisplayBox, Loading, PersonInterface, SmallButton, GroupMemberInterface, SessionInterface } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 import { GroupFiles } from "@/components/groups/GroupFiles";
@@ -13,11 +13,17 @@ import { GroupTabs } from "./GroupTabs";
 import { LeaderEdit } from "./LeaderEdit";
 import React from "react";
 import { PersonAdd } from "./PersonAdd";
+import { GroupSessions } from "./GroupSessions";
+import { SessionAdd } from "./SessionAdd";
+import { MembersAdd } from "./MembersAdd";
 
 interface Props {
   config: ConfigurationInterface;
   group: GroupInterface;
   addedCallback?: () => void;
+  addedPerson?: PersonInterface,
+  addedSession?: SessionInterface,
+  sidebarVisibilityFunction: (name: string, visible: boolean) => void
 }
 
 export function AuthenticatedView(props: Props) {
@@ -102,7 +108,7 @@ export function AuthenticatedView(props: Props) {
       let members = [...groupMembers];
       members.push(gm);
       setGroupMembers(members);
-      props.addedCallback();
+      {/* props.addedCallback(); */ }
     }
   }
 
@@ -143,7 +149,7 @@ export function AuthenticatedView(props: Props) {
         }</>
         break;
       case "attendance":
-        result = <><h2>Attendance</h2></>
+        result = <><h2>Attendance</h2><Grid container spacing={3}><Grid item md={7}><GroupSessions group={group} sidebarVisibilityFunction={props.sidebarVisibilityFunction} addedSession={props.addedSession} addedPerson={props.addedPerson} /></Grid><Grid item md={5}><MembersAdd group={group} addFunction={handleAdd} /></Grid><Grid item md={5}><SessionAdd group={group} updatedFunction={loadData} /></Grid></Grid></>
         break;
     }
     return result;
