@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useContext } from "react";
 import { Grid, Container } from "@mui/material";
-import { GroupInterface, UserHelper, MarkdownPreviewLight, Conversations, DisplayBox, PersonInterface, SessionInterface } from "@churchapps/apphelper";
+import { GroupInterface, UserHelper, MarkdownPreviewLight, Conversations, DisplayBox } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 import { GroupFiles } from "@/components/groups/GroupFiles";
