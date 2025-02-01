@@ -73,7 +73,7 @@ const CascadingHoverMenus = ({ link }: MenuInterface) => {
   const popupState = usePopupState({ popupId: "demoMenu", variant: "popover" });
   return (
     <div>
-      <Link key={link.id} href={link.url} style={{ paddingLeft: 15, paddingRight: 15, paddingBottom: 8, fontSize:14 }} {...bindHover(popupState)} {...bindFocus(popupState)}>
+      <Link key={link.id} href={link.url || ""} style={{ paddingLeft: 15, paddingRight: 15, paddingBottom: 8, fontSize:14 }} {...bindHover(popupState)} {...bindFocus(popupState)}>
         {link.text}
       </Link>
       {link?.children && <CascadingMenu popupState={popupState} anchorOrigin={{ vertical: "bottom", horizontal: "left" }} transformOrigin={{ vertical: "top", horizontal: "left" }} id="stage-1">
