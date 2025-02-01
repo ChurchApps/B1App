@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { GroupInterface, UserHelper } from "@churchapps/apphelper";
 
 interface Props {
   config: ConfigurationInterface;
   onTabChange: (tab: string) => void;
+  group: GroupInterface;
 }
 
 export const GroupTabs = (props: Props) => {
@@ -16,6 +18,16 @@ export const GroupTabs = (props: Props) => {
   PersonHelper.person = context.person;
   const tabs: any[] = []
 
+  const [group, setGroup] = useState(props.group);
+
+  useEffect(() => {
+    setGroup(props.group);
+  }, [props.group]);
+
+  let isLeader = false;
+  UserHelper.currentUserChurch.groups?.forEach((g) => {
+    if (g.id === group?.id && g.leader) isLeader = true;
+  });
 
 
   const getTabs = () => {
@@ -24,7 +36,9 @@ export const GroupTabs = (props: Props) => {
 
     tabs.push({ key: "details", label: "Group Details" });
     tabs.push({ key: "members", label: "Members" });
-    tabs.push({ key: "attendance", label: "Attendance" });
+    if (isLeader) {
+      tabs.push({ key: "attendance", label: "Attendance" });
+    }
     tabs.push({ key: "calendar", label: "Calendar" });
     tabs.push({ key: "conversations", label: "Conversations" });
     tabs.push({ key: "files", label: "Files" });

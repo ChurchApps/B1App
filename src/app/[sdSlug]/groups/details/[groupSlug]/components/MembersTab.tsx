@@ -9,7 +9,6 @@ import { PersonAdd } from "./PersonAdd";
 interface Props {
   isLeader: boolean
   group: GroupInterface
-
 }
 
 export function MembersTab(props: Props) {
@@ -80,7 +79,6 @@ export function MembersTab(props: Props) {
       let members = [...groupMembers];
       members.push(gm);
       setGroupMembers(members);
-      {/* props.addedCallback(); */ }
     }
   }
 
@@ -93,7 +91,19 @@ export function MembersTab(props: Props) {
   }
 
   return <>{props.isLeader ?
-    <><h2>Members</h2><Grid container spacing={3}><Grid item md={7}><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></Grid><Grid item md={5}><PersonAdd addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} /></Grid></Grid></> :
-    <><h2>Members</h2><DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox></>
+    <>
+      <h2>Members</h2>
+      <Grid container spacing={3}>
+        <Grid item md={7}>
+          <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox>
+        </Grid>
+        <Grid item md={5}>
+          <PersonAdd addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} />
+        </Grid>
+      </Grid>
+    </> : <>
+      <h2>Members</h2>
+      <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox>
+    </>
   }</>
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { ApiHelper, GroupInterface, GroupServiceTimeInterface, InputBox, ErrorMessages, SessionInterface, DateHelper, UniqueIdHelper, Locale } from "@churchapps/apphelper";
 import { TextField, FormControl, Select, InputLabel, SelectChangeEvent, MenuItem } from "@mui/material"
 
-interface Props { group: GroupInterface, updatedFunction: (session: SessionInterface) => void }
+interface Props { group: GroupInterface, updatedFunction: (session: SessionInterface) => void, sidebarVisibilityFunction: (name: string, visible: boolean) => void, }
 
 export const SessionAdd: React.FC<Props> = (props) => {
   const [errors, setErrors] = React.useState<string[]>([]);
@@ -10,7 +10,7 @@ export const SessionAdd: React.FC<Props> = (props) => {
   const [groupServiceTimes, setGroupServiceTimes] = React.useState<GroupServiceTimeInterface[]>([]);
   const [serviceTimeId, setServiceTimeId] = React.useState("");
 
-  const handleCancel = () => { props.updatedFunction(null); }
+  const handleCancel = () => { props.sidebarVisibilityFunction("addPerson", true); }
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } }
   const loadData = React.useCallback(() => {
     ApiHelper.get("/groupservicetimes?groupId=" + props.group.id, "AttendanceApi").then(data => {

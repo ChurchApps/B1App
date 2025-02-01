@@ -78,7 +78,7 @@ export function AuthenticatedView(props: Props) {
           <Grid container spacing={2}>
             <Grid item xs={12} md={2}>
               <div className="sideNav">
-                <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val) }} />
+                <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val) }} group={group} />
               </div>
             </Grid>
             <Grid item xs={12} md={10}>

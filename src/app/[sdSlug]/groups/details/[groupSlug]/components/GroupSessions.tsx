@@ -35,7 +35,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
     ApiHelper.delete("/visitsessions?sessionId=" + session.id + "&personId=" + vs.visit.personId, "AttendanceApi").then(loadAttendance);
   }
 
-  const handleAdd = (e: React.MouseEvent) => { e.preventDefault(); console.log("clicked new"); {/* props.sidebarVisibilityFunction("addSession", true); */ } }
+  const handleAdd = (e: React.MouseEvent) => { e.preventDefault(); props.sidebarVisibilityFunction("addSession", true); }
 
   const getRows = () => {
     let canEdit = UserHelper.checkAccess(Permissions.attendanceApi.attendance.edit);
@@ -96,14 +96,12 @@ export const GroupSessions: React.FC<Props> = (props) => {
   const handleSessionSelected = React.useCallback(() => {
     if (session !== null) {
       loadAttendance();
-      {/* props.sidebarVisibilityFunction("addPerson", true); */ }
     }
   }, [props, loadAttendance, session])
 
   const handlePersonAdd = React.useCallback(() => {
     let v = { checkinTime: new Date(), personId: props.addedPerson.id, visitSessions: [{ sessionId: session.id }] } as VisitInterface;
     ApiHelper.post("/visitsessions/log", v, "AttendanceApi").then(() => { loadAttendance(); });
-    props.addedCallback();
   }, [props, loadAttendance, session]);
 
   React.useEffect(() => { if (props.group.id !== undefined) { loadSessions() }; {/* props.addedCallback();*/ } }, [props.group, props.addedSession, loadSessions, props]);
