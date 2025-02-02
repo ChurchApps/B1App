@@ -1,6 +1,7 @@
 body {
   background-color: #e5e8ee !important;
 }
+
 /*Start Checkin*/
 
 .bigLinkButton {
@@ -112,7 +113,8 @@ body {
   border-top: none;
 }
 
-.note, .conversation {
+.note,
+.conversation {
   margin-top: 10px;
   border-bottom: 1px solid #ddd;
   display: flex;
@@ -120,17 +122,20 @@ body {
   padding: 0 10px;
 }
 
-.note:last-child, .conversation:last-child {
+.note:last-child,
+.conversation:last-child {
   border-bottom: none;
 }
 
-.note .postedBy, .conversation .postedBy {
+.note .postedBy,
+.conversation .postedBy {
   color: #999;
   justify-content: space-between;
   align-items: baseline;
 }
 
-.note .postedBy img, .conversation .postedBy img {
+.note .postedBy img,
+.conversation .postedBy img {
   width: 60px;
   height: 45px;
   margin-right: 15px;
@@ -156,9 +161,9 @@ body {
 /* End private messaging & notes */
 
 .understated {
-  color:#777;
-  font-style:"italic";
-  font-size:14px;
+  color: #777;
+  font-style: "italic";
+  font-size: 14px;
 }
 
 
@@ -338,8 +343,15 @@ body {
   border: none;
 }
 
-.b1Frame { width:100%; height:95vh; }
-.b1Frame iframe { width:100%; height:100%; }
+.b1Frame {
+  width: 100%;
+  height: 95vh;
+}
+
+.b1Frame iframe {
+  width: 100%;
+  height: 100%;
+}
 
 
 .socialPost {
@@ -348,7 +360,9 @@ body {
   margin-bottom: 20px;
 }
 
-#smallPeopleTable img { max-height: 50px; }
+#smallPeopleTable img {
+  max-height: 50px;
+}
 
 /*
 #editorBar>div>div {
@@ -358,11 +372,21 @@ body {
 */
 
 #dialogForm {
-  
+
   margin-bottom: 0px;
   min-width: 500px;
 }
 
 #dialogFormContent {
-  padding-top:20px;
+  padding-top: 20px;
+}
+
+.personSideTable img {
+  width: 60px;
+  height: 45px;
+  border-radius: 5px;
+}
+
+.sideTableHeader h2 {
+  font-size: 26px;
 }
