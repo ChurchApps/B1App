@@ -21,7 +21,7 @@ export const DirectorySearch: React.FC<Props> = (props) => {
   }
 
   const loadData = () => {
-    ApiHelper.get("/people/recent", "MembershipApi").then(data => { setSearchResults(data) });
+    ApiHelper.get("/people/directory/all", "MembershipApi").then(data => { setSearchResults(data) });
     ApiHelper.get("/groups", "MembershipApi").then((data: GroupInterface[]) => setGroups(data));
   }
 
