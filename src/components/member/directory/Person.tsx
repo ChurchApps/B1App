@@ -69,7 +69,7 @@ export const Person: React.FC<Props> = (props) => {
   }
 
   const loadData = () => {
-    ApiHelper.get("/people/" + props.personId, "MembershipApi").then(data => setPerson(data));
+    ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then(data => setPerson(data));
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then(data => setRequestedChanges(data));
   }
 
