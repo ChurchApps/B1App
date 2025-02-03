@@ -23,7 +23,7 @@ export const VisibilityPreferences = () => {
   const handleSave = () => {
     ApiHelper.post("/visibilityPreferences", [pref], "MembershipApi").then(() => {
       alert("Changes Saved.");
-    });
+    }).finally(() => { initData(); });
   };
 
   useEffect(initData, []);
@@ -35,7 +35,7 @@ export const VisibilityPreferences = () => {
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth>
             <InputLabel id="address">Address</InputLabel>
-            <Select fullWidth labelId="address" label="Address" name="address" value={pref.address} defaultValue="" onChange={handlePrefChange}>
+            <Select fullWidth labelId="address" label="Address" name="address" value={pref.address || ""} defaultValue="" onChange={handlePrefChange}>
               <MenuItem value="everyone">Everyone</MenuItem>
               <MenuItem value="members">Members</MenuItem>
               <MenuItem value="groups">My Groups Only</MenuItem>
@@ -45,7 +45,7 @@ export const VisibilityPreferences = () => {
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth>
             <InputLabel id="phone">Phone Number</InputLabel>
-            <Select fullWidth labelId="phone" label="Phone Number" name="phoneNumber" value={pref.phoneNumber} defaultValue="" onChange={handlePrefChange}>
+            <Select fullWidth labelId="phone" label="Phone Number" name="phoneNumber" value={pref.phoneNumber || ""} defaultValue="" onChange={handlePrefChange}>
               <MenuItem value="everyone">Everyone</MenuItem>
               <MenuItem value="members">Members</MenuItem>
               <MenuItem value="groups">My Groups Only</MenuItem>
@@ -55,7 +55,7 @@ export const VisibilityPreferences = () => {
         <Grid item xs={12} sm={12} md={4}>
           <FormControl fullWidth>
             <InputLabel id="email">Email</InputLabel>
-            <Select fullWidth labelId="email" label="Email" name="email" value={pref.email} defaultValue="" onChange={handlePrefChange}>
+            <Select fullWidth labelId="email" label="Email" name="email" value={pref.email || ""} defaultValue="" onChange={handlePrefChange}>
               <MenuItem value="everyone">Everyone</MenuItem>
               <MenuItem value="members">Members</MenuItem>
               <MenuItem value="groups">My Groups Only</MenuItem>
