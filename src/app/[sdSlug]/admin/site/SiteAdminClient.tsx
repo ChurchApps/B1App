@@ -52,7 +52,7 @@ export function SiteAdminClient(props: WrapperPageProps) {
   }
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
+    if (!isAuthenticated) redirect("/login?returnUrl=/admin/site");
     else loadData();
   }, [isAuthenticated]);
 
