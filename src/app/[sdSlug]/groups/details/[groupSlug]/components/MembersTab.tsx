@@ -52,7 +52,7 @@ export function MembersTab(props: Props) {
             <img src={PersonHelper.getPhotoUrl(gm.person)} alt="avatar" style={{ width: "50px", height: "40px", borderRadius: 8 }} />
           </TableCell>
           <TableCell>
-            <Link href={`/member/directory/${gm.person.id}`}>{gm.person.name.display}</Link>
+            <Link href={`/my/community/${gm.person.id}`}>{gm.person.name.display}</Link>
           </TableCell>
           {props.isLeader &&
             <TableCell style={{ textAlign: "right" }}>

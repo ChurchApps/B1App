@@ -16,8 +16,6 @@ interface Props {
 
 export const TimelinePost: React.FC<Props> = (props) => {
 
-  //const [photoUrl, setPhotoUrl] = useState((props.post.conversation?.messages?.length>0) ? EnvironmentHelper.Common.ContentRoot + "/" + UserHelper.currentUserChurch.church.id + "/membership/people/" + props.post.conversation.messages[0].personId + ".png" : "/images/sample-profile.png");
-
   const getPostDetails = () => {
     const displayTime = DateHelper.getDisplayDuration(props.post.timeSent);
 

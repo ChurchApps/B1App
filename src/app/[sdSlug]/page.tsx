@@ -38,13 +38,8 @@ export default async function Home({params}: {params:Promise<PageParams>}) {
 
   const { sdSlug } =  await params;
   const props = await loadData(sdSlug);
-  /*
-  useEffect(() => {
-    if (!props.pageData?.url && typeof window !== undefined) window.location.href = window.location.origin + "/member";
-  }, []); //eslint-disable-line
-  */
 
-  if (!props.pageData?.url) redirect("/member"); //return <Loading />
+  if (!props.pageData?.url) redirect("/my"); //return <Loading />
   else return (<>
     <Theme config={props.config} />
     <PageLayout config={props.config} pageData={props.pageData} />
