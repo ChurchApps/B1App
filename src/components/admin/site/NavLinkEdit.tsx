@@ -41,6 +41,7 @@ export function NavLinkEdit(props: Props) {
   const validate = () => {
     let errors = [];
     if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to create pages");
+    if (!link?.text || link?.text === "" || link?.text?.trim().length === 0) errors.push("Please enter link text");
     setErrors(errors);
     return errors.length === 0;
   };
