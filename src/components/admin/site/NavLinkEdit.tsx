@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, SyntheticEvent } from "react";
 import { ErrorMessages, InputBox, ApiHelper, UserHelper, Permissions, LinkInterface } from "@churchapps/apphelper";
 import { Autocomplete, Dialog, SelectChangeEvent, TextField } from "@mui/material";
 import { PageLink } from "@/helpers";
@@ -31,9 +31,17 @@ export function NavLinkEdit(props: Props) {
     setLink(l);
   };
 
+  const handleUrlChange = (e: SyntheticEvent<Element, Event>, value: string) => {
+    e?.preventDefault();
+    let l = { ...link };
+    l.url = value;
+    setLink(l);
+  }
+
   const validate = () => {
     let errors = [];
     if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to create pages");
+    if (!link?.text || link?.text === "" || link?.text?.trim().length === 0) errors.push("Please enter link text");
     setErrors(errors);
     return errors.length === 0;
   };
@@ -81,8 +89,8 @@ export function NavLinkEdit(props: Props) {
     <Dialog open={true} onClose={props.onDone} style={{minWidth:800}}>
       <InputBox id="pageDetailsBox" headerText={link?.id ? "Add Link" : "Link Settings"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
         <ErrorMessages errors={errors} />
-        <Autocomplete disablePortal limitTags={3} freeSolo options={getPageOptions()} sx={{ width: 300 }} ListboxProps={{ style: { maxHeight:150 }}} value={link.url} renderInput={(params) =>
-          <TextField {...params} size="small" fullWidth label="Url" name="linkUrl" onChange={handleLinkChange} onKeyDown={handleKeyDown} />
+        <Autocomplete disablePortal limitTags={3} freeSolo options={getPageOptions()} onChange={handleUrlChange} onInputChange={handleUrlChange} sx={{ width: 300 }} ListboxProps={{ style: { maxHeight:150 }}} value={link.url} renderInput={(params) =>
+          <TextField {...params} size="small" fullWidth label="Url" name="linkUrl" onKeyDown={handleKeyDown} />
         } />
         <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
       </InputBox>

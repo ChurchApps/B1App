@@ -51,7 +51,10 @@ export const SiteNavigation: React.FC<Props> = (props) => {
     return (
       <>
         {childrenLinks.map((link) => {
-          const anchor = (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); }}>{link.text}</a>)
+          let linkText = link.text;
+          if (linkText.trim().length === 0) linkText = "[No Title]";
+
+          const anchor = (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); }}>{linkText}</a>)
           idx++
 
           const index = idx-1
