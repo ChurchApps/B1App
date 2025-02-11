@@ -5,14 +5,17 @@ import { Loading, FormSubmissionEdit, ApiHelper, ChurchInterface } from "@church
 
 interface Props {
   element: ElementInterface;
-  church: ChurchInterface
+  church: ChurchInterface;
 }
+
+export interface FormInterface { id?: string, name?: string, contentType?: string, restricted?: boolean, accessStartTime?: Date, accessEndTime?: Date, archived: boolean, action?: string, thankYouMessage?: string }
 
 export const FormElement = (props: Props) => {
   const [addFormId, setAddFormId] = useState<string>("");
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
   const formId = props.element.answers.formId;
+  const [form, setForm] = useState<FormInterface>(null);
 
 
   useEffect(() => {
@@ -28,6 +31,7 @@ export const FormElement = (props: Props) => {
     ).then((data) => {
       if (data.restricted) setAddFormId(formId);
       else setUnRestrictedFormId(formId);
+      setForm(data);
     });
   };
 
@@ -40,7 +44,7 @@ export const FormElement = (props: Props) => {
   if (isFormSubmitted) {
     return (
       <p>
-        Your form has been successfully submitted.{" "}
+        {form.thankYouMessage ? form.thankYouMessage : "Your form has been successfully submitted."}
         <Button
           variant="text"
           size="small"
