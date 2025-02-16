@@ -4,7 +4,6 @@ import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper } from "@churchapps/apphelper";
 import React from "react";
-import Head from "next/head";
 
 interface Props { config?:ConfigurationInterface }
 
