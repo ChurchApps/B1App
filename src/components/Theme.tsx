@@ -4,7 +4,6 @@ import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper } from "@churchapps/apphelper";
 import React from "react";
-import Head from "next/head";
 
 interface Props { config?:ConfigurationInterface }
 
@@ -65,7 +64,7 @@ export const Theme: React.FC<Props> = (props) => {
     <style jsx>
       {css}
     </style>
-    <Head>
+    <head>
 
       {favicon
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
@@ -75,7 +74,7 @@ export const Theme: React.FC<Props> = (props) => {
       <meta property="og:url" content={EnvironmentHelper.Common.B1Root.replace("{key}", props.config?.church?.subDomain)} />
       <meta property="og:type" content="website" />
       <meta property="og:title" content={props.config?.church?.name} />
-    </Head>
+    </head>
     {customJs}
   </>);
 }
