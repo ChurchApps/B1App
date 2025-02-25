@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { StreamingServiceExtendedInterface } from "@/helpers";
-import { useMountedState } from "@churchapps/apphelper";
+import { SectionInterface, StreamingServiceExtendedInterface } from "@/helpers";
+import { AppearanceHelper, useMountedState } from "@churchapps/apphelper";
+import { StyleHelper } from "@/helpers/StyleHelper";
+import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { useParams } from "next/navigation";
 
-interface Props { currentService: StreamingServiceExtendedInterface | null, embedded:boolean }
+interface Props {
+  currentService: StreamingServiceExtendedInterface | null, embedded: boolean;
+  sections?: SectionInterface[];
+  overlayContent: boolean;
+}
+
+type PageParams = { sdSlug: string }
 
 export const VideoContainer: React.FC<Props> = (props) => {
 
   const [currentTime, setCurrentTime] = React.useState(new Date().getTime());
   const [loadedTime, setLoadedTime] = React.useState(new Date().getTime());
   const isMounted = useMountedState();
+  const [config, setConfig] = React.useState<ConfigurationInterface>(null);
+  const [transparent, setTransparent] = useState(props.overlayContent);
+  const params = useParams<PageParams>()
+
+  const loadData = () => {
+    ConfigHelper.load(params.sdSlug).then((data) => { setConfig(data); });
+  };
+
+  useEffect(() => {
+    loadData();
+  });
 
   const getCountdownTime = (serviceTime: Date) => {
     let remainingSeconds = Math.floor((serviceTime.getTime() - currentTime) / 1000);
@@ -40,12 +60,21 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getCountdown = (cs: StreamingServiceExtendedInterface) => {
     let displayTime = getCountdownTime(cs.localCountdownTime || new Date());
-    return <div id="noVideoContent"><h3>Next Service Time</h3>{displayTime}</div>
+    return <div id="noVideoContent" style={{ backgroundImage: `url(${getLogo()})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>Next Service Time</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>
+  }
+
+  const getLogo = () => {
+    if (transparent) {
+      const textColor = StyleHelper.getTextColor(props.sections[0]?.textColor, config?.globalStyles, config?.appearance);
+      const logo = AppearanceHelper.getLogoByTextColor(config?.appearance?.logoLight || null, config?.appearance?.logoDark || null, textColor);
+      return logo !== "" ? logo : null;
+    }
+    else return config?.appearance?.logoLight || null;
   }
 
   const getContents = () => {
     let cs = props.currentService;
-    if (cs === undefined || cs === null || cs.localEndTime === undefined) return <div id="noVideoContent"><h3>Check back for new services</h3></div>;
+    if (cs === undefined || cs === null || cs.localEndTime === undefined) return <div id="noVideoContent" style={{ backgroundImage: `url(${getLogo()})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
     else if (new Date() > cs.localEndTime) return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
     else {
       if (cs.localStartTime !== undefined && new Date() <= cs.localStartTime) return getCountdown(cs);
