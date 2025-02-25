@@ -16,7 +16,6 @@ interface Props {
   includeInteraction: boolean,
   includeHeader: boolean,
   offlineContent?: JSX.Element,
-  overlayContent: boolean;
 }
 
 export const LiveStream: React.FC<Props> = (props) => {
@@ -24,6 +23,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   const [config, setConfig] = React.useState<StreamConfigInterface>(null);
   const [chatState, setChatState] = React.useState<ChatStateInterface>(null);
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
+  const [overlayContent, setOverlayContent] = React.useState(false);
 
   const loadData = async (keyName: string) => {
     let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then(response => response.json());
@@ -59,7 +59,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   let result = (<div id="liveContainer">
     {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}
     <div id="liveBody">
-      <VideoContainer overlayContent={props.overlayContent} currentService={currentService} embedded={!props.includeHeader} />
+      <VideoContainer overlayContent={overlayContent} currentService={currentService} embedded={!props.includeHeader} />
       {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} embedded={!props.includeHeader} />}
     </div>
   </div>);
