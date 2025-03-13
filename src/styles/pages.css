@@ -469,17 +469,9 @@ a.dropdown-toggle::after {
 
 .draggable-container {
   position: relative;
-  /* border: 2px solid red; */
-  /* background-color: #d97b76; */
   display: flex;
   align-items: center;
-  /* transition: border 0.2s ease-in-out; */
-  /* padding: 10px; */
   cursor: text; /* Keeps text selection */
-}
-
-.draggable-container:hover {
-  /* border: 1px solid #28a745; */
 }
 
 /* Drag handle - Always present but only visible on hover */
@@ -499,11 +491,6 @@ a.dropdown-toggle::after {
   opacity: 0;
   transition: opacity 0.2s;
 }
-
-/* Prevents dots from being selected */
-/* .drag-handle span {
-  pointer-events: none;
-} */
 
 /* Section drag handle - INSIDE top-left corner */
 .section-handle {
