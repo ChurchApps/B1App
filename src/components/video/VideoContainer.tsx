@@ -60,7 +60,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getCountdown = (cs: StreamingServiceExtendedInterface) => {
     let displayTime = getCountdownTime(cs.localCountdownTime || new Date());
-    return <div id="noVideoContent" style={{ backgroundImage: `url(${getLogo()})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>Next Service Time</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>
+    return <div id="noVideoContent" style={{ backgroundImage: `url(${getLogo()})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>{cs?.sermon?.title ?? "Next Service Time"}</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>
   }
 
   const getLogo = () => {
@@ -69,7 +69,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
       const logo = AppearanceHelper.getLogoByTextColor(config?.appearance?.logoLight || null, config?.appearance?.logoDark || null, textColor);
       return logo !== "" ? logo : null;
     }
-    else return config?.appearance?.logoLight || null;
+    else return config?.appearance?.logoDark || null;
   }
 
   const getContents = () => {
