@@ -30,11 +30,11 @@ export function CuratedEventCalendar(props: Props) {
 
   const handleEventClick = (event: CuratedEventWithEventInterface) => {
     const ev = { ...event };
-    let tz = new Date().getTimezoneOffset();
-    ev.start = new Date(ev.start);
-    ev.end = new Date(ev.end);
-    ev.start.setMinutes(ev.start.getMinutes() - tz);
-    ev.end.setMinutes(ev.end.getMinutes() - tz);
+    // let tz = new Date().getTimezoneOffset();
+    // ev.start = new Date(ev.start);
+    // ev.end = new Date(ev.end);
+    // ev.start.setMinutes(ev.start.getMinutes() - tz);
+    // ev.end.setMinutes(ev.end.getMinutes() - tz);
     setDisplayCalendarEvent(ev);
   };
 
