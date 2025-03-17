@@ -192,7 +192,7 @@ export default function ContentEditor(props: Props) {
 
   //<div style={{ height: "31px" }}>{getAddSection(sections[sections.length - 1]?.sort + 0.1, keyName, "Drop at the bottom of page")}</div>
   const getZoneBox = (sections: SectionInterface[], name: string, keyName: string) => <div key={"zone-" + keyName} style={{ minHeight: 100 }}>
-    <div style={{ position: "absolute", backgroundColor: "#FFF", zIndex: 100, padding: 10, border: "1px solid #999", opacity: 0.5 }}>Zone: {keyName}</div>
+    <div style={{ position: "absolute", backgroundColor: "#FFF", zIndex: 99, padding: 10, border: "1px solid #999", opacity: 0.5 }}>Zone: {keyName}</div>
     <div style={{ minHeight: 100 }}>
       <>
         <div className="page" style={(deviceType === "mobile" ? { width: 400, marginLeft: "auto", marginRight: "auto" } : {})}>
