@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogActions, Typography, Box, Button } from "@mui/material";
-import { DateHelper, CuratedEventWithEventInterface, ApiHelper } from "@churchapps/apphelper";
+import { DateHelper, CuratedEventWithEventInterface, ApiHelper, MarkdownPreviewLight } from "@churchapps/apphelper";
 
 interface Props {
   event: CuratedEventWithEventInterface;
@@ -42,7 +42,7 @@ export function DisplayCalendarEventModal(props: Props) {
         <Box borderLeft={5} borderRadius={1} borderColor="#1976d2" padding={2} paddingBottom={0}>
           <Typography variant="h5" fontWeight={550} marginBottom={1}>{props.event.title}</Typography>
           <i>{getDisplayTime()}</i>
-          <Typography marginTop={2}>{props.event?.description}</Typography>
+          <Box marginTop={2}><MarkdownPreviewLight  value={props.event?.description || ""} /></Box>
         </Box>
       </DialogContent>
       <DialogActions>
