@@ -1,11 +1,12 @@
-import { ElementInterface } from "@/helpers";
+import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
-import { MarkdownPreviewLight } from "@churchapps/apphelper";
+import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper";
 
-interface Props { element: ElementInterface }
+interface Props { element: ElementInterface; onEdit?: (section: SectionInterface, element: ElementInterface) => void; }
 
 export const TextWithPhoto: React.FC<Props> = props => {
-  let result = <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
+  const editor = props?.onEdit ? <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} element={props.element} showFloatingEditor /> : <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />;
+  let result = editor;
   switch (props.element.answers?.photoPosition || "left") {
     case "left":
       result = (
@@ -14,7 +15,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
           </Grid>
           <Grid item md={8} xs={12}>
-            <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
+            {editor}
           </Grid>
         </Grid>
       )
@@ -23,7 +24,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <Grid container columnSpacing={3}>
           <Grid item md={8} xs={12}>
-            <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
+            {editor}
           </Grid>
           <Grid item md={4} xs={12}>
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
@@ -34,7 +35,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
     case "bottom":
       result = (
         <>
-          <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
+          {editor}
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
         </>
       )
@@ -43,7 +44,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <>
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
-          <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />
+          {editor}
         </>
       )
       break;

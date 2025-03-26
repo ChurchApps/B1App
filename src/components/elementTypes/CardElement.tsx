@@ -1,11 +1,13 @@
-import { ElementInterface } from "@/helpers";
-import { MarkdownPreviewLight } from "@churchapps/apphelper";
+import { ElementInterface, SectionInterface } from "@/helpers";
+import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper";
 import { Card, CardContent } from "@mui/material";
 
 
-interface Props { element: ElementInterface; }
+interface Props { element: ElementInterface; onEdit?: (section: SectionInterface, element: ElementInterface) => void; }
 
 export const CardElement: React.FC<Props> = (props) => {
+
+  const editor = props.onEdit ? <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} element={props.element} showFloatingEditor /> : <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />;
 
   let photoContent = <></>
   if (props.element.answers?.photo) {
@@ -20,7 +22,7 @@ export const CardElement: React.FC<Props> = (props) => {
     if (props.element.answers?.url) result.push(<a href={props.element.answers?.url}>{title}</a>);
     else result.push(title);
   }
-  if (props.element.answers?.text) result.push(<MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />);
+  if (props.element.answers?.text) result.push(editor);
 
   return <Card id={"el-" + props.element.id}>
     {photoContent}
