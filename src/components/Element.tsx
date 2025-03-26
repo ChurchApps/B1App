@@ -70,16 +70,16 @@ export const Element: React.FC<Props> = props => {
       result = <ElementBlock key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} textColor={props.textColor} />
       break;
     case "card":
-      result = <CardElement key={props.element.id} element={props.element as ElementInterface} />
+      result = <CardElement key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
     case "logo":
       result = <LogoElement key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} textColor={props.textColor} />
       break;
     case "text":
-      result = <TextOnly key={props.element.id} element={props.element as ElementInterface} />
+      result = <TextOnly key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
     case "textWithPhoto":
-      result = <TextWithPhoto key={props.element.id} element={props.element as ElementInterface} />
+      result = <TextWithPhoto key={props.element.id} element={props.element as ElementInterface} onEdit={props.onEdit} />
       break;
     case "row":
       result = <RowElement key={props.element.id} church={props.church} element={props.element as ElementInterface} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} onMove={props.onMove} />
