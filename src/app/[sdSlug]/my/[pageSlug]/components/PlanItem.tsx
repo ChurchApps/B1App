@@ -1,11 +1,13 @@
 import React from "react";
 import { PlanItemInterface } from "@/helpers";
+import { SongDialog } from "./SongDialog";
 
 interface Props {
   planItem: PlanItemInterface,
 }
 
 export const PlanItem = (props: Props) => {
+  const [dialogKeyId, setDialogKeyId] = React.useState<string>(null);
 
   const getChildren = () => {
     const result: JSX.Element[] = [];
@@ -37,7 +39,9 @@ export const PlanItem = (props: Props) => {
     <div className="planItem">
       <div>{formatTime(props.planItem.seconds)}</div>
       <div>
-        {props.planItem.label}
+        <a href="about:blank" onClick={(e) => { e.preventDefault(); setDialogKeyId(props.planItem.relatedId); }}>
+          {props.planItem.label}
+        </a>
       </div>
       {getDescriptionRow()}
     </div>
@@ -63,6 +67,7 @@ export const PlanItem = (props: Props) => {
 
   return (<>
     {getPlanItem()}
+    {dialogKeyId && <SongDialog arrangementKeyId={dialogKeyId} onClose={() => { setDialogKeyId(null); }} />}
   </>)
 };
 
