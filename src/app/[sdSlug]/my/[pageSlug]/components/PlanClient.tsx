@@ -6,8 +6,9 @@ import { Grid, Icon } from "@mui/material";
 import { ApiHelper, ArrayHelper, AssignmentInterface, DisplayBox, Loading, PersonInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
 import { Team } from "@/components/plans/Team";
 import { PositionDetails } from "@/components/plans/PositionDetails";
+import { ServiceOrder } from "./ServiceOrder";
 
-interface Props  {
+interface Props {
   planId: string;
 }
 
@@ -91,6 +92,7 @@ export function PlanClient({ planId }: Props) {
         <Grid item md={8} xs={12}>
           {getPositionDetails()}
           {getNotes()}
+          <ServiceOrder plan={plan} />
         </Grid>
         <Grid item md={4} xs={12}>
           {getTeams()}
