@@ -1,5 +1,4 @@
 import React from "react";
-import { DisplayBox } from "@churchapps/apphelper";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { SongDetailInterface } from "@/helpers";
 import { SongDetailLinks } from "./SongDetailLinks";
