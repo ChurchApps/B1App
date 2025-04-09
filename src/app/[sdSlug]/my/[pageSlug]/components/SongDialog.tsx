@@ -40,7 +40,8 @@ export const SongDialog: React.FC<Props> = (props) => {
     const qs = product.download.split("?")[1].split("&");
     const skus = qs[0].split("=")[1];
     const keys = qs[1].split("=")[1];
-    PraiseChartsHelper.download(skus, product.name + "." + product.file_type, keys)
+    const url = await PraiseChartsHelper.download(skus, product.name + "." + product.file_type, keys)
+    window.open(url, "_blank");
   }
 
   const listProducts = () => (<ul>
