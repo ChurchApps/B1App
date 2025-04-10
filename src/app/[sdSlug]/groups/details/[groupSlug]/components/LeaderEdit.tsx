@@ -90,7 +90,7 @@ export function LeaderEdit(props: Props) {
           <GalleryModal
             onClose={() => setSelectPhotoField(null)}
             onSelect={handlePhotoSelected}
-            aspectRatio={4}
+            aspectRatio={1.78}
           />
         )}
       </form>
