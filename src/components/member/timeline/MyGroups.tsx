@@ -17,7 +17,7 @@ export default function MyGroups() {
       {groups?.length > 0
         ? (
           groups.map((group) => (
-            <Grid item xs={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <GroupCard group={group} />
             </Grid>
           ))
