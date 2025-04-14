@@ -30,6 +30,7 @@ export async function DefaultPageWrapper(props: Props) {
 
           {props.children}
 
+          {!props.overlayContent && <div style={{ paddingBottom: 90 }}></div>}
         </div>
       </main>
       <Footer config={props.config} footerSections={footerSections} />
