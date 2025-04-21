@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import { AnimationsInterface, BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
-import { Dialog, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Button, Dialog, FormControl, Icon, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { PickColors } from "./elements/PickColors";
 import { StylesAnimations } from "./elements/StylesAnimations";
 
@@ -124,12 +124,37 @@ export function SectionEdit(props: Props) {
     }
   }
 
+  const handleConvertToBlock = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const name = window.prompt("Are you sure you wish to copy this section and all of it's contents to a block?", "Block Name");
+    if (name !== null) {
+      ApiHelper.post(`/sections/duplicate/${props.section.id}?convertToBlock=${name.toString()}`, {}, "ContentApi").then((data) => {
+        props.updatedCallback(data);
+      });
+    }
+  }
+
   const getAppearanceFields = (fields:string[]) => <StylesAnimations fields={fields} styles={parsedStyles} animations={parsedAnimations} onStylesChange={handleStyleChange} onAnimationsChange={handleAnimationChange} />
 
   if (!section) return <></>
   else return (
     <Dialog open={true} onClose={handleCancel} fullWidth maxWidth="md">
-      <InputBox id="sectionDetailsBox" headerText="Edit Section" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.section.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
+      <InputBox
+        id="sectionDetailsBox"
+        headerText="Edit Section"
+        headerIcon="school"
+        saveFunction={handleSave}
+        cancelFunction={handleCancel}
+        deleteFunction={handleDelete}
+        headerActionContent={
+          props.section.id && (
+            <>
+              <Button size="small" variant="outlined" onClick={handleConvertToBlock} title="Convert to Block" endIcon={<Icon>smart_button</Icon>} sx={{ marginRight: 2 }}>Convert to</Button>
+              <Button size="small" variant="outlined" onClick={handleDuplicate}>duplicate</Button>
+            </>
+          )
+        }
+      >
         <div id="dialogFormContent">
           {(section?.targetBlockId) ? getBlockFields() : getStandardFields()}
         </div>
