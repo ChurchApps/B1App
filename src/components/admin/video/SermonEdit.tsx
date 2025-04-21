@@ -20,6 +20,8 @@ export const SermonEdit: React.FC<Props> = (props) => {
   const [playlists, setPlaylists] = React.useState<PlaylistInterface[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [showB1Share, setShowB1Share] = React.useState(false);
+  const [showOption, setShowOption] = React.useState(false);
+  const [additionalPlaylistId, setAdditionalPlaylistId] = React.useState("");
 
   const loadData = () => {
     ApiHelper.get("/playlists", "ContentApi").then(data => {
@@ -116,6 +118,25 @@ export const SermonEdit: React.FC<Props> = (props) => {
     ApiHelper.post("/sermons", [currentSermon], "ContentApi").then(props.updatedFunction);
   }
 
+  const handleAdd = () => {
+    let errors: string[] = [];
+    if (!UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) errors.push("Unauthorized to create sermons");
+
+    if (errors.length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    const sermon = { ...currentSermon };
+    sermon.playlistId = additionalPlaylistId;
+    sermon.id = null;
+
+    ApiHelper.post("/sermons", [sermon], "ContentApi").then(() => {
+      setShowOption(false);
+      props.updatedFunction()
+    });
+  }
+
   const setSermonUrl = () => {
     let result = currentSermon?.videoData;
     switch (currentSermon?.videoType) {
@@ -151,6 +172,14 @@ export const SermonEdit: React.FC<Props> = (props) => {
     let result: JSX.Element[] = [];
     playlists.forEach(playlist => {
       result.push(<MenuItem value={playlist.id}>{playlist.title}</MenuItem>);
+    });
+    return result;
+  }
+
+  const getAdditionalPlaylists = () => {
+    let result: JSX.Element[] = [];
+    playlists.forEach(playlist => {
+      if (playlist.id !== currentSermon.playlistId) result.push(<MenuItem value={playlist.id}>{playlist.title}</MenuItem>);
     });
     return result;
   }
@@ -243,6 +272,21 @@ export const SermonEdit: React.FC<Props> = (props) => {
           <TextField fullWidth multiline label="Description" name="description" value={currentSermon?.description || ""} onChange={handleChange} placeholder={keyPlaceholder} />
         </Grid>
       </Grid>
+
+      {/* add to another playlist */}
+      <div style={{ marginTop: 15 }}>
+        <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowOption(!showOption) }}>Add to another playlist</a>
+        {showOption && (
+          <FormControl fullWidth>
+            <InputLabel>Playlist</InputLabel>
+            <Select label="Playlist" name="additionalPlaylistId" value={additionalPlaylistId} onChange={(e) => { e.preventDefault(); setAdditionalPlaylistId(e.target.value) }}
+              endAdornment={<Button variant="contained" size="small" disabled={!additionalPlaylistId || additionalPlaylistId === ""} onClick={handleAdd}>add</Button>}
+            >
+              {getAdditionalPlaylists()}
+            </Select>
+          </FormControl>
+        )}
+      </div>
     </>
   </InputBox>
   {showB1Share && <B1ShareModal contentDisplayName={currentSermon.title} contentType="sermon" contentId={currentSermon.id} onClose={() => { setShowB1Share(false); }} /> }
