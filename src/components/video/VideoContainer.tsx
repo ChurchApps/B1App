@@ -29,7 +29,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   useEffect(() => {
     loadData();
-  });
+  }, []);
 
   const getCountdownTime = (serviceTime: Date) => {
     let remainingSeconds = Math.floor((serviceTime.getTime() - currentTime) / 1000);
