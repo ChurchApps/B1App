@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, TextField } from "@mui/material";
+import { Grid, TextField, Typography } from "@mui/material";
 import { ApiHelper, ErrorMessages, InputBox, LinkInterface, Permissions, UserHelper } from "@churchapps/apphelper";
 
 interface Props {
@@ -42,6 +42,7 @@ export function GroupLinkAdd(props: Props) {
   return (
     <InputBox headerIcon="description" headerText="Add Links" saveFunction={handleAdd} saveText="Add">
       <ErrorMessages errors={errors} />
+      <Typography sx={{ textIndent: 3, fontSize: "14px" }}>Link could be of Google Drive, Hosted Lesson PDF, etc.</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <TextField fullWidth label="Link Text" name="text" value={text} onChange={handleChange} />
