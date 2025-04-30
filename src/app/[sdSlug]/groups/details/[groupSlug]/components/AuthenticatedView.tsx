@@ -5,7 +5,7 @@ import { Grid, Container } from "@mui/material";
 import { GroupInterface, UserHelper, MarkdownPreviewLight, Conversations, DisplayBox } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
-import { GroupFiles } from "@/components/groups/GroupFiles";
+import { GroupResources } from "@/components/groups/GroupResources";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { GroupHero } from "./GroupHero";
 import { GroupTabs } from "./GroupTabs";
@@ -57,8 +57,8 @@ export function AuthenticatedView(props: Props) {
       case "conversations":
         result = <><h2>Conversations</h2><Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} /></>
         break;
-      case "files":
-        result = <><h2>Files</h2><GroupFiles context={context} groupId={group.id} /></>
+      case "resources":
+        result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>
         break;
       case "members":
         result = <MembersTab isLeader={isLeader} group={group} />
