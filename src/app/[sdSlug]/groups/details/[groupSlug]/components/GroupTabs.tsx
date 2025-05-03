@@ -42,6 +42,9 @@ export const GroupTabs = (props: Props) => {
     tabs.push({ key: "calendar", label: "Calendar" });
     tabs.push({ key: "conversations", label: "Conversations" });
     tabs.push({ key: "resources", label: "Resources" });
+    if (isLeader) {
+      tabs.push({ key: "leaderResources", label: "Resources (Leaders)" });
+    }
 
     return tabs;
   }

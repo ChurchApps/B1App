@@ -6,6 +6,7 @@ import { GroupInterface, UserHelper, MarkdownPreviewLight, Conversations, Displa
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 import { GroupResources } from "@/components/groups/GroupResources";
+import { GroupLeaderResources } from "@/components/groups/GroupLeaderResources";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { GroupHero } from "./GroupHero";
 import { GroupTabs } from "./GroupTabs";
@@ -59,6 +60,9 @@ export function AuthenticatedView(props: Props) {
         break;
       case "resources":
         result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>
+        break;
+      case "leaderResources":
+        result = <><h2>Resources (Leaders Only)</h2><GroupLeaderResources context={context} groupId={group.id} /></>
         break;
       case "members":
         result = <MembersTab isLeader={isLeader} group={group} />
