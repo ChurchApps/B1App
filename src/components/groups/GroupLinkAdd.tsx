@@ -5,9 +5,10 @@ import { ApiHelper, ErrorMessages, InputBox, LinkInterface, Permissions, UserHel
 interface Props {
   groupId: string;
   saveCallback?: () => void;
+  forGroupLeader?: boolean;
 }
 
-export function GroupLinkAdd(props: Props) {
+export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
   const [errors, setErrors] = useState<string[]>([]);
   const [text, setText] = useState<string>("");
   const [url, setUrl] = useState<string>("");
@@ -31,7 +32,8 @@ export function GroupLinkAdd(props: Props) {
       return;
     }
 
-    const link: LinkInterface = { category: "groupLink", url: url, linkType: "url", text: text, linkData: props.groupId, icon: "" };
+    const category = forGroupLeader ? "groupLeaderLink" : "groupLink";
+    const link: LinkInterface = { category: category, url: url, linkType: "url", text: text, linkData: props.groupId, icon: "" };
     ApiHelper.post("/links", [link], "ContentApi").then(() => {
       setText("");
       setUrl("");
