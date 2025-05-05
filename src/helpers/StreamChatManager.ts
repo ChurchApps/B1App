@@ -42,7 +42,7 @@ export class StreamChatManager {
       const hostChatDetails = await ApiHelper.get("/streamingServices/" + currentServiceId + "/hostChat", "ContentApi");
       if (hostChatDetails.room) {
         d.tabs.push({ type: "hostchat", text: "Host Chat", icon: "group", data: "", url: "" });
-        const hostConversation: ConversationInterface = await ApiHelper.get("/conversations/current/" + d.churchId + "/streamingLiveHost/" + hostChatDetails.room, "MessagingApi");
+        const hostConversation: ConversationInterface = await ApiHelper.get("/conversations/current/" + d.churchId + "/streamingLiveHost/" + encodeURIComponent(hostChatDetails.room), "MessagingApi");
         ChatHelper.current.hostRoom = ChatHelper.createRoom(hostConversation);
         ChatHelper.current.hostRoom.conversation.title = "Host Chat";
         setChatState(ChatHelper.current);
