@@ -9,6 +9,7 @@ import { RowEdit } from "./RowEdit";
 import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";
 import { CalendarElementEdit } from "./CalendarElementEdit";
+import { DonateLinkEdit } from "./DonateLinkEdit";
 import { PickColors } from "./PickColors";
 import { TableEdit } from "./TableEdit";
 import { StylesAnimations } from "./StylesAnimations";
@@ -361,6 +362,7 @@ export function ElementEdit(props: Props) {
       case "card": result = getCardFields(); break;
       case "logo": result = getLogoFields(); break;
       case "donation": result = <></>; break;
+      case "donateLink": result = <><DonateLinkEdit parsedData={parsedData} onRealtimeChange={handleRowChange} /></>; break;
       case "stream": result = getStreamFields(); break;
       case "iframe": result = getIframeFields(); break;
       case "buttonLink": result = getButtonLink(); break;
