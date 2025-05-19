@@ -16,6 +16,7 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
     const data = { ...parsedData };
     const val = e.target.value;
     switch (e.target.name) {
+      case "alignment": data.alignment = val; break;
       case "url": data.url = val; break;
       case "text": data.text = val; break;
       case "fundId": data.fundId = val; break;
@@ -62,6 +63,21 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
 
   return (
     <>
+      {/* Link Alignment */}
+      <FormControl fullWidth>
+        <InputLabel>Link Alignment</InputLabel>
+        <Select
+          fullWidth
+          label="Link Alignment"
+          name="alignment"
+          value={parsedData.alignment}
+          onChange={handleChange}
+        >
+          <MenuItem value="center">Center</MenuItem>
+          <MenuItem value="left">Left</MenuItem>
+          <MenuItem value="right">Right</MenuItem>
+        </Select>
+      </FormControl>
       {/* Link Url */}
       <TextField
         fullWidth
