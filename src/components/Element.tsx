@@ -25,6 +25,7 @@ import { BoxElement } from "./elementTypes/BoxElement";
 import { TableElement } from "./elementTypes/TableElement";
 import { DraggableWrapper } from "./admin/DraggableWrapper";
 import { GroupListElement } from "./elementTypes/GroupListElement";
+import { DonateLinkElement } from "./elementTypes/DonateLinkElement";
 
 interface Props {
   element: ElementInterface;
@@ -92,6 +93,9 @@ export const Element: React.FC<Props> = props => {
       break;
     case "donation":
       result = <NonAuthDonation key={props.element.id} churchId={props.church?.id ?? props.element.churchId} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      break;
+    case "donateLink":
+      result = <DonateLinkElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "stream":
       result = <StreamElement key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} church={props.church} editMode={ props.onEdit !== undefined } />

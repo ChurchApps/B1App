@@ -77,6 +77,7 @@ export function ElementAdd(props: Props) {
                 <AddableElement dndType="element" elementType="sermons" icon="video_library" label="Sermons" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="stream" icon="live_tv" label="Stream" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="donation" icon="volunteer_activism" label="Donation" draggingCallback={props.draggingCallback} />
+                <AddableElement dndType="element" elementType="donateLink" icon="link" label="Donate Link" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="form" icon="format_align_left" label="Form" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="calendar" icon="calendar_month" label="Calendar" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="groupList" icon="people" label="Group List" draggingCallback={props.draggingCallback} />
