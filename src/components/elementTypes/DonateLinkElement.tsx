@@ -27,4 +27,3 @@ export function DonateLinkElement({ element }: Props) {
     </div>
   );
 }
-//TODO: what if there's no amounts and fundId, change url in diff scenarios.
