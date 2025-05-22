@@ -42,13 +42,20 @@ export function DraggableWrapper(props: Props) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                // justifyContent: "center", // Removed to allow text to align left
                 cursor: "grab",
-                padding: "4px", // Increased padding for a larger clickable area
-                fontSize: "1.5rem", // Increased icon size
+                padding: "8px", // Adjusted padding
+                // fontSize for icon is set on DragIndicatorIcon directly or inherited
               }}
             >
-              <DragIndicatorIcon fontSize="inherit" />
+              <DragIndicatorIcon style={{ fontSize: "1.5rem", marginRight: "8px" }} />
+              <span style={{ fontSize: "0.9rem", lineHeight: "1.5rem" /* Align with icon height */ }}>
+                {props.dndType === "section"
+                  ? "Section"
+                  : props.elementType
+                  ? props.elementType.charAt(0).toUpperCase() + props.elementType.slice(1)
+                  : "Element"}
+              </span>
             </div>
           )}
 
