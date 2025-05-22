@@ -31,12 +31,29 @@ export function DroppableWrapper(props: Props) {
 
   useEffect(() => { if (props.updateIsDragging) props.updateIsDragging(isDragging) }, [isDragging]);
 
-  let droppableStyle:CSSProperties = { width: "100%", zIndex: 1, backgroundColor: (isOver) ? "rgba(25,118,210, 1)" : "rgba(25,118,210, 0.1)" }
+  let droppableStyle: CSSProperties = {
+    width: "100%",
+    zIndex: 1,
+    boxSizing: "border-box", // Added for consistency
+    transition: "background-color 0.2s ease-in-out, border-color 0.2s ease-in-out", // Added transition
+  };
+
+  if (canDrop) {
+    if (isOver) {
+      droppableStyle.backgroundColor = "rgba(25,118,210, 1)";
+      droppableStyle.border = "2px solid #1976d2"; // Solid border when actively hovered
+    } else {
+      droppableStyle.backgroundColor = "rgba(25,118,210, 0.1)";
+      droppableStyle.border = "2px dashed #1976d2"; // Dashed border when it's a droppable target but not hovered
+    }
+  }
+  // If not canDrop, no special background or border is applied, which is correct.
 
   if (canDrop) return (
-    <div style={{ position: "relative" }}>
-      <div style={droppableStyle}>
-        <div style={{ width: "100%" }} ref={drop as any}>
+    // The ref needs to be on the div that receives the style for the drop indication
+    <div style={{ position: "relative" }}> 
+      <div style={droppableStyle} ref={drop as any}>
+        <div style={{ width: "100%" }}>
           {props.children}
         </div>
       </div>
