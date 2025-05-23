@@ -36,12 +36,12 @@ export function DroppableArea(props: Props) {
   useEffect(() => { if (props.updateIsDragging) props.updateIsDragging(isDragging) }, [isDragging]);
 
   let droppableStyle: CSSProperties = {
-    position: "relative", // Changed from "absolute"
-    // top: 0, // Removed
-    // left: 0, // Removed
+    position: "absolute", // Reverted
+    top: 0, // Reverted
+    left: 0, // Reverted
     width: "100%",
     height: 30,
-    // zIndex: 1, // Removed, less likely needed with relative positioning in normal flow
+    zIndex: 1, // Reverted
     border: "2px dashed #1976d2", // Default border for canDrop true
     backgroundColor: "transparent", // Default background for canDrop true and isOver false
     boxSizing: "border-box", // Ensure border is within height
