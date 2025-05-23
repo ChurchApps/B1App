@@ -35,19 +35,45 @@ export function DroppableArea(props: Props) {
 
   useEffect(() => { if (props.updateIsDragging) props.updateIsDragging(isDragging) }, [isDragging]);
 
-  let droppableStyle:CSSProperties = { position: "absolute", top: 0, left: 0, width: "100%", height: 30, zIndex: 1, backgroundColor: (isOver) ? "#00FF00" : "#28a745" }
-  if (props.minimal) droppableStyle = { ...droppableStyle, height: 4, overflowY: "hidden" }
+  let droppableStyle: CSSProperties = {
+    position: "absolute", // Reverted
+    top: 0, // Reverted
+    left: 0, // Reverted
+    width: "100%",
+    height: 30,
+    zIndex: 1, // Reverted
+    border: "2px dashed #1976d2", // Default border for canDrop true
+    backgroundColor: "transparent", // Default background for canDrop true and isOver false
+    boxSizing: "border-box", // Ensure border is within height
+    transition: "background-color 0.2s ease-in-out, border-color 0.2s ease-in-out", 
+    // Note: Text color transition will be handled by the Box/Icon sx prop if needed, 
+    // or by adding a transition to the parent div holding the text/icon if textColor was applied directly.
+    // For now, focusing on background and border.
+  };
+
+  if (isOver) {
+    droppableStyle.backgroundColor = "rgba(25, 118, 210, 0.1)"; // Highlight when hovered
+  }
+
+  if (props.minimal) {
+    droppableStyle = { ...droppableStyle, height: 4, overflowY: "hidden" };
+  }
+
+  // Text color adjusted for better contrast with new backgrounds
+  const textColor = "#1976d2"; 
 
   const getFullDisplay = () => (
     <>
       {props.children || props.text
         ? (
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: "4px" }}>
+          // Added transition to the Box sx for smooth color change of text and icon
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", mt: "4px", color: textColor, transition: "color 0.2s ease-in-out" }}>
             <Icon sx={{ marginRight: props.text ? "10px" : "auto" }}>add</Icon>
             <span>{props.text}</span>
           </Box>
         )
-        : <Icon>add</Icon>}
+        // Added transition to the Icon sx for smooth color change
+        : <Icon sx={{ color: textColor, transition: "color 0.2s ease-in-out" }}>add</Icon>}
     </>
   )
 
@@ -59,8 +85,8 @@ export function DroppableArea(props: Props) {
 
   if (canDrop) return (
     <div style={{ position: "relative" }}>
-      <div style={droppableStyle}>
-        <div style={{ textAlign: "center", color: "#FFFFFF", width: "100%" }} ref={drop as any}>
+      <div style={droppableStyle} ref={drop as any}> {/* Moved ref to the styled div itself */}
+        <div style={{ textAlign: "center", width: "100%" }}> {/* Removed color: "#FFFFFF" */}
           {(props.minimal) ? getMinimalDisplay() : getFullDisplay()}
         </div>
       </div>
