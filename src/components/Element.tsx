@@ -40,18 +40,21 @@ interface Props {
 export const Element: React.FC<Props> = props => {
 
   const handleDrop = (data: any, sort: number) => {
-    if (data.data) {
-      const element: ElementInterface = data.data;
-      element.sort = sort;
-      element.sectionId = props.element.sectionId;
-      element.parentId = props.element.parentId;
-      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
+    if (data.data) { // Existing element dropped
+      const draggedElement: ElementInterface = data.data;
+      // const receivedSortFromDropArea: number = sort; // Not needed if 'sort' is used directly
+      // const originalSortOfDraggedElement: number = draggedElement.sort; // Not needed for this revert
+
+      draggedElement.sort = sort; // Use the sort from the DroppableArea directly
+      draggedElement.sectionId = props.element.sectionId;
+      draggedElement.parentId = props.element.parentId; // Ensure parentId is correctly assigned
+      ApiHelper.post("/elements", [draggedElement], "ContentApi").then(() => { props.onMove(); }); // Use draggedElement
     }
-    else {
-      const element: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId, parentId: props.parentId ? props.parentId : null };
-      if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
-      else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
-      props.onEdit(null, element);
+    else { // New element dropped
+      const newElement: ElementInterface = { sectionId: props.element.sectionId, elementType: data.elementType, sort, blockId: props.element.blockId, parentId: props.parentId ? props.parentId : null };
+      if (data.blockId) newElement.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
+      else if (data.elementType === "row") newElement.answersJSON = JSON.stringify({ columns: "6,6" });
+      props.onEdit(null, newElement);
     }
   }
 
