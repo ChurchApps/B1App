@@ -12,7 +12,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
 import { DroppableArea } from "@/components/admin/DroppableArea";
 import { SectionBlock } from "@/components/SectionBlock";
-import { Helmet } from "react-helmet";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ElementAdd } from "@/components/admin/elements/ElementAdd";
 import { ElementEdit } from "@/components/admin/elements/ElementEdit";
