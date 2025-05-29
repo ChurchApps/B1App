@@ -370,7 +370,7 @@ export function ElementEdit(props: Props) {
       case "card": result = getCardFields(); break;
       case "logo": result = getLogoFields(); break;
       case "donation": result = <></>; break;
-      case "donateLink": result = <><DonateLinkEdit parsedData={parsedData} onRealtimeChange={handleRowChange} /></>; break;
+      case "donateLink": result = <><DonateLinkEdit parsedData={parsedData} onRealtimeChange={handleRowChange} />{getAppearanceFields(["border"])}</>; break;
       case "stream": result = getStreamFields(); break;
       case "iframe": result = getIframeFields(); break;
       case "buttonLink": result = getButtonLink(); break;

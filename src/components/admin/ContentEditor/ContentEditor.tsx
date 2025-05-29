@@ -40,6 +40,7 @@ export default function ContentEditor(props: Props) {
   const [showAdd, setShowAdd] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [navLinks, setNavLinks] = useState<any>(null);
+  const css = StyleHelper.getCss(container?.sections || []);
 
   let elementOnlyMode = false;
   if (props.blockId && container?.sections?.length===1 && container?.sections[0]?.id==="") elementOnlyMode = true;
@@ -236,7 +237,8 @@ export default function ContentEditor(props: Props) {
 
   return (<>
     <Theme config={props.config} />
-    <Helmet><style>{StyleHelper.getCss(container?.sections || [], deviceType)}</style></Helmet>
+    {/* <Helmet><style>{StyleHelper.getCss(container?.sections || [], deviceType)}</style></Helmet> */}
+    <style>{css}</style>
 
     <div style={{ backgroundColor: "#FFF", position: "sticky", top: 0, width: "100%", zIndex: 1000, boxShadow: "0px 2px 2px black", marginBottom: 10 }}>
       <Grid container spacing={2}>
