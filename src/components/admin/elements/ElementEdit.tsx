@@ -9,6 +9,7 @@ import { RowEdit } from "./RowEdit";
 import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";
 import { CalendarElementEdit } from "./CalendarElementEdit";
+import { DonateLinkEdit } from "./DonateLinkEdit";
 import { PickColors } from "./PickColors";
 import { TableEdit } from "./TableEdit";
 import { StylesAnimations } from "./StylesAnimations";
@@ -340,6 +341,14 @@ export function ElementEdit(props: Props) {
         <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open link in new tab" />
         <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.noResize === "true" ? true : false} />} name="noResize" label="Do not resize image" />
       </FormGroup>
+      <FormControl fullWidth sx={{ marginTop: 2 }}>
+        <InputLabel>Image Alignment</InputLabel>
+        <Select fullWidth size="small" label="Image Alignment" name="imageAlign" value={parsedData.imageAlign || "left"} onChange={handleChange}>
+          <MenuItem value="left">Left</MenuItem>
+          <MenuItem value="center">Center</MenuItem>
+          <MenuItem value="right">Right</MenuItem>
+        </Select>
+      </FormControl>
       {getAppearanceFields(["border", "background", "color", "height", "margin", "padding", "width"])}
     </>
   )
@@ -361,6 +370,7 @@ export function ElementEdit(props: Props) {
       case "card": result = getCardFields(); break;
       case "logo": result = getLogoFields(); break;
       case "donation": result = <></>; break;
+      case "donateLink": result = <><DonateLinkEdit parsedData={parsedData} onRealtimeChange={handleRowChange} />{getAppearanceFields(["border"])}</>; break;
       case "stream": result = getStreamFields(); break;
       case "iframe": result = getIframeFields(); break;
       case "buttonLink": result = getButtonLink(); break;
