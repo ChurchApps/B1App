@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { PaperProps } from "@mui/material";
+import { Alert, PaperProps } from "@mui/material";
 import { Layout } from "@/components";
 import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
@@ -42,16 +42,22 @@ export function Login({ showLogo, redirectAfterLogin, loginContainerCssProps, ke
 
   return (
     <Layout withoutNavbar withoutFooter>
-      <LoginPage
-        auth={searchParams.get("auth")}
-        context={context}
-        jwt={jwt}
-        appName="B1"
-        showLogo={showLogo}
-        loginContainerCssProps={loginContainerCssProps}
-        keyName={keyName}
-        returnUrl={returnUrl || "/my"}
-      />
+      <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 600 }}>
+        {process.env.NEXT_PUBLIC_STAGE === "demo" && (<Alert severity="error" style={{ marginTop: 50 }}>
+          <b>Demo:</b> This is the demo environment.  All data is erased nightly.<br />
+          You can log into a test church with the credentials demo@chums.org / password .
+        </Alert>)}
+        <LoginPage
+          auth={searchParams.get("auth")}
+          context={context}
+          jwt={jwt}
+          appName="B1"
+          showLogo={showLogo}
+          loginContainerCssProps={loginContainerCssProps}
+          keyName={keyName}
+          returnUrl={returnUrl || "/my"}
+        />
+      </div>
     </Layout>
   );
 }
