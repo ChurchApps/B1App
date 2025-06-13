@@ -39,11 +39,11 @@ export function GroupContact(props: Props) {
       personId: formData.personId,
       appName: "B1",
       subject: "Contact Request For " + props.group.name,
-      body: "First Name: " + formData.firstName + "<br />" +
-        "Last Name: " + formData.lastName + "<br />" +
-        "Email Address: " + formData.email + "<br />" +
-        "Phone Number: " + formData.phone + "<br />" +
-        "Message: " + formData.message
+      body: "First Name: " + formData.firstName + "<br />"
+        + "Last Name: " + formData.lastName + "<br />"
+        + "Email Address: " + formData.email + "<br />"
+        + "Phone Number: " + formData.phone + "<br />"
+        + "Message: " + formData.message
     }
 
     try {

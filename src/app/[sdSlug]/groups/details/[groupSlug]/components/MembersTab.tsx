@@ -54,8 +54,8 @@ export function MembersTab(props: Props) {
           <TableCell>
             <Link href={`/my/community/${gm.person.id}`}>{gm.person.name.display}</Link>
           </TableCell>
-          {props.isLeader &&
-            <TableCell style={{ textAlign: "right" }}>
+          {props.isLeader
+            && <TableCell style={{ textAlign: "right" }}>
               <SmallButton icon="person_remove" toolTip="Remove" onClick={() => handleRemove(gm)} color="error" />
             </TableCell>}
         </TableRow>
@@ -90,8 +90,8 @@ export function MembersTab(props: Props) {
     ApiHelper.delete("/groupmembers/" + member.id, "MembershipApi");
   }
 
-  return <>{props.isLeader ?
-    <>
+  return <>{props.isLeader
+    ? <>
       <h2>Members</h2>
       <Grid container spacing={3}>
         <Grid item md={7}>
@@ -101,7 +101,8 @@ export function MembersTab(props: Props) {
           <PersonAdd addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} />
         </Grid>
       </Grid>
-    </> : <>
+    </>
+    : <>
       <h2>Members</h2>
       <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox>
     </>

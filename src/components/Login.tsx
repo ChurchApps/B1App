@@ -56,6 +56,8 @@ export function Login({ showLogo, redirectAfterLogin, loginContainerCssProps, ke
           loginContainerCssProps={loginContainerCssProps}
           keyName={keyName}
           returnUrl={returnUrl || "/my"}
+          defaultEmail={process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@chums.org" : undefined}
+          defaultPassword={process.env.NEXT_PUBLIC_STAGE === "demo" ? "password" : undefined}
         />
       </div>
     </Layout>
