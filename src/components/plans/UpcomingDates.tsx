@@ -28,7 +28,6 @@ export const UpcomingDates: React.FC<Props> = (props) => {
       });
 
     });
-    console.log("DATA", data)
     ArrayHelper.sortBy(data, "startTime", false)
 
     return data;

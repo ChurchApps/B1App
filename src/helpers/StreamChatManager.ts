@@ -72,7 +72,7 @@ export class StreamChatManager {
       const data = await response.json();
       return data.ip;
     } catch (error) {
-      console.log("Error fetching IP Address: ", error);
+      // IP address fetch failed, continue without blocking functionality
       return "";
     }
   }

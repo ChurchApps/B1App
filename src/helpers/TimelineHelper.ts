@@ -38,7 +38,6 @@ export class TimelineHelper {
     const venueIds:string[] = [];
     const sermonIds:string[] = [];
     initialConversations.forEach((conv) => {
-      console.log(conv.contentType, conv.contentId)
       if (conv.contentType==="task" && taskIds.indexOf(conv.contentId)===-1) taskIds.push(conv.contentId);
       if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
       if (conv.contentType==="venue" && venueIds.indexOf(conv.contentId)===-1) venueIds.push(conv.contentId);
@@ -81,7 +80,6 @@ export class TimelineHelper {
       p.conversation?.messages?.forEach(m => {
         if (m.personId && peopleIds.indexOf(m.personId) === -1) peopleIds.push(m.personId);
       });
-      console.log(p)
       if (p.postType==="group" && p.conversation.contentId && groupIds.indexOf(p.conversation.contentId) === -1) groupIds.push(p.conversation.contentId);
       if (p.postType==="event" && p.data && p.data.groupId && groupIds.indexOf(p.data.groupId) === -1) groupIds.push(p.data.groupId);
       if (p.postType==="task") {

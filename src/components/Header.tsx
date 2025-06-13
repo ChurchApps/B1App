@@ -59,12 +59,9 @@ export function Header(props: Props) {
     //   }
     // })
 
-    console.log("USE EFFECT")
     if (typeof window !== "undefined" && props.config?.church?.id) {
-      console.log("ITS A BROWSER")
       // Fetch settings from the API
       ApiHelper.getAnonymous("/settings/public/" + props.config?.church.id, "ContentApi").then((data) => {
-        console.log("SETTINGS ARE", data)
         if (data.showLogin) {
           setShowLogin(data.showLogin === "true");
         }

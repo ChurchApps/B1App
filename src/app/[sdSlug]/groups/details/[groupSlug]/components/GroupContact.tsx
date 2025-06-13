@@ -27,7 +27,6 @@ export function GroupContact(props: Props) {
       case "message": fd.message = val; break;
     }
     setFormData(fd);
-    console.log(fd);
   }
 
   const [isSubmitted, setIsSubmitted] = useState(false);

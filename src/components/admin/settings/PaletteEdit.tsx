@@ -63,7 +63,6 @@ export function PaletteEdit(props: Props) {
 
 
   useEffect(() => {
-    console.log("SET PALETTE", props.globalStyle)
     if (props.globalStyle) setPalette(JSON.parse(props.globalStyle.palette));
   }, [props.globalStyle]);
 

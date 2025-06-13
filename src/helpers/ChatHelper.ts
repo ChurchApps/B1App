@@ -45,7 +45,6 @@ export class ChatHelper {
   }
 
   static handleAttendance = (attendance: ChatAttendanceInterface) => {
-    console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<IN HANDLE ATTENDANCE>>>>>>>>>>>>>>>>>>>>>>>>>>>", attendance)
     const room = ChatHelper.getRoom(attendance.conversationId);
     if (room !== null) {
       room.attendance = attendance;
