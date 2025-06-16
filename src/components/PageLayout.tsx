@@ -35,7 +35,6 @@ export function PageLayout(props: Props) {
     }
   }
   const css = StyleHelper.getCss(props.pageData.sections);
-  console.log("CSS", css);
   return <>
     <style>{css}</style>
     {result}

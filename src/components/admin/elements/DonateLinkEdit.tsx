@@ -101,9 +101,11 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
       />
 
       {/* Funds */}
-      {!funds || funds.length === 0 ? (
+      {!funds || funds.length === 0
+        ? (
         <>No Funds</>
-      ) : (
+      )
+        : (
         <FormControl fullWidth>
           <InputLabel>Funds</InputLabel>
           <Select

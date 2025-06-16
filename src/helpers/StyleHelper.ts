@@ -85,11 +85,9 @@ export class StyleHelper {
     let result:any = {};
     /*
     if (element.styles && Object.keys(element.styles).length > 0) {
-      console.log("GET STYLES", element)
       Object.keys(element.styles).forEach((platformKey) => {
         const platform:any = element.styles[platformKey];
         Object.keys(platform).forEach((key) => {
-          console.log("KEY", key);
           const parts = key.split("-");
           const camelCase = parts[0] + parts.slice(1).map((x) => x[0].toUpperCase() + x.slice(1)).join("");
           const option = allStyleOptions.find((x) => x.key === key);
@@ -102,7 +100,6 @@ export class StyleHelper {
               result[camelCase] = element.styles[key];
               break;
           }
-          //console.log("OPTION", option, camelCase, element.styles[key], result)
         });
 
       });

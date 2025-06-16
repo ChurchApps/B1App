@@ -51,7 +51,7 @@ export function DroppableWrapper(props: Props) {
 
   if (canDrop) return (
     // The ref needs to be on the div that receives the style for the drop indication
-    <div style={{ position: "relative" }}> 
+    <div style={{ position: "relative" }}>
       <div style={droppableStyle} ref={drop as any}>
         <div style={{ width: "100%" }}>
           {props.children}

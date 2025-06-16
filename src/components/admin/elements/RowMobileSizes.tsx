@@ -15,7 +15,6 @@ export function RowMobileSizes(props: Props) {
   const updateMobileSizes = () => {
     const data = { ...props.parsedData };
     data.mobileSizes = mobileSizes.toString();
-    console.log(data);
     props.onRealtimeChange(data);
   }
 

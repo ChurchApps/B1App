@@ -23,17 +23,14 @@ export function LeaderEdit(props: Props) {
 
   useEffect(() => {
     setFormEdits(props.group);
-    console.log("group is", props.group);
     EnvironmentHelper.initLocale();
   }, [props.group])
 
   const hideForm = () => {
     if (hidden === "none") {
       setHidden("block");
-      console.log("showing")
     } else {
       setHidden("none");
-      console.log("hiding")
     }
     return;
   }
@@ -48,7 +45,6 @@ export function LeaderEdit(props: Props) {
       case "about": fe.about = val; break;
     }
     setFormEdits(fe);
-    console.log(fe);
   }
 
   const handleSubmit = async () => {

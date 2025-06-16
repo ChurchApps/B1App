@@ -11,7 +11,6 @@ export const MembersAdd: React.FC<Props> = (props) => {
 
   const loadData = React.useCallback(() => {
     ApiHelper.get("/groupmembers?groupId=" + props.group.id, "MembershipApi").then(data => {
-      console.log("Data is:", data);
       setGroupMembers(data);
     });
   }, [props.group]);

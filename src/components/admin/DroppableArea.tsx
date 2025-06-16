@@ -45,8 +45,8 @@ export function DroppableArea(props: Props) {
     border: "2px dashed #1976d2", // Default border for canDrop true
     backgroundColor: "transparent", // Default background for canDrop true and isOver false
     boxSizing: "border-box", // Ensure border is within height
-    transition: "background-color 0.2s ease-in-out, border-color 0.2s ease-in-out", 
-    // Note: Text color transition will be handled by the Box/Icon sx prop if needed, 
+    transition: "background-color 0.2s ease-in-out, border-color 0.2s ease-in-out",
+    // Note: Text color transition will be handled by the Box/Icon sx prop if needed,
     // or by adding a transition to the parent div holding the text/icon if textColor was applied directly.
     // For now, focusing on background and border.
   };
@@ -60,7 +60,7 @@ export function DroppableArea(props: Props) {
   }
 
   // Text color adjusted for better contrast with new backgrounds
-  const textColor = "#1976d2"; 
+  const textColor = "#1976d2";
 
   const getFullDisplay = () => (
     <>

@@ -80,9 +80,11 @@ export default function GroupCard(props: Props) {
         </div>
         {/* Description */}
         <div style={{ fontSize: "14px", color: "#757575", padding: "0 16px 16px 16px" }}>
-          {!props.group.about || props.group.about === "" ? (
+          {!props.group.about || props.group.about === ""
+            ? (
             <p style={{ fontStyle: "italic" }}>No Description Provided.</p>
-          ) : (
+          )
+            : (
             <div style={{ display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden", textOverflow: "ellipsis" }}>
               <MarkdownPreviewLight value={props.group.about} />
             </div>

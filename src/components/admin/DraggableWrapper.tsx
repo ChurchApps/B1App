@@ -29,7 +29,8 @@ export function DraggableWrapper(props: Props) {
 
   return (
     <>
-      {props.dndType === "section" || props.dndType === "element" ? (
+      {props.dndType === "section" || props.dndType === "element"
+        ? (
         <div
           className="draggable-container"
           onMouseEnter={() => setIsHovered(true)} // Added
@@ -71,7 +72,8 @@ export function DraggableWrapper(props: Props) {
           {/* Content - Fully selectable text */}
           <div className="draggable-content">{props.children}</div>
         </div>
-      ) : (
+      )
+        : (
         //Show old double click drag for site navigation, etc.
         <div
           ref={dragRef}

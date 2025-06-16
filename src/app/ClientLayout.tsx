@@ -7,7 +7,7 @@ import "@/styles/buttons.css";
 import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
 
 import { UserProvider } from "@/context/UserContext";
-import { AnalyticsHelper, UserHelper, ErrrorAppDataInterface, ErrorLogInterface } from "@churchapps/apphelper";
+import { AnalyticsHelper, UserHelper, ErrorAppDataInterface, ErrorLogInterface } from "@churchapps/apphelper";
 import React, { useEffect } from "react";
 import { ErrorHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
@@ -17,10 +17,10 @@ import { ThemeProvider, createTheme } from "@mui/material";
 
 
 
-function ClientLayout({ children}: {children: React.ReactNode}) {
+function ClientLayout({ children }: { children: React.ReactNode }) {
   const [errors, setErrors] = React.useState([]);
   const [localeInit, setLocaleInit] = React.useState(false);
-  const location = (typeof(window) === "undefined") ? null : window.location;
+  const location = (typeof (window) === "undefined") ? null : window.location;
 
   useEffect(() => {
     EnvironmentHelper.init();
@@ -31,12 +31,11 @@ function ClientLayout({ children}: {children: React.ReactNode}) {
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
   EnvironmentHelper.init();
-
   useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
 
   const getErrorAppData = () => {
-    const result: ErrrorAppDataInterface = {
+    const result: ErrorAppDataInterface = {
       churchId: UserHelper.currentUserChurch?.church?.id || "",
       userId: UserHelper.user?.id || "",
       originUrl: location?.toString(),
@@ -51,10 +50,6 @@ function ClientLayout({ children}: {children: React.ReactNode}) {
       case "500": setErrors(["Server error when loading " + error.message]); break;
     }
   }
-
-  AnalyticsHelper.init();
-  ErrorHelper.init(getErrorAppData, customErrorHandler);
-  React.useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
 
 
   const mdTheme = createTheme({
