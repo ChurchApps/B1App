@@ -4,6 +4,8 @@ package-lock.json
 /public/content
 /public/robots.txt
 /public/sitemap*
+playwright-report
+test-results
 
 # dependencies
 /node_modules
