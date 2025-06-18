@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, SmallButton, Banner } from "@churchapps/apphelper";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { CalendarEdit } from "@/components/admin/calendar/CalendarEdit";
@@ -10,13 +10,14 @@ import { WrapperPageProps } from "@/helpers";
 
 export function CalendarsClientWrapper(props: WrapperPageProps) {
   const { isAuthenticated } = ApiHelper;
+  const pathname = usePathname();
 
   const [calendars, setCalendars] = useState<CuratedCalendarInterface[]>(null);
   const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
 
   const loadData = () => {
     if (!isAuthenticated) {
-      redirect("/login");
+      redirect("/login?returnUrl=" + encodeURIComponent(pathname));
     }
     ApiHelper.get("/curatedCalendars", "ContentApi").then((data) => {
       setCalendars(data);

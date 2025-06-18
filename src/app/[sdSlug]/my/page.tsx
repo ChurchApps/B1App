@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 
-export default async function My() {
-  redirect("/my/timeline");
+type Params = Promise<{ sdSlug: string }>;
+
+export default async function My({ params }: { params: Params }) {
+  const { sdSlug } = await params;
+  redirect(`/${sdSlug}/my/timeline`);
 }

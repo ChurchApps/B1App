@@ -75,11 +75,11 @@ export const Person: React.FC<Props> = (props) => {
 
   const getEditContent = () => {
     if (props.personId===PersonHelper.person.id) return <ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />;
-    else return <Button variant="contained" color="primary" onClick={() => {setShowPM(true)}}>Message</Button>
+    else return <Button variant="contained" color="primary" disabled={!person} onClick={() => {if (person) setShowPM(true)}}>Message</Button>
   }
 
   const getPM = () => {
-    if (showPM) return (<DirectMessageModal onBack={() => {setShowPM(false)}} context={context} person={person} />)
+    if (showPM && person) return (<DirectMessageModal onBack={() => {setShowPM(false)}} context={context} person={person} />)
   }
 
   React.useEffect(loadData, [props.personId]);

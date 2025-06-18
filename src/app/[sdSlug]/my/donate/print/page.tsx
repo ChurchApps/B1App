@@ -1,5 +1,6 @@
 "use client";
 import UserContext from "@/context/UserContext";
+import { AuthGuard } from "@/components/AuthGuard";
 import { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ArrayHelper, CurrencyHelper, DateHelper } from "@churchapps/helpers";
@@ -11,12 +12,17 @@ type Params = Promise<{ sdSlug: string; }>;
 
 export default function PrintPage({ params }: { params: Params }) {
   const router = useRouter();
+  const [sdSlug, setSdSlug] = useState<string>("");
   let currYear = new Date().getFullYear();
   const searchparams = useSearchParams();
   if (searchparams.get("prev") === "1") {
     currYear = currYear - 1;
   }
   const context = useContext(UserContext);
+
+  useEffect(() => {
+    params.then(({ sdSlug }) => setSdSlug(sdSlug));
+  }, [params]);
 
   const [funds, setFunds] = useState<FundInterface[]>([]);
   const [fundDonations, setFundDonations] = useState<FundDonationInterface[]>([]);
@@ -117,7 +123,7 @@ export default function PrintPage({ params }: { params: Params }) {
   useEffect(loadData, []);
 
   return (
-    <>
+    <AuthGuard sdSlug={sdSlug}>
       <div style={{ margin: "0px", padding: "0px", height: "100%", width: "100%", backgroundColor: "white", fontFamily: "Roboto, sans-serif" }}>
         <div style={{ margin: "0px", padding: "0px", borderTop: "24px solid #1976D2", width: "100%" }}></div>
 
@@ -199,6 +205,6 @@ export default function PrintPage({ params }: { params: Params }) {
         </div>
 
       </div>
-    </>
+    </AuthGuard>
   );
 }

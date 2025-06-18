@@ -2,6 +2,7 @@ export { Layout } from "./Layout";
 export { PageLayout } from "./PageLayout";
 export { LoadingPage } from "./LoadingPage";
 export { Theme } from "./Theme";
+export { AuthGuard } from "./AuthGuard";
 
 // login
 export { Login } from "./Login";
