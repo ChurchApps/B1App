@@ -13,13 +13,15 @@ interface Props {
 export function DonationsPage(props: Props) {
   const context = useContext(UserContext);
 
+  const personId = context?.userChurch?.person?.id || UserHelper.currentUserChurch?.person?.id;
+
   return (<>
     <h1>My Donations</h1>
     <BaseDonationPage
-      personId={UserHelper.currentUserChurch?.person?.id}
+      personId={personId}
       appName="B1App"
       church={props.config?.church}
-      churchLogo={AppearanceHelper.getLogo( props.config?.appearance, "", "", "#FFF")}
+      churchLogo={AppearanceHelper.getLogo(props.config?.appearance, "", "", "#FFF")}
     />
   </>);
 }

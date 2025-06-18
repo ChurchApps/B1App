@@ -16,6 +16,16 @@ Tests admin access:
 - Admin page permission checks
 - Admin site page access
 
+### `donations.spec.ts`
+**Comprehensive CRUD tests for donation functionality:**
+- **Authentication**: All tests use proper login via `authenticatedPage` fixture
+- **CREATE**: Add payment methods, make one-time donations, setup recurring donations
+- **READ**: View donation pages, history, statements, verify authentication requirements
+- **UPDATE**: Modify recurring donations and payment methods
+- **DELETE**: Remove payment methods, cancel recurring donations
+- **Data Integrity**: Tests maintain initial state and clean up test data for repeatability
+- **Error Handling**: Graceful handling of missing payment gateway config and UI elements
+
 ### `navigation.spec.ts`
 Tests navigation features:
 - Public page accessibility

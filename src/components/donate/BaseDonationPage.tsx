@@ -8,7 +8,7 @@ import { ApiHelper, DateHelper, UniqueIdHelper, CurrencyHelper, Locale } from "@
 import { DonationInterface, PersonInterface, StripePaymentMethod, ChurchInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead, Alert, Button, Icon, Menu, MenuItem } from "@mui/material"
 
-import  Link  from "next/link";
+import Link from "next/link";
 import { useMountedState } from "@churchapps/apphelper/dist/hooks/useMountedState";
 
 interface Props { personId: string, appName?: string, church?: ChurchInterface, churchLogo?: string }
@@ -33,16 +33,17 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     if (props?.appName) setAppName(props.appName);
     if (!UniqueIdHelper.isMissing(props.personId)) {
       ApiHelper.get("/donations/my", "GivingApi").then(data => {
-        if(isMounted()) {
+        if (isMounted()) {
           setDonations(data);
-        }});
+        }
+      });
       ApiHelper.get("/gateways", "GivingApi").then(data => {
         if (data.length && data[0]?.publicKey) {
-          if(isMounted()) {
+          if (isMounted()) {
             setStripe(loadStripe(data[0].publicKey));
           }
           ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then(results => {
-            if(!isMounted()) {
+            if (!isMounted()) {
               return;
             }
             if (!results.length) setPaymentMethods([]);
@@ -55,13 +56,15 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             }
           });
           ApiHelper.get("/people/" + props.personId, "MembershipApi").then(data => {
-            if(isMounted()) {
+            if (isMounted()) {
               setPerson(data);
             }
           });
         }
         else setPaymentMethods([]);
       });
+    } else {
+      console.log('PersonId is missing or invalid:', props.personId);
     }
   }
 
@@ -83,8 +86,8 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       { label: "amount", key: "amount" },
       { label: "donationDate", key: "donationDate" },
       { label: "fundName", key: "fund.name" },
-      { label: "method", key: "method"},
-      { label: "methodDetails", key: "methodDetails"},
+      { label: "method", key: "method" },
+      { label: "methodDetails", key: "methodDetails" },
     ]
 
     result.push(<>
@@ -144,7 +147,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
 
     if (donations.length > 0) {
       rows.push(
-        <TableRow key="header" sx={{textAlign: "left"}}>
+        <TableRow key="header" sx={{ textAlign: "left" }}>
           {appName !== "B1App" && <th>{Locale.label("donation.page.batch")}</th>}
           <th>{Locale.label("donation.page.date")}</th>
           <th>{Locale.label("donation.page.method")}</th>
@@ -157,7 +160,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     return rows;
   }
 
-  React.useEffect(loadData, [isMounted]); //eslint-disable-line
+  React.useEffect(loadData, [isMounted, props.personId]); //eslint-disable-line
 
   const getTable = () => {
     if (!donations) return <Loading />;
