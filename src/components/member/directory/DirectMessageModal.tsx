@@ -9,12 +9,11 @@ import { NewPrivateMessage, PrivateMessageDetails } from "@churchapps/apphelper"
 interface Props {
   context: UserContextInterface;
   onBack: () => void
-  person?: PersonInterface
+  person: PersonInterface
 }
 
 export const DirectMessageModal: React.FC<Props> = (props) => {
   const [selectedMessage, setSelectedMessage] = React.useState<PrivateMessageInterface>(null);
-  let a= 0;
 
   const handleMessageSelect = (pm: PrivateMessageInterface) => {
     setSelectedMessage(pm);

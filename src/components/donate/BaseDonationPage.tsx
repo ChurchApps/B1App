@@ -32,7 +32,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   const loadData = () => {
     if (props?.appName) setAppName(props.appName);
     if (!UniqueIdHelper.isMissing(props.personId)) {
-      ApiHelper.get("/donations?personId=" + props.personId, "GivingApi").then(data => {
+      ApiHelper.get("/donations/my", "GivingApi").then(data => {
         if(isMounted()) {
           setDonations(data);
         }});

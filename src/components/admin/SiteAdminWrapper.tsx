@@ -4,7 +4,7 @@ import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton, UserHelper } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -22,6 +22,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const [editLink, setEditLink] = useState<LinkInterface>(null);
   const [pages, setPages] = useState<PageInterface[]>([]);
   const [showLogin, setShowLogin] = useState<GenericSettingInterface>();
+  const pathname = usePathname();
   const checked = showLogin?.value === "true" ? true : false;
 
   const loadData = () => {
@@ -43,7 +44,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   };
 
 
-  useEffect(() => { if (!isAuthenticated) redirect("/login"); }, []);
+  useEffect(() => { if (!isAuthenticated) redirect("/login?returnUrl=" + encodeURIComponent(pathname)); }, [pathname]);
   useEffect(loadData, [isAuthenticated]);
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
