@@ -10,9 +10,11 @@ import { FontsEdit } from "@/components/admin/settings/FontEdit";
 import { Preview } from "@/components/admin/settings/Preview";
 import { CssEdit } from "@/components/admin/settings/CssEdit";
 import { Appearance } from "@/components/admin/Appearance";
+import { useRouter } from "next/navigation";
 
 
 export function StylesClientWrapper(props: WrapperPageProps) {
+  const router = useRouter();
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
   const [section, setSection] = useState<string>("");
   const [churchSettings, setChurchSettings] = useState<any>(null);
@@ -67,11 +69,11 @@ export function StylesClientWrapper(props: WrapperPageProps) {
 
   const getFooter = async () => {
     const existing = await ApiHelper.get("/blocks/blockType/footerBlock", "ContentApi");
-    if (existing.length > 0) redirect("/admin/site/blocks/" + existing[0].id);
+    if (existing.length > 0) router.push("/admin/site/blocks/" + existing[0].id);
     else {
       const block:BlockInterface = { name: "Site Footer", blockType: "footerBlock" };
       ApiHelper.post("/blocks", [block], "ContentApi").then((data) => {
-        redirect("/admin/site/blocks/" + data[0].id);
+        router.push("/admin/site/blocks/" + data[0].id);
       });
     }
   }

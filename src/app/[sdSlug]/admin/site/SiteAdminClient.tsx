@@ -9,9 +9,11 @@ import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { PageHelper } from "@/helpers/PageHelper";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { AddPageModal } from "@/components/admin/site/AddPageModal";
+import { useRouter } from "next/navigation";
 
 export function SiteAdminClient(props: WrapperPageProps) {
   const windowWidth = useWindowWidth();
+  const router = useRouter();
   EnvironmentHelper.initLocale();
   const [pageTree, setPageTree] = useState<PageLink[]>([]);
   const [addMode, setAddMode] = useState<string>("");
@@ -32,7 +34,7 @@ export function SiteAdminClient(props: WrapperPageProps) {
     items.forEach((item) => {
       result.push(<TableRow key={item.url}>
         <TableCell>{item.custom
-          ? <SmallButton icon="edit" onClick={() => {redirect("/admin/site/pages/preview/" + item.pageId) }} />
+          ? <SmallButton icon="edit" onClick={() => {router.push("/admin/site/pages/preview/" + item.pageId) }} />
           : <SmallButton icon="difference" onClick={() => { if (confirm("Would you like to convert this auto-generated page to a custom page?")) {  setRequestedSlug(item.url); setAddMode("unlinked"); }  }} color="secondary" />
         }</TableCell>
         <TableCell>{getExpandControl(item, level)}{item.url}</TableCell>
