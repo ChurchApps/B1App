@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { redirect, usePathname } from "next/navigation";
+import { ApiHelper } from "@churchapps/apphelper";
 import UserContext from "../../context/UserContext";
 import { CssBaseline } from "@mui/material";
-import { PersonHelper } from "@/helpers";
+import { PersonHelper, UrlHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AdminHeader } from "./AdminHeader";
 
@@ -14,8 +16,22 @@ interface Props {
 }
 
 export const AdminWrapper: React.FC<Props> = (props) => {
+  const { isAuthenticated } = ApiHelper;
   const context = React.useContext(UserContext);
+  const pathname = usePathname();
+  
   PersonHelper.person = context.person;
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      const returnUrl = UrlHelper.getReturnUrl(pathname);
+      redirect(`/login?returnUrl=${encodeURIComponent(returnUrl)}`);
+    }
+  }, [isAuthenticated, pathname]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <>

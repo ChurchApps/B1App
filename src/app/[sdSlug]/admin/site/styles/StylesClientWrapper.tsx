@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -14,7 +13,6 @@ import { Appearance } from "@/components/admin/Appearance";
 
 
 export function StylesClientWrapper(props: WrapperPageProps) {
-  const { isAuthenticated } = ApiHelper;
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
   const [section, setSection] = useState<string>("");
   const [churchSettings, setChurchSettings] = useState<any>(null);
@@ -64,8 +62,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else loadData();
+    loadData();
   }, []);
 
   const getFooter = async () => {

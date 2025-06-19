@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useParams } from "next/navigation";
-import { ApiHelper, Banner, ImageEditor, Permissions, UserHelper } from "@churchapps/apphelper";
+import { useParams } from "next/navigation";
+import { Banner, ImageEditor, Permissions, UserHelper } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Playlists } from "@/components/admin/video/Playlists";
@@ -10,7 +10,6 @@ import { Playlists } from "@/components/admin/video/Playlists";
 type PageParams = {sdSlug:string }
 
 export default function AdminPagesClient() {
-  const { isAuthenticated } = ApiHelper;
   const [config, setConfig] = useState<ConfigurationInterface>(null);
   const [photoType, setPhotoType] = useState<string>(null);
   const [photoUrl, setPhotoUrl] = useState<string>(null);
@@ -21,9 +20,8 @@ export default function AdminPagesClient() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else loadData();
-  }, [isAuthenticated]);
+    loadData();
+  }, []);
 
   const handlePhotoUpdated = (dataUrl: string) => {
     setPhotoUrl(dataUrl);

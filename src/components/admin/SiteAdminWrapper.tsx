@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton, UserHelper } from "@churchapps/apphelper";
-import { PageInterface } from "@/helpers";
+import { PageInterface, UrlHelper } from "@/helpers";
 import { redirect, usePathname } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
 import { DndProvider } from 'react-dnd'
@@ -44,7 +44,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   };
 
 
-  useEffect(() => { if (!isAuthenticated) redirect("/login?returnUrl=" + encodeURIComponent(pathname)); }, [pathname]);
+  useEffect(() => { if (!isAuthenticated) redirect("/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname))); }, [isAuthenticated, pathname]);
   useEffect(loadData, [isAuthenticated]);
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
@@ -11,7 +10,6 @@ import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
 
 export function FilesClientWrapper(props: WrapperPageProps) {
-  const { isAuthenticated } = ApiHelper;
   const [pendingFileSave, setPendingFileSave] = useState(false);
   const [files, setFiles] = useState<FileInterface[]>(null);
 
@@ -64,8 +62,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else ApiHelper.get("/files", "ContentApi").then((d) => setFiles(d));
+    ApiHelper.get("/files", "ContentApi").then((d) => setFiles(d));
   }, []);
 
   const fileRows = files?.map((file) => (
