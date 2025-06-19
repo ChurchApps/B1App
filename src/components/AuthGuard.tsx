@@ -18,7 +18,7 @@ export function AuthGuard({ children, sdSlug }: Props) {
   useEffect(() => {
     if (context && !context.user) {
       // Encode the current URL as a return URL parameter, removing sdSlug to avoid double inclusion
-      const returnUrl = encodeURIComponent(UrlHelper.getReturnUrl(pathname));
+      const returnUrl = encodeURIComponent(UrlHelper.getReturnUrl(pathname, sdSlug));
       router.push(`/login?returnUrl=${returnUrl}`);
     }
   }, [context, router, sdSlug, pathname]);

@@ -44,7 +44,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   };
 
 
-  useEffect(() => { if (!isAuthenticated) redirect("/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname))); }, [isAuthenticated, pathname]);
+  useEffect(() => { if (!isAuthenticated) redirect("/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config.keyName))); }, [isAuthenticated, pathname, props.config.keyName]);
   useEffect(loadData, [isAuthenticated]);
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

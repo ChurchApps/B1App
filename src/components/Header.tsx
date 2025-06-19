@@ -115,7 +115,7 @@ export function Header(props: Props) {
         {showLogin
           ? (
             <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname)) } clickable id="loginButton" label="Login"
+              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config.keyName)) } clickable id="loginButton" label="Login"
                 icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
                 sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
               />
