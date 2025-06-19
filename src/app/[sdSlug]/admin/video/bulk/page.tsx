@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useParams, usePathname } from "next/navigation";
-import { ApiHelper, Banner, DisplayBox } from "@churchapps/apphelper";
+import { useParams } from "next/navigation";
+import { Banner, DisplayBox } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { ConfigHelper, ConfigurationInterface } from "@/helpers";
 import { VimeoImport } from "@/components/admin/video/VimeoImport";
 import { YouTubeImport } from "@/components/admin/video/YouTubeImport";
 import { Button, Grid } from "@mui/material";
@@ -12,10 +12,8 @@ import { Button, Grid } from "@mui/material";
 type PageParams = {sdSlug:string }
 
 export default function AdminPagesClient() {
-  const { isAuthenticated } = ApiHelper;
   const [config, setConfig] = useState<ConfigurationInterface>(null);
   const params = useParams<PageParams>()
-  const pathname = usePathname();
   const [importType, setImportType] = useState<"youtube" | "vimeo" | "">();
 
   const loadData = () => {
@@ -23,9 +21,8 @@ export default function AdminPagesClient() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login?returnUrl=" + encodeURIComponent(pathname));
-    else loadData();
-  }, [isAuthenticated, pathname]);
+    loadData();
+  }, []);
 
   return (
     <AdminWrapper config={config}>

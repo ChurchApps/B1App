@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { EnvironmentHelper, PageLink, WrapperPageProps } from "@/helpers";
-import { ApiHelper, Banner, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
+import { Banner, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
 import { useWindowWidth } from "@react-hook/window-size";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
@@ -12,7 +11,6 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { AddPageModal } from "@/components/admin/site/AddPageModal";
 
 export function SiteAdminClient(props: WrapperPageProps) {
-  const { isAuthenticated } = ApiHelper;
   const windowWidth = useWindowWidth();
   EnvironmentHelper.initLocale();
   const [pageTree, setPageTree] = useState<PageLink[]>([]);
@@ -52,9 +50,8 @@ export function SiteAdminClient(props: WrapperPageProps) {
   }
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login?returnUrl=/admin/site");
-    else loadData();
-  }, [isAuthenticated]);
+    loadData();
+  }, []);
 
 
   if (windowWidth < 882) {

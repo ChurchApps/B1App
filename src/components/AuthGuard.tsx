@@ -3,6 +3,7 @@
 import { useContext, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import UserContext from "@/context/UserContext";
+import { UrlHelper } from "@/helpers";
 
 interface Props {
   children: React.ReactNode;
@@ -16,8 +17,8 @@ export function AuthGuard({ children, sdSlug }: Props) {
 
   useEffect(() => {
     if (context && !context.user) {
-      // Encode the current URL as a return URL parameter
-      const returnUrl = encodeURIComponent(pathname);
+      // Encode the current URL as a return URL parameter, removing sdSlug to avoid double inclusion
+      const returnUrl = encodeURIComponent(UrlHelper.getReturnUrl(pathname));
       router.push(`/login?returnUrl=${returnUrl}`);
     }
   }, [context, router, sdSlug, pathname]);

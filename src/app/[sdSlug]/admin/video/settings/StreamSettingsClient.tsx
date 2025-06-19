@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { useState } from "react";
 import {  PageInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Grid } from "@mui/material";
@@ -11,16 +10,11 @@ import { Services } from "@/components/admin/video/Services";
 import { Tabs } from "@/components/admin/video/Tabs";
 import { EmbeddablePages } from "@/components/admin/EmbeddablePages";
 import { PageEdit } from "@/components/admin/PageEdit";
-import { ApiHelper, Banner } from "@churchapps/apphelper";
+import { Banner } from "@churchapps/apphelper";
 
 export function StreamSettingsClient(props: WrapperPageProps) {
-  const { isAuthenticated } = ApiHelper;
   const [editPage, setEditPage] = useState<PageInterface>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-
-  useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-  }, [isAuthenticated]);
 
   return (
     <AdminWrapper config={props.config}>
