@@ -3,6 +3,7 @@ import { AdminSiteTests } from './modules/admin-site';
 import { AdminBlocksTests } from './modules/admin-blocks';
 import { AdminStylesTests } from './modules/admin-styles';
 import { AdminVideoTests } from './modules/admin-video';
+import { AdminMobileTests } from './modules/admin-mobile';
 
 test.describe('Admin Site Management', () => {
   test('should create new test page', async ({ page }) => {
@@ -93,5 +94,27 @@ test.describe('Admin Video Management', () => {
 
   test('should delete test content and restore original state', async ({ page }) => {
     await AdminVideoTests.deleteTestContentAndRestoreOriginalState(page);
+  });
+});
+
+test.describe('Admin Mobile Management', () => {
+  test('should create new test tab', async ({ page }) => {
+    await AdminMobileTests.createTestTab(page);
+  });
+
+  test('should edit test tab content', async ({ page }) => {
+    await AdminMobileTests.editTestTab(page);
+  });
+
+  test('should create new test mobile page', async ({ page }) => {
+    await AdminMobileTests.createTestMobilePage(page);
+  });
+
+  test('should test mobile app navigation', async ({ page }) => {
+    await AdminMobileTests.testMobileAppNavigation(page);
+  });
+
+  test('should delete test content and restore original state', async ({ page }) => {
+    await AdminMobileTests.deleteTestContentAndRestoreOriginalState(page);
   });
 });
