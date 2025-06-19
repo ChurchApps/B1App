@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
 import { AdminSiteTests } from './modules/admin-site';
 import { AdminBlocksTests } from './modules/admin-blocks';
+import { AdminStylesTests } from './modules/admin-styles';
 
 test.describe('Admin Site Management', () => {
   test('should create new test page', async ({ page }) => {
@@ -35,5 +36,39 @@ test.describe('Admin Blocks Management', () => {
 
   test('should delete test block and clean up test pages to restore original state', async ({ page }) => {
     await AdminBlocksTests.deleteTestBlockAndCleanup(page);
+  });
+});
+
+test.describe('Admin Styles Management', () => {
+  test('should navigate to styles page and show main interface', async ({ page }) => {
+    await AdminStylesTests.testStylesNavigation(page);
+  });
+
+  test('should test color palette editor', async ({ page }) => {
+    await AdminStylesTests.testColorPaletteEditor(page);
+  });
+
+  test('should test font editor', async ({ page }) => {
+    await AdminStylesTests.testFontEditor(page);
+  });
+
+  test('should test CSS and Javascript editor', async ({ page }) => {
+    await AdminStylesTests.testCssEditor(page);
+  });
+
+  test('should test logo section', async ({ page }) => {
+    await AdminStylesTests.testLogoSection(page);
+  });
+
+  test('should test site footer functionality', async ({ page }) => {
+    await AdminStylesTests.testSiteFooter(page);
+  });
+
+  test('should save color palette changes', async ({ page }) => {
+    await AdminStylesTests.testSaveColorPalette(page);
+  });
+
+  test('should test suggested palette selection', async ({ page }) => {
+    await AdminStylesTests.testSuggestedPaletteSelection(page);
   });
 });
