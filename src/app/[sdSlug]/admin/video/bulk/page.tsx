@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Banner, DisplayBox } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { ConfigHelper, ConfigurationInterface } from "@/helpers";
+import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { VimeoImport } from "@/components/admin/video/VimeoImport";
 import { YouTubeImport } from "@/components/admin/video/YouTubeImport";
 import { Button, Grid } from "@mui/material";

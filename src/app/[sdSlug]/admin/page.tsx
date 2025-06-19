@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Banner, UserHelper, Permissions } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { ConfigHelper, ConfigurationInterface } from "@/helpers";
+import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Tabs } from "@/components/admin/settings/Tabs";
 
 type PageParams = {sdSlug:string }
