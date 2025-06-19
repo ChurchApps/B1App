@@ -271,92 +271,166 @@ test.describe('Donation Functionality - Complete CRUD Tests', () => {
     // Wait for donation form to load completely
     await page.waitForTimeout(3000);
     
-    // Find and fill donation amount - from DonationForm component
-    console.log('Looking for donation amount input...');
-    const amountSelectors = [
+    // Step 1: Click the "single-donation" button to activate one-time donation mode
+    console.log('Looking for single-donation button...');
+    const singleDonationButton = page.locator('button[aria-label="single-donation"]');
+    
+    await singleDonationButton.waitFor({ state: 'visible', timeout: 10000 });
+    console.log('✅ Found single-donation button');
+    
+    await singleDonationButton.click();
+    console.log('✅ Clicked single-donation button');
+    
+    // Wait for the form to expand and show fund donation fields
+    console.log('Waiting for form to expand after single-donation click...');
+    await page.waitForTimeout(3000);
+    
+    // Check if form has expanded by looking for donation-specific content
+    const formExpandedIndicators = [
+      'text=Fund', 
+      'text=Total',
+      'text=Preview',
       'input[name="amount"]',
-      'input[placeholder*="Amount"]',
-      'input[placeholder*="amount"]',
-      'input[type="number"]',
-      'input[aria-label*="amount"]'
+      'select[name="method"]'
     ];
     
-    let amountInput = null;
-    for (const selector of amountSelectors) {
+    let formExpanded = false;
+    for (const indicator of formExpandedIndicators) {
+      if (await page.locator(indicator).isVisible({ timeout: 3000 }).catch(() => false)) {
+        console.log(`✅ Form expanded - found indicator: ${indicator}`);
+        formExpanded = true;
+        break;
+      }
+    }
+    
+    expect(formExpanded, 'Form must expand after clicking single-donation button').toBeTruthy();
+    
+    // Step 2: Fill in the fund donation amount
+    console.log('Looking for fund donation amount input...');
+    
+    // From FundDonation.tsx: TextField with name="amount" and aria-label="amount"
+    const fundAmountSelectors = [
+      'input[name="amount"][aria-label="amount"]', // Exact from FundDonation.tsx line 44
+      'input[name="amount"]',
+      'input[aria-label="amount"]',
+      'input[type="number"]'
+    ];
+    
+    let fundAmountInput = null;
+    for (const selector of fundAmountSelectors) {
       try {
-        await page.waitForSelector(selector, { state: 'visible', timeout: 5000 });
-        amountInput = await TestHelpers.findVisibleElement(page, [selector]);
-        if (amountInput) {
-          console.log(`Found amount input using selector: ${selector}`);
+        await page.waitForSelector(selector, { state: 'visible', timeout: 8000 });
+        fundAmountInput = await TestHelpers.findVisibleElement(page, [selector]);
+        if (fundAmountInput) {
+          console.log(`Found fund amount input using selector: ${selector}`);
           break;
         }
       } catch (e) {
-        // Continue trying other selectors
+        console.log(`Fund amount selector ${selector} failed: ${e.message}`);
       }
     }
     
-    expect(amountInput, 'Amount input field must be visible on donation page').toBeTruthy();
+    expect(fundAmountInput, 'Fund donation amount input must be visible after clicking single-donation').toBeTruthy();
     
-    // Clear any existing value and enter test amount
-    await amountInput.element.clear();
-    await amountInput.element.fill('25.00');
-    console.log('✅ Entered donation amount: $25.00');
+    // Enter the donation amount
+    await fundAmountInput.element.clear();
+    await fundAmountInput.element.fill('25.00');
+    console.log('✅ Entered fund donation amount: $25.00');
     
     // Verify amount was entered correctly
-    const enteredAmount = await amountInput.element.inputValue();
+    const enteredAmount = await fundAmountInput.element.inputValue();
     expect(enteredAmount, 'Amount must be entered correctly').toBe('25.00');
     
-    // Ensure this is a one-time donation (not recurring)
-    console.log('Checking for recurring donation toggles...');
-    try {
-      const recurringCheckbox = await TestHelpers.findVisibleElement(page, [
-        'input[type="checkbox"][name*="recurring"]',
-        'input[type="checkbox"][id*="recurring"]',
-        'input[type="checkbox"][aria-label*="recurring"]'
-      ]);
-      
-      if (recurringCheckbox && await recurringCheckbox.element.isChecked()) {
-        console.log('Unchecking recurring donation option');
-        await recurringCheckbox.element.uncheck();
-      }
-    } catch (e) {
-      console.log('No recurring checkbox found or needed');
-    }
+    // Wait for form to process the amount and calculate totals
+    await page.waitForTimeout(2000);
     
-    // Find and click donate/give button
-    console.log('Looking for donate/give button...');
-    const donateSelectors = [
-      'button[aria-label="single-donation"]', // From DonationForm.tsx
-      'button:has-text("Give")',
-      'button:has-text("Donate")',
-      'button:has-text("Submit")',
+    // Step 3: Click the Preview button to proceed with donation
+    console.log('Looking for Preview button...');
+    
+    // From DonationForm.tsx: ariaLabelSave="save-button" and saveText="Preview"
+    const previewSelectors = [
+      'button[aria-label="save-button"]', // Exact from DonationForm.tsx line 190
+      'button:has-text("Preview")',
+      'button:has-text("Save")',
       'button[type="submit"]'
     ];
     
-    let donateButton = null;
-    for (const selector of donateSelectors) {
+    let previewButton = null;
+    for (const selector of previewSelectors) {
       try {
         await page.waitForSelector(selector, { state: 'visible', timeout: 5000 });
-        donateButton = await TestHelpers.findVisibleElement(page, [selector]);
-        if (donateButton) {
-          console.log(`Found donate button using selector: ${selector}`);
+        previewButton = await TestHelpers.findVisibleElement(page, [selector]);
+        if (previewButton) {
+          console.log(`Found preview button using selector: ${selector}`);
           break;
         }
       } catch (e) {
-        // Continue trying other selectors
+        console.log(`Preview selector ${selector} failed: ${e.message}`);
       }
     }
     
-    expect(donateButton, 'Donate/Give button must be visible and enabled').toBeTruthy();
+    expect(previewButton, 'Preview button must be visible after entering amount').toBeTruthy();
     
-    console.log('Clicking donate button...');
-    await donateButton.element.click();
+    console.log('Clicking Preview button...');
+    await previewButton.element.click();
     
-    // Wait for payment processing - this could take several seconds
-    console.log('Waiting for payment processing...');
+    // Step 4: Handle the DonationPreviewModal
+    console.log('Waiting for donation preview modal...');
+    await page.waitForTimeout(3000);
+    
+    // Look for the modal and donation confirmation button
+    const modalSelectors = [
+      '[role="dialog"]', // Material-UI modal
+      '.MuiDialog-root',
+      'div:has-text("Preview")',
+      'div:has-text("Donate")'
+    ];
+    
+    let modalVisible = false;
+    for (const selector of modalSelectors) {
+      if (await page.locator(selector).isVisible({ timeout: 2000 }).catch(() => false)) {
+        console.log(`✅ Found donation modal using selector: ${selector}`);
+        modalVisible = true;
+        break;
+      }
+    }
+    
+    expect(modalVisible, 'Donation preview modal must appear').toBeTruthy();
+    
+    // Look for final donation/submit button in the modal
+    console.log('Looking for final donation button in modal...');
+    const finalDonateSelectors = [
+      'button:has-text("Donate")',
+      'button:has-text("Give")',
+      'button:has-text("Submit")',
+      'button:has-text("Confirm")',
+      'button[type="submit"]'
+    ];
+    
+    let finalDonateButton = null;
+    for (const selector of finalDonateSelectors) {
+      try {
+        await page.waitForSelector(selector, { state: 'visible', timeout: 5000 });
+        finalDonateButton = await TestHelpers.findVisibleElement(page, [selector]);
+        if (finalDonateButton) {
+          console.log(`Found final donate button using selector: ${selector}`);
+          break;
+        }
+      } catch (e) {
+        console.log(`Final donate selector ${selector} failed: ${e.message}`);
+      }
+    }
+    
+    expect(finalDonateButton, 'Final donate button must be visible in modal').toBeTruthy();
+    
+    console.log('Clicking final donate button...');
+    await finalDonateButton.element.click();
+    
+    // Step 5: Wait for donation processing and check for success
+    console.log('Waiting for donation processing...');
     await page.waitForTimeout(8000);
     
-    // Look for success indicators - payment should complete successfully
+    // Look for success indicators
     console.log('Checking for donation success indicators...');
     const successIndicators = [
       'text=Thank you',
@@ -365,12 +439,13 @@ test.describe('Donation Functionality - Complete CRUD Tests', () => {
       'text=completed successfully', 
       'text=Thank you for your donation',
       'text=Payment successful',
-      'text=Donation successful'
+      'text=Donation successful',
+      'text=succeeded'
     ];
     
     let donationSuccessful = false;
     for (const indicator of successIndicators) {
-      if (await page.locator(indicator).isVisible({ timeout: 2000 }).catch(() => false)) {
+      if (await page.locator(indicator).isVisible({ timeout: 3000 }).catch(() => false)) {
         console.log(`✅ Found success indicator: ${indicator}`);
         donationSuccessful = true;
         break;
@@ -391,13 +466,16 @@ test.describe('Donation Functionality - Complete CRUD Tests', () => {
       }
     }
     
-    // If no success found, check for error messages
+    // If no success found, check for error messages and debug
     if (!donationSuccessful) {
+      console.log('❌ No success indicators found, checking for errors...');
+      
       const errorIndicators = [
         'text=Error',
         'text=Failed',
         'text=Invalid',
-        'text=Declined'
+        'text=Declined',
+        'text=payment method required'
       ];
       
       for (const indicator of errorIndicators) {
@@ -407,9 +485,10 @@ test.describe('Donation Functionality - Complete CRUD Tests', () => {
         }
       }
       
-      // Take screenshot for debugging
-      await page.screenshot({ path: 'debug-donation-failed.png', fullPage: true });
-      console.log('Screenshot saved: debug-donation-failed.png');
+      // Get page content for debugging
+      const pageContent = await page.locator('body').textContent();
+      console.log('Page content (first 1000 chars):', pageContent?.substring(0, 1000));
+      
     }
     
     expect(donationSuccessful, 'Donation must complete successfully with success message').toBeTruthy();
@@ -582,11 +661,6 @@ test.describe('Donation Functionality - Complete CRUD Tests', () => {
     const newRecurringCount = await getRecurringDonationCount(page);
     console.log(`Initial recurring count: ${initialRecurringDonationCount}, New count: ${newRecurringCount}`);
     
-    if (!recurringSuccessful) {
-      // Take screenshot for debugging
-      await page.screenshot({ path: 'debug-recurring-failed.png', fullPage: true });
-      console.log('Screenshot saved: debug-recurring-failed.png');
-    }
     
     expect(recurringSuccessful || newRecurringCount > initialRecurringDonationCount, 
       'Recurring donation must be created successfully').toBeTruthy();
