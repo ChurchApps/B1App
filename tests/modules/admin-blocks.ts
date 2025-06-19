@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { TestHelpers } from './helpers/test-base';
+import { Page, expect } from '@playwright/test';
+import { TestHelpers } from '../helpers/test-base';
 
-test.describe('Admin Blocks Management', () => {
-  test('should create new test block', async ({ page }) => {
+export class AdminBlocksTests {
+  static async createTestBlock(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin site first
@@ -83,9 +83,9 @@ test.describe('Admin Blocks Management', () => {
     }
     
     console.log('✅ Block creation workflow completed');
-  });
+  }
 
-  test('should edit test block content', async ({ page }) => {
+  static async editTestBlockContent(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin site, then blocks
@@ -165,9 +165,9 @@ test.describe('Admin Blocks Management', () => {
     }
     
     console.log('✅ Block editing workflow completed');
-  });
+  }
 
-  test('should use test block in a page', async ({ page }) => {
+  static async useTestBlockInPage(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to pages to create a test page for using the block
@@ -227,9 +227,9 @@ test.describe('Admin Blocks Management', () => {
     }
     
     console.log('✅ Block integration workflow verified');
-  });
+  }
 
-  test('should delete test block and clean up test pages to restore original state', async ({ page }) => {
+  static async deleteTestBlockAndCleanup(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin site, then blocks
@@ -333,5 +333,5 @@ test.describe('Admin Blocks Management', () => {
     console.log('   • Delete any test pages created for block testing');
     console.log('   • Verify no block references remain in pages');
     console.log('   • Restore blocks admin to original state');
-  });
-});
+  }
+}

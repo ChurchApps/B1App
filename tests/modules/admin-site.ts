@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { TestHelpers } from './helpers/test-base';
+import { Page, expect } from '@playwright/test';
+import { TestHelpers } from '../helpers/test-base';
 
-test.describe('Admin Site Management', () => {
-  test('should create new /test-page', async ({ page }) => {
+export class AdminSiteTests {
+  static async createTestPage(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin site
@@ -14,52 +14,23 @@ test.describe('Admin Site Management', () => {
     expect(page.url()).toContain('/admin/site');
     await expect(page.locator('text=Pages').first()).toBeVisible();
     
-    // Debug: Print all buttons to see what's available
-    const allButtons = await page.locator('button').count();
-    console.log(`Found ${allButtons} buttons on page`);
+    // Click the "+" button to add a new page - it's the blue + button in the top right
+    const addButton = page.locator('button:has-text("+"), [data-testid="add-button"]').first();
     
-    // The + button is clearly visible - let's try multiple approaches
-    const addButtonSelectors = [
-      'button:has-text("+")',
-      '[data-testid="add-button"]',
-      'button[aria-label*="add"]',
-      'button[title*="add"]',
-      'button:has(svg) >> text="+"',
-      'button >> text="+"'
-    ];
-    
-    let buttonToClick = null;
-    for (const selector of addButtonSelectors) {
-      const button = page.locator(selector).first();
-      if (await button.isVisible({ timeout: 1000 }).catch(() => false)) {
-        console.log(`Found button with selector: ${selector}`);
-        buttonToClick = button;
-        break;
-      }
-    }
-    
-    if (!buttonToClick) {
-      console.log('No button found with selectors, trying coordinate click');
+    // Try multiple approaches to find the add button
+    if (!(await addButton.isVisible({ timeout: 2000 }).catch(() => false))) {
+      console.log('Add button not found with selector, trying coordinate click');
       // From the screenshot, the + button appears to be around coordinates 1223, 183
-      await page.click('text=Pages');
-      await page.waitForTimeout(500);
       await page.mouse.click(1223, 183);
-      buttonToClick = 'clicked_by_coordinates';
+    } else {
+      await addButton.click();
     }
     
-    if (buttonToClick !== 'clicked_by_coordinates') {
-      await expect(buttonToClick).toBeVisible({ timeout: 5000 });
-      console.log('Clicking add button');
-      await buttonToClick.click();
-    } else {
-      console.log('Already clicked by coordinates');
-    }
     await page.waitForTimeout(1000);
     
     // Look for new page form dialog
     const pageForm = page.locator('form, [role="dialog"], .modal, .MuiDialog-root').first();
     await expect(pageForm).toBeVisible({ timeout: 3000 });
-    
     console.log('Page creation form opened');
     
     // Click the "About Us" template button
@@ -88,9 +59,9 @@ test.describe('Admin Site Management', () => {
     
     expect(hasNotFound).toBeFalsy();
     console.log('✅ Test page created and accessible at /test-page');
-  });
+  }
 
-  test('should edit test-page to add section and Hello World text element', async ({ page }) => {
+  static async editTestPageContent(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin site
@@ -118,7 +89,6 @@ test.describe('Admin Site Management', () => {
     await page.waitForTimeout(2000);
     
     console.log('Current URL after clicking edit:', page.url());
-    await page.screenshot({ path: 'debug-edit-page.png' });
     
     // Look for and click "EDIT CONTENT" button
     const editContentButton = page.locator('button:has-text("EDIT CONTENT")').first();
@@ -127,7 +97,6 @@ test.describe('Admin Site Management', () => {
       await editContentButton.click();
       await page.waitForTimeout(3000);
       
-      await page.screenshot({ path: 'debug-content-edit-mode.png' });
       console.log('Entered content edit mode');
       
       // Find and double-click the main heading text (could be "ABOUT US" or "Hello World" from previous runs)
@@ -145,8 +114,6 @@ test.describe('Admin Site Management', () => {
         console.log(`Found heading "${headingText}", double-clicking to edit`);
         await mainHeading.dblclick();
         await page.waitForTimeout(1000);
-        
-        await page.screenshot({ path: 'debug-after-heading-dblclick.png' });
         
         // Look for text input/editor that appears after double-click
         const textEditor = page.locator('textarea, [contenteditable="true"], input[type="text"], .ql-editor').first();
@@ -199,6 +166,14 @@ test.describe('Admin Site Management', () => {
         }
       }
       
+      // Close any open dialogs first
+      const closeButton = page.locator('button:has-text("Close"), [aria-label="Close"]').first();
+      if (await closeButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+        console.log('Closing dialog first');
+        await closeButton.click();
+        await page.waitForTimeout(1000);
+      }
+      
       // Exit edit mode
       const doneButton = page.locator('button:has-text("DONE")').first();
       if (await doneButton.isVisible({ timeout: 3000 }).catch(() => false)) {
@@ -223,7 +198,6 @@ test.describe('Admin Site Management', () => {
     
     if (isPageNotFound) {
       console.log('⚠️  Test page not found (404) - this may be a timing issue after content editing');
-      await page.screenshot({ path: 'debug-404-page.png' });
       // The test still succeeded in editing the content, even if the page isn't immediately available
       console.log('✅ Content editing workflow completed successfully');
     } else {
@@ -234,15 +208,14 @@ test.describe('Admin Site Management', () => {
         console.log('🎉 SUCCESS! Hello World text found on /test-page');
       } else {
         console.log('⚠️  Hello World text not immediately visible, but editing workflow succeeded');
-        await page.screenshot({ path: 'debug-final-verification.png' });
       }
     }
     
     // The test passes if we successfully completed the editing workflow
     console.log('✅ Test completed - page editing functionality verified');
-  });
+  }
 
-  test('should add test-page to main navigation and verify it appears on home page', async ({ page }) => {
+  static async addTestPageToNavigation(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin site
@@ -252,9 +225,6 @@ test.describe('Admin Site Management', () => {
     
     // Wait for the sidebar and content to load
     await page.waitForTimeout(3000);
-    
-    // Take screenshot to see the admin interface
-    await page.screenshot({ path: 'debug-admin-site-full.png' });
     
     // Look for navigation management in the left sidebar - I can see "Main Navigation" with a + button
     const mainNavSection = page.locator('text=Main Navigation').first();
@@ -269,14 +239,11 @@ test.describe('Admin Site Management', () => {
         console.log('Found + button next to Main Navigation, clicking it');
         await navAddButton.click();
         await page.waitForTimeout(2000);
-        
-        await page.screenshot({ path: 'debug-after-nav-add-click.png' });
       } else {
         console.log('+ button not found next to Main Navigation, trying coordinate click');
         // From the screenshot, the + button appears to be around coordinates (177, 280)
         await page.mouse.click(177, 280);
         await page.waitForTimeout(2000);
-        await page.screenshot({ path: 'debug-after-coordinate-nav-click.png' });
       }
       
       // Look for a navigation form or dialog
@@ -340,14 +307,13 @@ test.describe('Admin Site Management', () => {
       }
     } else {
       console.log('⚠️  Test Page navigation link not found on home page');
-      await page.screenshot({ path: 'debug-home-navigation.png' });
       console.log('✅ Navigation management workflow completed (link may need time to appear)');
     }
     
     console.log('✅ Test completed - navigation functionality verified');
-  });
+  }
 
-  test('should delete navigation link and test page to restore original state', async ({ page }) => {
+  static async deleteTestContentAndRestoreOriginalState(page: Page) {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin site
@@ -464,5 +430,5 @@ test.describe('Admin Site Management', () => {
     console.log('   • Delete any dedicated test pages');
     console.log('   • Restore About Us page to original ABOUT US heading');
     console.log('   • Verify site is returned to pre-test state');
-  });
-});
+  }
+}
