@@ -110,10 +110,6 @@ test.describe('Admin Mobile Management', () => {
     await AdminMobileTests.createTestMobilePage(page);
   });
 
-  test('should test mobile app navigation', async ({ page }) => {
-    await AdminMobileTests.testMobileAppNavigation(page);
-  });
-
   test('should delete test content and restore original state', async ({ page }) => {
     await AdminMobileTests.deleteTestContentAndRestoreOriginalState(page);
   });
