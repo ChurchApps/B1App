@@ -91,10 +91,13 @@ test.describe('Calendar & Events', () => {
     }
   });
 
-  test('event registration check', async ({ authenticatedPage }) => {
+  test('event registration check', async ({ page }) => {
+    // Login first to check registration options as authenticated user
+    await TestHelpers.loginAndSelectChurch(page);
+    
     // Check for registration options on events from home page calendar
-    await authenticatedPage.goto('/');
-    await authenticatedPage.waitForLoadState('domcontentloaded');
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
     
     // First find an event on the calendar
     const eventSelectors = [
@@ -106,10 +109,10 @@ test.describe('Calendar & Events', () => {
       '[data-event]'
     ];
     
-    const event = await TestHelpers.findVisibleElement(authenticatedPage, eventSelectors);
+    const event = await TestHelpers.findVisibleElement(page, eventSelectors);
     if (event) {
       await event.element.click();
-      await authenticatedPage.waitForTimeout(1000);
+      await page.waitForTimeout(1000);
       
       // Look for registration options in modal/popup or event details
       const registerSelectors = [
@@ -123,7 +126,7 @@ test.describe('Calendar & Events', () => {
         '[href*="register"]'
       ];
       
-      const registerButton = await TestHelpers.findVisibleElement(authenticatedPage, registerSelectors);
+      const registerButton = await TestHelpers.findVisibleElement(page, registerSelectors);
       if (registerButton) {
         console.log('Found registration option for event');
         expect(registerButton).toBeTruthy();

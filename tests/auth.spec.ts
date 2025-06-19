@@ -28,7 +28,8 @@ test.describe('Authentication', () => {
   });
 
   test('successful login flow', async ({ page }) => {
-    await TestHelpers.quickLogin(page);
+    // Use the comprehensive login method which handles church selection
+    await TestHelpers.loginAndSelectChurch(page);
     
     // Verify redirect to member area
     expect(page.url()).toContain('/my');

@@ -71,7 +71,10 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   const handleDataUpdate = (message?: string) => {
     setMessage(message)
     setPaymentMethods(null);
-    loadData();
+    // Add a small delay to allow backend to process the donation
+    setTimeout(() => {
+      loadData();
+    }, 2000);
   }
 
   const getEditContent = () => {

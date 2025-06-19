@@ -115,6 +115,109 @@ export class TestHelpers {
     await page.goto('/logout');
     await page.waitForLoadState('networkidle');
   }
+
+  /**
+   * Comprehensive login helper with browser state clearing and church selection
+   * This is the most robust login method that handles all edge cases
+   */
+  static async loginAndSelectChurch(page: Page, returnUrl?: string): Promise<void> {
+    console.log(`=== Starting login process ${returnUrl ? 'with returnUrl: ' + returnUrl : ''} ===`);
+    
+    // Clear all browser state first
+    await page.context().clearCookies();
+    await page.context().clearPermissions();
+    try {
+      await page.evaluate(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+      });
+    } catch {
+      // Ignore if we can't clear storage on current page
+    }
+    
+    // Navigate to login with optional return URL
+    const loginUrl = returnUrl ? `/login?returnUrl=${encodeURIComponent(returnUrl)}` : '/login';
+    console.log('Navigating to login URL:', loginUrl);
+    await page.goto(loginUrl);
+    
+    // Fill login form
+    await page.fill(selectors.login.emailInput, 'demo@chums.org');
+    await page.fill(selectors.login.passwordInput, 'password');
+    await page.click(selectors.login.submitButton);
+    
+    // Wait for page to settle after login
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(3000);
+    
+    const currentUrl = page.url();
+    console.log('Current URL after login:', currentUrl);
+    
+    // Handle church selection if it appears
+    const hasDialog = await page.locator('[role="dialog"], .MuiDialog-root').isVisible({ timeout: 3000 }).catch(() => false);
+    
+    if (hasDialog) {
+      console.log('Church selection modal detected');
+      
+      // Try to find Grace Community Church first
+      let churchSelected = false;
+      
+      const graceSelectors = [
+        '[role="dialog"] a:has-text("Grace Community Church")',
+        '.MuiDialog-root a:has-text("Grace Community Church")',
+        'text="Grace Community Church"',
+        'a:has-text("Grace Community Church")',
+      ];
+      
+      for (const selector of graceSelectors) {
+        try {
+          const element = page.locator(selector).first();
+          if (await element.isVisible({ timeout: 1000 })) {
+            console.log(`Found Grace Community Church with selector: ${selector}`);
+            await element.click();
+            churchSelected = true;
+            break;
+          }
+        } catch (e) {
+          // Continue to next selector
+        }
+      }
+      
+      if (!churchSelected) {
+        console.log('Grace Community Church not found, selecting first available church...');
+        const firstChurch = page.locator('[role="dialog"] a, .MuiDialog-root a').first();
+        if (await firstChurch.isVisible({ timeout: 2000 })) {
+          const churchName = await firstChurch.textContent();
+          console.log(`Selecting fallback church: ${churchName?.trim()}`);
+          await firstChurch.click();
+          churchSelected = true;
+        }
+      }
+      
+      if (churchSelected) {
+        await page.waitForTimeout(3000);
+        console.log('Church selected successfully');
+      } else {
+        throw new Error('Could not select any church from the modal');
+      }
+    } else {
+      console.log('No church selection modal - proceeding directly');
+    }
+    
+    // Wait for final navigation to complete
+    try {
+      if (returnUrl && returnUrl.startsWith('/my/')) {
+        await page.waitForURL(`**${returnUrl}`, { timeout: 15000 });
+      } else {
+        await page.waitForURL('**/my/**', { timeout: 15000 });
+      }
+    } catch (error) {
+      console.log('URL wait timeout - current URL:', page.url());
+      // Don't throw error here, let the test continue and fail appropriately
+    }
+    
+    await page.waitForLoadState('domcontentloaded');
+    console.log('Login completed, final URL:', page.url());
+  }
 }
 
 export { expect } from '@playwright/test';
