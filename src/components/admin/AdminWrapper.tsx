@@ -23,11 +23,11 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   PersonHelper.person = context.person;
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && props.config?.keyName) {
       const returnUrl = UrlHelper.getReturnUrl(pathname, props.config.keyName);
       redirect(`/login?returnUrl=${encodeURIComponent(returnUrl)}`);
     }
-  }, [isAuthenticated, pathname, props.config.keyName]);
+  }, [isAuthenticated, pathname, props.config?.keyName]);
 
   if (!isAuthenticated) {
     return null;
