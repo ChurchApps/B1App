@@ -4,6 +4,7 @@ import { AdminBlocksTests } from './modules/admin-blocks';
 import { AdminStylesTests } from './modules/admin-styles';
 import { AdminVideoTests } from './modules/admin-video';
 import { AdminMobileTests } from './modules/admin-mobile';
+import { AdminCalendarsTests } from './modules/admin-calendars';
 
 test.describe('Admin Site Management', () => {
   test('should create new test page', async ({ page }) => {
@@ -112,5 +113,23 @@ test.describe('Admin Mobile Management', () => {
 
   test('should delete test content and restore original state', async ({ page }) => {
     await AdminMobileTests.deleteTestContentAndRestoreOriginalState(page);
+  });
+});
+
+test.describe('Admin Calendars Management', () => {
+  test('should create new test calendar', async ({ page }) => {
+    await AdminCalendarsTests.createTestCalendar(page);
+  });
+
+  test('should edit test calendar', async ({ page }) => {
+    await AdminCalendarsTests.editTestCalendar(page);
+  });
+
+  test('should manage calendar events', async ({ page }) => {
+    await AdminCalendarsTests.manageCalendarEvents(page);
+  });
+
+  test('should delete test calendar and restore original state', async ({ page }) => {
+    await AdminCalendarsTests.deleteTestCalendar(page);
   });
 });
