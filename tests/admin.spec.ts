@@ -2,6 +2,7 @@ import { test } from '@playwright/test';
 import { AdminSiteTests } from './modules/admin-site';
 import { AdminBlocksTests } from './modules/admin-blocks';
 import { AdminStylesTests } from './modules/admin-styles';
+import { AdminVideoTests } from './modules/admin-video';
 
 test.describe('Admin Site Management', () => {
   test('should create new test page', async ({ page }) => {
@@ -70,5 +71,27 @@ test.describe('Admin Styles Management', () => {
 
   test('should test suggested palette selection', async ({ page }) => {
     await AdminStylesTests.testSuggestedPaletteSelection(page);
+  });
+});
+
+test.describe('Admin Video Management', () => {
+  test('should create new test sermon', async ({ page }) => {
+    await AdminVideoTests.createTestSermon(page);
+  });
+
+  test('should edit test sermon content', async ({ page }) => {
+    await AdminVideoTests.editTestSermon(page);
+  });
+
+  test('should create new test playlist', async ({ page }) => {
+    await AdminVideoTests.createTestPlaylist(page);
+  });
+
+  test('should access and test stream settings', async ({ page }) => {
+    await AdminVideoTests.testStreamSettings(page);
+  });
+
+  test('should delete test content and restore original state', async ({ page }) => {
+    await AdminVideoTests.deleteTestContentAndRestoreOriginalState(page);
   });
 });
