@@ -31,9 +31,15 @@ export function YoutubeBackground({
   const [videoX, setVideoX] = useState(0);
   const containerRef = useRef<any>(null);
 
-  if (typeof aspectRatio === "string") {
+  if (typeof aspectRatio === "string" && aspectRatio) {
     const split = aspectRatio.split(":");
-    aspectRatio = parseInt(split[0]) / parseInt(split[1]);
+    if (split.length === 2) {
+      aspectRatio = parseInt(split[0]) / parseInt(split[1]);
+    } else {
+      aspectRatio = 16 / 9; // fallback to 16:9
+    }
+  } else {
+    aspectRatio = 16 / 9; // fallback to 16:9
   }
 
 
