@@ -34,19 +34,19 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
 const loadData = async (sdSlug: string, groupSlug: string) => {
   try {
     const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-    
+
     // Try to get the group data
     let group: GroupInterface | null = null;
     let events: EventInterface[] = [];
     let leaders: GroupMemberInterface[] = [];
-    
+
     try {
       group = await ApiHelper.get("/groups/public/" + config.church.id + "/slug/" + groupSlug, "MembershipApi");
-      
+
       // Only fetch additional data if group exists
       if (group && group.id) {
-        events = await ApiHelper.get("/events/public/group/" + config.church.id + "/" + group.id, "ContentApi").catch(() => []);
-        leaders = await ApiHelper.get("/groupMembers/public/leaders/" + config.church.id + "/" + group.id, "MembershipApi").catch(() => []);
+        events = await ApiHelper.get("/events/public/group/" + config.church.id + "/" + group.id, "ContentApi").catch((): any[] => []);
+        leaders = await ApiHelper.get("/groupMembers/public/leaders/" + config.church.id + "/" + group.id, "MembershipApi").catch((): any[] => []);
       }
     } catch (error) {
       console.error("Failed to load group data:", error);

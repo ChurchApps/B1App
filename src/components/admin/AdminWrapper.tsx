@@ -19,7 +19,7 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   const { isAuthenticated } = ApiHelper;
   const context = React.useContext(UserContext);
   const pathname = usePathname();
-  
+
   PersonHelper.person = context.person;
 
   useEffect(() => {

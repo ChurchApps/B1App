@@ -36,7 +36,7 @@ const loadData = async (sdSlug:string, pageSlug:string) => {
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug, id } = await params;
-  
+
   // Validate id parameter
   if (!id || id === 'undefined' || id.trim() === '') {
     return (
@@ -46,7 +46,7 @@ export default async function Home({ params }: { params: PageParams }) {
       </div>
     );
   }
-  
+
   const { config } = await loadSharedData(sdSlug, pageSlug);
 
   let label = "Plan Details";
