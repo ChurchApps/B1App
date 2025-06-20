@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
 import { MyGroupsTests } from './modules/my-groups';
 import { MyCommunityTests } from './modules/my-community';
+import { MyCheckinTests } from './modules/my-checkin';
 
 test.describe('My Portal - Groups Management', () => {
   test('should navigate to My Groups page', async ({ page }) => {
@@ -47,5 +48,35 @@ test.describe('My Portal - Community Directory', () => {
 
   test('should display correctly on different screen sizes', async ({ page }) => {
     await MyCommunityTests.testDirectoryResponsiveness(page);
+  });
+});
+
+test.describe('My Portal - Check-in Functionality', () => {
+  test('should navigate to Check-in page', async ({ page }) => {
+    await MyCheckinTests.navigateToCheckin(page);
+  });
+
+  test('should load initial check-in screen', async ({ page }) => {
+    await MyCheckinTests.testInitialCheckinLoad(page);
+  });
+
+  test('should handle service selection', async ({ page }) => {
+    await MyCheckinTests.testServiceSelection(page);
+  });
+
+  test('should handle household member interactions', async ({ page }) => {
+    await MyCheckinTests.testHouseholdMemberInteraction(page);
+  });
+
+  test('should complete check-in process', async ({ page }) => {
+    await MyCheckinTests.testCheckinProcess(page);
+  });
+
+  test('should handle unauthenticated access properly', async ({ page }) => {
+    await MyCheckinTests.testUnauthenticatedAccess(page);
+  });
+
+  test('should display correctly on different screen sizes', async ({ page }) => {
+    await MyCheckinTests.testCheckinResponsiveness(page);
   });
 });
