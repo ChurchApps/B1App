@@ -34,7 +34,7 @@ export class ChumsPersonHelper {
       middleName: person?.name?.middle,
       age: person?.birthDate === null
         ? ""
-        : PersonHelper.getAge(person?.birthDate).split(" ")[0],
+        : (PersonHelper.getAge(person?.birthDate)?.split(" ")[0] || ""),
       displayName: person?.name?.display,
       birthDate: person?.birthDate ? new Date(person?.birthDate) : null,
       anniversary: person?.anniversary ? new Date(person?.anniversary) : null,

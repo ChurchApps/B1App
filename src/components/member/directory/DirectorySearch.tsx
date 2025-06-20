@@ -15,7 +15,7 @@ export const DirectorySearch: React.FC<Props> = (props) => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
-    let term = escape(searchText.trim());
+    let term = encodeURIComponent(searchText.trim());
     if (searchCategory === "people") ApiHelper.get("/people/search?term=" + term, "MembershipApi").then(data => setSearchResults(data));
     else ApiHelper.get("/people/search/group?groupId=" + searchGroupId, "MembershipApi").then(data => setSearchResults(data));
   }

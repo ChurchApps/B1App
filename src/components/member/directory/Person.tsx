@@ -69,6 +69,11 @@ export const Person: React.FC<Props> = (props) => {
   }
 
   const loadData = () => {
+    if (!props.personId || props.personId === 'undefined' || props.personId.trim() === '') {
+      console.error('Invalid personId:', props.personId);
+      return;
+    }
+    
     ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then(data => setPerson(data));
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then(data => setRequestedChanges(data));
   }

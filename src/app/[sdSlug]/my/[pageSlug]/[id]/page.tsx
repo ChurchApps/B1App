@@ -1,4 +1,5 @@
 import { Theme } from "@/components";
+import { AuthGuard } from "@/components/AuthGuard";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
@@ -35,6 +36,17 @@ const loadData = async (sdSlug:string, pageSlug:string) => {
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug, id } = await params;
+  
+  // Validate id parameter
+  if (!id || id === 'undefined' || id.trim() === '') {
+    return (
+      <div>
+        <h1>Invalid ID</h1>
+        <p>The requested ID is invalid or missing.</p>
+      </div>
+    );
+  }
+  
   const { config } = await loadSharedData(sdSlug, pageSlug);
 
   let label = "Plan Details";
@@ -58,10 +70,11 @@ export default async function Home({ params }: { params: PageParams }) {
   return (
     <>
       <Theme config={config} />
-      <MyWrapper pageSlug={pageSlug} idLabel={label} config={config}>
-        {getPageContent()}
-      </MyWrapper>
-
+      <AuthGuard sdSlug={sdSlug}>
+        <MyWrapper pageSlug={pageSlug} idLabel={label} config={config}>
+          {getPageContent()}
+        </MyWrapper>
+      </AuthGuard>
       <Animate />
     </>
   );

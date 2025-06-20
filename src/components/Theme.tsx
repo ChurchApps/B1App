@@ -65,7 +65,6 @@ export const Theme: React.FC<Props> = (props) => {
       {css}
     </style>
     <head>
-
       {favicon
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
         : <link rel="icon" href="/favicon.ico" />

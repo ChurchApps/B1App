@@ -11,6 +11,17 @@ interface Props {
 export function PersonPage(props: Props) {
   const { personId } = props;
 
+  // Validate personId
+  if (!personId || personId === 'undefined' || personId.trim() === '') {
+    return (
+      <>
+        <h1>Invalid Person</h1>
+        <p>The person ID is invalid or missing.</p>
+        <Link href="/my/community">Return to Directory</Link>
+      </>
+    );
+  }
+
   const getContent = () => (
     <Person personId={personId} backHandler={() => {}} selectedHandler={() => {}} />
   );

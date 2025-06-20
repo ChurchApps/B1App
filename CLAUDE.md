@@ -103,3 +103,4 @@ Set up `.env` from `dotenv.sample.txt`:
 - Always run the tests to verify they work after changing them.
 - Review relevant code to get exact field/button/link names instead of writing broad match rules.
 - Delete any temporary screenshots and debug tests.
+- Make sure tests run in headless mode when auto-running them.
