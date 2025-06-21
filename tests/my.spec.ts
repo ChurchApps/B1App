@@ -3,6 +3,7 @@ import { MyGroupsTests } from './modules/my-groups';
 import { MyCommunityTests } from './modules/my-community';
 import { MyCheckinTests } from './modules/my-checkin';
 import { MyDonationsTests } from './modules/my-donations';
+import { MyPlansTests } from './modules/my-plans';
 
 test.describe('My Portal - Groups Management', () => {
   test('should navigate to My Groups page', async ({ page }) => {
@@ -117,5 +118,43 @@ test.describe('My Portal - Donations Management', () => {
 
   test('should display correctly on different screen sizes', async ({ page }) => {
     await MyDonationsTests.testDonationsResponsiveness(page);
+  });
+});
+
+test.describe('My Portal - Plans Management', () => {
+  test('should navigate to Plans page', async ({ page }) => {
+    await MyPlansTests.navigateToPlans(page);
+  });
+
+  test('should load initial plans screen', async ({ page }) => {
+    await MyPlansTests.testInitialPlansLoad(page);
+  });
+
+  test('should display serving times section correctly', async ({ page }) => {
+    await MyPlansTests.testServingTimesSection(page);
+  });
+
+  test('should display upcoming dates section correctly', async ({ page }) => {
+    await MyPlansTests.testUpcomingDatesSection(page);
+  });
+
+  test('should display blockout dates section correctly', async ({ page }) => {
+    await MyPlansTests.testBlockoutDatesSection(page);
+  });
+
+  test('should add blockout date', async ({ page }) => {
+    await MyPlansTests.testAddBlockoutDate(page);
+  });
+
+  test('should navigate to plan details', async ({ page }) => {
+    await MyPlansTests.testNavigateToPlanDetails(page);
+  });
+
+  test('should handle unauthenticated access properly', async ({ page }) => {
+    await MyPlansTests.testUnauthenticatedAccess(page);
+  });
+
+  test('should display correctly on different screen sizes', async ({ page }) => {
+    await MyPlansTests.testPlansResponsiveness(page);
   });
 });
