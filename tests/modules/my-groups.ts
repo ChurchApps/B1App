@@ -32,29 +32,45 @@ export class MyGroupsTests {
     const noGroupsMessage = page.locator('text=No groups found').first();
     const groupCards = page.locator('a[href*="/groups/details/"]').first(); // Group cards are links to group details
     
+    // REQUIRED: Page must show either groups or "no groups" message
     const hasNoGroups = await noGroupsMessage.isVisible({ timeout: 3000 }).catch(() => false);
     const hasGroups = await groupCards.isVisible({ timeout: 3000 }).catch(() => false);
+    
+    if (!hasNoGroups && !hasGroups) {
+      throw new Error('Groups page shows neither groups nor "no groups found" message');
+    }
     
     if (hasNoGroups) {
       console.log('ℹ️  No groups found for this user');
       await expect(noGroupsMessage).toBeVisible();
-    } else if (hasGroups) {
+    } else {
       console.log('✅ Groups are displayed');
       await expect(groupCards).toBeVisible();
       
-      // Count the number of group cards
+      // REQUIRED: Group cards must have proper count and structure
       const groupCardCount = await page.locator('a[href*="/groups/details/"]').count();
+      expect(groupCardCount).toBeGreaterThan(0);
       console.log(`Found ${groupCardCount} group card(s)`);
       
-      // Verify group names are visible
-      const groupNames = page.locator('a[href*="/groups/details/"] [style*="fontWeight: bold"]');
-      const nameCount = await groupNames.count();
-      if (nameCount > 0) {
+      // REQUIRED: Groups must have visible names (look for text overlays on group cards)
+      const groupNames = page.locator('a[href*="/groups/details/"] h3, a[href*="/groups/details/"] h2, a[href*="/groups/details/"] .group-name, a[href*="/groups/details/"] [style*="color: white"], a[href*="/groups/details/"] [style*="color:white"]');
+      let nameCount = await groupNames.count();
+      
+      // If specific selectors don't work, get all text from group cards
+      if (nameCount === 0) {
+        const allGroupText = page.locator('a[href*="/groups/details/"]');
+        nameCount = await allGroupText.count();
+        expect(nameCount).toBeGreaterThan(0);
+        
+        const firstGroupText = await allGroupText.first().textContent();
+        expect(firstGroupText).toBeTruthy();
+        console.log(`First group text: "${firstGroupText}"`);
+      } else {
+        expect(nameCount).toBeGreaterThan(0);
         const firstGroupName = await groupNames.first().textContent();
+        expect(firstGroupName).toBeTruthy();
         console.log(`First group name: "${firstGroupName}"`);
       }
-    } else {
-      console.log('ℹ️  Groups section loaded (content may still be loading)');
     }
     
     console.log('✅ Groups list view functionality verified');
@@ -100,26 +116,17 @@ export class MyGroupsTests {
       expect(page.url()).toContain('/groups/details/');
       console.log('✅ Successfully navigated to group details page');
       
-      // Look for group details content
+      // REQUIRED: Group details page must load with content
       const groupContent = page.locator('main, article, .group-content, [class*="group"]').first();
-      const groupContentVisible = await groupContent.isVisible({ timeout: 5000 }).catch(() => false);
-      
-      if (groupContentVisible) {
-        console.log('✅ Group details page loaded successfully');
-      } else {
-        console.log('ℹ️  Group details page navigation completed (content may still be loading)');
-      }
+      await expect(groupContent).toBeVisible({ timeout: 5000 });
+      console.log('✅ Group details page loaded successfully');
     } else {
       console.log('ℹ️  No group cards found to test interaction');
       
-      // Verify "No groups found" message is displayed
+      // REQUIRED: Must show "No groups found" message when no groups exist
       const noGroupsMessage = page.locator('text=No groups found').first();
-      if (await noGroupsMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await expect(noGroupsMessage).toBeVisible({ timeout: 3000 });
-        console.log('✅ "No groups found" message displayed correctly');
-      } else {
-        console.log('ℹ️  No groups found, but no specific message displayed');
-      }
+      await expect(noGroupsMessage).toBeVisible({ timeout: 3000 });
+      console.log('✅ "No groups found" message displayed correctly');
     }
     
     console.log('✅ Group card interaction functionality verified');
@@ -165,6 +172,7 @@ export class MyGroupsTests {
           page.locator('[role="tablist"], .tabs, button[role="tab"]').first(), // Tabs interface
         ];
         
+        // REQUIRED: Group details page must have recognizable content
         let contentFound = false;
         for (const element of groupElements) {
           if (await element.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -173,11 +181,8 @@ export class MyGroupsTests {
           }
         }
         
-        if (contentFound) {
-          console.log('✅ Group details page content loaded successfully');
-        } else {
-          console.log('ℹ️  Group details page loaded (content structure may differ)');
-        }
+        expect(contentFound).toBe(true);
+        console.log('✅ Group details page content loaded successfully');
         
         // Test navigation back to My Groups
         await page.goto('/my/groups');
@@ -191,7 +196,7 @@ export class MyGroupsTests {
     } else {
       console.log('ℹ️  No group links found for navigation testing');
       
-      // Verify "No groups found" state
+      // REQUIRED: Must show proper empty state
       const noGroupsMessage = page.locator('text=No groups found').first();
       await expect(noGroupsMessage).toBeVisible({ timeout: 3000 });
       console.log('✅ "No groups found" state verified');

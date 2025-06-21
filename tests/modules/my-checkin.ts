@@ -40,34 +40,36 @@ export class MyCheckinTests {
       await loadingIndicator.waitFor({ state: 'hidden', timeout: 10000 });
     }
     
-    if (await serviceSelection.isVisible({ timeout: 5000 }).catch(() => false)) {
+    const hasServiceSelection = await serviceSelection.isVisible({ timeout: 5000 }).catch(() => false);
+    const hasLoginPrompt = await loginPrompt.isVisible({ timeout: 5000 }).catch(() => false);
+    
+    // REQUIRED: Page must show either service selection or login prompt
+    expect(hasServiceSelection || hasLoginPrompt).toBe(true);
+    
+    if (hasServiceSelection) {
       console.log('✅ Service selection screen displayed');
+      await expect(serviceSelection).toBeVisible();
       
-      // Check for service buttons
+      // REQUIRED: Service buttons must be present if service selection is shown
       const serviceButtons = page.locator('a.bigLinkButton');
       const serviceCount = await serviceButtons.count();
+      expect(serviceCount).toBeGreaterThan(0);
+      console.log(`Found ${serviceCount} service(s) available for check-in`);
       
-      if (serviceCount > 0) {
-        console.log(`Found ${serviceCount} service(s) available for check-in`);
-        
-        // Verify service button structure
-        const firstService = serviceButtons.first();
-        const serviceText = await firstService.textContent();
-        console.log(`First service: ${serviceText}`);
-        
-        await expect(firstService).toBeVisible();
-      } else {
-        console.log('ℹ️  No services found for check-in');
-      }
-    } else if (await loginPrompt.isVisible({ timeout: 5000 }).catch(() => false)) {
+      // REQUIRED: Service buttons must have visible text
+      const firstService = serviceButtons.first();
+      await expect(firstService).toBeVisible();
+      const serviceText = await firstService.textContent();
+      expect(serviceText).toBeTruthy();
+      console.log(`First service: ${serviceText}`);
+    } else {
       console.log('ℹ️  Login required for check-in (user not authenticated)');
+      await expect(loginPrompt).toBeVisible();
       
-      // Verify login link is present
+      // REQUIRED: Login link must be present when login is required
       const loginLink = page.locator('a[href*="/login"]').first();
       await expect(loginLink).toBeVisible();
       console.log('✅ Login link displayed');
-    } else {
-      console.log('ℹ️  Check-in page loaded (structure may vary based on data)');
     }
     
     console.log('✅ Initial check-in load functionality verified');
@@ -111,30 +113,40 @@ export class MyCheckinTests {
         const errorMessage = page.locator('text=error', { hasText: /error/i }).first();
         const noMembersMessage = page.locator('text=No household members').first();
         
-        if (await householdMembers.isVisible({ timeout: 5000 }).catch(() => false)) {
+        const hasHouseholdMembers = await householdMembers.isVisible({ timeout: 5000 }).catch(() => false);
+        const hasErrorMessage = await errorMessage.isVisible({ timeout: 3000 }).catch(() => false);
+        const hasNoMembersMessage = await noMembersMessage.isVisible({ timeout: 3000 }).catch(() => false);
+        
+        // REQUIRED: Service selection must result in members, error, or no members message
+        expect(hasHouseholdMembers || hasErrorMessage || hasNoMembersMessage).toBe(true);
+        
+        if (hasHouseholdMembers) {
           console.log('✅ Household member selection displayed');
+          await expect(householdMembers).toBeVisible();
           
-          // Count household members
+          // REQUIRED: Must have at least one household member
           const memberButtons = page.locator('a.bigLinkButton.checkinPerson');
           const memberCount = await memberButtons.count();
+          expect(memberCount).toBeGreaterThan(0);
           console.log(`Found ${memberCount} household member(s) for check-in`);
           
-          // Verify member structure
+          // REQUIRED: Members must have visible names
           const firstMember = memberButtons.first();
           const memberName = await firstMember.locator('div:last-child').textContent();
+          expect(memberName).toBeTruthy();
           console.log(`First member: ${memberName}`);
           
-          // Check for avatar images
+          // Check for avatar images (optional but count if present)
           const avatarImages = page.locator('a.bigLinkButton.checkinPerson img[alt="avatar"]');
           const avatarCount = await avatarImages.count();
           console.log(`Found ${avatarCount} avatar image(s)`);
           
-        } else if (await errorMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
+        } else if (hasErrorMessage) {
           console.log('ℹ️  Error occurred during service selection (may be expected with test data)');
-        } else if (await noMembersMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-          console.log('ℹ️  No household members found for check-in');
+          await expect(errorMessage).toBeVisible();
         } else {
-          console.log('ℹ️  Service selection completed (outcome may vary based on data)');
+          console.log('ℹ️  No household members found for check-in');
+          await expect(noMembersMessage).toBeVisible();
         }
         
       } else {
@@ -306,16 +318,23 @@ export class MyCheckinTests {
             const completionMessage = page.locator('text=Your attendance has been saved').first();
             const errorMessage = page.locator('text=error', { hasText: /error/i }).first();
             
-            if (await thankYouMessage.isVisible({ timeout: 5000 }).catch(() => false)) {
+            const hasThankYou = await thankYouMessage.isVisible({ timeout: 5000 }).catch(() => false);
+            const hasError = await errorMessage.isVisible({ timeout: 3000 }).catch(() => false);
+            
+            // REQUIRED: Check-in must result in either success or error message
+            expect(hasThankYou || hasError).toBe(true);
+            
+            if (hasThankYou) {
               console.log('✅ Check-in completed successfully - Thank you message displayed');
+              await expect(thankYouMessage).toBeVisible();
               
+              // Optional completion message
               if (await completionMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
                 console.log('✅ Attendance confirmation message displayed');
               }
-            } else if (await errorMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-              console.log('ℹ️  Error occurred during check-in completion (may be expected with test data)');
             } else {
-              console.log('ℹ️  Check-in process completed (outcome may vary based on backend)');
+              console.log('ℹ️  Error occurred during check-in completion (may be expected with test data)');
+              await expect(errorMessage).toBeVisible();
             }
           } else {
             console.log('ℹ️  Check-in button not available (may require complete selections)');
@@ -433,22 +452,28 @@ export class MyCheckinTests {
     const loginLink = page.locator('a[href*="/login"]').first();
     const loginRedirect = page.url().includes('/login');
     
-    if (await loginPrompt.isVisible({ timeout: 3000 }).catch(() => false)) {
+    const hasLoginPrompt = await loginPrompt.isVisible({ timeout: 3000 }).catch(() => false);
+    
+    // REQUIRED: Unauthenticated users must see login prompt or be redirected
+    expect(hasLoginPrompt || loginRedirect).toBe(true);
+    
+    if (hasLoginPrompt) {
       console.log('✅ Login prompt displayed for unauthenticated user');
+      await expect(loginPrompt).toBeVisible();
       
-      if (await loginLink.isVisible({ timeout: 2000 }).catch(() => false)) {
-        const linkHref = await loginLink.getAttribute('href');
-        console.log(`✅ Login link present: ${linkHref}`);
-        
-        // Verify return URL is set correctly
-        if (linkHref && linkHref.includes('returnUrl')) {
-          console.log('✅ Return URL configured in login link');
-        }
+      // REQUIRED: Login link must be present
+      await expect(loginLink).toBeVisible();
+      const linkHref = await loginLink.getAttribute('href');
+      expect(linkHref).toBeTruthy();
+      console.log(`✅ Login link present: ${linkHref}`);
+      
+      // Check for return URL (optional but good practice)
+      if (linkHref && linkHref.includes('returnUrl')) {
+        console.log('✅ Return URL configured in login link');
       }
-    } else if (loginRedirect) {
-      console.log('✅ Redirected to login page for unauthenticated access');
     } else {
-      console.log('ℹ️  Check-in page behavior for unauthenticated users may vary');
+      console.log('✅ Redirected to login page for unauthenticated access');
+      expect(loginRedirect).toBe(true);
     }
     
     console.log('✅ Unauthenticated access handling verified');

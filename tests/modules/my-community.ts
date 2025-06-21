@@ -47,30 +47,37 @@ export class MyCommunityTests {
     const noResults = page.locator('text=No results found').first();
     const resultsTable = page.locator('#peopleTable').first();
     
+    // REQUIRED: Search must either return results OR show no results message
     const hasNoResults = await noResults.isVisible({ timeout: 3000 }).catch(() => false);
     const hasResults = await resultsTable.isVisible({ timeout: 3000 }).catch(() => false);
+    
+    if (!hasNoResults && !hasResults) {
+      throw new Error('Search returned neither results nor "no results found" message');
+    }
     
     if (hasNoResults) {
       console.log('ℹ️  No search results found for "John"');
       await expect(noResults).toBeVisible();
-    } else if (hasResults) {
+    } else {
       console.log('✅ Search results displayed');
+      await expect(resultsTable).toBeVisible();
       
-      // Count the number of results
+      // REQUIRED: Results table must have actual data
       const resultRows = page.locator('#peopleTable tbody tr');
       const resultCount = await resultRows.count();
+      expect(resultCount).toBeGreaterThan(0);
       console.log(`Found ${resultCount} result(s) for "John"`);
       
-      // Verify result structure
-      if (resultCount > 0) {
-        const firstResult = resultRows.first();
-        const nameCell = firstResult.locator('td').nth(1);
-        const nameLink = nameCell.locator('a');
-        
-        await expect(nameLink).toBeVisible();
-        const personName = await nameLink.textContent();
-        console.log(`First result: ${personName}`);
-      }
+      // REQUIRED: First result must have proper structure
+      const firstResult = resultRows.first();
+      const nameCell = firstResult.locator('td').nth(1);
+      const nameLink = nameCell.locator('a');
+      
+      await expect(nameLink).toBeVisible();
+      const personName = await nameLink.textContent();
+      expect(personName).toBeTruthy();
+      expect(personName?.toLowerCase()).toContain('john');
+      console.log(`First result: ${personName}`);
     }
     
     // Clear search and verify all results return
@@ -101,50 +108,56 @@ export class MyCommunityTests {
     
     // Check if group dropdown is visible
     const groupSelect = page.locator('div[role="combobox"]').first();
-    const groupSelectVisible = await groupSelect.isVisible({ timeout: 3000 }).catch(() => false);
+    // REQUIRED: Group search mode must be functional
+    await expect(groupSelect).toBeVisible({ timeout: 3000 });
+    console.log('✅ Group search mode activated');
     
-    if (groupSelectVisible) {
-      console.log('✅ Group search mode activated');
+    // Click to open dropdown
+    await groupSelect.click();
+    await page.waitForTimeout(1000);
+    
+    // Check if there are any groups
+    const groupOptions = page.locator('[role="option"]');
+    const groupCount = await groupOptions.count();
+    
+    if (groupCount > 0) {
+      console.log(`Found ${groupCount} group(s) available`);
       
-      // Click to open dropdown
-      await groupSelect.click();
+      // REQUIRED: Must be able to select a group
+      const firstGroup = groupOptions.first();
+      const groupName = await firstGroup.textContent();
+      expect(groupName).toBeTruthy();
+      console.log(`Selecting group: ${groupName}`);
+      
+      await firstGroup.click();
       await page.waitForTimeout(1000);
       
-      // Check if there are any groups
-      const groupOptions = page.locator('[role="option"]');
-      const groupCount = await groupOptions.count();
+      // Click search button
+      await page.click('button:has-text("Search")');
+      await page.waitForTimeout(2000);
       
-      if (groupCount > 0) {
-        console.log(`Found ${groupCount} group(s) available`);
-        
-        // Select the first group
-        const firstGroup = groupOptions.first();
-        const groupName = await firstGroup.textContent();
-        console.log(`Selecting group: ${groupName}`);
-        
-        await firstGroup.click();
-        await page.waitForTimeout(1000);
-        
-        // Click search button
-        await page.click('button:has-text("Search")');
-        await page.waitForTimeout(2000);
-        
-        // Check for results
-        const resultsTable = page.locator('#peopleTable').first();
-        const noResults = page.locator('text=No results found').first();
-        
-        if (await resultsTable.isVisible({ timeout: 3000 }).catch(() => false)) {
-          const resultRows = page.locator('#peopleTable tbody tr');
-          const resultCount = await resultRows.count();
-          console.log(`✅ Found ${resultCount} member(s) in ${groupName}`);
-        } else if (await noResults.isVisible({ timeout: 3000 }).catch(() => false)) {
-          console.log(`ℹ️  No members found in ${groupName}`);
-        }
+      // REQUIRED: Search must return either results or no results message
+      const resultsTable = page.locator('#peopleTable').first();
+      const noResults = page.locator('text=No results found').first();
+      
+      const hasResults = await resultsTable.isVisible({ timeout: 3000 }).catch(() => false);
+      const hasNoResults = await noResults.isVisible({ timeout: 3000 }).catch(() => false);
+      
+      if (!hasResults && !hasNoResults) {
+        throw new Error(`Group search for "${groupName}" returned neither results nor "no results found" message`);
+      }
+      
+      if (hasResults) {
+        const resultRows = page.locator('#peopleTable tbody tr');
+        const resultCount = await resultRows.count();
+        expect(resultCount).toBeGreaterThan(0);
+        console.log(`✅ Found ${resultCount} member(s) in ${groupName}`);
       } else {
-        console.log('ℹ️  No groups available for search');
+        await expect(noResults).toBeVisible();
+        console.log(`ℹ️  No members found in ${groupName}`);
       }
     } else {
-      console.log('ℹ️  Group search dropdown not found');
+      console.log('ℹ️  No groups available for search - this is acceptable');
     }
     
     console.log('✅ Search by group functionality verified');
@@ -181,7 +194,7 @@ export class MyCommunityTests {
       // Wait for navigation and check for errors
       await page.waitForLoadState('domcontentloaded');
       
-      // Check if there's an application error
+      // REQUIRED: No application errors should occur
       const errorHeading = page.locator('text=Application error').first();
       const hasError = await errorHeading.isVisible({ timeout: 2000 }).catch(() => false);
       
@@ -238,24 +251,21 @@ export class MyCommunityTests {
         const hasPhone = await phoneIcon.isVisible({ timeout: 1000 }).catch(() => false);
         const hasAddress = await addressIcon.isVisible({ timeout: 1000 }).catch(() => false);
         
-        if (!hasEmail && !hasPhone && !hasAddress) {
-          throw new Error('No contact information displayed on profile page');
-        }
+        expect(hasEmail || hasPhone || hasAddress).toBe(true);
         console.log('✅ Contact information found');
       } else {
+        expect(contactMethodCount).toBeGreaterThan(0);
         console.log(`✅ Found ${contactMethodCount} contact method(s)`);
       }
       
-      // 5. Check for either Message button (for other users) or Modify Profile section (for own profile)
+      // REQUIRED: Must have either Message button or Modify Profile section
       const messageButton = contactInfoBox.locator('button:has-text("Message")').first();
       const modifyProfileSection = page.locator('text=Modify Profile').first();
       
       const hasMessageButton = await messageButton.isVisible({ timeout: 2000 }).catch(() => false);
       const hasModifyProfile = await modifyProfileSection.isVisible({ timeout: 2000 }).catch(() => false);
       
-      if (!hasMessageButton && !hasModifyProfile) {
-        throw new Error('Neither Message button nor Modify Profile section found on profile page');
-      }
+      expect(hasMessageButton || hasModifyProfile).toBe(true);
       
       if (hasMessageButton) {
         console.log('✅ Message button found (viewing another person\'s profile)');
