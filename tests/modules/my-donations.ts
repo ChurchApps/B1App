@@ -30,11 +30,9 @@ export class MyDonationsTests {
     
     console.log('Testing initial donations page load');
     
-    // Check for main donation sections
-    const donationForm = page.locator('[data-testid="donation-form"], .donation-form').first();
-    const donationsHistory = page.locator('h2:has-text("Donations"), [data-testid="donations-table"]').first();
-    const paymentMethods = page.locator('h2:has-text("Payment Methods"), [data-testid="payment-methods"]').first();
-    const recurringDonations = page.locator('h2:has-text("Recurring"), [data-testid="recurring-donations"]').first();
+    // REQUIRED: Page title must be correct
+    await expect(page.locator('h1:has-text("My Donations")').first()).toBeVisible({ timeout: 10000 });
+    console.log('✅ Page title verified');
     
     // Wait for loading to complete
     const loadingIndicators = page.locator('[data-testid="loading"]');
@@ -43,51 +41,66 @@ export class MyDonationsTests {
       await loadingIndicators.first().waitFor({ state: 'hidden', timeout: 15000 });
     }
     
-    // Check if donation form is visible
-    if (await donationForm.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Donation form displayed');
-      
-      // Check for fund selection
-      const fundSelect = page.locator('select, [role="combobox"]').first();
-      if (await fundSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('✅ Fund selection available');
-      }
-      
-      // Check for amount input
-      const amountInput = page.locator('input[type="number"], input[name*="amount"]').first();
-      if (await amountInput.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('✅ Amount input field available');
-      }
+    // REQUIRED: Core sections must be present
+    const donationsHistory = page.locator('h2:has-text("Donations"), [data-testid="donations-table"]').first();
+    const paymentMethods = page.locator('h2:has-text("Payment Methods"), [data-testid="payment-methods"]').first();
+    
+    await expect(donationsHistory).toBeVisible({ timeout: 10000 });
+    console.log('✅ Donations history section found');
+    
+    await expect(paymentMethods).toBeVisible({ timeout: 10000 });
+    console.log('✅ Payment methods section found');
+    
+    // REQUIRED: Donation form triggers must be present
+    const makeDonationButton = page.locator('button:has-text("MAKE A DONATION")').first();
+    const makeRecurringButton = page.locator('button:has-text("MAKE A RECURRING DONATION")').first();
+    
+    await expect(makeDonationButton).toBeVisible({ timeout: 10000 });
+    console.log('✅ Make a donation button found');
+    
+    await expect(makeRecurringButton).toBeVisible({ timeout: 5000 });
+    console.log('✅ Make a recurring donation button found');
+    
+    // Test that clicking opens the donation form
+    await makeDonationButton.click();
+    await page.waitForTimeout(2000);
+    
+    // REQUIRED: Donation form must appear after clicking
+    const amountInput = page.locator('input[type="number"], input[name*="amount"]').first();
+    await expect(amountInput).toBeVisible({ timeout: 10000 });
+    console.log('✅ Donation amount input appeared');
+    
+    // Test that amount input accepts values
+    await amountInput.clear();
+    await amountInput.fill('10.00');
+    await expect(amountInput).toHaveValue('10.00');
+    console.log('✅ Amount input field functional');
+    
+    // Check for donation/submit button (may need scrolling)
+    const donateButton = page.locator('button:has-text("Donate"), button:has-text("Give"), button:has-text("Submit"), button[type="submit"]').first();
+    
+    // Scroll down to find the donate button if needed
+    await page.keyboard.press('PageDown');
+    await page.waitForTimeout(1000);
+    
+    if (await donateButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Donate button found');
+    } else {
+      console.log('ℹ️  Donate button may be hidden or require form completion');
     }
     
-    // Check for donations history section
-    if (await donationsHistory.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Donations history section displayed');
-      
-      // Look for donations table or empty message
-      const donationsTable = page.locator('table, tbody tr').first();
-      const emptyMessage = page.locator('text=will appear here', { hasText: /will appear|no donations|empty/i }).first();
-      
-      if (await donationsTable.isVisible({ timeout: 3000 }).catch(() => false)) {
-        const rows = page.locator('tbody tr');
-        const rowCount = await rows.count();
-        console.log(`Found ${rowCount} donation record(s) in history`);
-      } else if (await emptyMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('ℹ️  Empty donations history message displayed');
-      }
+    // Check optional sections
+    const fundSelect = page.locator('select, [role="combobox"]').first();
+    if (await fundSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Fund selection available');
     }
     
-    // Check for payment methods section
-    if (await paymentMethods.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Payment methods section displayed');
-    }
-    
-    // Check for recurring donations section
+    const recurringDonations = page.locator('h2:has-text("Recurring"), [data-testid="recurring-donations"]').first();
     if (await recurringDonations.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Recurring donations section displayed');
+      console.log('✅ Recurring donations section found');
     }
     
-    console.log('✅ Initial donations page load functionality verified');
+    console.log('✅ Initial donations page load verification completed');
   }
 
   static async addPaymentMethod(page: Page) {
@@ -447,92 +460,131 @@ export class MyDonationsTests {
     
     console.log('Testing one-time donation functionality');
     
-    // Look for donation amount input
-    const amountInput = page.locator('input[type="number"], input[name*="amount"], input[placeholder*="amount"]').first();
+    // Get initial donation count for verification
+    const donationRows = page.locator('table tbody tr');
+    const initialDonationCount = await donationRows.count();
+    console.log(`Initial donation count: ${initialDonationCount}`);
     
-    if (await amountInput.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Donation amount input found');
-      
-      // Enter donation amount
-      await amountInput.clear();
-      await amountInput.fill('25.00');
+    // REQUIRED: Click "MAKE A DONATION" to open the form
+    const makeDonationButton = page.locator('button:has-text("MAKE A DONATION")').first();
+    await expect(makeDonationButton).toBeVisible({ timeout: 10000 });
+    console.log('✅ Make a donation button found');
+    
+    await makeDonationButton.click();
+    await page.waitForTimeout(2000);
+    
+    // REQUIRED: Find donation amount input after form opens
+    const amountInput = page.locator('input[type="number"], input[name*="amount"], input[placeholder*="amount"]').first();
+    await expect(amountInput).toBeVisible({ timeout: 10000 });
+    console.log('✅ Donation amount input found');
+    
+    // REQUIRED: Enter donation amount
+    await amountInput.clear();
+    await amountInput.fill('25.00');
+    await page.waitForTimeout(1000);
+    
+    // Verify amount was entered correctly
+    await expect(amountInput).toHaveValue('25.00');
+    console.log('✅ Donation amount set to $25.00');
+    
+    // Select fund if available
+    const fundSelect = page.locator('select, [role="combobox"]').first();
+    if (await fundSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await fundSelect.click();
       await page.waitForTimeout(1000);
-      console.log('✅ Donation amount set to $25.00');
       
-      // Look for fund selection (if available)
-      const fundSelect = page.locator('select, [role="combobox"]').first();
-      if (await fundSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-        // Try to select the first fund option
-        await fundSelect.click();
-        await page.waitForTimeout(1000);
-        
-        const fundOptions = page.locator('option, [role="option"]');
-        const optionCount = await fundOptions.count();
-        if (optionCount > 0) {
-          await fundOptions.first().click();
-          console.log('✅ Fund selected');
-        }
+      const fundOptions = page.locator('option, [role="option"]');
+      const optionCount = await fundOptions.count();
+      if (optionCount > 0) {
+        await fundOptions.first().click();
+        console.log('✅ Fund selected');
       }
-      
-      // Look for payment method selection
-      const paymentMethodSelect = page.locator('select[name*="payment"], [data-testid="payment-method"]').first();
-      if (await paymentMethodSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('✅ Payment method selector found');
-        // Payment method should be pre-selected from previous test
-      }
-      
-      // Look for donation type selection (one-time vs recurring)
-      const oneTimeRadio = page.locator('input[type="radio"][value*="one"], input[name*="type"][value*="single"]').first();
-      const oneTimeButton = page.locator('button:has-text("One Time"), text=One Time').first();
-      
-      if (await oneTimeRadio.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await oneTimeRadio.check();
-        console.log('✅ One-time donation type selected');
-      } else if (await oneTimeButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await oneTimeButton.click();
-        console.log('✅ One-time donation type selected');
-      }
-      
-      // Look for donate button
-      const donateButton = page.locator('button:has-text("Donate"), button:has-text("Give"), button:has-text("Submit"), button[type="submit"]').first();
-      
-      if (await donateButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('Attempting to submit donation...');
-        await donateButton.click();
-        await page.waitForTimeout(7000);
-        
-        // Check for success/confirmation message
-        const successMessage = page.locator('text=Thank you, text=donation successful, text=completed successfully', { hasText: /thank you|success|completed|processed/i }).first();
-        const errorMessage = page.locator('text=error, text=failed, text=invalid', { hasText: /error|failed|invalid|declined/i }).first();
-        const confirmationModal = page.locator('[role="dialog"], .modal').first();
-        
-        if (await successMessage.isVisible({ timeout: 10000 }).catch(() => false)) {
-          console.log('✅ Donation submitted successfully');
-        } else if (await confirmationModal.isVisible({ timeout: 5000 }).catch(() => false)) {
-          console.log('✅ Donation confirmation modal appeared');
-          
-          // Look for confirm button in modal
-          const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Submit"), button:has-text("Process")').first();
-          if (await confirmButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-            await confirmButton.click();
-            await page.waitForTimeout(5000);
-            console.log('✅ Donation confirmed');
-          }
-        } else if (await errorMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-          console.log('ℹ️  Donation failed (may be expected in test environment)');
-        } else {
-          console.log('ℹ️  Donation form submitted (outcome varies by environment)');
-        }
-        
-      } else {
-        console.log('ℹ️  Donate button not found');
-      }
-      
-    } else {
-      console.log('ℹ️  Donation amount input not found');
     }
     
-    console.log('✅ One-time donation functionality verified');
+    // Ensure one-time donation type is selected
+    const oneTimeRadio = page.locator('input[type="radio"][value*="one"], input[name*="type"][value*="single"]').first();
+    const oneTimeButton = page.locator('button:has-text("One Time"), text=One Time').first();
+    
+    if (await oneTimeRadio.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await oneTimeRadio.check();
+      await expect(oneTimeRadio).toBeChecked();
+      console.log('✅ One-time donation type selected');
+    } else if (await oneTimeButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await oneTimeButton.click();
+      console.log('✅ One-time donation type selected');
+    }
+    
+    // REQUIRED: Find and click donate button
+    const donateButton = page.locator('button:has-text("Donate"), button:has-text("Give"), button:has-text("Submit"), button[type="submit"], button:has-text("Preview")').first();
+    
+    // Scroll down to find the donate button
+    await page.keyboard.press('PageDown');
+    await page.waitForTimeout(1000);
+    
+    // Also try scrolling within the form area
+    const fundSection = page.locator('text=Fund').first();
+    if (await fundSection.isVisible().catch(() => false)) {
+      await fundSection.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(1000);
+    }
+    
+    if (!(await donateButton.isVisible({ timeout: 3000 }).catch(() => false))) {
+      // Try pressing PageDown again
+      await page.keyboard.press('PageDown');
+      await page.waitForTimeout(1000);
+    }
+    
+    await expect(donateButton).toBeVisible({ timeout: 5000 });
+    
+    console.log('Submitting donation...');
+    await donateButton.click();
+    await page.waitForTimeout(8000);
+    
+    // REQUIRED: Verify donation was successful
+    let donationSuccessful = false;
+    
+    // Check for success message
+    const successMessage = page.locator('text=Thank you, text=donation successful, text=completed successfully', { hasText: /thank you|success|completed|processed/i }).first();
+    
+    if (await successMessage.isVisible({ timeout: 10000 }).catch(() => false)) {
+      console.log('✅ Donation submitted successfully');
+      donationSuccessful = true;
+    } else {
+      // Check for confirmation modal
+      const confirmationModal = page.locator('[role="dialog"], .modal').first();
+      if (await confirmationModal.isVisible({ timeout: 5000 }).catch(() => false)) {
+        console.log('✅ Donation confirmation modal appeared');
+        
+        // Click confirm button in modal
+        const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Submit"), button:has-text("Process")').first();
+        if (await confirmButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+          await confirmButton.click();
+          await page.waitForTimeout(5000);
+          
+          // Re-check for success after confirmation
+          if (await successMessage.isVisible({ timeout: 10000 }).catch(() => false)) {
+            console.log('✅ Donation confirmed and processed');
+            donationSuccessful = true;
+          }
+        }
+      }
+    }
+    
+    // If no success message, check if donation count increased
+    if (!donationSuccessful) {
+      await page.waitForTimeout(5000);
+      const finalDonationCount = await donationRows.count();
+      console.log(`Final donation count: ${finalDonationCount}`);
+      
+      if (finalDonationCount > initialDonationCount) {
+        console.log('✅ Donation count increased - donation was successful');
+        donationSuccessful = true;
+      }
+    }
+    
+    // REQUIRED: Donation must be successful
+    expect(donationSuccessful).toBe(true);
+    console.log('✅ One-time donation completed successfully');
   }
 
   static async verifyDonationHistory(page: Page) {
@@ -548,63 +600,62 @@ export class MyDonationsTests {
     
     console.log('Testing donation history verification');
     
-    // Look for donations history section
+    // REQUIRED: Donations history section must exist
     const donationsSection = page.locator('h2:has-text("Donations"), [data-testid="donations-table"]').first();
+    await expect(donationsSection).toBeVisible({ timeout: 10000 });
+    console.log('✅ Donations history section found');
     
-    if (await donationsSection.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Donations history section found');
+    // REQUIRED: Must have donations table or empty message
+    const donationsTable = page.locator('table tbody tr');
+    const emptyMessage = page.locator('text=will appear here, text=no donations', { hasText: /will appear|no donations|empty/i }).first();
+    
+    const hasTable = await donationsTable.first().isVisible({ timeout: 5000 }).catch(() => false);
+    const hasEmptyMessage = await emptyMessage.isVisible({ timeout: 3000 }).catch(() => false);
+    
+    // At least one of these must be present
+    expect(hasTable || hasEmptyMessage).toBe(true);
+    
+    if (hasTable) {
+      // REQUIRED: If table exists, it must have data
+      const rowCount = await donationsTable.count();
+      expect(rowCount).toBeGreaterThan(0);
+      console.log(`✅ Found ${rowCount} donation record(s) in history`);
       
-      // Look for donations table
-      const donationsTable = page.locator('table tbody tr').first();
-      const emptyMessage = page.locator('text=will appear here, text=no donations', { hasText: /will appear|no donations|empty/i }).first();
+      // REQUIRED: Verify table has proper structure
+      const headers = page.locator('table thead th, table th');
+      const headerCount = await headers.count();
+      expect(headerCount).toBeGreaterThan(0);
+      console.log(`✅ Donation history table has ${headerCount} column(s)`);
       
-      if (await donationsTable.isVisible({ timeout: 5000 }).catch(() => false)) {
-        // Count donation records
-        const donationRows = page.locator('table tbody tr');
-        const rowCount = await donationRows.count();
-        console.log(`✅ Found ${rowCount} donation record(s) in history`);
-        
-        if (rowCount > 0) {
-          // Check the first donation record
-          const firstRow = donationRows.first();
-          const dateCell = firstRow.locator('td').first();
-          const amountCell = firstRow.locator('td').last();
-          
-          if (await dateCell.isVisible({ timeout: 2000 }).catch(() => false)) {
-            const dateText = await dateCell.textContent();
-            console.log(`Latest donation date: ${dateText}`);
-          }
-          
-          if (await amountCell.isVisible({ timeout: 2000 }).catch(() => false)) {
-            const amountText = await amountCell.textContent();
-            console.log(`Latest donation amount: ${amountText}`);
-            
-            // Check if our test donation of $25.00 appears
-            if (amountText && amountText.includes('25')) {
-              console.log('✅ Test donation found in history');
-            }
-          }
-          
-          // Verify table structure
-          const headers = page.locator('table thead th, table th');
-          const headerCount = await headers.count();
-          console.log(`Donation history table has ${headerCount} column(s)`);
+      // REQUIRED: Verify first row has readable data
+      const firstRow = donationsTable.first();
+      await expect(firstRow).toBeVisible();
+      
+      const cells = firstRow.locator('td');
+      const cellCount = await cells.count();
+      expect(cellCount).toBeGreaterThan(0);
+      
+      // Verify at least one cell has meaningful content
+      let hasValidData = false;
+      for (let i = 0; i < cellCount; i++) {
+        const cellText = await cells.nth(i).textContent();
+        if (cellText && cellText.trim().length > 0 && cellText !== '-' && cellText !== 'N/A') {
+          hasValidData = true;
+          console.log(`✅ Found valid donation data: ${cellText.trim()}`);
+          break;
         }
-        
-      } else if (await emptyMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('ℹ️  Empty donation history displayed');
-      } else {
-        console.log('ℹ️  Donation history structure may vary');
       }
       
-      // Check for download/export options
-      const downloadButton = page.locator('button[aria-label*="download"], button:has-text("Download"), [data-testid="download"]').first();
-      if (await downloadButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('✅ Download/export functionality available');
+      expect(hasValidData).toBe(true);
+      
+      // Look for recent test donation (optional but informative)
+      const pageContent = await page.textContent('body');
+      if (pageContent && pageContent.includes('25')) {
+        console.log('✅ Recent test donation ($25.00) found in history');
       }
       
-    } else {
-      console.log('ℹ️  Donations history section not found');
+    } else if (hasEmptyMessage) {
+      console.log('ℹ️  No donation history - empty state properly displayed');
     }
     
     console.log('✅ Donation history verification completed');
@@ -623,82 +674,111 @@ export class MyDonationsTests {
     
     console.log('Testing recurring donation functionality');
     
-    // Look for donation amount input
-    const amountInput = page.locator('input[type="number"], input[name*="amount"]').first();
+    // Get initial recurring donation count
+    const recurringRows = page.locator('table tbody tr'); // Will need to identify recurring donation table specifically
+    const initialRecurringCount = await recurringRows.count();
+    console.log(`Initial recurring donation count: ${initialRecurringCount}`);
     
-    if (await amountInput.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Setting up recurring donation');
-      
-      // Enter donation amount
-      await amountInput.clear();
-      await amountInput.fill('50.00');
-      await page.waitForTimeout(1000);
-      console.log('✅ Recurring donation amount set to $50.00');
-      
-      // Look for recurring/subscription option
-      const recurringRadio = page.locator('input[type="radio"][value*="recurring"], input[name*="type"][value*="subscription"]').first();
-      const recurringButton = page.locator('button:has-text("Recurring"), text=Recurring').first();
-      const subscriptionCheckbox = page.locator('input[type="checkbox"][name*="recurring"], input[type="checkbox"][name*="subscription"]').first();
-      
-      if (await recurringRadio.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await recurringRadio.check();
-        console.log('✅ Recurring donation type selected');
-      } else if (await recurringButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await recurringButton.click();
-        console.log('✅ Recurring donation type selected');
-      } else if (await subscriptionCheckbox.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await subscriptionCheckbox.check();
-        console.log('✅ Recurring donation checkbox checked');
-      }
-      
-      // Look for frequency selection (monthly, weekly, etc.)
-      const frequencySelect = page.locator('select[name*="frequency"], select[name*="interval"], [data-testid="frequency"]').first();
-      if (await frequencySelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await frequencySelect.selectOption('month');
-        console.log('✅ Monthly frequency selected');
-      }
-      
-      // Look for fund selection (if available)
-      const fundSelect = page.locator('select[name*="fund"], [role="combobox"]').first();
-      if (await fundSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await fundSelect.click();
-        await page.waitForTimeout(1000);
-        const fundOptions = page.locator('option, [role="option"]');
-        const optionCount = await fundOptions.count();
-        if (optionCount > 0) {
-          await fundOptions.first().click();
-          console.log('✅ Fund selected for recurring donation');
-        }
-      }
-      
-      // Look for donate/subscribe button
-      const subscribeButton = page.locator('button:has-text("Subscribe"), button:has-text("Start"), button:has-text("Donate"), button[type="submit"]').first();
-      
-      if (await subscribeButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('Attempting to create recurring donation...');
-        await subscribeButton.click();
-        await page.waitForTimeout(7000);
-        
-        // Check for success message
-        const successMessage = page.locator('text=subscription created, text=recurring donation, text=successfully', { hasText: /subscription|recurring|successfully/i }).first();
-        const errorMessage = page.locator('text=error, text=failed', { hasText: /error|failed/i }).first();
-        
-        if (await successMessage.isVisible({ timeout: 10000 }).catch(() => false)) {
-          console.log('✅ Recurring donation created successfully');
-        } else if (await errorMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-          console.log('ℹ️  Recurring donation failed (may be expected in test environment)');
-        } else {
-          console.log('ℹ️  Recurring donation form submitted (outcome varies by environment)');
-        }
-      } else {
-        console.log('ℹ️  Subscribe button not found');
-      }
-      
-    } else {
-      console.log('ℹ️  Donation amount input not found for recurring donation');
+    // REQUIRED: Click "MAKE A RECURRING DONATION" to open the form
+    const makeRecurringButton = page.locator('button:has-text("MAKE A RECURRING DONATION")').first();
+    await expect(makeRecurringButton).toBeVisible({ timeout: 10000 });
+    console.log('✅ Make a recurring donation button found');
+    
+    await makeRecurringButton.click();
+    await page.waitForTimeout(2000);
+    
+    // REQUIRED: Find donation amount input after form opens
+    const amountInput = page.locator('input[type="number"], input[name*="amount"]').first();
+    await expect(amountInput).toBeVisible({ timeout: 10000 });
+    console.log('✅ Donation amount input found');
+    
+    // REQUIRED: Enter donation amount
+    await amountInput.clear();
+    await amountInput.fill('50.00');
+    await page.waitForTimeout(1000);
+    
+    // Verify amount was entered correctly
+    await expect(amountInput).toHaveValue('50.00');
+    console.log('✅ Recurring donation amount set to $50.00');
+    
+    // REQUIRED: Select recurring donation type
+    const recurringRadio = page.locator('input[type="radio"][value*="recurring"], input[name*="type"][value*="subscription"]').first();
+    const recurringButton = page.locator('button:has-text("Recurring"), text=Recurring').first();
+    const subscriptionCheckbox = page.locator('input[type="checkbox"][name*="recurring"], input[type="checkbox"][name*="subscription"]').first();
+    
+    let recurringSelected = false;
+    
+    if (await recurringRadio.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await recurringRadio.check();
+      await expect(recurringRadio).toBeChecked();
+      console.log('✅ Recurring donation radio selected');
+      recurringSelected = true;
+    } else if (await recurringButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await recurringButton.click();
+      console.log('✅ Recurring donation button clicked');
+      recurringSelected = true;
+    } else if (await subscriptionCheckbox.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await subscriptionCheckbox.check();
+      await expect(subscriptionCheckbox).toBeChecked();
+      console.log('✅ Recurring donation checkbox checked');
+      recurringSelected = true;
     }
     
-    console.log('✅ Recurring donation functionality verified');
+    // At least one recurring option must be available and selected
+    expect(recurringSelected).toBe(true);
+    
+    // Select frequency if available
+    const frequencySelect = page.locator('select[name*="frequency"], select[name*="interval"], [data-testid="frequency"]').first();
+    if (await frequencySelect.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await frequencySelect.selectOption('month');
+      console.log('✅ Monthly frequency selected');
+    }
+    
+    // Select fund if available
+    const fundSelect = page.locator('select[name*="fund"], [role="combobox"]').first();
+    if (await fundSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await fundSelect.click();
+      await page.waitForTimeout(1000);
+      const fundOptions = page.locator('option, [role="option"]');
+      const optionCount = await fundOptions.count();
+      if (optionCount > 0) {
+        await fundOptions.first().click();
+        console.log('✅ Fund selected for recurring donation');
+      }
+    }
+    
+    // REQUIRED: Find and click subscribe/donate button
+    const subscribeButton = page.locator('button:has-text("Subscribe"), button:has-text("Start"), button:has-text("Donate"), button[type="submit"]').first();
+    await expect(subscribeButton).toBeVisible({ timeout: 5000 });
+    
+    console.log('Creating recurring donation...');
+    await subscribeButton.click();
+    await page.waitForTimeout(8000);
+    
+    // REQUIRED: Verify recurring donation was successful
+    let recurringSuccessful = false;
+    
+    // Check for success message
+    const successMessage = page.locator('text=subscription created, text=recurring donation, text=successfully', { hasText: /subscription|recurring|successfully/i }).first();
+    
+    if (await successMessage.isVisible({ timeout: 10000 }).catch(() => false)) {
+      console.log('✅ Recurring donation created successfully');
+      recurringSuccessful = true;
+    } else {
+      // Check if recurring donation count increased
+      await page.waitForTimeout(5000);
+      const finalRecurringCount = await recurringRows.count();
+      console.log(`Final recurring donation count: ${finalRecurringCount}`);
+      
+      if (finalRecurringCount > initialRecurringCount) {
+        console.log('✅ Recurring donation count increased - creation was successful');
+        recurringSuccessful = true;
+      }
+    }
+    
+    // REQUIRED: Recurring donation must be successful
+    expect(recurringSuccessful).toBe(true);
+    console.log('✅ Recurring donation completed successfully');
   }
 
   static async deleteRecurringDonation(page: Page) {
@@ -714,102 +794,102 @@ export class MyDonationsTests {
     
     console.log('Testing delete recurring donation functionality');
     
-    // Look for recurring donations section
+    // REQUIRED: Recurring donations section must exist
     const recurringSection = page.locator('h2:has-text("Recurring"), [data-testid="recurring-donations"]').first();
+    await expect(recurringSection).toBeVisible({ timeout: 10000 });
+    console.log('✅ Recurring donations section found');
     
-    if (await recurringSection.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Recurring donations section found');
-      
-      // Look for existing recurring donations
-      const recurringTable = page.locator('table tbody tr').first();
+    // Get initial count
+    const recurringRows = page.locator('table tbody tr');
+    const initialCount = await recurringRows.count();
+    console.log(`Initial recurring donation count: ${initialCount}`);
+    
+    // Skip test if no recurring donations exist
+    if (initialCount === 0) {
       const noRecurringMessage = page.locator('text=no recurring, text=no subscriptions', { hasText: /no recurring|no subscriptions/i }).first();
-      
-      if (await recurringTable.isVisible({ timeout: 5000 }).catch(() => false)) {
-        // Count recurring donations
-        const recurringRows = page.locator('table tbody tr');
-        const rowCount = await recurringRows.count();
-        console.log(`Found ${rowCount} recurring donation(s)`);
-        
-        if (rowCount > 0) {
-          // Look for delete/cancel buttons or actions
-          const deleteButton = page.locator('button:has-text("Delete"), button:has-text("Cancel"), button[aria-label*="delete"], [data-testid="delete"]').first();
-          const editButton = page.locator('button:has-text("Edit"), [aria-label*="edit"]').first();
-          const menuButton = page.locator('button[aria-label*="menu"], [data-testid="menu"]').first();
-          
-          if (await deleteButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-            console.log('✅ Delete button found');
-            await deleteButton.click();
-            await page.waitForTimeout(2000);
-            
-            // Handle confirmation dialog
-            const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Yes"), button:has-text("Delete")').first();
-            if (await confirmButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-              await confirmButton.click();
-              await page.waitForTimeout(3000);
-              console.log('✅ Recurring donation deletion confirmed');
-            }
-            
-          } else if (await editButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-            console.log('✅ Edit button found, looking for delete option');
-            await editButton.click();
-            await page.waitForTimeout(2000);
-            
-            // Look for delete option in edit form
-            const deleteInEdit = page.locator('button:has-text("Delete"), button:has-text("Cancel Subscription")').first();
-            if (await deleteInEdit.isVisible({ timeout: 3000 }).catch(() => false)) {
-              await deleteInEdit.click();
-              await page.waitForTimeout(2000);
-              
-              // Handle confirmation
-              const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
-              if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
-                await confirmDelete.click();
-                await page.waitForTimeout(3000);
-                console.log('✅ Recurring donation deleted via edit form');
-              }
-            }
-            
-          } else if (await menuButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-            console.log('✅ Menu button found');
-            await menuButton.click();
-            await page.waitForTimeout(1000);
-            
-            // Look for delete option in menu
-            const deleteMenuItem = page.locator('[role="menuitem"]:has-text("Delete"), [role="menuitem"]:has-text("Cancel")').first();
-            if (await deleteMenuItem.isVisible({ timeout: 3000 }).catch(() => false)) {
-              await deleteMenuItem.click();
-              await page.waitForTimeout(2000);
-              
-              // Handle confirmation
-              const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
-              if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
-                await confirmDelete.click();
-                await page.waitForTimeout(3000);
-                console.log('✅ Recurring donation deleted via menu');
-              }
-            }
-          } else {
-            console.log('ℹ️  Delete option not found for recurring donations');
-          }
-          
-          // Check for success message
-          const successMessage = page.locator('text=deleted successfully, text=cancelled successfully', { hasText: /deleted|cancelled|removed/i }).first();
-          if (await successMessage.isVisible({ timeout: 5000 }).catch(() => false)) {
-            console.log('✅ Recurring donation deletion confirmed');
-          }
-        }
-        
-      } else if (await noRecurringMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('ℹ️  No recurring donations found to delete');
-      } else {
-        console.log('ℹ️  Recurring donations structure may vary');
-      }
-      
-    } else {
-      console.log('ℹ️  Recurring donations section not found');
+      await expect(noRecurringMessage).toBeVisible({ timeout: 5000 });
+      console.log('ℹ️  No recurring donations found to delete - test skipped');
+      return;
     }
     
-    console.log('✅ Delete recurring donation functionality verified');
+    // REQUIRED: Must have at least one recurring donation to delete
+    expect(initialCount).toBeGreaterThan(0);
+    
+    // REQUIRED: Find delete/cancel button
+    const deleteButton = page.locator('button:has-text("Delete"), button:has-text("Cancel"), button[aria-label*="delete"], [data-testid="delete"]').first();
+    const editButton = page.locator('button:has-text("Edit"), [aria-label*="edit"]').first();
+    const menuButton = page.locator('button[aria-label*="menu"], [data-testid="menu"]').first();
+    
+    let deleteActionFound = false;
+    
+    if (await deleteButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Delete button found');
+      await deleteButton.click();
+      await page.waitForTimeout(2000);
+      deleteActionFound = true;
+      
+      // Handle confirmation dialog
+      const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Yes"), button:has-text("Delete")').first();
+      if (await confirmButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await confirmButton.click();
+        await page.waitForTimeout(3000);
+        console.log('✅ Deletion confirmed');
+      }
+      
+    } else if (await editButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Edit button found');
+      await editButton.click();
+      await page.waitForTimeout(2000);
+      
+      // Look for delete option in edit form
+      const deleteInEdit = page.locator('button:has-text("Delete"), button:has-text("Cancel Subscription")').first();
+      if (await deleteInEdit.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await deleteInEdit.click();
+        await page.waitForTimeout(2000);
+        deleteActionFound = true;
+        
+        // Handle confirmation
+        const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
+        if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
+          await confirmDelete.click();
+          await page.waitForTimeout(3000);
+          console.log('✅ Deletion confirmed via edit form');
+        }
+      }
+      
+    } else if (await menuButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Menu button found');
+      await menuButton.click();
+      await page.waitForTimeout(1000);
+      
+      // Look for delete option in menu
+      const deleteMenuItem = page.locator('[role="menuitem"]:has-text("Delete"), [role="menuitem"]:has-text("Cancel")').first();
+      if (await deleteMenuItem.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await deleteMenuItem.click();
+        await page.waitForTimeout(2000);
+        deleteActionFound = true;
+        
+        // Handle confirmation
+        const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
+        if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
+          await confirmDelete.click();
+          await page.waitForTimeout(3000);
+          console.log('✅ Deletion confirmed via menu');
+        }
+      }
+    }
+    
+    // REQUIRED: Must find a delete action
+    expect(deleteActionFound).toBe(true);
+    
+    // REQUIRED: Verify deletion occurred
+    await page.waitForTimeout(5000);
+    const finalCount = await recurringRows.count();
+    console.log(`Final recurring donation count: ${finalCount}`);
+    
+    // REQUIRED: Count must decrease
+    expect(finalCount).toBeLessThan(initialCount);
+    console.log('✅ Recurring donation deletion verified');
   }
 
   static async deletePaymentMethod(page: Page) {
@@ -825,102 +905,102 @@ export class MyDonationsTests {
     
     console.log('Testing delete payment method functionality');
     
-    // Look for payment methods section
+    // REQUIRED: Payment methods section must exist
     const paymentMethodsSection = page.locator('h2:has-text("Payment Methods"), [data-testid="payment-methods"]').first();
+    await expect(paymentMethodsSection).toBeVisible({ timeout: 10000 });
+    console.log('✅ Payment methods section found');
     
-    if (await paymentMethodsSection.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('✅ Payment methods section found');
-      
-      // Look for existing payment methods
-      const paymentMethodTable = page.locator('table tbody tr').first();
+    // Get initial count
+    const paymentMethodRows = page.locator('table tbody tr');
+    const initialCount = await paymentMethodRows.count();
+    console.log(`Initial payment method count: ${initialCount}`);
+    
+    // Skip test if no payment methods exist
+    if (initialCount === 0) {
       const noPaymentMethodsMessage = page.locator('text=no payment methods, text=no cards', { hasText: /no payment|no cards/i }).first();
-      
-      if (await paymentMethodTable.isVisible({ timeout: 5000 }).catch(() => false)) {
-        // Count payment methods
-        const paymentMethodRows = page.locator('table tbody tr');
-        const rowCount = await paymentMethodRows.count();
-        console.log(`Found ${rowCount} payment method(s)`);
-        
-        if (rowCount > 0) {
-          // Look for delete buttons or actions
-          const deleteButton = page.locator('button:has-text("Delete"), button[aria-label*="delete"], [data-testid="delete"]').first();
-          const menuButton = page.locator('button[aria-label*="menu"], [data-testid="menu"]').first();
-          const actionsButton = page.locator('button:has-text("Actions"), [aria-label*="actions"]').first();
-          
-          if (await deleteButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-            console.log('✅ Delete button found');
-            await deleteButton.click();
-            await page.waitForTimeout(2000);
-            
-            // Handle confirmation dialog
-            const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Yes"), button:has-text("Delete")').first();
-            if (await confirmButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-              await confirmButton.click();
-              await page.waitForTimeout(3000);
-              console.log('✅ Payment method deletion confirmed');
-            }
-            
-          } else if (await menuButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-            console.log('✅ Menu button found');
-            await menuButton.click();
-            await page.waitForTimeout(1000);
-            
-            // Look for delete option in menu
-            const deleteMenuItem = page.locator('[role="menuitem"]:has-text("Delete"), [role="menuitem"]:has-text("Remove")').first();
-            if (await deleteMenuItem.isVisible({ timeout: 3000 }).catch(() => false)) {
-              await deleteMenuItem.click();
-              await page.waitForTimeout(2000);
-              
-              // Handle confirmation
-              const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
-              if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
-                await confirmDelete.click();
-                await page.waitForTimeout(3000);
-                console.log('✅ Payment method deleted via menu');
-              }
-            }
-            
-          } else if (await actionsButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-            console.log('✅ Actions button found');
-            await actionsButton.click();
-            await page.waitForTimeout(1000);
-            
-            // Look for delete option in actions menu
-            const deleteAction = page.locator('text=Delete, text=Remove').first();
-            if (await deleteAction.isVisible({ timeout: 3000 }).catch(() => false)) {
-              await deleteAction.click();
-              await page.waitForTimeout(2000);
-              
-              // Handle confirmation
-              const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
-              if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
-                await confirmDelete.click();
-                await page.waitForTimeout(3000);
-                console.log('✅ Payment method deleted via actions menu');
-              }
-            }
-          } else {
-            console.log('ℹ️  Delete option not found for payment methods');
-          }
-          
-          // Check for success message
-          const successMessage = page.locator('text=deleted successfully, text=removed successfully', { hasText: /deleted|removed|successfully/i }).first();
-          if (await successMessage.isVisible({ timeout: 5000 }).catch(() => false)) {
-            console.log('✅ Payment method deletion confirmed');
-          }
-        }
-        
-      } else if (await noPaymentMethodsMessage.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('ℹ️  No payment methods found to delete');
-      } else {
-        console.log('ℹ️  Payment methods structure may vary');
-      }
-      
-    } else {
-      console.log('ℹ️  Payment methods section not found');
+      await expect(noPaymentMethodsMessage).toBeVisible({ timeout: 5000 });
+      console.log('ℹ️  No payment methods found to delete - test skipped');
+      return;
     }
     
-    console.log('✅ Delete payment method functionality verified');
+    // REQUIRED: Must have at least one payment method to delete
+    expect(initialCount).toBeGreaterThan(0);
+    
+    // REQUIRED: Find delete action
+    const deleteButton = page.locator('button:has-text("Delete"), button[aria-label*="delete"], [data-testid="delete"]').first();
+    const menuButton = page.locator('button[aria-label*="menu"], [data-testid="menu"]').first();
+    const actionsButton = page.locator('button:has-text("Actions"), [aria-label*="actions"]').first();
+    
+    let deleteActionFound = false;
+    
+    if (await deleteButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Delete button found');
+      await deleteButton.click();
+      await page.waitForTimeout(2000);
+      deleteActionFound = true;
+      
+      // Handle confirmation dialog
+      const confirmButton = page.locator('button:has-text("Confirm"), button:has-text("Yes"), button:has-text("Delete")').first();
+      if (await confirmButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await confirmButton.click();
+        await page.waitForTimeout(3000);
+        console.log('✅ Deletion confirmed');
+      }
+      
+    } else if (await menuButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Menu button found');
+      await menuButton.click();
+      await page.waitForTimeout(1000);
+      
+      // Look for delete option in menu
+      const deleteMenuItem = page.locator('[role="menuitem"]:has-text("Delete"), [role="menuitem"]:has-text("Remove")').first();
+      if (await deleteMenuItem.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await deleteMenuItem.click();
+        await page.waitForTimeout(2000);
+        deleteActionFound = true;
+        
+        // Handle confirmation
+        const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
+        if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
+          await confirmDelete.click();
+          await page.waitForTimeout(3000);
+          console.log('✅ Deletion confirmed via menu');
+        }
+      }
+      
+    } else if (await actionsButton.isVisible({ timeout: 3000 }).catch(() => false)) {
+      console.log('✅ Actions button found');
+      await actionsButton.click();
+      await page.waitForTimeout(1000);
+      
+      // Look for delete option in actions menu
+      const deleteAction = page.locator('text=Delete, text=Remove').first();
+      if (await deleteAction.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await deleteAction.click();
+        await page.waitForTimeout(2000);
+        deleteActionFound = true;
+        
+        // Handle confirmation
+        const confirmDelete = page.locator('button:has-text("Confirm"), button:has-text("Yes")').first();
+        if (await confirmDelete.isVisible({ timeout: 3000 }).catch(() => false)) {
+          await confirmDelete.click();
+          await page.waitForTimeout(3000);
+          console.log('✅ Deletion confirmed via actions menu');
+        }
+      }
+    }
+    
+    // REQUIRED: Must find a delete action
+    expect(deleteActionFound).toBe(true);
+    
+    // REQUIRED: Verify deletion occurred
+    await page.waitForTimeout(5000);
+    const finalCount = await paymentMethodRows.count();
+    console.log(`Final payment method count: ${finalCount}`);
+    
+    // REQUIRED: Count must decrease
+    expect(finalCount).toBeLessThan(initialCount);
+    console.log('✅ Payment method deletion verified');
   }
 
   static async testDonationsResponsiveness(page: Page) {
