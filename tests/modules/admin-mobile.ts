@@ -56,9 +56,8 @@ export class AdminMobileTests {
     // REQUIRED: Save functionality must work
     const saveButton = page.locator('button:has-text("SAVE"), button:has-text("Save")').first();
     await expect(saveButton).toBeVisible({ timeout: 5000 });
-      await saveButton.click();
-      await page.waitForTimeout(3000);
-    }
+    await saveButton.click();
+    await page.waitForTimeout(3000);
 
     // Verify we're back on the admin page and our test tab appears
     await page.goto('/admin');
