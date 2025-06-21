@@ -1,7 +1,7 @@
 "use client";
 
 import { ApiHelper, ErrorMessages } from "@churchapps/apphelper";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 export default function SocialSuggestions() {
@@ -9,6 +9,21 @@ export default function SocialSuggestions() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
+
+  const [lessonOutline, setLessonOutline] = useState({ url: "", title: "", author: "" });
+  const [scriptLoading, setScriptLoading] = useState(false);
+  const [lessonOutlineResult, setLessonOutlineResult] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const o = { ...lessonOutline };
+    const value = e.target.value;
+    switch (e.target.name) {
+      case "url": o.url = value; break;
+      case "title": o.title = value; break;
+      case "author": o.author = value; break;
+    }
+    setLessonOutline(o);
+  }
 
   const getYouTubeKey = (youtubeInput: string) => {
     let result = youtubeInput.split("&")[0];
@@ -42,33 +57,82 @@ export default function SocialSuggestions() {
       });
   };
 
+  const handleOutlineFetch = () => {
+    setScriptLoading(true);
+    setLessonOutlineResult("");
+    ApiHelper.get(`/sermons/outline?url=${encodeURIComponent(lessonOutline.url)}&title=${lessonOutline.title}&author=${lessonOutline.author}`, "ContentApi")
+      .then((data: any) => {
+        setLessonOutlineResult(data.outline)
+    })
+    .finally(() => {
+      setScriptLoading(false);
+      setLessonOutline({ url: "", title: "", author: "" })
+    })
+  }
+
   return (
     <>
       <ErrorMessages errors={errors} />
-      <div style={{ margin: 20 }}>
-        <TextField
-          label="YouTube URL"
-          helperText="Enter YouTube URL"
-          size="small"
-          onChange={(e) => {setUrl(e.target.value);}}
-          value={url}
-        />
-        <Typography>videoId: {getYouTubeKey(url)}</Typography>
-        <br />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleFetchPosts}
-          disabled={loading || !url || url === ""}
-        >
-          {loading ? "Loading.." : "Fetch Posts"}
-        </Button>
-      </div>
-      <div style={{ margin: 20 }}>
-        {posts?.map((post: any) => (
-          <div style={{ padding: 20 }}>{JSON.stringify(post)}</div>
-        ))}
-      </div>
+      <Grid container>
+        <Grid item xs={12} md={6}>
+          <div style={{ margin: 20 }}>
+            <TextField
+              label="YouTube URL"
+              helperText="Enter YouTube URL"
+              size="small"
+              onChange={(e) => {setUrl(e.target.value);}}
+              value={url}
+            />
+            <Typography>videoId: {getYouTubeKey(url)}</Typography>
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleFetchPosts}
+              disabled={loading || !url || url === ""}
+            >
+              {loading ? "Loading.." : "Fetch Posts"}
+            </Button>
+          </div>
+          <div style={{ margin: 20 }}>
+            {posts?.map((post: any) => (
+              <div style={{ padding: 20 }}>{JSON.stringify(post)}</div>
+            ))}
+          </div>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <div style={{ margin: 20 }}>
+            <TextField
+              helperText="Enter sermon script URL"
+              size="small"
+              required
+              label="URL"
+              name="url"
+              onChange={handleChange}
+              value={lessonOutline.url}
+            />
+            <br />
+            <br />
+            <Typography fontSize={14} fontStyle="italic">Please enter Sermon Title and Author just in case if the link doesn't work or it isn't accesible to public.</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={6}><TextField size="small" fullWidth required label="Sermon Title" name="title" onChange={handleChange} value={lessonOutline.title} /></Grid>
+              <Grid item xs={6}><TextField size="small" fullWidth required label="Author / Speaker" name="author" onChange={handleChange} value={lessonOutline.author} /></Grid>
+            </Grid>
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleOutlineFetch}
+              disabled={scriptLoading || !lessonOutline.url || lessonOutline.url === "" || !lessonOutline.title || lessonOutline.title === "" || !lessonOutline.author || lessonOutline.author === ""}
+            >
+              {scriptLoading ? "Loading.." : "Fetch Outline"}
+            </Button>
+          </div>
+          <div style={{ margin: 20 }}>
+            {lessonOutlineResult && <div style={{ padding: 20 }}>{lessonOutlineResult}</div>}
+          </div>
+        </Grid>
+      </Grid>
     </>
   );
 }
