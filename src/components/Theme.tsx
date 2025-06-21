@@ -3,6 +3,7 @@
 import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { AppearanceHelper } from "@churchapps/apphelper";
+import Head from "next/head";
 import React from "react";
 
 interface Props { config?:ConfigurationInterface }
@@ -60,11 +61,8 @@ export const Theme: React.FC<Props> = (props) => {
   console.log("************FONTLINK", fontLink);
 
   return (<>
-    {fontLink}
-    <style jsx>
-      {css}
-    </style>
-    <head>
+    <Head>
+      {fontLink}
       {favicon
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
         : <link rel="icon" href="/favicon.ico" />
@@ -73,7 +71,10 @@ export const Theme: React.FC<Props> = (props) => {
       <meta property="og:url" content={EnvironmentHelper.Common.B1Root.replace("{key}", props.config?.church?.subDomain)} />
       <meta property="og:type" content="website" />
       <meta property="og:title" content={props.config?.church?.name} />
-    </head>
+    </Head>
+    <style jsx>
+      {css}
+    </style>
     {customJs}
   </>);
 }

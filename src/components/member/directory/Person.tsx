@@ -79,7 +79,7 @@ export const Person: React.FC<Props> = (props) => {
   }
 
   const getEditContent = () => {
-    if (props.personId===PersonHelper.person.id) return <ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />;
+    if (PersonHelper.person && props.personId === PersonHelper.person.id) return <ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />;
     else return <Button variant="contained" color="primary" disabled={!person} onClick={() => {if (person) setShowPM(true)}}>Message</Button>
   }
 
@@ -112,7 +112,7 @@ export const Person: React.FC<Props> = (props) => {
         </Grid>
         {getPM()}
       </Grid>
-      {props.personId === PersonHelper.person.id && <VisibilityPreferences />}
+      {PersonHelper.person && props.personId === PersonHelper.person.id && <VisibilityPreferences />}
     </>
 
   )
