@@ -14,45 +14,34 @@ export class AdminCalendarsTests {
     expect(page.url()).toContain('/admin/calendars');
     await expect(page.locator('text=Curated Calendars').first()).toBeVisible();
     
-    // Click the "+" button to add a new calendar - it's in the header of the Curated Calendars box
-    // First try to find it within the calendarsBox
-    let addButton = page.locator('#calendarsBox button, [data-testid="calendarsBox"] button').first();
-    
-    if (!(await addButton.isVisible({ timeout: 3000 }).catch(() => false))) {
-      // Try to find it by Material-UI add icon
-      addButton = page.locator('button:has([data-testid="AddIcon"]), button svg[data-testid="AddIcon"]').first();
-    }
-    
-    if (!(await addButton.isVisible({ timeout: 3000 }).catch(() => false))) {
-      // Fallback: coordinate click based on screenshot (+ button in top right of box)
-      console.log('Add button not found with selectors, trying coordinate click');
-      await page.mouse.click(805, 184);
-    } else {
-      await addButton.click();
-    }
+    // REQUIRED: Add button must be present in the Curated Calendars section
+    const addButton = page.locator('text=Curated Calendars').locator('..').locator('button').first();
+    await expect(addButton).toBeVisible({ timeout: 5000 });
+    await addButton.click();
     
     await page.waitForTimeout(1000);
     
-    // Look for the "Edit Calendar" panel that appeared on the right
+    // REQUIRED: Edit Calendar panel must appear
     const editCalendarPanel = page.locator('text=Edit Calendar').first();
-    await expect(editCalendarPanel).toBeVisible({ timeout: 3000 });
-    console.log('Calendar creation form opened');
+    await expect(editCalendarPanel).toBeVisible({ timeout: 5000 });
+    console.log('✅ Calendar creation form opened');
     
-    // Fill in calendar name - look for the Name field (Material-UI TextField with label="Name")
+    // REQUIRED: Name field must be editable
     const nameField = page.locator('input[name="name"], [data-testid="calendarDetailsBox"] input, .MuiTextField-root input').first();
-    await expect(nameField).toBeVisible({ timeout: 3000 });
+    await expect(nameField).toBeVisible({ timeout: 5000 });
     await nameField.click();
     await nameField.fill('Test Calendar');
+    await expect(nameField).toHaveValue('Test Calendar');
     
-    // Save the calendar
-    const saveButton = page.locator('button:has-text("SAVE")').first();
-    await expect(saveButton).toBeVisible({ timeout: 3000 });
+    // REQUIRED: Save functionality must work
+    const saveButton = page.locator('button:has-text("SAVE"), button:has-text("Save")').first();
+    await expect(saveButton).toBeVisible({ timeout: 5000 });
     await saveButton.click();
     await page.waitForTimeout(2000);
     
-    // Verify calendar appears in the list - it's not in a table, just text in the list
+    // REQUIRED: Calendar must appear in the list after creation
     const testCalendarText = page.locator('text=Test Calendar').first();
-    await expect(testCalendarText).toBeVisible({ timeout: 5000 });
+    await expect(testCalendarText).toBeVisible({ timeout: 10000 });
     
     console.log('✅ Test calendar created successfully');
   }
@@ -70,14 +59,12 @@ export class AdminCalendarsTests {
     const testCalendarSection = page.locator('text=Test Calendar').first();
     await expect(testCalendarSection).toBeVisible({ timeout: 5000 });
     
-    // Find the edit icon next to "Test Calendar" - it should be the pencil icon
-    const editIcon = page.locator('text=Test Calendar').locator('..').locator('[data-testid="EditIcon"], button:has([data-testid="EditIcon"])').first();
+    // REQUIRED: Edit functionality must be accessible
+    const editIcon = page.locator('text=Test Calendar').locator('..').locator('[data-testid="EditIcon"], button:has([data-testid="EditIcon"]), button').first();
     
-    if (await editIcon.isVisible({ timeout: 3000 }).catch(() => false)) {
-      console.log('Found edit icon, clicking it');
+    if (await editIcon.isVisible({ timeout: 5000 }).catch(() => false)) {
       await editIcon.click();
     } else {
-      // Try clicking the second button near the test calendar text
       console.log('Edit icon not found, trying to find buttons near Test Calendar text');
       const buttonsNearCalendar = page.locator('text=Test Calendar').locator('..').locator('button');
       const buttonCount = await buttonsNearCalendar.count();

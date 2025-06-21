@@ -28,45 +28,34 @@ export class AdminVideoTests {
     
     await page.waitForTimeout(2000);
     
-    // We should now be in the sermon edit form
-    // Look for sermon title field and fill it
-    const titleField = page.locator('input[name="title"], input[placeholder*="title"]').first();
-    if (await titleField.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await titleField.click();
-      await titleField.fill('Test Sermon');
-      console.log('Filled sermon title');
-    }
+    // REQUIRED: Sermon edit form must be accessible
+    const titleField = page.locator('input[name="title"], input[placeholder*="title"], input[placeholder*="Title"]').first();
+    await expect(titleField).toBeVisible({ timeout: 5000 });
+    await titleField.click();
+    await titleField.fill('Test Sermon');
+    await expect(titleField).toHaveValue('Test Sermon');
     
-    // Look for description field
-    const descriptionField = page.locator('textarea[name="description"], textarea[placeholder*="description"]').first();
+    // Fill description field if available
+    const descriptionField = page.locator('textarea[name="description"], textarea[placeholder*="description"], textarea[placeholder*="Description"]').first();
     if (await descriptionField.isVisible({ timeout: 3000 }).catch(() => false)) {
       await descriptionField.click();
       await descriptionField.fill('This is a test sermon for automated testing');
-      console.log('Filled sermon description');
     }
     
-    // Save the sermon
-    const saveButton = page.locator('button:has-text("SAVE")').first();
-    if (await saveButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-      console.log('Saving sermon');
-      await saveButton.click();
-      await page.waitForTimeout(3000);
-    }
+    // REQUIRED: Save functionality must work
+    const saveButton = page.locator('button:has-text("SAVE"), button:has-text("Save")').first();
+    await expect(saveButton).toBeVisible({ timeout: 5000 });
+    await saveButton.click();
+    await page.waitForTimeout(3000);
     
-    // Verify we're back on the sermons list and our test sermon appears
+    // REQUIRED: Navigate back and verify sermon was created
     await page.goto('/admin/video');
     await page.waitForLoadState('domcontentloaded');
     
+    // REQUIRED: Test sermon must appear in the list
     const testSermonRow = page.locator('tr:has-text("Test Sermon"), td:has-text("Test Sermon")').first();
-    const sermonVisible = await testSermonRow.isVisible({ timeout: 5000 }).catch(() => false);
-    
-    if (sermonVisible) {
-      console.log('🎉 SUCCESS! Test sermon found in sermons list');
-    } else {
-      console.log('⚠️  Test sermon not immediately visible, but creation workflow completed');
-    }
-    
-    console.log('✅ Test completed - sermon creation functionality verified');
+    await expect(testSermonRow).toBeVisible({ timeout: 10000 });
+    console.log('✅ Test sermon created and visible in sermons list');
   }
 
   static async editTestSermon(page: Page) {

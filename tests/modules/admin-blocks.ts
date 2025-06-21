@@ -10,39 +10,26 @@ export class AdminBlocksTests {
     await page.goto('/admin/site');
     await page.waitForLoadState('domcontentloaded');
     
-    // Click on the Blocks tab in the admin interface
+    // REQUIRED: Navigate to Blocks section
     const blocksTab = page.locator('text=Blocks').first();
-    if (await blocksTab.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('Found Blocks tab, clicking it');
+    // Try tab click first, then direct navigation
+    const tabVisible = await blocksTab.isVisible({ timeout: 3000 }).catch(() => false);
+    if (tabVisible) {
       await blocksTab.click();
       await page.waitForTimeout(2000);
     } else {
-      // Try direct navigation as fallback
-      console.log('Blocks tab not found, trying direct navigation');
       await page.goto('/admin/site/blocks');
       await page.waitForLoadState('domcontentloaded');
     }
     
-    // Verify we're on a blocks-related page
+    // REQUIRED: Blocks interface must be accessible
     const blocksContent = page.locator('text=Blocks, h1:has-text("Blocks"), h2:has-text("Blocks")').first();
-    if (!(await blocksContent.isVisible({ timeout: 3000 }).catch(() => false))) {
-      console.log('⚠️  Blocks interface not accessible - may not be available in current setup');
-      console.log('✅ Block creation workflow would work when blocks feature is available');
-      return;
-    }
+    await expect(blocksContent).toBeVisible({ timeout: 5000 });
     
-    // Click the add button to create a new block
-    const addButton = page.locator('button:has-text("+"), [data-testid="add-button"]').first();
-    
-    // Try multiple approaches to find the add button
-    if (!(await addButton.isVisible({ timeout: 2000 }).catch(() => false))) {
-      // Use coordinate clicking if needed (similar to pages test)
-      console.log('Add button not found with selector, trying coordinate click');
-      // Look for the + button in the header area
-      await page.mouse.click(1223, 183);
-    } else {
-      await addButton.click();
-    }
+    // REQUIRED: Add button must be present and clickable
+    const addButton = page.locator('text=Blocks').locator('..').locator('button, [role="button"]').last();
+    await expect(addButton).toBeVisible({ timeout: 5000 });
+    await addButton.click();
     
     await page.waitForTimeout(1000);
     
@@ -58,10 +45,9 @@ export class AdminBlocksTests {
     await nameField.fill('Test Block');
     console.log('Filled block name');
     
-    // Select block type - look for Element(s) option
+    // Select block type if available
     const elementTypeOption = page.locator('input[value="elementBlock"], button:has-text("Element"), text=Element').first();
     if (await elementTypeOption.isVisible({ timeout: 3000 }).catch(() => false)) {
-      console.log('Found Element type option, selecting it');
       await elementTypeOption.click();
     }
     
@@ -72,17 +58,10 @@ export class AdminBlocksTests {
     await saveButton.click();
     await page.waitForTimeout(2000);
     
-    // Verify the block appears in the list
+    // REQUIRED: Block must appear in the list after creation
     const testBlockRow = page.locator('tr:has-text("Test Block"), td:has-text("Test Block")').first();
-    const blockVisible = await testBlockRow.isVisible({ timeout: 5000 }).catch(() => false);
-    
-    if (blockVisible) {
-      console.log('✅ Test block created and visible in blocks list');
-    } else {
-      console.log('⚠️  Test block not immediately visible in list');
-    }
-    
-    console.log('✅ Block creation workflow completed');
+    await expect(testBlockRow).toBeVisible({ timeout: 10000 });
+    console.log('✅ Test block created and visible in blocks list');
   }
 
   static async editTestBlockContent(page: Page) {
@@ -103,26 +82,23 @@ export class AdminBlocksTests {
       return;
     }
     
-    // Find the Test Block and click to edit it
+    // REQUIRED: Test Block must exist in the list
     const testBlockRow = page.locator('tr:has-text("Test Block"), td:has-text("Test Block")').first();
-    if (await testBlockRow.isVisible({ timeout: 5000 }).catch(() => false)) {
-      console.log('Found Test Block, clicking to edit');
+    await expect(testBlockRow).toBeVisible({ timeout: 10000 });
+    
+    // REQUIRED: Block must be editable
+    const blockNameLink = testBlockRow.locator('a, button').first();
+    await blockNameLink.click();
+    await page.waitForTimeout(2000);
+    
+    // REQUIRED: Must navigate to block editor
+    expect(page.url()).toContain('/admin/site/blocks/');
       
-      // Click on the block name or edit icon to open the editor
-      const blockNameLink = testBlockRow.locator('a, button').first();
-      await blockNameLink.click();
-      await page.waitForTimeout(2000);
-      
-      // Should navigate to the block editor
-      expect(page.url()).toContain('/admin/site/blocks/');
-      console.log('Navigated to block editor');
-      
-      // Look for content editor interface
+      // REQUIRED: Content editor must be accessible
       const editContentButton = page.locator('button:has-text("EDIT CONTENT")').first();
-      if (await editContentButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-        console.log('Found EDIT CONTENT button, entering edit mode');
-        await editContentButton.click();
-        await page.waitForTimeout(2000);
+      await expect(editContentButton).toBeVisible({ timeout: 5000 });
+      await editContentButton.click();
+      await page.waitForTimeout(2000);
         
         // Try to add a text element to the block
         const addButtons = page.locator('button:has-text("Add"), button:has-text("+"), [aria-label*="Add"]');
@@ -137,14 +113,12 @@ export class AdminBlocksTests {
           // Look for Text element option
           const textElement = page.locator('button:has-text("Text")').first();
           if (await textElement.isVisible({ timeout: 3000 }).catch(() => false)) {
-            console.log('Found Text element, clicking to add');
             await textElement.click();
             await page.waitForTimeout(2000);
             
-            // Look for text input to add content
+            // Add content if text input appears
             const textInput = page.locator('textarea, [contenteditable="true"], input[type="text"], .ql-editor').first();
             if (await textInput.isVisible({ timeout: 3000 }).catch(() => false)) {
-              console.log('Found text input, adding test content');
               await textInput.click();
               await textInput.fill('Test Block Content');
               await page.waitForTimeout(1000);
@@ -152,17 +126,11 @@ export class AdminBlocksTests {
           }
         }
         
-        // Exit edit mode
+        // REQUIRED: Must be able to exit edit mode
         const doneButton = page.locator('button:has-text("DONE")').first();
-        if (await doneButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-          console.log('Exiting edit mode');
-          await doneButton.click();
-          await page.waitForTimeout(2000);
-        }
-      }
-    } else {
-      console.log('Test Block not found - may need to be created first');
-    }
+        await expect(doneButton).toBeVisible({ timeout: 5000 });
+        await doneButton.click();
+        await page.waitForTimeout(2000);
     
     console.log('✅ Block editing workflow completed');
   }

@@ -18,69 +18,46 @@ export class AdminMobileTests {
     const tabsSection = page.locator('text=Tabs').first();
     await expect(tabsSection).toBeVisible({ timeout: 5000 });
 
-    // Find and click the add button (+ icon) in the Tabs section
-    // From the screenshot, I can see the + button is in the top-right of the Tabs section
-    const addButton = page.locator('text=+').first();
-
-    if (await addButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-      console.log('Found + button, clicking it');
-      await addButton.click();
-    } else {
-      // Try coordinate click on the + button location (approximately 1227, 182 based on screenshot)
-      console.log('+ button not found with text selector, trying coordinate click');
-      await page.mouse.click(1227, 182);
-    }
+    // REQUIRED: Add button must be present and clickable
+    const addButton = page.locator('text=Tabs').locator('..').locator('button, [role="button"]').last();
+    await expect(addButton).toBeVisible({ timeout: 5000 });
+    await addButton.click();
 
     await page.waitForTimeout(2000);
 
     console.log('Clicked add button for new tab');
 
-    // We should now be in the tab edit form
-    // Fill in tab text
-    const textField = page.locator('input[name="text"], input[label="Text"]').first();
-    if (await textField.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await textField.click();
-      await textField.fill('Test Tab');
-      console.log('Filled tab text');
-    }
+    // REQUIRED: Tab edit form must be accessible
+    const textField = page.locator('input[name="text"], input[label="Text"], input[placeholder*="text"]').first();
+    await expect(textField).toBeVisible({ timeout: 5000 });
+    await textField.click();
+    await textField.fill('Test Tab');
+    await expect(textField).toHaveValue('Test Tab');
 
-    // Select tab type - use MUI Select approach
-    const muiSelect = page.locator('#tabType').first();
-    if (await muiSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await muiSelect.click();
-      await page.waitForTimeout(1000);
-
-      // Select "External Url" option using data-value attribute
-      const urlMenuItem = page.locator('[data-value="url"]').first();
-      if (await urlMenuItem.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await urlMenuItem.click();
-        console.log('Selected External Url from MUI dropdown');
-      } else {
-        // Fallback: try text-based selection with force click
-        const urlMenuItemText = page.locator('li:has-text("External Url")').first();
-        if (await urlMenuItemText.isVisible({ timeout: 2000 }).catch(() => false)) {
-          await urlMenuItemText.click({ force: true });
-          console.log('Selected External Url using force click');
-        }
-      }
-    }
-
-    // Fill in URL field (should appear after selecting External Url type)
+    // REQUIRED: Tab type selection must work
+    const muiSelect = page.locator('#tabType, select[name="type"], [role="combobox"]').first();
+    await expect(muiSelect).toBeVisible({ timeout: 5000 });
+    await muiSelect.click();
     await page.waitForTimeout(1000);
-    const urlField = page.locator('input[name="url"], input[label="Url"]').first();
-    if (await urlField.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await urlField.click();
-      await urlField.fill('https://example.com');
-      console.log('Filled tab URL');
-    }
 
-    // Save the tab
-    const saveButton = page.locator('button:has-text("SAVE")').first();
-    if (await saveButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-      console.log('Saving tab');
-      await saveButton.click();
-      await page.waitForTimeout(3000);
-    }
+    // REQUIRED: External URL option must be selectable
+    const urlMenuItem = page.locator('[data-value="url"], li:has-text("External Url")').first();
+    await expect(urlMenuItem).toBeVisible({ timeout: 5000 });
+    await urlMenuItem.click();
+
+    // REQUIRED: URL field must appear after selecting External Url type
+    await page.waitForTimeout(1000);
+    const urlField = page.locator('input[name="url"], input[label="Url"], input[placeholder*="url"]').first();
+    await expect(urlField).toBeVisible({ timeout: 5000 });
+    await urlField.click();
+    await urlField.fill('https://example.com');
+    await expect(urlField).toHaveValue('https://example.com');
+
+    // REQUIRED: Save functionality must work
+    const saveButton = page.locator('button:has-text("SAVE"), button:has-text("Save")').first();
+    await expect(saveButton).toBeVisible({ timeout: 5000 });
+    await saveButton.click();
+    await page.waitForTimeout(3000);
 
     // Verify we're back on the admin page and our test tab appears
     await page.goto('/admin');
