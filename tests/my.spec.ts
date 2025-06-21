@@ -2,6 +2,7 @@ import { test } from '@playwright/test';
 import { MyGroupsTests } from './modules/my-groups';
 import { MyCommunityTests } from './modules/my-community';
 import { MyCheckinTests } from './modules/my-checkin';
+import { MyDonationsTests } from './modules/my-donations';
 
 test.describe('My Portal - Groups Management', () => {
   test('should navigate to My Groups page', async ({ page }) => {
@@ -78,5 +79,43 @@ test.describe('My Portal - Check-in Functionality', () => {
 
   test('should display correctly on different screen sizes', async ({ page }) => {
     await MyCheckinTests.testCheckinResponsiveness(page);
+  });
+});
+
+test.describe('My Portal - Donations Management', () => {
+  test('should navigate to Donations page', async ({ page }) => {
+    await MyDonationsTests.navigateToDonations(page);
+  });
+
+  test('should load initial donations screen', async ({ page }) => {
+    await MyDonationsTests.testInitialDonationsLoad(page);
+  });
+
+  test('should add payment method', async ({ page }) => {
+    await MyDonationsTests.addPaymentMethod(page);
+  });
+
+  test('should make one-time donation', async ({ page }) => {
+    await MyDonationsTests.makeOneTimeDonation(page);
+  });
+
+  test('should verify donation appears in history', async ({ page }) => {
+    await MyDonationsTests.verifyDonationHistory(page);
+  });
+
+  test('should add recurring donation', async ({ page }) => {
+    await MyDonationsTests.addRecurringDonation(page);
+  });
+
+  test('should delete recurring donation', async ({ page }) => {
+    await MyDonationsTests.deleteRecurringDonation(page);
+  });
+
+  test('should delete payment method', async ({ page }) => {
+    await MyDonationsTests.deletePaymentMethod(page);
+  });
+
+  test('should display correctly on different screen sizes', async ({ page }) => {
+    await MyDonationsTests.testDonationsResponsiveness(page);
   });
 });
