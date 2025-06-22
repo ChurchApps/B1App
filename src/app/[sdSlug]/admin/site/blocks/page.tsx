@@ -31,7 +31,7 @@ export default function AdminPagesClient() {
   }, []);
 
 
-  const editBlockContent = (<SmallButton icon="add" onClick={() => { setEditBlock({ blockType: "elementBlock" }); }} />);
+  const editBlockContent = (<SmallButton icon="add" data-testid="add-block-button" aria-label="Add new block" onClick={() => { setEditBlock({ blockType: "elementBlock" }); }} />);
 
   const blocksUi = blocks.map((block) => (
     <TableRow key={block.id}>

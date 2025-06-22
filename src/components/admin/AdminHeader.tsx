@@ -49,5 +49,5 @@ export function AdminHeader() {
   }
 
   /*<Typography variant="h6" noWrap>{UserHelper.currentUserChurch?.church?.name || ""}</Typography>*/
-  return (<SiteHeader primaryMenuItems={getPrimaryMenu()} primaryMenuLabel={primaryLabel} secondaryMenuItems={secondaryMenu.menuItems} secondaryMenuLabel={secondaryMenu.label} context={context} appName={"B1"} onNavigate={handleNavigate} /> );
+  return (<SiteHeader primaryMenuItems={getPrimaryMenu()} primaryMenuLabel={primaryLabel} secondaryMenuItems={secondaryMenu.menuItems} secondaryMenuLabel={secondaryMenu.label} context={context} appName={"B1"} onNavigate={handleNavigate} data-testid="admin-site-header" /> );
 }

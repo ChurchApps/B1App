@@ -15,6 +15,7 @@ export function GiveNowPanel(props: Props) {
         recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}
         mainContainerCssProps={{ sx: { boxShadow: "none", paddingY: 3 } }}
         showHeader={false}
+        data-testid="non-auth-donation"
       />
     </Box>
   );

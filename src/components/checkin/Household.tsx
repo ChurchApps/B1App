@@ -60,6 +60,8 @@ export function Household({ completeHandler = () => { } }: Props) {
                 e.preventDefault();
                 selectServiceTime(st);
               }}
+              data-testid={`service-time-${st.id}`}
+              aria-label={`Select service time ${st.name}`}
             >
               {selectedGroupName}
             </a>
@@ -126,13 +128,15 @@ export function Household({ completeHandler = () => { } }: Props) {
             e.preventDefault();
             selectMember(member);
           }}
+          data-testid={`select-member-${member.id}`}
+          aria-label={`Select ${member.name.display} for checkin`}
         >
           <Grid container spacing={3}>
             <Grid item xs={1}>
               {arrow}
             </Grid>
             <Grid item xs={2}>
-              <img src={PersonHelper.getPhotoUrl(member)} alt="avatar" />
+              <img src={PersonHelper.getPhotoUrl(member)} alt={`${member.name.display} avatar`} data-testid={`member-photo-${member.id}`} />
             </Grid>
             <Grid item xs={9}>
               {member.name.display}
@@ -159,7 +163,7 @@ export function Household({ completeHandler = () => { } }: Props) {
   }, []);
 
   if (isLoading) {
-    return <Loading />;
+    return <Loading data-testid="checkin-loading" />;
   }
 
   if (showGroups) {
@@ -170,7 +174,7 @@ export function Household({ completeHandler = () => { } }: Props) {
     <>
       {CheckinHelper.householdMembers.map((member) => getMember(member))}
       <br />
-      <Button fullWidth size="large" variant="contained" onClick={handleCheckin}>
+      <Button fullWidth size="large" variant="contained" onClick={handleCheckin} data-testid="checkin-submit-button" aria-label="Complete checkin for selected members">
         Checkin
       </Button>
     </>

@@ -92,12 +92,12 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
                   <Typography sx={{ fontSize: "13.5px", fontStyle: "italic" }}>Show Login</Typography>
                   <Tooltip title="Show login button in the navigation bar" arrow><Icon color="primary" sx={{ fontSize: "18px !important", cursor: "pointer" }}>info</Icon></Tooltip>
                 </Stack>
-                <Switch onChange={handleSwitchChange} checked={showLogin ? checked : true} inputProps={{ 'aria-label': "controlled" }} />
+                <Switch onChange={handleSwitchChange} checked={showLogin ? checked : true} inputProps={{ 'aria-label': "Toggle login button visibility" }} data-testid="show-login-switch" />
               </Stack>
             </div>
             <div>
               <span style={{float:"right"}}>
-                <SmallButton icon="add" onClick={() => { setEditLink({churchId: UserHelper.currentUserChurch.church.id, category:"website", linkType:"url", sort:99, linkData:"", icon:""} ) }} />
+                <SmallButton icon="add" onClick={() => { setEditLink({churchId: UserHelper.currentUserChurch.church.id, category:"website", linkType:"url", sort:99, linkData:"", icon:""} ) }} data-testid="add-navigation-link" />
               </span>
               <h3>Main Navigation</h3>
             </div>

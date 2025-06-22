@@ -149,8 +149,8 @@ export function SectionEdit(props: Props) {
         headerActionContent={
           props.section.id && (
             <>
-              <Button size="small" variant="outlined" onClick={handleConvertToBlock} title="Convert to Block" endIcon={<Icon>smart_button</Icon>} sx={{ marginRight: 2 }}>Convert to</Button>
-              <Button size="small" variant="outlined" onClick={handleDuplicate}>duplicate</Button>
+              <Button size="small" variant="outlined" onClick={handleConvertToBlock} title="Convert to Block" endIcon={<Icon>smart_button</Icon>} sx={{ marginRight: 2 }} data-testid="convert-to-block-button" aria-label="Convert section to block">Convert to</Button>
+              <Button size="small" variant="outlined" onClick={handleDuplicate} data-testid="duplicate-section-button" aria-label="Duplicate section">duplicate</Button>
             </>
           )
         }

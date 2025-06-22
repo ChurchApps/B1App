@@ -42,15 +42,15 @@ export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
   };
 
   return (
-    <InputBox headerIcon="description" headerText="Add Links" saveFunction={handleAdd} saveText="Add">
-      <ErrorMessages errors={errors} />
+    <InputBox headerIcon="description" headerText="Add Links" saveFunction={handleAdd} saveText="Add" data-testid="group-link-add-box">
+      <ErrorMessages errors={errors} data-testid="group-link-errors" />
       <Typography sx={{ textIndent: 3, fontSize: "14px" }}>Link could be of Google Drive, Hosted Lesson PDF, etc.</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <TextField fullWidth label="Link Text" name="text" value={text} onChange={handleChange} />
+          <TextField fullWidth label="Link Text" name="text" value={text} onChange={handleChange} data-testid="group-link-text-input" aria-label="Link display text" />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField fullWidth label="Link Url" name="url" value={url} onChange={handleChange} />
+          <TextField fullWidth label="Link Url" name="url" value={url} onChange={handleChange} data-testid="group-link-url-input" aria-label="Link URL" />
         </Grid>
       </Grid>
     </InputBox>

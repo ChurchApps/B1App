@@ -84,7 +84,7 @@ export function PaletteEdit(props: Props) {
   const getCell = (name:string, color:string) => <TableCell style={{backgroundColor:color}}>&nbsp;</TableCell>
 
   const getPalette = (p: PaletteInterface) => {
-    let result = <a href="about:blank" onClick={(e) => { e.preventDefault(); setPalette(p); }}>
+    let result = <a href="about:blank" onClick={(e) => { e.preventDefault(); setPalette(p); }} data-testid="suggested-palette" aria-label="Apply suggested color palette">
       <Table>
         <TableRow>
           {getCell("light", p.light)}
@@ -123,14 +123,14 @@ export function PaletteEdit(props: Props) {
 
   return (
     <>
-      <InputBox headerIcon="folder" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)}>
+      <InputBox headerIcon="folder" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)} data-testid="palette-edit-box">
         <Table style={{width:"100%"}}>
           <TableRow>
-            <TableCell><TextField type="color" label="Light" fullWidth name="light" value={palette.light} onChange={handleChange} /></TableCell>
-            <TableCell><TextField type="color" label="Light Accent" fullWidth name="lightAccent" value={palette.lightAccent} onChange={handleChange} /></TableCell>
-            <TableCell><TextField type="color" label="Accent" fullWidth name="accent" value={palette.accent} onChange={handleChange} /></TableCell>
-            <TableCell><TextField type="color" label="Dark Accent" fullWidth name="darkAccent" value={palette.darkAccent} onChange={handleChange} /></TableCell>
-            <TableCell><TextField type="color" label="Dark" fullWidth name="dark" value={palette.dark} onChange={handleChange} /></TableCell>
+            <TableCell><TextField type="color" label="Light" fullWidth name="light" value={palette.light} onChange={handleChange} data-testid="light-color-input" aria-label="Light color" /></TableCell>
+            <TableCell><TextField type="color" label="Light Accent" fullWidth name="lightAccent" value={palette.lightAccent} onChange={handleChange} data-testid="light-accent-color-input" aria-label="Light accent color" /></TableCell>
+            <TableCell><TextField type="color" label="Accent" fullWidth name="accent" value={palette.accent} onChange={handleChange} data-testid="accent-color-input" aria-label="Accent color" /></TableCell>
+            <TableCell><TextField type="color" label="Dark Accent" fullWidth name="darkAccent" value={palette.darkAccent} onChange={handleChange} data-testid="dark-accent-color-input" aria-label="Dark accent color" /></TableCell>
+            <TableCell><TextField type="color" label="Dark" fullWidth name="dark" value={palette.dark} onChange={handleChange} data-testid="dark-color-input" aria-label="Dark color" /></TableCell>
           </TableRow>
         </Table>
 

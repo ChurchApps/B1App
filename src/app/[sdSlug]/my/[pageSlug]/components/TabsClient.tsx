@@ -59,9 +59,9 @@ export const TabsClient = (props: Props) => {
 
   const getItem = (tab:any) =>
     //if (tab.key === selectedTab) return (<li className="active"><a href="about:blank" onClick={(e) => { e.preventDefault(); setSelectedTab(tab.key); }}><Icon>{tab.icon}</Icon> {tab.label}</a></li>)
-    (<li><Link href={tab.url}>{tab.label}</Link></li>)
+    (<li><Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>{tab.label}</Link></li>)
 
-  return <ul>
+  return <ul data-testid="my-portal-tabs" aria-label="Member portal navigation">
     {getTabs().map((tab, index) => getItem(tab))}
   </ul>
 

@@ -105,6 +105,8 @@ export const GroupResources: React.FC<Props> = (props) => {
             onClick={() => {
               handleDelete(file);
             }}
+            data-testid={`delete-file-${file.id}`}
+            aria-label={`Delete file ${file.fileName}`}
           />
         )}
       </TableCell>
@@ -125,6 +127,8 @@ export const GroupResources: React.FC<Props> = (props) => {
             onClick={() => {
               handleLinkDelete(link);
             }}
+            data-testid={`delete-link-${link.id}`}
+            aria-label={`Delete link ${link.text}`}
           />
         )}
       </TableCell>

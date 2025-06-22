@@ -104,16 +104,16 @@ export function PageEdit(props: Props) {
   if (!page) return <></>
   else return (
     <>
-      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
-        <ErrorMessages errors={errors} />
-        <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page.id && <a href="about:blank" onClick={handleDuplicate} data-testid="duplicate-page-link" aria-label="Duplicate page">Duplicate</a>)} data-testid="page-edit-box">
+        <ErrorMessages errors={errors} data-testid="page-errors" />
+        <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="page-title-input" aria-label="Page title" />
         {checked
           ? (
             <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
               <Paper elevation={0}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                   <Typography>{page.url}</Typography>
-                  <IconButton color="primary" onClick={() => setChecked(false)}><EditIcon /></IconButton>
+                  <IconButton color="primary" onClick={() => setChecked(false)} data-testid="edit-url-button" aria-label="Edit URL path"><EditIcon /></IconButton>
                 </Stack>
               </Paper>
               <div>
@@ -125,13 +125,15 @@ export function PageEdit(props: Props) {
           )
           : (
             <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} helperText="ex: /camper-registration  (**Make sure to check before saving)"
-              InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation}>Check</Button> }}
+              InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation} data-testid="check-url-button" aria-label="Check URL validity">Check</Button> }}
+              data-testid="page-url-input"
+              aria-label="Page URL path"
             />
           )}
         {!props.embedded && (
           <FormControl fullWidth>
             <InputLabel>Layout</InputLabel>
-            <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange}>
+            <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange} data-testid="page-layout-select" aria-label="Select page layout">
               <MenuItem value="headerFooter">Header & Footer</MenuItem>
               <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
             </Select>
@@ -140,7 +142,7 @@ export function PageEdit(props: Props) {
         {!props.embedded && showPageTemplate === true && (
           <FormControl fullWidth>
             <InputLabel>Page Template</InputLabel>
-            <Select fullWidth label="Page Template" name="pageTemplate" value={pageTemplate} onChange={(e) => setPageTemplate(e.target.value)}>
+            <Select fullWidth label="Page Template" name="pageTemplate" value={pageTemplate} onChange={(e) => setPageTemplate(e.target.value)} data-testid="page-template-select" aria-label="Select page template">
               <MenuItem value="blank">Blank</MenuItem>
               <MenuItem value="sermons">Sermons</MenuItem>
               <MenuItem value="about">About Us</MenuItem>

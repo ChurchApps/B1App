@@ -102,6 +102,8 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           setAnchorEl(e.currentTarget);
         }}
+        data-testid="donation-download-button"
+        aria-label="Download donation records"
       >
         <Icon>download</Icon>
       </Button>
@@ -112,10 +114,10 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         onClose={handleClose}
         MenuListProps={{ 'aria-labelledby': "download-button" }}
       >
-        <MenuItem onClick={handleClose} dense><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text="Current Year (CSV)" icon="table_chart" /></MenuItem>
-        <MenuItem onClick={handleClose} dense><Link href="/my/donate/print"><Button><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
-        <MenuItem onClick={handleClose} dense><ExportLink data={last_year} filename="last_year_donations" customHeaders={customHeaders} text="Last Year (CSV)" icon="table_chart" /></MenuItem>
-        <MenuItem onClick={handleClose} dense><Link href="/my/donate/print?prev=1"><Button><Icon>print</Icon> &nbsp; LAST YEAR (PRINT)</Button></Link></MenuItem>
+        <MenuItem onClick={handleClose} dense data-testid="export-current-year-csv" aria-label="Export current year donations as CSV"><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text="Current Year (CSV)" icon="table_chart" data-testid="current-year-export-link" /></MenuItem>
+        <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label="Print current year donations"><Link href="/my/donate/print"><Button data-testid="print-current-year-button" aria-label="Print current year donations"><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
+        <MenuItem onClick={handleClose} dense data-testid="export-last-year-csv" aria-label="Export last year donations as CSV"><ExportLink data={last_year} filename="last_year_donations" customHeaders={customHeaders} text="Last Year (CSV)" icon="table_chart" data-testid="last-year-export-link" /></MenuItem>
+        <MenuItem onClick={handleClose} dense data-testid="print-last-year" aria-label="Print last year donations"><Link href="/my/donate/print?prev=1"><Button data-testid="print-last-year-button" aria-label="Print last year donations"><Icon>print</Icon> &nbsp; LAST YEAR (PRINT)</Button></Link></MenuItem>
       </Menu>
     </>);
 
@@ -166,7 +168,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   React.useEffect(loadData, [isMounted, props.personId]); //eslint-disable-line
 
   const getTable = () => {
-    if (!donations) return <Loading />;
+    if (!donations) return <Loading data-testid="donations-loading" />;
     else return (<Table>
       <TableHead>{getTableHeader()}</TableHead>
       <TableBody>{getRows()}</TableBody>
@@ -174,15 +176,15 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getPaymentMethodComponents = () => {
-    if (!paymentMethods) return <Loading />;
+    if (!paymentMethods) return <Loading data-testid="payment-methods-loading" />;
     else return (
       <>
-        <DonationForm person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} donationSuccess={handleDataUpdate} church={props?.church} churchLogo={props?.churchLogo} />
-        <DisplayBox headerIcon="payments" headerText="Donations" editContent={getEditContent()}>
+        <DonationForm person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} donationSuccess={handleDataUpdate} church={props?.church} churchLogo={props?.churchLogo} data-testid="donation-form" />
+        <DisplayBox headerIcon="payments" headerText="Donations" editContent={getEditContent()} data-testid="donations-display-box">
           {getTable()}
         </DisplayBox>
-        <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} appName={appName} dataUpdate={handleDataUpdate} />
-        <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} />
+        <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} appName={appName} dataUpdate={handleDataUpdate} data-testid="recurring-donations" />
+        <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
       </>
     );
   }

@@ -31,6 +31,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
               onClick={() => {
                 redirect("/admin/calendars/" + calendar.id);
               }}
+              data-testid={`manage-calendar-${calendar.id}`}
             />
             <SmallButton
               icon="edit"
@@ -38,6 +39,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
               onClick={() => {
                 setCurrentCalendar(calendar);
               }}
+              data-testid={`edit-calendar-${calendar.id}`}
             />
           </TableCell>
         </TableRow>
@@ -47,7 +49,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
   };
 
   const getTable = () => {
-    if (calendars === null) return <Loading />;
+    if (calendars === null) return <Loading data-testid="calendars-loading" />;
     else
       return (
         <Table>
@@ -68,6 +70,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
       onClick={() => {
         setCurrentCalendar({});
       }}
+      data-testid="add-calendar"
     />
   );
 
@@ -77,7 +80,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      <Banner><h1>Curated Calendars</h1></Banner>
+      <Banner data-testid="calendars-banner"><h1>Curated Calendars</h1></Banner>
       <div id="mainContent">
 
         <Grid container spacing={3}>
@@ -87,6 +90,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
               headerText="Curated Calendars"
               editContent={getEditContent()}
               id="calendarsBox"
+              data-testid="calendars-display-box"
             >
               {getTable()}
             </DisplayBox>

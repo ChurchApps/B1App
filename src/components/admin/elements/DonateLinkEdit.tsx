@@ -88,6 +88,8 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
         name="url"
         value={parsedData.url || ""}
         onChange={handleChange}
+        data-testid="donate-link-url-input"
+        aria-label="Donation page URL"
       />
       {/* Link Text */}
       <TextField
@@ -98,6 +100,8 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
         name="text"
         value={parsedData.text || ""}
         onChange={handleChange}
+        data-testid="donate-link-text-input"
+        aria-label="Donation link text"
       />
 
       {/* Funds */}
@@ -114,9 +118,11 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
             name="fundId"
             value={parsedData.fundId}
             onChange={handleChange}
+            data-testid="donate-link-fund-select"
+            aria-label="Select donation fund"
           >
             {funds.map((f: any) => (
-              <MenuItem value={f.id}>{f.name}</MenuItem>
+              <MenuItem key={f.id} value={f.id} data-testid={`fund-option-${f.id}`} aria-label={f.name}>{f.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -136,6 +142,8 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
             onDelete={() => { handleAmountDelete(a); }}
             sx={{ mr: 1, mt: 1, minWidth: 70 }}
             deleteIcon={<Icon sx={{ float: "right", marginLeft: "auto !important" }}>cancel</Icon>}
+            data-testid={`amount-chip-${a}`}
+            aria-label={`Remove $${a} donation amount`}
           />
         ))}
       </div>
@@ -148,9 +156,11 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
         name="amount"
         value={amountValue}
         onChange={handleChange}
+        data-testid="donate-amount-input"
+        aria-label="Donation amount"
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
-          endAdornment: <Button size="small" variant="contained" onClick={handleAmountAdd} disabled={!amountValue || amountValue === 0}>Add</Button>,
+          endAdornment: <Button size="small" variant="contained" onClick={handleAmountAdd} disabled={!amountValue || amountValue === 0} data-testid="add-amount-button" aria-label="Add donation amount">Add</Button>,
           inputProps: { min: 0 },
         }}
       />

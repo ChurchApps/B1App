@@ -171,7 +171,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   const getPlaylists = () => {
     let result: JSX.Element[] = [];
     playlists.forEach(playlist => {
-      result.push(<MenuItem value={playlist.id}>{playlist.title}</MenuItem>);
+      result.push(<MenuItem key={playlist.id} value={playlist.id} data-testid={`playlist-option-${playlist.id}`} aria-label={playlist.title}>{playlist.title}</MenuItem>);
     });
     return result;
   }
@@ -179,12 +179,12 @@ export const SermonEdit: React.FC<Props> = (props) => {
   const getAdditionalPlaylists = () => {
     let result: JSX.Element[] = [];
     playlists.forEach(playlist => {
-      if (playlist.id !== currentSermon.playlistId) result.push(<MenuItem value={playlist.id}>{playlist.title}</MenuItem>);
+      if (playlist.id !== currentSermon.playlistId) result.push(<MenuItem key={playlist.id} value={playlist.id} data-testid={`additional-playlist-option-${playlist.id}`} aria-label={playlist.title}>{playlist.title}</MenuItem>);
     });
     return result;
   }
 
-  const getShareIcon = () => (<a href="about:blank" onClick={(e) => { e.preventDefault(); setShowB1Share(true); }}><Icon style={{fontSize:18, paddingTop:7, height:30, paddingRight:20}}>share</Icon></a>)
+  const getShareIcon = () => (<a href="about:blank" onClick={(e) => { e.preventDefault(); setShowB1Share(true); }} data-testid="share-sermon-button" aria-label="Share sermon"><Icon style={{fontSize:18, paddingTop:7, height:30, paddingRight:20}}>share</Icon></a>)
 
   React.useEffect(() => { setCurrentSermon(props.currentSermon); loadData(); }, [props.currentSermon]);
   React.useEffect(handlePhotoUpdated, [props.updatedPhoto, currentSermon]); //eslint-disable-line
@@ -201,12 +201,12 @@ export const SermonEdit: React.FC<Props> = (props) => {
     case "youtube":
       keyLabel = <>YouTube ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}>https://youtube.com/watch?v=<b style={{ color: "#24b8ff" }}>abcd1234</b></span></>;
       keyPlaceholder = "abcd1234";
-      endAdornment = <Button variant="contained" onClick={() => fetchVideo("youtube")}>Fetch</Button>
+      endAdornment = <Button variant="contained" onClick={() => fetchVideo("youtube")} data-testid="fetch-youtube-button" aria-label="Fetch YouTube video details">Fetch</Button>
       break;
     case "vimeo":
       keyLabel = <>Vimeo ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}>https://vimeo.com/<b style={{ color: "#24b8ff" }}>123456789</b></span></>;
       keyPlaceholder = "123456789";
-      endAdornment = <Button variant="contained" onClick={() => fetchVideo("vimeo")}>Fetch</Button>
+      endAdornment = <Button variant="contained" onClick={() => fetchVideo("vimeo")} data-testid="fetch-vimeo-button" aria-label="Fetch Vimeo video details">Fetch</Button>
       break;
     case "facebook":
       keyLabel = <>Sermon ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}>https://facebook.com/video.php?v=<b>123456789</b></span></>;
@@ -214,14 +214,14 @@ export const SermonEdit: React.FC<Props> = (props) => {
       break;
   }
 
-  if (isLoading) return <Loading />
-  else return (<><InputBox headerIcon="calendar_month" headerText={(currentSermon?.permanentUrl) ? "Edit Permanent Live Url" : "Edit Sermon"} saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/sermons" headerActionContent={getShareIcon()}>
-    <ErrorMessages errors={errors} />
+  if (isLoading) return <Loading data-testid="sermon-edit-loading" />
+  else return (<><InputBox headerIcon="calendar_month" headerText={(currentSermon?.permanentUrl) ? "Edit Permanent Live Url" : "Edit Sermon"} saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/sermons" headerActionContent={getShareIcon()} data-testid="sermon-edit-box">
+    <ErrorMessages errors={errors} data-testid="sermon-errors" />
     <>
       {!currentSermon?.permanentUrl && (
         <FormControl fullWidth>
           <InputLabel>Playlist</InputLabel>
-          <Select label="Playlist" name="playlistId" value={currentSermon?.playlistId || ""} onChange={handleChange}>
+          <Select label="Playlist" name="playlistId" value={currentSermon?.playlistId || ""} onChange={handleChange} data-testid="sermon-playlist-select" aria-label="Select playlist">
             <MenuItem value="">None</MenuItem>
             {getPlaylists()}
           </Select>
@@ -232,7 +232,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
         <Grid item xs={6}>
           <FormControl fullWidth>
             <InputLabel>Video Provider</InputLabel>
-            <Select label="Video Provider" name="videoType" value={currentSermon?.videoType || ""} onChange={handleChange}>
+            <Select label="Video Provider" name="videoType" value={currentSermon?.videoType || ""} onChange={handleChange} data-testid="video-provider-select" aria-label="Select video provider">
               {currentSermon?.permanentUrl && (<MenuItem value="youtube_channel">Current YouTube Live Stream</MenuItem>)}
               <MenuItem value="youtube">YouTube</MenuItem>
               <MenuItem value="vimeo">Vimeo</MenuItem>
@@ -244,6 +244,8 @@ export const SermonEdit: React.FC<Props> = (props) => {
         <Grid item xs={6}>
           <TextField fullWidth label={keyLabel} name="videoData" value={currentSermon?.videoData || ""} onChange={handleChange} placeholder={keyPlaceholder}
             InputProps={{ endAdornment: endAdornment }}
+            data-testid="video-data-input"
+            aria-label="Video ID or URL"
           />
         </Grid>
       </Grid>
@@ -251,7 +253,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
         {!currentSermon?.permanentUrl && (
           <Grid item xs={6}>
             <label style={{ width: "100%" }}>Publish Date</label>
-            <TextField fullWidth type="date" name="publishDate" value={(currentSermon?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentSermon?.publishDate)) : ""} onChange={handleChange} placeholder={keyPlaceholder} />
+            <TextField fullWidth type="date" name="publishDate" value={(currentSermon?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentSermon?.publishDate)) : ""} onChange={handleChange} placeholder={keyPlaceholder} data-testid="publish-date-input" aria-label="Publish date" />
           </Grid>
         )}
         <Grid item xs={6}>
@@ -263,24 +265,26 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
       <Grid container spacing={3}>
         <Grid item xs={3}>
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); props.showPhotoEditor("sermon", currentSermon?.thumbnail || ""); }}>
-            <img src={currentSermon?.thumbnail || "/images/no-image.png"} className="img-fluid" style={{ marginTop: 20 }} alt="thumbnail"></img>
+          <a href="about:blank" onClick={(e) => { e.preventDefault(); props.showPhotoEditor("sermon", currentSermon?.thumbnail || ""); }} data-testid="edit-thumbnail-link" aria-label="Edit sermon thumbnail">
+            <img src={currentSermon?.thumbnail || "/images/no-image.png"} className="img-fluid" style={{ marginTop: 20 }} alt="Sermon thumbnail" data-testid="sermon-thumbnail"></img>
           </a>
         </Grid>
         <Grid item xs={9}>
-          <TextField fullWidth label="Title" name="title" value={currentSermon?.title || ""} onChange={handleChange} />
-          <TextField fullWidth multiline label="Description" name="description" value={currentSermon?.description || ""} onChange={handleChange} placeholder={keyPlaceholder} />
+          <TextField fullWidth label="Title" name="title" value={currentSermon?.title || ""} onChange={handleChange} data-testid="sermon-title-input" aria-label="Sermon title" />
+          <TextField fullWidth multiline label="Description" name="description" value={currentSermon?.description || ""} onChange={handleChange} placeholder={keyPlaceholder} data-testid="sermon-description-input" aria-label="Sermon description" />
         </Grid>
       </Grid>
 
       {/* add to another playlist */}
       <div style={{ marginTop: 15 }}>
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowOption(!showOption) }}>Add to another playlist</a>
+        <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowOption(!showOption) }} data-testid="add-to-playlist-link" aria-label="Add sermon to another playlist">Add to another playlist</a>
         {showOption && (
           <FormControl fullWidth>
             <InputLabel>Playlist</InputLabel>
             <Select label="Playlist" name="additionalPlaylistId" value={additionalPlaylistId} onChange={(e) => { e.preventDefault(); setAdditionalPlaylistId(e.target.value) }}
-              endAdornment={<Button variant="contained" size="small" disabled={!additionalPlaylistId || additionalPlaylistId === ""} onClick={handleAdd}>add</Button>}
+              endAdornment={<Button variant="contained" size="small" disabled={!additionalPlaylistId || additionalPlaylistId === ""} onClick={handleAdd} data-testid="add-to-playlist-button" aria-label="Add to selected playlist">add</Button>}
+              data-testid="additional-playlist-select"
+              aria-label="Select additional playlist"
             >
               {getAdditionalPlaylists()}
             </Select>
