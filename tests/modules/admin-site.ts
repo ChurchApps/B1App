@@ -7,6 +7,7 @@ export class AdminSiteTests {
     
     // Login and navigate to admin site
     await TestHelpers.login(page);
+    await TestHelpers.navigateToAdminPortal(page);
     await page.goto('/admin/site');
     await page.waitForLoadState('domcontentloaded');
     
@@ -14,8 +15,8 @@ export class AdminSiteTests {
     expect(page.url()).toContain('/admin/site');
     await expect(page.locator('text=Pages').first()).toBeVisible();
     
-    // Click the "+" button to add a new page - it's the + symbol in the top right of Pages section
-    const addButton = page.locator('text=Pages').locator('..').locator('button, [role="button"]').last();
+    // Click the "+" button to add a new page using data-testid
+    const addButton = page.locator('[data-testid="add-page-button"]');
     
     // REQUIRED: Add button must be present and clickable
     await expect(addButton).toBeVisible({ timeout: 5000 });
@@ -29,13 +30,13 @@ export class AdminSiteTests {
     console.log('✅ Page creation form opened');
     
     // REQUIRED: About Us template must be available
-    const aboutButton = page.locator('button:has-text("About Us")').first();
+    const aboutButton = page.locator('[data-testid="template-about-button"]');
     await expect(aboutButton).toBeVisible({ timeout: 5000 });
     await aboutButton.click();
     console.log('✅ Selected About Us template');
     
     // REQUIRED: Title field must be present and editable
-    const titleField = page.locator('input[name="title"], input[placeholder*="title"], input[placeholder*="Title"]').first();
+    const titleField = page.locator('[data-testid="page-title-input"]');
     await expect(titleField).toBeVisible({ timeout: 5000 });
     await titleField.click();
     await titleField.fill('Test Page');

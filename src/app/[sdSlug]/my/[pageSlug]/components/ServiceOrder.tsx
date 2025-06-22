@@ -20,7 +20,7 @@ export const ServiceOrder = (props: Props) => {
 
   const getEditContent = () => (
     <Stack direction="row">
-      <SmallButton href={"/plans/print/" + props.plan?.id} icon="print" />
+      <SmallButton href={"/plans/print/" + props.plan?.id} icon="print" data-testid="print-service-order-button" />
     </Stack>
   )
 

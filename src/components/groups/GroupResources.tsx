@@ -137,7 +137,7 @@ export const GroupResources: React.FC<Props> = (props) => {
 
   return (
     <>
-      <DisplayBox headerText="Files" headerIcon="description">
+      <DisplayBox headerText="Files" headerIcon="description" data-testid="group-files-display-box">
         {links && links.length > 0 && (
           <>
             <Divider variant="middle" textAlign="center" sx={{ marginTop: 3, marginBottom: 3 }}>
@@ -183,7 +183,7 @@ export const GroupResources: React.FC<Props> = (props) => {
 
       {/* File Upload */}
       {isLeader && (
-        <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload">
+        <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload" data-testid="group-upload-inputbox">
           {getStorage()}
           <p>
             100 MB of storage space is provided for free for storing PDFs and

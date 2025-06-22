@@ -107,7 +107,7 @@ export const SongDialog: React.FC<Props> = (props) => {
 
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" onClick={props.onClose}>Close</Button>
+        <Button variant="outlined" onClick={props.onClose} data-testid="song-dialog-close-button">Close</Button>
       </DialogActions>
     </Dialog>
   </>);

@@ -47,6 +47,7 @@ export default function AdminPagesClient() {
           onClick={() => {
             setEditBlock(block);
           }}
+          data-testid={`edit-block-${block.id}-button`}
         />
       </TableCell>
     </TableRow>
@@ -68,7 +69,7 @@ export default function AdminPagesClient() {
             }}
           />
         )}
-        <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent}>
+        <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent} data-testid="reusable-blocks-display-box">
           <Table>
             <TableHead>
               <TableRow>

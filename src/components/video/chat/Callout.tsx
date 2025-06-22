@@ -27,7 +27,7 @@ export const Callout: React.FC<Props> = (props) => {
     <InputLabel htmlFor="calloutText">Callout Message</InputLabel>
     <OutlinedInput id="calloutText" name="calloutText" type="text" label="Callout Message" value={message} onChange={handleChange} autoComplete="off"
       endAdornment={<>
-        <Button variant="contained" onClick={handleUpdate}>Update</Button>
+        <Button variant="contained" onClick={handleUpdate} data-testid="callout-update-button">Update</Button>
       </>}
     />
   </FormControl>)

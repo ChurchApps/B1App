@@ -36,7 +36,7 @@ export const Team: React.FC<Props> = (props) => {
     return rows;
   }
 
-  return (<DisplayBox headerIcon="people" headerText={props.name}>
+  return (<DisplayBox headerIcon="people" headerText={props.name} data-testid={`team-${props.name.toLowerCase().replace(/\s+/g, '-')}-display-box`}>
     <Table size="small">
       <TableBody>
         {getTeam()}

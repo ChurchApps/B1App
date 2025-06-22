@@ -6,8 +6,7 @@ export class AdminBlocksTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate directly to blocks admin
-    await TestHelpers.login(page);
-    await page.goto('/admin/site/blocks');
+    await TestHelpers.login(page, '/admin/site/blocks');
     await page.waitForLoadState('domcontentloaded');
     
     // REQUIRED: Verify we're on the blocks page
@@ -30,7 +29,7 @@ export class AdminBlocksTests {
     console.log('Block creation form opened');
     
     // REQUIRED: Fill in block name
-    const nameField = page.locator('input[name="name"]').first();
+    const nameField = page.locator('[data-testid="block-name-input"]');
     await expect(nameField).toBeVisible({ timeout: 3000 });
     await nameField.click();
     await nameField.fill('Test Block');
@@ -38,27 +37,15 @@ export class AdminBlocksTests {
     console.log('Filled block name: Test Block');
     
     // REQUIRED: Select block type (elementBlock)
-    const blockTypeSelect = page.locator('select[name="blockType"], #blockType').first();
-    if (await blockTypeSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await blockTypeSelect.click();
-      await page.waitForTimeout(500);
-      
-      // Select elementBlock option
-      const elementBlockOption = page.locator('li[data-value="elementBlock"], option[value="elementBlock"]').first();
-      await elementBlockOption.click();
-      console.log('Selected elementBlock type');
-    } else {
-      // Try Material-UI Select approach
-      const muiSelect = page.locator('[role="combobox"]').first();
-      if (await muiSelect.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await muiSelect.click();
-        await page.waitForTimeout(500);
-        
-        const elementOption = page.locator('li:has-text("Element"), [data-value="elementBlock"]').first();
-        await elementOption.click();
-        console.log('Selected elementBlock type via MUI select');
-      }
-    }
+    const blockTypeSelect = page.locator('[data-testid="block-type-select"]');
+    await expect(blockTypeSelect).toBeVisible({ timeout: 3000 });
+    await blockTypeSelect.click();
+    await page.waitForTimeout(500);
+    
+    // Select elementBlock option
+    const elementBlockOption = page.locator('[data-testid="block-type-element"]');
+    await elementBlockOption.click();
+    console.log('Selected elementBlock type');
     
     // REQUIRED: Save the block (InputBox save button)
     const saveButton = page.locator('button:has-text("Save")').first();
@@ -86,8 +73,7 @@ export class AdminBlocksTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate directly to blocks admin
-    await TestHelpers.login(page);
-    await page.goto('/admin/site/blocks');
+    await TestHelpers.login(page, '/admin/site/blocks');
     await page.waitForLoadState('domcontentloaded');
     
     // REQUIRED: Test Block must exist in the list
@@ -164,8 +150,7 @@ export class AdminBlocksTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to pages admin to create a test page for using the block
-    await TestHelpers.login(page);
-    await page.goto('/admin/site');
+    await TestHelpers.login(page, '/admin/site');
     await page.waitForLoadState('domcontentloaded');
     
     // Create a simple test page first
@@ -181,7 +166,7 @@ export class AdminBlocksTests {
       const pageForm = page.locator('#pageDetailsBox, [role="dialog"], .modal').first();
       if (await pageForm.isVisible({ timeout: 3000 }).catch(() => false)) {
         // Fill in page title first
-        const titleField = page.locator('input[name="title"]').first();
+        const titleField = page.locator('[data-testid="page-title-input"]');
         if (await titleField.isVisible({ timeout: 3000 }).catch(() => false)) {
           await titleField.click();
           await titleField.fill('Block Test Page');
@@ -238,8 +223,7 @@ export class AdminBlocksTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate directly to blocks admin
-    await TestHelpers.login(page);
-    await page.goto('/admin/site/blocks');
+    await TestHelpers.login(page, '/admin/site/blocks');
     await page.waitForLoadState('domcontentloaded');
     
     console.log('Step 1: Attempting to delete test block');

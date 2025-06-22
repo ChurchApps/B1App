@@ -44,7 +44,7 @@ export const Household: React.FC<Props> = (props) => {
   React.useEffect(loadMembers, [props.person]);
 
   return (
-    <DisplayBox id="householdBox" headerIcon="people" headerText="Household">
+    <DisplayBox id="householdBox" headerIcon="people" headerText="Household" data-testid="household-display-box">
       {getMembers()}
     </DisplayBox>
   )

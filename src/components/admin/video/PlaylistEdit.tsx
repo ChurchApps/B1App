@@ -67,13 +67,13 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
   React.useEffect(handlePhotoUpdated, [props.updatedPhoto, currentPlaylist]); //eslint-disable-line
 
   return (
-    <InputBox headerIcon="calendar_month" headerText="Edit Playlist" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/playlists">
+    <InputBox headerIcon="calendar_month" headerText="Edit Playlist" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} help="b1/streaming/playlists" data-testid="edit-playlist-inputbox">
       <ErrorMessages errors={errors} />
       <>
-        <TextField fullWidth label="Title" name="title" value={currentPlaylist?.title || ""} onChange={handleChange} />
-        <TextField fullWidth multiline label="Description" name="description" value={currentPlaylist?.description || ""} onChange={handleChange} />
+        <TextField fullWidth label="Title" name="title" value={currentPlaylist?.title || ""} onChange={handleChange} data-testid="playlist-title-input" />
+        <TextField fullWidth multiline label="Description" name="description" value={currentPlaylist?.description || ""} onChange={handleChange} data-testid="playlist-description-input" />
         <label style={{ width: "100%" }}>Publish Date</label>
-        <TextField fullWidth type="date" name="publishDate" value={(currentPlaylist?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentPlaylist?.publishDate)) : ""} onChange={handleChange} />
+        <TextField fullWidth type="date" name="publishDate" value={(currentPlaylist?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentPlaylist?.publishDate)) : ""} onChange={handleChange} data-testid="playlist-publish-date-input" />
         <a href="about:blank" onClick={(e) => { e.preventDefault(); props.showPhotoEditor("playlist", currentPlaylist?.thumbnail || ""); }}>
           <img src={currentPlaylist?.thumbnail || "/images/no-image.png"} className="img-fluid" style={{ marginTop: 20, maxWidth: "500px" }} alt="thumbnail"></img>
         </a>

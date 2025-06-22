@@ -70,8 +70,8 @@ export function CuratedEventCalendar(props: Props) {
   return (
     <div>
       <Stack direction="row" justifyContent="space-between" alignItems="center" marginBottom={"17px"} marginTop={"12px"}>
-        <Button startIcon={<Icon>link</Icon>} title="Copy the URL and add this to your Google Calendar (or other)" size="small" variant="contained" onClick={(e) => { e.preventDefault(); handleSubscribe(); }}>Subscribe</Button>
-        {props.mode === "edit" && <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }}>Add</Button>}
+        <Button startIcon={<Icon>link</Icon>} title="Copy the URL and add this to your Google Calendar (or other)" size="small" variant="contained" onClick={(e) => { e.preventDefault(); handleSubscribe(); }} data-testid="calendar-subscribe-button">Subscribe</Button>
+        {props.mode === "edit" && <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }} data-testid="calendar-add-event-button">Add</Button>}
       </Stack>
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />
       {open && props.mode === "edit" && <EditCalendarEventModal onDone={handleDone} churchId={props.churchId} curatedCalendarId={props.curatedCalendarId} />}

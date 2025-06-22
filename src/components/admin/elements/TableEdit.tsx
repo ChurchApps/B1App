@@ -62,7 +62,7 @@ export function TableEdit(props: Props) {
         data.contents = c;
         props.onRealtimeChange({ ...props.parsedData, contents: c });
       }} />
-      <Button style={{float:"right"}} onClick={() => { setEditCellIdx(null) }}>Done</Button>
+      <Button style={{float:"right"}} onClick={() => { setEditCellIdx(null) }} data-testid="table-cell-done-button">Done</Button>
       <br />
     </>)
   }
@@ -73,7 +73,7 @@ export function TableEdit(props: Props) {
       let row: JSX.Element[] = [];
       for (let j = 0; j < cols; j++) {
         if (markdown) row.push(<TableCell key={j} style={{cursor:"pointer"}} onClick={() => { setEditCellIdx([i,j]) }}><MarkdownPreviewLight value={contents[i][j] || "(empty)"} /></TableCell>);
-        else row.push(<TableCell key={j}><TextField fullWidth size="small" label="" style={{margin:0}} name={"cell-" + i + "-" + j} value={contents[i][j]} onChange={handleChange} /></TableCell>);
+        else row.push(<TableCell key={j}><TextField fullWidth size="small" label="" style={{margin:0}} name={"cell-" + i + "-" + j} value={contents[i][j]} onChange={handleChange} data-testid={`table-cell-${i}-${j}-input`} /></TableCell>);
       }
       result.push(<TableRow key={i}>{row}</TableRow>);
     }
@@ -84,10 +84,10 @@ export function TableEdit(props: Props) {
     <>
       <Grid container columnSpacing={3}>
         <Grid item md={6} xs={12}>
-          <TextField fullWidth size="small" label="Rows" name="rows" value={rows} onChange={handleChange} />
+          <TextField fullWidth size="small" label="Rows" name="rows" value={rows} onChange={handleChange} data-testid="table-rows-input" />
         </Grid>
         <Grid item md={6} xs={12}>
-          <TextField fullWidth size="small" label="Columns" name="columns" value={cols} onChange={handleChange} />
+          <TextField fullWidth size="small" label="Columns" name="columns" value={cols} onChange={handleChange} data-testid="table-columns-input" />
         </Grid>
         <Grid item md={6} xs={12}>
           <FormControl fullWidth size="small">

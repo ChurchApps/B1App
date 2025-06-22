@@ -48,7 +48,7 @@ export const UpcomingDates: React.FC<Props> = (props) => {
     return rows;
   }
 
-  return (<DisplayBox headerIcon="event" headerText="Upcoming Dates">
+  return (<DisplayBox headerIcon="event" headerText="Upcoming Dates" data-testid="upcoming-dates-display-box">
     <Table>
       <TableHead>
         <TableRow>

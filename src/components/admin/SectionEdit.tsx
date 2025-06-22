@@ -146,6 +146,7 @@ export function SectionEdit(props: Props) {
         saveFunction={handleSave}
         cancelFunction={handleCancel}
         deleteFunction={handleDelete}
+        data-testid="edit-section-inputbox"
         headerActionContent={
           props.section.id && (
             <>

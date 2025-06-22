@@ -46,7 +46,7 @@ export function DisplayEventModal(props: Props) {
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Edit Event
             </Typography>
-            <Button autoFocus color="inherit" onClick={props.onEdit}>
+            <Button autoFocus color="inherit" onClick={props.onEdit} data-testid="event-edit-button">
               Edit
             </Button>
           </Toolbar>

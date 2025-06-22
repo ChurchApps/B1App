@@ -6,22 +6,21 @@ export class AdminVideoTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin video
-    await TestHelpers.login(page);
-    await page.goto('/admin/video');
+    await TestHelpers.login(page, '/admin/video');
     await page.waitForLoadState('domcontentloaded');
     
     // Verify we're on the admin video page
     expect(page.url()).toContain('/admin/video');
     await expect(page.locator('text=Manage Sermons').first()).toBeVisible();
     
-    // Look for the add button (+ icon)
-    const addButton = page.locator('button[aria-label="addButton"], #addBtnGroup').first();
+    // Look for the add button using data-testid
+    const addButton = page.locator('[data-testid="add-sermon-menu-button"]');
     await expect(addButton).toBeVisible({ timeout: 5000 });
     await addButton.click();
     await page.waitForTimeout(1000);
     
     // Look for the menu that appears after clicking add
-    const addSermonMenuItem = page.locator('text=Add Sermon').first();
+    const addSermonMenuItem = page.locator('[data-testid="add-sermon-item"]');
     await expect(addSermonMenuItem).toBeVisible({ timeout: 3000 });
     await addSermonMenuItem.click();
     console.log('Selected Add Sermon from menu');
@@ -29,14 +28,14 @@ export class AdminVideoTests {
     await page.waitForTimeout(2000);
     
     // REQUIRED: Sermon edit form must be accessible
-    const titleField = page.locator('input[name="title"], input[placeholder*="title"], input[placeholder*="Title"]').first();
+    const titleField = page.locator('[data-testid="sermon-title-input"]');
     await expect(titleField).toBeVisible({ timeout: 5000 });
     await titleField.click();
     await titleField.fill('Test Sermon');
     await expect(titleField).toHaveValue('Test Sermon');
     
     // Fill description field if available
-    const descriptionField = page.locator('textarea[name="description"], textarea[placeholder*="description"], textarea[placeholder*="Description"]').first();
+    const descriptionField = page.locator('[data-testid="sermon-description-input"]');
     if (await descriptionField.isVisible({ timeout: 3000 }).catch(() => false)) {
       await descriptionField.click();
       await descriptionField.fill('This is a test sermon for automated testing');
@@ -62,8 +61,7 @@ export class AdminVideoTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin video
-    await TestHelpers.login(page);
-    await page.goto('/admin/video');
+    await TestHelpers.login(page, '/admin/video');
     await page.waitForLoadState('domcontentloaded');
     
     // Find the Test Sermon in the list and click the edit icon
@@ -71,8 +69,8 @@ export class AdminVideoTests {
     if (await testSermonRow.isVisible({ timeout: 5000 }).catch(() => false)) {
       console.log('Found Test Sermon row');
       
-      // Click the edit icon (pencil icon)
-      const editIcon = testSermonRow.locator('a:has([data-testid="EditIcon"]), a:has(svg), a').last();
+      // Click the edit icon (pencil icon) - find the edit link in this row
+      const editIcon = testSermonRow.locator('a[data-testid^="edit-sermon-"]');
       await editIcon.click();
       await page.waitForTimeout(2000);
       
@@ -80,7 +78,7 @@ export class AdminVideoTests {
       
       // We should now be in the sermon edit form
       // Update the title
-      const titleField = page.locator('input[name="title"], input[value*="Test Sermon"]').first();
+      const titleField = page.locator('[data-testid="sermon-title-input"]');
       if (await titleField.isVisible({ timeout: 3000 }).catch(() => false)) {
         await titleField.click();
         await titleField.selectText();
@@ -89,7 +87,7 @@ export class AdminVideoTests {
       }
       
       // Update the description
-      const descriptionField = page.locator('textarea[name="description"]').first();
+      const descriptionField = page.locator('[data-testid="sermon-description-input"]');
       if (await descriptionField.isVisible({ timeout: 3000 }).catch(() => false)) {
         await descriptionField.click();
         await descriptionField.selectText();
@@ -244,8 +242,7 @@ export class AdminVideoTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to admin video
-    await TestHelpers.login(page);
-    await page.goto('/admin/video');
+    await TestHelpers.login(page, '/admin/video');
     await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(3000);
     

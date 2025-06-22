@@ -40,7 +40,7 @@ export const Person: React.FC<Props> = (props) => {
     requestedChanges.map((t) => {
       const changes = JSON.parse(t.data);
       result.push (
-        <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText="Profile Changes">
+        <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText="Profile Changes" data-testid={`profile-changes-${t.id}`}>
           <Typography fontSize="13px" fontStyle="italic" sx={{ textIndent: "10px" }}>Requested by {t.createdByLabel}</Typography>
           <Table size="small" sx={{ width: "80%", textIndent: "20px", marginTop: 2 }}>
             <TableHead>
@@ -93,7 +93,7 @@ export const Person: React.FC<Props> = (props) => {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()}>
+          <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />

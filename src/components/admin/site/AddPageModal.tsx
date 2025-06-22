@@ -118,7 +118,7 @@ export function AddPageModal(props: Props) {
 
   const getTemplateButton = (key:string, icon:string, text:string) => (
     <Grid xs={3} item>
-      <Button variant={(pageTemplate.toLowerCase() === key) ? "contained" : "outlined"} startIcon={<Icon>{icon}</Icon>} onClick={() => {selectTemplate(key)}} fullWidth>{text}</Button>
+      <Button variant={(pageTemplate.toLowerCase() === key) ? "contained" : "outlined"} startIcon={<Icon>{icon}</Icon>} onClick={() => {selectTemplate(key)}} fullWidth data-testid={`template-${key}-button`}>{text}</Button>
     </Grid>
   )
 
@@ -140,7 +140,7 @@ export function AddPageModal(props: Props) {
   else return (
 
     <Dialog open={true} onClose={props.onDone} className="dialogForm">
-      <InputBox id="dialogForm" headerText={(pageTemplate==="link") ? "New Link" : "New Page"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel}>
+      <InputBox id="dialogForm" headerText={(pageTemplate==="link") ? "New Link" : "New Page"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} data-testid="add-page-modal">
         <ErrorMessages errors={errors} />
 
         <InputLabel>Page Type</InputLabel>
@@ -158,7 +158,7 @@ export function AddPageModal(props: Props) {
         <Grid container spacing={2}>
           {(pageTemplate !== "link")
           && <Grid xs={(props.mode === "navigation") ? 6 : 12} item>
-            <TextField size="small" fullWidth label="Page Title" name="title" value={page.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+            <TextField size="small" fullWidth label="Page Title" name="title" value={page.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="page-title-input" />
           </Grid>
           }
           {(pageTemplate === "link")

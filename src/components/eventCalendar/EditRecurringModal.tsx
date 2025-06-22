@@ -21,8 +21,8 @@ export function EditRecurringModal(props: Props) {
         </RadioGroup>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { props.onDone("none") }}>Cancel</Button>
-        <Button onClick={() => { props.onDone(editType) }} color="primary">Save</Button>
+        <Button onClick={() => { props.onDone("none") }} data-testid="edit-recurring-cancel-button">Cancel</Button>
+        <Button onClick={() => { props.onDone(editType) }} color="primary" data-testid="edit-recurring-save-button">Save</Button>
       </DialogActions>
     </Dialog>
   );
