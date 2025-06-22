@@ -36,7 +36,7 @@ export class AdminSiteTests {
     console.log('✅ Selected About Us template');
     
     // REQUIRED: Title field must be present and editable
-    const titleField = page.locator('[data-testid="page-title-input"]');
+    const titleField = page.locator('[data-testid="page-title-input"] input, input[name="title"]');
     await expect(titleField).toBeVisible({ timeout: 5000 });
     await titleField.click();
     await titleField.fill('Test Page');
@@ -45,7 +45,7 @@ export class AdminSiteTests {
     await expect(titleField).toHaveValue('Test Page');
     
     // REQUIRED: Save button must be present and functional
-    const saveButton = page.locator('button:has-text("SAVE"), button:has-text("Save")').first();
+    const saveButton = page.locator('[role="dialog"] button:has-text("Save"), .MuiDialog-root button:has-text("Save"), button:has-text("SAVE"), button:has-text("Save")').first();
     await expect(saveButton).toBeVisible({ timeout: 5000 });
     await saveButton.click();
     await page.waitForTimeout(3000);
