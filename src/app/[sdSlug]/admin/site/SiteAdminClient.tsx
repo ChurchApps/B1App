@@ -34,8 +34,8 @@ export function SiteAdminClient(props: WrapperPageProps) {
     items.forEach((item) => {
       result.push(<TableRow key={item.url}>
         <TableCell>{item.custom
-          ? <SmallButton icon="edit" onClick={() => {router.push("/admin/site/pages/preview/" + item.pageId) }} />
-          : <SmallButton icon="difference" onClick={() => { if (confirm("Would you like to convert this auto-generated page to a custom page?")) {  setRequestedSlug(item.url); setAddMode("unlinked"); }  }} color="secondary" />
+          ? <SmallButton icon="edit" onClick={() => {router.push("/admin/site/pages/preview/" + item.pageId) }} data-testid="edit-page-button" />
+          : <SmallButton icon="difference" onClick={() => { if (confirm("Would you like to convert this auto-generated page to a custom page?")) {  setRequestedSlug(item.url); setAddMode("unlinked"); }  }} color="secondary" data-testid="convert-page-button" />
         }</TableCell>
         <TableCell>{getExpandControl(item, level)}{item.url}</TableCell>
         <TableCell>{item.title}</TableCell>
@@ -67,7 +67,7 @@ export function SiteAdminClient(props: WrapperPageProps) {
         <Banner><h1>Website</h1></Banner>
         <SiteAdminWrapper config={props.config}>
           <div id="mainContent">
-            <DisplayBox headerText="Pages" headerIcon="article" editContent={<SmallButton icon="add" onClick={() => { setAddMode("unlinked"); }} />}>
+            <DisplayBox headerText="Pages" headerIcon="article" editContent={<SmallButton icon="add" onClick={() => { setAddMode("unlinked"); }} data-testid="add-page-button" />}>
               <p>Below is a list of custom and auto-generated pages.  You can add new pages, edit existing ones, or convert auto-generate pages to custom pages.</p>
               <Table size="small">
                 <TableHead>

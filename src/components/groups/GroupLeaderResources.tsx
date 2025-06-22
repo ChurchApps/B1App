@@ -101,6 +101,7 @@ export const GroupLeaderResources: React.FC<Props> = (props) => {
           onClick={() => {
             handleDelete(file);
           }}
+          data-testid={`delete-leader-file-${file.id}`}
         />
       </TableCell>
     </TableRow>
@@ -119,6 +120,7 @@ export const GroupLeaderResources: React.FC<Props> = (props) => {
           onClick={() => {
             handleLinkDelete(link);
           }}
+          data-testid={`delete-leader-link-${link.id}`}
         />
       </TableCell>
     </TableRow>
@@ -126,7 +128,7 @@ export const GroupLeaderResources: React.FC<Props> = (props) => {
 
   return (
     <>
-      <DisplayBox headerText="Files" headerIcon="description">
+      <DisplayBox headerText="Files" headerIcon="description" data-testid="group-leader-files-display-box">
         {links && links.length > 0 && (
           <>
             <Divider variant="middle" textAlign="center" sx={{ marginTop: 3, marginBottom: 3 }}>
@@ -170,7 +172,7 @@ export const GroupLeaderResources: React.FC<Props> = (props) => {
       />
 
       {/* File Upload */}
-      <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload">
+      <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload" data-testid="group-leader-upload-inputbox">
         {getStorage()}
         <p>
           100 MB of storage space is provided for free for storing PDFs and

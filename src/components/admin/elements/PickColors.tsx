@@ -101,7 +101,7 @@ export function PickColors(props: Props) {
     let result: JSX.Element[] = [
       <FormControl fullWidth>
         <InputLabel>Background Type</InputLabel>
-        <Select fullWidth size="small" label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange}>
+        <Select fullWidth size="small" label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange} data-testid="background-type-select">
           <MenuItem value="color">Color</MenuItem>
           <MenuItem value="image">Image</MenuItem>
           <MenuItem value="youtube">Youtube Video</MenuItem>
@@ -124,7 +124,7 @@ export function PickColors(props: Props) {
     } else if (backgroundType === "image") {
       result.push(<>
         <img src={props.background} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="background image" /><br />
-        <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+        <Button variant="contained" onClick={() => setSelectPhotoField("photo")} data-testid="select-photo-button">Select photo</Button>
         {props?.onChange && (
           <TextField fullWidth size="small" label="Background Opacity" name="backgroundOpacity" value={props?.backgroundOpacity || "0.55"} onChange={props.onChange}
             type="number" sx={{ marginTop: 2 }} helperText={<>The opacity of black gradient layer on top of the image.<br />Max value: 1</>} FormHelperTextProps={{ sx: { marginLeft: 1 } }} InputProps={{ inputProps: { min: "0", max: "1", step: "1" } }}

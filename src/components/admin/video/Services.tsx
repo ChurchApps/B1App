@@ -9,7 +9,7 @@ export const Services: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   const handleUpdated = () => { setCurrentService(null); loadData(); }
-  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} />
+  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} data-testid="add-service-button" />
   const loadData = () => {
     ApiHelper.get("/streamingServices", "ContentApi").then(data => {
       data.forEach((s: StreamingServiceInterface) => {
@@ -69,7 +69,7 @@ export const Services: React.FC = () => {
 
   if (currentService !== null) return <ServiceEdit currentService={currentService} updatedFunction={handleUpdated} />;
   else return (
-    <DisplayBox headerIcon="calendar_month" headerText="Services" editContent={getEditContent()} id="servicesBox">
+    <DisplayBox headerIcon="calendar_month" headerText="Services" editContent={getEditContent()} id="servicesBox" data-testid="services-display-box">
       {getTable()}
     </DisplayBox>
   );

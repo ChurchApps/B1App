@@ -120,7 +120,7 @@ export function EditCalendarEventModal(props: Props) {
                 ? (
                   <FormControl fullWidth>
                     <InputLabel>Select a Group</InputLabel>
-                    <Select fullWidth label="Select a Group" value={selectedGroupId} onChange={(e: SelectChangeEvent) => setSelectedGroupId(e.target.value as string)}>
+                    <Select fullWidth label="Select a Group" value={selectedGroupId} onChange={(e: SelectChangeEvent) => setSelectedGroupId(e.target.value as string)} data-testid="calendar-group-select">
                       {groups.map((group) => <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>)}
                     </Select>
                   </FormControl>
@@ -153,8 +153,8 @@ export function EditCalendarEventModal(props: Props) {
         )}
       </DialogContent>
       <DialogActions>
-        <Button variant="text" onClick={handleDone}>cancel</Button>
-        <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId || (addType === "events" && eventIdsList.length === 0)}>Save</Button>
+        <Button variant="text" onClick={handleDone} data-testid="calendar-edit-cancel-button">cancel</Button>
+        <Button variant="contained" onClick={handleSave} disabled={!selectedGroupId || (addType === "events" && eventIdsList.length === 0)} data-testid="calendar-edit-save-button">Save</Button>
       </DialogActions>
     </Dialog>
   );

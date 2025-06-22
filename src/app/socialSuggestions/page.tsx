@@ -82,6 +82,7 @@ export default function SocialSuggestions() {
               size="small"
               onChange={(e) => {setUrl(e.target.value);}}
               value={url}
+              data-testid="youtube-url-input"
             />
             <Typography>videoId: {getYouTubeKey(url)}</Typography>
             <br />
@@ -90,6 +91,7 @@ export default function SocialSuggestions() {
               color="primary"
               onClick={handleFetchPosts}
               disabled={loading || !url || url === ""}
+              data-testid="fetch-posts-button"
             >
               {loading ? "Loading.." : "Fetch Posts"}
             </Button>
@@ -110,13 +112,14 @@ export default function SocialSuggestions() {
               name="url"
               onChange={handleChange}
               value={lessonOutline.url}
+              data-testid="sermon-script-url-input"
             />
             <br />
             <br />
             <Typography fontSize={14} fontStyle="italic">Please enter Sermon Title and Author just in case if the link doesn't work or it isn't accesible to public.</Typography>
             <Grid container spacing={2}>
-              <Grid item xs={6}><TextField size="small" fullWidth required label="Sermon Title" name="title" onChange={handleChange} value={lessonOutline.title} /></Grid>
-              <Grid item xs={6}><TextField size="small" fullWidth required label="Author / Speaker" name="author" onChange={handleChange} value={lessonOutline.author} /></Grid>
+              <Grid item xs={6}><TextField size="small" fullWidth required label="Sermon Title" name="title" onChange={handleChange} value={lessonOutline.title} data-testid="sermon-title-input" /></Grid>
+              <Grid item xs={6}><TextField size="small" fullWidth required label="Author / Speaker" name="author" onChange={handleChange} value={lessonOutline.author} data-testid="sermon-author-input" /></Grid>
             </Grid>
             <br />
             <Button
@@ -124,6 +127,7 @@ export default function SocialSuggestions() {
               color="primary"
               onClick={handleOutlineFetch}
               disabled={scriptLoading || !lessonOutline.url || lessonOutline.url === "" || !lessonOutline.title || lessonOutline.title === "" || !lessonOutline.author || lessonOutline.author === ""}
+              data-testid="fetch-outline-button"
             >
               {scriptLoading ? "Loading.." : "Fetch Outline"}
             </Button>

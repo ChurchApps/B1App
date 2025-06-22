@@ -242,7 +242,7 @@ export default function ContentEditor(props: Props) {
     <div style={{ backgroundColor: "#FFF", position: "sticky", top: 0, width: "100%", zIndex: 1000, boxShadow: "0px 2px 2px black", marginBottom: 10 }}>
       <Grid container spacing={2}>
         <Grid item xs={4} style={{ paddingLeft: 40, paddingTop: 8 }}>
-          <SmallButton icon={"done"} text="Done" onClick={handleDone} />
+          <SmallButton icon={"done"} text="Done" onClick={handleDone} data-testid="content-editor-done-button" />
         </Grid>
         <Grid item xs={4} style={{ textAlign: "center" }}>
           <b>

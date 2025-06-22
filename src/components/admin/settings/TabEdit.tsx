@@ -83,7 +83,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
       return (
         <FormControl fullWidth>
           <InputLabel id="page">Page</InputLabel>
-          <Select labelId="page" label="Page" name="page" value={currentTab?.linkData} onChange={handleChange}>
+          <Select labelId="page" label="Page" name="page" value={currentTab?.linkData} onChange={handleChange} data-testid="page-select">
             {options}
           </Select>
         </FormControl>
@@ -108,17 +108,17 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
 
   return (
     <>
-      <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={updatedFunction} deleteFunction={!UniqueIdHelper.isMissing(currentTab?.id) ? handleDelete : null}>
+      <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={updatedFunction} deleteFunction={!UniqueIdHelper.isMissing(currentTab?.id) ? handleDelete : null} data-testid="tab-edit-inputbox">
         <Typography sx={{ marginTop: 2, marginBottom: 1 }}>Tab Preview:</Typography>
         <div>
           <TabPreview tab={currentTab} />
-          <Button onClick={() => { setShowLibrary(true); }}>Change Image </Button>
+          <Button onClick={() => { setShowLibrary(true); }} data-testid="change-image-button">Change Image </Button>
         </div>
         <Stack direction="row" pt={2}>
           <TextField fullWidth margin="none" label="Text" name="text" type="text" value={currentTab?.text || ""} onChange={handleChange}
             InputProps={{
               endAdornment: (<div className="input-group-append">
-                <Button variant="contained" endIcon={<Icon>arrow_drop_down</Icon>} onClick={() => setIsModalOpen(true)}>
+                <Button variant="contained" endIcon={<Icon>arrow_drop_down</Icon>} onClick={() => setIsModalOpen(true)} data-testid="icon-dropdown-button">
                   <Icon>{currentTab?.icon}</Icon>
                 </Button>
               </div>)

@@ -62,7 +62,7 @@ export function BlockEdit(props: Props) {
   if (!block) return <></>
   else return (
     <>
-      <InputBox id="blockDetailsBox" headerText="Edit Block" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
+      <InputBox id="blockDetailsBox" headerText="Edit Block" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} data-testid="edit-block-inputbox">
         <ErrorMessages errors={errors} />
         <TextField fullWidth label="Name" name="name" value={block.name} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="block-name-input" aria-label="Block name" />
         <FormControl fullWidth>

@@ -76,16 +76,16 @@ export function GroupContact(props: Props) {
       <form>
         {(props.leaders?.length > 1) && <FormControl fullWidth>
           <InputLabel>Contact</InputLabel>
-          <Select fullWidth label="Contact" name="personId" value={formData.personId || ""} onChange={handleChange}>
+          <Select fullWidth label="Contact" name="personId" value={formData.personId || ""} onChange={handleChange} data-testid="group-contact-select">
             {getSelectLeaders()}
           </Select>
         </FormControl>}
-        <TextField fullWidth label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} />
-        <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} />
-        <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} />
-        <TextField fullWidth label="Phone Number" name="phone" value={formData.phone} onChange={handleChange} />
-        <TextField fullWidth label="Message" name="message" value={formData.message} onChange={handleChange} multiline />
-        <Button onClick={handleSubmit} id="conbtn" style={{ height: "50px", fontWeight: "bold", width: "40%", marginBottom: "10px" }}>Submit</Button>
+        <TextField fullWidth label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} data-testid="group-contact-first-name" />
+        <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} data-testid="group-contact-last-name" />
+        <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} data-testid="group-contact-email" />
+        <TextField fullWidth label="Phone Number" name="phone" value={formData.phone} onChange={handleChange} data-testid="group-contact-phone" />
+        <TextField fullWidth label="Message" name="message" value={formData.message} onChange={handleChange} multiline data-testid="group-contact-message" />
+        <Button onClick={handleSubmit} id="conbtn" style={{ height: "50px", fontWeight: "bold", width: "40%", marginBottom: "10px" }} data-testid="group-contact-submit-button">Submit</Button>
       </form>
 
       {isSubmitted && (

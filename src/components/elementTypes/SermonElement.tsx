@@ -49,6 +49,7 @@ export const SermonElement = ({ churchId, appearance }: Props) => {
           onClick={() => {
             setIsActive("playlists");
           }}
+          data-testid="sermon-playlists-button"
         >
           Playlists
         </Button>
@@ -62,6 +63,7 @@ export const SermonElement = ({ churchId, appearance }: Props) => {
             onClick={() => {
               setIsActive("sermons");
             }}
+            data-testid="sermon-topics-button"
           >
             {activePlaylist?.title}
           </Button>
@@ -76,6 +78,7 @@ export const SermonElement = ({ churchId, appearance }: Props) => {
             onClick={() => {
               setIsActive("video");
             }}
+            data-testid="sermon-watch-button"
           >
             {activeVideo?.title}
           </Button>

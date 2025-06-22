@@ -38,7 +38,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
         InputProps={{
           endAdornment: (
             <>
-              <Button size="small" variant="contained" onClick={handleUpdate}>update</Button>
+              <Button size="small" variant="contained" onClick={handleUpdate} data-testid="chat-name-update-button">update</Button>
               <IconButton color="error" size="small" onClick={() => { setEdit(false); setDisplayName(""); }}><CloseIcon fontSize="small" /></IconButton>
             </>
           ),
@@ -50,7 +50,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
       <>
         {currentUserName.trim() === "" || currentUserName === "Anonymous "
           ? (
-            <Button fullWidth size="small" startIcon={<DriveFileRenameOutlineIcon fontSize="small" />} onClick={() => setEdit(true)} sx={{ borderRadius: 0, height: "25px" }}>
+            <Button fullWidth size="small" startIcon={<DriveFileRenameOutlineIcon fontSize="small" />} onClick={() => setEdit(true)} sx={{ borderRadius: 0, height: "25px" }} data-testid="edit-name-button">
             Change Name
             </Button>
           )

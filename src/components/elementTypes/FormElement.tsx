@@ -49,6 +49,7 @@ export const FormElement = (props: Props) => {
           variant="text"
           size="small"
           onClick={() => setIsFormSubmitted(false)}
+          data-testid="form-fill-again-button"
         >
           Fill Again
         </Button>

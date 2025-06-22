@@ -109,6 +109,7 @@ export function Groups({ selectedHandler }: Props) {
         onClick={() => {
           selectedHandler({ id: "", name: "NONE" });
         }}
+        data-testid="checkin-none-button"
       >
         NONE
       </Button>

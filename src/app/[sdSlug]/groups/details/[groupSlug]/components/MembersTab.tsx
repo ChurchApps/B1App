@@ -56,7 +56,7 @@ export function MembersTab(props: Props) {
           </TableCell>
           {props.isLeader
             && <TableCell style={{ textAlign: "right" }}>
-              <SmallButton icon="person_remove" toolTip="Remove" onClick={() => handleRemove(gm)} color="error" />
+              <SmallButton icon="person_remove" toolTip="Remove" onClick={() => handleRemove(gm)} color="error" data-testid={`remove-member-${gm.personId}-button`} />
             </TableCell>}
         </TableRow>
       );

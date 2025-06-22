@@ -43,7 +43,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
     for (let i = 0; i < visitSessions.length; i++) {
       const vs = visitSessions[i];
       //let editLink = (canEdit) ? (<a href="about:blank" onClick={handleRemove} className="text-danger" data-personid={vs.visit.personId}><Icon>person_remove</Icon> Remove</a>) : null;
-      let editLink = (canEdit) ? <SmallButton icon="person_remove" text="Remove" onClick={() => handleRemove(vs)} color="error" /> : <></>
+      let editLink = (canEdit) ? <SmallButton icon="person_remove" text="Remove" onClick={() => handleRemove(vs)} color="error" data-testid="remove-session-member-button" /> : <></>
       let person = ArrayHelper.getOne(people, "id", vs.visit.personId);
       if (person) {
         result.push(
@@ -75,13 +75,13 @@ export const GroupSessions: React.FC<Props> = (props) => {
         <Grid item>
           <FormControl style={{ width: 140, marginTop: 0 }} size="small">
             <InputLabel id="sessions">{Locale.label("Session")}</InputLabel>
-            <Select fullWidth labelId="sessions" label={Locale.label("groups.groupSessions.session")} value={session?.id} onChange={selectSession}>
+            <Select fullWidth labelId="sessions" label={Locale.label("groups.groupSessions.session")} value={session?.id} onChange={selectSession} data-testid="group-sessions-select">
               {getSessionOptions()}
             </Select>
           </FormControl>
         </Grid>
         <Grid item>
-          <Button variant="contained" data-cy="add-service-time" onClick={handleAdd}><Icon>calendar_month</Icon> {Locale.label("New")}</Button>
+          <Button variant="contained" data-cy="add-service-time" onClick={handleAdd} data-testid="add-service-time-button"><Icon>calendar_month</Icon> {Locale.label("New")}</Button>
         </Grid>
       </Grid>
     );
