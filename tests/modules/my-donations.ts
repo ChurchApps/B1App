@@ -6,8 +6,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Verify we're on the Donations page
@@ -21,8 +20,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for initial load
@@ -35,15 +33,15 @@ export class MyDonationsTests {
     console.log('✅ Page title verified');
     
     // Wait for loading to complete
-    const loadingIndicators = page.locator('[data-testid="loading"]');
+    const loadingIndicators = page.locator('[data-testid="donations-loading"]');
     const loadingCount = await loadingIndicators.count();
     if (loadingCount > 0) {
       await loadingIndicators.first().waitFor({ state: 'hidden', timeout: 15000 });
     }
     
     // REQUIRED: Core sections must be present
-    const donationsHistory = page.locator('h2:has-text("Donations"), [data-testid="donations-table"]').first();
-    const paymentMethods = page.locator('h2:has-text("Payment Methods"), [data-testid="payment-methods"]').first();
+    const donationsHistory = page.locator('[data-testid="donations-display-box"]');
+    const paymentMethods = page.locator('[data-testid="payment-methods"]');
     
     await expect(donationsHistory).toBeVisible({ timeout: 10000 });
     console.log('✅ Donations history section found');
@@ -107,8 +105,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for page to fully load
@@ -117,7 +114,7 @@ export class MyDonationsTests {
     console.log('Testing add payment method functionality');
     
     // Wait for loading indicators to disappear
-    const loadingIndicators = page.locator('[data-testid="loading"]');
+    const loadingIndicators = page.locator('[data-testid="payment-methods-loading"]');
     const loadingCount = await loadingIndicators.count();
     if (loadingCount > 0) {
       await loadingIndicators.first().waitFor({ state: 'hidden', timeout: 15000 });
@@ -451,8 +448,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for page to fully load
@@ -474,7 +470,7 @@ export class MyDonationsTests {
     await page.waitForTimeout(2000);
     
     // REQUIRED: Find donation amount input after form opens
-    const amountInput = page.locator('input[type="number"], input[name*="amount"], input[placeholder*="amount"]').first();
+    const amountInput = page.locator('[data-testid="donation-form"] input[type="number"], input[name*="amount"], input[placeholder*="amount"]').first();
     await expect(amountInput).toBeVisible({ timeout: 10000 });
     console.log('✅ Donation amount input found');
     
@@ -591,8 +587,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for page to fully load
@@ -601,7 +596,7 @@ export class MyDonationsTests {
     console.log('Testing donation history verification');
     
     // REQUIRED: Donations history section must exist
-    const donationsSection = page.locator('h2:has-text("Donations"), [data-testid="donations-table"]').first();
+    const donationsSection = page.locator('[data-testid="donations-display-box"]');
     await expect(donationsSection).toBeVisible({ timeout: 10000 });
     console.log('✅ Donations history section found');
     
@@ -665,8 +660,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for page to fully load
@@ -785,8 +779,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for page to fully load
@@ -795,7 +788,7 @@ export class MyDonationsTests {
     console.log('Testing delete recurring donation functionality');
     
     // REQUIRED: Recurring donations section must exist
-    const recurringSection = page.locator('h2:has-text("Recurring"), [data-testid="recurring-donations"]').first();
+    const recurringSection = page.locator('[data-testid="recurring-donations"]');
     await expect(recurringSection).toBeVisible({ timeout: 10000 });
     console.log('✅ Recurring donations section found');
     
@@ -896,8 +889,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for page to fully load
@@ -906,7 +898,7 @@ export class MyDonationsTests {
     console.log('Testing delete payment method functionality');
     
     // REQUIRED: Payment methods section must exist
-    const paymentMethodsSection = page.locator('h2:has-text("Payment Methods"), [data-testid="payment-methods"]').first();
+    const paymentMethodsSection = page.locator('[data-testid="payment-methods"]');
     await expect(paymentMethodsSection).toBeVisible({ timeout: 10000 });
     console.log('✅ Payment methods section found');
     
@@ -1007,8 +999,7 @@ export class MyDonationsTests {
     await TestHelpers.clearBrowserState(page);
     
     // Login and navigate to Donations
-    await TestHelpers.login(page);
-    await page.goto('/my/donate');
+    await TestHelpers.login(page, '/my/donate');
     await page.waitForLoadState('domcontentloaded');
     
     // Wait for page to fully load

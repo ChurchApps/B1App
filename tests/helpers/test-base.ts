@@ -36,6 +36,46 @@ export class TestHelpers {
     }
     await page.waitForLoadState('domcontentloaded');
   }
+
+  static async navigateToAdminPortal(page: Page) {
+    // Wait for the user menu to be available after login
+    const userMenuChip = page.locator('[data-testid="user-menu-chip"]');
+    await userMenuChip.waitFor({ state: 'visible', timeout: 10000 });
+    await userMenuChip.click();
+    
+    const adminPortalItem = page.locator('[data-testid="admin-portal-menu-item"]');
+    await adminPortalItem.waitFor({ state: 'visible', timeout: 5000 });
+    await adminPortalItem.click();
+    
+    await page.waitForURL('**/admin', { timeout: 15000 });
+    await page.waitForLoadState('domcontentloaded');
+  }
+
+  static async navigateToMemberPortal(page: Page) {
+    // Wait for the user menu to be available after login
+    const userMenuChip = page.locator('[data-testid="user-menu-chip"]');
+    await userMenuChip.waitFor({ state: 'visible', timeout: 10000 });
+    await userMenuChip.click();
+    
+    const memberPortalItem = page.locator('[data-testid="member-portal-menu-item"]');
+    await memberPortalItem.waitFor({ state: 'visible', timeout: 5000 });
+    await memberPortalItem.click();
+    
+    await page.waitForURL('**/my/**', { timeout: 15000 });
+    await page.waitForLoadState('domcontentloaded');
+  }
+
+  static async logout(page: Page) {
+    const userMenuChip = page.locator('[data-testid="user-menu-chip"]');
+    await userMenuChip.waitFor({ state: 'visible', timeout: 10000 });
+    await userMenuChip.click();
+    
+    const logoutItem = page.locator('[data-testid="logout-menu-item"]');
+    await logoutItem.waitFor({ state: 'visible', timeout: 5000 });
+    await logoutItem.click();
+    
+    await page.waitForURL('**/login', { timeout: 15000 });
+  }
 }
 
 export { expect } from '@playwright/test';

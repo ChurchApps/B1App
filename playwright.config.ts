@@ -37,7 +37,10 @@ export default defineConfig({
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
           '--disable-blink-features=AutomationControlled',
-          '--disable-web-security'
+          '--disable-web-security',
+          '--disable-gpu',
+          '--single-process',
+          '--no-zygote'
         ],
         // Browser context options
         contextOptions: {
