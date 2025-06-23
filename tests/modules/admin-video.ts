@@ -28,14 +28,14 @@ export class AdminVideoTests {
     await page.waitForTimeout(2000);
     
     // REQUIRED: Sermon edit form must be accessible
-    const titleField = page.locator('[data-testid="sermon-title-input"]');
+    const titleField = page.locator('[data-testid="sermon-title-input"] input');
     await expect(titleField).toBeVisible({ timeout: 5000 });
     await titleField.click();
     await titleField.fill('Test Sermon');
     await expect(titleField).toHaveValue('Test Sermon');
     
     // Fill description field if available
-    const descriptionField = page.locator('[data-testid="sermon-description-input"]');
+    const descriptionField = page.locator('[data-testid="sermon-description-input"] input, [data-testid="sermon-description-input"] textarea');
     if (await descriptionField.isVisible({ timeout: 3000 }).catch(() => false)) {
       await descriptionField.click();
       await descriptionField.fill('This is a test sermon for automated testing');
@@ -78,7 +78,7 @@ export class AdminVideoTests {
       
       // We should now be in the sermon edit form
       // Update the title
-      const titleField = page.locator('[data-testid="sermon-title-input"]');
+      const titleField = page.locator('[data-testid="sermon-title-input"] input');
       if (await titleField.isVisible({ timeout: 3000 }).catch(() => false)) {
         await titleField.click();
         await titleField.selectText();
@@ -87,7 +87,7 @@ export class AdminVideoTests {
       }
       
       // Update the description
-      const descriptionField = page.locator('[data-testid="sermon-description-input"]');
+      const descriptionField = page.locator('[data-testid="sermon-description-input"] input, [data-testid="sermon-description-input"] textarea');
       if (await descriptionField.isVisible({ timeout: 3000 }).catch(() => false)) {
         await descriptionField.click();
         await descriptionField.selectText();
