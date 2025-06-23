@@ -18,17 +18,48 @@ const loadSharedData = (sdSlug: string, groupSlug: string) => {
 
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug, groupSlug } = await params;
-  const props = await loadSharedData(sdSlug, groupSlug);
-  return MetaHelper.getMetaData(props.group?.name + " - " + props.config.church.name, props.group?.about, props.config.appearance.ogImage);
+  try {
+    const props = await loadSharedData(sdSlug, groupSlug);
+    const title = props.group?.name ? `${props.group.name} - ${props.config.church.name}` : `Group - ${props.config.church.name}`;
+    const description = props.group?.about || "Group information";
+    return MetaHelper.getMetaData(title, description, props.config.appearance.ogImage);
+  } catch (error) {
+    console.error("Failed to generate metadata:", error);
+    // Fallback metadata
+    const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
+    return MetaHelper.getMetaData(`Group - ${config.church.name}`, "Group information", config.appearance.ogImage);
+  }
 }
 
 const loadData = async (sdSlug: string, groupSlug: string) => {
-  const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  const group: GroupInterface = await ApiHelper.get("/groups/public/" + config.church.id + "/slug/" + groupSlug, "MembershipApi");
-  const events: EventInterface[] = await ApiHelper.get("/events/public/group/" + config.church.id + "/" + group.id, "ContentApi");
-  const leaders: GroupMemberInterface[] = await ApiHelper.get("/groupMembers/public/leaders/" + config.church.id + "/" + group.id, "MembershipApi");
+  try {
+    const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
 
-  return { config, group, events, leaders }
+    // Try to get the group data
+    let group: GroupInterface | null = null;
+    let events: EventInterface[] = [];
+    let leaders: GroupMemberInterface[] = [];
+
+    try {
+      group = await ApiHelper.get("/groups/public/" + config.church.id + "/slug/" + groupSlug, "MembershipApi");
+
+      // Only fetch additional data if group exists
+      if (group && group.id) {
+        events = await ApiHelper.get("/events/public/group/" + config.church.id + "/" + group.id, "ContentApi").catch((): any[] => []);
+        leaders = await ApiHelper.get("/groupMembers/public/leaders/" + config.church.id + "/" + group.id, "MembershipApi").catch((): any[] => []);
+      }
+    } catch (error) {
+      console.error("Failed to load group data:", error);
+      // Group will remain null, which will be handled in the component
+    }
+
+    return { config, group, events, leaders }
+  } catch (error) {
+    console.error("Failed to load page data:", error);
+    // Return minimal data to prevent complete page failure
+    const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
+    return { config, group: null, events: [], leaders: [] }
+  }
 }
 
 

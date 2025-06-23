@@ -22,14 +22,14 @@ export const Sermons = (props: Props) => {
   const getEditContent = () => {
     const open = Boolean(anchorEl);
     return (<>
-      <IconButton aria-label="addButton" id="addBtnGroup" data-cy="add-button" aria-controls={open ? "add-menu" : undefined} aria-expanded={open ? "true" : undefined} aria-haspopup="true" onClick={(e) => { setAnchorEl(e.currentTarget); }}>
+      <IconButton aria-label="Add sermon menu" id="addBtnGroup" data-cy="add-button" aria-controls={open ? "add-menu" : undefined} aria-expanded={open ? "true" : undefined} aria-haspopup="true" onClick={(e) => { setAnchorEl(e.currentTarget); }} data-testid="add-sermon-menu-button">
         <Icon color="primary">add</Icon>
       </IconButton>
       <Menu id="add-menu" MenuListProps={{ "aria-labelledby": "addBtnGroup" }} anchorEl={anchorEl} open={open} onClose={() => { setAnchorEl(null); }}>
-        <MenuItem data-cy="add-campus" onClick={() => { setAnchorEl(null);; handleAdd(false); }}>
+        <MenuItem data-cy="add-campus" onClick={() => { setAnchorEl(null);; handleAdd(false); }} data-testid="add-sermon-item" aria-label="Add new sermon">
           Add Sermon
         </MenuItem>
-        <MenuItem aria-label="addService" data-cy="add-service" onClick={() => { setAnchorEl(null); handleAdd(true) }}>
+        <MenuItem aria-label="Add permanent live URL" data-cy="add-service" onClick={() => { setAnchorEl(null); handleAdd(true) }} data-testid="add-live-url-item">
           Add Permanent Live Url
         </MenuItem>
       </Menu>
@@ -74,7 +74,7 @@ export const Sermons = (props: Props) => {
           <TableCell>{video.title}</TableCell>
           <TableCell>{(video.publishDate) ? DateHelper.prettyDate(DateHelper.toDate(video.publishDate)) : "N/A"}</TableCell>
           <TableCell style={{ textAlign: "right" }}>
-            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentSermon(video); }}><Icon>edit</Icon></a>
+            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentSermon(video); }} data-testid={`edit-sermon-${video.id}`} aria-label={`Edit ${video.title}`}><Icon>edit</Icon></a>
           </TableCell>
         </TableRow>
       );
@@ -84,7 +84,7 @@ export const Sermons = (props: Props) => {
   }
 
   const getTable = () => {
-    if (isLoading) return <Loading />
+    if (isLoading) return <Loading data-testid="sermons-loading" />
     else return (<Table>
       <TableHead>
         <TableRow>
@@ -104,7 +104,7 @@ export const Sermons = (props: Props) => {
 
   if (currentSermon !== null) return <SermonEdit currentSermon={currentSermon} updatedFunction={handleUpdated} showPhotoEditor={props.showPhotoEditor} updatedPhoto={props.updatedPhoto} />;
   else return (
-    <DisplayBox headerIcon="live_tv" headerText="Sermons" editContent={getEditContent()} id="servicesBox">
+    <DisplayBox headerIcon="live_tv" headerText="Sermons" editContent={getEditContent()} id="servicesBox" data-testid="sermons-display-box">
       {getTable()}
     </DisplayBox>
   );

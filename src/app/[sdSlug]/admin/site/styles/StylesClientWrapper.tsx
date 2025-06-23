@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -11,10 +10,11 @@ import { FontsEdit } from "@/components/admin/settings/FontEdit";
 import { Preview } from "@/components/admin/settings/Preview";
 import { CssEdit } from "@/components/admin/settings/CssEdit";
 import { Appearance } from "@/components/admin/Appearance";
+import { useRouter } from "next/navigation";
 
 
 export function StylesClientWrapper(props: WrapperPageProps) {
-  const { isAuthenticated } = ApiHelper;
+  const router = useRouter();
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
   const [section, setSection] = useState<string>("");
   const [churchSettings, setChurchSettings] = useState<any>(null);
@@ -64,17 +64,16 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else loadData();
+    loadData();
   }, []);
 
   const getFooter = async () => {
     const existing = await ApiHelper.get("/blocks/blockType/footerBlock", "ContentApi");
-    if (existing.length > 0) redirect("/admin/site/blocks/" + existing[0].id);
+    if (existing.length > 0) router.push("/admin/site/blocks/" + existing[0].id);
     else {
       const block:BlockInterface = { name: "Site Footer", blockType: "footerBlock" };
       ApiHelper.post("/blocks", [block], "ContentApi").then((data) => {
-        redirect("/admin/site/blocks/" + data[0].id);
+        router.push("/admin/site/blocks/" + data[0].id);
       });
     }
   }

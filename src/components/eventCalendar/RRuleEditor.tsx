@@ -57,7 +57,7 @@ export function RRuleEditor(props: Props) {
 
   const getDayButton = (value:Weekday, label:string) => {
     let selected = rRuleOptions.byweekday?.includes(value.weekday);
-    return <Button key={value.toString()} variant={selected ? "contained" : "outlined"} onClick={() => { handleWeekDayClick(value) }}>{label}</Button>
+    return <Button key={value.toString()} variant={selected ? "contained" : "outlined"} onClick={() => { handleWeekDayClick(value) }} data-testid={`weekday-${label.toLowerCase()}-button`} aria-label={`Toggle ${value.toString()} for weekly recurrence`}>{label}</Button>
   }
 
   const handleMonthOptionChange = (mode:string, monthDay:number, nthWeekday:number, weekday:number) => {
@@ -101,7 +101,7 @@ export function RRuleEditor(props: Props) {
         const ordinal = Math.floor((dayOfMonth - 1) / 7);
         result = (<>
           <InputLabel>On</InputLabel>
-          <Select name="on" value={(rRuleOptions.bymonthday?.length>0) ? "monthDay" : "nthWeekday"} onChange={(e) => { handleMonthOptionChange(e.target.value, dayOfMonth, ordinal, dayOfWeek) }} label="On">
+          <Select name="on" value={(rRuleOptions.bymonthday?.length>0) ? "monthDay" : "nthWeekday"} onChange={(e) => { handleMonthOptionChange(e.target.value, dayOfMonth, ordinal, dayOfWeek) }} label="On" data-testid="monthly-option-select" aria-label="Select monthly recurrence option">
             <MenuItem value="monthDay">Monthly on day {dayOfMonth}</MenuItem>
             <MenuItem value="nthWeekday">Monthly on the {ordinals[ordinal]} {daysOfWeek[dayOfWeek]}</MenuItem>
           </Select>
@@ -146,10 +146,10 @@ export function RRuleEditor(props: Props) {
     switch(ends)
     {
       case "until":
-        result = (<TextField name="until" type="date" value={DateHelper.formatHtml5Date(rRuleOptions.until)} fullWidth label="End Date" onChange={handleEndFollowupChange} size="small" />);
+        result = (<TextField name="until" type="date" value={DateHelper.formatHtml5Date(rRuleOptions.until)} fullWidth label="End Date" onChange={handleEndFollowupChange} size="small" data-testid="recurrence-end-date-input" aria-label="Recurrence end date" />);
         break;
       case "count":
-        result = (<TextField name="count" type="number" value={rRuleOptions.count} fullWidth label="Occurances" onChange={handleEndFollowupChange} size="small" />);
+        result = (<TextField name="count" type="number" value={rRuleOptions.count} fullWidth label="Occurances" onChange={handleEndFollowupChange} size="small" data-testid="recurrence-count-input" aria-label="Number of recurrence occurrances" />);
         break;
     }
     return result;
@@ -163,12 +163,12 @@ export function RRuleEditor(props: Props) {
   return (
     <>
       <Grid item xs={2}>
-        <TextField name="interval" type="number" value={rRuleOptions.interval} fullWidth label="Interval" onChange={handleChange} size="small" />
+        <TextField name="interval" type="number" value={rRuleOptions.interval} fullWidth label="Interval" onChange={handleChange} size="small" data-testid="recurrence-interval-input" aria-label="Recurrence interval" />
       </Grid>
       <Grid item xs={5}>
         <FormControl fullWidth size="small">
           <InputLabel>Frequency</InputLabel>
-          <Select name="freq" value={rRuleOptions.freq.toString()} onChange={handleChange} label="Frequency">
+          <Select name="freq" value={rRuleOptions.freq.toString()} onChange={handleChange} label="Frequency" data-testid="recurrence-frequency-select" aria-label="Select recurrence frequency">
             <MenuItem value={RRule.DAILY.toString()}>Day</MenuItem>
             <MenuItem value={RRule.WEEKLY.toString()}>Week</MenuItem>
             <MenuItem value={RRule.MONTHLY.toString()}>Month</MenuItem>
@@ -183,7 +183,7 @@ export function RRuleEditor(props: Props) {
       <Grid item xs={3}>
         <FormControl fullWidth size="small">
           <InputLabel>Ends</InputLabel>
-          <Select name="ends" value={ends} onChange={handleEndsChange} label="Frequency">
+          <Select name="ends" value={ends} onChange={handleEndsChange} label="Frequency" data-testid="recurrence-ends-select" aria-label="Select when recurrence ends">
             <MenuItem value="never">Never</MenuItem>
             <MenuItem value="until">On</MenuItem>
             <MenuItem value="count">After</MenuItem>

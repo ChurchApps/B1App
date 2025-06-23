@@ -26,7 +26,7 @@ export function DonatePage(props:Props) {
           </a>
           <p style={{ textAlign: "center", fontSize: "12.5px", marginBottom: 3, fontStyle: "italic" }}>Please login to manage donations</p>
           <Link href="/login/?returnUrl=/donate">
-            <Button sx={{ fontSize: "16px", textTransform: "capitalize" }} fullWidth variant="contained">Login</Button>
+            <Button sx={{ fontSize: "16px", textTransform: "capitalize" }} fullWidth variant="contained" data-testid="donate-login-button">Login</Button>
           </Link>
         </Grid>
       </Grid>

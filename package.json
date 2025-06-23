@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales && copyfiles -a -f node_modules/@churchapps/apphelper/public/css/** public/apphelper/css"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.3.40",
+    "@churchapps/apphelper": "0.3.47",
     "@mui/icons-material": "^5.16.7",
     "@mui/lab": "^5.0.0-alpha.176",
     "@mui/material": "^5.16.7",
@@ -41,6 +44,7 @@
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.0",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.3.12",
     "@types/react-big-calendar": "^1.16.2",

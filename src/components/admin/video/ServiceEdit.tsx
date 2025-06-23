@@ -127,12 +127,12 @@ export const ServiceEdit: React.FC<Props> = (props) => {
     let chatAndPrayerEndTime = currentService?.serviceTime?.getTime() + currentService?.chatAfter * 1000;
     let earlyStartTime = currentService?.serviceTime?.getTime() - currentService?.earlyStart * 1000;
     return (
-      <InputBox headerIcon="calendar_month" headerText="Edit Service" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()}>
+      <InputBox headerIcon="calendar_month" headerText="Edit Service" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} data-testid="edit-service-inputbox">
         <>
-          <TextField fullWidth label="Service Name" name="serviceLabel" value={currentService?.label || ""} onChange={handleChange} />
+          <TextField fullWidth label="Service Name" name="serviceLabel" value={currentService?.label || ""} onChange={handleChange} data-testid="service-name-input" />
           <Grid container spacing={3}>
             <Grid item xs={6}>
-              <TextField fullWidth label="Service Time" type="datetime-local" name="serviceTime" InputLabelProps={{ shrink: !!DateHelper.formatHtml5DateTime(localServiceTime) }} defaultValue={DateHelper.formatHtml5DateTime(localServiceTime)} onChange={handleChange} />
+              <TextField fullWidth label="Service Time" type="datetime-local" name="serviceTime" InputLabelProps={{ shrink: !!DateHelper.formatHtml5DateTime(localServiceTime) }} defaultValue={DateHelper.formatHtml5DateTime(localServiceTime)} onChange={handleChange} data-testid="service-time-input" />
             </Grid>
             <Grid item xs={6}>
               <FormControl fullWidth>

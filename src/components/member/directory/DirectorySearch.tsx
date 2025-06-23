@@ -15,7 +15,7 @@ export const DirectorySearch: React.FC<Props> = (props) => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
-    let term = escape(searchText.trim());
+    let term = encodeURIComponent(searchText.trim());
     if (searchCategory === "people") ApiHelper.get("/people/search?term=" + term, "MembershipApi").then(data => setSearchResults(data));
     else ApiHelper.get("/people/search/group?groupId=" + searchGroupId, "MembershipApi").then(data => setSearchResults(data));
   }
@@ -34,10 +34,10 @@ export const DirectorySearch: React.FC<Props> = (props) => {
 
   const EndAdornment = () => (
     <Stack direction="row" alignItems="center">
-      <Chip label="People" color="primary" size="small" icon={<Icon>person</Icon>} variant={searchCategory === "people" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("people")} sx={{ marginRight: "6px" }} />
-      <Chip label="Group" color="primary" size="small" icon={<Icon>groups</Icon>} variant={searchCategory === "group" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("group")} />
+      <Chip label="People" color="primary" size="small" icon={<Icon>person</Icon>} variant={searchCategory === "people" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("people")} sx={{ marginRight: "6px" }} data-testid="search-people-chip" aria-label="Search by people" />
+      <Chip label="Group" color="primary" size="small" icon={<Icon>groups</Icon>} variant={searchCategory === "group" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("group")} data-testid="search-group-chip" aria-label="Search by group" />
       <Divider orientation="vertical" sx={{ height: 38, margin: 0.5, marginRight: 1, marginLeft: 1, borderRightWidth: 2 }} />
-      <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSubmit}>Search</Button>
+      <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSubmit} data-testid="directory-search-button" aria-label="Search directory">Search</Button>
     </Stack>
   )
 
@@ -46,7 +46,7 @@ export const DirectorySearch: React.FC<Props> = (props) => {
   return (
     <>
       <h1><Box sx={{ display: "flex", alignItems: "center" }}><Icon sx={{ marginRight: "5px" }}>person</Icon>Member Directory</Box></h1>
-      <DisplayBox id="peopleBox" headerIcon="person" headerText="Search">
+      <DisplayBox id="peopleBox" headerIcon="person" headerText="Search" data-testid="directory-search-box">
         {searchCategory === "people"
           ? (
             <TextField
@@ -61,6 +61,8 @@ export const DirectorySearch: React.FC<Props> = (props) => {
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               InputProps={{ endAdornment: <EndAdornment /> }}
+              data-testid="directory-name-search-input"
+              aria-label="Search by name"
             />
           )
           : (
@@ -73,13 +75,15 @@ export const DirectorySearch: React.FC<Props> = (props) => {
                 value={searchGroupId}
                 onChange={handleChange}
                 endAdornment={<EndAdornment />}
+                data-testid="directory-group-select"
+                aria-label="Select group to search"
               >
-                {groups?.map((g: GroupInterface) => (<MenuItem key={g.id} value={g.id}>{g.name}</MenuItem>))}
+                {groups?.map((g: GroupInterface) => (<MenuItem key={g.id} value={g.id} data-testid={`group-option-${g.id}`} aria-label={g.name}>{g.name}</MenuItem>))}
               </Select>
             </FormControl>
           )}
         <br />
-        <PeopleSearchResults people={searchResults} selectedHandler={props.selectedHandler} />
+        <PeopleSearchResults people={searchResults} selectedHandler={props.selectedHandler} data-testid="directory-search-results" />
       </DisplayBox>
 
     </>

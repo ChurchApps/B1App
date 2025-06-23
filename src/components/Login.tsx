@@ -1,10 +1,10 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useCookies } from "react-cookie";
 import { Alert, PaperProps } from "@mui/material";
 import { Layout } from "@/components";
-import { LoginPage, ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { LoginPage } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { PersonHelper } from "@/helpers";
 import { useSearchParams } from "next/navigation";
@@ -19,26 +19,20 @@ interface Props {
 
 export function Login({ showLogo, redirectAfterLogin, loginContainerCssProps, keyName }: Props) {
   const searchParams = useSearchParams();
-  const [returnUrl, setReturnUrl] = useState<string | null>(redirectAfterLogin);
   const [cookies] = useCookies();
   const context = useContext(UserContext);
-  //const [jwt, setJwt] = useState<string>("");
 
-  useEffect(() => {
-    // Set returnUrl from searchParams or default to "/member"
-    const urlParam = searchParams.get("returnUrl");
-    setReturnUrl(urlParam || redirectAfterLogin || "/my");
-  }, [searchParams]);
 
-  useEffect(() => {
-    if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) {
-      PersonHelper.person = context.person;
-      redirect(`${returnUrl}`);
-    }
-  }, [context.person, returnUrl]);
+  const handleRedirect = (url: string) => {
+    console.log("Redirecting to:", url);
+    // Handle redirect if user is authenticated
+    //if (ApiHelper.isAuthenticated && UserHelper.currentUserChurch?.church) {
+    PersonHelper.person = context.person;
+    redirect(url);
+    //}
+  };
 
   const jwt = searchParams.get("jwt") || cookies.jwt;
-
 
   return (
     <Layout withoutNavbar withoutFooter>
@@ -55,7 +49,8 @@ export function Login({ showLogo, redirectAfterLogin, loginContainerCssProps, ke
           showLogo={showLogo}
           loginContainerCssProps={loginContainerCssProps}
           keyName={keyName}
-          returnUrl={returnUrl || "/my"}
+          returnUrl={searchParams.get("returnUrl") || redirectAfterLogin || "/my"}
+          handleRedirect={handleRedirect}
           defaultEmail={process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@chums.org" : undefined}
           defaultPassword={process.env.NEXT_PUBLIC_STAGE === "demo" ? "password" : undefined}
         />

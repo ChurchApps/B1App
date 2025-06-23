@@ -62,14 +62,14 @@ export function BlockEdit(props: Props) {
   if (!block) return <></>
   else return (
     <>
-      <InputBox id="blockDetailsBox" headerText="Edit Block" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
+      <InputBox id="blockDetailsBox" headerText="Edit Block" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} data-testid="edit-block-inputbox">
         <ErrorMessages errors={errors} />
-        <TextField fullWidth label="Name" name="name" value={block.name} onChange={handleChange} onKeyDown={handleKeyDown} />
+        <TextField fullWidth label="Name" name="name" value={block.name} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="block-name-input" aria-label="Block name" />
         <FormControl fullWidth>
           <InputLabel>Block Type</InputLabel>
-          <Select fullWidth label="Block Type" name="blockType" value={block.blockType} onChange={handleChange}>
-            <MenuItem value="elementBlock">Element(s)</MenuItem>
-            <MenuItem value="sectionBlock">Section(s)</MenuItem>
+          <Select fullWidth label="Block Type" name="blockType" value={block.blockType} onChange={handleChange} data-testid="block-type-select" aria-label="Select block type">
+            <MenuItem value="elementBlock" data-testid="block-type-element" aria-label="Element block type">Element(s)</MenuItem>
+            <MenuItem value="sectionBlock" data-testid="block-type-section" aria-label="Section block type">Section(s)</MenuItem>
           </Select>
         </FormControl>
       </InputBox>

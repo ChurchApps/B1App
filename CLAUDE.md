@@ -28,6 +28,7 @@ npm run lint
 ## Architecture
 
 ### Multi-Tenant System
+
 - **Subdomain-based routing**: Each church accessed via subdomain (e.g., `churchname.b1.church`)
 - **Dynamic route parameter**: `[sdSlug]` represents the subdomain/church identifier
 - **Church configuration**: Loaded via `ConfigHelper.load(sdSlug)` which aggregates:
@@ -38,7 +39,9 @@ npm run lint
   - Global styles
 
 ### API Microservices
+
 The application integrates with multiple backend services configured in `EnvironmentHelper`:
+
 - **MembershipApi**: Church data, users, settings
 - **ContentApi**: Pages, navigation, styles
 - **GivingApi**: Donations, payment processing
@@ -48,6 +51,7 @@ The application integrates with multiple backend services configured in `Environ
 - **LessonsApi**: Educational content
 
 ### Key Patterns
+
 1. **Server Actions**: Cache clearing via `revalidateTag()` in `src/app/actions.ts`
 2. **Configuration Loading**: Aggregated in `ConfigHelper.load()` with caching
 3. **Authentication**: JWT-based with `UserContext` managing user state
@@ -55,6 +59,7 @@ The application integrates with multiple backend services configured in `Environ
 5. **Page Generation**: Server-side rendered with metadata generation for SEO
 
 ### Directory Structure
+
 - `/src/app/[sdSlug]/` - Main church routes
   - `admin/` - Administrative interfaces (site, video, calendar management)
   - `my/` - Member portal (timeline, donations, directory)
@@ -65,11 +70,14 @@ The application integrates with multiple backend services configured in `Environ
 - `/src/services/` - API service layer
 
 ### Environment Configuration
+
 Set up `.env` from `dotenv.sample.txt`:
+
 - Staging: Use default values
 - Production: Update API URLs to production endpoints
 
 ### TypeScript Configuration
+
 - Strict mode enabled (except `strictNullChecks`)
 - Path alias: `@/*` maps to `src/*`
 - Target: ES6 with ESNext modules
@@ -82,7 +90,17 @@ Set up `.env` from `dotenv.sample.txt`:
 4. Progressive Web App capabilities configured in `public/manifest.json`
 
 ## Important Dependencies
+
 - `@churchapps/apphelper` - Shared church app utilities
 - Material-UI (MUI) - UI component framework
 - React DnD - Drag-and-drop functionality for page builder
 - React Big Calendar - Event calendar component
+
+## Playwright Tests
+
+- Use shared helper functions for recurring functionality such as logging in.
+- Keep the tests as simple as possible
+- Always run the tests to verify they work after changing them.
+- Review relevant code to get exact field/button/link names instead of writing broad match rules.
+- Delete any temporary screenshots and debug tests.
+- Make sure tests run in headless mode when auto-running them.

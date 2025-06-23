@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useParams } from "next/navigation";
-import { ApiHelper, Banner, UserHelper, Permissions } from "@churchapps/apphelper";
+import { useParams } from "next/navigation";
+import { Banner, UserHelper, Permissions } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Tabs } from "@/components/admin/settings/Tabs";
@@ -10,7 +10,6 @@ import { Tabs } from "@/components/admin/settings/Tabs";
 type PageParams = {sdSlug:string }
 
 export default function AdminPagesClient() {
-  const { isAuthenticated } = ApiHelper;
   const [config, setConfig] = useState<ConfigurationInterface>(null);
   const params = useParams<PageParams>()
 
@@ -19,9 +18,8 @@ export default function AdminPagesClient() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else loadData();
-  }, [isAuthenticated]);
+    loadData();
+  }, []);
 
   return (
     <AdminWrapper config={config}>

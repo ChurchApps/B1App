@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { useState } from "react";
 import { WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { ImageEditor, ApiHelper, UserHelper, Permissions, Banner } from "@churchapps/apphelper";
+import { ImageEditor, UserHelper, Permissions, Banner } from "@churchapps/apphelper";
 import { Sermons } from "@/components/admin/video/Sermons";
 
 export function ManageVideoClient(props: WrapperPageProps) {
-  const { isAuthenticated } = ApiHelper;
-
-  useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-  }, [isAuthenticated]);
 
   const [photoUrl, setPhotoUrl] = useState<string>(null);
   const [photoType, setPhotoType] = useState<string>(null);

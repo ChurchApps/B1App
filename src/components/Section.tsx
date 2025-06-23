@@ -140,7 +140,7 @@ export const Section: React.FC<Props> = props => {
   }
 
   let result = <></>;
-  if (props.section.background.indexOf("youtube:") > -1) {
+  if (props.section.background && props.section.background.indexOf("youtube:") > -1) {
     const youtubeId = props.section.background.split(":")[1];
     result = (<>{getSectionAnchor()}<YoutubeBackground isDragging={isDragging} id={getId()} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground></>);
   }

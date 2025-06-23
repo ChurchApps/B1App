@@ -40,11 +40,12 @@ export const ChatName: React.FC<Props> = (props) => {
 
   React.useEffect(() => { setEdit(props.promptName); }, [props.promptName]);
 
-  if (!edit) return (<a href="about:blank" className="nav-link" onClick={editMode}>Change Name</a>);
+  if (!edit) return (<a href="about:blank" className="nav-link" onClick={editMode} data-testid="edit-name-button">Change Name</a>);
   else return (
     <>
       <TextField size="small" fullWidth label="Name" id="nameText2" name="displayName" type="text" placeholder="John Smith" value={displayName} onChange={handleChange}
-        InputProps={{ endAdornment: <Button size="small" variant="contained" id="setNameButton" onClick={handleUpdate}>Update</Button> }}
+        InputProps={{ endAdornment: <Button size="small" variant="contained" id="setNameButton" onClick={handleUpdate} data-testid="chat-name-update-button">Update</Button> }}
+        data-testid="chat-name-input"
       />
     </>
   );

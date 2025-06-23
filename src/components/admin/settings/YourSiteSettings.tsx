@@ -143,7 +143,7 @@ export function YourSiteSettings() {
       <ErrorMessages errors={errors} />
       {UserHelper.checkAccess(Permissions.contentApi.content.edit)
         && <Grid item md={8} xs={12}>
-          <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent}>
+          <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent} data-testid="site-pages-display-box">
             <Table>
               <TableHead>
                 <TableRow>
@@ -155,7 +155,7 @@ export function YourSiteSettings() {
               <TableBody>{pagesUi}</TableBody>
             </Table>
           </DisplayBox>
-          <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent}>
+          <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent} data-testid="site-reusable-blocks-display-box">
             <Table>
               <TableHead>
                 <TableRow>
@@ -180,7 +180,7 @@ export function YourSiteSettings() {
         )}
         {UserHelper.checkAccess(Permissions.contentApi.content.edit) && <Links refresh={refresh} />}
 
-        <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance">
+        <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance" data-testid="additional-resources-display-box">
           <table className="table">
             <tbody>
               <tr>

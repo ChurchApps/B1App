@@ -72,10 +72,10 @@ export const LinkEdit: React.FC<Props> = (props) => {
   React.useEffect(() => { setLinks(props.links); }, [props.links]);
 
   return (
-    <InputBox headerIcon="link" headerText="Edit Link" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="b1/streaming/header-links">
+    <InputBox headerIcon="link" headerText="Edit Link" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="b1/streaming/header-links" data-testid="edit-link-inputbox">
       <ErrorMessages errors={errors} />
-      <TextField fullWidth label="Text" name="text" type="text" value={currentLink?.text || ""} onChange={handleChange} />
-      <TextField fullWidth label="Url" name="url" type="text" value={currentLink?.url || ""} onChange={handleChange} />
+      <TextField fullWidth label="Text" name="text" type="text" value={currentLink?.text || ""} onChange={handleChange} data-testid="link-text-input" aria-label="Link display text" />
+      <TextField fullWidth label="Url" name="url" type="text" value={currentLink?.url || ""} onChange={handleChange} data-testid="link-url-input" aria-label="Link URL" />
       {filteredGroupLinks?.length > 0
         && <>
           <div>
@@ -101,6 +101,8 @@ export const LinkEdit: React.FC<Props> = (props) => {
                   size="small"
                   color="primary"
                   onClick={() => setToggleSubName(!toggleSubName)}
+                  data-testid={`submenu-toggle-${link.id}`}
+                  aria-label={`Set as submenu under ${link.text}`}
                 >
                   {link.text}
                 </ToggleButton>

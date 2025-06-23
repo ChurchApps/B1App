@@ -46,8 +46,8 @@ export function DisplayCalendarEventModal(props: Props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button variant="text" onClick={props.onDone}>Cancel</Button>
-        {props.event.eventId && props.mode === "edit" && <Button variant="contained" onClick={handleDelete}>Delete</Button>}
+        <Button variant="text" onClick={props.onDone} data-testid="calendar-event-cancel-button">Cancel</Button>
+        {props.event.eventId && props.mode === "edit" && <Button variant="contained" onClick={handleDelete} data-testid="calendar-event-delete-button">Delete</Button>}
       </DialogActions>
     </Dialog>
   );

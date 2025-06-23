@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useParams } from "next/navigation";
-import { ApiHelper, Banner, DisplayBox } from "@churchapps/apphelper";
+import { useParams } from "next/navigation";
+import { Banner, DisplayBox } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { VimeoImport } from "@/components/admin/video/VimeoImport";
@@ -12,7 +12,6 @@ import { Button, Grid } from "@mui/material";
 type PageParams = {sdSlug:string }
 
 export default function AdminPagesClient() {
-  const { isAuthenticated } = ApiHelper;
   const [config, setConfig] = useState<ConfigurationInterface>(null);
   const params = useParams<PageParams>()
   const [importType, setImportType] = useState<"youtube" | "vimeo" | "">();
@@ -22,9 +21,8 @@ export default function AdminPagesClient() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else loadData();
-  }, [isAuthenticated]);
+    loadData();
+  }, []);
 
   return (
     <AdminWrapper config={config}>
@@ -38,13 +36,13 @@ export default function AdminPagesClient() {
             }
           </>)
           : (<>
-            <DisplayBox headerText={"Import Source"}>
+            <DisplayBox headerText={"Import Source"} data-testid="import-source-box">
               <Grid container spacing={3}>
                 <Grid item sm={6} textAlign={"center"} marginTop={5} marginBottom={5}>
-                  <Button size="large" variant="contained" onClick={() => setImportType("youtube")}>Import from YouTube</Button>
+                  <Button size="large" variant="contained" onClick={() => setImportType("youtube")} data-testid="import-youtube-button">Import from YouTube</Button>
                 </Grid>
                 <Grid item sm={6} textAlign={"center"} marginTop={5} marginBottom={5}>
-                  <Button size="large" variant="contained" onClick={() => setImportType("vimeo")}>Import from Vimeo</Button>
+                  <Button size="large" variant="contained" onClick={() => setImportType("vimeo")} data-testid="import-vimeo-button">Import from Vimeo</Button>
                 </Grid>
               </Grid>
             </DisplayBox>

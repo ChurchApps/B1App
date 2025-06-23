@@ -33,7 +33,7 @@ export function Preview(props: Props) {
               <a href="#" style={{marginRight:20, color:palette.darkAccent}}>Location</a>
               <a href="#" style={{marginRight:20, color:palette.darkAccent}}>Service Times</a>
               <a href="#" style={{marginRight:20, color:palette.darkAccent}}>Youth</a>
-              <Button style={{backgroundColor:palette.darkAccent, color:palette.light}}>Give</Button>
+              <Button style={{backgroundColor:palette.darkAccent, color:palette.light}} data-testid="preview-give-button">Give</Button>
             </Grid>
           </Grid>
         </div>
@@ -43,10 +43,10 @@ export function Preview(props: Props) {
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <Grid container spacing={3} style={{ paddingTop:10 }}>
               <Grid item xs={6} style={{textAlign:"right"}}>
-                <Button style={{backgroundColor:palette.accent, color:palette.light }}>Plan Your Visit</Button>
+                <Button style={{backgroundColor:palette.accent, color:palette.light }} data-testid="preview-plan-visit-button">Plan Your Visit</Button>
               </Grid>
               <Grid item xs={6} style={{textAlign:"left"}}>
-                <Button style={{backgroundColor:palette.light, color:palette.accent, border: "2px solid " + palette.accent}}>Learn Our Story</Button>
+                <Button style={{backgroundColor:palette.light, color:palette.accent, border: "2px solid " + palette.accent}} data-testid="preview-learn-story-button">Learn Our Story</Button>
               </Grid>
             </Grid>
 

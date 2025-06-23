@@ -74,15 +74,15 @@ export function FontsEdit(props: Props) {
   return (
     <>
       {getFont()}
-      <InputBox headerIcon="text_fields" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)}>
+      <InputBox headerIcon="text_fields" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)} data-testid="font-edit-inputbox">
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <div><label>Heading Font</label></div>
-            <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("heading"); }}>{fonts.heading || "Roboto"}</Button>
+            <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("heading"); }} data-testid="heading-font-button">{fonts.heading || "Roboto"}</Button>
           </Grid>
           <Grid item xs={12} md={4}>
             <div><label>Body Font</label></div>
-            <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("body"); }}>{fonts.body || "Roboto"}</Button>
+            <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("body"); }} data-testid="body-font-button">{fonts.body || "Roboto"}</Button>
           </Grid>
           <Grid item xs={12} md={4}>
 

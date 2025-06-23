@@ -34,7 +34,7 @@ export const Links: React.FC<Props> = (props) => {
   let cat = props.category ? props.category : "website";
 
   const handleUpdated = () => { setCurrentLink(null); loadData(); }
-  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} />
+  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} data-testid="add-link-button" />
   const loadData = () => { ApiHelper.get("/links?category=" + cat, "ContentApi").then(data => { setLinks(data); setIsLoading(false); }); }
   const saveChanges = () => { ApiHelper.post("/links", links, "ContentApi").then(loadData); }
 
@@ -152,7 +152,7 @@ export const Links: React.FC<Props> = (props) => {
 
   if (currentLink !== null) return <LinkEdit links={links} currentLink={currentLink} updatedFunction={handleUpdated} />;
   else return (
-    <DisplayBox headerIcon="link" headerText="Navigation Links" editContent={getEditContent()}>
+    <DisplayBox headerIcon="link" headerText="Navigation Links" editContent={getEditContent()} data-testid="navigation-links-display-box">
       {structuredLinks && getTable(structuredLinks)}
     </DisplayBox>
   );

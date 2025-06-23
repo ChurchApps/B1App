@@ -54,7 +54,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
           let linkText = link.text;
           if (!linkText || linkText.trim().length === 0) linkText = "[No Title]";
 
-          const anchor = (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); }}>{linkText}</a>)
+          const anchor = (<a href="about:blank" onClick={(e) => { e.preventDefault(); setEditLink(link); }} data-testid={`edit-nav-link-${link.id}`} aria-label={`Edit ${linkText} navigation link`}>{linkText}</a>)
           idx++
 
           const index = idx-1
@@ -87,7 +87,7 @@ export const SiteNavigation: React.FC<Props> = (props) => {
 
   return (
     <>
-      {editLink && <NavLinkEdit link={editLink} updatedCallback={() => { ConfigHelper.clearCache("sdSlug=" + props.keyName); setEditLink(null); props.refresh();  }} onDone={() => { setEditLink(null); }} />}
+      {editLink && <NavLinkEdit link={editLink} updatedCallback={() => { ConfigHelper.clearCache("sdSlug=" + props.keyName); setEditLink(null); props.refresh();  }} onDone={() => { setEditLink(null); }} data-testid="nav-link-edit-modal" />}
       <table className="table">
         <tbody>
           <RecursiveLinks childrenLinks={structuredLinks} nestedLevel={-1} />

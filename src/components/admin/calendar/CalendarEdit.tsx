@@ -60,9 +60,9 @@ export function CalendarEdit(props: Props) {
   if (!calendar) return <></>
   else return (
     <>
-      <InputBox id="calendarDetailsBox" headerText="Edit Calendar" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
-        <ErrorMessages errors={errors} />
-        <TextField fullWidth label="Name" name="name" value={calendar.name} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <InputBox id="calendarDetailsBox" headerText="Edit Calendar" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} data-testid="calendar-edit-box">
+        <ErrorMessages errors={errors} data-testid="calendar-errors" />
+        <TextField fullWidth label="Name" name="name" value={calendar.name} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="calendar-name-input" aria-label="Calendar name" />
       </InputBox>
     </>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { EnvironmentHelper, WrapperPageProps } from "@/helpers";
@@ -14,7 +14,6 @@ interface Props extends WrapperPageProps {
 }
 
 export function CalendarClientWrapper(props: Props) {
-  const { isAuthenticated } = ApiHelper;
   EnvironmentHelper.initLocale();
   const [currentCalendar, setCurrentCalendar] = useState<CuratedCalendarInterface>(null);
   const [groups, setGroups] = useState<GroupInterface[]>([]);
@@ -28,10 +27,6 @@ export function CalendarClientWrapper(props: Props) {
   // const curatedCalendarId = router.query?.id;
 
   const loadData = () => {
-    if (!isAuthenticated) {
-      redirect("/login");
-    }
-
     setIsLoadingGroups(true);
     ApiHelper.get("/curatedCalendars/" + props.curatedCalendarId, "ContentApi").then((data) => {
       setCurrentCalendar(data);
@@ -75,7 +70,7 @@ export function CalendarClientWrapper(props: Props) {
           <TableCell>{g.name}</TableCell>
           <TableCell style={{textAlign:"right"}}>
             <Tooltip title="Remove Group" arrow>
-              <IconButton color="primary" size="small" onClick={() => handleGroupDelete(g.id)}>
+              <IconButton color="primary" size="small" onClick={() => handleGroupDelete(g.id)} data-testid={`remove-group-${g.id}-button`} aria-label={`Remove ${g.name} from calendar`}>
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
@@ -93,20 +88,20 @@ export function CalendarClientWrapper(props: Props) {
 
   return (
     <AdminWrapper config={props.config}>
-      <Banner><h1>{currentCalendar?.name}</h1></Banner>
+      <Banner data-testid="calendar-banner"><h1>{currentCalendar?.name}</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
-            <DisplayBox headerText="">
+            <DisplayBox headerText="" data-testid="curated-calendar-display-box">
               <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
-              <CuratedCalendar curatedCalendarId={props.curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} />
+              <CuratedCalendar curatedCalendarId={props.curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} data-testid="curated-calendar" />
             </DisplayBox>
           </Grid>
           <Grid item md={4} xs={12}>
-            <DisplayBox headerText="Groups" headerIcon="backup_table">
+            <DisplayBox headerText="Groups" headerIcon="backup_table" data-testid="calendar-groups-display-box">
               {isLoadingGroups
                 ? (
-                  <Loading />
+                  <Loading data-testid="groups-loading" />
                 )
                 : (
                   <Table size="small">

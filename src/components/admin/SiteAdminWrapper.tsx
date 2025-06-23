@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton, UserHelper } from "@churchapps/apphelper";
-import { PageInterface } from "@/helpers";
-import { redirect } from "next/navigation";
+import { PageInterface, UrlHelper } from "@/helpers";
+import { redirect, usePathname } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -22,6 +22,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const [editLink, setEditLink] = useState<LinkInterface>(null);
   const [pages, setPages] = useState<PageInterface[]>([]);
   const [showLogin, setShowLogin] = useState<GenericSettingInterface>();
+  const pathname = usePathname();
   const checked = showLogin?.value === "true" ? true : false;
 
   const loadData = () => {
@@ -43,7 +44,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   };
 
 
-  useEffect(() => { if (!isAuthenticated) redirect("/login"); }, []);
+  useEffect(() => { if (!isAuthenticated) redirect("/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config.keyName))); }, [isAuthenticated, pathname, props.config.keyName]);
   useEffect(loadData, [isAuthenticated]);
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,12 +92,12 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
                   <Typography sx={{ fontSize: "13.5px", fontStyle: "italic" }}>Show Login</Typography>
                   <Tooltip title="Show login button in the navigation bar" arrow><Icon color="primary" sx={{ fontSize: "18px !important", cursor: "pointer" }}>info</Icon></Tooltip>
                 </Stack>
-                <Switch onChange={handleSwitchChange} checked={showLogin ? checked : true} inputProps={{ 'aria-label': "controlled" }} />
+                <Switch onChange={handleSwitchChange} checked={showLogin ? checked : true} inputProps={{ 'aria-label': "Toggle login button visibility" }} data-testid="show-login-switch" />
               </Stack>
             </div>
             <div>
               <span style={{float:"right"}}>
-                <SmallButton icon="add" onClick={() => { setEditLink({churchId: UserHelper.currentUserChurch.church.id, category:"website", linkType:"url", sort:99, linkData:"", icon:""} ) }} />
+                <SmallButton icon="add" onClick={() => { setEditLink({churchId: UserHelper.currentUserChurch.church.id, category:"website", linkType:"url", sort:99, linkData:"", icon:""} ) }} data-testid="add-navigation-link" />
               </span>
               <h3>Main Navigation</h3>
             </div>

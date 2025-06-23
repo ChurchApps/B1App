@@ -52,9 +52,11 @@ export const ChatSend: React.FC<Props> = (props) => {
           <OutlinedInput id="sendChatText" name="sendChatText" type="text" label={(size === "medium") ? "Send Message" : "Message"} value={message} onChange={handleChange}
             onKeyDown={handleKeyDown} autoComplete="off"
             style={(size==="small") ? {paddingRight:4} : {} }
+            data-testid="chat-message-input"
+            aria-label="Type your message"
             endAdornment={<>
-              <Button variant="outlined" size="small" style={{ paddingRight: 8, paddingLeft: 8, minWidth: 0, marginRight: 5 }} onClick={toggleEmojis} data-field="sendText" className="emojiButton"><span role="img" aria-label="emoji">😀</span></Button>
-              <Button variant="contained" onClick={handleSendMessage} size="small">Send</Button>
+              <Button variant="outlined" size="small" style={{ paddingRight: 8, paddingLeft: 8, minWidth: 0, marginRight: 5 }} onClick={toggleEmojis} data-field="sendText" className="emojiButton" data-testid="emoji-button" aria-label="Open emoji picker"><span role="img" aria-label="emoji">😀</span></Button>
+              <Button variant="contained" onClick={handleSendMessage} size="small" data-testid="send-message-button" aria-label="Send message">Send</Button>
             </>}
           />
         </FormControl>

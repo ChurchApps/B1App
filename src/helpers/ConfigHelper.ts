@@ -22,10 +22,14 @@ export class ConfigHelper {
     let appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi", [cacheKey]);
     const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=" + navCategory, "ContentApi", [cacheKey]);
     const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi", [cacheKey]);
-    const gateway = await ApiHelper.getAnonymous("/gateways/churchId/" + church.id, "GivingApi", [cacheKey]);
+    const gatewayConfigured = await ApiHelper.getAnonymous("/gateways/configured/" + church.id, "GivingApi", [cacheKey]);
     const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
 
-    let result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations:gateway!==null, hasWebsite: Boolean(homePage?.url), globalStyles }
+    // Check if gateway is properly configured with a valid privateKey
+    // This prevents showing the donate tab when no payment gateway is set up
+    const allowDonations = gatewayConfigured?.configured === true;
+
+    let result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles }
     result.keyName = keyName;
     return result;
   }

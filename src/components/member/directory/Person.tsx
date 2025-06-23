@@ -40,7 +40,7 @@ export const Person: React.FC<Props> = (props) => {
     requestedChanges.map((t) => {
       const changes = JSON.parse(t.data);
       result.push (
-        <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText="Profile Changes">
+        <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText="Profile Changes" data-testid={`profile-changes-${t.id}`}>
           <Typography fontSize="13px" fontStyle="italic" sx={{ textIndent: "10px" }}>Requested by {t.createdByLabel}</Typography>
           <Table size="small" sx={{ width: "80%", textIndent: "20px", marginTop: 2 }}>
             <TableHead>
@@ -69,17 +69,22 @@ export const Person: React.FC<Props> = (props) => {
   }
 
   const loadData = () => {
+    if (!props.personId || props.personId === 'undefined' || props.personId.trim() === '') {
+      console.error('Invalid personId:', props.personId);
+      return;
+    }
+
     ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then(data => setPerson(data));
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then(data => setRequestedChanges(data));
   }
 
   const getEditContent = () => {
-    if (props.personId===PersonHelper.person.id) return <ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />;
-    else return <Button variant="contained" color="primary" onClick={() => {setShowPM(true)}}>Message</Button>
+    if (PersonHelper.person && props.personId === PersonHelper.person.id) return <ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />;
+    else return <Button variant="contained" color="primary" disabled={!person} onClick={() => {if (person) setShowPM(true)}}>Message</Button>
   }
 
   const getPM = () => {
-    if (showPM) return (<DirectMessageModal onBack={() => {setShowPM(false)}} context={context} person={person} />)
+    if (showPM && person) return (<DirectMessageModal onBack={() => {setShowPM(false)}} context={context} person={person} />)
   }
 
   React.useEffect(loadData, [props.personId]);
@@ -88,7 +93,7 @@ export const Person: React.FC<Props> = (props) => {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()}>
+          <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
@@ -107,7 +112,7 @@ export const Person: React.FC<Props> = (props) => {
         </Grid>
         {getPM()}
       </Grid>
-      {props.personId === PersonHelper.person.id && <VisibilityPreferences />}
+      {PersonHelper.person && props.personId === PersonHelper.person.id && <VisibilityPreferences />}
     </>
 
   )

@@ -64,22 +64,22 @@ export function LeaderEdit(props: Props) {
 
   return <>
     <div style={{ textAlign: "right", float: "right", marginTop: 20 }}>
-      <Button onClick={hideForm}><EditIcon /></Button>
+      <Button onClick={hideForm} data-testid="edit-group-button" aria-label="Edit group details"><EditIcon /></Button>
     </div>
 
     <div>
       <form style={{ display: hidden, marginTop: 20 }}>
-        <InputBox saveFunction={handleSubmit} cancelFunction={hideForm}>
-          <TextField fullWidth label="Group Name" name="name" value={formEdits.name || ""} onChange={handleChange} />
-          <TextField fullWidth label="Meeting Time" name="meetingTime" value={formEdits.meetingTime || ""} onChange={handleChange} />
-          <TextField fullWidth label="Meeting Location" name="meetingLocation" value={formEdits.meetingLocation || ""} onChange={handleChange} />
-          <TextField fullWidth label="Description" name="about" value={formEdits.about || ""} onChange={handleChange} multiline />
+        <InputBox saveFunction={handleSubmit} cancelFunction={hideForm} data-testid="group-edit-box">
+          <TextField fullWidth label="Group Name" name="name" value={formEdits.name || ""} onChange={handleChange} data-testid="group-name-input" aria-label="Group name" />
+          <TextField fullWidth label="Meeting Time" name="meetingTime" value={formEdits.meetingTime || ""} onChange={handleChange} data-testid="meeting-time-input" aria-label="Meeting time" />
+          <TextField fullWidth label="Meeting Location" name="meetingLocation" value={formEdits.meetingLocation || ""} onChange={handleChange} data-testid="meeting-location-input" aria-label="Meeting location" />
+          <TextField fullWidth label="Description" name="about" value={formEdits.about || ""} onChange={handleChange} multiline data-testid="group-description-input" aria-label="Group description" />
           {formEdits.photoUrl && (<>
-            <img src={formEdits.photoUrl} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="group" />
+            <img src={formEdits.photoUrl} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Group photo" data-testid="group-photo" />
             <br />
           </>)}
           {!formEdits.photoUrl && <InputLabel>Group Photo</InputLabel>}
-          <Button variant="contained" onClick={() => setSelectPhotoField("photoUrl")}>Select Photo</Button>
+          <Button variant="contained" onClick={() => setSelectPhotoField("photoUrl")} data-testid="select-photo-button" aria-label="Select group photo">Select Photo</Button>
         </InputBox>
 
         {selectPhotoField && (
@@ -87,6 +87,7 @@ export function LeaderEdit(props: Props) {
             onClose={() => setSelectPhotoField(null)}
             onSelect={handlePhotoSelected}
             aspectRatio={1.78}
+            data-testid="photo-gallery-modal"
           />
         )}
       </form>

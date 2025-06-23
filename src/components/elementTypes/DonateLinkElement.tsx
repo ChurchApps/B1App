@@ -9,7 +9,7 @@ export function DonateLinkElement({ element }: Props) {
   const amounts = (element.answers?.amounts && element.answers.amounts.length > 0) ? JSON.parse(element.answers.amounts) : [];
 
   return (
-    <div id={"el-" + element.id}>
+    <div id={"el-" + element.id} data-testid={`donate-link-element-${element.id}`} aria-label="Donation options">
       <Box sx={{ backgroundColor: "white", padding: "20px", borderRadius: "15px", marginBottom: "15px" }}>
         <h4 style={{ marginTop: 10, marginBottom: 15 }}>
           {element.answers?.text?.toUpperCase() || "DONATE NOW"}
@@ -22,6 +22,8 @@ export function DonateLinkElement({ element }: Props) {
             sx={{ minWidth: "70px", marginRight: "10px", marginTop: "5px", borderWidth: "2px", borderRadius: "10px", fontWeight: "bold" }}
             href={`${element.answers?.url}?amount=${a}&fundId=${element.answers?.fundId}`}
             target="_blank"
+            data-testid={`donate-amount-${a}-button`}
+            aria-label={`Donate $${a}`}
           >
             $ {a}
           </Button>
@@ -32,6 +34,8 @@ export function DonateLinkElement({ element }: Props) {
           sx={{ marginTop: "5px", borderWidth: "2px", borderRadius: "10px", fontWeight: "bold" }}
           href={`${element.answers?.url}?fundId=${element.answers?.fundId}`}
           target="_blank"
+          data-testid="donate-other-amount-button"
+          aria-label="Donate custom amount"
         >
           Other
         </Button>

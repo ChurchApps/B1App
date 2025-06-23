@@ -102,10 +102,10 @@ export function ElementEdit(props: Props) {
   const getTextAlignment = (fieldName:string, label:string="Text Alignment") => (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
-      <Select fullWidth size="small" label="Text Alignment" name={fieldName} value={parsedData[fieldName] || "left"} onChange={handleChange}>
-        <MenuItem value="left">Left</MenuItem>
-        <MenuItem value="center">Center</MenuItem>
-        <MenuItem value="right">Right</MenuItem>
+      <Select fullWidth size="small" label="Text Alignment" name={fieldName} value={parsedData[fieldName] || "left"} onChange={handleChange} data-testid={`text-alignment-${fieldName}-select`} aria-label={`Select ${label.toLowerCase()}`}>
+        <MenuItem value="left" data-testid="text-align-left" aria-label="Align left">Left</MenuItem>
+        <MenuItem value="center" data-testid="text-align-center" aria-label="Align center">Center</MenuItem>
+        <MenuItem value="right" data-testid="text-align-right" aria-label="Align right">Right</MenuItem>
       </Select>
     </FormControl>
   )
@@ -116,7 +116,7 @@ export function ElementEdit(props: Props) {
     }
   };
 
-  const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline />);
+  const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline data-testid="answers-json-input" aria-label="Answers JSON data" />);
 
   const selectColors = (background:string, textColor:string, headingColor:string, linkColor:string) => {
     let p = { ...element };
@@ -153,15 +153,15 @@ export function ElementEdit(props: Props) {
   // TODO: add alt field while saving image and use it here, in image tage.
   const getTextWithPhotoFields = () => (<>
     {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
-    <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
-    <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <Button variant="contained" onClick={() => setSelectPhotoField("photo")} data-testid="select-photo-button" aria-label="Select photo">Select photo</Button>
+    <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="photo-alt-input" aria-label="Photo alternative text" />
     <FormControl fullWidth>
       <InputLabel>Photo Position</InputLabel>
-      <Select fullWidth size="small" label="Photo Position" name="photoPosition" value={parsedData.photoPosition || ""} onChange={handleChange}>
-        <MenuItem value="left">Left</MenuItem>
-        <MenuItem value="right">Right</MenuItem>
-        <MenuItem value="top">Top</MenuItem>
-        <MenuItem value="bottom">Bottom</MenuItem>
+      <Select fullWidth size="small" label="Photo Position" name="photoPosition" value={parsedData.photoPosition || ""} onChange={handleChange} data-testid="photo-position-select" aria-label="Select photo position">
+        <MenuItem value="left" data-testid="photo-position-left" aria-label="Position photo on left">Left</MenuItem>
+        <MenuItem value="right" data-testid="photo-position-right" aria-label="Position photo on right">Right</MenuItem>
+        <MenuItem value="top" data-testid="photo-position-top" aria-label="Position photo on top">Top</MenuItem>
+        <MenuItem value="bottom" data-testid="photo-position-bottom" aria-label="Position photo on bottom">Bottom</MenuItem>
       </Select>
     </FormControl>
     {getTextAlignment("textAlignment")}
@@ -174,8 +174,8 @@ export function ElementEdit(props: Props) {
   // TODO: add alt field while saving image and use it here, in image tage.
   const getCardFields = () => (<>
     {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
-    <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
-    <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+    <Button variant="contained" onClick={() => setSelectPhotoField("photo")} data-testid="select-photo-button" aria-label="Select photo">Select photo</Button>
+    <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="photo-alt-input" aria-label="Photo alternative text" />
     <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     {getTextAlignment("titleAlignment", "Title Alignment")}
     <TextField fullWidth size="small" label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
@@ -334,7 +334,7 @@ export function ElementEdit(props: Props) {
   const getImageFields = () => (
     <>
       {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
-      <Button variant="contained" onClick={() => setSelectPhotoField("photo")}>Select photo</Button>
+      <Button variant="contained" onClick={() => setSelectPhotoField("photo")} data-testid="select-photo-button" aria-label="Select photo">Select photo</Button>
       <TextField fullWidth size="small" label="Photo Label" name="photoAlt"  value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
       <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
       <FormGroup sx={{ marginLeft: 0.5}}>
@@ -452,7 +452,7 @@ export function ElementEdit(props: Props) {
   if (!element) return <></>
   else return (
     <Dialog open={true} onClose={handleCancel} fullWidth maxWidth="md" id="elementEditDialog">
-      <InputBox id="dialogForm" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.element.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
+      <InputBox id="dialogForm" headerText="Edit Element" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(props.element.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)} data-testid="edit-element-inputbox">
         <div id="dialogFormContent">
           {(element?.elementType === "block") ? getBlockFields() : getStandardFields()}
         </div>

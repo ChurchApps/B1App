@@ -1,4 +1,5 @@
 import { Theme } from "@/components";
+import { AuthGuard } from "@/components/AuthGuard";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
@@ -57,9 +58,11 @@ export default async function Home({ params }: { params: PageParams }) {
   return (
     <>
       <Theme config={config} />
-      <MyWrapper pageSlug={pageSlug} root={pageSlug==="timeline"} config={config}>
-        {getPageContent()}
-      </MyWrapper>
+      <AuthGuard sdSlug={sdSlug}>
+        <MyWrapper pageSlug={pageSlug} root={pageSlug==="timeline"} config={config}>
+          {getPageContent()}
+        </MyWrapper>
+      </AuthGuard>
       <Animate />
     </>
   );

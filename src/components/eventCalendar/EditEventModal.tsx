@@ -108,18 +108,18 @@ export function EditEventModal(props: Props) {
   const getDates = () => {
     if (event.allDay) return (<>
       <Grid item xs={6}>
-        <TextField name="start" type="date" value={(event.start) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.start)) : ""} fullWidth label="Start Time" onChange={handleChange} size="small" />
+        <TextField name="start" type="date" value={(event.start) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.start)) : ""} fullWidth label="Start Time" onChange={handleChange} size="small" data-testid="event-start-date-input" aria-label="Event start date" />
       </Grid>
       <Grid item xs={6}>
-        <TextField name="end" type="date" value={(event.end) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.end)) : ""} fullWidth label="End Time" onChange={handleChange} size="small" />
+        <TextField name="end" type="date" value={(event.end) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.end)) : ""} fullWidth label="End Time" onChange={handleChange} size="small" data-testid="event-end-date-input" aria-label="Event end date" />
       </Grid>
     </>);
     else return (<>
       <Grid item xs={6}>
-        <TextField name="start" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.start)} fullWidth label="Start Time" onChange={handleChange} size="small" />
+        <TextField name="start" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.start)} fullWidth label="Start Time" onChange={handleChange} size="small" data-testid="event-start-datetime-input" aria-label="Event start date and time" />
       </Grid>
       <Grid item xs={6}>
-        <TextField name="end" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.end)} fullWidth label="End Time" onChange={handleChange} size="small" />
+        <TextField name="end" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.end)} fullWidth label="End Time" onChange={handleChange} size="small" data-testid="event-end-datetime-input" aria-label="Event end date and time" />
       </Grid>
     </>);
 
@@ -132,20 +132,20 @@ export function EditEventModal(props: Props) {
 
   return (
     <>
-      <ErrorMessages errors={errors} />
+      <ErrorMessages errors={errors} data-testid="event-errors" />
       <Dialog open={true} onClose={props.onDone} fullScreen>
         <AppBar sx={{ position: 'relative' }}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label="close">
+            <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label="close" data-testid="close-event-modal-button">
               <Icon>close</Icon>
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Edit Event
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleDelete}>
+            <Button autoFocus color="inherit" onClick={handleDelete} data-testid="delete-event-button" aria-label="Delete event">
               Delete
             </Button>
-            <Button autoFocus color="inherit" onClick={handleSave}>
+            <Button autoFocus color="inherit" onClick={handleSave} data-testid="save-event-button" aria-label="Save event">
               Save
             </Button>
           </Toolbar>
@@ -154,12 +154,12 @@ export function EditEventModal(props: Props) {
           <Grid container spacing={1}>
             <Grid item xs={6}>
               <FormGroup>
-                <FormControlLabel control={<Checkbox checked={event.allDay} />}  label="All Day" name="allDay" onChange={(e, checked) => { setEvent({...event, allDay:checked}); }} />
+                <FormControlLabel control={<Checkbox checked={event.allDay} data-testid="all-day-checkbox" />}  label="All Day" name="allDay" onChange={(e, checked) => { setEvent({...event, allDay:checked}); }} data-testid="all-day-form-control" aria-label="Mark event as all day" />
               </FormGroup>
             </Grid>
             <Grid item xs={6}>
               <FormGroup>
-                <FormControlLabel control={<Checkbox checked={event.recurrenceRule?.length>0} />}  label="Recurring" name="recurring" onChange={(e, checked) => { handleToggleRecurring(checked); }} />
+                <FormControlLabel control={<Checkbox checked={event.recurrenceRule?.length>0} data-testid="recurring-checkbox" />}  label="Recurring" name="recurring" onChange={(e, checked) => { handleToggleRecurring(checked); }} data-testid="recurring-form-control" aria-label="Mark event as recurring" />
               </FormGroup>
             </Grid>
             {getDates()}
@@ -176,14 +176,16 @@ export function EditEventModal(props: Props) {
                     if (e.target.checked === true) setEvent({...event, visibility: "private"});
                     else setEvent({...event, visibility: "public"});
                   }}
+                  data-testid="event-privacy-switch"
+                  aria-label="Toggle event privacy"
                 />
               </Stack>
             </Grid>
             <Grid item xs={12}>
-              <TextField name="title" value={event.title} fullWidth label="Title" onChange={handleChange} size="small" />
+              <TextField name="title" value={event.title} fullWidth label="Title" onChange={handleChange} size="small" data-testid="event-title-input" aria-label="Event title" />
             </Grid>
             <Grid item xs={12}>
-              <MarkdownEditor value={event.description || ""} onChange={val => setEvent({...event, description: val})} style={{ maxHeight: 200, overflowY: "scroll" }} />
+              <MarkdownEditor value={event.description || ""} onChange={val => setEvent({...event, description: val})} style={{ maxHeight: 200, overflowY: "scroll" }} data-testid="event-description-editor" />
             </Grid>
           </Grid>
 

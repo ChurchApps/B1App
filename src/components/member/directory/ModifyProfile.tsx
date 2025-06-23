@@ -88,11 +88,12 @@ export const ModifyProfile: React.FC<Props> = (props) => {
                     setCurrentField(cf);
                     setShowPhotoEditor(false);
                   }}
+                  data-testid="profile-photo-editor"
                 />
               )
               : (
-                <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setShowPhotoEditor(true); }}>
-                  <img src={currentField.value || PersonHelper.getPhotoUrl(props.person)} alt="" />
+                <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setShowPhotoEditor(true); }} data-testid="edit-photo-link" aria-label="Edit profile photo">
+                  <img src={currentField.value || PersonHelper.getPhotoUrl(props.person)} alt="Profile photo" data-testid="profile-photo" />
                 </a>
               )
             }
@@ -101,10 +102,10 @@ export const ModifyProfile: React.FC<Props> = (props) => {
         break;
       case "birthDate":
         option = (
-          <TextField fullWidth label="Birthdate" name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(new Date(currentField.value))} onChange={handleChange} />
+          <TextField fullWidth label="Birthdate" name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(new Date(currentField.value))} onChange={handleChange} data-testid="birthdate-input" aria-label="Birth date" />
         );
         break;
-      default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? '*Enter First Name only' : null} />); break;
+      default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? '*Enter First Name only' : null} data-testid="field-value-input" aria-label={`${currentField.label} value`} />); break;
     }
     return option;
   };
@@ -120,7 +121,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
           <TableCell>{ch.label}</TableCell>
           <TableCell>{val}</TableCell>
           <TableCell>
-            <IconButton size="small" color="error" onClick={() => handleDelete(ch.field)}><DeleteIcon fontSize="inherit" /></IconButton>
+            <IconButton size="small" color="error" onClick={() => handleDelete(ch.field)} data-testid={`delete-change-${ch.field}-button`} aria-label={`Delete ${ch.label} change`}><DeleteIcon fontSize="inherit" /></IconButton>
           </TableCell>
         </TableRow>
       );
@@ -175,7 +176,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
       {(PersonHelper.person.id === props.personId || householdMembers?.some((m) => m.id === props.personId))
         && (
           <Tooltip title="Modify Profile" arrow>
-            <IconButton color="primary" size="medium" onClick={() => setOpen(true)}>
+            <IconButton color="primary" size="medium" onClick={() => setOpen(true)} data-testid="modify-profile-button" aria-label="Modify profile">
               <AssignmentReturnIcon fontSize="medium" sx={{ transform: "scaleX(-1)" }} />
             </IconButton>
           </Tooltip>
@@ -191,16 +192,16 @@ export const ModifyProfile: React.FC<Props> = (props) => {
           </Table>
           <FormControl fullWidth>
             <InputLabel>Field</InputLabel>
-            <Select fullWidth label="Field" name="field" value={currentField.field} onChange={handleChange}>
+            <Select fullWidth label="Field" name="field" value={currentField.field} onChange={handleChange} data-testid="field-select" aria-label="Select field to modify">
               {fieldOptions()}
             </Select>
           </FormControl>
           {valueOption()}
-          <Button fullWidth variant="outlined" sx={{ paddingTop: 0, paddingBottom: 0 }} onClick={handleAdd}>+ Add</Button>
+          <Button fullWidth variant="outlined" sx={{ paddingTop: 0, paddingBottom: 0 }} onClick={handleAdd} data-testid="add-change-button" aria-label="Add field change">+ Add</Button>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
-          <Button variant="contained" onClick={handleRequest} disabled={changes.length === 0}>Request</Button>
+          <Button onClick={handleClose} data-testid="close-modify-profile-button" aria-label="Close modify profile dialog">Close</Button>
+          <Button variant="contained" onClick={handleRequest} disabled={changes.length === 0} data-testid="request-changes-button" aria-label="Request profile changes">Request</Button>
         </DialogActions>
       </Dialog>
     </>

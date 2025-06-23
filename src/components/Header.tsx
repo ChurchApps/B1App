@@ -8,7 +8,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ApiHelper, AppearanceHelper, ArrayHelper, LinkInterface, Permissions, UserHelper } from "@churchapps/apphelper";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
-import { PersonHelper, SectionInterface } from "@/helpers";
+import { PersonHelper, SectionInterface, UrlHelper } from "@/helpers";
 import { redirect, usePathname } from "next/navigation";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -83,12 +83,12 @@ export function Header(props: Props) {
   // const pathName = usePathname();
   // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
 
-  const memberPortal = <MenuItem onClick={() => { redirect("/my") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
+  const memberPortal = <MenuItem onClick={() => { redirect("/my") }} dense data-testid="member-portal-menu-item" aria-label="Go to member portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
   const adminPortal = UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
-    <MenuItem onClick={() => { redirect("/admin") }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
+    <MenuItem onClick={() => { redirect("/admin") }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
-  const editProfile = <MenuItem onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`) }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
+  const editProfile = <MenuItem onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`) }} dense data-testid="edit-profile-menu-item" aria-label="Edit your profile"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
 
   const userAction = ApiHelper.isAuthenticated
     ? (
@@ -100,13 +100,15 @@ export function Header(props: Props) {
             icon={<Icon id="userIcon" sx={{ color: "#36547e !important" }}>account_circle</Icon>}
             sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
             onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.target); }}
+            data-testid="user-menu-chip"
+            aria-label="User menu"
           />
         </ClickAwayListener>
         <Menu id="useMenu" anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={() => { setMenuAnchor(null); }} MenuListProps={{ "aria-labelledby": "userMenuLink" }} sx={{ top: 5 }}>
           {memberPortal}
           {adminPortal}
           {editProfile}
-          <MenuItem onClick={() => { redirect("/logout") }} sx={{ color: "#d32f2f" }} dense><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> Logout</MenuItem>
+          <MenuItem onClick={() => { redirect("/logout") }} sx={{ color: "#d32f2f" }} dense data-testid="logout-menu-item" aria-label="Logout"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> Logout</MenuItem>
         </Menu>
       </Box>
     )
@@ -115,9 +117,11 @@ export function Header(props: Props) {
         {showLogin
           ? (
             <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(pathname) } clickable id="loginButton" label="Login"
+              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config.keyName)) } clickable id="loginButton" label="Login"
                 icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
                 sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
+                data-testid="login-chip"
+                aria-label="Login to your account"
               />
             </Box>
           )
@@ -127,21 +131,21 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect("/my") }}>
+      <ListItemButton onClick={() => { redirect("/my") }} data-testid="member-portal-list-item" aria-label="Go to member portal">
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
     </ListItem>
     {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (<>
       <ListItem disablePadding>
-        <ListItemButton onClick={() => { redirect("/admin") }}>
+        <ListItemButton onClick={() => { redirect("/admin") }} data-testid="admin-portal-list-item" aria-label="Go to admin portal">
           <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
           <ListItemText primary="Admin Portal" />
         </ListItemButton>
       </ListItem>
     </>)}
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect(`/my/directory/${PersonHelper?.person?.id}`) }}>
+      <ListItemButton onClick={() => { redirect(`/my/directory/${PersonHelper?.person?.id}`) }} data-testid="edit-profile-list-item" aria-label="Edit your profile">
         <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
         <ListItemText primary="Edit Profile" />
       </ListItemButton>
@@ -211,7 +215,7 @@ export function Header(props: Props) {
     {structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={() => toggleDrawer()} />)}
     {ApiHelper.isAuthenticated && (
       <ListItem disablePadding sx={{ color: "#d32f2f" }}>
-        <ListItemButton onClick={() => { redirect("/logout") }}>
+        <ListItemButton onClick={() => { redirect("/logout") }} data-testid="logout-list-item" aria-label="Logout">
           <ListItemIcon><Icon sx={{ color: "#d32f2f" }}>logout</Icon></ListItemIcon>
           <ListItemText primary="Logout" />
         </ListItemButton>
@@ -232,17 +236,17 @@ export function Header(props: Props) {
       <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? { marginBottom: 0 } : {}}>
         <Container style={{ height: 71 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Link href="/"><img src={getLogo()} alt={props.config?.church.name} id="headerLogo" /></Link>
+            <Link href="/" data-testid="header-logo-link" aria-label="Go to homepage"><img src={getLogo()} alt={props.config?.church.name} id="headerLogo" data-testid="header-logo" /></Link>
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap", }}>
               {getLinks()}
               {userAction}
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton size="large" color="inherit" id="nav-menu" onClick={toggleDrawer}>
+              <IconButton size="large" color="inherit" id="nav-menu" onClick={toggleDrawer} data-testid="mobile-menu-button" aria-label="Open navigation menu">
                 <MenuIcon />
               </IconButton>
               <Drawer open={open} onClose={toggleDrawer} anchor="right">
-                <Toolbar disableGutters><IconButton onClick={toggleDrawer}><ChevronRightIcon /></IconButton></Toolbar>
+                <Toolbar disableGutters><IconButton onClick={toggleDrawer} data-testid="close-drawer-button" aria-label="Close navigation menu"><ChevronRightIcon /></IconButton></Toolbar>
                 <Box sx={{ width: { xs: '100vw', sm: '50vw' } }}>
                   {userAction}
                   {getListMenu()}

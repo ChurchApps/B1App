@@ -18,7 +18,7 @@ export const Playlists = (props: Props) => {
     setCurrentPlaylist(null);
     loadData();
   };
-  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} />;
+  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} data-testid="add-playlist-button" />;
   const loadData = () => {
     ApiHelper.get("/playlists", "ContentApi").then((data) => {
       setPlaylists(data);
@@ -73,7 +73,7 @@ export const Playlists = (props: Props) => {
   if (currentPlaylist !== null) return <PlaylistEdit currentPlaylist={currentPlaylist} updatedFunction={handleUpdated} showPhotoEditor={props.showPhotoEditor} updatedPhoto={props.updatedPhoto} />;
   else
     return (
-      <DisplayBox headerIcon="video_library" headerText="Playlists" editContent={getEditContent()} id="servicesBox">
+      <DisplayBox headerIcon="video_library" headerText="Playlists" editContent={getEditContent()} id="servicesBox" data-testid="playlists-display-box">
         {getTable()}
       </DisplayBox>
     );

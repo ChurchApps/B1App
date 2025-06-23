@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
@@ -11,7 +10,6 @@ import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
 
 export function FilesClientWrapper(props: WrapperPageProps) {
-  const { isAuthenticated } = ApiHelper;
   const [pendingFileSave, setPendingFileSave] = useState(false);
   const [files, setFiles] = useState<FileInterface[]>(null);
 
@@ -64,8 +62,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else ApiHelper.get("/files", "ContentApi").then((d) => setFiles(d));
+    ApiHelper.get("/files", "ContentApi").then((d) => setFiles(d));
   }, []);
 
   const fileRows = files?.map((file) => (
@@ -77,7 +74,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
       </TableCell>
       <TableCell>{formatSize(file.size)}</TableCell>
       <TableCell align="right">
-        <SmallButton icon="delete" onClick={() => handleDelete(file)} />
+        <SmallButton icon="delete" onClick={() => handleDelete(file)} data-testid={`delete-file-${file.id}-button`} />
       </TableCell>
     </TableRow>
   ));
@@ -88,7 +85,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
       <div id="mainContent">
         <Grid container spacing={3}>
           <Grid item md={8} xs={12}>
-            <DisplayBox headerText="Files" headerIcon="description">
+            <DisplayBox headerText="Files" headerIcon="description" data-testid="files-display-box">
               <Table>
                 <TableHead>
                   <TableRow>
@@ -102,7 +99,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
             </DisplayBox>
           </Grid>
           <Grid item md={4} xs={12}>
-            <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload">
+            <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload" data-testid="file-upload-inputbox">
               {getStorage()}
               <p>
                 100 MB of storage space is provided for free for storing PDFs and other documents commonly needed for

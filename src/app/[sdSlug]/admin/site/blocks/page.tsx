@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { redirect, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { ApiHelper, Banner, SmallButton, DisplayBox } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -13,7 +13,6 @@ import { BlockEdit } from "@/components/admin/BlockEdit";
 type PageParams = {sdSlug:string }
 
 export default function AdminPagesClient() {
-  const { isAuthenticated } = ApiHelper;
   const [config, setConfig] = useState<ConfigurationInterface>(null);
   const [blocks, setBlocks] = useState<BlockInterface[]>([]);
   const [editBlock, setEditBlock] = useState<BlockInterface>(null);
@@ -28,12 +27,11 @@ export default function AdminPagesClient() {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-    else loadData();
-  }, [isAuthenticated]);
+    loadData();
+  }, []);
 
 
-  const editBlockContent = (<SmallButton icon="add" onClick={() => { setEditBlock({ blockType: "elementBlock" }); }} />);
+  const editBlockContent = (<SmallButton icon="add" data-testid="add-block-button" aria-label="Add new block" onClick={() => { setEditBlock({ blockType: "elementBlock" }); }} />);
 
   const blocksUi = blocks.map((block) => (
     <TableRow key={block.id}>
@@ -49,16 +47,13 @@ export default function AdminPagesClient() {
           onClick={() => {
             setEditBlock(block);
           }}
+          data-testid={`edit-block-${block.id}-button`}
         />
       </TableCell>
     </TableRow>
   ));
 
-  useEffect(() => {
-    if (!isAuthenticated) redirect("/login");
-  }, [isAuthenticated]);
-
-  useEffect(loadData, [isAuthenticated]);
+  useEffect(loadData, []);
 
 
   return (
@@ -74,7 +69,7 @@ export default function AdminPagesClient() {
             }}
           />
         )}
-        <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent}>
+        <DisplayBox headerText="Reusable Blocks" headerIcon="smart_button" editContent={editBlockContent} data-testid="reusable-blocks-display-box">
           <Table>
             <TableHead>
               <TableRow>

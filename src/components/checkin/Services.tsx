@@ -80,6 +80,7 @@ export function Services({ selectedHandler }: Props) {
             e.preventDefault();
             selectService(service.id);
           }}
+          data-testid={`select-service-${service.id}-button`}
         >
           {service.campus.name} - {service.name}
         </a>

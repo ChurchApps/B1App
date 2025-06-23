@@ -77,7 +77,7 @@ export const TabEdit: React.FC<Props> = (props) => {
   const getUrl = () => {
     if (currentTab?.linkType === "url") {
       return (
-        <TextField fullWidth label="Url" name="url" type="text" value={currentTab?.url} onChange={handleChange} />
+        <TextField fullWidth label="Url" name="url" type="text" value={currentTab?.url} onChange={handleChange} data-testid="tab-url-input" />
       );
     } else return null;
   }
@@ -96,7 +96,7 @@ export const TabEdit: React.FC<Props> = (props) => {
       return (
         <FormControl fullWidth>
           <InputLabel id="page">Page</InputLabel>
-          <Select labelId="page" label="Page" name="page" value={currentTab?.linkData} onChange={handleChange}>
+          <Select labelId="page" label="Page" name="page" value={currentTab?.linkData} onChange={handleChange} data-testid="video-tab-page-select">
             {options}
           </Select>
         </FormControl>
@@ -108,12 +108,12 @@ export const TabEdit: React.FC<Props> = (props) => {
 
   if (!currentTab) return <></>
   else return (
-    <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="b1/streaming/pages-tabs">
+    <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete} help="b1/streaming/pages-tabs" data-testid="video-tab-edit-inputbox">
       <ErrorMessages errors={errors} />
       <Stack direction="row" pt={2}>
         <TextField fullWidth margin="none" label="Text" name="text" type="text" value={currentTab?.text} onChange={handleChange} InputProps={{
           endAdornment: <div className="input-group-append">
-            <Button variant="contained" endIcon={<Icon>arrow_drop_down</Icon>} onClick={openModal}>
+            <Button variant="contained" endIcon={<Icon>arrow_drop_down</Icon>} onClick={openModal} data-testid="video-tab-icon-dropdown-button">
               <Icon>{currentTab?.icon}</Icon>
             </Button>
           </div>
