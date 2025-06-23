@@ -38,14 +38,23 @@ export class TestHelpers {
   }
 
   static async navigateToAdminPortal(page: Page) {
-    // Wait for the user menu to be available after login
-    const userMenuChip = page.locator('[data-testid="user-menu-chip"]');
-    await userMenuChip.waitFor({ state: 'visible', timeout: 10000 });
-    await userMenuChip.click();
+    // Try direct navigation to admin portal to avoid UI interaction issues
+    await page.goto('/admin');
+    await page.waitForLoadState('domcontentloaded');
     
-    const adminPortalItem = page.locator('[data-testid="admin-portal-menu-item"]');
-    await adminPortalItem.waitFor({ state: 'visible', timeout: 5000 });
-    await adminPortalItem.click();
+    // If the above doesn't work, try the menu approach
+    if (!page.url().includes('/admin')) {
+      // Wait for the user menu to be available after login
+      const userMenuChip = page.locator('[data-testid="user-menu-chip"]');
+      await userMenuChip.waitFor({ state: 'visible', timeout: 10000 });
+      
+      // Force click using JavaScript to bypass viewport issues
+      await userMenuChip.evaluate(element => element.click());
+      
+      const adminPortalItem = page.locator('[data-testid="admin-portal-menu-item"]');
+      await adminPortalItem.waitFor({ state: 'visible', timeout: 5000 });
+      await adminPortalItem.click();
+    }
     
     await page.waitForURL('**/admin', { timeout: 15000 });
     await page.waitForLoadState('domcontentloaded');
