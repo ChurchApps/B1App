@@ -41,10 +41,12 @@ export function DroppableWrapper(props: Props) {
   if (canDrop) {
     if (isOver) {
       droppableStyle.backgroundColor = "rgba(25,118,210, 1)";
-      droppableStyle.border = "2px solid #1976d2"; // Solid border when actively hovered
+      droppableStyle.outline = "2px solid #1976d2"; // Solid outline when actively hovered
+      droppableStyle.outlineOffset = "-1px";
     } else {
       droppableStyle.backgroundColor = "rgba(25,118,210, 0.1)";
-      droppableStyle.border = "2px dashed #1976d2"; // Dashed border when it's a droppable target but not hovered
+      droppableStyle.outline = "2px dashed #1976d2"; // Dashed outline when it's a droppable target but not hovered
+      droppableStyle.outlineOffset = "-1px";
     }
   }
   // If not canDrop, no special background or border is applied, which is correct.
