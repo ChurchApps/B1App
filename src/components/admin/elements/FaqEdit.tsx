@@ -1,5 +1,6 @@
 import { TextField, Box, SelectChangeEvent, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { MarkdownEditor } from "@churchapps/apphelper";
+import { ColorPicker } from "../ColorPicker";
 
 type Props = {
   parsedData: any;
@@ -23,6 +24,10 @@ export const FaqEdit = ({ parsedData, handleChange, handleMarkdownChange }: Prop
         onChange={(val) => handleMarkdownChange("description", val)}
         style={{ maxHeight: 200, overflowY: "scroll" }}
       />
+    </Box>
+    <Box sx={{ marginTop: 2 }}>
+      <InputLabel>Icon Color</InputLabel>
+      <ColorPicker color={parsedData?.iconColor || "#03a9f4"} updatedCallback={(c) => handleMarkdownChange("iconColor", c)} globalStyles={null} />
     </Box>
   </>
 );
