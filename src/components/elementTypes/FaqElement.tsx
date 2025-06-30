@@ -18,7 +18,7 @@ const Accordion = styled((props: AccordionProps) => (<MuiAccordion disableGutter
 }));
 
 
-const AccordionSummary = styled((props: AccordionSummaryProps) => (<MuiAccordionSummary expandIcon={<DoubleArrowIcon sx={{ color: "#03a9f4" }} />} {...props} />))(({ theme }) => ({
+const AccordionSummary = styled((props: AccordionSummaryProps & { iconColor: string }) => (<MuiAccordionSummary expandIcon={<DoubleArrowIcon sx={{ color: props.iconColor }} />} {...props} />))(({ theme }) => ({
   flexDirection: "row-reverse",
   backgroundColor: "transparent",
   marginTop: 10,
@@ -46,7 +46,7 @@ export const FaqElement = ({ element, textColor }: Props) => {
   return (
     <>
       <Accordion id={"el-" + element.id} style={(simple) ? {marginTop:0} : null }>
-        {!simple && <AccordionSummary>
+        {!simple && <AccordionSummary iconColor={element?.answers?.iconColor || "#03a9f4"}>
           <Typography variant="h6" fontWeight={600} color={textColor === "dark" ? "#444" : "#eee"}>
             {element?.answers?.title}
           </Typography>
