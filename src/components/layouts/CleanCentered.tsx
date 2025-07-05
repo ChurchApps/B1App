@@ -1,6 +1,8 @@
+"use client";
+
 import Head from "next/head";
 import { Box, Card, CssBaseline } from "@mui/material";
-import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import type { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
 import Zone from "./Zone";
 
 type Props = {

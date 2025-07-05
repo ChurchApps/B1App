@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { ApiHelper, GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/apphelper";
 import { TimelinePost } from "./TimelinePost";

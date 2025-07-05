@@ -1,7 +1,12 @@
 import Cookies from "js-cookie";
 import { ChatHelper } from "./ChatHelper";
 import { ChatStateInterface, StreamConfigInterface, StreamingServiceExtendedInterface } from "./interfaces";
-import { SocketHelper, ConversationInterface, BlockedIpInterface, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
+import { SocketHelper } from "@churchapps/apphelper/dist/helpers/SocketHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import type { ConversationInterface } from "@churchapps/apphelper/dist/interfaces/ConversationInterface";
+import type { BlockedIpInterface } from "@churchapps/apphelper/dist/interfaces/BlockedIpInterface";
 
 export class StreamChatManager {
 

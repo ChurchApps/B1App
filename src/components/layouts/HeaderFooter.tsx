@@ -1,7 +1,9 @@
+"use client";
+
 import Head from "next/head";
 import { Header } from "../Header";
 import { CssBaseline } from "@mui/material";
-import { ArrayHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import Zone from "./Zone";
 import { Footer } from "./Footer";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";

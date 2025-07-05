@@ -1,5 +1,6 @@
 "use client";
-import { AppearanceInterface, SermonInterface } from "@churchapps/apphelper";
+import type { AppearanceInterface } from "@churchapps/apphelper/dist/interfaces/AppearanceInterface";
+import type { SermonInterface } from "@churchapps/apphelper/dist/interfaces/SermonInterface";
 import { EnvironmentHelper, StreamConfigInterface } from "."
 import { ChatHelper } from "./ChatHelper";
 import { StreamingServiceHelper } from "./StreamingServiceHelper";

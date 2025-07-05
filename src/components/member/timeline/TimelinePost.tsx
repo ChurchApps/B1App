@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { TimelinePostInterface } from "../../../helpers";
 import Image from "next/image";

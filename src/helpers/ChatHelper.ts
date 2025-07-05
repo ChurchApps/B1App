@@ -1,4 +1,8 @@
-import { SocketHelper, ApiHelper, ConnectionInterface, ConversationInterface, MessageInterface } from "@churchapps/apphelper";
+import { SocketHelper } from "@churchapps/apphelper/dist/helpers/SocketHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { ConnectionInterface } from "@churchapps/apphelper/dist/interfaces/ConnectionInterface";
+import type { ConversationInterface } from "@churchapps/apphelper/dist/interfaces/ConversationInterface";
+import type { MessageInterface } from "@churchapps/apphelper/dist/interfaces/MessageInterface";
 import Cookies from "js-cookie";
 import { ChatAttendanceInterface, ChatBlockedInterface, ChatRoomInterface, ChatStateInterface, ChatUserInterface } from "."
 import { ChatConfigHelper } from "./ChatConfigHelper";
