@@ -3,9 +3,9 @@ import { DefaultPageWrapper } from "../../../[pageSlug]/components/DefaultPageWr
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { GroupInterface } from "@churchapps/apphelper/dist/interfaces/GroupInterface";
-import { GroupMemberInterface } from "@churchapps/apphelper/dist/interfaces/GroupMemberInterface";
-import { EventInterface } from "@churchapps/apphelper/dist/interfaces/EventInterface";
+import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupMemberInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { EventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Metadata } from "next";
 import { Theme } from "@/components";
 import { GroupClient } from "./components/GroupClient";

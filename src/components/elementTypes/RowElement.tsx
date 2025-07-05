@@ -3,7 +3,8 @@ import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void, church?: ChurchInterface }
 

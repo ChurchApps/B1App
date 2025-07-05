@@ -2,7 +2,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import {RRule, Weekday, rrulestr} from "rrule";
-import { EventHelper, DateHelper } from "@churchapps/apphelper";
+import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 
 interface Props {
   start: Date;

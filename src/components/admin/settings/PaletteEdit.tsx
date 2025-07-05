@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Table, TableCell, TableRow, TextField } from "@mui/material";
 import { GlobalStyleInterface } from "@/helpers";
-import { InputBox } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 
 interface Props {
   globalStyle?: GlobalStyleInterface;

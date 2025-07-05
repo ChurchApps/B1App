@@ -1,7 +1,7 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 

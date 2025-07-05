@@ -4,7 +4,10 @@ import React, { useState } from "react";
 
 import { PersonInterface } from "@churchapps/helpers"
 import { TextField, Button, Typography } from "@mui/material";
-import { ApiHelper, Locale, CreatePerson, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+// // CreatePerson component not available
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { PersonAddResults } from "./PersonAddResults";
 
 
@@ -52,7 +55,7 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
         <Typography sx={{ marginTop: "7px" }}>{Locale.label("person.noRec")} <a href="about:blank" onClick={(e) => { e.preventDefault(); setOpen(true); }} data-testid="create-person-link" aria-label="Create new person">{Locale.label("createPerson.addNewPerson")}</a></Typography>
       )}
       <PersonAddResults addFunction={addFunction} getPhotoUrl={getPhotoUrl} includeEmail={includeEmail} actionLabel={actionLabel} searchResults={searchResults} />
-      {open && <CreatePerson showInModal onClose={() => { setOpen(false); }} navigateOnCreate={false} onCreate={person => { setSearchText(""); setSearchResults([person]) }} data-testid="create-person-modal" />}
+      {/* CreatePerson component not available - open && <CreatePerson showInModal onClose={() => { setOpen(false); }} navigateOnCreate={false} onCreate={person => { setSearchText(""); setSearchResults([person]) }} data-testid="create-person-modal" /> */}
     </DisplayBox>
   );
 }

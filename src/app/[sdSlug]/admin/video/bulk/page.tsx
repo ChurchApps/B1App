@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Banner, DisplayBox } from "@churchapps/apphelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { VimeoImport } from "@/components/admin/video/VimeoImport";

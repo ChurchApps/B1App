@@ -1,5 +1,7 @@
 import React from "react";
-import { ApiHelper, AssignmentInterface, InputBox, PositionInterface, TimeInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import type { AssignmentInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Alert } from "@mui/material";
 import { DateHelper } from "@churchapps/helpers";
 

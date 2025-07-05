@@ -6,7 +6,9 @@ import { Icon } from "@mui/material";
 import "react-contexify/dist/ReactContexify.css";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
-import { ConversationInterface, ApiHelper, UniqueIdHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import type { ConversationInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 
 interface Props {

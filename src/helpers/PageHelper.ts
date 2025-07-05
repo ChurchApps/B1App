@@ -1,5 +1,5 @@
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { GroupInterface } from "@churchapps/apphelper";
+import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { PageLink } from "./interfaces";
 
 export class PageHelper {

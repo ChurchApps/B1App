@@ -1,5 +1,5 @@
 import React from "react";
-import { ChurchInterface } from "@churchapps/apphelper";
+import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { ElementInterface } from "@/helpers";
 
 import { LiveStream } from "../video/LiveStream";

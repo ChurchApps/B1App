@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GlobalStyleInterface } from '@/helpers';
-import { GalleryModal } from '@churchapps/apphelper';
+import { GalleryModal } from "../../gallery/GalleryModal";
 import { FormControl, InputLabel, Select, MenuItem, TextField, Tabs, Tab, Button, SelectChangeEvent, Grid } from '@mui/material';
 import { SliderPicker } from 'react-color';
 

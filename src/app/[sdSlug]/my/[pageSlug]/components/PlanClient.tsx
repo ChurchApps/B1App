@@ -3,7 +3,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid, Icon } from "@mui/material";
-import { ApiHelper, ArrayHelper, AssignmentInterface, DisplayBox, Loading, PersonInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { AssignmentInterface, PersonInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Team } from "@/components/plans/Team";
 import { PositionDetails } from "@/components/plans/PositionDetails";
 import { ServiceOrder } from "./ServiceOrder";

@@ -1,7 +1,12 @@
 import React from "react";
-import { ApiHelper, GroupInterface, DisplayBox, GroupMemberInterface, PersonHelper, PersonInterface, Loading, Locale } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import type { GroupInterface, GroupMemberInterface, PersonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
-import { SmallButton } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import Link from "next/link";
 
 interface Props { group: GroupInterface, addFunction: (person: PersonInterface) => void }

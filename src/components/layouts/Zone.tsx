@@ -4,7 +4,7 @@ import React from "react";
 import { Section } from "@/components/Section";
 import { SectionInterface } from "@/helpers";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import type { ChurchInterface } from "@churchapps/apphelper";
+import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { SectionBlock } from "../SectionBlock";
 
 type Props = {

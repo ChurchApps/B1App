@@ -1,6 +1,6 @@
 import React from "react";
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreviewLight } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/MarkdownEditor";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 interface Props {

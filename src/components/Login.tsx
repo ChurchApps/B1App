@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useCookies } from "react-cookie";
 import { Alert, PaperProps } from "@mui/material";
 import { Layout } from "@/components";
-import { LoginPage } from "@churchapps/apphelper";
+import { LoginPage } from "@churchapps/apphelper/dist/pageComponents/LoginPage";
 import UserContext from "@/context/UserContext";
 import { PersonHelper } from "@/helpers";
 import { useSearchParams } from "next/navigation";

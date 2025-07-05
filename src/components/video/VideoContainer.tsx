@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { SectionInterface, StreamingServiceExtendedInterface } from "@/helpers";
-import { AppearanceHelper, useMountedState } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
+import { useMountedState } from "@churchapps/apphelper/dist/helpers/useMountedState";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { useParams } from "next/navigation";

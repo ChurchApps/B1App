@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import { ApiHelper, GroupInterface, Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import GroupCard from "./GroupCard";
 import { EnvironmentHelper } from "@/helpers";
 

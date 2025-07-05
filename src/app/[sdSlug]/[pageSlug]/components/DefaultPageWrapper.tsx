@@ -2,7 +2,7 @@ import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/layouts/Footer";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { CssBaseline } from "@mui/material";
 
 type Props = {

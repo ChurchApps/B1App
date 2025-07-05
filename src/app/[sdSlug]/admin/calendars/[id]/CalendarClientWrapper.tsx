@@ -6,7 +6,11 @@ import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconB
 import DeleteIcon from '@mui/icons-material/Delete';
 import { EnvironmentHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, GroupInterface, CuratedEventInterface, Banner } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 
 interface Props extends WrapperPageProps {

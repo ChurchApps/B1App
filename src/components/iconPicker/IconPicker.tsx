@@ -4,7 +4,7 @@ import * as React from "react";
 import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, Pagination, Stack } from "@mui/material";
 import MuiPaper from "@mui/material/Paper";
 import IconNamesList from "./IconNamesList"
-import { Locale } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
 import FlexSearch from "flexsearch";
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 

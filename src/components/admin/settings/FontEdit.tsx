@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Grid, SelectChangeEvent } from "@mui/material";
 import { GlobalStyleInterface } from "@/helpers";
-import { DisplayBox, InputBox } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { CustomFontModal } from "@/app/[sdSlug]/admin/site/styles/CustomFontModal";
 
 interface Props {

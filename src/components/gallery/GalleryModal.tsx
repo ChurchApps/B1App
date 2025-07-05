@@ -1,10 +1,12 @@
 "use client";
 
 import { FileHelper, CommonEnvironmentHelper } from "@churchapps/helpers";
-import { ApiHelper, Locale } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Tab, Tabs, Tooltip, Icon } from "@mui/material";
 import React, { useState } from "react";
-import { ImageEditor, TabPanel } from "@churchapps/apphelper";
+import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
+import { TabPanel } from "@churchapps/apphelper/dist/helpers/TabPanel";
 import { StockPhotos } from "./StockPhotos";
 
 interface Props {

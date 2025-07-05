@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Dialog } from "@mui/material";
-import { DisplayBox, ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { BlockInterface } from "@/helpers";
 import { AddableElement } from "../AddableElement";
 

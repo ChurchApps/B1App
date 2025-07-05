@@ -5,7 +5,11 @@ import { FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { DisplayBox, InputBox, ApiHelper, SmallButton, Banner } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
 

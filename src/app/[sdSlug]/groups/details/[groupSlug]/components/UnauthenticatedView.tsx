@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
+import type { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { GroupContact } from "./GroupContact";
 import { GroupHero } from "./GroupHero";
 import { Avatar, Container, Grid } from "@mui/material";

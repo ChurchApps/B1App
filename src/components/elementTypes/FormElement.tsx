@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { ElementInterface, PersonHelper } from "@/helpers";
-import { Loading, FormSubmissionEdit, ApiHelper, ChurchInterface } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { FormSubmissionEdit } from "@churchapps/apphelper/dist/components/FormSubmissionEdit";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props {
   element: ElementInterface;

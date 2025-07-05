@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox, UserHelper, Permissions, LinkInterface, SlugHelper, ApiHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
 import { Button, Dialog, Grid, Icon, InputLabel, SelectChangeEvent, TextField } from "@mui/material";

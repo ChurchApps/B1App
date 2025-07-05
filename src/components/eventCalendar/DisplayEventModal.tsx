@@ -1,6 +1,9 @@
 "use client";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { DateHelper, EventInterface, Conversations, MarkdownPreviewLight } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { Conversations } from "../notes/Conversations";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownPreviewLight";
+import type { EventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { AppBar, Button, Dialog, DialogContent, Icon, IconButton, Toolbar, Typography } from "@mui/material";
 import { useContext } from "react";
 import UserContext from "@/context/UserContext";

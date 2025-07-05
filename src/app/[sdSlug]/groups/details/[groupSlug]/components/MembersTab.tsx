@@ -1,6 +1,11 @@
 "use client";
 
-import { ApiHelper, DisplayBox, GroupInterface, GroupMemberInterface, Loading, PersonHelper, PersonInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import type { GroupInterface, GroupMemberInterface, PersonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Grid, Link, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";

@@ -2,7 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper, GenericSettingInterface, LinkInterface, SmallButton, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { GenericSettingInterface, LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { PageInterface, UrlHelper } from "@/helpers";
 import { redirect, usePathname } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";

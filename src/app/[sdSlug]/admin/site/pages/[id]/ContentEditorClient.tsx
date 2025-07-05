@@ -1,7 +1,8 @@
 "use client";
 
 import { WrapperPageProps } from "@/helpers";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import React from "react";
 import ContentEditor from "@/components/admin/ContentEditor/ContentEditor";
 import { redirect } from "next/navigation";

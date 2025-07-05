@@ -1,7 +1,10 @@
 "use client"
 import { useState, useEffect } from "react";
 import { CheckinHelper, PersonHelper } from "@/helpers";
-import { Loading, ApiHelper, ServiceInterface, ArrayHelper, GroupServiceTimeInterface, GroupInterface } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props {
   selectedHandler: () => void;

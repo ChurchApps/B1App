@@ -6,7 +6,8 @@ import { Box, Container } from "@mui/material";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { DraggableWrapper } from "./admin/DraggableWrapper";
 import { StyleHelper } from "@/helpers/StyleHelper";
 

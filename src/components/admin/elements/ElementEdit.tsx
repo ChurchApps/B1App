@@ -2,9 +2,13 @@
 import { useState, useEffect } from "react";
 import { AnimationsInterface, BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider, Dialog } from "@mui/material";
-import { MarkdownEditor, ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
+import { MarkdownEditor } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownEditor";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import React from "react";
-import { GalleryModal } from "@churchapps/apphelper";
+import { GalleryModal } from "../../gallery/GalleryModal";
 import { RowEdit } from "./RowEdit";
 import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";

@@ -1,5 +1,11 @@
 import React from "react";
-import { ApiHelper, GroupInterface, GroupServiceTimeInterface, InputBox, ErrorMessages, SessionInterface, DateHelper, UniqueIdHelper, Locale } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import type { GroupInterface, GroupServiceTimeInterface, SessionInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { TextField, FormControl, Select, InputLabel, SelectChangeEvent, MenuItem } from "@mui/material"
 
 interface Props { group: GroupInterface, updatedFunction: (session: SessionInterface) => void, sidebarVisibilityFunction: (name: string, visible: boolean) => void, }

@@ -2,7 +2,8 @@
 
 import React, { useEffect } from "react";
 
-import { UserHelper, ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import Link from "next/link";

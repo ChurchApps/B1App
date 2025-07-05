@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Icon, Box } from "@mui/material";
-import { DisplayBox, UserHelper, ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { B1LinkInterface } from "@/helpers";
 import { TabEdit } from "./TabEdit";
 

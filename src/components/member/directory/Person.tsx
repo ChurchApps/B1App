@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { Grid, Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
-import { PersonInterface, DisplayBox, ApiHelper, TaskInterface } from "@churchapps/apphelper"
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { PersonInterface, TaskInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { PersonHelper } from "../../../helpers";
 import { Household } from "./Household";
 import { ModifyProfile } from "./ModifyProfile";

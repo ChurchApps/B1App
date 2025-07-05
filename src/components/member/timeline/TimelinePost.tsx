@@ -4,7 +4,13 @@ import React from "react";
 import { TimelinePostInterface } from "../../../helpers";
 import Image from "next/image";
 import { Card, CardContent, Grid } from "@mui/material";
-import { Conversation, AddNote, ArrayHelper, DateHelper, GroupInterface, PersonInterface, UserContextInterface, UserHelper, ConversationInterface, ApiHelper } from "@churchapps/apphelper";
+import { Conversation } from "@churchapps/apphelper/dist/helpers/Conversation";
+import { AddNote } from "@churchapps/apphelper/dist/helpers/AddNote";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { GroupInterface, PersonInterface, UserContextInterface, ConversationInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import Link from "next/link";
 
 interface Props {

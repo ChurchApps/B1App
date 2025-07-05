@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, SmallButton, Banner } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { CuratedCalendarInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import { redirect } from "next/navigation";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";

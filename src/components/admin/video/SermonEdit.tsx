@@ -1,10 +1,17 @@
 "use client";
 import React from "react";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button, Icon } from "@mui/material";
-import { Loading, InputBox, ErrorMessages } from "@churchapps/apphelper";
-import { SermonInterface, PlaylistInterface, ApiHelper, UniqueIdHelper, DateHelper, UserHelper, Permissions } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import type { SermonInterface, PlaylistInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Duration } from "./Duration";
-import { B1ShareModal } from "@churchapps/apphelper";
+import { B1ShareModal } from "../../../B1ShareModal";
 
 interface Props {
   currentSermon: SermonInterface,

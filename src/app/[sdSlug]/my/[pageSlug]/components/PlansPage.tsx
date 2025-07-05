@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid } from "@mui/material";
-import { ApiHelper, ArrayHelper, AssignmentInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { ServingTimes } from "@/components/plans/ServingTimes";
 import { UpcomingDates } from "@/components/plans/UpcomingDates";
 import { BlockoutDates } from "@/components/plans/BlockoutDates";

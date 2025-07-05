@@ -1,7 +1,10 @@
 "use client";
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper, GalleryModal, GroupInterface, InputBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { GalleryModal } from "../../../../../components/gallery/GalleryModal";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Button, InputLabel, SelectChangeEvent, TextField } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from "react";

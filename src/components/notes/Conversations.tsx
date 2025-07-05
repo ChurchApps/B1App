@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Loading } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ArrayHelper } from "@churchapps/helpers";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ConversationInterface, UserContextInterface } from "@churchapps/helpers";
 import { Conversation } from "./Conversation";
 import { NewConversation } from "./NewConversation";

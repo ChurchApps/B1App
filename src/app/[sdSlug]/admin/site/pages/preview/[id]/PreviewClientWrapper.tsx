@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import { ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper, Banner, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { Grid } from "@mui/material";
 import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";

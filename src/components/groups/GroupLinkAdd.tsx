@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Grid, TextField, Typography } from "@mui/material";
-import { ApiHelper, ErrorMessages, InputBox, LinkInterface, Permissions, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { Permissions } from "@churchapps/helpers";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props {
   groupId: string;

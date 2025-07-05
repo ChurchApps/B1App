@@ -2,7 +2,8 @@
 import { Button, Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { CommonEnvironmentHelper } from "@churchapps/helpers";
-import { ApiHelper, Locale } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
 
 interface Props {
   aspectRatio: number,

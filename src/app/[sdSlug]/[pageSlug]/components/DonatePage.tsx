@@ -1,7 +1,8 @@
 "use client";
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { NonAuthDonation, UserHelper } from "@churchapps/apphelper";
+import { NonAuthDonation } from "@churchapps/apphelper/dist/donationComponents/components/NonAuthDonation";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Button, Container,  Grid,  Icon,  Link,  Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 

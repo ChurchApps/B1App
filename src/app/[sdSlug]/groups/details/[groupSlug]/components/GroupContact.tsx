@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { GroupInterface, GroupMemberInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Alert, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 interface Props {

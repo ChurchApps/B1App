@@ -3,7 +3,10 @@ import { Typography, Breadcrumbs, Button, Grid, Card, CardContent, Box } from "@
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import TopicIcon from "@mui/icons-material/Topic";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { PlaylistInterface, SermonInterface, ApiHelper, AppearanceHelper, Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import type { PlaylistInterface, SermonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props {
   churchId: string;

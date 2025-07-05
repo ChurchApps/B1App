@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SmallButton } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";
 import { Section } from "./Section";
