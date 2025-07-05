@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ErrorMessages, InputBox, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import { AnimationsInterface, BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { Button, Dialog, FormControl, Icon, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
@@ -87,7 +87,7 @@ export function SectionEdit(props: Props) {
   </>)
 
   const getBlockFields = () => {
-    let options: JSX.Element[] = [];
+    let options: React.ReactElement[] = [];
     blocks?.forEach(b => {
       options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
     });

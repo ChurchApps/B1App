@@ -1,3 +1,4 @@
+import React from 'react';
 import { GlobalStyleInterface } from '@/helpers';
 import { TextField, SelectChangeEvent } from '@mui/material';
 import { SliderPicker } from 'react-color';
@@ -31,7 +32,7 @@ export function ColorPicker(props: Props) {
   }
 
   const getManualOptions = (colors:string[], values:string[]) => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     colors.forEach((c, i) => {
       const v = values[i];
       const style: any = { backgroundColor: c, width: "100%", height: (props.color === v) ? 20 : 12, display: "block" }

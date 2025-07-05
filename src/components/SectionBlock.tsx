@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { SmallButton } from "@churchapps/apphelper";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DraggableIcon } from "./admin/DraggableIcon";
@@ -39,7 +40,7 @@ export const SectionBlock: React.FC<Props> = props => {
   }
 
   const getSections = () => {
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
     props.section.sections.forEach(section => {
       result.push(<Section key={section.id} section={section} churchSettings={props.churchSettings} />)
     });

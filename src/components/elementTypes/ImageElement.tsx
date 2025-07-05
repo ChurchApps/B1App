@@ -1,10 +1,9 @@
+import React, { CSSProperties } from "react";
 import { ElementInterface } from "@/helpers";
 
 interface Props {
   element: ElementInterface;
 }
-
-import { CSSProperties } from "react";
 
 // The user has confirmed the logic from the previous turn is correct.
 // This is a no-op as the file should already be in the desired state.
@@ -46,7 +45,7 @@ export const ImageElement = ({ element }: Props) => {
     wrapperStyle.textAlign = "left";
   }
 
-  let photoDisplayContent: JSX.Element = <></>;
+  let photoDisplayContent: React.ReactElement = <></>;
 
   if (imageUrl) {
     const imgTag = (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Icon, Box } from "@mui/material";
 import { DisplayBox, UserHelper, ApiHelper } from "@churchapps/apphelper";
 import { B1LinkInterface } from "@/helpers";
@@ -56,7 +56,7 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
 
   const getRows = () => {
     let idx = 0;
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     tabs.forEach((tab) => {
       const upLink = (idx === 0)
         ? null

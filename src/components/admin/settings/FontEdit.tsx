@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid, SelectChangeEvent } from "@mui/material";
 import { GlobalStyleInterface } from "@/helpers";
 import { DisplayBox, InputBox } from "@churchapps/apphelper";
@@ -45,7 +45,7 @@ export function FontsEdit(props: Props) {
 
 
   const getPairings = () => {
-    let result:JSX.Element[] = [];
+    let result:React.ReactElement[] = [];
 
     fontList.forEach(heading => {
       result.push(<Grid item xs={12} md={6}>

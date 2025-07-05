@@ -1,12 +1,12 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
 import { GroupContact } from "./GroupContact";
 import { GroupHero } from "./GroupHero";
 import { Avatar, Container, Grid } from "@mui/material";
-import { useEffect, useState } from "react";
 
 interface Props {
   config: ConfigurationInterface
@@ -19,7 +19,7 @@ export function UnauthenticatedView(props: Props) {
 
   EnvironmentHelper.init();
   const getLeaders = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     props.leaders.forEach((l) => {
       result.push(<Grid container item xs={6} md={2} key={l.person.id} style={{ height: "50px", backgroundColor: "hsl(0, 0%, 85%)", marginLeft: "5px", borderRadius: "40px" }}>
         <Grid item md={4} style={{ padding: "5px" }}>
@@ -33,10 +33,10 @@ export function UnauthenticatedView(props: Props) {
 
   const [hidden, setHidden] = useState("block");
   const [shift, setShift] = useState(8);
-  const [events, setEvents] = useState<JSX.Element[]>([]);
+  const [events, setEvents] = useState<React.ReactElement[]>([]);
 
   useEffect(() => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     const currDate = new Date();
 
     props.events.forEach((e) => {

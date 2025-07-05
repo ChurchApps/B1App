@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Icon, Grid } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { GroupInterface } from "@churchapps/apphelper";
@@ -34,7 +34,7 @@ export function Groups({ selectedHandler }: Props) {
   };
 
   const getCategories = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     groupTree.forEach((c) => {
       result.push(getCategory(c));
     });
@@ -42,7 +42,7 @@ export function Groups({ selectedHandler }: Props) {
   };
 
   const getGroups = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     selectedCategory?.items?.forEach((g) => {
       result.push(getGroup(g));
     });

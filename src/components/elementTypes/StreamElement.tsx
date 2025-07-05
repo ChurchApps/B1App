@@ -1,3 +1,4 @@
+import React from "react";
 import { ChurchInterface } from "@churchapps/apphelper";
 import { ElementInterface } from "@/helpers";
 
@@ -12,7 +13,7 @@ export const StreamElement: React.FC<Props> = (props) => {
   const includeInteraction = mode !== "video";
 
 
-  let offlineContent:JSX.Element = null;
+  let offlineContent:React.ReactElement = null;
   if (props.element.answers?.offlineContent === "hide") offlineContent = (props.editMode) ? (<>Offline Video Placeholder</>) : (<></>);
   else if (props.element.answers?.offlineContent === "block") offlineContent = <ElementBlock key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} textColor={"#333333"} />;
 

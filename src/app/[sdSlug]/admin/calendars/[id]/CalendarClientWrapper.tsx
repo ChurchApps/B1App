@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -54,7 +54,7 @@ export function CalendarClientWrapper(props: Props) {
   const addedGroups = groups.filter((g) => events.find((event) => event.groupId === g.id));
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
 
     if (addedGroups.length === 0) {
       rows.push(
@@ -91,13 +91,13 @@ export function CalendarClientWrapper(props: Props) {
       <Banner data-testid="calendar-banner"><h1>{currentCalendar?.name}</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             <DisplayBox headerText="" data-testid="curated-calendar-display-box">
               <Typography component="h2" variant="h6" color="primary">Curated Calendar</Typography>
               <CuratedCalendar curatedCalendarId={props.curatedCalendarId as string} churchId={props.config.church.id} mode="edit" updatedCallback={loadData} refresh={refresh} data-testid="curated-calendar" />
             </DisplayBox>
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <DisplayBox headerText="Groups" headerIcon="backup_table" data-testid="calendar-groups-display-box">
               {isLoadingGroups
                 ? (

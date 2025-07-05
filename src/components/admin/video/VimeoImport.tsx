@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ApiHelper, ErrorMessages, InputBox, PlaylistInterface, SermonInterface } from "@churchapps/apphelper";
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 
@@ -38,7 +38,7 @@ export const VimeoImport = (props: Props) => {
   };
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     sermons.forEach((sermon) => {
       rows.push(
         <TableRow key={sermon.videoData}>

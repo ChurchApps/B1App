@@ -32,7 +32,7 @@ export default function AdminPagesClient() {
       <div id="mainContent">
         {editPage && (<PageEdit page={editPage} updatedCallback={() => { setEditPage(null); setRefreshKey(Math.random()) }} embedded={true} /> )}
         {UserHelper.checkAccess(Permissions.contentApi.content.edit)
-        && <Grid item md={8} xs={12}>
+        && <Grid size={{ md: 8, xs: 12 }}>
           <EmbeddablePages onSelected={(page:PageInterface) => { setEditPage(page); } } pathPrefix="/member" refreshKey={refreshKey} />
         </Grid>
         }

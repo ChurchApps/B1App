@@ -1,7 +1,7 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import {RRule, Weekday, rrulestr} from "rrule";
-import { ChangeEvent, useEffect, useState } from "react";
 import { EventHelper, DateHelper } from "@churchapps/apphelper";
 
 interface Props {
@@ -77,7 +77,7 @@ export function RRuleEditor(props: Props) {
   }
 
   const getFreqFollowUp = () => {
-    let result:JSX.Element = <></>;
+    let result:React.ReactElement = <></>;
     switch(rRuleOptions.freq.toString())
     {
       case RRule.WEEKLY.toString():
@@ -142,7 +142,7 @@ export function RRuleEditor(props: Props) {
   const ends = (rRuleOptions.count) ? "count" : (rRuleOptions.until) ? "until" : "never";
 
   const getEndsFollowUp = () => {
-    let result:JSX.Element = <></>;
+    let result:React.ReactElement = <></>;
     switch(ends)
     {
       case "until":

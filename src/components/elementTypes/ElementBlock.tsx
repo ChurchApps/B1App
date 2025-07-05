@@ -1,3 +1,4 @@
+import React from "react";
 import { ElementInterface } from "@/helpers";
 import { Element } from "../Element";
 
@@ -10,7 +11,7 @@ interface Props {
 export const ElementBlock: React.FC<Props> = (props) => {
 
   const getChildren = (elements: ElementInterface[]) => {
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
     elements?.forEach(c => {
       result.push(<Element key={c.id} element={c} churchSettings={props.churchSettings} textColor={props.textColor} />)
     });

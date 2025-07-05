@@ -84,7 +84,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
       <Banner><h1>Manage Your Files</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             <DisplayBox headerText="Files" headerIcon="description" data-testid="files-display-box">
               <Table>
                 <TableHead>
@@ -98,7 +98,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
               </Table>
             </DisplayBox>
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload" data-testid="file-upload-inputbox">
               {getStorage()}
               <p>

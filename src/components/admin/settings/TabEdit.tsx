@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
 import { B1LinkInterface,  PageInterface } from "@/helpers";
 import { IconPicker } from "@churchapps/apphelper";
@@ -71,7 +71,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
 
   const getPage = () => {
     if (currentTab?.linkType === "page") {
-      let options: JSX.Element[] = [];
+      let options: React.ReactElement[] = [];
       if (pages === null) loadPages();
       else {
         options = [];

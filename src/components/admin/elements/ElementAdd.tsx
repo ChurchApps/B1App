@@ -20,7 +20,7 @@ export function ElementAdd(props: Props) {
   useEffect(loadData, []);
 
   const Blocks = () => {
-    let result: JSX.Element[] = []
+    let result: React.ReactElement[] = []
     blocks.forEach((b) => {
       result.push(<AddableElement key={b.id} dndType={b.blockType} elementType="block" blockId={b.id} icon={(b.blockType === "elementBlock") ? "table_chart" : "reorder"} label={b.name} draggingCallback={props.draggingCallback} />);
     });
@@ -36,19 +36,19 @@ export function ElementAdd(props: Props) {
           <p>Drag and drop onto page<br /></p>
 
           <Grid container spacing={0}>
-            <Grid xs={6}>
+            <Grid size={6}>
               <h3>Simple Elements</h3>
             </Grid>
-            <Grid xs={3}>
+            <Grid size={3}>
               <h3>Church Specific</h3>
             </Grid>
-            <Grid xs={3}>
+            <Grid size={3}>
               {showBlocks && <h3>Blocks</h3>}
             </Grid>
           </Grid>
 
           <Grid container spacing={1}>
-            <Grid item xs={3}>
+            <Grid size={3}>
 
               <Grid container spacing={0.5}>
                 {props.includeSection && (<AddableElement dndType="section" elementType="section" icon="table_rows" label="Section" draggingCallback={props.draggingCallback} />)}
@@ -60,7 +60,7 @@ export function ElementAdd(props: Props) {
                 <AddableElement dndType="element" elementType="map" icon="add_location_alt" label="Location" draggingCallback={props.draggingCallback} />
               </Grid>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={3}>
               <Grid container spacing={0.5}>
                 <AddableElement dndType="element" elementType="table" icon="table_chart" label="Table" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="row" icon="reorder" label="Row" draggingCallback={props.draggingCallback} />
@@ -71,7 +71,7 @@ export function ElementAdd(props: Props) {
                 <AddableElement dndType="element" elementType="iframe" icon="crop_free" label="Embed Page" draggingCallback={props.draggingCallback} />
               </Grid>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={3}>
               <Grid container spacing={0.5}>
                 <AddableElement dndType="element" elementType="logo" icon="home_app_logo" label="Logo" draggingCallback={props.draggingCallback} />
                 <AddableElement dndType="element" elementType="sermons" icon="video_library" label="Sermons" draggingCallback={props.draggingCallback} />
@@ -84,7 +84,7 @@ export function ElementAdd(props: Props) {
               </Grid>
             </Grid>
             {showBlocks && (
-              <Grid item xs={3}>
+              <Grid size={3}>
                 <Grid container spacing={0.5}>
                   <Blocks />
                 </Grid>

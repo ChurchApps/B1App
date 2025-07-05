@@ -117,7 +117,7 @@ export function AddPageModal(props: Props) {
   }
 
   const getTemplateButton = (key:string, icon:string, text:string) => (
-    <Grid xs={3} item>
+    <Grid size={3}>
       <Button variant={(pageTemplate.toLowerCase() === key) ? "contained" : "outlined"} startIcon={<Icon>{icon}</Icon>} onClick={() => {selectTemplate(key)}} fullWidth data-testid={`template-${key}-button`}>{text}</Button>
     </Grid>
   )
@@ -157,17 +157,17 @@ export function AddPageModal(props: Props) {
 
         <Grid container spacing={2}>
           {(pageTemplate !== "link")
-          && <Grid xs={(props.mode === "navigation") ? 6 : 12} item>
+          && <Grid size={(props.mode === "navigation") ? 6 : 12}>
             <TextField size="small" fullWidth label="Page Title" name="title" value={page.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="page-title-input" />
           </Grid>
           }
           {(pageTemplate === "link")
-            && <Grid xs={(props.mode === "navigation") ? 6 : 12} item>
+            && <Grid size={(props.mode === "navigation") ? 6 : 12}>
               <TextField size="small" fullWidth label="Link Url" name="linkUrl" value={link.url || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
             </Grid>
           }
           {(props.mode === "navigation")
-          && <Grid xs={6} item>
+          && <Grid size={6}>
             <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
           </Grid>
           }

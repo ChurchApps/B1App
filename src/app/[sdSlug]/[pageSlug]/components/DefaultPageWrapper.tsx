@@ -1,3 +1,4 @@
+import React from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/layouts/Footer";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -8,7 +9,7 @@ type Props = {
   overlayContent?: boolean;
   ogDescription?: string;
   config?: ConfigurationInterface
-  children: JSX.Element | JSX.Element[];
+  children: React.ReactNode;
   linkColor?: string;
 };
 

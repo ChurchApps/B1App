@@ -1,7 +1,7 @@
+import React, { CSSProperties } from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
-import { CSSProperties } from "react";
 import { ApiHelper } from "@churchapps/apphelper";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
@@ -28,7 +28,7 @@ export function BoxElement(props: Props) {
   const getElements = () => {
     const textColor = props.element.answers?.textColor || props.textColor;
 
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
     if (props.onEdit) result.push(getAddElement(1))
     props.element.elements?.forEach(c => {
       result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={textColor} parentId={props.element.id} onMove={props.onMove} />)

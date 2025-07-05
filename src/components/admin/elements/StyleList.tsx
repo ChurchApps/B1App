@@ -36,7 +36,7 @@ export const StyleList: React.FC<Props> = (props) => {
       if (field) result.push(<div style={{marginBottom:5}}><a href="about:blank" style={{color:"#999", textDecoration:"underline"}} onClick={(e) => {e.preventDefault(); setEditStyle({platform:platformKey, name:key, value})}}>{field.label}: {value}</a></div>)
     })
     result.push(<a href="about:blank" style={{marginBottom:15, display:"block" }} onClick={(e) => {e.preventDefault(); setEditStyle({platform:platformKey, name:"", value:""})}}>Add a style</a>)
-    return <Grid item lg={4}>{result}</Grid>
+    return <Grid size={{ lg: 4 }}>{result}</Grid>
   }
 
   const handleSave = (platform:string, name:string, value:any) => {

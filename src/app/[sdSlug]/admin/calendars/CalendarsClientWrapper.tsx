@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { DisplayBox, Loading, ApiHelper, CuratedCalendarInterface, SmallButton, Banner } from "@churchapps/apphelper";
 import { redirect } from "next/navigation";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
@@ -19,7 +19,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
   };
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     calendars?.forEach((calendar) => {
       rows.push(
         <TableRow key={calendar.id}>
@@ -84,7 +84,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
       <div id="mainContent">
 
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             <DisplayBox
               headerIcon="calendar_month"
               headerText="Curated Calendars"
@@ -95,7 +95,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
               {getTable()}
             </DisplayBox>
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             {currentCalendar && (
               <CalendarEdit
                 calendar={currentCalendar}

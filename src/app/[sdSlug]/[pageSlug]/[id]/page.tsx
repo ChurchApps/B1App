@@ -1,3 +1,4 @@
+import React from "react";
 import { Theme } from "@/components";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -49,7 +50,7 @@ export default async function Home({ params }: { params: PageParams }) {
     }
   }
 
-  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper config={config}>
+  const wrapDefaultPage = (content: React.ReactElement) => <DefaultPageWrapper config={config}>
     {content}
   </DefaultPageWrapper>
 

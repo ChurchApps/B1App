@@ -1,9 +1,9 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper, GroupInterface, GroupMemberInterface } from "@churchapps/apphelper";
 import { Alert, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
 
 interface Props {
   leaders: GroupMemberInterface[];
@@ -54,7 +54,7 @@ export function GroupContact(props: Props) {
   }
 
   const getSelectLeaders = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     props.leaders.forEach((l) => {
       result.push(<MenuItem value={l.personId} key={l.personId}>{l.person.name.display}</MenuItem>);
     });

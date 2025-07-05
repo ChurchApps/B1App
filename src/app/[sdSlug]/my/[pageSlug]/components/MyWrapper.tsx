@@ -1,5 +1,6 @@
 import "@/styles/animations.css";
 
+import React from "react";
 import { Breadcrumbs, Container, Grid } from "@mui/material";
 
 import Link from "next/link";
@@ -8,7 +9,7 @@ import { TabsClient } from "./TabsClient";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props {
-  children: JSX.Element;
+  children: React.ReactElement;
   config: ConfigurationInterface;
   root?: boolean;
   pageSlug?: string;

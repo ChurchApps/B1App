@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EnvironmentHelper, PageLink, WrapperPageProps } from "@/helpers";
 import { Banner, DisplayBox, ErrorMessages, SmallButton } from "@churchapps/apphelper";
 import { useWindowWidth } from "@react-hook/window-size";
@@ -30,7 +30,7 @@ export function SiteAdminClient(props: WrapperPageProps) {
   }
 
   const getTreeLevel = (items:PageLink[], level:number) => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     items.forEach((item) => {
       result.push(<TableRow key={item.url}>
         <TableCell>{item.custom

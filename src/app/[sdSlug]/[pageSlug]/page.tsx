@@ -1,3 +1,4 @@
+import React from "react";
 import { PageLayout, Theme } from "@/components";
 import { ApiHelper } from "@churchapps/apphelper";
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
@@ -74,7 +75,7 @@ export default async function Home({ params }: { params: PageParams }) {
     return result;
   }
 
-  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper config={config}>
+  const wrapDefaultPage = (content: React.ReactElement) => <DefaultPageWrapper config={config}>
     {content}
   </DefaultPageWrapper>
 

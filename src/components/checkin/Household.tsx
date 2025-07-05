@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Icon, Grid, Box } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
@@ -79,7 +79,7 @@ export function Household({ completeHandler = () => { } }: Props) {
   const getMemberServiceTimes = () => {
     const visit = ArrayHelper.getOne(pendingVisits, "personId", selectedMember.id);
     const visitSessions = visit?.visitSessions || [];
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     CheckinHelper.serviceTimes.forEach((st) => {
       result.push(getServiceTime(st, visitSessions));
     });
@@ -97,7 +97,7 @@ export function Household({ completeHandler = () => { } }: Props) {
       const visit = CheckinHelper.getVisitByPersonId(pendingVisits, person.id || "");
       if (visit?.visitSessions?.length === 0) return null;
       else {
-        const groups: JSX.Element[] = [];
+        const groups: React.ReactElement[] = [];
         visit?.visitSessions?.forEach((vs: VisitSessionInterface) => {
           const st: ServiceTimeInterface | null = ArrayHelper.getOne(
             CheckinHelper.serviceTimes,

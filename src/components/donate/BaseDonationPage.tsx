@@ -2,7 +2,7 @@
 
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { DonationForm, RecurringDonations, PaymentMethods } from "@churchapps/apphelper/dist/donationComponents/components"
+import { DonationForm, RecurringDonations, PaymentMethods } from "@churchapps/apphelper";
 import { DisplayBox, ExportLink, Loading } from "@churchapps/apphelper/dist/components"
 import { ApiHelper, DateHelper, UniqueIdHelper, CurrencyHelper, Locale } from "@churchapps/apphelper/dist/helpers";
 import { DonationInterface, PersonInterface, StripePaymentMethod, ChurchInterface } from "@churchapps/helpers";
