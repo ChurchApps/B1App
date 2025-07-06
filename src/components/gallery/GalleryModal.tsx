@@ -6,7 +6,7 @@ import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Tab, Tabs, Tooltip, Icon } from "@mui/material";
 import React, { useState } from "react";
 import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
-import { TabPanel } from "@churchapps/apphelper/dist/helpers/TabPanel";
+import { TabPanel } from "@churchapps/apphelper/dist/components/TabPanel";
 import { StockPhotos } from "./StockPhotos";
 
 interface Props {

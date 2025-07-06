@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Icon, Box } from "@mui/material";
-import { useMountedState } from "@churchapps/apphelper/dist/helpers/useMountedState";
+import { useMountedState } from "@churchapps/apphelper/dist/hooks/useMountedState";
 import { StreamingTabInterface, EnvironmentHelper, StreamConfigInterface, ChatStateInterface } from "@/helpers";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { HostChat, ReceivePrayer } from "./chat/host";

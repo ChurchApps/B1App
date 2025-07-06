@@ -8,8 +8,8 @@ import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
 import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
 import { ConversationInterface, MessageInterface, UserContextInterface } from "@churchapps/helpers";
-import { AddNote } from "@churchapps/apphelper/dist/helpers/AddNote";
-import { Note } from "@churchapps/apphelper/dist/helpers/Note";
+import { AddNote } from "@churchapps/apphelper/dist/components/notes/AddNote";
+import { Note } from "@churchapps/apphelper/dist/components/notes/Note";
 
 interface Props {
   conversation: ConversationInterface;

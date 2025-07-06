@@ -1,6 +1,6 @@
 import React from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper/dist/components/MarkdownEditor";
+import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper/dist/components/markdownEditor";
 import { Card, CardContent } from "@mui/material";
 
 

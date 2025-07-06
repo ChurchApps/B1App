@@ -11,7 +11,7 @@ import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
 import type { SermonInterface, PlaylistInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Duration } from "./Duration";
-import { B1ShareModal } from "../../../B1ShareModal";
+import { B1ShareModal } from "@/components/B1ShareModal";
 
 interface Props {
   currentSermon: SermonInterface,

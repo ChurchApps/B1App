@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
-import { IconPicker } from "@churchapps/apphelper/dist/components/IconPicker";
+import { IconPicker } from "@/components/iconPicker/IconPicker";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
 import { PageInterface } from "@/helpers";

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
 import { B1LinkInterface,  PageInterface } from "@/helpers";
-import { IconPicker } from "@churchapps/apphelper/dist/components/IconPicker";
+import { IconPicker } from "@/components/iconPicker/IconPicker";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { GalleryModal } from "../../gallery/GalleryModal";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";

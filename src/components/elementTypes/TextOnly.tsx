@@ -1,5 +1,5 @@
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper/dist/components/MarkdownEditor";
+import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper/dist/components/markdownEditor";
 
 interface Props { element: ElementInterface; onEdit?: (section: SectionInterface, element: ElementInterface) => void; }
 

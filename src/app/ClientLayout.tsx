@@ -15,6 +15,7 @@ import { ErrorHelper } from "@churchapps/apphelper/dist/helpers/ErrorHelper";
 import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
 import { EnvironmentHelper } from "@/helpers";
 import { ThemeProvider, createTheme } from "@mui/material";
+import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
 
 
 
@@ -67,12 +68,14 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
   });
 
   return (
-    <ThemeProvider theme={mdTheme}>
-      <UserProvider>
-        <ErrorMessages errors={errors} />
-        <>{children}</>
-      </UserProvider>
-    </ThemeProvider>
+    <CookieProviderWrapper>
+      <ThemeProvider theme={mdTheme}>
+        <UserProvider>
+          <ErrorMessages errors={errors} />
+          <>{children}</>
+        </UserProvider>
+      </ThemeProvider>
+    </CookieProviderWrapper>
   );
 }
 export default ClientLayout;
