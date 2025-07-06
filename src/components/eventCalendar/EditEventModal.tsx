@@ -1,6 +1,11 @@
 "use client";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ApiHelper, DateHelper, EventExceptionInterface, EventInterface, MarkdownEditor, ErrorMessages, EventHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { MarkdownEditor } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownEditor";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
+import type { EventExceptionInterface, EventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography, Switch, Stack } from "@mui/material";
 import { useState } from "react";
 import { RRuleEditor } from "./RRuleEditor";

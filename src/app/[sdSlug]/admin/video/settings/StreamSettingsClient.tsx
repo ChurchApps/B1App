@@ -10,7 +10,7 @@ import { Services } from "@/components/admin/video/Services";
 import { Tabs } from "@/components/admin/video/Tabs";
 import { EmbeddablePages } from "@/components/admin/EmbeddablePages";
 import { PageEdit } from "@/components/admin/PageEdit";
-import { Banner } from "@churchapps/apphelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 
 export function StreamSettingsClient(props: WrapperPageProps) {
   const [editPage, setEditPage] = useState<PageInterface>(null);

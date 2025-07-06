@@ -5,7 +5,12 @@ import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButto
 import { useWindowWidth } from "@react-hook/window-size";
 import { BlockInterface, ElementInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
-import { ApiHelper, ArrayHelper, UserHelper, Permissions, SmallButton, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { Section } from "@/components/Section";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'

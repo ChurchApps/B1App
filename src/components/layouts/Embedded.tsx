@@ -2,7 +2,7 @@
 
 import Head from "next/head";
 import { createTheme, CssBaseline } from "@mui/material";
-import { ChurchInterface, LinkInterface } from "@churchapps/apphelper";
+import type { ChurchInterface, LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import Zone from "./Zone";
 
 type Props = {

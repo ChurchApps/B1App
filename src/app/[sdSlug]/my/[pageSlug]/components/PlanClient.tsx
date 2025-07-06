@@ -1,9 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid, Icon } from "@mui/material";
-import { ApiHelper, ArrayHelper, AssignmentInterface, DisplayBox, Loading, PersonInterface, PlanInterface, PositionInterface, TimeInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { AssignmentInterface, PersonInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Team } from "@/components/plans/Team";
 import { PositionDetails } from "@/components/plans/PositionDetails";
 import { ServiceOrder } from "./ServiceOrder";
@@ -37,7 +42,7 @@ export function PlanClient({ planId }: Props) {
   };
 
   const getTeams = () => {
-    const rows: JSX.Element[] = [];
+    const rows: React.ReactElement[] = [];
     ArrayHelper.getUniqueValues(positions, "categoryName").forEach((category) => {
       const pos = ArrayHelper.getAll(positions, "categoryName", category);
       rows.push(<Team positions={pos} assignments={assignments} people={people} name={category} />);
@@ -46,7 +51,7 @@ export function PlanClient({ planId }: Props) {
   };
 
   const getPositionDetails = () => {
-    const rows: JSX.Element[] = [];
+    const rows: React.ReactElement[] = [];
     const myAssignments = ArrayHelper.getAll(assignments, "personId", UserHelper.currentUserChurch.person.id);
     myAssignments.forEach((assignment) => {
       const position = ArrayHelper.getOne(positions, "id", assignment.positionId);

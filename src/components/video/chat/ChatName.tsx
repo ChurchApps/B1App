@@ -1,5 +1,5 @@
 import React from "react";
-import { UserInterface } from "@churchapps/apphelper";
+import type { UserInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Button, TextField } from "@mui/material";
 
 interface Props {

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Table, TableCell, TableRow, TextField } from "@mui/material";
 import { GlobalStyleInterface } from "@/helpers";
-import { InputBox } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 
 interface Props {
   globalStyle?: GlobalStyleInterface;
@@ -99,7 +99,7 @@ export function PaletteEdit(props: Props) {
   }
 
   const getPalettes = () => {
-    let result:JSX.Element[] = [];
+    let result:React.ReactElement[] = [];
     suggestions.forEach(s => {
       result.push(<Grid item xs={12} md={6}>{getPalette(s)}</Grid>)
     })
@@ -107,7 +107,7 @@ export function PaletteEdit(props: Props) {
   }
 
   const getPairings = () => {
-    let result:JSX.Element[] = [];
+    let result:React.ReactElement[] = [];
     pairings.forEach(p => {
       const backgroundName = p.background as keyof PaletteInterface;
       const textName = p.text as keyof PaletteInterface;

@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
 import React, { useEffect } from "react";
-import { ApiHelper, LinkInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface, SongInterface } from "@/helpers";
 import { SongDetails } from "./SongDetails";
 import { ChordProHelper } from "@/helpers/ChordProHelper";

@@ -1,6 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ApiHelper, DisplayBox, InputBox, LinkInterface, SmallButton, UserContextInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { LinkInterface, UserContextInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { FileInterface } from "@/helpers";
 import { Box, LinearProgress, Typography, TableRow, TableCell, Table, TableHead, TableBody, Divider, Chip } from "@mui/material";
 import Link from "next/link";

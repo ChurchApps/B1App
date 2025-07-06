@@ -1,5 +1,9 @@
-import { SmallButton, Loading, DisplayBox } from "@churchapps/apphelper";
-import { LinkInterface, ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Icon } from "@mui/material";
 import React from "react";
 import { TabEdit } from "./TabEdit";

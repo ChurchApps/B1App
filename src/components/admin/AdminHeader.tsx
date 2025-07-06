@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 
-import { SiteHeader } from "@churchapps/apphelper";
+import { SiteHeader } from "@churchapps/apphelper/dist/components/header/SiteHeader";
 
 import UserContext from "@/context/UserContext";
 import { SecondaryMenuHelper } from "@/helpers/SecondaryMenuHelper";

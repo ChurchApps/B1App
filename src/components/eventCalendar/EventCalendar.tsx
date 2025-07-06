@@ -2,7 +2,11 @@ import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Snackbar, Stack } from "@mui/material";
-import { EventInterface, EventHelper, SmallButton, CommonEnvironmentHelper, UserHelper } from "@churchapps/apphelper";
+import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { CommonEnvironmentHelper } from "@churchapps/apphelper/dist/helpers/CommonEnvironmentHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { EventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { DisplayEventModal } from "./DisplayEventModal";

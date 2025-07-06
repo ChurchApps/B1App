@@ -1,5 +1,5 @@
 import { StyleOption } from "@/helpers";
-import { InputBox } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import { ColorPicker } from "../ColorPicker";

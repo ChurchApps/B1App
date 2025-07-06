@@ -1,8 +1,10 @@
+import React from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void, church?: ChurchInterface }
 
@@ -27,7 +29,7 @@ export function RowElement(props: Props) {
   }
 
   const getElements = (column: ElementInterface, elements: ElementInterface[]) => {
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
     if (props.onEdit) result.push(getAddElement(column, 1))
     elements?.forEach(c => {
       result.push(<Element key={c.id} element={c} onEdit={props.onEdit} churchSettings={props.churchSettings} textColor={props.textColor} parentId={column.id} onMove={props.onMove} church={props?.church} />)
@@ -46,7 +48,7 @@ export function RowElement(props: Props) {
 
   const getColumns = () => {
     const emptyStyle = { minHeight: 100, border: "1px solid #999" }
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
     props.element.elements?.forEach((c:ElementInterface, idx:number) => {
       let xs = 12;
       if (c.answers?.mobileSize) xs = c.answers?.mobileSize;

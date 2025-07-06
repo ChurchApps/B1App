@@ -1,5 +1,5 @@
 import { AnimationsInterface } from "@/helpers";
-import { InputBox } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import React, { useEffect } from "react";
 

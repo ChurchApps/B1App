@@ -1,8 +1,12 @@
 "use client";
-import { InputBox } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent } from "@mui/material";
 import React from "react";
-import { ApiHelper, DateHelper, SermonInterface, StreamingServiceInterface, UniqueIdHelper, Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import type { SermonInterface, StreamingServiceInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props { currentService: StreamingServiceInterface, updatedFunction?: () => void }
 

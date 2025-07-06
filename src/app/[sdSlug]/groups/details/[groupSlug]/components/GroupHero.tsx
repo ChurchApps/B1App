@@ -1,6 +1,6 @@
 "use client";
 
-import { GroupInterface } from "@churchapps/apphelper";
+import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Container, Grid } from "@mui/material";
 import Image from "next/image";
 

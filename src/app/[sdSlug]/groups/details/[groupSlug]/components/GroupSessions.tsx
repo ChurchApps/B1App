@@ -1,5 +1,15 @@
 import React from "react";
-import { ApiHelper, ArrayHelper, GroupInterface, DisplayBox, SessionInterface, VisitSessionInterface, PersonInterface, PersonHelper, VisitInterface, UserHelper, ExportLink, Permissions, Loading, SmallButton, Locale } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ExportLink } from "@churchapps/apphelper/dist/components/ExportLink";
+import { Permissions } from "@churchapps/helpers";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import type { GroupInterface, SessionInterface, VisitSessionInterface, PersonInterface, VisitInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Table, TableBody, TableRow, TableCell, TableHead, Icon, FormControl, InputLabel, Select, Button, SelectChangeEvent, Grid, MenuItem } from "@mui/material"
 
 interface Props {

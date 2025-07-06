@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ApiHelper, ArrayHelper, DateHelper, GroupInterface, ImageEditor, PersonInterface, TaskInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";

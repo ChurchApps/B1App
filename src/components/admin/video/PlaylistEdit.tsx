@@ -1,8 +1,14 @@
 "use client";
 import React from "react";
 import { TextField, SelectChangeEvent } from "@mui/material";
-import { InputBox, ErrorMessages } from "@churchapps/apphelper";
-import { ApiHelper, DateHelper, PlaylistInterface, UniqueIdHelper, UserHelper, Permissions } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import type { PlaylistInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props {
   currentPlaylist: PlaylistInterface,

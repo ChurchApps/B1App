@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PersonHelper, WrapperPageProps } from "@/helpers";
-import { Loading, FormSubmissionEdit, DateHelper, ApiHelper, FormInterface } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { FormSubmissionEdit } from "@churchapps/apphelper/dist/components/FormSubmissionEdit";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { FormInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Container } from "@mui/material";
 
 interface Props extends WrapperPageProps {

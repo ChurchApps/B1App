@@ -4,7 +4,10 @@ import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Button, Icon, Snackbar, Stack } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import { EventHelper, CuratedEventWithEventInterface, CommonEnvironmentHelper, UserHelper } from "@churchapps/apphelper";
+import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
+import { CommonEnvironmentHelper } from "@churchapps/apphelper/dist/helpers/CommonEnvironmentHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { CuratedEventWithEventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { EditCalendarEventModal } from "./EditCalendarEventModal";
 import { DisplayCalendarEventModal } from "./DisplayCalendarEventModal";
 

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Grid, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { ApiHelper, InputBox, VisibilityPreferenceInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import type { VisibilityPreferenceInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 export const VisibilityPreferences = () => {
   const [pref, setPref] = useState<VisibilityPreferenceInterface>({ address: "", phoneNumber: "", email: "" } as VisibilityPreferenceInterface);
@@ -32,7 +34,7 @@ export const VisibilityPreferences = () => {
     <InputBox headerText="Visibility Preferences" saveFunction={handleSave}>
       <p>Choose how you would like to show your private info.</p>
       <Grid container spacing={{ xs: 0, sm: 1, md: 2 }}>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="address">Address</InputLabel>
             <Select fullWidth labelId="address" label="Address" name="address" value={pref.address || ""} defaultValue="" onChange={handlePrefChange}>
@@ -42,7 +44,7 @@ export const VisibilityPreferences = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="phone">Phone Number</InputLabel>
             <Select fullWidth labelId="phone" label="Phone Number" name="phoneNumber" value={pref.phoneNumber || ""} defaultValue="" onChange={handlePrefChange}>
@@ -52,7 +54,7 @@ export const VisibilityPreferences = () => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12} sm={12} md={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="email">Email</InputLabel>
             <Select fullWidth labelId="email" label="Email" name="email" value={pref.email || ""} defaultValue="" onChange={handlePrefChange}>

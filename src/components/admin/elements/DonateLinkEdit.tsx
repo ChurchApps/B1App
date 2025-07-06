@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Chip, FormControl, Icon, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 
 type Props = {
   parsedData: any;

@@ -1,5 +1,8 @@
 import React from "react";
-import { ArrayHelper, AssignmentInterface, DateHelper, DisplayBox, PlanInterface, PositionInterface } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import type { AssignmentInterface, PlanInterface, PositionInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";
 import Link from "next/link";
 

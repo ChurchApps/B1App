@@ -1,5 +1,5 @@
 import { ElementInterface } from "@/helpers";
-import { AppearanceHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
 
 interface Props { element: ElementInterface; churchSettings: any; textColor: string; }
 

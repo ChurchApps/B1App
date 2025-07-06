@@ -1,8 +1,10 @@
+"use client";
+
 import { useState } from "react";
 import { Box, Collapse, IconButton, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { LinkInterface } from "@churchapps/apphelper";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props {
   link?: LinkInterface;

@@ -1,7 +1,7 @@
+import React, { useState } from 'react';
 import { GlobalStyleInterface } from '@/helpers';
-import { GalleryModal } from '@churchapps/apphelper';
+import { GalleryModal } from "../../gallery/GalleryModal";
 import { FormControl, InputLabel, Select, MenuItem, TextField, Tabs, Tab, Button, SelectChangeEvent, Grid } from '@mui/material';
-import { useState } from 'react';
 import { SliderPicker } from 'react-color';
 
 type Props = {
@@ -77,7 +77,7 @@ export function PickColors(props: Props) {
   }
 
   const getManualOptions = (colors:string[], values:string[], field:"background" | "textColor" | "headingColor" | "linkColor") => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     colors.forEach((c, i) => {
       const v = values[i];
       const style: any = { backgroundColor: c, width: "100%", height: (props[field] === v) ? 20 : 12, display: "block" }
@@ -98,7 +98,7 @@ export function PickColors(props: Props) {
     if (props.background?.startsWith("#") || props.background?.startsWith("var(") ) backgroundType = "color";
     else if (props.background?.startsWith("youtube")) backgroundType = "youtube"
 
-    let result: JSX.Element[] = [
+    let result: React.ReactElement[] = [
       <FormControl fullWidth>
         <InputLabel>Background Type</InputLabel>
         <Select fullWidth size="small" label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange} data-testid="background-type-select">
@@ -193,7 +193,7 @@ export function PickColors(props: Props) {
 
     });
 
-    const suggestions:JSX.Element[] = [];
+    const suggestions:React.ReactElement[] = [];
 
     pairings.forEach(p => {
       const b = colors[p[0]]

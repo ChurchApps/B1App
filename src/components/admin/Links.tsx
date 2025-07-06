@@ -1,7 +1,12 @@
 import React from "react";
 import { Icon } from "@mui/material";
 import { LinkEdit } from "./LinkEdit";
-import { ApiHelper, UserHelper, LinkInterface, Loading, SmallButton, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];

@@ -1,9 +1,13 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
 import { B1LinkInterface,  PageInterface } from "@/helpers";
-import { IconPicker } from "@churchapps/apphelper";
-import { InputBox, GalleryModal, ApiHelper, UniqueIdHelper, ArrayHelper } from "@churchapps/apphelper";
+import { IconPicker } from "@/components/iconPicker/IconPicker";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { GalleryModal } from "../../gallery/GalleryModal";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 
 interface Props {
   currentTab: B1LinkInterface;
@@ -71,7 +75,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
 
   const getPage = () => {
     if (currentTab?.linkType === "page") {
-      let options: JSX.Element[] = [];
+      let options: React.ReactElement[] = [];
       if (pages === null) loadPages();
       else {
         options = [];

@@ -1,5 +1,6 @@
+import React from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper";
+import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper/dist/components/markdownEditor";
 import { Card, CardContent } from "@mui/material";
 
 
@@ -16,7 +17,7 @@ export const CardElement: React.FC<Props> = (props) => {
     else photoContent = (photo);
   }
 
-  let result: JSX.Element[] = [];
+  let result: React.ReactElement[] = [];
   if (props.element.answers?.title) {
     const title = <h3 style={{textAlign:props.element.answers?.titleAlignment || "center"}}>{props.element.answers?.title}</h3>;
     if (props.element.answers?.url) result.push(<a href={props.element.answers?.url}>{title}</a>);

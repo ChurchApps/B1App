@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { ApiHelper, AppearanceHelper, AppearanceInterface, DisplayBox, GenericSettingInterface } from "@churchapps/apphelper"
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import type { AppearanceInterface, GenericSettingInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { AppearanceEdit } from "./AppearanceEdit";
 import { Box, Grid } from "@mui/material";
 

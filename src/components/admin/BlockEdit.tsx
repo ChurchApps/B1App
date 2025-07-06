@@ -1,6 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox, UserHelper, Permissions, ApiHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { BlockInterface } from "@/helpers";
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 

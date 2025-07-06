@@ -1,5 +1,5 @@
 import { TextField, Box, SelectChangeEvent, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { MarkdownEditor } from "@churchapps/apphelper";
+import { MarkdownEditor } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownEditor";
 import { ColorPicker } from "../ColorPicker";
 
 type Props = {

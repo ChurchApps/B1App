@@ -1,6 +1,7 @@
+import React from "react";
 import Carousel from "react-material-ui-carousel";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 
@@ -39,7 +40,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
   };
 
   const getElements = ( column: ElementInterface, elements: ElementInterface[] ) => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     if (onEdit) result.push(getAddElement(column, 1));
     elements?.forEach((c) => {
       result.push(
@@ -51,7 +52,7 @@ export const CarouselElement = ({ element, churchSettings, textColor, onEdit, on
 
   const getColumns = () => {
     const emptyStyle = { minHeight: 100, border: "1px solid #999" };
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     element.elements?.forEach((c) => {
       //{onEdit && <div style={{ height: "31px", paddingTop: "31px", paddingBottom: "31px" }}>{getAddElement(c, c?.elements?.[c?.elements.length - 1]?.sort + 0.1, "Drop at the bottom of slide")}</div>}
       result.push(

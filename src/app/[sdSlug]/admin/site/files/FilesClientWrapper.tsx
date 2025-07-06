@@ -5,7 +5,11 @@ import { FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { DisplayBox, InputBox, ApiHelper, SmallButton, Banner } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -84,7 +88,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
       <Banner><h1>Manage Your Files</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             <DisplayBox headerText="Files" headerIcon="description" data-testid="files-display-box">
               <Table>
                 <TableHead>
@@ -98,7 +102,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
               </Table>
             </DisplayBox>
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload" data-testid="file-upload-inputbox">
               {getStorage()}
               <p>

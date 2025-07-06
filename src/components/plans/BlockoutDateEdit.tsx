@@ -1,5 +1,9 @@
 import React from "react";
-import { ApiHelper, BlockoutDateInterface, DateHelper, ErrorMessages, InputBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import type { BlockoutDateInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { TextField } from "@mui/material";
 
 interface Props {

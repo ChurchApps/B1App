@@ -1,4 +1,5 @@
-import { AppearanceInterface, UserHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { EnvironmentHelper, StreamConfigInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
@@ -7,7 +8,10 @@ import Link from "next/link";
 import React from "react";
 import { ChatName } from "./chat";
 import { StreamingNavItems } from "./StreamingNavItems";
-import { Permissions,  UserInterface, ApiHelper, AppearanceHelper } from "@churchapps/apphelper";
+import { Permissions } from "@churchapps/helpers";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
+import type { UserInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props {
   user: UserInterface,

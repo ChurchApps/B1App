@@ -1,10 +1,13 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import { FormControl, InputLabel, Select, SelectChangeEvent, TextField, MenuItem, Stack, Icon, Button, Dialog } from "@mui/material";
-import { IconPicker } from "@churchapps/apphelper";
-import { InputBox, ErrorMessages } from "@churchapps/apphelper";
+import { IconPicker } from "@/components/iconPicker/IconPicker";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
 import { PageInterface } from "@/helpers";
-import { LinkInterface, ApiHelper, ArrayHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }
 

@@ -1,5 +1,8 @@
-import { useState, useEffect } from "react";
-import { ApiHelper, ErrorMessages, InputBox, PlaylistInterface, SermonInterface } from "@churchapps/apphelper";
+import React, { useState, useEffect } from "react";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import type { PlaylistInterface, SermonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 
 interface Props {
@@ -38,7 +41,7 @@ export const VimeoImport = (props: Props) => {
   };
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     sermons.forEach((sermon) => {
       rows.push(
         <TableRow key={sermon.videoData}>

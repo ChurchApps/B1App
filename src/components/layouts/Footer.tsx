@@ -1,5 +1,7 @@
+"use client";
+
 import { SectionInterface } from "@/helpers";
-import { AppearanceHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
 import Zone from "./Zone";
 import { Grid } from "@mui/material";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";

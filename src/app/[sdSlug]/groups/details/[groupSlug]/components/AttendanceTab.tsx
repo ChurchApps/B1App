@@ -1,6 +1,6 @@
 "use client";
 
-import { GroupInterface } from "@churchapps/apphelper";
+import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { Grid } from "@mui/material";
 import React, { useState } from "react";
 import { GroupSessions } from "./GroupSessions";

@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox, UserHelper, Permissions, LinkInterface, SlugHelper, ApiHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
 import { Button, Dialog, Grid, Icon, InputLabel, SelectChangeEvent, TextField } from "@mui/material";
@@ -117,7 +123,7 @@ export function AddPageModal(props: Props) {
   }
 
   const getTemplateButton = (key:string, icon:string, text:string) => (
-    <Grid xs={3} item>
+    <Grid size={3}>
       <Button variant={(pageTemplate.toLowerCase() === key) ? "contained" : "outlined"} startIcon={<Icon>{icon}</Icon>} onClick={() => {selectTemplate(key)}} fullWidth data-testid={`template-${key}-button`}>{text}</Button>
     </Grid>
   )
@@ -157,17 +163,17 @@ export function AddPageModal(props: Props) {
 
         <Grid container spacing={2}>
           {(pageTemplate !== "link")
-          && <Grid xs={(props.mode === "navigation") ? 6 : 12} item>
+          && <Grid size={(props.mode === "navigation") ? 6 : 12}>
             <TextField size="small" fullWidth label="Page Title" name="title" value={page.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="page-title-input" />
           </Grid>
           }
           {(pageTemplate === "link")
-            && <Grid xs={(props.mode === "navigation") ? 6 : 12} item>
+            && <Grid size={(props.mode === "navigation") ? 6 : 12}>
               <TextField size="small" fullWidth label="Link Url" name="linkUrl" value={link.url || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
             </Grid>
           }
           {(props.mode === "navigation")
-          && <Grid xs={6} item>
+          && <Grid size={6}>
             <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text || ""} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
           </Grid>
           }
