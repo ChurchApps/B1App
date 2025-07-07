@@ -6,7 +6,6 @@ import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
-import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import { Sermons } from "@/components/admin/video/Sermons";
 
 export function ManageVideoClient(props: WrapperPageProps) {
@@ -37,13 +36,10 @@ export function ManageVideoClient(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      <Banner><h1>Manage Sermons</h1></Banner>
-      <div id="mainContent">
-        {imageEditor}
-        {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && (
-          <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
-        )}
-      </div>
+      {imageEditor}
+      {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && (
+        <Sermons showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "sermon" && photoUrl) || null} />
+      )}
     </AdminWrapper>
   );
 }
