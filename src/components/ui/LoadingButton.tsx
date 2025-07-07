@@ -7,10 +7,8 @@ interface LoadingButtonProps extends ButtonProps {
   loadingText?: string;
 }
 
-export const LoadingButton: React.FC<LoadingButtonProps> = ({ loading, loadingText, children, disabled, ...props }) => {
-  return (
-    <Button {...props} disabled={disabled || loading} startIcon={loading ? <CircularProgress size={16} /> : props.startIcon}>
-      {loading && loadingText ? loadingText : children}
-    </Button>
-  );
-};
+export const LoadingButton: React.FC<LoadingButtonProps> = ({ loading, loadingText, children, disabled, ...props }) => (
+  <Button {...props} disabled={disabled || loading} startIcon={loading ? <CircularProgress size={16} /> : props.startIcon}>
+    {loading && loadingText ? loadingText : children}
+  </Button>
+);
