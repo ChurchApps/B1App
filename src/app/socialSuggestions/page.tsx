@@ -64,11 +64,11 @@ export default function SocialSuggestions() {
     ApiHelper.get(`/sermons/outline?url=${encodeURIComponent(lessonOutline.url)}&title=${lessonOutline.title}&author=${lessonOutline.author}`, "ContentApi")
       .then((data: any) => {
         setLessonOutlineResult(data.outline)
-    })
-    .finally(() => {
-      setScriptLoading(false);
-      setLessonOutline({ url: "", title: "", author: "" })
-    })
+      })
+      .finally(() => {
+        setScriptLoading(false);
+        setLessonOutline({ url: "", title: "", author: "" })
+      })
   }
 
   return (

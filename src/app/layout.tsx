@@ -6,6 +6,13 @@ import "@/styles/buttons.css";
 import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
 import ClientLayout from "./ClientLayout";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
+import { Roboto } from 'next/font/google';
+
+const roboto = Roboto({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export const metadata = {
   title: 'ChurchApps',
@@ -16,11 +23,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   await EnvironmentHelper.initServerSide();
 
   return (
-    <html>
+    <html className={roboto.className}>
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <link rel="stylesheet" href="/apphelper/css/styles.css"  />
       </head>
       <body>
         <ClientLayout>{children}</ClientLayout>

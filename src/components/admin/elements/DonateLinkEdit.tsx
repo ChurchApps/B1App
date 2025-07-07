@@ -107,26 +107,26 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
       {/* Funds */}
       {!funds || funds.length === 0
         ? (
-        <>No Funds</>
-      )
+          <>No Funds</>
+        )
         : (
-        <FormControl fullWidth>
-          <InputLabel>Funds</InputLabel>
-          <Select
-            fullWidth
-            label="Funds"
-            name="fundId"
-            value={parsedData.fundId}
-            onChange={handleChange}
-            data-testid="donate-link-fund-select"
-            aria-label="Select donation fund"
-          >
-            {funds.map((f: any) => (
-              <MenuItem key={f.id} value={f.id} data-testid={`fund-option-${f.id}`} aria-label={f.name}>{f.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      )}
+          <FormControl fullWidth>
+            <InputLabel>Funds</InputLabel>
+            <Select
+              fullWidth
+              label="Funds"
+              name="fundId"
+              value={parsedData.fundId}
+              onChange={handleChange}
+              data-testid="donate-link-fund-select"
+              aria-label="Select donation fund"
+            >
+              {funds.map((f: any) => (
+                <MenuItem key={f.id} value={f.id} data-testid={`fund-option-${f.id}`} aria-label={f.name}>{f.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
 
       {/* Donation Amounts */}
       <Typography marginTop={1.5}>Donation Amounts</Typography>

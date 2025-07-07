@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
+import Head from 'next/head';
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
@@ -83,8 +84,10 @@ export function StylesClientWrapper(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato&family=Montserrat:wght@400&family=Open+Sans:wght@400&family=Oswald:wght@400&family=Playfair+Display:wght@400&family=Poppins:wght@400&family=Raleway:wght@400&family=Roboto:wght@400&display=swap" rel="stylesheet"></link>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato&family=Montserrat:wght@400&family=Open+Sans:wght@400&family=Oswald:wght@400&family=Playfair+Display:wght@400&family=Poppins:wght@400&family=Raleway:wght@400&family=Roboto:wght@400&display=swap" rel="stylesheet" />
+      </Head>
       <Banner><h1>Manage Global Styles</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
