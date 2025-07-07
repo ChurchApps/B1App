@@ -4,7 +4,7 @@ import { CheckinHelper, PersonHelper } from "@/helpers";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface } from "@churchapps/helpers";
 
 interface Props {
   selectedHandler: () => void;

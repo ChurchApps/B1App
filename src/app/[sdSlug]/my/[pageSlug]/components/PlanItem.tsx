@@ -10,7 +10,7 @@ export const PlanItem = (props: Props) => {
   const [dialogKeyId, setDialogKeyId] = React.useState<string>(null);
 
   const getChildren = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     props.planItem.children?.forEach((c, index) => {
       result.push(
         <>

@@ -9,7 +9,7 @@ import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
 import { UserProvider } from "@/context/UserContext";
 import { AnalyticsHelper } from "@churchapps/apphelper/dist/helpers/AnalyticsHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { ErrorAppDataInterface, ErrorLogInterface } from "@churchapps/apphelper/dist/helpers/ErrorHelper";
+import type { ErrorAppDataInterface, ErrorLogInterface } from "@churchapps/helpers";
 import React, { useEffect } from "react";
 import { ErrorHelper } from "@churchapps/apphelper/dist/helpers/ErrorHelper";
 import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";

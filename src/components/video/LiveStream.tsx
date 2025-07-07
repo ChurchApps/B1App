@@ -8,7 +8,7 @@ import { VideoContainer } from "./VideoContainer";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
-import type { AppearanceInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import { StreamingHeader } from "./StreamingHeader";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 
@@ -17,7 +17,7 @@ interface Props {
   appearance: AppearanceInterface,
   includeInteraction: boolean,
   includeHeader: boolean,
-  offlineContent?: JSX.Element,
+  offlineContent?: React.ReactElement,
 }
 
 export const LiveStream: React.FC<Props> = (props) => {

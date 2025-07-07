@@ -6,7 +6,7 @@ import { Grid } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { ServingTimes } from "@/components/plans/ServingTimes";
 import { UpcomingDates } from "@/components/plans/UpcomingDates";
 import { BlockoutDates } from "@/components/plans/BlockoutDates";
@@ -52,10 +52,10 @@ export function PlansPage() {
     <>
       <h1>My Plans</h1>
       <Grid container spacing={3} alignItems="flex-start">
-        <Grid item md={8} xs={12}>
+        <Grid size={{ md: 8, xs: 12 }}>
           <ServingTimes assignments={assignments} plans={plans} positions={positions} />
         </Grid>
-        <Grid item md={4} xs={12}>
+        <Grid size={{ md: 4, xs: 12 }}>
           <UpcomingDates assignments={assignments} plans={plans} positions={positions} times={times} />
           <BlockoutDates />
         </Grid>

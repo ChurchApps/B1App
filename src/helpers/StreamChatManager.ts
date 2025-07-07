@@ -5,8 +5,8 @@ import { SocketHelper } from "@churchapps/apphelper/dist/helpers/SocketHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
-import type { ConversationInterface } from "@churchapps/apphelper/dist/interfaces/ConversationInterface";
-import type { BlockedIpInterface } from "@churchapps/apphelper/dist/interfaces/BlockedIpInterface";
+import type { ConversationInterface } from "@churchapps/helpers";
+import type { BlockedIpInterface } from "@churchapps/helpers";
 
 export class StreamChatManager {
 

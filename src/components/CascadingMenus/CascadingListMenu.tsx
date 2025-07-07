@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Box, Collapse, IconButton, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 
 interface Props {
   link?: LinkInterface;

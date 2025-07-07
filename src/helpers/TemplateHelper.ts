@@ -1,7 +1,7 @@
 import moment from "moment";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { LinkInterface, StreamingServiceInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface, StreamingServiceInterface } from "@churchapps/helpers";
 import { BlockInterface, ElementInterface, PageInterface, SectionInterface } from "./interfaces";
 
 export class TemplateHelper {

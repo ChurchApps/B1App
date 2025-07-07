@@ -1,6 +1,6 @@
 "use client";
 
-import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { ChurchInterface } from "@churchapps/helpers";
 import { NonAuthDonation } from "@churchapps/apphelper/dist/donationComponents/components/NonAuthDonation";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "./admin/DroppableArea";

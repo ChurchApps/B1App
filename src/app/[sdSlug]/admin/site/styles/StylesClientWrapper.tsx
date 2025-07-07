@@ -88,7 +88,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
       <Banner><h1>Manage Global Styles</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             {section === "palette" && <PaletteEdit globalStyle={globalStyle} updatedFunction={handlePaletteUpdate} />}
             {section === "fonts" && <FontsEdit globalStyle={globalStyle} updatedFunction={handleFontsUpdate} />}
             {section === "css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
@@ -97,7 +97,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
               <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
             )}
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <DisplayBox headerIcon="link" headerText="Style Settings" editContent={false}>
               <Table size="small">
                 <TableBody>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Grid, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import type { VisibilityPreferenceInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { VisibilityPreferenceInterface } from "@churchapps/helpers";
 
 export const VisibilityPreferences = () => {
   const [pref, setPref] = useState<VisibilityPreferenceInterface>({ address: "", phoneNumber: "", email: "" } as VisibilityPreferenceInterface);

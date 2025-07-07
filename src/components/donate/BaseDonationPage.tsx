@@ -86,7 +86,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getEditContent = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     const date = new Date();
     const currentY = date.getFullYear();
     const lastY = date.getFullYear() - 1;
@@ -133,7 +133,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
 
     if (donations.length === 0) {
       rows.push(<TableRow key="0"><TableCell>{Locale.label("donation.page.willAppear")}</TableCell></TableRow>);
@@ -156,7 +156,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getTableHeader = () => {
-    const rows: JSX.Element[] = []
+    const rows: React.ReactElement[] = []
 
     if (donations.length > 0) {
       rows.push(

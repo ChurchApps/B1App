@@ -198,7 +198,7 @@ export function ElementEdit(props: Props) {
   const getStreamFields = () => {
     let blockField = <></>
     if (parsedData.offlineContent==="block")  {
-      let options: JSX.Element[] = [];
+      let options: React.ReactElement[] = [];
       blocks?.forEach(b => { options.push(<MenuItem value={b.id}>{b.name}</MenuItem>) });
       blockField = (<FormControl fullWidth>
         <InputLabel>Block</InputLabel>
@@ -430,7 +430,7 @@ export function ElementEdit(props: Props) {
   </>)
 
   const getBlockFields = () => {
-    let options: JSX.Element[] = [];
+    let options: React.ReactElement[] = [];
     blocks?.forEach(b => {
       options.push(<MenuItem value={b.id}>{b.name}</MenuItem>)
     });

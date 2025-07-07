@@ -146,7 +146,7 @@ export function YourSiteSettings() {
     <Grid container spacing={3}>
       <ErrorMessages errors={errors} />
       {UserHelper.checkAccess(Permissions.contentApi.content.edit)
-        && <Grid item md={8} xs={12}>
+        && <Grid size={{ md: 8, xs: 12 }}>
           <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent} data-testid="site-pages-display-box">
             <Table>
               <TableHead>
@@ -173,7 +173,7 @@ export function YourSiteSettings() {
           </DisplayBox>
         </Grid>
       }
-      <Grid item md={4} xs={12}>
+      <Grid size={{ md: 4, xs: 12 }}>
 
         {editBlock && (<BlockEdit block={editBlock}
           updatedCallback={() => {

@@ -9,7 +9,7 @@ import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/helpers";
 import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 

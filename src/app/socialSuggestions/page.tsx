@@ -75,7 +75,7 @@ export default function SocialSuggestions() {
     <>
       <ErrorMessages errors={errors} />
       <Grid container>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <div style={{ margin: 20 }}>
             <TextField
               label="YouTube URL"
@@ -103,7 +103,7 @@ export default function SocialSuggestions() {
             ))}
           </div>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <div style={{ margin: 20 }}>
             <TextField
               helperText="Enter sermon script URL"

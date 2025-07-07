@@ -25,7 +25,7 @@ export function RowMobileOrder(props: Props) {
   }
 
   const getCustomOrders = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     props.cols.forEach((c:number, idx:number) => {
       const index = idx;
       let order = (mobileOrder.length > idx) ? mobileOrder[idx] || idx + 1 : idx + 1;

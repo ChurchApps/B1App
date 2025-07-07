@@ -41,7 +41,7 @@ export const AnimationsEdit: React.FC<Props> = (props) => {
 
   return <InputBox saveFunction={handleSave} saveText="Update" headerText="Edit Animations" cancelFunction={() => { props.onSave(null) }}>
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <FormControl size="small" fullWidth style={{marginTop:10}}>
           <InputLabel>On Show Animation</InputLabel>
           <Select size="small" fullWidth label="On Show Animation" name="onShow" value={animations?.onShow || ""} onChange={handleChange}>
@@ -59,7 +59,7 @@ export const AnimationsEdit: React.FC<Props> = (props) => {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <FormControl size="small" fullWidth style={{marginTop:10}}>
           <InputLabel>On Show Speed</InputLabel>
           <Select size="small" fullWidth label="On Show Speed" name="onShowSpeed" value={animations?.onShowSpeed || "normal"} onChange={handleChange}>

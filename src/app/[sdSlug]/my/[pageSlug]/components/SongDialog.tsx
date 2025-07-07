@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
 import React, { useEffect } from "react";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface, SongInterface } from "@/helpers";
 import { SongDetails } from "./SongDetails";
 import { ChordProHelper } from "@/helpers/ChordProHelper";
@@ -86,7 +86,7 @@ export const SongDialog: React.FC<Props> = (props) => {
       <DialogTitle>{songDetail?.title || "Song Details"}</DialogTitle>
       <DialogContent>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={9}>
+          <Grid size={{ xs: 12, md: 9 }}>
             {(products?.length > 0 || links.length > 0) && <>
               <h3>Files</h3>
               {listProducts()}
@@ -101,7 +101,7 @@ export const SongDialog: React.FC<Props> = (props) => {
 
 
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid size={{ xs: 12, md: 3 }}>
             <SongDetails songDetail={songDetail} reload={() => { }} />
           </Grid>
         </Grid>

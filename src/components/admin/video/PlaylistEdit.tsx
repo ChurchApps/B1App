@@ -8,7 +8,7 @@ import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
-import type { PlaylistInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { PlaylistInterface } from "@churchapps/helpers";
 
 interface Props {
   currentPlaylist: PlaylistInterface,

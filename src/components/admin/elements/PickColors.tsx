@@ -199,7 +199,7 @@ export function PickColors(props: Props) {
       const b = colors[p[0]]
       const t = colors[p[1]]
       const l = colors[p[2]]
-      suggestions.push(<Grid item xs={4}>
+      suggestions.push(<Grid size={{ xs: 4 }}>
         <a href="about:blank" onClick={(e) => {e.preventDefault(); selectPairing(p); }} style={{display:"block", backgroundColor:b, color:t, border:"1px solid " + t, borderRadius:5, padding:5, marginBottom:3 }}>Sample Text -  <span style={{color:l}}>Sample Link</span></a>
       </Grid>);
     });
@@ -211,11 +211,11 @@ export function PickColors(props: Props) {
   }
 
   const getManualColors = () => (<Grid container spacing={1}>
-    <Grid item xs={6}>
+    <Grid size={{ xs: 6 }}>
       <div style={{marginBottom:20}}><b>Background</b></div>
       {getBackgroundField()}
     </Grid>
-    <Grid item xs={6}>
+    <Grid size={{ xs: 6 }}>
 
       <div style={{marginBottom:20}}><b>Content</b></div>
       <div><InputLabel>Heading Color</InputLabel></div>

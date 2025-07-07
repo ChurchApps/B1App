@@ -10,7 +10,7 @@ import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceH
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { PersonHelper, SectionInterface, UrlHelper } from "@/helpers";

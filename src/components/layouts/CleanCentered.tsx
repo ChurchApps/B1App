@@ -2,7 +2,7 @@
 
 import Head from "next/head";
 import { Box, Card, CssBaseline } from "@mui/material";
-import type { ChurchInterface, LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
 import Zone from "./Zone";
 
 type Props = {

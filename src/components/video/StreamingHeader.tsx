@@ -1,5 +1,5 @@
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { AppearanceInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import { EnvironmentHelper, StreamConfigInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
@@ -11,7 +11,7 @@ import { StreamingNavItems } from "./StreamingNavItems";
 import { Permissions } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
-import type { UserInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { UserInterface } from "@churchapps/helpers";
 
 interface Props {
   user: UserInterface,

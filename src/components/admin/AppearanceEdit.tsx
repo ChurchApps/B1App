@@ -5,7 +5,7 @@ import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
-import type { GenericSettingInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GenericSettingInterface } from "@churchapps/helpers";
 
 interface Props {
   updatedFunction?: () => void,

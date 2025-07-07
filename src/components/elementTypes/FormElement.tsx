@@ -4,7 +4,7 @@ import { ElementInterface, PersonHelper } from "@/helpers";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { FormSubmissionEdit } from "@churchapps/apphelper/dist/components/FormSubmissionEdit";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { ChurchInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { ChurchInterface } from "@churchapps/helpers";
 
 interface Props {
   element: ElementInterface;

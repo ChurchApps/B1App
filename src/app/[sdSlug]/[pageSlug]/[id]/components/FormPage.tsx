@@ -8,7 +8,7 @@ import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { FormSubmissionEdit } from "@churchapps/apphelper/dist/components/FormSubmissionEdit";
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { FormInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { FormInterface } from "@churchapps/helpers";
 import { Container } from "@mui/material";
 
 interface Props extends WrapperPageProps {

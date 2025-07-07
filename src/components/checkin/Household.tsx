@@ -7,7 +7,7 @@ import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
-import type { VisitInterface, GroupInterface, PersonInterface, ServiceTimeInterface, VisitSessionInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { VisitInterface, GroupInterface, PersonInterface, ServiceTimeInterface, VisitSessionInterface } from "@churchapps/helpers";
 
 interface Props {
   completeHandler: () => void;
@@ -50,13 +50,13 @@ export function Household({ completeHandler = () => { } }: Props) {
     return (
       <div className="checkinServiceTime" key={st.id}>
         <Grid container spacing={3}>
-          <Grid item xs={4}>
+          <Grid size={{ xs: 4 }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Icon sx={{ marginRight: "5px" }}>watch_later</Icon>
               {st.name}
             </Box>
           </Grid>
-          <Grid item xs={8}>
+          <Grid size={{ xs: 8 }}>
             <a
               className="bigLinkButton serviceTimeButton"
               href="about:blank"
@@ -136,13 +136,13 @@ export function Household({ completeHandler = () => { } }: Props) {
           aria-label={`Select ${member.name.display} for checkin`}
         >
           <Grid container spacing={3}>
-            <Grid item xs={1}>
+            <Grid size={{ xs: 1 }}>
               {arrow}
             </Grid>
-            <Grid item xs={2}>
+            <Grid size={{ xs: 2 }}>
               <img src={PersonHelper.getPhotoUrl(member)} alt={`${member.name.display} avatar`} data-testid={`member-photo-${member.id}`} />
             </Grid>
-            <Grid item xs={9}>
+            <Grid size={{ xs: 9 }}>
               {member.name.display}
               {getCondensedGroupList(member)}
             </Grid>

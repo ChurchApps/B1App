@@ -5,7 +5,7 @@ import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
 import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
 import { Button, Dialog, Grid, Icon, InputLabel, SelectChangeEvent, TextField } from "@mui/material";

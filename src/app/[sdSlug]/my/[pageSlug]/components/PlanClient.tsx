@@ -8,7 +8,7 @@ import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { AssignmentInterface, PersonInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { AssignmentInterface, PersonInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { Team } from "@/components/plans/Team";
 import { PositionDetails } from "@/components/plans/PositionDetails";
 import { ServiceOrder } from "./ServiceOrder";
@@ -94,12 +94,12 @@ export function PlanClient({ planId }: Props) {
         <Icon>assignment</Icon> {plan.name}
       </h1>
       <Grid container spacing={3} alignItems="flex-start">
-        <Grid item md={8} xs={12}>
+        <Grid size={{ md: 8, xs: 12 }}>
           {getPositionDetails()}
           {getNotes()}
           <ServiceOrder plan={plan} />
         </Grid>
-        <Grid item md={4} xs={12}>
+        <Grid size={{ md: 4, xs: 12 }}>
           {getTeams()}
         </Grid>
       </Grid>

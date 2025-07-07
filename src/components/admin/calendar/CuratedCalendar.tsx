@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { CuratedEventWithEventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { CuratedEventWithEventInterface } from "@churchapps/helpers";
 import { CuratedEventCalendar } from "./CuratedEventCalendar";
 
 interface Props {

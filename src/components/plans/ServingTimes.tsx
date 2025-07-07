@@ -2,7 +2,7 @@ import React from "react";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import type { AssignmentInterface, PlanInterface, PositionInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { AssignmentInterface, PlanInterface, PositionInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";
 import Link from "next/link";
 
@@ -29,7 +29,7 @@ export const ServingTimes: React.FC<Props> = (props) => {
       if (position && plan) data.push({ assignmentId:assignment.id, planId: plan.id, planName:plan.name, serviceDate: new Date(plan.serviceDate), position: position.name, status:assignment.status || "Unconfirmed" });
     });
     ArrayHelper.sortBy(data, "serviceDate", true)
-    const rows:JSX.Element[] = [];
+    const rows:React.ReactElement[] = [];
     data.forEach((d) => {
       rows.push(
         <TableRow key={d.planId}>

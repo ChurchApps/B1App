@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "@/context/UserContext";
 import { AuthGuard } from "@/components/AuthGuard";
-import type { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ArrayHelper, CurrencyHelper, DateHelper } from "@churchapps/helpers";
 import { useSearchParams } from "next/navigation";

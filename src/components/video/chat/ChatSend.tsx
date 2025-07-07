@@ -6,7 +6,7 @@ import React, { KeyboardEvent } from "react";
 import { Emojis } from ".";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { MessageInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { MessageInterface } from "@churchapps/helpers";
 import { ChatRoomInterface } from "../../../helpers"
 
 interface Props { room: ChatRoomInterface }

@@ -44,7 +44,7 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
       case "bible": title = "Bible"; break;
     }
   }
-  return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title, props.config.appearance.ogImage);
+  return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title);
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {

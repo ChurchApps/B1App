@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import type { PlaylistInterface, SermonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 
 interface Props {

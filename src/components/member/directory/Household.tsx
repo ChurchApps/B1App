@@ -3,7 +3,7 @@ import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
-import type { PersonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { PersonInterface } from "@churchapps/helpers";
 import { Grid } from "@mui/material";
 
 interface Props { person: PersonInterface, selectedHandler: (personId: string) => void }
@@ -16,8 +16,8 @@ export const Household: React.FC<Props> = (props) => {
     const m = member;
     return (<a href="about:blank" className="householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id) }}>
       <Grid container spacing={3}>
-        <Grid item xs={2}><img src={PersonHelper.getPhotoUrl(member)} alt="avatar" /></Grid>
-        <Grid item xs={10}>
+        <Grid size={{ xs: 2 }}><img src={PersonHelper.getPhotoUrl(member)} alt="avatar" /></Grid>
+        <Grid size={{ xs: 10 }}>
           {member?.name?.display}
           <div><span>{member?.householdRole}</span></div>
         </Grid>
@@ -28,7 +28,7 @@ export const Household: React.FC<Props> = (props) => {
   const getMembers = () => {
     if (isLoading) return (<Loading size="sm" />)
     else {
-      let result: JSX.Element[] = [];
+      let result: React.ReactElement[] = [];
       members?.forEach(m => {
         if (m.id !== props.person.id) result.push(getMember(m))
       });

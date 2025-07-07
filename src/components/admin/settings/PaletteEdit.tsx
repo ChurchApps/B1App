@@ -101,7 +101,7 @@ export function PaletteEdit(props: Props) {
   const getPalettes = () => {
     let result:React.ReactElement[] = [];
     suggestions.forEach(s => {
-      result.push(<Grid item xs={12} md={6}>{getPalette(s)}</Grid>)
+      result.push(<Grid size={{ xs: 12, md: 6 }}>{getPalette(s)}</Grid>)
     })
     return <Grid container spacing={3}>{result}</Grid>
   }
@@ -113,7 +113,7 @@ export function PaletteEdit(props: Props) {
       const textName = p.text as keyof PaletteInterface;
       const bg = palette[backgroundName];
       const text = palette[textName];
-      result.push(<Grid item xs={12} md={6}><div style={{backgroundColor:bg, color:text, border:"1px solid " + text, padding:10}}>{p.background +"-" + p.text}</div></Grid>)
+      result.push(<Grid size={{ xs: 12, md: 6 }}><div style={{backgroundColor:bg, color:text, border:"1px solid " + text, padding:10}}>{p.background +"-" + p.text}</div></Grid>)
     })
     return <Grid container spacing={1}>{result}</Grid>
   }
@@ -135,11 +135,11 @@ export function PaletteEdit(props: Props) {
         </Table>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <h2>Suggested Pallets</h2>
             {getPalettes()}
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <h2>Pairings</h2>
             {getPairings()}
           </Grid>

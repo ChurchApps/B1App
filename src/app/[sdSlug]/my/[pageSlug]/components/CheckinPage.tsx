@@ -27,7 +27,7 @@ export function CheckinPage() {
       {UserHelper.user?.firstName
         ? (
           <Grid container spacing={3}>
-            <Grid item md={8} xs={12}>
+            <Grid size={{ md: 8, xs: 12 }}>
               {content}
             </Grid>
           </Grid>

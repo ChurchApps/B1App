@@ -3,7 +3,7 @@ import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
 import React from "react";
 import { TabEdit } from "./TabEdit";
@@ -47,7 +47,7 @@ export const Tabs: React.FC = () => {
 
   const getRows = () => {
     let idx = 0;
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     tabs.forEach(tab => {
       const upLink = (idx === 0) ? null : <a href="about:blank" data-idx={idx} onClick={moveUp}><Icon>arrow_upward</Icon></a>
       const downLink = (idx === tabs.length - 1) ? null : <a href="about:blank" data-idx={idx} onClick={moveDown}><Icon>arrow_downward</Icon></a>

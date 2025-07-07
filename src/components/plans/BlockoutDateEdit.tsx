@@ -3,7 +3,7 @@ import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import type { BlockoutDateInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { BlockoutDateInterface } from "@churchapps/helpers";
 import { TextField } from "@mui/material";
 
 interface Props {

@@ -6,7 +6,7 @@ import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface } from "@churchapps/helpers";
 
 interface Props {
   config: ConfigurationInterface;

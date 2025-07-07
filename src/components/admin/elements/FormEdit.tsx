@@ -3,7 +3,7 @@ import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Typograph
 import { CommonEnvironmentHelper } from "@churchapps/apphelper/dist/helpers/CommonEnvironmentHelper";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { FormInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { FormInterface } from "@churchapps/helpers";
 
 type Props = {
   parsedData: any;

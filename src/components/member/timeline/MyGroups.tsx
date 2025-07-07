@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "@/components/groups/GroupCard";
 
 export default function MyGroups() {

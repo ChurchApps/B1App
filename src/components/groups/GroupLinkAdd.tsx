@@ -5,7 +5,7 @@ import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessag
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { Permissions } from "@churchapps/helpers";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 
 interface Props {
   groupId: string;
@@ -51,10 +51,10 @@ export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
       <ErrorMessages errors={errors} data-testid="group-link-errors" />
       <Typography sx={{ textIndent: 3, fontSize: "14px" }}>Link could be of Google Drive, Hosted Lesson PDF, etc.</Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField fullWidth label="Link Text" name="text" value={text} onChange={handleChange} data-testid="group-link-text-input" aria-label="Link display text" />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <TextField fullWidth label="Link Url" name="url" value={url} onChange={handleChange} data-testid="group-link-url-input" aria-label="Link URL" />
         </Grid>
       </Grid>

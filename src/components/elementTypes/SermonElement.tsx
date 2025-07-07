@@ -6,7 +6,7 @@ import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import type { PlaylistInterface, SermonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 
 interface Props {
   churchId: string;

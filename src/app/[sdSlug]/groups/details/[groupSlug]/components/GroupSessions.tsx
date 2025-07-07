@@ -9,7 +9,7 @@ import { Permissions } from "@churchapps/helpers";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
-import type { GroupInterface, SessionInterface, VisitSessionInterface, PersonInterface, VisitInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface, SessionInterface, VisitSessionInterface, PersonInterface, VisitInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead, Icon, FormControl, InputLabel, Select, Button, SelectChangeEvent, Grid, MenuItem } from "@mui/material"
 
 interface Props {
@@ -49,7 +49,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
 
   const getRows = () => {
     let canEdit = UserHelper.checkAccess(Permissions.attendanceApi.attendance.edit);
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     for (let i = 0; i < visitSessions.length; i++) {
       const vs = visitSessions[i];
       //let editLink = (canEdit) ? (<a href="about:blank" onClick={handleRemove} className="text-danger" data-personid={vs.visit.personId}><Icon>person_remove</Icon> Remove</a>) : null;
@@ -73,7 +73,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
   }
 
   const getSessionOptions = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     for (let i = 0; i < sessions.length; i++) result.push(<MenuItem value={sessions[i].id} key={sessions[i].id}>{sessions[i].displayName}</MenuItem>);
     return result;
   }
@@ -82,17 +82,17 @@ export const GroupSessions: React.FC<Props> = (props) => {
     if (!UserHelper.checkAccess(Permissions.attendanceApi.attendance.edit)) return null;
     else return (
       <Grid container columnSpacing={2}>
-        <Grid item>
+        <div>
           <FormControl style={{ width: 140, marginTop: 0 }} size="small">
             <InputLabel id="sessions">{Locale.label("Session")}</InputLabel>
             <Select fullWidth labelId="sessions" label={Locale.label("groups.groupSessions.session")} value={session?.id} onChange={selectSession} data-testid="group-sessions-select">
               {getSessionOptions()}
             </Select>
           </FormControl>
-        </Grid>
-        <Grid item>
+        </div>
+        <div>
           <Button variant="contained" data-cy="add-service-time" onClick={handleAdd} data-testid="add-service-time-button"><Icon>calendar_month</Icon> {Locale.label("New")}</Button>
-        </Grid>
+        </div>
       </Grid>
     );
     /*else return (

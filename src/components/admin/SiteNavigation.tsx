@@ -1,5 +1,5 @@
 import React from "react";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 import { ConfigHelper } from "@/helpers";
 import { DroppableWrapper } from "./DroppableWrapper";
 import { DraggableWrapper } from "./DraggableWrapper";

@@ -9,7 +9,7 @@ import { } from "@/helpers";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { GroupInterface, EventInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface, EventInterface } from "@churchapps/helpers";
 
 interface Props {
   churchId: string;

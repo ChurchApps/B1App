@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { GroupInterface, GroupMemberInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
 import { Alert, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 interface Props {

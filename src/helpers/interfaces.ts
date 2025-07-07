@@ -1,4 +1,4 @@
-import type { ConversationInterface, MessageInterface, SocketPayloadInterface, SermonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { ConversationInterface, MessageInterface, SocketPayloadInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "./ConfigHelper";
 
 export interface ColumnInterface {

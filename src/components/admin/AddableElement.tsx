@@ -39,7 +39,7 @@ export function AddableElement(props: Props) {
     : { ...baseStyle, border: "1px solid #28a745", backgroundColor: "#28a745" }
 
   return (
-    <Grid item xs={12}>
+    <Grid size={{ xs: 12 }}>
       <div ref={dragRef} style={style}>
         <div style={{ float: "left" }}><Icon>{props.icon}</Icon></div> <span style={{ paddingLeft: 10 }}>{props.label}</span>
       </div>
@@ -48,7 +48,7 @@ export function AddableElement(props: Props) {
 
   /*
   return (
-    <Grid item xs={4}>
+    <Grid size={{ xs: 4 }}>
       <div ref={dragRef} style={{ textAlign: "center", border: "1px solid #CCC", borderRadius: 5, paddingTop: 10, paddingBottom: 10, opacity, cursor: "pointer" }}>
         <Icon>{props.icon}</Icon><br />
         {props.label}

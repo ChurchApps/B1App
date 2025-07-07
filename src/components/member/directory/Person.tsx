@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Grid, Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { PersonInterface, TaskInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { PersonHelper } from "../../../helpers";
 import { Household } from "./Household";
 import { ModifyProfile } from "./ModifyProfile";
@@ -38,7 +38,7 @@ export const Person: React.FC<Props> = (props) => {
   }
 
   const showChanges = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     requestedChanges.map((t) => {
       const changes = JSON.parse(t.data);
       result.push (
@@ -94,13 +94,13 @@ export const Person: React.FC<Props> = (props) => {
   return (
     <>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
             <Grid container spacing={3}>
-              <Grid item xs={4}>
+              <Grid size={{ xs: 4 }}>
                 <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
               </Grid>
-              <Grid item xs={8}>
+              <Grid size={{ xs: 8 }}>
                 <h2>{person?.name.display}</h2>
                 {getContactMethods()}
               </Grid>
@@ -108,7 +108,7 @@ export const Person: React.FC<Props> = (props) => {
           </DisplayBox>
           {requestedChanges.length > 0 && showChanges()}
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
 
           <Household person={person} selectedHandler={props.selectedHandler} />
         </Grid>

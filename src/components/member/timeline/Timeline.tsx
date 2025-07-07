@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/helpers";
 import { TimelinePost } from "./TimelinePost";
 import { TimelineHelper } from "@/helpers/TimelineHelper";
 

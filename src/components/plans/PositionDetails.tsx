@@ -1,7 +1,7 @@
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import type { AssignmentInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { AssignmentInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { Alert } from "@mui/material";
 import { DateHelper } from "@churchapps/helpers";
 
@@ -23,7 +23,7 @@ export const PositionDetails: React.FC<Props> = (props) => {
   }
 
   const getTimes = () => {
-    const rows:JSX.Element[] = [];
+    const rows:React.ReactElement[] = [];
     const times = props.times.sort((a,b) => a.startTime > b.startTime ? 1 : -1);
     props.times.forEach((time) => {
       rows.push(<li key={time.id}><b>{time.displayName}:</b> {DateHelper.prettyDateTime(new Date(time.startTime))} - {DateHelper.prettyTime(new Date(time.endTime))}</li>);

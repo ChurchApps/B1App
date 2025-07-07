@@ -107,7 +107,7 @@ export default function ContentEditor(props: Props) {
   }
 
   const getSections = (zone: string) => {
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
     result.push(getAddSection(0, zone));
     const sections = (zone === "block") ? container?.sections : ArrayHelper.getAll(container?.sections, "zone", zone);
     sections?.forEach(section => {
@@ -246,16 +246,16 @@ export default function ContentEditor(props: Props) {
 
     <div style={{ backgroundColor: "#FFF", position: "sticky", top: 0, width: "100%", zIndex: 1000, boxShadow: "0px 2px 2px black", marginBottom: 10 }}>
       <Grid container spacing={2}>
-        <Grid item xs={4} style={{ paddingLeft: 40, paddingTop: 8 }}>
+        <Grid size={{ xs: 4 }} style={{ paddingLeft: 40, paddingTop: 8 }}>
           <SmallButton icon={"done"} text="Done" onClick={handleDone} data-testid="content-editor-done-button" />
         </Grid>
-        <Grid item xs={4} style={{ textAlign: "center" }}>
+        <Grid size={{ xs: 4 }} style={{ textAlign: "center" }}>
           <b>
             {props.pageId && "Page: " + (container as PageInterface)?.title}
             {props.blockId && "Block: " + (container as BlockInterface)?.name}
           </b>
         </Grid>
-        <Grid item xs={4} style={{ textAlign: "right", paddingTop: 5, paddingBottom: 5, paddingRight: 15 }}>
+        <Grid size={{ xs: 4 }} style={{ textAlign: "right", paddingTop: 5, paddingBottom: 5, paddingRight: 15 }}>
           <div style={{ float: "right", display: "flex", backgroundColor: "#1976d2" }}>
             <ToggleButtonGroup value={showHelp.toString()} exclusive size="small">
               <ToggleButton value="true" onClick={() => setShowHelp(!showHelp)} style={{ borderRight: "1px solid #FFF", color: "#FFF" }}><Tooltip title="Help" placement="top"><Icon>help</Icon></Tooltip></ToggleButton>

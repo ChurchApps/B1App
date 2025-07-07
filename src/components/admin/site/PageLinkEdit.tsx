@@ -6,7 +6,7 @@ import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
 import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
 import { Button, Dialog, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
@@ -152,15 +152,15 @@ export function PageLinkEdit(props: Props) {
       <InputBox id="pageDetailsBox" headerText={page ? "Page Settings" : "Link Settings"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page?.id && <a href="about:blank" onClick={handleDuplicate}>Duplicate</a>)}>
         <ErrorMessages errors={errors} />
         <Grid container spacing={2} style={{minWidth:500}}>
-          {page && <Grid item xs={6}>
+          {page && <Grid size={{ xs: 6 }}>
             <TextField size="small" fullWidth label="Page Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} />
           </Grid>
           }
-          {link && <Grid item xs={6}>
+          {link && <Grid size={{ xs: 6 }}>
             <TextField size="small" fullWidth label="Link Text" name="linkText" value={link.text} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
           </Grid>
           }
-          {page && <Grid item xs={6}>
+          {page && <Grid size={{ xs: 6 }}>
             {!props.embedded && (
               <FormControl fullWidth size="small">
                 <InputLabel>Layout</InputLabel>
@@ -172,7 +172,7 @@ export function PageLinkEdit(props: Props) {
             )}
           </Grid>
           }
-          {page && <Grid item xs={6}>
+          {page && <Grid size={{ xs: 6 }}>
             {checked
               ? (
                 <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
@@ -191,7 +191,7 @@ export function PageLinkEdit(props: Props) {
               )}
           </Grid>
           }
-          {!page && link && <Grid item xs={6}>
+          {!page && link && <Grid size={{ xs: 6 }}>
             <TextField size="small" fullWidth label="Url" name="linkUrl" value={link.url} onChange={handleLinkChange} onKeyDown={handleKeyDown} />
           </Grid>
           }

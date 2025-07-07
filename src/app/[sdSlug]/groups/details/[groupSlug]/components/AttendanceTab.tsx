@@ -1,6 +1,6 @@
 "use client";
 
-import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface } from "@churchapps/helpers";
 import { Grid } from "@mui/material";
 import React, { useState } from "react";
 import { GroupSessions } from "./GroupSessions";
@@ -31,8 +31,8 @@ export function AttendanceTab(props: Props) {
   return <>
     <h2>Attendance</h2>
     <Grid container spacing={3}>
-      <Grid item md={7}><GroupSessions group={props.group} sidebarVisibilityFunction={hideAdd} addedSession={addedSession} addedPerson={addedPerson} /></Grid>
-      <Grid item md={5} style={{ display: showing }}><MembersAdd group={props.group} addFunction={setAddedPerson} /></Grid>
-      <Grid item md={5} style={{ display: hidden }}><SessionAdd group={props.group} updatedFunction={setAddedSession} sidebarVisibilityFunction={hideAdd} /></Grid></Grid>
+      <Grid size={{ md: 7 }}><GroupSessions group={props.group} sidebarVisibilityFunction={hideAdd} addedSession={addedSession} addedPerson={addedPerson} /></Grid>
+      <Grid size={{ md: 5 }} style={{ display: showing }}><MembersAdd group={props.group} addFunction={setAddedPerson} /></Grid>
+      <Grid size={{ md: 5 }} style={{ display: hidden }}><SessionAdd group={props.group} updatedFunction={setAddedSession} sidebarVisibilityFunction={hideAdd} /></Grid></Grid>
   </>
 }

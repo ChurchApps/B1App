@@ -19,7 +19,7 @@ export const StyleList: React.FC<Props> = (props) => {
   });
 
   const getCurrentStyles = () => {
-    const result:JSX.Element[] = [];
+    const result:React.ReactElement[] = [];
     result.push(getPlatformStyles("all", "All"));
     result.push(getPlatformStyles("desktop", "Desktop Only"));
     result.push(getPlatformStyles("mobile", "Mobile Only"));

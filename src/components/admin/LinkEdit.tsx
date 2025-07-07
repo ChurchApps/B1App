@@ -5,7 +5,7 @@ import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 
 interface Props {
   currentLink: LinkInterface,

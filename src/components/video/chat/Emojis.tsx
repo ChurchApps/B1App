@@ -8,7 +8,7 @@ export const Emojis: React.FC<Props> = (props) => {
     let result = [];
     let emojis = ["😀", "😁", "🤣", "😉", "😊", "😇", "😍", "😜", "🤫", "🤨", "🙄", "😬", "😔", "😷", "🤯", "😎", "😲", "❤", "👋", "✋", "🤞", "👍", "👊", "👏", "🙌", "🙏"];
     for (let i = 0; i < emojis.length; i++) {
-      result.push(<Grid item key={i} xs={6} md={2}>
+      result.push(<Grid key={i} size={{ xs: 6, md: 2 }}>
         <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); props.selectedFunction(emojis[i]) }}>{emojis[i]}</a>
       </Grid>);
     }

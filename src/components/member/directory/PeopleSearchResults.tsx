@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
-import type { PersonInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { PersonInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 interface Props {

@@ -5,7 +5,7 @@ import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { LinkInterface, UserContextInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface, UserContextInterface } from "@churchapps/helpers";
 import { FileInterface } from "@/helpers";
 import { Box, LinearProgress, Typography, TableRow, TableCell, Table, TableHead, TableBody, Divider, Chip } from "@mui/material";
 import Link from "next/link";

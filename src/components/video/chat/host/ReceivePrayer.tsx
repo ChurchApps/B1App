@@ -51,7 +51,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
   }
 
   const getRooms = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     props.chatState.privateRooms.forEach(r => {
       if (r.joined) {
         let className = "streamingTab streamingChildTab";

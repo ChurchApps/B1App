@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownPreviewLight";
-import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface } from "@churchapps/helpers";
 import { useState } from "react";
 
 interface Props {

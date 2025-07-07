@@ -6,7 +6,7 @@ import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -123,7 +123,7 @@ export const Links: React.FC<Props> = (props) => {
 
   const getLinks = (structuredLinks: LinkInterface[]) => {
     let idx = 0;
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     structuredLinks.forEach(link => {
       const upLink = (idx === 0) ? null : <a href="about:blank" data-idx={idx} onClick={(e: React.MouseEvent) => moveUp(e, structuredLinks)}><Icon>arrow_upward</Icon></a>
       const downLink = (idx === structuredLinks.length - 1) ? null : <a href="about:blank" data-idx={idx} onClick={(e: React.MouseEvent) => moveDown(e, structuredLinks)}><Icon>arrow_downward</Icon></a>

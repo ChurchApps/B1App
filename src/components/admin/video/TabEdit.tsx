@@ -7,7 +7,7 @@ import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessag
 import { PageInterface } from "@/helpers";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import type { LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { LinkInterface } from "@churchapps/helpers";
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }
 
@@ -87,7 +87,7 @@ export const TabEdit: React.FC<Props> = (props) => {
 
   const getPage = () => {
     if (currentTab?.linkType === "page") {
-      let options: JSX.Element[] = [];
+      let options: React.ReactElement[] = [];
       if (pages === null) loadPages();
       else {
         options = [];

@@ -5,7 +5,7 @@ import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessag
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
 import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
-import type { GroupInterface, GroupServiceTimeInterface, SessionInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface, GroupServiceTimeInterface, SessionInterface } from "@churchapps/helpers";
 import { TextField, FormControl, Select, InputLabel, SelectChangeEvent, MenuItem } from "@mui/material"
 
 interface Props { group: GroupInterface, updatedFunction: (session: SessionInterface) => void, sidebarVisibilityFunction: (name: string, visible: boolean) => void, }

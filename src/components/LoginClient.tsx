@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { Alert, PaperProps } from "@mui/material";
+import { Alert } from "@mui/material";
 import { Layout } from "@/components";
 import { LoginPage } from "@churchapps/apphelper/dist/pageComponents/LoginPage";
 import UserContext from "@/context/UserContext";
@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 interface Props {
   showLogo?: boolean;
   redirectAfterLogin?: string;
-  loginContainerCssProps?: PaperProps;
+  loginContainerCssProps?: any;
   keyName?: string;
 }
 

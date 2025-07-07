@@ -1,7 +1,7 @@
 import React from "react";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
-import type { AssignmentInterface, PersonInterface, PositionInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { AssignmentInterface, PersonInterface, PositionInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableBody } from "@mui/material";
 import Link from "next/link";
 
@@ -16,7 +16,7 @@ export const Team: React.FC<Props> = (props) => {
 
   const getTeam = () => {
     if (!props.people) return;
-    const rows:JSX.Element[] = [];
+    const rows:React.ReactElement[] = [];
     props.positions.forEach((position) => {
       const posAssignments = props.assignments.filter(a => a.positionId === position.id);
       posAssignments.forEach((assignment) => {

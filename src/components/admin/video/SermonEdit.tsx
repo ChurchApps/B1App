@@ -9,7 +9,7 @@ import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelpe
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
-import type { SermonInterface, PlaylistInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { SermonInterface, PlaylistInterface } from "@churchapps/helpers";
 import { Duration } from "./Duration";
 import { B1ShareModal } from "@/components/B1ShareModal";
 
@@ -176,7 +176,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   const getPlaylists = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     playlists.forEach(playlist => {
       result.push(<MenuItem key={playlist.id} value={playlist.id} data-testid={`playlist-option-${playlist.id}`} aria-label={playlist.title}>{playlist.title}</MenuItem>);
     });
@@ -184,7 +184,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   const getAdditionalPlaylists = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     playlists.forEach(playlist => {
       if (playlist.id !== currentSermon.playlistId) result.push(<MenuItem key={playlist.id} value={playlist.id} data-testid={`additional-playlist-option-${playlist.id}`} aria-label={playlist.title}>{playlist.title}</MenuItem>);
     });
@@ -236,7 +236,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
       )}
 
       <Grid container spacing={3}>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <FormControl fullWidth>
             <InputLabel>Video Provider</InputLabel>
             <Select label="Video Provider" name="videoType" value={currentSermon?.videoType || ""} onChange={handleChange} data-testid="video-provider-select" aria-label="Select video provider">
@@ -248,7 +248,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <TextField fullWidth label={keyLabel} name="videoData" value={currentSermon?.videoData || ""} onChange={handleChange} placeholder={keyPlaceholder}
             InputProps={{ endAdornment: endAdornment }}
             data-testid="video-data-input"
@@ -258,12 +258,12 @@ export const SermonEdit: React.FC<Props> = (props) => {
       </Grid>
       <Grid container spacing={3}>
         {!currentSermon?.permanentUrl && (
-          <Grid item xs={6}>
+          <Grid size={{ xs: 6 }}>
             <label style={{ width: "100%" }}>Publish Date</label>
             <TextField fullWidth type="date" name="publishDate" value={(currentSermon?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentSermon?.publishDate)) : ""} onChange={handleChange} placeholder={keyPlaceholder} data-testid="publish-date-input" aria-label="Publish date" />
           </Grid>
         )}
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <label style={{ width: "100%" }}>Total Sermon Duration</label>
           <Duration totalSeconds={currentSermon?.duration || 0} updatedFunction={totalSeconds => { let s = { ...currentSermon }; s.duration = totalSeconds; setCurrentSermon(s); }} />
         </Grid>
@@ -271,12 +271,12 @@ export const SermonEdit: React.FC<Props> = (props) => {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid item xs={3}>
+        <Grid size={{ xs: 3 }}>
           <a href="about:blank" onClick={(e) => { e.preventDefault(); props.showPhotoEditor("sermon", currentSermon?.thumbnail || ""); }} data-testid="edit-thumbnail-link" aria-label="Edit sermon thumbnail">
             <img src={currentSermon?.thumbnail || "/images/no-image.png"} className="img-fluid" style={{ marginTop: 20 }} alt="Sermon thumbnail" data-testid="sermon-thumbnail"></img>
           </a>
         </Grid>
-        <Grid item xs={9}>
+        <Grid size={{ xs: 9 }}>
           <TextField fullWidth label="Title" name="title" value={currentSermon?.title || ""} onChange={handleChange} data-testid="sermon-title-input" aria-label="Sermon title" />
           <TextField fullWidth multiline label="Description" name="description" value={currentSermon?.description || ""} onChange={handleChange} placeholder={keyPlaceholder} data-testid="sermon-description-input" aria-label="Sermon description" />
         </Grid>

@@ -5,7 +5,7 @@ import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import type { GenericSettingInterface, LinkInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GenericSettingInterface, LinkInterface } from "@churchapps/helpers";
 import { PageInterface, UrlHelper } from "@/helpers";
 import { redirect, usePathname } from "next/navigation";
 import { SiteNavigation } from "./SiteNavigation";
@@ -86,7 +86,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
       {(editLink) && <NavLinkEdit updatedCallback={addLinkCallback} onDone={() => { setEditLink(null); } } link={editLink} />}
 
       <Grid container spacing={3}>
-        <Grid item md={2} xs={12} style={{backgroundColor:"#FFF", marginTop:25, paddingLeft:40}}>
+        <Grid size={{ md: 2, xs: 12 }} style={{backgroundColor:"#FFF", marginTop:25, paddingLeft:40}}>
           <DndProvider backend={HTML5Backend}>
             <h2 style={{marginTop:0}}>Pages</h2>
             <div>
@@ -108,7 +108,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
 
           </DndProvider>
         </Grid>
-        <Grid item md={10} xs={12}>
+        <Grid size={{ md: 10, xs: 12 }}>
           {props.children}
         </Grid>
       </Grid>

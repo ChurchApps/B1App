@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import type { CuratedCalendarInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { CuratedCalendarInterface } from "@churchapps/helpers";
 import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import { redirect } from "next/navigation";

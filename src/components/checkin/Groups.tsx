@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Icon, Grid } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
-import type { GroupInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { GroupInterface } from "@churchapps/helpers";
 
 interface GroupCategoryInterface {
   key: number;
@@ -82,10 +82,10 @@ export function Groups({ selectedHandler }: Props) {
           }}
         >
           <Grid container spacing={3}>
-            <Grid item xs={1}>
+            <Grid size={{ xs: 1 }}>
               {arrow}
             </Grid>
-            <Grid item xs={11}>
+            <Grid size={{ xs: 11 }}>
               {category.name}
             </Grid>
           </Grid>

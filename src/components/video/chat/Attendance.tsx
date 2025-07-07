@@ -8,7 +8,7 @@ import { ChatHelper } from "@/helpers/ChatHelper";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
-import type { ConversationInterface } from "@churchapps/apphelper/dist/helpers/Interfaces";
+import type { ConversationInterface } from "@churchapps/helpers";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 
 interface Props {
@@ -70,7 +70,7 @@ export const Attendance: React.FC<Props> = (props) => {
   }
 
   const getPMIcon = (connectionId: string) => {
-    let result: JSX.Element = null;
+    let result: React.ReactElement = null;
     if (props.user.isHost) {
       let privateRoom: ChatRoomInterface = getRoomForConnection(connectionId);
       if (privateRoom !== null) {
@@ -83,7 +83,7 @@ export const Attendance: React.FC<Props> = (props) => {
   }
 
   const getBlockIcon = (ipAddress: string) => {
-    let result: JSX.Element = null;
+    let result: React.ReactElement = null;
 
     const handleClick = (e: React.MouseEvent, type: "block" | "unblock") => {
       e.preventDefault();
@@ -195,7 +195,7 @@ export const Attendance: React.FC<Props> = (props) => {
 
   const getContextMenuItems = () => {
     const privateRoom: ChatRoomInterface = getRoomForConnection(selectedConnectionId);
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
 
     if (privateRoom === null) result.push(<Item onClick={() => handlePMClick(null)}>Private Message</Item>);
     else result.push(<Item onClick={() => handlePMClick(privateRoom)}>Join Private Conversation</Item>);
