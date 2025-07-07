@@ -4,6 +4,7 @@ import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
+import "../styles/admin.css";
 import ClientLayout from "./ClientLayout";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { Roboto } from 'next/font/google';
