@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
-import { ArrayHelper, AssignmentInterface, DateHelper, DisplayBox, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";
 
 interface Props {
@@ -36,7 +39,7 @@ export const UpcomingDates: React.FC<Props> = (props) => {
   const getRows = () => {
     const data = getData();
 
-    const rows:JSX.Element[] = [];
+    const rows:React.ReactElement[] = [];
     data.forEach((d) => {
       rows.push(
         <TableRow key={d.timeId}>

@@ -1,5 +1,7 @@
+"use client";
+
 import { SectionInterface } from "@/helpers";
-import { AppearanceHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
 import Zone from "./Zone";
 import { Grid } from "@mui/material";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -23,10 +25,10 @@ export function Footer(props: Props) {
       <>
         <div className="section headingsLight linksLightAccent" style={{backgroundColor:"var(--dark)", color:"var(--light)", paddingTop:40, paddingBottom:40 }}>
           <Grid container spacing={2} className="container">
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               {photo}
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid size={{ xs: 12, md: 6 }}>
               <h2>{props.config?.church.name}</h2>
               <p>
                 {props.config?.church.address1}<br />

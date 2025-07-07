@@ -1,4 +1,4 @@
-import { Locale } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
 
 interface MenuItem {
   url: string;

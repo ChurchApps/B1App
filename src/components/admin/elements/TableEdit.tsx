@@ -1,4 +1,5 @@
-import { MarkdownEditor, MarkdownPreviewLight } from "@churchapps/apphelper";
+import { MarkdownEditor } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownEditor";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownPreviewLight";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import React from "react";
 
@@ -68,9 +69,9 @@ export function TableEdit(props: Props) {
   }
 
   const getGrid = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     for (let i = 0; i < rows; i++) {
-      let row: JSX.Element[] = [];
+      let row: React.ReactElement[] = [];
       for (let j = 0; j < cols; j++) {
         if (markdown) row.push(<TableCell key={j} style={{cursor:"pointer"}} onClick={() => { setEditCellIdx([i,j]) }}><MarkdownPreviewLight value={contents[i][j] || "(empty)"} /></TableCell>);
         else row.push(<TableCell key={j}><TextField fullWidth size="small" label="" style={{margin:0}} name={"cell-" + i + "-" + j} value={contents[i][j]} onChange={handleChange} data-testid={`table-cell-${i}-${j}-input`} /></TableCell>);
@@ -83,13 +84,13 @@ export function TableEdit(props: Props) {
   return (
     <>
       <Grid container columnSpacing={3}>
-        <Grid item md={6} xs={12}>
+        <Grid size={{ md: 6, xs: 12 }}>
           <TextField fullWidth size="small" label="Rows" name="rows" value={rows} onChange={handleChange} data-testid="table-rows-input" />
         </Grid>
-        <Grid item md={6} xs={12}>
+        <Grid size={{ md: 6, xs: 12 }}>
           <TextField fullWidth size="small" label="Columns" name="columns" value={cols} onChange={handleChange} data-testid="table-columns-input" />
         </Grid>
-        <Grid item md={6} xs={12}>
+        <Grid size={{ md: 6, xs: 12 }}>
           <FormControl fullWidth size="small">
             <InputLabel>First Row is Header</InputLabel>
             <Select fullWidth label="First Row is Header" size="small" name="head" value={props.parsedData.head?.toString() || "false"} onChange={handleChange}>
@@ -99,7 +100,7 @@ export function TableEdit(props: Props) {
           </FormControl>
 
         </Grid>
-        <Grid item md={6} xs={12}>
+        <Grid size={{ md: 6, xs: 12 }}>
           <FormControl fullWidth size="small">
             <InputLabel>Allow Markdown</InputLabel>
             <Select fullWidth label="Allow Markdown" size="small" name="markdown" value={props.parsedData.markdown?.toString() || "false"} onChange={handleChange}>

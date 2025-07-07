@@ -1,6 +1,10 @@
+"use client";
+
+import React from "react";
 import { Section } from "@/components/Section";
 import { SectionInterface } from "@/helpers";
-import { ArrayHelper, ChurchInterface } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import type { ChurchInterface } from "@churchapps/helpers";
 import { SectionBlock } from "../SectionBlock";
 
 type Props = {
@@ -11,7 +15,7 @@ type Props = {
 };
 
 // export default function Zone(props: Props) {
-//   const result: JSX.Element[] = []
+//   const result: React.ReactElement[] = []
 //   let first = true;
 //   const sections = ArrayHelper.getAll(props.sections, "zone", props.zone);
 //   for (let section of sections) {
@@ -24,7 +28,7 @@ type Props = {
 
 
 export default function Zone(props: Props) {
-  const result: JSX.Element[] = []
+  const result: React.ReactElement[] = []
   let first = true;
   const sections = ArrayHelper.getAll(props.sections, "zone", props.zone);
 

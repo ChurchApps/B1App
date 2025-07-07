@@ -1,5 +1,10 @@
-import { Loading, DisplayBox } from "@churchapps/apphelper";
-import { SermonInterface, PlaylistInterface, ApiHelper, UserHelper, ArrayHelper, DateHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import type { SermonInterface, PlaylistInterface } from "@churchapps/helpers";
 import { Icon, IconButton, Menu, MenuItem, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import React from "react";
 import { SermonEdit } from "./SermonEdit";
@@ -66,7 +71,7 @@ export const Sermons = (props: Props) => {
 
   const getRows = () => {
     //var idx = 0;
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     sermons.forEach(video => {
       rows.push(
         <TableRow key={video.id}>

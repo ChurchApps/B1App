@@ -5,7 +5,8 @@ import React, { useEffect, useState } from "react";
 import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { GroupInterface, UserHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { GroupInterface } from "@churchapps/helpers";
 
 interface Props {
   config: ConfigurationInterface;

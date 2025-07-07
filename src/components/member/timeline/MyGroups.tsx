@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
-import { ApiHelper, GroupInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "@/components/groups/GroupCard";
 
 export default function MyGroups() {
@@ -17,7 +18,7 @@ export default function MyGroups() {
       {groups?.length > 0
         ? (
           groups.map((group) => (
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={group.id}>
               <GroupCard group={group} />
             </Grid>
           ))

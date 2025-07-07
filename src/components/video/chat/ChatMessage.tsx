@@ -1,7 +1,10 @@
 import { ChatHelper } from "@/helpers/ChatHelper";
 import React from "react";
 import { ChatUserInterface } from "../../../helpers";
-import { Permissions, MessageInterface, ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { Permissions } from "@churchapps/helpers";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { MessageInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
 
 interface Props { message: MessageInterface, conversationId: string, user: ChatUserInterface }

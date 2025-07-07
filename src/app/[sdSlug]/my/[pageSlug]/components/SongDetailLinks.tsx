@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { Stack } from "@mui/material";
 import { SongDetailInterface, SongDetailLinkInterface } from "@/helpers";
 

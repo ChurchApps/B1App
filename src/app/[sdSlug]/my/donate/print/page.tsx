@@ -1,11 +1,11 @@
 "use client";
+import React, { useContext, useEffect, useState } from "react";
 import UserContext from "@/context/UserContext";
 import { AuthGuard } from "@/components/AuthGuard";
-import { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/apphelper";
+import type { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ArrayHelper, CurrencyHelper, DateHelper } from "@churchapps/helpers";
 import { useSearchParams } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Params = Promise<{ sdSlug: string; }>;
@@ -82,7 +82,7 @@ export default function PrintPage({ params }: { params: Params }) {
   }
 
   const tableDonations = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     fundDonations.forEach((fd) => {
       const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
       const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
@@ -109,7 +109,7 @@ export default function PrintPage({ params }: { params: Params }) {
         result.push({ fund: fd.fund, total: fd.amount });
       }
     });
-    const tableValues: JSX.Element[] = [];
+    const tableValues: React.ReactElement[] = [];
 
     result.forEach((tv) => {
       tableValues.push(<tr style={{ height: "24px" }}>

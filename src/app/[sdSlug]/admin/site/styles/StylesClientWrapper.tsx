@@ -3,8 +3,12 @@
 import { useEffect, useState } from "react";
 import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
+import Head from 'next/head';
 import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { DisplayBox, ApiHelper, UserHelper, Banner } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import { PaletteEdit } from "@/components/admin/settings/PaletteEdit";
 import { FontsEdit } from "@/components/admin/settings/FontEdit";
 import { Preview } from "@/components/admin/settings/Preview";
@@ -80,12 +84,14 @@ export function StylesClientWrapper(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato&family=Montserrat:wght@400&family=Open+Sans:wght@400&family=Oswald:wght@400&family=Playfair+Display:wght@400&family=Poppins:wght@400&family=Raleway:wght@400&family=Roboto:wght@400&display=swap" rel="stylesheet"></link>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato&family=Montserrat:wght@400&family=Open+Sans:wght@400&family=Oswald:wght@400&family=Playfair+Display:wght@400&family=Poppins:wght@400&family=Raleway:wght@400&family=Roboto:wght@400&display=swap" rel="stylesheet" />
+      </Head>
       <Banner><h1>Manage Global Styles</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             {section === "palette" && <PaletteEdit globalStyle={globalStyle} updatedFunction={handlePaletteUpdate} />}
             {section === "fonts" && <FontsEdit globalStyle={globalStyle} updatedFunction={handleFontsUpdate} />}
             {section === "css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
@@ -94,7 +100,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
               <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
             )}
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <DisplayBox headerIcon="link" headerText="Style Settings" editContent={false}>
               <Table size="small">
                 <TableBody>

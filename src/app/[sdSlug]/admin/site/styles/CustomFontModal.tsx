@@ -1,4 +1,4 @@
-import { ArrayHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { DialogContent, FormControl, Grid, InputLabel, MenuItem, Pagination, Select, SelectChangeEvent, TextField } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -71,7 +71,7 @@ export const CustomFontModal: React.FC<Props> = props => {
       const pageResults = filtered.splice((page-1) * 10, num);
       loadFonts(pageResults);
 
-      const rows: JSX.Element[] = [];
+      const rows: React.ReactElement[] = [];
       pageResults.forEach(f => {
         const family = f.family;
         rows.push(<tr>
@@ -97,7 +97,7 @@ export const CustomFontModal: React.FC<Props> = props => {
       <DialogContent>
 
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             <FormControl fullWidth>
               <InputLabel>Category Filter</InputLabel>
               <Select fullWidth label="Category Filter" name="category" value={category} onChange={handleChange}>
@@ -110,7 +110,7 @@ export const CustomFontModal: React.FC<Props> = props => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <TextField fullWidth label="Search" name="search" value={search} onChange={handleChange} />
           </Grid>
         </Grid>

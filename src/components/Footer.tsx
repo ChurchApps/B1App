@@ -1,4 +1,4 @@
-import { ChurchInterface } from "@churchapps/apphelper";
+import type { ChurchInterface } from "@churchapps/helpers";
 import { Container, Grid } from "@mui/material";
 
 
@@ -12,15 +12,15 @@ export function Footer(props: Props) {
     <div id="footer">
       <Container>
         <Grid container columnSpacing={3}>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <img src={props.churchSettings.logoDark} alt={props.church.name} />
             4010 W New Orleans St<br />
             Broken Arrow, Oklahoma 74011
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
 
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <b>Sunday service times: </b>
             <br />9:00 a.m.
             <br />10:30 a.m.

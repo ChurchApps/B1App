@@ -1,6 +1,11 @@
 "use client";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { ApiHelper, DateHelper, EventExceptionInterface, EventInterface, MarkdownEditor, ErrorMessages, EventHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { MarkdownEditor } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownEditor";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
+import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";
 import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography, Switch, Stack } from "@mui/material";
 import { useState } from "react";
 import { RRuleEditor } from "./RRuleEditor";
@@ -107,18 +112,18 @@ export function EditEventModal(props: Props) {
 
   const getDates = () => {
     if (event.allDay) return (<>
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <TextField name="start" type="date" value={(event.start) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.start)) : ""} fullWidth label="Start Time" onChange={handleChange} size="small" data-testid="event-start-date-input" aria-label="Event start date" />
       </Grid>
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <TextField name="end" type="date" value={(event.end) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.end)) : ""} fullWidth label="End Time" onChange={handleChange} size="small" data-testid="event-end-date-input" aria-label="Event end date" />
       </Grid>
     </>);
     else return (<>
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <TextField name="start" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.start)} fullWidth label="Start Time" onChange={handleChange} size="small" data-testid="event-start-datetime-input" aria-label="Event start date and time" />
       </Grid>
-      <Grid item xs={6}>
+      <Grid size={{ xs: 6 }}>
         <TextField name="end" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.end)} fullWidth label="End Time" onChange={handleChange} size="small" data-testid="event-end-datetime-input" aria-label="Event end date and time" />
       </Grid>
     </>);
@@ -152,12 +157,12 @@ export function EditEventModal(props: Props) {
         </AppBar>
         <DialogContent>
           <Grid container spacing={1}>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <FormGroup>
                 <FormControlLabel control={<Checkbox checked={event.allDay} data-testid="all-day-checkbox" />}  label="All Day" name="allDay" onChange={(e, checked) => { setEvent({...event, allDay:checked}); }} data-testid="all-day-form-control" aria-label="Mark event as all day" />
               </FormGroup>
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <FormGroup>
                 <FormControlLabel control={<Checkbox checked={event.recurrenceRule?.length>0} data-testid="recurring-checkbox" />}  label="Recurring" name="recurring" onChange={(e, checked) => { handleToggleRecurring(checked); }} data-testid="recurring-form-control" aria-label="Mark event as recurring" />
               </FormGroup>
@@ -166,7 +171,7 @@ export function EditEventModal(props: Props) {
 
             {(event?.recurrenceRule?.length>0) && <RRuleEditor start={event.start} rRule={event.recurrenceRule || ""} onChange={(rRule:string) => { setRRule(rRule); }} /> }
 
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography>Private: </Typography>
                 <Switch
@@ -181,10 +186,10 @@ export function EditEventModal(props: Props) {
                 />
               </Stack>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <TextField name="title" value={event.title} fullWidth label="Title" onChange={handleChange} size="small" data-testid="event-title-input" aria-label="Event title" />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <MarkdownEditor value={event.description || ""} onChange={val => setEvent({...event, description: val})} style={{ maxHeight: 200, overflowY: "scroll" }} data-testid="event-description-editor" />
             </Grid>
           </Grid>

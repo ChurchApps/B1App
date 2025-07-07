@@ -1,9 +1,11 @@
+"use client";
+
 import { useContext, createContext, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { MenuItem } from "@mui/material";
 import { usePopupState, bindHover, bindFocus, bindMenu } from "material-ui-popup-state/hooks";
 import HoverMenu from "material-ui-popup-state/HoverMenu";
-import { LinkInterface } from "@churchapps/apphelper";
+import type { LinkInterface } from "@churchapps/helpers";
 
 interface MenuInterface {
   links?: LinkInterface[];

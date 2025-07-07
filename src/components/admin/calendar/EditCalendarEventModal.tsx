@@ -6,8 +6,10 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, FormCont
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { } from "@/helpers";
-import { Loading } from "@churchapps/apphelper";
-import { EventHelper, GroupInterface, EventInterface, ApiHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { GroupInterface, EventInterface } from "@churchapps/helpers";
 
 interface Props {
   churchId: string;

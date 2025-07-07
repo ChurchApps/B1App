@@ -1,7 +1,7 @@
+import React, { useState } from 'react';
 import { GlobalStyleInterface } from '@/helpers';
-import { GalleryModal } from '@churchapps/apphelper';
+import { GalleryModal } from "../../gallery/GalleryModal";
 import { FormControl, InputLabel, Select, MenuItem, TextField, Tabs, Tab, Button, SelectChangeEvent, Grid } from '@mui/material';
-import { useState } from 'react';
 import { SliderPicker } from 'react-color';
 
 type Props = {
@@ -77,7 +77,7 @@ export function PickColors(props: Props) {
   }
 
   const getManualOptions = (colors:string[], values:string[], field:"background" | "textColor" | "headingColor" | "linkColor") => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     colors.forEach((c, i) => {
       const v = values[i];
       const style: any = { backgroundColor: c, width: "100%", height: (props[field] === v) ? 20 : 12, display: "block" }
@@ -98,7 +98,7 @@ export function PickColors(props: Props) {
     if (props.background?.startsWith("#") || props.background?.startsWith("var(") ) backgroundType = "color";
     else if (props.background?.startsWith("youtube")) backgroundType = "youtube"
 
-    let result: JSX.Element[] = [
+    let result: React.ReactElement[] = [
       <FormControl fullWidth>
         <InputLabel>Background Type</InputLabel>
         <Select fullWidth size="small" label="Background Type" name="backgroundType" value={backgroundType} onChange={handleChange} data-testid="background-type-select">
@@ -193,13 +193,13 @@ export function PickColors(props: Props) {
 
     });
 
-    const suggestions:JSX.Element[] = [];
+    const suggestions:React.ReactElement[] = [];
 
     pairings.forEach(p => {
       const b = colors[p[0]]
       const t = colors[p[1]]
       const l = colors[p[2]]
-      suggestions.push(<Grid item xs={4}>
+      suggestions.push(<Grid size={{ xs: 4 }}>
         <a href="about:blank" onClick={(e) => {e.preventDefault(); selectPairing(p); }} style={{display:"block", backgroundColor:b, color:t, border:"1px solid " + t, borderRadius:5, padding:5, marginBottom:3 }}>Sample Text -  <span style={{color:l}}>Sample Link</span></a>
       </Grid>);
     });
@@ -211,11 +211,11 @@ export function PickColors(props: Props) {
   }
 
   const getManualColors = () => (<Grid container spacing={1}>
-    <Grid item xs={6}>
+    <Grid size={{ xs: 6 }}>
       <div style={{marginBottom:20}}><b>Background</b></div>
       {getBackgroundField()}
     </Grid>
-    <Grid item xs={6}>
+    <Grid size={{ xs: 6 }}>
 
       <div style={{marginBottom:20}}><b>Content</b></div>
       <div><InputLabel>Heading Color</InputLabel></div>

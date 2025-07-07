@@ -1,7 +1,8 @@
 "use client";
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { NonAuthDonation, UserHelper } from "@churchapps/apphelper";
+import { NonAuthDonation } from "@churchapps/apphelper/dist/donationComponents/components/NonAuthDonation";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Button, Container,  Grid,  Icon,  Link,  Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 
@@ -15,10 +16,10 @@ export function DonatePage(props:Props) {
     <Container>
       <h1>Donate</h1>
       <Grid container spacing={3}>
-        <Grid item md={8} xs={12}>
+        <Grid size={{ md: 8, xs: 12 }}>
           <NonAuthDonation churchId={props.config.church.id} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} showHeader={false} />
         </Grid>
-        <Grid item md={4} xs={12}>
+        <Grid size={{ md: 4, xs: 12 }}>
           <Typography component="h3" sx={{ textAlign: "center", fontSize: "30px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Manage Donations</Typography>
           <a href="https://support.churchapps.org/b1/portal/donations/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", textUnderlineOffset: 2, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "15px" }}>
             <p>Instructions for ACH Payment</p>

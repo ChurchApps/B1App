@@ -1,3 +1,4 @@
+import React from "react";
 import { Theme } from "@/components";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -22,7 +23,7 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
   const props = await loadSharedData(sdSlug, pageSlug);
 
   const title = "Forms";
-  return MetaHelper.getMetaData(title + " - " + props.config.church.name, "My", props.config.appearance.ogImage);
+  return MetaHelper.getMetaData(title + " - " + props.config.church.name, "My");
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
@@ -49,7 +50,7 @@ export default async function Home({ params }: { params: PageParams }) {
     }
   }
 
-  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper config={config}>
+  const wrapDefaultPage = (content: React.ReactElement) => <DefaultPageWrapper config={config}>
     {content}
   </DefaultPageWrapper>
 

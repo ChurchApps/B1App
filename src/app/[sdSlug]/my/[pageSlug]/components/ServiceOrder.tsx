@@ -1,6 +1,9 @@
 import React from "react";
 import { Stack } from "@mui/material";
-import { ApiHelper, DisplayBox, PlanInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import type { PlanInterface } from "@churchapps/helpers";
 import { PlanItem } from "./PlanItem";
 import { PlanItemInterface } from "@/helpers";
 

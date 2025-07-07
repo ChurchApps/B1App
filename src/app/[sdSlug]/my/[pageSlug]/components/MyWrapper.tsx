@@ -1,5 +1,6 @@
 import "@/styles/animations.css";
 
+import React from "react";
 import { Breadcrumbs, Container, Grid } from "@mui/material";
 
 import Link from "next/link";
@@ -8,7 +9,7 @@ import { TabsClient } from "./TabsClient";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props {
-  children: JSX.Element;
+  children: React.ReactElement;
   config: ConfigurationInterface;
   root?: boolean;
   pageSlug?: string;
@@ -33,12 +34,12 @@ export async function MyWrapper(props:Props) {
   const getRootLayout = () => <Container>
     <div id="mainContent">
       <Grid container spacing={2}>
-        <Grid item xs={12} md={2}>
+        <Grid size={{ xs: 12, md: 2 }}>
           <div className="sideNav" style={{height:"100vh", borderRight:"1px solid #CCC" }}>
             <TabsClient config={props.config} />
           </div>
         </Grid>
-        <Grid item xs={12} md={10}>
+        <Grid size={{ xs: 12, md: 10 }}>
           {props.children}
         </Grid>
       </Grid>

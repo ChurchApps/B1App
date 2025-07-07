@@ -1,6 +1,6 @@
 import { PageInterface } from "@/helpers/interfaces";
 import { ConfigHelper } from "@/helpers/ConfigHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
 import { Metadata } from "next";
@@ -22,7 +22,7 @@ const loadSharedData = (sdSlug:string) =>
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
   const { sdSlug } =  await params;
   const props = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData(props.pageData.title + " - " + props.config.church.name, props.pageData.title, props.config.appearance.ogImage);
+  return MetaHelper.getMetaData(props.pageData.title + " - " + props.config.church.name, props.pageData.title);
 }
 
 const loadData = async (sdSlug:string) => {

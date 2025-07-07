@@ -25,7 +25,7 @@ export function RowEdit(props: Props) {
 
   const getPreviewTable = () => {
     const colors = ["#FBF8CC", "#FDE4CF", "#FFCFD2", "#F1C0E8", "#CFBAF0", "#A3C4F3", "#90DBF4", "#8EECF5", "#98F5E1", "B9FBC0", "#FBF8CC", "#FDE4CF"]
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     let idx = 0;
     cols.forEach(c => {
       result.push(<TableCell key={idx} style={{ backgroundColor: colors[idx], width: Math.round(c / 12 * 100).toString() + "%" }} colSpan={c}>{c}</TableCell>)
@@ -70,7 +70,7 @@ export function RowEdit(props: Props) {
   }
 
   const getCustomSizes = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     let idx = 0;
     let total = 0;
     cols.forEach(c => {

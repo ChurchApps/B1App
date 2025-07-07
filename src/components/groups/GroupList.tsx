@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import { ApiHelper, GroupInterface, Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "./GroupCard";
 import { EnvironmentHelper } from "@/helpers";
 
@@ -28,7 +30,7 @@ export const GroupList = (props: Props) => {
     <Grid container spacing={3}>
       {
         groups?.length > 0
-          ? (groups.map((group) => (<Grid item xs={4}><GroupCard group={group} /></Grid>)))
+          ? (groups.map((group) => (<Grid size={{ xs: 4 }}><GroupCard group={group} /></Grid>)))
           : (<p>No groups found</p>)
       }
     </Grid>

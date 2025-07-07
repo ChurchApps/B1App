@@ -16,7 +16,7 @@ export const SongDetails = (props: Props) => {
   }
 
   const getDetails = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     if (!props.songDetail) return result;
 
 

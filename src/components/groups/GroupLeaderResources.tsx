@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Box, Chip, Divider, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
-import { ApiHelper, DisplayBox, InputBox, LinkInterface, SmallButton, UserContextInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import type { LinkInterface, UserContextInterface } from "@churchapps/helpers";
 import { FileInterface } from "@/helpers";
 import { FileUpload } from "../admin/FileUpload";
 import { GroupLinkAdd } from "./GroupLinkAdd";

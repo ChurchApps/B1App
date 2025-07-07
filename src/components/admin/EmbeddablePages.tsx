@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { SmallButton, DisplayBox, ApiHelper } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { PageInterface } from "@/helpers";
 
 type Props = {

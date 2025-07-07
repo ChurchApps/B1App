@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { ApiHelper, Banner, SmallButton, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { BlockInterface } from "@/helpers";

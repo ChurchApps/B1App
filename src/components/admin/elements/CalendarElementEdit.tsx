@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { ApiHelper, GroupInterface, CuratedCalendarInterface, Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import type { GroupInterface, CuratedCalendarInterface } from "@churchapps/helpers";
 
 interface Props {
   parsedData: any;

@@ -2,9 +2,17 @@
 
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { DonationForm, RecurringDonations, PaymentMethods } from "@churchapps/apphelper/dist/donationComponents/components"
-import { DisplayBox, ExportLink, Loading } from "@churchapps/apphelper/dist/components"
-import { ApiHelper, DateHelper, UniqueIdHelper, CurrencyHelper, Locale } from "@churchapps/apphelper/dist/helpers";
+import { DonationForm } from "@churchapps/apphelper/dist/donationComponents/components/DonationForm";
+import { RecurringDonations } from "@churchapps/apphelper/dist/donationComponents/components/RecurringDonations";
+import { PaymentMethods } from "@churchapps/apphelper/dist/donationComponents/components/PaymentMethods";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ExportLink } from "@churchapps/apphelper/dist/components/ExportLink";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import { CurrencyHelper } from "@churchapps/apphelper/dist/helpers/CurrencyHelper";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
 import { DonationInterface, PersonInterface, StripePaymentMethod, ChurchInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead, Alert, Button, Icon, Menu, MenuItem } from "@mui/material"
 
@@ -78,7 +86,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getEditContent = () => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     const date = new Date();
     const currentY = date.getFullYear();
     const lastY = date.getFullYear() - 1;
@@ -125,7 +133,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
 
     if (donations.length === 0) {
       rows.push(<TableRow key="0"><TableCell>{Locale.label("donation.page.willAppear")}</TableCell></TableRow>);
@@ -148,7 +156,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getTableHeader = () => {
-    const rows: JSX.Element[] = []
+    const rows: React.ReactElement[] = []
 
     if (donations.length > 0) {
       rows.push(

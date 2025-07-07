@@ -1,8 +1,12 @@
 "use client";
-import { InputBox } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent } from "@mui/material";
 import React from "react";
-import { ApiHelper, DateHelper, SermonInterface, StreamingServiceInterface, UniqueIdHelper, Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import type { SermonInterface, StreamingServiceInterface } from "@churchapps/helpers";
 
 interface Props { currentService: StreamingServiceInterface, updatedFunction?: () => void }
 
@@ -106,7 +110,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
   }
 
   const getSermons = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     sermons.forEach(sermon => {
       if (sermon.permanentUrl) result.push(<MenuItem value={sermon.id}>{sermon.title}</MenuItem>);
     });
@@ -131,10 +135,10 @@ export const ServiceEdit: React.FC<Props> = (props) => {
         <>
           <TextField fullWidth label="Service Name" name="serviceLabel" value={currentService?.label || ""} onChange={handleChange} data-testid="service-name-input" />
           <Grid container spacing={3}>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <TextField fullWidth label="Service Time" type="datetime-local" name="serviceTime" InputLabelProps={{ shrink: !!DateHelper.formatHtml5DateTime(localServiceTime) }} defaultValue={DateHelper.formatHtml5DateTime(localServiceTime)} onChange={handleChange} data-testid="service-time-input" />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Recurs Weekly</InputLabel>
                 <Select label="Recurs Weekly" name="recurs" value={Boolean(currentService?.recurring).toString() || ""} onChange={handleChange}>
@@ -146,13 +150,13 @@ export const ServiceEdit: React.FC<Props> = (props) => {
 
           </Grid>
           <Grid container spacing={3}>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <TextField fullWidth label="Enable Chat - Minutes Before" type="number" name="chatBefore" value={currentService?.chatBefore / 60 || ""} onChange={handleChange} InputProps={{
                 inputProps: { min: 0, step: 1 },
                 endAdornment: <span style={{ whiteSpace: "nowrap" }}>{DateHelper.prettyTime(new Date(chatAndPrayerStartTime))}</span>
               }} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <TextField fullWidth label="Enable Chat - Minutes After" type="number" name="chatAfter" value={currentService?.chatAfter / 60 || ""} onChange={handleChange} InputProps={{
                 inputProps: { min: 0, step: 1 },
                 endAdornment: <span style={{ whiteSpace: "nowrap" }}>{DateHelper.prettyTime(new Date(chatAndPrayerEndTime))}</span>
@@ -160,13 +164,13 @@ export const ServiceEdit: React.FC<Props> = (props) => {
             </Grid>
           </Grid>
           <Grid container spacing={3}>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <TextField fullWidth label="Start Video Early - Optional for countdowns" type="number" name="earlyStart" value={currentService?.earlyStart / 60 || ""} onChange={handleChange} InputProps={{
                 inputProps: { min: 0, step: 1 },
                 endAdornment: <span style={{ whiteSpace: "nowrap" }}>{DateHelper.prettyTime(new Date(earlyStartTime))}</span>
               }} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={{ xs: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Sermon</InputLabel>
                 <Select label="Sermon" name="sermonId" value={currentService.sermonId} onChange={handleChange}>

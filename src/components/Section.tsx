@@ -1,12 +1,13 @@
 "use client";
 
+import React, { CSSProperties, useState } from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Box, Container } from "@mui/material";
-import { CSSProperties, useState } from "react";
 import { DroppableArea } from "./admin/DroppableArea";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
-import { ApiHelper, ChurchInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { ChurchInterface } from "@churchapps/helpers";
 import { DraggableWrapper } from "./admin/DraggableWrapper";
 import { StyleHelper } from "@/helpers/StyleHelper";
 
@@ -24,7 +25,7 @@ export const Section: React.FC<Props> = props => {
 
 
   const getElements = () => {
-    const result: JSX.Element[] = []
+    const result: React.ReactElement[] = []
     props.section?.elements?.forEach(e => {
       const textColor = StyleHelper.getTextColor(props.section?.textColor, {}, props.churchSettings);
       result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={textColor} />)

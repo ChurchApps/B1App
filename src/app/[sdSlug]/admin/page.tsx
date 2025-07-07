@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Banner, UserHelper, Permissions } from "@churchapps/apphelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Tabs } from "@/components/admin/settings/Tabs";

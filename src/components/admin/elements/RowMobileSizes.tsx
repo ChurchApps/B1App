@@ -25,7 +25,7 @@ export function RowMobileSizes(props: Props) {
   }
 
   const getCustomSizes = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     props.cols.forEach((c:number, idx:number) => {
       const index = idx;
       let mobileSize = (mobileSizes.length > idx) ? mobileSizes[idx] || c : c;

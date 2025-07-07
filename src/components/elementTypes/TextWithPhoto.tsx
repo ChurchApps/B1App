@@ -1,6 +1,6 @@
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
-import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper";
+import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper/dist/components/markdownEditor";
 
 interface Props { element: ElementInterface; onEdit?: (section: SectionInterface, element: ElementInterface) => void; }
 
@@ -11,10 +11,10 @@ export const TextWithPhoto: React.FC<Props> = props => {
     case "left":
       result = (
         <Grid container columnSpacing={3}>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
           </Grid>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             {editor}
           </Grid>
         </Grid>
@@ -23,10 +23,10 @@ export const TextWithPhoto: React.FC<Props> = props => {
     case "right":
       result = (
         <Grid container columnSpacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             {editor}
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
           </Grid>
         </Grid>

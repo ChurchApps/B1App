@@ -2,7 +2,7 @@
 
 import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { AppearanceHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
 import Head from "next/head";
 import React from "react";
 
@@ -56,7 +56,7 @@ export const Theme: React.FC<Props> = (props) => {
 
   //These really belong in the head, but if we use Helmet, it won't be rendered in the server side html
   const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
-  const ogImage = props.config?.appearance?.ogImage && props.config.appearance.ogImage;
+  const ogImage: string | undefined = undefined;
 
   console.log("************FONTLINK", fontLink);
 

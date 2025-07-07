@@ -1,5 +1,9 @@
-import { SmallButton, Loading, DisplayBox } from "@churchapps/apphelper";
-import { ApiHelper, PlaylistInterface, UserHelper } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { PlaylistInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
 import React from "react";
 import { PlaylistEdit } from "./PlaylistEdit";
@@ -34,7 +38,7 @@ export const Playlists = (props: Props) => {
 
   const getRows = () => {
     //var idx = 0;
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     playlists.forEach((playlist) => {
       rows.push(
         <tr key={playlist.id}>

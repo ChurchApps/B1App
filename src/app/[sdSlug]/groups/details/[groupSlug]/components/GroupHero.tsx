@@ -1,6 +1,6 @@
 "use client";
 
-import { GroupInterface } from "@churchapps/apphelper";
+import type { GroupInterface } from "@churchapps/helpers";
 import { Container, Grid } from "@mui/material";
 import Image from "next/image";
 
@@ -13,7 +13,7 @@ export function GroupHero(props: Props) {
     <div className="content">
       <Container fixed>
         <Grid container spacing={2}>
-          <Grid item md={7} xs={12}>
+          <Grid size={{ md: 7, xs: 12 }}>
             <h1>{props.group.name}</h1>
             <div style={{paddingTop:20}}>{props.group.meetingTime}</div>
             <div style={{paddingTop:10}}>{props.group.meetingLocation}</div>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Grid } from "@mui/material";
 import { Household, CheckinComplete, Services } from "@/components";
-import { UserHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 
 export function CheckinPage() {
   const [currentStep, setCurrentStep] = useState<"household" | "complete">();
@@ -27,7 +27,7 @@ export function CheckinPage() {
       {UserHelper.user?.firstName
         ? (
           <Grid container spacing={3}>
-            <Grid item md={8} xs={12}>
+            <Grid size={{ md: 8, xs: 12 }}>
               {content}
             </Grid>
           </Grid>

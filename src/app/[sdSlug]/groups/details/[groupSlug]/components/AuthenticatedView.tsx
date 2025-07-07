@@ -2,7 +2,11 @@
 
 import { useState, useEffect, useContext } from "react";
 import { Grid, Container } from "@mui/material";
-import { GroupInterface, UserHelper, MarkdownPreviewLight, Conversations, DisplayBox } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownPreviewLight";
+import { Conversations } from "@/components/notes/Conversations";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import type { GroupInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 import { GroupResources } from "@/components/groups/GroupResources";
@@ -80,12 +84,12 @@ export function AuthenticatedView(props: Props) {
       <Container>
         <div id="mainContent">
           <Grid container spacing={2}>
-            <Grid item xs={12} md={2}>
+            <Grid size={{ xs: 12, md: 2 }}>
               <div className="sideNav">
                 <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val) }} group={group} />
               </div>
             </Grid>
-            <Grid item xs={12} md={10}>
+            <Grid size={{ xs: 12, md: 10 }}>
               {group
                 ? (<>{getTabContent()}</>)
                 : (<p>No group data found</p>)}

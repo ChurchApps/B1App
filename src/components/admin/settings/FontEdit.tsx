@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid, SelectChangeEvent } from "@mui/material";
 import { GlobalStyleInterface } from "@/helpers";
-import { DisplayBox, InputBox } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { CustomFontModal } from "@/app/[sdSlug]/admin/site/styles/CustomFontModal";
 
 interface Props {
@@ -45,10 +46,10 @@ export function FontsEdit(props: Props) {
 
 
   const getPairings = () => {
-    let result:JSX.Element[] = [];
+    let result:React.ReactElement[] = [];
 
     fontList.forEach(heading => {
-      result.push(<Grid item xs={12} md={6}>
+      result.push(<Grid size={{ xs: 12, md: 6 }}>
         <div style={{border:"1px solid black", borderRadius:5, paddingLeft:10}}>
           <h2 style={{fontFamily:heading}}>{heading} Heading</h2>
           {
@@ -76,15 +77,15 @@ export function FontsEdit(props: Props) {
       {getFont()}
       <InputBox headerIcon="text_fields" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)} data-testid="font-edit-inputbox">
         <Grid container spacing={3}>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <div><label>Heading Font</label></div>
             <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("heading"); }} data-testid="heading-font-button">{fonts.heading || "Roboto"}</Button>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <div><label>Body Font</label></div>
             <Button variant="outlined" onClick={(e) => { e.preventDefault(); setShowFont("body"); }} data-testid="body-font-button">{fonts.body || "Roboto"}</Button>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
 
           </Grid>
         </Grid>

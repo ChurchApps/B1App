@@ -1,7 +1,12 @@
 import React from "react";
-import { ApiHelper, GroupInterface, DisplayBox, GroupMemberInterface, PersonHelper, PersonInterface, Loading, Locale } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import type { GroupInterface, GroupMemberInterface, PersonInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
-import { SmallButton } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import Link from "next/link";
 
 interface Props { group: GroupInterface, addFunction: (person: PersonInterface) => void }
@@ -23,7 +28,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
   }
 
   const getRows = () => {
-    const rows: JSX.Element[] = [];
+    const rows: React.ReactElement[] = [];
     if (groupMembers.length === 0) {
       rows.push(<TableRow key="0"><TableCell>{Locale.label("No group members available.")}</TableCell></TableRow>);
       return rows;
@@ -42,7 +47,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
   }
 
   const getTableHeader = () => {
-    const rows: JSX.Element[] = [];
+    const rows: React.ReactElement[] = [];
     if (groupMembers.length === 0) return rows;
     rows.push(<TableRow key="0"><th></th><th>{Locale.label("Name")}</th><th></th></TableRow>);
     return rows;

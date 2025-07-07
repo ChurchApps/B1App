@@ -1,8 +1,16 @@
+"use client";
+
 import React from "react";
 import { TimelinePostInterface } from "../../../helpers";
 import Image from "next/image";
 import { Card, CardContent, Grid } from "@mui/material";
-import { Conversation, AddNote, ArrayHelper, DateHelper, GroupInterface, PersonInterface, UserContextInterface, UserHelper, ConversationInterface, ApiHelper } from "@churchapps/apphelper";
+import { Conversation } from "@/components/notes/Conversation";
+import { AddNote } from "@churchapps/apphelper/dist/components/notes/AddNote";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { GroupInterface, PersonInterface, UserContextInterface, ConversationInterface } from "@churchapps/helpers";
 import Link from "next/link";
 
 interface Props {
@@ -111,13 +119,13 @@ export const TimelinePost: React.FC<Props> = (props) => {
     return result;
   }
 
-  const getIntroLine = (content:JSX.Element) => {
+  const getIntroLine = (content:React.ReactElement) => {
     const displayTime = DateHelper.getDisplayDuration(props.post.timeSent);
     return (<Grid container spacing={2}>
-      <Grid item xs={8}>
+      <Grid size={{ xs: 8 }}>
         {content}
       </Grid>
-      <Grid item xs={4} style={{textAlign:"right"}}>
+      <Grid size={{ xs: 4 }} style={{textAlign:"right"}}>
         {displayTime}
       </Grid>
     </Grid>);

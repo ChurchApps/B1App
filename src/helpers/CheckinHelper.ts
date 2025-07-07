@@ -1,5 +1,10 @@
-import { ArrayHelper } from "@churchapps/apphelper";
-import { GroupInterface, GroupServiceTimeInterface, PersonInterface, ServiceTimeInterface, VisitInterface, VisitSessionInterface } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import type { GroupInterface } from "@churchapps/helpers";
+import type { GroupServiceTimeInterface } from "@churchapps/helpers";
+import type { PersonInterface } from "@churchapps/helpers";
+import type { ServiceTimeInterface } from "@churchapps/helpers";
+import type { VisitInterface } from "@churchapps/helpers";
+import type { VisitSessionInterface } from "@churchapps/helpers";
 
 export class CheckinHelper {
   static pendingVisits: VisitInterface[] = [];

@@ -1,6 +1,12 @@
 import { Icon } from "@mui/material";
 import React from "react";
-import { ApiHelper, DateHelper, StreamingServiceInterface, UserHelper, DisplayBox, Loading, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import type { StreamingServiceInterface } from "@churchapps/helpers";
 import { ServiceEdit } from "./ServiceEdit";
 
 export const Services: React.FC = () => {
@@ -40,7 +46,7 @@ export const Services: React.FC = () => {
 
   const getRows = () => {
     //var idx = 0;
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     services.forEach(service => {
       rows.push(
         <tr key={service.id}>

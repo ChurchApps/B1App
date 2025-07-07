@@ -1,8 +1,9 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import {RRule, Weekday, rrulestr} from "rrule";
-import { ChangeEvent, useEffect, useState } from "react";
-import { EventHelper, DateHelper } from "@churchapps/apphelper";
+import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 
 interface Props {
   start: Date;
@@ -77,7 +78,7 @@ export function RRuleEditor(props: Props) {
   }
 
   const getFreqFollowUp = () => {
-    let result:JSX.Element = <></>;
+    let result:React.ReactElement = <></>;
     switch(rRuleOptions.freq.toString())
     {
       case RRule.WEEKLY.toString():
@@ -142,7 +143,7 @@ export function RRuleEditor(props: Props) {
   const ends = (rRuleOptions.count) ? "count" : (rRuleOptions.until) ? "until" : "never";
 
   const getEndsFollowUp = () => {
-    let result:JSX.Element = <></>;
+    let result:React.ReactElement = <></>;
     switch(ends)
     {
       case "until":
@@ -162,10 +163,10 @@ export function RRuleEditor(props: Props) {
 
   return (
     <>
-      <Grid item xs={2}>
+      <Grid size={{ xs: 2 }}>
         <TextField name="interval" type="number" value={rRuleOptions.interval} fullWidth label="Interval" onChange={handleChange} size="small" data-testid="recurrence-interval-input" aria-label="Recurrence interval" />
       </Grid>
-      <Grid item xs={5}>
+      <Grid size={{ xs: 5 }}>
         <FormControl fullWidth size="small">
           <InputLabel>Frequency</InputLabel>
           <Select name="freq" value={rRuleOptions.freq.toString()} onChange={handleChange} label="Frequency" data-testid="recurrence-frequency-select" aria-label="Select recurrence frequency">
@@ -175,12 +176,12 @@ export function RRuleEditor(props: Props) {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={5}>
+      <Grid size={{ xs: 5 }}>
         <FormControl fullWidth size="small">
           {getFreqFollowUp()}
         </FormControl>
       </Grid>
-      <Grid item xs={3}>
+      <Grid size={{ xs: 3 }}>
         <FormControl fullWidth size="small">
           <InputLabel>Ends</InputLabel>
           <Select name="ends" value={ends} onChange={handleEndsChange} label="Frequency" data-testid="recurrence-ends-select" aria-label="Select when recurrence ends">
@@ -190,7 +191,7 @@ export function RRuleEditor(props: Props) {
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={9}>
+      <Grid size={{ xs: 9 }}>
         {getEndsFollowUp()}
       </Grid>
 

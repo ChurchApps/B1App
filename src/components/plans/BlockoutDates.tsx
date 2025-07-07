@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
-import { ApiHelper, BlockoutDateInterface, DateHelper, DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import type { BlockoutDateInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody, IconButton, Icon } from "@mui/material";
 import { BlockoutDateEdit } from "./BlockoutDateEdit";
 
@@ -20,7 +23,7 @@ export const BlockoutDates: React.FC<Props> = (props) => {
 
   const getRows = () => {
 
-    const rows:JSX.Element[] = [];
+    const rows:React.ReactElement[] = [];
     blockoutDates.forEach((d) => {
       rows.push(
         <TableRow key={d.id}>

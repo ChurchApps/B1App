@@ -1,5 +1,6 @@
+import React from "react";
 import { PageLayout, Theme } from "@/components";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
@@ -43,7 +44,7 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
       case "bible": title = "Bible"; break;
     }
   }
-  return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title, props.config.appearance.ogImage);
+  return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title);
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
@@ -74,7 +75,7 @@ export default async function Home({ params }: { params: PageParams }) {
     return result;
   }
 
-  const wrapDefaultPage = (content:JSX.Element) => <DefaultPageWrapper config={config}>
+  const wrapDefaultPage = (content: React.ReactElement) => <DefaultPageWrapper config={config}>
     {content}
   </DefaultPageWrapper>
 

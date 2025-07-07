@@ -1,9 +1,13 @@
 "use client"
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Icon, Grid, Box } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
-import { VisitInterface, GroupInterface, PersonInterface, ArrayHelper, ServiceTimeInterface, VisitSessionInterface, ApiHelper, Loading, PersonHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import type { VisitInterface, GroupInterface, PersonInterface, ServiceTimeInterface, VisitSessionInterface } from "@churchapps/helpers";
 
 interface Props {
   completeHandler: () => void;
@@ -46,13 +50,13 @@ export function Household({ completeHandler = () => { } }: Props) {
     return (
       <div className="checkinServiceTime" key={st.id}>
         <Grid container spacing={3}>
-          <Grid item xs={4}>
+          <Grid size={{ xs: 4 }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Icon sx={{ marginRight: "5px" }}>watch_later</Icon>
               {st.name}
             </Box>
           </Grid>
-          <Grid item xs={8}>
+          <Grid size={{ xs: 8 }}>
             <a
               className="bigLinkButton serviceTimeButton"
               href="about:blank"
@@ -79,7 +83,7 @@ export function Household({ completeHandler = () => { } }: Props) {
   const getMemberServiceTimes = () => {
     const visit = ArrayHelper.getOne(pendingVisits, "personId", selectedMember.id);
     const visitSessions = visit?.visitSessions || [];
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     CheckinHelper.serviceTimes.forEach((st) => {
       result.push(getServiceTime(st, visitSessions));
     });
@@ -97,7 +101,7 @@ export function Household({ completeHandler = () => { } }: Props) {
       const visit = CheckinHelper.getVisitByPersonId(pendingVisits, person.id || "");
       if (visit?.visitSessions?.length === 0) return null;
       else {
-        const groups: JSX.Element[] = [];
+        const groups: React.ReactElement[] = [];
         visit?.visitSessions?.forEach((vs: VisitSessionInterface) => {
           const st: ServiceTimeInterface | null = ArrayHelper.getOne(
             CheckinHelper.serviceTimes,
@@ -132,13 +136,13 @@ export function Household({ completeHandler = () => { } }: Props) {
           aria-label={`Select ${member.name.display} for checkin`}
         >
           <Grid container spacing={3}>
-            <Grid item xs={1}>
+            <Grid size={{ xs: 1 }}>
               {arrow}
             </Grid>
-            <Grid item xs={2}>
+            <Grid size={{ xs: 2 }}>
               <img src={PersonHelper.getPhotoUrl(member)} alt={`${member.name.display} avatar`} data-testid={`member-photo-${member.id}`} />
             </Grid>
-            <Grid item xs={9}>
+            <Grid size={{ xs: 9 }}>
               {member.name.display}
               {getCondensedGroupList(member)}
             </Grid>

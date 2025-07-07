@@ -2,7 +2,10 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { DefaultPageWrapper } from "../../../[pageSlug]/components/DefaultPageWrapper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
-import { ApiHelper, GroupInterface, GroupMemberInterface, EventInterface } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { GroupInterface } from "@churchapps/helpers";
+import type { GroupMemberInterface } from "@churchapps/helpers";
+import type { EventInterface } from "@churchapps/helpers";
 import { Metadata } from "next";
 import { Theme } from "@/components";
 import { GroupClient } from "./components/GroupClient";
@@ -22,12 +25,12 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
     const props = await loadSharedData(sdSlug, groupSlug);
     const title = props.group?.name ? `${props.group.name} - ${props.config.church.name}` : `Group - ${props.config.church.name}`;
     const description = props.group?.about || "Group information";
-    return MetaHelper.getMetaData(title, description, props.config.appearance.ogImage);
+    return MetaHelper.getMetaData(title, description);
   } catch (error) {
     console.error("Failed to generate metadata:", error);
     // Fallback metadata
     const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-    return MetaHelper.getMetaData(`Group - ${config.church.name}`, "Group information", config.appearance.ogImage);
+    return MetaHelper.getMetaData(`Group - ${config.church.name}`, "Group information");
   }
 }
 

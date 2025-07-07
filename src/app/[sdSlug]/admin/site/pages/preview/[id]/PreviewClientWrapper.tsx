@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import { ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper, Banner, LinkInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import type { LinkInterface } from "@churchapps/helpers";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { Grid } from "@mui/material";
 import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
@@ -46,14 +49,14 @@ export function PreviewClientWrapper(props: Props) {
         <div style={{ marginLeft: -22 }}>
           <div style={{ background: "#FFF", padding: 15 }}>
             <Grid container>
-              <Grid item xs={3}>
+              <Grid size={{ xs: 3 }}>
                 <SmallButton icon="edit" text="Edit Content" onClick={() => redirect("/admin/site/pages/" + props.pageData.id)} />
               </Grid>
-              <Grid item xs={6} style={{ textAlign: "center" }}>
+              <Grid size={{ xs: 6 }} style={{ textAlign: "center" }}>
                 <b>{props.pageData.title}</b>
                 <br />
               </Grid>
-              <Grid item xs={3} style={{ textAlign: "right" }}>
+              <Grid size={{ xs: 3 }} style={{ textAlign: "right" }}>
                 <SmallButton icon="settings" text="Page Settings" onClick={() => setShowSettings(true)} />
               </Grid>
             </Grid>

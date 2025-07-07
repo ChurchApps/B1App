@@ -1,6 +1,11 @@
 "use client";
 
-import { ApiHelper, DisplayBox, GroupInterface, GroupMemberInterface, Loading, PersonHelper, PersonInterface, SmallButton } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import type { GroupInterface, GroupMemberInterface, PersonInterface } from "@churchapps/helpers";
 import { Grid, Link, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -37,7 +42,7 @@ export function MembersTab(props: Props) {
   };
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
 
     if (groupMembers.length === 0) {
       rows.push(<TableRow key="0"><TableCell>No group members found.</TableCell></TableRow>);
@@ -94,10 +99,10 @@ export function MembersTab(props: Props) {
     ? <>
       <h2>Members</h2>
       <Grid container spacing={3}>
-        <Grid item md={7}>
+        <Grid size={{ md: 7 }}>
           <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox>
         </Grid>
-        <Grid item md={5}>
+        <Grid size={{ md: 5 }}>
           <PersonAdd addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} />
         </Grid>
       </Grid>

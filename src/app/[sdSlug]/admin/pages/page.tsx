@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Banner, UserHelper, Permissions } from "@churchapps/apphelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { PageInterface } from "@/helpers";
@@ -32,7 +34,7 @@ export default function AdminPagesClient() {
       <div id="mainContent">
         {editPage && (<PageEdit page={editPage} updatedCallback={() => { setEditPage(null); setRefreshKey(Math.random()) }} embedded={true} /> )}
         {UserHelper.checkAccess(Permissions.contentApi.content.edit)
-        && <Grid item md={8} xs={12}>
+        && <Grid size={{ md: 8, xs: 12 }}>
           <EmbeddablePages onSelected={(page:PageInterface) => { setEditPage(page); } } pathPrefix="/member" refreshKey={refreshKey} />
         </Grid>
         }

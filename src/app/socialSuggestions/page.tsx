@@ -1,6 +1,7 @@
 "use client";
 
-import { ApiHelper, ErrorMessages } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
@@ -63,18 +64,18 @@ export default function SocialSuggestions() {
     ApiHelper.get(`/sermons/outline?url=${encodeURIComponent(lessonOutline.url)}&title=${lessonOutline.title}&author=${lessonOutline.author}`, "ContentApi")
       .then((data: any) => {
         setLessonOutlineResult(data.outline)
-    })
-    .finally(() => {
-      setScriptLoading(false);
-      setLessonOutline({ url: "", title: "", author: "" })
-    })
+      })
+      .finally(() => {
+        setScriptLoading(false);
+        setLessonOutline({ url: "", title: "", author: "" })
+      })
   }
 
   return (
     <>
       <ErrorMessages errors={errors} />
       <Grid container>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <div style={{ margin: 20 }}>
             <TextField
               label="YouTube URL"
@@ -102,7 +103,7 @@ export default function SocialSuggestions() {
             ))}
           </div>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <div style={{ margin: 20 }}>
             <TextField
               helperText="Enter sermon script URL"
@@ -118,8 +119,8 @@ export default function SocialSuggestions() {
             <br />
             <Typography fontSize={14} fontStyle="italic">Please enter Sermon Title and Author just in case if the link doesn't work or it isn't accesible to public.</Typography>
             <Grid container spacing={2}>
-              <Grid item xs={6}><TextField size="small" fullWidth required label="Sermon Title" name="title" onChange={handleChange} value={lessonOutline.title} data-testid="sermon-title-input" /></Grid>
-              <Grid item xs={6}><TextField size="small" fullWidth required label="Author / Speaker" name="author" onChange={handleChange} value={lessonOutline.author} data-testid="sermon-author-input" /></Grid>
+              <Grid size={6}><TextField size="small" fullWidth required label="Sermon Title" name="title" onChange={handleChange} value={lessonOutline.title} data-testid="sermon-title-input" /></Grid>
+              <Grid size={6}><TextField size="small" fullWidth required label="Author / Speaker" name="author" onChange={handleChange} value={lessonOutline.author} data-testid="sermon-author-input" /></Grid>
             </Grid>
             <br />
             <Button

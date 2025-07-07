@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ApiHelper, ArrayHelper, DateHelper, GroupInterface, ImageEditor, PersonInterface, TaskInterface, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
@@ -63,7 +68,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const fieldOptions = () => {
-    let options: JSX.Element[] = [];
+    let options: React.ReactElement[] = [];
     categories.forEach((c) => {
       options.push(<MenuItem value={c.key} disabled={changes?.some((ch) => c.key !== "familyMember" && ch.field === c.key)}>{c.label}</MenuItem>);
     });
@@ -71,7 +76,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const valueOption = () => {
-    let option: JSX.Element = <></>;
+    let option: React.ReactElement = <></>;
     switch (currentField.field) {
       case "photo":
         option = (
@@ -111,7 +116,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const getChangesRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     changes?.forEach((ch) => {
       let val: any = ch.value;
       if (ch.field === "birthDate") val = DateHelper.formatHtml5Date(new Date(ch.value));

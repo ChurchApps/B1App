@@ -1,5 +1,6 @@
 import { ChatStateInterface } from "@/helpers";
-import { ConversationInterface, ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { ConversationInterface } from "@churchapps/helpers";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import React from "react";

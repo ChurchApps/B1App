@@ -10,7 +10,7 @@ import { Services } from "@/components/admin/video/Services";
 import { Tabs } from "@/components/admin/video/Tabs";
 import { EmbeddablePages } from "@/components/admin/EmbeddablePages";
 import { PageEdit } from "@/components/admin/PageEdit";
-import { Banner } from "@churchapps/apphelper";
+import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 
 export function StreamSettingsClient(props: WrapperPageProps) {
   const [editPage, setEditPage] = useState<PageInterface>(null);
@@ -21,11 +21,11 @@ export function StreamSettingsClient(props: WrapperPageProps) {
       <Banner><h1>Stream Settings</h1></Banner>
       <div id="mainContent">
         <Grid container spacing={3}>
-          <Grid item md={8} xs={12}>
+          <Grid size={{ md: 8, xs: 12 }}>
             <Services />
             <EmbeddablePages onSelected={(page: PageInterface) => setEditPage(page)} pathPrefix="/stream" refreshKey={refreshKey} />
           </Grid>
-          <Grid item md={4} xs={12}>
+          <Grid size={{ md: 4, xs: 12 }}>
             {editPage && (
               <PageEdit page={editPage} updatedCallback={() => {
                 setEditPage(null);

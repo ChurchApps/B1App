@@ -1,5 +1,6 @@
+import React from "react";
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreviewLight } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/markdownEditor";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 interface Props {
@@ -11,8 +12,8 @@ export const TableElement = ({ element }: Props) => {
   const hasHead = element.answers.head || false;
   const markdown = element.answers.markdown || false;
 
-  const appendRow = (result:JSX.Element[], rowArray:string[], key:string) => {
-    let row: JSX.Element[] = [];
+  const appendRow = (result:React.ReactElement[], rowArray:string[], key:string) => {
+    let row: React.ReactElement[] = [];
     for (let j = 0; j < rowArray.length; j++) {
       if (markdown) row.push(<TableCell key={j}><MarkdownPreviewLight value={rowArray[j]} /></TableCell>);
       else row.push(<TableCell key={j}>{rowArray[j]}</TableCell>);
@@ -21,13 +22,13 @@ export const TableElement = ({ element }: Props) => {
   }
 
   const getHead = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     if (contents.length > 0) appendRow(result, contents[0], "head");
     return (<TableHead>{result}</TableHead>)
   }
 
   const getBody = () => {
-    let result: JSX.Element[] = [];
+    let result: React.ReactElement[] = [];
     const startIdx = hasHead ? 1 : 0;
     for (let i = startIdx; i < contents.length; i++) appendRow(result, contents[i], i.toString());
     return result;

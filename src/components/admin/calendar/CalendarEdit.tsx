@@ -1,6 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ErrorMessages, InputBox, ApiHelper, CuratedCalendarInterface, UserHelper, Permissions } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
+import type { CuratedCalendarInterface } from "@churchapps/helpers";
 import { SelectChangeEvent, TextField } from "@mui/material";
 
 type Props = {

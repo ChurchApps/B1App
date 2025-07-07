@@ -1,5 +1,7 @@
-import { ErrorMessages, InputBox } from "@churchapps/apphelper";
-import { ApiHelper, PlaylistInterface, SermonInterface } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 import React from "react";
 
@@ -39,7 +41,7 @@ export const YouTubeImport = (props: Props) => {
   }
 
   const getRows = () => {
-    let rows: JSX.Element[] = [];
+    let rows: React.ReactElement[] = [];
     sermons.forEach((ser) => {
       const sermon = ser;
       rows.push(<TableRow key={sermon.videoData}>

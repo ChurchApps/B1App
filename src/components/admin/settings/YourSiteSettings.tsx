@@ -4,10 +4,14 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon, Button } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
-import { DisplayBox, ErrorMessages, ApiHelper, UserHelper, Permissions } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Permissions } from "@churchapps/helpers";
 import { Links } from "@/components/admin/Links";
 import { BlockEdit } from "@/components/admin/BlockEdit";
-import { SmallButton } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { BlockInterface, PageInterface } from "@/helpers";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 
@@ -142,7 +146,7 @@ export function YourSiteSettings() {
     <Grid container spacing={3}>
       <ErrorMessages errors={errors} />
       {UserHelper.checkAccess(Permissions.contentApi.content.edit)
-        && <Grid item md={8} xs={12}>
+        && <Grid size={{ md: 8, xs: 12 }}>
           <DisplayBox headerText="Pages" headerIcon="article" editContent={editContent} data-testid="site-pages-display-box">
             <Table>
               <TableHead>
@@ -169,7 +173,7 @@ export function YourSiteSettings() {
           </DisplayBox>
         </Grid>
       }
-      <Grid item md={4} xs={12}>
+      <Grid size={{ md: 4, xs: 12 }}>
 
         {editBlock && (<BlockEdit block={editBlock}
           updatedCallback={() => {

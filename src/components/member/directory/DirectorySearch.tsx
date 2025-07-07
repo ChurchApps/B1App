@@ -1,6 +1,8 @@
 import { Button, TextField, Icon, Box, Stack, Chip, Divider, SelectChangeEvent, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import React from "react";
-import { ApiHelper, DisplayBox, GroupInterface } from "@churchapps/apphelper"
+import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import type { GroupInterface } from "@churchapps/helpers";
 import { PeopleSearchResults } from "./PeopleSearchResults"
 
 interface Props { selectedHandler: (personId: string) => void }
