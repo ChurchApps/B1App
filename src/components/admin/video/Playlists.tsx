@@ -1,10 +1,28 @@
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import type { PlaylistInterface } from "@churchapps/helpers";
-import { Icon } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Box,
+  IconButton,
+  Paper
+} from "@mui/material";
+import {
+  Add as AddIcon,
+  Edit as EditIcon,
+  VideoLibrary as VideoLibraryIcon
+} from "@mui/icons-material";
 import React from "react";
 import { PlaylistEdit } from "./PlaylistEdit";
 
@@ -22,7 +40,7 @@ export const Playlists = (props: Props) => {
     setCurrentPlaylist(null);
     loadData();
   };
-  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} data-testid="add-playlist-button" />;
+
   const loadData = () => {
     ApiHelper.get("/playlists", "ContentApi").then((data) => {
       setPlaylists(data);
@@ -36,49 +54,147 @@ export const Playlists = (props: Props) => {
     loadData();
   };
 
-  const getRows = () => {
-    //var idx = 0;
-    let rows: React.ReactElement[] = [];
-    playlists.forEach((playlist) => {
-      rows.push(
-        <tr key={playlist.id}>
-          <td>{playlist.title}</td>
-          <td style={{ textAlign: "right" }}>
-            <a
-              href="about:blank"
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                setCurrentPlaylist(playlist);
-              }}>
-              <Icon>edit</Icon>
-            </a>
-          </td>
-        </tr>
-      );
-      //idx++;
-    });
-    return rows;
-  };
+  const getTableRows = () => playlists.map((playlist) => (
+    <TableRow
+      key={playlist.id}
+      sx={{
+        '&:hover': { backgroundColor: 'action.hover' },
+        transition: 'background-color 0.2s ease'
+      }}
+    >
+      <TableCell>
+        <Typography variant="body1" sx={{ fontWeight: 500 }}>
+          {playlist.title}
+        </Typography>
+        {playlist.description && (
+          <Typography variant="body2" color="text.secondary">
+            {playlist.description}
+          </Typography>
+        )}
+      </TableCell>
+      <TableCell align="right">
+        <IconButton
+          size="small"
+          onClick={() => setCurrentPlaylist(playlist)}
+          sx={{
+            color: 'primary.main',
+            '&:hover': { backgroundColor: 'primary.light', opacity: 0.1 }
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  ));
+
+  const getEmptyState = () => (
+    <TableRow>
+      <TableCell colSpan={2} sx={{ textAlign: 'center', py: 6 }}>
+        <Stack spacing={2} alignItems="center">
+          <VideoLibraryIcon sx={{ fontSize: 48, color: 'text.secondary' }} />
+          <Typography variant="h6" color="text.secondary">
+            No playlists found
+          </Typography>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+            Get started by creating your first playlist
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleAdd}
+            data-testid="add-playlist-button"
+          >
+            Create First Playlist
+          </Button>
+        </Stack>
+      </TableCell>
+    </TableRow>
+  );
 
   const getTable = () => {
     if (isLoading) return <Loading />;
-    else
-      return (
-        <table className="table">
-          <tbody>{getRows()}</tbody>
-        </table>
-      );
+
+    return (
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead
+            sx={{
+              backgroundColor: 'grey.50',
+              '& .MuiTableCell-root': {
+                borderBottom: '2px solid',
+                borderBottomColor: 'divider'
+              }
+            }}
+          >
+            <TableRow>
+              <TableCell>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  Playlist
+                </Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  Actions
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {playlists.length === 0 ? getEmptyState() : getTableRows()}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
   };
 
   React.useEffect(() => {
     loadData();
   }, []);
 
-  if (currentPlaylist !== null) return <PlaylistEdit currentPlaylist={currentPlaylist} updatedFunction={handleUpdated} showPhotoEditor={props.showPhotoEditor} updatedPhoto={props.updatedPhoto} />;
-  else
+  if (currentPlaylist !== null) {
     return (
-      <DisplayBox headerIcon="video_library" headerText="Playlists" editContent={getEditContent()} id="servicesBox" data-testid="playlists-display-box">
-        {getTable()}
-      </DisplayBox>
+      <PlaylistEdit
+        currentPlaylist={currentPlaylist}
+        updatedFunction={handleUpdated}
+        showPhotoEditor={props.showPhotoEditor}
+        updatedPhoto={props.updatedPhoto}
+      />
     );
+  }
+
+  return (
+    <Card sx={{
+      borderRadius: 2,
+      border: '1px solid',
+      borderColor: 'grey.200'
+    }}>
+      <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <VideoLibraryIcon sx={{ color: 'primary.main' }} />
+            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+              Playlists
+            </Typography>
+          </Stack>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleAdd}
+            data-testid="add-playlist-button"
+            sx={{
+              textTransform: 'none',
+              borderRadius: 2,
+              fontWeight: 600
+            }}
+          >
+            Add Playlist
+          </Button>
+        </Stack>
+      </Box>
+
+      <CardContent sx={{ p: 0 }}>
+        {getTable()}
+      </CardContent>
+    </Card>
+  );
 };
