@@ -15,12 +15,15 @@ import {
   TableHead,
   TableRow,
   IconButton,
-  Paper
+  TextField,
+  Box,
+  Tooltip
 } from "@mui/material";
 import {
   Add as AddIcon,
   Edit as EditIcon,
-  VideoLibrary as VideoLibraryIcon
+  VideoLibrary as VideoLibraryIcon,
+  Search as SearchIcon
 } from "@mui/icons-material";
 import React from "react";
 import { PlaylistEdit } from "./PlaylistEdit";
@@ -34,8 +37,10 @@ interface Props {
 
 export const Playlists = (props: Props) => {
   const [playlists, setPlaylists] = React.useState<PlaylistInterface[]>([]);
+  const [filteredPlaylists, setFilteredPlaylists] = React.useState<PlaylistInterface[]>([]);
   const [currentPlaylist, setCurrentPlaylist] = React.useState<PlaylistInterface>(null);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [searchTerm, setSearchTerm] = React.useState<string>("");
 
   const handleUpdated = () => {
     setCurrentPlaylist(null);
@@ -45,8 +50,24 @@ export const Playlists = (props: Props) => {
   const loadData = () => {
     ApiHelper.get("/playlists", "ContentApi").then((data) => {
       setPlaylists(data);
+      setFilteredPlaylists(data);
       setIsLoading(false);
     });
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const term = event.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (term === "") {
+      setFilteredPlaylists(playlists);
+    } else {
+      const filtered = playlists.filter(playlist =>
+        playlist.title.toLowerCase().includes(term)
+        || (playlist.description && playlist.description.toLowerCase().includes(term))
+      );
+      setFilteredPlaylists(filtered);
+    }
   };
 
   const handleAdd = () => {
@@ -55,12 +76,15 @@ export const Playlists = (props: Props) => {
     loadData();
   };
 
-  const getTableRows = () => playlists.map((playlist) => (
+  const getTableRows = () => filteredPlaylists.map((playlist, index) => (
     <TableRow
       key={playlist.id}
       sx={{
         '&:hover': { backgroundColor: 'action.hover' },
-        transition: 'background-color 0.2s ease'
+        transition: 'background-color 0.2s ease',
+        '&:last-child td': {
+          borderBottom: 0
+        }
       }}
     >
       <TableCell>
@@ -74,49 +98,62 @@ export const Playlists = (props: Props) => {
         )}
       </TableCell>
       <TableCell align="right">
-        <IconButton
-          size="small"
-          onClick={() => setCurrentPlaylist(playlist)}
-          sx={{
-            color: 'primary.main',
-            '&:hover': { backgroundColor: 'primary.light', opacity: 0.1 }
-          }}
-        >
-          <EditIcon />
-        </IconButton>
+        <Tooltip title="Edit playlist" arrow>
+          <IconButton
+            size="small"
+            onClick={() => setCurrentPlaylist(playlist)}
+            sx={{
+              color: 'primary.main',
+              '&:hover': {
+                backgroundColor: 'primary.main',
+                color: 'white',
+                transform: 'scale(1.05)'
+              },
+              transition: 'all 0.2s ease-in-out'
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
       </TableCell>
     </TableRow>
   ));
 
-  const getEmptyState = () => (
-    <TableRow>
-      <TableCell colSpan={2} sx={{ textAlign: 'center', py: 6 }}>
-        <Stack spacing={2} alignItems="center">
-          <VideoLibraryIcon sx={{ fontSize: 48, color: 'text.secondary' }} />
-          <Typography variant="h6" color="text.secondary">
-            No playlists found
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-            Get started by creating your first playlist
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleAdd}
-            data-testid="add-playlist-button"
-          >
-            Create First Playlist
-          </Button>
-        </Stack>
-      </TableCell>
-    </TableRow>
-  );
+  const getEmptyState = () => {
+    const isSearching = searchTerm.length > 0;
+
+    return (
+      <TableRow>
+        <TableCell colSpan={2} sx={{ textAlign: 'center', py: 6, borderBottom: 0 }}>
+          <Stack spacing={2} alignItems="center">
+            <VideoLibraryIcon sx={{ fontSize: 48, color: 'text.secondary' }} />
+            <Typography variant="h6" color="text.secondary">
+              {isSearching ? 'No playlists match your search' : 'No playlists found'}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+              {isSearching ? 'Try adjusting your search terms' : 'Get started by creating your first playlist'}
+            </Typography>
+            {!isSearching && (
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleAdd}
+                data-testid="add-playlist-button"
+              >
+                Create First Playlist
+              </Button>
+            )}
+          </Stack>
+        </TableCell>
+      </TableRow>
+    );
+  };
 
   const getTable = () => {
     if (isLoading) return <Loading />;
 
     return (
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table sx={{ minWidth: 650 }}>
           <TableHead
             sx={{
@@ -141,7 +178,7 @@ export const Playlists = (props: Props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {playlists.length === 0 ? getEmptyState() : getTableRows()}
+            {filteredPlaylists.length === 0 ? getEmptyState() : getTableRows()}
           </TableBody>
         </Table>
       </TableContainer>
@@ -158,6 +195,12 @@ export const Playlists = (props: Props) => {
       props.onAddTriggered();
     }
   }, [props.triggerAdd]);
+
+  React.useEffect(() => {
+    if (searchTerm === "") {
+      setFilteredPlaylists(playlists);
+    }
+  }, [playlists, searchTerm]);
 
   if (currentPlaylist !== null) {
     return (
@@ -177,6 +220,28 @@ export const Playlists = (props: Props) => {
       borderColor: 'grey.200'
     }}>
       <CardContent sx={{ p: 0 }}>
+        {/* Search Bar */}
+        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search playlists..."
+            value={searchTerm}
+            onChange={handleSearch}
+            size="small"
+            InputProps={{
+              startAdornment: (
+                <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />
+              )
+            }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'grey.50'
+              }
+            }}
+          />
+        </Box>
+
         {getTable()}
       </CardContent>
     </Card>
