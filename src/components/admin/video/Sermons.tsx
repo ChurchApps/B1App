@@ -4,8 +4,8 @@ import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import type { SermonInterface, PlaylistInterface } from "@churchapps/helpers";
-import { Box, Button, Card, CardContent, Chip, Icon, IconButton, InputAdornment, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
-import { Add as AddIcon, CalendarMonth as CalendarIcon, LiveTv as LiveTvIcon, PlaylistPlay as PlaylistIcon, Search as SearchIcon } from "@mui/icons-material";
+import { Box, Button, Card, CardContent, Chip, Icon, IconButton, InputAdornment, Menu, MenuItem, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { Add as AddIcon, CalendarMonth as CalendarIcon, LiveTv as LiveTvIcon, PlaylistPlay as PlaylistIcon, Search as SearchIcon, ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
 import React from "react";
 import { SermonEdit } from "./SermonEdit";
 
@@ -21,26 +21,74 @@ export const Sermons = (props: Props) => {
   const [currentSermon, setCurrentSermon] = React.useState<SermonInterface>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleUpdated = () => { setCurrentSermon(null); loadData(); }
 
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleAddSermon = () => {
+    handleMenuClose();
+    handleAdd(false);
+  };
+
+  const handleAddPermanentLiveUrl = () => {
+    handleMenuClose();
+    handleAdd(true);
+  };
+
   const getActionButtons = () => (
-    <Button
-      variant="outlined"
-      startIcon={<AddIcon />}
-      onClick={() => handleAdd(false)}
-      data-testid="add-sermon-button"
-      sx={{
-        color: '#FFF',
-        borderColor: 'rgba(255,255,255,0.5)',
-        '&:hover': {
-          borderColor: '#FFF',
-          backgroundColor: 'rgba(255,255,255,0.1)'
-        }
-      }}
-    >
-      Add Sermon
-    </Button>
+    <>
+      <Button
+        variant="outlined"
+        startIcon={<AddIcon />}
+        endIcon={<ArrowDropDownIcon />}
+        onClick={handleMenuClick}
+        data-testid="add-sermon-button"
+        sx={{
+          color: '#FFF',
+          borderColor: 'rgba(255,255,255,0.5)',
+          '&:hover': {
+            borderColor: '#FFF',
+            backgroundColor: 'rgba(255,255,255,0.1)'
+          }
+        }}
+      >
+        Add Sermon
+      </Button>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem onClick={handleAddSermon}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <LiveTvIcon fontSize="small" />
+            <Typography>Add Sermon</Typography>
+          </Stack>
+        </MenuItem>
+        <MenuItem onClick={handleAddPermanentLiveUrl}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <LiveTvIcon fontSize="small" sx={{ color: 'error.main' }} />
+            <Typography>Add Permanent Live URL</Typography>
+          </Stack>
+        </MenuItem>
+      </Menu>
+    </>
   );
 
   const loadData = () => {
