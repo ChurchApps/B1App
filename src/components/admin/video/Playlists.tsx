@@ -33,6 +33,7 @@ interface Props {
   updatedPhoto: string;
   triggerAdd: boolean;
   onAddTriggered: () => void;
+  showSearch: boolean;
 }
 
 export const Playlists = (props: Props) => {
@@ -202,6 +203,13 @@ export const Playlists = (props: Props) => {
     }
   }, [playlists, searchTerm]);
 
+  React.useEffect(() => {
+    if (!props.showSearch) {
+      setSearchTerm("");
+      setFilteredPlaylists(playlists);
+    }
+  }, [props.showSearch, playlists]);
+
   if (currentPlaylist !== null) {
     return (
       <PlaylistEdit
@@ -220,27 +228,30 @@ export const Playlists = (props: Props) => {
       borderColor: 'grey.200'
     }}>
       <CardContent sx={{ p: 0 }}>
-        {/* Search Bar */}
-        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Search playlists..."
-            value={searchTerm}
-            onChange={handleSearch}
-            size="small"
-            InputProps={{
-              startAdornment: (
-                <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />
-              )
-            }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                backgroundColor: 'grey.50'
-              }
-            }}
-          />
-        </Box>
+        {/* Search Bar - Conditionally Rendered */}
+        {props.showSearch && (
+          <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search playlists..."
+              value={searchTerm}
+              onChange={handleSearch}
+              size="small"
+              autoFocus
+              InputProps={{
+                startAdornment: (
+                  <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />
+                )
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: 'grey.50'
+                }
+              }}
+            />
+          </Box>
+        )}
 
         {getTable()}
       </CardContent>

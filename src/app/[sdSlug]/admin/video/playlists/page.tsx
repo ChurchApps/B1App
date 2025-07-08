@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Box, Typography, Stack, Button } from "@mui/material";
-import { VideoLibrary as VideoLibraryIcon, Add as AddIcon } from "@mui/icons-material";
+import { VideoLibrary as VideoLibraryIcon, Add as AddIcon, Search as SearchIcon } from "@mui/icons-material";
 import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
 import { Permissions } from "@churchapps/helpers";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
@@ -18,6 +18,7 @@ export default function AdminPagesClient() {
   const [photoType, setPhotoType] = useState<string>(null);
   const [photoUrl, setPhotoUrl] = useState<string>(null);
   const [showAddPlaylist, setShowAddPlaylist] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const params = useParams<PageParams>()
 
   const loadData = () => {
@@ -101,6 +102,22 @@ export default function AdminPagesClient() {
           <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
             <Button
               variant="outlined"
+              startIcon={<SearchIcon />}
+              onClick={() => setShowSearch(!showSearch)}
+              sx={{
+                color: '#FFF',
+                borderColor: showSearch ? '#FFF' : 'rgba(255,255,255,0.5)',
+                backgroundColor: showSearch ? 'rgba(255,255,255,0.1)' : 'transparent',
+                '&:hover': {
+                  borderColor: '#FFF',
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              Search
+            </Button>
+            <Button
+              variant="outlined"
               startIcon={<AddIcon />}
               onClick={() => setShowAddPlaylist(true)}
               sx={{
@@ -127,6 +144,7 @@ export default function AdminPagesClient() {
             updatedPhoto={(photoType === "playlist" && photoUrl) || null}
             triggerAdd={showAddPlaylist}
             onAddTriggered={() => setShowAddPlaylist(false)}
+            showSearch={showSearch}
           />
         )}
       </Box>
