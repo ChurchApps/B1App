@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Box, Typography, Stack } from "@mui/material";
-import { VideoLibrary as VideoLibraryIcon } from "@mui/icons-material";
+import { Box, Typography, Stack, Button } from "@mui/material";
+import { VideoLibrary as VideoLibraryIcon, Add as AddIcon } from "@mui/icons-material";
 import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
 import { Permissions } from "@churchapps/helpers";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
@@ -17,6 +17,7 @@ export default function AdminPagesClient() {
   const [config, setConfig] = useState<ConfigurationInterface>(null);
   const [photoType, setPhotoType] = useState<string>(null);
   const [photoUrl, setPhotoUrl] = useState<string>(null);
+  const [showAddPlaylist, setShowAddPlaylist] = useState<boolean>(false);
   const params = useParams<PageParams>()
 
   const loadData = () => {
@@ -96,6 +97,24 @@ export default function AdminPagesClient() {
               </Typography>
             </Box>
           </Stack>
+
+          <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={() => setShowAddPlaylist(true)}
+              sx={{
+                color: '#FFF',
+                borderColor: 'rgba(255,255,255,0.5)',
+                '&:hover': {
+                  borderColor: '#FFF',
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              Add Playlist
+            </Button>
+          </Stack>
         </Stack>
       </Box>
 
@@ -103,7 +122,12 @@ export default function AdminPagesClient() {
       <Box sx={{ p: 3 }}>
         {imageEditor}
         {UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit) && (
-          <Playlists showPhotoEditor={showPhotoEditor} updatedPhoto={(photoType === "playlist" && photoUrl) || null} />
+          <Playlists
+            showPhotoEditor={showPhotoEditor}
+            updatedPhoto={(photoType === "playlist" && photoUrl) || null}
+            triggerAdd={showAddPlaylist}
+            onAddTriggered={() => setShowAddPlaylist(false)}
+          />
         )}
       </Box>
     </AdminWrapper>

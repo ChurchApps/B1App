@@ -14,7 +14,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Box,
   IconButton,
   Paper
 } from "@mui/material";
@@ -29,6 +28,8 @@ import { PlaylistEdit } from "./PlaylistEdit";
 interface Props {
   showPhotoEditor: (photoType: string, url: string) => void;
   updatedPhoto: string;
+  triggerAdd: boolean;
+  onAddTriggered: () => void;
 }
 
 export const Playlists = (props: Props) => {
@@ -115,7 +116,7 @@ export const Playlists = (props: Props) => {
     if (isLoading) return <Loading />;
 
     return (
-      <TableContainer component={Paper} sx={{ mt: 2 }}>
+      <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead
             sx={{
@@ -151,6 +152,13 @@ export const Playlists = (props: Props) => {
     loadData();
   }, []);
 
+  React.useEffect(() => {
+    if (props.triggerAdd) {
+      handleAdd();
+      props.onAddTriggered();
+    }
+  }, [props.triggerAdd]);
+
   if (currentPlaylist !== null) {
     return (
       <PlaylistEdit
@@ -168,30 +176,6 @@ export const Playlists = (props: Props) => {
       border: '1px solid',
       borderColor: 'grey.200'
     }}>
-      <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <VideoLibraryIcon sx={{ color: 'primary.main' }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
-              Playlists
-            </Typography>
-          </Stack>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleAdd}
-            data-testid="add-playlist-button"
-            sx={{
-              textTransform: 'none',
-              borderRadius: 2,
-              fontWeight: 600
-            }}
-          >
-            Add Playlist
-          </Button>
-        </Stack>
-      </Box>
-
       <CardContent sx={{ p: 0 }}>
         {getTable()}
       </CardContent>
