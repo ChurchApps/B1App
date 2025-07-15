@@ -1,15 +1,37 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
 import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
-import { Button, FormControl, IconButton, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Stack, TextField, Typography } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import {
+  Button,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  Box,
+  Alert
+} from "@mui/material";
+import {
+  Edit as EditIcon,
+  Article as ArticleIcon,
+  Save as SaveIcon,
+  Cancel as CancelIcon,
+  Delete as DeleteIcon,
+  ContentCopy as ContentCopyIcon,
+  Link as LinkIcon
+} from '@mui/icons-material';
 
 type Props = {
   page: PageInterface;
@@ -107,56 +129,232 @@ export function PageEdit(props: Props) {
   }, [props.page]);
 
   if (!page) return <></>
-  else return (
-    <>
-      <InputBox id="pageDetailsBox" headerText="Edit Page" headerIcon="school" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete} headerActionContent={(page.id && <a href="about:blank" onClick={handleDuplicate} data-testid="duplicate-page-link" aria-label="Duplicate page">Duplicate</a>)} data-testid="page-edit-box">
-        <ErrorMessages errors={errors} data-testid="page-errors" />
-        <TextField fullWidth label="Title" name="title" value={page.title} onChange={handleChange} onKeyDown={handleKeyDown} data-testid="page-title-input" aria-label="Page title" />
-        {checked
-          ? (
-            <div style={{ marginTop: "5px", paddingLeft: "4px" }}>
-              <Paper elevation={0}>
+
+  return (
+    <Card sx={{
+      borderRadius: 2,
+      border: '1px solid',
+      borderColor: 'grey.200'
+    }}>
+      {/* Header */}
+      <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ArticleIcon sx={{ color: 'primary.main' }} />
+            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+              Edit Page
+            </Typography>
+          </Stack>
+
+          {/* Action Buttons */}
+          <Stack direction="row" spacing={1}>
+            {page.id && (
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<ContentCopyIcon />}
+                onClick={handleDuplicate}
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 'auto'
+                }}
+                data-testid="duplicate-page-link"
+                aria-label="Duplicate page"
+              >
+                Duplicate
+              </Button>
+            )}
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<CancelIcon />}
+              onClick={handleCancel}
+              sx={{
+                textTransform: 'none',
+                minWidth: 'auto'
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<SaveIcon />}
+              onClick={handleSave}
+              sx={{
+                textTransform: 'none',
+                fontWeight: 600
+              }}
+            >
+              Save
+            </Button>
+            {page.id && (
+              <Button
+                variant="outlined"
+                size="small"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 'auto'
+                }}
+              >
+                Delete
+              </Button>
+            )}
+          </Stack>
+        </Stack>
+      </Box>
+
+      {/* Content */}
+      <CardContent sx={{ p: 3 }}>
+        <Stack spacing={3}>
+          {/* Error Messages */}
+          {errors.length > 0 && (
+            <Alert severity="error" data-testid="page-errors">
+              <Stack spacing={1}>
+                {errors.map((error, index) => (
+                  <Typography key={index} variant="body2">
+                    {error}
+                  </Typography>
+                ))}
+              </Stack>
+            </Alert>
+          )}
+
+          {/* Title Field */}
+          <TextField
+            fullWidth
+            label="Title"
+            name="title"
+            value={page.title || ''}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            data-testid="page-title-input"
+            aria-label="Page title"
+            variant="outlined"
+          />
+
+          {/* URL Field */}
+          {checked ? (
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+                URL Path
+              </Typography>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 2,
+                  backgroundColor: 'grey.50',
+                  border: '1px solid',
+                  borderColor: 'grey.200',
+                  borderRadius: 1
+                }}
+              >
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Typography>{page.url}</Typography>
-                  <IconButton color="primary" onClick={() => setChecked(false)} data-testid="edit-url-button" aria-label="Edit URL path"><EditIcon /></IconButton>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <LinkIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {page.url}
+                    </Typography>
+                  </Stack>
+                  <IconButton
+                    color="primary"
+                    size="small"
+                    onClick={() => setChecked(false)}
+                    data-testid="edit-url-button"
+                    aria-label="Edit URL path"
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
                 </Stack>
               </Paper>
-              <div>
-                <a href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`} target="_blank" rel="noopener noreferrer">
-                  {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
-                </a>
-              </div>
-            </div>
-          )
-          : (
-            <TextField fullWidth label="Url Path" name="url" value={page.url} onChange={handleChange} helperText="ex: /camper-registration  (**Make sure to check before saving)"
-              InputProps={{ endAdornment: <Button variant="contained" color="primary" size="small" onClick={handleSlugValidation} data-testid="check-url-button" aria-label="Check URL validity">Check</Button> }}
+              <Box sx={{ mt: 1 }}>
+                <Typography variant="caption" color="text.secondary">
+                  Preview:
+                  <a
+                    href={`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ marginLeft: '4px', color: 'inherit' }}
+                  >
+                    {`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`}
+                  </a>
+                </Typography>
+              </Box>
+            </Box>
+          ) : (
+            <TextField
+              fullWidth
+              label="URL Path"
+              name="url"
+              value={page.url || ''}
+              onChange={handleChange}
+              helperText="ex: /camper-registration (**Make sure to check before saving)"
+              InputProps={{
+                endAdornment: (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={handleSlugValidation}
+                    data-testid="check-url-button"
+                    aria-label="Check URL validity"
+                    sx={{ ml: 1 }}
+                  >
+                    Check
+                  </Button>
+                )
+              }}
               data-testid="page-url-input"
               aria-label="Page URL path"
+              variant="outlined"
             />
           )}
-        {!props.embedded && (
-          <FormControl fullWidth>
-            <InputLabel>Layout</InputLabel>
-            <Select fullWidth label="Layout" value={page.layout || ""} name="layout" onChange={handleChange} data-testid="page-layout-select" aria-label="Select page layout">
-              <MenuItem value="headerFooter">Header & Footer</MenuItem>
-              <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-        {!props.embedded && showPageTemplate === true && (
-          <FormControl fullWidth>
-            <InputLabel>Page Template</InputLabel>
-            <Select fullWidth label="Page Template" name="pageTemplate" value={pageTemplate} onChange={(e) => setPageTemplate(e.target.value)} data-testid="page-template-select" aria-label="Select page template">
-              <MenuItem value="blank">Blank</MenuItem>
-              <MenuItem value="sermons">Sermons</MenuItem>
-              <MenuItem value="about">About Us</MenuItem>
-              <MenuItem value="donate">Donate</MenuItem>
-              <MenuItem value="location">Location</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-      </InputBox>
-    </>
+
+          {/* Layout Field (only if not embedded) */}
+          {!props.embedded && (
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Layout</InputLabel>
+              <Select
+                fullWidth
+                label="Layout"
+                value={page.layout || ""}
+                name="layout"
+                onChange={handleChange}
+                data-testid="page-layout-select"
+                aria-label="Select page layout"
+              >
+                <MenuItem value="headerFooter">Header & Footer</MenuItem>
+                <MenuItem value="cleanCentered">Clean Centered Content</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+
+          {/* Page Template Field (only for new pages not embedded) */}
+          {!props.embedded && showPageTemplate === true && (
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Page Template</InputLabel>
+              <Select
+                fullWidth
+                label="Page Template"
+                name="pageTemplate"
+                value={pageTemplate}
+                onChange={(e) => setPageTemplate(e.target.value)}
+                data-testid="page-template-select"
+                aria-label="Select page template"
+              >
+                <MenuItem value="blank">Blank</MenuItem>
+                <MenuItem value="sermons">Sermons</MenuItem>
+                <MenuItem value="about">About Us</MenuItem>
+                <MenuItem value="donate">Donate</MenuItem>
+                <MenuItem value="location">Location</MenuItem>
+              </Select>
+            </FormControl>
+          )}
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }
