@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { 
-  Box, 
-  Button, 
-  Stack, 
-  Typography, 
-  IconButton, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
+import {
+  Box,
+  Stack,
+  Typography,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   ListItemSecondaryAction,
   Tooltip,
   Divider
 } from "@mui/material";
-import { 
-  Add as AddIcon,
+import {
   Edit as EditIcon,
   ArrowUpward as ArrowUpIcon,
   ArrowDownward as ArrowDownIcon,
@@ -28,9 +26,11 @@ import { CardWithHeader, EmptyState } from "@/components/ui";
 
 interface Props {
   updatedFunction?: () => void;
+  showAddTab?: boolean;
+  onAddTabComplete?: () => void;
 }
 
-export function Tabs({ updatedFunction = () => {} }: Props) {
+export function Tabs({ updatedFunction = () => {}, showAddTab = false, onAddTabComplete = () => {} }: Props) {
   const [tabs, setTabs] = useState<B1LinkInterface[]>([]);
   const [currentTab, setCurrentTab] = useState<B1LinkInterface>(null);
 
@@ -52,6 +52,7 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
     setCurrentTab(null);
     loadData();
     updatedFunction();
+    onAddTabComplete();
   };
 
   const loadData = () => {
@@ -158,6 +159,12 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
 
   useEffect(loadData, []);
 
+  useEffect(() => {
+    if (showAddTab && !currentTab) {
+      handleAdd();
+    }
+  }, [showAddTab]);
+
   if (currentTab !== null) {
     return <TabEdit currentTab={currentTab} updatedFunction={handleUpdated} />;
   }
@@ -166,33 +173,12 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
     <CardWithHeader
       title="Navigation Tabs"
       icon={<TabIcon />}
-      actions={
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAdd}
-          size="small"
-          sx={{ textTransform: 'none' }}
-        >
-          Add Tab
-        </Button>
-      }
     >
       {tabs.length === 0 ? (
         <EmptyState
           icon={<TabIcon />}
           title="No navigation tabs"
           description="Create your first navigation tab to get started with your mobile app."
-          action={
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleAdd}
-              sx={{ textTransform: 'none' }}
-            >
-              Add First Tab
-            </Button>
-          }
           variant="card"
         />
       ) : (
