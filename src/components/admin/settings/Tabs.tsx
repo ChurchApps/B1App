@@ -18,42 +18,17 @@ import {
   ArrowDownward as ArrowDownIcon,
   Tab as TabIcon
 } from "@mui/icons-material";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { B1LinkInterface } from "@/helpers";
-import { TabEdit } from "./TabEdit";
 import { CardWithHeader, EmptyState } from "@/components/ui";
 
 interface Props {
-  updatedFunction?: () => void;
-  showAddTab?: boolean;
-  onAddTabComplete?: () => void;
+  onSelected?: (tab: B1LinkInterface) => void;
+  refreshKey?: number;
 }
 
-export function Tabs({ updatedFunction = () => {}, showAddTab = false, onAddTabComplete = () => {} }: Props) {
+export function Tabs({ onSelected = () => {}, refreshKey = 0 }: Props) {
   const [tabs, setTabs] = useState<B1LinkInterface[]>([]);
-  const [currentTab, setCurrentTab] = useState<B1LinkInterface>(null);
-
-  const handleAdd = () => {
-    const tab: B1LinkInterface = { 
-      churchId: UserHelper.currentUserChurch.church.id, 
-      sort: tabs.length, 
-      text: "", 
-      url: "", 
-      icon: "home", 
-      linkData: "", 
-      linkType: "url", 
-      category: "b1Tab" 
-    };
-    setCurrentTab(tab);
-  };
-
-  const handleUpdated = () => {
-    setCurrentTab(null);
-    loadData();
-    updatedFunction();
-    onAddTabComplete();
-  };
 
   const loadData = () => {
     ApiHelper.get("/links?category=b1Tab", "ContentApi").then((data) => setTabs(data));
@@ -82,15 +57,15 @@ export function Tabs({ updatedFunction = () => {}, showAddTab = false, onAddTabC
   };
 
   const handleEdit = (tab: B1LinkInterface) => {
-    setCurrentTab(tab);
+    onSelected(tab);
   };
 
   const renderTabItem = (tab: B1LinkInterface, index: number) => (
     <React.Fragment key={index}>
       <ListItem sx={{ py: 2 }}>
         <ListItemIcon>
-          <Box 
-            sx={{ 
+          <Box
+            sx={{
               backgroundColor: 'primary.main',
               borderRadius: '8px',
               p: 1,
@@ -158,34 +133,27 @@ export function Tabs({ updatedFunction = () => {}, showAddTab = false, onAddTabC
   );
 
   useEffect(loadData, []);
-
-  useEffect(() => {
-    if (showAddTab && !currentTab) {
-      handleAdd();
-    }
-  }, [showAddTab]);
-
-  if (currentTab !== null) {
-    return <TabEdit currentTab={currentTab} updatedFunction={handleUpdated} />;
-  }
+  useEffect(loadData, [refreshKey]);
 
   return (
     <CardWithHeader
       title="Navigation Tabs"
       icon={<TabIcon />}
     >
-      {tabs.length === 0 ? (
-        <EmptyState
-          icon={<TabIcon />}
-          title="No navigation tabs"
-          description="Create your first navigation tab to get started with your mobile app."
-          variant="card"
-        />
-      ) : (
-        <List sx={{ p: 0 }}>
-          {tabs.map((tab, index) => renderTabItem(tab, index))}
-        </List>
-      )}
+      {tabs.length === 0
+        ? (
+            <EmptyState
+              icon={<TabIcon />}
+              title="No navigation tabs"
+              description="Create your first navigation tab to get started with your mobile app."
+              variant="card"
+            />
+          )
+        : (
+            <List sx={{ p: 0 }}>
+              {tabs.map((tab, index) => renderTabItem(tab, index))}
+            </List>
+          )}
     </CardWithHeader>
   );
 }

@@ -153,6 +153,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
           <Stack direction="row" spacing={1}>
             <Button
               variant="outlined"
+              color="error"
               startIcon={<CancelIcon />}
               onClick={updatedFunction}
               size="small"
@@ -176,7 +177,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
       >
         <Grid container spacing={3}>
           {/* Tab Preview */}
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={6}>
             <Card sx={{ border: '1px solid', borderColor: 'grey.200' }}>
               <CardContent>
                 <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
@@ -198,7 +199,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
           </Grid>
 
           {/* Tab Settings */}
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={6}>
             <Card sx={{ border: '1px solid', borderColor: 'grey.200' }}>
               <CardContent>
                 <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>

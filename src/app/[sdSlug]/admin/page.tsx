@@ -7,7 +7,9 @@ import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { Permissions } from "@churchapps/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { B1LinkInterface } from "@/helpers";
 import { Tabs } from "@/components/admin/settings/Tabs";
+import { TabEdit } from "@/components/admin/settings/TabEdit";
 import { PageHeader } from "@/components/ui";
 import { PhoneIphone as PhoneIcon, Add as AddIcon } from "@mui/icons-material";
 
@@ -15,7 +17,8 @@ type PageParams = {sdSlug:string }
 
 export default function AdminPagesClient() {
   const [config, setConfig] = useState<ConfigurationInterface>(null);
-  const [showAddTab, setShowAddTab] = useState<boolean>(false);
+  const [editTab, setEditTab] = useState<B1LinkInterface>(null);
+  const [refreshTabsKey, setRefreshTabsKey] = useState(0);
   const params = useParams<PageParams>()
 
   const loadData = () => {
@@ -23,11 +26,22 @@ export default function AdminPagesClient() {
   };
 
   const handleAddTab = () => {
-    setShowAddTab(true);
+    const newTab: B1LinkInterface = {
+      churchId: UserHelper.currentUserChurch.church.id,
+      sort: 0, // Will be set properly when saved
+      text: "",
+      url: "",
+      icon: "home",
+      linkData: "",
+      linkType: "url",
+      category: "b1Tab"
+    };
+    setEditTab(newTab);
   };
 
   const handleTabsUpdated = () => {
-    setShowAddTab(false);
+    setEditTab(null);
+    setRefreshTabsKey(Math.random());
     ConfigHelper.clearCache("sdSlug=" + UserHelper.currentUserChurch.church.subDomain);
   };
 
@@ -59,11 +73,19 @@ export default function AdminPagesClient() {
         </Button>
       </PageHeader>
       <Box sx={{ p: 3 }}>
+        {editTab && (
+          <Box sx={{ mb: 3 }}>
+            <TabEdit
+              currentTab={editTab}
+              updatedFunction={handleTabsUpdated}
+            />
+          </Box>
+        )}
+
         {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
           <Tabs
-            updatedFunction={handleTabsUpdated}
-            showAddTab={showAddTab}
-            onAddTabComplete={() => setShowAddTab(false)}
+            onSelected={(tab: B1LinkInterface) => { setEditTab(tab); }}
+            refreshKey={refreshTabsKey}
           />
         )}
       </Box>
