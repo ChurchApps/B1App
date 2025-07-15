@@ -138,72 +138,11 @@ export function PageEdit(props: Props) {
     }}>
       {/* Header */}
       <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Stack direction="row" spacing={1} alignItems="center">
-            <ArticleIcon sx={{ color: 'primary.main' }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
-              Edit Page
-            </Typography>
-          </Stack>
-
-          {/* Action Buttons */}
-          <Stack direction="row" spacing={1}>
-            {page.id && (
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<ContentCopyIcon />}
-                onClick={handleDuplicate}
-                sx={{
-                  textTransform: 'none',
-                  minWidth: 'auto'
-                }}
-                data-testid="duplicate-page-link"
-                aria-label="Duplicate page"
-              >
-                Duplicate
-              </Button>
-            )}
-            <Button
-              variant="outlined"
-              size="small"
-              startIcon={<CancelIcon />}
-              onClick={handleCancel}
-              sx={{
-                textTransform: 'none',
-                minWidth: 'auto'
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<SaveIcon />}
-              onClick={handleSave}
-              sx={{
-                textTransform: 'none',
-                fontWeight: 600
-              }}
-            >
-              Save
-            </Button>
-            {page.id && (
-              <Button
-                variant="outlined"
-                size="small"
-                color="error"
-                startIcon={<DeleteIcon />}
-                onClick={handleDelete}
-                sx={{
-                  textTransform: 'none',
-                  minWidth: 'auto'
-                }}
-              >
-                Delete
-              </Button>
-            )}
-          </Stack>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <ArticleIcon sx={{ color: 'black' }} />
+          <Typography variant="h6" sx={{ fontWeight: 400, color: 'black' }}>
+            Edit Page
+          </Typography>
         </Stack>
       </Box>
 
@@ -224,17 +163,33 @@ export function PageEdit(props: Props) {
           )}
 
           {/* Title Field */}
-          <TextField
-            fullWidth
-            label="Title"
-            name="title"
-            value={page.title || ''}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            data-testid="page-title-input"
-            aria-label="Page title"
-            variant="outlined"
-          />
+          <Box>
+            <Typography variant="subtitle2" sx={{ mb: 0, fontWeight: 600 }}>
+              Title
+            </Typography>
+            <TextField
+              fullWidth
+              name="title"
+              value={page.title || ''}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              data-testid="page-title-input"
+              aria-label="Page title"
+              variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: 'grey.50',
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'grey.400'
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'primary.main',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
+            />
+          </Box>
 
           {/* URL Field */}
           {checked ? (
@@ -252,22 +207,11 @@ export function PageEdit(props: Props) {
                   borderRadius: 1
                 }}
               >
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <LinkIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {page.url}
-                    </Typography>
-                  </Stack>
-                  <IconButton
-                    color="primary"
-                    size="small"
-                    onClick={() => setChecked(false)}
-                    data-testid="edit-url-button"
-                    aria-label="Edit URL path"
-                  >
-                    <EditIcon fontSize="small" />
-                  </IconButton>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <LinkIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    {page.url}
+                  </Typography>
                 </Stack>
               </Paper>
               <Box sx={{ mt: 1 }}>
@@ -310,6 +254,18 @@ export function PageEdit(props: Props) {
               data-testid="page-url-input"
               aria-label="Page URL path"
               variant="outlined"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: 'grey.50',
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'grey.400'
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'primary.main',
+                    borderWidth: '1px'
+                  }
+                }
+              }}
             />
           )}
 
@@ -353,6 +309,73 @@ export function PageEdit(props: Props) {
               </Select>
             </FormControl>
           )}
+
+          {/* Action Buttons */}
+          <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ mt: 2 }}>
+            {page.id && (
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<ContentCopyIcon />}
+                onClick={handleDuplicate}
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 'auto'
+                }}
+                data-testid="duplicate-page-link"
+                aria-label="Duplicate page"
+              >
+                Duplicate
+              </Button>
+            )}
+            <Button
+              variant="outlined"
+              size="small"
+              color="error"
+              startIcon={<CancelIcon />}
+              onClick={handleCancel}
+              sx={{
+                textTransform: 'none',
+                minWidth: 'auto',
+                borderColor: 'error.main',
+                color: 'error.main',
+                '&:hover': {
+                  borderColor: 'error.dark',
+                  backgroundColor: 'error.main',
+                  color: 'white'
+                }
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              startIcon={<SaveIcon />}
+              onClick={handleSave}
+              sx={{
+                textTransform: 'none',
+                fontWeight: 600
+              }}
+            >
+              Save
+            </Button>
+            {page.id && (
+              <Button
+                variant="outlined"
+                size="small"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+                sx={{
+                  textTransform: 'none',
+                  minWidth: 'auto'
+                }}
+              >
+                Delete
+              </Button>
+            )}
+          </Stack>
         </Stack>
       </CardContent>
     </Card>
