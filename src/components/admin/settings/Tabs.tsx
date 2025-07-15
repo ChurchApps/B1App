@@ -1,10 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Icon, Box } from "@mui/material";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { 
+  Box, 
+  Button, 
+  Stack, 
+  Typography, 
+  IconButton, 
+  List, 
+  ListItem, 
+  ListItemIcon, 
+  ListItemText, 
+  ListItemSecondaryAction,
+  Tooltip,
+  Divider
+} from "@mui/material";
+import { 
+  Add as AddIcon,
+  Edit as EditIcon,
+  ArrowUpward as ArrowUpIcon,
+  ArrowDownward as ArrowDownIcon,
+  Tab as TabIcon
+} from "@mui/icons-material";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { B1LinkInterface } from "@/helpers";
 import { TabEdit } from "./TabEdit";
+import { CardWithHeader, EmptyState } from "@/components/ui";
 
 interface Props {
   updatedFunction?: () => void;
@@ -14,9 +34,17 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
   const [tabs, setTabs] = useState<B1LinkInterface[]>([]);
   const [currentTab, setCurrentTab] = useState<B1LinkInterface>(null);
 
-  const handleAdd = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const tab: B1LinkInterface = { churchId: UserHelper.currentUserChurch.church.id, sort: tabs.length, text: "", url: "", icon: "link", linkData: "", linkType: "url", category: "b1Tab" };
+  const handleAdd = () => {
+    const tab: B1LinkInterface = { 
+      churchId: UserHelper.currentUserChurch.church.id, 
+      sort: tabs.length, 
+      text: "", 
+      url: "", 
+      icon: "home", 
+      linkData: "", 
+      linkType: "url", 
+      category: "b1Tab" 
+    };
     setCurrentTab(tab);
   };
 
@@ -38,61 +66,94 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
     for (let i = 0; i < tabs.length; i++) tabs[i].sort = i + 1;
   };
 
-  const moveUp = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const idx = parseInt(e.currentTarget.getAttribute("data-idx"));
+  const moveUp = (idx: number) => {
     makeSortSequential();
     tabs[idx - 1].sort++;
     tabs[idx].sort--;
     saveChanges();
   };
 
-  const moveDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const idx = parseInt(e.currentTarget.getAttribute("data-idx"));
+  const moveDown = (idx: number) => {
     makeSortSequential();
     tabs[idx].sort++;
     tabs[idx + 1].sort--;
     saveChanges();
   };
 
-  const getRows = () => {
-    let idx = 0;
-    let rows: React.ReactElement[] = [];
-    tabs.forEach((tab) => {
-      const upLink = (idx === 0)
-        ? null
-        : (<a href="about:blank" data-idx={idx} onClick={moveUp}><Icon>arrow_upward</Icon></a>);
-      const downLink = (idx === tabs.length - 1)
-        ? null
-        : (<a href="about:blank" data-idx={idx} onClick={moveDown}><Icon>arrow_downward</Icon></a>);
-      rows.push(
-        <tr key={idx}>
-          <td>
-            <a href={tab.url}>
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <Icon style={{ marginRight: 5 }}>{tab.icon}</Icon> {tab.text}
-              </Box>
-            </a>
-          </td>
-          <td style={{ textAlign: "right" }}>
-            {upLink}
-            {downLink}
-            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentTab(tab); }}>
-              <Icon>edit</Icon>
-            </a>
-          </td>
-        </tr>
-      );
-      idx++;
-    });
-    return rows;
+  const handleEdit = (tab: B1LinkInterface) => {
+    setCurrentTab(tab);
   };
 
-  const editContent = (
-    <a href="about:blank" onClick={handleAdd}>
-      <Icon>add</Icon>
-    </a>
+  const renderTabItem = (tab: B1LinkInterface, index: number) => (
+    <React.Fragment key={index}>
+      <ListItem sx={{ py: 2 }}>
+        <ListItemIcon>
+          <Box 
+            sx={{ 
+              backgroundColor: 'primary.main',
+              borderRadius: '8px',
+              p: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white'
+            }}
+          >
+            <TabIcon sx={{ fontSize: 20 }} />
+          </Box>
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+              {tab.text || "Untitled Tab"}
+            </Typography>
+          }
+          secondary={
+            <Typography variant="body2" color="text.secondary">
+              {tab.linkType === 'url' ? tab.url : `${tab.linkType} - ${tab.linkData}`}
+            </Typography>
+          }
+        />
+        <ListItemSecondaryAction>
+          <Stack direction="row" spacing={0.5}>
+            <Tooltip title="Move up" arrow>
+              <span>
+                <IconButton
+                  size="small"
+                  onClick={() => moveUp(index)}
+                  disabled={index === 0}
+                  sx={{ color: 'text.secondary' }}
+                >
+                  <ArrowUpIcon fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="Move down" arrow>
+              <span>
+                <IconButton
+                  size="small"
+                  onClick={() => moveDown(index)}
+                  disabled={index === tabs.length - 1}
+                  sx={{ color: 'text.secondary' }}
+                >
+                  <ArrowDownIcon fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Tooltip title="Edit tab" arrow>
+              <IconButton
+                size="small"
+                onClick={() => handleEdit(tab)}
+                sx={{ color: 'primary.main' }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        </ListItemSecondaryAction>
+      </ListItem>
+      {index < tabs.length - 1 && <Divider />}
+    </React.Fragment>
   );
 
   useEffect(loadData, []);
@@ -102,10 +163,43 @@ export function Tabs({ updatedFunction = () => {} }: Props) {
   }
 
   return (
-    <DisplayBox headerIcon="folder" headerText="Tabs" editContent={editContent}>
-      <table className="table">
-        <tbody>{getRows()}</tbody>
-      </table>
-    </DisplayBox>
+    <CardWithHeader
+      title="Navigation Tabs"
+      icon={<TabIcon />}
+      actions={
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleAdd}
+          size="small"
+          sx={{ textTransform: 'none' }}
+        >
+          Add Tab
+        </Button>
+      }
+    >
+      {tabs.length === 0 ? (
+        <EmptyState
+          icon={<TabIcon />}
+          title="No navigation tabs"
+          description="Create your first navigation tab to get started with your mobile app."
+          action={
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={handleAdd}
+              sx={{ textTransform: 'none' }}
+            >
+              Add First Tab
+            </Button>
+          }
+          variant="card"
+        />
+      ) : (
+        <List sx={{ p: 0 }}>
+          {tabs.map((tab, index) => renderTabItem(tab, index))}
+        </List>
+      )}
+    </CardWithHeader>
   );
 }
