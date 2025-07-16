@@ -261,9 +261,9 @@ export function PageEdit(props: Props) {
                       elevation={0}
                       sx={{
                         p: 2.5,
-                        backgroundColor: 'success.light',
+                        backgroundColor: 'grey.50',
                         border: '1px solid',
-                        borderColor: 'success.main',
+                        borderColor: 'grey.200',
                         borderRadius: 2,
                         position: 'relative'
                       }}
@@ -272,10 +272,10 @@ export function PageEdit(props: Props) {
                         <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flex: 1 }}>
                           <CheckCircleIcon sx={{ color: 'success.main', fontSize: 22 }} />
                           <Box sx={{ flex: 1 }}>
-                            <Typography variant="body1" sx={{ fontWeight: 600, color: 'success.dark' }}>
+                            <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary' }}>
                               {page.url}
                             </Typography>
-                            <Typography variant="caption" sx={{ color: 'success.dark', opacity: 0.8 }}>
+                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                             URL path validated and ready to use
                             </Typography>
                           </Box>
@@ -285,8 +285,8 @@ export function PageEdit(props: Props) {
                             size="small"
                             onClick={() => window.open(`https://${UserHelper.currentUserChurch.church.subDomain}.b1.church${page.url}`, '_blank')}
                             sx={{
-                              color: 'success.main',
-                              '&:hover': { backgroundColor: 'success.light' }
+                              color: 'primary.main',
+                              '&:hover': { backgroundColor: 'primary.light' }
                             }}
                           >
                             <LaunchIcon sx={{ fontSize: 18 }} />
@@ -541,6 +541,7 @@ export function PageEdit(props: Props) {
                 <Button
                   variant="outlined"
                   size="medium"
+                  color="error"
                   startIcon={<CancelIcon />}
                   onClick={handleCancel}
                   sx={{
@@ -548,11 +549,12 @@ export function PageEdit(props: Props) {
                     fontWeight: 500,
                     borderRadius: 2,
                     minWidth: 100,
-                    color: 'text.secondary',
-                    borderColor: 'grey.300',
+                    borderColor: 'error.main',
+                    color: 'error.main',
                     '&:hover': {
-                      borderColor: 'grey.400',
-                      backgroundColor: 'grey.50'
+                      borderColor: 'error.dark',
+                      backgroundColor: 'error.main',
+                      color: 'white'
                     }
                   }}
                 >
