@@ -208,7 +208,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
               <VideoCallIcon sx={{ color: 'primary.main', fontSize: 20 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+              <Typography variant="h6" sx={{ color: 'primary.main' }}>
                 Basic Information
               </Typography>
             </Stack>
@@ -292,7 +292,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
               <ChatIcon sx={{ color: 'primary.main', fontSize: 20 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+              <Typography variant="h6" sx={{ color: 'primary.main' }}>
                 Chat Settings
               </Typography>
             </Stack>
@@ -361,7 +361,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
               <PlayCircleIcon sx={{ color: 'primary.main', fontSize: 20 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+              <Typography variant="h6" sx={{ color: 'primary.main' }}>
                 Video Settings
               </Typography>
             </Stack>
