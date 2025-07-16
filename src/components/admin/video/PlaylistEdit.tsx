@@ -106,7 +106,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
         <Grid size={12}>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
             <TitleIcon sx={{ color: 'primary.main', fontSize: 20 }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+            <Typography variant="h6" sx={{ color: 'primary.main' }}>
               Basic Information
             </Typography>
           </Stack>
@@ -154,7 +154,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
           
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
             <CalendarIcon sx={{ color: 'primary.main', fontSize: 20 }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+            <Typography variant="h6" sx={{ color: 'primary.main' }}>
               Publishing & Schedule
             </Typography>
           </Stack>
@@ -179,7 +179,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
           
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
             <PhotoCameraIcon sx={{ color: 'primary.main', fontSize: 20 }} />
-            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+            <Typography variant="h6" sx={{ color: 'primary.main' }}>
               Thumbnail Image
             </Typography>
           </Stack>
