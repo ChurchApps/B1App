@@ -57,7 +57,7 @@ export function EmbeddablePages(props:Props) {
   // Loading state
   if (loading) {
     return (
-      <Card sx={{ 
+      <Card sx={{
         borderRadius: 2,
         border: '1px solid',
         borderColor: 'grey.200'
@@ -84,7 +84,7 @@ export function EmbeddablePages(props:Props) {
   // Empty state
   if (pages.length === 0) {
     return (
-      <Card sx={{ 
+      <Card sx={{
         borderRadius: 2,
         border: '1px solid',
         borderColor: 'grey.200'
@@ -111,7 +111,7 @@ export function EmbeddablePages(props:Props) {
             startIcon={<AddIcon />}
             size="large"
             onClick={handleAddPage}
-            sx={{ 
+            sx={{
               textTransform: 'none',
               borderRadius: 2,
               fontWeight: 600

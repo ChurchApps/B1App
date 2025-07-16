@@ -1,17 +1,17 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { 
-  Typography, 
-  Button, 
-  Stack, 
-  TextField, 
-  FormControl, 
-  Icon, 
-  InputLabel, 
-  Select, 
-  MenuItem, 
-  Dialog, 
-  SelectChangeEvent, 
+import {
+  Typography,
+  Button,
+  Stack,
+  TextField,
+  FormControl,
+  Icon,
+  InputLabel,
+  Select,
+  MenuItem,
+  Dialog,
+  SelectChangeEvent,
   Box,
   Card,
   CardContent,
@@ -19,7 +19,7 @@ import {
   IconButton,
   Grid
 } from "@mui/material";
-import { 
+import {
   Save as SaveIcon,
   Cancel as CancelIcon,
   Delete as DeleteIcon,
@@ -205,7 +205,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
                 <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
                   Tab Settings
                 </Typography>
-                
+
                 <Stack spacing={3}>
                   {/* Tab Name and Icon */}
                   <TextField
@@ -291,7 +291,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
       <Dialog open={isModalOpen} maxWidth="md" fullWidth>
         <IconPicker onSelect={onSelect} />
       </Dialog>
-      
+
       {showLibrary && (
         <GalleryModal
           onClose={() => setShowLibrary(false)}

@@ -142,18 +142,18 @@ export function Tabs({ onSelected = () => {}, refreshKey = 0 }: Props) {
     >
       {tabs.length === 0
         ? (
-            <EmptyState
-              icon={<TabIcon />}
-              title="No navigation tabs"
-              description="Create your first navigation tab to get started with your mobile app."
-              variant="card"
-            />
-          )
+          <EmptyState
+            icon={<TabIcon />}
+            title="No navigation tabs"
+            description="Create your first navigation tab to get started with your mobile app."
+            variant="card"
+          />
+        )
         : (
-            <List sx={{ p: 0 }}>
-              {tabs.map((tab, index) => renderTabItem(tab, index))}
-            </List>
-          )}
+          <List sx={{ p: 0 }}>
+            {tabs.map((tab, index) => renderTabItem(tab, index))}
+          </List>
+        )}
     </CardWithHeader>
   );
 }

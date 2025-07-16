@@ -140,7 +140,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
                 sx={{
                   color: 'var(--c1)',
                   backgroundColor: 'var(--c1l7)',
-                  '&:hover': { 
+                  '&:hover': {
                     backgroundColor: 'var(--c1l6)',
                     transform: 'translateY(-1px)'
                   },
@@ -161,7 +161,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
                 sx={{
                   color: 'var(--c1)',
                   backgroundColor: 'var(--c1l7)',
-                  '&:hover': { 
+                  '&:hover': {
                     backgroundColor: 'var(--c1l6)',
                     transform: 'translateY(-1px)'
                   },

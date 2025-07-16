@@ -8,7 +8,7 @@ import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { PageInterface } from "@/helpers";
 import { PageEdit } from "@/components/admin/PageEdit";
-import { Box, Grid, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { Article as ArticleIcon, Add as AddIcon, Visibility as VisibilityIcon } from "@mui/icons-material";
 import { EmbeddablePages } from "@/components/admin/EmbeddablePages";
 

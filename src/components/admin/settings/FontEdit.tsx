@@ -146,21 +146,21 @@ export function FontsEdit(props: Props) {
   return (
     <Box sx={{ maxWidth: 1200 }}>
       {getFont()}
-      
+
       {/* Header */}
-      <Box sx={{ 
-        backgroundColor: 'var(--c1l2)', 
-        color: '#FFF', 
-        p: 3, 
+      <Box sx={{
+        backgroundColor: 'var(--c1l2)',
+        color: '#FFF',
+        p: 3,
         borderRadius: '12px 12px 0 0',
         mb: 0
       }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Stack direction="row" spacing={2} alignItems="center">
-            <Box 
-              sx={{ 
-                backgroundColor: 'rgba(255,255,255,0.2)', 
-                borderRadius: '8px', 
+            <Box
+              sx={{
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: '8px',
                 p: 1,
                 display: 'flex',
                 alignItems: 'center',
@@ -229,8 +229,8 @@ export function FontsEdit(props: Props) {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   Used for titles, headings, and emphasis text
                 </Typography>
-                <Button 
-                  variant="outlined" 
+                <Button
+                  variant="outlined"
                   onClick={() => setShowFont("heading")}
                   data-testid="heading-font-button"
                   startIcon={<FormatSizeIcon />}
@@ -255,8 +255,8 @@ export function FontsEdit(props: Props) {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   Used for paragraphs, descriptions, and body text
                 </Typography>
-                <Button 
-                  variant="outlined" 
+                <Button
+                  variant="outlined"
                   onClick={() => setShowFont("body")}
                   data-testid="body-font-button"
                   startIcon={<TextFieldsIcon />}
@@ -283,9 +283,9 @@ export function FontsEdit(props: Props) {
             icon={<VisibilityIcon />}
           >
             <Box sx={{ p: 3, backgroundColor: alpha('#f5f5f5', 0.3), borderRadius: 2 }}>
-              <Typography 
-                variant="h4" 
-                sx={{ 
+              <Typography
+                variant="h4"
+                sx={{
                   fontFamily: fonts?.heading || 'Roboto',
                   fontWeight: 600,
                   mb: 2,
@@ -294,9 +294,9 @@ export function FontsEdit(props: Props) {
               >
                 Main Heading Preview
               </Typography>
-              <Typography 
-                variant="body1" 
-                sx={{ 
+              <Typography
+                variant="body1"
+                sx={{
                   fontFamily: fonts?.body || 'Roboto',
                   mb: 3,
                   lineHeight: 1.6,
@@ -305,9 +305,9 @@ export function FontsEdit(props: Props) {
               >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus urna neque viverra justo nec ultrices dui sapien. Faucibus pulvinar elementum integer enim neque volutpat ac tincidunt.
               </Typography>
-              <Typography 
-                variant="h6" 
-                sx={{ 
+              <Typography
+                variant="h6"
+                sx={{
                   fontFamily: fonts?.heading || 'Roboto',
                   fontWeight: 600,
                   mb: 2,
@@ -316,9 +316,9 @@ export function FontsEdit(props: Props) {
               >
                 Secondary Heading
               </Typography>
-              <Typography 
-                variant="body1" 
-                sx={{ 
+              <Typography
+                variant="body1"
+                sx={{
                   fontFamily: fonts?.body || 'Roboto',
                   lineHeight: 1.6,
                   color: 'text.primary'

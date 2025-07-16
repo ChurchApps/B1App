@@ -1,22 +1,22 @@
 "use client";
 import React from "react";
-import { 
-  TextField, 
-  SelectChangeEvent, 
-  Grid, 
-  Typography, 
-  Card, 
-  CardContent, 
-  Box, 
-  Button, 
-  Stack, 
-  Divider 
+import {
+  TextField,
+  SelectChangeEvent,
+  Grid,
+  Typography,
+  Card,
+  CardContent,
+  Box,
+  Button,
+  Stack,
+  Divider
 } from "@mui/material";
-import { 
-  PhotoCamera as PhotoCameraIcon, 
-  CalendarMonth as CalendarIcon, 
-  Title as TitleIcon, 
-  Description as DescriptionIcon 
+import {
+  PhotoCamera as PhotoCameraIcon,
+  CalendarMonth as CalendarIcon,
+  Title as TitleIcon,
+  Description as DescriptionIcon
 } from "@mui/icons-material";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
@@ -90,17 +90,17 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
   React.useEffect(handlePhotoUpdated, [props.updatedPhoto, currentPlaylist]); //eslint-disable-line
 
   return (
-    <InputBox 
-      headerIcon="calendar_month" 
-      headerText={UniqueIdHelper.isMissing(currentPlaylist?.id) ? "Create New Playlist" : "Edit Playlist"} 
-      saveFunction={handleSave} 
-      cancelFunction={handleCancel} 
-      deleteFunction={checkDelete()} 
-      help="b1/streaming/playlists" 
+    <InputBox
+      headerIcon="calendar_month"
+      headerText={UniqueIdHelper.isMissing(currentPlaylist?.id) ? "Create New Playlist" : "Edit Playlist"}
+      saveFunction={handleSave}
+      cancelFunction={handleCancel}
+      deleteFunction={checkDelete()}
+      help="b1/streaming/playlists"
       data-testid="edit-playlist-inputbox"
     >
       <ErrorMessages errors={errors} />
-      
+
       <Grid container spacing={3}>
         {/* Basic Information Section */}
         <Grid size={12}>
@@ -110,31 +110,31 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
               Basic Information
             </Typography>
           </Stack>
-          
+
           <Grid container spacing={2}>
             <Grid size={12}>
-              <TextField 
-                fullWidth 
-                label="Playlist Title" 
-                name="title" 
-                value={currentPlaylist?.title || ""} 
-                onChange={handleChange} 
+              <TextField
+                fullWidth
+                label="Playlist Title"
+                name="title"
+                value={currentPlaylist?.title || ""}
+                onChange={handleChange}
                 data-testid="playlist-title-input"
                 variant="outlined"
                 placeholder="Enter playlist title..."
                 sx={{ mb: 2 }}
               />
             </Grid>
-            
+
             <Grid size={12}>
-              <TextField 
-                fullWidth 
-                multiline 
+              <TextField
+                fullWidth
+                multiline
                 rows={3}
-                label="Description" 
-                name="description" 
-                value={currentPlaylist?.description || ""} 
-                onChange={handleChange} 
+                label="Description"
+                name="description"
+                value={currentPlaylist?.description || ""}
+                onChange={handleChange}
                 data-testid="playlist-description-input"
                 variant="outlined"
                 placeholder="Describe this playlist..."
@@ -151,21 +151,21 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
         {/* Publishing & Schedule Section */}
         <Grid size={12}>
           <Divider sx={{ my: 2 }} />
-          
+
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
             <CalendarIcon sx={{ color: 'primary.main', fontSize: 20 }} />
             <Typography variant="h6" sx={{ color: 'primary.main' }}>
               Publishing & Schedule
             </Typography>
           </Stack>
-          
-          <TextField 
+
+          <TextField
             fullWidth
-            type="date" 
+            type="date"
             label="Publish Date"
-            name="publishDate" 
-            value={(currentPlaylist?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentPlaylist?.publishDate)) : ""} 
-            onChange={handleChange} 
+            name="publishDate"
+            value={(currentPlaylist?.publishDate) ? DateHelper.formatHtml5Date(DateHelper.toDate(currentPlaylist?.publishDate)) : ""}
+            onChange={handleChange}
             data-testid="playlist-publish-date-input"
             variant="outlined"
             InputLabelProps={{ shrink: true }}
@@ -176,16 +176,16 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
         {/* Thumbnail Section */}
         <Grid size={12}>
           <Divider sx={{ my: 2 }} />
-          
+
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
             <PhotoCameraIcon sx={{ color: 'primary.main', fontSize: 20 }} />
             <Typography variant="h6" sx={{ color: 'primary.main' }}>
               Thumbnail Image
             </Typography>
           </Stack>
-          
-          <Card 
-            sx={{ 
+
+          <Card
+            sx={{
               borderRadius: 2,
               border: '1px solid',
               borderColor: 'grey.200',
@@ -198,8 +198,8 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
           >
             <CardContent sx={{ p: 2 }}>
               <Stack spacing={2}>
-                <Box 
-                  sx={{ 
+                <Box
+                  sx={{
                     position: 'relative',
                     display: 'flex',
                     justifyContent: 'center',
@@ -212,24 +212,24 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
                     overflow: 'hidden'
                   }}
                 >
-                  <img 
-                    src={currentPlaylist?.thumbnail || "/images/no-image.png"} 
+                  <img
+                    src={currentPlaylist?.thumbnail || "/images/no-image.png"}
                     alt="Playlist thumbnail"
-                    style={{ 
-                      maxWidth: '100%', 
+                    style={{
+                      maxWidth: '100%',
                       maxHeight: '200px',
                       objectFit: 'contain',
                       borderRadius: '4px'
                     }}
                   />
                 </Box>
-                
+
                 <Button
                   variant="outlined"
                   startIcon={<PhotoCameraIcon />}
-                  onClick={(e) => { 
-                    e.preventDefault(); 
-                    props.showPhotoEditor("playlist", currentPlaylist?.thumbnail || ""); 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    props.showPhotoEditor("playlist", currentPlaylist?.thumbnail || "");
                   }}
                   sx={{
                     textTransform: 'none',
@@ -243,7 +243,7 @@ export const PlaylistEdit: React.FC<Props> = (props) => {
                 >
                   {currentPlaylist?.thumbnail ? 'Change Thumbnail' : 'Add Thumbnail'}
                 </Button>
-                
+
                 <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
                   Recommended size: 1280x720 pixels (16:9 aspect ratio)
                 </Typography>

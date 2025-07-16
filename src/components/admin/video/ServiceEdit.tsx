@@ -1,12 +1,12 @@
 "use client";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { 
-  Grid, 
-  InputLabel, 
-  MenuItem, 
-  Select, 
-  TextField, 
-  FormControl, 
+import {
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  FormControl,
   SelectChangeEvent,
   Box,
   Stack,
@@ -16,7 +16,7 @@ import {
   InputAdornment,
   Alert
 } from "@mui/material";
-import { 
+import {
   VideoCall as VideoCallIcon,
   Schedule as ScheduleIcon,
   Chat as ChatIcon,
@@ -112,19 +112,19 @@ export const ServiceEdit: React.FC<Props> = (props) => {
 
   const validateForm = (): boolean => {
     const errors: string[] = [];
-    
+
     if (!currentService?.label?.trim()) {
       errors.push("Service name is required");
     }
-    
+
     if (!currentService?.serviceTime) {
       errors.push("Service time is required");
     }
-    
+
     if (currentService?.provider && !currentService?.providerKey?.trim()) {
       errors.push("Provider key is required when a video provider is selected");
     }
-    
+
     setValidationErrors(errors);
     return errors.length === 0;
   };
@@ -133,7 +133,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
     if (!validateForm()) {
       return;
     }
-    
+
     setVideoUrl();
     ApiHelper.post("/streamingServices", [currentService], "ContentApi").then(props.updatedFunction);
   }
@@ -177,7 +177,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
     let chatAndPrayerStartTime = currentService?.serviceTime?.getTime() - currentService?.chatBefore * 1000;
     let chatAndPrayerEndTime = currentService?.serviceTime?.getTime() + currentService?.chatAfter * 1000;
     let earlyStartTime = currentService?.serviceTime?.getTime() - currentService?.earlyStart * 1000;
-    
+
     return (
       <InputBox
         headerIcon="video_settings"

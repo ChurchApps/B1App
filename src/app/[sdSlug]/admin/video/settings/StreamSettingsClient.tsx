@@ -46,18 +46,18 @@ export function StreamSettingsClient(props: WrapperPageProps) {
     <AdminWrapper config={props.config}>
       {/* Modern Header */}
       <Box sx={{ backgroundColor: "var(--c1l2)", color: "#FFF", padding: "24px" }}>
-        <Stack 
-          direction={{ xs: "column", md: "row" }} 
-          spacing={{ xs: 2, md: 4 }} 
-          alignItems={{ xs: "flex-start", md: "center" }} 
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={{ xs: 2, md: 4 }}
+          alignItems={{ xs: "flex-start", md: "center" }}
           sx={{ width: "100%" }}
         >
           {/* Left side: Title and Icon */}
           <Stack direction="row" spacing={2} alignItems="center" sx={{ flex: 1 }}>
-            <Box 
-              sx={{ 
-                backgroundColor: 'rgba(255,255,255,0.2)', 
-                borderRadius: '12px', 
+            <Box
+              sx={{
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: '12px',
                 p: 1.5,
                 display: 'flex',
                 alignItems: 'center',
@@ -67,19 +67,19 @@ export function StreamSettingsClient(props: WrapperPageProps) {
               <LiveTvIcon sx={{ fontSize: 32, color: '#FFF' }} />
             </Box>
             <Box>
-              <Typography 
-                variant="h4" 
-                sx={{ 
-                  fontWeight: 600, 
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: 600,
                   mb: 0.5,
                   fontSize: { xs: '1.75rem', md: '2.125rem' }
                 }}
               >
                 Stream Settings
               </Typography>
-              <Typography 
-                variant="body1" 
-                sx={{ 
+              <Typography
+                variant="body1"
+                sx={{
                   color: 'rgba(255,255,255,0.9)',
                   fontSize: { xs: '0.875rem', md: '1rem' }
                 }}
@@ -88,12 +88,12 @@ export function StreamSettingsClient(props: WrapperPageProps) {
               </Typography>
             </Box>
           </Stack>
-          
+
           {/* Right side: Tab Navigation */}
-          <Stack 
-            direction="row" 
-            spacing={1} 
-            sx={{ 
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
               flexShrink: 0,
               justifyContent: { xs: "flex-start", md: "flex-end" },
               width: { xs: "100%", md: "auto" }
@@ -127,13 +127,13 @@ export function StreamSettingsClient(props: WrapperPageProps) {
         {selectedTab === "pages" && editPage ? (
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, md: 8 }}>
-              <PageEdit 
-                page={editPage} 
+              <PageEdit
+                page={editPage}
                 updatedCallback={() => {
                   setEditPage(null);
                   setRefreshKey(Math.random());
-                }} 
-                embedded={true} 
+                }}
+                embedded={true}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>

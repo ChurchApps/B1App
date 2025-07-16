@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { 
-  TextField, 
-  Box, 
-  Typography, 
+import {
+  TextField,
+  Box,
+  Typography,
   Stack,
   Button,
   Alert,
@@ -10,7 +10,7 @@ import {
   AccordionSummary,
   AccordionDetails
 } from "@mui/material";
-import { 
+import {
   Code as CodeIcon,
   Info as InfoIcon,
   Warning as WarningIcon,
@@ -109,19 +109,19 @@ a:hover {
   return (
     <Box sx={{ maxWidth: 1200 }}>
       {/* Header */}
-      <Box sx={{ 
-        backgroundColor: 'var(--c1l2)', 
-        color: '#FFF', 
-        p: 3, 
+      <Box sx={{
+        backgroundColor: 'var(--c1l2)',
+        color: '#FFF',
+        p: 3,
         borderRadius: '12px 12px 0 0',
         mb: 0
       }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Stack direction="row" spacing={2} alignItems="center">
-            <Box 
-              sx={{ 
-                backgroundColor: 'rgba(255,255,255,0.2)', 
-                borderRadius: '8px', 
+            <Box
+              sx={{
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: '8px',
                 p: 1,
                 display: 'flex',
                 alignItems: 'center',
@@ -176,13 +176,13 @@ a:hover {
       {/* Content */}
       <Box sx={{ p: 3, backgroundColor: '#FFF', borderRadius: '0 0 12px 12px', border: '1px solid', borderColor: 'grey.200', borderTop: 'none' }}>
         {/* Warning Alert */}
-        <Alert 
-          severity="warning" 
+        <Alert
+          severity="warning"
           icon={<WarningIcon />}
           sx={{ mb: 3 }}
         >
           <Typography variant="body2">
-            <strong>Advanced Feature:</strong> Custom CSS and JavaScript can affect your site's functionality. 
+            <strong>Advanced Feature:</strong> Custom CSS and JavaScript can affect your site's functionality.
             Please test changes thoroughly and ensure you have a backup of your current settings.
           </Typography>
         </Alert>
@@ -197,14 +197,14 @@ a:hover {
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 Add custom CSS to override default styles or create new styling rules.
               </Typography>
-              <TextField 
-                multiline 
-                rows={8} 
-                label="Custom CSS" 
-                name="css" 
-                value={globalStyle?.customCss || ""} 
-                onChange={handleChange} 
-                fullWidth 
+              <TextField
+                multiline
+                rows={8}
+                label="Custom CSS"
+                name="css"
+                value={globalStyle?.customCss || ""}
+                onChange={handleChange}
+                fullWidth
                 placeholder={`/* Add your custom CSS here */
 a {
   color: #1976d2;
@@ -221,7 +221,7 @@ a {
                 }}
               />
             </Box>
-            
+
             {/* CSS Examples */}
             <Box>
               <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 2 }}>
@@ -236,17 +236,17 @@ a {
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Box sx={{ 
-                        backgroundColor: '#f8f9fa', 
-                        p: 2, 
+                      <Box sx={{
+                        backgroundColor: '#f8f9fa',
+                        p: 2,
                         borderRadius: 1,
                         border: '1px solid',
                         borderColor: 'grey.200'
                       }}>
-                        <Typography 
-                          variant="body2" 
-                          component="pre" 
-                          sx={{ 
+                        <Typography
+                          variant="body2"
+                          component="pre"
+                          sx={{
                             fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
                             fontSize: '0.75rem',
                             margin: 0,
@@ -276,14 +276,14 @@ a {
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                   Add custom JavaScript code or third-party scripts like Google Analytics.
                 </Typography>
-                <TextField 
-                  multiline 
-                  rows={8} 
-                  label="Custom JavaScript" 
-                  name="js" 
-                  value={globalStyle?.customJS || ""} 
-                  onChange={handleChange} 
-                  fullWidth 
+                <TextField
+                  multiline
+                  rows={8}
+                  label="Custom JavaScript"
+                  name="js"
+                  value={globalStyle?.customJS || ""}
+                  onChange={handleChange}
+                  fullWidth
                   placeholder={`<!-- Add your custom JavaScript here -->
 <script>
   // Your JavaScript code
@@ -297,7 +297,7 @@ a {
                   }}
                 />
               </Box>
-              
+
               {/* JavaScript Examples */}
               <Box>
                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 2 }}>
@@ -312,17 +312,17 @@ a {
                         </Typography>
                       </AccordionSummary>
                       <AccordionDetails>
-                        <Box sx={{ 
-                          backgroundColor: '#f8f9fa', 
-                          p: 2, 
+                        <Box sx={{
+                          backgroundColor: '#f8f9fa',
+                          p: 2,
                           borderRadius: 1,
                           border: '1px solid',
                           borderColor: 'grey.200'
                         }}>
-                          <Typography 
-                            variant="body2" 
-                            component="pre" 
-                            sx={{ 
+                          <Typography
+                            variant="body2"
+                            component="pre"
+                            sx={{
                               fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
                               fontSize: '0.75rem',
                               margin: 0,
@@ -343,13 +343,13 @@ a {
         </Box>
 
         {/* Info Alert */}
-        <Alert 
-          severity="info" 
+        <Alert
+          severity="info"
           icon={<InfoIcon />}
           sx={{ mt: 3 }}
         >
           <Typography variant="body2">
-            <strong>Pro Tip:</strong> Use your browser's developer tools (F12) to test CSS changes before applying them here. 
+            <strong>Pro Tip:</strong> Use your browser's developer tools (F12) to test CSS changes before applying them here.
             JavaScript code will be added to every page of your site.
           </Typography>
         </Alert>
