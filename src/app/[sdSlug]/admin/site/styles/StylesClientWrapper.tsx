@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import Head from 'next/head';
 import { Grid, Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import {
   Palette as PaletteIcon,
@@ -129,10 +128,6 @@ export function StylesClientWrapper(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato&family=Montserrat:wght@400&family=Open+Sans:wght@400&family=Oswald:wght@400&family=Playfair+Display:wght@400&family=Poppins:wght@400&family=Raleway:wght@400&family=Roboto:wght@400&display=swap" rel="stylesheet" />
-      </Head>
 
       <PageHeader
         icon={<StyleIcon />}

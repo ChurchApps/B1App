@@ -177,7 +177,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
       >
         <Grid container spacing={3}>
           {/* Tab Preview */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card sx={{ border: '1px solid', borderColor: 'grey.200' }}>
               <CardContent>
                 <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
@@ -199,7 +199,7 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
           </Grid>
 
           {/* Tab Settings */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card sx={{ border: '1px solid', borderColor: 'grey.200' }}>
               <CardContent>
                 <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>

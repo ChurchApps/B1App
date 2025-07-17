@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
@@ -28,7 +28,7 @@ import {
 import Link from "next/link";
 import { BlockEdit } from "@/components/admin/BlockEdit";
 
-type PageParams = {sdSlug:string }
+type PageParams = { sdSlug: string }
 
 export default function AdminPagesClient() {
   const [config, setConfig] = useState<ConfigurationInterface>(null);
@@ -44,7 +44,7 @@ export default function AdminPagesClient() {
       ApiHelper.get("/blocks", "ContentApi")
     ]).then(([configData, blocksData]) => {
       setConfig(configData);
-      const filtered = blocksData.filter((block:BlockInterface) => block.blockType !== "footerBlock");
+      const filtered = blocksData.filter((block: BlockInterface) => block.blockType !== "footerBlock");
       setBlocks(filtered || []);
       setLoading(false);
     });

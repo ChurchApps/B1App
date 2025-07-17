@@ -24,7 +24,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ icon, title, subtitle, c
             justifyContent: "center",
           }}
         >
-          {React.cloneElement(icon as React.ReactElement, { sx: { fontSize: 32, color: "#FFF" } })}
+          {React.isValidElement(icon) && React.cloneElement(icon as React.ReactElement<any>, { sx: { fontSize: 32, color: "#FFF" } })}
         </Box>
         <Box>
           <Typography
@@ -72,7 +72,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ icon, title, subtitle, c
       <Stack direction={{ xs: "column", sm: "row" }} spacing={3} sx={{ mt: 3 }}>
         {statistics.map((stat, index) => (
           <Stack key={index} direction="row" spacing={1} alignItems="center">
-            {React.cloneElement(stat.icon as React.ReactElement, { sx: { color: "#FFF", fontSize: 20 } })}
+            {React.isValidElement(stat.icon) && React.cloneElement(stat.icon as React.ReactElement<any>, { sx: { color: "#FFF", fontSize: 20 } })}
             <Typography variant="h6" sx={{ color: "#FFF", fontWeight: 600, mr: 1 }}>
               {stat.value}
             </Typography>

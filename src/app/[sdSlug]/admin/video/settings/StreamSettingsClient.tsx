@@ -124,27 +124,29 @@ export function StreamSettingsClient(props: WrapperPageProps) {
 
       {/* Content Area */}
       <Box sx={{ p: 3 }}>
-        {selectedTab === "pages" && editPage ? (
-          <PageEdit
-            page={editPage}
-            updatedCallback={() => {
-              setEditPage(null);
-              setRefreshKey(Math.random());
-            }}
-            embedded={true}
-          />
-        ) : (
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12, md: selectedTab === "settings" ? 8 : 12 }}>
-              {getCurrentTabContent()}
-            </Grid>
-            {selectedTab === "settings" && (
-              <Grid size={{ xs: 12, md: 4 }}>
-                {/* Settings sidebar content */}
+        {selectedTab === "pages" && editPage
+          ? (
+            <PageEdit
+              page={editPage}
+              updatedCallback={() => {
+                setEditPage(null);
+                setRefreshKey(Math.random());
+              }}
+              embedded={true}
+            />
+          )
+          : (
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 12, md: selectedTab === "settings" ? 8 : 12 }}>
+                {getCurrentTabContent()}
               </Grid>
-            )}
-          </Grid>
-        )}
+              {selectedTab === "settings" && (
+                <Grid size={{ xs: 12, md: 4 }}>
+                  {/* Settings sidebar content */}
+                </Grid>
+              )}
+            </Grid>
+          )}
       </Box>
     </AdminWrapper>
   );
