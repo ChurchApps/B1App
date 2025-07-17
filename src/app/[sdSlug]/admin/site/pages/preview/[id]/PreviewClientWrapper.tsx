@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import { ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import type { LinkInterface } from "@churchapps/helpers";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
-import { Grid } from "@mui/material";
+import { Box, Button, Stack, Typography, Paper } from "@mui/material";
 import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Edit as EditIcon, Settings as SettingsIcon, Web as WebIcon } from "@mui/icons-material";
 
 interface Props extends WrapperPageProps {
   pageData: any;
@@ -43,26 +43,91 @@ export function PreviewClientWrapper(props: Props) {
 
   return (
     <AdminWrapper config={props.config}>
-      <Banner><h1>Website</h1></Banner>
+      <PageHeader
+        icon={<WebIcon />}
+        title="Website Preview"
+        subtitle={`Previewing: ${props.pageData.title}`}
+      >
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ width: { xs: '100%', sm: 'auto' } }}>
+          <Button
+            variant="outlined"
+            startIcon={<EditIcon />}
+            onClick={() => redirect("/admin/site/pages/" + props.pageData.id)}
+            sx={{
+              color: '#FFF',
+              borderColor: 'rgba(255,255,255,0.5)',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                borderColor: '#FFF',
+                backgroundColor: 'rgba(255,255,255,0.1)'
+              }
+            }}
+          >
+            Edit Content
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<SettingsIcon />}
+            onClick={() => setShowSettings(true)}
+            sx={{
+              color: '#FFF',
+              borderColor: 'rgba(255,255,255,0.5)',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                borderColor: '#FFF',
+                backgroundColor: 'rgba(255,255,255,0.1)'
+              }
+            }}
+          >
+            Page Settings
+          </Button>
+        </Stack>
+      </PageHeader>
+
       <SiteAdminWrapper config={props.config}>
         {showSettings && <PageLinkEdit link={link} page={props.pageData} updatedCallback={handlePageUpdated} onDone={() => setShowSettings(false)} />}
-        <div style={{ marginLeft: -22 }}>
-          <div style={{ background: "#FFF", padding: 15 }}>
-            <Grid container>
-              <Grid size={{ xs: 3 }}>
-                <SmallButton icon="edit" text="Edit Content" onClick={() => redirect("/admin/site/pages/" + props.pageData.id)} />
-              </Grid>
-              <Grid size={{ xs: 6 }} style={{ textAlign: "center" }}>
-                <b>{props.pageData.title}</b>
-                <br />
-              </Grid>
-              <Grid size={{ xs: 3 }} style={{ textAlign: "right" }}>
-                <SmallButton icon="settings" text="Page Settings" onClick={() => setShowSettings(true)} />
-              </Grid>
-            </Grid>
-          </div>
-          <iframe src={url} style={{ width: "100%", height: "100vh" }} />
-        </div>
+
+        <Box sx={{ p: 3 }}>
+          <Paper
+            elevation={0}
+            sx={{
+              borderRadius: 2,
+              overflow: 'hidden',
+              border: '1px solid',
+              borderColor: 'grey.200'
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: 'grey.50',
+                p: 2,
+                borderBottom: '1px solid',
+                borderColor: 'divider'
+              }}
+            >
+              <Stack direction="row" alignItems="center" justifyContent="center">
+                <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                  {props.pageData.title}
+                </Typography>
+              </Stack>
+            </Box>
+
+            <Box sx={{ position: 'relative' }}>
+              <iframe
+                src={url}
+                style={{
+                  width: '100%',
+                  height: '80vh',
+                  minHeight: '600px',
+                  border: 'none',
+                  display: 'block'
+                }}
+              />
+            </Box>
+          </Paper>
+        </Box>
       </SiteAdminWrapper>
     </AdminWrapper>
   );

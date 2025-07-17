@@ -1,20 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BlockInterface, ConfigHelper, GlobalStyleInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import Head from 'next/head';
-import { Grid, Icon, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { Grid, Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import {
+  Palette as PaletteIcon,
+  TextFields as TextFieldsIcon,
+  Code as CodeIcon,
+  Image as ImageIcon,
+  SmartButton as SmartButtonIcon,
+  Style as StyleIcon
+} from "@mui/icons-material";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
 import { PaletteEdit } from "@/components/admin/settings/PaletteEdit";
 import { FontsEdit } from "@/components/admin/settings/FontEdit";
 import { Preview } from "@/components/admin/settings/Preview";
 import { CssEdit } from "@/components/admin/settings/CssEdit";
 import { Appearance } from "@/components/admin/Appearance";
 import { useRouter } from "next/navigation";
+import { PageHeader, CardWithHeader } from "@/components/ui";
 
 
 export function StylesClientWrapper(props: WrapperPageProps) {
@@ -82,16 +89,60 @@ export function StylesClientWrapper(props: WrapperPageProps) {
     }
   }
 
+  const styleOptions = [
+    {
+      id: "palette",
+      icon: <PaletteIcon />,
+      title: "Color Palette",
+      description: "Customize your site's color scheme",
+      action: () => setSection("palette")
+    },
+    {
+      id: "fonts",
+      icon: <TextFieldsIcon />,
+      title: "Fonts",
+      description: "Select and customize typography",
+      action: () => setSection("fonts")
+    },
+    {
+      id: "css",
+      icon: <CodeIcon />,
+      title: "CSS & Javascript",
+      description: "Add custom styles and scripts",
+      action: () => setSection("css")
+    },
+    {
+      id: "logo",
+      icon: <ImageIcon />,
+      title: "Logo",
+      description: "Upload and manage your logo",
+      action: () => setSection("logo")
+    },
+    {
+      id: "footer",
+      icon: <SmartButtonIcon />,
+      title: "Site Footer",
+      description: "Customize your site footer",
+      action: getFooter
+    }
+  ];
+
   return (
     <AdminWrapper config={props.config}>
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Lato&family=Montserrat:wght@400&family=Open+Sans:wght@400&family=Oswald:wght@400&family=Playfair+Display:wght@400&family=Poppins:wght@400&family=Raleway:wght@400&family=Roboto:wght@400&display=swap" rel="stylesheet" />
       </Head>
-      <Banner><h1>Manage Global Styles</h1></Banner>
-      <div id="mainContent">
+
+      <PageHeader
+        icon={<StyleIcon />}
+        title="Site Styles"
+        subtitle="Below is a preview of a sample site with your colors, fonts and logos. This is not your actual site content."
+      />
+
+      <Box sx={{ p: 3 }}>
         <Grid container spacing={3}>
-          <Grid size={{ md: 8, xs: 12 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
             {section === "palette" && <PaletteEdit globalStyle={globalStyle} updatedFunction={handlePaletteUpdate} />}
             {section === "fonts" && <FontsEdit globalStyle={globalStyle} updatedFunction={handleFontsUpdate} />}
             {section === "css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
@@ -100,51 +151,80 @@ export function StylesClientWrapper(props: WrapperPageProps) {
               <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
             )}
           </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
-            <DisplayBox headerIcon="link" headerText="Style Settings" editContent={false}>
-              <Table size="small">
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("palette"); }}>
-                        <Icon sx={{ marginRight: "5px" }}>palette</Icon>Color Palette
-                      </a>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("fonts"); }}>
-                        <Icon sx={{ marginRight: "5px" }}>text_fields</Icon>Fonts
-                      </a>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("css"); }}>
-                        <Icon sx={{ marginRight: "5px" }}>css</Icon>CSS and Javascript
-                      </a>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <a href="#" onClick={(e) => { e.preventDefault(); setSection("logo"); }}>
-                        <Icon sx={{ marginRight: "5px" }}>image</Icon>Logo
-                      </a>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>
-                      <a href="#" onClick={(e) => { e.preventDefault(); getFooter(); }}>
-                        <Icon sx={{ marginRight: "5px" }}>smart_button</Icon>Site Footer
-                      </a>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </DisplayBox>
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <CardWithHeader
+              title="Style Settings"
+              icon={<StyleIcon sx={{ color: 'primary.main' }} />}
+            >
+              <Stack spacing={2}>
+                {styleOptions.map((option) => (
+                  <Card
+                    key={option.id}
+                    sx={{
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease-in-out',
+                      border: '1px solid',
+                      borderColor: section === option.id ? 'primary.main' : 'grey.200',
+                      backgroundColor: section === option.id ? 'primary.50' : 'transparent',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: 2,
+                        borderColor: 'primary.main'
+                      }
+                    }}
+                    onClick={option.action}
+                  >
+                    <CardContent sx={{ p: 2 }}>
+                      <Stack direction="row" spacing={2} alignItems="center">
+                        <Box
+                          sx={{
+                            backgroundColor: section === option.id ? 'primary.main' : 'rgba(25, 118, 210, 0.1)',
+                            borderRadius: '8px',
+                            p: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            minWidth: 40,
+                            height: 40
+                          }}
+                        >
+                          {React.cloneElement(option.icon, {
+                            sx: {
+                              fontSize: 20,
+                              color: section === option.id ? '#FFF' : 'primary.main'
+                            }
+                          })}
+                        </Box>
+                        <Box sx={{ flex: 1 }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              fontWeight: 600,
+                              color: section === option.id ? 'primary.main' : 'text.primary'
+                            }}
+                          >
+                            {option.title}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: 'text.secondary',
+                              fontSize: '0.875rem'
+                            }}
+                          >
+                            {option.description}
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Stack>
+            </CardWithHeader>
           </Grid>
         </Grid>
-      </div>
+      </Box>
     </AdminWrapper>
   );
 }

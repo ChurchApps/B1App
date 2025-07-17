@@ -1,10 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Resizer from "react-image-file-resizer";
+import {
+  Box,
+  Typography,
+  Stack,
+  Button,
+  Card,
+  CardContent,
+  alpha
+} from "@mui/material";
+import {
+  Image as ImageIcon,
+  CloudUpload as CloudUploadIcon,
+  Edit as EditIcon
+} from "@mui/icons-material";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
+import { CardWithHeader, LoadingButton } from "@/components/ui";
 import type { GenericSettingInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -171,62 +185,202 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
     }
   }
 
-  const getLogoLink = (name: string, backgroundColor: string) => {
-    const logoImage = ArrayHelper.getOne(currentSettings, "keyName", name)
-    let logoImg = (currentSettings && logoImage !== null) ? <img src={logoImage.value} alt="logo" style={{ backgroundColor: backgroundColor }} /> : "none";
-    return <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setEditLogo(true); setCurrentEditLogo(name) }}>{logoImg}</a>
+  const getLogoDisplay = (name: string, backgroundColor: string, title: string, description: string) => {
+    const logoImage = ArrayHelper.getOne(currentSettings, "keyName", name);
+    const hasLogo = currentSettings && logoImage !== null && logoImage.value;
+
+    return (
+      <Card sx={{
+        border: '1px solid',
+        borderColor: 'grey.200',
+        borderRadius: 2,
+        overflow: 'hidden',
+        height: '100%'
+      }}>
+        <Box sx={{
+          backgroundColor: backgroundColor,
+          minHeight: 120,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {hasLogo
+            ? (
+              <img
+                src={logoImage.value}
+                alt={title}
+                style={{
+                  maxWidth: '100%',
+                  maxHeight: '100px',
+                  objectFit: 'contain'
+                }}
+              />
+            )
+            : (
+              <Stack alignItems="center" spacing={1} sx={{ color: alpha('#000', 0.4) }}>
+                <ImageIcon sx={{ fontSize: 48 }} />
+                <Typography variant="body2">No image</Typography>
+              </Stack>
+            )}
+        </Box>
+        <CardContent sx={{ p: 2 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+            {title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.875rem' }}>
+            {description}
+          </Typography>
+          <Button
+            variant="outlined"
+            startIcon={hasLogo ? <EditIcon /> : <CloudUploadIcon />}
+            onClick={() => { setEditLogo(true); setCurrentEditLogo(name); }}
+            fullWidth
+            sx={{ textTransform: 'none' }}
+          >
+            {hasLogo ? 'Edit' : 'Upload'} {title}
+          </Button>
+        </CardContent>
+      </Card>
+    );
   }
 
-  const handleSave = () => { setIsSubmitting(true); ApiHelper.post("/settings", currentSettings, "MembershipApi").then(() => { props.updatedFunction(); setIsSubmitting(false); }); }
+  const handleSave = () => {
+    setIsSubmitting(true);
+    ApiHelper.post("/settings", currentSettings, "MembershipApi").then(() => {
+      props.updatedFunction();
+      setIsSubmitting(false);
+    });
+  }
   const handleCancel = () => { props.updatedFunction(); }
 
   React.useEffect(() => { setCurrentSettings(props.settings); }, [props.settings]);
 
   return (
-    <>
+    <Box sx={{ maxWidth: 1200 }}>
       {getLogoEditor(currentEditLogo)}
-      <InputBox headerIcon="palette" headerText="Church Appearance" saveFunction={handleSave} cancelFunction={handleCancel} isSubmitting={isSubmitting}>
-        <div style={{ backgroundColor: "#EEE", padding: 10 }}>
 
-          <label>Logo - Light background</label><br />
-          <p style={{ color: "#999", fontSize: 12 }}>Upload horizontal logo with a transparent background suitable for use of light backrounds. The ideal size is 1280 pixels wide by 320 pixels high.</p>
-          {getLogoLink("logoLight", "#EEE")}
+      {/* Header */}
+      <Box sx={{
+        backgroundColor: 'var(--c1l2)',
+        color: '#FFF',
+        p: 3,
+        borderRadius: '12px 12px 0 0',
+        mb: 0
+      }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Box
+              sx={{
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: '8px',
+                p: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <ImageIcon sx={{ fontSize: 24, color: '#FFF' }} />
+            </Box>
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                Logo & Branding
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)' }}>
+                Upload and manage your organization's logos and branding assets
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant="outlined"
+              onClick={handleCancel}
+              sx={{
+                color: '#FFF',
+                borderColor: 'rgba(255,255,255,0.5)',
+                '&:hover': {
+                  borderColor: '#FFF',
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              Cancel
+            </Button>
+            <LoadingButton
+              loading={isSubmitting}
+              loadingText="Saving..."
+              variant="contained"
+              onClick={handleSave}
+              sx={{
+                backgroundColor: '#FFF',
+                color: 'var(--c1l2)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.9)'
+                }
+              }}
+            >
+              Save Changes
+            </LoadingButton>
+          </Stack>
+        </Stack>
+      </Box>
 
-        </div>
-        <hr />
-        <div style={{ backgroundColor: "#333", padding: 10, color: "#FFF" }}>
+      {/* Content */}
+      <Box sx={{ p: 3, backgroundColor: '#FFF', borderRadius: '0 0 12px 12px', border: '1px solid', borderColor: 'grey.200', borderTop: 'none' }}>
+        <CardWithHeader
+          title="Logo Management"
+          icon={<ImageIcon />}
+        >
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            Upload your logos for different contexts. All images should have transparent backgrounds for best results.
+          </Typography>
 
-          <label>Logo - Dark background</label><br />
-          <p style={{ color: "#999", fontSize: 12 }}>Upload horizontal logo with a transparent background suitable for use of dark backrounds. The ideal size is 1280 pixels wide by 320 pixels high.</p>
-          {getLogoLink("logoDark", "#333")}
+          <Stack spacing={3}>
+            {/* Light and Dark Logos */}
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2, color: 'primary.main' }}>
+                Main Logos
+              </Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
+                {getLogoDisplay(
+                  "logoLight",
+                  "#F5F5F5",
+                  "Light Background Logo",
+                  "Horizontal logo for light backgrounds. Ideal size: 1280×320px"
+                )}
+                {getLogoDisplay(
+                  "logoDark",
+                  "#333333",
+                  "Dark Background Logo",
+                  "Horizontal logo for dark backgrounds. Ideal size: 1280×320px"
+                )}
+              </Box>
+            </Box>
 
-        </div>
-        <hr />
-
-        <div style={{ backgroundColor: "#3f51b5", padding: 10, color: "#FFF" }}>
-          <label style={{ color: "whitesmoke" }}>Open Graph Image</label>
-          <p style={{ color: "whitesmoke", fontSize: 12 }}>Upload horizontal image suitable for use of SEO purposes. The ideal size is 1200 pixels wide by 630 pixels high.</p>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div style={{ maxWidth: 600, maxHeight: 315 }}>
-              {getLogoLink("ogImage", "#3f51b5")}
-            </div>
-          </div>
-        </div>
-        <hr />
-
-        <div style={{ backgroundColor: "#bbdefb", padding: 10, color: "#FFF" }}>
-          <label>Favicon</label>
-          <p style={{ color: "#999", fontSize: 12 }}>Upload square logo with a transparent background.The ideal size is 400 pixels wide by 400 pixels high.</p>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <div style={{maxWidth: 150, maxHeight: 150}}>
-              {getLogoLink("favicon_400x400", "#bbdefb")}
-            </div>
-          </div>
-        </div>
-        <hr />
-
-
-      </InputBox>
-    </>
+            {/* SEO and Favicon */}
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 2, color: 'primary.main' }}>
+                SEO & Browser Assets
+              </Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
+                {getLogoDisplay(
+                  "ogImage",
+                  "#1976d2",
+                  "Social Media Image",
+                  "Used for social sharing and SEO. Ideal size: 1200×630px"
+                )}
+                {getLogoDisplay(
+                  "favicon_400x400",
+                  "#bbdefb",
+                  "Favicon",
+                  "Square icon for browser tabs. Ideal size: 400×400px"
+                )}
+              </Box>
+            </Box>
+          </Stack>
+        </CardWithHeader>
+      </Box>
+    </Box>
   );
 }

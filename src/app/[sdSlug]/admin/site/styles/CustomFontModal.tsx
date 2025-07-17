@@ -1,9 +1,25 @@
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { DialogContent, FormControl, Grid, InputLabel, MenuItem, Pagination, Select, SelectChangeEvent, TextField } from "@mui/material";
+import {
+  DialogContent,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  Box
+} from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import React from "react";
-
 import WebFont from 'webfontloader';
 
 interface Props {
@@ -63,59 +79,123 @@ export const CustomFontModal: React.FC<Props> = props => {
 
   const getResults = () => {
     if (fonts) {
-
       const filtered = getFiltered();
       const start = (page-1) * 10;
       let num = 10;
       if (start+num>filtered.length) num = filtered.length - start;
-      const pageResults = filtered.splice((page-1) * 10, num);
+      const pageResults = filtered.slice((page-1) * 10, start + num);
       loadFonts(pageResults);
 
-      const rows: React.ReactElement[] = [];
-      pageResults.forEach(f => {
-        const family = f.family;
-        rows.push(<tr>
-          <td><a href="about:blank" onClick={(e) => { e.preventDefault(); props.updateValue(family); }}>{f.family}</a></td>
-          <td style={{ fontFamily: f.family }}>The quick brown fox jumps over the lazy dog.</td>
-        </tr>)
-      })
-
-      return <table className="table table-sm" style={{minHeight:400}}>
-        <thead>
-          <tr><th>Name</th><th>Sample</th></tr>
-          {rows}
-        </thead>
-      </table>
+      return (
+        <Table sx={{ minWidth: 650, minHeight: 400 }}>
+          <TableHead
+            sx={{
+              backgroundColor: 'grey.50',
+              '& .MuiTableCell-root': {
+                borderBottom: '2px solid',
+                borderBottomColor: 'divider'
+              }
+            }}
+          >
+            <TableRow>
+              <TableCell>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  Name
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  Sample
+                </Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {pageResults.map((f, index) => (
+              <TableRow
+                key={index}
+                sx={{
+                  '&:hover': { backgroundColor: 'action.hover' },
+                  transition: 'background-color 0.2s ease',
+                  cursor: 'pointer'
+                }}
+                onClick={() => props.updateValue(f.family)}
+              >
+                <TableCell>
+                  <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 500 }}>
+                    {f.family}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontFamily: f.family, color: 'text.secondary' }}
+                  >
+                    The quick brown fox jumps over the lazy dog.
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      );
     }
   }
 
   React.useEffect(loadData, []);
 
   return (
-    <Dialog open={true} onClose={props.onClose} fullWidth scroll="body">
-      <DialogTitle>Select a Font</DialogTitle>
-      <DialogContent>
+    <Dialog
+      open={true}
+      onClose={props.onClose}
+      fullWidth
+      maxWidth="md"
+      scroll="body"
+      PaperProps={{
+        sx: {
+          borderRadius: 2,
+          minHeight: '70vh'
+        }
+      }}
+    >
+      <DialogTitle sx={{
+        backgroundColor: 'var(--c1l2)',
+        color: '#FFF',
+        borderRadius: '8px 8px 0 0'
+      }}>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Select a Font
+        </Typography>
+      </DialogTitle>
+      <DialogContent sx={{ p: 3 }}>
+        <Box sx={{ mb: 3 }}>
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, md: 8 }}>
+              <FormControl fullWidth>
+                <InputLabel>Category Filter</InputLabel>
+                <Select fullWidth label="Category Filter" name="category" value={category} onChange={handleChange}>
+                  <MenuItem value="">All</MenuItem>
+                  <MenuItem value="serif">Serif</MenuItem>
+                  <MenuItem value="sans-serif">Sans Serif</MenuItem>
+                  <MenuItem value="display">Display</MenuItem>
+                  <MenuItem value="handwriting">Handwriting</MenuItem>
+                  <MenuItem value="monospace">Monospace</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid size={{ xs: 12, md: 4 }}>
+              <TextField fullWidth label="Search" name="search" value={search} onChange={handleChange} />
+            </Grid>
+          </Grid>
+        </Box>
 
-        <Grid container spacing={3}>
-          <Grid size={{ md: 8, xs: 12 }}>
-            <FormControl fullWidth>
-              <InputLabel>Category Filter</InputLabel>
-              <Select fullWidth label="Category Filter" name="category" value={category} onChange={handleChange}>
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="serif">Serif</MenuItem>
-                <MenuItem value="sans-serif">Sans Serif</MenuItem>
-                <MenuItem value="display">Display</MenuItem>
-                <MenuItem value="handwriting">Handwriting</MenuItem>
-                <MenuItem value="monospace">Monospace</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid size={{ md: 4, xs: 12 }}>
-            <TextField fullWidth label="Search" name="search" value={search} onChange={handleChange} />
-          </Grid>
-        </Grid>
-        {getResults()}
-        {getPages()}
+        <Box sx={{ mb: 3 }}>
+          {getResults()}
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          {getPages()}
+        </Box>
       </DialogContent>
     </Dialog>
   );
