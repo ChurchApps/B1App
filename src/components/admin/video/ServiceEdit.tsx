@@ -1,6 +1,29 @@
 "use client";
 import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent } from "@mui/material";
+import {
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  FormControl,
+  SelectChangeEvent,
+  Box,
+  Stack,
+  Typography,
+  Chip,
+  Divider,
+  InputAdornment,
+  Alert
+} from "@mui/material";
+import {
+  VideoCall as VideoCallIcon,
+  Schedule as ScheduleIcon,
+  Chat as ChatIcon,
+  PlayCircle as PlayCircleIcon,
+  MenuBook as MenuBookIcon,
+  AccessTime as AccessTimeIcon
+} from "@mui/icons-material";
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
@@ -14,6 +37,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
   const [currentService, setCurrentService] = React.useState<StreamingServiceInterface>(null);
   const [sermons, setSermons] = React.useState<SermonInterface[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [validationErrors, setValidationErrors] = React.useState<string[]>([]);
 
   const checkDelete = () => { if (!UniqueIdHelper.isMissing(currentService?.id)) return handleDelete; else return null; }
   const handleCancel = () => { props.updatedFunction(); }
@@ -86,7 +110,30 @@ export const ServiceEdit: React.FC<Props> = (props) => {
     return result;
   }
 
+  const validateForm = (): boolean => {
+    const errors: string[] = [];
+
+    if (!currentService?.label?.trim()) {
+      errors.push("Service name is required");
+    }
+
+    if (!currentService?.serviceTime) {
+      errors.push("Service time is required");
+    }
+
+    if (currentService?.provider && !currentService?.providerKey?.trim()) {
+      errors.push("Provider key is required when a video provider is selected");
+    }
+
+    setValidationErrors(errors);
+    return errors.length === 0;
+  };
+
   const handleSave = () => {
+    if (!validateForm()) {
+      return;
+    }
+
     setVideoUrl();
     ApiHelper.post("/streamingServices", [currentService], "ContentApi").then(props.updatedFunction);
   }
@@ -130,57 +177,252 @@ export const ServiceEdit: React.FC<Props> = (props) => {
     let chatAndPrayerStartTime = currentService?.serviceTime?.getTime() - currentService?.chatBefore * 1000;
     let chatAndPrayerEndTime = currentService?.serviceTime?.getTime() + currentService?.chatAfter * 1000;
     let earlyStartTime = currentService?.serviceTime?.getTime() - currentService?.earlyStart * 1000;
-    return (
-      <InputBox headerIcon="calendar_month" headerText="Edit Service" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={checkDelete()} data-testid="edit-service-inputbox">
-        <>
-          <TextField fullWidth label="Service Name" name="serviceLabel" value={currentService?.label || ""} onChange={handleChange} data-testid="service-name-input" />
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 6 }}>
-              <TextField fullWidth label="Service Time" type="datetime-local" name="serviceTime" InputLabelProps={{ shrink: !!DateHelper.formatHtml5DateTime(localServiceTime) }} defaultValue={DateHelper.formatHtml5DateTime(localServiceTime)} onChange={handleChange} data-testid="service-time-input" />
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <FormControl fullWidth>
-                <InputLabel>Recurs Weekly</InputLabel>
-                <Select label="Recurs Weekly" name="recurs" value={Boolean(currentService?.recurring).toString() || ""} onChange={handleChange}>
-                  <MenuItem value="false">No</MenuItem>
-                  <MenuItem value="true">Yes</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
 
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 6 }}>
-              <TextField fullWidth label="Enable Chat - Minutes Before" type="number" name="chatBefore" value={currentService?.chatBefore / 60 || ""} onChange={handleChange} InputProps={{
-                inputProps: { min: 0, step: 1 },
-                endAdornment: <span style={{ whiteSpace: "nowrap" }}>{DateHelper.prettyTime(new Date(chatAndPrayerStartTime))}</span>
-              }} />
+    return (
+      <InputBox
+        headerIcon="video_settings"
+        headerText={UniqueIdHelper.isMissing(currentService?.id) ? "Add New Service" : "Edit Service"}
+        saveFunction={handleSave}
+        cancelFunction={handleCancel}
+        deleteFunction={checkDelete()}
+        data-testid="edit-service-inputbox"
+      >
+        <Stack spacing={3}>
+          {/* Validation Errors */}
+          {validationErrors.length > 0 && (
+            <Alert severity="error">
+              <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                Please correct the following errors:
+              </Typography>
+              <Stack component="ul" spacing={0.5} sx={{ m: 0, pl: 2 }}>
+                {validationErrors.map((error, index) => (
+                  <Typography key={index} component="li" variant="body2">
+                    {error}
+                  </Typography>
+                ))}
+              </Stack>
+            </Alert>
+          )}
+
+          {/* Basic Information Section */}
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+              <VideoCallIcon sx={{ color: 'primary.main', fontSize: 20 }} />
+              <Typography variant="h6" sx={{ color: 'primary.main' }}>
+                Basic Information
+              </Typography>
+            </Stack>
+
+            <Stack spacing={2}>
+              <TextField
+                fullWidth
+                label="Service Name"
+                name="serviceLabel"
+                value={currentService?.label || ""}
+                onChange={handleChange}
+                data-testid="service-name-input"
+                placeholder="e.g., Sunday Morning Service"
+                error={validationErrors.some(e => e.includes("Service name"))}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <VideoCallIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Service Time"
+                    type="datetime-local"
+                    name="serviceTime"
+                    InputLabelProps={{ shrink: !!DateHelper.formatHtml5DateTime(localServiceTime) }}
+                    defaultValue={DateHelper.formatHtml5DateTime(localServiceTime)}
+                    onChange={handleChange}
+                    data-testid="service-time-input"
+                    error={validationErrors.some(e => e.includes("Service time"))}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <ScheduleIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <FormControl fullWidth>
+                    <InputLabel>Recurs Weekly</InputLabel>
+                    <Select
+                      label="Recurs Weekly"
+                      name="recurs"
+                      value={Boolean(currentService?.recurring).toString() || ""}
+                      onChange={handleChange}
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <AccessTimeIcon sx={{ fontSize: 18, color: 'text.secondary', mr: 1 }} />
+                        </InputAdornment>
+                      }
+                    >
+                      <MenuItem value="false">
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Typography>No</Typography>
+                          <Chip label="One-time" size="small" sx={{ backgroundColor: '#fff3e0', color: '#f57c00' }} />
+                        </Stack>
+                      </MenuItem>
+                      <MenuItem value="true">
+                        <Stack direction="row" spacing={1} alignItems="center">
+                          <Typography>Yes</Typography>
+                          <Chip label="Weekly" size="small" sx={{ backgroundColor: '#e8f5e9', color: '#2e7d32' }} />
+                        </Stack>
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Stack>
+          </Box>
+
+          <Divider />
+
+          {/* Chat Settings Section */}
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+              <ChatIcon sx={{ color: 'primary.main', fontSize: 20 }} />
+              <Typography variant="h6" sx={{ color: 'primary.main' }}>
+                Chat Settings
+              </Typography>
+            </Stack>
+
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  fullWidth
+                  label="Enable Chat - Minutes Before"
+                  type="number"
+                  name="chatBefore"
+                  value={currentService?.chatBefore / 60 || ""}
+                  onChange={handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, step: 1 },
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ChatIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Chip
+                          label={chatAndPrayerStartTime ? DateHelper.prettyTime(new Date(chatAndPrayerStartTime)) : "Time"}
+                          size="small"
+                          sx={{ backgroundColor: 'rgba(25, 118, 210, 0.08)', color: 'primary.main' }}
+                        />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  fullWidth
+                  label="Enable Chat - Minutes After"
+                  type="number"
+                  name="chatAfter"
+                  value={currentService?.chatAfter / 60 || ""}
+                  onChange={handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, step: 1 },
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <ChatIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Chip
+                          label={chatAndPrayerEndTime ? DateHelper.prettyTime(new Date(chatAndPrayerEndTime)) : "Time"}
+                          size="small"
+                          sx={{ backgroundColor: 'rgba(25, 118, 210, 0.08)', color: 'primary.main' }}
+                        />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid size={{ xs: 6 }}>
-              <TextField fullWidth label="Enable Chat - Minutes After" type="number" name="chatAfter" value={currentService?.chatAfter / 60 || ""} onChange={handleChange} InputProps={{
-                inputProps: { min: 0, step: 1 },
-                endAdornment: <span style={{ whiteSpace: "nowrap" }}>{DateHelper.prettyTime(new Date(chatAndPrayerEndTime))}</span>
-              }} />
+          </Box>
+
+          <Divider />
+
+          {/* Video Settings Section */}
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+              <PlayCircleIcon sx={{ color: 'primary.main', fontSize: 20 }} />
+              <Typography variant="h6" sx={{ color: 'primary.main' }}>
+                Video Settings
+              </Typography>
+            </Stack>
+
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  fullWidth
+                  label="Start Video Early"
+                  type="number"
+                  name="earlyStart"
+                  value={currentService?.earlyStart / 60 || ""}
+                  onChange={handleChange}
+                  helperText="Optional: For countdown videos or pre-service content"
+                  InputProps={{
+                    inputProps: { min: 0, step: 1 },
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PlayCircleIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Chip
+                          label={earlyStartTime ? DateHelper.prettyTime(new Date(earlyStartTime)) : "Time"}
+                          size="small"
+                          sx={{ backgroundColor: 'rgba(25, 118, 210, 0.08)', color: 'primary.main' }}
+                        />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Sermon</InputLabel>
+                  <Select
+                    label="Sermon"
+                    name="sermonId"
+                    value={currentService?.sermonId || "latest"}
+                    onChange={handleChange}
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <MenuBookIcon sx={{ fontSize: 18, color: 'text.secondary', mr: 1 }} />
+                      </InputAdornment>
+                    }
+                  >
+                    <MenuItem value="latest">
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Typography>Latest Sermon</Typography>
+                        <Chip label="Auto" size="small" sx={{ backgroundColor: '#e8f5e9', color: '#2e7d32' }} />
+                      </Stack>
+                    </MenuItem>
+                    <Divider />
+                    {getSermons()}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 6 }}>
-              <TextField fullWidth label="Start Video Early - Optional for countdowns" type="number" name="earlyStart" value={currentService?.earlyStart / 60 || ""} onChange={handleChange} InputProps={{
-                inputProps: { min: 0, step: 1 },
-                endAdornment: <span style={{ whiteSpace: "nowrap" }}>{DateHelper.prettyTime(new Date(earlyStartTime))}</span>
-              }} />
-            </Grid>
-            <Grid size={{ xs: 6 }}>
-              <FormControl fullWidth>
-                <InputLabel>Sermon</InputLabel>
-                <Select label="Sermon" name="sermonId" value={currentService.sermonId} onChange={handleChange}>
-                  <MenuItem value="latest">Latest Sermon</MenuItem>
-                  {getSermons()}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </>
+          </Box>
+        </Stack>
       </InputBox>
     );
   }

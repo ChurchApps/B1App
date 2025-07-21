@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Table, TableCell, TableRow, TextField } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Stack,
+  Button,
+  alpha
+} from "@mui/material";
+import {
+  Palette as PaletteIcon,
+  Visibility as VisibilityIcon,
+  ColorLens as ColorLensIcon
+} from "@mui/icons-material";
 import { GlobalStyleInterface } from "@/helpers";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { CardWithHeader, LoadingButton } from "@/components/ui";
 
 interface Props {
   globalStyle?: GlobalStyleInterface;
@@ -18,6 +33,7 @@ export interface PaletteInterface {
 
 export function PaletteEdit(props: Props) {
   const [palette, setPalette] = useState<PaletteInterface>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const pairings = [
     { background: "light", text: "lightAccent" },
@@ -66,7 +82,13 @@ export function PaletteEdit(props: Props) {
     if (props.globalStyle) setPalette(JSON.parse(props.globalStyle.palette));
   }, [props.globalStyle]);
 
-  const handleSave = () => { props.updatedFunction(JSON.stringify(palette)); };
+  const handleSave = () => {
+    setIsSubmitting(true);
+    setTimeout(() => {
+      props.updatedFunction(JSON.stringify(palette));
+      setIsSubmitting(false);
+    }, 500);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -81,71 +103,265 @@ export function PaletteEdit(props: Props) {
     setPalette(p);
   };
 
-  const getCell = (name:string, color:string) => <TableCell style={{backgroundColor:color}}>&nbsp;</TableCell>
+  const getPalette = (p: PaletteInterface, index: number) => (
+    <Card
+      sx={{
+        cursor: 'pointer',
+        transition: 'all 0.2s ease-in-out',
+        border: '1px solid',
+        borderColor: 'grey.200',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: 2,
+          borderColor: 'primary.main'
+        }
+      }}
+      onClick={() => setPalette(p)}
+      data-testid="suggested-palette"
+      aria-label="Apply suggested color palette"
+    >
+      <CardContent sx={{ p: 2 }}>
+        <Stack direction="row" spacing={0.5} sx={{ mb: 1 }}>
+          {Object.entries(p).map(([key, color]) => (
+            <Box
+              key={key}
+              sx={{
+                width: 32,
+                height: 32,
+                backgroundColor: color,
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'grey.300',
+                flexShrink: 0
+              }}
+            />
+          ))}
+        </Stack>
+        <Typography variant="caption" color="text.secondary">
+          Palette {index + 1}
+        </Typography>
+      </CardContent>
+    </Card>
+  )
 
-  const getPalette = (p: PaletteInterface) => {
-    let result = <a href="about:blank" onClick={(e) => { e.preventDefault(); setPalette(p); }} data-testid="suggested-palette" aria-label="Apply suggested color palette">
-      <Table>
-        <TableRow>
-          {getCell("light", p.light)}
-          {getCell("lightAccent", p.lightAccent)}
-          {getCell("accent", p.accent)}
-          {getCell("darkAccent", p.darkAccent)}
-          {getCell("dark", p.dark)}
-        </TableRow>
-      </Table>
-    </a>
-    return result;
-  }
+  const getPalettes = () => (
+    <Grid container spacing={2}>
+      {suggestions.map((s, index) => (
+        <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+          {getPalette(s, index)}
+        </Grid>
+      ))}
+    </Grid>
+  )
 
-  const getPalettes = () => {
-    let result:React.ReactElement[] = [];
-    suggestions.forEach(s => {
-      result.push(<Grid size={{ xs: 12, md: 6 }}>{getPalette(s)}</Grid>)
-    })
-    return <Grid container spacing={3}>{result}</Grid>
-  }
-
-  const getPairings = () => {
-    let result:React.ReactElement[] = [];
-    pairings.forEach(p => {
-      const backgroundName = p.background as keyof PaletteInterface;
-      const textName = p.text as keyof PaletteInterface;
-      const bg = palette[backgroundName];
-      const text = palette[textName];
-      result.push(<Grid size={{ xs: 12, md: 6 }}><div style={{backgroundColor:bg, color:text, border:"1px solid " + text, padding:10}}>{p.background +"-" + p.text}</div></Grid>)
-    })
-    return <Grid container spacing={1}>{result}</Grid>
-  }
+  const getPairings = () => (
+    <Grid container spacing={1}>
+      {pairings.map((p, index) => {
+        const backgroundName = p.background as keyof PaletteInterface;
+        const textName = p.text as keyof PaletteInterface;
+        const bg = palette[backgroundName];
+        const text = palette[textName];
+        return (
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+            <Box
+              sx={{
+                backgroundColor: bg,
+                color: text,
+                border: '1px solid',
+                borderColor: alpha(text, 0.3),
+                borderRadius: 1,
+                p: 1.5,
+                textAlign: 'center',
+                minHeight: 48,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Typography variant="body2" sx={{ fontSize: '0.75rem' }}>
+                {p.background} + {p.text}
+              </Typography>
+            </Box>
+          </Grid>
+        );
+      })}
+    </Grid>
+  )
 
   if (!palette) return null;
 
 
   return (
-    <>
-      <InputBox headerIcon="folder" headerText="Edit Color Palette" saveFunction={handleSave} cancelFunction={() => props.updatedFunction(null)} data-testid="palette-edit-box">
-        <Table style={{width:"100%"}}>
-          <TableRow>
-            <TableCell><TextField type="color" label="Light" fullWidth name="light" value={palette.light} onChange={handleChange} data-testid="light-color-input" aria-label="Light color" /></TableCell>
-            <TableCell><TextField type="color" label="Light Accent" fullWidth name="lightAccent" value={palette.lightAccent} onChange={handleChange} data-testid="light-accent-color-input" aria-label="Light accent color" /></TableCell>
-            <TableCell><TextField type="color" label="Accent" fullWidth name="accent" value={palette.accent} onChange={handleChange} data-testid="accent-color-input" aria-label="Accent color" /></TableCell>
-            <TableCell><TextField type="color" label="Dark Accent" fullWidth name="darkAccent" value={palette.darkAccent} onChange={handleChange} data-testid="dark-accent-color-input" aria-label="Dark accent color" /></TableCell>
-            <TableCell><TextField type="color" label="Dark" fullWidth name="dark" value={palette.dark} onChange={handleChange} data-testid="dark-color-input" aria-label="Dark color" /></TableCell>
-          </TableRow>
-        </Table>
+    <Box sx={{ maxWidth: 1200 }}>
+      {/* Header */}
+      <Box sx={{
+        backgroundColor: 'var(--c1l2)',
+        color: '#FFF',
+        p: 3,
+        borderRadius: '12px 12px 0 0',
+        mb: 0
+      }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Box
+              sx={{
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                borderRadius: '8px',
+                p: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <PaletteIcon sx={{ fontSize: 24, color: '#FFF' }} />
+            </Box>
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                Color Palette
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)' }}>
+                Customize your site's color scheme
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant="outlined"
+              onClick={() => props.updatedFunction(null)}
+              sx={{
+                color: '#FFF',
+                borderColor: 'rgba(255,255,255,0.5)',
+                '&:hover': {
+                  borderColor: '#FFF',
+                  backgroundColor: 'rgba(255,255,255,0.1)'
+                }
+              }}
+            >
+              Cancel
+            </Button>
+            <LoadingButton
+              loading={isSubmitting}
+              loadingText="Saving..."
+              variant="contained"
+              onClick={handleSave}
+              sx={{
+                backgroundColor: '#FFF',
+                color: 'var(--c1l2)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.9)'
+                }
+              }}
+              data-testid="save-palette-button"
+            >
+              Save Palette
+            </LoadingButton>
+          </Stack>
+        </Stack>
+      </Box>
 
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <h2>Suggested Pallets</h2>
-            {getPalettes()}
+      {/* Content */}
+      <Box sx={{ p: 3, backgroundColor: '#FFF', borderRadius: '0 0 12px 12px', border: '1px solid', borderColor: 'grey.200', borderTop: 'none' }}>
+        {/* Color Pickers */}
+        <CardWithHeader
+          title="Color Values"
+          icon={<ColorLensIcon />}
+        >
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+              <TextField
+                type="color"
+                label="Light"
+                fullWidth
+                name="light"
+                value={palette.light}
+                onChange={handleChange}
+                data-testid="light-color-input"
+                aria-label="Light color"
+                sx={{ '& .MuiInputBase-input': { height: 48 } }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+              <TextField
+                type="color"
+                label="Light Accent"
+                fullWidth
+                name="lightAccent"
+                value={palette.lightAccent}
+                onChange={handleChange}
+                data-testid="light-accent-color-input"
+                aria-label="Light accent color"
+                sx={{ '& .MuiInputBase-input': { height: 48 } }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+              <TextField
+                type="color"
+                label="Accent"
+                fullWidth
+                name="accent"
+                value={palette.accent}
+                onChange={handleChange}
+                data-testid="accent-color-input"
+                aria-label="Accent color"
+                sx={{ '& .MuiInputBase-input': { height: 48 } }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+              <TextField
+                type="color"
+                label="Dark Accent"
+                fullWidth
+                name="darkAccent"
+                value={palette.darkAccent}
+                onChange={handleChange}
+                data-testid="dark-accent-color-input"
+                aria-label="Dark accent color"
+                sx={{ '& .MuiInputBase-input': { height: 48 } }}
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }}>
+              <TextField
+                type="color"
+                label="Dark"
+                fullWidth
+                name="dark"
+                value={palette.dark}
+                onChange={handleChange}
+                data-testid="dark-color-input"
+                aria-label="Dark color"
+                sx={{ '& .MuiInputBase-input': { height: 48 } }}
+              />
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <h2>Pairings</h2>
-            {getPairings()}
-          </Grid>
-        </Grid>
+        </CardWithHeader>
 
-      </InputBox>
-    </>
+        <Box sx={{ mt: 3 }}>
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CardWithHeader
+                title="Suggested Palettes"
+                icon={<PaletteIcon />}
+              >
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Click any palette to apply it instantly
+                </Typography>
+                {getPalettes()}
+              </CardWithHeader>
+            </Grid>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CardWithHeader
+                title="Color Combinations Preview"
+                icon={<VisibilityIcon />}
+              >
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Preview how your colors work together
+                </Typography>
+                {getPairings()}
+              </CardWithHeader>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Box>
   );
 }

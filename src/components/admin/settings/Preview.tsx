@@ -21,8 +21,6 @@ export function Preview(props: Props) {
 
   return (
     <>
-      <h2>Preview</h2>
-      <p>Below is a preview of a sample site with your colors, fonts and logos.  This is not your actual site content.</p>
       <div style={{fontFamily:fonts.body}}>
         <div style={{backgroundColor:palette.light, color:palette.darkAccent, padding:20, borderRadius:5}}>
           <Grid container spacing={3}>

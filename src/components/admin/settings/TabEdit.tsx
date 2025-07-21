@@ -1,13 +1,38 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { Typography, Button, Stack, TextField, FormControl, Icon, InputLabel, Select, MenuItem, Dialog, SelectChangeEvent, Box } from "@mui/material";
-import { B1LinkInterface,  PageInterface } from "@/helpers";
+import {
+  Typography,
+  Button,
+  Stack,
+  TextField,
+  FormControl,
+  Icon,
+  InputLabel,
+  Select,
+  MenuItem,
+  Dialog,
+  SelectChangeEvent,
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  IconButton,
+  Grid
+} from "@mui/material";
+import {
+  Save as SaveIcon,
+  Cancel as CancelIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  Image as ImageIcon
+} from "@mui/icons-material";
+import { B1LinkInterface, PageInterface } from "@/helpers";
 import { IconPicker } from "@/components/iconPicker/IconPicker";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
 import { GalleryModal } from "../../gallery/GalleryModal";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
 import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { CardWithHeader, LoadingButton } from "@/components/ui";
 
 interface Props {
   currentTab: B1LinkInterface;
@@ -19,14 +44,23 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
   const [pages, setPages] = useState<PageInterface[]>(null);
   const [showLibrary, setShowLibrary] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   useEffect(() => {
     setCurrentTab(currentTabFromProps);
   }, [currentTabFromProps]);
 
-  const handleSave = () => {
-    if (currentTab.linkType !== "url" && currentTab.linkType!=="page") currentTab.url = "";
-    ApiHelper.post("/links", [currentTab], "ContentApi").then(updatedFunction);
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      if (currentTab.linkType !== "url" && currentTab.linkType !== "page") currentTab.url = "";
+      await ApiHelper.post("/links", [currentTab], "ContentApi");
+      updatedFunction();
+    } catch (error) {
+      console.error("Error saving tab:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
@@ -112,43 +146,158 @@ export function TabEdit({ currentTab: currentTabFromProps, updatedFunction = () 
 
   return (
     <>
-      <InputBox headerIcon="folder" headerText="Edit Tab" saveFunction={handleSave} cancelFunction={updatedFunction} deleteFunction={!UniqueIdHelper.isMissing(currentTab?.id) ? handleDelete : null} data-testid="tab-edit-inputbox">
-        <Typography sx={{ marginTop: 2, marginBottom: 1 }}>Tab Preview:</Typography>
-        <div>
-          <TabPreview tab={currentTab} />
-          <Button onClick={() => { setShowLibrary(true); }} data-testid="change-image-button">Change Image </Button>
-        </div>
-        <Stack direction="row" pt={2}>
-          <TextField fullWidth margin="none" label="Text" name="text" type="text" value={currentTab?.text || ""} onChange={handleChange}
-            InputProps={{
-              endAdornment: (<div className="input-group-append">
-                <Button variant="contained" endIcon={<Icon>arrow_drop_down</Icon>} onClick={() => setIsModalOpen(true)} data-testid="icon-dropdown-button">
-                  <Icon>{currentTab?.icon}</Icon>
+      <CardWithHeader
+        title={UniqueIdHelper.isMissing(currentTab?.id) ? "Add New Tab" : "Edit Tab"}
+        icon={<EditIcon />}
+        actions={
+          <Stack direction="row" spacing={1}>
+            <Button
+              variant="outlined"
+              color="error"
+              startIcon={<CancelIcon />}
+              onClick={updatedFunction}
+              size="small"
+              sx={{ textTransform: 'none' }}
+            >
+              Cancel
+            </Button>
+            <LoadingButton
+              loading={isSaving}
+              loadingText="Saving..."
+              variant="contained"
+              startIcon={<SaveIcon />}
+              onClick={handleSave}
+              size="small"
+              sx={{ textTransform: 'none' }}
+            >
+              Save Tab
+            </LoadingButton>
+          </Stack>
+        }
+      >
+        <Grid container spacing={3}>
+          {/* Tab Preview */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Card sx={{ border: '1px solid', borderColor: 'grey.200' }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                  Tab Preview
+                </Typography>
+                <TabPreview tab={currentTab} />
+                <Button
+                  variant="outlined"
+                  startIcon={<ImageIcon />}
+                  onClick={() => setShowLibrary(true)}
+                  size="small"
+                  sx={{ mt: 2, textTransform: 'none' }}
+                  data-testid="change-image-button"
+                >
+                  Change Background Image
                 </Button>
-              </div>)
-            }} />
-          <input type="hidden" asp-for="TabId" />
-        </Stack>
-        <FormControl fullWidth>
-          <InputLabel id="type">Type</InputLabel>
-          <Select labelId="type" label="Type" id="tabType" name="type" value={currentTab?.linkType || ""} onChange={handleChange}>
-            <MenuItem value="bible" disabled={isDisabled("bible")}>Bible</MenuItem>
+              </CardContent>
+            </Card>
+          </Grid>
 
-            <MenuItem value="stream" disabled={isDisabled("stream")}>Live Stream</MenuItem>
-            <MenuItem value="votd" disabled={isDisabled("votd")}>Verse of the Day</MenuItem>
-            <MenuItem value="url">External Url</MenuItem>
-            <MenuItem value="page">Page</MenuItem>
-          </Select>
-        </FormControl>
-        {currentTab?.linkType === "url" ? (<TextField fullWidth label="Url" name="url" type="text" value={currentTab?.url || ""} onChange={handleChange} />) : null}
-        {getPage()}
+          {/* Tab Settings */}
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Card sx={{ border: '1px solid', borderColor: 'grey.200' }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+                  Tab Settings
+                </Typography>
 
-        <Dialog open={isModalOpen}>
-          <IconPicker onSelect={onSelect} />
-        </Dialog>
-      </InputBox>
+                <Stack spacing={3}>
+                  {/* Tab Name and Icon */}
+                  <TextField
+                    fullWidth
+                    label="Tab Name"
+                    name="text"
+                    value={currentTab?.text || ""}
+                    onChange={handleChange}
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton
+                          onClick={() => setIsModalOpen(true)}
+                          data-testid="icon-dropdown-button"
+                          sx={{ color: 'primary.main' }}
+                        >
+                          <Icon>{currentTab?.icon}</Icon>
+                        </IconButton>
+                      )
+                    }}
+                    helperText="Choose a descriptive name for your tab"
+                  />
+
+                  {/* Tab Type */}
+                  <FormControl fullWidth>
+                    <InputLabel id="type">Tab Type</InputLabel>
+                    <Select
+                      labelId="type"
+                      label="Tab Type"
+                      name="type"
+                      value={currentTab?.linkType || ""}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="bible" disabled={isDisabled("bible")}>Bible</MenuItem>
+                      <MenuItem value="stream" disabled={isDisabled("stream")}>Live Stream</MenuItem>
+                      <MenuItem value="votd" disabled={isDisabled("votd")}>Verse of the Day</MenuItem>
+                      <MenuItem value="url">External URL</MenuItem>
+                      <MenuItem value="page">Internal Page</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  {/* URL Field */}
+                  {currentTab?.linkType === "url" && (
+                    <TextField
+                      fullWidth
+                      label="URL"
+                      name="url"
+                      type="url"
+                      value={currentTab?.url || ""}
+                      onChange={handleChange}
+                      helperText="Enter the full URL (e.g., https://example.com)"
+                    />
+                  )}
+
+                  {/* Page Selection */}
+                  {getPage()}
+                </Stack>
+
+                {/* Delete Action */}
+                {!UniqueIdHelper.isMissing(currentTab?.id) && (
+                  <>
+                    <Divider sx={{ mt: 4, mb: 2 }} />
+                    <Box sx={{ textAlign: 'center' }}>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                        onClick={handleDelete}
+                        size="small"
+                        sx={{ textTransform: 'none' }}
+                      >
+                        Delete Tab
+                      </Button>
+                    </Box>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </CardWithHeader>
+
+      {/* Modals */}
+      <Dialog open={isModalOpen} maxWidth="md" fullWidth>
+        <IconPicker onSelect={onSelect} />
+      </Dialog>
+
       {showLibrary && (
-        <GalleryModal onClose={() => setShowLibrary(false)} onSelect={handlePhotoSelected} aspectRatio={4} />
+        <GalleryModal
+          onClose={() => setShowLibrary(false)}
+          onSelect={handlePhotoSelected}
+          aspectRatio={4}
+        />
       )}
     </>
   );
@@ -159,17 +308,46 @@ interface TabPreviewProps {
 }
 
 function TabPreview({ tab }: TabPreviewProps) {
-  const el = document.getElementById("tabType");
-  let width = el?.offsetWidth || 400;
-  if (width > 400) width = 400;
-  const height = width / 4;
   const imageUrl = tab?.photo || "/images/dashboard/storm.png";
 
   return (
-    <Box id="tabImage" sx={{ backgroundImage: `url(${imageUrl})`, backgroundBlendMode: "overlay", backgroundColor: "#616161", backgroundRepeat: "no-repeat", backgroundSize: `${width}px ${height}px`, cursor: "pointer", color: "white", textAlign: "center", height: height, width: width, display: "flex", justifyContent: "center", alignItems: "center" }} marginBottom={1}>
-      <Typography noWrap sx={{ fontSize: 34, color: "#FFFFFF", padding: 2 }} style={{ color: "#FFF" }}>
-        {tab?.text}
-      </Typography>
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        aspectRatio: '4/1',
+        borderRadius: 2,
+        overflow: 'hidden',
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${imageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: '1px solid',
+        borderColor: 'grey.300'
+      }}
+    >
+      <Stack direction="row" spacing={1} alignItems="center" sx={{ color: 'white', textAlign: 'center' }}>
+        {tab?.icon && (
+          <Icon sx={{ fontSize: 24, color: 'white' }}>
+            {tab.icon}
+          </Icon>
+        )}
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            color: 'white',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+            fontSize: { xs: '1rem', sm: '1.25rem' }
+          }}
+          noWrap
+        >
+          {tab?.text || "Tab Name"}
+        </Typography>
+      </Stack>
     </Box>
   );
 }

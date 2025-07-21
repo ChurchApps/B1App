@@ -1,11 +1,11 @@
-import { Icon } from "@mui/material";
+import { Icon, Button, Typography, Stack, Chip } from "@mui/material";
+import { Add as AddIcon, VideoCall as VideoCallIcon } from "@mui/icons-material";
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
 import type { StreamingServiceInterface } from "@churchapps/helpers";
 import { ServiceEdit } from "./ServiceEdit";
 
@@ -15,7 +15,26 @@ export const Services: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   const handleUpdated = () => { setCurrentService(null); loadData(); }
-  const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} data-testid="add-service-button" />
+  const getEditContent = () => (
+    <Button
+      variant="outlined"
+      startIcon={<AddIcon />}
+      onClick={handleAdd}
+      data-testid="add-service-button"
+      sx={{
+        color: '#FFF',
+        borderColor: 'rgba(255,255,255,0.5)',
+        textTransform: 'none',
+        fontWeight: 600,
+        '&:hover': {
+          borderColor: '#FFF',
+          backgroundColor: 'rgba(255,255,255,0.1)'
+        }
+      }}
+    >
+      Add Service
+    </Button>
+  )
   const loadData = () => {
     ApiHelper.get("/streamingServices", "ContentApi").then(data => {
       data.forEach((s: StreamingServiceInterface) => {
@@ -45,19 +64,46 @@ export const Services: React.FC = () => {
   }
 
   const getRows = () => {
-    //var idx = 0;
     let rows: React.ReactElement[] = [];
     services.forEach(service => {
       rows.push(
         <tr key={service.id}>
-          <td>{service.label}</td>
-          <td>{DateHelper.prettyDateTime(service.serviceTime)}</td>
+          <td>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <VideoCallIcon sx={{ fontSize: 18, color: 'primary.main' }} />
+              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                {service.label}
+              </Typography>
+              {service.recurring && (
+                <Chip
+                  label="Weekly"
+                  size="small"
+                  sx={{ backgroundColor: '#e8f5e9', color: '#2e7d32' }}
+                />
+              )}
+            </Stack>
+          </td>
+          <td>
+            <Typography variant="body2" color="text.secondary">
+              {DateHelper.prettyDateTime(service.serviceTime)}
+            </Typography>
+          </td>
           <td style={{ textAlign: "right" }}>
-            <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentService(service); }}><Icon>edit</Icon></a>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => setCurrentService(service)}
+              sx={{
+                minWidth: 'auto',
+                borderRadius: 2,
+                textTransform: 'none'
+              }}
+            >
+              <Icon sx={{ fontSize: 18 }}>edit</Icon>
+            </Button>
           </td>
         </tr>
       );
-      //idx++;
     })
     return rows;
   }
