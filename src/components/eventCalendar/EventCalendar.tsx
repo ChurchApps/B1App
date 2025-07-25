@@ -4,7 +4,6 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Snackbar, Stack } from "@mui/material";
 import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
 import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
-import { CommonEnvironmentHelper } from "@churchapps/apphelper/dist/helpers/CommonEnvironmentHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import type { EventInterface } from "@churchapps/helpers";
 import { useState } from "react";
