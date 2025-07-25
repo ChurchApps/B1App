@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { CommonEnvironmentHelper } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 interface Props {
   aspectRatio: number,
@@ -55,8 +56,8 @@ export const StockPhotos: React.FC<Props> = (props: Props) => {
     let result: React.ReactElement[] = [];
     images.forEach(img => {
       result.push(<Grid size={{ xs: 12, md: 4 }}>
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(CommonEnvironmentHelper.ContentRoot + "/" + img) }}>
-          <img src={CommonEnvironmentHelper.ContentRoot + "/" + img} className="img-fluid" alt="stock" />
+        <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(EnvironmentHelper.Common.ContentRoot + "/" + img) }}>
+          <img src={EnvironmentHelper.Common.ContentRoot + "/" + img} className="img-fluid" alt="stock" />
         </a>
       </Grid>);
     })

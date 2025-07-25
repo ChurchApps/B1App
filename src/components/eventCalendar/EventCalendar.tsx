@@ -10,6 +10,7 @@ import type { EventInterface } from "@churchapps/helpers";
 import { useState } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { DisplayEventModal } from "./DisplayEventModal";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 interface Props {
   events: EventInterface[];
@@ -17,7 +18,7 @@ interface Props {
   onRequestRefresh?: () => void;
 }
 
-export function EventCalendar(props:Props) {
+export function EventCalendar(props: Props) {
   const localizer = momentLocalizer(moment)
   const [editEvent, setEditEvent] = useState<EventInterface | null>(null);
   const [displayEvent, setDisplayEvent] = useState<EventInterface | null>(null);
@@ -25,7 +26,7 @@ export function EventCalendar(props:Props) {
 
   const handleSubscribe = () => {
     setOpen(true);
-    navigator.clipboard.writeText(`${CommonEnvironmentHelper.ContentApi}/events/subscribe?groupId=${props.editGroupId}&churchId=${UserHelper.currentUserChurch.church.id}`);
+    navigator.clipboard.writeText(`${EnvironmentHelper.Common.ContentApi}/events/subscribe?groupId=${props.editGroupId}&churchId=${UserHelper.currentUserChurch.church.id}`);
   }
 
   const handleAddEvent = (slotInfo: any) => {
@@ -37,7 +38,7 @@ export function EventCalendar(props:Props) {
     endTime.setHours(13);
     endTime.setMinutes(0);
     endTime.setSeconds(0);
-    setEditEvent({ start: startTime, end: endTime, allDay:false, groupId: props.editGroupId, visibility: "public" })
+    setEditEvent({ start: startTime, end: endTime, allDay: false, groupId: props.editGroupId, visibility: "public" })
   }
 
   const handleEventClick = (event: EventInterface) => {
@@ -57,14 +58,14 @@ export function EventCalendar(props:Props) {
     if (props.onRequestRefresh) props.onRequestRefresh();
   }
 
-  const expandedEvents:EventInterface[] = [];
+  const expandedEvents: EventInterface[] = [];
   const startRange = new Date();
   const endRange = new Date();
   startRange.setFullYear(startRange.getFullYear() - 1);
   endRange.setFullYear(endRange.getFullYear() + 1);
 
   props.events.forEach((event) => {
-    const ev = {...event};
+    const ev = { ...event };
     ev.start = new Date(ev.start);
     ev.end = new Date(ev.end);
     if (event.recurrenceRule) {
@@ -86,12 +87,12 @@ export function EventCalendar(props:Props) {
       {props.editGroupId
         && <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
           <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe() }} toolTip="Copy the URL and add this to your Google Calendar (or other)" />
-          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start:new Date(), end: new Date() }) }} />
+          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }) }} />
         </Stack>
       }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} />
-      {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={ handleDone } />}
-      {displayEvent && <DisplayEventModal event={displayEvent} onDone={ handleDone } canEdit={props.editGroupId!==""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}
+      {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={handleDone} />}
+      {displayEvent && <DisplayEventModal event={displayEvent} onDone={handleDone} canEdit={props.editGroupId !== ""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}
       <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} ContentProps={{ sx: { background: "green" } }} />
     </div>
   );
