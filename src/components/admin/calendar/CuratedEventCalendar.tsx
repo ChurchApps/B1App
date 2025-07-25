@@ -5,7 +5,6 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Button, Icon, Snackbar, Stack } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
-import { CommonEnvironmentHelper } from "@churchapps/apphelper/dist/helpers/CommonEnvironmentHelper";
 import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import type { CuratedEventWithEventInterface } from "@churchapps/helpers";
 import { EditCalendarEventModal } from "./EditCalendarEventModal";
