@@ -10,6 +10,7 @@ import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
 import type { CuratedEventWithEventInterface } from "@churchapps/helpers";
 import { EditCalendarEventModal } from "./EditCalendarEventModal";
 import { DisplayCalendarEventModal } from "./DisplayCalendarEventModal";
+import { EnvironmentHelper } from "@/helpers";
 
 interface Props {
   events: CuratedEventWithEventInterface[];
@@ -28,7 +29,7 @@ export function CuratedEventCalendar(props: Props) {
 
   const handleSubscribe = () => {
     setShowCopy(true);
-    navigator.clipboard.writeText(`${CommonEnvironmentHelper.ContentApi}/events/subscribe?curatedCalendarId=${props.curatedCalendarId}&churchId=${UserHelper.currentUserChurch.church.id}`);
+    navigator.clipboard.writeText(`${EnvironmentHelper.Common.ContentApi}/events/subscribe?curatedCalendarId=${props.curatedCalendarId}&churchId=${UserHelper.currentUserChurch.church.id}`);
   }
 
   const handleEventClick = (event: CuratedEventWithEventInterface) => {

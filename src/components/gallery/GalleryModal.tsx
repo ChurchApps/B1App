@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
 import { TabPanel } from "@churchapps/apphelper/dist/components/TabPanel";
 import { StockPhotos } from "./StockPhotos";
+import { EnvironmentHelper } from "@/helpers";
 
 interface Props {
   aspectRatio: number,
@@ -40,7 +41,7 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
   };
 
   const handleDelete = (folder: string, image: string) => {
-    if (window.confirm(Locale.label("gallery.confirmDelete"))){
+    if (window.confirm(Locale.label("gallery.confirmDelete"))) {
       ApiHelper.delete("/gallery/" + folder + "/" + image, "ContentApi").then(() => { loadData(); });
     }
   }
@@ -49,14 +50,15 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
   React.useEffect(loadData, [aspectRatio]); //eslint-disable-line
 
   const getImages = () => {
+    console.log("GET IMAGES", EnvironmentHelper.Common.ContentRoot);
     let result: React.ReactElement[] = [];
     images.forEach(img => {
       const parts = img.split("/");
 
       result.push(<Grid size={{ xs: 12, md: 4 }}>
         <Box sx={{ position: "relative", ":hover #deleteIcon": { visibility: "visible" } }}>
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(CommonEnvironmentHelper.ContentRoot + "/" + img) }} aria-label="Select image" data-testid="select-image">
-            <Box component="img" src={CommonEnvironmentHelper.ContentRoot + "/" + img} className="img-fluid" alt="custom" />
+          <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(EnvironmentHelper.Common.ContentRoot + "/" + img) }} aria-label="Select image" data-testid="select-image">
+            <Box component="img" src={EnvironmentHelper.Common.ContentRoot + "/" + img} className="img-fluid" alt="custom" />
           </a>
           <Box id="deleteIcon" sx={{ position: "absolute", top: 3, right: 3, visibility: "hidden", backgroundColor: "whitesmoke", borderRadius: 5 }}>
             <Tooltip title="Delete">

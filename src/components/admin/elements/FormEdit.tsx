@@ -4,6 +4,7 @@ import { CommonEnvironmentHelper } from "@churchapps/apphelper/dist/helpers/Comm
 import { Loading } from "@churchapps/apphelper/dist/components/Loading";
 import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
 import type { FormInterface } from "@churchapps/helpers";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 type Props = {
   parsedData: any;
@@ -29,7 +30,7 @@ export const FormEdit = ({ parsedData, handleChange }: Props) => {
         No forms available!
         <br />
         <Link
-          href={`${CommonEnvironmentHelper.ChumsRoot}/forms`}
+          href={`${EnvironmentHelper.Common.ChumsRoot}/forms`}
           target="_blank"
           rel="noreferrer"
         >
