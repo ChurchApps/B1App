@@ -1,6 +1,6 @@
 "use client";
 
-import { FileHelper } from "@churchapps/helpers";
+import { FileHelper } from "@churchapps/apphelper/dist/helpers/FileHelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Tab, Tabs, Tooltip, Icon } from "@mui/material";
