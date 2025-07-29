@@ -1,5 +1,5 @@
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";

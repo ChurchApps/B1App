@@ -1,8 +1,8 @@
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { SmallButton } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
 import React from "react";
@@ -15,7 +15,7 @@ export const Tabs: React.FC = () => {
 
   const handleUpdated = () => { setCurrentTab(null); loadData(); }
   const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} />
-  const loadData = () => { ApiHelper.get("/links?category=streamingTab", "ContentApi").then(data => { setTabs(data); setIsLoading(false); }); }
+  const loadData = () => { ApiHelper.get("/links?category=streamingTab", "ContentApi").then((data: any) => { setTabs(data); setIsLoading(false); }); }
   const saveChanges = () => { ApiHelper.post("/links", tabs, "ContentApi").then(loadData); }
 
   const handleAdd = () => {

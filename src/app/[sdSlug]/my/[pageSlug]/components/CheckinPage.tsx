@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Grid } from "@mui/material";
 import { Household, CheckinComplete, Services } from "@/components";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { UserHelper } from "@churchapps/apphelper";
 
 export function CheckinPage() {
   const [currentStep, setCurrentStep] = useState<"household" | "complete">();

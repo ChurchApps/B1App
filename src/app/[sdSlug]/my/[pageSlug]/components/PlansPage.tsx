@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { ServingTimes } from "@/components/plans/ServingTimes";
 import { UpcomingDates } from "@/components/plans/UpcomingDates";
@@ -27,8 +27,8 @@ export function PlansPage() {
       if (tempPositions.length > 0) {
         setPositions(tempPositions);
         const planIds = ArrayHelper.getUniqueValues(tempPositions, "planId");
-        ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi").then((data) => setPlans(data));
-        ApiHelper.get("/times/plans?planIds=" + planIds, "DoingApi").then((data) => setTimes(data));
+        ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi").then((data: any) => setPlans(data));
+        ApiHelper.get("/times/plans?planIds=" + planIds, "DoingApi").then((data: any) => setTimes(data));
       }
     }
   };

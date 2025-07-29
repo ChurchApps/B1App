@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
 

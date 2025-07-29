@@ -1,8 +1,8 @@
 import React from "react";
 import { Stack } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
 import type { PlanInterface } from "@churchapps/helpers";
 import { PlanItem } from "./PlanItem";
 import { PlanItemInterface } from "@/helpers";
@@ -17,7 +17,7 @@ export const ServiceOrder = (props: Props) => {
 
   const loadData = async () => {
     if (props.plan?.id) {
-      ApiHelper.get("/planItems/plan/" + props.plan.id.toString(), "DoingApi").then(d => { setPlanItems(d); });
+      ApiHelper.get("/planItems/plan/" + props.plan.id.toString(), "DoingApi").then((d: any) => { setPlanItems(d); });
     }
   }
 

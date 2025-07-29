@@ -1,9 +1,9 @@
 "use client"
 import { useState, useEffect } from "react";
 import { CheckinHelper, PersonHelper } from "@/helpers";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -16,7 +16,7 @@ export function Services({ selectedHandler }: Props) {
 
   const loadData = () => {
     setIsLoading(true);
-    ApiHelper.get("/services", "AttendanceApi").then((data) => {
+    ApiHelper.get("/services", "AttendanceApi").then((data: any) => {
       setServices(data);
       setIsLoading(false);
     });
@@ -26,17 +26,17 @@ export function Services({ selectedHandler }: Props) {
     setIsLoading(true);
 
     const promises: Promise<any>[] = [
-      ApiHelper.get("/servicetimes?serviceId=" + serviceId, "AttendanceApi").then((times) => {
+      ApiHelper.get("/servicetimes?serviceId=" + serviceId, "AttendanceApi").then((times: any) => {
         CheckinHelper.serviceId = serviceId;
         CheckinHelper.serviceTimes = times;
       }),
-      ApiHelper.get("/groupservicetimes", "AttendanceApi").then((groupServiceTimes) => {
+      ApiHelper.get("/groupservicetimes", "AttendanceApi").then((groupServiceTimes: any) => {
         CheckinHelper.groupServiceTimes = groupServiceTimes;
       }),
-      ApiHelper.get("/groups", "MembershipApi").then((groups) => {
+      ApiHelper.get("/groups", "MembershipApi").then((groups: any) => {
         CheckinHelper.groups = groups;
       }),
-      ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((members) => {
+      ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((members: any) => {
         CheckinHelper.householdMembers = members;
       }),
     ];

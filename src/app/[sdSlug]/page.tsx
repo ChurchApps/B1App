@@ -1,6 +1,6 @@
 import { PageInterface } from "@/helpers/interfaces";
 import { ConfigHelper } from "@/helpers/ConfigHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
 import { Metadata } from "next";

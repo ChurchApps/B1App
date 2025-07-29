@@ -1,10 +1,10 @@
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { ApiHelper } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { UniqueIdHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface, GroupServiceTimeInterface, SessionInterface } from "@churchapps/helpers";
 import { TextField, FormControl, Select, InputLabel, SelectChangeEvent, MenuItem } from "@mui/material"
 
@@ -19,7 +19,7 @@ export const SessionAdd: React.FC<Props> = (props) => {
   const handleCancel = () => { props.sidebarVisibilityFunction("addPerson", true); }
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } }
   const loadData = React.useCallback(() => {
-    ApiHelper.get("/groupservicetimes?groupId=" + props.group.id, "AttendanceApi").then(data => {
+    ApiHelper.get("/groupservicetimes?groupId=" + props.group.id, "AttendanceApi").then((data: any) => {
       setGroupServiceTimes(data);
       if (data.length > 0) setServiceTimeId(data[0].serviceTimeId);
     });

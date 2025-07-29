@@ -1,12 +1,12 @@
 "use client";
 
 import { FileHelper } from "@churchapps/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, IconButton, InputLabel, MenuItem, Select, Tab, Tabs, Tooltip, Icon } from "@mui/material";
 import React, { useState } from "react";
-import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
-import { TabPanel } from "@churchapps/apphelper/dist/components/TabPanel";
+import { ImageEditor } from "@churchapps/apphelper";
+import { TabPanel } from "@/components/TabPanel";
 import { StockPhotos } from "./StockPhotos";
 import { EnvironmentHelper } from "@/helpers";
 
@@ -24,7 +24,7 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
 
   const handleTabChange = (el: any, newValue: any) => { setTabIndex(newValue); }
 
-  const loadData = () => { ApiHelper.get("/gallery/" + aspectRatio.toString(), "ContentApi").then(data => setImages(data.images)); }
+  const loadData = () => { ApiHelper.get("/gallery/" + aspectRatio.toString(), "ContentApi").then((data: any) => setImages(data.images)); }
 
   const handleImageUpdated = async (dataUrl: string) => {
     const fileName = Math.floor(Date.now() / 1000).toString() + ".jpg"
@@ -52,7 +52,7 @@ export const GalleryModal: React.FC<Props> = (props: Props) => {
   const getImages = () => {
     console.log("GET IMAGES", EnvironmentHelper.Common.ContentRoot);
     let result: React.ReactElement[] = [];
-    images.forEach(img => {
+    images.forEach((img: any) => {
       const parts = img.split("/");
 
       result.push(<Grid size={{ xs: 12, md: 4 }}>

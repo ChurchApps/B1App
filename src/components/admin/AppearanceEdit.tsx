@@ -15,9 +15,9 @@ import {
   CloudUpload as CloudUploadIcon,
   Edit as EditIcon
 } from "@mui/icons-material";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ImageEditor } from "@churchapps/apphelper";
 import { CardWithHeader, LoadingButton } from "@/components/ui";
 import type { GenericSettingInterface } from "@churchapps/helpers";
 
@@ -81,7 +81,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
     const settings = [...currentSettings]
-    const keySetting = settings.filter(c => c.keyName === name);
+    const keySetting = settings.filter((c: any) => c.keyName === name);
 
     if (keySetting.length === 0) {
       settings.push({ keyName: name, value, public: 1 });
@@ -119,7 +119,7 @@ export const AppearanceEdit: React.FC<Props> = (props) => {
   const imageUpdated = async (dataUrl: string, keyName: string) => {
     if (dataUrl !== null) {
       const settings = [...currentSettings];
-      const keySetting = settings.filter(s => s.keyName === keyName);
+      const keySetting = settings.filter((s: any) => s.keyName === keyName);
 
       if (keySetting.length === 0) {
         settings.push({ keyName, value: await getValue(keyName, dataUrl), public: 1 });

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "./GroupCard";
 import { EnvironmentHelper } from "@/helpers";
@@ -19,7 +19,7 @@ export const GroupList = (props: Props) => {
 
   useEffect(() => {
     EnvironmentHelper.init();
-    ApiHelper.getAnonymous("/groups/public/" + props.churchId + "/label?label=" + encodeURIComponent(props.label), "MembershipApi").then((data) => {
+    ApiHelper.getAnonymous("/groups/public/" + props.churchId + "/label?label=" + encodeURIComponent(props.label), "MembershipApi").then((data: any) => {
       setGroups(data);
     });
   }, []);

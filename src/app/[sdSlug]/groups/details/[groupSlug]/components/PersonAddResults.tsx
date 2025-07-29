@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { PersonInterface } from "@churchapps/helpers"
 import { Table, TableBody, TableRow, TableCell } from "@mui/material";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { SmallButton } from "@churchapps/apphelper";
 
 
 interface Props {

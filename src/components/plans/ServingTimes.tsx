@@ -1,7 +1,7 @@
 import React from "react";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
 import type { AssignmentInterface, PlanInterface, PositionInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";
 import Link from "next/link";
@@ -24,8 +24,8 @@ export const ServingTimes: React.FC<Props> = (props) => {
   const getRows = () => {
     const data:any[] = [];
     props.assignments.forEach((assignment) => {
-      const position = props?.positions.find(p => p.id === assignment.positionId);
-      const plan = props?.plans.find(p => p.id === position?.planId);
+      const position = props?.positions.find((p: any) => p.id === assignment.positionId);
+      const plan = props?.plans.find((p: any) => p.id === position?.planId);
       if (position && plan) data.push({ assignmentId:assignment.id, planId: plan.id, planName:plan.name, serviceDate: new Date(plan.serviceDate), position: position.name, status:assignment.status || "Unconfirmed" });
     });
     ArrayHelper.sortBy(data, "serviceDate", true)

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
 import type { BlockoutDateInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody, IconButton, Icon } from "@mui/material";
 import { BlockoutDateEdit } from "./BlockoutDateEdit";
@@ -14,7 +14,7 @@ export const BlockoutDates: React.FC<Props> = (props) => {
   const [blockoutDate, setBlockoutDate] = React.useState<BlockoutDateInterface>(null);
 
   const loadData = () => {
-    ApiHelper.get("/blockoutDates/my", "DoingApi").then((data) => setBlockoutDates(data));
+    ApiHelper.get("/blockoutDates/my", "DoingApi").then((data: any) => setBlockoutDates(data));
     setBlockoutDate(null);
   }
 

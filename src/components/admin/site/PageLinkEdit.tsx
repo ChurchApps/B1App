@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
-import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
+import { SlugHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
@@ -131,7 +131,7 @@ export function PageLinkEdit(props: Props) {
   const handleDuplicate = (e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm("Are you sure you wish to make a copy of this page and all of it's contents?")) {
-      ApiHelper.post("/pages/duplicate/" + page.id, {}, "ContentApi").then((data) => {
+      ApiHelper.post("/pages/duplicate/" + page.id, {}, "ContentApi").then((data: any) => {
         setPage(null);
         props.updatedCallback(data, link);
       });

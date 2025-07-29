@@ -1,9 +1,9 @@
 import Cookies from "js-cookie";
 import { ChatHelper } from "./ChatHelper";
 import { ChatStateInterface, StreamConfigInterface, StreamingServiceExtendedInterface } from "./interfaces";
-import { SocketHelper } from "@churchapps/apphelper/dist/helpers/SocketHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { SocketHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { ConversationInterface } from "@churchapps/helpers";
 import type { BlockedIpInterface } from "@churchapps/helpers";

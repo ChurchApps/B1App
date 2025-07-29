@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import UserContext from "@/context/UserContext";
 import { AuthGuard } from "@/components/AuthGuard";
 import type { DonationInterface, FundDonationInterface, FundInterface } from "@churchapps/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { ArrayHelper, CurrencyHelper, DateHelper } from "@churchapps/helpers";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -30,11 +30,11 @@ export default function PrintPage({ params }: { params: Params }) {
 
 
   const loadData = () => {
-    ApiHelper.get("/funds", "GivingApi").then((f) => { setFunds(f) });
-    ApiHelper.get("/fundDonations/my", "GivingApi").then((fd) => { setFundDonations(fd) });
+    ApiHelper.get("/funds", "GivingApi").then((f: any) => { setFunds(f) });
+    ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: any) => { setFundDonations(fd) });
     ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
       const result: DonationInterface[] = []
-      d.forEach((don) => {
+      d.forEach((don: any) => {
         don.donationDate = new Date(don.donationDate);
         if (don.donationDate.getFullYear() === currYear) {
           result.push(don);

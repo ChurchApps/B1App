@@ -1,11 +1,11 @@
 import React from "react";
 import { Icon } from "@mui/material";
 import { LinkEdit } from "./LinkEdit";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 
 interface RecursiveInterface {
@@ -40,7 +40,7 @@ export const Links: React.FC<Props> = (props) => {
 
   const handleUpdated = () => { setCurrentLink(null); loadData(); }
   const getEditContent = () => <SmallButton icon="add" text="Add" onClick={handleAdd} data-testid="add-link-button" />
-  const loadData = () => { ApiHelper.get("/links?category=" + cat, "ContentApi").then(data => { setLinks(data); setIsLoading(false); }); }
+  const loadData = () => { ApiHelper.get("/links?category=" + cat, "ContentApi").then((data: any) => { setLinks(data); setIsLoading(false); }); }
   const saveChanges = () => { ApiHelper.post("/links", links, "ContentApi").then(loadData); }
 
   const handleAdd = () => {
@@ -124,7 +124,7 @@ export const Links: React.FC<Props> = (props) => {
   const getLinks = (structuredLinks: LinkInterface[]) => {
     let idx = 0;
     let rows: React.ReactElement[] = [];
-    structuredLinks.forEach(link => {
+    structuredLinks.forEach((link: any) => {
       const upLink = (idx === 0) ? null : <a href="about:blank" data-idx={idx} onClick={(e: React.MouseEvent) => moveUp(e, structuredLinks)}><Icon>arrow_upward</Icon></a>
       const downLink = (idx === structuredLinks.length - 1) ? null : <a href="about:blank" data-idx={idx} onClick={(e: React.MouseEvent) => moveDown(e, structuredLinks)}><Icon>arrow_downward</Icon></a>
       rows.push(

@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { redirect, usePathname } from "next/navigation";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import UserContext from "../../context/UserContext";
 import { CssBaseline } from "@mui/material";
 import { PersonHelper, UrlHelper } from "@/helpers";

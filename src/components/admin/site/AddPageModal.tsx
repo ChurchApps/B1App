@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
-import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { SlugHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
@@ -89,7 +89,7 @@ export function AddPageModal(props: Props) {
         const slugString = link?.text || page.title || "new-page";
         p.url = props.requestedSlug || SlugHelper.slugifyString("/" + slugString.toLowerCase().replace(" ", "-"), "urlPath");
 
-        pageData = await ApiHelper.post("/pages", [p], "ContentApi").then((data) => {
+        pageData = await ApiHelper.post("/pages", [p], "ContentApi").then((data: any) => {
           setPage(data[0]);
           createTemplate(pageTemplate, data[0].id);
           return data[0];
@@ -99,7 +99,7 @@ export function AddPageModal(props: Props) {
       if (props.mode==="navigation") {
         const l = {...link};
         if (pageTemplate!== "link") l.url = pageData.url;
-        linkData = await ApiHelper.post("/links", [l], "ContentApi").then(data => data[0] );
+        linkData = await ApiHelper.post("/links", [l], "ContentApi").then((data: any) => data[0] );
       }
 
       props.updatedCallback((pageTemplate !== "link") ? pageData : null, (props.mode==="navigation") ? linkData : null);

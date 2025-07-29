@@ -1,4 +1,4 @@
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import {
   DialogContent,
   FormControl,
@@ -47,7 +47,7 @@ export const CustomFontModal: React.FC<Props> = props => {
   const loadData = () => {
     const key = atob("QUl6YVN5RDlxTkViWDdIQzhvYXZGaC0tR0JrdkxVVkRUSnM4dlZB");
     fetch("https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=" + key)
-      .then(response => response.json())
+      .then((response: any) => response.json())
       .then((data: any) => {
         const result: { category: string, family: string }[] = [];
         data.items.forEach((item: any) => { result.push({ family: item.family, category: item.category }) })
@@ -58,7 +58,7 @@ export const CustomFontModal: React.FC<Props> = props => {
 
   const loadFonts = (fontList: { category: string, family: string }[]) => {
     const fonts: string[] = [];
-    fontList.forEach(f => fonts.push(f.family));
+    fontList.forEach((f: any) => fonts.push(f.family));
     if (fonts.length>0) WebFont.load({
       google: { families: fonts }
     });
@@ -67,7 +67,7 @@ export const CustomFontModal: React.FC<Props> = props => {
   const getFiltered = () => {
     let filtered: { category: string, family: string }[] = [...fonts];
     if (category) filtered = ArrayHelper.getAll(filtered, "category", category);
-    if (search) filtered = ArrayHelper.getAllContaining(filtered, "family", search)
+    if (search) filtered = filtered.filter((font: any) => font.family.toLowerCase().includes(search.toLowerCase()));
     return filtered;
   }
 

@@ -1,5 +1,5 @@
-import { MarkdownEditor } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownEditor";
-import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownPreviewLight";
+import { MarkdownEditor } from "@churchapps/apphelper-markdown";
+import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import React from "react";
 

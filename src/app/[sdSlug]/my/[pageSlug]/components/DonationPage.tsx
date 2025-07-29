@@ -3,8 +3,8 @@
 import { useContext } from "react";
 import UserContext from "@/context/UserContext";
 import { BaseDonationPage } from "@/components/donate/BaseDonationPage";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props {

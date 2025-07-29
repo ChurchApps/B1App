@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { TextField } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { LinkInterface } from "@churchapps/helpers";
 import { PageInterface } from "@/helpers";

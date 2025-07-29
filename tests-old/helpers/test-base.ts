@@ -134,9 +134,9 @@ export class TestHelpers {
         
         // Clear IndexedDB
         if ('indexedDB' in window) {
-          indexedDB.databases().then(databases => {
+          indexedDB.databases().then((databases: any) => {
             console.log(`Found ${databases.length} IndexedDB databases to clear`);
-            databases.forEach(db => {
+            databases.forEach((db: any) => {
               if (db.name) indexedDB.deleteDatabase(db.name);
             });
           }).catch(() => {});
@@ -144,9 +144,9 @@ export class TestHelpers {
         
         // Clear service worker registrations
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(registrations => {
+          navigator.serviceWorker.getRegistrations().then((registrations: any) => {
             console.log(`Found ${registrations.length} service workers to unregister`);
-            registrations.forEach(registration => registration.unregister());
+            registrations.forEach((registration: any) => registration.unregister());
           }).catch(() => {});
         }
       });

@@ -1,12 +1,12 @@
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { PersonHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface, GroupMemberInterface, PersonInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead } from "@mui/material";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { SmallButton } from "@churchapps/apphelper";
 import Link from "next/link";
 
 interface Props { group: GroupInterface, addFunction: (person: PersonInterface) => void }
@@ -15,7 +15,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
   const [groupMembers, setGroupMembers] = React.useState<GroupMemberInterface[]>([]);
 
   const loadData = React.useCallback(() => {
-    ApiHelper.get("/groupmembers?groupId=" + props.group.id, "MembershipApi").then(data => {
+    ApiHelper.get("/groupmembers?groupId=" + props.group.id, "MembershipApi").then((data: any) => {
       setGroupMembers(data);
     });
   }, [props.group]);

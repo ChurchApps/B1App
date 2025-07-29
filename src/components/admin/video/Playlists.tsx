@@ -1,6 +1,6 @@
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { PlaylistInterface } from "@churchapps/helpers";
 import {
   Card,
@@ -49,7 +49,7 @@ export const Playlists = (props: Props) => {
   };
 
   const loadData = () => {
-    ApiHelper.get("/playlists", "ContentApi").then((data) => {
+    ApiHelper.get("/playlists", "ContentApi").then((data: any) => {
       setPlaylists(data);
       setFilteredPlaylists(data);
       setIsLoading(false);
@@ -63,7 +63,7 @@ export const Playlists = (props: Props) => {
     if (term === "") {
       setFilteredPlaylists(playlists);
     } else {
-      const filtered = playlists.filter(playlist =>
+      const filtered = playlists.filter((playlist: any) =>
         playlist.title.toLowerCase().includes(term)
         || (playlist.description && playlist.description.toLowerCase().includes(term))
       );

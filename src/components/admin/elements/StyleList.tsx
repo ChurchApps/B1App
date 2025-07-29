@@ -32,7 +32,7 @@ export const StyleList: React.FC<Props> = (props) => {
     const platform:any = props.styles[platformKey as keyof InlineStylesInterface] || {};
     Object.keys(platform).forEach((key:string) => {
       const value = platform[key];
-      const field = options.find(o => o.key === key);
+      const field = options.find((o: any) => o.key === key);
       if (field) result.push(<div style={{marginBottom:5}}><a href="about:blank" style={{color:"#999", textDecoration:"underline"}} onClick={(e) => {e.preventDefault(); setEditStyle({platform:platformKey, name:key, value})}}>{field.label}: {value}</a></div>)
     })
     result.push(<a href="about:blank" style={{marginBottom:15, display:"block" }} onClick={(e) => {e.preventDefault(); setEditStyle({platform:platformKey, name:"", value:""})}}>Add a style</a>)

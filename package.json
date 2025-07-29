@@ -10,10 +10,13 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
-    "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales && copyfiles -a -f node_modules/@churchapps/apphelper/public/css/** public/apphelper/css"
+    "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales && copyfiles -a -f node_modules/@churchapps/apphelper-markdown/dist/editor.css public/apphelper/css"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.4.12",
+    "@churchapps/apphelper": "^0.4.22",
+    "@churchapps/apphelper-donations": "^0.4.21",
+    "@churchapps/apphelper-login": "^0.4.21",
+    "@churchapps/apphelper-markdown": "^0.4.21",
     "@churchapps/helpers": "^1.0.40",
     "@mui/icons-material": "^7.2.0",
     "@mui/lab": "^7.0.0-beta.14",
@@ -50,9 +53,9 @@
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.0.10",
     "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
     "@types/react-big-calendar": "^1.16.2",
     "@types/react-color": "^3.0.13",
+    "@types/react-dom": "^19.1.6",
     "@types/react-helmet": "^6.1.11",
     "@types/webfontloader": "^1.6.38",
     "copyfiles": "^2.4.1",

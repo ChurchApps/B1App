@@ -1,9 +1,9 @@
 "use client";
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { GalleryModal } from "@/components/gallery/GalleryModal";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { InputBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { Button, InputLabel, SelectChangeEvent, TextField } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';

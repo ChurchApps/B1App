@@ -1,7 +1,7 @@
 "use client";
 
 import type { ChurchInterface } from "@churchapps/helpers";
-import { NonAuthDonation } from "@churchapps/apphelper/dist/donationComponents/components/NonAuthDonation";
+import { NonAuthDonation } from "@churchapps/apphelper-donations";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
@@ -23,7 +23,7 @@ import { CarouselElement } from "./elementTypes/CarouselElement";
 import { ImageElement } from "./elementTypes/ImageElement";
 import { WhiteSpaceElement } from "./elementTypes/WhiteSpaceElement";
 import { CalendarElement } from "./elementTypes/CalendarElement";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { BoxElement } from "./elementTypes/BoxElement";
 import { TableElement } from "./elementTypes/TableElement";
 import { DraggableWrapper } from "./admin/DraggableWrapper";

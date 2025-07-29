@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
-import { SlugHelper } from "@churchapps/apphelper/dist/helpers/SlugHelper";
+import { SlugHelper } from "@churchapps/apphelper";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 import { PageInterface } from "@/helpers";
 import {
@@ -85,7 +85,7 @@ export function PageEdit(props: Props) {
 
   const handleSave = () => {
     if (validate()) {
-      ApiHelper.post("/pages", [page], "ContentApi").then((data) => {
+      ApiHelper.post("/pages", [page], "ContentApi").then((data: any) => {
         setPage(data);
         createTemplate(pageTemplate, data[0].id);
         props.updatedCallback(data);
@@ -117,7 +117,7 @@ export function PageEdit(props: Props) {
   const handleDuplicate = (e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm("Are you sure you wish to make a copy of this page and all of it's contents?")) {
-      ApiHelper.post("/pages/duplicate/" + page.id, {}, "ContentApi").then((data) => {
+      ApiHelper.post("/pages/duplicate/" + page.id, {}, "ContentApi").then((data: any) => {
         setPage(null);
         props.updatedCallback(data);
       });

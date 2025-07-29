@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Dialog } from "@mui/material";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { BlockInterface } from "@/helpers";
 import { AddableElement } from "../AddableElement";
 
@@ -16,7 +16,7 @@ export function ElementAdd(props: Props) {
   const [blocks, setBlocks] = useState<BlockInterface[]>([]);
   const showBlocks = props.includeBlocks && blocks.length > 0;
 
-  const loadData = () => { ApiHelper.get("/blocks", "ContentApi").then(b => setBlocks(b)); }
+  const loadData = () => { ApiHelper.get("/blocks", "ContentApi").then((b: any) => setBlocks(b)); }
 
   useEffect(loadData, []);
 

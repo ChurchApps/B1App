@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { ImageEditor } from "@churchapps/apphelper/dist/components/ImageEditor";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { ImageEditor } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -171,7 +171,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const loadData = () => {
-    ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((data) => setHouseholdMembers(data));
+    ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((data: any) => setHouseholdMembers(data));
   };
 
   useEffect(loadData, [props.personId]);

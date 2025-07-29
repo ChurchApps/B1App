@@ -2,7 +2,7 @@
 
 import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
 import Head from "next/head";
 import React from "react";
 

@@ -1,8 +1,8 @@
 import React from "react";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { PersonHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { Grid } from "@mui/material";
 
@@ -38,7 +38,7 @@ export const Household: React.FC<Props> = (props) => {
 
   const loadMembers = () => {
     if (props.person?.householdId) {
-      ApiHelper.get("/people/household/" + props.person?.householdId, "MembershipApi").then(data => {
+      ApiHelper.get("/people/household/" + props.person?.householdId, "MembershipApi").then((data: any) => {
         setMembers(data);
         setIsLoading(false);
       });
