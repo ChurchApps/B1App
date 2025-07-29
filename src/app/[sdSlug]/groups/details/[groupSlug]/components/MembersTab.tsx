@@ -1,10 +1,10 @@
 "use client";
 
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { PersonHelper } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
 import type { GroupInterface, GroupMemberInterface, PersonInterface } from "@churchapps/helpers";
 import { Grid, Link, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import React from "react";
@@ -28,7 +28,7 @@ export function MembersTab(props: Props) {
     setIsLoading(true);
 
     ApiHelper.get(`/groupmembers?groupId=${props.group.id}`, "MembershipApi")
-      .then((data) => setGroupMembers(data))
+      .then((data: any) => setGroupMembers(data))
       .finally(() => setIsLoading(false));
   };
 
@@ -78,7 +78,7 @@ export function MembersTab(props: Props) {
   const handleAdd = (addedPerson: PersonInterface) => {
     if (getMemberByPersonId(addedPerson.id) === null) {
       let gm = { groupId: props.group.id, personId: addedPerson.id, person: addedPerson } as GroupMemberInterface
-      ApiHelper.post("/groupmembers", [gm], "MembershipApi").then((data) => {
+      ApiHelper.post("/groupmembers", [gm], "MembershipApi").then((data: any) => {
         gm.id = data[0].id;
       });
       let members = [...groupMembers];

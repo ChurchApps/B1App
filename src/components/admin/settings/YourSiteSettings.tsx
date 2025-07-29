@@ -4,14 +4,14 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Grid, Table, TableBody, TableCell, TableHead, TableRow, Icon, Button } from "@mui/material";
 import { useWindowWidth } from "@react-hook/window-size";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import { Links } from "@/components/admin/Links";
 import { BlockEdit } from "@/components/admin/BlockEdit";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { SmallButton } from "@churchapps/apphelper";
 import { BlockInterface, PageInterface } from "@/helpers";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
 
@@ -38,14 +38,14 @@ export function YourSiteSettings() {
       return;
     }
 
-    ApiHelper.get("/pages", "ContentApi").then((_pages) => {
+    ApiHelper.get("/pages", "ContentApi").then((_pages: any) => {
       let filteredPages:PageInterface[] = [];
       _pages.forEach((p:PageInterface) => {
         if (!p.url.startsWith("/stream/") && !p.url.startsWith("/member/")) filteredPages.push(p);
       });
       setPages(filteredPages || [])
     });
-    ApiHelper.get("/blocks", "ContentApi").then((b) => setBlocks(b || []));
+    ApiHelper.get("/blocks", "ContentApi").then((b: any) => setBlocks(b || []));
   };
 
   useEffect(loadData, [isAuthenticated]);

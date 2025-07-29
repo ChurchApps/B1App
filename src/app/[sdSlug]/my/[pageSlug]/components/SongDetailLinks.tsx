@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { Stack } from "@mui/material";
 import { SongDetailInterface, SongDetailLinkInterface } from "@/helpers";
 
@@ -12,7 +12,7 @@ export const SongDetailLinks = (props: Props) => {
 
   useEffect(() => {
     if (props.songDetail?.id) {
-      ApiHelper.get("/songDetailLinks/songDetail/" + props.songDetail?.id, "ContentApi").then(data => {
+      ApiHelper.get("/songDetailLinks/songDetail/" + props.songDetail?.id, "ContentApi").then((data: any) => {
         setSongDetailLinks(data);
       });
     }

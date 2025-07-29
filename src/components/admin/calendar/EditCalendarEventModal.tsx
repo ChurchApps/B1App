@@ -6,9 +6,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, FormCont
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { } from "@/helpers";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper";
+import { EventHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { GroupInterface, EventInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -32,11 +32,11 @@ export function EditCalendarEventModal(props: Props) {
 
   const loadData = () => {
     setIsLoadingGroups(true);
-    ApiHelper.get("/groups/my", "MembershipApi").then((data) => { setGroups(data); setIsLoadingGroups(false); });
+    ApiHelper.get("/groups/my", "MembershipApi").then((data: any) => { setGroups(data); setIsLoadingGroups(false); });
   };
 
   const getGroupEvents = () => {
-    selectedGroupId && ApiHelper.get("/events/public/group/" + props.churchId + "/" + selectedGroupId, "ContentApi").then((data) => setGroupEvents(data));
+    selectedGroupId && ApiHelper.get("/events/public/group/" + props.churchId + "/" + selectedGroupId, "ContentApi").then((data: any) => setGroupEvents(data));
   };
 
   const handleDone = () => {

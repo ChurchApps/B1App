@@ -1,6 +1,6 @@
 import React from "react";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
+import { Loading } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props { config: ConfigurationInterface }

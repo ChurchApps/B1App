@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogActions, Typography, Box, Button } from "@mui/material";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { MarkdownPreviewLight } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownPreviewLight";
+import { DateHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 import type { CuratedEventWithEventInterface } from "@churchapps/helpers";
 
 interface Props {

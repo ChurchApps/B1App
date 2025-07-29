@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { ElementInterface } from "@/helpers";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { Loading } from "@churchapps/apphelper";
 
 interface Props {
   element: ElementInterface;

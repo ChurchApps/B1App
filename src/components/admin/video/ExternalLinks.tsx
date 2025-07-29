@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "@mui/material";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers";
 import Link from "next/link";

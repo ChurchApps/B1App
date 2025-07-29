@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { ElementInterface, PersonHelper } from "@/helpers";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { FormSubmissionEdit } from "@churchapps/apphelper/dist/components/FormSubmissionEdit";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper";
+import { FormSubmissionEdit } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -31,7 +31,7 @@ export const FormElement = (props: Props) => {
     ApiHelper.get(
       "/forms/standalone/" + formId + "?churchId=" + props.church.id,
       "MembershipApi"
-    ).then((data) => {
+    ).then((data: any) => {
       if (data.restricted) setAddFormId(formId);
       else setUnRestrictedFormId(formId);
       setForm(data);

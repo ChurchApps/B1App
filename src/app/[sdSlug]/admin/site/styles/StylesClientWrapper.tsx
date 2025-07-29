@@ -12,8 +12,8 @@ import {
   SmartButton as SmartButtonIcon,
   Style as StyleIcon
 } from "@mui/icons-material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { PaletteEdit } from "@/components/admin/settings/PaletteEdit";
 import { FontsEdit } from "@/components/admin/settings/FontEdit";
 import { Preview } from "@/components/admin/settings/Preview";
@@ -30,9 +30,9 @@ export function StylesClientWrapper(props: WrapperPageProps) {
   const [churchSettings, setChurchSettings] = useState<any>(null);
 
   const loadData = () => {
-    ApiHelper.getAnonymous("/settings/public/" + props.config.church.id, "MembershipApi").then(s => setChurchSettings(s));
+    ApiHelper.getAnonymous("/settings/public/" + props.config.church.id, "MembershipApi").then((s: any) => setChurchSettings(s));
 
-    ApiHelper.get("/globalStyles", "ContentApi").then((gs) => {
+    ApiHelper.get("/globalStyles", "ContentApi").then((gs: any) => {
       if (gs.palette) setGlobalStyle(gs);
       else
         setGlobalStyle({
@@ -82,7 +82,7 @@ export function StylesClientWrapper(props: WrapperPageProps) {
     if (existing.length > 0) router.push("/admin/site/blocks/" + existing[0].id);
     else {
       const block:BlockInterface = { name: "Site Footer", blockType: "footerBlock" };
-      ApiHelper.post("/blocks", [block], "ContentApi").then((data) => {
+      ApiHelper.post("/blocks", [block], "ContentApi").then((data: any) => {
         router.push("/admin/site/blocks/" + data[0].id);
       });
     }

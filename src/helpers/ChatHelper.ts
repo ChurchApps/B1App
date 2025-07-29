@@ -1,5 +1,5 @@
-import { SocketHelper } from "@churchapps/apphelper/dist/helpers/SocketHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { SocketHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { ConnectionInterface } from "@churchapps/helpers";
 import type { ConversationInterface } from "@churchapps/helpers";
 import type { MessageInterface } from "@churchapps/helpers";
@@ -66,8 +66,8 @@ export class ChatHelper {
 
   static handleDelete = (messageId: string) => {
     const rooms = [ChatHelper.current.mainRoom, ChatHelper.current.hostRoom];
-    ChatHelper.current.privateRooms.forEach(r => rooms.push(r));
-    rooms.forEach(room => {
+    ChatHelper.current.privateRooms.forEach((r: any) => rooms.push(r));
+    rooms.forEach((room: any) => {
       if (room !== null) {
         for (let i = room.messages.length - 1; i >= 0; i--) {
           if (room.messages[i].id === messageId) room.messages.splice(i, 1);
@@ -123,7 +123,7 @@ export class ChatHelper {
 
   static getOrCreatePrivateRoom = (conversation: ConversationInterface) => {
     let privateRoom: ChatRoomInterface = null;
-    ChatHelper.current.privateRooms.forEach(pr => {
+    ChatHelper.current.privateRooms.forEach((pr: any) => {
       if (pr.conversation.id === conversation.id) privateRoom = pr;
     });
 
@@ -143,7 +143,7 @@ export class ChatHelper {
     if (messages.length > 0) {
       const room = ChatHelper.getRoom(messages[0].conversationId);
       room.messages = [];
-      messages.forEach(m => {
+      messages.forEach((m: any) => {
         switch (m.messageType) {
           case "message": ChatHelper.handleMessage(m); break;
           case "callout": ChatHelper.handleCallout(m); break;
@@ -167,7 +167,7 @@ export class ChatHelper {
     let result: ChatRoomInterface = null;
     if (c.mainRoom?.conversation.id === conversationId) result = c.mainRoom;
     else if (c.hostRoom?.conversation.id === conversationId) result = c.hostRoom;
-    else c.privateRooms.forEach(r => { if (r.conversation.id === conversationId) result = r; });
+    else c.privateRooms.forEach((r: any) => { if (r.conversation.id === conversationId) result = r; });
     return result;
   }
 
@@ -189,13 +189,13 @@ export class ChatHelper {
     const { firstName, lastName } = ChatHelper.current.user;
     const ipAddress = await StreamChatManager.getIpAddress();
     const connection: ConnectionInterface = { conversationId: conversationId, churchId: churchId, displayName: `${firstName} ${lastName}`, socketId: SocketHelper.socketId, ipAddress: ipAddress }
-    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi").then((c) => {
+    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi").then((c: any) => {
       if (connection.displayName.includes("Anonymous ")) {
         ChatHelper.current.user.firstName = c[0].displayName;
         ChatHelper.onChange();
       }
     });
-    ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversationId, "MessagingApi").then(messages => { ChatHelper.handleCatchup(messages) });
+    ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversationId, "MessagingApi").then((messages: any) => { ChatHelper.handleCatchup(messages) });
   }
 
 }

@@ -21,7 +21,7 @@ import {
   Add as AddIcon,
   OpenInNew as OpenInNewIcon
 } from "@mui/icons-material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
 
 type Props = {

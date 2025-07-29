@@ -5,10 +5,10 @@ import Link from "next/link";
 import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ClickAwayListener, ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { LinkInterface } from "@churchapps/helpers";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
@@ -66,7 +66,7 @@ export function Header(props: Props) {
 
     if (typeof window !== "undefined" && props.config?.church?.id) {
       // Fetch settings from the API
-      ApiHelper.getAnonymous("/settings/public/" + props.config?.church.id, "ContentApi").then((data) => {
+      ApiHelper.getAnonymous("/settings/public/" + props.config?.church.id, "ContentApi").then((data: any) => {
         if (data.showLogin) {
           setShowLogin(data.showLogin === "true");
         }

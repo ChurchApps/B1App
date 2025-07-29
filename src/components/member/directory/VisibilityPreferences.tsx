@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Grid, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ApiHelper } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
 import type { VisibilityPreferenceInterface } from "@churchapps/helpers";
 
 export const VisibilityPreferences = () => {
   const [pref, setPref] = useState<VisibilityPreferenceInterface>({ address: "", phoneNumber: "", email: "" } as VisibilityPreferenceInterface);
 
   const initData = () => {
-    ApiHelper.get("/visibilityPreferences/my", "MembershipApi").then((data) => setPref(data));
+    ApiHelper.get("/visibilityPreferences/my", "MembershipApi").then((data: any) => setPref(data));
   };
 
   const handlePrefChange = (e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {

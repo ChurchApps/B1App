@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 
@@ -21,12 +21,12 @@ export const VimeoImport = (props: Props) => {
   const [autoImportSettings, setAutoImportSettings] = useState(null);
 
   const loadData = () => {
-    ApiHelper.get("/playlists", "ContentApi").then((data) => { setPlaylists(data); });
+    ApiHelper.get("/playlists", "ContentApi").then((data: any) => { setPlaylists(data); });
   };
 
   const loadSettings = () => {
     if (playlistId && channelId) {
-      ApiHelper.get(`/settings/imports?type=vimeo&playlistId=${playlistId}&channelId=${channelId}`, "ContentApi").then((data) => {
+      ApiHelper.get(`/settings/imports?type=vimeo&playlistId=${playlistId}&channelId=${channelId}`, "ContentApi").then((data: any) => {
         if (data.length === 1) { setAutoImportSettings(data[0]); setAutoImportSermons(true); }
         else { setAutoImportSettings(null); setAutoImportSermons(false); }
       });
@@ -72,7 +72,7 @@ export const VimeoImport = (props: Props) => {
 
   const handleFetch = () => {
     setIsFetching(true);
-    ApiHelper.get("/sermons/vimeoImport/" + channelId, "ContentApi").then((data) => { setSermons(data); setIsFetching(false); });
+    ApiHelper.get("/sermons/vimeoImport/" + channelId, "ContentApi").then((data: any) => { setSermons(data); setIsFetching(false); });
   };
 
   const handleSave = () => {

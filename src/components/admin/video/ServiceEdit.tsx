@@ -1,5 +1,5 @@
 "use client";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { InputBox } from "@churchapps/apphelper";
 import {
   Grid,
   InputLabel,
@@ -25,10 +25,10 @@ import {
   AccessTime as AccessTimeIcon
 } from "@mui/icons-material";
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { UniqueIdHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
 import type { SermonInterface, StreamingServiceInterface } from "@churchapps/helpers";
 
 interface Props { currentService: StreamingServiceInterface, updatedFunction?: () => void }
@@ -43,7 +43,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
   const handleCancel = () => { props.updatedFunction(); }
 
   const loadData = () => {
-    ApiHelper.get("/sermons", "ContentApi").then(data => {
+    ApiHelper.get("/sermons", "ContentApi").then((data: any) => {
       setSermons(data);
       setIsLoading(false);
     });

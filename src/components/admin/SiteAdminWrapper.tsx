@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Icon, Stack, Switch, Tooltip, Typography } from "@mui/material";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { GenericSettingInterface, LinkInterface } from "@churchapps/helpers";
 import { PageInterface, UrlHelper } from "@/helpers";
 import { redirect, usePathname } from "next/navigation";
@@ -31,7 +31,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
   const loadData = () => {
     if (!isAuthenticated) return;
 
-    ApiHelper.get("/pages", "ContentApi").then((_pages) => {
+    ApiHelper.get("/pages", "ContentApi").then((_pages: any) => {
       let filteredPages:PageInterface[] = [];
       _pages.forEach((p:PageInterface) => {
         if (!p.url?.startsWith("/stream/")) filteredPages.push(p);
@@ -39,9 +39,9 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
       setPages(filteredPages || [])
     });
 
-    ApiHelper.get("/links?category=website", "ContentApi").then(data => { setLinks(data); });
+    ApiHelper.get("/links?category=website", "ContentApi").then((data: any) => { setLinks(data); });
     ApiHelper.get("/settings", "ContentApi").then((data: GenericSettingInterface[]) => {
-      const loginSetting = data.filter(d => d.keyName === "showLogin");
+      const loginSetting = data.filter((d: any) => d.keyName === "showLogin");
       if (loginSetting) setShowLogin(loginSetting[0]);
     });
   };
@@ -52,7 +52,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
 
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const setting: GenericSettingInterface = showLogin ? { ...showLogin, value: `${e.target.checked}` } : { keyName: "showLogin", value: `${e.target.checked}`, public: 1 }
-    ApiHelper.post("/settings", [setting], "ContentApi").then(data => { setShowLogin(data[0]); });
+    ApiHelper.post("/settings", [setting], "ContentApi").then((data: any) => { setShowLogin(data[0]); });
   }
 
   const handleDrop = (index:number, parentId:string, link:LinkInterface) => {

@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import { AnimationsInterface, BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider, Dialog } from "@mui/material";
-import { MarkdownEditor } from "@churchapps/apphelper/dist/components/markdownEditor/MarkdownEditor";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { MarkdownEditor } from "@churchapps/apphelper-markdown";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import React from "react";
 import { GalleryModal } from "../../gallery/GalleryModal";
 import { RowEdit } from "./RowEdit";
@@ -92,7 +92,7 @@ export function ElementEdit(props: Props) {
 
   const handleSave = () => {
     if (innerErrors.length === 0) {
-      ApiHelper.post("/elements", [element], "ContentApi").then((data) => {
+      ApiHelper.post("/elements", [element], "ContentApi").then((data: any) => {
         setElement(data);
         props.updatedCallback(data);
       });
@@ -447,7 +447,7 @@ export function ElementEdit(props: Props) {
   const handleDuplicate = (e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm("Are you sure you wish to make a copy of this element and all of it's children?")) {
-      ApiHelper.post("/elements/duplicate/" + props.element.id, {}, "ContentApi").then((data) => {
+      ApiHelper.post("/elements/duplicate/" + props.element.id, {}, "ContentApi").then((data: any) => {
         props.updatedCallback(data);
       });
     }

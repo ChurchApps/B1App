@@ -6,7 +6,7 @@ import React, { useEffect } from "react";
 import { InteractionContainer } from "./InteractionContainer";
 import { VideoContainer } from "./VideoContainer";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import { StreamingHeader } from "./StreamingHeader";
@@ -28,7 +28,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   const [overlayContent, setOverlayContent] = React.useState(false);
 
   const loadData = async (keyName: string) => {
-    let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then(response => response.json());
+    let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: any) => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;

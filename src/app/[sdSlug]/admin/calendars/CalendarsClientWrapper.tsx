@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { CuratedCalendarInterface } from "@churchapps/helpers";
 import { redirect } from "next/navigation";
 import {
@@ -42,7 +42,7 @@ export function CalendarsClientWrapper(props: WrapperPageProps) {
 
   const loadData = () => {
     setLoading(true);
-    ApiHelper.get("/curatedCalendars", "ContentApi").then((data) => {
+    ApiHelper.get("/curatedCalendars", "ContentApi").then((data: any) => {
       setCalendars(data);
       setLoading(false);
     }).catch(() => {

@@ -1,6 +1,6 @@
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 import React from "react";
@@ -21,12 +21,12 @@ export const YouTubeImport = (props: Props) => {
   const [autoImportSettings, setAutoImportSettings] = React.useState(null);
 
   const loadData = () => {
-    ApiHelper.get("/playlists", "ContentApi").then((data) => { setPlaylists(data); });
+    ApiHelper.get("/playlists", "ContentApi").then((data: any) => { setPlaylists(data); });
   };
 
   const loadSettings = () => {
     if (playlistId && channelId) {
-      ApiHelper.get(`/settings/imports?type=youtube&playlistId=${playlistId}&channelId=${channelId}`, "ContentApi").then((data) => {
+      ApiHelper.get(`/settings/imports?type=youtube&playlistId=${playlistId}&channelId=${channelId}`, "ContentApi").then((data: any) => {
         if (data.length === 1) { setAutoImportSettings(data[0]); setAutoImportSermons(true); }
         else { setAutoImportSettings(null); setAutoImportSermons(false); }
       });
@@ -46,7 +46,7 @@ export const YouTubeImport = (props: Props) => {
       const sermon = ser;
       rows.push(<TableRow key={sermon.videoData}>
         <TableCell>
-          <Checkbox onChange={(e) => handleCheck(sermon, e.currentTarget.checked)} checked={ selectedSermons.filter(s => s.videoData === sermon.videoData).length > 0 } />
+          <Checkbox onChange={(e) => handleCheck(sermon, e.currentTarget.checked)} checked={ selectedSermons.filter((s: any) => s.videoData === sermon.videoData).length > 0 } />
         </TableCell>
         <TableCell>{sermon.title}</TableCell>
       </TableRow>);
@@ -72,7 +72,7 @@ export const YouTubeImport = (props: Props) => {
 
   const handleFetch = () => {
     setIsFetching(true);
-    ApiHelper.get("/sermons/youtubeImport/" + channelId, "ContentApi").then((data) => { setSermons(data); setIsFetching(false); });
+    ApiHelper.get("/sermons/youtubeImport/" + channelId, "ContentApi").then((data: any) => { setSermons(data); setIsFetching(false); });
   }
 
   const handleSave = () => {

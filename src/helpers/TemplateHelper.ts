@@ -1,6 +1,6 @@
 import moment from "moment";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface, StreamingServiceInterface } from "@churchapps/helpers";
 import { BlockInterface, ElementInterface, PageInterface, SectionInterface } from "./interfaces";
 
@@ -80,7 +80,7 @@ export class TemplateHelper {
   };
 
   static async createDefaultLinks() {
-    const linksLength = await ApiHelper.get("/links?category=website", "ContentApi").then((data) => data.length);
+    const linksLength = await ApiHelper.get("/links?category=website", "ContentApi").then((data: any) => data.length);
     const linksArr: LinkInterface[] = [];
     this.links.forEach((l, index) => {
       l.sort = linksLength + index;

@@ -3,13 +3,13 @@
 import { Box, Paper, Stack } from "@mui/material";
 import React from "react";
 import { ArrayHelper } from "@churchapps/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
+import { PersonHelper } from "@churchapps/apphelper";
 import { ConversationInterface, MessageInterface, UserContextInterface } from "@churchapps/helpers";
-import { AddNote } from "@churchapps/apphelper/dist/components/notes/AddNote";
-import { Note } from "@churchapps/apphelper/dist/components/notes/Note";
+import { AddNote } from "@churchapps/apphelper";
+import { Note } from "@churchapps/apphelper";
 
 interface Props {
   conversation: ConversationInterface;

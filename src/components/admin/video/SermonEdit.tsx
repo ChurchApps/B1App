@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import { Grid, InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent, Button, Icon } from "@mui/material";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { Loading } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UniqueIdHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { SermonInterface, PlaylistInterface } from "@churchapps/helpers";
 import { Duration } from "./Duration";
@@ -31,7 +31,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   const [additionalPlaylistId, setAdditionalPlaylistId] = React.useState("");
 
   const loadData = () => {
-    ApiHelper.get("/playlists", "ContentApi").then(data => {
+    ApiHelper.get("/playlists", "ContentApi").then((data: any) => {
       setPlaylists(data);
       setIsLoading(false);
     });
@@ -164,7 +164,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
   }
 
   const fetchVideo = (videoType: "youtube" | "vimeo") => {
-    ApiHelper.getAnonymous(`/sermons/lookup?videoType=${videoType}&videoData=${currentSermon.videoData}`, "ContentApi").then(d => {
+    ApiHelper.getAnonymous(`/sermons/lookup?videoType=${videoType}&videoData=${currentSermon.videoData}`, "ContentApi").then((d: any) => {
       let v = { ...currentSermon };
       v.title = d.title;
       v.description = d.description;
@@ -177,7 +177,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
   const getPlaylists = () => {
     let result: React.ReactElement[] = [];
-    playlists.forEach(playlist => {
+    playlists.forEach((playlist: any) => {
       result.push(<MenuItem key={playlist.id} value={playlist.id} data-testid={`playlist-option-${playlist.id}`} aria-label={playlist.title}>{playlist.title}</MenuItem>);
     });
     return result;
@@ -185,7 +185,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
   const getAdditionalPlaylists = () => {
     let result: React.ReactElement[] = [];
-    playlists.forEach(playlist => {
+    playlists.forEach((playlist: any) => {
       if (playlist.id !== currentSermon.playlistId) result.push(<MenuItem key={playlist.id} value={playlist.id} data-testid={`additional-playlist-option-${playlist.id}`} aria-label={playlist.title}>{playlist.title}</MenuItem>);
     });
     return result;

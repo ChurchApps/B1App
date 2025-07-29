@@ -1,5 +1,5 @@
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import type { ConversationInterface } from "@churchapps/helpers";
 import type { GroupInterface } from "@churchapps/helpers";
 import type { PersonInterface } from "@churchapps/helpers";

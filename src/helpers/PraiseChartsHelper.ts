@@ -1,4 +1,4 @@
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "./EnvironmentHelper";
 
 export class PraiseChartsHelper {

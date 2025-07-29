@@ -22,10 +22,10 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon, Delete as DeleteIcon, Save as SaveIcon } from "@mui/icons-material";
 import { IconPicker } from "@/components/iconPicker/IconPicker";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { ErrorMessages } from "@churchapps/apphelper";
 import { PageInterface } from "@/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }

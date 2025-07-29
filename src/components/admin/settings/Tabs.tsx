@@ -18,7 +18,7 @@ import {
   ArrowDownward as ArrowDownIcon,
   Tab as TabIcon
 } from "@mui/icons-material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { B1LinkInterface } from "@/helpers";
 import { CardWithHeader, EmptyState } from "@/components/ui";
 
@@ -31,7 +31,7 @@ export function Tabs({ onSelected = () => {}, refreshKey = 0 }: Props) {
   const [tabs, setTabs] = useState<B1LinkInterface[]>([]);
 
   const loadData = () => {
-    ApiHelper.get("/links?category=b1Tab", "ContentApi").then((data) => setTabs(data));
+    ApiHelper.get("/links?category=b1Tab", "ContentApi").then((data: any) => setTabs(data));
   };
 
   const saveChanges = () => {

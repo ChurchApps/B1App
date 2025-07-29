@@ -18,12 +18,12 @@ import {
   Title as TitleIcon,
   Description as DescriptionIcon
 } from "@mui/icons-material";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { UniqueIdHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { PlaylistInterface } from "@churchapps/helpers";
 

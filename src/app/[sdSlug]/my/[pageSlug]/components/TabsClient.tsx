@@ -2,8 +2,8 @@
 
 import React, { useEffect } from "react";
 
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
@@ -22,8 +22,8 @@ export const TabsClient = (props: Props) => {
 
   const loadData = () => {
     if (UserHelper.currentUserChurch) {
-      ApiHelper.get("/classrooms/person", "LessonsApi").then(data => setClassrooms(data));
-      ApiHelper.get("/campuses", "AttendanceApi").then(data => setCampuses(data));
+      ApiHelper.get("/classrooms/person", "LessonsApi").then((data: any) => setClassrooms(data));
+      ApiHelper.get("/campuses", "AttendanceApi").then((data: any) => setCampuses(data));
     }
   }
 
@@ -40,7 +40,7 @@ export const TabsClient = (props: Props) => {
 
     if (context.userChurch) {
       showMyGroups = context.userChurch?.groups?.length > 0;
-      context.userChurch.groups.forEach(group => {
+      context.userChurch.groups.forEach((group: any) => {
         if (group.tags.indexOf("team") > -1) showPlans = true;
       });
     }

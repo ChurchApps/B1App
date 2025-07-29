@@ -1,7 +1,7 @@
 import { Button, TextField, Icon, Box, Stack, Chip, Divider, SelectChangeEvent, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { PeopleSearchResults } from "./PeopleSearchResults"
 
@@ -18,12 +18,12 @@ export const DirectorySearch: React.FC<Props> = (props) => {
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
     let term = encodeURIComponent(searchText.trim());
-    if (searchCategory === "people") ApiHelper.get("/people/search?term=" + term, "MembershipApi").then(data => setSearchResults(data));
-    else ApiHelper.get("/people/search/group?groupId=" + searchGroupId, "MembershipApi").then(data => setSearchResults(data));
+    if (searchCategory === "people") ApiHelper.get("/people/search?term=" + term, "MembershipApi").then((data: any) => setSearchResults(data));
+    else ApiHelper.get("/people/search/group?groupId=" + searchGroupId, "MembershipApi").then((data: any) => setSearchResults(data));
   }
 
   const loadData = () => {
-    ApiHelper.get("/people/directory/all", "MembershipApi").then(data => { setSearchResults(data) });
+    ApiHelper.get("/people/directory/all", "MembershipApi").then((data: any) => { setSearchResults(data) });
     ApiHelper.get("/groups", "MembershipApi").then((data: GroupInterface[]) => setGroups(data));
   }
 

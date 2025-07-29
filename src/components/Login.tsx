@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import dynamic from "next/dynamic";
 import { PaperProps } from "@mui/material";
 
@@ -10,7 +11,7 @@ interface Props {
   keyName?: string;
 }
 
-const LoginClient = dynamic(() => import("./LoginClient").then(mod => ({ default: mod.LoginClient })), {
+const LoginClient: React.ComponentType<Props> = dynamic(() => import("./LoginClient").then((mod: any) => ({ default: mod.LoginClient })), {
   ssr: false,
   loading: () => <div>Loading...</div>
 });

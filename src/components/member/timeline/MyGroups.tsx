@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "@/components/groups/GroupCard";
 
@@ -8,7 +8,7 @@ export default function MyGroups() {
   const [groups, setGroups] = useState<GroupInterface[]>([]);
 
   const loadData = () => {
-    ApiHelper.get("/groups/my", "MembershipApi").then((data) => setGroups(data));
+    ApiHelper.get("/groups/my", "MembershipApi").then((data: any) => setGroups(data));
   };
 
   useEffect(loadData, []);

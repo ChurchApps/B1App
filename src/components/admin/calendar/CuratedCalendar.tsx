@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { CuratedEventWithEventInterface } from "@churchapps/helpers";
 import { CuratedEventCalendar } from "./CuratedEventCalendar";
 
@@ -15,8 +15,8 @@ export function CuratedCalendar(props: Props) {
   const [events, setEvents] = useState<CuratedEventWithEventInterface[]>([]);
 
   const loadData = () => {
-    if (ApiHelper.isAuthenticated) ApiHelper.get("/curatedEvents/calendar/" + props.curatedCalendarId, "ContentApi").then((data) => { setEvents(data); if (props.updatedCallback) props.updatedCallback(); });
-    else ApiHelper.getAnonymous("/curatedEvents/public/calendar/" + props.churchId + "/" + props.curatedCalendarId, "ContentApi").then((data) => { setEvents(data); });
+    if (ApiHelper.isAuthenticated) ApiHelper.get("/curatedEvents/calendar/" + props.curatedCalendarId, "ContentApi").then((data: any) => { setEvents(data); if (props.updatedCallback) props.updatedCallback(); });
+    else ApiHelper.getAnonymous("/curatedEvents/public/calendar/" + props.churchId + "/" + props.curatedCalendarId, "ContentApi").then((data: any) => { setEvents(data); });
   };
 
   useEffect(loadData, [props.curatedCalendarId, props?.refresh]);

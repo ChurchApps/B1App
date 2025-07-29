@@ -2,17 +2,9 @@
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
 import { useState } from "react";
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic"; // temporarily disabled
 
-const MarkdownEditor = dynamic(
-  () => import("@churchapps/apphelper").then((mod) => mod.MarkdownEditor),
-  { ssr: false } // disable server-side rendering if needed
-);
-
-const MarkdownPreviewLight = dynamic(
-  () => import("@churchapps/apphelper").then((mod) => mod.MarkdownPreviewLight),
-  { ssr: false }
-);
+// Markdown components temporarily disabled due to type issues
 
 export default function Localhost() {
   const [val, setVal] = useState("");
@@ -38,12 +30,8 @@ export default function Localhost() {
       </table>
 
       <br />
-      <h3>Editor</h3>
-      <MarkdownEditor value={val} onChange={(v) => setVal(v)} />
-      <h3>Markdown</h3>
-      <TextField multiline fullWidth value={val} />
-      <h3>Preview</h3>
-      <MarkdownPreviewLight value={val} />
+      <h3>Markdown Test (Editor temporarily disabled)</h3>
+      <TextField multiline fullWidth value={val} onChange={(e) => setVal(e.target.value)} />
     </Container>
   );
 }

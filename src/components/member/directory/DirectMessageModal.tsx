@@ -4,8 +4,8 @@ import { Dialog, DialogContent } from "@mui/material";
 import React from "react";
 
 import { PersonInterface, PrivateMessageInterface, UserContextInterface } from "@churchapps/helpers";
-import { NewPrivateMessage } from "@churchapps/apphelper/dist/components/wrapper/NewPrivateMessage";
-import { PrivateMessageDetails } from "@churchapps/apphelper/dist/components/wrapper/PrivateMessageDetails";
+import { NewPrivateMessage } from "@churchapps/apphelper";
+import { PrivateMessageDetails } from "@churchapps/apphelper";
 
 interface Props {
   context: UserContextInterface;

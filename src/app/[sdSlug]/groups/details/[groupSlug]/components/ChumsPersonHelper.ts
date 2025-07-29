@@ -1,4 +1,4 @@
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { PersonHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 
 export class ChumsPersonHelper {

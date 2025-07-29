@@ -4,8 +4,8 @@ import { ChatHelper } from "@/helpers/ChatHelper";
 import { Button, FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import React, { KeyboardEvent } from "react";
 import { Emojis } from ".";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { MessageInterface } from "@churchapps/helpers";
 import { ChatRoomInterface } from "../../../helpers"
 

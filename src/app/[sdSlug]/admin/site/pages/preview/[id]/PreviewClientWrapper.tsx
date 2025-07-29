@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 import { ConfigHelper, PageInterface, WrapperPageProps } from "@/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { Box, Button, Stack, Typography, Paper } from "@mui/material";
@@ -24,7 +24,7 @@ export function PreviewClientWrapper(props: Props) {
 
   const loadData = () => {
     const linkId = searchParams.get("linkId");
-    if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then((data) => setLink(data));
+    if (linkId) ApiHelper.get("/links/" + linkId, "ContentApi").then((data: any) => setLink(data));
   };
 
   const handlePageUpdated = (page: PageInterface, link: LinkInterface) => {

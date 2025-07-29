@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { ApiHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import type { GenericSettingInterface } from "@churchapps/helpers";
 import { AppearanceEdit } from "./AppearanceEdit";
@@ -14,7 +14,7 @@ export const Appearance: React.FC<Props> = (props) => {
   const [mode, setMode] = useState("display");
   const [styles, setStyles] = useState<AppearanceInterface>({});
 
-  const loadData = () => { ApiHelper.get("/settings", "MembershipApi").then(settings => { setCurrentSettings(settings); configureStyles(settings) }) }
+  const loadData = () => { ApiHelper.get("/settings", "MembershipApi").then((settings: any) => { setCurrentSettings(settings); configureStyles(settings) }) }
   const handleEdit = () => { setMode("edit"); }
   const handleUpdate = () => { setMode("display"); loadData(); }
 
@@ -33,7 +33,7 @@ export const Appearance: React.FC<Props> = (props) => {
 
   const configureStyles = (settings: GenericSettingInterface[]) => {
     let style: any = getDefaultStyles();
-    settings.forEach(s => { style[s.keyName] = s.value; });
+    settings.forEach((s: any) => { style[s.keyName] = s.value; });
     setStyles(style);
   }
 

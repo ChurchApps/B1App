@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Grid, Icon } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { AssignmentInterface, PersonInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { Team } from "@/components/plans/Team";
 import { PositionDetails } from "@/components/plans/PositionDetails";
@@ -28,7 +28,7 @@ export function PlanClient({ planId }: Props) {
   const loadData = async () => {
     setLoading(true);
     const tempPlan = await ApiHelper.get("/plans/" + planId, "DoingApi");
-    ApiHelper.get("/times/plan/" + planId, "DoingApi").then((data) => setTimes(data));
+    ApiHelper.get("/times/plan/" + planId, "DoingApi").then((data: any) => setTimes(data));
     setPlan(tempPlan);
     const tempPositions = await ApiHelper.get("/positions/plan/" + planId, "DoingApi");
     const tempAssignments = await ApiHelper.get("/assignments/plan/" + planId, "DoingApi");

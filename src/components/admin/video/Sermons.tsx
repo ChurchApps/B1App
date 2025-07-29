@@ -1,8 +1,8 @@
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
 import type { SermonInterface, PlaylistInterface } from "@churchapps/helpers";
 import { Box, Button, Card, CardContent, Chip, Icon, IconButton, InputAdornment, Menu, MenuItem, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import { Add as AddIcon, CalendarMonth as CalendarIcon, LiveTv as LiveTvIcon, PlaylistPlay as PlaylistIcon, Search as SearchIcon, ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
@@ -92,8 +92,8 @@ export const Sermons = (props: Props) => {
   );
 
   const loadData = () => {
-    ApiHelper.get("/playlists", "ContentApi").then(data => { setPlaylists(data); });
-    ApiHelper.get("/sermons", "ContentApi").then(data => {
+    ApiHelper.get("/playlists", "ContentApi").then((data: any) => { setPlaylists(data); });
+    ApiHelper.get("/sermons", "ContentApi").then((data: any) => {
       setSermons(data);
       setFilteredSermons(data);
       setIsLoading(false);
@@ -105,7 +105,7 @@ export const Sermons = (props: Props) => {
     if (value === "") {
       setFilteredSermons(sermons);
     } else {
-      const filtered = sermons.filter(sermon => {
+      const filtered = sermons.filter((sermon: any) => {
         const playlistTitle = getPlaylistTitle(sermon.playlistId);
         return (
           sermon.title.toLowerCase().includes(value.toLowerCase())
@@ -139,7 +139,7 @@ export const Sermons = (props: Props) => {
 
   const getRows = () => {
     let rows: React.ReactElement[] = [];
-    filteredSermons.forEach(video => {
+    filteredSermons.forEach((video: any) => {
       rows.push(
         <TableRow
           key={video.id}

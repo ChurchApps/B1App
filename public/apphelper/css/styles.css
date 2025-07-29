@@ -53,18 +53,18 @@
   overflow:visible;
 }
 
-#appBarSpacer {
-  height: 64px;
-}
-
 #primaryNavButton {
-  margin-right:50px;
+  margin-right:15px;
   text-transform: "none";
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
 }
 
 #primaryNavButton img {
-  height:35px;
+  height:35px !important;
   margin-right:15px;
+  max-height:35px !important;
 }
 
 #primaryNavButton h2 {
@@ -99,7 +99,6 @@
   #primaryNavButton h2 { display:none; }
   #primaryNavButton>img {margin-right:0px;}
   #primaryNavButton>span {margin-left:0px;}
-  #appBarSpacer { height:60px;}
   #secondaryMenu { display:none; }
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/helpers";
 import { TimelinePost } from "./TimelinePost";
 import { TimelineHelper } from "@/helpers/TimelineHelper";
