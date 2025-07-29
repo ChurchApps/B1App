@@ -9,7 +9,7 @@ import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";
 import { Box, Button, Stack, Typography, Paper } from "@mui/material";
 import { PageLinkEdit } from "@/components/admin/site/PageLinkEdit";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { PageHeader } from "@/components/ui/PageHeader";
+import { PageHeader } from "@churchapps/apphelper";
 import { Edit as EditIcon, Settings as SettingsIcon, Web as WebIcon } from "@mui/icons-material";
 
 interface Props extends WrapperPageProps {

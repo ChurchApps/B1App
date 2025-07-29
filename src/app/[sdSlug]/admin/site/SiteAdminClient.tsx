@@ -33,7 +33,8 @@ import {
 } from "@mui/icons-material";
 import { AddPageModal } from "@/components/admin/site/AddPageModal";
 import { useRouter } from "next/navigation";
-import { PageHeader, EmptyState } from "@/components/ui";
+import { PageHeader } from "@churchapps/apphelper";
+import { EmptyState } from "@/components/ui";
 
 export function SiteAdminClient(props: WrapperPageProps) {
   const windowWidth = useWindowWidth();
