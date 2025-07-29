@@ -44,25 +44,26 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
 
   return (
     <Layout withoutNavbar withoutFooter>
-      <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 600 }}>
-        {process.env.NEXT_PUBLIC_STAGE === "demo" && (<Alert severity="error" style={{ marginTop: 50 }}>
-          <b>Demo:</b> This is the demo environment.  All data is erased nightly.<br />
-          You can log into a test church with the credentials demo@chums.org / password .
-        </Alert>)}
-        <LoginPage
-          auth={searchParams.get("auth")}
-          context={context}
-          jwt={jwt}
-          appName="B1"
-          showLogo={showLogo}
-          loginContainerCssProps={loginContainerCssProps}
-          keyName={keyName}
-          returnUrl={searchParams.get("returnUrl") || redirectAfterLogin || "/my"}
-          handleRedirect={handleRedirect}
-          defaultEmail={process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@chums.org" : undefined}
-          defaultPassword={process.env.NEXT_PUBLIC_STAGE === "demo" ? "password" : undefined}
-        />
-      </div>
+
+
+      {process.env.NEXT_PUBLIC_STAGE === "demo" && (<Alert severity="error" style={{ marginTop: 50 }}>
+        <b>Demo:</b> This is the demo environment.  All data is erased nightly.<br />
+        You can log into a test church with the credentials demo@chums.org / password .
+      </Alert>)}
+      <LoginPage
+        auth={searchParams.get("auth")}
+        context={context}
+        jwt={jwt}
+        appName="B1"
+        showLogo={showLogo}
+        loginContainerCssProps={loginContainerCssProps}
+        keyName={keyName}
+        returnUrl={searchParams.get("returnUrl") || redirectAfterLogin || "/my"}
+        handleRedirect={handleRedirect}
+        defaultEmail={process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@chums.org" : undefined}
+        defaultPassword={process.env.NEXT_PUBLIC_STAGE === "demo" ? "password" : undefined}
+      />
+
     </Layout>
   );
 }
