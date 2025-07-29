@@ -29,12 +29,22 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     EnvironmentHelper.init();
     EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
     console.log("ENVIRONMENT HAD BEEN INIT")
-    AnalyticsHelper.init();
+    try {
+      AnalyticsHelper.init();
+    } catch (error) {
+      console.warn("Analytics initialization failed:", error);
+    }
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
   EnvironmentHelper.init();
-  useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
+  useEffect(() => {
+    try {
+      AnalyticsHelper.logPageView();
+    } catch (error) {
+      console.warn("Analytics page view failed:", error);
+    }
+  }, [location]);
 
 
   const getErrorAppData = () => {
