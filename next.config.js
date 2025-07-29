@@ -1,5 +1,12 @@
 module.exports = {
   reactStrictMode: true,
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'react-cropper/node_modules/cropperjs/dist/cropper.css': require.resolve('react-cropper/node_modules/cropperjs/dist/cropper.css')
+    };
+    return config;
+  },
   async rewrites() {
     return [
       {
