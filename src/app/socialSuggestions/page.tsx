@@ -1,7 +1,7 @@
 "use client";
 
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 

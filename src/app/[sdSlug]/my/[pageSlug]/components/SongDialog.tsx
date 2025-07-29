@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
 import React, { useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface, SongInterface } from "@/helpers";
 import { SongDetails } from "./SongDetails";
@@ -69,7 +69,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   }
 
   const loadLinks = () => {
-    if (arrangementKey) ApiHelper.get("/links?category=arrangementKey_" + arrangementKey.id, "ContentApi").then(data => { setLinks(data); });
+    if (arrangementKey) ApiHelper.get("/links?category=arrangementKey_" + arrangementKey.id, "ContentApi").then((data: any) => { setLinks(data); });
   }
 
   useEffect(() => { loadData() }, [props.arrangementKeyId]) //eslint-disable-line react-hooks/exhaustive-deps

@@ -1,11 +1,11 @@
 import { Icon, Button, Typography, Stack, Chip } from "@mui/material";
 import { Add as AddIcon, VideoCall as VideoCallIcon } from "@mui/icons-material";
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
 import type { StreamingServiceInterface } from "@churchapps/helpers";
 import { ServiceEdit } from "./ServiceEdit";
 
@@ -36,7 +36,7 @@ export const Services: React.FC = () => {
     </Button>
   )
   const loadData = () => {
-    ApiHelper.get("/streamingServices", "ContentApi").then(data => {
+    ApiHelper.get("/streamingServices", "ContentApi").then((data: any) => {
       data.forEach((s: StreamingServiceInterface) => {
         s.serviceTime = new Date(Date.parse(s.serviceTime.toString()));
         s.serviceTime.setMinutes(s.serviceTime.getMinutes() + s.timezoneOffset);

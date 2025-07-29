@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Chip, FormControl, Icon, InputAdornment, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 
 type Props = {
   parsedData: any;
@@ -55,7 +55,7 @@ export function DonateLinkEdit({ parsedData, onRealtimeChange }: Props) {
   };
 
   useEffect(() => {
-    ApiHelper.get("/funds", "GivingApi").then((data) => setFunds(data));
+    ApiHelper.get("/funds", "GivingApi").then((data: any) => setFunds(data));
     if (parsedData?.amounts) {
       setAmounts(JSON.parse(parsedData.amounts));
     }

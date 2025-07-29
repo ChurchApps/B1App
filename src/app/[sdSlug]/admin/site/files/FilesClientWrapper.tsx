@@ -5,9 +5,9 @@ import { FileInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { FileUpload } from "@/components/admin/FileUpload";
 import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography, Stack, Card } from "@mui/material";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { InputBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
 import { Folder as FolderIcon, CloudUpload as CloudUploadIcon, InsertDriveFile as FileIcon } from "@mui/icons-material";
 import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
@@ -30,7 +30,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
   };
 
   const loadData = () => {
-    ApiHelper.get("/files", "ContentApi").then((d) => setFiles(d));
+    ApiHelper.get("/files", "ContentApi").then((d: any) => setFiles(d));
   };
 
   const handleDelete = async (file: FileInterface) => {
@@ -73,7 +73,7 @@ export function FilesClientWrapper(props: WrapperPageProps) {
   };
 
   useEffect(() => {
-    ApiHelper.get("/files", "ContentApi").then((d) => setFiles(d));
+    ApiHelper.get("/files", "ContentApi").then((d: any) => setFiles(d));
   }, []);
 
   const fileRows = files?.length > 0

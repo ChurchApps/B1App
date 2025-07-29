@@ -5,12 +5,12 @@ import { Container, Dialog, Grid, Icon, ThemeProvider, ToggleButton, ToggleButto
 import { useWindowWidth } from "@react-hook/window-size";
 import { BlockInterface, ElementInterface, PageInterface, SectionInterface, WrapperPageProps } from "@/helpers";
 import { Theme } from "@/components";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
+import { SmallButton } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
 import { Section } from "@/components/Section";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -72,7 +72,7 @@ export default function ContentEditor(props: Props) {
   }
 
   const loadLinks = () => {
-    if (props.config?.church) ApiHelper.getAnonymous("/links/church/" + props.config?.church.id + "?category=website", "ContentApi").then((data) => { setNavLinks(data) });
+    if (props.config?.church) ApiHelper.getAnonymous("/links/church/" + props.config?.church.id + "?category=website", "ContentApi").then((data: any) => { setNavLinks(data) });
   }
 
   useEffect(loadData, [props.pageId, props.blockId]);

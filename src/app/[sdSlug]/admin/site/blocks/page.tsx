@@ -2,8 +2,8 @@
 
 import { JSX, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { BlockInterface } from "@/helpers";

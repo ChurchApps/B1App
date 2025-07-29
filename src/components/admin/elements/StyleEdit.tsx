@@ -1,5 +1,5 @@
 import { StyleOption } from "@/helpers";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
+import { InputBox } from "@churchapps/apphelper";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import { ColorPicker } from "../ColorPicker";
@@ -16,7 +16,7 @@ export const StyleEdit: React.FC<Props> = (props) => {
 
   const [name, setName] = React.useState(props.style.name || props.fieldOptions[0].key);
   const [value, setValue] = React.useState(props.style.value.replace("px", "") || props.fieldOptions[0].default);
-  const field = props.fieldOptions.find(o => o.key === name);
+  const field = props.fieldOptions.find((o: any) => o.key === name);
 
   const getInputField = () => {
     let result = <></>;
@@ -50,7 +50,7 @@ export const StyleEdit: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (name===props.style.name) setValue(props.style.value.replace("px", ""));
-    else setValue(props.fieldOptions.find(o => o.key === name).default);
+    else setValue(props.fieldOptions.find((o: any) => o.key === name).default);
   }, [name]);
 
   const handleSave = () => {

@@ -4,10 +4,10 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { PersonHelper, WrapperPageProps } from "@/helpers";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { FormSubmissionEdit } from "@churchapps/apphelper/dist/components/FormSubmissionEdit";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper";
+import { FormSubmissionEdit } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { FormInterface } from "@churchapps/helpers";
 import { Container } from "@mui/material";
 
@@ -27,7 +27,7 @@ export function FormPage(props: Props) {
 
   const loadData = () => {
     setIsLoading(true);
-    ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi").then((data) => {
+    ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi").then((data: any) => {
       const now = new Date().setHours(0, 0, 0, 0);
       const start = data.accessStartTime ? new Date(data.accessStartTime) : null;
       const end = data.accessEndTime ? new Date(data.accessEndTime) : null;

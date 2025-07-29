@@ -1,6 +1,6 @@
 "use client";
 
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
 import { UnauthenticatedView } from "./UnauthenticatedView";
 import { AuthenticatedView } from "./AuthenticatedView";

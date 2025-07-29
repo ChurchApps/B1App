@@ -1,6 +1,6 @@
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
-import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper/dist/components/markdownEditor";
+import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper-markdown";
 
 interface Props { element: ElementInterface; onEdit?: (section: SectionInterface, element: ElementInterface) => void; }
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";

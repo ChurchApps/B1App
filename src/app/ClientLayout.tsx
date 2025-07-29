@@ -4,15 +4,15 @@ import "@/styles/pages.css";
 import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
-import "@churchapps/apphelper/dist/components/markdownEditor/editor.css";
+import "@churchapps/apphelper-markdown/dist/components/markdownEditor/editor.css";
 
 import { UserProvider } from "@/context/UserContext";
-import { AnalyticsHelper } from "@churchapps/apphelper/dist/helpers/AnalyticsHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { AnalyticsHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { ErrorAppDataInterface, ErrorLogInterface } from "@churchapps/helpers";
 import React, { useEffect } from "react";
-import { ErrorHelper } from "@churchapps/apphelper/dist/helpers/ErrorHelper";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { ErrorHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
@@ -29,12 +29,22 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     EnvironmentHelper.init();
     EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
     console.log("ENVIRONMENT HAD BEEN INIT")
-    AnalyticsHelper.init();
+    try {
+      AnalyticsHelper.init();
+    } catch (error) {
+      console.warn("Analytics initialization failed:", error);
+    }
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
   EnvironmentHelper.init();
-  useEffect(() => { AnalyticsHelper.logPageView() }, [location]);
+  useEffect(() => {
+    try {
+      AnalyticsHelper.logPageView();
+    } catch (error) {
+      console.warn("Analytics page view failed:", error);
+    }
+  }, [location]);
 
 
   const getErrorAppData = () => {

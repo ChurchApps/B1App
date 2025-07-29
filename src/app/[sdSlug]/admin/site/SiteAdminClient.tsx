@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { EnvironmentHelper, PageLink, WrapperPageProps } from "@/helpers";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
+import { ErrorMessages } from "@churchapps/apphelper";
 import { useWindowWidth } from "@react-hook/window-size";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { SiteAdminWrapper } from "@/components/admin/SiteAdminWrapper";

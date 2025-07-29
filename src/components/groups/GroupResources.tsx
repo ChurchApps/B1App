@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface, UserContextInterface } from "@churchapps/helpers";
 import { FileInterface } from "@/helpers";
 import { Box, LinearProgress, Typography, TableRow, TableCell, Table, TableHead, TableBody, Divider, Chip } from "@mui/material";
@@ -35,7 +35,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   };
 
   const loadData = () => {
-    ApiHelper.get("/files/group/" + props.groupId, "ContentApi").then((d) =>
+    ApiHelper.get("/files/group/" + props.groupId, "ContentApi").then((d: any) =>
       setFiles(d)
     );
 

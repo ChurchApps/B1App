@@ -1,14 +1,14 @@
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
-import { ExportLink } from "@churchapps/apphelper/dist/components/ExportLink";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { PersonHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { ExportLink } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { Loading } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface, SessionInterface, VisitSessionInterface, PersonInterface, VisitInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead, Icon, FormControl, InputLabel, Select, Button, SelectChangeEvent, Grid, MenuItem } from "@mui/material"
 
@@ -30,12 +30,12 @@ export const GroupSessions: React.FC<Props> = (props) => {
     ApiHelper.get("/visitsessions?sessionId=" + session.id, "AttendanceApi").then((vs: VisitSessionInterface[]) => {
       setVisitSessions(vs);
       const peopleIds = ArrayHelper.getUniqueValues(vs, "visit.personId");
-      ApiHelper.get("/people/ids?ids=" + escape(peopleIds.join(",")), "MembershipApi").then(data => setPeople(data));
+      ApiHelper.get("/people/ids?ids=" + escape(peopleIds.join(",")), "MembershipApi").then((data: any) => setPeople(data));
     });
   }, [session]);
 
   const loadSessions = React.useCallback(() => {
-    ApiHelper.get("/sessions?groupId=" + props.group.id, "AttendanceApi").then(data => {
+    ApiHelper.get("/sessions?groupId=" + props.group.id, "AttendanceApi").then((data: any) => {
       setSessions(data);
       if (data.length > 0) setSession(data[0]);
     });

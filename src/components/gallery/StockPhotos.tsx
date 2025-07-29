@@ -1,8 +1,8 @@
 "use client";
 import { Button, Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 interface Props {
@@ -18,7 +18,7 @@ export const StockPhotos: React.FC<Props> = (props: Props) => {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>(null);
 
-  const loadData = () => { ApiHelper.getAnonymous("/gallery/stock/" + props.aspectRatio.toString(), "ContentApi").then(data => setImages(data.images)); }
+  const loadData = () => { ApiHelper.getAnonymous("/gallery/stock/" + props.aspectRatio.toString(), "ContentApi").then((data: any) => setImages(data.images)); }
 
   React.useEffect(loadData, [props.aspectRatio]); //eslint-disable-line
 
@@ -37,7 +37,7 @@ export const StockPhotos: React.FC<Props> = (props: Props) => {
 
   const getResults = () => {
     let result: React.ReactElement[] = [];
-    searchResults.forEach(p => {
+    searchResults.forEach((p: any) => {
       result.push(<Grid size={{ xs: 12, md: 4 }}>
         <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onStockSelect(p.large) }}>
           <img src={p.thumbnail} className="img-fluid" alt="stock" />
@@ -53,7 +53,7 @@ export const StockPhotos: React.FC<Props> = (props: Props) => {
 
   const getSuggested = () => {
     let result: React.ReactElement[] = [];
-    images.forEach(img => {
+    images.forEach((img: any) => {
       result.push(<Grid size={{ xs: 12, md: 4 }}>
         <a href="about:blank" onClick={(e) => { e.preventDefault(); props.onSelect(EnvironmentHelper.Common.ContentRoot + "/" + img) }}>
           <img src={EnvironmentHelper.Common.ContentRoot + "/" + img} className="img-fluid" alt="stock" />

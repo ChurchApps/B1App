@@ -2,7 +2,7 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { DefaultPageWrapper } from "../../../[pageSlug]/components/DefaultPageWrapper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import type { GroupMemberInterface } from "@churchapps/helpers";
 import type { EventInterface } from "@churchapps/helpers";

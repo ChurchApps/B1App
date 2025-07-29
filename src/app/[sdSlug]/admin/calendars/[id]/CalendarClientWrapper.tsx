@@ -6,11 +6,11 @@ import { Typography, Grid, Table, TableBody, TableRow, TableCell, Tooltip, IconB
 import DeleteIcon from '@mui/icons-material/Delete';
 import { EnvironmentHelper, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { CuratedCalendarInterface, GroupInterface, CuratedEventInterface } from "@churchapps/helpers";
-import { Banner } from "@churchapps/apphelper/dist/components/header/Banner";
+import { Banner } from "@churchapps/apphelper";
 import { CuratedCalendar } from "@/components/admin/calendar/CuratedCalendar";
 
 interface Props extends WrapperPageProps {
@@ -32,11 +32,11 @@ export function CalendarClientWrapper(props: Props) {
 
   const loadData = () => {
     setIsLoadingGroups(true);
-    ApiHelper.get("/curatedCalendars/" + props.curatedCalendarId, "ContentApi").then((data) => {
+    ApiHelper.get("/curatedCalendars/" + props.curatedCalendarId, "ContentApi").then((data: any) => {
       setCurrentCalendar(data);
     });
 
-    ApiHelper.get("/groups/my", "MembershipApi").then((data) => {
+    ApiHelper.get("/groups/my", "MembershipApi").then((data: any) => {
       setGroups(data);
       setIsLoadingGroups(false);
     });

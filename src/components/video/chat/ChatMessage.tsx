@@ -2,8 +2,8 @@ import { ChatHelper } from "@/helpers/ChatHelper";
 import React from "react";
 import { ChatUserInterface } from "../../../helpers";
 import { Permissions } from "@churchapps/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import type { MessageInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
 

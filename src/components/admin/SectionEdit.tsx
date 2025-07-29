@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { InputBox } from "@churchapps/apphelper/dist/components/InputBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { InputBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import { AnimationsInterface, BlockInterface, GlobalStyleInterface, SectionInterface } from "@/helpers";
 import { Button, Dialog, FormControl, Icon, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import { PickColors } from "./elements/PickColors";
@@ -55,7 +55,7 @@ export function SectionEdit(props: Props) {
 
   const handleSave = () => {
     if (validate()) {
-      ApiHelper.post("/sections", [section], "ContentApi").then((data) => {
+      ApiHelper.post("/sections", [section], "ContentApi").then((data: any) => {
         setSection(data);
         props.updatedCallback(data);
       });
@@ -121,7 +121,7 @@ export function SectionEdit(props: Props) {
   const handleDuplicate = (e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm("Are you sure you wish to make a copy of this section and all of it's contents?")) {
-      ApiHelper.post("/sections/duplicate/" + props.section.id, {}, "ContentApi").then((data) => {
+      ApiHelper.post("/sections/duplicate/" + props.section.id, {}, "ContentApi").then((data: any) => {
         props.updatedCallback(data);
       });
     }
@@ -131,7 +131,7 @@ export function SectionEdit(props: Props) {
     e.preventDefault();
     const name = window.prompt("Are you sure you wish to copy this section and all of it's contents to a block?", "Block Name");
     if (name !== null) {
-      ApiHelper.post(`/sections/duplicate/${props.section.id}?convertToBlock=${name.toString()}`, {}, "ContentApi").then((data) => {
+      ApiHelper.post(`/sections/duplicate/${props.section.id}?convertToBlock=${name.toString()}`, {}, "ContentApi").then((data: any) => {
         props.updatedCallback(data);
       });
     }

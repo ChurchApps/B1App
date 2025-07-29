@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Person } from "@/components/member/directory/Person";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { UserHelper } from "@churchapps/apphelper";
 
 interface Props {
   personId: string;

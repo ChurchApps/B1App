@@ -2,8 +2,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 import {RRule, Weekday, rrulestr} from "rrule";
-import { EventHelper } from "@churchapps/apphelper/dist/helpers/EventHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
+import { EventHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
 
 interface Props {
   start: Date;
@@ -52,7 +52,7 @@ export function RRuleEditor(props: Props) {
     if (!options.byweekday) options.byweekday=[];
     let selected = rRuleOptions.byweekday?.includes(value.weekday);
     if (!selected) options.byweekday.push(value.weekday);
-    else options.byweekday = options.byweekday.filter(x => x !== value.weekday);
+    else options.byweekday = options.byweekday.filter((x: any) => x !== value.weekday);
     setRRuleOptions(options);
   }
 

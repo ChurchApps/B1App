@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { CuratedCalendarInterface } from "@churchapps/helpers";
 import {
@@ -58,7 +58,7 @@ export function CalendarEdit(props: Props) {
   const handleSave = () => {
     if (validate()) {
       setSaving(true);
-      ApiHelper.post("/curatedCalendars", [calendar], "ContentApi").then((data) => {
+      ApiHelper.post("/curatedCalendars", [calendar], "ContentApi").then((data: any) => {
         setCalendar(data);
         setSaving(false);
         props.updatedCallback(data);

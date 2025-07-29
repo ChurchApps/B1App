@@ -3,9 +3,9 @@ import { Typography, Breadcrumbs, Button, Grid, Card, CardContent, Box } from "@
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import TopicIcon from "@mui/icons-material/Topic";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { AppearanceHelper } from "@churchapps/apphelper/dist/helpers/AppearanceHelper";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { ApiHelper } from "@churchapps/apphelper";
+import { AppearanceHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -23,12 +23,12 @@ export const SermonElement = ({ churchId, appearance }: Props) => {
   const [activeVideo, setActiveVideo] = useState<SermonInterface>();
 
   useEffect(() => {
-    ApiHelper.getAnonymous("/playlists/public/" + churchId, "ContentApi").then((data) => {
+    ApiHelper.getAnonymous("/playlists/public/" + churchId, "ContentApi").then((data: any) => {
       setPlaylists(data);
       setIsLoading(false);
     });
 
-    ApiHelper.getAnonymous("/sermons/public/" + churchId, "ContentApi").then((data) => {
+    ApiHelper.getAnonymous("/sermons/public/" + churchId, "ContentApi").then((data: any) => {
       setSermons(data);
     });
   }, []);

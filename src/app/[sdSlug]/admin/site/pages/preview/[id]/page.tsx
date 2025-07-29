@@ -1,5 +1,5 @@
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { PreviewClientWrapper } from "./PreviewClientWrapper";
 
 type Params = Promise<{ sdSlug: string;  id: string; }>

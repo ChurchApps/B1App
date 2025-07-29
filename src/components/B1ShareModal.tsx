@@ -1,12 +1,12 @@
 "use client";
 
 import { GroupInterface } from "@churchapps/helpers";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { Modal, Box, FormControl, InputLabel, MenuItem, Select, TextField, SelectChangeEvent, Button, DialogActions, Alert, Snackbar } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
+import { Loading } from "@churchapps/apphelper";
 
 type Props = {
   contentDisplayName: string;

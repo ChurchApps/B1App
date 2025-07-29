@@ -4,7 +4,7 @@ import * as React from "react";
 import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, Pagination, Stack } from "@mui/material";
 import MuiPaper from "@mui/material/Paper";
 import IconNamesList from "./IconNamesList"
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { Locale } from "@churchapps/apphelper";
 import FlexSearch from "flexsearch";
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
@@ -75,9 +75,9 @@ const searchIndex = new FlexSearch.Index({ tokenize: "full" });
 
 function createSearchIndex() {
   // create component names from icons list
-  const iconsAndComponentNames = IconNamesList.map(icon => {
+  const iconsAndComponentNames = IconNamesList.map((icon: any) => {
     const split = icon.split("_");
-    const capitalizedSplit = split.map(s => {
+    const capitalizedSplit = split.map((s: any) => {
       if (isAlphabet(s[0])) {
         s = s[0].toUpperCase() + s.slice(1)
       }
@@ -90,7 +90,7 @@ function createSearchIndex() {
   })
 
   // create search index
-  iconsAndComponentNames.forEach(icon => {
+  iconsAndComponentNames.forEach((icon: any) => {
     let searchTerm = icon.iconName + " " + icon.componentName;
 
     searchIndex.addAsync(icon.iconName, searchTerm)

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Typography, Link } from "@mui/material";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { FormInterface } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
@@ -14,7 +14,7 @@ export const FormEdit = ({ parsedData, handleChange }: Props) => {
   const [forms, setForms] = useState<FormInterface[]>(null);
 
   useEffect(() => {
-    ApiHelper.get("/forms", "MembershipApi").then((data) => setForms(data));
+    ApiHelper.get("/forms", "MembershipApi").then((data: any) => setForms(data));
   }, []);
 
   const standaloneForms = forms?.filter((form) => form.contentType === "form");

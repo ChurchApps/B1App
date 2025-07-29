@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Grid, Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { DisplayBox } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { PersonHelper } from "../../../helpers";
 import { Household } from "./Household";
@@ -76,8 +76,8 @@ export const Person: React.FC<Props> = (props) => {
       return;
     }
 
-    ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then(data => setPerson(data));
-    ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then(data => setRequestedChanges(data));
+    ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then((data: any) => setPerson(data));
+    ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then((data: any) => setRequestedChanges(data));
   }
 
   const getEditContent = () => {

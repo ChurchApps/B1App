@@ -29,9 +29,9 @@ import {
 import { B1LinkInterface, PageInterface } from "@/helpers";
 import { IconPicker } from "@/components/iconPicker/IconPicker";
 import { GalleryModal } from "../../gallery/GalleryModal";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { UniqueIdHelper } from "@churchapps/apphelper";
+import { ArrayHelper } from "@churchapps/apphelper";
 import { CardWithHeader, LoadingButton } from "@/components/ui";
 
 interface Props {

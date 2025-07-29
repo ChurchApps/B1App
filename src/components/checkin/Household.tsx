@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import { Button, Icon, Grid, Box } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
-import { ArrayHelper } from "@churchapps/apphelper/dist/helpers/ArrayHelper";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { ArrayHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { PersonHelper } from "@churchapps/apphelper";
 import type { VisitInterface, GroupInterface, PersonInterface, ServiceTimeInterface, VisitSessionInterface } from "@churchapps/helpers";
 
 interface Props {

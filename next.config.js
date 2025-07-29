@@ -1,5 +1,40 @@
 module.exports = {
   reactStrictMode: true,
+  webpack: (config) => {
+    // Handle the cropperjs CSS import issue
+    const path = require('path');
+    const fs = require('fs');
+    
+    const cropperCssPath = 'react-cropper/node_modules/cropperjs/dist/cropper.css';
+    let resolvedPath;
+    
+    try {
+      resolvedPath = require.resolve(cropperCssPath);
+    } catch (e) {
+      // Fallback for different environments
+      const possiblePaths = [
+        path.join(process.cwd(), 'node_modules', cropperCssPath),
+        path.join(process.cwd(), 'node_modules', 'cropperjs', 'dist', 'cropper.css'),
+        path.join(process.cwd(), 'public', 'css', 'cropper.css')
+      ];
+      
+      for (const possiblePath of possiblePaths) {
+        if (fs.existsSync(possiblePath)) {
+          resolvedPath = possiblePath;
+          break;
+        }
+      }
+    }
+    
+    if (resolvedPath) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        [cropperCssPath]: resolvedPath
+      };
+    }
+    
+    return config;
+  },
   async rewrites() {
     return [
       {
@@ -59,5 +94,5 @@ module.exports = {
   images:{
     domains: ["content.staging.churchapps.org", "content.churchapps.org", "content.lessons.church"]
   },
-  transpilePackages: ["@churchapps/apphelper", "mui-tel-input"]
+  transpilePackages: ["@churchapps/apphelper", "@churchapps/apphelper-login", "@churchapps/apphelper-markdown", "@churchapps/apphelper-donations", "@churchapps/helpers", "mui-tel-input"]
 };

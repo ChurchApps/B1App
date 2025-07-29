@@ -2,7 +2,7 @@ import React, { CSSProperties } from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "../admin/DroppableArea";
 import { Element } from "../Element";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 
 interface Props { element: ElementInterface, churchSettings: any, textColor: string, onEdit?: (section: SectionInterface, element: ElementInterface) => void, onMove?: () => void }
 

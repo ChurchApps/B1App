@@ -1,5 +1,5 @@
 import { PageLayout, Theme } from "@/components";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
 
 type Params = Promise<{ sdSlug: string; pageSlug: string }>;

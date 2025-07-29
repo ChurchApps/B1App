@@ -1,4 +1,4 @@
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import type { LoginResponseInterface, UserInterface } from "@churchapps/helpers";
 
 type Payload = UserInterface | { jwt: string } | { authGuid: string };

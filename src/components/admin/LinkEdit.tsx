@@ -17,9 +17,9 @@ import {
   IconButton
 } from "@mui/material";
 import { Close as CloseIcon, Save as SaveIcon, Delete as DeleteIcon, Link as LinkIcon } from "@mui/icons-material";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { UserHelper } from "@churchapps/apphelper/dist/helpers/UserHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { LinkInterface } from "@churchapps/helpers";
 

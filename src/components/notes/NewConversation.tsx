@@ -2,12 +2,12 @@
 
 import { Icon, Paper, Stack, TextField } from "@mui/material";
 import React from "react";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
-import { PersonHelper } from "@churchapps/apphelper/dist/helpers/PersonHelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
+import { PersonHelper } from "@churchapps/apphelper";
 import { ConversationInterface, MessageInterface, UserContextInterface } from "@churchapps/helpers";
-import { ErrorMessages } from "@churchapps/apphelper/dist/components/ErrorMessages";
-import { SmallButton } from "@churchapps/apphelper/dist/components/SmallButton";
+import { ErrorMessages } from "@churchapps/apphelper";
+import { SmallButton } from "@churchapps/apphelper";
 
 interface Props {
   contentType: string;

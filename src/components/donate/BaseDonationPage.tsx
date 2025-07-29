@@ -2,22 +2,22 @@
 
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { DonationForm } from "@churchapps/apphelper/dist/donationComponents/components/DonationForm";
-import { RecurringDonations } from "@churchapps/apphelper/dist/donationComponents/components/RecurringDonations";
-import { PaymentMethods } from "@churchapps/apphelper/dist/donationComponents/components/PaymentMethods";
-import { DisplayBox } from "@churchapps/apphelper/dist/components/DisplayBox";
-import { ExportLink } from "@churchapps/apphelper/dist/components/ExportLink";
-import { Loading } from "@churchapps/apphelper/dist/components/Loading";
-import { ApiHelper } from "@churchapps/apphelper/dist/helpers/ApiHelper";
-import { DateHelper } from "@churchapps/apphelper/dist/helpers/DateHelper";
-import { UniqueIdHelper } from "@churchapps/apphelper/dist/helpers/UniqueIdHelper";
-import { CurrencyHelper } from "@churchapps/apphelper/dist/helpers/CurrencyHelper";
-import { Locale } from "@churchapps/apphelper/dist/helpers/Locale";
+import { DonationForm } from "@churchapps/apphelper-donations";
+import { RecurringDonations } from "@churchapps/apphelper-donations";
+import { PaymentMethods } from "@churchapps/apphelper-donations";
+import { DisplayBox } from "@churchapps/apphelper";
+import { ExportLink } from "@churchapps/apphelper";
+import { Loading } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/apphelper";
+import { UniqueIdHelper } from "@churchapps/apphelper";
+import { CurrencyHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { DonationInterface, PersonInterface, StripePaymentMethod, ChurchInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead, Alert, Button, Icon, Menu, MenuItem } from "@mui/material"
 
 import Link from "next/link";
-import { useMountedState } from "@churchapps/apphelper/dist/hooks/useMountedState";
+import { useMountedState } from "@churchapps/apphelper";
 
 interface Props { personId: string, appName?: string, church?: ChurchInterface, churchLogo?: string }
 
@@ -40,17 +40,17 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   const loadData = () => {
     if (props?.appName) setAppName(props.appName);
     if (!UniqueIdHelper.isMissing(props.personId)) {
-      ApiHelper.get("/donations/my", "GivingApi").then(data => {
+      ApiHelper.get("/donations/my", "GivingApi").then((data: any) => {
         if (isMounted()) {
           setDonations(data);
         }
       });
-      ApiHelper.get("/gateways", "GivingApi").then(data => {
+      ApiHelper.get("/gateways", "GivingApi").then((data: any) => {
         if (data.length && data[0]?.publicKey) {
           if (isMounted()) {
             setStripe(loadStripe(data[0].publicKey));
           }
-          ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then(results => {
+          ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then((results: any) => {
             if (!isMounted()) {
               return;
             }
@@ -63,7 +63,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
               setPaymentMethods(methods);
             }
           });
-          ApiHelper.get("/people/" + props.personId, "MembershipApi").then(data => {
+          ApiHelper.get("/people/" + props.personId, "MembershipApi").then((data: any) => {
             if (isMounted()) {
               setPerson(data);
             }
@@ -91,8 +91,8 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     const currentY = date.getFullYear();
     const lastY = date.getFullYear() - 1;
 
-    const current_year = donations.filter(d => new Date(d.donationDate).getFullYear() === currentY);
-    const last_year = donations.filter(d => new Date(d.donationDate).getFullYear() === lastY);
+    const current_year = donations.filter((d: any) => new Date(d.donationDate).getFullYear() === currentY);
+    const last_year = donations.filter((d: any) => new Date(d.donationDate).getFullYear() === lastY);
     const customHeaders = [
       { label: "amount", key: "amount" },
       { label: "donationDate", key: "donationDate" },
