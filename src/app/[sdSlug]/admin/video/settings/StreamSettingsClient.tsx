@@ -3,7 +3,8 @@
 import { useState } from "react";
 import {  PageInterface, WrapperPageProps } from "@/helpers";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
-import { Box, Typography, Stack, Grid, Button } from "@mui/material";
+import { PageHeader } from "@churchapps/apphelper";
+import { Box, Stack, Grid, Button } from "@mui/material";
 import { Settings as SettingsIcon, LiveTv as LiveTvIcon, ViewStream as ViewStreamIcon, PlayArrow as PlayArrowIcon } from "@mui/icons-material";
 import { Links } from "@/components/admin/Links";
 import { ExternalLinks } from "@/components/admin/video/ExternalLinks";
@@ -44,83 +45,33 @@ export function StreamSettingsClient(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      {/* Modern Header */}
-      <Box sx={{ backgroundColor: "var(--c1l2)", color: "#FFF", padding: "24px" }}>
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={{ xs: 2, md: 4 }}
-          alignItems={{ xs: "flex-start", md: "center" }}
-          sx={{ width: "100%" }}
-        >
-          {/* Left side: Title and Icon */}
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ flex: 1 }}>
-            <Box
+      <PageHeader
+        icon={<LiveTvIcon />}
+        title="Stream Settings"
+        subtitle="Manage your live streaming services and configuration"
+      >
+        <Stack direction="row" spacing={1}>
+          {tabs.map((tab, index) => (
+            <Button
+              key={tab.key}
+              variant={selectedTab === tab.key ? "contained" : "outlined"}
+              startIcon={tab.icon}
+              onClick={() => setSelectedTab(tab.key)}
               sx={{
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                borderRadius: '12px',
-                p: 1.5,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
+                color: selectedTab === tab.key ? "var(--c1l2)" : "#FFF",
+                backgroundColor: selectedTab === tab.key ? "#FFF" : "transparent",
+                borderColor: selectedTab === tab.key ? "#FFF" : "rgba(255,255,255,0.5)",
+                "&:hover": {
+                  borderColor: "#FFF",
+                  backgroundColor: selectedTab === tab.key ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.1)"
+                }
               }}
             >
-              <LiveTvIcon sx={{ fontSize: 32, color: '#FFF' }} />
-            </Box>
-            <Box>
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 600,
-                  mb: 0.5,
-                  fontSize: { xs: '1.75rem', md: '2.125rem' }
-                }}
-              >
-                Stream Settings
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: { xs: '0.875rem', md: '1rem' }
-                }}
-              >
-                Manage your live streaming services and configuration
-              </Typography>
-            </Box>
-          </Stack>
-
-          {/* Right side: Tab Navigation */}
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              flexShrink: 0,
-              justifyContent: { xs: "flex-start", md: "flex-end" },
-              width: { xs: "100%", md: "auto" }
-            }}
-          >
-            {tabs.map((tab, index) => (
-              <Button
-                key={tab.key}
-                variant={selectedTab === tab.key ? "contained" : "outlined"}
-                startIcon={tab.icon}
-                onClick={() => setSelectedTab(tab.key)}
-                sx={{
-                  color: selectedTab === tab.key ? "var(--c1l2)" : "#FFF",
-                  backgroundColor: selectedTab === tab.key ? "#FFF" : "transparent",
-                  borderColor: selectedTab === tab.key ? "#FFF" : "rgba(255,255,255,0.5)",
-                  "&:hover": {
-                    borderColor: "#FFF",
-                    backgroundColor: selectedTab === tab.key ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.1)"
-                  }
-                }}
-              >
-                {tab.label}
-              </Button>
-            ))}
-          </Stack>
+              {tab.label}
+            </Button>
+          ))}
         </Stack>
-      </Box>
+      </PageHeader>
 
       {/* Content Area */}
       <Box sx={{ p: 3 }}>

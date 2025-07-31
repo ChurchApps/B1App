@@ -8,6 +8,7 @@ import { Box, Grid, Table, TableBody, TableCell, TableHead, TableRow, Typography
 import { InputBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
+import { PageHeader } from "@churchapps/apphelper";
 import { Folder as FolderIcon, CloudUpload as CloudUploadIcon, InsertDriveFile as FileIcon } from "@mui/icons-material";
 import Link from "next/link";
 import LinearProgress from '@mui/material/LinearProgress';
@@ -133,60 +134,18 @@ export function FilesClientWrapper(props: WrapperPageProps) {
 
   return (
     <AdminWrapper config={props.config}>
-      {/* Modern Header */}
-      <Box sx={{ backgroundColor: "var(--c1l2)", color: "#FFF", padding: "24px" }}>
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={{ xs: 2, md: 4 }}
-          alignItems={{ xs: "flex-start", md: "center" }}
-          sx={{ width: "100%" }}
-        >
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ flex: 1 }}>
-            <Box
-              sx={{
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                borderRadius: '12px',
-                p: 1.5,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <FolderIcon sx={{ fontSize: 32, color: '#FFF' }} />
-            </Box>
-            <Box>
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 600,
-                  mb: 0.5,
-                  fontSize: { xs: '1.75rem', md: '2.125rem' }
-                }}
-              >
-                File Manager
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: 'rgba(255,255,255,0.9)',
-                  fontSize: { xs: '0.875rem', md: '1rem' }
-                }}
-              >
-                Manage your website files and documents
-              </Typography>
-            </Box>
-          </Stack>
-
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Stack direction="row" spacing={1} alignItems="center">
-              <CloudUploadIcon sx={{ color: "#FFF", fontSize: 20 }} />
-              <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)' }}>
-                {formatSize(usedSpace)} / 100MB used
-              </Typography>
-            </Stack>
-          </Stack>
+      <PageHeader
+        icon={<FolderIcon />}
+        title="File Manager"
+        subtitle="Manage your website files and documents"
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          <CloudUploadIcon sx={{ color: "#FFF", fontSize: 20 }} />
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)' }}>
+            {formatSize(usedSpace)} / 100MB used
+          </Typography>
         </Stack>
-      </Box>
+      </PageHeader>
 
       {/* Main Content */}
       <Box sx={{ p: 3 }}>
