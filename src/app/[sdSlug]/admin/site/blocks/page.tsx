@@ -4,6 +4,7 @@ import { JSX, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";
+import { PageHeader } from "@churchapps/apphelper";
 import { AdminWrapper } from "@/components/admin/AdminWrapper";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { BlockInterface } from "@/helpers";
@@ -206,100 +207,35 @@ export default function AdminPagesClient() {
 
   return (
     <AdminWrapper config={config}>
-      {/* Modern Blue Header */}
-      <Box sx={{ backgroundColor: "var(--c1l2)", color: "#FFF", padding: "24px" }}>
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={{ xs: 2, md: 4 }}
-          alignItems={{ xs: "flex-start", md: "center" }}
-          sx={{ width: "100%" }}
+      <PageHeader
+        icon={<BlockIcon />}
+        title="Reusable Blocks"
+        subtitle="Create and manage reusable content blocks for your website"
+        statistics={[
+          {
+            icon: <BlockIcon />,
+            value: stats.totalBlocks.toString(),
+            label: "Total Blocks"
+          }
+        ]}
+      >
+        <Button
+          variant="outlined"
+          startIcon={<AddIcon />}
+          onClick={() => setEditBlock({ blockType: "elementBlock" })}
+          data-testid="add-block-button"
+          sx={{
+            color: "#FFF",
+            borderColor: "rgba(255,255,255,0.5)",
+            "&:hover": {
+              borderColor: "#FFF",
+              backgroundColor: "rgba(255,255,255,0.1)",
+            },
+          }}
         >
-          {/* Left side: Title and Icon */}
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ flex: 1 }}>
-            <Box
-              sx={{
-                backgroundColor: "rgba(255,255,255,0.2)",
-                borderRadius: "12px",
-                p: 1.5,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <BlockIcon sx={{ fontSize: 32, color: "#FFF" }} />
-            </Box>
-            <Box>
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 600,
-                  mb: 0.5,
-                  fontSize: { xs: "1.75rem", md: "2.125rem" },
-                }}
-              >
-                Reusable Blocks
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "rgba(255,255,255,0.9)",
-                  fontSize: { xs: "0.875rem", md: "1rem" },
-                }}
-              >
-                Create and manage reusable content blocks for your website
-              </Typography>
-            </Box>
-          </Stack>
-
-          {/* Right side: Action Buttons */}
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              flexShrink: 0,
-              justifyContent: { xs: "flex-start", md: "flex-end" },
-              width: { xs: "100%", md: "auto" }
-            }}
-          >
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={() => setEditBlock({ blockType: "elementBlock" })}
-              data-testid="add-block-button"
-              sx={{
-                color: "#FFF",
-                borderColor: "rgba(255,255,255,0.5)",
-                "&:hover": {
-                  borderColor: "#FFF",
-                  backgroundColor: "rgba(255,255,255,0.1)",
-                },
-              }}
-            >
-              Add Block
-            </Button>
-          </Stack>
-        </Stack>
-
-        {/* Statistics Row */}
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={3}
-          flexWrap="wrap"
-          useFlexGap
-          justifyContent="flex-start"
-          sx={{ mt: 3 }}
-        >
-          <Stack direction="row" spacing={1} alignItems="center">
-            <BlockIcon sx={{ color: "#FFF", fontSize: 20 }} />
-            <Typography variant="h6" sx={{ color: "#FFF", fontWeight: 600, mr: 1 }}>
-              {stats.totalBlocks}
-            </Typography>
-            <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.9)", fontSize: "0.875rem" }}>
-              Total Blocks
-            </Typography>
-          </Stack>
-        </Stack>
-      </Box>
+          Add Block
+        </Button>
+      </PageHeader>
 
       {/* Main Content */}
       <Box sx={{ p: 3 }}>
