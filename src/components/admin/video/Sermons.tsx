@@ -5,7 +5,7 @@ import { ArrayHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
 import { PageHeader } from "@churchapps/apphelper";
 import type { SermonInterface, PlaylistInterface } from "@churchapps/helpers";
-import { Box, Button, Card, CardContent, Chip, Icon, IconButton, InputAdornment, Menu, MenuItem, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Icon, IconButton, InputAdornment, Menu, MenuItem, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import { Add as AddIcon, CalendarMonth as CalendarIcon, LiveTv as LiveTvIcon, PlaylistPlay as PlaylistIcon, Search as SearchIcon, ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
 import React from "react";
 import { SermonEdit } from "./SermonEdit";
@@ -247,40 +247,25 @@ export const Sermons = (props: Props) => {
   if (currentSermon !== null) return <SermonEdit currentSermon={currentSermon} updatedFunction={handleUpdated} showPhotoEditor={props.showPhotoEditor} updatedPhoto={props.updatedPhoto} />;
   else return (
     <>
-      <PageHeader
-        icon={<LiveTvIcon />}
-        title="Sermons"
-        subtitle={
-          <Stack direction="row" spacing={2} alignItems="center">
-            <span>Manage your sermon library and live streams</span>
-            {sermons.length > 0 && (
-              <Chip
-                label={`${sermons.length} ${sermons.length === 1 ? 'sermon' : 'sermons'}`}
-                size="small"
-                sx={{
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  color: "#FFF",
-                  fontSize: '0.75rem',
-                  height: 20
-                }}
-              />
-            )}
-          </Stack>
-        }
-        sx={{ mb: 3 }}
-      >
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{
-            flexShrink: 0,
-            justifyContent: { xs: "flex-start", md: "flex-end" },
-            width: { xs: "100%", md: "auto" }
-          }}
+      <Box sx={{ mb: 3 }}>
+        <PageHeader
+          icon={<LiveTvIcon />}
+          title="Sermons"
+          subtitle="Manage your sermon library and live streams"
         >
-          {getActionButtons()}
-        </Stack>
-      </PageHeader>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              flexShrink: 0,
+              justifyContent: { xs: "flex-start", md: "flex-end" },
+              width: { xs: "100%", md: "auto" }
+            }}
+          >
+            {getActionButtons()}
+          </Stack>
+        </PageHeader>
+      </Box>
 
       {/* Content */}
       <Box sx={{ px: 3 }}>
