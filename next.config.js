@@ -1,36 +1,42 @@
 module.exports = {
   reactStrictMode: true,
-  webpack: (config) => {
-    // Handle the cropperjs CSS import issue
-    const path = require('path');
-    const fs = require('fs');
-    
-    const cropperCssPath = 'react-cropper/node_modules/cropperjs/dist/cropper.css';
-    let resolvedPath;
-    
-    try {
-      resolvedPath = require.resolve(cropperCssPath);
-    } catch (e) {
-      // Fallback for different environments
-      const possiblePaths = [
-        path.join(process.cwd(), 'node_modules', cropperCssPath),
-        path.join(process.cwd(), 'node_modules', 'cropperjs', 'dist', 'cropper.css'),
-        path.join(process.cwd(), 'public', 'css', 'cropper.css')
-      ];
+  experimental: {
+    optimizePackageImports: ['@mui/material', '@mui/icons-material', '@churchapps/apphelper']
+  },
+  webpack: (config, { isServer, dev }) => {
+    // Only apply webpack config in non-turbo mode
+    if (!dev || !process.env.TURBOPACK) {
+      // Handle the cropperjs CSS import issue
+      const path = require('path');
+      const fs = require('fs');
       
-      for (const possiblePath of possiblePaths) {
-        if (fs.existsSync(possiblePath)) {
-          resolvedPath = possiblePath;
-          break;
+      const cropperCssPath = 'react-cropper/node_modules/cropperjs/dist/cropper.css';
+      let resolvedPath;
+      
+      try {
+        resolvedPath = require.resolve(cropperCssPath);
+      } catch (e) {
+        // Fallback for different environments
+        const possiblePaths = [
+          path.join(process.cwd(), 'node_modules', cropperCssPath),
+          path.join(process.cwd(), 'node_modules', 'cropperjs', 'dist', 'cropper.css'),
+          path.join(process.cwd(), 'public', 'css', 'cropper.css')
+        ];
+        
+        for (const possiblePath of possiblePaths) {
+          if (fs.existsSync(possiblePath)) {
+            resolvedPath = possiblePath;
+            break;
+          }
         }
       }
-    }
-    
-    if (resolvedPath) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        [cropperCssPath]: resolvedPath
-      };
+      
+      if (resolvedPath) {
+        config.resolve.alias = {
+          ...config.resolve.alias,
+          [cropperCssPath]: resolvedPath
+        };
+      }
     }
     
     return config;
