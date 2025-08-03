@@ -10,7 +10,7 @@ import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { B1LinkInterface } from "@/helpers";
 import { Tabs } from "@/components/admin/settings/Tabs";
 import { TabEdit } from "@/components/admin/settings/TabEdit";
-import { PageHeader } from "@/components/ui";
+import { PageHeader } from "@churchapps/apphelper";
 import { PhoneIphone as PhoneIcon, Add as AddIcon } from "@mui/icons-material";
 
 type PageParams = {sdSlug:string }

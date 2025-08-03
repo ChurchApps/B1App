@@ -3,8 +3,9 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
+import { PageHeader } from "@churchapps/apphelper";
 import type { SermonInterface, PlaylistInterface } from "@churchapps/helpers";
-import { Box, Button, Card, CardContent, Chip, Icon, IconButton, InputAdornment, Menu, MenuItem, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Icon, IconButton, InputAdornment, Menu, MenuItem, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import { Add as AddIcon, CalendarMonth as CalendarIcon, LiveTv as LiveTvIcon, PlaylistPlay as PlaylistIcon, Search as SearchIcon, ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
 import React from "react";
 import { SermonEdit } from "./SermonEdit";
@@ -246,64 +247,12 @@ export const Sermons = (props: Props) => {
   if (currentSermon !== null) return <SermonEdit currentSermon={currentSermon} updatedFunction={handleUpdated} showPhotoEditor={props.showPhotoEditor} updatedPhoto={props.updatedPhoto} />;
   else return (
     <>
-      {/* Header */}
-      <Box sx={{ backgroundColor: "var(--c1l2)", color: "#FFF", padding: "24px", mb: 3 }}>
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={{ xs: 2, md: 4 }}
-          alignItems={{ xs: "flex-start", md: "center" }}
-          sx={{ width: "100%" }}
+      <Box sx={{ mb: 3 }}>
+        <PageHeader
+          icon={<LiveTvIcon />}
+          title="Sermons"
+          subtitle="Manage your sermon library and live streams"
         >
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ flex: 1 }}>
-            <Box
-              sx={{
-                backgroundColor: 'rgba(255,255,255,0.2)',
-                borderRadius: '12px',
-                p: 1.5,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <LiveTvIcon sx={{ fontSize: 32, color: '#FFF' }} />
-            </Box>
-            <Box>
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 600,
-                  mb: 0.5,
-                  fontSize: { xs: '1.75rem', md: '2.125rem' }
-                }}
-              >
-                Sermons
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: 'rgba(255,255,255,0.9)',
-                    fontSize: { xs: '0.875rem', md: '1rem' }
-                  }}
-                >
-                  Manage your sermon library and live streams
-                </Typography>
-                {sermons.length > 0 && (
-                  <Chip
-                    label={`${sermons.length} ${sermons.length === 1 ? 'sermon' : 'sermons'}`}
-                    size="small"
-                    sx={{
-                      backgroundColor: "rgba(255,255,255,0.2)",
-                      color: "#FFF",
-                      fontSize: '0.75rem',
-                      height: 20
-                    }}
-                  />
-                )}
-              </Stack>
-            </Box>
-          </Stack>
-
           <Stack
             direction="row"
             spacing={1}
@@ -315,7 +264,7 @@ export const Sermons = (props: Props) => {
           >
             {getActionButtons()}
           </Stack>
-        </Stack>
+        </PageHeader>
       </Box>
 
       {/* Content */}
