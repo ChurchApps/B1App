@@ -7,6 +7,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
+import { Permissions } from "@churchapps/helpers";
 
 interface Props {
   config: ConfigurationInterface;
@@ -30,6 +31,9 @@ export const GroupTabs = (props: Props) => {
     if (g.id === group?.id && g.leader) isLeader = true;
   });
 
+  const canEditGroup = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
+  const canViewLeaderResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
+
 
   const getTabs = () => {
     const memberStatus = context.userChurch?.person?.membershipStatus?.toLowerCase();
@@ -37,13 +41,13 @@ export const GroupTabs = (props: Props) => {
 
     tabs.push({ key: "details", label: "Group Details" });
     tabs.push({ key: "members", label: "Members" });
-    if (isLeader) {
+    if (canEditGroup) {
       tabs.push({ key: "attendance", label: "Attendance" });
     }
     tabs.push({ key: "calendar", label: "Calendar" });
     tabs.push({ key: "conversations", label: "Conversations" });
     tabs.push({ key: "resources", label: "Resources" });
-    if (isLeader) {
+    if (canViewLeaderResources) {
       tabs.push({ key: "leaderResources", label: "Resources (Leaders)" });
     }
 

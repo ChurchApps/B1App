@@ -20,7 +20,8 @@ import { Preview } from "@/components/admin/settings/Preview";
 import { CssEdit } from "@/components/admin/settings/CssEdit";
 import { Appearance } from "@/components/admin/Appearance";
 import { useRouter } from "next/navigation";
-import { PageHeader, CardWithHeader } from "@/components/ui";
+import { PageHeader } from "@churchapps/apphelper";
+import { CardWithHeader } from "@/components/ui";
 
 
 export function StylesClientWrapper(props: WrapperPageProps) {

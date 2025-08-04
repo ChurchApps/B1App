@@ -13,6 +13,7 @@ import { PersonAdd } from "./PersonAdd";
 
 interface Props {
   isLeader: boolean
+  canEditMembers?: boolean
   group: GroupInterface
 }
 
@@ -59,7 +60,7 @@ export function MembersTab(props: Props) {
           <TableCell>
             <Link href={`/my/community/${gm.person.id}`}>{gm.person.name.display}</Link>
           </TableCell>
-          {props.isLeader
+          {(props.canEditMembers ?? props.isLeader)
             && <TableCell style={{ textAlign: "right" }}>
               <SmallButton icon="person_remove" toolTip="Remove" onClick={() => handleRemove(gm)} color="error" data-testid={`remove-member-${gm.personId}-button`} />
             </TableCell>}
@@ -95,7 +96,8 @@ export function MembersTab(props: Props) {
     ApiHelper.delete("/groupmembers/" + member.id, "MembershipApi");
   }
 
-  return <>{props.isLeader
+  const canEdit = props.canEditMembers ?? props.isLeader;
+  return <>{canEdit
     ? <>
       <h2>Members</h2>
       <Grid container spacing={3}>

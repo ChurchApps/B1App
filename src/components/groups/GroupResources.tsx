@@ -6,6 +6,7 @@ import { InputBox } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface, UserContextInterface } from "@churchapps/helpers";
+import { Permissions } from "@churchapps/helpers";
 import { FileInterface } from "@/helpers";
 import { Box, LinearProgress, Typography, TableRow, TableCell, Table, TableHead, TableBody, Divider, Chip } from "@mui/material";
 import Link from "next/link";
@@ -95,6 +96,8 @@ export const GroupResources: React.FC<Props> = (props) => {
     if (g.id === props.groupId && g.leader) isLeader = true;
   });
 
+  const canEditGroupResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
+
   const fileRows = files?.map((file) => (
     <TableRow key={file.id}>
       <TableCell>
@@ -104,7 +107,7 @@ export const GroupResources: React.FC<Props> = (props) => {
       </TableCell>
       <TableCell>{formatSize(file.size)}</TableCell>
       <TableCell align="right">
-        {isLeader && (
+        {canEditGroupResources && (
           <SmallButton
             icon="delete"
             onClick={() => {
@@ -126,7 +129,7 @@ export const GroupResources: React.FC<Props> = (props) => {
         </Link>
       </TableCell>
       <TableCell>
-        {isLeader && (
+        {canEditGroupResources && (
           <SmallButton
             icon="delete"
             onClick={() => {
@@ -179,7 +182,7 @@ export const GroupResources: React.FC<Props> = (props) => {
       </DisplayBox>
 
       {/* Link Add */}
-      {isLeader && (
+      {canEditGroupResources && (
         <GroupLinkAdd
           saveCallback={() => { loadData(); }}
           groupId={props.groupId}
@@ -187,7 +190,7 @@ export const GroupResources: React.FC<Props> = (props) => {
       )}
 
       {/* File Upload */}
-      {isLeader && (
+      {canEditGroupResources && (
         <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload" data-testid="group-upload-inputbox">
           {getStorage()}
           <p>

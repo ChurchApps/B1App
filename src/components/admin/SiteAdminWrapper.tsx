@@ -86,7 +86,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
       {(editLink) && <NavLinkEdit updatedCallback={addLinkCallback} onDone={() => { setEditLink(null); } } link={editLink} />}
 
       <Grid container spacing={3}>
-        <Grid size={{ md: 2, xs: 12 }} style={{backgroundColor:"#FFF", paddingLeft:40, paddingTop:24}}>
+        <Grid size={{ md: 2, xs: 12 }} style={{backgroundColor:"#FFF", paddingLeft:40, paddingTop:24, position:"relative", zIndex:1}}>
           <DndProvider backend={HTML5Backend}>
             <h2 style={{marginTop:0}}>Pages</h2>
             <div>
@@ -108,7 +108,7 @@ export const SiteAdminWrapper: React.FC<Props> = (props) => {
 
           </DndProvider>
         </Grid>
-        <Grid size={{ md: 10, xs: 12 }}>
+        <Grid size={{ md: 10, xs: 12 }} style={{position:"relative", zIndex:1}}>
           {props.children}
         </Grid>
       </Grid>

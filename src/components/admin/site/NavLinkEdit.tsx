@@ -91,7 +91,15 @@ export function NavLinkEdit(props: Props) {
 
   if (!link) return <></>
   else return (
-    <Dialog open={true} onClose={props.onDone} style={{minWidth:800}}>
+    <Dialog
+      open={true}
+      onClose={props.onDone}
+      style={{minWidth:800}}
+      slotProps={{
+        backdrop: { sx: { zIndex: 1400 } }
+      }}
+      sx={{ zIndex: 1400 }}
+    >
       <InputBox id="pageDetailsBox" headerText={link?.id ? "Add Link" : "Link Settings"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
         <ErrorMessages errors={errors} />
         <Autocomplete disablePortal limitTags={3} freeSolo options={getPageOptions()} onChange={handleUrlChange} onInputChange={handleUrlChange} sx={{ width: 300 }} ListboxProps={{ style: { maxHeight:150 }}} value={link.url} renderInput={(params) =>

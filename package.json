@@ -13,11 +13,11 @@
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales && copyfiles -a -f node_modules/@churchapps/apphelper-markdown/dist/editor.css public/apphelper/css && copyfiles -a -f node_modules/react-cropper/node_modules/cropperjs/dist/cropper.css public/css"
   },
   "dependencies": {
-    "@churchapps/apphelper": "^0.4.22",
-    "@churchapps/apphelper-donations": "^0.4.21",
-    "@churchapps/apphelper-login": "^0.4.21",
-    "@churchapps/apphelper-markdown": "^0.4.21",
-    "@churchapps/helpers": "^1.0.44",
+    "@churchapps/apphelper": "^0.4.26",
+    "@churchapps/apphelper-donations": "^0.4.26",
+    "@churchapps/apphelper-login": "^0.4.26",
+    "@churchapps/apphelper-markdown": "^0.4.26",
+    "@churchapps/helpers": "^1.0.46",
     "@mui/icons-material": "^7.2.0",
     "@mui/lab": "^7.0.0-beta.14",
     "@mui/material": "^7.2.0",

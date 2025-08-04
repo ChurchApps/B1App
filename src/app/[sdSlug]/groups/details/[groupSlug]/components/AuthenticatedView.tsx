@@ -7,6 +7,7 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 import { Conversations } from "@/components/notes/Conversations";
 import { DisplayBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
+import { Permissions } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
 import { GroupResources } from "@/components/groups/GroupResources";
@@ -39,6 +40,9 @@ export function AuthenticatedView(props: Props) {
     if (g.id === group?.id && g.leader) isLeader = true;
   });
 
+  const canEditGroup = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
+  const canEditMembers = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groupMembers.edit);
+
   const handleChange = (g: GroupInterface) => {
     setGroup(g);
   }
@@ -49,7 +53,7 @@ export function AuthenticatedView(props: Props) {
     switch (tab) {
       case "details":
         result = <>
-          {isLeader && <LeaderEdit group={group} config={props.config} onChange={handleChange} updatedFunction={handleChange} />}
+          {canEditGroup && <LeaderEdit group={group} config={props.config} onChange={handleChange} updatedFunction={handleChange} />}
           <h2>Details</h2>
           <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
             <MarkdownPreviewLight value={group.about} />
@@ -57,7 +61,7 @@ export function AuthenticatedView(props: Props) {
         </>
         break;
       case "calendar":
-        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={isLeader} /></DisplayBox></>
+        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>
         break;
       case "conversations":
         result = <><h2>Conversations</h2><Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} /></>
@@ -69,7 +73,7 @@ export function AuthenticatedView(props: Props) {
         result = <><h2>Resources (Leaders Only)</h2><GroupLeaderResources context={context} groupId={group.id} /></>
         break;
       case "members":
-        result = <MembersTab isLeader={isLeader} group={group} />
+        result = <MembersTab isLeader={isLeader} canEditMembers={canEditMembers} group={group} />
         break;
       case "attendance":
         result = <AttendanceTab group={group} />
