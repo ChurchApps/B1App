@@ -6,6 +6,7 @@ package-lock.json
 /public/sitemap*
 playwright-report
 test-results
+.serena
 
 # dependencies
 /node_modules

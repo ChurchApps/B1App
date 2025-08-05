@@ -95,10 +95,7 @@ export function NavLinkEdit(props: Props) {
       open={true}
       onClose={props.onDone}
       style={{minWidth:800}}
-      slotProps={{
-        backdrop: { sx: { zIndex: 1400 } }
-      }}
-      sx={{ zIndex: 1400 }}
+      sx={{ zIndex: 2000 }}
     >
       <InputBox id="pageDetailsBox" headerText={link?.id ? "Add Link" : "Link Settings"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} deleteFunction={handleDelete}>
         <ErrorMessages errors={errors} />
