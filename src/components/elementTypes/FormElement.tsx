@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { ElementInterface, PersonHelper } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
-import { FormSubmissionEdit } from "@churchapps/apphelper";
+import { FormSubmissionEdit } from "@churchapps/apphelper-forms";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 
