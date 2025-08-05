@@ -2,7 +2,7 @@
 
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { DonationForm } from "@churchapps/apphelper-donations";
+import { StableDonationForm } from "./StableDonationForm";
 import { RecurringDonations } from "@churchapps/apphelper-donations";
 import { PaymentMethods } from "@churchapps/apphelper-donations";
 import { DisplayBox } from "@churchapps/apphelper";
@@ -22,7 +22,7 @@ import { useMountedState } from "@churchapps/apphelper";
 interface Props { personId: string, appName?: string, church?: ChurchInterface, churchLogo?: string }
 
 export const BaseDonationPage: React.FC<Props> = (props) => {
-  const [donations, setDonations] = React.useState<DonationInterface[]>(null);
+  const [donations, setDonations] = React.useState<DonationInterface[]>([]);
   const [stripePromise, setStripe] = React.useState<Promise<Stripe>>(null);
   const [paymentMethods, setPaymentMethods] = React.useState<StripePaymentMethod[]>(null);
   const [customerId, setCustomerId] = React.useState(null);
@@ -30,6 +30,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   const [message, setMessage] = React.useState<string>(null);
   const [appName, setAppName] = React.useState<string>("");
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const open = Boolean(anchorEl);
   const isMounted = useMountedState();
 
@@ -40,6 +41,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   const loadData = () => {
     if (props?.appName) setAppName(props.appName);
     if (!UniqueIdHelper.isMissing(props.personId)) {
+      setIsLoading(true);
       ApiHelper.get("/donations/my", "GivingApi").then((data: any) => {
         if (isMounted()) {
           setDonations(data);
@@ -62,6 +64,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
               setCustomerId(results[0].customer.id);
               setPaymentMethods(methods);
             }
+            setIsLoading(false);
           });
           ApiHelper.get("/people/" + props.personId, "MembershipApi").then((data: any) => {
             if (isMounted()) {
@@ -69,16 +72,21 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             }
           });
         }
-        else setPaymentMethods([]);
+        else {
+          setPaymentMethods([]);
+          setIsLoading(false);
+        }
       });
     } else {
       console.log('PersonId is missing or invalid:', props.personId);
+      setPaymentMethods([]);
+      setDonations([]);
+      setIsLoading(false);
     }
   }
 
   const handleDataUpdate = (message?: string) => {
     setMessage(message)
-    setPaymentMethods(null);
     // Add a small delay to allow backend to process the donation
     setTimeout(() => {
       loadData();
@@ -86,6 +94,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   }
 
   const getEditContent = () => {
+    if (!donations) return [];
     const result: React.ReactElement[] = [];
     const date = new Date();
     const currentY = date.getFullYear();
@@ -101,33 +110,35 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       { label: "methodDetails", key: "methodDetails" },
     ]
 
-    result.push(<>
-      <Button
-        id="download-button"
-        aria-controls={open ? "download-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-          setAnchorEl(e.currentTarget);
-        }}
-        data-testid="donation-download-button"
-        aria-label="Download donation records"
-      >
-        <Icon>download</Icon>
-      </Button>
-      <Menu
-        id="download-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{ 'aria-labelledby': "download-button" }}
-      >
-        <MenuItem onClick={handleClose} dense data-testid="export-current-year-csv" aria-label="Export current year donations as CSV"><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text="Current Year (CSV)" icon="table_chart" data-testid="current-year-export-link" /></MenuItem>
-        <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label="Print current year donations"><Link href="/my/donate/print"><Button data-testid="print-current-year-button" aria-label="Print current year donations"><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
-        <MenuItem onClick={handleClose} dense data-testid="export-last-year-csv" aria-label="Export last year donations as CSV"><ExportLink data={last_year} filename="last_year_donations" customHeaders={customHeaders} text="Last Year (CSV)" icon="table_chart" data-testid="last-year-export-link" /></MenuItem>
-        <MenuItem onClick={handleClose} dense data-testid="print-last-year" aria-label="Print last year donations"><Link href="/my/donate/print?prev=1"><Button data-testid="print-last-year-button" aria-label="Print last year donations"><Icon>print</Icon> &nbsp; LAST YEAR (PRINT)</Button></Link></MenuItem>
-      </Menu>
-    </>);
+    result.push(
+      <React.Fragment key="export-menu">
+        <Button
+          id="download-button"
+          aria-controls={open ? "download-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            setAnchorEl(e.currentTarget);
+          }}
+          data-testid="donation-download-button"
+          aria-label="Download donation records"
+        >
+          <Icon>download</Icon>
+        </Button>
+        <Menu
+          id="download-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{ 'aria-labelledby': "download-button" }}
+        >
+          <MenuItem onClick={handleClose} dense data-testid="export-current-year-csv" aria-label="Export current year donations as CSV"><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text="Current Year (CSV)" icon="table_chart" data-testid="current-year-export-link" /></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label="Print current year donations"><Link href="/my/donate/print"><Button data-testid="print-current-year-button" aria-label="Print current year donations"><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="export-last-year-csv" aria-label="Export last year donations as CSV"><ExportLink data={last_year} filename="last_year_donations" customHeaders={customHeaders} text="Last Year (CSV)" icon="table_chart" data-testid="last-year-export-link" /></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="print-last-year" aria-label="Print last year donations"><Link href="/my/donate/print?prev=1"><Button data-testid="print-last-year-button" aria-label="Print last year donations"><Icon>print</Icon> &nbsp; LAST YEAR (PRINT)</Button></Link></MenuItem>
+        </Menu>
+      </React.Fragment>
+    );
 
     return result;
   }
@@ -175,32 +186,37 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
 
   React.useEffect(loadData, [isMounted, props.personId]); //eslint-disable-line
 
-  const getTable = () => {
-    if (!donations) return <Loading data-testid="donations-loading" />;
-    else return (<Table>
-      <TableHead>{getTableHeader()}</TableHead>
-      <TableBody>{getRows()}</TableBody>
-    </Table>);
-  }
+  const getTable = () => (<Table>
+    <TableHead>{getTableHeader()}</TableHead>
+    <TableBody>{getRows()}</TableBody>
+  </Table>);
 
-  const getPaymentMethodComponents = () => {
-    if (!paymentMethods) return <Loading data-testid="payment-methods-loading" />;
-    else return (
+  if (isLoading) {
+    return (
       <>
-        <DonationForm person={person} customerId={customerId} paymentMethods={paymentMethods} stripePromise={stripePromise} donationSuccess={handleDataUpdate} church={props?.church} churchLogo={props?.churchLogo} data-testid="donation-form" />
-        <DisplayBox headerIcon="payments" headerText="Donations" editContent={getEditContent()} data-testid="donations-display-box">
-          {getTable()}
-        </DisplayBox>
-        <RecurringDonations customerId={customerId} paymentMethods={paymentMethods} appName={appName} dataUpdate={handleDataUpdate} data-testid="recurring-donations" />
-        <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
+        {message && <Alert severity="success">{message}</Alert>}
+        <Loading data-testid="payment-methods-loading" />
       </>
     );
   }
 
   return (
     <>
-      {paymentMethods && message && <Alert severity="success">{message}</Alert>}
-      {getPaymentMethodComponents()}
+      {message && <Alert severity="success">{message}</Alert>}
+      <StableDonationForm
+        person={person}
+        customerId={customerId}
+        paymentMethods={paymentMethods}
+        stripePromise={stripePromise}
+        donationSuccess={handleDataUpdate}
+        church={props?.church}
+        churchLogo={props?.churchLogo}
+      />
+      <DisplayBox headerIcon="payments" headerText="Donations" editContent={getEditContent()} data-testid="donations-display-box">
+        {getTable()}
+      </DisplayBox>
+      <RecurringDonations customerId={customerId} paymentMethods={paymentMethods || []} appName={appName} dataUpdate={handleDataUpdate} data-testid="recurring-donations" />
+      <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods || []} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
     </>
   );
 }
