@@ -26,6 +26,7 @@ export class EnvironmentHelper {
       default: EnvironmentHelper.initDev(); break;
     }
     EnvironmentHelper.Common.init(stage)
+    CommonEnvironmentHelper.AskApi = "http://localhost:8097"
 
     ApiHelper.apiConfigs = [
       { keyName: "MembershipApi", url: EnvironmentHelper.Common.MembershipApi, jwt: "", permissions: [] },
@@ -34,7 +35,8 @@ export class EnvironmentHelper {
       { keyName: "ContentApi", url: EnvironmentHelper.Common.ContentApi, jwt: "", permissions: [] },
       { keyName: "GivingApi", url: EnvironmentHelper.Common.GivingApi, jwt: "", permissions: [] },
       { keyName: "DoingApi", url: EnvironmentHelper.Common.DoingApi, jwt: "", permissions: [] },
-      { keyName: "LessonsApi", url: EnvironmentHelper.LessonsApi, jwt: "", permissions: [] }
+      { keyName: "LessonsApi", url: EnvironmentHelper.LessonsApi, jwt: "", permissions: [] },
+      { keyName: "AskApi", url: EnvironmentHelper.Common.AskApi, jwt: "", permissions: [] }
     ];
   };
 
@@ -60,7 +62,6 @@ export class EnvironmentHelper {
   static initProd = () => {
     EnvironmentHelper.Common.GoogleAnalyticsTag = "G-XYCPBKWXB5";
     EnvironmentHelper.LessonsApi = "https://api.lessons.church";
-
   };
 
 }

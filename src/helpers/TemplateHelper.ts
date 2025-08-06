@@ -242,6 +242,23 @@ export class TemplateHelper {
     //if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.donate.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
+  static async createAIPage(title: string, description: string, url: string) {
+    // Call the AskApi to create the page with AI-generated content
+    const aiPageData = {
+      title: title,
+      description: description,
+      url: url
+    };
+    
+    // First, get the AI-generated page content
+    const aiResponse = await ApiHelper.post("/website/createPage", aiPageData, "AskApi");
+    
+    // Then create the actual page with the AI-generated content
+    const pageData = await ApiHelper.post("/pages/temp/ai", aiResponse, "ContentApi");
+    
+    return pageData;
+  }
+
   static async createDefaultPages() {
     const promises = [];
     promises.push(this.createHomePage());
