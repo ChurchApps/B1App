@@ -193,11 +193,25 @@ export function EmbeddablePages(props:Props) {
       borderColor: 'grey.200'
     }}>
       <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <ArticleIcon sx={{ color: 'text.primary' }} />
-          <Typography variant="h6" sx={{ color: 'text.primary' }}>
-            Pages ({pages.length})
-          </Typography>
+        <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ArticleIcon sx={{ color: 'text.primary' }} />
+            <Typography variant="h6" sx={{ color: 'text.primary' }}>
+              Pages ({pages.length})
+            </Typography>
+          </Stack>
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={handleAddPage}
+            size="small"
+            sx={{
+              textTransform: 'none',
+              fontWeight: 600
+            }}
+          >
+            Add Page
+          </Button>
         </Stack>
       </Box>
       <Box>
