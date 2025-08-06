@@ -22,14 +22,8 @@ export const Services: React.FC = () => {
       onClick={handleAdd}
       data-testid="add-service-button"
       sx={{
-        color: '#FFF',
-        borderColor: 'rgba(255,255,255,0.5)',
         textTransform: 'none',
-        fontWeight: 600,
-        '&:hover': {
-          borderColor: '#FFF',
-          backgroundColor: 'rgba(255,255,255,0.1)'
-        }
+        fontWeight: 600
       }}
     >
       Add Service
