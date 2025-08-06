@@ -6,7 +6,7 @@ import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHel
 import { GlobalStyleInterface, PageInterface } from "./interfaces";
 import { startTransition } from "react";
 import { revalidate } from "@/app/actions";
-import { unstable_cache } from "next/cache";
+
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
@@ -22,30 +22,21 @@ export class ConfigHelper {
   }
 
   static async load(keyName: string, navCategory:string = "b1Tab") {
-    return unstable_cache(
-      async () => {
-        const cacheKey = "sd_" + keyName;
-        const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi", [cacheKey])
-        let appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi", [cacheKey]);
-        const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=" + navCategory, "ContentApi", [cacheKey]);
-        const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi", [cacheKey]);
-        const gatewayConfigured = await ApiHelper.getAnonymous("/gateways/configured/" + church.id, "GivingApi", [cacheKey]);
-        const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
+    const cacheKey = "sd_" + keyName;
+    const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi", [cacheKey])
+    let appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi", [cacheKey]);
+    const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=" + navCategory, "ContentApi", [cacheKey]);
+    const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi", [cacheKey]);
+    const gatewayConfigured = await ApiHelper.getAnonymous("/gateways/configured/" + church.id, "GivingApi", [cacheKey]);
+    const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
 
     // Check if gateway is properly configured with a valid privateKey
     // This prevents showing the donate tab when no payment gateway is set up
     const allowDonations = gatewayConfigured?.configured === true;
 
-        let result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles }
-        result.keyName = keyName;
-        return result;
-      },
-      [keyName, navCategory],
-      {
-        tags: [keyName],
-        revalidate: 300 // 5 minutes
-      }
-    )();
+    let result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles }
+    result.keyName = keyName;
+    return result;
   }
 
   static getFirstRoute(config: ConfigurationInterface) {

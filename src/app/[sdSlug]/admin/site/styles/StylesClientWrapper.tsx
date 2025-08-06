@@ -144,7 +144,15 @@ export function StylesClientWrapper(props: WrapperPageProps) {
             {section === "css" && <CssEdit globalStyle={globalStyle} updatedFunction={handleUpdate} />}
             {section === "logo" && <Appearance />}
             {section === "" && (
-              <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
+              churchSettings
+                ? (
+                  <Preview globalStyle={globalStyle} churchSettings={churchSettings} churchName={props.config.church.name} />
+                )
+                : (
+                  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 400 }}>
+                    <Typography color="text.secondary">Loading preview...</Typography>
+                  </Box>
+                )
             )}
           </Grid>
 
