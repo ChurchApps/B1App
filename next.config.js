@@ -3,6 +3,25 @@ module.exports = {
   experimental: {
     optimizePackageImports: ['@mui/material', '@mui/icons-material', '@churchapps/apphelper']
   },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  modularizeImports: {
+    '@mui/icons-material': {
+      transform: '@mui/icons-material/{{member}}',
+    },
+    '@mui/material': {
+      transform: '@mui/material/{{member}}',
+    },
+  },
   webpack: (config, { isServer, dev }) => {
     // Only apply webpack config in non-turbo mode
     if (!dev || !process.env.TURBOPACK) {
@@ -98,7 +117,11 @@ module.exports = {
     ]
   },
   images:{
-    domains: ["content.staging.churchapps.org", "content.churchapps.org", "content.lessons.church"]
+    domains: ["content.staging.churchapps.org", "content.churchapps.org", "content.lessons.church"],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
   },
+  poweredByHeader: false,
+  compress: true,
   transpilePackages: ["@churchapps/apphelper", "@churchapps/apphelper-login", "@churchapps/apphelper-markdown", "@churchapps/apphelper-donations", "@churchapps/helpers", "mui-tel-input"]
 };

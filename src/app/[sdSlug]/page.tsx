@@ -7,16 +7,21 @@ import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import "@/styles/animations.css";
-import { Animate } from "@/components/Animate";
+import dynamic from 'next/dynamic';
+
+const Animate = dynamic(() => import('@/components/Animate').then(mod => ({ default: mod.Animate })), {
+  ssr: false
+});
 import { redirect } from "next/navigation";
+import { unstable_cache } from 'next/cache';
 
 type PageParams = Promise<{ sdSlug: string;  }>
 
 
-const loadSharedData = (sdSlug:string) =>
-  //const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all","sdSlug=" + sdSlug]});
-  //return result(sdSlug);
-  loadData(sdSlug)
+const loadSharedData = (sdSlug:string) => {
+  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all","sdSlug=" + sdSlug], revalidate: 60});
+  return result(sdSlug);
+}
 
 
 export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
