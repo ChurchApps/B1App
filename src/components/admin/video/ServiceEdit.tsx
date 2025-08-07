@@ -51,7 +51,7 @@ export const ServiceEdit: React.FC<Props> = (props) => {
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you wish to delete this service?")) {
-      ApiHelper.delete("/streamingServices/" + currentService.id, "ContentApi").then(() => { setCurrentService(null); props.updatedFunction(); });
+      ApiHelper.delete("/streamingServices/" + currentService.id, "ContentApi").then(() => { props.updatedFunction(); });
     }
   }
 
