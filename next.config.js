@@ -3,10 +3,11 @@ module.exports = {
   experimental: {
     optimizePackageImports: ['@mui/material', '@mui/icons-material', '@churchapps/apphelper']
   },
-  webpack: (config, { isServer, dev }) => {
-    // Only apply webpack config in non-turbo mode
-    if (!dev || !process.env.TURBOPACK) {
-      // Handle the cropperjs CSS import issue
+  // Webpack config (only used when Turbopack is disabled)
+  webpack: (config, { dev }) => {
+    // Only apply when not using Turbopack
+    if (!process.env.TURBOPACK) {
+      // Handle the cropperjs CSS import issue for webpack mode
       const path = require('path');
       const fs = require('fs');
       

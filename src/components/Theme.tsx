@@ -12,7 +12,6 @@ export const Theme: React.FC<Props> = (props) => {
 
   let css = null;
   const googleFonts = [];
-  let fontLink = <></>;
   let customJs = <></>;
   const lines:string[] = []
 
@@ -37,20 +36,7 @@ export const Theme: React.FC<Props> = (props) => {
 
   if (props.config.globalStyles?.customCss) lines.push(props.config.globalStyles?.customCss);
 
-  /*
-  css = (<style type="text/css">{`
-      :root {
-        ${lines.join("\n")}
-      }
-      `}</style>);*/
   css = ":root { " + lines.join("\n") + " }";
-
-  if (googleFonts.length > 0) {
-    const fontList:string[] = [];
-    googleFonts.forEach(f => fontList.push(f.replace(" ","+") + ":wght@400"));
-
-    fontLink = <link href={"https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap"} rel="stylesheet"></link>
-  }
 
   if (props?.config.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{__html:props.config.globalStyles.customJS}} />
 
@@ -58,11 +44,31 @@ export const Theme: React.FC<Props> = (props) => {
   const favicon = props.config?.appearance?.favicon_16x16 && AppearanceHelper.getFavicon(props.config.appearance, "16");
   const ogImage: string | undefined = undefined;
 
-  console.log("************FONTLINK", fontLink);
+  // Generate Google Fonts URL for dynamic loading
+  let googleFontsUrl = "";
+  if (googleFonts.length > 0) {
+    const fontList:string[] = [];
+    googleFonts.forEach(f => fontList.push(f.replace(" ","+") + ":wght@400"));
+    googleFontsUrl = "https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap";
+  }
+
+  // Use useEffect to dynamically load fonts in the browser
+  React.useEffect(() => {
+    if (googleFontsUrl) {
+      // Check if font link already exists
+      const existingLink = document.querySelector(`link[href="${googleFontsUrl}"]`);
+      if (!existingLink) {
+        const link = document.createElement('link');
+        link.href = googleFontsUrl;
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        document.head.appendChild(link);
+      }
+    }
+  }, [googleFontsUrl]);
 
   return (<>
     <Head>
-      {fontLink}
       {favicon
         ? <link rel="shortcut icon" type="image/png" href={favicon} />
         : <link rel="icon" href="/favicon.ico" />
@@ -78,4 +84,3 @@ export const Theme: React.FC<Props> = (props) => {
     {customJs}
   </>);
 }
-
