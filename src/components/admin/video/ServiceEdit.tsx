@@ -121,9 +121,10 @@ export const ServiceEdit: React.FC<Props> = (props) => {
       errors.push("Service time is required");
     }
 
+    /*
     if (currentService?.provider && !currentService?.providerKey?.trim()) {
       errors.push("Provider key is required when a video provider is selected");
-    }
+    }*/
 
     setValidationErrors(errors);
     return errors.length === 0;
