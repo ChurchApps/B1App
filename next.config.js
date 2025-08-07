@@ -3,23 +3,6 @@ module.exports = {
   experimental: {
     optimizePackageImports: ['@mui/material', '@mui/icons-material', '@churchapps/apphelper']
   },
-  // Turbopack configuration
-  turbopack: {
-    rules: {
-      '*.css': {
-        loaders: ['css-loader'],
-        as: 'css'
-      }
-    },
-    resolveAlias: {
-      // Add aliases for faster resolution
-      '@': './src',
-      'components': './src/components',
-      'helpers': './src/helpers',
-      // Handle cropperjs CSS path resolution for Turbopack
-      'react-cropper/node_modules/cropperjs/dist/cropper.css': './public/css/cropper.css'
-    }
-  },
   // Webpack config (only used when Turbopack is disabled)
   webpack: (config, { dev }) => {
     // Only apply when not using Turbopack
