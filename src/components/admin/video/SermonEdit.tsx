@@ -191,7 +191,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
     return result;
   }
 
-  const getShareIcon = () => (<a href="about:blank" onClick={(e) => { e.preventDefault(); setShowB1Share(true); }} data-testid="share-sermon-button" aria-label="Share sermon"><Icon style={{fontSize:18, paddingTop:7, height:30, paddingRight:20}}>share</Icon></a>)
+  const getShareIcon = () => (<a href="about:blank" onClick={(e) => { e.preventDefault(); setShowB1Share(true); }} data-testid="share-sermon-button" aria-label="Share sermon"><Icon style={{ fontSize: 18, paddingTop: 7, height: 30, paddingRight: 20 }}>share</Icon></a>)
 
   React.useEffect(() => { setCurrentSermon(props.currentSermon); loadData(); }, [props.currentSermon]);
   React.useEffect(handlePhotoUpdated, [props.updatedPhoto, currentSermon]); //eslint-disable-line
@@ -202,7 +202,7 @@ export const SermonEdit: React.FC<Props> = (props) => {
 
   switch (currentSermon?.videoType) {
     case "youtube_channel":
-      keyLabel = <>YouTube Channel ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}><a target="blank" rel="noreferrer noopener" href="https://support.churchapps.org/b1/streaming/youtube-channel-id.html">Get Your Channel Id</a></span></>;
+      keyLabel = <>YouTube Channel ID <span className="description" style={{ float: "right", marginTop: 3, paddingLeft: 5 }}><a target="blank" rel="noreferrer noopener" href="https://support.churchapps.org/b1/admin/youtube-channel-id.html">Get Your Channel Id</a></span></>;
       keyPlaceholder = "UCfiDl90gAfZMkgbeCqX1Wi0 - This is not your channel url";
       break;
     case "youtube":
@@ -300,6 +300,6 @@ export const SermonEdit: React.FC<Props> = (props) => {
       </div>
     </>
   </InputBox>
-  {showB1Share && <B1ShareModal contentDisplayName={currentSermon.title} contentType="sermon" contentId={currentSermon.id} onClose={() => { setShowB1Share(false); }} /> }
+    {showB1Share && <B1ShareModal contentDisplayName={currentSermon.title} contentType="sermon" contentId={currentSermon.id} onClose={() => { setShowB1Share(false); }} />}
   </>);
 }
