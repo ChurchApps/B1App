@@ -22,7 +22,7 @@
     "no-var": "error",
     "operator-linebreak": ["warn", "before"],
     "multiline-ternary": ["warn", "always-multiline"],
-    "indent": ["warn", 2, { "SwitchCase": 1 }],
+    "indent": "off",
     "arrow-body-style": ["warn", "as-needed"],
     "react/jsx-tag-spacing": ["warn", { "beforeSelfClosing": "always", "beforeClosing": "never" }],
     "no-multiple-empty-lines": "off",
