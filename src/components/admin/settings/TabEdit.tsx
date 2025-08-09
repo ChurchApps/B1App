@@ -28,7 +28,7 @@ import {
 } from "@mui/icons-material";
 import { B1LinkInterface, PageInterface } from "@/helpers";
 import { IconPicker } from "@/components/iconPicker/IconPicker";
-import { GalleryModal } from "../../gallery/GalleryModal";
+import { GalleryModal } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { UniqueIdHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
