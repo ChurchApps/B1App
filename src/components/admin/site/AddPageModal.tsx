@@ -25,6 +25,7 @@ export function AddPageModal(props: Props) {
   const [errors, setErrors] = useState([]);
   const [pageTemplate, setPageTemplate] = useState<string>("blank");
   const [aiDescription, setAiDescription] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleCancel = () => props.onDone();
   const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
@@ -89,45 +90,49 @@ export function AddPageModal(props: Props) {
 
   const handleSave = async () => {
     if (validate()) {
-      let pageData = null;
-      let linkData = null;
-      if (pageTemplate !== "link") {
-        if (pageTemplate === "ai") {
-          // Handle AI page creation differently
-          const slugString = page.title || "new-page";
-          const url = props.requestedSlug || SlugHelper.slugifyString("/" + slugString.toLowerCase().replace(/ /g, "-"), "urlPath");
+      setIsSubmitting(true);
+      try {
+        let pageData = null;
+        let linkData = null;
+        if (pageTemplate !== "link") {
+          if (pageTemplate === "ai") {
+            // Handle AI page creation differently
+            const slugString = page.title || "new-page";
+            const url = props.requestedSlug || SlugHelper.slugifyString("/" + slugString.toLowerCase().replace(/ /g, "-"), "urlPath");
 
-          // Use TemplateHelper to create the AI page
-          pageData = await TemplateHelper.createAIPage(page.title, aiDescription, url);
-          setPage(pageData);
-        } else {
-          // Handle other page types normally
-          let p = { ...page };
-          const slugString = link?.text || page.title || "new-page";
-          p.url = props.requestedSlug || SlugHelper.slugifyString("/" + slugString.toLowerCase().replace(" ", "-"), "urlPath");
+            // Use TemplateHelper to create the AI page
+            pageData = await TemplateHelper.createAIPage(page.title, aiDescription, url);
+            setPage(pageData);
+          } else {
+            // Handle other page types normally
+            let p = { ...page };
+            const slugString = link?.text || page.title || "new-page";
+            p.url = props.requestedSlug || SlugHelper.slugifyString("/" + slugString.toLowerCase().replace(" ", "-"), "urlPath");
 
-          pageData = await ApiHelper.post("/pages", [p], "ContentApi").then((data: any) => {
-            setPage(data[0]);
-            createTemplate(pageTemplate, data[0].id);
-            return data[0];
-          });
+            pageData = await ApiHelper.post("/pages", [p], "ContentApi").then((data: any) => {
+              setPage(data[0]);
+              createTemplate(pageTemplate, data[0].id);
+              return data[0];
+            });
+          }
         }
+
+        if (props.mode === "navigation") {
+          const l = { ...link };
+          if (pageTemplate !== "link") l.url = pageData.url;
+          linkData = await ApiHelper.post("/links", [l], "ContentApi").then((data: any) => data[0]);
+        }
+
+        props.updatedCallback((pageTemplate !== "link") ? pageData : null, (props.mode === "navigation") ? linkData : null);
+
+        // Redirect to the new AI page after creation
+        /*
+        if (pageTemplate === "ai" && pageData?.url) {
+          router.push(pageData.url);
+        }*/
+      } finally {
+        setIsSubmitting(false);
       }
-
-      if (props.mode === "navigation") {
-        const l = { ...link };
-        if (pageTemplate !== "link") l.url = pageData.url;
-        linkData = await ApiHelper.post("/links", [l], "ContentApi").then((data: any) => data[0]);
-      }
-
-      props.updatedCallback((pageTemplate !== "link") ? pageData : null, (props.mode === "navigation") ? linkData : null);
-
-      // Redirect to the new AI page after creation
-      /*
-      if (pageTemplate === "ai" && pageData?.url) {
-        router.push(pageData.url);
-      }*/
-
     }
   };
 
@@ -171,7 +176,7 @@ export function AddPageModal(props: Props) {
   else return (
 
     <Dialog open={true} onClose={props.onDone} className="dialogForm">
-      <InputBox id="dialogForm" headerText={(pageTemplate === "link") ? "New Link" : "New Page"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} data-testid="add-page-modal">
+      <InputBox id="dialogForm" headerText={(pageTemplate === "link") ? "New Link" : "New Page"} headerIcon="article" saveFunction={handleSave} cancelFunction={handleCancel} data-testid="add-page-modal" isSubmitting={isSubmitting}>
         <ErrorMessages errors={errors} />
 
         <InputLabel>Page Type</InputLabel>
