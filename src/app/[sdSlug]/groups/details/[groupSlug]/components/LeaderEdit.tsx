@@ -2,7 +2,7 @@
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper } from "@churchapps/apphelper";
-import { GalleryModal } from "@/components/gallery/GalleryModal";
+import { GalleryModal } from "@churchapps/apphelper";
 import { InputBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { Button, InputLabel, SelectChangeEvent, TextField } from "@mui/material";

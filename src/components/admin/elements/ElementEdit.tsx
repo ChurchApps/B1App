@@ -8,7 +8,7 @@ import { InputBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
 import React from "react";
-import { GalleryModal } from "../../gallery/GalleryModal";
+import { GalleryModal } from "@churchapps/apphelper";
 import { RowEdit } from "./RowEdit";
 import { FormEdit } from "./FormEdit";
 import { FaqEdit } from "./FaqEdit";
