@@ -7,7 +7,6 @@ import "@/styles/buttons.css";
 import "@churchapps/apphelper-markdown/dist/components/markdownEditor/editor.css";
 
 import { UserProvider } from "@/context/UserContext";
-import { AnalyticsHelper } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { ErrorAppDataInterface, ErrorLogInterface } from "@churchapps/helpers";
 import React, { useEffect } from "react";
@@ -16,6 +15,7 @@ import { ErrorMessages } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 
 
@@ -29,22 +29,10 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     EnvironmentHelper.init();
     EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
     console.log("ENVIRONMENT HAD BEEN INIT")
-    try {
-      AnalyticsHelper.init();
-    } catch (error) {
-      console.warn("Analytics initialization failed:", error);
-    }
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
   EnvironmentHelper.init();
-  useEffect(() => {
-    try {
-      AnalyticsHelper.logPageView();
-    } catch (error) {
-      console.warn("Analytics page view failed:", error);
-    }
-  }, [location]);
 
 
   const getErrorAppData = () => {
@@ -79,6 +67,7 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <CookieProviderWrapper>
+      <GoogleAnalytics />
       <ThemeProvider theme={mdTheme}>
         <UserProvider>
           <ErrorMessages errors={errors} />
