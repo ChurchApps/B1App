@@ -10,33 +10,34 @@ import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
 import { redirect } from "next/navigation";
 
-type PageParams = Promise<{ sdSlug: string;  }>
+type PageParams = Promise<{ sdSlug: string; }>
 
 
-const loadSharedData = (sdSlug:string) =>
+const loadSharedData = (sdSlug: string) =>
   //const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all","sdSlug=" + sdSlug]});
   //return result(sdSlug);
   loadData(sdSlug)
 
 
-export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
-  const { sdSlug } =  await params;
+export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
+  const { sdSlug } = await params;
   const props = await loadSharedData(sdSlug);
   return MetaHelper.getMetaData(props.pageData.title + " - " + props.config.church.name, props.pageData.title);
 }
 
-const loadData = async (sdSlug:string) => {
+const loadData = async (sdSlug: string) => {
   const config = await ConfigHelper.load(sdSlug, "website");
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?url=/", "ContentApi");
+  console.log("Loaded page data for /pages/" + config.church.id + "/tree?url=/");
 
 
   return { pageData, config }
 }
 
-export default async function Home({params}: {params:Promise<PageParams>}) {
+export default async function Home({ params }: { params: Promise<PageParams> }) {
   await EnvironmentHelper.initServerSide();
 
-  const { sdSlug } =  await params;
+  const { sdSlug } = await params;
   const props = await loadData(sdSlug);
 
   if (!props.pageData?.url) redirect("/my"); //return <Loading />
