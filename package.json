@@ -2,6 +2,9 @@
   "name": "b1-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "next dev -p 3301",
     "dev:turbo": "next dev --turbo -p 3301",
