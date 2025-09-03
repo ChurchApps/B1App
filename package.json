@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@churchapps/apphelper": "^0.4.44",
-    "@churchapps/apphelper-donations": "^0.4.44",
+    "@churchapps/apphelper-donations": "^0.4.45",
     "@churchapps/apphelper-forms": "^0.4.44",
     "@churchapps/apphelper-login": "^0.4.44",
     "@churchapps/apphelper-markdown": "^0.4.44",
