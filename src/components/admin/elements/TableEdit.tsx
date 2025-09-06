@@ -1,5 +1,10 @@
-import { MarkdownEditor } from "@churchapps/apphelper-markdown";
+import dynamic from "next/dynamic";
 import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
+
+const HtmlEditor = dynamic(
+  () => import("@churchapps/apphelper-markdown").then((mod) => mod.HtmlEditor),
+  { ssr: false, loading: () => <div>Loading editor...</div> }
+);
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import React from "react";
 
@@ -56,7 +61,7 @@ export function TableEdit(props: Props) {
     const row = editCellIdx[0];
     const col = editCellIdx[1];
     return (<>
-      <MarkdownEditor value={contents[row][col]} onChange={val => {
+      <HtmlEditor value={contents[row][col]} onChange={val => {
         const c = [...contents];
         c[row][col] = val;
         const data = { ...props.parsedData };

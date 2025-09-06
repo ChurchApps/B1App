@@ -11,7 +11,7 @@ export interface ColorsInterface { primary: string, contrast: string, header: st
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
 export interface ServiceInterface { videoUrl: string, serviceTime: string, duration: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string }
-export interface ConfigurationInterface { keyName?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface }
+export interface ConfigurationInterface { keyName?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface }
 
 export class ConfigHelper {
 
@@ -34,7 +34,7 @@ export class ConfigHelper {
     // This prevents showing the donate tab when no payment gateway is set up
     const allowDonations = gatewayConfigured?.configured === true;
 
-    let result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles }
+    let result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles, homePage }
     result.keyName = keyName;
     return result;
   }
