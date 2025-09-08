@@ -1,6 +1,5 @@
 import React from "react";
 import { ElementInterface } from "@/helpers";
-import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 interface Props {
@@ -15,7 +14,7 @@ export const TableElement = ({ element }: Props) => {
   const appendRow = (result:React.ReactElement[], rowArray:string[], key:string) => {
     let row: React.ReactElement[] = [];
     for (let j = 0; j < rowArray.length; j++) {
-      if (markdown) row.push(<TableCell key={j}><MarkdownPreviewLight value={rowArray[j]} /></TableCell>);
+      if (markdown) row.push(<TableCell key={j}><div dangerouslySetInnerHTML={{ __html: rowArray[j] }} /></TableCell>);
       else row.push(<TableCell key={j}>{rowArray[j]}</TableCell>);
     }
     result.push(<TableRow key={key}>{row}</TableRow>);

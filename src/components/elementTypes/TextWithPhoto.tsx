@@ -1,12 +1,21 @@
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Grid } from "@mui/material";
-import { MarkdownPreviewLight, MarkdownPreview } from "@churchapps/apphelper-markdown";
+import { HtmlPreview } from "./HtmlPreview";
 
 interface Props { element: ElementInterface; onEdit?: (section: SectionInterface, element: ElementInterface) => void; }
 
 export const TextWithPhoto: React.FC<Props> = props => {
-  const editor = props?.onEdit ? <MarkdownPreview value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} element={props.element} showFloatingEditor /> : <MarkdownPreviewLight value={props.element.answers?.text || ""} textAlign={props.element.answers?.textAlignment} />;
-  let result = editor;
+  const textContent = props.element.answers?.text || "";
+  const textAlign = props.element.answers?.textAlignment;
+
+  // Create text component - use HtmlPreview for edit mode, HTML rendering for display
+  const textComponent = props?.onEdit
+    ? <HtmlPreview value={textContent} textAlign={textAlign} element={props.element} showFloatingEditor onEdit={props.onEdit} />
+    : <div
+        style={{ textAlign: textAlign as any }}
+        dangerouslySetInnerHTML={{ __html: textContent }}
+      />;
+  let result = textComponent;
   switch (props.element.answers?.photoPosition || "left") {
     case "left":
       result = (
@@ -15,7 +24,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
           </Grid>
           <Grid size={{ md: 8, xs: 12 }}>
-            {editor}
+            {textComponent}
           </Grid>
         </Grid>
       )
@@ -24,7 +33,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <Grid container columnSpacing={3}>
           <Grid size={{ md: 8, xs: 12 }}>
-            {editor}
+            {textComponent}
           </Grid>
           <Grid size={{ md: 4, xs: 12 }}>
             <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
@@ -35,7 +44,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
     case "bottom":
       result = (
         <>
-          {editor}
+          {textComponent}
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
         </>
       )
@@ -44,7 +53,7 @@ export const TextWithPhoto: React.FC<Props> = props => {
       result = (
         <>
           <img src={props.element.answers?.photo || "about:blank"} alt={props.element.answers?.photoAlt || ""} style={{ borderRadius: 10, marginTop: 40 }} />
-          {editor}
+          {textComponent}
         </>
       )
       break;
