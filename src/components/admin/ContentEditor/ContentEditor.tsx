@@ -66,8 +66,12 @@ export default function ContentEditor(props: Props) {
   }, []);
 
   const loadData = () => {
+    console.log("ContentEditor loadData called - this will overwrite container");
     if (isAuthenticated && UserHelper.checkAccess(Permissions.contentApi.content.edit)) {
-      props.loadData(props.pageId || props.blockId).then((p: PageInterface | BlockInterface) => { setContainer(p) });
+      props.loadData(props.pageId || props.blockId).then((p: PageInterface | BlockInterface) => {
+        console.log("ContentEditor loadData received from API:", p);
+        setContainer(p);
+      });
     }
   }
 
@@ -162,16 +166,21 @@ export default function ContentEditor(props: Props) {
 
 
   const handleRealtimeChange = (element: ElementInterface) => {
+    console.log("ContentEditor handleRealtimeChange called with element:", element);
     const c = { ...container };
     c.sections.forEach(s => {
       realtimeUpdateElement(element, s.elements);
     })
+    console.log("ContentEditor setContainer called with updated container:", c);
     setContainer(c);
   }
 
   const realtimeUpdateElement = (element: ElementInterface, elements: ElementInterface[]) => {
     for (let i = 0; i < elements.length; i++) {
-      if (elements[i].id === element.id) elements[i] = element;
+      if (elements[i].id === element.id) {
+        console.log("ContentEditor realtimeUpdateElement found matching element", { oldElement: elements[i], newElement: element });
+        elements[i] = element;
+      }
       //if (elements[i].elements?.length > 0) realtimeUpdateElement(element, element.elements);
     }
   }
@@ -277,7 +286,23 @@ export default function ContentEditor(props: Props) {
     <DndProvider backend={HTML5Backend}>
       {showHelp && getHelp()}
       {showAdd && <ElementAdd includeBlocks={!elementOnlyMode} includeSection={!elementOnlyMode} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
-      {editElement && <ElementEdit element={editElement} updatedCallback={() => { setEditElement(null); loadData(); }} onRealtimeChange={handleRealtimeChange} globalStyles={props.config?.globalStyles} />}
+      {editElement && <ElementEdit element={editElement} updatedCallback={(updatedElement) => {
+        console.log("ContentEditor ElementEdit updatedCallback called with:", updatedElement);
+        setEditElement(null);
+        if (updatedElement) {
+          // Update the element in the container instead of reloading everything
+          const c = { ...container };
+          c.sections.forEach(s => {
+            realtimeUpdateElement(updatedElement, s.elements);
+          });
+          setContainer(c);
+          console.log("ContentEditor updated container with saved element");
+        } else {
+          // Element was deleted, reload the data
+          console.log("ContentEditor element was deleted, reloading data");
+          loadData();
+        }
+      }} onRealtimeChange={handleRealtimeChange} globalStyles={props.config?.globalStyles} />}
       {editSection && <SectionEdit section={editSection} updatedCallback={() => { setEditSection(null); loadData(); }} globalStyles={props.config?.globalStyles} />}
 
       <div>

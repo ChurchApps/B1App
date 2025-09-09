@@ -1,8 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { AnimationsInterface, BlockInterface, ElementInterface, GlobalStyleInterface, InlineStylesInterface } from "@/helpers";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Checkbox, FormGroup, FormControlLabel, Typography, Slider, Dialog } from "@mui/material";
-import { MarkdownEditor } from "@churchapps/apphelper-markdown";
+
+const HtmlEditor = dynamic(
+  () => import("@churchapps/apphelper-markdown").then((mod) => mod.HtmlEditor),
+  { ssr: false, loading: () => <div>Loading editor...</div> }
+);
 import { ErrorMessages } from "@churchapps/apphelper";
 import { InputBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
@@ -50,6 +55,7 @@ export function ElementEdit(props: Props) {
         break;
     }
     setElement(p);
+    props.onRealtimeChange(p);
   };
 
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,14 +70,27 @@ export function ElementEdit(props: Props) {
         break;
     }
     setElement(p);
+    props.onRealtimeChange(p);
   }
 
-  const handleMarkdownChange = (field: string, newValue: string) => {
-    parsedData[field] = newValue;
-    let p = { ...element };
-    p.answers = parsedData;
-    p.answersJSON = JSON.stringify(parsedData);
-    if (p.answersJSON !== element.answersJSON) setElement(p);
+  const handleHtmlChange = (field: string, newValue: string) => {
+    try {
+      console.log("ElementEdit handleHtmlChange called", { field, newValue, element: element });
+      parsedData[field] = newValue;
+      let p = { ...element };
+      p.answers = parsedData;
+      p.answersJSON = JSON.stringify(parsedData);
+      console.log("ElementEdit handleHtmlChange updated element:", p);
+      if (p.answersJSON !== element.answersJSON) {
+        setElement(p);
+        console.log("ElementEdit calling onRealtimeChange");
+        props.onRealtimeChange(p);
+      } else {
+        console.log("ElementEdit no change detected, not updating");
+      }
+    } catch (error) {
+      console.error("ElementEdit handleHtmlChange error:", error);
+    }
   };
 
   const handleStyleChange = (styles: InlineStylesInterface) => {
@@ -91,12 +110,24 @@ export function ElementEdit(props: Props) {
   }
 
   const handleSave = () => {
+    console.log("ElementEdit handleSave called", {
+      element: element,
+      innerErrors: innerErrors.length,
+      answersJSON: element?.answersJSON
+    });
+
     if (innerErrors.length === 0) {
+      console.log("ElementEdit sending API request with element:", element);
       ApiHelper.post("/elements", [element], "ContentApi").then((data: any) => {
+        console.log("ElementEdit API response received:", data);
         setElement(data);
+        console.log("ElementEdit calling updatedCallback with:", data);
         props.updatedCallback(data);
+      }).catch((error: any) => {
+        console.error("ElementEdit API error:", error);
       });
     } else {
+      console.log("ElementEdit validation errors:", innerErrors);
       setErrors(innerErrors);
     }
   };
@@ -144,11 +175,18 @@ export function ElementEdit(props: Props) {
     </>
   );
 
+
   const getTextFields = () => (
     <>
       {getTextAlignment("textAlignment")}
       <Box sx={{ marginTop: 2 }}>
-        <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
+        <HtmlEditor
+          value={parsedData.text || ""}
+          onChange={(val) => {
+            handleHtmlChange("text", val);
+          }}
+          style={{ maxHeight: 200, overflowY: "scroll" }}
+        />
       </Box>
       {getAppearanceFields(["font", "color", "line", "margin", "padding", "text"])}
     </>
@@ -170,7 +208,13 @@ export function ElementEdit(props: Props) {
     </FormControl>
     {getTextAlignment("textAlignment")}
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll" }} textAlign={parsedData.textAlignment} />
+      <HtmlEditor
+        value={parsedData.text || ""}
+        onChange={(val) => {
+          handleHtmlChange("text", val);
+        }}
+        style={{ maxHeight: 200, overflowY: "scroll" }}
+      />
     </Box>
     {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "text", "width"])}
   </>);
@@ -185,7 +229,13 @@ export function ElementEdit(props: Props) {
     <TextField fullWidth size="small" label="Title" name="title" value={parsedData.title || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
     {getTextAlignment("textAlignment")}
     <Box sx={{ marginTop: 2 }}>
-      <MarkdownEditor value={parsedData.text || ""} onChange={val => handleMarkdownChange("text", val)} style={{ maxHeight: 200, overflowY: "scroll", zindex: -1 }} textAlign={parsedData.textAlignment} />
+      <HtmlEditor
+        value={parsedData.text || ""}
+        onChange={(val) => {
+          handleHtmlChange("text", val);
+        }}
+        style={{ maxHeight: 200, overflowY: "scroll", zIndex: -1 }}
+      />
     </Box>
     {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "text", "width"])}
   </>);
@@ -381,7 +431,7 @@ export function ElementEdit(props: Props) {
       case "video": result = getVideoFields(); break;
       case "rawHTML": result = getRawHTML(); break;
       case "form": result = <><FormEdit parsedData={parsedData} handleChange={handleChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
-      case "faq": result = <><FaqEdit parsedData={parsedData} handleChange={handleChange} handleMarkdownChange={handleMarkdownChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
+      case "faq": result = <><FaqEdit parsedData={parsedData} handleChange={handleChange} handleHtmlChange={handleHtmlChange} />{getAppearanceFields(["border", "background", "color", "font", "height", "line", "margin", "padding", "width"])}</>; break;
       case "map": result = getMapFields(); break;
       case "sermons": result = <></>; break;
       case "carousel": result = getCarouselFields(); break;
