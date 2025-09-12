@@ -234,7 +234,7 @@ export function ElementEdit(props: Props) {
         onChange={(val) => {
           handleHtmlChange("text", val);
         }}
-        style={{ maxHeight: 200, overflowY: "scroll", zIndex: -1 }}
+        style={{ maxHeight: 200, overflowY: "scroll" }}
       />
     </Box>
     {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "text", "width"])}
