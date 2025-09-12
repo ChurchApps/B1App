@@ -18,6 +18,26 @@ export function AdminHeader() {
     getPrimaryLabel();
   }, [pathname]);
 
+  // Handle church switching with subdomain redirect
+  useEffect(() => {
+    if (context?.userChurch?.church?.subDomain && typeof window !== 'undefined') {
+      const currentSubdomain = window.location.hostname.split('.')[0];
+      const newSubdomain = context.userChurch.church.subDomain;
+
+      // Only redirect if the subdomain has actually changed
+      if (currentSubdomain !== newSubdomain) {
+        const protocol = window.location.protocol;
+        const baseDomain = window.location.hostname.includes('localhost')
+          ? 'localhost:3301'
+          : window.location.hostname.split('.').slice(1).join('.');
+
+        const newUrl = `${protocol}//${newSubdomain}.${baseDomain}${pathname}${window.location.search}`;
+
+        // Redirect to the new subdomain
+        window.location.href = newUrl;
+      }
+    }
+  }, [context?.userChurch?.church?.subDomain, pathname]);
 
   const getPrimaryMenu = () => {
     const menuItems:{ url: string, icon:string, label: string }[] = []

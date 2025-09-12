@@ -290,13 +290,23 @@ export default function ContentEditor(props: Props) {
         console.log("ContentEditor ElementEdit updatedCallback called with:", updatedElement);
         setEditElement(null);
         if (updatedElement) {
-          // Update the element in the container instead of reloading everything
-          const c = { ...container };
-          c.sections.forEach(s => {
-            realtimeUpdateElement(updatedElement, s.elements);
-          });
-          setContainer(c);
-          console.log("ContentEditor updated container with saved element");
+          // Check if this is a new element (was not in the original edit element)
+          const isNewElement = !editElement.id;
+          
+          if (isNewElement) {
+            // For new elements, we need to reload data from the server
+            // New elements need to be properly added to the container
+            console.log("ContentEditor new element saved, reloading data");
+            loadData();
+          } else {
+            // Update existing element in the container without reloading
+            const c = { ...container };
+            c.sections.forEach(s => {
+              realtimeUpdateElement(updatedElement, s.elements);
+            });
+            setContainer(c);
+            console.log("ContentEditor updated container with saved element");
+          }
         } else {
           // Element was deleted, reload the data
           console.log("ContentEditor element was deleted, reloading data");
