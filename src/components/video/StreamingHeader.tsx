@@ -71,20 +71,23 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     ? AppearanceHelper.getLogo(props.appearance, "images/logo-header.png", "/images/logo.png", "#FFF")
     : "";
 
-  if (!props.appearance) {
-    setTimeout(() => {
-      try {
-        const { firstName, lastName } = ChatHelper.current.user;
-        const displayName = `${firstName} ${lastName}`;
-        if (displayName.trim() === "" || displayName === "Anonymous") {
-          if (!promptName) {
-            setShowUserMenu(true);
-            setPromptName(true);
+  React.useEffect(() => {
+    if (!props.appearance) {
+      const id = setTimeout(() => {
+        try {
+          const { firstName, lastName } = ChatHelper.current.user;
+          const displayName = `${firstName} ${lastName}`;
+          if (displayName.trim() === "" || displayName === "Anonymous") {
+            if (!promptName) {
+              setShowUserMenu(true);
+              setPromptName(true);
+            }
           }
-        }
-      } catch { }
-    }, 30000);
-  }
+        } catch { }
+      }, 30000);
+      return () => clearTimeout(id);
+    }
+  }, [props.appearance, promptName]);
 
   //const { firstName, lastName } = props.user || {};
   const { firstName, lastName } = ChatHelper.current.user;

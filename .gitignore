@@ -7,6 +7,7 @@ package-lock.json
 playwright-report
 test-results
 .serena
+CODE_REVIEW.md
 
 # dependencies
 /node_modules

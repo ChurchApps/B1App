@@ -28,7 +28,10 @@ export const Chat: React.FC<Props> = (props) => {
     if (result !== chatEnabled) setChatEnabled(result);
   }, [chatEnabled]);
 
-  React.useEffect(() => { setInterval(updateChatEnabled, 1000); }, [updateChatEnabled]);
+  React.useEffect(() => {
+    const id = setInterval(updateChatEnabled, 1000);
+    return () => clearInterval(id);
+  }, [updateChatEnabled]);
 
   let className = (chatEnabled) ? "chatContainer" : "chatContainer chatDisabled";
 

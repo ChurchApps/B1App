@@ -51,7 +51,6 @@ export const CustomFontModal: React.FC<Props> = props => {
       .then((data: any) => {
         const result: { category: string, family: string }[] = [];
         data.items.forEach((item: any) => { result.push({ family: item.family, category: item.category }) })
-        console.log("DATA LENGTH", result.length)
         setFonts(result);
       });
   }
@@ -74,7 +73,7 @@ export const CustomFontModal: React.FC<Props> = props => {
   const getPages = () => {
     const filtered = getFiltered();
     const pages = Math.ceil(filtered.length / 10);
-    return <Pagination count={pages} page={page} onChange={(e, p) => console.log(setPage(p))} />
+    return <Pagination count={pages} page={page} onChange={(_, p) => setPage(p)} />
   }
 
   const getResults = () => {

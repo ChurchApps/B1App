@@ -32,7 +32,6 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
-  EnvironmentHelper.init();
 
 
   const getErrorAppData = () => {

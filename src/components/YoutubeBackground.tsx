@@ -50,7 +50,7 @@ export function YoutubeBackground({
     return () => {
       window.removeEventListener("resize", updateDimensions);
     };
-  });
+  }, []);
 
   const updateDimensions = () => {
     const containerWidth = containerRef.current.clientWidth;

@@ -30,7 +30,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
     ApiHelper.get("/visitsessions?sessionId=" + session.id, "AttendanceApi").then((vs: VisitSessionInterface[]) => {
       setVisitSessions(vs);
       const peopleIds = ArrayHelper.getUniqueValues(vs, "visit.personId");
-      ApiHelper.get("/people/ids?ids=" + escape(peopleIds.join(",")), "MembershipApi").then((data: any) => setPeople(data));
+      ApiHelper.get("/people/ids?ids=" + encodeURIComponent(peopleIds.join(",")), "MembershipApi").then((data: any) => setPeople(data));
     });
   }, [session]);
 
