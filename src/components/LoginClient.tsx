@@ -35,7 +35,6 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
   }, []);
 
   const handleRedirect = (url: string) => {
-    console.log("Redirecting to:", url);
     PersonHelper.person = context.person;
     redirect(url);
   };

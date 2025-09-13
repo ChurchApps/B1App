@@ -20,7 +20,6 @@ export const StyleEdit: React.FC<Props> = (props) => {
 
   const getInputField = () => {
     let result = <></>;
-    console.log("GET INPUT FIELD", field, value)
 
     switch (field.type) {
       case "text":
@@ -35,7 +34,6 @@ export const StyleEdit: React.FC<Props> = (props) => {
         </FormControl>
         break;
       case "px":
-        console.log("PX", value)
         result = <TextField fullWidth style={{marginTop:10}} size="small" label={field.label + " - px"} name="value" value={value} onChange={(e:any) => { setValue(e.target.value) }} type="number" />
         break;
       case "color":
