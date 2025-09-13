@@ -7,6 +7,7 @@ import { Loading } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
+import { ensureSequentialSort, moveItemDown, moveItemUp } from "@/helpers/SortHelper";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -50,25 +51,19 @@ export const Links: React.FC<Props> = (props) => {
 
   const structuredLinks = links && getNestedChildren(links, undefined);
 
-  const makeSortSequential = (structuredLinks: LinkInterface[]) => {
-    for (let i = 0; i < structuredLinks.length; i++) structuredLinks[i].sort = i + 1;
-  }
-
   const moveUp = (e: React.MouseEvent, structuredLinks: LinkInterface[]) => {
     e.preventDefault();
     const idx = parseInt(e.currentTarget.getAttribute("data-idx"));
-    makeSortSequential(structuredLinks);
-    structuredLinks[idx - 1].sort++;
-    structuredLinks[idx].sort--;
+    ensureSequentialSort(structuredLinks);
+    moveItemUp(structuredLinks, idx);
     saveChanges();
   }
 
   const moveDown = (e: React.MouseEvent, structuredLinks: LinkInterface[]) => {
     e.preventDefault();
     const idx = parseInt(e.currentTarget.getAttribute("data-idx"));
-    makeSortSequential(structuredLinks);
-    structuredLinks[idx].sort++;
-    structuredLinks[idx + 1].sort--;
+    ensureSequentialSort(structuredLinks);
+    moveItemDown(structuredLinks, idx);
     saveChanges();
   }
 
