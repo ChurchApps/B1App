@@ -3,11 +3,11 @@ import { Icon } from "@mui/material";
 import { LinkEdit } from "./LinkEdit";
 import { ApiHelper } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
-import { Loading } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { ensureSequentialSort, moveItemDown, moveItemUp } from "@/helpers/SortHelper";
+import { TableList } from "@/components/admin/TableList";
 
 interface RecursiveInterface {
   childrenLinks: LinkInterface[];
@@ -140,14 +140,9 @@ export const Links: React.FC<Props> = (props) => {
     return rows;
   }
 
-  const getTable = (structuredLinks: LinkInterface[]) => {
-    if (isLoading) return <Loading />
-    else return (<table className="table">
-      <tbody>
-        {getLinks(structuredLinks)}
-      </tbody>
-    </table>)
-  }
+  const getTable = (structuredLinks: LinkInterface[]) => (
+    <TableList rows={getLinks(structuredLinks)} isLoading={isLoading} />
+  )
   React.useEffect(() => { loadData(); }, [props?.refresh]);
 
   if (currentLink !== null) return <LinkEdit links={links} currentLink={currentLink} updatedFunction={handleUpdated} />;

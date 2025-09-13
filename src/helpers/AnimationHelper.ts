@@ -27,4 +27,14 @@ export class AnimationHelper {
     }, observerOptions);
     setTimeout(() => { this.setupAnimations(); }, 300);
   }
+
+  static destroy = () => {
+    try {
+      if (this.observer) {
+        this.observer.disconnect();
+        this.observer = null as any;
+      }
+      this.runningAnimations = [];
+    } catch { /* no-op */ }
+  }
 }

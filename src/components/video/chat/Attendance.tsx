@@ -188,9 +188,12 @@ export const Attendance: React.FC<Props> = (props) => {
     setSelectedConnectionId(connectionId);
 
     //contextMenu.show(e); //TODO:enable
-    //The component has a bug.  It captures keyboard input to allow keyboard navigation and doesn't give it back.
-    window.addEventListener("keydown", function (event) { event.stopPropagation(); }, true);
-
+    // Mitigate library bug by stopping the next keydown once, with auto-cleanup.
+    window.addEventListener(
+      "keydown",
+      (event) => { event.stopPropagation(); },
+      { capture: true, once: true }
+    );
   }
 
   const getContextMenuItems = () => {

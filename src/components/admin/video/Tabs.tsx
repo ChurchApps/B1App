@@ -1,5 +1,4 @@
 import { SmallButton } from "@churchapps/apphelper";
-import { Loading } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
@@ -8,6 +7,7 @@ import { Icon } from "@mui/material";
 import React from "react";
 import { TabEdit } from "./TabEdit";
 import { ensureSequentialSort, moveItemDown, moveItemUp } from "@/helpers/SortHelper";
+import { TableList } from "@/components/admin/TableList";
 
 export const Tabs: React.FC = () => {
   const [tabs, setTabs] = React.useState<LinkInterface[]>([]);
@@ -61,14 +61,7 @@ export const Tabs: React.FC = () => {
     return rows;
   }
 
-  const getTable = () => {
-    if (isLoading) return <Loading />
-    else return (<table className="table">
-      <tbody>
-        {getRows()}
-      </tbody>
-    </table>);
-  }
+  const getTable = () => (<TableList rows={getRows()} isLoading={isLoading} />);
 
   React.useEffect(() => { loadData(); }, []);
 

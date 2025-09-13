@@ -28,11 +28,7 @@ export const AnimationsEdit: React.FC<Props> = (props) => {
     switch (e.target.name) {
       case "onShow":
         a.onShow = val;
-        console.log("VAL", val);
-        console.log("A", a);
-        console.log(val && !a.onShowSpeed);
         if (val && !a.onShowSpeed) a.onShowSpeed = "normal";
-        console.log("A", a);
         break;
       case "onShowSpeed": a.onShowSpeed=val; break;
     }

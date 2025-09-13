@@ -8,6 +8,7 @@ import { DisplayBox } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";
 import type { StreamingServiceInterface } from "@churchapps/helpers";
 import { ServiceEdit } from "./ServiceEdit";
+import { TableList } from "@/components/admin/TableList";
 
 export const Services: React.FC = () => {
   const [services, setServices] = React.useState<StreamingServiceInterface[]>([]);
@@ -102,14 +103,7 @@ export const Services: React.FC = () => {
     return rows;
   }
 
-  const getTable = () => {
-    if (isLoading) return <Loading />
-    else return (<table className="table">
-      <tbody>
-        {getRows()}
-      </tbody>
-    </table>);
-  }
+  const getTable = () => (<TableList rows={getRows()} isLoading={isLoading} />);
 
   React.useEffect(() => { loadData(); }, []);
 

@@ -57,7 +57,6 @@ export function PickColors(props: Props) {
   }
 
   const getThemeOptions = (field:"background" | "textColor" | "headingColor" | "linkColor" =  "background") => {
-    if (field==="linkColor") console.log("LINK COLOR", props.linkColor);
     if (props.globalStyles?.palette)
     {
       const palette = JSON.parse(props.globalStyles.palette);
@@ -67,7 +66,6 @@ export function PickColors(props: Props) {
   }
 
   const updateField = (field:"background" | "textColor" | "headingColor" | "linkColor", value:string) => {
-    console.log("UPDATE FIELD", field, value)
     switch (field) {
       case "background": props.updatedCallback(value, props.textColor, props.headingColor, props.linkColor); break;
       case "textColor": props.updatedCallback(props.background, value, props.headingColor, props.linkColor); break;
