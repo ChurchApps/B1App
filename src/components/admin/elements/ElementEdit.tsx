@@ -75,18 +75,13 @@ export function ElementEdit(props: Props) {
 
   const handleHtmlChange = (field: string, newValue: string) => {
     try {
-      console.log("ElementEdit handleHtmlChange called", { field, newValue, element: element });
       parsedData[field] = newValue;
       let p = { ...element };
       p.answers = parsedData;
       p.answersJSON = JSON.stringify(parsedData);
-      console.log("ElementEdit handleHtmlChange updated element:", p);
       if (p.answersJSON !== element.answersJSON) {
         setElement(p);
-        console.log("ElementEdit calling onRealtimeChange");
         props.onRealtimeChange(p);
-      } else {
-        console.log("ElementEdit no change detected, not updating");
       }
     } catch (error) {
       console.error("ElementEdit handleHtmlChange error:", error);
@@ -110,24 +105,14 @@ export function ElementEdit(props: Props) {
   }
 
   const handleSave = () => {
-    console.log("ElementEdit handleSave called", {
-      element: element,
-      innerErrors: innerErrors.length,
-      answersJSON: element?.answersJSON
-    });
-
     if (innerErrors.length === 0) {
-      console.log("ElementEdit sending API request with element:", element);
       ApiHelper.post("/elements", [element], "ContentApi").then((data: any) => {
-        console.log("ElementEdit API response received:", data);
         setElement(data);
-        console.log("ElementEdit calling updatedCallback with:", data);
         props.updatedCallback(data);
       }).catch((error: any) => {
         console.error("ElementEdit API error:", error);
       });
     } else {
-      console.log("ElementEdit validation errors:", innerErrors);
       setErrors(innerErrors);
     }
   };

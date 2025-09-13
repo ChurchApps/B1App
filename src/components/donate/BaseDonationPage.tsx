@@ -78,7 +78,6 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         }
       });
     } else {
-      console.log('PersonId is missing or invalid:', props.personId);
       setPaymentMethods([]);
       setDonations([]);
       setIsLoading(false);
