@@ -14,6 +14,7 @@ import { BlockEdit } from "@/components/admin/BlockEdit";
 import { SmallButton } from "@churchapps/apphelper";
 import { BlockInterface, PageInterface } from "@/helpers";
 import { TemplateHelper } from "@/helpers/TemplateHelper";
+import { TableList } from "@/components/admin/TableList";
 
 export function YourSiteSettings() {
   const { isAuthenticated } = ApiHelper;
@@ -185,24 +186,10 @@ export function YourSiteSettings() {
         {UserHelper.checkAccess(Permissions.contentApi.content.edit) && <Links refresh={refresh} />}
 
         <DisplayBox headerIcon="link" headerText="Additional Resources" editContent={false} help="b1/streaming/appearance" data-testid="additional-resources-display-box">
-          <table className="table">
-            <tbody>
-              <tr>
-                <td>
-                  <Link href={"/admin/site/styles"} style={{ display: "flex" }}>
-                    <Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Appearance
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Link href={"/admin/site/files"} style={{ display: "flex" }}>
-                    <Icon sx={{ marginRight: "5px" }}>description</Icon>Manage Files
-                  </Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <TableList rows={[
+            (<tr key="appearance"><td><Link href={"/admin/site/styles"} style={{ display: "flex" }}><Icon sx={{ marginRight: "5px" }}>palette</Icon>Manage Appearance</Link></td></tr>),
+            (<tr key="files"><td><Link href={"/admin/site/files"} style={{ display: "flex" }}><Icon sx={{ marginRight: "5px" }}>description</Icon>Manage Files</Link></td></tr>),
+          ]} />
         </DisplayBox>
       </Grid>
     </Grid>

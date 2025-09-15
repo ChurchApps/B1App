@@ -66,10 +66,8 @@ export default function ContentEditor(props: Props) {
   }, []);
 
   const loadData = () => {
-    console.log("ContentEditor loadData called - this will overwrite container");
     if (isAuthenticated && UserHelper.checkAccess(Permissions.contentApi.content.edit)) {
       props.loadData(props.pageId || props.blockId).then((p: PageInterface | BlockInterface) => {
-        console.log("ContentEditor loadData received from API:", p);
         setContainer(p);
       });
     }
@@ -166,19 +164,16 @@ export default function ContentEditor(props: Props) {
 
 
   const handleRealtimeChange = (element: ElementInterface) => {
-    console.log("ContentEditor handleRealtimeChange called with element:", element);
     const c = { ...container };
     c.sections.forEach(s => {
       realtimeUpdateElement(element, s.elements);
     })
-    console.log("ContentEditor setContainer called with updated container:", c);
     setContainer(c);
   }
 
   const realtimeUpdateElement = (element: ElementInterface, elements: ElementInterface[]) => {
     for (let i = 0; i < elements.length; i++) {
       if (elements[i].id === element.id) {
-        console.log("ContentEditor realtimeUpdateElement found matching element", { oldElement: elements[i], newElement: element });
         elements[i] = element;
       }
       //if (elements[i].elements?.length > 0) realtimeUpdateElement(element, element.elements);
@@ -287,7 +282,6 @@ export default function ContentEditor(props: Props) {
       {showHelp && getHelp()}
       {showAdd && <ElementAdd includeBlocks={!elementOnlyMode} includeSection={!elementOnlyMode} updateCallback={() => { setShowAdd(false); }} draggingCallback={() => setShowAdd(false)} />}
       {editElement && <ElementEdit element={editElement} updatedCallback={(updatedElement) => {
-        console.log("ContentEditor ElementEdit updatedCallback called with:", updatedElement);
         setEditElement(null);
         if (updatedElement) {
           // Check if this is a new element (was not in the original edit element)
@@ -296,7 +290,6 @@ export default function ContentEditor(props: Props) {
           if (isNewElement) {
             // For new elements, we need to reload data from the server
             // New elements need to be properly added to the container
-            console.log("ContentEditor new element saved, reloading data");
             loadData();
           } else {
             // Update existing element in the container without reloading
@@ -305,11 +298,9 @@ export default function ContentEditor(props: Props) {
               realtimeUpdateElement(updatedElement, s.elements);
             });
             setContainer(c);
-            console.log("ContentEditor updated container with saved element");
           }
         } else {
           // Element was deleted, reload the data
-          console.log("ContentEditor element was deleted, reloading data");
           loadData();
         }
       }} onRealtimeChange={handleRealtimeChange} globalStyles={props.config?.globalStyles} />}

@@ -28,11 +28,9 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     EnvironmentHelper.init();
     EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
-    console.log("ENVIRONMENT HAD BEEN INIT")
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
-  EnvironmentHelper.init();
 
 
   const getErrorAppData = () => {

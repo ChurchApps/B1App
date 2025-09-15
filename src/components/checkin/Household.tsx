@@ -156,7 +156,7 @@ export function Household({ completeHandler = () => { } }: Props) {
   const handleCheckin = () => {
     setIsLoading(true);
     const peopleIds: number[] = ArrayHelper.getUniqueValues(CheckinHelper.householdMembers, "id");
-    const url = "/visits/checkin?serviceId=" + CheckinHelper.serviceId + "&peopleIds=" + escape(peopleIds.join(","));
+    const url = "/visits/checkin?serviceId=" + CheckinHelper.serviceId + "&peopleIds=" + encodeURIComponent(peopleIds.join(","));
     ApiHelper.post(url, CheckinHelper.pendingVisits, "AttendanceApi").then(() => {
       completeHandler();
     });

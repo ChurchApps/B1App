@@ -1,5 +1,4 @@
 import { SmallButton } from "@churchapps/apphelper";
-import { Loading } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
@@ -7,6 +6,8 @@ import type { LinkInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
 import React from "react";
 import { TabEdit } from "./TabEdit";
+import { ensureSequentialSort, moveItemDown, moveItemUp } from "@/helpers/SortHelper";
+import { TableList } from "@/components/admin/TableList";
 
 export const Tabs: React.FC = () => {
   const [tabs, setTabs] = React.useState<LinkInterface[]>([]);
@@ -23,25 +24,19 @@ export const Tabs: React.FC = () => {
     setCurrentTab(tab);
   }
 
-  const makeSortSequential = () => {
-    for (let i = 0; i < tabs.length; i++) tabs[i].sort = i + 1;
-  }
-
   const moveUp = (e: React.MouseEvent) => {
     e.preventDefault();
     const idx = parseInt(e.currentTarget.getAttribute("data-idx"));
-    makeSortSequential();
-    tabs[idx - 1].sort++;
-    tabs[idx].sort--;
+    ensureSequentialSort(tabs);
+    moveItemUp(tabs, idx);
     saveChanges();
   }
 
   const moveDown = (e: React.MouseEvent) => {
     e.preventDefault();
     const idx = parseInt(e.currentTarget.getAttribute("data-idx"));
-    makeSortSequential();
-    tabs[idx].sort++;
-    tabs[idx + 1].sort--;
+    ensureSequentialSort(tabs);
+    moveItemDown(tabs, idx);
     saveChanges();
   }
 
@@ -66,14 +61,7 @@ export const Tabs: React.FC = () => {
     return rows;
   }
 
-  const getTable = () => {
-    if (isLoading) return <Loading />
-    else return (<table className="table">
-      <tbody>
-        {getRows()}
-      </tbody>
-    </table>);
-  }
+  const getTable = () => (<TableList rows={getRows()} isLoading={isLoading} />);
 
   React.useEffect(() => { loadData(); }, []);
 

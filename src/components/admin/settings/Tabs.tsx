@@ -21,6 +21,7 @@ import {
 import { ApiHelper } from "@churchapps/apphelper";
 import { B1LinkInterface } from "@/helpers";
 import { CardWithHeader, EmptyState } from "@/components/ui";
+import { ensureSequentialSort, moveItemDown, moveItemUp } from "@/helpers/SortHelper";
 
 interface Props {
   onSelected?: (tab: B1LinkInterface) => void;
@@ -38,21 +39,15 @@ export function Tabs({ onSelected = () => {}, refreshKey = 0 }: Props) {
     ApiHelper.post("/links", tabs, "ContentApi").then(loadData);
   };
 
-  const makeSortSequential = () => {
-    for (let i = 0; i < tabs.length; i++) tabs[i].sort = i + 1;
-  };
-
   const moveUp = (idx: number) => {
-    makeSortSequential();
-    tabs[idx - 1].sort++;
-    tabs[idx].sort--;
+    ensureSequentialSort(tabs);
+    moveItemUp(tabs, idx);
     saveChanges();
   };
 
   const moveDown = (idx: number) => {
-    makeSortSequential();
-    tabs[idx].sort++;
-    tabs[idx + 1].sort--;
+    ensureSequentialSort(tabs);
+    moveItemDown(tabs, idx);
     saveChanges();
   };
 

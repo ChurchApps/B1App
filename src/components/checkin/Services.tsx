@@ -46,7 +46,7 @@ export function Services({ selectedHandler }: Props) {
       = "/visits/checkin?serviceId="
       + CheckinHelper.serviceId
       + "&peopleIds="
-      + escape(peopleIds.join(","))
+      + encodeURIComponent(peopleIds.join(","))
       + "&include=visitSessions";
     CheckinHelper.existingVisits = await ApiHelper.get(url, "AttendanceApi");
     CheckinHelper.pendingVisits = [...CheckinHelper.existingVisits];

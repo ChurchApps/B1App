@@ -48,7 +48,6 @@ export function AuthenticatedView(props: Props) {
   }
 
   const getTabContent = () => {
-    console.log("Tab is", tab)
     let result = <></>
     switch (tab) {
       case "details":

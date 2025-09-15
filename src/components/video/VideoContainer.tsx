@@ -89,7 +89,8 @@ export const VideoContainer: React.FC<Props> = (props) => {
       }
     }
     setLoadedTime(new Date().getTime());
-    setInterval(updateCurrentTime, 1000);
+    const id = setInterval(updateCurrentTime, 1000);
+    return () => clearInterval(id);
   }, [isMounted]);
 
   return (

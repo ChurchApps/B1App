@@ -33,7 +33,7 @@ export function PlanClient({ planId }: Props) {
     const tempPositions = await ApiHelper.get("/positions/plan/" + planId, "DoingApi");
     const tempAssignments = await ApiHelper.get("/assignments/plan/" + planId, "DoingApi");
     const peopleIds = ArrayHelper.getIds(tempAssignments, "personId");
-    const tempPeople = await ApiHelper.get("/people/basic?ids=" + escape(peopleIds.join(",")), "MembershipApi");
+    const tempPeople = await ApiHelper.get("/people/basic?ids=" + encodeURIComponent(peopleIds.join(",")), "MembershipApi");
 
     setPositions(tempPositions);
     setAssignments(tempAssignments);

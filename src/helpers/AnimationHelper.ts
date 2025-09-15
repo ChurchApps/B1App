@@ -4,7 +4,6 @@ export class AnimationHelper {
 
   static setupAnimations = () => {
     const elements = document.querySelectorAll('.animated');
-    console.log("ANIMATED ELEMENTS", elements);
     elements.forEach((element) => this.observer.observe(element));
   }
 
@@ -26,5 +25,15 @@ export class AnimationHelper {
       });
     }, observerOptions);
     setTimeout(() => { this.setupAnimations(); }, 300);
+  }
+
+  static destroy = () => {
+    try {
+      if (this.observer) {
+        this.observer.disconnect();
+        this.observer = null as any;
+      }
+      this.runningAnimations = [];
+    } catch { /* no-op */ }
   }
 }
