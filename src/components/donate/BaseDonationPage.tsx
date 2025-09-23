@@ -56,12 +56,22 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             if (!isMounted()) {
               return;
             }
-            if (!results.length) setPaymentMethods([]);
-            else {
-              let cards = results[0].cards.data.map((card: any) => new StripePaymentMethod(card));
-              let banks = results[0].banks.data.map((bank: any) => new StripePaymentMethod(bank));
-              let methods = cards.concat(banks);
-              setCustomerId(results[0].customer.id);
+            if (!Array.isArray(results) || results.length === 0) {
+              setPaymentMethods([]);
+            } else {
+              const methods: StripePaymentMethod[] = [];
+
+              for (const pm of results) {
+                if (pm.provider === 'stripe') {
+                  methods.push(new StripePaymentMethod(pm));
+                }
+
+                // Extract customer ID from first payment method if we don't have one
+                if (pm.customerId && !customerId) {
+                  setCustomerId(pm.customerId);
+                }
+              }
+
               setPaymentMethods(methods);
             }
             setIsLoading(false);
