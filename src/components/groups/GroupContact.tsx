@@ -40,11 +40,11 @@ export function GroupContact({ leaders, group, config }: Props) {
       appName: "B1",
       subject: "Contact Request For " + group.name,
       body:
-        "First Name: " + formData.firstName + "<br />" +
-        "Last Name: " + formData.lastName + "<br />" +
-        "Email Address: " + formData.email + "<br />" +
-        "Phone Number: " + formData.phone + "<br />" +
-        "Message: " + formData.message,
+        "First Name: " + formData.firstName + "<br />"
+        + "Last Name: " + formData.lastName + "<br />"
+        + "Email Address: " + formData.email + "<br />"
+        + "Phone Number: " + formData.phone + "<br />"
+        + "Message: " + formData.message,
     };
 
     try {
@@ -101,3 +101,4 @@ export function GroupContact({ leaders, group, config }: Props) {
     </div>
   );
 }
+

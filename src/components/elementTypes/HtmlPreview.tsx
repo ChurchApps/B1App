@@ -21,7 +21,7 @@ export const HtmlPreview: React.FC<Props> = (props) => {
 
   return (
     <div
-      style={{ 
+      style={{
         textAlign: props.textAlign as any,
         cursor: props.showFloatingEditor ? "pointer" : "default",
         position: "relative"
