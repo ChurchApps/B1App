@@ -1,173 +1,183 @@
 module.exports =
-{
-  reactStrictMode: true,
-  experimental:
   {
-    optimizePackageImports:
-      [
-        "@mui/material",
-        "@mui/icons-material",
-        "@churchapps/apphelper"
-      ]
-  },
-  // Webpack config (only used when Turbopack is disabled)
-  webpack:
-    (
-      config,
+    reactStrictMode: true,
+    experimental:
       {
-        dev
-      }
-    ) => {
-      // Only apply when not using Turbopack
-      if (
-        !process
-          .env
-          .TURBOPACK
-      ) {
-        // Handle the cropperjs CSS import issue for webpack mode
-        const path = require("path");
-        const fs = require("fs");
+        optimizePackageImports:
+          [
+            "@mui/material",
+            "@mui/icons-material",
+            "@churchapps/apphelper"
+          ]
+      },
+    // Webpack config (only used when Turbopack is disabled)
+    webpack:
+      (
+        config,
+        {
+          dev
+        }
+      ) => {
+        // Only apply when not using Turbopack
+        if (
+          !process
+            .env
+            .TURBOPACK
+        ) {
+          // Handle the cropperjs CSS import issue for webpack mode
+          const path = require("path");
+          const fs = require("fs");
 
-        const cropperCssPath =
-          "react-cropper/node_modules/cropperjs/dist/cropper.css";
-        let resolvedPath;
+          const cropperCssPath =
+            "react-cropper/node_modules/cropperjs/dist/cropper.css";
+          let resolvedPath;
 
-        try {
-          resolvedPath =
-            require.resolve(
-              cropperCssPath
-            );
-        } catch (e) {
-          // Fallback for different environments
-          const possiblePaths =
-            [
-              path.join(
-                process.cwd(),
-                "node_modules",
+          try {
+            resolvedPath =
+              require.resolve(
                 cropperCssPath
-              ),
-              path.join(
-                process.cwd(),
-                "node_modules",
-                "cropperjs",
-                "dist",
-                "cropper.css"
-              ),
-              path.join(
-                process.cwd(),
-                "public",
-                "css",
-                "cropper.css"
-              )
-            ];
+              );
+          } catch (e) {
+            // Fallback for different environments
+            const possiblePaths =
+              [
+                path.join(
+                  process.cwd(),
+                  "node_modules",
+                  cropperCssPath
+                ),
+                path.join(
+                  process.cwd(),
+                  "node_modules",
+                  "cropperjs",
+                  "dist",
+                  "cropper.css"
+                ),
+                path.join(
+                  process.cwd(),
+                  "public",
+                  "css",
+                  "cropper.css"
+                )
+              ];
 
-          for (const possiblePath of possiblePaths) {
-            if (
-              fs.existsSync(
-                possiblePath
-              )
-            ) {
-              resolvedPath =
-                possiblePath;
-              break;
+            for (const possiblePath of possiblePaths) {
+              if (
+                fs.existsSync(
+                  possiblePath
+                )
+              ) {
+                resolvedPath =
+                  possiblePath;
+                break;
+              }
             }
           }
+
+          if (
+            resolvedPath
+          ) {
+            config.resolve.alias =
+              {
+                ...config
+                  .resolve
+                  .alias,
+                [cropperCssPath]:
+                  resolvedPath
+              };
+          }
         }
 
-        if (
-          resolvedPath
-        ) {
-          config.resolve.alias =
-          {
-            ...config
-              .resolve
-              .alias,
-            [cropperCssPath]:
-              resolvedPath
-          };
+        return config;
+      },
+    async rewrites() {
+      return [
+        {
+          source:
+            "/",
+          has: [
+            {
+              type: "header",
+              key: "x-site",
+              value:
+                "(?<subdomain>.*?)\\..*"
+            }
+          ],
+          destination:
+            "/:subdomain"
+        },
+        {
+          source:
+            "/:path*",
+          has: [
+            {
+              type: "header",
+              key: "x-site",
+              value:
+                "(?<subdomain>.*?)\\..*"
+            }
+          ],
+          destination:
+            "/:subdomain/:path*"
+        },
+        {
+          source:
+            "/",
+          has: [
+            {
+              type: "host",
+              value:
+                "localhost"
+            }
+          ],
+          destination:
+            "/localhost"
+        },
+        {
+          source:
+            "/",
+          has: [
+            {
+              type: "host",
+              value:
+                "(?<subdomain>.*?)\\..*"
+            }
+          ],
+          destination:
+            "/:subdomain"
+        },
+        {
+          source:
+            "/:path*",
+          has: [
+            {
+              type: "host",
+              value:
+                "(?<subdomain>.*?)\\..*"
+            }
+          ],
+          destination:
+            "/:subdomain/:path*"
         }
-      }
-
-      return config;
+      ];
     },
-  async rewrites() {
-    return [
+    images:
       {
-        source:
-          "/",
-        has: [
-          {
-            type: "header",
-            key: "x-site",
-            value:
-              "(?<subdomain>.*?)\\..*"
-          }
-        ],
-        destination:
-          "/:subdomain"
+        domains:
+          [
+            "content.staging.churchapps.org",
+            "content.churchapps.org",
+            "content.lessons.church"
+          ]
       },
-      {
-        source:
-          "/:path*",
-        has: [
-          {
-            type: "header",
-            key: "x-site",
-            value:
-              "(?<subdomain>.*?)\\..*"
-          }
-        ],
-        destination:
-          "/:subdomain/:path*"
-      },
-      {
-        source:
-          "/",
-        has: [
-          {
-            type: "host",
-            value:
-              "localhost"
-          }
-        ],
-        destination:
-          "/localhost"
-      },
-      {
-        source:
-          "/",
-        has: [
-          {
-            type: "host",
-            value:
-              "(?<subdomain>.*?)\\..*"
-          }
-        ],
-        destination:
-          "/:subdomain"
-      },
-      {
-        source:
-          "/:path*",
-        has: [
-          {
-            type: "host",
-            value:
-              "(?<subdomain>.*?)\\..*"
-          }
-        ],
-        destination:
-          "/:subdomain/:path*"
-      }
-    ];
-  },
-  images:
-  {
-    domains:
+    transpilePackages:
       [
-        "content.staging.churchapps.org",
-        "content.churchapps.org",
-        "content.lessons.church"
+        "@churchapps/apphelper",
+        "@churchapps/apphelper-login",
+        "@churchapps/apphelper-markdown",
+        "@churchapps/apphelper-donations",
+        "@churchapps/helpers",
+        "mui-tel-input"
       ]
   },
   transpilePackages:
@@ -180,3 +190,4 @@ module.exports =
       "mui-tel-input"
     ]
 }; 
+
