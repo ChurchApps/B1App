@@ -3,7 +3,7 @@
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { StableDonationForm } from "./StableDonationForm";
-import { RecurringDonations } from "@churchapps/apphelper-donations";
+import { RecurringDonations, StripePaymentMethod as AppHelperStripePaymentMethod } from "@churchapps/apphelper-donations";
 import { PaymentMethods } from "@churchapps/apphelper-donations";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ExportLink } from "@churchapps/apphelper";
@@ -25,6 +25,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   const [donations, setDonations] = React.useState<DonationInterface[]>([]);
   const [stripePromise, setStripe] = React.useState<Promise<Stripe>>(null);
   const [paymentMethods, setPaymentMethods] = React.useState<StripePaymentMethod[]>(null);
+  const [appHelperPaymentMethods, setAppHelperPaymentMethods] = React.useState<AppHelperStripePaymentMethod[]>(null);
   const [customerId, setCustomerId] = React.useState(null);
   const [person, setPerson] = React.useState<PersonInterface>(null);
   const [message, setMessage] = React.useState<string>(null);
@@ -56,13 +57,32 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             if (!isMounted()) {
               return;
             }
-            if (!results.length) setPaymentMethods([]);
-            else {
-              let cards = results[0].cards.data.map((card: any) => new StripePaymentMethod(card));
-              let banks = results[0].banks.data.map((bank: any) => new StripePaymentMethod(bank));
-              let methods = cards.concat(banks);
-              setCustomerId(results[0].customer.id);
+            if (!Array.isArray(results) || results.length === 0) {
+              setPaymentMethods([]);
+              setAppHelperPaymentMethods([]);
+            } else {
+              const methods: StripePaymentMethod[] = [];
+              const appHelperMethods: AppHelperStripePaymentMethod[] = [];
+
+              for (const pm of results) {
+                if (pm.provider === 'stripe') {
+                  // Create AppHelper version for donation components
+                  const appHelperPM = new AppHelperStripePaymentMethod(pm);
+                  appHelperMethods.push(appHelperPM);
+
+                  // Create helpers version for StableDonationForm compatibility
+                  const helpersPM = appHelperPM as unknown as StripePaymentMethod;
+                  methods.push(helpersPM);
+                }
+
+                // Extract customer ID from first payment method if we don't have one
+                if (pm.customerId && !customerId) {
+                  setCustomerId(pm.customerId);
+                }
+              }
+
               setPaymentMethods(methods);
+              setAppHelperPaymentMethods(appHelperMethods);
             }
             setIsLoading(false);
           });
@@ -74,11 +94,13 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         }
         else {
           setPaymentMethods([]);
+          setAppHelperPaymentMethods([]);
           setIsLoading(false);
         }
       });
     } else {
       setPaymentMethods([]);
+      setAppHelperPaymentMethods([]);
       setDonations([]);
       setIsLoading(false);
     }
@@ -205,7 +227,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       <StableDonationForm
         person={person}
         customerId={customerId}
-        paymentMethods={paymentMethods}
+        paymentMethods={appHelperPaymentMethods}
         stripePromise={stripePromise}
         donationSuccess={handleDataUpdate}
         church={props?.church}
@@ -214,8 +236,8 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       <DisplayBox headerIcon="payments" headerText="Donations" editContent={getEditContent()} data-testid="donations-display-box">
         {getTable()}
       </DisplayBox>
-      <RecurringDonations customerId={customerId} paymentMethods={paymentMethods || []} appName={appName} dataUpdate={handleDataUpdate} data-testid="recurring-donations" />
-      <PaymentMethods person={person} customerId={customerId} paymentMethods={paymentMethods || []} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
+      <RecurringDonations customerId={customerId} paymentMethods={appHelperPaymentMethods || []} appName={appName} dataUpdate={handleDataUpdate} data-testid="recurring-donations" />
+      <PaymentMethods person={person} customerId={customerId} paymentMethods={appHelperPaymentMethods || []} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
     </>
   );
 }

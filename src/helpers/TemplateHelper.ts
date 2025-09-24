@@ -249,13 +249,13 @@ export class TemplateHelper {
       description: description,
       url: url
     };
-    
+
     // First, get the AI-generated page content
     const aiResponse = await ApiHelper.post("/website/createPage", aiPageData, "AskApi");
-    
+
     // Then create the actual page with the AI-generated content
     const pageData = await ApiHelper.post("/pages/temp/ai", aiResponse, "ContentApi");
-    
+
     return pageData;
   }
 

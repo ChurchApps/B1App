@@ -286,7 +286,6 @@ export default function ContentEditor(props: Props) {
         if (updatedElement) {
           // Check if this is a new element (was not in the original edit element)
           const isNewElement = !editElement.id;
-          
           if (isNewElement) {
             // For new elements, we need to reload data from the server
             // New elements need to be properly added to the container
