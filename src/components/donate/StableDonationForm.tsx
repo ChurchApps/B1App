@@ -26,9 +26,7 @@ const StableDonationFormComponent: React.FC<Props> = (props) => {
 
   // Only render when all required props are available
   if (!props.person
-      || !props.customerId
       || !props.paymentMethods
-      || props.paymentMethods.length === 0
       || !props.stripePromise) {
     return <div>Loading payment options...</div>;
   }
