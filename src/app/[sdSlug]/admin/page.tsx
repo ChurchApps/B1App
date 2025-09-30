@@ -82,7 +82,7 @@ export default function AdminPagesClient() {
           </Box>
         )}
 
-        {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
+        {UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit) && (
           <Tabs
             onSelected={(tab: B1LinkInterface) => { setEditTab(tab); }}
             refreshKey={refreshTabsKey}
