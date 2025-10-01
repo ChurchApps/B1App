@@ -21,7 +21,7 @@ export function Conversations(props: Props) {
   //const [editMessageId, setEditMessageId] = React.useState(null)
 
   const loadConversations = async () => {
-    const conversations: ConversationInterface[] = (props.contentId) ? await ApiHelper.get("/conversations/" + props.contentType + "/" + props.contentId, "MessagingApi") : [];
+    const conversations: ConversationInterface[] = (props.contentId) ? await ApiHelper.get("/conversations/messages/" + props.contentType + "/" + props.contentId, "MessagingApi") : [];
     if (conversations.length > 0) {
       const peopleIds: string[] = [];
       conversations.forEach(c => {
@@ -54,8 +54,10 @@ export function Conversations(props: Props) {
   if (!conversations) return <Loading />
   else return (
     <>
-      <NewConversation context={props.context} contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
-      {getConversations()}
+      <NewConversation conversation={conversations} context={props.context} contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
+      {conversations && Array.isArray(conversations) && (
+        <Conversation context={props.context} conversation={conversations[0]} key={conversations[0].id} />
+      )}
     </>
   );
 };
