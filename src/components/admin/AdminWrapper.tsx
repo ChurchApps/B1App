@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ApiHelper } from "@churchapps/apphelper";
 import UserContext from "../../context/UserContext";
 import { CssBaseline } from "@mui/material";
@@ -19,15 +19,16 @@ export const AdminWrapper: React.FC<Props> = (props) => {
   const { isAuthenticated } = ApiHelper;
   const context = React.useContext(UserContext);
   const pathname = usePathname();
+  const router = useRouter();
 
   PersonHelper.person = context.person;
 
   useEffect(() => {
     if (!isAuthenticated && props.config?.keyName) {
       const returnUrl = UrlHelper.getReturnUrl(pathname, props.config.keyName);
-      redirect(`/login?returnUrl=${encodeURIComponent(returnUrl)}`);
+      router.push(`/login?returnUrl=${encodeURIComponent(returnUrl)}`);
     }
-  }, [isAuthenticated, pathname, props.config?.keyName]);
+  }, [isAuthenticated, pathname, props.config?.keyName, router]);
 
   if (!isAuthenticated) {
     return null;
