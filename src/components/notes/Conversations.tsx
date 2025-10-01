@@ -54,8 +54,10 @@ export function Conversations(props: Props) {
   if (!conversations) return <Loading />
   else return (
     <>
-      <NewConversation conversation={conversations} context={props.context} contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
-      {conversations && Array.isArray(conversations) && (
+      {conversations?.length === 0 && (
+          <NewConversation conversation={conversations} context={props.context} contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
+      )}
+      {conversations && Array.isArray(conversations) && conversations?.length > 0 && (
         <Conversation context={props.context} conversation={conversations[0]} key={conversations[0].id} />
       )}
     </>
