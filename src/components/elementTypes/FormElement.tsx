@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
-import { ElementInterface, PersonHelper } from "@/helpers";
+import { ElementInterface, EnvironmentHelper, PersonHelper } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper-forms";
 import { ApiHelper } from "@churchapps/apphelper";
@@ -29,7 +29,8 @@ export const FormElement = (props: Props) => {
     }
   }, [formId, props.church]);
 
-  const loadData = () => {
+  const loadData = async () => {
+    await EnvironmentHelper.init();
     ApiHelper.get(
       "/forms/standalone/" + formId + "?churchId=" + props.church.id,
       "MembershipApi"
