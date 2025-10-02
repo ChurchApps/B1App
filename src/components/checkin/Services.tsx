@@ -85,7 +85,7 @@ export function Services({ selectedHandler }: Props) {
           }}
           data-testid={`select-service-${service.id}-button`}
         >
-          {service.campus.name} - {service.name}
+          {service.campus?.name ? `${service.campus.name} - ` : ''}{service.name}
         </a>
       ))}
     </>
