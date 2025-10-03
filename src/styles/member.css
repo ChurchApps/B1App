@@ -106,7 +106,7 @@ body {
 /* Start private messaging & notes */
 .messages {
   clear: both;
-  margin-left: 60px;
+  /* margin-left: 60px; */
 }
 
 .messages .note:first-of-type {

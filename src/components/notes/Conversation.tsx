@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Paper, Stack } from "@mui/material";
+import { Paper } from "@mui/material";
 import React from "react";
 import { ArrayHelper } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper";
@@ -51,12 +51,12 @@ export function Conversation(props: Props) {
 
     const getNotes = () => {
       let noteArray: React.ReactNode[] = [];
-      for (let i = 1; i < conversation.messages.length; i++) noteArray.push(<Note context={props.context} message={conversation.messages[i]} key={conversation.messages[i].id} showEditNote={setEditMessageId} />);
+      for (let i = 0; i < conversation.messages.length; i++) noteArray.push(<Note context={props.context} message={conversation.messages[i]} key={conversation.messages[i].id} showEditNote={setEditMessageId} />);
       return noteArray;
     }
 
     let result = (<>
-      <div className="conversation">
+      {/* <div className="conversation">
         <div className="postedBy">
           <img src={photoUrl} alt="avatar" />
         </div>
@@ -68,7 +68,7 @@ export function Conversation(props: Props) {
             </div>
           </Stack>
         </Box>
-      </div>
+      </div> */}
       {props.showCommentCount && (
         <div className="commentCount">
           <div>{(conversation.postCount === 1) ? "1 " + Locale.label("notes.comment") : conversation.postCount + " " + Locale.label("notes.comments")}</div>
