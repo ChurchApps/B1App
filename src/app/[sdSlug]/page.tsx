@@ -8,14 +8,14 @@ import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import "@/styles/animations.css";
 import { Animate } from "@/components/Animate";
 import { redirect } from "next/navigation";
-import { unstable_cache } from "next/cache";
+import { ApiHelper } from "@churchapps/apphelper";
 
 type PageParams = { sdSlug: string; }
 
 
 const loadSharedData = (sdSlug: string) => {
-  const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all","sdSlug=" + sdSlug]});
-  return result(sdSlug);
+  EnvironmentHelper.init();
+  return loadData(sdSlug);
 }
 
 
@@ -27,8 +27,9 @@ export async function generateMetadata({ params }: { params: Promise<PageParams>
 
 const loadData = async (sdSlug: string) => {
   const config = await ConfigHelper.load(sdSlug, "website");
+  const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?url=/", "ContentApi");
   // Use the homePage already loaded in ConfigHelper instead of fetching it again
-  const pageData: PageInterface = config.homePage || { url: null } as PageInterface;
+  //const pageData: PageInterface = config.homePage || { url: null } as PageInterface;
   return { pageData, config }
 }
 
