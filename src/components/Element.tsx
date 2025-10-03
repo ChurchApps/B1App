@@ -1,7 +1,6 @@
 "use client";
 
 import type { ChurchInterface } from "@churchapps/helpers";
-import { NonAuthDonation } from "@churchapps/apphelper-donations";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { DroppableArea } from "./admin/DroppableArea";
 import { RowElement } from "./elementTypes/RowElement";
@@ -29,6 +28,7 @@ import { TableElement } from "./elementTypes/TableElement";
 import { DraggableWrapper } from "./admin/DraggableWrapper";
 import { GroupListElement } from "./elementTypes/GroupListElement";
 import { DonateLinkElement } from "./elementTypes/DonateLinkElement";
+import { NonAuthDonationWrapper } from "./donate/NonAuthDonationWrapper";
 
 interface Props {
   element: ElementInterface;
@@ -98,7 +98,7 @@ export const Element: React.FC<Props> = props => {
       result = <MapElement key={props.element.id} element={props.element as ElementInterface} />
       break;
     case "donation":
-      result = <NonAuthDonation key={props.element.id} churchId={props.church?.id ?? props.element.churchId} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
+      result = <NonAuthDonationWrapper key={props.element.id} churchId={props.church?.id ?? props.element.churchId} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 3 } }} showHeader={false} />
       break;
     case "donateLink":
       result = <DonateLinkElement key={props.element.id} element={props.element as ElementInterface} />

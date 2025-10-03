@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { NonAuthDonation } from "@churchapps/apphelper-donations";
+import { NonAuthDonationWrapper } from "@/components/donate/NonAuthDonationWrapper";
 
 interface Props {
   churchId: string
@@ -10,12 +10,10 @@ export function GiveNowPanel(props: Props) {
       <Typography variant="h5" fontWeight="bold">
         My Donation
       </Typography>
-      <NonAuthDonation
+      <NonAuthDonationWrapper
         churchId={props.churchId}
-        recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY}
         mainContainerCssProps={{ sx: { boxShadow: "none", paddingY: 3 } }}
         showHeader={false}
-        data-testid="non-auth-donation"
       />
     </Box>
   );
