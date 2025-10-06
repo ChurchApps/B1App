@@ -135,7 +135,7 @@ export function Conversation(props: Props) {
         {hasMore && !loading && (
           <Button onClick={() => loadNotes(page + 1)}>Load More</Button>
         )}
-        {loading && <div>Loading...</div>}
+        {loading && <Button disabled>Loading...</Button>}
       </div>
     </>
   );
