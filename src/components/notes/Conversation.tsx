@@ -1,88 +1,147 @@
 "use client";
 
-import { Box, Paper, Stack } from "@mui/material";
-import React from "react";
-import { ArrayHelper } from "@churchapps/helpers";
+import { Box, Paper, Stack, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { ArrayHelper, MessageInterface } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
-import { ConversationInterface, MessageInterface, UserContextInterface } from "@churchapps/helpers";
+import { ConversationInterface, UserContextInterface } from "@churchapps/helpers";
 import { AddNote } from "@churchapps/apphelper";
 import { Note } from "@churchapps/apphelper";
+import moment from "moment";
 
 interface Props {
   conversation: ConversationInterface;
   context: UserContextInterface;
   showCommentCount?: boolean;
   noWrapper?: boolean;
+  pageSize?: number;
 }
 
 export function Conversation(props: Props) {
-  const [conversation, setConversation] = React.useState<ConversationInterface>(null)
-  const [editMessageId, setEditMessageId] = React.useState(null)
+  const [conversations, setConversations] = React.useState<ConversationInterface>(null);
+  const [editMessageId, setEditMessageId] = React.useState(null);
+  const [page, setPage] = React.useState(1);
+  const [loading, setLoading] = React.useState(false);
+  const [hasMore, setHasMore] = React.useState(true);
 
-  const loadNotes = async () => {
-    const messages: MessageInterface[] = (conversation.id) ? await ApiHelper.get("/messages/conversation/" + conversation.id, "MessagingApi") : [];
+  useEffect(() => {
+    loadNotes(1)
+  }, [props])
+
+  const loadNotes = async (nextPage: number = 1) => {
+    if (!props?.conversation?.groupId) return;
+
+    setLoading(true);
+    const limit = props.pageSize || 10;
+
+    const response: any[] = await ApiHelper.get(
+      `/conversations/messages/group/${props.conversation.groupId}?page=${nextPage}&limit=${limit}`,
+      "MessagingApi"
+    );
+
+    const messages = response?.filter(m => m.id === props.conversation.id)[0]?.messages;
+
     if (messages.length > 0) {
       const peopleIds = ArrayHelper.getIds(messages, "personId");
-      const people = await ApiHelper.get("/people/ids?ids=" + peopleIds.join(","), "MembershipApi");
-      messages.forEach(n => {
-        n.person = ArrayHelper.getOne(people, "id", n.personId);
-      })
+      const people = await ApiHelper.get(
+        "/people/ids?ids=" + peopleIds.join(","),
+        "MembershipApi"
+      );
+
+      messages.forEach((m: MessageInterface) => {
+        m.person = ArrayHelper.getOne(people, "id", m.personId);
+      });
+
+      const c = { ...props.conversation };
+      if (nextPage === 1) {
+        c.messages = messages;
+      } else {
+        c.messages = [...(c.messages || []), ...messages];
+      }
+
+      setConversations(c);
+      setPage(nextPage);
+      setHasMore(messages.length === limit);
+    } else {
+      setHasMore(false);
     }
-    const c = { ...conversation }
-    c.messages = messages;
-    setConversation(c);
+
     setEditMessageId(null);
+    setLoading(false);
   };
 
-  React.useEffect(() => { setConversation(props.conversation) }, [props.conversation]); //eslint-disable-line
 
-  if (conversation === null) return null;
-  else {
-    const message = conversation.messages[0];
-    const photoUrl = PersonHelper.getPhotoUrl(message?.person);
-    let datePosted = new Date(message.timeUpdated || message.timeSent);
-    const displayDuration = DateHelper.getDisplayDuration(datePosted);
+  if (conversations === null) return null;
 
-    const isEdited = message.timeUpdated && message.timeUpdated !== message.timeSent && <>(edited)</>;
-    const contents = message.content?.split("\n");
+  const getNotes = () => {
+    return conversations.messages.map(m => {
+      if (!m.content) return null;
+      const isEditing = m.id === editMessageId;
+      const diffMinutes = moment().diff(moment(m.timeSent), "minutes");
+      const canEdit = diffMinutes <= 45 && m.personId === props.context.person.id;
 
-    const getNotes = () => {
-      let noteArray: React.ReactNode[] = [];
-      for (let i = 0; i < conversation.messages.length; i++) noteArray.push(<Note context={props.context} message={conversation.messages[i]} key={conversation.messages[i].id} showEditNote={setEditMessageId} />);
-      return noteArray;
-    }
+      return (
+        <Note
+          context={props.context}
+          message={m}
+          key={m.id}
+          showEditNote={(id) => {
+            setEditMessageId(id);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          isEditing={isEditing}
+          hideEdit={!canEdit}
+        />
+      )
+    });
+  };
 
-    let result = (<>
-      {/* <div className="conversation">
-        <div className="postedBy">
-          <img src={photoUrl} alt="avatar" />
-        </div>
-        <Box sx={{ width: "100%" }} className="conversationContents">
-          <Stack direction="row" justifyContent="space-between">
-            <div>
-              <b>{message.person?.name?.display}</b> · <span className="text-grey">{displayDuration}{isEdited}</span>
-              {contents.map((c, i) => c ? <p key={i}>{c}</p> : <br />)}
-            </div>
-          </Stack>
-        </Box>
-      </div> */}
+  const result = (
+    <>
       {props.showCommentCount && (
         <div className="commentCount">
-          <div>{(conversation.postCount === 1) ? "1 " + Locale.label("notes.comment") : conversation.postCount + " " + Locale.label("notes.comments")}</div>
-          {(conversation.postCount > conversation.messages.length) ? <a href="about:blank" onClick={(e) => { e.preventDefault(); loadNotes(); }}>{Locale.label("notes.viewAll")} {conversation.postCount} {Locale.label("notes.comments")}</a> : <>&nbsp;</>}
+          <div>
+            {conversations.postCount === 1
+              ? "1 " + Locale.label("notes.comment")
+              : conversations.postCount + " " + Locale.label("notes.comments")}
+          </div>
+          {conversations.postCount > conversations.messages.length && (
+            <a
+              href="#"
+              onClick={e => {
+                e.preventDefault();
+                loadNotes(page + 1);
+              }}
+            >
+              {Locale.label("notes.viewAll")} {conversations.postCount}{" "}
+              {Locale.label("notes.comments")}
+            </a>
+          )}
         </div>
       )}
       <div className="messages">
-        {getNotes()}
-        <AddNote context={props.context} conversationId={props.conversation.id} onUpdate={loadNotes} createConversation={async () => (props.conversation.id)} messageId={editMessageId} />
+        <AddNote
+          context={props.context}
+          conversationId={props?.conversation?.id}
+          onUpdate={() => loadNotes(1)}
+          onCancel={() => setEditMessageId(null)}
+          createConversation={async () => props?.conversation?.id}
+          messageId={editMessageId}
+        />
+        <div className="messages-wrapper">
+          {getNotes()}
+        </div>
+        {hasMore && !loading && (
+          <Button onClick={() => loadNotes(page + 1)}>Load More</Button>
+        )}
+        {loading && <div>Loading...</div>}
       </div>
-    </>);
+    </>
+  );
 
-
-    if (props.noWrapper) return result;
-    else return (<Paper sx={{ padding: 1, marginBottom: 2 }}>{result}</Paper>);
-  }
-};
+  if (props.noWrapper) return result;
+  return <Paper sx={{ padding: 1, marginBottom: 2 }}>{result}</Paper>;
+}
