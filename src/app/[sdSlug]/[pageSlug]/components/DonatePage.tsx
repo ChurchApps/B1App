@@ -1,7 +1,7 @@
 "use client";
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { NonAuthDonation } from "@churchapps/apphelper-donations";
+import { NonAuthDonationWrapper } from "@/components/donate/NonAuthDonationWrapper";
 import { UserHelper } from "@churchapps/apphelper";
 import { Button, Container,  Grid,  Icon,  Link,  Typography } from "@mui/material";
 import { redirect } from "next/navigation";
@@ -17,7 +17,7 @@ export function DonatePage(props:Props) {
       <h1>Donate</h1>
       <Grid container spacing={3}>
         <Grid size={{ md: 8, xs: 12 }}>
-          <NonAuthDonation churchId={props.config.church.id} recaptchaSiteKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY} showHeader={false} />
+          <NonAuthDonationWrapper churchId={props.config.church.id} showHeader={false} />
         </Grid>
         <Grid size={{ md: 4, xs: 12 }}>
           <Typography component="h3" sx={{ textAlign: "center", fontSize: "30px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Manage Donations</Typography>

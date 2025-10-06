@@ -106,7 +106,11 @@ export function ElementEdit(props: Props) {
 
   const handleSave = () => {
     if (innerErrors.length === 0) {
-      ApiHelper.post("/elements", [element], "ContentApi").then((data: any) => {
+      ApiHelper.post("/elements", [element], "ContentApi").then((response: any) => {
+        const data = Array.isArray(response) ? response[0] : response;
+        if (data.answersJSON) data.answers = JSON.parse(data.answersJSON);
+        if (data.stylesJSON) data.styles = JSON.parse(data.stylesJSON);
+        if (data.animationsJSON) data.animations = JSON.parse(data.animationsJSON);
         setElement(data);
         props.updatedCallback(data);
       }).catch((error: any) => {
@@ -433,6 +437,7 @@ export function ElementEdit(props: Props) {
     parsedData[selectPhotoField] = image;
     p.answersJSON = JSON.stringify(parsedData);
     setElement(p);
+    props.onRealtimeChange(p);
     setSelectPhotoField(null);
   }
 
