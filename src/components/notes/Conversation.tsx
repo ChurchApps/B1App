@@ -1,12 +1,10 @@
 "use client";
 
-import { Box, Paper, Stack, Button } from "@mui/material";
+import { Paper, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { ArrayHelper, MessageInterface } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper";
-import { DateHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
-import { PersonHelper } from "@churchapps/apphelper";
 import { ConversationInterface, UserContextInterface } from "@churchapps/helpers";
 import { AddNote } from "@churchapps/apphelper";
 import { Note } from "@churchapps/apphelper";
