@@ -33,7 +33,7 @@ export function Conversation(props: Props) {
     if (!props?.conversation?.groupId) return;
 
     setLoading(true);
-    const limit = props.pageSize || 10;
+    const limit = props.noWrapper ? 2 : props.pageSize || 10;
 
     const response: any[] = await ApiHelper.get(
       `/conversations/messages/group/${props.conversation.groupId}?page=${nextPage}&limit=${limit}`,
@@ -132,7 +132,7 @@ export function Conversation(props: Props) {
         <div className="messages-wrapper">
           {getNotes()}
         </div>
-        {hasMore && !loading && (
+        {hasMore && !loading && !props.noWrapper && (
           <Button onClick={() => loadNotes(page + 1)}>Load More</Button>
         )}
         {loading && <Button disabled>Loading...</Button>}
