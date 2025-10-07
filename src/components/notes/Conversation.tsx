@@ -24,76 +24,89 @@ export function Conversation(props: Props) {
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   const [hasMore, setHasMore] = React.useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     loadNotes(1)
   }, [props])
 
   const loadNotes = async (nextPage: number = 1) => {
-    if (!props?.conversation?.groupId) return;
+    try {
+      if (!props?.conversation?.groupId) return;
 
-    setLoading(true);
-    const limit = props.noWrapper ? 2 : props.pageSize || 10;
+      setLoading(true);
+      const limit = props.pageSize || 10;
 
-    const response: any[] = await ApiHelper.get(
-      `/conversations/messages/group/${props.conversation.groupId}?page=${nextPage}&limit=${limit}`,
-      "MessagingApi"
-    );
-
-    const messages = response?.filter(m => m.id === props.conversation.id)[0]?.messages;
-
-    if (messages.length > 0) {
-      const peopleIds = ArrayHelper.getIds(messages, "personId");
-      const people = await ApiHelper.get(
-        "/people/ids?ids=" + peopleIds.join(","),
-        "MembershipApi"
+      const response: any[] = await ApiHelper.get(
+        `/conversations/messages/group/${props.conversation.groupId}?page=${nextPage}&limit=${limit}`,
+        "MessagingApi"
       );
 
-      messages.forEach((m: MessageInterface) => {
-        m.person = ArrayHelper.getOne(people, "id", m.personId);
-      });
+      const messages = response[0]?.messages;
 
-      const c = { ...props.conversation };
-      if (nextPage === 1) {
-        c.messages = messages;
+      if (messages.length > 0) {
+        const peopleIds = ArrayHelper.getIds(messages, "personId");
+        const people = await ApiHelper.get(
+          "/people/ids?ids=" + peopleIds.join(","),
+          "MembershipApi"
+        );
+
+        messages.forEach((m: MessageInterface) => {
+          m.person = ArrayHelper.getOne(people, "id", m.personId);
+        });
+
+        setConversations(prev => {
+          const newMessages = nextPage === 1
+            ? messages
+            : [...(prev?.messages || []), ...messages];
+          return { ...prev, messages: newMessages };
+        });
+        setPage(nextPage);
+        setHasMore(messages.length === limit);
       } else {
-        c.messages = [...(c.messages || []), ...messages];
+        setHasMore(false);
       }
 
-      setConversations(c);
-      setPage(nextPage);
-      setHasMore(messages.length === limit);
-    } else {
-      setHasMore(false);
+      setEditMessageId(null);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
     }
-
-    setEditMessageId(null);
-    setLoading(false);
   };
 
 
   if (conversations === null) return null;
 
   const getNotes = () => {
-    return conversations.messages.map(m => {
-      if (!m.content) return null;
-      const isEditing = m.id === editMessageId;
-      const diffMinutes = moment().diff(moment(m.timeSent), "minutes");
-      const canEdit = diffMinutes <= 45 && m.personId === props.context.person.id;
+    if (!conversations?.messages || conversations.messages.length === 0) return null;
+
+    const notesToShow = showAll || !props.noWrapper
+      ? conversations.messages
+      : conversations.messages.slice(0, 2);
+
+    return notesToShow.map((message, index) => {
+      if (!message.content) return null;
+
+      const isEditing = message.id === editMessageId;
+
+      const diffMinutes = moment().diff(moment(message.timeSent), "minutes");
+      const canEdit = diffMinutes <= 45 && message.personId === props.context.person.id;
 
       return (
         <Note
+          key={message.id || index} 
           context={props.context}
-          message={m}
-          key={m.id}
-          showEditNote={(id) => {
-            setEditMessageId(id);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
+          message={message}
           isEditing={isEditing}
           hideEdit={!canEdit}
+          showEditNote={(id: string) => {
+            setEditMessageId(id);
+            if (!props.noWrapper) {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }}
         />
-      )
+      );
     });
   };
 
@@ -132,9 +145,15 @@ export function Conversation(props: Props) {
         <div className="messages-wrapper">
           {getNotes()}
         </div>
-        {hasMore && !loading && !props.noWrapper && (
+
+        {hasMore && !loading && (showAll || !props.noWrapper) && (
           <Button onClick={() => loadNotes(page + 1)}>Load More</Button>
         )}
+
+        {!showAll && props.noWrapper && (
+          <Button onClick={() => setShowAll(true)}>Show All</Button>
+        )}
+
         {loading && <Button disabled>Loading...</Button>}
       </div>
     </>
