@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { Typography, Breadcrumbs, Button, Grid, Card, CardContent, Box } from "@mui/material";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
@@ -7,6 +8,7 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { AppearanceHelper } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
+import { EnvironmentHelper } from "@/helpers";
 
 interface Props {
   churchId: string;
@@ -23,6 +25,7 @@ export const SermonElement = ({ churchId, appearance }: Props) => {
   const [activeVideo, setActiveVideo] = useState<SermonInterface>();
 
   useEffect(() => {
+    EnvironmentHelper.init();
     ApiHelper.getAnonymous("/playlists/public/" + churchId, "ContentApi").then((data: any) => {
       setPlaylists(data);
       setIsLoading(false);
@@ -31,7 +34,7 @@ export const SermonElement = ({ churchId, appearance }: Props) => {
     ApiHelper.getAnonymous("/sermons/public/" + churchId, "ContentApi").then((data: any) => {
       setSermons(data);
     });
-  }, []);
+  }, [churchId]);
 
   const getFilteredData = (id: string) => {
     const filteredData = sermons.filter((item) => item.playlistId === id);
