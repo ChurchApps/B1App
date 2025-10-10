@@ -22,7 +22,7 @@ import { CardWithHeader, LoadingButton } from "@/components/ui";
 
 interface Props {
   globalStyle?: GlobalStyleInterface;
-  updatedFunction?: (globalStyle:GlobalStyleInterface) => void;
+  updatedFunction?: (globalStyle: GlobalStyleInterface) => void;
 }
 
 
@@ -30,7 +30,7 @@ export function CssEdit(props: Props) {
   const [globalStyle, setGlobalStyle] = useState<GlobalStyleInterface>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => { if (props.globalStyle) setGlobalStyle({...props.globalStyle}); }, [props.globalStyle]);
+  useEffect(() => { if (props.globalStyle) setGlobalStyle({ ...props.globalStyle }); }, [props.globalStyle]);
 
   const handleSave = () => {
     setIsSubmitting(true);
@@ -96,7 +96,7 @@ a:hover {
 </script>`
     },
     {
-      title: "Custom JavaScript function",
+      title: "Custom HTML",
       code: `<script>
   // Custom functionality
   function customFunction() {
@@ -265,26 +265,26 @@ a {
           </Stack>
         </CardWithHeader>
 
-        {/* Custom JavaScript Section */}
+        {/* Custom HTML Section */}
         <Box sx={{ mt: 3 }}>
           <CardWithHeader
-            title="Custom JavaScript"
+            title="Custom HTML"
             icon={<TerminalIcon />}
           >
             <Stack spacing={3}>
               <Box>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Add custom JavaScript code or third-party scripts like Google Analytics.
+                  Add custom HTML code for third-party scripts like Google Analytics.
                 </Typography>
                 <TextField
                   multiline
                   rows={8}
-                  label="Custom JavaScript"
+                  label="Custom HTML"
                   name="js"
                   value={globalStyle?.customJS || ""}
                   onChange={handleChange}
                   fullWidth
-                  placeholder={`<!-- Add your custom JavaScript here -->
+                  placeholder={`<!-- Add your custom HTML here -->
 <script>
   // Your JavaScript code
   console.log('Hello World');
