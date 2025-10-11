@@ -121,23 +121,23 @@ export function SiteAdminClient(props: WrapperPageProps) {
               <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
                 {item.url}
               </Typography>
+              {!item.custom && (
+                <Chip
+                  label="Generated"
+                  size="small"
+                  color="default"
+                  sx={{
+                    fontSize: '0.7rem',
+                    height: 18
+                  }}
+                />
+              )}
             </Stack>
           </TableCell>
           <TableCell>
             <Typography variant="body2">
               {item.title}
             </Typography>
-          </TableCell>
-          <TableCell>
-            <Chip
-              label={item.custom ? "Custom" : "Auto-generated"}
-              size="small"
-              color={item.custom ? "primary" : "default"}
-              sx={{
-                fontSize: '0.75rem',
-                height: 20
-              }}
-            />
           </TableCell>
         </TableRow>
       );
@@ -279,11 +279,6 @@ export function SiteAdminClient(props: WrapperPageProps) {
                           <TableCell>
                             <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                               Title
-                            </Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                              Type
                             </Typography>
                           </TableCell>
                         </TableRow>
