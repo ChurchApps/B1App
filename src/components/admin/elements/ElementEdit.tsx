@@ -91,7 +91,7 @@ export function ElementEdit(props: Props) {
   const handleStyleChange = (styles: InlineStylesInterface) => {
     let p = { ...element };
     p.styles = styles;
-    p.stylesJSON = Object.keys(styles).length>0 ? JSON.stringify(styles) : null;
+    p.stylesJSON = Object.keys(styles).length > 0 ? JSON.stringify(styles) : null;
 
     setElement(p);
   }
@@ -99,7 +99,7 @@ export function ElementEdit(props: Props) {
   const handleAnimationChange = (animations: AnimationsInterface) => {
     let p = { ...element };
     p.animations = animations;
-    p.animationsJSON = Object.keys(animations).length>0 ? JSON.stringify(animations) : null;
+    p.animationsJSON = Object.keys(animations).length > 0 ? JSON.stringify(animations) : null;
 
     setElement(p);
   }
@@ -123,7 +123,7 @@ export function ElementEdit(props: Props) {
 
 
 
-  const getTextAlignment = (fieldName:string, label:string="Text Alignment") => (
+  const getTextAlignment = (fieldName: string, label: string = "Text Alignment") => (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
       <Select fullWidth size="small" label="Text Alignment" name={fieldName} value={parsedData[fieldName] || "left"} onChange={handleChange} data-testid={`text-alignment-${fieldName}-select`} aria-label={`Select ${label.toLowerCase()}`}>
@@ -142,7 +142,7 @@ export function ElementEdit(props: Props) {
 
   const getJsonFields = () => (<TextField fullWidth size="small" label="Answers JSON" name="answersJSON" value={element.answersJSON} onChange={handleChange} onKeyDown={handleKeyDown} multiline data-testid="answers-json-input" aria-label="Answers JSON data" />);
 
-  const selectColors = (background:string, textColor:string, headingColor:string, linkColor:string) => {
+  const selectColors = (background: string, textColor: string, headingColor: string, linkColor: string) => {
     let p = { ...element };
     parsedData["background"] = background;
     parsedData["textColor"] = textColor;
@@ -152,7 +152,7 @@ export function ElementEdit(props: Props) {
     setElement(p);
   }
 
-  const getAppearanceFields = (fields:string[]) => <StylesAnimations fields={fields} styles={parsedStyles} onStylesChange={handleStyleChange} animations={parsedAnimations} onAnimationsChange={handleAnimationChange} />
+  const getAppearanceFields = (fields: string[]) => <StylesAnimations fields={fields} styles={parsedStyles} onStylesChange={handleStyleChange} animations={parsedAnimations} onAnimationsChange={handleAnimationChange} />
 
   const getBoxFields = () => (
     <>
@@ -236,7 +236,7 @@ export function ElementEdit(props: Props) {
 
   const getStreamFields = () => {
     let blockField = <></>
-    if (parsedData.offlineContent==="block")  {
+    if (parsedData.offlineContent === "block") {
       let options: React.ReactElement[] = [];
       blocks?.forEach(b => { options.push(<MenuItem value={b.id}>{b.name}</MenuItem>) });
       blockField = (<FormControl fullWidth>
@@ -318,12 +318,12 @@ export function ElementEdit(props: Props) {
       <TextField fullWidth size="small" label="Id" name="videoId" value={parsedData.videoId || ""} onChange={handleChange} />
       {(!parsedData.videoType || parsedData.videoType === "youtube") && (
         <Typography fontSize="12px" fontStyle="italic">
-            video url - https://www.youtube.com/watch?v=dQw4w9WgXcQ <br /> id - dQw4w9WgXcQ
+          video url - https://www.youtube.com/watch?v=dQw4w9WgXcQ <br /> id - dQw4w9WgXcQ
         </Typography>
       )}
       {parsedData.videoType === "vimeo" && (
         <Typography fontSize="12px" fontStyle="italic">
-            video url - https://vimeo.com/751393851 <br /> id - 751393851
+          video url - https://vimeo.com/751393851 <br /> id - 751393851
         </Typography>
       )}
       {getAppearanceFields(["border", "background", "color", "font", "height", "min", "max", "line", "margin", "padding", "width"])}
@@ -342,7 +342,7 @@ export function ElementEdit(props: Props) {
     <>
       <TextField fullWidth size="small" label="Address" name="mapAddress" onChange={handleChange} value={parsedData.mapAddress || ""} helperText="ex: City Hall, New York, NY" />
       <TextField fullWidth size="small" label="Label" name="mapLabel" onChange={handleChange} value={parsedData.mapLabel || ""} helperText="ex: First Baptist Church" />
-      <Typography fontSize="13px" sx={{marginTop: 1}}>Zoom-level</Typography>
+      <Typography fontSize="13px" sx={{ marginTop: 1 }}>Zoom-level</Typography>
       <Slider defaultValue={15} valueLabelDisplay="auto" step={1} min={8} max={20} name="mapZoom" value={parsedData?.mapZoom || 15} onChange={(e: any) => handleChange(e)} />
       <Typography fontSize="12px" fontStyle="italic">Ex: 0(the whole world) & 21(individual buildings)</Typography>
     </>
@@ -378,9 +378,9 @@ export function ElementEdit(props: Props) {
     <>
       {parsedData.photo && <><img src={parsedData.photo} style={{ maxHeight: 100, maxWidth: "100%", width: "auto" }} alt="Image describing the topic" /><br /></>}
       <Button variant="contained" onClick={() => setSelectPhotoField("photo")} data-testid="select-photo-button" aria-label="Select photo">Select photo</Button>
-      <TextField fullWidth size="small" label="Photo Label" name="photoAlt"  value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
+      <TextField fullWidth size="small" label="Photo Label" name="photoAlt" value={parsedData.photoAlt || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
       <TextField fullWidth size="small" label="Link Url (optional)" name="url" value={parsedData.url || ""} onChange={handleChange} onKeyDown={handleKeyDown} />
-      <FormGroup sx={{ marginLeft: 0.5}}>
+      <FormGroup sx={{ marginLeft: 0.5 }}>
         <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.external === "true" ? true : false} />} name="external" label="Open link in new tab" />
         <FormControlLabel control={<Checkbox size="small" onChange={handleCheck} checked={parsedData.noResize === "true" ? true : false} />} name="noResize" label="Do not resize image" />
       </FormGroup>
@@ -451,9 +451,8 @@ export function ElementEdit(props: Props) {
 
   useEffect(() => {
     const loadBlocks = async () => {
-      if (blocks===null)
-      {
-        if (props.element.elementType === "block" || (props.element.elementType==="stream" && parsedData?.offlineContent==="block")) {
+      if (blocks === null) {
+        if (props.element.elementType === "block" || (props.element.elementType === "stream" && parsedData?.offlineContent === "block")) {
           let result: BlockInterface[] = await ApiHelper.get("/blocks", "ContentApi");
           setBlocks(ArrayHelper.getAll(result, "blockType", "elementBlock"));
         }
@@ -461,6 +460,12 @@ export function ElementEdit(props: Props) {
     }
 
     loadBlocks();
+  }, [element]);
+
+  // Auto-save elements that have no settings to edit
+  useEffect(() => {
+    const elementHasNoSettings = (elementType: string): boolean => elementType === "sermons" || elementType === "donation";
+    if (element && !element.id && elementHasNoSettings(element.elementType)) { handleSave(); }
   }, [element]);
 
 
