@@ -2,8 +2,9 @@ import { useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { Button, Icon, Snackbar, Stack } from "@mui/material";
+import { Button, Icon, Snackbar, Stack, Menu, MenuItem } from "@mui/material";
 import EventNoteIcon from "@mui/icons-material/EventNote";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { EventHelper } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { CuratedEventWithEventInterface } from "@churchapps/helpers";
@@ -23,13 +24,36 @@ export function CuratedEventCalendar(props: Props) {
   const [open, setOpen] = useState<boolean>(false);
   const [displayCalendarEvent, setDisplayCalendarEvent] = useState<CuratedEventWithEventInterface | null>(null);
   const [ShowCopy, setShowCopy] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const localizer = momentLocalizer(moment);
 
-  const handleSubscribe = () => {
+  const getIcsUrl = () => `${EnvironmentHelper.Common.ContentApi}/events/subscribe?curatedCalendarId=${props.curatedCalendarId}&churchId=${UserHelper.currentUserChurch.church.id}`;
+
+  const handleSubscribeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleCopyIcsLink = () => {
     setShowCopy(true);
-    navigator.clipboard.writeText(`${EnvironmentHelper.Common.ContentApi}/events/subscribe?curatedCalendarId=${props.curatedCalendarId}&churchId=${UserHelper.currentUserChurch.church.id}`);
-  }
+    navigator.clipboard.writeText(getIcsUrl());
+    handleMenuClose();
+  };
+
+  const handleDownloadIcsFile = () => {
+    const url = getIcsUrl();
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'calendar.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    handleMenuClose();
+  };
 
   const handleEventClick = (event: CuratedEventWithEventInterface) => {
     const ev = { ...event };
@@ -73,7 +97,19 @@ export function CuratedEventCalendar(props: Props) {
   return (
     <div>
       <Stack direction="row" justifyContent="space-between" alignItems="center" marginBottom={"17px"} marginTop={"12px"}>
-        <Button startIcon={<Icon>link</Icon>} title="Copy the URL and add this to your Google Calendar (or other)" size="small" variant="contained" onClick={(e) => { e.preventDefault(); handleSubscribe(); }} data-testid="calendar-subscribe-button">Subscribe</Button>
+        <div>
+          <Button startIcon={<Icon>link</Icon>} endIcon={<ArrowDropDownIcon />} title="Subscribe to calendar" size="small" variant="contained" onClick={handleSubscribeClick} data-testid="calendar-subscribe-button">Subscribe</Button>
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose} data-testid="calendar-subscribe-menu">
+            <MenuItem onClick={handleCopyIcsLink} data-testid="copy-ics-link-option">
+              <Icon sx={{ marginRight: 1 }}>content_copy</Icon>
+              Copy ICS Link
+            </MenuItem>
+            <MenuItem onClick={handleDownloadIcsFile} data-testid="download-ics-file-option">
+              <Icon sx={{ marginRight: 1 }}>download</Icon>
+              Download ICS File
+            </MenuItem>
+          </Menu>
+        </div>
         {props.mode === "edit" && <Button endIcon={<EventNoteIcon />} size="small" variant="contained" onClick={() => { setOpen(true); }} data-testid="calendar-add-event-button">Add</Button>}
       </Stack>
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} />

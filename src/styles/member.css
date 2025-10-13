@@ -113,6 +113,10 @@ body {
   border-top: none;
 }
 
+.messages-wrapper {
+  margin-top: 20px
+}
+
 .note,
 .conversation {
   margin-top: 10px;

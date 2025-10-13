@@ -175,6 +175,11 @@ export default function ContentEditor(props: Props) {
     for (let i = 0; i < elements.length; i++) {
       if (elements[i].id === element.id) {
         elements[i] = element;
+        return;
+      }
+      // Recursively search in nested elements
+      if (elements[i].elements && elements[i].elements.length > 0) {
+        realtimeUpdateElement(element, elements[i].elements);
       }
       //if (elements[i].elements?.length > 0) realtimeUpdateElement(element, element.elements);
     }
