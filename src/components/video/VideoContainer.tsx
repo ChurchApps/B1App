@@ -45,7 +45,12 @@ export const VideoContainer: React.FC<Props> = (props) => {
   }
 
   const getVideo = (cs: StreamingServiceExtendedInterface) => {
-    let videoUrl = cs.sermon?.videoUrl || "";
+    let videoUrl = cs?.sermon?.videoUrl || "";
+    if (!videoUrl || videoUrl === "") {
+      const logoUrl = getLogo();
+      return <div id="noVideoContent" style={{ backgroundImage: `url(${logoUrl})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
+    }
+
     if (cs.localStartTime !== undefined) {
       let seconds = Math.floor((loadedTime - cs.localStartTime.getTime()) / 1000);
       if (seconds > 10) {
@@ -73,15 +78,41 @@ export const VideoContainer: React.FC<Props> = (props) => {
     else return config?.appearance?.logoDark || null;
   }
 
-  const getContents = () => {
+  const contentType = React.useMemo(() => {
     let cs = props.currentService;
-    if (cs === undefined || cs === null || cs.localEndTime === undefined) return <div id="noVideoContent" style={{ backgroundImage: `url(${getLogo()})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
-    else if (new Date() > cs.localEndTime) return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
-    else {
-      if (cs.localStartTime !== undefined && new Date() <= cs.localStartTime) return getCountdown(cs);
-      else return getVideo(cs);
+    const now = new Date();
+
+    if (cs === undefined || cs === null || cs.localEndTime === undefined) {
+      return 'logo';
     }
-  }
+    else if (now > cs.localEndTime) {
+      return 'ended';
+    }
+    else if (cs.localStartTime !== undefined && now <= cs.localStartTime) {
+      return 'countdown';
+    }
+    else {
+      return 'video';
+    }
+  }, [props.currentService]);
+
+  const getContents = () => {
+    const logoUrl = getLogo();
+
+    switch (contentType) {
+      case 'logo':
+        return <div id="noVideoContent" style={{ backgroundImage: `url(${logoUrl})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
+      case 'ended':
+        return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
+      case 'countdown':
+        return getCountdown(props.currentService);
+      case 'video':
+        return getVideo(props.currentService);
+      default:
+        return <div id="noVideoContent" style={{ backgroundImage: `url(${logoUrl})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
+    }
+  };
+
   React.useEffect(() => {
     const updateCurrentTime = () => {
       if (isMounted()) {

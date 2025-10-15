@@ -19,6 +19,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 
 
+if (typeof window !== 'undefined') EnvironmentHelper.init();
 
 function ClientLayout({ children }: { children: React.ReactNode }) {
   const [errors, setErrors] = React.useState([]);
@@ -26,7 +27,6 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
   const location = (typeof (window) === "undefined") ? null : window.location;
 
   useEffect(() => {
-    EnvironmentHelper.init();
     EnvironmentHelper.initLocale().then(() => setLocaleInit(true));
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
