@@ -44,6 +44,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
+    EnvironmentHelper.init();
     if (props.includeInteraction) {
       ChatHelper.onChange = () => {
         setChatState({ ...ChatHelper.current });
