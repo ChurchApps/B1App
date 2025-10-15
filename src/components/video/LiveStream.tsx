@@ -44,7 +44,6 @@ export const LiveStream: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    EnvironmentHelper.init();
     if (props.includeInteraction) {
       ChatHelper.onChange = () => {
         setChatState({ ...ChatHelper.current });
@@ -54,7 +53,6 @@ export const LiveStream: React.FC<Props> = (props) => {
     }
     StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs) });
     loadData(props.keyName);
-    setCurrentService(StreamingServiceHelper.currentService);
   }, []);
 
   React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
