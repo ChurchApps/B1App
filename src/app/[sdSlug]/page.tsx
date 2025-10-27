@@ -5,8 +5,8 @@ import { PageLayout } from "@/components/PageLayout";
 import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
-import "@/styles/animations.css";
-import { Animate } from "@/components/Animate";
+import "@churchapps/apphelper-website/dist/styles/animations.css";
+import { Animate } from "@churchapps/apphelper-website";
 import { redirect } from "next/navigation";
 import { ApiHelper } from "@churchapps/apphelper";
 

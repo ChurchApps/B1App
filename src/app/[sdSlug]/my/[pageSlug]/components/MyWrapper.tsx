@@ -1,4 +1,4 @@
-import "@/styles/animations.css";
+import "@churchapps/apphelper-website/dist/styles/animations.css";
 
 import React from "react";
 import { Breadcrumbs, Container, Grid } from "@mui/material";
