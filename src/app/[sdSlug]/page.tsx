@@ -27,9 +27,12 @@ export async function generateMetadata({ params }: { params: Promise<PageParams>
 
 const loadData = async (sdSlug: string) => {
   const config = await ConfigHelper.load(sdSlug, "website");
-  const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?url=/", "ContentApi");
   // Use the homePage already loaded in ConfigHelper instead of fetching it again
-  //const pageData: PageInterface = config.homePage || { url: null } as PageInterface;
+  const pageData: PageInterface = config.homePage || { url: null } as PageInterface;
+  console.log("🔍 [sdSlug]:", sdSlug);
+  console.log("🏠 homePage:", config.homePage);
+  console.log("📄 pageData:", pageData);
+  console.log("🌐 hasWebsite:", config.hasWebsite);
   return { pageData, config }
 }
 

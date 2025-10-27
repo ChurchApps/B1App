@@ -15,7 +15,7 @@ import { Section } from "@/components/Section";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import React from "react";
-import { DroppableArea } from "@/components/admin/DroppableArea";
+import { DroppableArea } from "@churchapps/apphelper-website";
 import { SectionBlock } from "@/components/SectionBlock";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ElementAdd } from "@/components/admin/elements/ElementAdd";

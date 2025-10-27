@@ -1,7 +1,7 @@
 import { ElementInterface, GlobalStyleInterface } from "@/helpers";
 import { FontsInterface } from "./FontEdit";
 import { PaletteInterface } from "./PaletteEdit";
-import { LogoElement } from "@/components/elementTypes/LogoElement";
+import { LogoElement } from "@churchapps/apphelper-website";
 import { Button, Grid } from "@mui/material";
 
 interface Props {
