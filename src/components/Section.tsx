@@ -3,12 +3,11 @@
 import React, { CSSProperties, useState } from "react";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { Box, Container } from "@mui/material";
-import { DroppableArea } from "./admin/DroppableArea";
+import { DraggableWrapper, DroppableArea } from "@churchapps/apphelper-website";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { ChurchInterface } from "@churchapps/helpers";
-import { DraggableWrapper } from "./admin/DraggableWrapper";
 import { StyleHelper } from "@/helpers/StyleHelper";
 
 interface Props {
