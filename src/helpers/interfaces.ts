@@ -18,9 +18,9 @@ export interface ElementInterface {
   stylesJSON?: string;
   styles?: { all?: any, desktop?: any, mobile?: any };
   animationsJSON?: string;
-  animations?: { onShow: string, onShowSpeed: string };
+  animations?: { onShow?: string, onShowSpeed?: string };
   sort?: number;
-  elementType: string;
+  elementType?: string;
   elements?: ElementInterface[];
 }
 

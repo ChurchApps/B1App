@@ -8,7 +8,6 @@ import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import "@churchapps/apphelper-website/dist/styles/animations.css";
 import { Animate } from "@churchapps/apphelper-website";
 import { redirect } from "next/navigation";
-import { ApiHelper } from "@churchapps/apphelper";
 
 type PageParams = { sdSlug: string; }
 
