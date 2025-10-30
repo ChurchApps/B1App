@@ -1,6 +1,6 @@
 "use client"
 import "react-activity/dist/Dots.css";
-import "@/styles/pages.css";
+import "@churchapps/apphelper-website/dist/styles/pages.css";
 import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";

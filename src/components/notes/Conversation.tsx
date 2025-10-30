@@ -94,7 +94,7 @@ export function Conversation(props: Props) {
 
       return (
         <Note
-          key={message.id || index} 
+          key={message.id || index}
           context={props.context}
           message={message}
           isEditing={isEditing}
