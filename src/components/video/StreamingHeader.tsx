@@ -45,9 +45,13 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     }
   }
   const getSettingLink = () => {
-    if (UserHelper.checkAccess(Permissions.contentApi.content.edit) || UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) return (
-      <li className="nav-item"><Link href="/admin" className="nav-link">Admin Dashboard</Link></li>
-    );
+    if (UserHelper.checkAccess(Permissions.contentApi.content.edit) || UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) {
+      const jwt = UserHelper.currentUserChurch?.jwt;
+      const churchId = UserHelper.currentUserChurch?.church?.id;
+      return (
+        <li className="nav-item"><a href={`https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/`} className="nav-link">Admin Dashboard</a></li>
+      );
+    }
   }
 
   const getUserMenu = () => {

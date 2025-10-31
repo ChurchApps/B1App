@@ -8,7 +8,7 @@ import { InputBox } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import type { LinkInterface, UserContextInterface } from "@churchapps/helpers";
 import { FileInterface } from "@/helpers";
-import { FileUpload } from "../admin/FileUpload";
+import { FileUpload } from "../FileUpload";
 import { GroupLinkAdd } from "./GroupLinkAdd";
 
 interface Props {
