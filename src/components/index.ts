@@ -12,9 +12,6 @@ export * from "./iconPicker";
 // login
 export { Login } from "./Login";
 
-// Settings
-export { YourSiteSettings } from "./admin/settings/YourSiteSettings";
-
 // donate
 export { AuthLanding } from "./donate/AuthLanding";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Link from "next/link";
 import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ClickAwayListener, ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -17,6 +17,7 @@ import { PersonHelper, SectionInterface, UrlHelper } from "@/helpers";
 import { redirect, usePathname } from "next/navigation";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import UserContext from "@/context/UserContext";
 
 
 type Props = {
@@ -50,6 +51,7 @@ export function Header(props: Props) {
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const pathname = usePathname()
+  const context = useContext(UserContext);
 
 
   const toggleDrawer = () => {
@@ -90,7 +92,7 @@ export function Header(props: Props) {
 
   const memberPortal = <MenuItem onClick={() => { redirect("/my") }} dense data-testid="member-portal-menu-item" aria-label="Go to member portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
   const adminPortal = (UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit)) && (
-    <MenuItem onClick={() => { redirect("/admin") }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
+    <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/` }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
   const editProfile = <MenuItem onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`) }} dense data-testid="edit-profile-menu-item" aria-label="Edit your profile"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
@@ -143,7 +145,7 @@ export function Header(props: Props) {
     </ListItem>
     {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (<>
       <ListItem disablePadding>
-        <ListItemButton onClick={() => { redirect("/admin") }} data-testid="admin-portal-list-item" aria-label="Go to admin portal">
+        <ListItemButton onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/` }} data-testid="admin-portal-list-item" aria-label="Go to admin portal">
           <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
           <ListItemText primary="Admin Portal" />
         </ListItemButton>

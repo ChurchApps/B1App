@@ -1,6 +1,4 @@
 import { ApiHelper } from "@churchapps/apphelper";
-import { UserHelper } from "@churchapps/apphelper";
-import { Permissions } from "@churchapps/helpers";
 import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import { GlobalStyleInterface, PageInterface } from "./interfaces";
@@ -43,7 +41,7 @@ export class ConfigHelper {
     const firstTab = config.navLinks[0]
 
     if (!firstTab) {
-      return (UserHelper.checkAccess(Permissions.contentApi.content.edit) || UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) ? "/admin/settings" : "/"
+      return "/"
     }
 
     let route = ""
