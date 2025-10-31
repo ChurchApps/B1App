@@ -1,0 +1,40 @@
+.sideNav ul {
+  padding-left: 0px;
+}
+
+.sideNav li {
+  list-style-type: none;
+  border-bottom: 1px solid #ccc;
+  padding:8px 10px;
+}
+
+.sideNav li a {
+  color:#333;
+}
+
+.sideNav li.active {
+  list-style-type: none;
+  border-bottom: 1px solid #3578CC;
+  padding:8px 10px;
+}
+
+.sideNav li.active a, .sideNav li a:hover {
+  color:#3578CC;
+}
+
+.sideNav .subhead {
+  margin-top:30px;
+  background-color:#DDE1FC;
+  padding-left:12px;
+  padding-top:5px;
+  padding-bottom: 5px;
+}
+
+.sideNav li span {
+  padding-top:5px;
+  overflow:visible;
+}
+
+#mainContent {
+  padding:24px;
+}
