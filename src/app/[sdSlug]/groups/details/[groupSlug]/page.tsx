@@ -25,12 +25,12 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
     const props = await loadSharedData(sdSlug, groupSlug);
     const title = props.group?.name ? `${props.group.name} - ${props.config.church.name}` : `Group - ${props.config.church.name}`;
     const description = props.group?.about || "Group information";
-    return MetaHelper.getMetaData(title, description);
+    return MetaHelper.getMetaData(title, description, undefined, undefined, props.config.appearance);
   } catch (error) {
     console.error("Failed to generate metadata:", error);
     // Fallback metadata
     const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-    return MetaHelper.getMetaData(`Group - ${config.church.name}`, "Group information");
+    return MetaHelper.getMetaData(`Group - ${config.church.name}`, "Group information", undefined, undefined, config.appearance);
   }
 }
 

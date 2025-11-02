@@ -18,7 +18,7 @@ const loadSharedData = (sdSlug: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug } = await params;
   const props = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData(props.config.church.name, "");
+  return MetaHelper.getMetaData(props.config.church.name, "", undefined, undefined, props.config.appearance);
 }
 
 const loadData = async (sdSlug:string) => {
