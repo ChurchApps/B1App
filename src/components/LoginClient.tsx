@@ -47,7 +47,7 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
 
       {process.env.NEXT_PUBLIC_STAGE === "demo" && (<Alert severity="error" style={{ marginTop: 0 }}>
         <b>Demo:</b> This is the demo environment.  All data is erased nightly.<br />
-        You can log into a test church with the credentials demo@chums.org / password .
+        You can log into a test church with the credentials demo@b1.church / password .
       </Alert>)}
       <LoginPage
         auth={searchParams.get("auth")}
@@ -59,7 +59,7 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
         keyName={keyName}
         returnUrl={searchParams.get("returnUrl") || redirectAfterLogin || "/my"}
         handleRedirect={handleRedirect}
-        defaultEmail={process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@chums.org" : undefined}
+        defaultEmail={process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@b1.church" : undefined}
         defaultPassword={process.env.NEXT_PUBLIC_STAGE === "demo" ? "password" : undefined}
         showFooter={true}
       />

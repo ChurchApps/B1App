@@ -40,7 +40,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     if (!ApiHelper.isAuthenticated) return (<li className="nav-item"><ChatName user={props.user} updateFunction={updateName} promptName={promptName} /></li>);
     else {
       const jwt = ApiHelper.getConfig("MembershipApi").jwt;
-      const profileUrl = `${EnvironmentHelper.Common.ChumsRoot}/login?jwt=${jwt}&returnUrl=/profile`;
+      const profileUrl = `${EnvironmentHelper.Common.B1AdminRoot}/login?jwt=${jwt}&returnUrl=/profile`;
       return (<li className="nav-item"><a href={profileUrl} target="_blank" rel="noopener noreferrer" className="nav-link">Profile</a></li>);
     }
   }
