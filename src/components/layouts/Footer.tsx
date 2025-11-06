@@ -19,7 +19,7 @@ export function Footer(props: Props) {
   }
   else {
     let logoUrl = AppearanceHelper.getLogoDark(props.config?.appearance, "/images/logo.png");
-    const photo = <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.config?.church.name} />
+    const photo = <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.config?.church.name} style={{ maxWidth: "200px" }} />
 
     return (
       <>

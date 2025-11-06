@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 
 import { UserHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
+import { Permissions } from "@churchapps/helpers";
 import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
@@ -36,7 +37,8 @@ export const TabsClient = (props: Props) => {
       showPlans = false,
       showDirectory = memberStatus === "member" || memberStatus === "staff",
       showLessons = classRoooms.length > 0,
-      showCheckin = campuses.length > 0;
+      showCheckin = campuses.length > 0,
+      showAdmin = UserHelper.checkAccess(Permissions.membershipApi.people.view);
 
     if (context.userChurch) {
       showMyGroups = context.userChurch?.groups?.length > 0;
@@ -52,15 +54,14 @@ export const TabsClient = (props: Props) => {
     if (showCheckin) tabs.push({url:"/my/checkin", label:"Check-in"});
     if (showLessons) tabs.push({url:"/my/lessons", label:"Lessons"});
     if (showDonations) tabs.push({url:"/my/donate", label:"Donations"});
+    if (showAdmin) tabs.push({url:`https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/`, label:"Admin"});
     return tabs;
   }
 
   useEffect(() => { loadData() }, [context.userChurch])
 
 
-  const getItem = (tab:any) =>
-    //if (tab.key === selectedTab) return (<li className="active"><a href="about:blank" onClick={(e) => { e.preventDefault(); setSelectedTab(tab.key); }}><Icon>{tab.icon}</Icon> {tab.label}</a></li>)
-    (<li><Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>{tab.label}</Link></li>)
+  const getItem = (tab:any) => (<li><Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>{tab.label}</Link></li>)
 
   return <ul data-testid="my-portal-tabs" aria-label="Member portal navigation">
     {getTabs().map((tab, index) => getItem(tab))}
