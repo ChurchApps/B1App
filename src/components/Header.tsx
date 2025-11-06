@@ -50,6 +50,7 @@ export function Header(props: Props) {
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<any>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
+  const [logoError, setLogoError] = useState(false);
   const pathname = usePathname()
   const context = useContext(UserContext);
 
@@ -86,6 +87,11 @@ export function Header(props: Props) {
       document.removeEventListener('scroll', handleScroll)
     }
   }, [props.config?.church?.id, props.overlayContent]);
+
+  // Reset logo error state when logo URL changes
+  useEffect(() => {
+    setLogoError(false);
+  }, [props.config?.appearance?.logoLight, props.config?.appearance?.logoDark, transparent]);
 
   // const pathName = usePathname();
   // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
@@ -238,12 +244,19 @@ export function Header(props: Props) {
     //:  "transparent";
   }
 
+  const logo = getLogo();
+  const showLogoImage = logo && !logoError;
+
   return (
     <div>
       <AppBar id="navbar" position={(props.editMode) ? "relative" : "fixed"} className={appBarClass} style={(props.editMode) ? { marginBottom: 0 } : {}}>
         <Container style={{ height: 71 }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Link href="/" data-testid="header-logo-link" aria-label="Go to homepage"><img src={getLogo()} alt={props.config?.church.name} id="headerLogo" data-testid="header-logo" /></Link>
+            <Link href="/" data-testid="header-logo-link" aria-label="Go to homepage">
+              {showLogoImage
+                ? (<img src={logo} alt={props.config?.church.name} id="headerLogo" data-testid="header-logo" onError={() => setLogoError(true)} />)
+                : (<Box component="span" id="headerLogo" data-testid="header-church-name" sx={{ fontSize: "1.5rem", fontWeight: 600, display: "inline-block", lineHeight: 1 }}>{props.config?.church.name}</Box>)}
+            </Link>
             <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap", }}>
               {getLinks()}
               {userAction}
