@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { Button, Icon, Grid, Box } from "@mui/material";
+import { Button, Icon, Grid, Box, Card, CardActionArea, Typography, Chip, Divider } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
 import { ArrayHelper } from "@churchapps/apphelper";
@@ -40,38 +40,68 @@ export function Household({ completeHandler = () => { } }: Props) {
 
   const getServiceTime = (st: ServiceTimeInterface, visitSessions: VisitSessionInterface[]) => {
     const stSessions = ArrayHelper.getAll(visitSessions, "session.serviceTimeId", st.id);
-    let selectedGroupName = "NONE";
+    let selectedGroupName = "No group selected";
+    let hasSelection = false;
     if (stSessions.length > 0) {
       const groupId = stSessions[0].session?.groupId || "";
       const group: GroupInterface = ArrayHelper.getOne(st.groups || [], "id", groupId);
-      selectedGroupName = group?.name || "Error";
+      selectedGroupName = group?.name || "None";
+      hasSelection = true;
     }
 
     return (
-      <div className="checkinServiceTime" key={st.id}>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 4 }}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Icon sx={{ marginRight: "5px" }}>watch_later</Icon>
+      <Box
+        key={st.id}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: 2,
+          backgroundColor: "#F6F6F8",
+          borderBottom: "1px solid #F0F0F0",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", flex: 1 }}>
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              backgroundColor: "#FFFFFF",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight: 1.5,
+            }}
+          >
+            <Icon sx={{ fontSize: 20, color: "#0D47A1" }}>schedule</Icon>
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="body1" sx={{ color: "#3c3c3c", fontWeight: 600, marginBottom: 0.25 }}>
               {st.name}
-            </Box>
-          </Grid>
-          <Grid size={{ xs: 8 }}>
-            <a
-              className="bigLinkButton serviceTimeButton"
-              href="about:blank"
-              onClick={(e) => {
-                e.preventDefault();
-                selectServiceTime(st);
-              }}
-              data-testid={`service-time-${st.id}`}
-              aria-label={`Select service time ${st.name}`}
-            >
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#9E9E9E" }}>
               {selectedGroupName}
-            </a>
-          </Grid>
-        </Grid>
-      </div>
+            </Typography>
+          </Box>
+        </Box>
+        <Button
+          variant={hasSelection ? "contained" : "outlined"}
+          size="small"
+          onClick={() => selectServiceTime(st)}
+          data-testid={`service-time-${st.id}`}
+          sx={{
+            borderRadius: 2,
+            minWidth: 100,
+            backgroundColor: hasSelection ? "#70DC87" : "transparent",
+            "&:hover": {
+              backgroundColor: hasSelection ? "#5FC876" : "rgba(0,0,0,0.04)",
+            },
+          }}
+        >
+          {hasSelection ? "Change" : "Select Group"}
+        </Button>
+      </Box>
     );
   };
 
@@ -99,8 +129,13 @@ export function Household({ completeHandler = () => { } }: Props) {
     if (selectedMember === person) return null;
     else {
       const visit = CheckinHelper.getVisitByPersonId(pendingVisits, person.id || "");
-      if (visit?.visitSessions?.length === 0) return null;
-      else {
+      if (visit?.visitSessions?.length === 0) {
+        return (
+          <Typography variant="body2" sx={{ color: "#9E9E9E", fontStyle: "italic" }}>
+            Tap to select groups
+          </Typography>
+        );
+      } else {
         const groups: React.ReactElement[] = [];
         visit?.visitSessions?.forEach((vs: VisitSessionInterface) => {
           const st: ServiceTimeInterface | null = ArrayHelper.getOne(
@@ -109,47 +144,78 @@ export function Household({ completeHandler = () => { } }: Props) {
             vs.session?.serviceTimeId || ""
           );
           const group: GroupInterface = ArrayHelper.getOne(st?.groups || [], "id", vs.session?.groupId || "");
-          //const group: GroupInterface = ArrayHelper.getOne()
-          let name = group.name || "none";
-          if (st != null) name = (st.name || "") + " - " + name;
-          // if (groups.length > 0) groups.push(<Text key={vs.id?.toString() + "comma"} style={{ color: StyleConstants.grayColor }}>, </Text>);
-          groups.push(<span key={vs.id?.toString()}>{name}</span>);
+          let name = group?.name || "none";
+          groups.push(
+            <Chip
+              key={vs.id?.toString()}
+              label={name}
+              size="small"
+              sx={{
+                marginRight: 0.5,
+                marginBottom: 0.5,
+                backgroundColor: "rgba(13, 71, 161, 0.1)",
+                borderColor: "#0D47A1",
+                border: "1px solid",
+                color: "#0D47A1",
+                fontSize: 12,
+              }}
+            />
+          );
         });
-        return <div className="groups">{groups}</div>;
+        return <Box sx={{ display: "flex", flexWrap: "wrap" }}>{groups}</Box>;
       }
     }
   };
 
   const getMember = (member: PersonInterface) => {
-    const arrow = member === selectedMember ? <Icon>keyboard_arrow_down</Icon> : <Icon>keyboard_arrow_right</Icon>;
-    const serviceTimeList = member === selectedMember ? getMemberServiceTimes() : null;
+    const isExpanded = member === selectedMember;
+    const serviceTimeList = isExpanded ? getMemberServiceTimes() : null;
     return (
-      <>
-        <a
-          href="about:blank"
-          className="bigLinkButton checkinPerson"
-          onClick={(e) => {
-            e.preventDefault();
-            selectMember(member);
-          }}
+      <Card
+        key={member.id}
+        sx={{
+          borderRadius: 3,
+          marginBottom: 1.5,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+          overflow: "hidden",
+        }}
+      >
+        <CardActionArea
+          onClick={() => selectMember(member)}
           data-testid={`select-member-${member.id}`}
-          aria-label={`Select ${member.name.display} for checkin`}
+          sx={{ padding: 2 }}
         >
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 1 }}>
-              {arrow}
-            </Grid>
-            <Grid size={{ xs: 2 }}>
-              <img src={PersonHelper.getPhotoUrl(member)} alt={`${member.name.display} avatar`} data-testid={`member-photo-${member.id}`} />
-            </Grid>
-            <Grid size={{ xs: 9 }}>
-              {member.name.display}
-              {getCondensedGroupList(member)}
-            </Grid>
-          </Grid>
-        </a>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Icon sx={{ marginRight: 2, color: "#9E9E9E" }}>
+              {isExpanded ? "expand_less" : "expand_more"}
+            </Icon>
+            <Box
+              sx={{
+                width: 56,
+                height: 56,
+                borderRadius: "50%",
+                marginRight: 2,
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src={PersonHelper.getPhotoUrl(member)}
+                alt={`${member.name.display} avatar`}
+                data-testid={`member-photo-${member.id}`}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </Box>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="h6" sx={{ color: "#3c3c3c", fontWeight: 600, marginBottom: 1 }}>
+                {member.name.display}
+              </Typography>
+              {!isExpanded && getCondensedGroupList(member)}
+            </Box>
+          </Box>
+        </CardActionArea>
+        {isExpanded && <Divider sx={{ backgroundColor: "#F0F0F0" }} />}
         {serviceTimeList}
-      </>
+      </Card>
     );
   };
 
@@ -176,11 +242,78 @@ export function Household({ completeHandler = () => { } }: Props) {
 
   return (
     <>
-      {CheckinHelper.householdMembers.map((member) => getMember(member))}
-      <br />
-      <Button fullWidth size="large" variant="contained" onClick={handleCheckin} data-testid="checkin-submit-button" aria-label="Complete checkin for selected members">
-        Checkin
-      </Button>
+      {/* Header Section */}
+      <Box
+        sx={{
+          backgroundColor: "#FFFFFF",
+          padding: 3,
+          textAlign: "center",
+          borderRadius: 2,
+          marginBottom: 2,
+          boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+        }}
+      >
+        <Box
+          sx={{
+            width: 80,
+            height: 80,
+            borderRadius: "50%",
+            backgroundColor: "#F6F6F8",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "0 auto 16px",
+          }}
+        >
+          <Icon sx={{ fontSize: 48, color: "#0D47A1" }}>people</Icon>
+        </Box>
+        <Typography variant="h4" sx={{ color: "#3c3c3c", fontWeight: 700, marginBottom: 1 }}>
+          Household Members
+        </Typography>
+        <Typography variant="body1" sx={{ color: "#9E9E9E" }}>
+          Select groups for each family member
+        </Typography>
+      </Box>
+
+      {/* Members List */}
+      {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0 ? (
+        <Card sx={{ borderRadius: 3, padding: 4, textAlign: "center" }}>
+          <Icon sx={{ fontSize: 64, color: "#9E9E9E" }}>person_off</Icon>
+          <Typography variant="h6" sx={{ color: "#3c3c3c", fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
+            No Household Members Found
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#9E9E9E" }}>
+            Please ensure you are logged in and have household members registered.
+          </Typography>
+        </Card>
+      ) : (
+        CheckinHelper.householdMembers.map((member) => getMember(member))
+      )}
+
+      {/* Bottom Action */}
+      <Box sx={{ marginTop: 3 }}>
+        <Button
+          fullWidth
+          size="large"
+          variant="contained"
+          onClick={handleCheckin}
+          data-testid="checkin-submit-button"
+          startIcon={<Icon>check_circle</Icon>}
+          sx={{
+            backgroundColor: "#0D47A1",
+            borderRadius: 3,
+            height: 56,
+            fontWeight: 700,
+            fontSize: 16,
+            boxShadow: "0 2px 4px rgba(13, 71, 161, 0.2)",
+            "&:hover": {
+              backgroundColor: "#0B3D8F",
+            },
+          }}
+        >
+          Complete Check-in
+        </Button>
+      </Box>
     </>
   );
 }
