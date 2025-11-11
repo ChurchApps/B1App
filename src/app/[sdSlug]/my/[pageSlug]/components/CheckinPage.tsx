@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Grid } from "@mui/material";
 import { Household, CheckinComplete, Services } from "@/components";
 import { UserHelper } from "@churchapps/apphelper";
 
@@ -25,13 +24,7 @@ export function CheckinPage() {
   return (
     <>
       {UserHelper.user?.firstName
-        ? (
-          <Grid container spacing={3}>
-            <Grid size={{ md: 8, xs: 12 }}>
-              {content}
-            </Grid>
-          </Grid>
-        )
+        ? content
         : (
           <h3 className="text-center w-100">
           Please <Link href="/login/?returnUrl=/my/checkin">Login</Link> to check in.

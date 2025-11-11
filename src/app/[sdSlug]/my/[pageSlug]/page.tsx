@@ -59,7 +59,7 @@ export default async function Home({ params }: { params: PageParams }) {
     <>
       <Theme config={config} />
       <AuthGuard sdSlug={sdSlug}>
-        <MyWrapper pageSlug={pageSlug} root={pageSlug==="timeline"} config={config}>
+        <MyWrapper pageSlug={pageSlug} root={true} config={config}>
           {getPageContent()}
         </MyWrapper>
       </AuthGuard>
