@@ -1,13 +1,13 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { Button, Icon, Grid, Box, CardActionArea, Typography, Chip, Divider } from "@mui/material";
+import { Button, Icon, Box, CardActionArea, Typography, Chip, Divider } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
-import { HeaderSection, HeaderIconContainer, CheckinCard, IconCircle, SmallIconCircle, ServiceTimeItem, EmptyStateCard, colors } from "./CheckinStyles";
+import { HeaderSection, HeaderIconContainer, CheckinCard, SmallIconCircle, ServiceTimeItem, EmptyStateCard, colors } from "./CheckinStyles";
 import type { VisitInterface, GroupInterface, PersonInterface, ServiceTimeInterface, VisitSessionInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -228,19 +228,21 @@ export function Household({ completeHandler = () => { } }: Props) {
       </HeaderSection>
 
       {/* Members List */}
-      {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0 ? (
-        <EmptyStateCard>
-          <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>person_off</Icon>
-          <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
-            No Household Members Found
-          </Typography>
-          <Typography variant="body2" sx={{ color: colors.textSecondary }}>
-            Please ensure you are logged in and have household members registered.
-          </Typography>
-        </EmptyStateCard>
-      ) : (
-        CheckinHelper.householdMembers.map((member) => getMember(member))
-      )}
+      {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0
+        ? (
+          <EmptyStateCard>
+            <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>person_off</Icon>
+            <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
+              No Household Members Found
+            </Typography>
+            <Typography variant="body2" sx={{ color: colors.textSecondary }}>
+              Please ensure you are logged in and have household members registered.
+            </Typography>
+          </EmptyStateCard>
+        )
+        : (
+          CheckinHelper.householdMembers.map((member) => getMember(member))
+        )}
 
       {/* Bottom Action */}
       <Box sx={{ marginTop: 3 }}>

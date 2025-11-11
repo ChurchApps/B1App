@@ -91,17 +91,19 @@ export function Services({ selectedHandler }: Props) {
       </HeaderSection>
 
       {/* Services List */}
-      {services.length === 0 ? (
-        <EmptyStateCard>
-          <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>event_busy</Icon>
-          <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
-            No Services Available
-          </Typography>
-          <Typography variant="body2" sx={{ color: colors.textSecondary }}>
-            Please check back later or contact your church administrator
-          </Typography>
-        </EmptyStateCard>
-      ) : (
+      {services.length === 0
+        ? (
+          <EmptyStateCard>
+            <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>event_busy</Icon>
+            <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
+              No Services Available
+            </Typography>
+            <Typography variant="body2" sx={{ color: colors.textSecondary }}>
+              Please check back later or contact your church administrator
+            </Typography>
+          </EmptyStateCard>
+        )
+        : (
         services.map((service) => (
           <CheckinCard key={service.id}>
             <CardActionArea
@@ -123,11 +125,13 @@ export function Services({ selectedHandler }: Props) {
                     </Typography>
                   )}
                 </Box>
-                {selectingServiceId === service.id ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  <Icon sx={{ color: colors.textSecondary }}>chevron_right</Icon>
-                )}
+                {selectingServiceId === service.id
+                  ? (
+                    <CircularProgress size={24} />
+                  )
+                  : (
+                    <Icon sx={{ color: colors.textSecondary }}>chevron_right</Icon>
+                  )}
               </Box>
             </CardActionArea>
           </CheckinCard>

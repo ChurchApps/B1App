@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Grid } from "@mui/material";
 import { Household, CheckinComplete, Services } from "@/components";
 import { UserHelper } from "@churchapps/apphelper";
 

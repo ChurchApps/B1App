@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Icon, Grid, Box, CardActionArea, Typography, Divider } from "@mui/material";
+import { Button, Icon, Box, CardActionArea, Typography, Divider } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { HeaderSection, HeaderIconContainer, CheckinCard, IconCircle, SmallIconCircle, EmptyStateCard, colors } from "./CheckinStyles";
 import type { GroupInterface } from "@churchapps/helpers";
@@ -131,10 +131,12 @@ export function Groups({ selectedHandler }: Props) {
       </HeaderSection>
 
       {/* Groups List */}
-      {groupTree && groupTree.length > 0 ? (
-        getCategories()
-      ) : (
-        <EmptyStateCard>
+      {groupTree && groupTree.length > 0
+        ? (
+          getCategories()
+        )
+        : (
+          <EmptyStateCard>
           <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>group_off</Icon>
           <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
             No Groups Available
