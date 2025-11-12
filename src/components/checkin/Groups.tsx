@@ -23,10 +23,11 @@ export function Groups({ selectedHandler }: Props) {
     let gt: GroupCategoryInterface[] = [];
 
     const sortedGroups = CheckinHelper.selectedServiceTime?.groups?.sort((a, b) =>
-      (a.categoryName || "") > (b.categoryName || "") ? 1 : -1
+      ((a?.categoryName || "") > (b?.categoryName || "")) ? 1 : -1
     );
 
     sortedGroups?.forEach((g) => {
+      if (!g) return;
       if (g.categoryName !== category) gt.push({ key: gt.length, name: g.categoryName || "", items: [] });
       gt[gt.length - 1].items.push(g);
       category = g.categoryName || "";

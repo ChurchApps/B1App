@@ -45,7 +45,8 @@ export function Household({ completeHandler = () => { } }: Props) {
     let hasSelection = false;
     if (stSessions.length > 0) {
       const groupId = stSessions[0].session?.groupId || "";
-      const group: GroupInterface = ArrayHelper.getOne(st.groups || [], "id", groupId);
+      const validGroups = (st.groups || []).filter((g) => g != null);
+      const group: GroupInterface = ArrayHelper.getOne(validGroups, "id", groupId);
       selectedGroupName = group?.name || "None";
       hasSelection = true;
     }
