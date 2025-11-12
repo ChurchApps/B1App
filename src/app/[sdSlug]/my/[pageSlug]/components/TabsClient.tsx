@@ -61,7 +61,7 @@ export const TabsClient = (props: Props) => {
   useEffect(() => { loadData() }, [context.userChurch])
 
 
-  const getItem = (tab:any) => (<li><Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>{tab.label}</Link></li>)
+  const getItem = (tab:any) => (<li key={tab.url}><Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>{tab.label}</Link></li>)
 
   return <ul data-testid="my-portal-tabs" aria-label="Member portal navigation">
     {getTabs().map((tab, index) => getItem(tab))}
