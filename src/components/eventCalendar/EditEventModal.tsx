@@ -133,6 +133,7 @@ export function EditEventModal(props: Props) {
   const handleToggleRecurring = (checked:boolean) => {
     const recurrenceRule = (checked) ? "FREQ=DAILY;INTERVAL=1" : "";
     setEvent({...event, recurrenceRule});
+    setRRule(recurrenceRule);
   }
 
   return (
