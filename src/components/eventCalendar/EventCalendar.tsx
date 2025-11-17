@@ -1,4 +1,4 @@
-import { Calendar, momentLocalizer } from "react-big-calendar"
+import { Calendar, momentLocalizer, View } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Snackbar, Stack } from "@mui/material";
@@ -23,7 +23,7 @@ export function EventCalendar(props: Props) {
   const [displayEvent, setDisplayEvent] = useState<EventInterface | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [date, setDate] = useState(new Date());
-  const [view, setView] = useState<"month" | "week" | "day" | "agenda">("month");
+  const [view, setView] = useState<View>("month");
 
   const handleSubscribe = () => {
     setOpen(true);
@@ -63,7 +63,7 @@ export function EventCalendar(props: Props) {
     setDate(newDate);
   }, []);
 
-  const onView = useCallback((newView: "month" | "week" | "day" | "agenda") => {
+  const onView = useCallback((newView: View) => {
     setView(newView);
   }, []);
 
