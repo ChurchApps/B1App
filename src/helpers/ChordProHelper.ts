@@ -28,7 +28,7 @@ export class ChordProHelper {
   static transposeChords = (line: string, halfSteps: number) => {
     let chords = line.match(/\[[A-G][#bm]?(\/[A-G][#bm]?)?\]/g);
     if (chords) {
-      chords.forEach((chord: any) => {
+      chords.forEach((chord: string) => {
         let newChord = this.transposeChord(chord.substring(1, chord.length - 1), halfSteps);
         line = line.replace(chord, "[" + newChord + "]");
       });
@@ -88,7 +88,7 @@ export class ChordProHelper {
   static formatLyrics = (lyrics: string, keyOffset: number) => {
     let lines = lyrics.split("\n");
     let result: string[] = [];
-    lines.forEach((line: any, index: any) => {
+    lines.forEach((line: string) => {
       let l = line.trim();
       let lineType = "line";
       if (line.startsWith("[") && line.endsWith("]")) lineType = "header";

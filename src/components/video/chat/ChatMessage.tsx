@@ -14,7 +14,6 @@ export const ChatMessage: React.FC<Props> = (props) => {
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     ApiHelper.delete("/messages/" + props.message.id, "MessagingApi");
-    //ChatHelper.sendDelete(props.roomName, props.message.timestamp)
   }
 
   const getDeleteLink = () => {

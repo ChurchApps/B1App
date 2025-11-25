@@ -15,7 +15,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
   const [groupMembers, setGroupMembers] = React.useState<GroupMemberInterface[]>([]);
 
   const loadData = React.useCallback(() => {
-    ApiHelper.get("/groupmembers?groupId=" + props.group.id, "MembershipApi").then((data: any) => {
+    ApiHelper.get("/groupmembers?groupId=" + props.group.id, "MembershipApi").then((data: GroupMemberInterface[]) => {
       setGroupMembers(data);
     });
   }, [props.group]);

@@ -37,7 +37,6 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     { key: "name.middle", label: "Middle Name" },
     { key: "name.last", label: "Last Name" },
     { key: "photo", label: "Photo" },
-    // { key: "photoUpdated", label: "Photo Updated" },
     { key: "birthDate", label: "Birth Date" },
     { key: "contactInfo.email", label: "Email" },
     { key: "contactInfo.address1", label: "Address Line 1" },
@@ -118,7 +117,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   const getChangesRows = () => {
     let rows: React.ReactElement[] = [];
     changes?.forEach((ch) => {
-      let val: any = ch.value;
+      let val: string | React.ReactElement = ch.value;
       if (ch.field === "birthDate") val = DateHelper.formatHtml5Date(new Date(ch.value));
       if (ch.field === "photo") val =  <img src={ch.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />
       rows.push(
@@ -171,7 +170,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const loadData = () => {
-    ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((data: any) => setHouseholdMembers(data));
+    ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((data: PersonInterface[]) => setHouseholdMembers(data));
   };
 
   useEffect(loadData, [props.personId]);

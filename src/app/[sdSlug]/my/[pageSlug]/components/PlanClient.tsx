@@ -28,7 +28,7 @@ export function PlanClient({ planId }: Props) {
   const loadData = async () => {
     setLoading(true);
     const tempPlan = await ApiHelper.get("/plans/" + planId, "DoingApi");
-    ApiHelper.get("/times/plan/" + planId, "DoingApi").then((data: any) => setTimes(data));
+    ApiHelper.get("/times/plan/" + planId, "DoingApi").then((data: TimeInterface[]) => setTimes(data));
     setPlan(tempPlan);
     const tempPositions = await ApiHelper.get("/positions/plan/" + planId, "DoingApi");
     const tempAssignments = await ApiHelper.get("/assignments/plan/" + planId, "DoingApi");

@@ -2,9 +2,6 @@
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
 import { useState } from "react";
-// import dynamic from "next/dynamic"; // temporarily disabled
-
-// Markdown components temporarily disabled due to type issues
 
 export default function Localhost() {
   const [val, setVal] = useState("");

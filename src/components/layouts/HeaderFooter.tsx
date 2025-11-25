@@ -7,16 +7,16 @@ import { ArrayHelper } from "@churchapps/apphelper";
 import Zone from "./Zone";
 import { Footer } from "./Footer";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { PageInterface } from "@/helpers";
 
 type Props = {
-  pageData: any;
+  pageData: PageInterface;
   pageTitle?: string;
   metaDescription?: string;
   ogDescription?: string;
   config?: ConfigurationInterface;
 };
 
-//<Zone church={props.church} sections={props.pageData.sections} zone="footer" churchSettings={props.churchSettings} />
 export function HeaderFooter(props: Props) {
   const getDescription = () => {
     if (props.metaDescription) return (<>

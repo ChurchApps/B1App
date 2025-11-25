@@ -38,7 +38,7 @@ export const Household: React.FC<Props> = (props) => {
 
   const loadMembers = () => {
     if (props.person?.householdId) {
-      ApiHelper.get("/people/household/" + props.person?.householdId, "MembershipApi").then((data: any) => {
+      ApiHelper.get("/people/household/" + props.person?.householdId, "MembershipApi").then((data: PersonInterface[]) => {
         setMembers(data);
         setIsLoading(false);
       });

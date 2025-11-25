@@ -17,7 +17,7 @@ export const ServiceOrder = (props: Props) => {
 
   const loadData = async () => {
     if (props.plan?.id) {
-      ApiHelper.get("/planItems/plan/" + props.plan.id.toString(), "DoingApi").then((d: any) => { setPlanItems(d); });
+      ApiHelper.get("/planItems/plan/" + props.plan.id.toString(), "DoingApi").then((d: PlanItemInterface[]) => { setPlanItems(d); });
     }
   }
 

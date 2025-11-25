@@ -8,8 +8,6 @@ import { Locale } from "@churchapps/apphelper";
 import FlexSearch from "flexsearch";
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
 
-//const FlexSearch = require("flexsearch");
-
 const StyledIconSpan = styled("span")(({ theme }) => ({
   display: "inline-flex",
   flexDirection: "column",
@@ -28,7 +26,7 @@ const StyledIconSpan = styled("span")(({ theme }) => ({
   }
 }));
 
-const StyledIcon: any = styled(Icon)(({ theme }) => ({
+const StyledIcon = styled(Icon)(({ theme }) => ({
   boxSizing: "content-box",
   cursor: "pointer",
   color: theme.palette.text.primary,
@@ -71,13 +69,17 @@ const Paper = styled(MuiPaper)(({ theme }) => ({ padding: "2px 4px", display: "f
 const Input = styled(InputBase)({ marginLeft: 8, flex: 1 });
 
 const searchIndex = new FlexSearch.Index({ tokenize: "full" });
-//const searchIndex = FlexSearch.create({ tokenize: "full" });
+
+interface IconData {
+  iconName: string;
+  componentName: string;
+}
 
 function createSearchIndex() {
   // create component names from icons list
-  const iconsAndComponentNames = IconNamesList.map((icon: any) => {
+  const iconsAndComponentNames: IconData[] = IconNamesList.map((icon: string) => {
     const split = icon.split("_");
-    const capitalizedSplit = split.map((s: any) => {
+    const capitalizedSplit = split.map((s: string) => {
       if (isAlphabet(s[0])) {
         s = s[0].toUpperCase() + s.slice(1)
       }
@@ -90,11 +92,10 @@ function createSearchIndex() {
   })
 
   // create search index
-  iconsAndComponentNames.forEach((icon: any) => {
+  iconsAndComponentNames.forEach((icon: IconData) => {
     let searchTerm = icon.iconName + " " + icon.componentName;
 
     searchIndex.addAsync(icon.iconName, searchTerm)
-    //searchIndex.add(searchTerm);
   })
 
 }
@@ -113,16 +114,15 @@ const defaultIcons = ["person", "group", "groups", "contact_mail", "mail", "chur
 
 export function IconPicker(props: Props) {
   const pageSize = 27;
-  const [keys, setKeys] = React.useState<any[] | null>(null);
+  const [keys, setKeys] = React.useState<string[] | null>(null);
   const [query, setQuery] = React.useState("");
   const [page, setPage] = React.useState(1);
 
   const updateSearchResults = React.useMemo(
     () =>
-      debounce((value) => {
+      debounce((value: string) => {
         if (value === "") setKeys(defaultIcons);
-        else searchIndex.searchAsync(value, { limit: 3000 }).then((results: any) => { setKeys(results); setPage(1); });
-        //else searchIndex.search(value, { limit: 3000 }).then((results: any) => { setKeys(results); setPage(1); });
+        else searchIndex.searchAsync(value, { limit: 3000 }).then((results) => { setKeys(results.map(r => String(r))); setPage(1); });
       }, UPDATE_SEARCH_INDEX_WAIT_MS),
     []
   );

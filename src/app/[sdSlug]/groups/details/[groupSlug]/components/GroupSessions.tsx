@@ -30,12 +30,12 @@ export const GroupSessions: React.FC<Props> = (props) => {
     ApiHelper.get("/visitsessions?sessionId=" + session.id, "AttendanceApi").then((vs: VisitSessionInterface[]) => {
       setVisitSessions(vs);
       const peopleIds = ArrayHelper.getUniqueValues(vs, "visit.personId");
-      ApiHelper.get("/people/ids?ids=" + encodeURIComponent(peopleIds.join(",")), "MembershipApi").then((data: any) => setPeople(data));
+      ApiHelper.get("/people/ids?ids=" + encodeURIComponent(peopleIds.join(",")), "MembershipApi").then((data: PersonInterface[]) => setPeople(data));
     });
   }, [session]);
 
   const loadSessions = React.useCallback(() => {
-    ApiHelper.get("/sessions?groupId=" + props.group.id, "AttendanceApi").then((data: any) => {
+    ApiHelper.get("/sessions?groupId=" + props.group.id, "AttendanceApi").then((data: SessionInterface[]) => {
       setSessions(data);
       if (data.length > 0) setSession(data[0]);
     });
@@ -52,7 +52,6 @@ export const GroupSessions: React.FC<Props> = (props) => {
     let result: React.ReactElement[] = [];
     for (let i = 0; i < visitSessions.length; i++) {
       const vs = visitSessions[i];
-      //let editLink = (canEdit) ? (<a href="about:blank" onClick={handleRemove} className="text-danger" data-personid={vs.visit.personId}><Icon>person_remove</Icon> Remove</a>) : null;
       let editLink = (canEdit) ? <SmallButton icon="person_remove" text="Remove" onClick={() => handleRemove(vs)} color="error" data-testid="remove-session-member-button" /> : <></>
       let person = ArrayHelper.getOne(people, "id", vs.visit.personId);
       if (person) {
@@ -95,12 +94,6 @@ export const GroupSessions: React.FC<Props> = (props) => {
         </div>
       </Grid>
     );
-    /*else return (
-      <InputGroup>
-        <FormControl as="select" value={session?.id} onChange={selectSession}>{getSessionOptions()}</FormControl>
-        <InputGroup.Append><Button variant="primary" onClick={handleAdd} data-cy="create-new-session"><Icon>calendar_month</Icon> New</Button></InputGroup.Append>
-      </InputGroup>
-    );*/
   }
 
   const handleSessionSelected = React.useCallback(() => {
@@ -114,7 +107,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
     ApiHelper.post("/visitsessions/log", v, "AttendanceApi").then(() => { loadAttendance(); });
   }, [props, loadAttendance, session]);
 
-  React.useEffect(() => { if (props.group.id !== undefined) { loadSessions() }; {/* props.addedCallback();*/ } }, [props.group, props.addedSession, loadSessions, props]);
+  React.useEffect(() => { if (props.group.id !== undefined) { loadSessions() }; }, [props.group, props.addedSession, loadSessions, props]);
 
   React.useEffect(() => { if (props.addedPerson?.id !== undefined) { handlePersonAdd() } }, [props.addedPerson, handlePersonAdd]);
 

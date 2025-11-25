@@ -11,7 +11,7 @@ interface Props {
   keyName?: string;
 }
 
-const LoginClient: React.ComponentType<Props> = dynamic(() => import("./LoginClient").then((mod: any) => ({ default: mod.LoginClient })), {
+const LoginClient: React.ComponentType<Props> = dynamic(() => import("./LoginClient").then((mod: { LoginClient: React.ComponentType<Props> }) => ({ default: mod.LoginClient })), {
   ssr: false,
   loading: () => <div>Loading...</div>
 });

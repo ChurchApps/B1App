@@ -25,22 +25,6 @@ export function Layout(props: Props) {
     </>);
   }
 
-  // const getImage = () => {
-  //   if (props.image) return (<meta property="og:image" content={props.image}></meta>);
-  // }
-
-  // const mdTheme = createTheme({
-  //   palette: {
-  //     secondary: {
-  //       main: "#444444"
-  //     }
-  //   },
-  //   components: {
-  //     MuiTextField: { defaultProps: { margin: "normal" } },
-  //     MuiFormControl: { defaultProps: { margin: "normal" } }
-  //   }
-  // });
-
   return (
     <>
       <CssBaseline />
@@ -48,7 +32,6 @@ export function Layout(props: Props) {
         <Head>
           <title>{props.pageTitle || props.config?.church?.name}</title>
           {getDescription()}
-          {/* {getImage()} */}
         </Head>
         {!props.withoutNavbar && <Header config={props.config} overlayContent={false} />}
         <main>{props.children}</main>

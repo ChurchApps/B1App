@@ -5,36 +5,17 @@ import { ApiHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/helpers";
 import { TimelinePost } from "./TimelinePost";
 import { TimelineHelper } from "@/helpers/TimelineHelper";
+import { TimelinePostInterface } from "@/helpers";
 
 interface Props { context: UserContextInterface; }
 
 export const Timeline: React.FC<Props> = (props) => {
-  const [posts, setPosts] = React.useState<any[]>([]);
+  const [posts, setPosts] = React.useState<TimelinePostInterface[]>([]);
   const [people, setPeople] = React.useState<PersonInterface[]>([]);
   const [groups, setGroups] = React.useState<GroupInterface[]>([]);
 
-
-  //1 Load recent messaging conversations
-  //2 Load events and task details (including ones not mentioned by conversations)
-  //3 Load additional conversations for events and tasks
-  //4 Load all people and groups
-
-
   const loadData = async () => {
     if (ApiHelper.isAuthenticated) {
-
-      //const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts", "MessagingApi");
-      //const allPosts:TimelinePostInterface[] = await loadDetails(initialConversations);
-      /*
-      const allPosts:TimelinePostInterface[] = await TimelineHelper.loadForUser();
-      await TimelineHelper.populateConversations(allPosts);
-      const data = await TimelineHelper.populateEntities(allPosts);
-      if (data.people) setPeople(data.people);
-      if (data.groups) setGroups(data.groups);
-
-      TimelineHelper.standardizePosts(allPosts, data.people);
-
-      setPosts(allPosts);*/
       const {posts, people, groups} = await TimelineHelper.loadForUser();
       setPeople(people);
       setGroups(groups);

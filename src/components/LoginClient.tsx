@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { Alert } from "@mui/material";
+import { Alert, type PaperProps } from "@mui/material";
 import { Layout } from "@/components";
 import { LoginPage } from "@churchapps/apphelper-login";
 import UserContext from "@/context/UserContext";
@@ -12,19 +12,19 @@ import { redirect } from "next/navigation";
 interface Props {
   showLogo?: boolean;
   redirectAfterLogin?: string;
-  loginContainerCssProps?: any;
+  loginContainerCssProps?: PaperProps;
   keyName?: string;
 }
 
 export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssProps, keyName }: Props) {
   const searchParams = useSearchParams();
   const context = useContext(UserContext);
-  const [cookies, setCookies] = useState<any>({});
+  const [cookies, setCookies] = useState<Record<string, string>>({});
 
   useEffect(() => {
     // Get cookies manually to avoid react-cookie SSR issues
     const cookieString = document.cookie;
-    const cookieObj: any = {};
+    const cookieObj: Record<string, string> = {};
     cookieString.split(';').forEach(cookie => {
       const [key, value] = cookie.trim().split('=');
       if (key && value) {

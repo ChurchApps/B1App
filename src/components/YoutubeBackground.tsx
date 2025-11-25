@@ -7,7 +7,7 @@ interface Props extends YouTubeProps {
   children?: ReactNode;
   overlay?: string;
   playerOptions?: {};
-  aspectRatio?: any;
+  aspectRatio?: string | number;
   noCookie?: boolean;
   contentClassName?: string;
   isDragging: boolean;

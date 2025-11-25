@@ -27,7 +27,7 @@ export function FormPage(props: Props) {
 
   const loadData = () => {
     setIsLoading(true);
-    ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi").then((data: any) => {
+    ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi").then((data: FormInterface) => {
       const now = new Date().setHours(0, 0, 0, 0);
       const start = data.accessStartTime ? new Date(data.accessStartTime) : null;
       const end = data.accessEndTime ? new Date(data.accessEndTime) : null;

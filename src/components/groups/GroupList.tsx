@@ -19,7 +19,7 @@ export const GroupList = (props: Props) => {
 
   useEffect(() => {
     EnvironmentHelper.init();
-    ApiHelper.getAnonymous("/groups/public/" + props.churchId + "/label?label=" + encodeURIComponent(props.label), "MembershipApi").then((data: any) => {
+    ApiHelper.getAnonymous("/groups/public/" + props.churchId + "/label?label=" + encodeURIComponent(props.label), "MembershipApi").then((data: GroupInterface[]) => {
       setGroups(data);
     });
   }, []);

@@ -7,6 +7,7 @@ import { DraggableWrapper, DroppableArea } from "@churchapps/apphelper-website";
 import { Element } from "./Element";
 import { YoutubeBackground } from "./YoutubeBackground";
 import { ApiHelper } from "@churchapps/apphelper";
+import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { StyleHelper } from "@/helpers/StyleHelper";
 
@@ -14,7 +15,7 @@ interface Props {
   first?: boolean,
   section: SectionInterface,
   church?: ChurchInterface;
-  churchSettings: any;
+  churchSettings: AppearanceInterface;
   onEdit?: (section: SectionInterface, element: ElementInterface) => void;
   onMove?: () => void;
 }
@@ -45,7 +46,6 @@ export const Section: React.FC<Props> = props => {
     if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
 
     result = { ...result };
-    //console.log("SECTION STYLE", result)
     return result;
   }
 
@@ -78,29 +78,13 @@ export const Section: React.FC<Props> = props => {
     return result;
   }
 
-  /*
-  const getEdit = () => {
-    if (props.onEdit) {
-      return (
-        <div className="sectionActions">
-          <table style={{ float: "right" }}>
-            <tbody>
-              <tr>
-                <td><DraggableIcon dndType="section" elementType="section" data={props.section} /></td>
-                <td>
-                  <div className="sectionEditButton">
-                    <SmallButton icon="edit" onClick={() => props.onEdit(props.section, null)} toolTip="section" />
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      );
-    }
-  }*/
+  interface DropData {
+    data?: ElementInterface;
+    elementType?: string;
+    blockId?: string;
+  }
 
-  const handleDrop = (data: any, sort: number) => {
+  const handleDrop = (data: DropData, sort: number) => {
     if (data.data) {
       const element: ElementInterface = data.data;
       element.sort = sort;
@@ -119,7 +103,6 @@ export const Section: React.FC<Props> = props => {
   const getAddElement = (s: number) => {
     const sort = s;
     return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} updateIsDragging={(dragging) => setIsDragging(dragging)} />);
-    //return (<div style={{ textAlign: "center", background: "rgba(230,230,230,0.25)" }}><SmallButton icon="add" onClick={() => props.onEdit(null, { sectionId: props.section.id, elementType: "textWithPhoto", sort })} toolTip="Add Element" /></div>)
   }
 
   let contents = (<Container>
@@ -129,7 +112,7 @@ export const Section: React.FC<Props> = props => {
 
 
   const getSectionAnchor = () => {
-    if (props.section.answers?.sectionId) return <a id={props.section.answers?.sectionId} className="sectionAnchor"></a>;
+    if (props.section.answers?.sectionId) return <a id={String(props.section.answers?.sectionId)} className="sectionAnchor"></a>;
     else return <></>;
   }
 

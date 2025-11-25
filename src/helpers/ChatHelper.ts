@@ -65,9 +65,9 @@ export class ChatHelper {
   }
 
   static handleDelete = (messageId: string) => {
-    const rooms = [ChatHelper.current.mainRoom, ChatHelper.current.hostRoom];
-    ChatHelper.current.privateRooms.forEach((r: any) => rooms.push(r));
-    rooms.forEach((room: any) => {
+    const rooms: (ChatRoomInterface | null)[] = [ChatHelper.current.mainRoom, ChatHelper.current.hostRoom];
+    ChatHelper.current.privateRooms.forEach((r: ChatRoomInterface) => rooms.push(r));
+    rooms.forEach((room: ChatRoomInterface | null) => {
       if (room !== null) {
         for (let i = room.messages.length - 1; i >= 0; i--) {
           if (room.messages[i].id === messageId) room.messages.splice(i, 1);
@@ -123,7 +123,7 @@ export class ChatHelper {
 
   static getOrCreatePrivateRoom = (conversation: ConversationInterface) => {
     let privateRoom: ChatRoomInterface = null;
-    ChatHelper.current.privateRooms.forEach((pr: any) => {
+    ChatHelper.current.privateRooms.forEach((pr: ChatRoomInterface) => {
       if (pr.conversation.id === conversation.id) privateRoom = pr;
     });
 
@@ -143,7 +143,7 @@ export class ChatHelper {
     if (messages.length > 0) {
       const room = ChatHelper.getRoom(messages[0].conversationId);
       room.messages = [];
-      messages.forEach((m: any) => {
+      messages.forEach((m: MessageInterface) => {
         switch (m.messageType) {
           case "message": ChatHelper.handleMessage(m); break;
           case "callout": ChatHelper.handleCallout(m); break;
@@ -167,7 +167,7 @@ export class ChatHelper {
     let result: ChatRoomInterface = null;
     if (c.mainRoom?.conversation.id === conversationId) result = c.mainRoom;
     else if (c.hostRoom?.conversation.id === conversationId) result = c.hostRoom;
-    else c.privateRooms.forEach((r: any) => { if (r.conversation.id === conversationId) result = r; });
+    else c.privateRooms.forEach((r: ChatRoomInterface) => { if (r.conversation.id === conversationId) result = r; });
     return result;
   }
 
@@ -189,13 +189,13 @@ export class ChatHelper {
     const { firstName, lastName } = ChatHelper.current.user;
     const ipAddress = await StreamChatManager.getIpAddress();
     const connection: ConnectionInterface = { conversationId: conversationId, churchId: churchId, displayName: `${firstName} ${lastName}`, socketId: SocketHelper.socketId, ipAddress: ipAddress }
-    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi").then((c: any) => {
+    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi").then((c: ConnectionInterface[]) => {
       if (connection.displayName.includes("Anonymous ")) {
         ChatHelper.current.user.firstName = c[0].displayName;
         ChatHelper.onChange();
       }
     });
-    ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversationId, "MessagingApi").then((messages: any) => { ChatHelper.handleCatchup(messages) });
+    ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversationId, "MessagingApi").then((messages: MessageInterface[]) => { ChatHelper.handleCatchup(messages) });
   }
 
 }

@@ -17,9 +17,9 @@ export const SessionAdd: React.FC<Props> = (props) => {
   const [serviceTimeId, setServiceTimeId] = React.useState("");
 
   const handleCancel = () => { props.sidebarVisibilityFunction("addPerson", true); }
-  const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } }
   const loadData = React.useCallback(() => {
-    ApiHelper.get("/groupservicetimes?groupId=" + props.group.id, "AttendanceApi").then((data: any) => {
+    ApiHelper.get("/groupservicetimes?groupId=" + props.group.id, "AttendanceApi").then((data: GroupServiceTimeInterface[]) => {
       setGroupServiceTimes(data);
       if (data.length > 0) setServiceTimeId(data[0].serviceTimeId);
     });

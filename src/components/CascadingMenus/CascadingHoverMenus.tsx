@@ -3,7 +3,7 @@
 import { useContext, createContext, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { MenuItem } from "@mui/material";
-import { usePopupState, bindHover, bindFocus, bindMenu } from "material-ui-popup-state/hooks";
+import { usePopupState, bindHover, bindFocus, bindMenu, type PopupState } from "material-ui-popup-state/hooks";
 import HoverMenu from "material-ui-popup-state/HoverMenu";
 import type { LinkInterface } from "@churchapps/helpers";
 
@@ -12,19 +12,36 @@ interface MenuInterface {
   link?: LinkInterface;
 }
 
-const CascadingContext = createContext({ parentPopupState: null, rootPopupState: null });
+interface CascadingContextType {
+  parentPopupState: PopupState | null;
+  rootPopupState: PopupState | null;
+}
 
-const CascadingMenuItem = ({ onClick, ...props }: any) => {
+const CascadingContext = createContext<CascadingContextType>({ parentPopupState: null, rootPopupState: null });
+
+interface CascadingMenuItemProps extends React.ComponentProps<typeof MenuItem> {
+  onClick?: (event: React.MouseEvent) => void;
+  children?: React.ReactNode;
+}
+
+const CascadingMenuItem = ({ onClick, ...props }: CascadingMenuItemProps) => {
   const { rootPopupState } = useContext(CascadingContext);
   if (!rootPopupState) throw new Error("must be used inside a CascadingMenu");
-  const handleClick = useCallback((event: any) => {
+  const handleClick = useCallback((event: React.MouseEvent) => {
     rootPopupState.close(event);
     if (onClick) onClick(event);
   }, [rootPopupState, onClick]);
   return (<MenuItem {...props} onClick={handleClick} style={{ whiteSpace: "normal", width: 200, overflow: "hidden" }} data-testid={`menu-item-${props.children?.toString().toLowerCase().replace(/\s+/g, '-')}`} aria-label={`Navigate to ${props.children}`} />);
 };
 
-const CascadingSubmenu = ({ title, popupId, ...props }: any) => {
+interface CascadingSubmenuProps {
+  title: string;
+  popupId: string;
+  children?: React.ReactNode;
+  classes?: { paper?: string };
+}
+
+const CascadingSubmenu = ({ title, popupId, ...props }: CascadingSubmenuProps) => {
   const { parentPopupState } = useContext(CascadingContext);
   const popupState = usePopupState({ popupId, variant: "popover", parentPopupState });
   return (
@@ -39,7 +56,16 @@ const CascadingSubmenu = ({ title, popupId, ...props }: any) => {
   );
 };
 
-const CascadingMenu = ({ popupState, ...props }: any) => {
+interface CascadingMenuProps {
+  popupState: PopupState;
+  children?: React.ReactNode;
+  anchorOrigin?: { vertical: "top" | "bottom"; horizontal: "left" | "right" };
+  transformOrigin?: { vertical: "top" | "bottom"; horizontal: "left" | "right" };
+  classes?: { paper?: string };
+  id?: string;
+}
+
+const CascadingMenu = ({ popupState, ...props }: CascadingMenuProps) => {
   const { rootPopupState } = useContext(CascadingContext);
   const context = useMemo(
     () => ({

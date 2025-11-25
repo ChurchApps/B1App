@@ -4,8 +4,13 @@ import { Embedded } from "./layouts/Embedded";
 import { StyleHelper } from "@/helpers/StyleHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
+interface PageData {
+  layout?: string;
+  sections?: unknown[];
+}
+
 type Props = {
-  pageData: any;
+  pageData: PageData;
   pageTitle?: string;
   metaDescription?: string;
   ogDescription?: string;

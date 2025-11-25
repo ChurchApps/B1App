@@ -14,8 +14,8 @@ export function GroupCalendar(props: Props) {
   const [events, setEvents] = useState<EventInterface[]>([]);
 
   const loadData = () => {
-    if (ApiHelper.isAuthenticated) ApiHelper.get("/events/group/" + props.groupId, "ContentApi").then((data: any) => { setEvents(data); });
-    else ApiHelper.getAnonymous("/events/public/group/" + props.churchId + "/" + props.groupId, "ContentApi").then((data: any) => { setEvents(data); });
+    if (ApiHelper.isAuthenticated) ApiHelper.get("/events/group/" + props.groupId, "ContentApi").then((data: EventInterface[]) => { setEvents(data); });
+    else ApiHelper.getAnonymous("/events/public/group/" + props.churchId + "/" + props.groupId, "ContentApi").then((data: EventInterface[]) => { setEvents(data); });
   }
 
   useEffect(loadData, [props.groupId]);

@@ -6,7 +6,6 @@ import { PersonInterface } from "@churchapps/helpers"
 import { TextField, Button, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
-// // CreatePerson component not available
 import { DisplayBox } from "@churchapps/apphelper";
 import { PersonAddResults } from "./PersonAddResults";
 
@@ -29,7 +28,7 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
   const [open, setOpen] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { e.preventDefault(); setHasSearched(false); setSearchText(e.currentTarget.value); }
-  const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(null); } }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(null); } }
 
   const handleSearch = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
@@ -37,7 +36,7 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
     ApiHelper.post("/people/search", { term: term }, "MembershipApi")
       .then((data: PersonInterface[]) => {
         setHasSearched(true);
-        const filteredResult = data.filter((s: any) => !filterList.includes(s.id))
+        const filteredResult = data.filter((s: PersonInterface) => !filterList.includes(s.id))
         setSearchResults(filteredResult);
         if (searchClicked) {
           searchClicked();
@@ -55,7 +54,6 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
         <Typography sx={{ marginTop: "7px" }}>{Locale.label("person.noRec")} <a href="about:blank" onClick={(e) => { e.preventDefault(); setOpen(true); }} data-testid="create-person-link" aria-label="Create new person">{Locale.label("createPerson.addNewPerson")}</a></Typography>
       )}
       <PersonAddResults addFunction={addFunction} getPhotoUrl={getPhotoUrl} includeEmail={includeEmail} actionLabel={actionLabel} searchResults={searchResults} />
-      {/* CreatePerson component not available - open && <CreatePerson showInModal onClose={() => { setOpen(false); }} navigateOnCreate={false} onCreate={person => { setSearchText(""); setSearchResults([person]) }} data-testid="create-person-modal" /> */}
     </DisplayBox>
   );
 }

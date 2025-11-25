@@ -24,8 +24,7 @@ export default function GroupCard(props: Props) {
           transition: "border 0.3s ease",
           display: "flex",
           flexDirection: "column",
-          height: "100%",
-          // minHeight: "340px"
+          height: "100%"
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

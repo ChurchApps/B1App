@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function MembersTab(props: Props) {
-  const [groupMembers, setGroupMembers] = useState([]);
+  const [groupMembers, setGroupMembers] = useState<GroupMemberInterface[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function MembersTab(props: Props) {
     setIsLoading(true);
 
     ApiHelper.get(`/groupmembers?groupId=${props.group.id}`, "MembershipApi")
-      .then((data: any) => setGroupMembers(data))
+      .then((data: GroupMemberInterface[]) => setGroupMembers(data))
       .finally(() => setIsLoading(false));
   };
 
@@ -79,7 +79,7 @@ export function MembersTab(props: Props) {
   const handleAdd = (addedPerson: PersonInterface) => {
     if (getMemberByPersonId(addedPerson.id) === null) {
       let gm = { groupId: props.group.id, personId: addedPerson.id, person: addedPerson } as GroupMemberInterface
-      ApiHelper.post("/groupmembers", [gm], "MembershipApi").then((data: any) => {
+      ApiHelper.post("/groupmembers", [gm], "MembershipApi").then((data: GroupMemberInterface[]) => {
         gm.id = data[0].id;
       });
       let members = [...groupMembers];

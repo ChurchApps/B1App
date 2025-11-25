@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { type AxiosProgressEvent } from "axios";
 import { LinearProgress } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { FileInterface } from "@/helpers";
@@ -44,8 +44,8 @@ export function FileUpload(props: Props) {
     const data: FileInterface[] = await ApiHelper.post("/files", [f], "ContentApi");
     setFile({});
     setUploadedFile({} as File);
-    const el:any = document.getElementById("fileUpload");
-    el.value = "";
+    const el = document.getElementById("fileUpload") as HTMLInputElement | null;
+    if (el) el.value = "";
     props.saveCallback(data[0]);
   };
 
@@ -64,22 +64,27 @@ export function FileUpload(props: Props) {
     return doUpload;
   };
 
-  //This will throw a CORS error if ran from localhost
-  const postPresignedFile = (presigned: any) => {
+  interface PresignedResponse {
+    url: string;
+    key?: string;
+    fields: Record<string, string>;
+  }
+
+  const postPresignedFile = (presigned: PresignedResponse) => {
     const formData = new FormData();
-    //formData.append("key", presigned.key);
     formData.append("acl", "public-read");
     formData.append("Content-Type", uploadedFile.type);
     for (const property in presigned.fields)
       formData.append(property, presigned.fields[property]);
-    const f: any = document.getElementById("fileUpload");
-    formData.append("file", f.files[0]);
-    //const requestOptions: RequestInit = { method: "POST", body: formData };
+    const f = document.getElementById("fileUpload") as HTMLInputElement | null;
+    if (f?.files?.[0]) formData.append("file", f.files[0]);
 
     const axiosConfig = {
       headers: { "Content-Type": "multipart/form-data" },
-      onUploadProgress: (data: any) => {
-        setUploadProgress(Math.round((100 * data.loaded) / data.total));
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        if (progressEvent.total) {
+          setUploadProgress(Math.round((100 * progressEvent.loaded) / progressEvent.total));
+        }
       },
     };
 

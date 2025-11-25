@@ -14,8 +14,6 @@ type PageParams = Promise<{ sdSlug: string; groupSlug: string; }>
 
 const loadSharedData = (sdSlug: string, groupSlug: string) => {
   EnvironmentHelper.init();
-  //const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all", "sdSlug=" + sdSlug]});
-  //return result(sdSlug, );
   return loadData(sdSlug, groupSlug);
 }
 
@@ -48,8 +46,8 @@ const loadData = async (sdSlug: string, groupSlug: string) => {
 
       // Only fetch additional data if group exists
       if (group && group.id) {
-        events = await ApiHelper.get("/events/public/group/" + config.church.id + "/" + group.id, "ContentApi").catch((): any[] => []);
-        leaders = await ApiHelper.get("/groupMembers/public/leaders/" + config.church.id + "/" + group.id, "MembershipApi").catch((): any[] => []);
+        events = await ApiHelper.get("/events/public/group/" + config.church.id + "/" + group.id, "ContentApi").catch((): EventInterface[] => []);
+        leaders = await ApiHelper.get("/groupMembers/public/leaders/" + config.church.id + "/" + group.id, "MembershipApi").catch((): GroupMemberInterface[] => []);
       }
     } catch (error) {
       console.error("Failed to load group data:", error);

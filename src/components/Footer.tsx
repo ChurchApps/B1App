@@ -1,10 +1,11 @@
+import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { Container, Grid } from "@mui/material";
 
 
 type Props = {
   church: ChurchInterface;
-  churchSettings: any;
+  churchSettings: AppearanceInterface;
 };
 
 export function Footer(props: Props) {

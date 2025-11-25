@@ -104,11 +104,11 @@ export const Attendance: React.FC<Props> = (props) => {
   }
 
   const getPeopleCondensed = () => {
-    let people = [];
+    let people: React.ReactNode[] = [];
     const combinedPeople = getCombinedPeople();
 
     for (let i = 0; i < combinedPeople.length; i++) {
-      let children: any[] = [];
+      let children: React.ReactNode[] = [];
       let v = combinedPeople[i];
       let countSpan = null;
       if (v.count > 1) {
@@ -135,9 +135,14 @@ export const Attendance: React.FC<Props> = (props) => {
     return people;
   }
 
-  const getCombinedPeople = () => {
-    let lastName = null;
-    const result: any[] = [];
+interface CombinedPerson {
+  displayName: string;
+  count: number;
+}
+
+  const getCombinedPeople = (): CombinedPerson[] => {
+    let lastName: string | null = null;
+    const result: CombinedPerson[] = [];
     for (let i = 0; i < props.attendance.viewers.length; i++) {
       const v = props.attendance.viewers[i];
       if (v.displayName === lastName) result[result.length - 1].count++;

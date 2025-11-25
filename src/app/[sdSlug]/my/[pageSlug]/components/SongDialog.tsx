@@ -7,6 +7,11 @@ import { SongDetails } from "./SongDetails";
 import { ChordProHelper } from "@/helpers/ChordProHelper";
 import { PraiseChartsHelper } from "@/helpers/PraiseChartsHelper";
 
+interface PraiseChartsProduct {
+  name: string;
+  file_type: string;
+  download: string;
+}
 
 interface Props {
   arrangementKeyId?: string
@@ -18,7 +23,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   const [arrangement, setArrangement] = React.useState<ArrangementInterface>(null);
   const [song, setSong] = React.useState<SongInterface>(null);
   const [songDetail, setSongDetail] = React.useState<SongDetailInterface>(null);
-  const [products, setProducts] = React.useState<any[]>([]);
+  const [products, setProducts] = React.useState<PraiseChartsProduct[]>([]);
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
 
   const loadData = async () => {
@@ -37,7 +42,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   }, [props.arrangementKeyId]); //eslint-disable-line react-hooks/exhaustive-deps
 
 
-  const download = async (product: any) => {
+  const download = async (product: PraiseChartsProduct) => {
     const qs = product.download.split("?")[1].split("&");
     const skus = qs[0].split("=")[1];
     const keys = qs[1].split("=")[1];
@@ -69,7 +74,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   }
 
   const loadLinks = () => {
-    if (arrangementKey) ApiHelper.get("/links?category=arrangementKey_" + arrangementKey.id, "ContentApi").then((data: any) => { setLinks(data); });
+    if (arrangementKey) ApiHelper.get("/links?category=arrangementKey_" + arrangementKey.id, "ContentApi").then((data: LinkInterface[]) => { setLinks(data); });
   }
 
   useEffect(() => { loadData() }, [props.arrangementKeyId]) //eslint-disable-line react-hooks/exhaustive-deps

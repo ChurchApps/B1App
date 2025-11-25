@@ -19,15 +19,6 @@ export const InteractionContainer: React.FC<Props> = (props) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
   const isMounted = useMountedState();
 
-  /*
-        const initChat = () => {
-            setTimeout(function () {
-                ChatHelper.init((state: ChatStateInterface) => { setChatState(state); setConfig(ConfigHelper.current); });
-                setChatState(ChatHelper.state);
-            }, 500);
-        }
-    */
-
   const selectTab = (index: number) => { setSelectedTab(index); }
 
   const getAltTabs = () => {
@@ -69,21 +60,6 @@ export const InteractionContainer: React.FC<Props> = (props) => {
       </div>);
     }
   }
-
-  //const getPage = async (tab: TabInterface, i: number, visible: boolean) => {
-  //  return <></>
-  /*
-    return (
-        <div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-            <iframe src={'/pageWrapper.html?url=' + escape(tab.url)} frameBorder="0" title={"frame" + i.toString()} /> :
-        </div>);*/
-  //}
-
-  /*
-    const getMainConversation = () => {
-        if (props.chatState.rooms.length > 0) return props.chatState.rooms[0].conversationId;
-        else return "";
-    }*/
 
   const getItems = () => {
     let result = [];

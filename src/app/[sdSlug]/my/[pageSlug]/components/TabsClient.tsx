@@ -10,6 +10,21 @@ import UserContext from "@/context/UserContext";
 import Link from "next/link";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
+interface TabItem {
+  url: string;
+  label: string;
+}
+
+interface Classroom {
+  id: string;
+  name: string;
+}
+
+interface Campus {
+  id: string;
+  name: string;
+}
+
 interface Props {
   config: ConfigurationInterface;
 }
@@ -17,14 +32,14 @@ interface Props {
 export const TabsClient = (props: Props) => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
-  const tabs: any[] = []
-  const [classRoooms, setClassrooms] = React.useState([]);
-  const [campuses, setCampuses] = React.useState([]);
+  const tabs: TabItem[] = []
+  const [classRoooms, setClassrooms] = React.useState<Classroom[]>([]);
+  const [campuses, setCampuses] = React.useState<Campus[]>([]);
 
   const loadData = () => {
     if (UserHelper.currentUserChurch) {
-      ApiHelper.get("/classrooms/person", "LessonsApi").then((data: any) => setClassrooms(data));
-      ApiHelper.get("/campuses", "AttendanceApi").then((data: any) => setCampuses(data));
+      ApiHelper.get("/classrooms/person", "LessonsApi").then((data: Classroom[]) => setClassrooms(data));
+      ApiHelper.get("/campuses", "AttendanceApi").then((data: Campus[]) => setCampuses(data));
     }
   }
 
@@ -42,7 +57,7 @@ export const TabsClient = (props: Props) => {
 
     if (context.userChurch) {
       showMyGroups = context.userChurch?.groups?.length > 0;
-      context.userChurch.groups.forEach((group: any) => {
+      context.userChurch.groups.forEach((group: { tags: string }) => {
         if (group.tags.indexOf("team") > -1) showPlans = true;
       });
     }
@@ -61,7 +76,7 @@ export const TabsClient = (props: Props) => {
   useEffect(() => { loadData() }, [context.userChurch])
 
 
-  const getItem = (tab:any) => (<li key={tab.url}><Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>{tab.label}</Link></li>)
+  const getItem = (tab: TabItem) => (<li key={tab.url}><Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>{tab.label}</Link></li>)
 
   return <ul data-testid="my-portal-tabs" aria-label="Member portal navigation">
     {getTabs().map((tab, index) => getItem(tab))}
