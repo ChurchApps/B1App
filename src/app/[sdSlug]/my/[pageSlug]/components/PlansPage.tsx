@@ -27,8 +27,8 @@ export function PlansPage() {
       if (tempPositions.length > 0) {
         setPositions(tempPositions);
         const planIds = ArrayHelper.getUniqueValues(tempPositions, "planId");
-        ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi").then((data: any) => setPlans(data));
-        ApiHelper.get("/times/plans?planIds=" + planIds, "DoingApi").then((data: any) => setTimes(data));
+        ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi").then((data: PlanInterface[]) => setPlans(data));
+        ApiHelper.get("/times/plans?planIds=" + planIds, "DoingApi").then((data: TimeInterface[]) => setTimes(data));
       }
     }
   };

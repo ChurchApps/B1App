@@ -45,3 +45,5 @@ yarn-error.log*
 # serverless
 .serverless
 .serverless_nextjs
+# Sentry Config File
+.env.sentry-build-plugin

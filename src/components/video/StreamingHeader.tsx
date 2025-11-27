@@ -93,7 +93,6 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     }
   }, [props.appearance, promptName]);
 
-  //const { firstName, lastName } = props.user || {};
   const { firstName, lastName } = ChatHelper.current.user;
 
   return (

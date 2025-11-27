@@ -36,7 +36,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   };
 
   const loadData = () => {
-    ApiHelper.get("/files/group/" + props.groupId, "ContentApi").then((d: any) =>
+    ApiHelper.get("/files/group/" + props.groupId, "ContentApi").then((d: FileInterface[]) =>
       setFiles(d)
     );
 

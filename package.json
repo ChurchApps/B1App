@@ -29,6 +29,7 @@
     "@mui/material": "^7.3.1",
     "@react-google-maps/api": "^2.20.6",
     "@react-hook/window-size": "^3.1.1",
+    "@sentry/nextjs": "^10.27.0",
     "@stripe/react-stripe-js": "^3.9.0",
     "@stripe/stripe-js": "^7.4.0",
     "@youversion/platform-react-hooks": "^0.5.1",

@@ -6,7 +6,7 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { Box, CardActionArea, Icon, Typography, CircularProgress } from "@mui/material";
 import { HeaderSection, HeaderIconContainer, CheckinCard, IconCircle, EmptyStateCard, colors } from "./CheckinStyles";
-import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface } from "@churchapps/helpers";
+import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface, ServiceTimeInterface, PersonInterface } from "@churchapps/helpers";
 
 interface Props {
   selectedHandler: () => void;
@@ -19,7 +19,7 @@ export function Services({ selectedHandler }: Props) {
 
   const loadData = () => {
     setIsLoading(true);
-    ApiHelper.get("/services", "AttendanceApi").then((data: any) => {
+    ApiHelper.get("/services", "AttendanceApi").then((data: ServiceInterface[]) => {
       setServices(data);
       setIsLoading(false);
     });
@@ -28,18 +28,18 @@ export function Services({ selectedHandler }: Props) {
   const selectService = async (serviceId: string) => {
     setSelectingServiceId(serviceId);
 
-    const promises: Promise<any>[] = [
-      ApiHelper.get("/servicetimes?serviceId=" + serviceId, "AttendanceApi").then((times: any) => {
+    const promises: Promise<void>[] = [
+      ApiHelper.get("/servicetimes?serviceId=" + serviceId, "AttendanceApi").then((times: ServiceTimeInterface[]) => {
         CheckinHelper.serviceId = serviceId;
         CheckinHelper.serviceTimes = times;
       }),
-      ApiHelper.get("/groupservicetimes", "AttendanceApi").then((groupServiceTimes: any) => {
+      ApiHelper.get("/groupservicetimes", "AttendanceApi").then((groupServiceTimes: GroupServiceTimeInterface[]) => {
         CheckinHelper.groupServiceTimes = groupServiceTimes;
       }),
-      ApiHelper.get("/groups", "MembershipApi").then((groups: any) => {
+      ApiHelper.get("/groups", "MembershipApi").then((groups: GroupInterface[]) => {
         CheckinHelper.groups = groups;
       }),
-      ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((members: any) => {
+      ApiHelper.get("/people/household/" + PersonHelper.person.householdId, "MembershipApi").then((members: PersonInterface[]) => {
         CheckinHelper.householdMembers = members;
       }),
     ];
@@ -54,7 +54,6 @@ export function Services({ selectedHandler }: Props) {
     CheckinHelper.existingVisits = await ApiHelper.get(url, "AttendanceApi");
     CheckinHelper.pendingVisits = [...CheckinHelper.existingVisits];
 
-    //for simplicity, iterate the group service times and add groups to the services.
     CheckinHelper.serviceTimes.forEach((st) => {
       st.groups = [];
       ArrayHelper.getAll(CheckinHelper.groupServiceTimes, "serviceTimeId", st.id).forEach(

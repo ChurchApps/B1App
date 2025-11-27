@@ -14,9 +14,9 @@ export interface ElementInterface {
   parentId?: string;
   size?: number;
   answersJSON?: string;
-  answers?: any;
+  answers?: Record<string, string | number | boolean>;
   stylesJSON?: string;
-  styles?: { all?: any, desktop?: any, mobile?: any };
+  styles?: { all?: Record<string, string>, desktop?: Record<string, string>, mobile?: Record<string, string> };
   animationsJSON?: string;
   animations?: { onShow?: string, onShowSpeed?: string };
   sort?: number;
@@ -37,11 +37,11 @@ export interface SectionInterface {
   sort?: number;
   targetBlockId?: string;
   answersJSON?: string;
-  answers?: any;
+  answers?: Record<string, string | number | boolean>;
   stylesJSON?: string;
-  styles?: any;
+  styles?: { all?: Record<string, string>, desktop?: Record<string, string>, mobile?: Record<string, string> };
   animationsJSON?: string;
-  animations?: any;
+  animations?: { onShow?: string, onShowSpeed?: string };
 
   sourceId?: string;
   sections?: SectionInterface[];
@@ -139,7 +139,7 @@ export interface TimelinePostInterface {
   timeUpdated?: Date;
   conversationId?: string;
   conversation?: ConversationInterface;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 
@@ -147,15 +147,15 @@ export interface GlobalStyleInterface {
   id?: string,
   churchId?: string,
   fonts?: string,
-  palette?: any,
+  palette?: string,
   customCss?: string,
   customJS?: string
 }
 
 export interface InlineStylesInterface {
-  all: any,
-  desktop: any,
-  mobile: any
+  all: Record<string, string>,
+  desktop: Record<string, string>,
+  mobile: Record<string, string>
 }
 
 export interface AnimationsInterface {

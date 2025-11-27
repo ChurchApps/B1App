@@ -66,12 +66,13 @@ export const TimelinePost: React.FC<Props> = (props) => {
   }
 
   const getTaskDetails = () => {
-    const creator = getEntity(props.post.data?.createdByType, props.post.data?.createdById, props.post.data?.createdByLabel);
-    const assignedTo = getEntity(props.post.data?.assignedToType, props.post.data?.assignedToId, props.post.data?.assignedToLabel);
-    const associatedWith = getEntity(props.post.data?.associatedWithType, props.post.data?.associatedWithId, props.post.data?.associatedWithLabel);
+    const data = props.post.data as Record<string, string> | undefined;
+    const creator = getEntity(data?.createdByType, data?.createdById, data?.createdByLabel);
+    const assignedTo = getEntity(data?.assignedToType, data?.assignedToId, data?.assignedToLabel);
+    const associatedWith = getEntity(data?.associatedWithType, data?.associatedWithId, data?.associatedWithLabel);
 
     const result=(<>
-      {getIntroLine(<><b>Task: {props.post.data?.title}</b></>)}
+      {getIntroLine(<><b>Task: {data?.title}</b></>)}
       <p>{creator} has requested this from {assignedTo} on behalf of {associatedWith}</p>
     </>);
     return result;
@@ -79,31 +80,34 @@ export const TimelinePost: React.FC<Props> = (props) => {
 
   const getEventDetails = () => {
     if (!props.post.data) return (<></>);
-    const group = ArrayHelper.getOne(props.groups, "id", props.post.data?.groupId);
-    let start = new Date(props.post.data?.start);
+    const data = props.post.data as Record<string, string>;
+    const group = ArrayHelper.getOne(props.groups, "id", data?.groupId);
+    let start = new Date(data?.start);
     const displayStart = DateHelper.prettyDateTime(start);
     const result=(<>
       {!props.condensed && group?.photoUrl && (<Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{width:"100%" }} />)}
-      {getIntroLine(<><b>Event: {props.post.data?.title}</b> - {displayStart}</>)}
-      <p>{props.post.data?.description}</p>
+      {getIntroLine(<><b>Event: {data?.title}</b> - {displayStart}</>)}
+      <p>{data?.description}</p>
     </>);
     return result;
   }
 
   const getVenueDetails = () => {
+    const data = props.post.data as Record<string, string> | undefined;
     const result=(<>
-      <a href={"https://lessons.church" + props.post.data?.slug} target="_blank"><Image src={props.post.data?.image} width="600" height="300" alt={props.post.data?.name} style={{aspectRatio:2, height:"auto" }} /></a>
-      {getIntroLine(<><b>{props.post.data?.studyName}: <a href={"https://lessons.church" + props.post.data?.slug} target="_blank">{props.post.data?.name}</a></b></>)}
-      <p className="understated">{props.post.data?.description}</p>
+      <a href={"https://lessons.church" + data?.slug} target="_blank"><Image src={data?.image || ""} width="600" height="300" alt={data?.name || ""} style={{aspectRatio:2, height:"auto" }} /></a>
+      {getIntroLine(<><b>{data?.studyName}: <a href={"https://lessons.church" + data?.slug} target="_blank">{data?.name}</a></b></>)}
+      <p className="understated">{data?.description}</p>
     </>);
     return result;
   }
 
   const getSermonDetails = () => {
+    const data = props.post.data as Record<string, string> | undefined;
     const result=(<>
-      <a href={"/sermons"} target="_blank"><img src={props.post.data?.thumbnail} width="600" height="338" alt={props.post.data?.name} style={{aspectRatio:1.778, height:"auto" }} /></a>
-      {getIntroLine(<><b><a href={"/sermons"} target="_blank">{props.post.data?.title}</a></b></>)}
-      <p className="understated">{props.post.data?.description}</p>
+      <a href={"/sermons"} target="_blank"><img src={data?.thumbnail} width="600" height="338" alt={data?.name} style={{aspectRatio:1.778, height:"auto" }} /></a>
+      {getIntroLine(<><b><a href={"/sermons"} target="_blank">{data?.title}</a></b></>)}
+      <p className="understated">{data?.description}</p>
     </>);
     return result;
   }
@@ -132,7 +136,8 @@ export const TimelinePost: React.FC<Props> = (props) => {
   }
 
   const createConversation = async () => {
-    const conv:ConversationInterface = { churchId:UserHelper.currentUserChurch.church.id, contentType:props.post.postType, contentId:props.post.postId, title:props.post.postType + " #" + props.post.postId + " Conversation", messages:[], groupId:props.post.data?.groupId };
+    const data = props.post.data as Record<string, string> | undefined;
+    const conv:ConversationInterface = { churchId:UserHelper.currentUserChurch.church.id, contentType:props.post.postType, contentId:props.post.postId, title:props.post.postType + " #" + props.post.postId + " Conversation", messages:[], groupId:data?.groupId };
     const result = await ApiHelper.post("/conversations", [conv], "MessagingApi");
     props.post.conversation
     return result[0].id;

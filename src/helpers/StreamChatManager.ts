@@ -32,7 +32,6 @@ export class StreamChatManager {
   }
 
   public static handleNameUpdate(displayName: string) {
-    //const displayName = `${firstName} ${lastName}`
     const data = { socketId: SocketHelper.socketId, name: displayName };
     ApiHelper.postAnonymous("/connections/setName", data, "MessagingApi");
     ChatHelper.current.user.firstName = displayName;
@@ -77,7 +76,6 @@ export class StreamChatManager {
       const data = await response.json();
       return data.ip;
     } catch (error) {
-      // IP address fetch failed, continue without blocking functionality
       return "";
     }
   }

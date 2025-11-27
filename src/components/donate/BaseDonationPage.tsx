@@ -43,17 +43,17 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     if (props?.appName) setAppName(props.appName);
     if (!UniqueIdHelper.isMissing(props.personId)) {
       setIsLoading(true);
-      ApiHelper.get("/donations/my", "GivingApi").then((data: any) => {
+      ApiHelper.get("/donations/my", "GivingApi").then((data: DonationInterface[]) => {
         if (isMounted()) {
           setDonations(data);
         }
       });
-      ApiHelper.get("/gateways", "GivingApi").then((data: any) => {
+      ApiHelper.get("/gateways", "GivingApi").then((data: { publicKey?: string }[]) => {
         if (data.length && data[0]?.publicKey) {
           if (isMounted()) {
             setStripe(loadStripe(data[0].publicKey));
           }
-          ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then((results: any) => {
+          ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then((results: { provider?: string; customerId?: string }[]) => {
             if (!isMounted()) {
               return;
             }
@@ -86,7 +86,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             }
             setIsLoading(false);
           });
-          ApiHelper.get("/people/" + props.personId, "MembershipApi").then((data: any) => {
+          ApiHelper.get("/people/" + props.personId, "MembershipApi").then((data: PersonInterface) => {
             if (isMounted()) {
               setPerson(data);
             }
@@ -121,8 +121,8 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     const currentY = date.getFullYear();
     const lastY = date.getFullYear() - 1;
 
-    const current_year = donations.filter((d: any) => new Date(d.donationDate).getFullYear() === currentY);
-    const last_year = donations.filter((d: any) => new Date(d.donationDate).getFullYear() === lastY);
+    const current_year = donations.filter((d: DonationInterface) => new Date(d.donationDate).getFullYear() === currentY);
+    const last_year = donations.filter((d: DonationInterface) => new Date(d.donationDate).getFullYear() === lastY);
     const customHeaders = [
       { label: "amount", key: "amount" },
       { label: "donationDate", key: "donationDate" },

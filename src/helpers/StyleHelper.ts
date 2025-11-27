@@ -1,9 +1,10 @@
 
-import { ElementInterface, SectionInterface } from "./interfaces";
+import { ElementInterface, GlobalStyleInterface, SectionInterface } from "./interfaces";
+import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 
 export class StyleHelper {
 
-  static getTextColor = (textColor:string, globalStyles:any, churchSettings:any) => {
+  static getTextColor = (textColor:string, globalStyles:GlobalStyleInterface, _churchSettings:AppearanceInterface) => {
     if (!textColor) textColor = "#FFF";
     if (textColor.indexOf("var(--") > -1) {
       if (globalStyles.palette) {
@@ -19,7 +20,7 @@ export class StyleHelper {
     return textColor;
   };
 
-  private static getStyle = (id:string, styles:any) => {
+  private static getStyle = (id:string, styles:Record<string, string>) => {
     let result:string[] = [];
     Object.keys(styles).forEach((key:string) => {
       const val = styles[key];
@@ -78,38 +79,9 @@ export class StyleHelper {
   }
 
 
-  static getStyles = (element: ElementInterface | SectionInterface) => {
-
-
-
-    let result:any = {};
-    /*
-    if (element.styles && Object.keys(element.styles).length > 0) {
-      Object.keys(element.styles).forEach((platformKey) => {
-        const platform:any = element.styles[platformKey];
-        Object.keys(platform).forEach((key) => {
-          const parts = key.split("-");
-          const camelCase = parts[0] + parts.slice(1).map((x) => x[0].toUpperCase() + x.slice(1)).join("");
-          const option = allStyleOptions.find((x) => x.key === key);
-
-          switch (option.type) {
-            case "px":
-              result[camelCase] = parseFloat(element.styles[key]);
-              break;
-            default:
-              result[camelCase] = element.styles[key];
-              break;
-          }
-        });
-
-      });
-
-
-    }
-    */
-
+  static getStyles = (_element: ElementInterface | SectionInterface): Record<string, string | number> => {
+    const result: Record<string, string | number> = {};
     return result;
-
   }
 
 }

@@ -30,7 +30,7 @@ export function EventCalendar(props: Props) {
     navigator.clipboard.writeText(`${EnvironmentHelper.Common.ContentApi}/events/subscribe?groupId=${props.editGroupId}&churchId=${UserHelper.currentUserChurch.church.id}`);
   }
 
-  const handleAddEvent = (slotInfo: any) => {
+  const handleAddEvent = (slotInfo: { start: Date; end: Date }) => {
     const startTime = new Date(slotInfo.start);
     startTime.setHours(12);
     startTime.setMinutes(0);
@@ -44,13 +44,7 @@ export function EventCalendar(props: Props) {
 
   const handleEventClick = (event: EventInterface) => {
     const ev = { ...event };
-    // let tz = new Date().getTimezoneOffset();
-    // ev.start = new Date(ev.start);
-    // ev.end = new Date(ev.end);
-    // ev.start.setMinutes(ev.start.getMinutes() - tz);
-    // ev.end.setMinutes(ev.end.getMinutes() - tz);
     setDisplayEvent(ev);
-    //setEditEvent(ev);
   }
 
   const handleDone = () => {

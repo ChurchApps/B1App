@@ -30,11 +30,11 @@ export default function PrintPage({ params }: { params: Params }) {
 
 
   const loadData = () => {
-    ApiHelper.get("/funds", "GivingApi").then((f: any) => { setFunds(f) });
-    ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: any) => { setFundDonations(fd) });
+    ApiHelper.get("/funds", "GivingApi").then((f: FundInterface[]) => { setFunds(f) });
+    ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: FundDonationInterface[]) => { setFundDonations(fd) });
     ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
       const result: DonationInterface[] = []
-      d.forEach((don: any) => {
+      d.forEach((don: DonationInterface) => {
         don.donationDate = new Date(don.donationDate);
         if (don.donationDate.getFullYear() === currYear) {
           result.push(don);
@@ -69,7 +69,7 @@ export default function PrintPage({ params }: { params: Params }) {
   }
 
   const getFundArray = () => {
-    const result: any[] = [];
+    const result: { fund: string; amount: number }[] = [];
     fundDonations.forEach((fd) => {
       const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
       const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
@@ -100,7 +100,7 @@ export default function PrintPage({ params }: { params: Params }) {
 
   const tableFundTotal = () => {
     const fundArray = getFundArray();
-    const result: any[] = [];
+    const result: { fund: string; total: number }[] = [];
     fundArray.forEach((fd) => {
       const existing = ArrayHelper.getOne(result, "fund", fd.fund);
       if (existing) {

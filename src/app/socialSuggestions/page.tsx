@@ -5,11 +5,25 @@ import { ErrorMessages } from "@churchapps/apphelper";
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
+interface SocialPost {
+  content: string;
+  platform?: string;
+}
+
+interface SocialSuggestionsResponse {
+  error: string | null;
+  posts: SocialPost[];
+}
+
+interface OutlineResponse {
+  outline: string;
+}
+
 export default function SocialSuggestions() {
   const [url, setUrl] = useState("");
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<SocialPost[]>([]);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const [lessonOutline, setLessonOutline] = useState({ url: "", title: "", author: "" });
   const [scriptLoading, setScriptLoading] = useState(false);
@@ -41,7 +55,7 @@ export default function SocialSuggestions() {
   const handleFetchPosts = () => {
     setLoading(true);
     ApiHelper.get("/sermons/socialSuggestions?youtubeVideoId=" + getYouTubeKey(url), "ContentApi")
-      .then((data: any) => {
+      .then((data: SocialSuggestionsResponse) => {
         if (data.error === null) {
           setErrors([]);
           setPosts(data.posts);
@@ -62,7 +76,7 @@ export default function SocialSuggestions() {
     setScriptLoading(true);
     setLessonOutlineResult("");
     ApiHelper.get(`/sermons/outline?url=${encodeURIComponent(lessonOutline.url)}&title=${lessonOutline.title}&author=${lessonOutline.author}`, "ContentApi")
-      .then((data: any) => {
+      .then((data: OutlineResponse) => {
         setLessonOutlineResult(data.outline)
       })
       .finally(() => {
@@ -98,8 +112,8 @@ export default function SocialSuggestions() {
             </Button>
           </div>
           <div style={{ margin: 20 }}>
-            {posts?.map((post: any) => (
-              <div style={{ padding: 20 }}>{JSON.stringify(post)}</div>
+            {posts?.map((post: SocialPost, index: number) => (
+              <div key={index} style={{ padding: 20 }}>{JSON.stringify(post)}</div>
             ))}
           </div>
         </Grid>

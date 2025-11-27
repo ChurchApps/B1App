@@ -15,12 +15,19 @@ interface Props {
 
 export const UpcomingDates: React.FC<Props> = (props) => {
 
-  const getData = () => {
+interface UpcomingDateData {
+  timeId: string;
+  timeName: string;
+  startTime: Date;
+  status: string;
+}
+
+  const getData = (): UpcomingDateData[] => {
     if (props.times?.length === 0) return [];
-    const data:any[] = [];
+    const data: UpcomingDateData[] = [];
     props.assignments.forEach((assignment) => {
-      const position = props?.positions.find((p: any) => p.id === assignment.positionId);
-      const plan = props?.plans.find((p: any) => p.id === position?.planId);
+      const position = props?.positions.find((p) => p.id === assignment.positionId);
+      const plan = props?.plans.find((p) => p.id === position?.planId);
       const times:TimeInterface[] = ArrayHelper.getAll(props.times, "planId", plan?.id);
       times.forEach(t => {
         if (new Date(t.endTime) > new Date()) {

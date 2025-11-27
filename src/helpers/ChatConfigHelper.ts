@@ -22,8 +22,7 @@ export class ChatConfigHelper {
   }
 
   static async load(keyName: string) {
-    let result: ConfigurationInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: any) => response.json());
-    //result.appearance = await AppearanceHelper.load(result.churchId);
+    let result: ConfigurationInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;

@@ -28,7 +28,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   const [overlayContent, setOverlayContent] = React.useState(false);
 
   const loadData = async (keyName: string) => {
-    let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: any) => response.json());
+    let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;

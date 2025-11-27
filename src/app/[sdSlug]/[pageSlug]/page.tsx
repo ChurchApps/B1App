@@ -15,21 +15,10 @@ import { notFound } from "next/navigation";
 import { SermonsPage } from "./components/SermonsPage";
 import { DonatePage } from "./components/DonatePage";
 
-
-
-// interface Props {
-//   params: {
-//     sdSlug: string;
-//     pageSlug: string;
-//   };
-// }
-
 type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
-  //const result = unstable_cache(loadData, ["/[sdSlug]", sdSlug], {tags:["all", "sdSlug=" + sdSlug]});
-  //return result(sdSlug, pageSlug);
   return loadData(sdSlug, pageSlug);
 }
 

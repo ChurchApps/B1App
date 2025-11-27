@@ -30,6 +30,10 @@ export function Conversation(props: Props) {
     loadNotes(1)
   }, [props])
 
+interface ConversationResponse {
+  messages: MessageInterface[];
+}
+
   const loadNotes = async (nextPage: number = 1) => {
     try {
       if (!props?.conversation?.groupId) return;
@@ -37,7 +41,7 @@ export function Conversation(props: Props) {
       setLoading(true);
       const limit = props.pageSize || 10;
 
-      const response: any[] = await ApiHelper.get(
+      const response: ConversationResponse[] = await ApiHelper.get(
         `/conversations/messages/group/${props.conversation.groupId}?page=${nextPage}&limit=${limit}`,
         "MessagingApi"
       );

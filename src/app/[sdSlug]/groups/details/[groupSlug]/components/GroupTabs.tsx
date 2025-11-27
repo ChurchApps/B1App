@@ -9,6 +9,11 @@ import { UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { Permissions } from "@churchapps/helpers";
 
+interface TabItem {
+  key: string;
+  label: string;
+}
+
 interface Props {
   config: ConfigurationInterface;
   onTabChange: (tab: string) => void;
@@ -18,7 +23,7 @@ interface Props {
 export const GroupTabs = (props: Props) => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
-  const tabs: any[] = []
+  const tabs: TabItem[] = []
 
   const [group, setGroup] = useState(props.group);
 
@@ -56,9 +61,8 @@ export const GroupTabs = (props: Props) => {
 
 
 
-  const getItem = (tab: any) =>
-    //if (tab.key === selectedTab) return (<li className="active"><a href="about:blank" onClick={(e) => { e.preventDefault(); setSelectedTab(tab.key); }}><Icon>{tab.icon}</Icon> {tab.label}</a></li>)
-    (<li><a href="about:blank" onClick={(e) => { e.preventDefault(); props.onTabChange(tab.key) }}>{tab.label}</a></li>)
+  const getItem = (tab: TabItem) =>
+    (<li key={tab.key}><a href="about:blank" onClick={(e) => { e.preventDefault(); props.onTabChange(tab.key) }}>{tab.label}</a></li>)
 
   return <ul>
     {getTabs().map((tab, index) => getItem(tab))}

@@ -7,7 +7,6 @@ interface Props { chatState: ChatStateInterface | undefined, visible: boolean, s
 
 export const ReceivePrayer: React.FC<Props> = (props) => {
 
-  //const [conversation, setConversation] = React.useState<ConversationInterface>(null)
   const [selectedConversation, setSelectedConversation] = React.useState("");
 
   const viewPrayer = (e: React.MouseEvent) => {
@@ -21,7 +20,6 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
     props.chatState.hostRoom.prayerRequests.splice(idx, 1);
     ChatHelper.onChange();
     ChatHelper.joinRoom(conv.id, conv.churchId);
-    //setConversation(conv);
   }
 
   const getRequests = () => {
@@ -36,15 +34,6 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
     if (links.length > 0) return (<div style={{ padding: 10 }}>{links}</div>);
     else return (<div style={{ padding: 10 }}><i>There are no pending prayer requests at this time.</i></div>);
   }
-
-  /*
-    const getChat = () => {
-        if (conversation !== null) return (<>
-            <div style={{ flex: "0 0 0 25px", backgroundColor: "#eee", paddingLeft: 10 }}>{conversation.title}</div>
-            <Chat room={props.chatState.privateRooms[0]} user={props.chatState.user} visible={props.visible} enableAttendance={true} />
-        </>);
-        else return null;
-    }*/
 
   const selectConversation = (conversationId: string) => {
     setSelectedConversation(conversationId);

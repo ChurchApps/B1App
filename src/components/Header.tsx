@@ -29,10 +29,10 @@ type Props = {
 };
 
 //structure navLinks based on their parentId
-const getNestedChildren = (arr: LinkInterface[], parent: string) => {
+const getNestedChildren = (arr: LinkInterface[], parent: string | undefined) => {
   const result: LinkInterface[] = [];
   for (const i in arr) {
-    if (arr[i].parentId == parent) {
+    if (arr[i].parentId === parent) {
       if (arr[i].id) {
         const children = getNestedChildren(arr, arr[i].id);
         if (children.length) {
@@ -48,7 +48,7 @@ const getNestedChildren = (arr: LinkInterface[], parent: string) => {
 export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
   const [open, setOpen] = useState(false);
-  const [menuAnchor, setMenuAnchor] = useState<any>(null);
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [logoError, setLogoError] = useState(false);
   const pathname = usePathname()
@@ -60,16 +60,8 @@ export function Header(props: Props) {
   }
 
   useEffect(() => {
-    // ApiHelper.get("/settings/public/" + props.church.id, "ContentApi").then((data) => {
-    //   if (data.showLogin) {
-    //     if (data.showLogin === "true") setShowLogin(true);
-    //     else setShowLogin(false);
-    //   }
-    // })
-
     if (typeof window !== "undefined" && props.config?.church?.id) {
-      // Fetch settings from the API
-      ApiHelper.getAnonymous("/settings/public/" + props.config?.church.id, "ContentApi").then((data: any) => {
+      ApiHelper.getAnonymous("/settings/public/" + props.config?.church.id, "ContentApi").then((data: { showLogin?: string }) => {
         if (data.showLogin) {
           setShowLogin(data.showLogin === "true");
         }
@@ -93,9 +85,6 @@ export function Header(props: Props) {
     setLogoError(false);
   }, [props.config?.appearance?.logoLight, props.config?.appearance?.logoDark, transparent]);
 
-  // const pathName = usePathname();
-  // const returnUrl = (pathName === "/") ? "" :  `?returnUrl=${encodeURIComponent(pathName)}`;
-
   const memberPortal = <MenuItem onClick={() => { redirect("/my") }} dense data-testid="member-portal-menu-item" aria-label="Go to member portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
   const adminPortal = (UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit)) && (
     <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/` }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
@@ -112,7 +101,7 @@ export function Header(props: Props) {
             label={`${UserHelper.user.firstName} ${UserHelper.user.lastName}`}
             icon={<Icon id="userIcon" sx={{ color: "#36547e !important" }}>account_circle</Icon>}
             sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
-            onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.target); }}
+            onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.currentTarget); }}
             data-testid="user-menu-chip"
             aria-label="User menu"
           />
@@ -186,38 +175,6 @@ export function Header(props: Props) {
     }
     else return props.config?.appearance?.logoLight || null;
   }
-
-  /*
-  const getLogo = () => {
-    if (transparent) {
-      let textColor = props.sections[0]?.textColor || "#FFF";
-      if (textColor.indexOf("var(--") > -1) {
-        const palette = JSON.parse(props.globalStyles.palette);
-        textColor = textColor.replace("var(--", "").replace(")", "");
-        textColor = palette[textColor];
-        if (!textColor) textColor = "#FFF";
-      }
-      const logo = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || null, props.churchSettings?.logoDark || null, textColor);
-      return logo !== "" ? logo : null;
-    } else {
-      return props.churchSettings?.logoLight || null;
-    }
-  };*/
-
-  // const getLogo = () => {
-  //   if (transparent) {
-  //     let textColor = props.sections[0]?.textColor || "#FFF";
-  //     if (textColor.indexOf("var(--") > -1) {
-  //       const palette = JSON.parse(props.globalStyles.palette);
-  //       textColor = textColor.replace("var(--", "").replace(")", "");
-  //       textColor = palette[textColor];
-  //       if (!textColor) textColor = "#FFF"
-  //     }
-  //     let result = AppearanceHelper.getLogoByTextColor(props.churchSettings?.logoLight || "", props.churchSettings?.logoDark || "", textColor)
-  //     return result;
-  //   }
-  //   else return props.churchSettings?.logoLight || ""; //"https://content.churchapps.org/3/settings/logoLight.png?dt=1638219047334";
-  // }
 
   //structured navLinks based on their parentId
   const structuredData = props.config?.navLinks && getNestedChildren(props.config?.navLinks, undefined);

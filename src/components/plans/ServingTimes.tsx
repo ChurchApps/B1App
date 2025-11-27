@@ -21,11 +21,20 @@ export const ServingTimes: React.FC<Props> = (props) => {
     return result;
   }
 
+interface ServingTimeData {
+  assignmentId: string;
+  planId: string;
+  planName: string;
+  serviceDate: Date;
+  position: string;
+  status: string;
+}
+
   const getRows = () => {
-    const data:any[] = [];
+    const data: ServingTimeData[] = [];
     props.assignments.forEach((assignment) => {
-      const position = props?.positions.find((p: any) => p.id === assignment.positionId);
-      const plan = props?.plans.find((p: any) => p.id === position?.planId);
+      const position = props?.positions.find((p) => p.id === assignment.positionId);
+      const plan = props?.plans.find((p) => p.id === position?.planId);
       if (position && plan) data.push({ assignmentId:assignment.id, planId: plan.id, planName:plan.name, serviceDate: new Date(plan.serviceDate), position: position.name, status:assignment.status || "Unconfirmed" });
     });
     ArrayHelper.sortBy(data, "serviceDate", true)

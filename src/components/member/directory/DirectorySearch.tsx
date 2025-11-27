@@ -2,7 +2,7 @@ import { Button, TextField, Icon, Box, Stack, Chip, Divider, SelectChangeEvent, 
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
-import type { GroupInterface } from "@churchapps/helpers";
+import type { GroupInterface, PersonInterface } from "@churchapps/helpers";
 import { PeopleSearchResults } from "./PeopleSearchResults"
 
 interface Props { selectedHandler: (personId: string) => void }
@@ -11,19 +11,19 @@ export const DirectorySearch: React.FC<Props> = (props) => {
 
   const [searchText, setSearchText] = React.useState("");
   const [searchGroupId, setSearchGroupId] = React.useState("");
-  const [searchResults, setSearchResults] = React.useState(null);
+  const [searchResults, setSearchResults] = React.useState<PersonInterface[] | null>(null);
   const [searchCategory, setSearchCategory] = React.useState<"people" | "group">("people");
   const [groups, setGroups] = React.useState<GroupInterface[]>(null);
 
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
     let term = encodeURIComponent(searchText.trim());
-    if (searchCategory === "people") ApiHelper.get("/people/search?term=" + term, "MembershipApi").then((data: any) => setSearchResults(data));
-    else ApiHelper.get("/people/search/group?groupId=" + searchGroupId, "MembershipApi").then((data: any) => setSearchResults(data));
+    if (searchCategory === "people") ApiHelper.get("/people/search?term=" + term, "MembershipApi").then((data: PersonInterface[]) => setSearchResults(data));
+    else ApiHelper.get("/people/search/group?groupId=" + searchGroupId, "MembershipApi").then((data: PersonInterface[]) => setSearchResults(data));
   }
 
   const loadData = () => {
-    ApiHelper.get("/people/directory/all", "MembershipApi").then((data: any) => { setSearchResults(data) });
+    ApiHelper.get("/people/directory/all", "MembershipApi").then((data: PersonInterface[]) => { setSearchResults(data) });
     ApiHelper.get("/groups", "MembershipApi").then((data: GroupInterface[]) => setGroups(data));
   }
 

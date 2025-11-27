@@ -52,7 +52,7 @@ export function RRuleEditor(props: Props) {
     if (!options.byweekday) options.byweekday=[];
     let selected = rRuleOptions.byweekday?.includes(value.weekday);
     if (!selected) options.byweekday.push(value.weekday);
-    else options.byweekday = options.byweekday.filter((x: any) => x !== value.weekday);
+    else options.byweekday = options.byweekday.filter((x: number | Weekday) => x !== value.weekday);
     setRRuleOptions(options);
   }
 

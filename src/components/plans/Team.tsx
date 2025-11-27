@@ -18,9 +18,9 @@ export const Team: React.FC<Props> = (props) => {
     if (!props.people) return;
     const rows:React.ReactElement[] = [];
     props.positions.forEach((position) => {
-      const posAssignments = props.assignments.filter((a: any) => a.positionId === position.id);
+      const posAssignments = props.assignments.filter((a) => a.positionId === position.id);
       posAssignments.forEach((assignment) => {
-        const person = props.people.find((p: any) => p.id === assignment.personId);
+        const person = props.people.find((p) => p.id === assignment.personId);
         rows.push(
           <TableRow key={assignment.id}>
             <TableCell style={{width:70}}>

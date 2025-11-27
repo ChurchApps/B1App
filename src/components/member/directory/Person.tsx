@@ -37,10 +37,16 @@ export const Person: React.FC<Props> = (props) => {
     return contactMethods;
   }
 
+  interface ProfileChange {
+    field: string;
+    label: string;
+    value: string;
+  }
+
   const showChanges = () => {
     let result: React.ReactElement[] = [];
     requestedChanges.map((t) => {
-      const changes = JSON.parse(t.data);
+      const changes: ProfileChange[] = JSON.parse(t.data);
       result.push (
         <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText="Profile Changes" data-testid={`profile-changes-${t.id}`}>
           <Typography fontSize="13px" fontStyle="italic" sx={{ textIndent: "10px" }}>Requested by {t.createdByLabel}</Typography>
@@ -52,11 +58,11 @@ export const Person: React.FC<Props> = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {changes.map((c: any) => {
-                let val = c.value;
+              {changes.map((c: ProfileChange) => {
+                let val: React.ReactNode = c.value;
                 if (c.field === "photo") val = <img src={c.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />
                 return (
-                  <TableRow>
+                  <TableRow key={c.field}>
                     <TableCell>{c.label}</TableCell>
                     <TableCell>{val}</TableCell>
                   </TableRow>
@@ -76,8 +82,8 @@ export const Person: React.FC<Props> = (props) => {
       return;
     }
 
-    ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then((data: any) => setPerson(data));
-    ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then((data: any) => setRequestedChanges(data));
+    ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then((data: PersonInterface) => setPerson(data));
+    ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then((data: TaskInterface[]) => setRequestedChanges(data));
   }
 
   const getEditContent = () => {

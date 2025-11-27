@@ -94,7 +94,7 @@ export function EditEventModal(props: Props) {
       }
 
       ev.recurrenceRule = rRule;
-      ApiHelper.post("/events", [ev], "ContentApi").then((data: any) => {
+      ApiHelper.post("/events", [ev], "ContentApi").then((data: EventInterface[]) => {
         props.onDone();
       });
     }

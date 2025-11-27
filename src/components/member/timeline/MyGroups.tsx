@@ -8,7 +8,7 @@ export default function MyGroups() {
   const [groups, setGroups] = useState<GroupInterface[]>([]);
 
   const loadData = () => {
-    ApiHelper.get("/groups/my", "MembershipApi").then((data: any) => setGroups(data));
+    ApiHelper.get("/groups/my", "MembershipApi").then((data: GroupInterface[]) => setGroups(data));
   };
 
   useEffect(loadData, []);

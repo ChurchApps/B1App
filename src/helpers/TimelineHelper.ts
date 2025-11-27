@@ -81,18 +81,19 @@ export class TimelineHelper {
     const peopleIds:string[] = [];
     const groupIds:string[] = [];
     allPosts.forEach(p => {
+      const data = p.data as Record<string, string> | undefined;
       p.conversation?.messages?.forEach(m => {
         if (m.personId && peopleIds.indexOf(m.personId) === -1) peopleIds.push(m.personId);
       });
       if (p.postType==="group" && p.conversation.contentId && groupIds.indexOf(p.conversation.contentId) === -1) groupIds.push(p.conversation.contentId);
-      if (p.postType==="event" && p.data && p.data.groupId && groupIds.indexOf(p.data.groupId) === -1) groupIds.push(p.data.groupId);
-      if (p.postType==="task") {
-        if (p.data.associatedWithType==="person" && peopleIds.indexOf(p.data.associatedWithId) === -1) peopleIds.push(p.data.associatedWithId);
-        if (p.data.createdByType==="person" && peopleIds.indexOf(p.data.createdById) === -1) peopleIds.push(p.data.createdById);
-        if (p.data.assignedToType==="person" && peopleIds.indexOf(p.data.assignedToId) === -1) peopleIds.push(p.data.assignedToId);
-        if (p.data.associatedWithType==="group" && peopleIds.indexOf(p.data.associatedWithId) === -1) groupIds.push(p.data.associatedWithId);
-        if (p.data.createdByType==="group" && peopleIds.indexOf(p.data.createdById) === -1) groupIds.push(p.data.createdById);
-        if (p.data.assignedToType==="group" && peopleIds.indexOf(p.data.assignedToId) === -1) groupIds.push(p.data.assignedToId);
+      if (p.postType==="event" && data && data.groupId && groupIds.indexOf(data.groupId) === -1) groupIds.push(data.groupId);
+      if (p.postType==="task" && data) {
+        if (data.associatedWithType==="person" && peopleIds.indexOf(data.associatedWithId) === -1) peopleIds.push(data.associatedWithId);
+        if (data.createdByType==="person" && peopleIds.indexOf(data.createdById) === -1) peopleIds.push(data.createdById);
+        if (data.assignedToType==="person" && peopleIds.indexOf(data.assignedToId) === -1) peopleIds.push(data.assignedToId);
+        if (data.associatedWithType==="group" && peopleIds.indexOf(data.associatedWithId) === -1) groupIds.push(data.associatedWithId);
+        if (data.createdByType==="group" && peopleIds.indexOf(data.createdById) === -1) groupIds.push(data.createdById);
+        if (data.assignedToType==="group" && peopleIds.indexOf(data.assignedToId) === -1) groupIds.push(data.assignedToId);
       }
     });
 

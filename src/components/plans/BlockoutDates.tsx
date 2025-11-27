@@ -14,7 +14,7 @@ export const BlockoutDates: React.FC<Props> = (props) => {
   const [blockoutDate, setBlockoutDate] = React.useState<BlockoutDateInterface>(null);
 
   const loadData = () => {
-    ApiHelper.get("/blockoutDates/my", "DoingApi").then((data: any) => setBlockoutDates(data));
+    ApiHelper.get("/blockoutDates/my", "DoingApi").then((data: BlockoutDateInterface[]) => setBlockoutDates(data));
     setBlockoutDate(null);
   }
 

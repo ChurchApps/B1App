@@ -12,7 +12,7 @@ export const SongDetailLinks = (props: Props) => {
 
   useEffect(() => {
     if (props.songDetail?.id) {
-      ApiHelper.get("/songDetailLinks/songDetail/" + props.songDetail?.id, "ContentApi").then((data: any) => {
+      ApiHelper.get("/songDetailLinks/songDetail/" + props.songDetail?.id, "ContentApi").then((data: SongDetailLinkInterface[]) => {
         setSongDetailLinks(data);
       });
     }

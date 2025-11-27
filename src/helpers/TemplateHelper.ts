@@ -34,7 +34,6 @@ export class TemplateHelper {
     section: { background: "var(--light)", headingColor: "var(--dark)", linkColor: "var(--darkAccent)", pageId: "", sort: 0, textColor: "var(--dark)", zone: "main" },
     heading: { elementType: "text", sectionId: "", sort: 1, answersJSON: '{"textAlignment":"center","text":"## DONATE"}', answers: { text: "## DONATE", textAlignment: "center" } },
     form: { elementType: "donation", sectionId: "", sort: 2 }
-    //footer: { background: "#FFF", pageId: "", sort: 0, targetBlockId: "", textColor: "dark", zone: "footer" },
   };
 
   static aboutUs = {
@@ -44,7 +43,6 @@ export class TemplateHelper {
     text1: { elementType: "text", sectionId: "", sort: 2, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"${TemplateHelper.demoText}\"}`, answers: { text: TemplateHelper.demoText, textAlignment: "center" } },
     text2: { elementType: "text", sectionId: "", sort: 3, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"${TemplateHelper.demoText}\"}`, answers: { text: TemplateHelper.demoText, textAlignment: "center" } },
     text3: { elementType: "text", sectionId: "", sort: 4, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"${TemplateHelper.demoText}\"}`, answers: { text: TemplateHelper.demoText, textAlignment: "center" } }
-    //footer: { background: "#FFF", pageId: "", sort: 0, targetBlockId: "", textColor: "dark", zone: "footer" },
   };
 
   static visit = {
@@ -56,7 +54,6 @@ export class TemplateHelper {
     },
     text1: { elementType: "text", sectionId: "", sort: 3, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"${TemplateHelper.demoText}\"}`, answers: { text: TemplateHelper.demoText, textAlignment: "center" } },
     map: { elementType: "map", sectionId: "", sort: 4, answersJSON: "" }
-    //footer: { background: "#FFF", pageId: "", sort: 0, targetBlockId: "", textColor: "dark", zone: "footer" },
   };
 
   static sermons = {
@@ -65,7 +62,6 @@ export class TemplateHelper {
     liveStream: { elementType: "stream", sectionId: "", sort: 1, answersJSON: '{"offlineContent":"hide"}' },
     heading: { elementType: "text", sectionId: "", sort: 2, answersJSON: '{"textAlignment":"center","text":"## SERMONS"}', answers: { text: "## SERMONS", textAlignment: "center" } },
     sermons: { elementType: "sermons", sectionId: "", sort: 3 }
-    //footer: { background: "#FFF", pageId: "", sort: 0, targetBlockId: "", textColor: "dark", zone: "footer" },
   };
 
   static home = {
@@ -76,11 +72,10 @@ export class TemplateHelper {
     aboutHeading: { elementType: "text", sectionId: "", sort: 1, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"#### About Us\"}`, answers: { text: "#### About Us", textAlignment: "center" } },
     aboutText: { elementType: "text", sectionId: "", sort: 2, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"${TemplateHelper.demoText}\"}`, answers: { text: TemplateHelper.demoText, textAlignment: "center" } },
     aboutText2: { elementType: "text", sectionId: "", sort: 3, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"${TemplateHelper.demoText}\"}`, answers: { text: TemplateHelper.demoText, textAlignment: "center" } }
-    //footer: { background: "#FFF", pageId: "", sort: 0, targetBlockId: "", textColor: "dark", zone: "footer" },
   };
 
   static async createDefaultLinks() {
-    const linksLength = await ApiHelper.get("/links?category=website", "ContentApi").then((data: any) => data.length);
+    const linksLength = await ApiHelper.get("/links?category=website", "ContentApi").then((data: LinkInterface[]) => data.length);
     const linksArr: LinkInterface[] = [];
     this.links.forEach((l, index) => {
       l.sort = linksLength + index;
@@ -161,7 +156,6 @@ export class TemplateHelper {
         { ...this.home.aboutText2, sectionId: section2.id },
       ],
       "ContentApi");
-    //if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.home.footer, pageId: page.id, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
   static async createVisitPage(pageId?: string) {
@@ -191,7 +185,6 @@ export class TemplateHelper {
       ],
       "ContentApi"
     );
-    //if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.visit.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
   static async createSermonsPage(pageId?: string) {
@@ -207,7 +200,6 @@ export class TemplateHelper {
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.sermons.section, pageId: PAGE_ID }], "ContentApi");
     const section = s[0];
     await ApiHelper.post("/elements",[{ ...this.sermons.liveStream, sectionId: section.id }, { ...this.sermons.heading, sectionId: section.id }, { ...this.sermons.sermons, sectionId: section.id }], "ContentApi");
-    //if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.sermons.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
   static async createAboutUsPage(pageId?: string) {
@@ -223,7 +215,6 @@ export class TemplateHelper {
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.aboutUs.section, pageId: PAGE_ID }], "ContentApi");
     const section = s[0];
     await ApiHelper.post("/elements", [{ ...this.aboutUs.heading, sectionId: section.id }, { ...this.aboutUs.text1, sectionId: section.id }, { ...this.aboutUs.text2, sectionId: section.id }, { ...this.aboutUs.text3, sectionId: section.id }], "ContentApi");
-    //if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.aboutUs.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
   static async createDonatePage(pageId?: string) {
@@ -239,7 +230,6 @@ export class TemplateHelper {
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.donate.section, pageId: PAGE_ID }], "ContentApi");
     const section = s[0];
     await ApiHelper.post("/elements", [{ ...this.donate.heading, sectionId: section.id }, { ...this.donate.form, sectionId: section.id }], "ContentApi");
-    //if (this.targetBlockId) await ApiHelper.post("/sections", [{ ...this.donate.footer, pageId: PAGE_ID, targetBlockId: this.targetBlockId }], "ContentApi");
   }
 
   static async createAIPage(title: string, description: string, url: string) {

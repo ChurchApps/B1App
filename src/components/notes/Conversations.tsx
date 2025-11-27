@@ -18,7 +18,6 @@ interface Props {
 export function Conversations(props: Props) {
 
   const [conversations, setConversations] = React.useState<ConversationInterface[]>(null)
-  //const [editMessageId, setEditMessageId] = React.useState(null)
 
   const loadConversations = async () => {
     const conversations: ConversationInterface[] = (props.contentId) ? await ApiHelper.get("/conversations/messages/" + props.contentType + "/" + props.contentId, "MessagingApi") : [];
@@ -37,7 +36,6 @@ export function Conversations(props: Props) {
       })
     }
     setConversations(conversations);
-    //setEditMessageId(null);
   };
 
   const getConversations = () => {

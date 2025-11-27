@@ -2,15 +2,17 @@
 
 import Head from "next/head";
 import { createTheme, CssBaseline } from "@mui/material";
+import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
 import Zone from "./Zone";
+import { PageInterface } from "@/helpers";
 
 type Props = {
-  pageData: any;
+  pageData: PageInterface;
   pageTitle?: string;
   metaDescription?: string;
   ogDescription?: string;
-  churchSettings?: any;
+  churchSettings?: AppearanceInterface;
   church?: ChurchInterface;
   navLinks?: LinkInterface[];
 };
