@@ -26,7 +26,6 @@ export class EnvironmentHelper {
       default: EnvironmentHelper.initDev(); break;
     }
     EnvironmentHelper.Common.init(stage)
-    CommonEnvironmentHelper.AskApi = "http://localhost:8097"
 
     ApiHelper.apiConfigs = [
       { keyName: "MembershipApi", url: EnvironmentHelper.Common.MembershipApi, jwt: "", permissions: [] },

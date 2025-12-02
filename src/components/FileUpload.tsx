@@ -19,7 +19,9 @@ export function FileUpload(props: Props) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setUploadedFile(e.target.files[0]);
+    if (e.target.files && e.target.files.length > 0) {
+      setUploadedFile(e.target.files[0]);
+    }
   };
 
   const convertBase64 = () => new Promise((resolve, reject) => {

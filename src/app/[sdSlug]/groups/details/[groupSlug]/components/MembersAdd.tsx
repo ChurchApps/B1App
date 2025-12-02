@@ -20,10 +20,10 @@ export const MembersAdd: React.FC<Props> = (props) => {
     });
   }, [props.group]);
   const addMember = (gm: GroupMemberInterface) => {
-    let members = groupMembers;
-    let idx = members.indexOf(gm);
-    let person = members.splice(idx, 1)[0].person;
-    setGroupMembers(members);
+    const idx = groupMembers.indexOf(gm);
+    const person = groupMembers[idx].person;
+    const updatedMembers = [...groupMembers.slice(0, idx), ...groupMembers.slice(idx + 1)];
+    setGroupMembers(updatedMembers);
     props.addFunction(person);
   }
 

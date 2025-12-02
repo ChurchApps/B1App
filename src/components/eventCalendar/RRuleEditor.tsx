@@ -159,7 +159,7 @@ export function RRuleEditor(props: Props) {
   useEffect(() => {
     const result = EventHelper.getPartialRRuleString(rRuleOptions);
     props.onChange(result);
-  }, [rRuleOptions]);
+  }, [rRuleOptions, props.onChange]);
 
   return (
     <>

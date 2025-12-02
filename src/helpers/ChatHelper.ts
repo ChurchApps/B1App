@@ -172,8 +172,19 @@ export class ChatHelper {
   }
 
   static insertLinks(text: string) {
-    let exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
-    return text.replace(exp, "<a href='$1' target='_blank'>$1</a>");
+    const escapeHtml = (str: string) => str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+    const exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
+    const escapedText = escapeHtml(text);
+    return escapedText.replace(exp, (match) => {
+      const safeUrl = encodeURI(decodeURI(match));
+      return `<a href='${safeUrl}' target='_blank' rel='noopener noreferrer'>${match}</a>`;
+    });
   }
 
   static getUser() {

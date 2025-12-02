@@ -38,6 +38,10 @@ export class ConfigHelper {
   }
 
   static getFirstRoute(config: ConfigurationInterface) {
+    if (!config.navLinks || config.navLinks.length === 0) {
+      return "/"
+    }
+
     const firstTab = config.navLinks[0]
 
     if (!firstTab) {
