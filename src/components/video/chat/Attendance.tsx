@@ -62,7 +62,7 @@ export const Attendance: React.FC<Props> = (props) => {
   }
 
   const getRoomForConnection = (connectionId: string) => {
-    let privateRoom: ChatRoomInterface = null;
+    let privateRoom: ChatRoomInterface | null = null;
     ChatHelper.current.privateRooms.forEach(pr => {
       if (pr.conversation.contentType === "privateMessage" && pr.conversation.contentId === connectionId) privateRoom = pr;
     });
@@ -75,7 +75,7 @@ export const Attendance: React.FC<Props> = (props) => {
       let privateRoom: ChatRoomInterface = getRoomForConnection(connectionId);
       if (privateRoom !== null) {
         if (privateRoom.joined) result = <i className="comment" style={{ marginLeft: 10 }}></i>
-        else result = <i className="comment" style={{ marginLeft: 10 }}></i>
+        else result = <i className="comment outline" style={{ marginLeft: 10, opacity: 0.5 }}></i>
 
       }
     }
@@ -121,9 +121,9 @@ export const Attendance: React.FC<Props> = (props) => {
 
       if (!props.user.isHost || v.count > 1) people.push(<div key={i}><i className="person"></i>{v.displayName} {countSpan}</div>);
       else {
-        for (let i = 0; i < props.attendance.viewers.length; i++) {
-          const c = props.attendance.viewers[i];
-          if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        for (let j = 0; j < props.attendance.viewers.length; j++) {
+          const c = props.attendance.viewers[j];
+          if (c.displayName === v.displayName) people.push(<div key={j} onContextMenu={(e) => handleAttendeeContext(e, c.id)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <p style={{ margin: 0 }}>{v.displayName}</p>
             <div>{getPMIcon(c.id)}{getBlockIcon(c.ipAddress)}</div>
           </div>);

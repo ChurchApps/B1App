@@ -25,12 +25,16 @@ export class PageHelper {
         if (existing) { existing.title = p.title; existing.custom = true; existing.pageId = p.id; }
         else result.push(page);
       } else {
-        let existing = groupPage.children.find((r) => r.url === p.url);
-        if (existing) { existing.title = p.title; existing.custom = true; existing.pageId = p.id; }
-        else groupPage.children.push(page);
+        if (groupPage && groupPage.children) {
+          let existing = groupPage.children.find((r) => r.url === p.url);
+          if (existing) { existing.title = p.title; existing.custom = true; existing.pageId = p.id; }
+          else groupPage.children.push(page);
+        }
       }
     });
-    groupPage.children = PageHelper.sortLevel(groupPage.children);
+    if (groupPage && groupPage.children) {
+      groupPage.children = PageHelper.sortLevel(groupPage.children);
+    }
     result = PageHelper.sortLevel(result);
     return result;
   }

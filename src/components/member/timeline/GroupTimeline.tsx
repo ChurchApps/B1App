@@ -5,11 +5,12 @@ import { ApiHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/helpers";
 import { TimelinePost } from "./TimelinePost";
 import { TimelineHelper } from "@/helpers/TimelineHelper";
+import { TimelinePostInterface } from "@/helpers";
 
 interface Props { context: UserContextInterface; groupId: string;}
 
 export const GroupTimeline: React.FC<Props> = (props) => {
-  const [posts, setPosts] = React.useState<any[]>([]);
+  const [posts, setPosts] = React.useState<TimelinePostInterface[]>([]);
   const [people, setPeople] = React.useState<PersonInterface[]>([]);
   const [groups, setGroups] = React.useState<GroupInterface[]>([]);
 

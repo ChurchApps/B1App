@@ -122,7 +122,7 @@ export class ChatHelper {
   }
 
   static getOrCreatePrivateRoom = (conversation: ConversationInterface) => {
-    let privateRoom: ChatRoomInterface = null;
+    let privateRoom: ChatRoomInterface | null = null;
     ChatHelper.current.privateRooms.forEach((pr: ChatRoomInterface) => {
       if (pr.conversation.id === conversation.id) privateRoom = pr;
     });
@@ -164,7 +164,7 @@ export class ChatHelper {
 
   static getRoom = (conversationId: string): ChatRoomInterface => {
     const c = ChatHelper.current;
-    let result: ChatRoomInterface = null;
+    let result: ChatRoomInterface | null = null;
     if (c.mainRoom?.conversation.id === conversationId) result = c.mainRoom;
     else if (c.hostRoom?.conversation.id === conversationId) result = c.hostRoom;
     else c.privateRooms.forEach((r: ChatRoomInterface) => { if (r.conversation.id === conversationId) result = r; });

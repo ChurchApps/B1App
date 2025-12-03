@@ -32,7 +32,7 @@ export const DirectorySearch: React.FC<Props> = (props) => {
     else setSearchGroupId(e.target.value);
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<any>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } }
 
   const EndAdornment = () => (
     <Stack direction="row" alignItems="center">
