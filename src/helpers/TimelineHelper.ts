@@ -65,9 +65,11 @@ export class TimelineHelper {
     const results = await Promise.all(promises);
     let allPosts:TimelinePostInterface[] = [];
     results.forEach((result: TimelineApiResponse[]) => {
-      result.forEach((r) => {
-        allPosts.push({ postId:r.postId, postType:r.postType, groupId:r.groupId, data:r})
-      });
+      if (Array.isArray(result)) {
+        result.forEach((r) => {
+          allPosts.push({ postId:r.postId, postType:r.postType, groupId:r.groupId, data:r})
+        });
+      }
     });
     return allPosts;
   }

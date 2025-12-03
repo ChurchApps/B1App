@@ -52,7 +52,7 @@ export function PlanClient({ planId }: Props) {
 
   const getPositionDetails = () => {
     const rows: React.ReactElement[] = [];
-    const myAssignments = ArrayHelper.getAll(assignments, "personId", UserHelper.currentUserChurch.person.id);
+    const myAssignments = ArrayHelper.getAll(assignments, "personId", UserHelper.currentUserChurch?.person?.id);
     myAssignments.forEach((assignment) => {
       const position = ArrayHelper.getOne(positions, "id", assignment.positionId);
       const posTimes: TimeInterface[] = [];
