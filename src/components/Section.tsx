@@ -9,7 +9,7 @@ import { YoutubeBackground } from "./YoutubeBackground";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import type { ChurchInterface } from "@churchapps/helpers";
-import { StyleHelper } from "@/helpers/StyleHelper";
+import { StyleHelper } from "@churchapps/apphelper-website";
 
 interface Props {
   first?: boolean,

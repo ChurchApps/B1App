@@ -15,7 +15,7 @@ import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { PersonHelper, SectionInterface, UrlHelper } from "@/helpers";
 import { redirect, usePathname } from "next/navigation";
-import { StyleHelper } from "@/helpers/StyleHelper";
+import { StyleHelper } from "@churchapps/apphelper-website";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 
