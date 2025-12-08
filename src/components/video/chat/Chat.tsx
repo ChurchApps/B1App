@@ -25,8 +25,11 @@ export const Chat: React.FC<Props> = (props) => {
       let currentTime = new Date();
       result = currentTime >= (cs.localChatStart || new Date()) && currentTime <= (cs.localChatEnd || new Date());
     }
-    if (result !== chatEnabled) setChatEnabled(result);
-  }, [chatEnabled]);
+    setChatEnabled(prev => {
+      if (result !== prev) return result;
+      return prev;
+    });
+  }, []);
 
   React.useEffect(() => {
     const id = setInterval(updateChatEnabled, 1000);

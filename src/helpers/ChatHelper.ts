@@ -122,7 +122,7 @@ export class ChatHelper {
   }
 
   static getOrCreatePrivateRoom = (conversation: ConversationInterface) => {
-    let privateRoom: ChatRoomInterface = null;
+    let privateRoom: ChatRoomInterface | null = null;
     ChatHelper.current.privateRooms.forEach((pr: ChatRoomInterface) => {
       if (pr.conversation.id === conversation.id) privateRoom = pr;
     });
@@ -164,7 +164,7 @@ export class ChatHelper {
 
   static getRoom = (conversationId: string): ChatRoomInterface => {
     const c = ChatHelper.current;
-    let result: ChatRoomInterface = null;
+    let result: ChatRoomInterface | null = null;
     if (c.mainRoom?.conversation.id === conversationId) result = c.mainRoom;
     else if (c.hostRoom?.conversation.id === conversationId) result = c.hostRoom;
     else c.privateRooms.forEach((r: ChatRoomInterface) => { if (r.conversation.id === conversationId) result = r; });
@@ -172,8 +172,19 @@ export class ChatHelper {
   }
 
   static insertLinks(text: string) {
-    let exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
-    return text.replace(exp, "<a href='$1' target='_blank'>$1</a>");
+    const escapeHtml = (str: string) => str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+
+    const exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
+    const escapedText = escapeHtml(text);
+    return escapedText.replace(exp, (match) => {
+      const safeUrl = encodeURI(decodeURI(match));
+      return `<a href='${safeUrl}' target='_blank' rel='noopener noreferrer'>${match}</a>`;
+    });
   }
 
   static getUser() {

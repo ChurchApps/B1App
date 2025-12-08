@@ -21,6 +21,31 @@ import { useMountedState } from "@churchapps/apphelper";
 
 interface Props { personId: string, appName?: string, church?: ChurchInterface, churchLogo?: string }
 
+/**
+ * Converts an AppHelper StripePaymentMethod to a Helpers StripePaymentMethod.
+ * These are two distinct classes from different packages with slightly different structures.
+ * AppHelper version includes additional fields (provider, email, gatewayId) that the Helpers version lacks.
+ */
+const convertToHelpersPaymentMethod = (appHelperPM: AppHelperStripePaymentMethod): StripePaymentMethod => new StripePaymentMethod({
+  id: appHelperPM.id,
+  type: appHelperPM.type,
+  card: appHelperPM.name && appHelperPM.type === "card"
+    ? {
+      brand: appHelperPM.name,
+      last4: appHelperPM.last4,
+      exp_month: appHelperPM.exp_month,
+      exp_year: appHelperPM.exp_year
+    }
+    : undefined,
+  bank_name: appHelperPM.type === "bank" ? appHelperPM.name : undefined,
+  last4: appHelperPM.last4,
+  exp_month: appHelperPM.exp_month,
+  exp_year: appHelperPM.exp_year,
+  status: appHelperPM.status,
+  account_holder_name: appHelperPM.account_holder_name,
+  account_holder_type: appHelperPM.account_holder_type,
+});
+
 export const BaseDonationPage: React.FC<Props> = (props) => {
   const [donations, setDonations] = React.useState<DonationInterface[]>([]);
   const [stripePromise, setStripe] = React.useState<Promise<Stripe>>(null);
@@ -70,8 +95,8 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
                   const appHelperPM = new AppHelperStripePaymentMethod(pm);
                   appHelperMethods.push(appHelperPM);
 
-                  // Create helpers version for StableDonationForm compatibility
-                  const helpersPM = appHelperPM as unknown as StripePaymentMethod;
+                  // Convert to Helpers version for backward compatibility
+                  const helpersPM = convertToHelpersPaymentMethod(appHelperPM);
                   methods.push(helpersPM);
                 }
 

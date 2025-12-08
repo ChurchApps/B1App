@@ -29,7 +29,7 @@ export function YoutubeBackground({
   const [videoWidth, setVideoWidth] = useState(10);
   const [videoY, setVideoY] = useState(0);
   const [videoX, setVideoX] = useState(0);
-  const containerRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   if (typeof aspectRatio === "string" && aspectRatio) {
     const split = aspectRatio.split(":");
@@ -53,6 +53,7 @@ export function YoutubeBackground({
   }, []);
 
   const updateDimensions = () => {
+    if (!containerRef.current) return;
     const containerWidth = containerRef.current.clientWidth;
     const containerHeight = containerRef.current.clientHeight;
     const containerAspectRatio = containerWidth / containerHeight;

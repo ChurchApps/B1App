@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 
 export function VotdPage() {
   const [shape, setShape] = useState("16x9");
+  const [day, setDay] = useState(1);
 
   const getShape = () => {
     const width = window.innerWidth;
@@ -31,11 +32,10 @@ export function VotdPage() {
 
   useEffect(() => {
     getShape();
+    setDay(getDayOfYear());
     window.addEventListener("resize", getShape);
     return () => window.removeEventListener("resize", getShape);
   }, []);
-
-  const day = getDayOfYear();
 
   return (
     <Container>

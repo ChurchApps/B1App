@@ -7,14 +7,14 @@ export function ensureSequentialSort<T extends Sortable>(items: T[] = []): void 
 export function moveItemUp<T extends Sortable>(items: T[], index: number): void {
   if (!items || index <= 0 || index >= items.length) return;
   ensureSequentialSort(items);
-  items[index - 1].sort!++;
-  items[index].sort!--;
+  items[index - 1].sort = (items[index - 1].sort || 0) + 1;
+  items[index].sort = (items[index].sort || 0) - 1;
 }
 
 export function moveItemDown<T extends Sortable>(items: T[], index: number): void {
   if (!items || index < 0 || index >= items.length - 1) return;
   ensureSequentialSort(items);
-  items[index].sort!++;
-  items[index + 1].sort!--;
+  items[index].sort = (items[index].sort || 0) + 1;
+  items[index + 1].sort = (items[index + 1].sort || 0) - 1;
 }
 

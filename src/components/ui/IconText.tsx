@@ -1,5 +1,9 @@
 import React, { ReactNode } from "react";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, SxProps, Theme } from "@mui/material";
+
+interface IconProps {
+  sx?: SxProps<Theme>;
+}
 
 interface IconTextProps {
   icon: ReactNode;
@@ -13,7 +17,7 @@ interface IconTextProps {
 
 export const IconText: React.FC<IconTextProps> = ({ icon, children, iconSize = 18, iconColor = "var(--c1l2)", spacing = 1, variant = "body2", color }) => (
   <Stack direction="row" spacing={spacing} alignItems="center">
-    {React.isValidElement(icon) && React.cloneElement(icon as React.ReactElement<any>, { sx: { fontSize: iconSize, color: iconColor } })}
+    {React.isValidElement(icon) && React.cloneElement(icon as React.ReactElement<IconProps>, { sx: { fontSize: iconSize, color: iconColor } })}
     <Typography variant={variant} color={color}>
       {children}
     </Typography>

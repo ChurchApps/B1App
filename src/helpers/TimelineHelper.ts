@@ -5,6 +5,13 @@ import type { GroupInterface } from "@churchapps/helpers";
 import type { PersonInterface } from "@churchapps/helpers";
 import { TimelinePostInterface } from ".";
 
+interface TimelineApiResponse {
+  postId: string;
+  postType: string;
+  groupId: string;
+  [key: string]: unknown;
+}
+
 export class TimelineHelper {
 
   static async loadForUser() {
@@ -57,10 +64,12 @@ export class TimelineHelper {
     if (sermonIds.length > 0) promises.push(ApiHelper.get("/sermons/timeline?sermonIds=" + sermonIds.join(","), "ContentApi"));
     const results = await Promise.all(promises);
     let allPosts:TimelinePostInterface[] = [];
-    results.forEach((result:any[]) => {
-      result.forEach((r) => {
-        allPosts.push({ postId:r.postId, postType:r.postType, groupId:r.groupId, data:r})
-      });
+    results.forEach((result: TimelineApiResponse[]) => {
+      if (Array.isArray(result)) {
+        result.forEach((r) => {
+          allPosts.push({ postId:r.postId, postType:r.postType, groupId:r.groupId, data:r})
+        });
+      }
     });
     return allPosts;
   }

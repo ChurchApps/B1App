@@ -97,12 +97,21 @@ export class TemplateHelper {
       }
     }
     const b: BlockInterface[] = await ApiHelper.post("/blocks", [this.footer.block], "ContentApi");
+    if (!b || b.length === 0) {
+      throw new Error("Failed to create footer block");
+    }
     const block = b[0];
     //need blockId to add the footer to the pages
     this.targetBlockId = block.id;
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.footer.section, blockId: block.id }], "ContentApi");
+    if (!s || s.length === 0) {
+      throw new Error("Failed to create footer section");
+    }
     const section = s[0];
     const r: ElementInterface[] = await ApiHelper.post("/elements", [{ ...this.footer.row, blockId: block.id, sectionId: section.id }], "ContentApi");
+    if (!r || r.length === 0) {
+      throw new Error("Failed to create footer row");
+    }
     const row = r[0];
     await ApiHelper.post(
       "/elements",
@@ -138,9 +147,15 @@ export class TemplateHelper {
   static async createHomePage() {
     const currentChurch = UserHelper.currentUserChurch.church;
     const p: PageInterface[] = await ApiHelper.post("/pages", [this.home.page], "ContentApi");
+    if (!p || p.length === 0) {
+      throw new Error("Failed to create home page");
+    }
     const page = p[0];
     const s1: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.home.heroSection, pageId: page.id }], "ContentApi");
     const s2: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.home.aboutSection, pageId: page.id }], "ContentApi");
+    if (!s1 || s1.length === 0 || !s2 || s2.length === 0) {
+      throw new Error("Failed to create home page sections");
+    }
     const section1 = s1[0];
     const section2 = s2[0];
     await ApiHelper.post(
@@ -162,6 +177,9 @@ export class TemplateHelper {
     let PAGE_ID;
     if (!pageId) {
       const p: PageInterface[] = await ApiHelper.post("/pages", [this.visit.page], "ContentApi");
+      if (!p || p.length === 0) {
+        throw new Error("Failed to create visit page");
+      }
       const page = p[0];
       PAGE_ID = page.id;
     } else {
@@ -170,6 +188,9 @@ export class TemplateHelper {
 
     const currentChurch = UserHelper.currentUserChurch.church;
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.visit.section, pageId: PAGE_ID }], "ContentApi");
+    if (!s || s.length === 0) {
+      throw new Error("Failed to create visit page section");
+    }
     const section = s[0];
     await ApiHelper.post(
       "/elements",
@@ -191,6 +212,9 @@ export class TemplateHelper {
     let PAGE_ID;
     if (!pageId) {
       const p: PageInterface[] = await ApiHelper.post("/pages", [this.sermons.page], "ContentApi");
+      if (!p || p.length === 0) {
+        throw new Error("Failed to create sermons page");
+      }
       const page = p[0];
       PAGE_ID = page.id;
     } else {
@@ -198,6 +222,9 @@ export class TemplateHelper {
     }
 
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.sermons.section, pageId: PAGE_ID }], "ContentApi");
+    if (!s || s.length === 0) {
+      throw new Error("Failed to create sermons page section");
+    }
     const section = s[0];
     await ApiHelper.post("/elements",[{ ...this.sermons.liveStream, sectionId: section.id }, { ...this.sermons.heading, sectionId: section.id }, { ...this.sermons.sermons, sectionId: section.id }], "ContentApi");
   }
@@ -206,6 +233,9 @@ export class TemplateHelper {
     let PAGE_ID;
     if (!pageId) {
       const p: PageInterface[] = await ApiHelper.post("/pages", [this.aboutUs.page], "ContentApi");
+      if (!p || p.length === 0) {
+        throw new Error("Failed to create about us page");
+      }
       const page = p[0];
       PAGE_ID = page.id;
     } else {
@@ -213,6 +243,9 @@ export class TemplateHelper {
     }
 
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.aboutUs.section, pageId: PAGE_ID }], "ContentApi");
+    if (!s || s.length === 0) {
+      throw new Error("Failed to create about us page section");
+    }
     const section = s[0];
     await ApiHelper.post("/elements", [{ ...this.aboutUs.heading, sectionId: section.id }, { ...this.aboutUs.text1, sectionId: section.id }, { ...this.aboutUs.text2, sectionId: section.id }, { ...this.aboutUs.text3, sectionId: section.id }], "ContentApi");
   }
@@ -221,6 +254,9 @@ export class TemplateHelper {
     let PAGE_ID;
     if (!pageId) {
       const p: PageInterface[] = await ApiHelper.post("/pages", [this.donate.page], "ContentApi");
+      if (!p || p.length === 0) {
+        throw new Error("Failed to create donate page");
+      }
       const page = p[0];
       PAGE_ID = page.id;
     } else {
@@ -228,6 +264,9 @@ export class TemplateHelper {
     }
 
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.donate.section, pageId: PAGE_ID }], "ContentApi");
+    if (!s || s.length === 0) {
+      throw new Error("Failed to create donate page section");
+    }
     const section = s[0];
     await ApiHelper.post("/elements", [{ ...this.donate.heading, sectionId: section.id }, { ...this.donate.form, sectionId: section.id }], "ContentApi");
   }

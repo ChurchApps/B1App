@@ -12,8 +12,18 @@ interface Props {
   config: ConfigurationInterface;
 }
 
+interface ContactFormData {
+  churchId: string;
+  personId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+}
+
 export function GroupContact({ leaders, group, config }: Props) {
-  const [formData, setFormData] = useState<any>({ churchId: config.church.id });
+  const [formData, setFormData] = useState<ContactFormData>({ churchId: config.church.id });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (

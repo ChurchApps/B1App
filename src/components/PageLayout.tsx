@@ -1,7 +1,7 @@
 import { HeaderFooter } from "./layouts/HeaderFooter";
 import { CleanCentered } from "./layouts/CleanCentered";
 import { Embedded } from "./layouts/Embedded";
-import { StyleHelper } from "@/helpers/StyleHelper";
+import { StyleHelper } from "@churchapps/apphelper-website";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface PageData {
