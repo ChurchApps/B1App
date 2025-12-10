@@ -13,7 +13,7 @@ import React, { useEffect } from "react";
 import { ErrorHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers";
-import { ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 

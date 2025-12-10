@@ -1,7 +1,8 @@
 "use client";
 
 import Head from "next/head";
-import { createTheme, CssBaseline } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
 import Zone from "./Zone";
