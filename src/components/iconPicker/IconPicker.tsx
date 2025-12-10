@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { styled, Icon, InputBase, Typography, debounce, Grid, IconButton, Pagination, Stack } from "@mui/material";
+import { Icon, InputBase, Typography, Grid, IconButton, Pagination, Stack } from "@mui/material";
+import { debounce } from "@mui/material/utils";
+import { styled } from "@mui/material/styles";
 import MuiPaper from "@mui/material/Paper";
 import IconNamesList from "./IconNamesList"
 import { Locale } from "@churchapps/apphelper";
