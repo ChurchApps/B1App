@@ -70,7 +70,7 @@ export function GroupContact({ leaders, group, config }: Props) {
     leaders.forEach((l) => {
       result.push(
         <MenuItem value={l.personId} key={l.personId}>
-          {l.person.name.display}
+          {l.person?.name?.display}
         </MenuItem>
       );
     });

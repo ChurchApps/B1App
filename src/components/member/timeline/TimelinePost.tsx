@@ -56,7 +56,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
     let result = <>{fallback}</>
     if (entityType==="person") {
       const person = ArrayHelper.getOne(props.people, "id", entityId);
-      if (person) result = <Link href={"/my/community/" + entityId}>{person.name.display}</Link>
+      if (person) result = <Link href={"/my/community/" + entityId}>{person.name?.display}</Link>
     }
     else if (entityType==="group") {
       const group = ArrayHelper.getOne(props.groups, "id", entityId);

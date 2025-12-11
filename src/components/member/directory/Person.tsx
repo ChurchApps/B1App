@@ -107,7 +107,7 @@ export const Person: React.FC<Props> = (props) => {
                 <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
               </Grid>
               <Grid size={{ xs: 8 }}>
-                <h2>{person?.name.display}</h2>
+                <h2>{person?.name?.display}</h2>
                 {getContactMethods()}
               </Grid>
             </Grid>

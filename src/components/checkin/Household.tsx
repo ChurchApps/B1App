@@ -173,14 +173,14 @@ export function Household({ completeHandler = () => { } }: Props) {
             >
               <img
                 src={PersonHelper.getPhotoUrl(member)}
-                alt={`${member.name.display} avatar`}
+                alt={`${member.name?.display || "Member"} avatar`}
                 data-testid={`member-photo-${member.id}`}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             </Box>
             <Box sx={{ flex: 1 }}>
               <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginBottom: 1 }}>
-                {member.name.display}
+                {member.name?.display}
               </Typography>
               {!isExpanded && getCondensedGroupList(member)}
             </Box>

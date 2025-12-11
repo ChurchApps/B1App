@@ -46,6 +46,6 @@ export class CheckinHelper {
       visitSession.session?.serviceTimeId || ""
     );
     const group: GroupInterface = ArrayHelper.getOne(st?.groups || [], "id", visitSession.session?.groupId || "");
-    return st.name + " - " + group.name;
+    return (st?.name || "") + " - " + (group?.name || "");
   };
 }
