@@ -47,7 +47,7 @@ export function Conversations(props: Props) {
     }
   }
 
-  React.useEffect(() => { loadConversations() }, [props.contentId]); //eslint-disable-line
+  React.useEffect(() => { loadConversations() }, [props.contentId, props.contentType, props.groupId]); //eslint-disable-line
 
   if (!conversations) return <Loading />
   else return (

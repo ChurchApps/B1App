@@ -230,7 +230,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     return rows;
   }
 
-  React.useEffect(loadData, [isMounted, props.personId]); //eslint-disable-line
+  React.useEffect(loadData, [props.personId]); //eslint-disable-line
 
   const getTable = () => (<Table>
     <TableHead>{getTableHeader()}</TableHead>
