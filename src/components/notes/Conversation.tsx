@@ -28,7 +28,7 @@ export function Conversation(props: Props) {
 
   useEffect(() => {
     loadNotes(1)
-  }, [props])
+  }, [props.conversation?.id, props.conversation?.groupId, props.context?.person?.id, props.pageSize])
 
 interface ConversationResponse {
   messages: MessageInterface[];
