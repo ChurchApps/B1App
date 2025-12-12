@@ -155,6 +155,7 @@ const nextConfig = {
     "@churchapps/apphelper-login",
     "@churchapps/apphelper-markdown",
     "@churchapps/apphelper-donations",
+    "@churchapps/apphelper-website",
     "@churchapps/helpers",
     "mui-tel-input"
   ],
