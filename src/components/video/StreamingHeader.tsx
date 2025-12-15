@@ -98,7 +98,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   return (
     <>
       <div id="streamingHeader">
-        <div id="logo"><img src={imgSrc} alt="logo" /></div>
+        <div id="logo">{imgSrc && <img src={imgSrc} alt="logo" />}</div>
         <div id="liveButtons" className="d-none d-xl-flex">
           <div>
             <ul className="nav">

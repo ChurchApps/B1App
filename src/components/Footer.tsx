@@ -14,7 +14,7 @@ export function Footer(props: Props) {
       <Container>
         <Grid container columnSpacing={3}>
           <Grid size={{ md: 4, xs: 12 }}>
-            <img src={props.churchSettings.logoDark} alt={props.church.name} />
+            {props.churchSettings?.logoDark && <img src={props.churchSettings.logoDark} alt={props.church.name} />}
             4010 W New Orleans St<br />
             Broken Arrow, Oklahoma 74011
           </Grid>

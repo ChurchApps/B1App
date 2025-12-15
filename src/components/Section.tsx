@@ -36,12 +36,13 @@ export const Section: React.FC<Props> = props => {
   const getStyle = () => {
 
     let result: CSSProperties = {}
-    if (props.section.background.indexOf("/") > -1) {
+    const bg = props.section.background;
+    if (bg && bg.indexOf("/") > -1) {
       result = {
-        backgroundImage: "url('" + props.section.background + "')"
+        backgroundImage: "url('" + bg + "')"
       };
-    } else {
-      result = { background: props.section.background };
+    } else if (bg) {
+      result = { background: bg };
     }
     if (props.section.textColor?.startsWith("var(")) result.color = props.section.textColor;
 
@@ -59,7 +60,8 @@ export const Section: React.FC<Props> = props => {
 
   const getClassName = () => {
     let result = "section";
-    if (props.section.background.indexOf("/") > -1) result += " sectionBG"
+    const bg = props.section.background;
+    if (bg && bg.indexOf("/") > -1) result += " sectionBG"
     if (props.section.textColor === "light") result += " sectionDark"
     if (props.first) result += " sectionFirst";
     if (props.onEdit) result += " sectionWrapper";
@@ -123,8 +125,9 @@ export const Section: React.FC<Props> = props => {
   }
 
   let result = <></>;
-  if (props.section.background && props.section.background.indexOf("youtube:") > -1) {
-    const youtubeId = props.section.background.split(":")[1];
+  const sectionBg = props.section.background;
+  if (sectionBg && sectionBg.indexOf("youtube:") > -1) {
+    const youtubeId = sectionBg.split(":")[1];
     result = (<>{getSectionAnchor()}<YoutubeBackground isDragging={isDragging} id={getId()} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground></>);
   }
   else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
