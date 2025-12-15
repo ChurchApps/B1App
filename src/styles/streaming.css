@@ -16,25 +16,24 @@
   height: 100%;
 }
 
-/* When embedded in a page (not full-screen stream), ensure side-by-side layout */
+/* When embedded in a page (not full-screen stream), stack video and chat vertically */
 .page #liveContainer {
-  min-height: 500px;
+  min-height: auto;
 }
 
-@media (min-width: 900px) {
-  .page #liveBody {
-    flex-direction: row;
-  }
+.page #liveBody {
+  flex-direction: column;
+}
 
-  .page #videoContainer {
-    flex: 2;
-  }
+.page #videoContainer {
+  aspect-ratio: 16 / 9;
+  flex: none;
+  height: auto;
+}
 
-  .page #interactionContainer {
-    flex: 1;
-    min-width: 300px;
-    max-width: 400px;
-  }
+.page #interactionContainer {
+  flex: none;
+  height: 400px;
 }
 
 #videoContainer {

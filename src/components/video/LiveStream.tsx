@@ -32,7 +32,7 @@ export const LiveStream: React.FC<Props> = (props) => {
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;
-    if (props.includeInteraction) ChatHelper.initChat();
+    if (props.includeInteraction) await ChatHelper.initChat();
     setConfig(result);
   }
 

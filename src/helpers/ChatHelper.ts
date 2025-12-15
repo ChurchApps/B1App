@@ -23,6 +23,14 @@ export class ChatHelper {
   })
 
   static initChat = async () => {
+    // Init socket first - catch errors so they don't break the page
+    try {
+      await SocketHelper.init();
+    } catch {
+      // Socket init failed, will retry on reconnect
+    }
+
+    // Register handlers AFTER init (init calls cleanup which clears handlers in npm version)
     SocketHelper.addHandler("attendance", "chatAttendance", ChatHelper.handleAttendance);
     SocketHelper.addHandler("callout", "chatCallout", ChatHelper.handleCallout);
     SocketHelper.addHandler("deleteMessage", "chatDelete", ChatHelper.handleDelete);
@@ -33,7 +41,6 @@ export class ChatHelper {
     SocketHelper.addHandler("videoChatInvite", "chatVideoChatInvite", ChatHelper.handleVideoChatInvite);
     SocketHelper.addHandler("reconnect", "chatReconnect", ChatHelper.handleReconnect);
     SocketHelper.addHandler("blockedIp", "chatBlockedIp", ChatHelper.handleBlockedIps);
-    SocketHelper.init();
   }
 
   static handleReconnect = () => {
@@ -197,9 +204,19 @@ export class ChatHelper {
   }
 
   static async joinRoom(conversationId: string, churchId: string) {
+    // Wait for socketId to be available (max 5 seconds)
+    let attempts = 0;
+    while (!SocketHelper.socketId && attempts < 50) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      attempts++;
+    }
+
+    if (!SocketHelper.socketId) return;
+
     const { firstName, lastName } = ChatHelper.current.user;
     const ipAddress = await StreamChatManager.getIpAddress();
     const connection: ConnectionInterface = { conversationId: conversationId, churchId: churchId, displayName: `${firstName} ${lastName}`, socketId: SocketHelper.socketId, ipAddress: ipAddress }
+
     ApiHelper.postAnonymous("/connections", [connection], "MessagingApi").then((c: ConnectionInterface[]) => {
       if (connection.displayName.includes("Anonymous ")) {
         ChatHelper.current.user.firstName = c[0].displayName;
