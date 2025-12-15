@@ -16,6 +16,27 @@
   height: 100%;
 }
 
+/* When embedded in a page (not full-screen stream), ensure side-by-side layout */
+.page #liveContainer {
+  min-height: 500px;
+}
+
+@media (min-width: 900px) {
+  .page #liveBody {
+    flex-direction: row;
+  }
+
+  .page #videoContainer {
+    flex: 2;
+  }
+
+  .page #interactionContainer {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+  }
+}
+
 #videoContainer {
   flex: 3;
   overflow: hidden;
