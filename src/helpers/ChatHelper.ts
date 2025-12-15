@@ -23,7 +23,14 @@ export class ChatHelper {
   })
 
   static initChat = async () => {
-    // Register handlers BEFORE init so they're ready when messages arrive
+    // Init socket first - catch errors so they don't break the page
+    try {
+      await SocketHelper.init();
+    } catch {
+      // Socket init failed, will retry on reconnect
+    }
+
+    // Register handlers AFTER init (init calls cleanup which clears handlers in npm version)
     SocketHelper.addHandler("attendance", "chatAttendance", ChatHelper.handleAttendance);
     SocketHelper.addHandler("callout", "chatCallout", ChatHelper.handleCallout);
     SocketHelper.addHandler("deleteMessage", "chatDelete", ChatHelper.handleDelete);
@@ -34,13 +41,6 @@ export class ChatHelper {
     SocketHelper.addHandler("videoChatInvite", "chatVideoChatInvite", ChatHelper.handleVideoChatInvite);
     SocketHelper.addHandler("reconnect", "chatReconnect", ChatHelper.handleReconnect);
     SocketHelper.addHandler("blockedIp", "chatBlockedIp", ChatHelper.handleBlockedIps);
-
-    // Init socket - catch errors so they don't break the page
-    try {
-      await SocketHelper.init();
-    } catch {
-      // Socket init failed, will retry on reconnect
-    }
   }
 
   static handleReconnect = () => {
