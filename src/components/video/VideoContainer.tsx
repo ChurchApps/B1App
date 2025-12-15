@@ -50,7 +50,14 @@ export const VideoContainer: React.FC<Props> = (props) => {
     let videoUrl = cs?.sermon?.videoUrl || "";
     if (!videoUrl || videoUrl === "") {
       const logoUrl = getLogo();
-      return <div id="noVideoContent" style={{ backgroundImage: `url(${logoUrl})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
+      const style: React.CSSProperties = {
+        height: "100%",
+        backgroundSize: "contain",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        ...(logoUrl ? { backgroundImage: `url(${logoUrl})` } : {})
+      };
+      return <div id="noVideoContent" style={style} />;
     }
 
     if (cs.localStartTime !== undefined) {
@@ -68,7 +75,15 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getCountdown = (cs: StreamingServiceExtendedInterface) => {
     let displayTime = getCountdownTime(cs.localCountdownTime || new Date());
-    return <div id="noVideoContent" style={{ backgroundImage: `url(${getLogo()})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>{cs?.sermon?.title ?? "Next Service Time"}</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>
+    const logoUrl = getLogo();
+    const style: React.CSSProperties = {
+      height: "100%",
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      ...(logoUrl ? { backgroundImage: `url(${logoUrl})` } : {})
+    };
+    return <div id="noVideoContent" style={style}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>{cs?.sermon?.title ?? "Next Service Time"}</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>
   }
 
   const getLogo = () => {
@@ -103,10 +118,18 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getContents = () => {
     const logoUrl = getLogo();
+    // Only add backgroundImage if we have a valid URL to avoid url(null) requests
+    const logoStyle: React.CSSProperties = {
+      height: "100%",
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      ...(logoUrl ? { backgroundImage: `url(${logoUrl})` } : {})
+    };
 
     switch (contentType) {
       case 'logo':
-        return <div id="noVideoContent" style={{ backgroundImage: `url(${logoUrl})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
+        return <div id="noVideoContent" style={logoStyle} />;
       case 'ended':
         return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
       case 'countdown':
@@ -114,7 +137,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
       case 'video':
         return getVideo(props.currentService);
       default:
-        return <div id="noVideoContent" style={{ backgroundImage: `url(${logoUrl})`, height: "100%", backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }} />;
+        return <div id="noVideoContent" style={logoStyle} />;
     }
   };
 

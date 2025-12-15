@@ -22,12 +22,20 @@ export class ChatHelper {
     blockedIps: []
   })
 
+  private static initialized = false;
+
   static initChat = async () => {
+    // Prevent double initialization
+    if (ChatHelper.initialized) return;
+    ChatHelper.initialized = true;
+
     // Init socket first - catch errors so they don't break the page
     try {
       await SocketHelper.init();
     } catch {
-      // Socket init failed, will retry on reconnect
+      // Socket init failed - reset initialized flag so it can be retried
+      ChatHelper.initialized = false;
+      return;
     }
 
     // Register handlers AFTER init (init calls cleanup which clears handlers in npm version)

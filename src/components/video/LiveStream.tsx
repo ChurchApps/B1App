@@ -47,6 +47,8 @@ export const LiveStream: React.FC<Props> = (props) => {
   useEffect(() => {
     setIsClient(true);
     if (props.includeInteraction) {
+      // Initialize chatState with current value so UI has something to render
+      setChatState({ ...ChatHelper.current });
       ChatHelper.onChange = () => {
         setChatState({ ...ChatHelper.current });
         setConfig({ ...ChatConfigHelper.current });
