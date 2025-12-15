@@ -17,8 +17,10 @@ type PageParams = { sdSlug: string }
 
 export const VideoContainer: React.FC<Props> = (props) => {
 
-  const [currentTime, setCurrentTime] = React.useState(new Date().getTime());
-  const [loadedTime, setLoadedTime] = React.useState(new Date().getTime());
+  // Initialize with 0 to avoid hydration mismatch, then set actual time in useEffect
+  const [currentTime, setCurrentTime] = React.useState(0);
+  const [loadedTime, setLoadedTime] = React.useState(0);
+  const [isClient, setIsClient] = React.useState(false);
   const isMounted = useMountedState();
   const [config, setConfig] = React.useState<ConfigurationInterface>(null);
   const [transparent, setTransparent] = useState(props.overlayContent);
@@ -79,6 +81,9 @@ export const VideoContainer: React.FC<Props> = (props) => {
   }
 
   const contentType = React.useMemo(() => {
+    // Don't calculate until client-side to avoid hydration mismatch
+    if (!isClient) return 'logo';
+
     let cs = props.currentService;
     const now = new Date();
 
@@ -94,7 +99,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
     else {
       return 'video';
     }
-  }, [props.currentService]);
+  }, [props.currentService, isClient]);
 
   const getContents = () => {
     const logoUrl = getLogo();
@@ -114,12 +119,17 @@ export const VideoContainer: React.FC<Props> = (props) => {
   };
 
   React.useEffect(() => {
+    // Set initial times and mark as client-side
+    const now = new Date().getTime();
+    setCurrentTime(now);
+    setLoadedTime(now);
+    setIsClient(true);
+
     const updateCurrentTime = () => {
       if (isMounted()) {
         setCurrentTime(new Date().getTime());
       }
     }
-    setLoadedTime(new Date().getTime());
     const id = setInterval(updateCurrentTime, 1000);
     return () => clearInterval(id);
   }, [isMounted]);

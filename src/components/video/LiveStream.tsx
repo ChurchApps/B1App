@@ -26,6 +26,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   const [chatState, setChatState] = React.useState<ChatStateInterface>(null);
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
   const [overlayContent, setOverlayContent] = React.useState(false);
+  const [isClient, setIsClient] = React.useState(false);
 
   const loadData = async (keyName: string) => {
     let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
@@ -44,6 +45,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
+    setIsClient(true);
     if (props.includeInteraction) {
       ChatHelper.onChange = () => {
         setChatState({ ...ChatHelper.current });
@@ -65,9 +67,9 @@ export const LiveStream: React.FC<Props> = (props) => {
     </div>
   </div>);
 
-  if (props.offlineContent) {
+  if (props.offlineContent && isClient) {
     let showAlt = !currentService;
-    if (!showAlt) {
+    if (!showAlt && currentService.localCountdownTime) {
       const seconds = (currentService.localCountdownTime.getTime() - new Date().getTime()) / 1000;
       if (seconds > 3600) showAlt = true;
     }
