@@ -27,18 +27,28 @@ export const LiveStream: React.FC<Props> = (props) => {
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
   const [overlayContent, setOverlayContent] = React.useState(false);
   const [isClient, setIsClient] = React.useState(false);
+  const [chatReady, setChatReady] = React.useState(false);
+  const joinedServiceIdRef = React.useRef<string | null>(null);
 
   const loadData = async (keyName: string) => {
     let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;
-    if (props.includeInteraction) await ChatHelper.initChat();
+    if (props.includeInteraction) {
+      await ChatHelper.initChat();
+      setChatReady(true);
+    }
     setConfig(result);
   }
 
   const checkJoinRooms = () => {
-    if (props.includeInteraction && currentService && config) {
+    // Only join rooms after chat is fully initialized
+    if (props.includeInteraction && currentService && config && chatReady) {
+      // Prevent duplicate joins for the same service
+      if (joinedServiceIdRef.current === currentService.id) return;
+      joinedServiceIdRef.current = currentService.id;
+
       StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId, currentService, setChatState);
       StreamChatManager.checkHost(config, currentService.id, chatState, setChatState);
     }
@@ -59,7 +69,7 @@ export const LiveStream: React.FC<Props> = (props) => {
     loadData(props.keyName);
   }, []);
 
-  React.useEffect(checkJoinRooms, [currentService]); //eslint-disable-line
+  React.useEffect(checkJoinRooms, [currentService, chatReady, config]); //eslint-disable-line
 
   let result = (<div id="liveContainer">
     {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}

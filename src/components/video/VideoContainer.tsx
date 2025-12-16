@@ -87,12 +87,17 @@ export const VideoContainer: React.FC<Props> = (props) => {
   }
 
   const getLogo = () => {
+    let logo: string | null = null;
     if (transparent) {
       const textColor = StyleHelper.getTextColor(props.sections[0]?.textColor, config?.globalStyles, config?.appearance);
-      const logo = AppearanceHelper.getLogoByTextColor(config?.appearance?.logoLight || null, config?.appearance?.logoDark || null, textColor);
-      return logo !== "" ? logo : null;
+      logo = AppearanceHelper.getLogoByTextColor(config?.appearance?.logoLight || null, config?.appearance?.logoDark || null, textColor);
     }
-    else return config?.appearance?.logoDark || null;
+    else {
+      logo = config?.appearance?.logoDark || null;
+    }
+    // Return null for any falsy value or the string "null"
+    if (!logo || logo === "null") return null;
+    return logo;
   }
 
   const contentType = React.useMemo(() => {
