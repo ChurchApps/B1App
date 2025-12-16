@@ -74,6 +74,8 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   let imgSrc = (props.appearance)
     ? AppearanceHelper.getLogo(props.appearance, "images/logo-header.png", "/images/logo.png", "#FFF")
     : "";
+  // Guard against the string "null" being stored in the database
+  if (imgSrc === "null") imgSrc = "";
 
   React.useEffect(() => {
     if (!props.appearance) {

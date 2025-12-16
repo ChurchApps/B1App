@@ -18,8 +18,8 @@ export function Footer(props: Props) {
     return <Zone church={props.config?.church} sections={props.footerSections} zone="siteFooter" churchSettings={props.config?.appearance} />
   }
   else {
-    let logoUrl = AppearanceHelper.getLogoDark(props.config?.appearance, "/images/logo.png");
-    const photo = <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.config?.church.name} style={{ maxWidth: "200px" }} />
+    const logoUrl = AppearanceHelper.getLogoDark(props.config?.appearance, "/images/logo.png");
+    const photo = logoUrl ? <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.config?.church.name} style={{ maxWidth: "200px" }} /> : null;
 
     return (
       <>

@@ -22,19 +22,24 @@ export class ChatHelper {
     blockedIps: []
   })
 
-  private static initialized = false;
+  private static initializing = false;
 
   static initChat = async () => {
-    // Prevent double initialization
-    if (ChatHelper.initialized) return;
-    ChatHelper.initialized = true;
+    // If socket is already connected and has a socketId, no need to reinitialize
+    if (SocketHelper.isConnected?.() && SocketHelper.socketId) {
+      return;
+    }
+
+    // Prevent concurrent initialization attempts
+    if (ChatHelper.initializing) return;
+    ChatHelper.initializing = true;
 
     // Init socket first - catch errors so they don't break the page
     try {
       await SocketHelper.init();
     } catch {
-      // Socket init failed - reset initialized flag so it can be retried
-      ChatHelper.initialized = false;
+      // Socket init failed - allow retry
+      ChatHelper.initializing = false;
       return;
     }
 
@@ -49,6 +54,8 @@ export class ChatHelper {
     SocketHelper.addHandler("videoChatInvite", "chatVideoChatInvite", ChatHelper.handleVideoChatInvite);
     SocketHelper.addHandler("reconnect", "chatReconnect", ChatHelper.handleReconnect);
     SocketHelper.addHandler("blockedIp", "chatBlockedIp", ChatHelper.handleBlockedIps);
+
+    ChatHelper.initializing = false;
   }
 
   static handleReconnect = () => {
