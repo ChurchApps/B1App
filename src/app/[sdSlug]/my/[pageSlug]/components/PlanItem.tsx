@@ -1,6 +1,9 @@
+"use client";
 import React from "react";
 import { PlanItemInterface } from "@/helpers";
 import { SongDialog } from "./SongDialog";
+import { LessonDialog } from "./LessonDialog";
+import { ActionDialog } from "./ActionDialog";
 
 interface Props {
   planItem: PlanItemInterface,
@@ -8,14 +11,14 @@ interface Props {
 
 export const PlanItem = (props: Props) => {
   const [dialogKeyId, setDialogKeyId] = React.useState<string>(null);
+  const [lessonSectionId, setLessonSectionId] = React.useState<string>(null);
+  const [actionId, setActionId] = React.useState<string>(null);
 
   const getChildren = () => {
     const result: React.ReactElement[] = [];
-    props.planItem.children?.forEach((c, index) => {
+    props.planItem.children?.forEach((c) => {
       result.push(
-        <>
-          <PlanItem key={c.id} planItem={c} />
-        </>
+        <PlanItem key={c.id} planItem={c} />
       );
     });
     return result;
@@ -29,7 +32,17 @@ export const PlanItem = (props: Props) => {
     <div className="planItem">
       <div>{formatTime(props.planItem.seconds)}</div>
       <div>
-        {props.planItem.label}
+        {props.planItem.relatedId ? (
+          <a href="about:blank" onClick={(e) => { e.preventDefault(); setLessonSectionId(props.planItem.relatedId); }}>
+            {props.planItem.label}
+          </a>
+        ) : props.planItem.link ? (
+          <a href={props.planItem.link} target="_blank" rel="noopener noreferrer">
+            {props.planItem.label}
+          </a>
+        ) : (
+          props.planItem.label
+        )}
       </div>
       {getDescriptionRow()}
     </div>
@@ -47,6 +60,22 @@ export const PlanItem = (props: Props) => {
     </div>
   </>
 
+  const getActionRow = () => <>
+    <div className="planItem">
+      <div>{formatTime(props.planItem.seconds)}</div>
+      <div>
+        {props.planItem.relatedId ? (
+          <a href="about:blank" onClick={(e) => { e.preventDefault(); setActionId(props.planItem.relatedId); }}>
+            {props.planItem.label}
+          </a>
+        ) : (
+          props.planItem.label
+        )}
+      </div>
+      {getDescriptionRow()}
+    </div>
+  </>
+
   const getDescriptionRow = () => <div className="planItemDescription">{props.planItem.description}</div>
 
   const getPlanItem = () => {
@@ -55,19 +84,21 @@ export const PlanItem = (props: Props) => {
       case "song":
       case "arrangementKey":
         return getSongRow();
+      case "action": return getActionRow();
       case "item": return getItemRow();
     }
   }
 
   const formatTime = (seconds: number) => {
-    let minutes = Math.floor(seconds / 60);
-    let secs = seconds % 60;
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
     return minutes + ":" + (secs < 10 ? "0" : "") + secs;
   }
 
   return (<>
     {getPlanItem()}
     {dialogKeyId && <SongDialog arrangementKeyId={dialogKeyId} onClose={() => { setDialogKeyId(null); }} />}
+    {lessonSectionId && <LessonDialog sectionId={lessonSectionId} sectionName={props.planItem.label} onClose={() => { setLessonSectionId(null); }} />}
+    {actionId && <ActionDialog actionId={actionId} actionName={props.planItem.label} onClose={() => { setActionId(null); }} />}
   </>)
 };
-

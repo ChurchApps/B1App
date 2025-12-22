@@ -5,6 +5,7 @@ import { Locale } from "@churchapps/apphelper";
 export class EnvironmentHelper {
   static Common = CommonEnvironmentHelper;
   public static LessonsApi = "";
+  public static LessonsUrl = "";
   static hasInit = false;
 
   static initServerSide = async () => {
@@ -55,12 +56,14 @@ export class EnvironmentHelper {
   //NOTE: None of these values are secret.
   static initStaging = () => {
     EnvironmentHelper.LessonsApi = "https://api.staging.lessons.church";
+    EnvironmentHelper.LessonsUrl = "https://staging.lessons.church";
   };
 
   //NOTE: None of these values are secret.
   static initProd = () => {
     EnvironmentHelper.Common.GoogleAnalyticsTag = "G-XYCPBKWXB5";
     EnvironmentHelper.LessonsApi = "https://api.lessons.church";
+    EnvironmentHelper.LessonsUrl = "https://lessons.church";
   };
 
 }

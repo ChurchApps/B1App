@@ -1,13 +1,9 @@
-import * as Sentry from '@sentry/nextjs';
-
+// Dev instrumentation - no Sentry to avoid Turbopack symlink issues on Windows
+// For production builds, this file is replaced with instrumentation.prod.ts via prebuild script
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('../sentry.server.config');
-  }
-
-  if (process.env.NEXT_RUNTIME === 'edge') {
-    await import('../sentry.edge.config');
-  }
+  // No-op in development
 }
 
-export const onRequestError = Sentry.captureRequestError;
+export function onRequestError() {
+  // No-op in development
+}
