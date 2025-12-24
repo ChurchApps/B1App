@@ -4,6 +4,7 @@ import { PlanItemInterface } from "@/helpers";
 import { SongDialog } from "./SongDialog";
 import { LessonDialog } from "./LessonDialog";
 import { ActionDialog } from "./ActionDialog";
+import { AddOnDialog } from "./AddOnDialog";
 
 interface Props {
   planItem: PlanItemInterface,
@@ -13,6 +14,7 @@ export const PlanItem = (props: Props) => {
   const [dialogKeyId, setDialogKeyId] = React.useState<string>(null);
   const [lessonSectionId, setLessonSectionId] = React.useState<string>(null);
   const [actionId, setActionId] = React.useState<string>(null);
+  const [addOnId, setAddOnId] = React.useState<string>(null);
 
   const getChildren = () => {
     const result: React.ReactElement[] = [];
@@ -76,6 +78,22 @@ export const PlanItem = (props: Props) => {
     </div>
   </>
 
+  const getAddOnRow = () => <>
+    <div className="planItem">
+      <div>{formatTime(props.planItem.seconds)}</div>
+      <div>
+        {props.planItem.relatedId ? (
+          <a href="about:blank" onClick={(e) => { e.preventDefault(); setAddOnId(props.planItem.relatedId); }}>
+            {props.planItem.label}
+          </a>
+        ) : (
+          props.planItem.label
+        )}
+      </div>
+      {getDescriptionRow()}
+    </div>
+  </>
+
   const getDescriptionRow = () => <div className="planItemDescription">{props.planItem.description}</div>
 
   const getPlanItem = () => {
@@ -85,6 +103,7 @@ export const PlanItem = (props: Props) => {
       case "arrangementKey":
         return getSongRow();
       case "action": return getActionRow();
+      case "addOn": return getAddOnRow();
       case "item": return getItemRow();
     }
   }
@@ -100,5 +119,6 @@ export const PlanItem = (props: Props) => {
     {dialogKeyId && <SongDialog arrangementKeyId={dialogKeyId} onClose={() => { setDialogKeyId(null); }} />}
     {lessonSectionId && <LessonDialog sectionId={lessonSectionId} sectionName={props.planItem.label} onClose={() => { setLessonSectionId(null); }} />}
     {actionId && <ActionDialog actionId={actionId} actionName={props.planItem.label} onClose={() => { setActionId(null); }} />}
+    {addOnId && <AddOnDialog addOnId={addOnId} addOnName={props.planItem.label} onClose={() => { setAddOnId(null); }} />}
   </>)
 };
