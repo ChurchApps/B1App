@@ -1,13 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { Box, Typography, Icon, Stack, Link } from "@mui/material";
-import { PlanItemInterface } from "@/helpers";
+import { PlanItemInterface, ExternalVenueRefInterface } from "@/helpers";
 import { ActionDialog } from "./ActionDialog";
 import { LessonDialog } from "./LessonDialog";
 
 interface Props {
   lessonItems: PlanItemInterface[];
   venueName: string;
+  externalRef?: ExternalVenueRefInterface | null;
 }
 
 const formatTime = (seconds: number): string => {
@@ -156,8 +157,8 @@ export const LessonPreview: React.FC<Props> = (props) => {
           {props.lessonItems.map((item) => renderPreviewItem(item))}
         </Box>
       </Box>
-      {actionId && <ActionDialog actionId={actionId} actionName={actionName} onClose={() => setActionId(null)} />}
-      {lessonSectionId && <LessonDialog sectionId={lessonSectionId} sectionName={sectionName} onClose={() => setLessonSectionId(null)} />}
+      {actionId && <ActionDialog actionId={actionId} actionName={actionName} externalRef={props.externalRef} onClose={() => setActionId(null)} />}
+      {lessonSectionId && <LessonDialog sectionId={lessonSectionId} sectionName={sectionName} externalRef={props.externalRef} onClose={() => setLessonSectionId(null)} />}
     </>
   );
 };

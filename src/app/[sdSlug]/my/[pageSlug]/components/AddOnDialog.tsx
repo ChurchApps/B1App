@@ -1,16 +1,19 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import { EnvironmentHelper } from "@/helpers";
+import { EnvironmentHelper, ExternalVenueRefInterface } from "@/helpers";
 
 interface Props {
   addOnId: string;
   addOnName?: string;
+  externalRef?: ExternalVenueRefInterface | null;
   onClose: () => void;
 }
 
 export const AddOnDialog: React.FC<Props> = (props) => {
-  const iframeUrl = `${EnvironmentHelper.LessonsUrl}/embed/addon/${props.addOnId}`;
+  const iframeUrl = props.externalRef
+    ? `${EnvironmentHelper.LessonsUrl}/embed/external/${props.externalRef.externalProviderId}/addon/${props.addOnId}`
+    : `${EnvironmentHelper.LessonsUrl}/embed/addon/${props.addOnId}`;
   const [iframeHeight, setIframeHeight] = useState(typeof window !== "undefined" ? window.innerHeight * 0.7 : 500);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
