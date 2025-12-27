@@ -11,7 +11,6 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   reactStrictMode: true,
 
-  // Enable Turbopack for faster development
   experimental: {
     // Optimize package imports to reduce bundle size
     optimizePackageImports: [
