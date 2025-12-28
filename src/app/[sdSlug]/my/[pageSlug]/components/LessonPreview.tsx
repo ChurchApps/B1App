@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Box, Typography, Icon, Stack, Link } from "@mui/material";
-import { PlanItemInterface, ExternalVenueRefInterface } from "@/helpers";
+import { PlanItemInterface, ExternalVenueRefInterface, PlanHelper } from "@/helpers";
 import { ActionDialog } from "./ActionDialog";
 import { LessonDialog } from "./LessonDialog";
 
@@ -10,22 +10,6 @@ interface Props {
   venueName: string;
   externalRef?: ExternalVenueRefInterface | null;
 }
-
-const formatTime = (seconds: number): string => {
-  const minutes = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return minutes + ":" + (secs < 10 ? "0" : "") + secs;
-};
-
-const getSectionDuration = (section: PlanItemInterface): number => {
-  let totalSeconds = 0;
-  section.children?.forEach((child) => {
-    if (child.seconds) {
-      totalSeconds += child.seconds;
-    }
-  });
-  return totalSeconds;
-};
 
 export const LessonPreview: React.FC<Props> = (props) => {
   const [actionId, setActionId] = useState<string | null>(null);
@@ -51,7 +35,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
 
   const renderPreviewItem = (item: PlanItemInterface, isChild: boolean = false) => {
     if (item.itemType === "header") {
-      const sectionDuration = getSectionDuration(item);
+      const sectionDuration = PlanHelper.getSectionDuration(item);
       return (
         <Box key={item.id} sx={{ mb: 2 }}>
           <Box
@@ -70,7 +54,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
               <Stack direction="row" alignItems="center" spacing={0.5}>
                 <Icon sx={{ fontSize: 16, color: "grey.500" }}>schedule</Icon>
                 <Typography variant="body2" sx={{ color: "grey.600" }}>
-                  {formatTime(sectionDuration)}
+                  {PlanHelper.formatTime(sectionDuration)}
                 </Typography>
               </Stack>
             )}
@@ -129,7 +113,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
           <Stack direction="row" alignItems="center" spacing={0.5}>
             <Icon sx={{ fontSize: 16, color: "grey.500" }}>schedule</Icon>
             <Typography variant="body2" sx={{ color: "grey.600" }}>
-              {formatTime(item.seconds)}
+              {PlanHelper.formatTime(item.seconds)}
             </Typography>
           </Stack>
         )}

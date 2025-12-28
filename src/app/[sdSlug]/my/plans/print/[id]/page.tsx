@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ApiHelper, DateHelper, ArrayHelper } from "@churchapps/apphelper";
-import type { PlanInterface, PlanItemInterface, PositionInterface, AssignmentInterface, PersonInterface } from "@churchapps/helpers";
+import { type PlanInterface, type PlanItemInterface, type PositionInterface, type AssignmentInterface, type PersonInterface, PlanHelper } from "@churchapps/helpers";
 import { Grid } from "@mui/material";
 
 type Params = Promise<{ sdSlug: string; id: string }>;
@@ -21,12 +21,6 @@ export default function PrintPlanPage({ params }: { params: Params }) {
       setPlanId(id);
     });
   }, [params]);
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return minutes + ":" + (secs < 10 ? "0" : "") + secs;
-  };
 
   const loadData = async () => {
     if (!planId) return;
@@ -104,11 +98,11 @@ export default function PrintPlanPage({ params }: { params: Params }) {
       if (pi.itemType !== "header") {
         result.push(
           <tr key={pi.id}>
-            <td style={Styles.tableCell}>{formatTime(totalSeconds)}</td>
+            <td style={Styles.tableCell}>{PlanHelper.formatTime(totalSeconds)}</td>
             <td style={Styles.tableCell}>
               <b>{pi.label}:</b> {pi.description}
             </td>
-            <td style={{ ...Styles.tableCell, textAlign: "right" }}>{formatTime(pi.seconds)}</td>
+            <td style={{ ...Styles.tableCell, textAlign: "right" }}>{PlanHelper.formatTime(pi.seconds)}</td>
           </tr>
         );
         totalSeconds += pi.seconds;

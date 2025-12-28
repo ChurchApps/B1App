@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Icon } from "@mui/material";
-import { PlanItemInterface } from "@/helpers";
+import { PlanItemInterface, PlanHelper } from "@/helpers";
 import { SongDialog } from "./SongDialog";
 import { LessonDialog } from "./LessonDialog";
 import { ActionDialog } from "./ActionDialog";
@@ -18,12 +18,6 @@ export const PlanItem = (props: Props) => {
   const [actionId, setActionId] = React.useState<string>(null);
   const [addOnId, setAddOnId] = React.useState<string>(null);
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return minutes + ":" + (secs < 10 ? "0" : "") + secs;
-  }
-
   const getChildren = () => {
     const result: React.ReactElement[] = [];
     let cumulativeTime = props.startTime || 0;
@@ -37,22 +31,14 @@ export const PlanItem = (props: Props) => {
     return result;
   }
 
-  const getSectionDuration = (planItem: PlanItemInterface) => {
-    let result = 0;
-    planItem.children?.forEach((c) => {
-      result += c.seconds || 0;
-    });
-    return result;
-  }
-
   const getHeaderRow = () => {
-    const sectionDuration = getSectionDuration(props.planItem);
+    const sectionDuration = PlanHelper.getSectionDuration(props.planItem);
     return <>
       <div className="planItemHeader">
         <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
           {sectionDuration > 0 && <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>}
           <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-            {sectionDuration > 0 ? formatTime(sectionDuration) : ""}
+            {sectionDuration > 0 ? PlanHelper.formatTime(sectionDuration) : ""}
           </span>
         </span>
         <span>{props.planItem.label}</span>
@@ -66,10 +52,10 @@ export const PlanItem = (props: Props) => {
       <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
         <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
         <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {formatTime(props.planItem.seconds)}
+          {PlanHelper.formatTime(props.planItem.seconds)}
         </span>
       </span>
-      <div>{formatTime(props.startTime || 0)}</div>
+      <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
           <a href="about:blank" onClick={(e) => { e.preventDefault(); setLessonSectionId(props.planItem.relatedId); }}>
@@ -92,10 +78,10 @@ export const PlanItem = (props: Props) => {
       <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
         <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
         <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {formatTime(props.planItem.seconds)}
+          {PlanHelper.formatTime(props.planItem.seconds)}
         </span>
       </span>
-      <div>{formatTime(props.startTime || 0)}</div>
+      <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         <a href="about:blank" onClick={(e) => { e.preventDefault(); setDialogKeyId(props.planItem.relatedId); }}>
           {props.planItem.label}
@@ -110,10 +96,10 @@ export const PlanItem = (props: Props) => {
       <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
         <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
         <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {formatTime(props.planItem.seconds)}
+          {PlanHelper.formatTime(props.planItem.seconds)}
         </span>
       </span>
-      <div>{formatTime(props.startTime || 0)}</div>
+      <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
           <a href="about:blank" onClick={(e) => { e.preventDefault(); setActionId(props.planItem.relatedId); }}>
@@ -132,10 +118,10 @@ export const PlanItem = (props: Props) => {
       <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
         <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
         <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {formatTime(props.planItem.seconds)}
+          {PlanHelper.formatTime(props.planItem.seconds)}
         </span>
       </span>
-      <div>{formatTime(props.startTime || 0)}</div>
+      <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
           <a href="about:blank" onClick={(e) => { e.preventDefault(); setAddOnId(props.planItem.relatedId); }}>
@@ -154,10 +140,10 @@ export const PlanItem = (props: Props) => {
       <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
         <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
         <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {formatTime(props.planItem.seconds)}
+          {PlanHelper.formatTime(props.planItem.seconds)}
         </span>
       </span>
-      <div>{formatTime(props.startTime || 0)}</div>
+      <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
           <a href="about:blank" onClick={(e) => { e.preventDefault(); setLessonSectionId(props.planItem.relatedId); }}>
