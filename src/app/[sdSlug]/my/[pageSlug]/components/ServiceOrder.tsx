@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
-import { Stack, Box, Typography } from "@mui/material";
-import { ApiHelper, DisplayBox, SmallButton } from "@churchapps/apphelper";
+import { useParams } from "next/navigation";
+import { Stack, Box, Typography, IconButton } from "@mui/material";
+import PrintIcon from "@mui/icons-material/Print";
+import { ApiHelper, DisplayBox } from "@churchapps/apphelper";
 import { PlanItem } from "./PlanItem";
 import { type PlanItemInterface, type PlanInterface, LessonsContentProvider } from "@churchapps/helpers";
 import { LessonPreview } from "./LessonPreview";
@@ -10,6 +12,8 @@ interface Props {
 }
 
 export const ServiceOrder = (props: Props) => {
+  const params = useParams();
+  const sdSlug = params?.sdSlug as string;
   const [planItems, setPlanItems] = React.useState<PlanItemInterface[]>([]);
   const [previewLessonItems, setPreviewLessonItems] = React.useState<PlanItemInterface[]>([]);
   const [venueName, setVenueName] = React.useState<string>("");
@@ -43,7 +47,13 @@ export const ServiceOrder = (props: Props) => {
 
   const getEditContent = () => (
     <Stack direction="row">
-      <SmallButton href={"/plans/print/" + props.plan?.id} icon="print" data-testid="print-service-order-button" />
+      <IconButton
+        onClick={() => window.open(`/my/plans/print/${props.plan?.id}`, '_blank')}
+        size="small"
+        data-testid="print-service-order-button"
+      >
+        <PrintIcon />
+      </IconButton>
     </Stack>
   )
 
@@ -66,7 +76,12 @@ export const ServiceOrder = (props: Props) => {
         </Box>
       );
     }
-    return planItems.map((pi) => <PlanItem key={pi.id} planItem={pi} />);
+    let cumulativeTime = 0;
+    return planItems.map((pi) => {
+      const startTime = cumulativeTime;
+      cumulativeTime += pi.seconds || 0;
+      return <PlanItem key={pi.id} planItem={pi} startTime={startTime} />;
+    });
   };
 
   return (
