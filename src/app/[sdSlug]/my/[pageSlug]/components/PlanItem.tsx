@@ -168,7 +168,9 @@ export const PlanItem = (props: Props) => {
       case "lessonAction": return getActionRow();
       case "lessonAddOn": return getAddOnRow();
       case "lessonSection": return getLessonSectionRow();
-      case "item": return getItemRow();
+      case "item":
+      default:
+        return getItemRow();
     }
   }
 
