@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Stack, Box, Typography } from "@mui/material";
 import { ApiHelper, DisplayBox, SmallButton } from "@churchapps/apphelper";
 import { PlanItem } from "./PlanItem";
-import { PlanItemInterface, PlanInterface, ExternalVenueRefInterface } from "@/helpers";
+import { type PlanItemInterface, type PlanInterface, LessonsContentProvider } from "@churchapps/helpers";
 import { LessonPreview } from "./LessonPreview";
 
 interface Props {
@@ -14,20 +14,11 @@ export const ServiceOrder = (props: Props) => {
   const [previewLessonItems, setPreviewLessonItems] = React.useState<PlanItemInterface[]>([]);
   const [venueName, setVenueName] = React.useState<string>("");
 
-  const hasAssociatedLesson = (props.plan?.contentType === "venue" || props.plan?.contentType === "externalVenue") && props.plan?.contentId;
-  const isExternalVenue = props.plan?.contentType === "externalVenue";
+  // Use LessonsContentProvider from helpers
+  const lessonsProvider = useMemo(() => new LessonsContentProvider(), []);
+  const hasAssociatedLesson = lessonsProvider.hasAssociatedLesson(props.plan);
+  const externalRef = lessonsProvider.getExternalRef(props.plan);
   const showPreviewMode = hasAssociatedLesson && planItems.length === 0 && previewLessonItems.length > 0;
-
-  const getExternalRef = (): ExternalVenueRefInterface | null => {
-    if (!isExternalVenue || !props.plan?.contentId) return null;
-    try {
-      return JSON.parse(props.plan.contentId);
-    } catch {
-      return null;
-    }
-  };
-
-  const externalRef = getExternalRef();
 
   const loadData = async () => {
     if (props.plan?.id) {
@@ -40,20 +31,9 @@ export const ServiceOrder = (props: Props) => {
   const loadPreviewLessonItems = async () => {
     if (hasAssociatedLesson && planItems.length === 0) {
       try {
-        let response;
-        if (isExternalVenue && externalRef) {
-          response = await ApiHelper.getAnonymous(
-            `/externalProviders/${externalRef.externalProviderId}/venue/${externalRef.venueId}/planItems`,
-            "LessonsApi"
-          );
-        } else {
-          response = await ApiHelper.getAnonymous(`/venues/public/planItems/${props.plan.contentId}`, "LessonsApi");
-        }
-        // Handle both new format { venueName, items } and old format (array)
-        const items = Array.isArray(response) ? response : (response?.items || []);
-        const venue = Array.isArray(response) ? "" : (response?.venueName || "");
-        setPreviewLessonItems(items);
-        if (venue) setVenueName(venue);
+        const response = await lessonsProvider.fetchVenuePlanItems(props.plan);
+        setPreviewLessonItems(response?.items || []);
+        if (response?.venueName) setVenueName(response.venueName);
       } catch (error) {
         console.error("Error loading preview lesson items:", error);
         setPreviewLessonItems([]);
@@ -95,4 +75,3 @@ export const ServiceOrder = (props: Props) => {
     </DisplayBox>
   );
 };
-

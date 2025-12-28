@@ -25,7 +25,7 @@
     "@churchapps/apphelper-login": "^0.6.0",
     "@churchapps/apphelper-markdown": "^0.6.1",
     "@churchapps/apphelper-website": "^0.6.6",
-    "@churchapps/helpers": "^1.2.6",
+    "@churchapps/helpers": "^1.2.7",
     "@mui/icons-material": "^7.3.6",
     "@mui/lab": "^7.0.0-beta.22",
     "@mui/material": "^7.3.6",
