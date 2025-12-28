@@ -179,8 +179,8 @@ export const PlanItem = (props: Props) => {
       case "song":
       case "arrangementKey":
         return getSongRow();
-      case "action": return getActionRow();
-      case "addOn": return getAddOnRow();
+      case "lessonAction": return getActionRow();
+      case "lessonAddOn": return getAddOnRow();
       case "lessonSection": return getLessonSectionRow();
       case "item": return getItemRow();
     }

@@ -80,7 +80,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
       );
     }
 
-    const isAction = item.itemType === "action" && item.relatedId;
+    const isAction = item.itemType === "lessonAction" && item.relatedId;
     const isLessonSection = item.itemType === "item" && item.relatedId;
 
     return (
