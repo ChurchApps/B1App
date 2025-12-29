@@ -100,14 +100,14 @@ export const GroupSessions: React.FC<Props> = (props) => {
     if (session !== null) {
       loadAttendance();
     }
-  }, [props, loadAttendance, session])
+  }, [loadAttendance, session])
 
   const handlePersonAdd = React.useCallback(() => {
     let v = { checkinTime: new Date(), personId: props.addedPerson.id, visitSessions: [{ sessionId: session.id }] } as VisitInterface;
     ApiHelper.post("/visitsessions/log", v, "AttendanceApi").then(() => { loadAttendance(); });
-  }, [props, loadAttendance, session]);
+  }, [loadAttendance, session, props.addedPerson?.id]);
 
-  React.useEffect(() => { if (props.group.id !== undefined) { loadSessions() }; }, [props.group, props.addedSession, loadSessions, props]);
+  React.useEffect(() => { if (props.group.id !== undefined) { loadSessions() }; }, [props.group.id, props.addedSession, loadSessions]);
 
   React.useEffect(() => { if (props.addedPerson?.id !== undefined) { handlePersonAdd() } }, [props.addedPerson, handlePersonAdd]);
 
