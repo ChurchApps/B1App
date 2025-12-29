@@ -275,7 +275,27 @@ export interface PlanItemInterface {
   relatedId?: string,
   label?: string,
   description?: string,
-  seconds?: number
+  seconds?: number,
+  link?: string,
 
   children?: PlanItemInterface[]
+}
+
+export interface PlanInterface {
+  id?: string;
+  churchId?: string;
+  name?: string;
+  ministryId?: string;
+  serviceDate?: Date;
+  notes?: string;
+  contentType?: string;
+  contentId?: string;
+}
+
+export interface ExternalVenueRefInterface {
+  externalProviderId: string;
+  programId: string;
+  studyId: string;
+  lessonId: string;
+  venueId: string;
 }
