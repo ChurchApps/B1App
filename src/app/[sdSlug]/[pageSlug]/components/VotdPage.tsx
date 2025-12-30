@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 
 export function VotdPage() {
   const [shape, setShape] = useState("16x9");
-  const [day, setDay] = useState(1);
+  const [day, setDay] = useState<number | null>(null);
+  const [isClient, setIsClient] = useState(false);
 
   const getShape = () => {
     const width = window.innerWidth;
@@ -31,11 +32,22 @@ export function VotdPage() {
   };
 
   useEffect(() => {
+    setIsClient(true);
     getShape();
     setDay(getDayOfYear());
     window.addEventListener("resize", getShape);
     return () => window.removeEventListener("resize", getShape);
   }, []);
+
+  // Don't render the image until client-side to avoid hydration mismatch
+  if (!isClient || day === null) {
+    return (
+      <Container>
+        <h1 style={{textAlign:"center"}}>Verse of the Day</h1>
+        <div className="full-frame" style={{minHeight: "200px"}} />
+      </Container>
+    );
+  }
 
   return (
     <Container>
