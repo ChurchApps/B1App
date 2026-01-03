@@ -55,7 +55,7 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
         jwt={jwt}
         appName="B1"
         showLogo={showLogo}
-        loginContainerCssProps={loginContainerCssProps}
+        loginContainerCssProps={loginContainerCssProps as any}
         keyName={keyName}
         returnUrl={searchParams.get("returnUrl") || redirectAfterLogin || "/my"}
         handleRedirect={handleRedirect}
