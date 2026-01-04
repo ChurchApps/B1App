@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { PersonHelper, WrapperPageProps } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper-forms";
@@ -10,6 +11,7 @@ import { DateHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { FormInterface } from "@churchapps/helpers";
 import { Container } from "@mui/material";
+import { FormCardPayment } from "@/components/forms/FormCardPayment";
 
 interface Props extends WrapperPageProps {
   formId: string;
@@ -24,22 +26,39 @@ export function FormPage(props: Props) {
   const [addFormId, setAddFormId] = useState<string>("");
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
   const [form, setForm] = useState<FormInterface>(null);
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe> | null>(null);
 
-  const loadData = () => {
+  const loadData = async () => {
     setIsLoading(true);
-    ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi").then((data: FormInterface) => {
-      const now = new Date().setHours(0, 0, 0, 0);
-      const start = data.accessStartTime ? new Date(data.accessStartTime) : null;
-      const end = data.accessEndTime ? new Date(data.accessEndTime) : null;
 
-      if (start && start.setHours(0, 0, 0, 0) > now) setEarly(start);
-      if (end && end.setHours(0, 0, 0, 0) < now) setLate(end);
-      setRestrictedForm(data.restricted);
-      if (data.restricted) setAddFormId(props.formId);
-      else setUnRestrictedFormId(props.formId);
-      setIsLoading(false);
-      setForm(data);
-    });
+    // Load both APIs in parallel
+    type GatewayResponse = { gateways?: { provider?: string; publicKey?: string; enabled?: boolean }[] };
+    const [gatewayResponse, formData] = await Promise.all([
+      ApiHelper.get(`/donate/gateways/${props.config.church.id}`, "GivingApi").catch((): GatewayResponse => ({ gateways: [] })) as Promise<GatewayResponse>,
+      ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi") as Promise<FormInterface>
+    ]);
+
+    // Process gateway response
+    const gateways = Array.isArray(gatewayResponse?.gateways) ? gatewayResponse.gateways : [];
+    const enabledGateways = gateways.filter((g) => g && g.enabled !== false);
+    const stripeGateway = enabledGateways.find((g) => g.provider?.toLowerCase() === "stripe");
+    if (stripeGateway?.publicKey) {
+      setStripePromise(loadStripe(stripeGateway.publicKey));
+    }
+
+    // Process form data
+    const data = formData;
+    const now = new Date().setHours(0, 0, 0, 0);
+    const start = data.accessStartTime ? new Date(data.accessStartTime) : null;
+    const end = data.accessEndTime ? new Date(data.accessEndTime) : null;
+
+    if (start && start.setHours(0, 0, 0, 0) > now) setEarly(start);
+    if (end && end.setHours(0, 0, 0, 0) < now) setLate(end);
+    setRestrictedForm(data.restricted);
+    if (data.restricted) setAddFormId(props.formId);
+    else setUnRestrictedFormId(props.formId);
+    setIsLoading(false);
+    setForm(data);
   };
 
   const handleUpdate = () => setIsFormSubmitted(true);
@@ -55,6 +74,8 @@ export function FormPage(props: Props) {
       personId={PersonHelper?.person?.id}
       updatedFunction={handleUpdate}
       cancelFunction={() => redirect("/")}
+      stripePromise={stripePromise}
+      FormCardPaymentComponent={FormCardPayment}
     />
   );
 
