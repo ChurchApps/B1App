@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { Grid, Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
+import { Grid, Icon, IconButton, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { PersonHelper } from "../../../helpers";
 import { Household } from "./Household";
-import { ModifyProfile } from "./ModifyProfile";
+import { ProfileEdit } from "./ProfileEdit";
 import { DirectMessageModal } from "./DirectMessageModal";
 import { VisibilityPreferences } from "./VisibilityPreferences";
 import UserContext from "@/context/UserContext";
@@ -16,6 +17,7 @@ export const Person: React.FC<Props> = (props) => {
   const [person, setPerson] = React.useState<PersonInterface>(null);
   const [requestedChanges, setRequestedChanges] = React.useState<TaskInterface[]>([]);
   const [showPM, setShowPM] = React.useState(false);
+  const [editMode, setEditMode] = React.useState(false);
   const context = useContext(UserContext);
 
   const getContactMethods = () => {
@@ -86,9 +88,17 @@ export const Person: React.FC<Props> = (props) => {
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then((data: TaskInterface[]) => setRequestedChanges(data));
   }
 
+  const isOwnProfile = PersonHelper.person && props.personId === PersonHelper.person.id;
+
   const getEditContent = () => {
-    if (PersonHelper.person && props.personId === PersonHelper.person.id) return <ModifyProfile personId={props.personId} person={person} onSave={() => { loadData(); }} />;
-    else return <Button variant="contained" color="primary" disabled={!person} onClick={() => {if (person) setShowPM(true)}}>Message</Button>
+    if (isOwnProfile) {
+      return (
+        <IconButton color="primary" size="small" onClick={() => setEditMode(true)} title="Edit Profile">
+          <EditIcon />
+        </IconButton>
+      );
+    }
+    return <Button variant="contained" color="primary" disabled={!person} onClick={() => {if (person) setShowPM(true)}}>Message</Button>
   }
 
   const getPM = () => {
@@ -97,31 +107,40 @@ export const Person: React.FC<Props> = (props) => {
 
   React.useEffect(loadData, [props.personId]);
 
+  const handleSaveProfile = () => {
+    loadData();
+    setEditMode(false);
+  };
+
   return (
     <>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 8 }}>
-          <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 4 }}>
-                <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
+          {editMode ? (
+            <DisplayBox id="peopleBox" headerIcon="person" headerText="Edit Profile" data-testid="edit-profile-display-box">
+              <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} />
+            </DisplayBox>
+          ) : (
+            <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 4 }}>
+                  <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
+                </Grid>
+                <Grid size={{ xs: 8 }}>
+                  <h2>{person?.name?.display}</h2>
+                  {getContactMethods()}
+                </Grid>
               </Grid>
-              <Grid size={{ xs: 8 }}>
-                <h2>{person?.name?.display}</h2>
-                {getContactMethods()}
-              </Grid>
-            </Grid>
-          </DisplayBox>
+            </DisplayBox>
+          )}
           {requestedChanges.length > 0 && showChanges()}
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-
           <Household person={person} selectedHandler={props.selectedHandler} />
         </Grid>
         {getPM()}
       </Grid>
-      {PersonHelper.person && props.personId === PersonHelper.person.id && <VisibilityPreferences />}
+      {isOwnProfile && <VisibilityPreferences />}
     </>
-
   )
 }
