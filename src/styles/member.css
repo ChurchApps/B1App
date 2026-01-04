@@ -395,6 +395,40 @@ body {
   font-size: 26px;
 }
 
+/* Override church style preferences for headers in my section - use standard Roboto like B1Admin */
+#mainContent h1,
+#mainContent h2,
+#mainContent h3,
+#mainContent h4,
+.MuiContainer-root h1,
+.MuiContainer-root h2,
+.MuiContainer-root h3,
+.MuiContainer-root h4 {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 500;
+}
+
+#mainContent h1,
+.MuiContainer-root h1 {
+  font-size: 2rem;
+}
+
+#mainContent h2,
+.MuiContainer-root h2 {
+  font-size: 1.75rem;
+}
+
+#mainContent h3,
+.MuiContainer-root h3 {
+  font-size: 1.5rem;
+}
+
+#mainContent h4,
+.MuiContainer-root h4 {
+  font-size: 1.25rem;
+}
+
 /*Order of Service*/
 .planItemHeader { background-color:#EEE; border-bottom: 3px solid var(--c1l2); font-weight:bold; padding: 5px 5px 5px 10px; text-transform:uppercase; }
 .planItem {border-bottom: 1px solid #DDD; padding: 5px 5px 5px 10px; }
