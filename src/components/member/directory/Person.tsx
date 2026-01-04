@@ -18,6 +18,7 @@ export const Person: React.FC<Props> = (props) => {
   const [requestedChanges, setRequestedChanges] = React.useState<TaskInterface[]>([]);
   const [showPM, setShowPM] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
+  const [familyMembers, setFamilyMembers] = React.useState<string[]>([]);
   const context = useContext(UserContext);
 
   const getContactMethods = () => {
@@ -110,6 +111,7 @@ export const Person: React.FC<Props> = (props) => {
   const handleSaveProfile = () => {
     loadData();
     setEditMode(false);
+    setFamilyMembers([]);
   };
 
   return (
@@ -118,7 +120,7 @@ export const Person: React.FC<Props> = (props) => {
         <Grid size={{ xs: 12, md: 8 }}>
           {editMode ? (
             <DisplayBox id="peopleBox" headerIcon="person" headerText="Edit Profile" data-testid="edit-profile-display-box">
-              <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} />
+              <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
             </DisplayBox>
           ) : (
             <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
@@ -136,11 +138,11 @@ export const Person: React.FC<Props> = (props) => {
           {requestedChanges.length > 0 && showChanges()}
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
-          <Household person={person} selectedHandler={props.selectedHandler} />
+          <Household person={person} selectedHandler={props.selectedHandler} showAddMember={editMode} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
         </Grid>
         {getPM()}
       </Grid>
-      {isOwnProfile && <VisibilityPreferences />}
+      {isOwnProfile && editMode && <VisibilityPreferences />}
     </>
   )
 }

@@ -9,6 +9,8 @@ interface Props {
   person: PersonInterface;
   onSave?: () => void;
   onCancel?: () => void;
+  familyMembers?: string[];
+  onFamilyMembersChange?: (members: string[]) => void;
 }
 
 interface ProfileChange {
@@ -39,10 +41,10 @@ export const ProfileEdit: React.FC<Props> = (props) => {
   const originalPersonRef = useRef<PersonInterface | null>(null);
   const [modifiedFields, setModifiedFields] = useState<Set<string>>(new Set());
   const [showPhotoEditor, setShowPhotoEditor] = useState(false);
-  const [newFamilyMember, setNewFamilyMember] = useState("");
-  const [familyMembers, setFamilyMembers] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const familyMembers = props.familyMembers || [];
 
   useEffect(() => {
     if (props.person) {
@@ -103,19 +105,6 @@ export const ProfileEdit: React.FC<Props> = (props) => {
     setShowPhotoEditor(false);
   };
 
-  const handleAddFamilyMember = () => {
-    if (newFamilyMember.trim()) {
-      setFamilyMembers([...familyMembers, newFamilyMember.trim()]);
-      setNewFamilyMember("");
-    }
-  };
-
-  const handleRemoveFamilyMember = (index: number) => {
-    const newMembers = [...familyMembers];
-    newMembers.splice(index, 1);
-    setFamilyMembers(newMembers);
-  };
-
   const buildChanges = (): ProfileChange[] => {
     const changes: ProfileChange[] = [];
 
@@ -172,7 +161,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
       setSubmitted(true);
       setModifiedFields(new Set());
-      setFamilyMembers([]);
+      if (props.onFamilyMembersChange) props.onFamilyMembersChange([]);
       if (props.onSave) props.onSave();
     } catch (error) {
       console.error("Error submitting profile changes:", error);
@@ -203,32 +192,35 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         </Alert>
       )}
 
+      {/* Photo Editor - Full Width when active */}
+      {showPhotoEditor && (
+        <Box sx={{ mb: 3, "& .cropper-container": { overflow: "hidden !important" } }}>
+          <ImageEditor
+            aspectRatio={4 / 3}
+            photoUrl={person.photo?.startsWith("data:") ? person.photo : PersonHelper.getPhotoUrl(props.person)}
+            onCancel={() => setShowPhotoEditor(false)}
+            onUpdate={handlePhotoUpdate}
+          />
+        </Box>
+      )}
+
       <Grid container spacing={3}>
         {/* Photo Section */}
         <Grid size={{ xs: 12, sm: 3 }}>
           <Box sx={{ textAlign: "center" }}>
-            {showPhotoEditor ? (
-              <ImageEditor
-                aspectRatio={4 / 3}
-                photoUrl={person.photo || PersonHelper.getPhotoUrl(person)}
-                onCancel={() => setShowPhotoEditor(false)}
-                onUpdate={handlePhotoUpdate}
+            <Box
+              onClick={() => setShowPhotoEditor(true)}
+              sx={{ cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+            >
+              <img
+                src={person.photo?.startsWith("data:") ? person.photo : PersonHelper.getPhotoUrl(props.person)}
+                alt="Profile"
+                style={{ maxWidth: "100%", borderRadius: 8 }}
               />
-            ) : (
-              <Box
-                onClick={() => setShowPhotoEditor(true)}
-                sx={{ cursor: "pointer", "&:hover": { opacity: 0.8 } }}
-              >
-                <img
-                  src={person.photo || PersonHelper.getPhotoUrl(person)}
-                  alt="Profile"
-                  style={{ maxWidth: "100%", borderRadius: 8 }}
-                />
-                <Typography variant="caption" color="textSecondary">
-                  Click to change photo
-                </Typography>
-              </Box>
-            )}
+              <Typography variant="caption" color="textSecondary">
+                Click to change photo
+              </Typography>
+            </Box>
           </Box>
         </Grid>
 
@@ -365,39 +357,6 @@ export const ProfileEdit: React.FC<Props> = (props) => {
           />
         </Grid>
       </Grid>
-
-      {/* Add Family Member Section */}
-      <Typography variant="subtitle2" sx={{ mt: 3, mb: 1, fontWeight: 600, borderBottom: "1px solid #ddd", pb: 1 }}>
-        Add Family Member
-      </Typography>
-      <Grid container spacing={2} alignItems="center">
-        <Grid size={{ xs: 12, md: 8 }}>
-          <TextField
-            fullWidth
-            label="First Name"
-            value={newFamilyMember}
-            onChange={(e) => setNewFamilyMember(e.target.value)}
-            helperText="Enter the first name of a new family member"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Button variant="outlined" onClick={handleAddFamilyMember} disabled={!newFamilyMember.trim()}>
-            + Add
-          </Button>
-        </Grid>
-      </Grid>
-      {familyMembers.length > 0 && (
-        <Box sx={{ mt: 1 }}>
-          {familyMembers.map((name, index) => (
-            <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-              <Typography variant="body2">• {name}</Typography>
-              <Button size="small" color="error" onClick={() => handleRemoveFamilyMember(index)}>
-                Remove
-              </Button>
-            </Box>
-          ))}
-        </Box>
-      )}
 
       {/* Modified Fields and Submit */}
       <Box sx={{ mt: 3, p: 2, backgroundColor: hasChanges ? "#fff3cd" : "#f5f5f5", borderRadius: 1, border: hasChanges ? "1px solid #ffc107" : "1px solid #ddd" }}>
