@@ -257,6 +257,9 @@
   "wrapper": {
     "chatWith": "Plaudern mit",
     "deleteChurch": "Kirche aus der Liste löschen",
+    "editAccount": "Konto bearbeiten",
+    "editChurchProfile": "Kirchenprofil bearbeiten",
+    "editProfile": "Profil bearbeiten",
     "logout": "Ausloggen",
     "newPrivateMessage": "Neue private Nachricht",
     "privateMessage": "Private Nachricht",

@@ -20,7 +20,7 @@
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/public/locales/** public/apphelper/locales && copyfiles -a -f node_modules/@churchapps/apphelper-markdown/dist/editor.css public/apphelper/css && copyfiles -a -f node_modules/react-cropper/node_modules/cropperjs/dist/cropper.css public/css"
   },
   "dependencies": {
-    "@churchapps/apphelper": "^0.6.11",
+    "@churchapps/apphelper": "^0.6.13",
     "@churchapps/apphelper-donations": "^0.6.11",
     "@churchapps/apphelper-forms": "^0.6.11",
     "@churchapps/apphelper-login": "^0.6.11",

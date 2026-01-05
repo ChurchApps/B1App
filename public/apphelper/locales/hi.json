@@ -257,6 +257,9 @@
   "wrapper": {
     "chatWith": "साथ बात",
     "deleteChurch": "चर्च को सूची से हटा दें",
+    "editAccount": "खाता संपादित करें",
+    "editChurchProfile": "चर्च प्रोफ़ाइल संपादित करें",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
     "logout": "लॉग आउट",
     "newPrivateMessage": "नया निजी संदेश",
     "privateMessage": "निजी संदेश",

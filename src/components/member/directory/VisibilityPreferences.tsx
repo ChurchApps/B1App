@@ -8,7 +8,14 @@ export const VisibilityPreferences = () => {
   const [pref, setPref] = useState<VisibilityPreferenceInterface>({ address: "", phoneNumber: "", email: "" } as VisibilityPreferenceInterface);
 
   const initData = () => {
-    ApiHelper.get("/visibilityPreferences/my", "MembershipApi").then((data: VisibilityPreferenceInterface) => setPref(data));
+    ApiHelper.get("/visibilityPreferences/my", "MembershipApi").then((data: VisibilityPreferenceInterface) => {
+      setPref({
+        ...data,
+        address: data?.address || "members",
+        phoneNumber: data?.phoneNumber || "members",
+        email: data?.email || "members"
+      });
+    });
   };
 
   const handlePrefChange = (e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {

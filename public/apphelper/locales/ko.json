@@ -257,6 +257,9 @@
   "wrapper": {
     "chatWith": "채팅",
     "deleteChurch": "목록에서 교회 삭제",
+    "editAccount": "계정 편집",
+    "editChurchProfile": "교회 프로필 편집",
+    "editProfile": "프로필 편집",
     "logout": "로그 아웃",
     "newPrivateMessage": "새 비공개 메시지",
     "privateMessage": "사신",

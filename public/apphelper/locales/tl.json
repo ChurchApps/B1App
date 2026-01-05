@@ -257,6 +257,9 @@
   "wrapper": {
     "chatWith": "Makipag-usap kay",
     "deleteChurch": "Tanggalin ang simbahan sa listahan",
+    "editAccount": "I-edit ang Account",
+    "editChurchProfile": "I-edit ang Profile ng Simbahan",
+    "editProfile": "I-edit ang Profile",
     "logout": "Mag-logout",
     "newPrivateMessage": "Bagong Pribadong Mensahe",
     "privateMessage": "Pribadong Mensahe",
