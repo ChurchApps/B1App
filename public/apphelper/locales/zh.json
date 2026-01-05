@@ -257,6 +257,9 @@
   "wrapper": {
     "chatWith": "和...聊天",
     "deleteChurch": "从列表中删除教堂",
+    "editAccount": "编辑账户",
+    "editChurchProfile": "编辑教会资料",
+    "editProfile": "编辑个人资料",
     "logout": "登出",
     "newPrivateMessage": "新私信",
     "privateMessage": "私人信息",

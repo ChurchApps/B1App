@@ -257,6 +257,9 @@
   "wrapper": {
     "chatWith": "Chat med",
     "deleteChurch": "Slett kirke fra listen",
+    "editAccount": "Rediger konto",
+    "editChurchProfile": "Rediger kirkeprofil",
+    "editProfile": "Rediger profil",
     "logout": "Logg ut",
     "newPrivateMessage": "Ny privat melding",
     "privateMessage": "Privat melding",

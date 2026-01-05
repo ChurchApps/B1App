@@ -4,13 +4,39 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
-import { Grid } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { PersonHelper as LocalPersonHelper } from "../../../helpers";
 
-interface Props { person: PersonInterface, selectedHandler: (personId: string) => void }
+interface Props {
+  person: PersonInterface;
+  selectedHandler: (personId: string) => void;
+  showAddMember?: boolean;
+  familyMembers?: string[];
+  onFamilyMembersChange?: (members: string[]) => void;
+}
 
 export const Household: React.FC<Props> = (props) => {
   const [members, setMembers] = React.useState<PersonInterface[]>(null);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [newFamilyMember, setNewFamilyMember] = React.useState("");
+
+  const isOwnProfile = LocalPersonHelper.person && props.person?.id === LocalPersonHelper.person.id;
+  const showAddMemberSection = props.showAddMember && isOwnProfile;
+
+  const handleAddFamilyMember = () => {
+    if (newFamilyMember.trim() && props.onFamilyMembersChange) {
+      props.onFamilyMembersChange([...(props.familyMembers || []), newFamilyMember.trim()]);
+      setNewFamilyMember("");
+    }
+  };
+
+  const handleRemoveFamilyMember = (index: number) => {
+    if (props.onFamilyMembersChange && props.familyMembers) {
+      const newMembers = [...props.familyMembers];
+      newMembers.splice(index, 1);
+      props.onFamilyMembersChange(newMembers);
+    }
+  };
 
   const getMember = (member: PersonInterface) => {
     const m = member;
@@ -47,9 +73,51 @@ export const Household: React.FC<Props> = (props) => {
 
   React.useEffect(loadMembers, [props.person]);
 
+  const getAddMemberSection = () => {
+    if (!showAddMemberSection) return null;
+
+    return (
+      <Box sx={{ mt: 2, pt: 2, borderTop: "1px solid #ddd" }}>
+        <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
+          Add Family Member
+        </Typography>
+        <Grid container spacing={2} alignItems="center">
+          <Grid size={{ xs: 12, sm: 8 }}>
+            <TextField
+              fullWidth
+              size="small"
+              label="First Name"
+              value={newFamilyMember}
+              onChange={(e) => setNewFamilyMember(e.target.value)}
+              helperText="Enter the first name of a new family member"
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <Button variant="outlined" size="small" onClick={handleAddFamilyMember} disabled={!newFamilyMember.trim()}>
+              + Add
+            </Button>
+          </Grid>
+        </Grid>
+        {props.familyMembers && props.familyMembers.length > 0 && (
+          <Box sx={{ mt: 1 }}>
+            {props.familyMembers.map((name, index) => (
+              <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
+                <Typography variant="body2">• {name}</Typography>
+                <Button size="small" color="error" onClick={() => handleRemoveFamilyMember(index)}>
+                  Remove
+                </Button>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <DisplayBox id="householdBox" headerIcon="people" headerText="Household" data-testid="household-display-box">
       {getMembers()}
+      {getAddMemberSection()}
     </DisplayBox>
   )
 }
