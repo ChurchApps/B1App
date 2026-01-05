@@ -21,6 +21,8 @@ export const Person: React.FC<Props> = (props) => {
   const [familyMembers, setFamilyMembers] = React.useState<string[]>([]);
   const context = useContext(UserContext);
 
+  const isOwnProfile = context.person && props.personId === context.person.id;
+
   const getContactMethods = () => {
     let contactMethods = [];
     if (person) {
@@ -88,8 +90,6 @@ export const Person: React.FC<Props> = (props) => {
     ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then((data: PersonInterface) => setPerson(data));
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then((data: TaskInterface[]) => setRequestedChanges(data));
   }
-
-  const isOwnProfile = PersonHelper.person && props.personId === PersonHelper.person.id;
 
   const getEditContent = () => {
     if (isOwnProfile) {
