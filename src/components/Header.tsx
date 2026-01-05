@@ -2,7 +2,9 @@
 
 import { useEffect, useState, useContext } from "react";
 import Link from "next/link";
-import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ClickAwayListener, ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
+import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ListItem, ListItemButton, ListItemText, ListItemIcon, Collapse } from "@mui/material";
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ApiHelper } from "@churchapps/apphelper";
@@ -49,6 +51,8 @@ export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+  const [editMenuAnchor, setEditMenuAnchor] = useState<HTMLElement | null>(null);
+  const [editDrawerOpen, setEditDrawerOpen] = useState(false);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [logoError, setLogoError] = useState(false);
   const pathname = usePathname()
@@ -90,27 +94,56 @@ export function Header(props: Props) {
     <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/` }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
-  const editProfile = <MenuItem onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`) }} dense data-testid="edit-profile-menu-item" aria-label="Edit your profile"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>manage_accounts</Icon> Edit profile</MenuItem>
+  const getAccountUrl = () => {
+    const jwt = context.userChurch?.jwt;
+    const churchId = context.userChurch?.church?.id;
+    return `https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/profile`;
+  };
+
+  const handleEditMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setEditMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseAllMenus = () => {
+    setEditMenuAnchor(null);
+    setMenuAnchor(null);
+  };
 
   const userAction = ApiHelper.isAuthenticated
     ? (
       <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
-        <ClickAwayListener onClickAway={() => setMenuAnchor(null)}>
-          <Chip
-            id="userMenuLink"
-            label={`${UserHelper.user.firstName} ${UserHelper.user.lastName}`}
-            icon={<Icon id="userIcon" sx={{ color: "#36547e !important" }}>account_circle</Icon>}
-            sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
-            onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.currentTarget); }}
-            data-testid="user-menu-chip"
-            aria-label="User menu"
-          />
-        </ClickAwayListener>
-        <Menu id="useMenu" anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={() => { setMenuAnchor(null); }} MenuListProps={{ "aria-labelledby": "userMenuLink" }} sx={{ top: 5 }}>
+        <Chip
+          id="userMenuLink"
+          label={`${UserHelper.user.firstName} ${UserHelper.user.lastName}`}
+          icon={<Icon id="userIcon" sx={{ color: "#36547e !important" }}>account_circle</Icon>}
+          sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
+          onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.currentTarget); }}
+          data-testid="user-menu-chip"
+          aria-label="User menu"
+        />
+        <Menu id="useMenu" anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={() => { if (!editMenuAnchor) { setMenuAnchor(null); } }} MenuListProps={{ "aria-labelledby": "userMenuLink" }} sx={{ top: 5 }}>
           {memberPortal}
           {adminPortal}
-          {editProfile}
+          <MenuItem onClick={handleEditMenuOpen} dense data-testid="edit-menu-item" aria-label="Edit profile options">
+            <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Edit Profile
+            <Icon sx={{ marginLeft: "auto", fontSize: "18px !important" }}>chevron_right</Icon>
+          </MenuItem>
           <MenuItem onClick={() => { redirect("/logout") }} sx={{ color: "#d32f2f" }} dense data-testid="logout-menu-item" aria-label="Logout"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> Logout</MenuItem>
+        </Menu>
+        <Menu
+          id="editSubMenu"
+          anchorEl={editMenuAnchor}
+          open={Boolean(editMenuAnchor)}
+          onClose={handleCloseAllMenus}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "left" }}
+        >
+          <MenuItem onClick={() => { handleCloseAllMenus(); window.location.href = getAccountUrl(); }} dense data-testid="account-menu-item" aria-label="Edit account settings">
+            <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Edit Account
+          </MenuItem>
+          <MenuItem onClick={() => { handleCloseAllMenus(); redirect(`/my/community/${PersonHelper?.person?.id}`); }} dense data-testid="church-profile-menu-item" aria-label="Edit church profile">
+            <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>church</Icon> Edit Church Profile
+          </MenuItem>
         </Menu>
       </Box>
     )
@@ -147,11 +180,28 @@ export function Header(props: Props) {
       </ListItem>
     </>)}
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect(`/my/directory/${PersonHelper?.person?.id}`) }} data-testid="edit-profile-list-item" aria-label="Edit your profile">
-        <ListItemIcon><Icon color="secondary">manage_accounts</Icon></ListItemIcon>
+      <ListItemButton onClick={() => setEditDrawerOpen(!editDrawerOpen)} data-testid="edit-list-item" aria-label="Edit profile options">
+        <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Edit Profile" />
+        {editDrawerOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
     </ListItem>
+    <Collapse in={editDrawerOpen} timeout="auto" unmountOnExit>
+      <List component="div" disablePadding>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => { window.location.href = getAccountUrl(); }} data-testid="account-list-item" aria-label="Edit account settings">
+            <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
+            <ListItemText primary="Edit Account" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`); }} data-testid="church-profile-list-item" aria-label="Edit church profile">
+            <ListItemIcon><Icon color="secondary">church</Icon></ListItemIcon>
+            <ListItemText primary="Edit Church Profile" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Collapse>
   </>)
 
   const getLinkClass = () => {

@@ -257,6 +257,9 @@
   "wrapper": {
     "chatWith": "Чат с",
     "deleteChurch": "Удалить церковь из списка",
+    "editAccount": "Редактировать аккаунт",
+    "editChurchProfile": "Редактировать профиль церкви",
+    "editProfile": "Редактировать профиль",
     "logout": "Выйти",
     "newPrivateMessage": "Новое личное сообщение",
     "privateMessage": "Личное сообщение",

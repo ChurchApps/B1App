@@ -263,6 +263,9 @@
 	"wrapper": {
 		"chatWith": "Chat with",
 		"deleteChurch": "Delete",
+		"editAccount": "Edit Account",
+		"editChurchProfile": "Edit Church Profile",
+		"editProfile": "Edit Profile",
 		"logout": "Logout",
 		"messages": "Messages",
 		"newPrivateMessage": "New Private Message",
