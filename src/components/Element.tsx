@@ -5,6 +5,7 @@ import { Element as AppHelperElement, ElementBlock } from "@churchapps/apphelper
 import type { ChurchInterface } from "@churchapps/helpers";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { LiveStream } from "./video/LiveStream";
+import { FormElement } from "./elements/FormElement";
 
 interface Props {
   element: ElementInterface;
@@ -30,6 +31,10 @@ const StreamElement: React.FC<{ element: ElementInterface; churchSettings: any; 
 export const Element: React.FC<Props> = (props) => {
   if (props.element.elementType === "stream" && props.church) {
     return <StreamElement element={props.element} churchSettings={props.churchSettings} church={props.church} editMode={!!props.onEdit} />;
+  }
+
+  if (props.element.elementType === "form" && props.church) {
+    return <FormElement element={props.element} church={props.church} />;
   }
 
   return <AppHelperElement {...props} />;
