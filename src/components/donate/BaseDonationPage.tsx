@@ -199,13 +199,14 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
 
     for (let i = 0; i < donations.length; i++) {
       let d = donations[i];
+      const isPending = d.status === "pending";
       rows.push(
-        <TableRow key={i}>
+        <TableRow key={i} sx={{ opacity: isPending ? 0.8 : 1 }}>
           {appName !== "B1App" && <TableCell><Link href={"/donations/" + d.batchId}>{d.batchId}</Link></TableCell>}
           <TableCell>{DateHelper.prettyDate(new Date(d.donationDate))}</TableCell>
           <TableCell>{d.method} - {d.methodDetails}</TableCell>
-          <TableCell>{d.fund.name}</TableCell>
-          <TableCell>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>
+          <TableCell>{d.fund.name}{isPending && " (Pending)"}</TableCell>
+          <TableCell sx={{ color: isPending ? "warning.main" : undefined }}>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>
         </TableRow>
       );
     }
