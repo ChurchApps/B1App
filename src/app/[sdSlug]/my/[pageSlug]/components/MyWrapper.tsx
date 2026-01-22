@@ -34,8 +34,8 @@ export async function MyWrapper(props:Props) {
   const getRootLayout = () => <Container>
     <div id="mainContent">
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 2 }}>
-          <div className="sideNav" style={{height:"100vh", borderRight:"1px solid #CCC" }}>
+        <Grid size={{ xs: 12, md: 2 }} sx={{ order: { xs: -1, md: 0 } }}>
+          <div className="sideNav desktopSideNav">
             <TabsClient config={props.config} />
           </div>
         </Grid>

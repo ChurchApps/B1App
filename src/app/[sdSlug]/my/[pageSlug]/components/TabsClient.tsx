@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { UserHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
@@ -9,6 +9,9 @@ import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { IconButton, useMediaQuery, useTheme } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface TabItem {
   url: string;
@@ -23,6 +26,10 @@ export const TabsClient = (props: Props) => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
   const [navLinks, setNavLinks] = React.useState<LinkInterface[]>([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     // Load b1Tab links for the /my section navigation
@@ -107,13 +114,48 @@ export const TabsClient = (props: Props) => {
     return tabs;
   }, [navLinks, context.userChurch]);
 
+  const handleMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setMobileMenuOpen(false);
+    }
+  };
+
   const getItem = (tab: TabItem) => (
     <li key={tab.url}>
-      <Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>
+      <Link
+        href={tab.url}
+        data-testid={`my-tab-${tab.label.toLowerCase()}`}
+        aria-label={`Go to ${tab.label}`}
+        onClick={handleLinkClick}
+      >
         {tab.label}
       </Link>
     </li>
   );
+
+  if (isMobile) {
+    return (
+      <div className="mobileNav">
+        <IconButton
+          onClick={handleMenuToggle}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          className="mobileMenuToggle"
+        >
+          {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          <span className="mobileMenuLabel">Menu</span>
+        </IconButton>
+        {mobileMenuOpen && (
+          <ul data-testid="my-portal-tabs" aria-label="Member portal navigation" className="mobileMenuList">
+            {getTabs.map((tab) => getItem(tab))}
+          </ul>
+        )}
+      </div>
+    );
+  }
 
   return (
     <ul data-testid="my-portal-tabs" aria-label="Member portal navigation">
