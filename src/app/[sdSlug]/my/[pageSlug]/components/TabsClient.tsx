@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { UserHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
@@ -9,6 +9,7 @@ import { PersonHelper } from "@/helpers"
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { Icon } from "@mui/material";
 
 interface TabItem {
   url: string;
@@ -23,6 +24,7 @@ export const TabsClient = (props: Props) => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
   const [navLinks, setNavLinks] = React.useState<LinkInterface[]>([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Load b1Tab links for the /my section navigation
@@ -107,17 +109,50 @@ export const TabsClient = (props: Props) => {
     return tabs;
   }, [navLinks, context.userChurch]);
 
-  const getItem = (tab: TabItem) => (
+  const handleMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleLinkClick = () => {
+    setMobileMenuOpen(false);
+  };
+
+  const getItem = (tab: TabItem, includeClickHandler: boolean) => (
     <li key={tab.url}>
-      <Link href={tab.url} data-testid={`my-tab-${tab.label.toLowerCase()}`} aria-label={`Go to ${tab.label}`}>
+      <Link
+        href={tab.url}
+        data-testid={`my-tab-${tab.label.toLowerCase()}`}
+        aria-label={`Go to ${tab.label}`}
+        onClick={includeClickHandler ? handleLinkClick : undefined}
+      >
         {tab.label}
       </Link>
     </li>
   );
 
   return (
-    <ul data-testid="my-portal-tabs" aria-label="Member portal navigation">
-      {getTabs.map((tab) => getItem(tab))}
-    </ul>
+    <>
+      {/* Mobile Navigation */}
+      <div className="mobileNav">
+        <button
+          onClick={handleMenuToggle}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          className="mobileMenuToggle"
+        >
+          <Icon>{mobileMenuOpen ? "close" : "menu"}</Icon>
+          <span className="mobileMenuLabel">Menu</span>
+        </button>
+        {mobileMenuOpen && (
+          <ul data-testid="my-portal-tabs-mobile" aria-label="Member portal navigation" className="mobileMenuList">
+            {getTabs.map((tab) => getItem(tab, true))}
+          </ul>
+        )}
+      </div>
+
+      {/* Desktop Navigation */}
+      <ul data-testid="my-portal-tabs" aria-label="Member portal navigation" className="desktopNav">
+        {getTabs.map((tab) => getItem(tab, false))}
+      </ul>
+    </>
   );
 };
