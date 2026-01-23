@@ -53,6 +53,10 @@
   justify-content: flex-start;
   border-radius: 0;
   color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .mobileNav .mobileMenuLabel {
@@ -91,6 +95,14 @@
     height: 100vh;
     border-right: 1px solid #CCC;
   }
+
+  .mobileNav {
+    display: none;
+  }
+
+  .desktopNav {
+    display: block;
+  }
 }
 
 /* Mobile sidebar styles */
@@ -98,5 +110,13 @@
   .sideNav {
     height: auto;
     border-right: none;
+  }
+
+  .mobileNav {
+    display: block;
+  }
+
+  .desktopNav {
+    display: none;
   }
 }
