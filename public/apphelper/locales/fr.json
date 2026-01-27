@@ -144,6 +144,11 @@
     "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette image de la galerie ?",
     "freeForm": "Forme libre"
   },
+  "groups": {
+    "announcements": "Annonces",
+    "conversations": "Conversations",
+    "discussions": "Discussions"
+  },
   "iconPicker": {
     "iconsAvailable": "icônes disponibles",
     "matchingResults": "résultats correspondants",

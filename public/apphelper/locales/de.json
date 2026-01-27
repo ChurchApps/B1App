@@ -144,6 +144,11 @@
     "confirmDelete": "Sind Sie sicher, dass Sie dieses Bild aus der Galerie löschen möchten?",
     "freeForm": "Freie Form"
   },
+  "groups": {
+    "announcements": "Ankündigungen",
+    "conversations": "Unterhaltungen",
+    "discussions": "Diskussionen"
+  },
   "iconPicker": {
     "iconsAvailable": "Symbole verfügbar",
     "matchingResults": "passende Ergebnisse",

@@ -144,6 +144,11 @@
     "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang larawang ito mula sa gallery?",
     "freeForm": "Libreng Form"
   },
+  "groups": {
+    "announcements": "Mga Anunsyo",
+    "conversations": "Mga Usapan",
+    "discussions": "Mga Talakayan"
+  },
   "iconPicker": {
     "iconsAvailable": "magagamit ang mga icon",
     "matchingResults": "pagtutugma ng mga resulta",

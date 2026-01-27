@@ -13,9 +13,11 @@ interface Props {
   contentId: string;
   groupId: string;
   context: UserContextInterface;
+  canPost?: boolean;
 }
 
 export function Conversations(props: Props) {
+  const canPost = props.canPost !== false;
 
   const [conversations, setConversations] = React.useState<ConversationInterface[]>(null)
 
@@ -52,11 +54,11 @@ export function Conversations(props: Props) {
   if (!conversations) return <Loading />
   else return (
     <>
-      {conversations?.length === 0 && (
+      {conversations?.length === 0 && canPost && (
           <NewConversation conversation={conversations} context={props.context} contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
       )}
       {conversations && Array.isArray(conversations) && conversations?.length > 0 && (
-        <Conversation context={props.context} conversation={conversations[0]} key={conversations[0].id} />
+        <Conversation context={props.context} conversation={conversations[0]} key={conversations[0].id} canPost={canPost} />
       )}
     </>
   );

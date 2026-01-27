@@ -144,6 +144,11 @@
     "confirmDelete": "您确定要从图库中删除此图片吗？",
     "freeForm": "自由形式"
   },
+  "groups": {
+    "announcements": "公告",
+    "conversations": "对话",
+    "discussions": "讨论"
+  },
   "iconPicker": {
     "iconsAvailable": "可用图标",
     "matchingResults": "匹配结果",
