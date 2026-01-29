@@ -144,11 +144,6 @@
     "confirmDelete": "क्या आप वाकई इस छवि को गैलरी से हटाना चाहते हैं?",
     "freeForm": "मुफ्त फॉर्म"
   },
-  "groups": {
-    "announcements": "घोषणाएँ",
-    "conversations": "वार्तालाप",
-    "discussions": "चर्चाएँ"
-  },
   "iconPicker": {
     "iconsAvailable": "चिह्न उपलब्ध हैं",
     "matchingResults": "मिलान परिणाम",

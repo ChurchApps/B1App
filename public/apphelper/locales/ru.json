@@ -144,11 +144,6 @@
     "confirmDelete": "Вы уверены, что хотите удалить это изображение из галереи?",
     "freeForm": "Свободная форма"
   },
-  "groups": {
-    "announcements": "Объявления",
-    "conversations": "Беседы",
-    "discussions": "Обсуждения"
-  },
   "iconPicker": {
     "iconsAvailable": "доступны значки",
     "matchingResults": "совпадающие результаты",

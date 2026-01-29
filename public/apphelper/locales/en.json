@@ -1,9 +1,4 @@
 {
-	"groups": {
-		"announcements": "Announcements",
-		"conversations": "Conversations",
-		"discussions": "Discussions"
-	},
 	"b1Share": {
 		"comment": "Comment",
 		"commentPlaceholder": "Include a comment with your post.",

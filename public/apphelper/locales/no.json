@@ -144,11 +144,6 @@
     "confirmDelete": "Er du sikker på at du vil slette dette bildet fra galleriet?",
     "freeForm": "Fri form"
   },
-  "groups": {
-    "announcements": "Kunngjøringer",
-    "conversations": "Samtaler",
-    "discussions": "Diskusjoner"
-  },
   "iconPicker": {
     "iconsAvailable": "ikoner tilgjengelig",
     "matchingResults": "samsvarende resultater",

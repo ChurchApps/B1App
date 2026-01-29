@@ -144,11 +144,6 @@
     "confirmDelete": "갤러리에서 이 이미지를 삭제하시겠습니까?",
     "freeForm": "자유 형식"
   },
-  "groups": {
-    "announcements": "공지사항",
-    "conversations": "대화",
-    "discussions": "토론"
-  },
   "iconPicker": {
     "iconsAvailable": "사용 가능한 아이콘",
     "matchingResults": "일치하는 결과",
