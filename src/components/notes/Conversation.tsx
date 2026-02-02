@@ -16,9 +16,11 @@ interface Props {
   showCommentCount?: boolean;
   noWrapper?: boolean;
   pageSize?: number;
+  canPost?: boolean;
 }
 
 export function Conversation(props: Props) {
+  const canPost = props.canPost !== false;
   const [conversations, setConversations] = React.useState<ConversationInterface>(null);
   const [editMessageId, setEditMessageId] = React.useState(null);
   const [page, setPage] = React.useState(1);
@@ -138,14 +140,16 @@ interface ConversationResponse {
         </div>
       )}
       <div className="messages">
-        <AddNote
-          context={props.context}
-          conversationId={props?.conversation?.id}
-          onUpdate={() => loadNotes(1)}
-          onCancel={() => setEditMessageId(null)}
-          createConversation={async () => props?.conversation?.id}
-          messageId={editMessageId}
-        />
+        {canPost && (
+          <AddNote
+            context={props.context}
+            conversationId={props?.conversation?.id}
+            onUpdate={() => loadNotes(1)}
+            onCancel={() => setEditMessageId(null)}
+            createConversation={async () => props?.conversation?.id}
+            messageId={editMessageId}
+          />
+        )}
         <div className="messages-wrapper">
           {getNotes()}
         </div>

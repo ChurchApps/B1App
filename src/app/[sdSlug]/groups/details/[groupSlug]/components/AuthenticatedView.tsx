@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from "react";
 import { Grid, Container } from "@mui/material";
 import { UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
-import { Conversations } from "@/components/notes/Conversations";
 import { DisplayBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { Permissions } from "@churchapps/helpers";
@@ -19,6 +18,7 @@ import { LeaderEdit } from "./LeaderEdit";
 import React from "react";
 import { MembersTab } from "./MembersTab";
 import { AttendanceTab } from "./AttendanceTab";
+import { ConversationsTab } from "./ConversationsTab";
 
 interface Props {
   config: ConfigurationInterface;
@@ -63,7 +63,7 @@ export function AuthenticatedView(props: Props) {
         result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>
         break;
       case "conversations":
-        result = <><h2>Conversations</h2><Conversations context={context} contentType="group" contentId={group.id} groupId={group.id} /></>
+        result = <ConversationsTab context={context} groupId={group.id} isLeader={isLeader} />
         break;
       case "resources":
         result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>
