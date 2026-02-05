@@ -1,13 +1,32 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { ApiHelper, DateHelper, ImageEditor, UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/helpers";
-import { Button, Grid, TextField, Box, Typography, Alert } from "@mui/material";
+import { Button, Grid, TextField, Box, Typography, Alert, TextFieldProps } from "@mui/material";
 import { PersonHelper } from "../../../helpers";
+
+// Reusable form field - gets control from FormProvider context
+function FormTextField({ name, ...props }: { name: string } & Omit<TextFieldProps, "name">) {
+  return (
+    <Controller
+      name={name}
+      render={({ field, fieldState }) => (
+        <TextField
+          {...field}
+          {...props}
+          fullWidth
+          label={fieldLabels[name]}
+          error={!!fieldState.error}
+          helperText={fieldState.error?.message}
+        />
+      )}
+    />
+  );
+}
 
 // Zod schema - email must be valid format or empty string
 const nameSchema = z.object({
@@ -49,23 +68,23 @@ const PROFILE_DEFAULTS: ProfileFormData = {
   photo: "",
 };
 
-// Maps field paths to labels for displaying modified fields
-const fieldDefinitions = [
-  { key: "name.first", label: "First Name" },
-  { key: "name.middle", label: "Middle Name" },
-  { key: "name.last", label: "Last Name" },
-  { key: "photo", label: "Photo" },
-  { key: "birthDate", label: "Birth Date" },
-  { key: "contactInfo.email", label: "Email" },
-  { key: "contactInfo.address1", label: "Address Line 1" },
-  { key: "contactInfo.address2", label: "Address Line 2" },
-  { key: "contactInfo.city", label: "City" },
-  { key: "contactInfo.state", label: "State" },
-  { key: "contactInfo.zip", label: "Zip" },
-  { key: "contactInfo.homePhone", label: "Home Phone" },
-  { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
-  { key: "contactInfo.workPhone", label: "Work Phone" },
-];
+// Single source of truth for field labels - used by FormTextField and dirty field display
+const fieldLabels: Record<string, string> = {
+  "name.first": "First Name",
+  "name.middle": "Middle Name",
+  "name.last": "Last Name",
+  "photo": "Photo",
+  "birthDate": "Birth Date",
+  "contactInfo.email": "Email",
+  "contactInfo.address1": "Address Line 1",
+  "contactInfo.address2": "Address Line 2",
+  "contactInfo.city": "City",
+  "contactInfo.state": "State",
+  "contactInfo.zip": "Zip",
+  "contactInfo.homePhone": "Home Phone",
+  "contactInfo.mobilePhone": "Mobile Phone",
+  "contactInfo.workPhone": "Work Phone",
+};
 
 interface Props {
   personId: string;
@@ -84,17 +103,12 @@ interface ProfileChange {
 
 export const ProfileEdit: React.FC<Props> = (props) => {
   // RHF tracks dirty by comparing to defaultValues - changing back = not dirty
-  const {
-    control,
-    handleSubmit,
-    formState: { isDirty, dirtyFields, isSubmitting },
-    reset,
-    setValue,
-  } = useForm<ProfileFormData>({
+  const methods = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: PROFILE_DEFAULTS,
     mode: "onBlur",
   });
+  const { handleSubmit, formState: { isDirty, dirtyFields, isSubmitting }, reset, setValue } = methods;
 
   const [showPhotoEditor, setShowPhotoEditor] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -150,24 +164,21 @@ export const ProfileEdit: React.FC<Props> = (props) => {
     }, obj as unknown);
   };
 
-  // Build ProfileChange array from dirty fields - adding new fields just works
+  // Build ProfileChange array from dirty fields
   const buildChangesFromDirtyFields = (data: ProfileFormData): ProfileChange[] => {
-    const dirtyPaths = flattenDirtyFields(dirtyFields);
-    return dirtyPaths
-      .map((path) => {
-        const fieldDef = fieldDefinitions.find((f) => f.key === path);
-        if (!fieldDef) return null;
-        const value = getValueByPath(data as unknown as Record<string, unknown>, path);
-        return { field: path, label: fieldDef.label, value: String(value ?? "") };
-      })
-      .filter((change): change is ProfileChange => change !== null);
+    return flattenDirtyFields(dirtyFields)
+      .filter((path) => fieldLabels[path])
+      .map((path) => ({
+        field: path,
+        label: fieldLabels[path],
+        value: String(getValueByPath(data as unknown as Record<string, unknown>, path) ?? ""),
+      }));
   };
 
   const getModifiedFieldLabels = (): string[] => {
-    const dirtyPaths = flattenDirtyFields(dirtyFields);
-    const labels = dirtyPaths
-      .map((path) => fieldDefinitions.find((f) => f.key === path)?.label)
-      .filter((label): label is string => !!label);
+    const labels = flattenDirtyFields(dirtyFields)
+      .map((path) => fieldLabels[path])
+      .filter(Boolean);
     familyMembers.forEach(() => labels.push("New Family Member"));
     return labels;
   };
@@ -277,72 +288,37 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         </Box>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <Box sx={{ textAlign: "center" }}>
-              <Box
-                onClick={() => setShowPhotoEditor(true)}
-                sx={{ cursor: "pointer", "&:hover": { opacity: 0.8 } }}
-              >
-                <img
-                  src={currentPhoto?.startsWith("data:") ? currentPhoto : PersonHelper.getPhotoUrl(props.person)}
-                  alt="Profile"
-                  style={{ maxWidth: "100%", borderRadius: 8 }}
-                />
-                <Typography variant="caption" color="textSecondary">
-                  Click to change photo
-                </Typography>
-              </Box>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, sm: 3 }}>
+              <Box sx={{ textAlign: "center" }}>
+                <Box
+                  onClick={() => setShowPhotoEditor(true)}
+                  sx={{ cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+                >
+                  <img
+                    src={currentPhoto?.startsWith("data:") ? currentPhoto : PersonHelper.getPhotoUrl(props.person)}
+                    alt="Profile"
+                    style={{ maxWidth: "100%", borderRadius: 8 }}
+                  />
+                  <Typography variant="caption" color="textSecondary">
+                    Click to change photo
+                  </Typography>
+                </Box>
             </Box>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 9 }}>
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, md: 4 }}>
-                <Controller
-                  name="name.first"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label="First Name"
-                      error={!!fieldState.error}
-                      helperText={fieldState.error?.message}
-                    />
-                  )}
-                />
+                <FormTextField name="name.first" />
               </Grid>
               <Grid size={{ xs: 12, md: 4 }}>
-                <Controller
-                  name="name.middle"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label="Middle Name"
-                      error={!!fieldState.error}
-                      helperText={fieldState.error?.message}
-                    />
-                  )}
-                />
+                <FormTextField name="name.middle" />
               </Grid>
               <Grid size={{ xs: 12, md: 4 }}>
-                <Controller
-                  name="name.last"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label="Last Name"
-                      error={!!fieldState.error}
-                      helperText={fieldState.error?.message}
-                    />
-                  )}
-                />
+                <FormTextField name="name.last" />
               </Grid>
             </Grid>
           </Grid>
@@ -353,37 +329,10 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         </Typography>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Controller
-              name="contactInfo.email"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label="Email"
-                  type="email"
-                  error={!!fieldState.error}
-                  helperText={fieldState.error?.message}
-                />
-              )}
-            />
+            <FormTextField name="contactInfo.email" type="email" />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Controller
-              name="birthDate"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label="Birth Date"
-                  type="date"
-                  InputLabelProps={{ shrink: true }} // TODO: deprecated, use slotProps
-                  error={!!fieldState.error}
-                  helperText={fieldState.error?.message}
-                />
-              )}
-            />
+            <FormTextField name="birthDate" type="date" InputLabelProps={{ shrink: true }} />
           </Grid>
         </Grid>
 
@@ -392,69 +341,28 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, borderBottom: "1px solid #ddd", pb: 1 }}>
               Address
             </Typography>
-            <Controller
-              name="contactInfo.address1"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} fullWidth label="Address Line 1" sx={{ mb: 2 }} />
-              )}
-            />
-            <Controller
-              name="contactInfo.address2"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} fullWidth label="Address Line 2" sx={{ mb: 2 }} />
-              )}
-            />
+            <FormTextField name="contactInfo.address1" sx={{ mb: 2 }} />
+            <FormTextField name="contactInfo.address2" sx={{ mb: 2 }} />
             <Grid container spacing={2}>
               <Grid size={{ xs: 6 }}>
-                <Controller
-                  name="contactInfo.city"
-                  control={control}
-                  render={({ field }) => <TextField {...field} fullWidth label="City" />}
-                />
+                <FormTextField name="contactInfo.city" />
               </Grid>
               <Grid size={{ xs: 3 }}>
-                <Controller
-                  name="contactInfo.state"
-                  control={control}
-                  render={({ field }) => <TextField {...field} fullWidth label="State" />}
-                />
+                <FormTextField name="contactInfo.state" />
               </Grid>
               <Grid size={{ xs: 3 }}>
-                <Controller
-                  name="contactInfo.zip"
-                  control={control}
-                  render={({ field }) => <TextField {...field} fullWidth label="Zip" />}
-                />
+                <FormTextField name="contactInfo.zip" />
               </Grid>
             </Grid>
           </Grid>
 
-          {/* Phone */}
           <Grid size={{ xs: 12, md: 6 }}>
             <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, borderBottom: "1px solid #ddd", pb: 1 }}>
               Phone
             </Typography>
-            <Controller
-              name="contactInfo.mobilePhone"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} fullWidth label="Mobile Phone" sx={{ mb: 2 }} />
-              )}
-            />
-            <Controller
-              name="contactInfo.homePhone"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} fullWidth label="Home Phone" sx={{ mb: 2 }} />
-              )}
-            />
-            <Controller
-              name="contactInfo.workPhone"
-              control={control}
-              render={({ field }) => <TextField {...field} fullWidth label="Work Phone" />}
-            />
+            <FormTextField name="contactInfo.mobilePhone" sx={{ mb: 2 }} />
+            <FormTextField name="contactInfo.homePhone" sx={{ mb: 2 }} />
+            <FormTextField name="contactInfo.workPhone" />
           </Grid>
         </Grid>
 
@@ -485,8 +393,9 @@ export const ProfileEdit: React.FC<Props> = (props) => {
               {isSubmitting ? "Submitting..." : "Submit for Approval"}
             </Button>
           </Box>
-        </Box>
-      </form>
+          </Box>
+        </form>
+      </FormProvider>
     </Box>
   );
 };
