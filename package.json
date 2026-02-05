@@ -58,6 +58,7 @@
     "react-dom": "^19.2.1",
     "react-ga4": "^2.1.0",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.71.1",
     "react-image-file-resizer": "^0.4.8",
     "react-router-dom": "^7.6.3",
     "react-youtube": "^10.1.0",
