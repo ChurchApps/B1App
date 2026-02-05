@@ -62,7 +62,7 @@ const nameSchema = z.object({
  * - This means: "must be valid email OR empty string" (optional but validated if provided)
  */
 const contactInfoSchema = z.object({
-  email: z.string().email("Invalid email format").or(z.literal("")),
+  email: z.email("Invalid email format").or(z.literal("")),
   address1: z.string(),
   address2: z.string(),
   city: z.string(),
@@ -159,11 +159,23 @@ export const ProfileEdit: React.FC<Props> = (props) => {
    * - reset: Function to reset form to new default values
    * - setValue: Programmatically set a field value
    * - watch: Subscribe to field value changes
+   *
+   * DIRTY FIELD BEHAVIOR:
+   * RHF tracks dirty state by comparing current values to defaultValues.
+   * This means if a user:
+   *   1. Changes "John" → "Jane" (field becomes dirty)
+   *   2. Changes "Jane" → "John" (field is NO LONGER dirty)
+   *
+   * The field is only dirty if its current value differs from defaultValues.
+   * This is the default behavior - no extra configuration needed.
+   *
+   * When we call reset() with new values (e.g., when props.person changes),
+   * those become the new defaultValues for comparison.
    */
   const {
     control,
     handleSubmit,
-    formState: { errors, isDirty, dirtyFields, isSubmitting },
+    formState: { isDirty, dirtyFields, isSubmitting },
     reset,
     setValue,
   } = useForm<ProfileFormData>({
@@ -268,57 +280,97 @@ export const ProfileEdit: React.FC<Props> = (props) => {
   };
 
   // ---------------------------------------------------------------------------
-  // DIRTY FIELDS HELPER
+  // GENERIC DIRTY FIELD UTILITIES
   // ---------------------------------------------------------------------------
   /**
-   * dirtyFields is a nested object matching form structure.
-   * Example: { name: { first: true }, contactInfo: { email: true } }
+   * FLATTEN DIRTY FIELDS - Generic recursive utility
    *
-   * This helper flattens it to an array of dot-notation paths
-   * that match our fieldDefinitions keys.
+   * RHF's dirtyFields is a nested object mirroring the form structure:
+   *   { name: { first: true, last: true }, contactInfo: { email: true } }
+   *
+   * This flattens it to dot-notation paths:
+   *   ["name.first", "name.last", "contactInfo.email"]
+   *
+   * Benefits:
+   * - Automatically handles any nesting depth
+   * - No manual field-by-field checks needed
+   * - Adding new fields to schema "just works"
    */
-  const getDirtyFieldPaths = (): string[] => {
+  const flattenDirtyFields = (
+    obj: Record<string, unknown>,
+    prefix = ""
+  ): string[] => {
     const paths: string[] = [];
 
-    // Check top-level fields
-    if (dirtyFields.birthDate) paths.push("birthDate");
-    if (dirtyFields.photo) paths.push("photo");
+    for (const key in obj) {
+      const value = obj[key];
+      const path = prefix ? `${prefix}.${key}` : key;
 
-    // Check nested name fields
-    if (dirtyFields.name) {
-      if (dirtyFields.name.first) paths.push("name.first");
-      if (dirtyFields.name.middle) paths.push("name.middle");
-      if (dirtyFields.name.last) paths.push("name.last");
-    }
-
-    // Check nested contactInfo fields
-    if (dirtyFields.contactInfo) {
-      const ci = dirtyFields.contactInfo;
-      if (ci.email) paths.push("contactInfo.email");
-      if (ci.address1) paths.push("contactInfo.address1");
-      if (ci.address2) paths.push("contactInfo.address2");
-      if (ci.city) paths.push("contactInfo.city");
-      if (ci.state) paths.push("contactInfo.state");
-      if (ci.zip) paths.push("contactInfo.zip");
-      if (ci.homePhone) paths.push("contactInfo.homePhone");
-      if (ci.mobilePhone) paths.push("contactInfo.mobilePhone");
-      if (ci.workPhone) paths.push("contactInfo.workPhone");
+      if (value === true) {
+        // Leaf node - this field is dirty
+        paths.push(path);
+      } else if (typeof value === "object" && value !== null) {
+        // Nested object - recurse
+        paths.push(...flattenDirtyFields(value as Record<string, unknown>, path));
+      }
     }
 
     return paths;
   };
 
   /**
+   * GET VALUE BY PATH - Generic dot-notation accessor
+   *
+   * Given an object and a path like "contactInfo.email",
+   * returns the value at that path.
+   *
+   * This replaces the manual if/else chain for extracting values.
+   */
+  const getValueByPath = (obj: Record<string, unknown>, path: string): unknown => {
+    return path.split(".").reduce((current, key) => {
+      return current && typeof current === "object" ? (current as Record<string, unknown>)[key] : undefined;
+    }, obj as unknown);
+  };
+
+  /**
+   * BUILD CHANGES FROM DIRTY FIELDS
+   *
+   * Combines the utilities above to create the ProfileChange array.
+   * Now adding a new field only requires:
+   * 1. Add to Zod schema
+   * 2. Add to fieldDefinitions (for label)
+   * 3. Add Controller in JSX
+   *
+   * No changes needed to submission logic!
+   */
+  const buildChangesFromDirtyFields = (data: ProfileFormData): ProfileChange[] => {
+    const dirtyPaths = flattenDirtyFields(dirtyFields);
+
+    return dirtyPaths
+      .map((path) => {
+        const fieldDef = fieldDefinitions.find((f) => f.key === path);
+        if (!fieldDef) return null;
+
+        const value = getValueByPath(data as unknown as Record<string, unknown>, path);
+        return {
+          field: path,
+          label: fieldDef.label,
+          value: String(value ?? ""),
+        };
+      })
+      .filter((change): change is ProfileChange => change !== null);
+  };
+
+  /**
    * Convert dirty field paths to human-readable labels for display.
+   * Uses the generic flattener instead of manual checks.
    */
   const getModifiedFieldLabels = (): string[] => {
-    const labels: string[] = [];
-    const dirtyPaths = getDirtyFieldPaths();
+    const dirtyPaths = flattenDirtyFields(dirtyFields);
 
-    dirtyPaths.forEach((path) => {
-      const fieldDef = fieldDefinitions.find((f) => f.key === path);
-      if (fieldDef) labels.push(fieldDef.label);
-    });
+    const labels = dirtyPaths
+      .map((path) => fieldDefinitions.find((f) => f.key === path)?.label)
+      .filter((label): label is string => !!label);
 
     // Include family members (managed outside the form)
     familyMembers.forEach(() => labels.push("New Family Member"));
@@ -341,36 +393,8 @@ export const ProfileEdit: React.FC<Props> = (props) => {
    * isSubmitting is automatically true while this async function runs.
    */
   const onSubmit = async (data: ProfileFormData) => {
-    // Build changes array from dirty fields
-    const changes: ProfileChange[] = [];
-    const dirtyPaths = getDirtyFieldPaths();
-
-    dirtyPaths.forEach((path) => {
-      const fieldDef = fieldDefinitions.find((f) => f.key === path);
-      if (fieldDef) {
-        // Navigate the data object to get the value
-        let value: string;
-        if (path === "photo") {
-          value = data.photo;
-        } else if (path === "birthDate") {
-          value = data.birthDate;
-        } else if (path.startsWith("name.")) {
-          const key = path.split(".")[1] as keyof typeof data.name;
-          value = data.name[key];
-        } else if (path.startsWith("contactInfo.")) {
-          const key = path.split(".")[1] as keyof typeof data.contactInfo;
-          value = data.contactInfo[key];
-        } else {
-          value = "";
-        }
-
-        changes.push({
-          field: path,
-          label: fieldDef.label,
-          value,
-        });
-      }
-    });
+    // Build changes using the generic utility - no manual field mapping!
+    const changes = buildChangesFromDirtyFields(data);
 
     // Add family members
     familyMembers.forEach((name) => {
@@ -596,6 +620,8 @@ export const ProfileEdit: React.FC<Props> = (props) => {
                   fullWidth
                   label="Birth Date"
                   type="date"
+                  // TODO: InputLabelProps is deprecated in MUI v7
+                  // Replace with: slotProps={{ inputLabel: { shrink: true } }}
                   InputLabelProps={{ shrink: true }}
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
