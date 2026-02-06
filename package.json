@@ -29,6 +29,7 @@
     "@churchapps/helpers": "^1.2.22",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^5.2.2",
     "@mui/icons-material": "^7.3.6",
     "@mui/lab": "^7.0.0-beta.22",
     "@mui/material": "^7.3.6",
@@ -58,11 +59,13 @@
     "react-dom": "^19.2.1",
     "react-ga4": "^2.1.0",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.71.1",
     "react-image-file-resizer": "^0.4.8",
     "react-router-dom": "^7.6.3",
     "react-youtube": "^10.1.0",
     "rrule": "^2.8.1",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "zod": "^4.3.6"
   },
   "overrides": {
     "react-is": "18.3.1"
