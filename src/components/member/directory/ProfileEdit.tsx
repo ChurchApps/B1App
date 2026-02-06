@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -112,13 +112,11 @@ export const ProfileEdit: React.FC<Props> = (props) => {
 
   const [showPhotoEditor, setShowPhotoEditor] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const originalPersonRef = useRef<PersonInterface | null>(null);
   const familyMembers = props.familyMembers || [];
 
   // Sync props to form - reset() updates values and clears dirty state
   useEffect(() => {
     if (props.person) {
-      originalPersonRef.current = JSON.parse(JSON.stringify(props.person));
       const { name, contactInfo, birthDate, photo } = props.person;
       reset({
         name: { ...PROFILE_DEFAULTS.name, ...name },
