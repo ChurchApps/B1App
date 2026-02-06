@@ -2,12 +2,11 @@
 
 import { Icon, Paper, Stack, TextField } from "@mui/material";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
 import { ConversationInterface, UserContextInterface } from "@churchapps/helpers";
-import { ErrorMessages } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 
 interface Props {
@@ -26,10 +25,10 @@ interface FormData {
 
 export function NewConversation({ context, conversation, ...props }: Props) {
   const {
-    register,
+    control,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { isSubmitting }
   } = useForm<FormData>({
     defaultValues: { content: "" }
   });
@@ -68,29 +67,34 @@ export function NewConversation({ context, conversation, ...props }: Props) {
 
   const image = PersonHelper.getPhotoUrl(context?.person);
 
-  const errorMessages = errors.content ? [errors.content.message || Locale.label("notes.validate.content")] : [];
-
   return (
     <Paper sx={{ padding: 1, marginBottom: 2 }}>
-      <ErrorMessages errors={errorMessages} />
 
       <Stack direction="row" spacing={1.5} style={{ marginTop: 15 }} justifyContent="end">
 
         {image ? <img src={image} alt="user" style={{ width: 60, height: 45, borderRadius: 5, marginLeft: 8 }} /> : <Icon>person</Icon>}
         <Stack direction="column" spacing={2} style={{ width: "100%" }} justifyContent="end">
           <div><b>{context?.person?.name?.display}</b></div>
-          <TextField
-            fullWidth
-            aria-label={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")}
-            placeholder={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")}
-            multiline
-            style={{ marginTop: 0, border: "none" }}
-            variant="standard"
-            error={!!errors.content}
-            {...register("content", {
+          <Controller
+            name="content"
+            control={control}
+            rules={{
               required: Locale.label("notes.validate.content"),
               validate: (value) => value.trim() !== "" || Locale.label("notes.validate.content")
-            })}
+            }}
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                fullWidth
+                aria-label={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")}
+                placeholder={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")}
+                multiline
+                style={{ marginTop: 0, border: "none" }}
+                variant="standard"
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              />
+            )}
           />
         </Stack>
         <Stack direction="column" spacing={1} justifyContent="end">
