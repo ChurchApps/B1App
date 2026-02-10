@@ -8,7 +8,7 @@
     "validate": {
       "addComment": "Veuillez ajouter un commentaire.",
       "loginFirst": "S'il vous plait Connectez-vous d'abord.",
-      "notMember": "Vous n’êtes actuellement membre d’aucun groupe sur B1.",
+      "notMember": "Vous n'êtes actuellement membre d'aucun groupe sur B1.",
       "selectGroup": "Veuillez sélectionner un groupe."
     }
   },
@@ -28,6 +28,7 @@
   },
   "createPerson": {
     "addNewPerson": "Ajouter une nouvelle personne",
+    "email": "E-mail",
     "firstName": "Prénom",
     "lastName": "Nom de famille"
   },
@@ -45,17 +46,17 @@
       "secondDeposit": "Deuxième dépôt",
       "twoDeposits": "Saisissez les deux dépôts que vous avez reçus sur votre compte pour terminer la vérification de votre compte bancaire.",
       "updated": "Compte bancaire mis à jour.",
-      "verified": "Compte bancaire vérifié.",
       "validate": {
         "accountNumber": "Le routage et le numéro de compte sont requis.",
         "holderName": "Le nom du titulaire du compte est requis."
-      }
+      },
+      "verified": "Compte bancaire vérifié."
     },
     "cardForm": {
       "addNew": "Ajouter une nouvelle carte",
       "added": "Carte ajoutée avec succès.",
       "expirationMonth": "Mois d'expiration:",
-      "expirationYear": "Année d'expiration :",
+      "expirationYear": "Année d'expiration :",
       "updated": "Carte mise à jour avec succès."
     },
     "donationForm": {
@@ -63,7 +64,7 @@
       "biWeekly": "Bihebdomadaire",
       "cancelled": "Don récurrent annulé.",
       "confirmDelete": "Etes-vous sûr de vouloir supprimer ce don récurrent ?",
-      "cover": "J'ajouterai généreusement {} pour couvrir les frais de transaction afin que vous puissiez conserver 100 % de mon don.",
+      "cover": "J'ajouterai généreusement {} pour couvrir les frais de transaction afin que vous puissiez conserver 100 % de mon don.",
       "donate": "Faire un don",
       "editRecurring": "Modifier un don récurrent",
       "fees": "Des frais de transaction de {} sont appliqués.",
@@ -83,7 +84,7 @@
       "tooLow": "Le montant du don doit être supérieur à 0,50 $",
       "total": "Montant total du don",
       "validate": {
-        "amount": "Le montant ne peut pas être de 0 $.",
+        "amount": "Le montant ne peut pas être de 0 $.",
         "email": "Veuillez entrer votre adresse e-mail.",
         "firstName": "Entrez votre prénom s'il vous plait.",
         "lastName": "Veuillez entrer votre nom de famille.",
@@ -96,21 +97,21 @@
       "amount": "Montant",
       "fund": "Fonds"
     },
-    "paymentMethods": {
-      "addBank": "Ajouter un compte bancaire",
-      "addCard": "Ajouter une carte",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce mode de paiement ?",
-      "deleted": "Mode de paiement supprimé.",
-      "noMethods": "Aucun mode de paiement.  ",
-      "verify": "vérifier le compte"
-    },
     "page": {
       "amount": "Montant",
       "batch": "Lot",
       "date": "Date",
       "fund": "Fonds",
       "method": "Méthode",
-      "willAppear": "Les dons apparaîtront une fois qu’un don aura été saisi."
+      "willAppear": "Les dons apparaîtront une fois qu'un don aura été saisi."
+    },
+    "paymentMethods": {
+      "addBank": "Ajouter un compte bancaire",
+      "addCard": "Ajouter une carte",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce mode de paiement ?",
+      "deleted": "Mode de paiement supprimé.",
+      "noMethods": "Aucun mode de paiement.  ",
+      "verify": "vérifier le compte"
     },
     "preview": {
       "date": "Date du don",
@@ -134,14 +135,14 @@
     }
   },
   "formSubmissionEdit": {
-    "confirmDelete": "Êtes-vous sûr de vouloir supprimer les données de ce formulaire ?",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer les données de ce formulaire ?",
     "editForm": "Modifier le formulaire",
     "isRequired": "est requis",
     "submit": "Soumettre"
   },
   "gallery": {
     "aspectRatio": "Ratio d'aspect",
-    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette image de la galerie ?",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette image de la galerie ?",
     "freeForm": "Forme libre"
   },
   "iconPicker": {
@@ -152,20 +153,22 @@
   "login": {
     "createAccount": "Créer un compte",
     "email": "E-mail",
+    "expiredLink": "Le lien actuel a expiré.",
     "forgot": "Mot de passe oublié",
     "goLogin": "Allez dans Connexion",
     "login": "Se connecter",
+    "noAcc": "Vous n'avez pas de compte ?",
     "password": "Mot de passe",
     "register": "Registre",
     "registerThankYou": "Merci de votre inscription! ",
+    "requestLink": "Demander un nouveau lien de réinitialisation",
     "reset": "Réinitialiser",
     "resetInstructions": "Entrez votre adresse e-mail pour demander une réinitialisation du mot de passe.",
     "resetPassword": "réinitialiser le mot de passe",
-    "resetSent": "E-mail de réinitialisation du mot de passe envoyé !",
+    "resetSent": "E-mail de réinitialisation du mot de passe envoyé !",
     "setPassword": "Définir le mot de passe",
     "signIn": "Se connecter",
     "signInTitle": "Veuillez vous connecter",
-    "verifyPassword": "vérifier le mot de passe",
     "validate": {
       "email": "S'il vous plaît, mettez une adresse email valide.",
       "firstName": "Entrez votre prénom s'il vous plait.",
@@ -176,6 +179,7 @@
       "passwordMatch": "Les mots de passe ne correspondent pas.",
       "selectingChurch": "Erreur lors de la sélection de l'église. "
     },
+    "verifyPassword": "vérifier le mot de passe",
     "welcomeBack": "Content de te revoir",
     "welcomeName": "Content de te revoir, <b>{}</b>!  "
   },
@@ -193,7 +197,7 @@
     "july": "Juillet",
     "june": "Juin",
     "march": "Mars",
-    "may": "Peut",
+    "may": "Mai",
     "november": "Novembre",
     "october": "Octobre",
     "september": "Septembre"
@@ -213,13 +217,17 @@
     "firstName": "Prénom",
     "lastName": "Nom de famille",
     "name": "Nom",
+    "noRec": "Vous n'avez pas de fiche personne ?",
     "person": "Personne",
     "years": "années"
   },
   "reporting": {
+    "detailed": "Rapport détaillé",
     "downloadOptions": "Options de téléchargement",
     "noData": "Il n'y a aucune donnée à afficher.",
     "runReport": "Rapport d'exécution",
+    "sampleTemplate": "Modèle Word d'exemple",
+    "summary": "Résumé",
     "useFilter": "Utilisez le filtre pour exécuter le rapport."
   },
   "selectChurch": {
@@ -234,39 +242,39 @@
     "register": "Enregistrer une nouvelle église",
     "selectChurch": "Sélectionnez une église",
     "state": "État/Province",
-    "zip": "Zip / code postal",
     "validate": {
       "address": "L'adresse ne peut pas être vide.",
       "city": "La ville ne peut pas être vide.",
       "country": "Le pays ne peut pas être vide.",
-      "name": "Le nom de l’église ne peut pas être vide.",
+      "name": "Le nom de l'église ne peut pas être vide.",
       "state": "L'État/la Province ne peut pas être vide.",
       "zip": "Le code postal ne peut pas être vide."
-    }
+    },
+    "zip": "Zip / code postal"
   },
   "stockPhotos": {
     "photoBy": "Photo par:",
     "providedBy": "Photos d'archives fournies par"
   },
   "support": {
-    "email": "E-mail",
-    "knowledge base": "Base de connaissances",
-    "messenger": "Messager",
-    "phone": "Téléphone"
+    "discussions": "Forum d'assistance",
+    "documentation": "Documentation"
   },
   "wrapper": {
     "chatWith": "Parler avec",
-    "deleteChurch": "Supprimer l'église de la liste",
+    "deleteChurch": "Supprimer",
     "editAccount": "Modifier le compte",
     "editChurchProfile": "Modifier le profil de l'église",
     "editProfile": "Modifier le profil",
     "logout": "Se déconnecter",
+    "messages": "Messages",
     "newPrivateMessage": "Nouveau message privé",
+    "notifications": "Notifications",
     "privateMessage": "Message privé",
     "profile": "Profil",
     "searchForPerson": "Rechercher une personne",
     "support": "Soutien",
-    "sureRemoveChurch": "Êtes-vous sûr de vouloir supprimer {} de la liste ?",
+    "sureRemoveChurch": "Êtes-vous sûr de vouloir supprimer {} de la liste ?",
     "switchApp": "Changer d'application",
     "switchChurch": "Changer d'église"
   }

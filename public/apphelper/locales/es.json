@@ -1,185 +1,188 @@
 {
-	"b1Share": {
-		"comment": "Comentario",
-		"commentPlaceholder": "Incluya un comentario con su publicación.",
-		"contentShared": "Contenido compartido",
-		"group": "Grupo",
-		"sharingToGroup": "Compartiendo {} al Grupo B1",
-		"validate": {
-			"addComment": "Por favor agregue un comentario.",
-			"loginFirst": "Por favor inicie sesión primero.",
-			"notMember": "Actualmente no es miembro de ningún grupo en B1.",
-			"selectGroup": "Por favor seleccione un grupo."
-		}
-	},
-	"common": {
-		"add": "Agregar",
-		"cancel": "Cancelar",
-		"close": "Cerrar",
-		"date": "Fecha",
-		"delete": "Eliminar",
-		"edit": "Editar",
-		"error": "Error",
-		"pleaseWait": "Por favor espere...",
-		"save": "Guardar",
-		"search": "Buscar",
-		"submit": "Enviar",
-		"update": "Actualizar"
-	},
-	"createPerson": {
-		"addNewPerson": "Agregar una Nueva Persona",
-		"firstName": "Nombre",
-		"lastName": "Apellido"
-	},
-	"donation": {
-		"bankForm": {
-			"accountNumber": "Número de Cuenta",
-			"added": "Cuenta bancaria agregada. Verifique su cuenta bancaria para hacer una donación.",
-			"company": "Empresa",
-			"firstDeposit": "Primer Depósito",
-			"holderName": "Se requiere el nombre del titular de la cuenta.",
-			"individual": "Individual",
-			"name": "Nombre del Titular de la Cuenta",
-			"needVerified": "Las cuentas bancarias deberán ser verificadas antes de hacer cualquier donación. Su cuenta recibirá dos pequeños depósitos en aproximadamente 1-3 días hábiles. Deberá ingresar esos montos de depósito para finalizar la verificación de su cuenta seleccionando el enlace de verificación de cuenta junto a su cuenta bancaria en la sección de métodos de pago.",
-			"routingNumber": "Número de Ruta",
-			"secondDeposit": "Segundo Depósito",
-			"twoDeposits": "Ingrese los dos depósitos que recibió en su cuenta para finalizar la verificación de su cuenta bancaria.",
-			"updated": "Cuenta bancaria actualizada.",
-			"verified": "Cuenta bancaria verificada.",
-			"validate": {
-				"accountNumber": "Se requieren el número de ruta y el número de cuenta.",
-				"holderName": "Se requiere el nombre del titular de la cuenta."
-			}
-		},
-		"cardForm": {
-			"addNew": "Agregar Nueva Tarjeta",
-			"added": "Tarjeta agregada con éxito.",
-			"expirationMonth": "Mes de Vencimiento:",
-			"expirationYear": "Año de Vencimiento:",
-			"updated": "Tarjeta actualizada con éxito."
-		},
-		"donationForm": {
-			"annually": "Anual",
-			"biWeekly": "Bi-Semanal",
-			"cancelled": "Donación recurrente cancelada.",
-			"confirmDelete": "¿Está seguro de que desea eliminar esta donación recurrente?",
-			"cover": "Generosamente agregaré {} para cubrir las tarifas de transacción para que pueda mantener el 100% de mi donación.",
-			"donate": "Donar",
-			"editRecurring": "Editar Donación Recurrente",
-			"fees": "Se aplican tarifas de transacción de {}.",
-			"frequency": "Frecuencia",
-			"fund": "Fondo",
-			"funds": "Fondos",
-			"make": "Hacer una Donación",
-			"makeRecurring": "Hacer una Donación Recurrente",
-			"method": "Método",
-			"monthly": "Mensual",
-			"notes": "Notas",
-			"preview": "Vista Previa de la Donación",
-			"quarterly": "Trimestral",
-			"recurringUpdated": "Donación recurrente actualizada.",
-			"startDate": "Fecha de Inicio",
-			"thankYou": "¡Gracias por su donación!",
-			"tooLow": "La cantidad de la donación debe ser mayor a $0.50",
-			"total": "Monto Total de la Donación",
-			"validate": {
-				"amount": "La cantidad no puede ser $0.",
-				"email": "Por favor ingrese su dirección de correo electrónico.",
-				"firstName": "Por favor ingrese su nombre.",
-				"lastName": "Por favor ingrese su apellido.",
-				"validEmail": "Por favor ingrese una dirección de correo electrónico válida."
-			},
-			"weekly": "Semanal"
-		},
-		"fundDonations": {
-			"addMore": "Agregar Más",
-			"amount": "Monto",
-			"fund": "Fondo"
-		},
-		"paymentMethods": {
-			"addBank": "Agregar Cuenta Bancaria",
-			"addCard": "Agregar Tarjeta",
-			"confirmDelete": "¿Está seguro de que desea eliminar este método de pago?",
-			"deleted": "Método de pago eliminado.",
-			"noMethods": "No hay métodos de pago. Agregue un método de pago para hacer una donación.",
-			"verify": "Verificar Cuenta"
-		},
-		"page": {
-			"amount": "Monto",
-			"batch": "Lote",
-			"date": "Fecha",
-			"fund": "Fondo",
-			"method": "Método",
-			"willAppear": "Las donaciones aparecerán una vez que se haya ingresado una donación."
-		},
-		"preview": {
-			"date": "Fecha de la Donación",
-			"donate": "Donar",
-			"every": "Recurrente Cada",
-			"fee": "Tarifa de Transacción",
-			"funds": "Fondos",
-			"method": "Método de Donación",
-			"notes": "Notas",
-			"startingOn": "Comenzando el",
-			"total": "Total",
-			"type": "Tipo de Donación"
-		},
-		"recurring": {
-			"amount": "Monto",
-			"every": "Cada",
-			"interval": "Intervalo",
-			"notFound": "Método de pago no encontrado.",
-			"paymentMethod": "Método de Pago",
-			"startDate": "Fecha de Inicio"
-		}
-	},
-	"formSubmissionEdit": {
-		"confirmDelete": "¿Está seguro de que desea eliminar estos datos del formulario?",
-		"editForm": "Editar Formulario",
-		"isRequired": "es requerido",
-		"submit": "Enviar"
-	},
-	"gallery": {
-		"aspectRatio": "Relación de Aspecto",
-		"confirmDelete": "¿Está seguro de que desea eliminar esta imagen de la galería?",
-		"freeForm": "Forma Libre"
-	},
-	"iconPicker": {
-		"iconsAvailable": "iconos disponibles",
-		"matchingResults": "resultados coincidentes",
-		"search": "Buscar iconos..."
-	},
-	"login": {
-		"createAccount": "Crear una Cuenta",
-		"email": "Correo Electrónico",
-		"forgot": "Olvidó la Contraseña",
-		"goLogin": "Ir a Iniciar Sesión",
-		"login": "Iniciar Sesión",
-		"noAcc": "¿No tiene una cuenta?",
-		"password": "Contraseña",
-		"register": "Registrarse",
-		"registerThankYou": "¡Gracias por registrarse! Por favor revise su correo electrónico para verificar su cuenta.",
-		"reset": "Restablecer",
-		"resetInstructions": "Ingrese su dirección de correo electrónico para solicitar un restablecimiento de contraseña.",
-		"resetPassword": "Restablecer Contraseña",
-		"resetSent": "¡Correo de restablecimiento de contraseña enviado!",
-		"setPassword": "Establecer Contraseña",
-		"signIn": "Iniciar Sesión",
-		"signInTitle": "Por favor Inicie Sesión",
-		"verifyPassword": "Verificar Contraseña",
-		"validate": {
-			"email": "Por favor ingrese una dirección de correo electrónico válida.",
-			"firstName": "Por favor ingrese su nombre.",
-			"invalid": "Inicio de sesión inválido. Por favor verifique su correo electrónico o contraseña.",
-			"lastName": "Por favor ingrese su apellido.",
-			"password": "Por favor ingrese una contraseña.",
-			"passwordLength": "La contraseña debe tener al menos 8 caracteres.",
-			"passwordMatch": "Las contraseñas no coinciden.",
-			"selectingChurch": "Error al seleccionar la iglesia. Por favor verifique e intente nuevamente."
-		},
-		"welcomeBack": "Bienvenido de nuevo",
-		"welcomeName": "Bienvenido de nuevo, <b>{}</b>! Por favor espere mientras cargamos sus datos."
-	},
+  "b1Share": {
+    "comment": "Comentario",
+    "commentPlaceholder": "Incluya un comentario con su publicación.",
+    "contentShared": "Contenido compartido",
+    "group": "Grupo",
+    "sharingToGroup": "Compartiendo {} al Grupo B1",
+    "validate": {
+      "addComment": "Por favor agregue un comentario.",
+      "loginFirst": "Por favor inicie sesión primero.",
+      "notMember": "Actualmente no es miembro de ningún grupo en B1.",
+      "selectGroup": "Por favor seleccione un grupo."
+    }
+  },
+  "common": {
+    "add": "Agregar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "date": "Fecha",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "error": "Error",
+    "pleaseWait": "Por favor espere...",
+    "save": "Guardar",
+    "search": "Buscar",
+    "submit": "Enviar",
+    "update": "Actualizar"
+  },
+  "createPerson": {
+    "addNewPerson": "Agregar una Nueva Persona",
+    "email": "Correo Electrónico",
+    "firstName": "Nombre",
+    "lastName": "Apellido"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "Número de Cuenta",
+      "added": "Cuenta bancaria agregada. Verifique su cuenta bancaria para hacer una donación.",
+      "company": "Empresa",
+      "firstDeposit": "Primer Depósito",
+      "holderName": "Se requiere el nombre del titular de la cuenta.",
+      "individual": "Individual",
+      "name": "Nombre del Titular de la Cuenta",
+      "needVerified": "Las cuentas bancarias deberán ser verificadas antes de hacer cualquier donación. Su cuenta recibirá dos pequeños depósitos en aproximadamente 1-3 días hábiles. Deberá ingresar esos montos de depósito para finalizar la verificación de su cuenta seleccionando el enlace de verificación de cuenta junto a su cuenta bancaria en la sección de métodos de pago.",
+      "routingNumber": "Número de Ruta",
+      "secondDeposit": "Segundo Depósito",
+      "twoDeposits": "Ingrese los dos depósitos que recibió en su cuenta para finalizar la verificación de su cuenta bancaria.",
+      "updated": "Cuenta bancaria actualizada.",
+      "validate": {
+        "accountNumber": "Se requieren el número de ruta y el número de cuenta.",
+        "holderName": "Se requiere el nombre del titular de la cuenta."
+      },
+      "verified": "Cuenta bancaria verificada."
+    },
+    "cardForm": {
+      "addNew": "Agregar Nueva Tarjeta",
+      "added": "Tarjeta agregada con éxito.",
+      "expirationMonth": "Mes de Vencimiento:",
+      "expirationYear": "Año de Vencimiento:",
+      "updated": "Tarjeta actualizada con éxito."
+    },
+    "donationForm": {
+      "annually": "Anual",
+      "biWeekly": "Bi-Semanal",
+      "cancelled": "Donación recurrente cancelada.",
+      "confirmDelete": "¿Está seguro de que desea eliminar esta donación recurrente?",
+      "cover": "Generosamente agregaré {} para cubrir las tarifas de transacción para que pueda mantener el 100% de mi donación.",
+      "donate": "Donar",
+      "editRecurring": "Editar Donación Recurrente",
+      "fees": "Se aplican tarifas de transacción de {}.",
+      "frequency": "Frecuencia",
+      "fund": "Fondo",
+      "funds": "Fondos",
+      "make": "Hacer una Donación",
+      "makeRecurring": "Hacer una Donación Recurrente",
+      "method": "Método",
+      "monthly": "Mensual",
+      "notes": "Notas",
+      "preview": "Vista Previa de la Donación",
+      "quarterly": "Trimestral",
+      "recurringUpdated": "Donación recurrente actualizada.",
+      "startDate": "Fecha de Inicio",
+      "thankYou": "¡Gracias por su donación!",
+      "tooLow": "La cantidad de la donación debe ser mayor a $0.50",
+      "total": "Monto Total de la Donación",
+      "validate": {
+        "amount": "La cantidad no puede ser $0.",
+        "email": "Por favor ingrese su dirección de correo electrónico.",
+        "firstName": "Por favor ingrese su nombre.",
+        "lastName": "Por favor ingrese su apellido.",
+        "validEmail": "Por favor ingrese una dirección de correo electrónico válida."
+      },
+      "weekly": "Semanal"
+    },
+    "fundDonations": {
+      "addMore": "Agregar Más",
+      "amount": "Monto",
+      "fund": "Fondo"
+    },
+    "page": {
+      "amount": "Monto",
+      "batch": "Lote",
+      "date": "Fecha",
+      "fund": "Fondo",
+      "method": "Método",
+      "willAppear": "Las donaciones aparecerán una vez que se haya ingresado una donación."
+    },
+    "paymentMethods": {
+      "addBank": "Agregar Cuenta Bancaria",
+      "addCard": "Agregar Tarjeta",
+      "confirmDelete": "¿Está seguro de que desea eliminar este método de pago?",
+      "deleted": "Método de pago eliminado.",
+      "noMethods": "No hay métodos de pago. Agregue un método de pago para hacer una donación.",
+      "verify": "Verificar Cuenta"
+    },
+    "preview": {
+      "date": "Fecha de la Donación",
+      "donate": "Donar",
+      "every": "Recurrente Cada",
+      "fee": "Tarifa de Transacción",
+      "funds": "Fondos",
+      "method": "Método de Donación",
+      "notes": "Notas",
+      "startingOn": "Comenzando el",
+      "total": "Total",
+      "type": "Tipo de Donación"
+    },
+    "recurring": {
+      "amount": "Monto",
+      "every": "Cada",
+      "interval": "Intervalo",
+      "notFound": "Método de pago no encontrado.",
+      "paymentMethod": "Método de Pago",
+      "startDate": "Fecha de Inicio"
+    }
+  },
+  "formSubmissionEdit": {
+    "confirmDelete": "¿Está seguro de que desea eliminar estos datos del formulario?",
+    "editForm": "Editar Formulario",
+    "isRequired": "es requerido",
+    "submit": "Enviar"
+  },
+  "gallery": {
+    "aspectRatio": "Relación de Aspecto",
+    "confirmDelete": "¿Está seguro de que desea eliminar esta imagen de la galería?",
+    "freeForm": "Forma Libre"
+  },
+  "iconPicker": {
+    "iconsAvailable": "iconos disponibles",
+    "matchingResults": "resultados coincidentes",
+    "search": "Buscar iconos..."
+  },
+  "login": {
+    "createAccount": "Crear una Cuenta",
+    "email": "Correo Electrónico",
+    "expiredLink": "El enlace actual ha expirado.",
+    "forgot": "Olvidó la Contraseña",
+    "goLogin": "Ir a Iniciar Sesión",
+    "login": "Iniciar Sesión",
+    "noAcc": "¿No tiene una cuenta?",
+    "password": "Contraseña",
+    "register": "Registrarse",
+    "registerThankYou": "¡Gracias por registrarse! Por favor revise su correo electrónico para verificar su cuenta.",
+    "requestLink": "Solicitar un nuevo enlace de restablecimiento",
+    "reset": "Restablecer",
+    "resetInstructions": "Ingrese su dirección de correo electrónico para solicitar un restablecimiento de contraseña.",
+    "resetPassword": "Restablecer Contraseña",
+    "resetSent": "¡Correo de restablecimiento de contraseña enviado!",
+    "setPassword": "Establecer Contraseña",
+    "signIn": "Iniciar Sesión",
+    "signInTitle": "Por favor Inicie Sesión",
+    "validate": {
+      "email": "Por favor ingrese una dirección de correo electrónico válida.",
+      "firstName": "Por favor ingrese su nombre.",
+      "invalid": "Inicio de sesión inválido. Por favor verifique su correo electrónico o contraseña.",
+      "lastName": "Por favor ingrese su apellido.",
+      "password": "Por favor ingrese una contraseña.",
+      "passwordLength": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordMatch": "Las contraseñas no coinciden.",
+      "selectingChurch": "Error al seleccionar la iglesia. Por favor verifique e intente nuevamente."
+    },
+    "verifyPassword": "Verificar Contraseña",
+    "welcomeBack": "Bienvenido de nuevo",
+    "welcomeName": "Bienvenido de nuevo, <b>{}</b>! Por favor espere mientras cargamos sus datos."
+  },
   "markdownEditor": {
     "content": "Contenido",
     "markdownEditor": "Editor de Markdown",
@@ -214,13 +217,17 @@
     "firstName": "Nombre",
     "lastName": "Apellido",
     "name": "Nombre",
+    "noRec": "¿No tiene un registro de persona?",
     "person": "Persona",
     "years": "años"
   },
   "reporting": {
+    "detailed": "Informe Detallado",
     "downloadOptions": "Opciones de Descarga",
     "noData": "No hay datos para mostrar.",
     "runReport": "Ejecutar Informe",
+    "sampleTemplate": "Plantilla de Word de Ejemplo",
+    "summary": "Resumen",
     "useFilter": "Utilice el filtro para ejecutar el informe."
   },
   "selectChurch": {
@@ -235,7 +242,6 @@
     "register": "Registrar una Nueva Iglesia",
     "selectChurch": "Seleccionar una Iglesia",
     "state": "Estado / Provincia",
-    "zip": "Código Postal",
     "validate": {
       "address": "La dirección no puede estar en blanco.",
       "city": "La ciudad no puede estar en blanco.",
@@ -243,28 +249,27 @@
       "name": "El nombre de la iglesia no puede estar en blanco.",
       "state": "El estado/provincia no puede estar en blanco.",
       "zip": "El código postal no puede estar en blanco."
-    }
+    },
+    "zip": "Código Postal"
   },
   "stockPhotos": {
     "photoBy": "Foto por:",
     "providedBy": "Fotos de stock proporcionadas por"
   },
   "support": {
-    "email": "Correo Electrónico",
-    "knowledge base": "Base de Conocimientos",
-    "messenger": "Mensajero",
-    "phone": "Teléfono"
+    "discussions": "Foro de Soporte",
+    "documentation": "Documentación"
   },
   "wrapper": {
     "chatWith": "Chatear con",
-    "deleteChurch": "Eliminar iglesia de la lista",
+    "deleteChurch": "Eliminar",
     "editAccount": "Editar Cuenta",
     "editChurchProfile": "Editar Perfil de la Iglesia",
     "editProfile": "Editar Perfil",
     "logout": "Cerrar sesión",
-		"messages": "Mensajes",
+    "messages": "Mensajes",
     "newPrivateMessage": "Nuevo Mensaje Privado",
-		"notifications": "Notificaciones",
+    "notifications": "Notificaciones",
     "privateMessage": "Mensaje Privado",
     "profile": "Perfil",
     "searchForPerson": "Buscar a una persona",
@@ -274,5 +279,3 @@
     "switchChurch": "Cambiar de Iglesia"
   }
 }
-  
-
