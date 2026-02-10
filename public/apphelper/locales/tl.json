@@ -28,6 +28,7 @@
   },
   "createPerson": {
     "addNewPerson": "Magdagdag ng Bagong Tao",
+    "email": "Email",
     "firstName": "Pangalan",
     "lastName": "Huling pangalan"
   },
@@ -45,11 +46,11 @@
       "secondDeposit": "Pangalawang Deposito",
       "twoDeposits": "Ilagay ang dalawang deposito na natanggap mo sa iyong account para tapusin ang pag-verify sa iyong bank account.",
       "updated": "Na-update ang bank account.",
-      "verified": "Na-verify ang bank account.",
       "validate": {
         "accountNumber": "Kinakailangan ang pagruruta at numero ng account.",
         "holderName": "Kinakailangan ang pangalan ng may-ari ng account."
-      }
+      },
+      "verified": "Na-verify ang bank account."
     },
     "cardForm": {
       "addNew": "Magdagdag ng Bagong Card",
@@ -96,14 +97,6 @@
       "amount": "Halaga",
       "fund": "Pondo"
     },
-    "paymentMethods": {
-      "addBank": "Magdagdag ng Bank Account",
-      "addCard": "Magdagdag ng Card",
-      "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang paraan ng pagbabayad na ito?",
-      "deleted": "Ang paraan ng pagbabayad ay tinanggal.",
-      "noMethods": "Walang paraan ng pagbabayad.  ",
-      "verify": "I-verify ang Account"
-    },
     "page": {
       "amount": "Halaga",
       "batch": "Batch",
@@ -111,6 +104,14 @@
       "fund": "Pondo",
       "method": "Pamamaraan",
       "willAppear": "Lalabas ang mga donasyon kapag naipasok na ang donasyon."
+    },
+    "paymentMethods": {
+      "addBank": "Magdagdag ng Bank Account",
+      "addCard": "Magdagdag ng Card",
+      "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang paraan ng pagbabayad na ito?",
+      "deleted": "Ang paraan ng pagbabayad ay tinanggal.",
+      "noMethods": "Walang paraan ng pagbabayad.  ",
+      "verify": "I-verify ang Account"
     },
     "preview": {
       "date": "Petsa ng Donasyon",
@@ -152,12 +153,15 @@
   "login": {
     "createAccount": "Gumawa ng account",
     "email": "Email",
+    "expiredLink": "Ang kasalukuyang link ay nag-expire na.",
     "forgot": "Nakalimutan ang password",
     "goLogin": "Pumunta sa Login",
     "login": "Mag log in",
+    "noAcc": "Wala kang account?",
     "password": "Password",
     "register": "Magrehistro",
     "registerThankYou": "Salamat sa pagpaparehistro! ",
+    "requestLink": "Humiling ng bagong reset link",
     "reset": "I-reset",
     "resetInstructions": "Ilagay ang iyong email address upang humiling ng pag-reset ng password.",
     "resetPassword": "I-reset ang Password",
@@ -165,7 +169,6 @@
     "setPassword": "Itakda ang Password",
     "signIn": "Mag-sign In",
     "signInTitle": "Mangyaring Mag-sign In",
-    "verifyPassword": "I-verify ang Password",
     "validate": {
       "email": "Mangyaring magpasok ng wastong email address.",
       "firstName": "Pakilagay ang iyong pangalan.",
@@ -176,6 +179,7 @@
       "passwordMatch": "Hindi tugma ang mga password.",
       "selectingChurch": "Error sa pagpili ng simbahan. "
     },
+    "verifyPassword": "I-verify ang Password",
     "welcomeBack": "Maligayang pagbabalik",
     "welcomeName": "Maligayang pagbabalik, <b>{}</b>!  "
   },
@@ -213,13 +217,17 @@
     "firstName": "Pangalan",
     "lastName": "Huling pangalan",
     "name": "Pangalan",
+    "noRec": "Wala kang person record?",
     "person": "Tao",
     "years": "taon"
   },
   "reporting": {
+    "detailed": "Detalyadong Ulat",
     "downloadOptions": "Mga Opsyon sa Pag-download",
     "noData": "Walang data na ipapakita.",
     "runReport": "Patakbuhin ang Ulat",
+    "sampleTemplate": "Halimbawang Word Template",
+    "summary": "Buod",
     "useFilter": "Gamitin ang filter upang patakbuhin ang ulat."
   },
   "selectChurch": {
@@ -234,7 +242,6 @@
     "register": "Magrehistro ng Bagong Simbahan",
     "selectChurch": "Pumili ng Simbahan",
     "state": "Estado / Lalawigan",
-    "zip": "Zip / Postal Code",
     "validate": {
       "address": "Hindi maaaring blangko ang address.",
       "city": "Hindi maaaring blangko ang lungsod.",
@@ -242,26 +249,27 @@
       "name": "Hindi maaaring blangko ang pangalan ng simbahan.",
       "state": "Hindi maaaring blangko ang Estado/Lalawigan.",
       "zip": "Hindi maaaring blangko ang Zip/Postal code."
-    }
+    },
+    "zip": "Zip / Postal Code"
   },
   "stockPhotos": {
     "photoBy": "Larawan ni:",
     "providedBy": "Mga stock na larawan na ibinigay ni"
   },
   "support": {
-    "email": "Email",
-    "knowledge base": "Base ng Kaalaman",
-    "messenger": "Messenger",
-    "phone": "Telepono"
+    "discussions": "Forum ng Suporta",
+    "documentation": "Dokumentasyon"
   },
   "wrapper": {
     "chatWith": "Makipag-usap kay",
-    "deleteChurch": "Tanggalin ang simbahan sa listahan",
+    "deleteChurch": "Tanggalin",
     "editAccount": "I-edit ang Account",
     "editChurchProfile": "I-edit ang Profile ng Simbahan",
     "editProfile": "I-edit ang Profile",
     "logout": "Mag-logout",
+    "messages": "Mga Mensahe",
     "newPrivateMessage": "Bagong Pribadong Mensahe",
+    "notifications": "Mga Abiso",
     "privateMessage": "Pribadong Mensahe",
     "profile": "Profile",
     "searchForPerson": "Maghanap ng isang tao",

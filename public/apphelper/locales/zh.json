@@ -28,6 +28,7 @@
   },
   "createPerson": {
     "addNewPerson": "添加新人",
+    "email": "电子邮件",
     "firstName": "名",
     "lastName": "姓"
   },
@@ -45,11 +46,11 @@
       "secondDeposit": "第二次存款",
       "twoDeposits": "输入您帐户中收到的两笔存款以完成验证您的银行帐户。",
       "updated": "银行账户已更新。",
-      "verified": "银行账户已验证。",
       "validate": {
         "accountNumber": "需要路由和帐号。",
         "holderName": "帐户持有人姓名为必填项。"
-      }
+      },
+      "verified": "银行账户已验证。"
     },
     "cardForm": {
       "addNew": "添加新卡",
@@ -96,14 +97,6 @@
       "amount": "数量",
       "fund": "基金"
     },
-    "paymentMethods": {
-      "addBank": "添加银行账户",
-      "addCard": "添加卡",
-      "confirmDelete": "您确定要删除此付款方式吗？",
-      "deleted": "付款方式已删除。",
-      "noMethods": "没有付款方式。  ",
-      "verify": "验证账户"
-    },
     "page": {
       "amount": "数量",
       "batch": "批",
@@ -111,6 +104,14 @@
       "fund": "基金",
       "method": "方法",
       "willAppear": "一旦输入捐款，捐款就会出现。"
+    },
+    "paymentMethods": {
+      "addBank": "添加银行账户",
+      "addCard": "添加卡",
+      "confirmDelete": "您确定要删除此付款方式吗？",
+      "deleted": "付款方式已删除。",
+      "noMethods": "没有付款方式。  ",
+      "verify": "验证账户"
     },
     "preview": {
       "date": "捐赠日期",
@@ -152,12 +153,15 @@
   "login": {
     "createAccount": "创建一个帐户",
     "email": "电子邮件",
+    "expiredLink": "当前链接已过期。",
     "forgot": "忘记密码",
     "goLogin": "前往登录",
     "login": "登录",
+    "noAcc": "没有账户？",
     "password": "密码",
     "register": "登记",
     "registerThankYou": "感谢您注册！",
+    "requestLink": "请求新的重置链接",
     "reset": "重置",
     "resetInstructions": "输入您的电子邮件地址以请求重置密码。",
     "resetPassword": "重设密码",
@@ -165,7 +169,6 @@
     "setPassword": "设置密码",
     "signIn": "登入",
     "signInTitle": "请登录",
-    "verifyPassword": "验证密码",
     "validate": {
       "email": "请输入有效的电子邮件地址。",
       "firstName": "请输入您的名字。",
@@ -176,6 +179,7 @@
       "passwordMatch": "密码不匹配。",
       "selectingChurch": "选择教堂时出错。"
     },
+    "verifyPassword": "验证密码",
     "welcomeBack": "欢迎回来",
     "welcomeName": "欢迎回来， <b>{}</b>！  "
   },
@@ -213,13 +217,17 @@
     "firstName": "名",
     "lastName": "姓",
     "name": "姓名",
+    "noRec": "没有个人记录？",
     "person": "人",
     "years": "年"
   },
   "reporting": {
+    "detailed": "详细报告",
     "downloadOptions": "下载选项",
     "noData": "没有数据可显示。",
     "runReport": "运行报告",
+    "sampleTemplate": "Word 模板示例",
+    "summary": "摘要",
     "useFilter": "使用过滤器运行报告。"
   },
   "selectChurch": {
@@ -234,7 +242,6 @@
     "register": "注册新教会",
     "selectChurch": "选择一个教堂",
     "state": "州/省",
-    "zip": "邮编/邮政编码",
     "validate": {
       "address": "地址不能为空。",
       "city": "城市不能为空。",
@@ -242,26 +249,27 @@
       "name": "教会名称不能为空。",
       "state": "州/省不能为空。",
       "zip": "邮政编码不能为空。"
-    }
+    },
+    "zip": "邮编/邮政编码"
   },
   "stockPhotos": {
     "photoBy": "拍摄者：",
     "providedBy": "库存照片由提供"
   },
   "support": {
-    "email": "电子邮件",
-    "knowledge base": "知识库",
-    "messenger": "信使",
-    "phone": "电话"
+    "discussions": "支持论坛",
+    "documentation": "文档"
   },
   "wrapper": {
     "chatWith": "和...聊天",
-    "deleteChurch": "从列表中删除教堂",
+    "deleteChurch": "删除",
     "editAccount": "编辑账户",
     "editChurchProfile": "编辑教会资料",
     "editProfile": "编辑个人资料",
     "logout": "登出",
+    "messages": "消息",
     "newPrivateMessage": "新私信",
+    "notifications": "通知",
     "privateMessage": "私人信息",
     "profile": "轮廓",
     "searchForPerson": "寻找一个人",
