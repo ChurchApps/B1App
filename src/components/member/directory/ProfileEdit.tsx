@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ApiHelper, ArrayHelper, DateHelper, ImageEditor, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, ImageEditor, UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { Button, Grid, TextField, Box, Typography, Alert } from "@mui/material";
 import { PersonHelper } from "../../../helpers";
@@ -33,7 +33,7 @@ const fieldDefinitions = [
   { key: "contactInfo.zip", label: "Zip" },
   { key: "contactInfo.homePhone", label: "Home Phone" },
   { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
-  { key: "contactInfo.workPhone", label: "Work Phone" },
+  { key: "contactInfo.workPhone", label: "Work Phone" }
 ];
 
 export const ProfileEdit: React.FC<Props> = (props) => {
@@ -114,7 +114,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         changes.push({
           field: key,
           label: fieldDef.label,
-          value: key === "photo" ? person.photo || "" : getFieldValue(person, key),
+          value: key === "photo" ? person.photo || "" : getFieldValue(person, key)
         });
       }
     });
@@ -123,7 +123,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       changes.push({
         field: "familyMember",
         label: "Add Family Member",
-        value: name,
+        value: name
       });
     });
 
@@ -146,7 +146,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       createdByLabel: PersonHelper.person?.name?.display || "",
       title: `Profile changes for ${props.person?.name?.display}`,
       status: "Open",
-      data: JSON.stringify(changes),
+      data: JSON.stringify(changes)
     };
 
     try {

@@ -51,7 +51,7 @@ export default function PrintPlanPage({ params }: { params: Params }) {
 
   useEffect(() => {
     if (planId) loadData();
-  }, [planId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [planId]);
 
   const getPositionCategories = () => {
     const cats: string[] = [];
@@ -117,7 +117,7 @@ export default function PrintPlanPage({ params }: { params: Params }) {
       padding: "20px",
       backgroundColor: "#FFF",
       color: "#000",
-      minHeight: "100vh",
+      minHeight: "100vh"
     },
     header: { fontWeight: "bold", textAlign: "center", padding: 5 },
     inverseHeader: {
@@ -125,10 +125,10 @@ export default function PrintPlanPage({ params }: { params: Params }) {
       color: "#FFF",
       textAlign: "center",
       padding: 5,
-      fontWeight: "bold",
+      fontWeight: "bold"
     },
     divider: { borderBottom: "20px solid #000" },
-    tableCell: { verticalAlign: "top", padding: 5, textAlign: "left" },
+    tableCell: { verticalAlign: "top", padding: 5, textAlign: "left" }
   };
 
   if (!plan) {
@@ -137,39 +137,39 @@ export default function PrintPlanPage({ params }: { params: Params }) {
 
   return (
     <div style={Styles.body} className="printBackgrounds">
-        <Grid container>
-          <Grid size={{ xs: 4 }} style={Styles.inverseHeader}>
+      <Grid container>
+        <Grid size={{ xs: 4 }} style={Styles.inverseHeader}>
             Service Order
-          </Grid>
-          <Grid size={{ xs: 4 }} style={{ ...Styles.header, borderTop: "5px solid #000" }}>
-            {plan?.serviceDate && DateHelper.prettyDate(DateHelper.toDate(plan.serviceDate))}
-          </Grid>
-          <Grid size={{ xs: 4 }} style={Styles.inverseHeader}>
+        </Grid>
+        <Grid size={{ xs: 4 }} style={{ ...Styles.header, borderTop: "5px solid #000" }}>
+          {plan?.serviceDate && DateHelper.prettyDate(DateHelper.toDate(plan.serviceDate))}
+        </Grid>
+        <Grid size={{ xs: 4 }} style={Styles.inverseHeader}>
             Service Order
-          </Grid>
         </Grid>
-        <div style={Styles.divider}>&nbsp;</div>
-        <Grid container>
-          <Grid size={{ xs: 4 }} style={{ padding: 5 }}>
-            <div style={{ border: "2px solid #000", textAlign: "left", padding: 10 }}>{getPositionCategories()}</div>
-          </Grid>
-          <Grid size={{ xs: 8 }} style={{ padding: 5 }}>
-            <div style={{ border: "5px solid #000" }}>
-              <table style={{ width: "100%", margin: 0 }} cellSpacing={0}>
-                <thead>
-                  <tr style={Styles.inverseHeader}>
-                    <td style={{ textAlign: "left", paddingLeft: 10 }}>Time</td>
-                    <td></td>
-                    <td style={{ textAlign: "right", paddingRight: 10 }}>Length</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {getPlanItems(planItems)}
-                </tbody>
-              </table>
-            </div>
-          </Grid>
+      </Grid>
+      <div style={Styles.divider}>&nbsp;</div>
+      <Grid container>
+        <Grid size={{ xs: 4 }} style={{ padding: 5 }}>
+          <div style={{ border: "2px solid #000", textAlign: "left", padding: 10 }}>{getPositionCategories()}</div>
         </Grid>
-      </div>
+        <Grid size={{ xs: 8 }} style={{ padding: 5 }}>
+          <div style={{ border: "5px solid #000" }}>
+            <table style={{ width: "100%", margin: 0 }} cellSpacing={0}>
+              <thead>
+                <tr style={Styles.inverseHeader}>
+                  <td style={{ textAlign: "left", paddingLeft: 10 }}>Time</td>
+                  <td></td>
+                  <td style={{ textAlign: "right", paddingRight: 10 }}>Length</td>
+                </tr>
+              </thead>
+              <tbody>
+                {getPlanItems(planItems)}
+              </tbody>
+            </table>
+          </div>
+        </Grid>
+      </Grid>
+    </div>
   );
 }

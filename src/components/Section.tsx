@@ -25,22 +25,20 @@ export const Section: React.FC<Props> = props => {
 
 
   const getElements = () => {
-    const result: React.ReactElement[] = []
+    const result: React.ReactElement[] = [];
     props.section?.elements?.forEach(e => {
       const textColor = StyleHelper.getTextColor(props.section?.textColor, {}, props.churchSettings);
-      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={textColor} />)
+      result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={textColor} />);
     });
     return result;
-  }
+  };
 
   const getStyle = () => {
 
-    let result: CSSProperties = {}
+    let result: CSSProperties = {};
     const bg = props.section.background;
     if (bg && bg.indexOf("/") > -1) {
-      result = {
-        backgroundImage: "url('" + bg + "')"
-      };
+      result = { backgroundImage: "url('" + bg + "')" };
     } else if (bg) {
       result = { background: bg };
     }
@@ -48,21 +46,21 @@ export const Section: React.FC<Props> = props => {
 
     result = { ...result };
     return result;
-  }
+  };
 
   const getVideoClassName = () => {
     let result = "sectionVideo";
-    if (props.section.textColor === "light") result += " sectionDark"
-    if (props.first) result += " sectionFirst"
+    if (props.section.textColor === "light") result += " sectionDark";
+    if (props.first) result += " sectionFirst";
     if (props.onEdit) result += " sectionWrapper";
     return result;
-  }
+  };
 
   const getClassName = () => {
     let result = "section";
     const bg = props.section.background;
-    if (bg && bg.indexOf("/") > -1) result += " sectionBG"
-    if (props.section.textColor === "light") result += " sectionDark"
+    if (bg && bg.indexOf("/") > -1) result += " sectionBG";
+    if (props.section.textColor === "light") result += " sectionDark";
     if (props.first) result += " sectionFirst";
     if (props.onEdit) result += " sectionWrapper";
 
@@ -78,7 +76,7 @@ export const Section: React.FC<Props> = props => {
     }
 
     return result;
-  }
+  };
 
   interface DropData {
     data?: ElementInterface;
@@ -91,23 +89,22 @@ export const Section: React.FC<Props> = props => {
       const element: ElementInterface = data.data;
       element.sort = sort;
       element.sectionId = props.section.id;
-      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove() });
-    }
-    else {
+      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove(); });
+    } else {
       const element: ElementInterface = { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId };
       if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
       else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
       else if (data.elementType === "box") element.answersJSON = JSON.stringify({ background: "var(--light)", text: "var(--dark)" });
       props.onEdit(null, element);
     }
-  }
+  };
 
   const getAddElement = (s: number) => {
     const sort = s;
     return (<DroppableArea accept={["element", "elementBlock"]} onDrop={(data) => handleDrop(data, sort)} updateIsDragging={(dragging) => setIsDragging(dragging)} />);
-  }
+  };
 
-  let contents = (<Container>
+  const contents = (<Container>
     {props.onEdit && getAddElement(0)}
     {getElements()}
   </Container>);
@@ -116,27 +113,26 @@ export const Section: React.FC<Props> = props => {
   const getSectionAnchor = () => {
     if (props.section.answers?.sectionId) return <a id={String(props.section.answers?.sectionId)} className="sectionAnchor"></a>;
     else return <></>;
-  }
+  };
 
   const getId = () => {
-    let result = "section-" + props.section.answers?.sectionId?.toString()
-    if (result==="section-undefined") result = "section-" + props.section.id;
+    let result = "section-" + props.section.answers?.sectionId?.toString();
+    if (result === "section-undefined") result = "section-" + props.section.id;
     return result;
-  }
+  };
 
   let result = <></>;
   const sectionBg = props.section.background;
   if (sectionBg && sectionBg.indexOf("youtube:") > -1) {
     const youtubeId = sectionBg.split(":")[1];
     result = (<>{getSectionAnchor()}<YoutubeBackground isDragging={isDragging} id={getId()} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground></>);
-  }
-  else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
+  } else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
 
   if (props.onEdit) {
     return (
-      <DraggableWrapper  dndType="section" elementType="section" data={props.section} onDoubleClick={() => props.onEdit(props.section, null)}>
+      <DraggableWrapper dndType="section" elementType="section" data={props.section} onDoubleClick={() => props.onEdit(props.section, null)}>
         {result}
       </DraggableWrapper>
     );
   } else return result;
-}
+};

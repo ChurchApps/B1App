@@ -5,7 +5,7 @@ import { Icon, InputBase, Typography, Grid, IconButton, Pagination, Stack } from
 import { debounce } from "@mui/material/utils";
 import { styled } from "@mui/material/styles";
 import MuiPaper from "@mui/material/Paper";
-import IconNamesList from "./IconNamesList"
+import IconNamesList from "./IconNamesList";
 import { Locale } from "@churchapps/apphelper";
 import FlexSearch from "flexsearch";
 const UPDATE_SEARCH_INDEX_WAIT_MS = 220;
@@ -15,9 +15,7 @@ const StyledIconSpan = styled("span")(({ theme }) => ({
   flexDirection: "column",
   color: theme.palette.text.secondary,
   margin: "0 4px",
-  "& > div": {
-    display: "flex"
-  },
+  "& > div": { display: "flex" },
   "& > div > *": {
     flexGrow: 1,
     fontSize: ".6rem",
@@ -33,9 +31,7 @@ const StyledIcon = styled(Icon)(({ theme }) => ({
   cursor: "pointer",
   color: theme.palette.text.primary,
   borderRadius: theme.shape.borderRadius,
-  transition: theme.transitions.create(["background-color", "box-shadow"], {
-    duration: theme.transitions.duration.shortest
-  }),
+  transition: theme.transitions.create(["background-color", "box-shadow"], { duration: theme.transitions.duration.shortest }),
   padding: theme.spacing(1),
   margin: theme.spacing(0.5, 0),
   "&:hover": {
@@ -50,14 +46,14 @@ const Icons = React.memo(function Icons(props: { icons: string[]; handleOpenClic
   const handleIconClick = (name: string) => {
     const camel = name.substring(0, 1).toLocaleLowerCase() + name.substring(1, name.length);
     const underscored = camel.replace(/[A-Z]/g, m => "_" + m.toLowerCase());
-    handleOpenClick(underscored)
-  }
+    handleOpenClick(underscored);
+  };
 
   return (
     <div>
       {icons.map((icon) => (
         <StyledIconSpan key={icon}>
-          <StyledIcon tabIndex={-1} sx={{ fontSize: "34px !important" }} onClick={() => { handleIconClick(icon) }} aria-label={`Select ${icon} icon`} data-testid={`icon-${icon}`}>
+          <StyledIcon tabIndex={-1} sx={{ fontSize: "34px !important" }} onClick={() => { handleIconClick(icon); }} aria-label={`Select ${icon} icon`} data-testid={`icon-${icon}`}>
             {icon}
           </StyledIcon>
         </StyledIconSpan>
@@ -83,22 +79,22 @@ function createSearchIndex() {
     const split = icon.split("_");
     const capitalizedSplit = split.map((s: string) => {
       if (isAlphabet(s[0])) {
-        s = s[0].toUpperCase() + s.slice(1)
+        s = s[0].toUpperCase() + s.slice(1);
       }
-      return s
-    })
+      return s;
+    });
     return {
       iconName: icon,
       componentName: capitalizedSplit.join("")
     };
-  })
+  });
 
   // create search index
   iconsAndComponentNames.forEach((icon: IconData) => {
-    let searchTerm = icon.iconName + " " + icon.componentName;
+    const searchTerm = icon.iconName + " " + icon.componentName;
 
-    searchIndex.addAsync(icon.iconName, searchTerm)
-  })
+    searchIndex.addAsync(icon.iconName, searchTerm);
+  });
 
 }
 
@@ -112,7 +108,9 @@ type Props = {
   onSelect: (iconName: string) => void;
 };
 
-const defaultIcons = ["person", "group", "groups", "contact_mail", "mail", "church", "favorite", "volunteer_activism", "link", "home", "apps", "web", "public", "rss_feed", "videocam", "live_tv", "music_note", "menu_book", "star", "accessible", "woman", "man", "child_care", "handshake", "location_on", "restaurant", "local_cafe" ];
+const defaultIcons = [
+  "person", "group", "groups", "contact_mail", "mail", "church", "favorite", "volunteer_activism", "link", "home", "apps", "web", "public", "rss_feed", "videocam", "live_tv", "music_note", "menu_book", "star", "accessible", "woman", "man", "child_care", "handshake", "location_on", "restaurant", "local_cafe"
+];
 
 export function IconPicker(props: Props) {
   const pageSize = 27;

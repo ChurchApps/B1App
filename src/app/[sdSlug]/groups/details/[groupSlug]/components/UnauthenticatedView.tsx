@@ -29,7 +29,7 @@ export function UnauthenticatedView(props: Props) {
       </Grid>);
     });
     return result;
-  }
+  };
 
   const [hidden, setHidden] = useState("block");
   const [shift, setShift] = useState(8);
@@ -41,8 +41,8 @@ export function UnauthenticatedView(props: Props) {
 
     props.events.forEach((e) => {
       const startDate = new Date(e.start);
-      const monthAbb = startDate.toLocaleString('en-US', { month: 'short' });
-      const dayShort = startDate.toLocaleString('en-Us', { day: '2-digit' });
+      const monthAbb = startDate.toLocaleString("en-US", { month: "short" });
+      const dayShort = startDate.toLocaleString("en-Us", { day: "2-digit" });
 
       if (result.length < 3 && startDate > currDate) {
         result.push(<Grid container key={e.id}>
@@ -101,7 +101,7 @@ export function UnauthenticatedView(props: Props) {
 
     </Container>
 
-  </>
+  </>;
 
 
 }

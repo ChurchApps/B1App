@@ -1,7 +1,7 @@
 "use client";
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
 import type { SermonInterface } from "@churchapps/helpers";
-import { EnvironmentHelper, StreamConfigInterface } from "."
+import { EnvironmentHelper, StreamConfigInterface } from ".";
 import { ChatHelper } from "./ChatHelper";
 import { StreamingServiceHelper } from "./StreamingServiceHelper";
 
@@ -22,7 +22,7 @@ export class ChatConfigHelper {
   }
 
   static async load(keyName: string) {
-    let result: ConfigurationInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
+    const result: ConfigurationInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;
@@ -32,7 +32,7 @@ export class ChatConfigHelper {
 
   static setTabUpdated(tabType: string) {
     for (let i = 0; i < ChatConfigHelper.current.tabs.length; i++) {
-      let t = ChatConfigHelper.current.tabs[i];
+      const t = ChatConfigHelper.current.tabs[i];
       if (t.type === tabType) t.updated = true;
     }
   }
@@ -44,7 +44,7 @@ export class ChatConfigHelper {
       if (t.type === "prayer") prayerTabIndex = i;
     }
     if (prayerTabIndex === -1) {
-      ChatConfigHelper.current.tabs.push({ type: "prayer", icon: "mail_outline", text: "Private Messages", url: "", data: "" })
+      ChatConfigHelper.current.tabs.push({ type: "prayer", icon: "mail_outline", text: "Private Messages", url: "", data: "" });
       ChatHelper.onChange();
     }
   }

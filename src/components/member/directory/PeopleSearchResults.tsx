@@ -12,7 +12,7 @@ interface Props {
 export const PeopleSearchResults: React.FC<Props> = (props) => {
 
   const getRows = () => {
-    let result = [];
+    const result = [];
     for (let i = 0; i < props.people.length; i++) {
       const p = props.people[i];
       result.push(<TableRow key={p.id}>
@@ -21,13 +21,15 @@ export const PeopleSearchResults: React.FC<Props> = (props) => {
       </TableRow>);
     }
     return result;
-  }
+  };
 
-  if (props.people === undefined || props.people === null) return (<div className="alert alert-info">Use the search box above to search for a member or add a new one.</div>)
+  if (props.people === undefined || props.people === null) return (<div className="alert alert-info">Use the search box above to search for a member or add a new one.</div>);
 
   else if (props.people.length === 0) return (<p>No results found.</p>);
-  else return (<Table id="peopleTable">
-    <TableHead><TableRow><TableCell></TableCell><TableCell>Name</TableCell></TableRow></TableHead>
-    <TableBody>{getRows()}</TableBody>
-  </Table>);
-}
+  else {
+    return (<Table id="peopleTable">
+      <TableHead><TableRow><TableCell></TableCell><TableCell>Name</TableCell></TableRow></TableHead>
+      <TableBody>{getRows()}</TableBody>
+    </Table>);
+  }
+};

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import { PersonHelper } from "@/helpers"
+import { PersonHelper } from "@/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { UserHelper } from "@churchapps/apphelper";
@@ -23,7 +23,7 @@ interface Props {
 export const GroupTabs = (props: Props) => {
   const context = React.useContext(UserContext);
   PersonHelper.person = context.person;
-  const tabs: TabItem[] = []
+  const tabs: TabItem[] = [];
 
   const [group, setGroup] = useState(props.group);
 
@@ -57,16 +57,16 @@ export const GroupTabs = (props: Props) => {
     }
 
     return tabs;
-  }
+  };
 
 
 
   const getItem = (tab: TabItem) =>
-    (<li key={tab.key}><a href="about:blank" onClick={(e) => { e.preventDefault(); props.onTabChange(tab.key) }}>{tab.label}</a></li>)
+    (<li key={tab.key}><a href="about:blank" onClick={(e) => { e.preventDefault(); props.onTabChange(tab.key); }}>{tab.label}</a></li>);
 
   return <ul>
     {getTabs().map((tab, index) => getItem(tab))}
-  </ul>
+  </ul>;
 
 
 };

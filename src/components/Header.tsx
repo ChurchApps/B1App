@@ -3,10 +3,10 @@
 import { useEffect, useState, useContext } from "react";
 import Link from "next/link";
 import { Container, AppBar, Stack, Box, IconButton, List, Drawer, Toolbar, Chip, Icon, Menu, MenuItem, ListItem, ListItemButton, ListItemText, ListItemIcon, Collapse } from "@mui/material";
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { ApiHelper } from "@churchapps/apphelper";
 import { AppearanceHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
@@ -45,7 +45,7 @@ const getNestedChildren = (arr: LinkInterface[], parent: string | undefined) => 
     }
   }
   return result;
-}
+};
 
 export function Header(props: Props) {
   const [transparent, setTransparent] = useState(props.overlayContent);
@@ -55,13 +55,13 @@ export function Header(props: Props) {
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [logoError, setLogoError] = useState(false);
-  const pathname = usePathname()
+  const pathname = usePathname();
   const context = useContext(UserContext);
 
 
   const toggleDrawer = () => {
     setOpen(!open);
-  }
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined" && props.config?.church?.id) {
@@ -73,15 +73,15 @@ export function Header(props: Props) {
     }
     const handleScroll = () => {
       if (props.overlayContent) {
-        const show = window.scrollY > 100
+        const show = window.scrollY > 100;
         setTransparent(!show);
       }
-    }
+    };
 
-    document.addEventListener('scroll', handleScroll)
+    document.addEventListener("scroll", handleScroll);
     return () => {
-      document.removeEventListener('scroll', handleScroll)
-    }
+      document.removeEventListener("scroll", handleScroll);
+    };
   }, [props.config?.church?.id, props.overlayContent]);
 
   // Reset logo error state when logo URL changes
@@ -89,9 +89,9 @@ export function Header(props: Props) {
     setLogoError(false);
   }, [props.config?.appearance?.logoLight, props.config?.appearance?.logoDark, transparent]);
 
-  const memberPortal = <MenuItem onClick={() => { redirect("/my") }} dense data-testid="member-portal-menu-item" aria-label="Go to member portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>
+  const memberPortal = <MenuItem onClick={() => { redirect("/my"); }} dense data-testid="member-portal-menu-item" aria-label="Go to member portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>;
   const adminPortal = (UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit)) && (
-    <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/` }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
+    <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/`; }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
 
   const getAccountUrl = () => {
@@ -128,7 +128,7 @@ export function Header(props: Props) {
             <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Edit Profile
             <Icon sx={{ marginLeft: "auto", fontSize: "18px !important" }}>chevron_right</Icon>
           </MenuItem>
-          <MenuItem onClick={() => { redirect("/logout") }} sx={{ color: "#d32f2f" }} dense data-testid="logout-menu-item" aria-label="Logout"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> Logout</MenuItem>
+          <MenuItem onClick={() => { redirect("/logout"); }} sx={{ color: "#d32f2f" }} dense data-testid="logout-menu-item" aria-label="Logout"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> Logout</MenuItem>
         </Menu>
         <Menu
           id="editSubMenu"
@@ -162,18 +162,18 @@ export function Header(props: Props) {
           )
           : null}
       </>
-    )
+    );
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect("/my") }} data-testid="member-portal-list-item" aria-label="Go to member portal">
+      <ListItemButton onClick={() => { redirect("/my"); }} data-testid="member-portal-list-item" aria-label="Go to member portal">
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
     </ListItem>
     {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (<>
       <ListItem disablePadding>
-        <ListItemButton onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/` }} data-testid="admin-portal-list-item" aria-label="Go to admin portal">
+        <ListItemButton onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/`; }} data-testid="admin-portal-list-item" aria-label="Go to admin portal">
           <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
           <ListItemText primary="Admin Portal" />
         </ListItemButton>
@@ -202,7 +202,7 @@ export function Header(props: Props) {
         </ListItem>
       </List>
     </Collapse>
-  </>)
+  </>);
 
   const getLinkClass = () => {
     const sections = ArrayHelper.getAll(props.sections, "zone", "main");
@@ -215,16 +215,15 @@ export function Header(props: Props) {
     }
 
     return result;
-  }
+  };
 
   const getLogo = () => {
     if (transparent) {
-      const textColor=StyleHelper.getTextColor(props.sections[0]?.textColor, props.config?.globalStyles, props.config?.appearance);
+      const textColor = StyleHelper.getTextColor(props.sections[0]?.textColor, props.config?.globalStyles, props.config?.appearance);
       const logo = AppearanceHelper.getLogoByTextColor(props.config?.appearance?.logoLight || null, props.config?.appearance?.logoDark || null, textColor);
       return logo !== "" ? logo : null;
-    }
-    else return props.config?.appearance?.logoLight || null;
-  }
+    } else return props.config?.appearance?.logoLight || null;
+  };
 
   //structured navLinks based on their parentId
   const structuredData = props.config?.navLinks && getNestedChildren(props.config?.navLinks, undefined);
@@ -235,7 +234,7 @@ export function Header(props: Props) {
     {structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={() => toggleDrawer()} />)}
     {ApiHelper.isAuthenticated && (
       <ListItem disablePadding sx={{ color: "#d32f2f" }}>
-        <ListItemButton onClick={() => { redirect("/logout") }} data-testid="logout-list-item" aria-label="Logout">
+        <ListItemButton onClick={() => { redirect("/logout"); }} data-testid="logout-list-item" aria-label="Logout">
           <ListItemIcon><Icon sx={{ color: "#d32f2f" }}>logout</Icon></ListItemIcon>
           <ListItemText primary="Logout" />
         </ListItemButton>
@@ -264,7 +263,7 @@ export function Header(props: Props) {
                 ? (<img src={logo} alt={props.config?.church.name} id="headerLogo" data-testid="header-logo" onError={() => setLogoError(true)} />)
                 : (<Box component="span" id="headerLogo" data-testid="header-church-name" sx={{ fontSize: "1.5rem", fontWeight: 600, display: "inline-block", lineHeight: 1 }}>{props.config?.church.name}</Box>)}
             </Link>
-            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap", }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap" }}>
               {getLinks()}
               {userAction}
             </Box>
@@ -274,7 +273,7 @@ export function Header(props: Props) {
               </IconButton>
               <Drawer open={open} onClose={toggleDrawer} anchor="right">
                 <Toolbar disableGutters><IconButton onClick={toggleDrawer} data-testid="close-drawer-button" aria-label="Close navigation menu"><ChevronRightIcon /></IconButton></Toolbar>
-                <Box sx={{ width: { xs: '100vw', sm: '50vw' } }}>
+                <Box sx={{ width: { xs: "100vw", sm: "50vw" } }}>
                   {userAction}
                   {getListMenu()}
                 </Box>

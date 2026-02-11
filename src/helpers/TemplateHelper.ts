@@ -17,7 +17,7 @@ export class TemplateHelper {
     { text: "Visit", url: "/visit", linkType: "url", linkData: "", category: "website", icon: "" },
     { text: "Sermons", url: "/sermons", linkType: "url", linkData: "", category: "website", icon: "" },
     { text: "About Us", url: "/about", linkType: "url", linkData: "", category: "website", icon: "" },
-    { text: "Donate", url: "/donate", linkType: "url", linkData: "", category: "website", icon: "" },
+    { text: "Donate", url: "/donate", linkType: "url", linkData: "", category: "website", icon: "" }
   ];
 
   static footer = {
@@ -26,7 +26,7 @@ export class TemplateHelper {
     row: { answersJSON: '{"columns":"4,4,4"}', blockId: "", elementType: "row", sectionId: "", sort: 0 },
     logoElement: { blockId: "", elementType: "logo", parentId: "", sectionId: "", sort: 1 },
     addressElement: { blockId: "", elementType: "text", parentId: "", sectionId: "", sort: 1, answersJSON: "", answers: { text: "", textAlignment: "center" } },
-    serviceTimesElement: { blockId: "", elementType: "text", parentId: "", sectionId: "", sort: 1, answersJSON: "", answers: { text: "", textAlignment: "center" } },
+    serviceTimesElement: { blockId: "", elementType: "text", parentId: "", sectionId: "", sort: 1, answersJSON: "", answers: { text: "", textAlignment: "center" } }
   };
 
   static donate = {
@@ -49,8 +49,12 @@ export class TemplateHelper {
     page: { layout: "headerFooter", title: "Visit", url: "/visit" },
     section: { background: "var(--light)", headingColor: "var(--dark)", linkColor: "var(--darkAccent)", pageId: "", sort: 0, textColor: "var(--dark)", zone: "main" },
     heading: { elementType: "text", sectionId: "", sort: 1, answersJSON: '{"textAlignment":"center","text":"## PLAN YOUR VISIT"}', answers: { text: "## PLAN YOUR VISIT", textAlignment: "center" } },
-    heading2: { elementType: "text", sectionId: "", sort: 2, answersJSON: '{"textAlignment":"center","text":"**We Would Love to Hear from You!**"}',
-      answers: { text: "**We Would Love to Hear from You!**", textAlignment: "center" },
+    heading2: {
+      elementType: "text",
+      sectionId: "",
+      sort: 2,
+      answersJSON: '{"textAlignment":"center","text":"**We Would Love to Hear from You!**"}',
+      answers: { text: "**We Would Love to Hear from You!**", textAlignment: "center" }
     },
     text1: { elementType: "text", sectionId: "", sort: 3, answersJSON: `{\"textAlignment\":\"center\",\"text\":\"${TemplateHelper.demoText}\"}`, answers: { text: TemplateHelper.demoText, textAlignment: "center" } },
     map: { elementType: "map", sectionId: "", sort: 4, answersJSON: "" }
@@ -88,7 +92,7 @@ export class TemplateHelper {
   static async createDefaultFooter() {
     const currentChurch = UserHelper.currentUserChurch.church;
     const streamingServices = await ApiHelper.get("/streamingServices", "ContentApi");
-    let serviceTimes: string[] = [];
+    const serviceTimes: string[] = [];
     if (streamingServices.length > 0) {
       for (let i = 0; i < (streamingServices.length >= 2 ? 2 : 1); i++) {
         const service: StreamingServiceInterface = streamingServices?.[i];
@@ -128,8 +132,8 @@ export class TemplateHelper {
           answers: {
             textAlignment: "center",
             text:
-              `#### **${currentChurch.name}**\n\n${currentChurch?.address1}${ currentChurch?.address2 ? `\n\n${currentChurch.address2}` : "" }\n\n${currentChurch?.city}, ${currentChurch?.state} ${currentChurch?.zip}\n\n${currentChurch?.country}\n\n`,
-          },
+              `#### **${currentChurch.name}**\n\n${currentChurch?.address1}${ currentChurch?.address2 ? `\n\n${currentChurch.address2}` : "" }\n\n${currentChurch?.city}, ${currentChurch?.state} ${currentChurch?.zip}\n\n${currentChurch?.country}\n\n`
+          }
         },
         {
           ...this.footer.serviceTimesElement,
@@ -137,8 +141,8 @@ export class TemplateHelper {
           parentId: row.elements[2].id,
           sectionId: section.id,
           answersJSON: `{\"text\":\"#### **Services**${ serviceTimes.length > 0 ? `${serviceTimes.join("")}` : "\\n\\nNo Services available" }\\n\\n\",\"textAlignment\":\"center\"}`,
-          answers: { textAlignment: "center", text: `#### **Services**${ serviceTimes.length > 0 ? `${serviceTimes.join("")}` : "\\n\\nNo Services available" }` },
-        },
+          answers: { textAlignment: "center", text: `#### **Services**${ serviceTimes.length > 0 ? `${serviceTimes.join("")}` : "\\n\\nNo Services available" }` }
+        }
       ],
       "ContentApi"
     );
@@ -164,13 +168,15 @@ export class TemplateHelper {
         {
           ...this.home.heroHeading,
           sectionId: section1.id,
-          answersJSON: `{\"textAlignment\":\"center\",\"text\":\"# Welcome to ${currentChurch.name}\"}`, answers: { textAlignment: "center", text: `# Welcome to ${currentChurch.name}` },
+          answersJSON: `{\"textAlignment\":\"center\",\"text\":\"# Welcome to ${currentChurch.name}\"}`,
+          answers: { textAlignment: "center", text: `# Welcome to ${currentChurch.name}` }
         },
         { ...this.home.aboutHeading, sectionId: section2.id },
         { ...this.home.aboutText, sectionId: section2.id },
-        { ...this.home.aboutText2, sectionId: section2.id },
+        { ...this.home.aboutText2, sectionId: section2.id }
       ],
-      "ContentApi");
+      "ContentApi"
+    );
   }
 
   static async createVisitPage(pageId?: string) {
@@ -201,8 +207,8 @@ export class TemplateHelper {
         {
           ...this.visit.map,
           sectionId: section.id,
-          answersJSON: `{\"mapAddress\":\"${currentChurch.address1}, ${currentChurch.city}, ${currentChurch.state}, ${currentChurch.country}\",\"mapLabel\":\"${currentChurch.name}\"}`,
-        },
+          answersJSON: `{\"mapAddress\":\"${currentChurch.address1}, ${currentChurch.city}, ${currentChurch.state}, ${currentChurch.country}\",\"mapLabel\":\"${currentChurch.name}\"}`
+        }
       ],
       "ContentApi"
     );
@@ -226,7 +232,7 @@ export class TemplateHelper {
       throw new Error("Failed to create sermons page section");
     }
     const section = s[0];
-    await ApiHelper.post("/elements",[{ ...this.sermons.liveStream, sectionId: section.id }, { ...this.sermons.heading, sectionId: section.id }, { ...this.sermons.sermons, sectionId: section.id }], "ContentApi");
+    await ApiHelper.post("/elements", [{ ...this.sermons.liveStream, sectionId: section.id }, { ...this.sermons.heading, sectionId: section.id }, { ...this.sermons.sermons, sectionId: section.id }], "ContentApi");
   }
 
   static async createAboutUsPage(pageId?: string) {

@@ -10,7 +10,7 @@ export const Theme: React.FC<Props> = (props) => {
   let css = null;
   const googleFonts = [];
   let customJs = <></>;
-  const lines:string[] = []
+  const lines:string[] = [];
 
 
   if (props.config.globalStyles?.palette) {
@@ -27,7 +27,7 @@ export const Theme: React.FC<Props> = (props) => {
     const fonts = JSON.parse(props.config.globalStyles?.fonts);
     lines.push("--headingFont: '" + fonts.heading + "';");
     lines.push("--bodyFont: '" + fonts.body + "';");
-    if (fonts.heading!=="Roboto") googleFonts.push(fonts.heading);
+    if (fonts.heading !== "Roboto") googleFonts.push(fonts.heading);
     if (fonts.body !== fonts.heading) googleFonts.push(fonts.body);
   }
 
@@ -35,13 +35,13 @@ export const Theme: React.FC<Props> = (props) => {
 
   css = ":root { " + lines.join("\n") + " }";
 
-  if (props?.config.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{__html:props.config.globalStyles.customJS}} />
+  if (props?.config.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{ __html: props.config.globalStyles.customJS }} />;
 
   // Generate Google Fonts URL for dynamic loading
   let googleFontsUrl = "";
   if (googleFonts.length > 0) {
     const fontList:string[] = [];
-    googleFonts.forEach(f => fontList.push(f.replace(" ","+") + ":wght@400"));
+    googleFonts.forEach(f => fontList.push(f.replace(" ", "+") + ":wght@400"));
     googleFontsUrl = "https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap";
   }
 
@@ -51,10 +51,10 @@ export const Theme: React.FC<Props> = (props) => {
       // Check if font link already exists
       const existingLink = document.querySelector(`link[href="${googleFontsUrl}"]`);
       if (!existingLink) {
-        const link = document.createElement('link');
+        const link = document.createElement("link");
         link.href = googleFontsUrl;
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
+        link.rel = "stylesheet";
+        link.type = "text/css";
         document.head.appendChild(link);
       }
     }
@@ -66,4 +66,4 @@ export const Theme: React.FC<Props> = (props) => {
     </style>
     {customJs}
   </>);
-}
+};

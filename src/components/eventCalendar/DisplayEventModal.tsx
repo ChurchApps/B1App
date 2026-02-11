@@ -22,26 +22,26 @@ export function DisplayEventModal(props: Props) {
   const getDisplayTime = () => {
     let result = "";
     if (props.event.allDay) {
-      const prettyStartDate = DateHelper.prettyDate(props.event.start)
-      const prettyEndDate = DateHelper.prettyDate(props.event.end)
-      if (prettyStartDate===prettyEndDate) result = prettyStartDate;
+      const prettyStartDate = DateHelper.prettyDate(props.event.start);
+      const prettyEndDate = DateHelper.prettyDate(props.event.end);
+      if (prettyStartDate === prettyEndDate) result = prettyStartDate;
       else result = `${prettyStartDate} - ${prettyEndDate}`;
     } else {
-      const prettyStart = DateHelper.prettyDateTime(props.event.start)
-      const prettyEnd = DateHelper.prettyDateTime(props.event.end)
+      const prettyStart = DateHelper.prettyDateTime(props.event.start);
+      const prettyEnd = DateHelper.prettyDateTime(props.event.end);
       const prettyEndTime = DateHelper.prettyTime(props.event.end);
-      const startDate = DateHelper.prettyDate(new Date(prettyStart))
-      const endDate = DateHelper.prettyDate(new Date(prettyEnd))
-      if (startDate === endDate) result = `${prettyStart} - ${prettyEndTime}`
+      const startDate = DateHelper.prettyDate(new Date(prettyStart));
+      const endDate = DateHelper.prettyDate(new Date(prettyEnd));
+      if (startDate === endDate) result = `${prettyStart} - ${prettyEndTime}`;
       else result = `${prettyStart} - ${prettyEnd}`;
     }
     return result;
-  }
+  };
 
   return (
     <>
       <Dialog open={true} onClose={props.onDone} fullScreen>
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: "relative" }}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label="close">
               <Icon>close</Icon>

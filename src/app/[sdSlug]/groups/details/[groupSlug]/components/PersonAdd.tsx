@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { PersonInterface } from "@churchapps/helpers"
+import { PersonInterface } from "@churchapps/helpers";
 import { TextField, Button, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
@@ -27,22 +27,22 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
   const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { e.preventDefault(); setHasSearched(false); setSearchText(e.currentTarget.value); }
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(null); } }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { e.preventDefault(); setHasSearched(false); setSearchText(e.currentTarget.value); };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSearch(null); } };
 
   const handleSearch = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
-    let term = searchText.trim();
+    const term = searchText.trim();
     ApiHelper.post("/people/search", { term: term }, "MembershipApi")
       .then((data: PersonInterface[]) => {
         setHasSearched(true);
-        const filteredResult = data.filter((s: PersonInterface) => !filterList.includes(s.id))
+        const filteredResult = data.filter((s: PersonInterface) => !filterList.includes(s.id));
         setSearchResults(filteredResult);
         if (searchClicked) {
           searchClicked();
         }
       });
-  }
+  };
   return (
     <DisplayBox key="displayBox" id="personAddBox" headerIcon="person" headerText={Locale.label("Add Person")} data-testid="person-add-box">
       <TextField fullWidth name="personAddText" label={Locale.label("person.person")} value={searchText} onChange={handleChange} onKeyDown={handleKeyDown}
@@ -56,4 +56,4 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
       <PersonAddResults addFunction={addFunction} getPhotoUrl={getPhotoUrl} includeEmail={includeEmail} actionLabel={actionLabel} searchResults={searchResults} />
     </DisplayBox>
   );
-}
+};

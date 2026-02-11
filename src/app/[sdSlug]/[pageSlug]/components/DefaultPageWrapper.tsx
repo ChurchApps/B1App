@@ -17,7 +17,7 @@ type Props = {
 //add helmet here
 
 export async function DefaultPageWrapper(props: Props) {
-  let a = 0;
+  const a = 0;
 
   const footerSections = await ApiHelper.getAnonymous("/blocks/public/footer/" + props.config.church.id, "ContentApi");
 

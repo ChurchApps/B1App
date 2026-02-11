@@ -29,7 +29,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     createdByLabel: PersonHelper.person?.name?.display || "",
     title: `Profile changes for ${props.person?.name?.display}`,
     status: "Open",
-    data: "",
+    data: ""
   };
 
   const categories = [
@@ -67,7 +67,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const fieldOptions = () => {
-    let options: React.ReactElement[] = [];
+    const options: React.ReactElement[] = [];
     categories.forEach((c) => {
       options.push(<MenuItem value={c.key} disabled={changes?.some((ch) => c.key !== "familyMember" && ch.field === c.key)}>{c.label}</MenuItem>);
     });
@@ -109,17 +109,17 @@ export const ModifyProfile: React.FC<Props> = (props) => {
           <TextField fullWidth label="Birthdate" name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(new Date(currentField.value))} onChange={handleChange} data-testid="birthdate-input" aria-label="Birth date" />
         );
         break;
-      default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? '*Enter First Name only' : null} data-testid="field-value-input" aria-label={`${currentField.label} value`} />); break;
+      default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? "*Enter First Name only" : null} data-testid="field-value-input" aria-label={`${currentField.label} value`} />); break;
     }
     return option;
   };
 
   const getChangesRows = () => {
-    let rows: React.ReactElement[] = [];
+    const rows: React.ReactElement[] = [];
     changes?.forEach((ch) => {
       let val: string | React.ReactElement = ch.value;
       if (ch.field === "birthDate") val = DateHelper.formatHtml5Date(new Date(ch.value));
-      if (ch.field === "photo") val =  <img src={ch.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />
+      if (ch.field === "photo") val = <img src={ch.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />;
       rows.push(
         <TableRow>
           <TableCell>{ch.label}</TableCell>
@@ -134,7 +134,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const handleDelete = (field: string) => {
-    let newChanges = [...changes];
+    const newChanges = [...changes];
     const array = newChanges.filter((ch) => ch.field !== field);
     setChanges(array);
   };

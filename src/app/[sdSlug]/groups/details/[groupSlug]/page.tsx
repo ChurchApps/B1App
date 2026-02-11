@@ -15,7 +15,7 @@ type PageParams = Promise<{ sdSlug: string; groupSlug: string; }>
 const loadSharedData = (sdSlug: string, groupSlug: string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug, groupSlug);
-}
+};
 
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug, groupSlug } = await params;
@@ -54,19 +54,19 @@ const loadData = async (sdSlug: string, groupSlug: string) => {
       // Group will remain null, which will be handled in the component
     }
 
-    return { config, group, events, leaders }
+    return { config, group, events, leaders };
   } catch (error) {
     console.error("Failed to load page data:", error);
     // Return minimal data to prevent complete page failure
     const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-    return { config, group: null, events: [], leaders: [] }
+    return { config, group: null, events: [], leaders: [] };
   }
-}
+};
 
 
 export default async function GroupPage({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
-  const { sdSlug, groupSlug } = await params
+  const { sdSlug, groupSlug } = await params;
   const { group, events, leaders, config } = await loadSharedData(sdSlug, groupSlug);
 
 

@@ -25,7 +25,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
     const updatedMembers = [...groupMembers.slice(0, idx), ...groupMembers.slice(idx + 1)];
     setGroupMembers(updatedMembers);
     props.addFunction(person);
-  }
+  };
 
   const getRows = () => {
     const rows: React.ReactElement[] = [];
@@ -44,18 +44,18 @@ export const MembersAdd: React.FC<Props> = (props) => {
       );
     }
     return rows;
-  }
+  };
 
   const getTableHeader = () => {
     const rows: React.ReactElement[] = [];
     if (groupMembers.length === 0) return rows;
     rows.push(<TableRow key="0"><th></th><th>{Locale.label("Name")}</th><th></th></TableRow>);
     return rows;
-  }
+  };
 
   React.useEffect(() => { if (props.group !== null) loadData(); }, [props.group, loadData]);
 
-  let content = <Loading />
+  let content = <Loading />;
   if (groupMembers) {
     content = (<Table className="personSideTable">
       <TableHead>{getTableHeader()}</TableHead>
@@ -70,4 +70,4 @@ export const MembersAdd: React.FC<Props> = (props) => {
       </DisplayBox>
     </div>
   );
-}
+};

@@ -1,7 +1,7 @@
 import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
 import React from "react";
 import { ChatSend, Callout, Attendance } from ".";
-import { ChatRoomInterface, ChatUserInterface } from "../../../helpers"
+import { ChatRoomInterface, ChatUserInterface } from "../../../helpers";
 import { ChatReceive } from "./ChatReceive";
 import { EmbeddedChatName } from "./EmbeddedChatName";
 
@@ -19,10 +19,10 @@ export const Chat: React.FC<Props> = (props) => {
   const [chatEnabled, setChatEnabled] = React.useState(false);
 
   const updateChatEnabled = React.useCallback(() => {
-    let cs = StreamingServiceHelper.currentService;
+    const cs = StreamingServiceHelper.currentService;
     let result = false;
     if (cs !== null) {
-      let currentTime = new Date();
+      const currentTime = new Date();
       result = currentTime >= (cs.localChatStart || new Date()) && currentTime <= (cs.localChatEnd || new Date());
     }
     setChatEnabled(prev => {
@@ -36,7 +36,7 @@ export const Chat: React.FC<Props> = (props) => {
     return () => clearInterval(id);
   }, [updateChatEnabled]);
 
-  let className = (chatEnabled) ? "chatContainer" : "chatContainer chatDisabled";
+  const className = (chatEnabled) ? "chatContainer" : "chatContainer chatDisabled";
 
   return (
     <div className={className} style={(props.visible) ? {} : { display: "none" }}>
@@ -47,5 +47,5 @@ export const Chat: React.FC<Props> = (props) => {
       {props.user.isBlocked ? "Your access to the chat has been restricted" : <ChatSend room={props.room} />}
     </div>
   );
-}
+};
 

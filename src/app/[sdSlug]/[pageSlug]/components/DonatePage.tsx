@@ -3,7 +3,7 @@
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { NonAuthDonationWrapper } from "@churchapps/apphelper-website";
 import { UserHelper } from "@churchapps/apphelper";
-import { Button, Container,  Grid,  Icon,  Link,  Typography } from "@mui/material";
+import { Button, Container, Grid, Icon, Link, Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 
 type Props = { config?: ConfigurationInterface; };
@@ -32,7 +32,7 @@ export function DonatePage(props:Props) {
         </Grid>
       </Grid>
     </Container>
-  </>
+  </>;
 
 
 }

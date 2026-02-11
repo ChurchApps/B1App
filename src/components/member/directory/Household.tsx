@@ -40,7 +40,7 @@ export const Household: React.FC<Props> = (props) => {
 
   const getMember = (member: PersonInterface) => {
     const m = member;
-    return (<a href="about:blank" className="householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id) }}>
+    return (<a href="about:blank" className="householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id); }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 2 }}><img src={PersonHelper.getPhotoUrl(member)} alt="avatar" /></Grid>
         <Grid size={{ xs: 10 }}>
@@ -49,18 +49,18 @@ export const Household: React.FC<Props> = (props) => {
         </Grid>
       </Grid>
     </a>);
-  }
+  };
 
   const getMembers = () => {
-    if (isLoading) return (<Loading size="sm" />)
+    if (isLoading) return (<Loading size="sm" />);
     else {
-      let result: React.ReactElement[] = [];
+      const result: React.ReactElement[] = [];
       members?.forEach(m => {
-        if (m.id !== props.person.id) result.push(getMember(m))
+        if (m.id !== props.person.id) result.push(getMember(m));
       });
       return (result);
     }
-  }
+  };
 
   const loadMembers = () => {
     if (props.person?.householdId) {
@@ -69,7 +69,7 @@ export const Household: React.FC<Props> = (props) => {
         setIsLoading(false);
       });
     }
-  }
+  };
 
   React.useEffect(loadMembers, [props.person]);
 
@@ -119,5 +119,5 @@ export const Household: React.FC<Props> = (props) => {
       {getMembers()}
       {getAddMemberSection()}
     </DisplayBox>
-  )
-}
+  );
+};

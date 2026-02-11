@@ -43,7 +43,7 @@ export function MembersTab(props: Props) {
   };
 
   const getRows = () => {
-    let rows: React.ReactElement[] = [];
+    const rows: React.ReactElement[] = [];
 
     if (groupMembers.length === 0) {
       rows.push(<TableRow key="0"><TableCell>No group members found.</TableCell></TableRow>);
@@ -78,23 +78,23 @@ export function MembersTab(props: Props) {
 
   const handleAdd = (addedPerson: PersonInterface) => {
     if (getMemberByPersonId(addedPerson.id) === null) {
-      let gm = { groupId: props.group.id, personId: addedPerson.id, person: addedPerson } as GroupMemberInterface
+      const gm = { groupId: props.group.id, personId: addedPerson.id, person: addedPerson } as GroupMemberInterface;
       ApiHelper.post("/groupmembers", [gm], "MembershipApi").then((data: GroupMemberInterface[]) => {
         gm.id = data[0].id;
       });
-      let members = [...groupMembers];
+      const members = [...groupMembers];
       members.push(gm);
       setGroupMembers(members);
     }
-  }
+  };
 
   const handleRemove = (member: GroupMemberInterface) => {
-    let members = [...groupMembers];
-    let idx = members.indexOf(member);
+    const members = [...groupMembers];
+    const idx = members.indexOf(member);
     members.splice(idx, 1);
     setGroupMembers(members);
     ApiHelper.delete("/groupmembers/" + member.id, "MembershipApi");
-  }
+  };
 
   const canEdit = props.canEditMembers ?? props.isLeader;
   return <>{canEdit
@@ -113,5 +113,5 @@ export function MembersTab(props: Props) {
       <h2>Members</h2>
       <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox>
     </>
-  }</>
+  }</>;
 }

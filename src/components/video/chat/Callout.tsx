@@ -13,16 +13,16 @@ export const Callout: React.FC<Props> = (props) => {
   const [edit, setEdit] = React.useState(false);
   const [message, setMessage] = React.useState("");
 
-  const editMode = (e: React.MouseEvent) => { e.preventDefault(); setEdit(true); }
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setMessage(e.currentTarget.value); }
+  const editMode = (e: React.MouseEvent) => { e.preventDefault(); setEdit(true); };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setMessage(e.currentTarget.value); };
 
   const handleUpdate = (e: React.MouseEvent) => {
     e.preventDefault();
     const { firstName, lastName } = ChatHelper.current.user;
-    const msg: MessageInterface = { churchId: ChatConfigHelper.current.churchId, content: message, conversationId: props.room.conversation.id, displayName: `${firstName} ${lastName}`, messageType: "callout" }
+    const msg: MessageInterface = { churchId: ChatConfigHelper.current.churchId, content: message, conversationId: props.room.conversation.id, displayName: `${firstName} ${lastName}`, messageType: "callout" };
     ApiHelper.post("/messages/setCallout", msg, "MessagingApi");
     setEdit(false);
-  }
+  };
 
   const getEditSection = () => (<FormControl fullWidth variant="outlined">
     <InputLabel htmlFor="calloutText">Callout Message</InputLabel>
@@ -31,7 +31,7 @@ export const Callout: React.FC<Props> = (props) => {
         <Button variant="contained" onClick={handleUpdate} data-testid="callout-update-button">Update</Button>
       </>}
     />
-  </FormControl>)
+  </FormControl>);
 
   if (props.user?.isHost) {
     if (edit) return getEditSection();
@@ -43,5 +43,5 @@ export const Callout: React.FC<Props> = (props) => {
     if (props.room.callout?.content === "") return null;
     else return (<div id="callout">{ChatHelper.insertLinks(props.room.callout.content)}</div>);
   }
-}
+};
 

@@ -21,11 +21,11 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
   const [church, setChurch] = React.useState<ChurchInterface>();
   const [fund, setFund] = React.useState<FundInterface>();
   const [gateway, setGateway] = React.useState<any>(null);
-  let amt = Number(props.question.choices?.find((c: any) => c.text === "Amount")?.value);
-  let fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
+  const amt = Number(props.question.choices?.find((c: any) => c.text === "Amount")?.value);
+  const fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
 
   const getChurchData = () => {
-    let fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
+    const fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
     ApiHelper.get("/churches/" + props.churchId, "MembershipApi").then((data: any) => {
       setChurch(data);
     });
@@ -102,7 +102,7 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
   };
 
   const savePayment = async (paymentMethod: StripePaymentMethod, customerId: string, person?: PersonInterface) => {
-    let payment: any = {
+    const payment: any = {
       amount: amt,
       id: paymentMethod.id,
       customerId: customerId,

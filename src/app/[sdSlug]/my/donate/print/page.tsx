@@ -30,32 +30,32 @@ export default function PrintPage({ params }: { params: Params }) {
 
 
   const loadData = () => {
-    ApiHelper.get("/funds", "GivingApi").then((f: FundInterface[]) => { setFunds(f) });
-    ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: FundDonationInterface[]) => { setFundDonations(fd) });
+    ApiHelper.get("/funds", "GivingApi").then((f: FundInterface[]) => { setFunds(f); });
+    ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: FundDonationInterface[]) => { setFundDonations(fd); });
     ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
-      const result: DonationInterface[] = []
+      const result: DonationInterface[] = [];
       d.forEach((don: DonationInterface) => {
         const donDate = new Date(don.donationDate);
         if (donDate.getFullYear() === currYear) {
           result.push(don);
         }
       });
-      setDonations(result)
+      setDonations(result);
     });
 
 
     setTimeout(() => {
-      window.print()
+      window.print();
       router.back();
     }, 1000);
   };
 
   const getDate = () => {
-    let date = DateHelper.prettyDate(new Date());
-    let time = DateHelper.prettyTime(new Date());
-    let dateTime = `${date} ${time}`;
+    const date = DateHelper.prettyDate(new Date());
+    const time = DateHelper.prettyTime(new Date());
+    const dateTime = `${date} ${time}`;
     return dateTime;
-  }
+  };
 
   const getTotalContributions = () => {
     let result = 0;
@@ -66,7 +66,7 @@ export default function PrintPage({ params }: { params: Params }) {
       }
     });
     return CurrencyHelper.formatCurrency(result);
-  }
+  };
 
   const getFundArray = () => {
     const result: { fund: string; amount: number }[] = [];
@@ -79,7 +79,7 @@ export default function PrintPage({ params }: { params: Params }) {
       }
     });
     return result;
-  }
+  };
 
   const tableDonations = () => {
     const result: React.ReactElement[] = [];
@@ -96,7 +96,7 @@ export default function PrintPage({ params }: { params: Params }) {
       }
     });
     return result;
-  }
+  };
 
   const tableFundTotal = () => {
     const fundArray = getFundArray();
@@ -118,7 +118,7 @@ export default function PrintPage({ params }: { params: Params }) {
       </tr>);
     });
     return tableValues;
-  }
+  };
 
   useEffect(loadData, []);
 

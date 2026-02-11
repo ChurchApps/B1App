@@ -17,13 +17,13 @@ export function GroupClient(props: Props) {
   // Handle case where group doesn't exist
   if (!props.group) {
     return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
+      <div style={{ padding: "20px", textAlign: "center" }}>
         <h1>Group Not Found</h1>
         <p>The group you're looking for could not be found.</p>
       </div>
     );
   }
 
-  if (!UserHelper.currentUserChurch?.person?.id) return <UnauthenticatedView config={props.config} group={props.group} events={props.events} leaders={props.leaders}   />
-  else return <AuthenticatedView config={props.config} group={props.group} />
+  if (!UserHelper.currentUserChurch?.person?.id) return <UnauthenticatedView config={props.config} group={props.group} events={props.events} leaders={props.leaders} />;
+  else return <AuthenticatedView config={props.config} group={props.group} />;
 }

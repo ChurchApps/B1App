@@ -1,7 +1,7 @@
 import { ChatStateInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import React from "react";
-import { Chat } from "../"
+import { Chat } from "../";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean, switchToConversationId: string }
 
@@ -20,31 +20,31 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
     props.chatState.hostRoom.prayerRequests.splice(idx, 1);
     ChatHelper.onChange();
     ChatHelper.joinRoom(conv.id, conv.churchId);
-  }
+  };
 
   const getRequests = () => {
-    let links = [];
+    const links = [];
     const requests = props.chatState?.hostRoom?.prayerRequests;
     if (requests !== undefined) {
       for (let i = 0; i < requests.length; i++) {
-        let pr = requests[i];
-        links.push(<div style={{ flex: "1 0 0" }}><a href="about:blank" data-idx={i} onClick={viewPrayer}>{pr.title}</a></div>)
+        const pr = requests[i];
+        links.push(<div style={{ flex: "1 0 0" }}><a href="about:blank" data-idx={i} onClick={viewPrayer}>{pr.title}</a></div>);
       }
     }
     if (links.length > 0) return (<div style={{ padding: 10 }}>{links}</div>);
     else return (<div style={{ padding: 10 }}><i>There are no pending prayer requests at this time.</i></div>);
-  }
+  };
 
   const selectConversation = (conversationId: string) => {
     setSelectedConversation(conversationId);
-  }
+  };
 
   const getRooms = () => {
-    let result: React.ReactElement[] = [];
+    const result: React.ReactElement[] = [];
     props.chatState.privateRooms.forEach(r => {
       if (r.joined) {
-        let className = "streamingTab streamingChildTab";
-        let visible = selectedConversation === r.conversation.id;
+        const className = "streamingTab streamingChildTab";
+        const visible = selectedConversation === r.conversation.id;
         result.push(<a key={"anchor_" + r.conversation.id.toString()} href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); selectConversation(r.conversation.id); }} className={className}>
           <i className="chat"></i>{r.conversation.title}
         </a>);
@@ -53,7 +53,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
 
     });
     return result;
-  }
+  };
 
   React.useEffect(() => {
     if (props.switchToConversationId !== "" && props.switchToConversationId !== undefined) {
@@ -67,7 +67,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
   return <div id="receivePrayerContainer" style={(props.visible) ? {} : { display: "none" }}>
     {getRequests()}
     {getRooms()}
-  </div>
+  </div>;
 
-}
+};
 

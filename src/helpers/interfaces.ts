@@ -177,7 +177,15 @@ export interface StyleOption {
 export const allStyleOptions: StyleOption[] = [
   { label: "Border Color", key: "border-color", type: "color", default: "#FF0000" },
   { label: "Border Radius", key: "border-radius", type: "px", default: "5" },
-  { label: "Border Style", key: "border-style", type: "select", default: "solid", options: ["none", "solid", "dotted", "dashed", "double", "groove", "ridge", "inset", "outset"] },
+  {
+    label: "Border Style",
+    key: "border-style",
+    type: "select",
+    default: "solid",
+    options: [
+      "none", "solid", "dotted", "dashed", "double", "groove", "ridge", "inset", "outset"
+    ]
+  },
   { label: "Border Width", key: "border-width", type: "px", default: "1" },
   { label: "Background Color", key: "background-color", type: "color", default: "#FF0000" },
   { label: "Color", key: "color", type: "color", default: "#FF0000" },
@@ -202,7 +210,7 @@ export const allStyleOptions: StyleOption[] = [
   { label: "Padding Bottom", key: "padding-bottom", type: "px", default: 0 },
   { label: "Text Shadow", key: "text-shadow", type: "text-shadow", default: "1px 1px 2px black;" },
   { label: "Width", key: "width", type: "px", default: 500 }
-]
+];
 
 
 export interface PageLink {

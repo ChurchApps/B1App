@@ -19,7 +19,7 @@ interface Props {
 export function Conversations(props: Props) {
   const canPost = props.canPost !== false;
 
-  const [conversations, setConversations] = React.useState<ConversationInterface[]>(null)
+  const [conversations, setConversations] = React.useState<ConversationInterface[]>(null);
 
   const loadConversations = async () => {
     const conversations: ConversationInterface[] = (props.contentId) ? await ApiHelper.get("/conversations/messages/" + props.contentType + "/" + props.contentId, "MessagingApi") : [];
@@ -29,37 +29,39 @@ export function Conversations(props: Props) {
         c.messages.forEach(m => {
           if (peopleIds.indexOf(m.personId) === -1) peopleIds.push(m.personId);
         });
-      })
+      });
       const people = await ApiHelper.get("/people/ids?ids=" + peopleIds.join(","), "MembershipApi");
       conversations.forEach(c => {
         c.messages.forEach(m => {
           m.person = ArrayHelper.getOne(people, "id", m.personId);
         });
-      })
+      });
     }
     setConversations(conversations);
   };
 
   const getConversations = () => {
-    if (conversations.length === 0) return <></>
+    if (conversations.length === 0) return <></>;
     else {
-      let noteArray: React.ReactNode[] = [];
+      const noteArray: React.ReactNode[] = [];
       for (let i = 0; i < conversations.length; i++) noteArray.push(<Conversation context={props.context} conversation={conversations[i]} key={conversations[i].id} />);
       return noteArray;
     }
-  }
+  };
 
   React.useEffect(() => { loadConversations() }, [props.contentId, props.contentType, props.groupId]); //eslint-disable-line
 
-  if (!conversations) return <Loading />
-  else return (
-    <>
-      {conversations?.length === 0 && canPost && (
+  if (!conversations) return <Loading />;
+  else {
+    return (
+      <>
+        {conversations?.length === 0 && canPost && (
           <NewConversation conversation={conversations} context={props.context} contentType={props.contentType} contentId={props.contentId} onUpdate={loadConversations} groupId={props.groupId} visibility="public" />
-      )}
-      {conversations && Array.isArray(conversations) && conversations?.length > 0 && (
-        <Conversation context={props.context} conversation={conversations[0]} key={conversations[0].id} canPost={canPost} />
-      )}
-    </>
-  );
+        )}
+        {conversations && Array.isArray(conversations) && conversations?.length > 0 && (
+          <Conversation context={props.context} conversation={conversations[0]} key={conversations[0].id} canPost={canPost} />
+        )}
+      </>
+    );
+  }
 };

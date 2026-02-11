@@ -38,7 +38,7 @@ export default function SocialSuggestions() {
       case "author": o.author = value; break;
     }
     setLessonOutline(o);
-  }
+  };
 
   const getYouTubeKey = (youtubeInput: string) => {
     let result = youtubeInput.split("&")[0];
@@ -77,13 +77,13 @@ export default function SocialSuggestions() {
     setLessonOutlineResult("");
     ApiHelper.get(`/sermons/outline?url=${encodeURIComponent(lessonOutline.url)}&title=${lessonOutline.title}&author=${lessonOutline.author}`, "ContentApi")
       .then((data: OutlineResponse) => {
-        setLessonOutlineResult(data.outline)
+        setLessonOutlineResult(data.outline);
       })
       .finally(() => {
         setScriptLoading(false);
-        setLessonOutline({ url: "", title: "", author: "" })
-      })
-  }
+        setLessonOutline({ url: "", title: "", author: "" });
+      });
+  };
 
   return (
     <>
@@ -95,7 +95,7 @@ export default function SocialSuggestions() {
               label="YouTube URL"
               helperText="Enter YouTube URL"
               size="small"
-              onChange={(e) => {setUrl(e.target.value);}}
+              onChange={(e) => { setUrl(e.target.value); }}
               value={url}
               data-testid="youtube-url-input"
             />

@@ -14,22 +14,22 @@ export const ChatMessage: React.FC<Props> = (props) => {
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     ApiHelper.delete("/messages/" + props.message.id, "MessagingApi");
-  }
+  };
 
   const getDeleteLink = () => {
     if (!UserHelper.checkAccess(Permissions.contentApi.chat.host)) return null;
     else {
-      return <span className="delete"><a href="about:blank" onClick={handleDelete}><Icon>delete</Icon></a></span>
+      return <span className="delete"><a href="about:blank" onClick={handleDelete}><Icon>delete</Icon></a></span>;
     }
 
-  }
+  };
 
-  const className = (props.message.displayName.indexOf("Facebook") > -1) ? "message understate" : "message"
+  const className = (props.message.displayName.indexOf("Facebook") > -1) ? "message understate" : "message";
   return (
     <div className={className}>
       {getDeleteLink()}
       <b>{props.message.displayName}:</b> <span dangerouslySetInnerHTML={{ __html: ChatHelper.insertLinks(props.message.content) }}></span>
     </div>
   );
-}
+};
 

@@ -59,7 +59,7 @@ export function FileUpload(props: Props) {
   };
 
   const preUpload = async () => {
-    const params = { fileName: uploadedFile.name, contentType:props.contentType, contentId:props.contentId };
+    const params = { fileName: uploadedFile.name, contentType: props.contentType, contentId: props.contentId };
     const presigned = await ApiHelper.post("/files/postUrl", params, "ContentApi");
     const doUpload = presigned.key !== undefined;
     if (doUpload) await postPresignedFile(presigned);
@@ -76,8 +76,7 @@ export function FileUpload(props: Props) {
     const formData = new FormData();
     formData.append("acl", "public-read");
     formData.append("Content-Type", uploadedFile.type);
-    for (const property in presigned.fields)
-      formData.append(property, presigned.fields[property]);
+    for (const property in presigned.fields) formData.append(property, presigned.fields[property]);
     const f = document.getElementById("fileUpload") as HTMLInputElement | null;
     if (f?.files?.[0]) formData.append("file", f.files[0]);
 
@@ -87,7 +86,7 @@ export function FileUpload(props: Props) {
         if (progressEvent.total) {
           setUploadProgress(Math.round((100 * progressEvent.loaded) / progressEvent.total));
         }
-      },
+      }
     };
 
     return axios.post(presigned.url, formData, axiosConfig);

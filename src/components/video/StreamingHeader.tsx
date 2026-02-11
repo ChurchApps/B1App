@@ -24,17 +24,17 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   const [showUserMenu, setShowUserMenu] = React.useState(false);
   const [promptName, setPromptName] = React.useState(false);
 
-  const toggleUserMenu = (e: React.MouseEvent) => { e.preventDefault(); setShowUserMenu(!showUserMenu); }
+  const toggleUserMenu = (e: React.MouseEvent) => { e.preventDefault(); setShowUserMenu(!showUserMenu); };
 
   const updateName = (displayName: string) => {
     setShowUserMenu(false);
     StreamChatManager.handleNameUpdate(displayName);
-  }
+  };
 
   const getLoginLink = () => {
     if (!ApiHelper.isAuthenticated) return (<Link href="/login?returnUrl=/stream" className="nav-link">Login</Link>);
     else return (<Link href="/logout" className="nav-link">Logout</Link>);
-  }
+  };
 
   const getProfileLink = () => {
     if (!ApiHelper.isAuthenticated) return (<li className="nav-item"><ChatName user={props.user} updateFunction={updateName} promptName={promptName} /></li>);
@@ -43,7 +43,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
       const profileUrl = `${EnvironmentHelper.Common.B1AdminRoot}/login?jwt=${jwt}&returnUrl=/profile`;
       return (<li className="nav-item"><a href={profileUrl} target="_blank" rel="noopener noreferrer" className="nav-link">Profile</a></li>);
     }
-  }
+  };
   const getSettingLink = () => {
     if (UserHelper.checkAccess(Permissions.contentApi.content.edit) || UserHelper.checkAccess(Permissions.contentApi.streamingServices.edit)) {
       const jwt = UserHelper.currentUserChurch?.jwt;
@@ -52,24 +52,25 @@ export const StreamingHeader: React.FC<Props> = (props) => {
         <li className="nav-item"><a href={`https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/`} className="nav-link">Admin Dashboard</a></li>
       );
     }
-  }
+  };
 
   const getUserMenu = () => {
-    if (showUserMenu) return (
-      <div id="userMenu">
-        <div>
-          <ul className="nav flex-column d-xl-none">
-            <StreamingNavItems config={props.config} />
-          </ul>
-          <ul className="nav flex-column">
-            {getSettingLink()}
-            {getProfileLink()}
-            <li className="nav-item">{getLoginLink()}</li>
-          </ul>
-        </div>
-      </div>)
-    else return null;
-  }
+    if (showUserMenu) {
+      return (
+        <div id="userMenu">
+          <div>
+            <ul className="nav flex-column d-xl-none">
+              <StreamingNavItems config={props.config} />
+            </ul>
+            <ul className="nav flex-column">
+              {getSettingLink()}
+              {getProfileLink()}
+              <li className="nav-item">{getLoginLink()}</li>
+            </ul>
+          </div>
+        </div>);
+    } else return null;
+  };
 
   let imgSrc = (props.appearance)
     ? AppearanceHelper.getLogo(props.appearance, "images/logo-header.png", "/images/logo.png", "#FFF")
@@ -113,5 +114,5 @@ export const StreamingHeader: React.FC<Props> = (props) => {
       {getUserMenu()}
     </>
   );
-}
+};
 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { Button, Icon, Box, CardActionArea, Typography, Chip, Divider } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
@@ -29,7 +29,7 @@ export function Household({ completeHandler = () => { } }: Props) {
       visit = {
         personId: selectedMember.id,
         serviceId: CheckinHelper.selectedServiceTime.serviceId,
-        visitSessions: [],
+        visitSessions: []
       };
       CheckinHelper.pendingVisits.push(visit);
     }
@@ -75,9 +75,7 @@ export function Household({ completeHandler = () => { } }: Props) {
             borderRadius: 2,
             minWidth: 100,
             backgroundColor: hasSelection ? colors.success : "transparent",
-            "&:hover": {
-              backgroundColor: hasSelection ? colors.successHover : "rgba(0,0,0,0.04)",
-            },
+            "&:hover": { backgroundColor: hasSelection ? colors.successHover : "rgba(0,0,0,0.04)" }
           }}
         >
           {hasSelection ? "Change" : "Select Group"}
@@ -94,7 +92,7 @@ export function Household({ completeHandler = () => { } }: Props) {
   const getMemberServiceTimes = () => {
     const visit = ArrayHelper.getOne(pendingVisits, "personId", selectedMember.id);
     const visitSessions = visit?.visitSessions || [];
-    let result: React.ReactElement[] = [];
+    const result: React.ReactElement[] = [];
     CheckinHelper.serviceTimes.forEach((st) => {
       result.push(getServiceTime(st, visitSessions));
     });
@@ -125,7 +123,7 @@ export function Household({ completeHandler = () => { } }: Props) {
             vs.session?.serviceTimeId || ""
           );
           const group: GroupInterface = ArrayHelper.getOne(st?.groups || [], "id", vs.session?.groupId || "");
-          let name = group?.name || "none";
+          const name = group?.name || "none";
           groups.push(
             <Chip
               key={vs.id?.toString()}
@@ -138,7 +136,7 @@ export function Household({ completeHandler = () => { } }: Props) {
                 borderColor: colors.primary,
                 border: "1px solid",
                 color: colors.primary,
-                fontSize: 12,
+                fontSize: 12
               }}
             />
           );
@@ -168,7 +166,7 @@ export function Household({ completeHandler = () => { } }: Props) {
                 height: 56,
                 borderRadius: "50%",
                 marginRight: 2,
-                overflow: "hidden",
+                overflow: "hidden"
               }}
             >
               <img
@@ -261,9 +259,7 @@ export function Household({ completeHandler = () => { } }: Props) {
             fontWeight: 700,
             fontSize: 16,
             boxShadow: `0 2px 4px ${colors.primary}33`,
-            "&:hover": {
-              backgroundColor: colors.primaryHover,
-            },
+            "&:hover": { backgroundColor: colors.primaryHover }
           }}
         >
           Complete Check-in

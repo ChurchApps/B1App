@@ -19,7 +19,7 @@ export function BiblePage() {
   // OLD: Biblia.com Bible (comment this out when ready to switch to YouVersion)
   return (
     <Container>
-      <h1 style={{textAlign:"center"}}>Bible</h1>
+      <h1 style={{ textAlign: "center" }}>Bible</h1>
       <iframe
         title="content"
         className="full-frame"

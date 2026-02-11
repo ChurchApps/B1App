@@ -30,7 +30,7 @@ export const ServiceOrder = (props: Props) => {
         setPlanItems(d);
       });
     }
-  }
+  };
 
   const loadPreviewLessonItems = async () => {
     if (hasAssociatedLesson && planItems.length === 0) {
@@ -43,27 +43,27 @@ export const ServiceOrder = (props: Props) => {
         setPreviewLessonItems([]);
       }
     }
-  }
+  };
 
   const getEditContent = () => (
     <Stack direction="row">
       <IconButton
-        onClick={() => window.open(`/my/plans/print/${props.plan?.id}`, '_blank')}
+        onClick={() => window.open(`/my/plans/print/${props.plan?.id}`, "_blank")}
         size="small"
         data-testid="print-service-order-button"
       >
         <PrintIcon />
       </IconButton>
     </Stack>
-  )
+  );
 
   React.useEffect(() => {
     loadData();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     loadPreviewLessonItems();
-  }, [planItems.length, props.plan?.contentType, props.plan?.contentId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [planItems.length, props.plan?.contentType, props.plan?.contentId]);
 
   const renderContent = () => {
     if (planItems.length === 0 && showPreviewMode) {

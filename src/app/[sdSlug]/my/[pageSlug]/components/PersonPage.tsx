@@ -12,7 +12,7 @@ export function PersonPage(props: Props) {
   const { personId } = props;
 
   // Validate personId
-  if (!personId || personId === 'undefined' || personId.trim() === '') {
+  if (!personId || personId === "undefined" || personId.trim() === "") {
     return (
       <>
         <h1>Invalid Person</h1>

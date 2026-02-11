@@ -85,15 +85,15 @@ export function YoutubeBackground({
     mute: 1,
     modestbranding: 1,
     iv_load_policy: 3,
-    playsinline: 1,
+    playsinline: 1
   };
 
   const videoOptions = {
     playerVars: {
       ...defaultPlayerVars,
-      ...playerOptions,
+      ...playerOptions
     },
-    host: noCookie ? 'https://www.youtube-nocookie.com' : 'https://www.youtube.com'
+    host: noCookie ? "https://www.youtube-nocookie.com" : "https://www.youtube.com"
   };
 
   return (
@@ -105,7 +105,7 @@ export function YoutubeBackground({
           width: videoWidth + "px",
           height: (videoHeight + 130) + "px",
           top: (videoY + -65) + "px",
-          left: videoX + "px",
+          left: videoX + "px"
         }}
       >
         {overlay && <div className={styles.overlay} style={{ backgroundColor: overlay }}></div>}

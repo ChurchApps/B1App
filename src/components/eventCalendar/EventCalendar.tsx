@@ -1,5 +1,5 @@
-import { Calendar, momentLocalizer, View } from "react-big-calendar"
-import moment from "moment"
+import { Calendar, momentLocalizer, View } from "react-big-calendar";
+import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Snackbar, Stack } from "@mui/material";
 import { EventHelper } from "@churchapps/apphelper";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function EventCalendar(props: Props) {
-  const localizer = momentLocalizer(moment)
+  const localizer = momentLocalizer(moment);
   const [editEvent, setEditEvent] = useState<EventInterface | null>(null);
   const [displayEvent, setDisplayEvent] = useState<EventInterface | null>(null);
   const [open, setOpen] = useState<boolean>(false);
@@ -28,7 +28,7 @@ export function EventCalendar(props: Props) {
   const handleSubscribe = () => {
     setOpen(true);
     navigator.clipboard.writeText(`${EnvironmentHelper.Common.ContentApi}/events/subscribe?groupId=${props.editGroupId}&churchId=${UserHelper.currentUserChurch.church.id}`);
-  }
+  };
 
   const handleAddEvent = (slotInfo: { start: Date; end: Date }) => {
     const startTime = new Date(slotInfo.start);
@@ -39,19 +39,19 @@ export function EventCalendar(props: Props) {
     endTime.setHours(13);
     endTime.setMinutes(0);
     endTime.setSeconds(0);
-    setEditEvent({ start: startTime, end: endTime, allDay: false, groupId: props.editGroupId, visibility: "public" })
-  }
+    setEditEvent({ start: startTime, end: endTime, allDay: false, groupId: props.editGroupId, visibility: "public" });
+  };
 
   const handleEventClick = (event: EventInterface) => {
     const ev = { ...event };
     setDisplayEvent(ev);
-  }
+  };
 
   const handleDone = () => {
     setDisplayEvent(null);
     setEditEvent(null);
     if (props.onRequestRefresh) props.onRequestRefresh();
-  }
+  };
 
   const onNavigate = useCallback((newDate: Date) => {
     setDate(newDate);
@@ -81,16 +81,15 @@ export function EventCalendar(props: Props) {
         expandedEvents.push(ev);
       });
       EventHelper.removeExcludeDates(expandedEvents);
-    }
-    else expandedEvents.push(ev);
+    } else expandedEvents.push(ev);
   });
 
   return (
     <div>
       {props.editGroupId
         && <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
-          <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe() }} toolTip="Copy the URL and add this to your Google Calendar (or other)" />
-          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }) }} />
+          <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe(); }} toolTip="Copy the URL and add this to your Google Calendar (or other)" />
+          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }); }} />
         </Stack>
       }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} date={date} view={view} onNavigate={onNavigate} onView={onView} />

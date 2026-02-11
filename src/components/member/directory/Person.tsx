@@ -24,7 +24,7 @@ export const Person: React.FC<Props> = (props) => {
   const isOwnProfile = context.person && props.personId === context.person.id;
 
   const getContactMethods = () => {
-    let contactMethods = [];
+    const contactMethods = [];
     if (person) {
       const ci = person.contactInfo;
       if (ci?.mobilePhone) contactMethods.push(<div className="contactMethod"><Icon sx={{ marginRight: "5px" }}>phone</Icon> {ci.mobilePhone} <label>Mobile</label></div>);
@@ -32,7 +32,7 @@ export const Person: React.FC<Props> = (props) => {
       if (ci?.workPhone) contactMethods.push(<div className="contactMethod"><Icon sx={{ marginRight: "5px" }}>phone</Icon> {ci.workPhone} <label>Work</label></div>);
       if (ci?.email) contactMethods.push(<div className="contactMethod"><Icon sx={{ marginRight: "5px" }}>mail_outline</Icon> {ci.email}</div>);
       if (ci?.address1) {
-        let lines = []
+        const lines = [];
         lines.push(<div><Icon sx={{ marginRight: "5px" }}>room</Icon> {ci.address1}</div>);
         if (ci.address2) lines.push(<div>{ci.address2}</div>);
         if (ci.city) lines.push(<div>{ci.city}, {ci.state} {ci.zip}</div>);
@@ -40,7 +40,7 @@ export const Person: React.FC<Props> = (props) => {
       }
     }
     return contactMethods;
-  }
+  };
 
   interface ProfileChange {
     field: string;
@@ -49,7 +49,7 @@ export const Person: React.FC<Props> = (props) => {
   }
 
   const showChanges = () => {
-    let result: React.ReactElement[] = [];
+    const result: React.ReactElement[] = [];
     requestedChanges.map((t) => {
       const changes: ProfileChange[] = JSON.parse(t.data);
       result.push (
@@ -65,31 +65,31 @@ export const Person: React.FC<Props> = (props) => {
             <TableBody>
               {changes.map((c: ProfileChange) => {
                 let val: React.ReactNode = c.value;
-                if (c.field === "photo") val = <img src={c.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />
+                if (c.field === "photo") val = <img src={c.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />;
                 return (
                   <TableRow key={c.field}>
                     <TableCell>{c.label}</TableCell>
                     <TableCell>{val}</TableCell>
                   </TableRow>
-                )
+                );
               })}
             </TableBody>
           </Table>
         </DisplayBox>
-      )
+      );
     });
     return result;
-  }
+  };
 
   const loadData = () => {
-    if (!props.personId || props.personId === 'undefined' || props.personId.trim() === '') {
-      console.error('Invalid personId:', props.personId);
+    if (!props.personId || props.personId === "undefined" || props.personId.trim() === "") {
+      console.error("Invalid personId:", props.personId);
       return;
     }
 
     ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then((data: PersonInterface) => setPerson(data));
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then((data: TaskInterface[]) => setRequestedChanges(data));
-  }
+  };
 
   const getEditContent = () => {
     if (isOwnProfile) {
@@ -99,12 +99,12 @@ export const Person: React.FC<Props> = (props) => {
         </IconButton>
       );
     }
-    return <Button variant="contained" color="primary" disabled={!person} onClick={() => {if (person) setShowPM(true)}}>Message</Button>
-  }
+    return <Button variant="contained" color="primary" disabled={!person} onClick={() => { if (person) setShowPM(true); }}>Message</Button>;
+  };
 
   const getPM = () => {
-    if (showPM && person) return (<DirectMessageModal onBack={() => {setShowPM(false)}} context={context} person={person} />)
-  }
+    if (showPM && person) return (<DirectMessageModal onBack={() => { setShowPM(false); }} context={context} person={person} />);
+  };
 
   React.useEffect(loadData, [props.personId]);
 
@@ -144,5 +144,5 @@ export const Person: React.FC<Props> = (props) => {
       </Grid>
       {isOwnProfile && editMode && <VisibilityPreferences />}
     </>
-  )
-}
+  );
+};

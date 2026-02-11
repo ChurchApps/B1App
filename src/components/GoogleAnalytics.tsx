@@ -1,8 +1,8 @@
-"use client"
-import Script from 'next/script'
-import { Suspense, useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { EnvironmentHelper } from '@/helpers/EnvironmentHelper'
+"use client";
+import Script from "next/script";
+import { Suspense, useEffect } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 declare global {
   interface Window {
@@ -12,23 +12,21 @@ declare global {
 }
 
 function GoogleAnalyticsInner() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const gaId = EnvironmentHelper.Common.GoogleAnalyticsTag
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const gaId = EnvironmentHelper.Common.GoogleAnalyticsTag;
 
   useEffect(() => {
-    if (!gaId || !pathname) return
+    if (!gaId || !pathname) return;
 
-    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
+    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "");
 
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('config', gaId, {
-        page_path: url,
-      })
+    if (typeof window.gtag !== "undefined") {
+      window.gtag("config", gaId, { page_path: url });
     }
-  }, [pathname, searchParams, gaId])
+  }, [pathname, searchParams, gaId]);
 
-  if (!gaId) return null
+  if (!gaId) return null;
 
   return (
     <>
@@ -45,11 +43,11 @@ function GoogleAnalyticsInner() {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${gaId}');
-          `,
+          `
         }}
       />
     </>
-  )
+  );
 }
 
 export default function GoogleAnalytics() {
@@ -57,5 +55,5 @@ export default function GoogleAnalytics() {
     <Suspense fallback={null}>
       <GoogleAnalyticsInner />
     </Suspense>
-  )
+  );
 }

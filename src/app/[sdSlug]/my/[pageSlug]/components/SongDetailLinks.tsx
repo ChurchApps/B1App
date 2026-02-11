@@ -16,7 +16,7 @@ export const SongDetailLinks = (props: Props) => {
         setSongDetailLinks(data);
       });
     }
-  }, [props.songDetail]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.songDetail]);
 
   const getLink = (link: SongDetailLinkInterface, idx: number) => {
     const logos: { [key: string]: string } = {
@@ -28,21 +28,23 @@ export const SongDetailLinks = (props: Props) => {
       Genius: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Genius-Wordmark.svg/330px-Genius-Wordmark.svg.png",
       Hymnary: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Hymnary_logo.png",
       MusicBrainz: "https://upload.wikimedia.org/wikipedia/commons/0/01/MusicBrainz_Logo_with_text_%282016%29.svg"
-    }
-    let result = <a href={link.url} target="_blank" rel="noreferrer">{link.service}</a>
+    };
+    let result = <a href={link.url} target="_blank" rel="noreferrer">{link.service}</a>;
     const logo: string = logos[link.service] as string;
-    if (logo) result = <a href={link.url} target="_blank" rel="noreferrer"><img src={logo} alt={link.service} style={{ minHeight: 20, maxHeight: 30, maxWidth: 100 }} /></a>
+    if (logo) result = <a href={link.url} target="_blank" rel="noreferrer"><img src={logo} alt={link.service} style={{ minHeight: 20, maxHeight: 30, maxWidth: 100 }} /></a>;
 
     return result;
-  }
+  };
 
   if (!songDetailLinks || songDetailLinks.length === 0) return null;
-  else return <>
-    <hr />
-    <h4>Links</h4>
-    <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: 'wrap' }}>
-      {songDetailLinks?.map((sd, i) => getLink(sd, i))}
-      {props.songDetail?.praiseChartsId && getLink({ service: "PraiseCharts", url: `https://www.praisecharts.com/songs/details/${props.songDetail?.praiseChartsId}?XID=churchapps` }, songDetailLinks.length + 1)}
-    </Stack>
-  </>
-}
+  else {
+    return <>
+      <hr />
+      <h4>Links</h4>
+      <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: "wrap" }}>
+        {songDetailLinks?.map((sd, i) => getLink(sd, i))}
+        {props.songDetail?.praiseChartsId && getLink({ service: "PraiseCharts", url: `https://www.praisecharts.com/songs/details/${props.songDetail?.praiseChartsId}?XID=churchapps` }, songDetailLinks.length + 1)}
+      </Stack>
+    </>;
+  }
+};

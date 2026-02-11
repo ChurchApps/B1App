@@ -24,19 +24,13 @@ export function PageLayout(props: Props) {
 
   StyleHelper.getAllStyles(props.pageData.sections);
 
-  let result = <></>
+  let result = <></>;
   if (props.pageData) {
     switch (props.pageData?.layout) {
-      case "cleanCentered":
-        result = <CleanCentered church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />
-        break;
-      case "embed":
-        result = <Embedded church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />
-        break;
+      case "cleanCentered": result = <CleanCentered church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />; break;
+      case "embed": result = <Embedded church={props.config.church} churchSettings={props.config.appearance} navLinks={props.config.navLinks} pageData={props.pageData} />; break;
       case "headerFooter":
-      default:
-        result = <HeaderFooter config={props.config} pageData={props.pageData} />
-        break;
+      default: result = <HeaderFooter config={props.config} pageData={props.pageData} />; break;
     }
   }
   const css = StyleHelper.getCss(props.pageData.sections);

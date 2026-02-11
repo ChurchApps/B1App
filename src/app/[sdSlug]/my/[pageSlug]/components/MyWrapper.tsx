@@ -20,16 +20,16 @@ export async function MyWrapper(props:Props) {
 
   const getPageLink = (pageSlug:string) => {
     switch (pageSlug) {
-      case "timeline": return {url: "/my/timeline", label: "Timeline"};
-      case "groups": return {url: "/my/groups", label: "Groups"};
-      case "community": return {url: "/my/community", label: "Community"};
-      case "plans": return {url: "/my/plans", label: "Plans"};
-      case "checkin": return {url: "/my/checkin", label: "Check-in"};
-      case "lessons": return {url: "/my/lessons", label: "Lessons"};
-      case "donate": return {url: "/my/donate", label: "Donations"};
-      default: return {url: "/my/timeline", label: "Timeline"};
+      case "timeline": return { url: "/my/timeline", label: "Timeline" };
+      case "groups": return { url: "/my/groups", label: "Groups" };
+      case "community": return { url: "/my/community", label: "Community" };
+      case "plans": return { url: "/my/plans", label: "Plans" };
+      case "checkin": return { url: "/my/checkin", label: "Check-in" };
+      case "lessons": return { url: "/my/lessons", label: "Lessons" };
+      case "donate": return { url: "/my/donate", label: "Donations" };
+      default: return { url: "/my/timeline", label: "Timeline" };
     }
-  }
+  };
 
   const getRootLayout = () => <Container>
     <div id="mainContent">
@@ -44,27 +44,27 @@ export async function MyWrapper(props:Props) {
         </Grid>
       </Grid>
     </div>
-  </Container>
+  </Container>;
 
   const getPageLabel = () => {
     const pageLink = getPageLink(props.pageSlug);
-    if (props.idLabel) return <Link href={pageLink.url}>{pageLink.label}</Link>
-    else return <span>{pageLink.label}</span>
-  }
+    if (props.idLabel) return <Link href={pageLink.url}>{pageLink.label}</Link>;
+    else return <span>{pageLink.label}</span>;
+  };
 
   const getIdLabel = () => {
-    if (props.idLabel) return <span>{props.idLabel}</span>
-  }
+    if (props.idLabel) return <span>{props.idLabel}</span>;
+  };
 
   const getChildLayout = () => <Container>
-    <Breadcrumbs separator="›" aria-label="breadcrumb" style={{marginTop:30, marginBottom:30}}>
+    <Breadcrumbs separator="›" aria-label="breadcrumb" style={{ marginTop: 30, marginBottom: 30 }}>
       <Link href="/my/timeline">My {props.config?.church?.name}</Link>
       {getPageLabel()}
       {getIdLabel()}
     </Breadcrumbs>
     {props.children}
 
-  </Container>
+  </Container>;
 
   return (
     <DefaultPageWrapper config={props.config}>

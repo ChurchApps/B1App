@@ -77,7 +77,7 @@ export function PlanClient({ planId }: Props) {
     loadData();
   }, [planId]);
 
-  if (!UserHelper.currentUserChurch?.person?.id)
+  if (!UserHelper.currentUserChurch?.person?.id) {
     return (
       <>
         <h1>Group</h1>
@@ -86,6 +86,7 @@ export function PlanClient({ planId }: Props) {
         </h3>
       </>
     );
+  }
 
   if (isLoading || !plan) return <Loading />;
   return (

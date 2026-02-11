@@ -13,7 +13,7 @@
     "build": "next build",
     "postbuild": "git checkout src/instrumentation.ts src/instrumentation-client.ts 2>/dev/null || true",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
@@ -77,9 +77,13 @@
     "@types/react-dom": "^19.1.7",
     "@types/react-helmet": "^6.1.11",
     "@types/webfontloader": "^1.6.38",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "copyfiles": "^2.4.1",
     "eslint": "^9.28.0",
     "eslint-config-next": "^15.4.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-unused-imports": "4.1.4",
     "typescript": "^5.8.3"
   }

@@ -24,9 +24,7 @@ export function CheckinComplete() {
               borderRadius: 3,
               height: 48,
               fontWeight: 600,
-              "&:hover": {
-                backgroundColor: colors.primaryHover,
-              },
+              "&:hover": { backgroundColor: colors.primaryHover }
             }}
           >
             Back to My Page

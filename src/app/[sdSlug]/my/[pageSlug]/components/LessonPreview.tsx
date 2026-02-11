@@ -46,7 +46,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
               justifyContent: "space-between",
               p: 1,
               backgroundColor: "grey.100",
-              borderRadius: 1,
+              borderRadius: 1
             }}
           >
             <Typography sx={{ fontWeight: 600 }}>{item.label}</Typography>
@@ -78,7 +78,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
           p: 1,
           pl: isChild ? 3 : 1,
           borderBottom: "1px solid",
-          borderColor: "grey.200",
+          borderColor: "grey.200"
         }}
       >
         <Box>
@@ -129,7 +129,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: 2,
+            mb: 2
           }}
         >
           <Typography variant="body2" sx={{ color: "text.secondary" }}>

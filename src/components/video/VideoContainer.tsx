@@ -24,7 +24,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
   const isMounted = useMountedState();
   const [config, setConfig] = React.useState<ConfigurationInterface>(null);
   const [transparent, setTransparent] = useState(props.overlayContent);
-  const params = useParams<PageParams>()
+  const params = useParams<PageParams>();
 
   const loadData = () => {
     ConfigHelper.load(params.sdSlug).then((data) => { setConfig(data); });
@@ -36,15 +36,15 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getCountdownTime = (serviceTime: Date) => {
     let remainingSeconds = Math.floor((serviceTime.getTime() - currentTime) / 1000);
-    if (remainingSeconds > 86400) return serviceTime.toDateString() + " - " + serviceTime.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true })
+    if (remainingSeconds > 86400) return serviceTime.toDateString() + " - " + serviceTime.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
     else {
-      let hours = Math.floor(remainingSeconds / 3600);
+      const hours = Math.floor(remainingSeconds / 3600);
       remainingSeconds = remainingSeconds - (hours * 3600);
-      let minutes = Math.floor(remainingSeconds / 60);
-      let seconds = remainingSeconds - (minutes * 60);
+      const minutes = Math.floor(remainingSeconds / 60);
+      const seconds = remainingSeconds - (minutes * 60);
       return ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2);
     }
-  }
+  };
 
   const getVideo = (cs: StreamingServiceExtendedInterface) => {
     let videoUrl = cs?.sermon?.videoUrl || "";
@@ -61,7 +61,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
     }
 
     if (cs.localStartTime !== undefined) {
-      let seconds = Math.floor((loadedTime - cs.localStartTime.getTime()) / 1000);
+      const seconds = Math.floor((loadedTime - cs.localStartTime.getTime()) / 1000);
       if (seconds > 10) {
         if (cs?.sermon?.videoType === "youtube") videoUrl += "&start=" + seconds.toString();
         if (cs?.sermon?.videoType === "vimeo") videoUrl += "#t=" + seconds.toString() + "s";
@@ -71,10 +71,10 @@ export const VideoContainer: React.FC<Props> = (props) => {
       }
     }
     return (<iframe id="videoFrame" src={videoUrl} frameBorder={0} allow="autoplay; fullscreen" allowFullScreen title="Sermon Video"></iframe>);
-  }
+  };
 
   const getCountdown = (cs: StreamingServiceExtendedInterface) => {
-    let displayTime = getCountdownTime(cs.localCountdownTime || new Date());
+    const displayTime = getCountdownTime(cs.localCountdownTime || new Date());
     const logoUrl = getLogo();
     const style: React.CSSProperties = {
       height: "100%",
@@ -83,41 +83,37 @@ export const VideoContainer: React.FC<Props> = (props) => {
       backgroundPosition: "center",
       ...(logoUrl ? { backgroundImage: `url(${logoUrl})` } : {})
     };
-    return <div id="noVideoContent" style={style}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>{cs?.sermon?.title ?? "Next Service Time"}</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>
-  }
+    return <div id="noVideoContent" style={style}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>{cs?.sermon?.title ?? "Next Service Time"}</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>;
+  };
 
   const getLogo = () => {
     let logo: string | null = null;
     if (transparent) {
       const textColor = StyleHelper.getTextColor(props.sections[0]?.textColor, config?.globalStyles, config?.appearance);
       logo = AppearanceHelper.getLogoByTextColor(config?.appearance?.logoLight || null, config?.appearance?.logoDark || null, textColor);
-    }
-    else {
+    } else {
       logo = config?.appearance?.logoDark || null;
     }
     // Return null for any falsy value or the string "null"
     if (!logo || logo === "null") return null;
     return logo;
-  }
+  };
 
   const contentType = React.useMemo(() => {
     // Don't calculate until client-side to avoid hydration mismatch
-    if (!isClient) return 'logo';
+    if (!isClient) return "logo";
 
-    let cs = props.currentService;
+    const cs = props.currentService;
     const now = new Date();
 
     if (cs === undefined || cs === null || cs.localEndTime === undefined) {
-      return 'logo';
-    }
-    else if (now > cs.localEndTime) {
-      return 'ended';
-    }
-    else if (cs.localStartTime !== undefined && now <= cs.localStartTime) {
-      return 'countdown';
-    }
-    else {
-      return 'video';
+      return "logo";
+    } else if (now > cs.localEndTime) {
+      return "ended";
+    } else if (cs.localStartTime !== undefined && now <= cs.localStartTime) {
+      return "countdown";
+    } else {
+      return "video";
     }
   }, [props.currentService, isClient]);
 
@@ -133,16 +129,11 @@ export const VideoContainer: React.FC<Props> = (props) => {
     };
 
     switch (contentType) {
-      case 'logo':
-        return <div id="noVideoContent" style={logoStyle} />;
-      case 'ended':
-        return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
-      case 'countdown':
-        return getCountdown(props.currentService);
-      case 'video':
-        return getVideo(props.currentService);
-      default:
-        return <div id="noVideoContent" style={logoStyle} />;
+      case "logo": return <div id="noVideoContent" style={logoStyle} />;
+      case "ended": return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
+      case "countdown": return getCountdown(props.currentService);
+      case "video": return getVideo(props.currentService);
+      default: return <div id="noVideoContent" style={logoStyle} />;
     }
   };
 
@@ -157,7 +148,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
       if (isMounted()) {
         setCurrentTime(new Date().getTime());
       }
-    }
+    };
     const id = setInterval(updateCurrentTime, 1000);
     return () => clearInterval(id);
   }, [isMounted]);
@@ -167,5 +158,5 @@ export const VideoContainer: React.FC<Props> = (props) => {
       {getContents()}
     </div>
   );
-}
+};
 

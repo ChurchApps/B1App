@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { UserHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Permissions, LinkInterface } from "@churchapps/helpers";
-import { PersonHelper } from "@/helpers"
+import { PersonHelper } from "@/helpers";
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -65,21 +65,13 @@ export const TabsClient = (props: Props) => {
 
   const getLinkRoute = (link: LinkInterface): string | null => {
     switch (link.linkType) {
-      case "groups":
-        return "/my/groups";
-      case "directory":
-        return "/my/community";
-      case "plans":
-        return "/my/plans";
-      case "checkin":
-        return "/my/checkin";
-      case "lessons":
-        return "/my/lessons";
-      case "donation":
-        return "/my/donate";
-      default:
-        // Other link types (bible, sermons, stream, etc.) don't have /my routes
-        return null;
+      case "groups": return "/my/groups";
+      case "directory": return "/my/community";
+      case "plans": return "/my/plans";
+      case "checkin": return "/my/checkin";
+      case "lessons": return "/my/lessons";
+      case "donation": return "/my/donate";
+      default: return null; // Other link types (bible, sermons, stream, etc.) don't have /my routes
     }
   };
 

@@ -22,7 +22,7 @@ export const BlockoutDateEdit: React.FC<Props> = (props) => {
     if (blockoutDate.startDate && blockoutDate.endDate && blockoutDate.startDate > blockoutDate.endDate) result.push("Start date must be before end date.");
     setErrors(result);
     return result.length === 0;
-  }
+  };
 
   const handleSave = () => {
     if (validate()) {
@@ -30,27 +30,27 @@ export const BlockoutDateEdit: React.FC<Props> = (props) => {
         props.onUpdate();
       });
     }
-  }
+  };
 
   const handleDelete = () => {
     ApiHelper.delete("/blockoutDates/" + blockoutDate.id, "DoingApi").then(() => {
       props.onUpdate();
     });
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const bd = {...blockoutDate};
+    const bd = { ...blockoutDate };
     switch (e.target.name) {
       case "startDate": bd.startDate = new Date(e.target.value); break;
       case "endDate": bd.endDate = new Date(e.target.value); break;
     }
     setBlockoutDate(bd);
-  }
+  };
 
   return (<InputBox headerIcon="block" headerText="Blockout Dates" saveFunction={handleSave} cancelFunction={props.onUpdate} deleteFunction={blockoutDate.id && handleDelete}>
     <TextField fullWidth label="Start Date" name="startDate" type="date" data-cy="start-date" value={DateHelper.formatHtml5Date(blockoutDate.startDate)} onChange={handleChange} />
     <TextField fullWidth label="End Date" name="endDate" type="date" data-cy="end-date" value={DateHelper.formatHtml5Date(blockoutDate.endDate)} onChange={handleChange} />
     <ErrorMessages errors={errors} />
   </InputBox>);
-}
+};
 

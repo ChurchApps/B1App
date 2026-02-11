@@ -20,7 +20,7 @@ export const VisibilityPreferences = () => {
 
   const handlePrefChange = (e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {
     const p = { ...pref } as VisibilityPreferenceInterface;
-    let value = e.target.value;
+    const value = e.target.value;
     switch (e.target.name) {
       case "address": p.address = value; break;
       case "phoneNumber": p.phoneNumber = value; break;

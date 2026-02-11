@@ -18,8 +18,8 @@ export class TimelineHelper {
     const initialConversations:ConversationInterface[] = await ApiHelper.get("/conversations/posts", "MessagingApi");
     const allPosts = await TimelineHelper.loadRelatedData(initialConversations, null);
     TimelineHelper.mergeConversations(allPosts, initialConversations);
-    const {people, groups} = await TimelineHelper.populatePostsAndPeople(allPosts);
-    return {posts: allPosts, people, groups};
+    const { people, groups } = await TimelineHelper.populatePostsAndPeople(allPosts);
+    return { posts: allPosts, people, groups };
   }
 
   static async loadForGroup(groupId:string) {
@@ -30,16 +30,15 @@ export class TimelineHelper {
     //Add conversations to the posts when possible and create new posts when not.
     TimelineHelper.mergeConversations(allPosts, initialConversations);
     //Fill in the people and groups for the posts
-    const {people, groups} = await TimelineHelper.populatePostsAndPeople(allPosts);
-    return {posts: allPosts, people, groups};
+    const { people, groups } = await TimelineHelper.populatePostsAndPeople(allPosts);
+    return { posts: allPosts, people, groups };
   }
 
-  static async populatePostsAndPeople(allPosts:TimelinePostInterface[])
-  {
+  static async populatePostsAndPeople(allPosts:TimelinePostInterface[]) {
     await TimelineHelper.populateConversations(allPosts);
-    const {people, groups} = await TimelineHelper.populateEntities(allPosts);
+    const { people, groups } = await TimelineHelper.populateEntities(allPosts);
     TimelineHelper.standardizePosts(allPosts, people);
-    return {people, groups};
+    return { people, groups };
   }
 
   static async loadRelatedData(initialConversations: ConversationInterface[], groupId?:string) {
@@ -49,10 +48,10 @@ export class TimelineHelper {
     const venueIds:string[] = [];
     const sermonIds:string[] = [];
     initialConversations.forEach((conv) => {
-      if (conv.contentType==="task" && taskIds.indexOf(conv.contentId)===-1) taskIds.push(conv.contentId);
-      if (conv.contentType==="event" && eventIds.indexOf(conv.contentId)===-1) eventIds.push(conv.contentId);
-      if (conv.contentType==="venue" && venueIds.indexOf(conv.contentId)===-1) venueIds.push(conv.contentId);
-      if (conv.contentType==="sermon" && venueIds.indexOf(conv.contentId)===-1) sermonIds.push(conv.contentId);
+      if (conv.contentType === "task" && taskIds.indexOf(conv.contentId) === -1) taskIds.push(conv.contentId);
+      if (conv.contentType === "event" && eventIds.indexOf(conv.contentId) === -1) eventIds.push(conv.contentId);
+      if (conv.contentType === "venue" && venueIds.indexOf(conv.contentId) === -1) venueIds.push(conv.contentId);
+      if (conv.contentType === "sermon" && venueIds.indexOf(conv.contentId) === -1) sermonIds.push(conv.contentId);
     });
     if (groupId) {
       promises.push(ApiHelper.get("/events/timeline/group/" + groupId + "?eventIds=" + eventIds.join(","), "ContentApi"));
@@ -63,11 +62,11 @@ export class TimelineHelper {
     if (venueIds.length > 0) promises.push(ApiHelper.get("/venues/timeline?venueIds=" + venueIds.join(","), "LessonsApi"));
     if (sermonIds.length > 0) promises.push(ApiHelper.get("/sermons/timeline?sermonIds=" + sermonIds.join(","), "ContentApi"));
     const results = await Promise.all(promises);
-    let allPosts:TimelinePostInterface[] = [];
+    const allPosts:TimelinePostInterface[] = [];
     results.forEach((result: TimelineApiResponse[]) => {
       if (Array.isArray(result)) {
         result.forEach((r) => {
-          allPosts.push({ postId:r.postId, postType:r.postType, groupId:r.groupId, data:r})
+          allPosts.push({ postId: r.postId, postType: r.postType, groupId: r.groupId, data: r });
         });
       }
     });
@@ -75,14 +74,13 @@ export class TimelineHelper {
   }
 
   static mergeConversations(allPosts:TimelinePostInterface[], initialConversations:ConversationInterface[]) {
-    allPosts.forEach(p => { p.conversation={} })
+    allPosts.forEach(p => { p.conversation = {}; });
     initialConversations.forEach((conv) => {
-      let existingPost = ArrayHelper.getOne(allPosts, "postId", conv.contentId);
+      const existingPost = ArrayHelper.getOne(allPosts, "postId", conv.contentId);
       if (existingPost) {
         existingPost.conversation = conv;
         if (conv.groupId) existingPost.groupId = conv.groupId;
-      }
-      else allPosts.push({postId: conv.contentId, postType:conv.contentType, groupId:conv.groupId, conversation: conv} );
+      } else allPosts.push({ postId: conv.contentId, postType: conv.contentType, groupId: conv.groupId, conversation: conv } );
     });
   }
 
@@ -94,20 +92,20 @@ export class TimelineHelper {
       p.conversation?.messages?.forEach(m => {
         if (m.personId && peopleIds.indexOf(m.personId) === -1) peopleIds.push(m.personId);
       });
-      if (p.postType==="group" && p.conversation.contentId && groupIds.indexOf(p.conversation.contentId) === -1) groupIds.push(p.conversation.contentId);
-      if (p.postType==="event" && data && data.groupId && groupIds.indexOf(data.groupId) === -1) groupIds.push(data.groupId);
-      if (p.postType==="task" && data) {
-        if (data.associatedWithType==="person" && peopleIds.indexOf(data.associatedWithId) === -1) peopleIds.push(data.associatedWithId);
-        if (data.createdByType==="person" && peopleIds.indexOf(data.createdById) === -1) peopleIds.push(data.createdById);
-        if (data.assignedToType==="person" && peopleIds.indexOf(data.assignedToId) === -1) peopleIds.push(data.assignedToId);
-        if (data.associatedWithType==="group" && peopleIds.indexOf(data.associatedWithId) === -1) groupIds.push(data.associatedWithId);
-        if (data.createdByType==="group" && peopleIds.indexOf(data.createdById) === -1) groupIds.push(data.createdById);
-        if (data.assignedToType==="group" && peopleIds.indexOf(data.assignedToId) === -1) groupIds.push(data.assignedToId);
+      if (p.postType === "group" && p.conversation.contentId && groupIds.indexOf(p.conversation.contentId) === -1) groupIds.push(p.conversation.contentId);
+      if (p.postType === "event" && data && data.groupId && groupIds.indexOf(data.groupId) === -1) groupIds.push(data.groupId);
+      if (p.postType === "task" && data) {
+        if (data.associatedWithType === "person" && peopleIds.indexOf(data.associatedWithId) === -1) peopleIds.push(data.associatedWithId);
+        if (data.createdByType === "person" && peopleIds.indexOf(data.createdById) === -1) peopleIds.push(data.createdById);
+        if (data.assignedToType === "person" && peopleIds.indexOf(data.assignedToId) === -1) peopleIds.push(data.assignedToId);
+        if (data.associatedWithType === "group" && peopleIds.indexOf(data.associatedWithId) === -1) groupIds.push(data.associatedWithId);
+        if (data.createdByType === "group" && peopleIds.indexOf(data.createdById) === -1) groupIds.push(data.createdById);
+        if (data.assignedToType === "group" && peopleIds.indexOf(data.assignedToId) === -1) groupIds.push(data.assignedToId);
       }
     });
 
-    let people:PersonInterface[] = []
-    let groups:GroupInterface[] = []
+    let people:PersonInterface[] = [];
+    let groups:GroupInterface[] = [];
 
     if (peopleIds.length > 0 || groupIds.length > 0) {
       const data = await ApiHelper.get("/people/timeline?personIds=" + peopleIds.join(",") + "&groupIds=" + groupIds.join(","), "MembershipApi");
@@ -115,7 +113,7 @@ export class TimelineHelper {
       if (data.groups) groups = data.groups;
     }
 
-    return {people, groups};
+    return { people, groups };
   }
 
   static async populateConversations(allPosts:TimelinePostInterface[]) {
@@ -141,12 +139,11 @@ export class TimelineHelper {
       });
 
       if (p.timeSent) p.timeSent = new Date(p.timeSent);
-      if (!p.timeSent)
-      {
-        if (p.conversation?.messages?.length>0) p.timeSent = p.conversation.messages[0].timeSent || defaultDate;
+      if (!p.timeSent) {
+        if (p.conversation?.messages?.length > 0) p.timeSent = p.conversation.messages[0].timeSent || defaultDate;
         else p.timeSent = defaultDate;
       }
-      if (p.conversation?.messages?.length>0) p.timeUpdated = p.conversation.messages[p.conversation.messages.length - 1].timeSent
+      if (p.conversation?.messages?.length > 0) p.timeUpdated = p.conversation.messages[p.conversation.messages.length - 1].timeSent;
       else p.timeUpdated = p.timeSent;
 
 

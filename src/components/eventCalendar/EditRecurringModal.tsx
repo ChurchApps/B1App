@@ -12,17 +12,17 @@ export function EditRecurringModal(props: Props) {
 
   return (
     <Dialog open={true} onClose={props.onDone}>
-      <DialogTitle>{(props.action==="delete") ? "Delete" : "Edit"} Recurring Event</DialogTitle>
+      <DialogTitle>{(props.action === "delete") ? "Delete" : "Edit"} Recurring Event</DialogTitle>
       <DialogContent>
-        <RadioGroup defaultValue="this" onChange={(e) => { setEditType(e.target.value) }}>
+        <RadioGroup defaultValue="this" onChange={(e) => { setEditType(e.target.value); }}>
           <FormControlLabel value="this" control={<Radio />} label="Just this date" />
           <FormControlLabel value="future" control={<Radio />} label="This and all following dates" />
           <FormControlLabel value="all" control={<Radio />} label="All dates" />
         </RadioGroup>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => { props.onDone("none") }} data-testid="edit-recurring-cancel-button">Cancel</Button>
-        <Button onClick={() => { props.onDone(editType) }} color="primary" data-testid="edit-recurring-save-button">Save</Button>
+        <Button onClick={() => { props.onDone("none"); }} data-testid="edit-recurring-cancel-button">Cancel</Button>
+        <Button onClick={() => { props.onDone(editType); }} color="primary" data-testid="edit-recurring-save-button">Save</Button>
       </DialogActions>
     </Dialog>
   );

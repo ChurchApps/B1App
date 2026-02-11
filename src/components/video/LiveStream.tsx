@@ -31,7 +31,7 @@ export const LiveStream: React.FC<Props> = (props) => {
   const joinedServiceIdRef = React.useRef<string | null>(null);
 
   const loadData = async (keyName: string) => {
-    let result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
+    const result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;
@@ -40,7 +40,7 @@ export const LiveStream: React.FC<Props> = (props) => {
       setChatReady(true);
     }
     setConfig(result);
-  }
+  };
 
   const checkJoinRooms = () => {
     // Only join rooms after chat is fully initialized
@@ -52,7 +52,7 @@ export const LiveStream: React.FC<Props> = (props) => {
       StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId, currentService, setChatState);
       StreamChatManager.checkHost(config, currentService.id, chatState, setChatState);
     }
-  }
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -62,14 +62,14 @@ export const LiveStream: React.FC<Props> = (props) => {
       ChatHelper.onChange = () => {
         setChatState({ ...ChatHelper.current });
         setConfig({ ...ChatConfigHelper.current });
-      }
+      };
       StreamChatManager.initUser();
     }
-    StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs) });
+    StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs); });
     loadData(props.keyName);
   }, []);
 
-  React.useEffect(checkJoinRooms, [currentService, chatReady, config]); //eslint-disable-line
+  React.useEffect(checkJoinRooms, [currentService, chatReady, config]);
 
   let result = (<div id="liveContainer">
     {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}
@@ -90,4 +90,4 @@ export const LiveStream: React.FC<Props> = (props) => {
 
   return result;
 
-}
+};

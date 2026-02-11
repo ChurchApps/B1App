@@ -20,12 +20,14 @@ export const RequestPrayer: React.FC<Props> = (props) => {
     ChatHelper.onChange();
     ChatHelper.joinRoom(conversation.id, conversation.churchId);
 
-  }
+  };
 
-  if (props.chatState.privateRooms.length !== 0) return (<Chat room={props.chatState.privateRooms[0]} user={props.chatState.user} visible={props.visible} enableAttendance={true} />)
-  else return (<div id="prayerContainer" style={(props.visible) ? {} : { display: "none" }}>
+  if (props.chatState.privateRooms.length !== 0) return (<Chat room={props.chatState.privateRooms[0]} user={props.chatState.user} visible={props.visible} enableAttendance={true} />);
+  else {
+    return (<div id="prayerContainer" style={(props.visible) ? {} : { display: "none" }}>
         Need prayer?  Start a private chat session with one of our hosts.
-    <button id="requestPrayerButton" className="btn btn-primary btn-block" onClick={requestPrayer}>Request Prayer</button>
-  </div>);
-}
+      <button id="requestPrayerButton" className="btn btn-primary btn-block" onClick={requestPrayer}>Request Prayer</button>
+    </div>);
+  }
+};
 

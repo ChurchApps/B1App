@@ -20,18 +20,16 @@ type Props = {
 
 export function Embedded(props: Props) {
   const getDescription = () => {
-    if (props.metaDescription) return (<>
-      <meta name="description" content={props.metaDescription}></meta>
-      <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
-    </>);
-  }
+    if (props.metaDescription) {
+      return (<>
+        <meta name="description" content={props.metaDescription}></meta>
+        <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
+      </>);
+    }
+  };
 
   const mdTheme = createTheme({
-    palette: {
-      secondary: {
-        main: "#444444"
-      }
-    },
+    palette: { secondary: { main: "#444444" } },
     components: {
       MuiTextField: { defaultProps: { margin: "normal" } },
       MuiFormControl: { defaultProps: { margin: "normal" } }

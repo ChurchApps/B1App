@@ -54,7 +54,7 @@ export function GroupContact({ leaders, group, config }: Props) {
         + "Last Name: " + formData.lastName + "<br />"
         + "Email Address: " + formData.email + "<br />"
         + "Phone Number: " + formData.phone + "<br />"
-        + "Message: " + formData.message,
+        + "Message: " + formData.message
     };
 
     try {
@@ -83,7 +83,7 @@ export function GroupContact({ leaders, group, config }: Props) {
       fd.personId = leaders[0].personId;
       setFormData(fd);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [leaders]);
 
   if (leaders?.length < 1) return <></>;

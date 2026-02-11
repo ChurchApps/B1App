@@ -8,23 +8,23 @@ import "@churchapps/apphelper-markdown/dist/components/markdownEditor/editor.css
 import "@youversion/platform-react-ui/styles.css";
 import ClientLayout from "./ClientLayout";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
-import { Roboto } from 'next/font/google';
+import { Roboto } from "next/font/google";
 
 const roboto = Roboto({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  display: "swap"
+});
 
 export const metadata = {
-  title: 'ChurchApps',
-  description: 'Open Source Software for Churches',
+  title: "ChurchApps",
+  description: "Open Source Software for Churches",
   viewport: {
-    width: 'device-width',
+    width: "device-width",
     initialScale: 1,
-    maximumScale: 5,
+    maximumScale: 5
   }
-}
+};
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await EnvironmentHelper.initServerSide();
@@ -38,5 +38,5 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
-  )
+  );
 }

@@ -37,8 +37,7 @@ export const GroupResources: React.FC<Props> = (props) => {
 
   const loadData = () => {
     ApiHelper.get("/files/group/" + props.groupId, "ContentApi").then((d: FileInterface[]) =>
-      setFiles(d)
-    );
+      setFiles(d));
 
     ApiHelper.get("/links?category=groupLink", "ContentApi").then((data: LinkInterface[]) => {
       const result: LinkInterface[] = [];

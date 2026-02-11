@@ -6,7 +6,7 @@ export class UrlHelper {
    */
   static getReturnUrl(pathname: string, sdSlug?: string): string {
     // Split the pathname into segments
-    const segments = pathname.split('/').filter(segment => segment.length > 0);
+    const segments = pathname.split("/").filter(segment => segment.length > 0);
 
     // If there are no segments, return the original path
     if (segments.length === 0) {
@@ -15,7 +15,7 @@ export class UrlHelper {
 
     // Check if the first segment matches the sdSlug (if provided)
     // or if it looks like an sdSlug (not a known route like 'admin', 'my', etc.)
-    const knownRoutes = ['admin', 'my', 'login', 'logout', 'groups', 'stream'];
+    const knownRoutes = ["admin", "my", "login", "logout", "groups", "stream"];
     const firstSegment = segments[0];
 
     const shouldRemoveFirstSegment = sdSlug
@@ -24,7 +24,7 @@ export class UrlHelper {
 
     // Only remove the first segment if it's actually an sdSlug
     if (shouldRemoveFirstSegment && segments.length > 1) {
-      return '/' + segments.slice(1).join('/');
+      return "/" + segments.slice(1).join("/");
     }
 
     return pathname;

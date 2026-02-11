@@ -13,7 +13,7 @@ export const SongDetails = (props: Props) => {
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.style.display = "none";
-  }
+  };
 
   const getDetails = () => {
     const result: React.ReactElement[] = [];
@@ -34,13 +34,13 @@ export const SongDetails = (props: Props) => {
     if (props.songDetail.seconds) result.push(<TableRow key="seconds"><TableCell><strong>Length</strong></TableCell><TableCell>{formatSeconds(props.songDetail.seconds)}</TableCell></TableRow>);
 
     return result;
-  }
+  };
 
   const formatSeconds = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return mins + ":" + (secs < 10 ? "0" : "") + secs;
-  }
+  };
 
   return (<>
     <h3>{props.songDetail?.title}</h3>
@@ -52,5 +52,5 @@ export const SongDetails = (props: Props) => {
     </Table>
     <SongDetailLinks songDetail={props.songDetail} />
   </>);
-}
+};
 

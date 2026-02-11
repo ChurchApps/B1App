@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default function Zone(props: Props) {
-  const result: React.ReactElement[] = []
+  const result: React.ReactElement[] = [];
   let first = true;
   const sections = ArrayHelper.getAll(props.sections, "zone", props.zone);
 

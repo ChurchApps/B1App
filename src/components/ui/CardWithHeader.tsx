@@ -15,7 +15,7 @@ export const CardWithHeader: React.FC<CardWithHeaderProps> = ({ title, icon, act
     sx={{
       borderRadius,
       border: "1px solid",
-      borderColor,
+      borderColor
     }}
   >
     <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>

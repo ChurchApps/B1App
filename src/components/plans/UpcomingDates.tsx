@@ -22,54 +22,54 @@ interface UpcomingDateData {
   status: string;
 }
 
-  const getData = (): UpcomingDateData[] => {
-    if (props.times?.length === 0) return [];
-    const data: UpcomingDateData[] = [];
-    props.assignments.forEach((assignment) => {
-      const position = props?.positions.find((p) => p.id === assignment.positionId);
-      const plan = props?.plans.find((p) => p.id === position?.planId);
-      const times:TimeInterface[] = ArrayHelper.getAll(props.times, "planId", plan?.id);
-      times.forEach(t => {
-        if (new Date(t.endTime) > new Date()) {
-          if (t.teams?.indexOf(position.categoryName) > -1) {
-            data.push({ timeId: t.id, timeName:t.displayName, startTime:new Date(t.startTime), status:"Unconfirmed" });
-          }
+const getData = (): UpcomingDateData[] => {
+  if (props.times?.length === 0) return [];
+  const data: UpcomingDateData[] = [];
+  props.assignments.forEach((assignment) => {
+    const position = props?.positions.find((p) => p.id === assignment.positionId);
+    const plan = props?.plans.find((p) => p.id === position?.planId);
+    const times:TimeInterface[] = ArrayHelper.getAll(props.times, "planId", plan?.id);
+    times.forEach(t => {
+      if (new Date(t.endTime) > new Date()) {
+        if (t.teams?.indexOf(position.categoryName) > -1) {
+          data.push({ timeId: t.id, timeName: t.displayName, startTime: new Date(t.startTime), status: "Unconfirmed" });
         }
-      });
-
+      }
     });
-    ArrayHelper.sortBy(data, "startTime", false)
 
-    return data;
-  }
+  });
+  ArrayHelper.sortBy(data, "startTime", false);
 
-  const getRows = () => {
-    const data = getData();
+  return data;
+};
 
-    const rows:React.ReactElement[] = [];
-    data.forEach((d) => {
-      rows.push(
-        <TableRow key={d.timeId}>
-          <TableCell>{d.timeName}</TableCell>
-          <TableCell>{DateHelper.prettyDateTime(d.startTime)}</TableCell>
-        </TableRow>
-      );
-    });
-    return rows;
-  }
+const getRows = () => {
+  const data = getData();
 
-  return (<DisplayBox headerIcon="event" headerText="Upcoming Dates" data-testid="upcoming-dates-display-box">
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Event</TableCell>
-          <TableCell>Start Time</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {getRows()}
-      </TableBody>
-    </Table>
-  </DisplayBox>);
-}
+  const rows:React.ReactElement[] = [];
+  data.forEach((d) => {
+    rows.push(
+      <TableRow key={d.timeId}>
+        <TableCell>{d.timeName}</TableCell>
+        <TableCell>{DateHelper.prettyDateTime(d.startTime)}</TableCell>
+      </TableRow>
+    );
+  });
+  return rows;
+};
+
+return (<DisplayBox headerIcon="event" headerText="Upcoming Dates" data-testid="upcoming-dates-display-box">
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>Event</TableCell>
+        <TableCell>Start Time</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {getRows()}
+    </TableBody>
+  </Table>
+</DisplayBox>);
+};
 

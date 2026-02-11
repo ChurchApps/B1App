@@ -20,7 +20,7 @@ interface Props {
 }
 
 export function NewConversation({ context, conversation, ...props }: Props) {
-  const [message, setMessage] = React.useState<MessageInterface>({})
+  const [message, setMessage] = React.useState<MessageInterface>({});
   const [errors, setErrors] = React.useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -31,14 +31,14 @@ export function NewConversation({ context, conversation, ...props }: Props) {
     const m = { ...message } as MessageInterface;
     m.content = e.target.value;
     setMessage(m);
-  }
+  };
 
   const validate = () => {
     const result = [];
     if (!message.content.trim()) result.push(Locale.label("notes.validate.content"));
     setErrors(result);
     return result.length === 0;
-  }
+  };
 
   async function handleSave() {
     if (!validate()) return;
@@ -58,7 +58,7 @@ export function NewConversation({ context, conversation, ...props }: Props) {
           title: `${props.contentType} ${props.contentId} Conversation`,
           groupId: props.groupId,
           visibility: props.visibility,
-          allowAnonymousPosts: false,
+          allowAnonymousPosts: false
         };
         const result = await ApiHelper.post("/conversations", [conv], "MessagingApi");
         cId = result[0].id;

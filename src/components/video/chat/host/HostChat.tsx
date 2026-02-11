@@ -11,5 +11,5 @@ export const HostChat: React.FC<Props> = (props) => (
     <ChatReceive room={props.chatState.hostRoom} user={props.chatState.user} />
     <ChatSend room={props.chatState.hostRoom} />
   </div>
-)
+);
 
