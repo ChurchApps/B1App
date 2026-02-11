@@ -52,7 +52,7 @@ export const SongDialog: React.FC<Props> = (props) => {
 
   const listProducts = () => (<ul>
     {products.map((p, i) => (<li key={i}>
-      <a href="about:blank" onClick={(e) => { e.preventDefault(); download(p); }}>
+      <a href="about:blank" data-testid={`song-download-${i}-link`} onClick={(e) => { e.preventDefault(); download(p); }}>
         {p.name}
       </a>
     </li>))}
@@ -60,7 +60,7 @@ export const SongDialog: React.FC<Props> = (props) => {
 
   const listLinks = () => (<ul>
     {links.map((l, i) => (<li key={l.id}>
-      <a href={l.url} target="_blank" rel="noreferrer">{l.text}</a>
+      <a href={l.url} target="_blank" rel="noreferrer" data-testid={`song-external-${i}-link`}>{l.text}</a>
     </li>))}
   </ul>);
 

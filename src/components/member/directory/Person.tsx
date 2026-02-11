@@ -94,12 +94,12 @@ export const Person: React.FC<Props> = (props) => {
   const getEditContent = () => {
     if (isOwnProfile) {
       return (
-        <IconButton color="primary" size="small" onClick={() => setEditMode(true)} title="Edit Profile">
+        <IconButton color="primary" size="small" onClick={() => setEditMode(true)} title="Edit Profile" data-testid="edit-profile-button">
           <EditIcon />
         </IconButton>
       );
     }
-    return <Button variant="contained" color="primary" disabled={!person} onClick={() => { if (person) setShowPM(true); }}>Message</Button>;
+    return <Button variant="contained" color="primary" disabled={!person} onClick={() => { if (person) setShowPM(true); }} data-testid="person-message-button">Message</Button>;
   };
 
   const getPM = () => {

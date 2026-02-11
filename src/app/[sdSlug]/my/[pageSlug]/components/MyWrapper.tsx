@@ -58,7 +58,7 @@ export async function MyWrapper(props:Props) {
 
   const getChildLayout = () => <Container>
     <Breadcrumbs separator="›" aria-label="breadcrumb" style={{ marginTop: 30, marginBottom: 30 }}>
-      <Link href="/my/timeline">My {props.config?.church?.name}</Link>
+      <Link href="/my/timeline" data-testid="breadcrumb-my-link">My {props.config?.church?.name}</Link>
       {getPageLabel()}
       {getIdLabel()}
     </Breadcrumbs>

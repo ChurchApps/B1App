@@ -88,8 +88,8 @@ export function EventCalendar(props: Props) {
     <div>
       {props.editGroupId
         && <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
-          <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe(); }} toolTip="Copy the URL and add this to your Google Calendar (or other)" />
-          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }); }} />
+          <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe(); }} toolTip="Copy the URL and add this to your Google Calendar (or other)" data-testid="event-subscribe-button" />
+          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }); }} data-testid="event-add-button" />
         </Stack>
       }
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} date={date} view={view} onNavigate={onNavigate} onView={onView} />

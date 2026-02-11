@@ -30,7 +30,7 @@ export const BlockoutDates: React.FC<Props> = (props) => {
           <TableCell>{DateHelper.prettyDate(new Date(d.startDate))}</TableCell>
           <TableCell>{DateHelper.prettyDate(new Date(d.endDate))}</TableCell>
           <TableCell>
-            <IconButton onClick={() => setBlockoutDate(d)}><Icon>edit</Icon></IconButton>
+            <IconButton onClick={() => setBlockoutDate(d)} data-testid={`blockout-edit-${d.id}-button`}><Icon>edit</Icon></IconButton>
           </TableCell>
         </TableRow>
       );
@@ -42,7 +42,7 @@ export const BlockoutDates: React.FC<Props> = (props) => {
     setBlockoutDate({ startDate: new Date(), endDate: new Date() });
   };
 
-  const addLink = <IconButton onClick={handleAdd}><Icon color="primary">add</Icon></IconButton>;
+  const addLink = <IconButton onClick={handleAdd} data-testid="blockout-add-button"><Icon color="primary">add</Icon></IconButton>;
 
   if (blockoutDate !== null) return (<BlockoutDateEdit blockoutDate={blockoutDate} onUpdate={loadData} />);
   else {

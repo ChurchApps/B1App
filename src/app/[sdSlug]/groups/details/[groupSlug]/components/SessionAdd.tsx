@@ -54,7 +54,7 @@ export const SessionAdd: React.FC<Props> = (props) => {
 
       return (<FormControl>
         <InputLabel id="service-time">{Locale.label("Service Time")}</InputLabel>
-        <Select label={Locale.label("Service Time")} labelId="service-time" value={serviceTimeId} onChange={(e: SelectChangeEvent<string>) => { setServiceTimeId(e.target.value); }} onKeyDown={handleKeyDown}>
+        <Select label={Locale.label("Service Time")} labelId="service-time" value={serviceTimeId} onChange={(e: SelectChangeEvent<string>) => { setServiceTimeId(e.target.value); }} onKeyDown={handleKeyDown} data-testid="session-service-time-select">
           {options}
         </Select>
       </FormControl>);
@@ -68,7 +68,7 @@ export const SessionAdd: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       {getServiceTimes()}
 
-      <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} label={Locale.label("Session Date")} value={DateHelper.formatHtml5Date(sessionDate)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionDate(new Date(e.currentTarget.value))} onKeyDown={handleKeyDown} />
+      <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} label={Locale.label("Session Date")} value={DateHelper.formatHtml5Date(sessionDate)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionDate(new Date(e.currentTarget.value))} onKeyDown={handleKeyDown} data-testid="session-date-input" />
 
     </InputBox>
 

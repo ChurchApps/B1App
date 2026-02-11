@@ -29,12 +29,14 @@ function ChapterNavigation({ chapter, onChapterChange }: { chapter: string; onCh
           onClick={handlePrevious}
           disabled={chapterNum <= 1}
           startIcon={<ArrowBackIcon />}
+          data-testid="bible-previous-chapter-button"
         >
           Previous Chapter
         </Button>
         <Button
           onClick={handleNext}
           endIcon={<ArrowForwardIcon />}
+          data-testid="bible-next-chapter-button"
         >
           Next Chapter
         </Button>

@@ -18,7 +18,7 @@ export function DirectoryPage() {
           <>
             <h1>Member Directory</h1>
             <h3 className="text-center w-100">
-            Please <Link href="/login/?returnUrl=/my/community">Login</Link> to view Directory.
+            Please <Link href="/login/?returnUrl=/my/community" data-testid="directory-login-link">Login</Link> to view Directory.
             </h3>
           </>
         )}

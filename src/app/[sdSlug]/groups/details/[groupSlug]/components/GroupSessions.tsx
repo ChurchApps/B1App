@@ -58,7 +58,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
         result.push(
           <TableRow key={vs.id}>
             <TableCell><img className="personPhoto" src={PersonHelper.getPhotoUrl(person)} alt="avatar" /></TableCell>
-            <TableCell><a className="personName" href={"/people/person.aspx?id=" + vs.visit.personId}>{person?.name?.display}</a></TableCell>
+            <TableCell><a className="personName" href={"/people/person.aspx?id=" + vs.visit.personId} data-testid={`session-member-${vs.visit.personId}-link`}>{person?.name?.display}</a></TableCell>
             <TableCell style={{ textAlign: "right" }}>{editLink}</TableCell>
           </TableRow>
         );

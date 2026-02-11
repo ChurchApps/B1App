@@ -87,10 +87,10 @@ export function NewConversation({ context, conversation, ...props }: Props) {
         {image ? <img src={image} alt="user" style={{ width: 60, height: 45, borderRadius: 5, marginLeft: 8 }} /> : <Icon>person</Icon>}
         <Stack direction="column" spacing={2} style={{ width: "100%" }} justifyContent="end">
           <div><b>{context?.person?.name?.display}</b></div>
-          <TextField fullWidth name="noteText" aria-label={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} placeholder={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} multiline style={{ marginTop: 0, border: "none" }} variant="standard" onChange={handleChange} value={message.content} />
+          <TextField fullWidth name="noteText" aria-label={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} placeholder={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} multiline style={{ marginTop: 0, border: "none" }} variant="standard" onChange={handleChange} value={message.content} data-testid="new-conversation-message-input" />
         </Stack>
         <Stack direction="column" spacing={1} justifyContent="end">
-          <SmallButton icon="send" onClick={handleSave} disabled={isSubmitting} />
+          <SmallButton icon="send" onClick={handleSave} disabled={isSubmitting} data-testid="new-conversation-send-button" />
         </Stack>
       </Stack>
     </Paper>

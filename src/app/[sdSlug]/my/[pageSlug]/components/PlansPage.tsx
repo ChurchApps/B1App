@@ -42,7 +42,7 @@ export function PlansPage() {
       <>
         <h1>Plans</h1>
         <h3 className="text-center w-100">
-          Please <Link href="/login/?returnUrl=/my/plans">Login</Link> to view your plans.
+          Please <Link href="/login/?returnUrl=/my/plans" data-testid="plans-login-link">Login</Link> to view your plans.
         </h3>
       </>
     );

@@ -87,7 +87,7 @@ export function FormPage(props: Props) {
     if (!PersonHelper?.person?.id) {
       return (
         <h3 className="text-center">
-          <Link href={"/login?returnUrl=/forms/" + props.formId}>Login</Link> to view this form.
+          <Link href={"/login?returnUrl=/forms/" + props.formId} data-testid="form-login-link">Login</Link> to view this form.
         </h3>
       );
     }

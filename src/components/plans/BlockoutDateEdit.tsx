@@ -48,8 +48,8 @@ export const BlockoutDateEdit: React.FC<Props> = (props) => {
   };
 
   return (<InputBox headerIcon="block" headerText="Blockout Dates" saveFunction={handleSave} cancelFunction={props.onUpdate} deleteFunction={blockoutDate.id && handleDelete}>
-    <TextField fullWidth label="Start Date" name="startDate" type="date" data-cy="start-date" value={DateHelper.formatHtml5Date(blockoutDate.startDate)} onChange={handleChange} />
-    <TextField fullWidth label="End Date" name="endDate" type="date" data-cy="end-date" value={DateHelper.formatHtml5Date(blockoutDate.endDate)} onChange={handleChange} />
+    <TextField fullWidth label="Start Date" name="startDate" type="date" data-cy="start-date" data-testid="blockout-start-date-input" value={DateHelper.formatHtml5Date(blockoutDate.startDate)} onChange={handleChange} />
+    <TextField fullWidth label="End Date" name="endDate" type="date" data-cy="end-date" data-testid="blockout-end-date-input" value={DateHelper.formatHtml5Date(blockoutDate.endDate)} onChange={handleChange} />
     <ErrorMessages errors={errors} />
   </InputBox>);
 };

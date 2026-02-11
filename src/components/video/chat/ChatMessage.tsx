@@ -19,7 +19,7 @@ export const ChatMessage: React.FC<Props> = (props) => {
   const getDeleteLink = () => {
     if (!UserHelper.checkAccess(Permissions.contentApi.chat.host)) return null;
     else {
-      return <span className="delete"><a href="about:blank" onClick={handleDelete}><Icon>delete</Icon></a></span>;
+      return <span className="delete"><a href="about:blank" onClick={handleDelete} data-testid="chat-delete-message-link"><Icon>delete</Icon></a></span>;
     }
 
   };

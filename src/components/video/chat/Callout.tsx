@@ -26,7 +26,7 @@ export const Callout: React.FC<Props> = (props) => {
 
   const getEditSection = () => (<FormControl fullWidth variant="outlined">
     <InputLabel htmlFor="calloutText">Callout Message</InputLabel>
-    <OutlinedInput id="calloutText" name="calloutText" type="text" label="Callout Message" value={message} onChange={handleChange} autoComplete="off"
+    <OutlinedInput id="calloutText" name="calloutText" type="text" label="Callout Message" value={message} onChange={handleChange} autoComplete="off" data-testid="callout-message-input"
       endAdornment={<>
         <Button variant="contained" onClick={handleUpdate} data-testid="callout-update-button">Update</Button>
       </>}
@@ -36,7 +36,7 @@ export const Callout: React.FC<Props> = (props) => {
   if (props.user?.isHost) {
     if (edit) return getEditSection();
     else {
-      if (props.room.callout?.content === "") return <div id="callout"><a href="about:blank" onClick={editMode}>Set Callout</a></div>;
+      if (props.room.callout?.content === "") return <div id="callout"><a href="about:blank" onClick={editMode} data-testid="callout-set-link">Set Callout</a></div>;
       else return (<div id="callout"><span style={{ float: "right" }}><a href="about:blank" onClick={editMode}><Icon>edit</Icon></a></span>{ChatHelper.insertLinks(props.room.callout?.content || "")}</div>);
     }
   } else {

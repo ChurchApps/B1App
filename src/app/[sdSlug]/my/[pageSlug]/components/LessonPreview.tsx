@@ -87,6 +87,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
               href="#"
               onClick={(e) => handleActionClick(e, item)}
               variant="body2"
+              data-testid={`lesson-preview-action-${item.relatedId}-link`}
               sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
             >
               {item.label}
@@ -96,6 +97,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
               href="#"
               onClick={(e) => handleSectionClick(e, item)}
               variant="body2"
+              data-testid={`lesson-preview-section-${item.relatedId}-link`}
               sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
             >
               {item.label}

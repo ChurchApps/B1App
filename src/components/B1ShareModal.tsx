@@ -75,11 +75,11 @@ export function B1ShareModal(props: Props) {
         <h2>{Locale.label("b1Share.sharingToGroup").replace("{}", props.contentDisplayName)}</h2>
         <FormControl fullWidth>
           <InputLabel>{Locale.label("b1Share.group")}</InputLabel>
-          <Select label={Locale.label("b1Share.group")} name="group" value={groupId} onChange={handleChange}>
+          <Select label={Locale.label("b1Share.group")} name="group" value={groupId} onChange={handleChange} data-testid="share-group-select">
             {groups.map(g => <MenuItem key={g.id} value={g.id}>{g.name}</MenuItem>)}
           </Select>
         </FormControl>
-        <TextField fullWidth multiline label={Locale.label("b1Share.comment")} name="comment" value={comment} onChange={handleChange} rows={3} placeholder={Locale.label("b1Share.commentPlaceholder")} />
+        <TextField fullWidth multiline label={Locale.label("b1Share.comment")} name="comment" value={comment} onChange={handleChange} rows={3} placeholder={Locale.label("b1Share.commentPlaceholder")} data-testid="share-comment-input" />
       </>);
     }
   };
@@ -96,8 +96,8 @@ export function B1ShareModal(props: Props) {
           {getModalContent()}
         </div>
         <DialogActions sx={{ paddingX: "16px", paddingBottom: "12px" }}>
-          <Button variant="outlined" onClick={props.onClose}>Close</Button>
-          <Button variant="contained" onClick={handlePost}>Post</Button>
+          <Button variant="outlined" onClick={props.onClose} data-testid="share-close-button">Close</Button>
+          <Button variant="contained" onClick={handlePost} data-testid="share-post-button">Post</Button>
         </DialogActions>
       </Box>
 

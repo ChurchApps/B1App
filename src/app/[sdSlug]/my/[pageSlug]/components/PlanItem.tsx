@@ -58,11 +58,11 @@ export const PlanItem = (props: Props) => {
       <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); setLessonSectionId(props.planItem.relatedId); }}>
+          <a href="about:blank" data-testid={`plan-item-section-${props.planItem.relatedId}-link`} onClick={(e) => { e.preventDefault(); setLessonSectionId(props.planItem.relatedId); }}>
             {props.planItem.label}
           </a>
         ) : props.planItem.link ? (
-          <a href={props.planItem.link} target="_blank" rel="noopener noreferrer">
+          <a href={props.planItem.link} target="_blank" rel="noopener noreferrer" data-testid="plan-item-external-link">
             {props.planItem.label}
           </a>
         ) : (
@@ -83,7 +83,7 @@ export const PlanItem = (props: Props) => {
       </span>
       <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
-        <a href="about:blank" onClick={(e) => { e.preventDefault(); setDialogKeyId(props.planItem.relatedId); }}>
+        <a href="about:blank" data-testid={`plan-item-song-${props.planItem.relatedId}-link`} onClick={(e) => { e.preventDefault(); setDialogKeyId(props.planItem.relatedId); }}>
           {props.planItem.label}
         </a>
       </div>
@@ -102,7 +102,7 @@ export const PlanItem = (props: Props) => {
       <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); setActionId(props.planItem.relatedId); }}>
+          <a href="about:blank" data-testid={`plan-item-action-${props.planItem.relatedId}-link`} onClick={(e) => { e.preventDefault(); setActionId(props.planItem.relatedId); }}>
             {props.planItem.label}
           </a>
         ) : (
@@ -124,7 +124,7 @@ export const PlanItem = (props: Props) => {
       <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); setAddOnId(props.planItem.relatedId); }}>
+          <a href="about:blank" data-testid={`plan-item-addon-${props.planItem.relatedId}-link`} onClick={(e) => { e.preventDefault(); setAddOnId(props.planItem.relatedId); }}>
             {props.planItem.label}
           </a>
         ) : (
@@ -146,7 +146,7 @@ export const PlanItem = (props: Props) => {
       <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
       <div>
         {props.planItem.relatedId ? (
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); setLessonSectionId(props.planItem.relatedId); }}>
+          <a href="about:blank" data-testid={`plan-item-section-${props.planItem.relatedId}-link`} onClick={(e) => { e.preventDefault(); setLessonSectionId(props.planItem.relatedId); }}>
             {props.planItem.label}
           </a>
         ) : (

@@ -62,7 +62,7 @@ export const GroupTabs = (props: Props) => {
 
 
   const getItem = (tab: TabItem) =>
-    (<li key={tab.key}><a href="about:blank" onClick={(e) => { e.preventDefault(); props.onTabChange(tab.key); }}>{tab.label}</a></li>);
+    (<li key={tab.key}><a href="about:blank" data-testid={`group-tab-${tab.key}-link`} onClick={(e) => { e.preventDefault(); props.onTabChange(tab.key); }}>{tab.label}</a></li>);
 
   return <ul>
     {getTabs().map((tab, index) => getItem(tab))}

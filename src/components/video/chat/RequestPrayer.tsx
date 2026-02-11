@@ -26,7 +26,7 @@ export const RequestPrayer: React.FC<Props> = (props) => {
   else {
     return (<div id="prayerContainer" style={(props.visible) ? {} : { display: "none" }}>
         Need prayer?  Start a private chat session with one of our hosts.
-      <button id="requestPrayerButton" className="btn btn-primary btn-block" onClick={requestPrayer}>Request Prayer</button>
+      <button id="requestPrayerButton" className="btn btn-primary btn-block" onClick={requestPrayer} data-testid="request-prayer-button">Request Prayer</button>
     </div>);
   }
 };

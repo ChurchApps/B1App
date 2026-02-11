@@ -11,7 +11,7 @@ export default function GroupCard(props: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link href={"/groups/details/" + props.group.slug}>
+    <Link href={"/groups/details/" + props.group.slug} data-testid={`group-card-${props.group.slug}-link`}>
       {/* Card */}
       <div
         style={{

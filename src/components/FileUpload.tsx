@@ -103,7 +103,7 @@ export function FileUpload(props: Props) {
     <>
       <label>File</label>
       {getFileLink()}
-      <input id="fileUpload" type="file" onChange={handleChange} />
+      <input id="fileUpload" type="file" onChange={handleChange} data-testid="file-upload-input" />
     </>
   );
 }

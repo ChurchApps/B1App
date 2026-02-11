@@ -132,6 +132,7 @@ const result = (
               e.preventDefault();
               loadNotes(page + 1);
             }}
+            data-testid="conversation-view-all-link"
           >
             {Locale.label("notes.viewAll")} {conversations.postCount}{" "}
             {Locale.label("notes.comments")}
@@ -155,11 +156,11 @@ const result = (
       </div>
 
       {hasMore && !loading && (showAll || !props.noWrapper) && (
-        <Button onClick={() => loadNotes(page + 1)}>Load More</Button>
+        <Button onClick={() => loadNotes(page + 1)} data-testid="conversation-load-more-button">Load More</Button>
       )}
 
       {!showAll && props.noWrapper && (
-        <Button onClick={() => setShowAll(true)}>Show All</Button>
+        <Button onClick={() => setShowAll(true)} data-testid="conversation-show-all-button">Show All</Button>
       )}
 
       {loading && <Button disabled>Loading...</Button>}

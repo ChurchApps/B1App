@@ -82,7 +82,7 @@ export function PlanClient({ planId }: Props) {
       <>
         <h1>Group</h1>
         <h3 className="text-center w-100">
-          Please <Link href={`/login/?returnUrl=/my/plans/${planId}`}>Login</Link> to view your plans.
+          Please <Link href={`/login/?returnUrl=/my/plans/${planId}`} data-testid="plan-detail-login-link">Login</Link> to view your plans.
         </h3>
       </>
     );

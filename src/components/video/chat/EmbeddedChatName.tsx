@@ -34,6 +34,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
         placeholder="John Smith"
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
+        data-testid="embedded-chat-name-input"
         sx={{ marginTop: 0, marginBottom: "4px" }}
         InputProps={{
           endAdornment: (

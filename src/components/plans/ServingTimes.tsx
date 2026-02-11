@@ -42,7 +42,7 @@ const getRows = () => {
   data.forEach((d) => {
     rows.push(
       <TableRow key={d.planId}>
-        <TableCell><Link href={"/my/plans/" + d.planId}>{d.planName}</Link></TableCell>
+        <TableCell><Link href={"/my/plans/" + d.planId} data-testid={`serving-plan-${d.planId}-link`}>{d.planName}</Link></TableCell>
         <TableCell>{DateHelper.prettyDate(d.serviceDate)}</TableCell>
         <TableCell>{d.position}</TableCell>
         <TableCell>{getStatusLabel(d.status)}</TableCell>

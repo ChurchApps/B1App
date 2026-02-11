@@ -17,7 +17,7 @@ export function PersonPage(props: Props) {
       <>
         <h1>Invalid Person</h1>
         <p>The person ID is invalid or missing.</p>
-        <Link href="/my/community">Return to Directory</Link>
+        <Link href="/my/community" data-testid="person-return-directory-link">Return to Directory</Link>
       </>
     );
   }
@@ -33,7 +33,7 @@ export function PersonPage(props: Props) {
         : (
           <>
             <h1>Member Directory</h1>
-            <h3 className="text-center w-100">Please{" "} <Link href={`/login/?returnUrl=/my/community/${personId}`}>Login</Link>{" "} to view Directory.</h3>
+            <h3 className="text-center w-100">Please{" "} <Link href={`/login/?returnUrl=/my/community/${personId}`} data-testid="person-login-link">Login</Link>{" "} to view Directory.</h3>
           </>
         )}
     </>

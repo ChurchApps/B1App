@@ -15,10 +15,11 @@ export function CheckinComplete() {
         <Typography variant="body1" sx={{ color: colors.textSecondary, marginBottom: 3 }}>
           Your attendance has been saved. Thank you for checking in!
         </Typography>
-        <Link href="/my/timeline" style={{ textDecoration: "none" }}>
+        <Link href="/my/timeline" style={{ textDecoration: "none" }} data-testid="checkin-timeline-link">
           <Button
             variant="contained"
             fullWidth
+            data-testid="checkin-back-button"
             sx={{
               backgroundColor: colors.primary,
               borderRadius: 3,

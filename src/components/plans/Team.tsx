@@ -27,7 +27,7 @@ export const Team: React.FC<Props> = (props) => {
               <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" style={{ maxWidth: "50px" }} />
             </TableCell>
             <TableCell>
-              <Link href={"/my/community/" + person?.id}>{person?.name?.display}</Link>
+              <Link href={"/my/community/" + person?.id} data-testid={`team-member-${person?.id}-link`}>{person?.name?.display}</Link>
               <div>{position.name}</div>
             </TableCell>
           </TableRow>

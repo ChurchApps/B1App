@@ -32,8 +32,8 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   };
 
   const getLoginLink = () => {
-    if (!ApiHelper.isAuthenticated) return (<Link href="/login?returnUrl=/stream" className="nav-link">Login</Link>);
-    else return (<Link href="/logout" className="nav-link">Logout</Link>);
+    if (!ApiHelper.isAuthenticated) return (<Link href="/login?returnUrl=/stream" className="nav-link" data-testid="stream-login-link">Login</Link>);
+    else return (<Link href="/logout" className="nav-link" data-testid="stream-logout-link">Logout</Link>);
   };
 
   const getProfileLink = () => {
@@ -41,7 +41,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     else {
       const jwt = ApiHelper.getConfig("MembershipApi").jwt;
       const profileUrl = `${EnvironmentHelper.Common.B1AdminRoot}/login?jwt=${jwt}&returnUrl=/profile`;
-      return (<li className="nav-item"><a href={profileUrl} target="_blank" rel="noopener noreferrer" className="nav-link">Profile</a></li>);
+      return (<li className="nav-item"><a href={profileUrl} target="_blank" rel="noopener noreferrer" className="nav-link" data-testid="stream-profile-link">Profile</a></li>);
     }
   };
   const getSettingLink = () => {
@@ -49,7 +49,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
       const jwt = UserHelper.currentUserChurch?.jwt;
       const churchId = UserHelper.currentUserChurch?.church?.id;
       return (
-        <li className="nav-item"><a href={`https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/`} className="nav-link">Admin Dashboard</a></li>
+        <li className="nav-item"><a href={`https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/`} className="nav-link" data-testid="stream-admin-link">Admin Dashboard</a></li>
       );
     }
   };
@@ -109,7 +109,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
             </ul>
           </div>
         </div>
-        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu}>{firstName ? `${firstName} ${lastName}` : "Anonymous"} <Icon>expand_more</Icon></a></div></div>
+        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu} data-testid="stream-user-menu-link">{firstName ? `${firstName} ${lastName}` : "Anonymous"} <Icon>expand_more</Icon></a></div></div>
       </div>
       {getUserMenu()}
     </>

@@ -15,9 +15,9 @@ export function EditRecurringModal(props: Props) {
       <DialogTitle>{(props.action === "delete") ? "Delete" : "Edit"} Recurring Event</DialogTitle>
       <DialogContent>
         <RadioGroup defaultValue="this" onChange={(e) => { setEditType(e.target.value); }}>
-          <FormControlLabel value="this" control={<Radio />} label="Just this date" />
-          <FormControlLabel value="future" control={<Radio />} label="This and all following dates" />
-          <FormControlLabel value="all" control={<Radio />} label="All dates" />
+          <FormControlLabel value="this" control={<Radio />} label="Just this date" data-testid="edit-recurring-this-radio" />
+          <FormControlLabel value="future" control={<Radio />} label="This and all following dates" data-testid="edit-recurring-future-radio" />
+          <FormControlLabel value="all" control={<Radio />} label="All dates" data-testid="edit-recurring-all-radio" />
         </RadioGroup>
       </DialogContent>
       <DialogActions>
