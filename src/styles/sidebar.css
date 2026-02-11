@@ -59,6 +59,13 @@
   padding: 24px 32px;
 }
 
+/* Remove padding when master-detail layout is active */
+.myLayoutContent:has(.masterDetail) #mainContent {
+  padding: 0;
+  height: calc(100vh - 90px);
+  overflow: hidden;
+}
+
 /* === Mobile Navigation Styles === */
 .mobileNav {
   background-color: #fff;

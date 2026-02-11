@@ -4,13 +4,13 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import "@churchapps/apphelper-website/dist/styles/animations.css";
 import { Animate } from "@churchapps/apphelper-website";
 
 import { TimelinePage } from "../components/TimelinePage";
 import { MyWrapper } from "../components/MyWrapper";
 
-import { PersonPage } from "../components/PersonPage";
 import { PlanClient } from "../components/PlanClient";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; id:string; }>
@@ -37,6 +37,11 @@ export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug, id } = await params;
 
+  // Redirect community detail pages to the master-detail view
+  if (pageSlug === "community" && id && id !== "undefined" && id.trim() !== "") {
+    redirect(`/${sdSlug}/my/community?id=${id}`);
+  }
+
   // Validate id parameter
   if (!id || id === "undefined" || id.trim() === "") {
     return (
@@ -52,16 +57,13 @@ export default async function Home({ params }: { params: PageParams }) {
   let label = "Plan Details";
   switch (pageSlug) {
     case "plans": label = "Plan Details"; break;
-    case "community": label = "Community Details"; break;
     case "forms": label = "Form"; break;
   }
 
   const getPageContent = () => {
     switch (pageSlug) {
       case "plans": return <PlanClient planId={id} />;
-      case "community": return <PersonPage personId={id} />;
       default: return <TimelinePage />;
-      //default: return notFound();
     }
   };
 
