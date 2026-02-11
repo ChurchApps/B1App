@@ -1,7 +1,7 @@
 import "@churchapps/apphelper-website/dist/styles/animations.css";
 
 import React from "react";
-import { Breadcrumbs, Container, Grid } from "@mui/material";
+import { Breadcrumbs, Container } from "@mui/material";
 
 import Link from "next/link";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/[pageSlug]/components/DefaultPageWrapper";
@@ -31,20 +31,18 @@ export async function MyWrapper(props:Props) {
     }
   };
 
-  const getRootLayout = () => <Container>
-    <div id="mainContent">
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 2 }} sx={{ order: { xs: -1, md: 0 } }}>
-          <div className="sideNav desktopSideNav">
-            <TabsClient config={props.config} />
-          </div>
-        </Grid>
-        <Grid size={{ xs: 12, md: 10 }}>
+  const getRootLayout = () => (
+    <div className="myLayout">
+      <div className="sideNav desktopSideNav">
+        <TabsClient config={props.config} />
+      </div>
+      <div className="myLayoutContent">
+        <div id="mainContent">
           {props.children}
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </div>
-  </Container>;
+  );
 
   const getPageLabel = () => {
     const pageLink = getPageLink(props.pageSlug);

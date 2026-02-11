@@ -4,6 +4,7 @@ import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@/styles/sidebar.css";
+import "@/styles/master-detail.css";
 import "@churchapps/apphelper-markdown/dist/components/markdownEditor/editor.css";
 import "@youversion/platform-react-ui/styles.css";
 import ClientLayout from "./ClientLayout";

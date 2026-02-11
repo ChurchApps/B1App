@@ -1,0 +1,453 @@
+/* === Master-Detail Three-Column Layout === */
+.masterDetail {
+  display: flex;
+  height: calc(100vh - 90px);
+  overflow: hidden;
+}
+
+/* === Master Panel (List Column) === */
+.masterPanel {
+  width: 360px;
+  background: #fff;
+  border-right: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.masterHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.masterHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.masterSearch {
+  display: flex;
+  gap: 8px;
+}
+
+.masterSearch input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #333;
+  background: #fff;
+  outline: none;
+}
+
+.masterSearch input:focus {
+  border-color: #1565C0;
+}
+
+.masterSearch input::placeholder {
+  color: #666;
+}
+
+.filterToggle {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.filterBtn {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: transparent;
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.filterBtn:first-child {
+  border-radius: 6px 0 0 6px;
+}
+
+.filterBtn:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.filterBtn.active {
+  background: #1565C0;
+  color: #fff;
+  border-color: #1565C0;
+}
+
+.masterList {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* === Member List Items === */
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.memberItem:hover {
+  background: #F0F4FF;
+}
+
+.memberItem.selected {
+  background: #F0F4FF;
+  border-left-color: #1565C0;
+}
+
+.memberItem .memberAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.memberItem .memberInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.memberItem .memberName {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memberItem .memberSub {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.memberItem .memberChevron {
+  color: #666;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+/* === Group List Items === */
+.groupItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+  color: inherit;
+  border-left: 3px solid transparent;
+}
+
+.groupItem:hover {
+  background: #F0F4FF;
+  text-decoration: none;
+  color: inherit;
+}
+
+.groupItem .groupThumb {
+  width: 56px;
+  height: 42px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #e0e0e0;
+}
+
+.groupItem .groupInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.groupItem .groupName {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groupItem .groupSub {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.groupItem .groupChevron {
+  color: #666;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+/* === Alphabetical Letter Divider === */
+.letterDivider {
+  padding: 6px 20px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+/* === Detail Panel === */
+.detailPanel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+  background: #e5e8ee;
+}
+
+.detailEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
+  text-align: center;
+}
+
+.detailEmpty .material-icons-outlined,
+.detailEmpty .MuiIcon-root {
+  font-size: 64px !important;
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+.detailEmpty p {
+  font-size: 1rem;
+}
+
+/* === Detail Card (Person Profile) === */
+.detailCard {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 640px;
+  overflow: hidden;
+}
+
+.detailHero {
+  background: linear-gradient(135deg, #1565C0, #568BDA);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: #fff;
+}
+
+.detailHero .heroAvatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.2);
+}
+
+.detailHero h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+  color: #fff !important;
+}
+
+.detailHero .heroSubtitle {
+  font-size: 0.875rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.detailBody {
+  padding: 24px 32px;
+}
+
+.detailSection {
+  margin-bottom: 24px;
+}
+
+.detailSection:last-child {
+  margin-bottom: 0;
+}
+
+.detailSection h4 {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 0.9375rem;
+}
+
+.contactItem .MuiIcon-root {
+  color: #1565C0;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.contactItem .contactLabel {
+  font-size: 0.75rem;
+  color: #666;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.contactItem .contactValue {
+  flex: 1;
+  min-width: 0;
+}
+
+.hhMember {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hhMember:last-child {
+  border-bottom: none;
+}
+
+.hhMember:hover {
+  color: #1565C0;
+}
+
+.hhMember .hhAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #DDE1FC;
+}
+
+.hhMember .hhName {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.hhMember .hhRole {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.detailActions {
+  padding: 16px 32px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 12px;
+}
+
+/* === Detail Back Button (mobile only) === */
+.detailBackBtn {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #1565C0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  font-family: inherit;
+}
+
+/* === Responsive: Tablet === */
+@media (max-width: 1200px) {
+  .masterPanel {
+    width: 300px;
+  }
+}
+
+/* === Responsive: Small tablet (side nav already hidden by sidebar.css) === */
+@media (max-width: 900px) {
+  .masterPanel {
+    width: 280px;
+  }
+}
+
+/* === Responsive: Mobile === */
+@media (max-width: 600px) {
+  .masterDetail {
+    flex-direction: column;
+  }
+
+  .detailBackBtn {
+    display: flex;
+  }
+
+  /* No selection: show master, hide detail */
+  .masterDetail[data-has-selection="false"] .masterPanel {
+    width: 100%;
+    max-height: none;
+    flex: 1;
+    border-right: none;
+  }
+
+  .masterDetail[data-has-selection="false"] .detailPanel {
+    display: none;
+  }
+
+  /* Has selection: hide master, show detail full width */
+  .masterDetail[data-has-selection="true"] .masterPanel {
+    display: none;
+  }
+
+  .masterDetail[data-has-selection="true"] .detailPanel {
+    flex: 1;
+    padding: 16px;
+  }
+
+  .detailHero {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .detailBody {
+    padding: 16px 20px;
+  }
+
+  .detailActions {
+    padding: 12px 20px;
+  }
+}

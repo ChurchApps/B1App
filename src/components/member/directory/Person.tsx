@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { Grid, Icon, IconButton, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
+import { Icon, IconButton, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
+import { PersonHelper as AppPersonHelper } from "@churchapps/apphelper";
 import type { PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { PersonHelper } from "../../../helpers";
 import { Household } from "./Household";
@@ -19,28 +20,10 @@ export const Person: React.FC<Props> = (props) => {
   const [showPM, setShowPM] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
   const [familyMembers, setFamilyMembers] = React.useState<string[]>([]);
+  const [householdMembers, setHouseholdMembers] = React.useState<PersonInterface[]>([]);
   const context = useContext(UserContext);
 
   const isOwnProfile = context.person && props.personId === context.person.id;
-
-  const getContactMethods = () => {
-    const contactMethods = [];
-    if (person) {
-      const ci = person.contactInfo;
-      if (ci?.mobilePhone) contactMethods.push(<div className="contactMethod"><Icon sx={{ marginRight: "5px" }}>phone</Icon> {ci.mobilePhone} <label>Mobile</label></div>);
-      if (ci?.homePhone) contactMethods.push(<div className="contactMethod"><Icon sx={{ marginRight: "5px" }}>phone</Icon> {ci.homePhone} <label>Home</label></div>);
-      if (ci?.workPhone) contactMethods.push(<div className="contactMethod"><Icon sx={{ marginRight: "5px" }}>phone</Icon> {ci.workPhone} <label>Work</label></div>);
-      if (ci?.email) contactMethods.push(<div className="contactMethod"><Icon sx={{ marginRight: "5px" }}>mail_outline</Icon> {ci.email}</div>);
-      if (ci?.address1) {
-        const lines = [];
-        lines.push(<div><Icon sx={{ marginRight: "5px" }}>room</Icon> {ci.address1}</div>);
-        if (ci.address2) lines.push(<div>{ci.address2}</div>);
-        if (ci.city) lines.push(<div>{ci.city}, {ci.state} {ci.zip}</div>);
-        contactMethods.push(<div className="contactMethod">{lines}</div>);
-      }
-    }
-    return contactMethods;
-  };
 
   interface ProfileChange {
     field: string;
@@ -87,19 +70,15 @@ export const Person: React.FC<Props> = (props) => {
       return;
     }
 
-    ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then((data: PersonInterface) => setPerson(data));
+    ApiHelper.get("/people/directory/" + props.personId, "MembershipApi").then((data: PersonInterface) => {
+      setPerson(data);
+      if (data?.householdId) {
+        ApiHelper.get("/people/household/" + data.householdId, "MembershipApi").then((members: PersonInterface[]) => {
+          setHouseholdMembers(members.filter(m => m.id !== props.personId));
+        });
+      }
+    });
     ApiHelper.get("/tasks/directoryUpdate/" + props.personId, "DoingApi").then((data: TaskInterface[]) => setRequestedChanges(data));
-  };
-
-  const getEditContent = () => {
-    if (isOwnProfile) {
-      return (
-        <IconButton color="primary" size="small" onClick={() => setEditMode(true)} title="Edit Profile" data-testid="edit-profile-button">
-          <EditIcon />
-        </IconButton>
-      );
-    }
-    return <Button variant="contained" color="primary" disabled={!person} onClick={() => { if (person) setShowPM(true); }} data-testid="person-message-button">Message</Button>;
   };
 
   const getPM = () => {
@@ -114,35 +93,112 @@ export const Person: React.FC<Props> = (props) => {
     setFamilyMembers([]);
   };
 
-  return (
+  const getContactSection = () => {
+    const items: React.ReactElement[] = [];
+    if (!person) return null;
+    const ci = person.contactInfo;
+    if (ci?.email) items.push(
+      <div className="contactItem" key="email">
+        <Icon>mail_outline</Icon>
+        <span className="contactValue">{ci.email}</span>
+        <span className="contactLabel">Email</span>
+      </div>
+    );
+    if (ci?.mobilePhone) items.push(
+      <div className="contactItem" key="mobile">
+        <Icon>phone</Icon>
+        <span className="contactValue">{ci.mobilePhone}</span>
+        <span className="contactLabel">Mobile</span>
+      </div>
+    );
+    if (ci?.homePhone) items.push(
+      <div className="contactItem" key="home">
+        <Icon>phone</Icon>
+        <span className="contactValue">{ci.homePhone}</span>
+        <span className="contactLabel">Home</span>
+      </div>
+    );
+    if (ci?.workPhone) items.push(
+      <div className="contactItem" key="work">
+        <Icon>phone</Icon>
+        <span className="contactValue">{ci.workPhone}</span>
+        <span className="contactLabel">Work</span>
+      </div>
+    );
+    if (ci?.address1) {
+      const addr = [ci.address1, ci.address2, ci.city ? `${ci.city}, ${ci.state} ${ci.zip}` : null].filter(Boolean).join(", ");
+      items.push(
+        <div className="contactItem" key="address">
+          <Icon>room</Icon>
+          <span className="contactValue">{addr}</span>
+          <span className="contactLabel">Address</span>
+        </div>
+      );
+    }
+    if (items.length === 0) return null;
+    return (
+      <div className="detailSection">
+        <h4>Contact Information</h4>
+        {items}
+      </div>
+    );
+  };
+
+  const getHouseholdSection = () => {
+    if (householdMembers.length === 0) return null;
+    return (
+      <div className="detailSection">
+        <h4>Household Members</h4>
+        {householdMembers.map(m => (
+          <a key={m.id} href="about:blank" className="hhMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id); }} data-testid={`household-member-${m.id}-link`}>
+            <img className="hhAvatar" src={AppPersonHelper.getPhotoUrl(m)} alt="" />
+            <div>
+              <div className="hhName">{m.name?.display}</div>
+              <div className="hhRole">{m.householdRole}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    );
+  };
+
+  const getCardView = () => (
     <>
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          {editMode ? (
-            <DisplayBox id="peopleBox" headerIcon="person" headerText="Edit Profile" data-testid="edit-profile-display-box">
-              <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
-            </DisplayBox>
-          ) : (
-            <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
-              <Grid container spacing={3}>
-                <Grid size={{ xs: 4 }}>
-                  <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
-                </Grid>
-                <Grid size={{ xs: 8 }}>
-                  <h2>{person?.name?.display}</h2>
-                  {getContactMethods()}
-                </Grid>
-              </Grid>
-            </DisplayBox>
-          )}
-          {requestedChanges.length > 0 && showChanges()}
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Household person={person} selectedHandler={props.selectedHandler} showAddMember={editMode} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
-        </Grid>
-        {getPM()}
-      </Grid>
-      {isOwnProfile && editMode && <VisibilityPreferences />}
+      <div className="detailCard">
+        <div className="detailHero">
+          <img className="heroAvatar" src={PersonHelper.getPhotoUrl(person)} alt="" />
+          <div>
+            <h3>{person?.name?.display}</h3>
+            {person?.name?.last && <div className="heroSubtitle">{person.name.last} household</div>}
+          </div>
+        </div>
+        <div className="detailBody">
+          {getContactSection()}
+          {getHouseholdSection()}
+        </div>
+        <div className="detailActions">
+          {isOwnProfile
+            ? <Button variant="outlined" size="small" startIcon={<EditIcon />} onClick={() => setEditMode(true)} data-testid="edit-profile-button">Edit Profile</Button>
+            : <Button variant="contained" size="small" disabled={!person} startIcon={<Icon>mail_outline</Icon>} onClick={() => { if (person) setShowPM(true); }} data-testid="person-message-button">Message</Button>
+          }
+        </div>
+      </div>
+      {requestedChanges.length > 0 && showChanges()}
+      {getPM()}
     </>
   );
+
+  const getEditView = () => (
+    <>
+      <DisplayBox id="peopleBox" headerIcon="person" headerText="Edit Profile" data-testid="edit-profile-display-box">
+        <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
+      </DisplayBox>
+      {requestedChanges.length > 0 && showChanges()}
+      <Household person={person} selectedHandler={props.selectedHandler} showAddMember={editMode} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
+      {getPM()}
+      {isOwnProfile && <VisibilityPreferences />}
+    </>
+  );
+
+  return editMode ? getEditView() : getCardView();
 };
