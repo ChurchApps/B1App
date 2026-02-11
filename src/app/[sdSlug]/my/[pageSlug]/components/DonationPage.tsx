@@ -7,6 +7,7 @@ import type { DonationInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { DonationsMasterPanel } from "./DonationsMasterPanel";
 import { DonationsDetailPanel } from "./DonationsDetailPanel";
+import type { DonationSection } from "./DonationsMasterPanel";
 
 interface Props {
   config: ConfigurationInterface;
@@ -17,6 +18,7 @@ function DonationsPageInner({ config }: Props) {
   const personId = context?.userChurch?.person?.id || UserHelper.currentUserChurch?.person?.id;
   const [donations, setDonations] = useState<DonationInterface[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState<DonationSection>("give");
 
   const loadDonations = () => {
     setIsLoading(true);
@@ -29,16 +31,20 @@ function DonationsPageInner({ config }: Props) {
   useEffect(() => { loadDonations(); }, [personId]);
 
   return (
-    <div className="masterDetail" data-has-selection="false">
+    <div className="masterDetail" data-has-selection="true">
       <div className="masterPanel">
-        <DonationsMasterPanel donations={donations} isLoading={isLoading} />
+        <DonationsMasterPanel activeSection={activeSection} onSectionChange={setActiveSection} />
       </div>
       <div className="detailPanel">
         <DonationsDetailPanel
           personId={personId}
           church={config?.church}
           churchLogo={AppearanceHelper.getLogo(config?.appearance, "", "", "#FFF")}
+          donations={donations}
+          donationsLoading={isLoading}
           onDataUpdate={loadDonations}
+          activeSection={activeSection}
+          onBack={() => setActiveSection("give")}
         />
       </div>
     </div>

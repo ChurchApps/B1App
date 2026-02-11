@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 import { ApiHelper, ArrayHelper, DateHelper } from "@churchapps/apphelper";
 import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
-import { UpcomingDates } from "@/components/plans/UpcomingDates";
-import { BlockoutDates } from "@/components/plans/BlockoutDates";
 
 interface Props {
   selectedId: string | null;
@@ -82,6 +80,18 @@ export function PlansMasterPanel({ selectedId, onSelect }: Props) {
         </h2>
       </div>
       <div className="masterList">
+        <div
+          className={"memberItem" + (selectedId === "blockout" ? " selected" : "")}
+          onClick={() => onSelect("blockout")}
+        >
+          <Icon sx={{ color: "#1565C0", flexShrink: 0 }}>block</Icon>
+          <div className="memberInfo">
+            <div className="memberName">Blockout Dates</div>
+            <div className="memberSub">Manage dates you&apos;re unavailable</div>
+          </div>
+          <Icon className="memberChevron">chevron_right</Icon>
+        </div>
+
         {servingData.length === 0 && assignments.length === 0 && (
           <div style={{ padding: 20, color: "#666" }}>No serving assignments found.</div>
         )}
@@ -104,11 +114,6 @@ export function PlansMasterPanel({ selectedId, onSelect }: Props) {
             </div>
           </div>
         ))}
-
-        <div style={{ padding: "16px 20px", borderTop: "1px solid #f0f0f0" }}>
-          <UpcomingDates assignments={assignments} plans={plans} positions={positions} times={times} />
-          <BlockoutDates />
-        </div>
       </div>
     </>
   );

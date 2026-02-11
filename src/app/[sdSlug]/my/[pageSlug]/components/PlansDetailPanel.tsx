@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Icon } from "@mui/material";
 import { UserHelper } from "@churchapps/apphelper";
 import { PlanClient } from "./PlanClient";
+import { BlockoutDates } from "@/components/plans/BlockoutDates";
 
 interface Props {
   planId: string;
@@ -26,7 +27,7 @@ export function PlansDetailPanel({ planId, onBack }: Props) {
         <Icon sx={{ fontSize: 20 }}>arrow_back</Icon>
         Back to plans
       </button>
-      <PlanClient planId={planId} />
+      {planId === "blockout" ? <BlockoutDates /> : <PlanClient planId={planId} />}
     </>
   );
 }

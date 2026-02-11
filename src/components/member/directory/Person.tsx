@@ -116,32 +116,28 @@ export const Person: React.FC<Props> = (props) => {
 
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          {editMode ? (
-            <DisplayBox id="peopleBox" headerIcon="person" headerText="Edit Profile" data-testid="edit-profile-display-box">
-              <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
-            </DisplayBox>
-          ) : (
-            <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
-              <Grid container spacing={3}>
-                <Grid size={{ xs: 4 }}>
-                  <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
-                </Grid>
-                <Grid size={{ xs: 8 }}>
-                  <h2>{person?.name?.display}</h2>
-                  {getContactMethods()}
-                </Grid>
+      <>
+        {editMode ? (
+          <DisplayBox id="peopleBox" headerIcon="person" headerText="Edit Profile" data-testid="edit-profile-display-box">
+            <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
+          </DisplayBox>
+        ) : (
+          <DisplayBox id="peopleBox" headerIcon="person" headerText="Contact Information" editContent={getEditContent()} data-testid="contact-information-display-box">
+            <Grid container spacing={3}>
+              <Grid size={{ xs: 4 }}>
+                <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" />
               </Grid>
-            </DisplayBox>
-          )}
-          {requestedChanges.length > 0 && showChanges()}
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Household person={person} selectedHandler={props.selectedHandler} showAddMember={editMode} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
-        </Grid>
+              <Grid size={{ xs: 8 }}>
+                <h2>{person?.name?.display}</h2>
+                {getContactMethods()}
+              </Grid>
+            </Grid>
+          </DisplayBox>
+        )}
+        {requestedChanges.length > 0 && showChanges()}
+        <Household person={person} selectedHandler={props.selectedHandler} showAddMember={editMode} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
         {getPM()}
-      </Grid>
+      </>
       {isOwnProfile && editMode && <VisibilityPreferences />}
     </>
   );
