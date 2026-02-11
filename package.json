@@ -7,7 +7,7 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "dev": "next dev -p 3301 --webpack",
+    "dev": "next dev -p 3301",
     "dev:turbo": "next dev --turbo -p 3301",
     "prebuild": "node -e \"const fs=require('fs'); fs.copyFileSync('src/instrumentation.prod.ts', 'src/instrumentation.ts'); fs.copyFileSync('src/instrumentation-client.prod.ts', 'src/instrumentation-client.ts');\"",
     "build": "next build",
@@ -50,7 +50,6 @@
     "react-big-calendar": "^1.19.4",
     "react-color": "^2.19.3",
     "react-contexify": "^6.0.0",
-    "react-contextify": "^0.1.0",
     "react-cookie": "^8.0.1",
     "react-cropper": "^2.3.3",
     "react-dnd": "^16.0.1",

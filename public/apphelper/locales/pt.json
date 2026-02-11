@@ -28,7 +28,6 @@
   },
   "createPerson": {
     "addNewPerson": "Adicionar uma nova pessoa",
-    "email": "E-mail",
     "firstName": "Primeiro nome",
     "lastName": "Sobrenome"
   },
@@ -46,11 +45,11 @@
       "secondDeposit": "Segundo Depósito",
       "twoDeposits": "Insira os dois depósitos que você recebeu em sua conta para concluir a verificação de sua conta bancária.",
       "updated": "Conta bancária atualizada.",
+      "verified": "Conta bancária verificada.",
       "validate": {
         "accountNumber": "O roteamento e o número da conta são obrigatórios.",
         "holderName": "O nome do titular da conta é obrigatório."
-      },
-      "verified": "Conta bancária verificada."
+      }
     },
     "cardForm": {
       "addNew": "Adicionar novo cartão",
@@ -97,14 +96,6 @@
       "amount": "Quantia",
       "fund": "Fundo"
     },
-    "page": {
-      "amount": "Quantia",
-      "batch": "Lote",
-      "date": "Data",
-      "fund": "Fundo",
-      "method": "Método",
-      "willAppear": "As doações aparecerão assim que uma doação for inserida."
-    },
     "paymentMethods": {
       "addBank": "Adicionar conta bancária",
       "addCard": "Adicionar cartão",
@@ -112,6 +103,14 @@
       "deleted": "Forma de pagamento excluída.",
       "noMethods": "Sem métodos de pagamento.  ",
       "verify": "Verificar conta"
+    },
+    "page": {
+      "amount": "Quantia",
+      "batch": "Lote",
+      "date": "Data",
+      "fund": "Fundo",
+      "method": "Método",
+      "willAppear": "As doações aparecerão assim que uma doação for inserida."
     },
     "preview": {
       "date": "Data da Doação",
@@ -153,15 +152,12 @@
   "login": {
     "createAccount": "Crie a sua conta aqui",
     "email": "E-mail",
-    "expiredLink": "O link atual expirou.",
     "forgot": "Esqueceu sua senha",
     "goLogin": "Vá para Entrar",
     "login": "Conecte-se",
-    "noAcc": "Não tem uma conta?",
     "password": "Senha",
     "register": "Registro",
     "registerThankYou": "Obrigado por se registrar! ",
-    "requestLink": "Solicitar um novo link de redefinição",
     "reset": "Reiniciar",
     "resetInstructions": "Digite seu endereço de e-mail para solicitar uma redefinição de senha.",
     "resetPassword": "Redefinir senha",
@@ -169,6 +165,7 @@
     "setPassword": "Configurar senha",
     "signIn": "Entrar",
     "signInTitle": "Por favor, inscreva-se",
+    "verifyPassword": "verifique a senha",
     "validate": {
       "email": "Por favor insira um endereço de e-mail válido.",
       "firstName": "Por favor entre com seu primeiro nome.",
@@ -179,7 +176,6 @@
       "passwordMatch": "As senhas não coincidem.",
       "selectingChurch": "Erro ao selecionar igreja. "
     },
-    "verifyPassword": "verifique a senha",
     "welcomeBack": "bem vindo de volta",
     "welcomeName": "Bem vindo de volta, <b>{}</b>!  "
   },
@@ -217,17 +213,13 @@
     "firstName": "Primeiro nome",
     "lastName": "Sobrenome",
     "name": "Nome",
-    "noRec": "Não tem um registro de pessoa?",
     "person": "Pessoa",
     "years": "anos"
   },
   "reporting": {
-    "detailed": "Relatório Detalhado",
     "downloadOptions": "Opções de download",
     "noData": "Não há dados para exibir.",
     "runReport": "Executar relatório",
-    "sampleTemplate": "Modelo de Word de Exemplo",
-    "summary": "Resumo",
     "useFilter": "Use o filtro para gerar o relatório."
   },
   "selectChurch": {
@@ -242,6 +234,7 @@
     "register": "Cadastre uma nova igreja",
     "selectChurch": "Selecione uma Igreja",
     "state": "Estado/Província",
+    "zip": "CEP / Código Postal",
     "validate": {
       "address": "O endereço não pode ficar em branco.",
       "city": "A cidade não pode ficar em branco.",
@@ -249,27 +242,26 @@
       "name": "O nome da igreja não pode ficar em branco.",
       "state": "Estado/Província não pode ficar em branco.",
       "zip": "O CEP/código postal não pode ficar em branco."
-    },
-    "zip": "CEP / Código Postal"
+    }
   },
   "stockPhotos": {
     "photoBy": "Foto por:",
     "providedBy": "Fotos de estoque fornecidas por"
   },
   "support": {
-    "discussions": "Fórum de Suporte",
-    "documentation": "Documentação"
+    "email": "E-mail",
+    "knowledge base": "Base de conhecimento",
+    "messenger": "Mensageiro",
+    "phone": "Telefone"
   },
   "wrapper": {
     "chatWith": "Conversar com",
-    "deleteChurch": "Excluir",
+    "deleteChurch": "Excluir igreja da lista",
     "editAccount": "Editar Conta",
     "editChurchProfile": "Editar Perfil da Igreja",
     "editProfile": "Editar Perfil",
     "logout": "Sair",
-    "messages": "Mensagens",
     "newPrivateMessage": "Nova Mensagem Privada",
-    "notifications": "Notificações",
     "privateMessage": "Mensagem privada",
     "profile": "Perfil",
     "searchForPerson": "Procure uma pessoa",

@@ -151,12 +151,6 @@ const nextConfig = {
 
   // Transpile packages
   transpilePackages: [
-    "@churchapps/apphelper",
-    "@churchapps/apphelper-login",
-    "@churchapps/apphelper-markdown",
-    "@churchapps/apphelper-donations",
-    "@churchapps/apphelper-website",
-    "@churchapps/helpers",
     "mui-tel-input"
   ],
 

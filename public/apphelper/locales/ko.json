@@ -28,7 +28,6 @@
   },
   "createPerson": {
     "addNewPerson": "새 사람 추가",
-    "email": "이메일",
     "firstName": "이름",
     "lastName": "성"
   },
@@ -46,11 +45,11 @@
       "secondDeposit": "두 번째 입금",
       "twoDeposits": "계좌에 입금된 2건의 입금액을 입력하여 은행계좌 확인을 완료하세요.",
       "updated": "은행 계좌가 업데이트되었습니다.",
+      "verified": "은행 계좌가 확인되었습니다.",
       "validate": {
         "accountNumber": "라우팅 번호와 계좌 번호가 필요합니다.",
         "holderName": "계좌 소유자 이름이 필요합니다."
-      },
-      "verified": "은행 계좌가 확인되었습니다."
+      }
     },
     "cardForm": {
       "addNew": "새 카드 추가",
@@ -97,14 +96,6 @@
       "amount": "양",
       "fund": "축적"
     },
-    "page": {
-      "amount": "양",
-      "batch": "일괄",
-      "date": "날짜",
-      "fund": "축적",
-      "method": "방법",
-      "willAppear": "기부금을 입력하면 기부금이 표시됩니다."
-    },
     "paymentMethods": {
       "addBank": "은행 계좌 추가",
       "addCard": "카드 추가",
@@ -112,6 +103,14 @@
       "deleted": "결제 수단이 삭제되었습니다.",
       "noMethods": "결제 수단이 없습니다.  ",
       "verify": "계정 확인"
+    },
+    "page": {
+      "amount": "양",
+      "batch": "일괄",
+      "date": "날짜",
+      "fund": "축적",
+      "method": "방법",
+      "willAppear": "기부금을 입력하면 기부금이 표시됩니다."
     },
     "preview": {
       "date": "기부일자",
@@ -153,15 +152,12 @@
   "login": {
     "createAccount": "계정 만들기",
     "email": "이메일",
-    "expiredLink": "현재 링크가 만료되었습니다.",
     "forgot": "비밀번호를 잊으 셨나요",
     "goLogin": "로그인으로 이동",
     "login": "로그인",
-    "noAcc": "계정이 없으신가요?",
     "password": "비밀번호",
     "register": "등록하다",
     "registerThankYou": "등록해주셔서 감사합니다! ",
-    "requestLink": "새 재설정 링크 요청",
     "reset": "초기화",
     "resetInstructions": "비밀번호 재설정을 요청하려면 이메일 주소를 입력하세요.",
     "resetPassword": "암호를 재설정",
@@ -169,6 +165,7 @@
     "setPassword": "암호를 설정하세요",
     "signIn": "로그인",
     "signInTitle": "로그인 해주세요",
+    "verifyPassword": "비밀번호 확인",
     "validate": {
       "email": "유효한 이메일 주소를 입력하세요.",
       "firstName": "이름을 입력하세요.",
@@ -179,7 +176,6 @@
       "passwordMatch": "비밀번호가 일치하지 않습니다.",
       "selectingChurch": "교회선택에 오류가 있습니다. "
     },
-    "verifyPassword": "비밀번호 확인",
     "welcomeBack": "돌아온 것을 환영합니다",
     "welcomeName": "돌아온 것을 환영합니다. <b>{}</b>!  "
   },
@@ -217,17 +213,13 @@
     "firstName": "이름",
     "lastName": "성",
     "name": "이름",
-    "noRec": "인물 기록이 없으신가요?",
     "person": "사람",
     "years": "연령"
   },
   "reporting": {
-    "detailed": "상세 보고서",
     "downloadOptions": "다운로드 옵션",
     "noData": "표시할 데이터가 없습니다.",
     "runReport": "보고서 실행",
-    "sampleTemplate": "샘플 워드 템플릿",
-    "summary": "요약",
     "useFilter": "필터를 사용하여 보고서를 실행하세요."
   },
   "selectChurch": {
@@ -242,6 +234,7 @@
     "register": "새 교회 등록",
     "selectChurch": "교회를 선택하세요",
     "state": "주/도",
+    "zip": "우편번호",
     "validate": {
       "address": "주소는 비워둘 수 없습니다.",
       "city": "도시는 비워둘 수 없습니다.",
@@ -249,27 +242,26 @@
       "name": "교회 이름은 비워둘 수 없습니다.",
       "state": "시/도는 비워둘 수 없습니다.",
       "zip": "우편번호는 비워둘 수 없습니다."
-    },
-    "zip": "우편번호"
+    }
   },
   "stockPhotos": {
     "photoBy": "의 사진:",
     "providedBy": "스톡 사진 제공:"
   },
   "support": {
-    "discussions": "지원 포럼",
-    "documentation": "문서"
+    "email": "이메일",
+    "knowledge base": "기술 자료",
+    "messenger": "전령",
+    "phone": "핸드폰"
   },
   "wrapper": {
     "chatWith": "채팅",
-    "deleteChurch": "삭제",
+    "deleteChurch": "목록에서 교회 삭제",
     "editAccount": "계정 편집",
     "editChurchProfile": "교회 프로필 편집",
     "editProfile": "프로필 편집",
     "logout": "로그 아웃",
-    "messages": "메시지",
     "newPrivateMessage": "새 비공개 메시지",
-    "notifications": "알림",
     "privateMessage": "사신",
     "profile": "프로필",
     "searchForPerson": "사람 검색",

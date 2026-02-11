@@ -28,7 +28,6 @@
   },
   "createPerson": {
     "addNewPerson": "Aggiungi una nuova persona",
-    "email": "E-mail",
     "firstName": "Nome di battesimo",
     "lastName": "Cognome"
   },
@@ -46,11 +45,11 @@
       "secondDeposit": "Secondo deposito",
       "twoDeposits": "Inserisci i due depositi che hai ricevuto sul tuo conto per completare la verifica del tuo conto bancario.",
       "updated": "Conto bancario aggiornato.",
+      "verified": "Conto bancario verificato.",
       "validate": {
-        "accountNumber": "Sono richiesti il routing e il numero di conto.",
+        "accountNumber": "Sono richiesti il ​​routing e il numero di conto.",
         "holderName": "Il nome del titolare del conto è obbligatorio."
-      },
-      "verified": "Conto bancario verificato."
+      }
     },
     "cardForm": {
       "addNew": "Aggiungi nuova carta",
@@ -97,14 +96,6 @@
       "amount": "Quantità",
       "fund": "Finanziare"
     },
-    "page": {
-      "amount": "Quantità",
-      "batch": "Lotto",
-      "date": "Data",
-      "fund": "Finanziare",
-      "method": "Metodo",
-      "willAppear": "Le donazioni verranno visualizzate una volta inserita una donazione."
-    },
     "paymentMethods": {
       "addBank": "Aggiungi conto bancario",
       "addCard": "Aggiungi carta",
@@ -112,6 +103,14 @@
       "deleted": "Metodo di pagamento eliminato.",
       "noMethods": "Nessun metodo di pagamento.  ",
       "verify": "Verifica Account"
+    },
+    "page": {
+      "amount": "Quantità",
+      "batch": "Lotto",
+      "date": "Data",
+      "fund": "Finanziare",
+      "method": "Metodo",
+      "willAppear": "Le donazioni verranno visualizzate una volta inserita una donazione."
     },
     "preview": {
       "date": "Data della donazione",
@@ -153,15 +152,12 @@
   "login": {
     "createAccount": "Creare un account",
     "email": "E-mail",
-    "expiredLink": "Il link attuale è scaduto.",
     "forgot": "Ha dimenticato la password",
     "goLogin": "Vai su Accedi",
     "login": "Login",
-    "noAcc": "Non hai un account?",
     "password": "Parola d'ordine",
     "register": "Registrati",
     "registerThankYou": "Grazie per la registrazione! ",
-    "requestLink": "Richiedi un nuovo link di reimpostazione",
     "reset": "Ripristina",
     "resetInstructions": "Inserisci il tuo indirizzo email per richiedere la reimpostazione della password.",
     "resetPassword": "Resetta la password",
@@ -169,6 +165,7 @@
     "setPassword": "Impostare la password",
     "signIn": "Registrazione",
     "signInTitle": "Per favore accedi",
+    "verifyPassword": "Verifica la password",
     "validate": {
       "email": "Si prega di inserire un indirizzo email valido.",
       "firstName": "Per favore immettere il proprio Nome.",
@@ -179,7 +176,6 @@
       "passwordMatch": "Le passwords non corrispondono.",
       "selectingChurch": "Errore nella scelta della chiesa. "
     },
-    "verifyPassword": "Verifica la password",
     "welcomeBack": "Bentornato",
     "welcomeName": "Bentornato, <b>{}</b>!  "
   },
@@ -217,17 +213,13 @@
     "firstName": "Nome di battesimo",
     "lastName": "Cognome",
     "name": "Nome",
-    "noRec": "Non hai un record persona?",
     "person": "Persona",
     "years": "anni"
   },
   "reporting": {
-    "detailed": "Rapporto dettagliato",
     "downloadOptions": "Opzioni di download",
     "noData": "Non ci sono dati da visualizzare.",
     "runReport": "Esegui rapporto",
-    "sampleTemplate": "Modello Word di esempio",
-    "summary": "Riepilogo",
     "useFilter": "Utilizza il filtro per eseguire il report."
   },
   "selectChurch": {
@@ -242,6 +234,7 @@
     "register": "Registra una nuova chiesa",
     "selectChurch": "Seleziona una Chiesa",
     "state": "Stato/Provincia",
+    "zip": "Zip / Codice postale",
     "validate": {
       "address": "L'indirizzo non può essere vuoto.",
       "city": "La città non può essere vuota.",
@@ -249,27 +242,26 @@
       "name": "Il nome della chiesa non può essere vuoto.",
       "state": "Lo stato/provincia non può essere vuoto.",
       "zip": "Il codice postale non può essere vuoto."
-    },
-    "zip": "Zip / Codice postale"
+    }
   },
   "stockPhotos": {
     "photoBy": "Fotografato da:",
     "providedBy": "Foto d'archivio fornite da"
   },
   "support": {
-    "discussions": "Forum di supporto",
-    "documentation": "Documentazione"
+    "email": "E-mail",
+    "knowledge base": "base di conoscenza",
+    "messenger": "Messaggero",
+    "phone": "Telefono"
   },
   "wrapper": {
     "chatWith": "Chattare con",
-    "deleteChurch": "Elimina",
+    "deleteChurch": "Elimina la chiesa dall'elenco",
     "editAccount": "Modifica Account",
     "editChurchProfile": "Modifica Profilo della Chiesa",
     "editProfile": "Modifica Profilo",
     "logout": "Disconnettersi",
-    "messages": "Messaggi",
     "newPrivateMessage": "Nuovo messaggio privato",
-    "notifications": "Notifiche",
     "privateMessage": "Messaggio privato",
     "profile": "Profilo",
     "searchForPerson": "Cerca una persona",

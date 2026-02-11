@@ -28,7 +28,6 @@
   },
   "createPerson": {
     "addNewPerson": "Legg til en ny person",
-    "email": "E-post",
     "firstName": "Fornavn",
     "lastName": "Etternavn"
   },
@@ -46,11 +45,11 @@
       "secondDeposit": "Andre innskudd",
       "twoDeposits": "Skriv inn de to innskuddene du mottok på kontoen din, for å fullføre verifiseringen av bankkontoen din.",
       "updated": "Bankkonto oppdatert.",
+      "verified": "Bankkonto bekreftet.",
       "validate": {
         "accountNumber": "Routing og kontonummer er påkrevd.",
         "holderName": "Kontoinnehaverens navn er påkrevd."
-      },
-      "verified": "Bankkonto bekreftet."
+      }
     },
     "cardForm": {
       "addNew": "Legg til nytt kort",
@@ -97,14 +96,6 @@
       "amount": "Beløp",
       "fund": "Finansiering"
     },
-    "page": {
-      "amount": "Beløp",
-      "batch": "Parti",
-      "date": "Dato",
-      "fund": "Finansiering",
-      "method": "Metode",
-      "willAppear": "Donasjoner vises når en donasjon er lagt inn."
-    },
     "paymentMethods": {
       "addBank": "Legg til bankkonto",
       "addCard": "Legg til kort",
@@ -112,6 +103,14 @@
       "deleted": "Betalingsmetode slettet.",
       "noMethods": "Ingen betalingsmetoder. Legg til en for å kunne donere.",
       "verify": "Verifiser konto"
+    },
+    "page": {
+      "amount": "Beløp",
+      "batch": "Parti",
+      "date": "Dato",
+      "fund": "Finansiering",
+      "method": "Metode",
+      "willAppear": "Donasjoner vises når en donasjon er lagt inn."
     },
     "preview": {
       "date": "Donasjonsdato",
@@ -153,15 +152,12 @@
   "login": {
     "createAccount": "Opprett en konto",
     "email": "E-post",
-    "expiredLink": "Den gjeldende lenken har utløpt.",
     "forgot": "Glemt passord",
     "goLogin": "Gå til innlogging",
     "login": "Logg inn",
-    "noAcc": "Har du ikke en konto?",
     "password": "Passord",
     "register": "Registrer",
     "registerThankYou": "Takk for din registrering! Vennligst sjekk e-posten din for å bekrefte kontoen.",
-    "requestLink": "Be om en ny tilbakestillingslenke",
     "reset": "Tilbakestill",
     "resetInstructions": "Skriv inn e-postadressen din for å be om tilbakestilling av passord.",
     "resetPassword": "Tilbakestill passord",
@@ -169,6 +165,7 @@
     "setPassword": "Lag et passord",
     "signIn": "Logg inn",
     "signInTitle": "Vennligst logg inn",
+    "verifyPassword": "Bekreft passord",
     "validate": {
       "email": "Vennligst skriv inn en gyldig e-postadresse.",
       "firstName": "Vennligst skriv inn fornavnet ditt.",
@@ -179,7 +176,6 @@
       "passwordMatch": "Passordene er ikke like.",
       "selectingChurch": "Feil ved valg av kirke. Vennligst bekreft og prøv igjen"
     },
-    "verifyPassword": "Bekreft passord",
     "welcomeBack": "Velkommen tilbake",
     "welcomeName": "Velkommen tilbake, <b>{}</b>! Vennligst vent mens vi laster inn dataene dine."
   },
@@ -217,17 +213,13 @@
     "firstName": "Fornavn",
     "lastName": "Etternavn",
     "name": "Navn",
-    "noRec": "Har du ikke en personoppføring?",
     "person": "Person",
     "years": "år"
   },
   "reporting": {
-    "detailed": "Detaljert rapport",
     "downloadOptions": "Nedlastingsalternativer",
     "noData": "Det er ingen data å vise.",
     "runReport": "Kjør rapport",
-    "sampleTemplate": "Eksempel på Word-mal",
-    "summary": "Sammendrag",
     "useFilter": "Bruk filteret til å kjøre rapporten."
   },
   "selectChurch": {
@@ -242,6 +234,7 @@
     "register": "Registrer en ny kirke",
     "selectChurch": "Velg en kirke",
     "state": "Fylke / Region",
+    "zip": "Postnummer",
     "validate": {
       "address": "Adresse kan ikke stå tomt.",
       "city": "Sted/By kan ikke stå tomt.",
@@ -249,27 +242,26 @@
       "name": "Navn på kirke kan ikke stå tomt.",
       "state": "Fylke/Region kan ikke stå tomt.",
       "zip": "Postnummer kan ikke stå tomt."
-    },
-    "zip": "Postnummer"
+    }
   },
   "stockPhotos": {
     "photoBy": "Foto av:",
     "providedBy": "Arkivbilder levert av"
   },
   "support": {
-    "discussions": "Brukerstøtteforum",
-    "documentation": "Dokumentasjon"
+    "email": "E-post",
+    "knowledge base": "Kunnskapsbase",
+    "messenger": "Messenger",
+    "phone": "Telefon"
   },
   "wrapper": {
     "chatWith": "Chat med",
-    "deleteChurch": "Slett",
+    "deleteChurch": "Slett kirke fra listen",
     "editAccount": "Rediger konto",
     "editChurchProfile": "Rediger kirkeprofil",
     "editProfile": "Rediger profil",
     "logout": "Logg ut",
-    "messages": "Meldinger",
     "newPrivateMessage": "Ny privat melding",
-    "notifications": "Varsler",
     "privateMessage": "Privat melding",
     "profile": "Profil",
     "searchForPerson": "Søk etter en person",
