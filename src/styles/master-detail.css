@@ -242,6 +242,139 @@
   font-size: 1rem;
 }
 
+/* === Detail Card (Person Profile) === */
+.detailCard {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  max-width: 640px;
+  overflow: hidden;
+}
+
+.detailHero {
+  background: linear-gradient(135deg, #1565C0, #568BDA);
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: #fff;
+}
+
+.detailHero .heroAvatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.2);
+}
+
+.detailHero h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+  color: #fff !important;
+}
+
+.detailHero .heroSubtitle {
+  font-size: 0.875rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+.detailBody {
+  padding: 24px 32px;
+}
+
+.detailSection {
+  margin-bottom: 24px;
+}
+
+.detailSection:last-child {
+  margin-bottom: 0;
+}
+
+.detailSection h4 {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 0.9375rem;
+}
+
+.contactItem .MuiIcon-root {
+  color: #1565C0;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.contactItem .contactLabel {
+  font-size: 0.75rem;
+  color: #666;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.contactItem .contactValue {
+  flex: 1;
+  min-width: 0;
+}
+
+.hhMember {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hhMember:last-child {
+  border-bottom: none;
+}
+
+.hhMember:hover {
+  color: #1565C0;
+}
+
+.hhMember .hhAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #DDE1FC;
+}
+
+.hhMember .hhName {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.hhMember .hhRole {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.detailActions {
+  padding: 16px 32px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 12px;
+}
+
 /* === Detail Back Button (mobile only) === */
 .detailBackBtn {
   display: none;
@@ -302,5 +435,19 @@
   .masterDetail[data-has-selection="true"] .detailPanel {
     flex: 1;
     padding: 16px;
+  }
+
+  .detailHero {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .detailBody {
+    padding: 16px 20px;
+  }
+
+  .detailActions {
+    padding: 12px 20px;
   }
 }
