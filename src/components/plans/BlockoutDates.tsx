@@ -27,8 +27,8 @@ export const BlockoutDates: React.FC<Props> = (props) => {
     blockoutDates.forEach((d) => {
       rows.push(
         <TableRow key={d.id}>
-          <TableCell>{DateHelper.prettyDate(new Date(d.startDate))}</TableCell>
-          <TableCell>{DateHelper.prettyDate(new Date(d.endDate))}</TableCell>
+          <TableCell>{DateHelper.prettyDate(DateHelper.toDate(d.startDate))}</TableCell>
+          <TableCell>{DateHelper.prettyDate(DateHelper.toDate(d.endDate))}</TableCell>
           <TableCell>
             <IconButton onClick={() => setBlockoutDate(d)} data-testid={`blockout-edit-${d.id}-button`}><Icon>edit</Icon></IconButton>
           </TableCell>

@@ -53,7 +53,7 @@ export function PlansMasterPanel({ selectedId, onSelect }: Props) {
           assignmentId: assignment.id,
           planId: plan.id,
           planName: plan.name,
-          serviceDate: new Date(plan.serviceDate),
+          serviceDate: DateHelper.toDate(plan.serviceDate),
           position: position.name,
           status: assignment.status || "Unconfirmed"
         });

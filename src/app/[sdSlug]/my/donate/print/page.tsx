@@ -35,7 +35,7 @@ export default function PrintPage({ params }: { params: Params }) {
     ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
       const result: DonationInterface[] = [];
       d.forEach((don: DonationInterface) => {
-        const donDate = new Date(don.donationDate);
+        const donDate = DateHelper.toDate(don.donationDate);
         if (donDate.getFullYear() === currYear) {
           result.push(don);
         }

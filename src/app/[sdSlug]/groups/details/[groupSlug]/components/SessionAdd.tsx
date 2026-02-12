@@ -68,7 +68,7 @@ export const SessionAdd: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       {getServiceTimes()}
 
-      <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} label={Locale.label("Session Date")} value={DateHelper.formatHtml5Date(sessionDate)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionDate(new Date(e.currentTarget.value))} onKeyDown={handleKeyDown} data-testid="session-date-input" />
+      <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} label={Locale.label("Session Date")} value={DateHelper.formatHtml5Date(sessionDate)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionDate(DateHelper.toDate(e.currentTarget.value))} onKeyDown={handleKeyDown} data-testid="session-date-input" />
 
     </InputBox>
 

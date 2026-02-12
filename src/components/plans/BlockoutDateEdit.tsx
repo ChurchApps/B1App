@@ -41,8 +41,8 @@ export const BlockoutDateEdit: React.FC<Props> = (props) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const bd = { ...blockoutDate };
     switch (e.target.name) {
-      case "startDate": bd.startDate = new Date(e.target.value); break;
-      case "endDate": bd.endDate = new Date(e.target.value); break;
+      case "startDate": bd.startDate = DateHelper.toDate(e.target.value); break;
+      case "endDate": bd.endDate = DateHelper.toDate(e.target.value); break;
     }
     setBlockoutDate(bd);
   };

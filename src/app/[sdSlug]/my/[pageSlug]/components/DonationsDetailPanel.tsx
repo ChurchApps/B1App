@@ -99,8 +99,8 @@ export function DonationsDetailPanel({ personId, church, churchLogo, donations, 
 
   const currentYear = new Date().getFullYear();
   const lastYear = currentYear - 1;
-  const currentYearDonations = donations.filter((d) => new Date(d.donationDate).getFullYear() === currentYear);
-  const lastYearDonations = donations.filter((d) => new Date(d.donationDate).getFullYear() === lastYear);
+  const currentYearDonations = donations.filter((d) => DateHelper.toDate(d.donationDate).getFullYear() === currentYear);
+  const lastYearDonations = donations.filter((d) => DateHelper.toDate(d.donationDate).getFullYear() === lastYear);
   const customHeaders = [
     { label: "amount", key: "amount" },
     { label: "donationDate", key: "donationDate" },
@@ -149,7 +149,7 @@ export function DonationsDetailPanel({ personId, church, churchLogo, donations, 
               const isPending = d.status === "pending";
               return (
                 <TableRow key={i} sx={{ opacity: isPending ? 0.8 : 1 }}>
-                  <TableCell>{DateHelper.prettyDate(new Date(d.donationDate))}</TableCell>
+                  <TableCell>{DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}</TableCell>
                   <TableCell>{d.method} - {d.methodDetails}</TableCell>
                   <TableCell>{d.fund.name}{isPending && " (Pending)"}</TableCell>
                   <TableCell sx={{ color: isPending ? "warning.main" : undefined }}>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>

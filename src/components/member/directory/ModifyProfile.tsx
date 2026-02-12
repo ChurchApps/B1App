@@ -106,7 +106,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
         break;
       case "birthDate":
         option = (
-          <TextField fullWidth label="Birthdate" name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(new Date(currentField.value))} onChange={handleChange} data-testid="birthdate-input" aria-label="Birth date" />
+          <TextField fullWidth label="Birthdate" name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(currentField.value)} onChange={handleChange} data-testid="birthdate-input" aria-label="Birth date" />
         );
         break;
       default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? "*Enter First Name only" : null} data-testid="field-value-input" aria-label={`${currentField.label} value`} />); break;
@@ -118,7 +118,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     const rows: React.ReactElement[] = [];
     changes?.forEach((ch) => {
       let val: string | React.ReactElement = ch.value;
-      if (ch.field === "birthDate") val = DateHelper.formatHtml5Date(new Date(ch.value));
+      if (ch.field === "birthDate") val = DateHelper.formatHtml5Date(ch.value);
       if (ch.field === "photo") val = <img src={ch.value} style={{ maxWidth: "70px", maxHeight: "70px" }} alt="" />;
       rows.push(
         <TableRow>

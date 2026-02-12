@@ -60,7 +60,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       value = value?.[part];
     }
     if (key === "birthDate" && value) {
-      return DateHelper.formatHtml5Date(new Date(value));
+      return DateHelper.formatHtml5Date(value);
     }
     return value || "";
   };

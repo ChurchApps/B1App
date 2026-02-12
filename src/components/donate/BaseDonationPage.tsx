@@ -145,8 +145,8 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     const currentY = date.getFullYear();
     const lastY = date.getFullYear() - 1;
 
-    const current_year = donations.filter((d: DonationInterface) => new Date(d.donationDate).getFullYear() === currentY);
-    const last_year = donations.filter((d: DonationInterface) => new Date(d.donationDate).getFullYear() === lastY);
+    const current_year = donations.filter((d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear() === currentY);
+    const last_year = donations.filter((d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear() === lastY);
     const customHeaders = [
       { label: "amount", key: "amount" },
       { label: "donationDate", key: "donationDate" },
@@ -202,7 +202,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       rows.push(
         <TableRow key={i} sx={{ opacity: isPending ? 0.8 : 1 }}>
           {appName !== "B1App" && <TableCell><Link href={"/donations/" + d.batchId}>{d.batchId}</Link></TableCell>}
-          <TableCell>{DateHelper.prettyDate(new Date(d.donationDate))}</TableCell>
+          <TableCell>{DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}</TableCell>
           <TableCell>{d.method} - {d.methodDetails}</TableCell>
           <TableCell>{d.fund.name}{isPending && " (Pending)"}</TableCell>
           <TableCell sx={{ color: isPending ? "warning.main" : undefined }}>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>

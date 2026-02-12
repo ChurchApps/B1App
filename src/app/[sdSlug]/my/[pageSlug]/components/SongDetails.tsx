@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { SongDetailInterface } from "@/helpers";
+import { DateHelper } from "@churchapps/apphelper";
 import { SongDetailLinks } from "./SongDetailLinks";
 
 interface Props {
@@ -22,7 +23,7 @@ export const SongDetails = (props: Props) => {
 
     if (props.songDetail.artist) result.push(<TableRow><TableCell><strong>Artist</strong></TableCell><TableCell>{props.songDetail.artist}</TableCell></TableRow>);
     if (props.songDetail.releaseDate) {
-      const d = new Date(props.songDetail.releaseDate);
+      const d = DateHelper.toDate(props.songDetail.releaseDate);
       result.push(<TableRow key="releaseDate"><TableCell><strong>Release Date</strong></TableCell><TableCell>{d.toLocaleDateString()}</TableCell></TableRow>);
     }
     if (props.songDetail.album) result.push(<TableRow key="album"><TableCell><strong>Album</strong></TableCell><TableCell>{props.songDetail.album}</TableCell></TableRow>);
