@@ -1,10 +1,85 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ApiHelper, DateHelper, ArrayHelper } from "@churchapps/apphelper";
-import { type PlanInterface, type PlanItemInterface, type PositionInterface, type AssignmentInterface, type PersonInterface, PlanHelper } from "@churchapps/helpers";
+import { type PlanInterface, type PlanItemInterface, type PositionInterface, type AssignmentInterface, type PersonInterface, PlanHelper, LessonsContentProvider } from "@churchapps/helpers";
+import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-provider-helper";
 import { Grid } from "@mui/material";
 
 type Params = Promise<{ sdSlug: string; id: string }>;
+
+function findThumbnailRecursive(item: InstructionItem): string | undefined {
+  if (item.thumbnail) return item.thumbnail;
+  if (item.children) {
+    for (const child of item.children) {
+      const found = findThumbnailRecursive(child);
+      if (found) return found;
+    }
+  }
+  return undefined;
+}
+
+function instructionToPlanItem(item: InstructionItem, providerId?: string, providerPath?: string, pathIndices: number[] = []): PlanItemInterface {
+  let itemType = item.itemType || "item";
+  if (itemType === "section") itemType = "providerSection";
+  else if (itemType === "action") itemType = "providerPresentation";
+  else if (itemType === "file") itemType = "providerFile";
+
+  const contentPath = pathIndices.length > 0 ? pathIndices.join(".") : undefined;
+  const thumbnail = findThumbnailRecursive(item);
+
+  return {
+    itemType,
+    relatedId: item.relatedId,
+    label: item.label || "",
+    description: item.description,
+    seconds: item.seconds ?? 0,
+    providerId,
+    providerPath,
+    providerContentPath: contentPath,
+    thumbnailUrl: thumbnail,
+    children: item.children?.map((child, index) => instructionToPlanItem(child, providerId, providerPath, [...pathIndices, index]))
+  };
+}
+
+async function fetchPreviewItems(planData: PlanInterface): Promise<PlanItemInterface[]> {
+  try {
+    if (planData?.providerId) {
+      const provider: IProvider | null = getProvider(planData.providerId);
+      if (provider && planData.providerPlanId) {
+        let instructions: Instructions | null = null;
+
+        if (!provider.requiresAuth && provider.capabilities.instructions && provider.getInstructions) {
+          instructions = await provider.getInstructions(planData.providerPlanId);
+        }
+
+        if (!instructions) {
+          try {
+            instructions = await ApiHelper.post(
+              "/providerProxy/getInstructions",
+              { providerId: planData.providerId, path: planData.providerPlanId },
+              "DoingApi"
+            );
+          } catch { /* fall through */ }
+        }
+
+        if (instructions) {
+          return instructions.items.map((item, index) =>
+            instructionToPlanItem(item, planData.providerId, planData.providerPlanId, [index])
+          );
+        }
+      }
+    }
+
+    const lessonsProvider = new LessonsContentProvider();
+    if (lessonsProvider.hasAssociatedLesson(planData)) {
+      const response = await lessonsProvider.fetchVenuePlanItems(planData);
+      return response?.items || [];
+    }
+  } catch (error) {
+    console.error("Error loading preview items for print:", error);
+  }
+  return [];
+}
 
 export default function PrintPlanPage({ params }: { params: Params }) {
   const [planId, setPlanId] = useState<string>("");
@@ -12,7 +87,10 @@ export default function PrintPlanPage({ params }: { params: Params }) {
   const [positions, setPositions] = useState<PositionInterface[]>([]);
   const [assignments, setAssignments] = useState<AssignmentInterface[]>([]);
   const [people, setPeople] = useState<PersonInterface[]>([]);
-  const [planItems, setPlanItems] = useState<PlanItemInterface[]>([]);
+  const [displayItems, setDisplayItems] = useState<PlanItemInterface[]>([]);
+  const [isPreview, setIsPreview] = useState(false);
+  const [ready, setReady] = useState(false);
+  const printTriggered = useRef(false);
 
   let totalSeconds = 0;
 
@@ -25,33 +103,50 @@ export default function PrintPlanPage({ params }: { params: Params }) {
   const loadData = async () => {
     if (!planId) return;
 
-    ApiHelper.get("/plans/" + planId, "DoingApi").then((data: PlanInterface) => {
-      setPlan(data);
-    });
-    ApiHelper.get("/positions/plan/" + planId, "DoingApi").then((data: PositionInterface[]) => {
-      setPositions(data);
-    });
-    ApiHelper.get("/planItems/plan/" + planId, "DoingApi").then((d: PlanItemInterface[]) => {
-      setPlanItems(d);
-    });
+    const [planData, positionData, planItemData, assignmentData] = await Promise.all([
+      ApiHelper.get("/plans/" + planId, "DoingApi") as Promise<PlanInterface>,
+      ApiHelper.get("/positions/plan/" + planId, "DoingApi") as Promise<PositionInterface[]>,
+      ApiHelper.get("/planItems/plan/" + planId, "DoingApi") as Promise<PlanItemInterface[]>,
+      ApiHelper.get("/assignments/plan/" + planId, "DoingApi") as Promise<AssignmentInterface[]>
+    ]);
 
-    const d = await ApiHelper.get("/assignments/plan/" + planId, "DoingApi");
-    setAssignments(d);
-    const peopleIds = ArrayHelper.getUniqueValues(d, "personId");
+    setPlan(planData);
+    setPositions(positionData);
+    setAssignments(assignmentData);
+
+    const peopleIds = ArrayHelper.getUniqueValues(assignmentData, "personId");
     if (peopleIds.length > 0) {
-      ApiHelper.get("/people/ids?ids=" + peopleIds.join(","), "MembershipApi").then((data: PersonInterface[]) => {
-        setPeople(data);
-      });
+      const personData = await ApiHelper.get("/people/ids?ids=" + peopleIds.join(","), "MembershipApi") as PersonInterface[];
+      setPeople(personData);
     }
 
-    setTimeout(() => {
-      window.print();
-    }, 1000);
+    if (planItemData.length > 0) {
+      setDisplayItems(planItemData);
+      setReady(true);
+      return;
+    }
+
+    // Autopopulate from provider or lesson if no saved items
+    const previewItems = await fetchPreviewItems(planData);
+    if (previewItems.length > 0) {
+      setDisplayItems(previewItems);
+      setIsPreview(true);
+    }
+    setReady(true);
   };
 
   useEffect(() => {
     if (planId) loadData();
   }, [planId]);
+
+  useEffect(() => {
+    if (ready && !printTriggered.current) {
+      printTriggered.current = true;
+      setTimeout(() => {
+        window.print();
+      }, 500);
+    }
+  }, [ready]);
 
   const getPositionCategories = () => {
     const cats: string[] = [];
@@ -95,17 +190,25 @@ export default function PrintPlanPage({ params }: { params: Params }) {
   const getPlanItems = (items: PlanItemInterface[]) => {
     let result: React.ReactElement[] = [];
     items.forEach((pi) => {
-      if (pi.itemType !== "header") {
+      if (pi.itemType === "header") {
         result.push(
-          <tr key={pi.id}>
+          <tr key={pi.id || `header-${pi.label}`}>
+            <td colSpan={3} style={{ ...Styles.tableCell, backgroundColor: "#eee", fontWeight: "bold", paddingTop: 10 }}>
+              {pi.label}
+            </td>
+          </tr>
+        );
+      } else {
+        result.push(
+          <tr key={pi.id || `item-${totalSeconds}`}>
             <td style={Styles.tableCell}>{PlanHelper.formatTime(totalSeconds)}</td>
             <td style={Styles.tableCell}>
-              <b>{pi.label}:</b> {pi.description}
+              <b>{pi.label}</b>{pi.description ? <>: {pi.description}</> : null}
             </td>
             <td style={{ ...Styles.tableCell, textAlign: "right" }}>{PlanHelper.formatTime(pi.seconds)}</td>
           </tr>
         );
-        totalSeconds += pi.seconds;
+        totalSeconds += pi.seconds || 0;
       }
       if (pi.children) result = result.concat(getPlanItems(pi.children));
     });
@@ -149,6 +252,11 @@ export default function PrintPlanPage({ params }: { params: Params }) {
         </Grid>
       </Grid>
       <div style={Styles.divider}>&nbsp;</div>
+      {isPreview && (
+        <div style={{ textAlign: "center", padding: "8px 0", color: "#666", fontSize: "0.9em", fontStyle: "italic" }}>
+          Preview from associated lesson
+        </div>
+      )}
       <Grid container>
         <Grid size={{ xs: 4 }} style={{ padding: 5 }}>
           <div style={{ border: "2px solid #000", textAlign: "left", padding: 10 }}>{getPositionCategories()}</div>
@@ -164,7 +272,7 @@ export default function PrintPlanPage({ params }: { params: Params }) {
                 </tr>
               </thead>
               <tbody>
-                {getPlanItems(planItems)}
+                {getPlanItems(displayItems)}
               </tbody>
             </table>
           </div>
