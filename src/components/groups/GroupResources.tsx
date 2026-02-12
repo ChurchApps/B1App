@@ -37,8 +37,7 @@ export const GroupResources: React.FC<Props> = (props) => {
 
   const loadData = () => {
     ApiHelper.get("/files/group/" + props.groupId, "ContentApi").then((d: FileInterface[]) =>
-      setFiles(d)
-    );
+      setFiles(d));
 
     ApiHelper.get("/links?category=groupLink", "ContentApi").then((data: LinkInterface[]) => {
       const result: LinkInterface[] = [];
@@ -101,7 +100,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   const fileRows = files?.map((file) => (
     <TableRow key={file.id}>
       <TableCell>
-        <Link href={file.contentPath} target="_blank">
+        <Link href={file.contentPath} target="_blank" data-testid={`resource-file-${file.id}-link`}>
           {file.fileName}
         </Link>
       </TableCell>
@@ -124,7 +123,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   const linkRows = links?.map((link) => (
     <TableRow key={link.id}>
       <TableCell>
-        <Link href={link.url} target="_blank">
+        <Link href={link.url} target="_blank" data-testid={`resource-link-${link.id}-link`}>
           {link.text}
         </Link>
       </TableCell>

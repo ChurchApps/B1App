@@ -6,7 +6,7 @@ import { DateHelper } from "@churchapps/apphelper";
 import { UniqueIdHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface, GroupServiceTimeInterface, SessionInterface } from "@churchapps/helpers";
-import { TextField, FormControl, Select, InputLabel, SelectChangeEvent, MenuItem } from "@mui/material"
+import { TextField, FormControl, Select, InputLabel, SelectChangeEvent, MenuItem } from "@mui/material";
 
 interface Props { group: GroupInterface, updatedFunction: (session: SessionInterface) => void, sidebarVisibilityFunction: (name: string, visible: boolean) => void, }
 
@@ -16,8 +16,8 @@ export const SessionAdd: React.FC<Props> = (props) => {
   const [groupServiceTimes, setGroupServiceTimes] = React.useState<GroupServiceTimeInterface[]>([]);
   const [serviceTimeId, setServiceTimeId] = React.useState("");
 
-  const handleCancel = () => { props.sidebarVisibilityFunction("addPerson", true); }
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } }
+  const handleCancel = () => { props.sidebarVisibilityFunction("addPerson", true); };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSave(); } };
   const loadData = React.useCallback(() => {
     ApiHelper.get("/groupservicetimes?groupId=" + props.group.id, "AttendanceApi").then((data: GroupServiceTimeInterface[]) => {
       setGroupServiceTimes(data);
@@ -27,39 +27,39 @@ export const SessionAdd: React.FC<Props> = (props) => {
 
   const handleSave = () => {
     if (validate()) {
-      let s = { groupId: props.group.id, sessionDate: sessionDate } as SessionInterface
+      const s = { groupId: props.group.id, sessionDate: sessionDate } as SessionInterface;
       if (!UniqueIdHelper.isMissing(serviceTimeId)) s.serviceTimeId = serviceTimeId;
       ApiHelper.post("/sessions", [s], "AttendanceApi").then(() => {
         props.updatedFunction(s);
         setSessionDate(new Date());
       });
     }
-  }
+  };
 
   const validate = () => {
-    let errors: string[] = [];
+    const errors: string[] = [];
     if (sessionDate === null || sessionDate < new Date(2000, 1, 1)) errors.push(Locale.label("Invalid Date"));
     setErrors(errors);
     return errors.length === 0;
-  }
+  };
 
   const getServiceTimes = () => {
-    if (groupServiceTimes.length === 0) return <></>
+    if (groupServiceTimes.length === 0) return <></>;
     else {
-      let options = [];
+      const options = [];
       for (let i = 0; i < groupServiceTimes.length; i++) {
-        let gst = groupServiceTimes[i];
+        const gst = groupServiceTimes[i];
         options.push(<MenuItem key={i} value={gst.serviceTimeId}>{gst.serviceTime.name}</MenuItem>);
       }
 
       return (<FormControl>
         <InputLabel id="service-time">{Locale.label("Service Time")}</InputLabel>
-        <Select label={Locale.label("Service Time")} labelId="service-time" value={serviceTimeId} onChange={(e: SelectChangeEvent<string>) => { setServiceTimeId(e.target.value) }} onKeyDown={handleKeyDown}>
+        <Select label={Locale.label("Service Time")} labelId="service-time" value={serviceTimeId} onChange={(e: SelectChangeEvent<string>) => { setServiceTimeId(e.target.value); }} onKeyDown={handleKeyDown} data-testid="session-service-time-select">
           {options}
         </Select>
       </FormControl>);
     }
-  }
+  };
 
   React.useEffect(() => { if (props.group.id !== undefined) loadData(); }, [props.group, loadData]);
 
@@ -68,9 +68,9 @@ export const SessionAdd: React.FC<Props> = (props) => {
       <ErrorMessages errors={errors} />
       {getServiceTimes()}
 
-      <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} label={Locale.label("Session Date")} value={DateHelper.formatHtml5Date(sessionDate)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionDate(new Date(e.currentTarget.value))} onKeyDown={handleKeyDown} />
+      <TextField fullWidth type="date" InputLabelProps={{ shrink: true }} label={Locale.label("Session Date")} value={DateHelper.formatHtml5Date(sessionDate)} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSessionDate(DateHelper.toDate(e.currentTarget.value))} onKeyDown={handleKeyDown} data-testid="session-date-input" />
 
     </InputBox>
 
   );
-}
+};

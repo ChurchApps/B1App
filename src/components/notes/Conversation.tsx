@@ -29,144 +29,145 @@ export function Conversation(props: Props) {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    loadNotes(1)
-  }, [props.conversation?.id, props.conversation?.groupId, props.context?.person?.id, props.pageSize])
+    loadNotes(1);
+  }, [props.conversation?.id, props.conversation?.groupId, props.context?.person?.id, props.pageSize]);
 
 interface ConversationResponse {
   messages: MessageInterface[];
 }
 
-  const loadNotes = async (nextPage: number = 1) => {
-    try {
-      if (!props?.conversation?.groupId) return;
+const loadNotes = async (nextPage: number = 1) => {
+  try {
+    if (!props?.conversation?.groupId) return;
 
-      setLoading(true);
-      const limit = props.pageSize || 10;
+    setLoading(true);
+    const limit = props.pageSize || 10;
 
-      const response: ConversationResponse[] = await ApiHelper.get(
-        `/conversations/messages/group/${props.conversation.groupId}?page=${nextPage}&limit=${limit}`,
-        "MessagingApi"
+    const response: ConversationResponse[] = await ApiHelper.get(
+      `/conversations/messages/group/${props.conversation.groupId}?page=${nextPage}&limit=${limit}`,
+      "MessagingApi"
+    );
+
+    const messages = response[0]?.messages;
+
+    if (messages.length > 0) {
+      const peopleIds = ArrayHelper.getIds(messages, "personId");
+      const people = await ApiHelper.get(
+        "/people/ids?ids=" + peopleIds.join(","),
+        "MembershipApi"
       );
 
-      const messages = response[0]?.messages;
+      messages.forEach((m: MessageInterface) => {
+        m.person = ArrayHelper.getOne(people, "id", m.personId);
+      });
 
-      if (messages.length > 0) {
-        const peopleIds = ArrayHelper.getIds(messages, "personId");
-        const people = await ApiHelper.get(
-          "/people/ids?ids=" + peopleIds.join(","),
-          "MembershipApi"
-        );
-
-        messages.forEach((m: MessageInterface) => {
-          m.person = ArrayHelper.getOne(people, "id", m.personId);
-        });
-
-        setConversations(prev => {
-          const newMessages = nextPage === 1
-            ? messages
-            : [...(prev?.messages || []), ...messages];
-          return { ...prev, messages: newMessages };
-        });
-        setPage(nextPage);
-        setHasMore(messages.length === limit);
-      } else {
-        setHasMore(false);
-      }
-
-      setEditMessageId(null);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
+      setConversations(prev => {
+        const newMessages = nextPage === 1
+          ? messages
+          : [...(prev?.messages || []), ...messages];
+        return { ...prev, messages: newMessages };
+      });
+      setPage(nextPage);
+      setHasMore(messages.length === limit);
+    } else {
+      setHasMore(false);
     }
-  };
+
+    setEditMessageId(null);
+    setLoading(false);
+  } catch (error) {
+    setLoading(false);
+  }
+};
 
 
-  if (conversations === null) return null;
+if (conversations === null) return null;
 
-  const getNotes = () => {
-    if (!conversations?.messages || conversations.messages.length === 0) return null;
+const getNotes = () => {
+  if (!conversations?.messages || conversations.messages.length === 0) return null;
 
-    const notesToShow = showAll || !props.noWrapper
-      ? conversations.messages
-      : conversations.messages.slice(0, 2);
+  const notesToShow = showAll || !props.noWrapper
+    ? conversations.messages
+    : conversations.messages.slice(0, 2);
 
-    return notesToShow.map((message, index) => {
-      if (!message.content) return null;
+  return notesToShow.map((message, index) => {
+    if (!message.content) return null;
 
-      const isEditing = message.id === editMessageId;
+    const isEditing = message.id === editMessageId;
 
-      const diffMinutes = moment().diff(moment(message.timeSent), "minutes");
-      const canEdit = diffMinutes <= 45 && message.personId === props.context.person.id;
+    const diffMinutes = moment().diff(moment(message.timeSent), "minutes");
+    const canEdit = diffMinutes <= 45 && message.personId === props.context.person.id;
 
-      return (
-        <Note
-          key={message.id || index}
-          context={props.context}
-          message={message}
-          isEditing={isEditing}
-          hideEdit={!canEdit}
-          showEditNote={(id: string) => {
-            setEditMessageId(id);
-            if (!props.noWrapper) {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-          }}
-        />
-      );
-    });
-  };
+    return (
+      <Note
+        key={message.id || index}
+        context={props.context}
+        message={message}
+        isEditing={isEditing}
+        hideEdit={!canEdit}
+        showEditNote={(id: string) => {
+          setEditMessageId(id);
+          if (!props.noWrapper) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        }}
+      />
+    );
+  });
+};
 
-  const result = (
-    <>
-      {props.showCommentCount && (
-        <div className="commentCount">
-          <div>
-            {conversations.postCount === 1
-              ? "1 " + Locale.label("notes.comment")
-              : conversations.postCount + " " + Locale.label("notes.comments")}
-          </div>
-          {conversations.postCount > conversations.messages.length && (
-            <a
-              href="#"
-              onClick={e => {
-                e.preventDefault();
-                loadNotes(page + 1);
-              }}
-            >
-              {Locale.label("notes.viewAll")} {conversations.postCount}{" "}
-              {Locale.label("notes.comments")}
-            </a>
-          )}
+const result = (
+  <>
+    {props.showCommentCount && (
+      <div className="commentCount">
+        <div>
+          {conversations.postCount === 1
+            ? "1 " + Locale.label("notes.comment")
+            : conversations.postCount + " " + Locale.label("notes.comments")}
         </div>
-      )}
-      <div className="messages">
-        {canPost && (
-          <AddNote
-            context={props.context}
-            conversationId={props?.conversation?.id}
-            onUpdate={() => loadNotes(1)}
-            onCancel={() => setEditMessageId(null)}
-            createConversation={async () => props?.conversation?.id}
-            messageId={editMessageId}
-          />
+        {conversations.postCount > conversations.messages.length && (
+          <a
+            href="#"
+            onClick={e => {
+              e.preventDefault();
+              loadNotes(page + 1);
+            }}
+            data-testid="conversation-view-all-link"
+          >
+            {Locale.label("notes.viewAll")} {conversations.postCount}{" "}
+            {Locale.label("notes.comments")}
+          </a>
         )}
-        <div className="messages-wrapper">
-          {getNotes()}
-        </div>
-
-        {hasMore && !loading && (showAll || !props.noWrapper) && (
-          <Button onClick={() => loadNotes(page + 1)}>Load More</Button>
-        )}
-
-        {!showAll && props.noWrapper && (
-          <Button onClick={() => setShowAll(true)}>Show All</Button>
-        )}
-
-        {loading && <Button disabled>Loading...</Button>}
       </div>
-    </>
-  );
+    )}
+    <div className="messages">
+      {canPost && (
+        <AddNote
+          context={props.context}
+          conversationId={props?.conversation?.id}
+          onUpdate={() => loadNotes(1)}
+          onCancel={() => setEditMessageId(null)}
+          createConversation={async () => props?.conversation?.id}
+          messageId={editMessageId}
+        />
+      )}
+      <div className="messages-wrapper">
+        {getNotes()}
+      </div>
 
-  if (props.noWrapper) return result;
-  return <Paper sx={{ padding: 1, marginBottom: 2 }}>{result}</Paper>;
+      {hasMore && !loading && (showAll || !props.noWrapper) && (
+        <Button onClick={() => loadNotes(page + 1)} data-testid="conversation-load-more-button">Load More</Button>
+      )}
+
+      {!showAll && props.noWrapper && (
+        <Button onClick={() => setShowAll(true)} data-testid="conversation-show-all-button">Show All</Button>
+      )}
+
+      {loading && <Button disabled>Loading...</Button>}
+    </div>
+  </>
+);
+
+if (props.noWrapper) return result;
+return <Paper sx={{ padding: 1, marginBottom: 2 }}>{result}</Paper>;
 }

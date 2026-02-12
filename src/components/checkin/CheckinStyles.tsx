@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { styled } from "@mui/material/styles";
 import { Box, Card as MuiCard } from "@mui/material";
 
@@ -11,7 +11,7 @@ export const HeaderIconContainer = styled(Box)({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  margin: "0 auto 16px",
+  margin: "0 auto 16px"
 });
 
 // Header section wrapper
@@ -21,7 +21,7 @@ export const HeaderSection = styled(Box)({
   textAlign: "center",
   borderRadius: 8,
   marginBottom: 16,
-  boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+  boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
 });
 
 // Standard card for checkin items
@@ -29,7 +29,7 @@ export const CheckinCard = styled(MuiCard)({
   borderRadius: 12,
   marginBottom: 12,
   boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-  overflow: "hidden",
+  overflow: "hidden"
 });
 
 // Small circular icon container (for list items)
@@ -41,7 +41,7 @@ export const IconCircle = styled(Box)(({ size = 56 }: { size?: number }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  flexShrink: 0,
+  flexShrink: 0
 }));
 
 // Small white icon container (for nested items)
@@ -53,7 +53,7 @@ export const SmallIconCircle = styled(Box)({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  marginRight: 12,
+  marginRight: 12
 });
 
 // Success icon container (green background)
@@ -65,7 +65,7 @@ export const SuccessIconContainer = styled(Box)({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  margin: "0 auto 24px",
+  margin: "0 auto 24px"
 });
 
 // Empty state card
@@ -73,7 +73,7 @@ export const EmptyStateCard = styled(MuiCard)({
   borderRadius: 12,
   padding: 32,
   textAlign: "center",
-  boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+  boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
 });
 
 // Service time item container (for household member expanded view)
@@ -83,7 +83,7 @@ export const ServiceTimeItem = styled(Box)({
   justifyContent: "space-between",
   padding: 16,
   backgroundColor: "#F6F6F8",
-  borderBottom: "1px solid #F0F0F0",
+  borderBottom: "1px solid #F0F0F0"
 });
 
 // Colors
@@ -96,5 +96,5 @@ export const colors = {
   textSecondary: "#9E9E9E",
   backgroundLight: "#F6F6F8",
   border: "#F0F0F0",
-  white: "#FFFFFF",
+  white: "#FFFFFF"
 };

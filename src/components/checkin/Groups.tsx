@@ -20,11 +20,10 @@ export function Groups({ selectedHandler }: Props) {
 
   const buildTree = () => {
     let category = "";
-    let gt: GroupCategoryInterface[] = [];
+    const gt: GroupCategoryInterface[] = [];
 
     const sortedGroups = CheckinHelper.selectedServiceTime?.groups?.sort((a, b) =>
-      ((a?.categoryName || "") > (b?.categoryName || "")) ? 1 : -1
-    );
+      ((a?.categoryName || "") > (b?.categoryName || "")) ? 1 : -1);
 
     sortedGroups?.forEach((g) => {
       if (!g) return;
@@ -36,7 +35,7 @@ export function Groups({ selectedHandler }: Props) {
   };
 
   const getCategories = () => {
-    let result: React.ReactElement[] = [];
+    const result: React.ReactElement[] = [];
     groupTree.forEach((c) => {
       result.push(getCategory(c));
     });
@@ -44,7 +43,7 @@ export function Groups({ selectedHandler }: Props) {
   };
 
   const getGroups = () => {
-    let result: React.ReactElement[] = [];
+    const result: React.ReactElement[] = [];
     selectedCategory?.items?.forEach((g) => {
       result.push(getGroup(g));
     });
@@ -56,9 +55,7 @@ export function Groups({ selectedHandler }: Props) {
       key={g.id}
       sx={{
         borderBottom: `1px solid ${colors.border}`,
-        "&:last-child": {
-          borderBottom: "none",
-        },
+        "&:last-child": { borderBottom: "none" }
       }}
     >
       <CardActionArea
@@ -138,15 +135,15 @@ export function Groups({ selectedHandler }: Props) {
         )
         : (
           <EmptyStateCard>
-          <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>group_off</Icon>
-          <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
+            <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>group_off</Icon>
+            <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
             No Groups Available
-          </Typography>
-          <Typography variant="body2" sx={{ color: colors.textSecondary }}>
+            </Typography>
+            <Typography variant="body2" sx={{ color: colors.textSecondary }}>
             There are no groups configured for this service
-          </Typography>
-        </EmptyStateCard>
-      )}
+            </Typography>
+          </EmptyStateCard>
+        )}
 
       {/* Bottom Action */}
       <Box sx={{ marginTop: 3 }}>
@@ -164,7 +161,7 @@ export function Groups({ selectedHandler }: Props) {
             color: colors.textSecondary,
             borderRadius: 3,
             height: 48,
-            fontWeight: 600,
+            fontWeight: 600
           }}
         >
           No Group

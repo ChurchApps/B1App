@@ -26,7 +26,7 @@ export function AttendanceTab(props: Props) {
       setHidden("none");
     }
     return;
-  }
+  };
 
   return <>
     <h2>Attendance</h2>
@@ -34,5 +34,5 @@ export function AttendanceTab(props: Props) {
       <Grid size={{ md: 7 }}><GroupSessions group={props.group} sidebarVisibilityFunction={hideAdd} addedSession={addedSession} addedPerson={addedPerson} /></Grid>
       <Grid size={{ md: 5 }} style={{ display: showing }}><MembersAdd group={props.group} addFunction={setAddedPerson} /></Grid>
       <Grid size={{ md: 5 }} style={{ display: hidden }}><SessionAdd group={props.group} updatedFunction={setAddedSession} sidebarVisibilityFunction={hideAdd} /></Grid></Grid>
-  </>
+  </>;
 }

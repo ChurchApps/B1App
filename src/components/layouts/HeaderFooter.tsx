@@ -19,11 +19,13 @@ type Props = {
 
 export function HeaderFooter(props: Props) {
   const getDescription = () => {
-    if (props.metaDescription) return (<>
-      <meta name="description" content={props.metaDescription}></meta>
-      <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
-    </>);
-  }
+    if (props.metaDescription) {
+      return (<>
+        <meta name="description" content={props.metaDescription}></meta>
+        <meta property="og:description" content={props.ogDescription || props.metaDescription}></meta>
+      </>);
+    }
+  };
 
   const footerSections = ArrayHelper.getAll(props.pageData.sections, "zone", "siteFooter");
 

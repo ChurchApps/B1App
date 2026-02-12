@@ -64,7 +64,7 @@ export class StreamChatManager {
       const { firstName, lastName } = UserHelper.user;
       chatUser.firstName = firstName || "Anonymous";
       chatUser.lastName = lastName || "";
-      chatUser.isHost = UserHelper.checkAccess(Permissions.contentApi.chat.host)
+      chatUser.isHost = UserHelper.checkAccess(Permissions.contentApi.chat.host);
       ChatHelper.current.user = chatUser;
       ChatHelper.onChange();
     }

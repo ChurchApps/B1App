@@ -9,28 +9,40 @@ interface Props {
   lessonItems: PlanItemInterface[];
   venueName: string;
   externalRef?: ExternalVenueRefInterface | null;
+  associatedProviderId?: string;
+  associatedVenueId?: string;
+  ministryId?: string;
 }
 
 export const LessonPreview: React.FC<Props> = (props) => {
-  const [actionId, setActionId] = useState<string | null>(null);
-  const [actionName, setActionName] = useState<string>("");
-  const [lessonSectionId, setLessonSectionId] = useState<string | null>(null);
-  const [sectionName, setSectionName] = useState<string>("");
+  const [actionItem, setActionItem] = useState<PlanItemInterface | null>(null);
+  const [sectionItem, setSectionItem] = useState<PlanItemInterface | null>(null);
 
   const handleActionClick = (e: React.MouseEvent, item: PlanItemInterface) => {
     e.preventDefault();
-    if (item.relatedId) {
-      setActionId(item.relatedId);
-      setActionName(item.label || "");
+    if (item.relatedId || (item.providerId && item.providerPath && item.providerContentPath)) {
+      setActionItem(item);
     }
   };
 
   const handleSectionClick = (e: React.MouseEvent, item: PlanItemInterface) => {
     e.preventDefault();
-    if (item.relatedId) {
-      setLessonSectionId(item.relatedId);
-      setSectionName(item.label || "");
+    if (item.relatedId || (item.providerId && item.providerPath && item.providerContentPath)) {
+      setSectionItem(item);
     }
+  };
+
+  const isClickableAction = (item: PlanItemInterface) => {
+    const actionTypes = ["lessonAction", "providerPresentation", "action"];
+    const fileTypes = ["lessonAddOn", "providerFile", "addon", "file"];
+    return (actionTypes.includes(item.itemType) || fileTypes.includes(item.itemType))
+      && (item.relatedId || (item.providerId && item.providerPath && item.providerContentPath));
+  };
+
+  const isClickableSection = (item: PlanItemInterface) => {
+    const sectionTypes = ["lessonSection", "providerSection", "section", "item"];
+    return sectionTypes.includes(item.itemType)
+      && (item.relatedId || (item.providerId && item.providerPath && item.providerContentPath));
   };
 
   const renderPreviewItem = (item: PlanItemInterface, isChild: boolean = false) => {
@@ -46,7 +58,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
               justifyContent: "space-between",
               p: 1,
               backgroundColor: "grey.100",
-              borderRadius: 1,
+              borderRadius: 1
             }}
           >
             <Typography sx={{ fontWeight: 600 }}>{item.label}</Typography>
@@ -64,8 +76,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
       );
     }
 
-    const isAction = item.itemType === "lessonAction" && item.relatedId;
-    const isLessonSection = item.itemType === "item" && item.relatedId;
+    const clickable = isClickableAction(item) || isClickableSection(item);
 
     return (
       <Box
@@ -78,36 +89,37 @@ export const LessonPreview: React.FC<Props> = (props) => {
           p: 1,
           pl: isChild ? 3 : 1,
           borderBottom: "1px solid",
-          borderColor: "grey.200",
+          borderColor: "grey.200"
         }}
       >
-        <Box>
-          {isAction ? (
-            <Link
-              href="#"
-              onClick={(e) => handleActionClick(e, item)}
-              variant="body2"
-              sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-            >
-              {item.label}
-            </Link>
-          ) : isLessonSection ? (
-            <Link
-              href="#"
-              onClick={(e) => handleSectionClick(e, item)}
-              variant="body2"
-              sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-            >
-              {item.label}
-            </Link>
-          ) : (
-            <Typography variant="body2">{item.label}</Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
+          {item.thumbnailUrl && (
+            <Box
+              component="img"
+              src={item.thumbnailUrl}
+              alt=""
+              sx={{ width: 40, height: 24, objectFit: "cover", borderRadius: 0.5, flexShrink: 0 }}
+            />
           )}
-          {item.description && (
-            <Typography variant="caption" sx={{ color: "grey.600", fontStyle: "italic", display: "block" }}>
-              {item.description}
-            </Typography>
-          )}
+          <Box>
+            {clickable ? (
+              <Link
+                href="#"
+                onClick={(e) => isClickableAction(item) ? handleActionClick(e, item) : handleSectionClick(e, item)}
+                variant="body2"
+                sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <Typography variant="body2">{item.label}</Typography>
+            )}
+            {item.description && (
+              <Typography variant="caption" sx={{ color: "grey.600", fontStyle: "italic", display: "block" }}>
+                {item.description}
+              </Typography>
+            )}
+          </Box>
         </Box>
         {item.seconds > 0 && (
           <Stack direction="row" alignItems="center" spacing={0.5}>
@@ -124,25 +136,41 @@ export const LessonPreview: React.FC<Props> = (props) => {
   return (
     <>
       <Box sx={{ position: "relative" }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-          }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             Lesson: {props.venueName}
           </Typography>
         </Box>
-
         <Box>
           {props.lessonItems.map((item) => renderPreviewItem(item))}
         </Box>
       </Box>
-      {actionId && <ActionDialog actionId={actionId} actionName={actionName} externalRef={props.externalRef} onClose={() => setActionId(null)} />}
-      {lessonSectionId && <LessonDialog sectionId={lessonSectionId} sectionName={sectionName} externalRef={props.externalRef} onClose={() => setLessonSectionId(null)} />}
+      {actionItem && (
+        <ActionDialog
+          actionId={actionItem.relatedId || actionItem.providerContentPath || actionItem.id}
+          contentName={actionItem.label}
+          externalRef={props.externalRef}
+          onClose={() => setActionItem(null)}
+          providerId={actionItem.providerId || props.associatedProviderId}
+          downloadUrl={actionItem.link}
+          providerPath={actionItem.providerPath}
+          providerContentPath={actionItem.providerContentPath}
+          ministryId={props.ministryId}
+        />
+      )}
+      {sectionItem && (
+        <LessonDialog
+          sectionId={sectionItem.relatedId || sectionItem.providerContentPath || sectionItem.id}
+          sectionName={sectionItem.label}
+          externalRef={props.externalRef}
+          onClose={() => setSectionItem(null)}
+          providerId={sectionItem.providerId}
+          downloadUrl={sectionItem.link}
+          providerPath={sectionItem.providerPath}
+          providerContentPath={sectionItem.providerContentPath}
+          ministryId={props.ministryId}
+        />
+      )}
     </>
   );
 };

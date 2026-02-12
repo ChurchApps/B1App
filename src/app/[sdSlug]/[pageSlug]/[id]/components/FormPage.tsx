@@ -81,16 +81,16 @@ export function FormPage(props: Props) {
 
   const getForm = () => {
     if (isLoading) return <Loading />;
-    if (early)
-      return <h3 className="text-center">This form isn't available until {DateHelper.prettyDateTime(early)}</h3>;
+    if (early) return <h3 className="text-center">This form isn't available until {DateHelper.prettyDateTime(early)}</h3>;
     if (late) return <h3 className="text-center">This form closed on {DateHelper.prettyDateTime(late)}</h3>;
     if (!restrictedForm || PersonHelper?.person?.id) return showForm();
-    if (!PersonHelper?.person?.id)
+    if (!PersonHelper?.person?.id) {
       return (
         <h3 className="text-center">
-          <Link href={"/login?returnUrl=/forms/" + props.formId}>Login</Link> to view this form.
+          <Link href={"/login?returnUrl=/forms/" + props.formId} data-testid="form-login-link">Login</Link> to view this form.
         </h3>
       );
+    }
     return <></>;
   };
 

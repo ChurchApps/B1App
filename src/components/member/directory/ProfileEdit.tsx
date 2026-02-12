@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ApiHelper, ArrayHelper, DateHelper, ImageEditor, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, ImageEditor, UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { Button, Grid, TextField, Box, Typography, Alert } from "@mui/material";
 import { PersonHelper } from "../../../helpers";
@@ -33,7 +33,7 @@ const fieldDefinitions = [
   { key: "contactInfo.zip", label: "Zip" },
   { key: "contactInfo.homePhone", label: "Home Phone" },
   { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
-  { key: "contactInfo.workPhone", label: "Work Phone" },
+  { key: "contactInfo.workPhone", label: "Work Phone" }
 ];
 
 export const ProfileEdit: React.FC<Props> = (props) => {
@@ -60,7 +60,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       value = value?.[part];
     }
     if (key === "birthDate" && value) {
-      return DateHelper.formatHtml5Date(new Date(value));
+      return DateHelper.formatHtml5Date(value);
     }
     return value || "";
   };
@@ -114,7 +114,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         changes.push({
           field: key,
           label: fieldDef.label,
-          value: key === "photo" ? person.photo || "" : getFieldValue(person, key),
+          value: key === "photo" ? person.photo || "" : getFieldValue(person, key)
         });
       }
     });
@@ -123,7 +123,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       changes.push({
         field: "familyMember",
         label: "Add Family Member",
-        value: name,
+        value: name
       });
     });
 
@@ -146,7 +146,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       createdByLabel: PersonHelper.person?.name?.display || "",
       title: `Profile changes for ${props.person?.name?.display}`,
       status: "Open",
-      data: JSON.stringify(changes),
+      data: JSON.stringify(changes)
     };
 
     try {
@@ -233,6 +233,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
                 label="First Name"
                 value={getFieldValue(person, "name.first")}
                 onChange={(e) => handleChange("name.first", e.target.value)}
+                data-testid="profile-first-name-input"
               />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
@@ -241,6 +242,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
                 label="Middle Name"
                 value={getFieldValue(person, "name.middle")}
                 onChange={(e) => handleChange("name.middle", e.target.value)}
+                data-testid="profile-middle-name-input"
               />
             </Grid>
             <Grid size={{ xs: 12, md: 4 }}>
@@ -249,6 +251,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
                 label="Last Name"
                 value={getFieldValue(person, "name.last")}
                 onChange={(e) => handleChange("name.last", e.target.value)}
+                data-testid="profile-last-name-input"
               />
             </Grid>
           </Grid>
@@ -267,6 +270,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             type="email"
             value={getFieldValue(person, "contactInfo.email")}
             onChange={(e) => handleChange("contactInfo.email", e.target.value)}
+            data-testid="profile-email-input"
           />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
@@ -277,6 +281,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             InputLabelProps={{ shrink: true }}
             value={getFieldValue(person, "birthDate")}
             onChange={(e) => handleChange("birthDate", e.target.value)}
+            data-testid="profile-birth-date-input"
           />
         </Grid>
       </Grid>
@@ -294,6 +299,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             value={getFieldValue(person, "contactInfo.address1")}
             onChange={(e) => handleChange("contactInfo.address1", e.target.value)}
             sx={{ mb: 2 }}
+            data-testid="profile-address1-input"
           />
           <TextField
             fullWidth
@@ -301,6 +307,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             value={getFieldValue(person, "contactInfo.address2")}
             onChange={(e) => handleChange("contactInfo.address2", e.target.value)}
             sx={{ mb: 2 }}
+            data-testid="profile-address2-input"
           />
           <Grid container spacing={2}>
             <Grid size={{ xs: 6 }}>
@@ -309,6 +316,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
                 label="City"
                 value={getFieldValue(person, "contactInfo.city")}
                 onChange={(e) => handleChange("contactInfo.city", e.target.value)}
+                data-testid="profile-city-input"
               />
             </Grid>
             <Grid size={{ xs: 3 }}>
@@ -317,6 +325,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
                 label="State"
                 value={getFieldValue(person, "contactInfo.state")}
                 onChange={(e) => handleChange("contactInfo.state", e.target.value)}
+                data-testid="profile-state-input"
               />
             </Grid>
             <Grid size={{ xs: 3 }}>
@@ -325,6 +334,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
                 label="Zip"
                 value={getFieldValue(person, "contactInfo.zip")}
                 onChange={(e) => handleChange("contactInfo.zip", e.target.value)}
+                data-testid="profile-zip-input"
               />
             </Grid>
           </Grid>
@@ -341,6 +351,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             value={getFieldValue(person, "contactInfo.mobilePhone")}
             onChange={(e) => handleChange("contactInfo.mobilePhone", e.target.value)}
             sx={{ mb: 2 }}
+            data-testid="profile-mobile-phone-input"
           />
           <TextField
             fullWidth
@@ -348,12 +359,14 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             value={getFieldValue(person, "contactInfo.homePhone")}
             onChange={(e) => handleChange("contactInfo.homePhone", e.target.value)}
             sx={{ mb: 2 }}
+            data-testid="profile-home-phone-input"
           />
           <TextField
             fullWidth
             label="Work Phone"
             value={getFieldValue(person, "contactInfo.workPhone")}
             onChange={(e) => handleChange("contactInfo.workPhone", e.target.value)}
+            data-testid="profile-work-phone-input"
           />
         </Grid>
       </Grid>
@@ -367,7 +380,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         )}
         <Box sx={{ display: "flex", gap: 1 }}>
           {props.onCancel && (
-            <Button variant="outlined" onClick={props.onCancel}>
+            <Button variant="outlined" onClick={props.onCancel} data-testid="profile-cancel-button">
               Cancel
             </Button>
           )}
@@ -376,6 +389,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             color="primary"
             onClick={handleSubmit}
             disabled={submitting || !hasChanges}
+            data-testid="profile-submit-button"
           >
             {submitting ? "Submitting..." : "Submit for Approval"}
           </Button>

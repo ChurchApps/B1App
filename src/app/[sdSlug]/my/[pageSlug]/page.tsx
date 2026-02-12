@@ -16,15 +16,15 @@ import { LessonsPage } from "./components/LessonsPage";
 import { DirectoryPage } from "./components/DirectoryPage";
 import { DonationsPage } from "./components/DonationPage";
 
-type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
+type PageParams = Promise<{ sdSlug: string; pageSlug: string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug, pageSlug);
-}
+};
 
-export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
-  const { sdSlug, pageSlug } =  await params;
+export async function generateMetadata({ params }: {params:PageParams}): Promise<Metadata> {
+  const { sdSlug, pageSlug } = await params;
   const props = await loadSharedData(sdSlug, pageSlug);
 
   const title = "My....";
@@ -33,8 +33,8 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  return { config }
-}
+  return { config };
+};
 
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
@@ -42,18 +42,17 @@ export default async function Home({ params }: { params: PageParams }) {
   const { config } = await loadSharedData(sdSlug, pageSlug);
 
   const getPageContent = () => {
-    switch (pageSlug)
-    {
+    switch (pageSlug) {
       case "checkin": return <CheckinPage />;
       case "plans": return <PlansPage />;
       case "groups": return <GroupsPage />;
       case "lessons": return <LessonsPage />;
-      case "community": return <DirectoryPage />
-      case "donate": return <DonationsPage config={config} />
+      case "community": return <DirectoryPage />;
+      case "donate": return <DonationsPage config={config} />;
       default: return <TimelinePage />;
       //default: return notFound();
     }
-  }
+  };
 
   return (
     <>

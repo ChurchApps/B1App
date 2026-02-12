@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { Container, TextField } from "@mui/material";
 import { useState } from "react";

@@ -15,20 +15,19 @@ import { notFound } from "next/navigation";
 import { SermonsPage } from "./components/SermonsPage";
 import { DonatePage } from "./components/DonatePage";
 
-type PageParams = Promise<{ sdSlug: string;  pageSlug: string; }>
+type PageParams = Promise<{ sdSlug: string; pageSlug: string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug, pageSlug);
-}
+};
 
-export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
-  const { sdSlug, pageSlug } =  await params;
+export async function generateMetadata({ params }: {params:PageParams}): Promise<Metadata> {
+  const { sdSlug, pageSlug } = await params;
   const props = await loadSharedData(sdSlug, pageSlug);
   let title = props.pageData.title;
   if (!title) {
-    switch (pageSlug)
-    {
+    switch (pageSlug) {
       case "votd": title = "Verse of the Day"; break;
       case "bible": title = "Bible"; break;
     }
@@ -39,8 +38,8 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
 const loadData = async (sdSlug:string, pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
   const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?url=" + pageSlug, "ContentApi");
-  return { pageData, config }
-}
+  return { pageData, config };
+};
 
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
@@ -48,11 +47,10 @@ export default async function Home({ params }: { params: PageParams }) {
   const { pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
   const getPageContent = () => {
-    let result = <PageLayout config={config} pageData={pageData} />
+    let result = <PageLayout config={config} pageData={pageData} />;
 
     if (!pageData?.url) {
-      switch (pageSlug)
-      {
+      switch (pageSlug) {
         case "votd": result = wrapDefaultPage(<VotdPage />); break;
         case "bible": result = wrapDefaultPage(<BiblePage />); break;
         case "donate": result = wrapDefaultPage(<DonatePage config={config} />); break;
@@ -62,11 +60,11 @@ export default async function Home({ params }: { params: PageParams }) {
       }
     }
     return result;
-  }
+  };
 
   const wrapDefaultPage = (content: React.ReactElement) => <DefaultPageWrapper config={config}>
     {content}
-  </DefaultPageWrapper>
+  </DefaultPageWrapper>;
 
   return (
     <>

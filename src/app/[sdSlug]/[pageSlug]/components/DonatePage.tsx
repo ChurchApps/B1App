@@ -3,7 +3,7 @@
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { NonAuthDonationWrapper } from "@churchapps/apphelper-website";
 import { UserHelper } from "@churchapps/apphelper";
-import { Button, Container,  Grid,  Icon,  Link,  Typography } from "@mui/material";
+import { Button, Container, Grid, Icon, Link, Typography } from "@mui/material";
 import { redirect } from "next/navigation";
 
 type Props = { config?: ConfigurationInterface; };
@@ -21,7 +21,7 @@ export function DonatePage(props:Props) {
         </Grid>
         <Grid size={{ md: 4, xs: 12 }}>
           <Typography component="h3" sx={{ textAlign: "center", fontSize: "30px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>Manage Donations</Typography>
-          <a href="https://support.churchapps.org/b1/portal/donations/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", textUnderlineOffset: 2, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "15px" }}>
+          <a href="https://support.churchapps.org/b1/portal/donations/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", textUnderlineOffset: 2, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "15px" }} data-testid="donate-instructions-link">
             <p>Instructions for ACH Payment</p>
             <Icon sx={{ fontSize: "18px !important", marginLeft: 0.5 }}>open_in_new</Icon>
           </a>
@@ -32,7 +32,7 @@ export function DonatePage(props:Props) {
         </Grid>
       </Grid>
     </Container>
-  </>
+  </>;
 
 
 }

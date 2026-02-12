@@ -35,34 +35,34 @@ export const SongDialog: React.FC<Props> = (props) => {
     setSong(s);
     const sd = await ApiHelper.get("/songDetails/" + arr.songDetailId, "ContentApi");
     setSongDetail(sd);
-  }
+  };
 
   useEffect(() => {
     if (props.arrangementKeyId) loadData();
-  }, [props.arrangementKeyId]); //eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.arrangementKeyId]);
 
 
   const download = async (product: PraiseChartsProduct) => {
     const qs = product.download.split("?")[1].split("&");
     const skus = qs[0].split("=")[1];
     const keys = qs[1].split("=")[1];
-    const url = await PraiseChartsHelper.download(skus, product.name + "." + product.file_type, keys)
+    const url = await PraiseChartsHelper.download(skus, product.name + "." + product.file_type, keys);
     window.open(url, "_blank");
-  }
+  };
 
   const listProducts = () => (<ul>
     {products.map((p, i) => (<li key={i}>
-      <a href="about:blank" onClick={(e) => { e.preventDefault(); download(p); }}>
+      <a href="about:blank" data-testid={`song-download-${i}-link`} onClick={(e) => { e.preventDefault(); download(p); }}>
         {p.name}
       </a>
     </li>))}
-  </ul>)
+  </ul>);
 
   const listLinks = () => (<ul>
     {links.map((l, i) => (<li key={l.id}>
-      <a href={l.url} target="_blank" rel="noreferrer">{l.text}</a>
+      <a href={l.url} target="_blank" rel="noreferrer" data-testid={`song-external-${i}-link`}>{l.text}</a>
     </li>))}
-  </ul>)
+  </ul>);
 
   const loadPraiseCharts = async () => {
     if (arrangementKey && songDetail?.praiseChartsId) {
@@ -71,19 +71,19 @@ export const SongDialog: React.FC<Props> = (props) => {
       if (products) setProducts(products);
       else setProducts([]);
     }
-  }
+  };
 
   const loadLinks = () => {
     if (arrangementKey) ApiHelper.get("/links?category=arrangementKey_" + arrangementKey.id, "ContentApi").then((data: LinkInterface[]) => { setLinks(data); });
-  }
+  };
 
-  useEffect(() => { loadData() }, [props.arrangementKeyId]) //eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { loadData(); }, [props.arrangementKeyId]);
   useEffect(() => {
     if (songDetail && arrangementKey) {
       loadPraiseCharts();
       loadLinks();
     }
-  }, [arrangementKey, songDetail]) //eslint-disable-line react-hooks/exhaustive-deps
+  }, [arrangementKey, songDetail]);
 
 
   return (<>

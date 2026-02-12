@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import { UserHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Permissions, LinkInterface } from "@churchapps/helpers";
-import { PersonHelper } from "@/helpers"
+import { PersonHelper } from "@/helpers";
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -25,6 +26,15 @@ export const TabsClient = (props: Props) => {
   PersonHelper.person = context.person;
   const [navLinks, setNavLinks] = React.useState<LinkInterface[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (tabUrl: string): boolean => {
+    if (!pathname || tabUrl.startsWith("http")) return false;
+    const myIndex = pathname.indexOf("/my/");
+    if (myIndex === -1) return false;
+    const relevantPath = pathname.substring(myIndex);
+    return relevantPath === tabUrl || relevantPath.startsWith(tabUrl + "/");
+  };
 
   useEffect(() => {
     // Load b1Tab links for the /my section navigation
@@ -65,21 +75,13 @@ export const TabsClient = (props: Props) => {
 
   const getLinkRoute = (link: LinkInterface): string | null => {
     switch (link.linkType) {
-      case "groups":
-        return "/my/groups";
-      case "directory":
-        return "/my/community";
-      case "plans":
-        return "/my/plans";
-      case "checkin":
-        return "/my/checkin";
-      case "lessons":
-        return "/my/lessons";
-      case "donation":
-        return "/my/donate";
-      default:
-        // Other link types (bible, sermons, stream, etc.) don't have /my routes
-        return null;
+      case "groups": return "/my/groups";
+      case "directory": return "/my/community";
+      case "plans": return "/my/plans";
+      case "checkin": return "/my/checkin";
+      case "lessons": return "/my/lessons";
+      case "donation": return "/my/donate";
+      default: return null; // Other link types (bible, sermons, stream, etc.) don't have /my routes
     }
   };
 
@@ -118,7 +120,7 @@ export const TabsClient = (props: Props) => {
   };
 
   const getItem = (tab: TabItem, includeClickHandler: boolean) => (
-    <li key={tab.url}>
+    <li key={tab.url} className={isActive(tab.url) ? "active" : ""}>
       <Link
         href={tab.url}
         data-testid={`my-tab-${tab.label.toLowerCase()}`}

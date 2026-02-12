@@ -15,7 +15,7 @@ type PageParams = { sdSlug: string; }
 const loadSharedData = (sdSlug: string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug);
-}
+};
 
 
 export async function generateMetadata({ params }: { params: Promise<PageParams> }): Promise<Metadata> {
@@ -28,8 +28,8 @@ const loadData = async (sdSlug: string) => {
   const config = await ConfigHelper.load(sdSlug, "website");
   // Use the homePage already loaded in ConfigHelper instead of fetching it again
   const pageData: PageInterface = config.homePage || { url: null } as PageInterface;
-  return { pageData, config }
-}
+  return { pageData, config };
+};
 
 export default async function Home({ params }: { params: Promise<PageParams> }) {
   await EnvironmentHelper.initServerSide();

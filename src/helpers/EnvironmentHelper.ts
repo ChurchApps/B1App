@@ -13,12 +13,12 @@ export class EnvironmentHelper {
       this.init();
       await this.initLocale();
     }
-  }
+  };
 
   static init = () => {
     if (this.hasInit) return;
     this.hasInit = true;
-    let stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
+    const stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
 
     //stage = "prod"
     switch (stage) {
@@ -26,7 +26,7 @@ export class EnvironmentHelper {
       case "prod": EnvironmentHelper.initProd(); break;
       default: EnvironmentHelper.initDev(); break;
     }
-    EnvironmentHelper.Common.init(stage)
+    EnvironmentHelper.Common.init(stage);
 
     ApiHelper.apiConfigs = [
       { keyName: "MembershipApi", url: EnvironmentHelper.Common.MembershipApi, jwt: "", permissions: [] },
@@ -45,8 +45,8 @@ export class EnvironmentHelper {
     if (typeof window !== "undefined") {
       baseUrl = window.location.origin;
     }
-    await Locale.init([baseUrl + `/apphelper/locales/{{lng}}.json`])
-  }
+    await Locale.init([baseUrl + `/apphelper/locales/{{lng}}.json`]);
+  };
 
   static initDev = () => {
     this.initStaging();

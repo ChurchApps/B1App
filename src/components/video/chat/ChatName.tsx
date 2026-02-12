@@ -15,17 +15,14 @@ export const ChatName: React.FC<Props> = (props) => {
   const editMode = (e: React.MouseEvent) => {
     e.preventDefault();
     setEdit(true);
-  }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.currentTarget.value;
     switch (e.currentTarget.name) {
-      case "displayName":
-        setDisplayName(val);
-        break;
-      default:
-        break;
+      case "displayName": setDisplayName(val); break;
+      default: break;
     }
-  }
+  };
 
   const handleUpdate = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -36,18 +33,20 @@ export const ChatName: React.FC<Props> = (props) => {
     }
     props.updateFunction(trimmedName);
     setEdit(false);
-  }
+  };
 
   React.useEffect(() => { setEdit(props.promptName); }, [props.promptName]);
 
   if (!edit) return (<a href="about:blank" className="nav-link" onClick={editMode} data-testid="edit-name-button">Change Name</a>);
-  else return (
-    <>
-      <TextField size="small" fullWidth label="Name" id="nameText2" name="displayName" type="text" placeholder="John Smith" value={displayName} onChange={handleChange}
-        InputProps={{ endAdornment: <Button size="small" variant="contained" id="setNameButton" onClick={handleUpdate} data-testid="chat-name-update-button">Update</Button> }}
-        data-testid="chat-name-input"
-      />
-    </>
-  );
-}
+  else {
+    return (
+      <>
+        <TextField size="small" fullWidth label="Name" id="nameText2" name="displayName" type="text" placeholder="John Smith" value={displayName} onChange={handleChange}
+          InputProps={{ endAdornment: <Button size="small" variant="contained" id="setNameButton" onClick={handleUpdate} data-testid="chat-name-update-button">Update</Button> }}
+          data-testid="chat-name-input"
+        />
+      </>
+    );
+  }
+};
 

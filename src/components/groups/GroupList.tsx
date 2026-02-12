@@ -26,13 +26,15 @@ export const GroupList = (props: Props) => {
 
 
   if (!groups) return <Loading />;
-  else return (
-    <Grid container spacing={3}>
-      {
-        groups?.length > 0
-          ? (groups.map((group) => (<Grid size={{ xs: 4 }}><GroupCard group={group} /></Grid>)))
-          : (<p>No groups found</p>)
-      }
-    </Grid>
-  );
+  else {
+    return (
+      <Grid container spacing={3}>
+        {
+          groups?.length > 0
+            ? (groups.map((group) => (<Grid size={{ xs: 4 }}><GroupCard group={group} /></Grid>)))
+            : (<p>No groups found</p>)
+        }
+      </Grid>
+    );
+  }
 };

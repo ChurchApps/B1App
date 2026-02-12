@@ -40,7 +40,7 @@ export const Household: React.FC<Props> = (props) => {
 
   const getMember = (member: PersonInterface) => {
     const m = member;
-    return (<a href="about:blank" className="householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id) }}>
+    return (<a href="about:blank" className="householdMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id); }} data-testid={`household-member-${m.id}-link`}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 2 }}><img src={PersonHelper.getPhotoUrl(member)} alt="avatar" /></Grid>
         <Grid size={{ xs: 10 }}>
@@ -49,18 +49,18 @@ export const Household: React.FC<Props> = (props) => {
         </Grid>
       </Grid>
     </a>);
-  }
+  };
 
   const getMembers = () => {
-    if (isLoading) return (<Loading size="sm" />)
+    if (isLoading) return (<Loading size="sm" />);
     else {
-      let result: React.ReactElement[] = [];
+      const result: React.ReactElement[] = [];
       members?.forEach(m => {
-        if (m.id !== props.person.id) result.push(getMember(m))
+        if (m.id !== props.person.id) result.push(getMember(m));
       });
       return (result);
     }
-  }
+  };
 
   const loadMembers = () => {
     if (props.person?.householdId) {
@@ -69,7 +69,7 @@ export const Household: React.FC<Props> = (props) => {
         setIsLoading(false);
       });
     }
-  }
+  };
 
   React.useEffect(loadMembers, [props.person]);
 
@@ -90,10 +90,11 @@ export const Household: React.FC<Props> = (props) => {
               value={newFamilyMember}
               onChange={(e) => setNewFamilyMember(e.target.value)}
               helperText="Enter the first name of a new family member"
+              data-testid="household-add-member-input"
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 4 }}>
-            <Button variant="outlined" size="small" onClick={handleAddFamilyMember} disabled={!newFamilyMember.trim()}>
+            <Button variant="outlined" size="small" onClick={handleAddFamilyMember} disabled={!newFamilyMember.trim()} data-testid="household-add-member-button">
               + Add
             </Button>
           </Grid>
@@ -103,7 +104,7 @@ export const Household: React.FC<Props> = (props) => {
             {props.familyMembers.map((name, index) => (
               <Box key={index} sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
                 <Typography variant="body2">• {name}</Typography>
-                <Button size="small" color="error" onClick={() => handleRemoveFamilyMember(index)}>
+                <Button size="small" color="error" onClick={() => handleRemoveFamilyMember(index)} data-testid={`household-remove-member-${index}-button`}>
                   Remove
                 </Button>
               </Box>
@@ -119,5 +120,5 @@ export const Household: React.FC<Props> = (props) => {
       {getMembers()}
       {getAddMemberSection()}
     </DisplayBox>
-  )
-}
+  );
+};

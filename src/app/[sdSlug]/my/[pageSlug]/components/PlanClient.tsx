@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Grid, Icon } from "@mui/material";
+import { Icon } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
@@ -77,15 +77,16 @@ export function PlanClient({ planId }: Props) {
     loadData();
   }, [planId]);
 
-  if (!UserHelper.currentUserChurch?.person?.id)
+  if (!UserHelper.currentUserChurch?.person?.id) {
     return (
       <>
         <h1>Group</h1>
         <h3 className="text-center w-100">
-          Please <Link href={`/login/?returnUrl=/my/plans/${planId}`}>Login</Link> to view your plans.
+          Please <Link href={`/login/?returnUrl=/my/plans/${planId}`} data-testid="plan-detail-login-link">Login</Link> to view your plans.
         </h3>
       </>
     );
+  }
 
   if (isLoading || !plan) return <Loading />;
   return (
@@ -93,16 +94,10 @@ export function PlanClient({ planId }: Props) {
       <h1>
         <Icon>assignment</Icon> {plan.name}
       </h1>
-      <Grid container spacing={3} alignItems="flex-start">
-        <Grid size={{ md: 8, xs: 12 }}>
-          {getPositionDetails()}
-          {getNotes()}
-          <ServiceOrder plan={plan} />
-        </Grid>
-        <Grid size={{ md: 4, xs: 12 }}>
-          {getTeams()}
-        </Grid>
-      </Grid>
+      {getPositionDetails()}
+      {getNotes()}
+      <ServiceOrder plan={plan} />
+      {getTeams()}
     </>
   );
 }

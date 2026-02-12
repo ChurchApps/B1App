@@ -94,7 +94,7 @@ export const GroupLeaderResources: React.FC<Props> = (props) => {
   const fileRows = files?.map((file) => (
     <TableRow key={file.id}>
       <TableCell>
-        <Link href={file.contentPath} target="_blank">
+        <Link href={file.contentPath} target="_blank" data-testid={`leader-resource-file-${file.id}-link`}>
           {file.fileName}
         </Link>
       </TableCell>
@@ -114,7 +114,7 @@ export const GroupLeaderResources: React.FC<Props> = (props) => {
   const linkRows = links?.map((link) => (
     <TableRow key={link.id}>
       <TableCell>
-        <Link href={link.url} target="_blank">
+        <Link href={link.url} target="_blank" data-testid={`leader-resource-link-${link.id}-link`}>
           {link.text}
         </Link>
       </TableCell>

@@ -14,16 +14,15 @@ type Props = {
 
 export function Footer(props: Props) {
 
-  if (props.footerSections?.length>0) {
-    return <Zone church={props.config?.church} sections={props.footerSections} zone="siteFooter" churchSettings={props.config?.appearance} />
-  }
-  else {
+  if (props.footerSections?.length > 0) {
+    return <Zone church={props.config?.church} sections={props.footerSections} zone="siteFooter" churchSettings={props.config?.appearance} />;
+  } else {
     const logoUrl = AppearanceHelper.getLogoDark(props.config?.appearance, "/images/logo.png");
     const photo = logoUrl ? <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.config?.church.name} style={{ maxWidth: "200px" }} /> : null;
 
     return (
       <>
-        <div className="section headingsLight linksLightAccent" style={{backgroundColor:"var(--dark)", color:"var(--light)", paddingTop:40, paddingBottom:40 }}>
+        <div className="section headingsLight linksLightAccent" style={{ backgroundColor: "var(--dark)", color: "var(--light)", paddingTop: 40, paddingBottom: 40 }}>
           <Grid container spacing={2} className="container">
             <Grid size={{ xs: 12, md: 6 }}>
               {photo}

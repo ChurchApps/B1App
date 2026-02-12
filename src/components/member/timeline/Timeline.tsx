@@ -16,23 +16,24 @@ export const Timeline: React.FC<Props> = (props) => {
 
   const loadData = async () => {
     if (ApiHelper.isAuthenticated) {
-      const {posts, people, groups} = await TimelineHelper.loadForUser();
+      const { posts, people, groups } = await TimelineHelper.loadForUser();
       setPeople(people);
       setGroups(groups);
       setPosts(posts);
     }
-  }
+  };
 
 
 
-  React.useEffect(() => { loadData() }, [ApiHelper.isAuthenticated]);
+  React.useEffect(() => { loadData(); }, [ApiHelper.isAuthenticated]);
 
-  if (posts?.length > 0) return (
-    <>
-      {posts.map((post) => (
-        <TimelinePost post={post} key={post.postId} context={props.context} people={people} groups={groups} onUpdate={loadData} />
-      ))}
-    </>
-  );
-  else return <></>
-}
+  if (posts?.length > 0) {
+    return (
+      <>
+        {posts.map((post) => (
+          <TimelinePost post={post} key={post.postId} context={props.context} people={people} groups={groups} onUpdate={loadData} />
+        ))}
+      </>
+    );
+  } else return <></>;
+};

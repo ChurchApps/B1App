@@ -27,7 +27,7 @@ export function CheckinPage() {
         ? content
         : (
           <h3 className="text-center w-100">
-          Please <Link href="/login/?returnUrl=/my/checkin">Login</Link> to check in.
+          Please <Link href="/login/?returnUrl=/my/checkin" data-testid="checkin-login-link">Login</Link> to check in.
           </h3>
         )}
     </>

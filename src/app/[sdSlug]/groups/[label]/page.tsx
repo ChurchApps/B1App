@@ -13,7 +13,7 @@ type PageParams = Promise<{ sdSlug: string; label: string; }>
 const loadSharedData = (sdSlug: string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug);
-}
+};
 
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug } = await params;
@@ -23,20 +23,20 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
 
 const loadData = async (sdSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  return { config }
-}
+  return { config };
+};
 
 
 export default async function GroupPage({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
-  const { sdSlug, label } = await params
+  const { sdSlug, label } = await params;
   const { config } = await loadSharedData(sdSlug);
 
   const getTitleCase = (words: string) => words
     .toLowerCase()
-    .split(' ')
+    .split(" ")
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+    .join(" ");
 
   const searchLabel = label.replace(/-/g, " ");
   const displayLabel = getTitleCase(searchLabel);

@@ -1,14 +1,16 @@
 "use client";
 
-import { useContext } from "react";
-import UserContext from "@/context/UserContext";
-import MyGroups from "@/components/member/timeline/MyGroups";
+import { MasterDetailLayout } from "./MasterDetailLayout";
+import { GroupsMasterPanel } from "./GroupsMasterPanel";
 
 export function GroupsPage() {
-  const context = useContext(UserContext);
-
-  return (<>
-    <h1>My Groups</h1>
-    <MyGroups />
-  </>);
+  return (
+    <MasterDetailLayout
+      emptyDetailMessage="Select a group to view details"
+      masterContent={() => (
+        <GroupsMasterPanel />
+      )}
+      detailContent={() => null}
+    />
+  );
 }

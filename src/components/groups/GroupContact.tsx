@@ -54,7 +54,7 @@ export function GroupContact({ leaders, group, config }: Props) {
         + "Last Name: " + formData.lastName + "<br />"
         + "Email Address: " + formData.email + "<br />"
         + "Phone Number: " + formData.phone + "<br />"
-        + "Message: " + formData.message,
+        + "Message: " + formData.message
     };
 
     try {
@@ -83,7 +83,7 @@ export function GroupContact({ leaders, group, config }: Props) {
       fd.personId = leaders[0].personId;
       setFormData(fd);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [leaders]);
 
   if (leaders?.length < 1) return <></>;
@@ -91,13 +91,13 @@ export function GroupContact({ leaders, group, config }: Props) {
     <div>
       <h2>Contact Group Leader:</h2>
       <form>
-        {leaders?.length > 1 && (<FormControl fullWidth><InputLabel>Contact</InputLabel><Select fullWidth label="Contact" name="personId" value={formData.personId || ""} onChange={handleChange}>{getSelectLeaders()}</Select></FormControl>)}
-        <TextField fullWidth label="First Name" name="firstName" value={formData.firstName || ""} onChange={handleChange} aria-label="Your first name" />
-        <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName || ""} onChange={handleChange} aria-label="Your last name" />
-        <TextField fullWidth label="Email" name="email" value={formData.email || ""} onChange={handleChange} aria-label="Your email address" />
-        <TextField fullWidth label="Phone Number" name="phone" value={formData.phone || ""} onChange={handleChange} aria-label="Your phone number" />
-        <TextField fullWidth label="Message" name="message" value={formData.message || ""} onChange={handleChange} multiline aria-label="Your message to the group leader" />
-        <Button onClick={handleSubmit} id="conbtn" style={{ height: "50px", fontWeight: "bold", width: "40%", marginBottom: "10px" }} aria-label="Send message to group leader">Submit</Button>
+        {leaders?.length > 1 && (<FormControl fullWidth><InputLabel>Contact</InputLabel><Select fullWidth label="Contact" name="personId" value={formData.personId || ""} onChange={handleChange} data-testid="group-contact-select">{getSelectLeaders()}</Select></FormControl>)}
+        <TextField fullWidth label="First Name" name="firstName" value={formData.firstName || ""} onChange={handleChange} aria-label="Your first name" data-testid="group-contact-first-name-input" />
+        <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName || ""} onChange={handleChange} aria-label="Your last name" data-testid="group-contact-last-name-input" />
+        <TextField fullWidth label="Email" name="email" value={formData.email || ""} onChange={handleChange} aria-label="Your email address" data-testid="group-contact-email-input" />
+        <TextField fullWidth label="Phone Number" name="phone" value={formData.phone || ""} onChange={handleChange} aria-label="Your phone number" data-testid="group-contact-phone-input" />
+        <TextField fullWidth label="Message" name="message" value={formData.message || ""} onChange={handleChange} multiline aria-label="Your message to the group leader" data-testid="group-contact-message-input" />
+        <Button onClick={handleSubmit} id="conbtn" style={{ height: "50px", fontWeight: "bold", width: "40%", marginBottom: "10px" }} aria-label="Send message to group leader" data-testid="group-contact-submit-button">Submit</Button>
       </form>
 
       {isSubmitted && (

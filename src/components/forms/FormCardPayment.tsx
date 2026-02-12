@@ -21,11 +21,11 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
   const [church, setChurch] = React.useState<ChurchInterface>();
   const [fund, setFund] = React.useState<FundInterface>();
   const [gateway, setGateway] = React.useState<any>(null);
-  let amt = Number(props.question.choices?.find((c: any) => c.text === "Amount")?.value);
-  let fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
+  const amt = Number(props.question.choices?.find((c: any) => c.text === "Amount")?.value);
+  const fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
 
   const getChurchData = () => {
-    let fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
+    const fundId = props.question.choices?.find((c: any) => c.text === "FundId")?.value;
     ApiHelper.get("/churches/" + props.churchId, "MembershipApi").then((data: any) => {
       setChurch(data);
     });
@@ -102,7 +102,7 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
   };
 
   const savePayment = async (paymentMethod: StripePaymentMethod, customerId: string, person?: PersonInterface) => {
-    let payment: any = {
+    const payment: any = {
       amount: amt,
       id: paymentMethod.id,
       customerId: customerId,
@@ -179,13 +179,13 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
     <div style={{ backgroundColor: "#bdbdbd", padding: 35, borderRadius: 20 }}>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12 }}>
-          <TextField fullWidth required size="small" margin="none" style={{ backgroundColor: "white", borderRadius: "4px" }} InputLabelProps={{ sx: { fontWeight: "bold" } }} label={Locale.label("person.email")} value={email} onChange={(e) => setEmail(e.target.value)} disabled={ApiHelper.isAuthenticated && UserHelper.user.email !== ""} />
+          <TextField fullWidth required size="small" margin="none" style={{ backgroundColor: "white", borderRadius: "4px" }} InputLabelProps={{ sx: { fontWeight: "bold" } }} label={Locale.label("person.email")} value={email} onChange={(e) => setEmail(e.target.value)} disabled={ApiHelper.isAuthenticated && UserHelper.user.email !== ""} data-testid="payment-email-input" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <TextField fullWidth required size="small" margin="none" style={{ backgroundColor: "white", borderRadius: "4px" }} InputLabelProps={{ sx: { fontWeight: "bold" } }} label={Locale.label("person.firstName")} value={firstName} onChange={(e) => setFirstName(e.target.value)} disabled={ApiHelper.isAuthenticated && UserHelper.user.firstName !== ""} />
+          <TextField fullWidth required size="small" margin="none" style={{ backgroundColor: "white", borderRadius: "4px" }} InputLabelProps={{ sx: { fontWeight: "bold" } }} label={Locale.label("person.firstName")} value={firstName} onChange={(e) => setFirstName(e.target.value)} disabled={ApiHelper.isAuthenticated && UserHelper.user.firstName !== ""} data-testid="payment-first-name-input" />
         </Grid>
         <Grid size={{ xs: 12, sm: 6 }}>
-          <TextField fullWidth required size="small" margin="none" style={{ backgroundColor: "white", borderRadius: "4px" }} InputLabelProps={{ sx: { fontWeight: "bold" } }} label={Locale.label("person.lastName")} value={lastName} onChange={(e) => setLastName(e.target.value)} disabled={ApiHelper.isAuthenticated && UserHelper.user.lastName !== ""} />
+          <TextField fullWidth required size="small" margin="none" style={{ backgroundColor: "white", borderRadius: "4px" }} InputLabelProps={{ sx: { fontWeight: "bold" } }} label={Locale.label("person.lastName")} value={lastName} onChange={(e) => setLastName(e.target.value)} disabled={ApiHelper.isAuthenticated && UserHelper.user.lastName !== ""} data-testid="payment-last-name-input" />
         </Grid>
         <Grid size={{ xs: 12 }}>
           <Box sx={{ backgroundColor: "white", padding: 1.5, borderRadius: 1, color: "gray", fontWeight: "bold", fontSize: 18 }}>$ {amt}</Box>

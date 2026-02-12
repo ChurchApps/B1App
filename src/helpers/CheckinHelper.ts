@@ -35,8 +35,7 @@ export class CheckinHelper {
     for (let i = visitSessions.length - 1; i >= 0; i--) {
       if (visitSessions[i].session?.serviceTimeId === serviceTimeId) visitSessions.splice(i, 1);
     }
-    if (groupId !== "")
-      visitSessions.push({ session: { serviceTimeId: serviceTimeId, groupId: groupId, displayName: displayName } });
+    if (groupId !== "") visitSessions.push({ session: { serviceTimeId: serviceTimeId, groupId: groupId, displayName: displayName } });
   }
 
   public static getDisplayGroup = (visitSession: VisitSessionInterface) => {

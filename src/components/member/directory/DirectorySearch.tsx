@@ -3,7 +3,7 @@ import React from "react";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface } from "@churchapps/helpers";
-import { PeopleSearchResults } from "./PeopleSearchResults"
+import { PeopleSearchResults } from "./PeopleSearchResults";
 
 interface Props { selectedHandler: (personId: string) => void }
 
@@ -17,22 +17,22 @@ export const DirectorySearch: React.FC<Props> = (props) => {
 
   const handleSubmit = (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
-    let term = encodeURIComponent(searchText.trim());
+    const term = encodeURIComponent(searchText.trim());
     if (searchCategory === "people") ApiHelper.get("/people/search?term=" + term, "MembershipApi").then((data: PersonInterface[]) => setSearchResults(data));
     else ApiHelper.get("/people/search/group?groupId=" + searchGroupId, "MembershipApi").then((data: PersonInterface[]) => setSearchResults(data));
-  }
+  };
 
   const loadData = () => {
-    ApiHelper.get("/people/directory/all", "MembershipApi").then((data: PersonInterface[]) => { setSearchResults(data) });
+    ApiHelper.get("/people/directory/all", "MembershipApi").then((data: PersonInterface[]) => { setSearchResults(data); });
     ApiHelper.get("/groups", "MembershipApi").then((data: GroupInterface[]) => setGroups(data));
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     if (e.target.name === "searchText") setSearchText(e.target.value);
     else setSearchGroupId(e.target.value);
-  }
+  };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } }
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === "Enter") { e.preventDefault(); handleSubmit(null); } };
 
   const EndAdornment = () => (
     <Stack direction="row" alignItems="center">
@@ -41,7 +41,7 @@ export const DirectorySearch: React.FC<Props> = (props) => {
       <Divider orientation="vertical" sx={{ height: 38, margin: 0.5, marginRight: 1, marginLeft: 1, borderRightWidth: 2 }} />
       <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSubmit} data-testid="directory-search-button" aria-label="Search directory">Search</Button>
     </Stack>
-  )
+  );
 
   React.useEffect(loadData, []);
 
@@ -89,5 +89,5 @@ export const DirectorySearch: React.FC<Props> = (props) => {
       </DisplayBox>
 
     </>
-  )
-}
+  );
+};

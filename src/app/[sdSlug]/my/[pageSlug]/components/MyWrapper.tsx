@@ -1,7 +1,7 @@
 import "@churchapps/apphelper-website/dist/styles/animations.css";
 
 import React from "react";
-import { Breadcrumbs, Container, Grid } from "@mui/material";
+import { Breadcrumbs, Container } from "@mui/material";
 
 import Link from "next/link";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/[pageSlug]/components/DefaultPageWrapper";
@@ -20,51 +20,49 @@ export async function MyWrapper(props:Props) {
 
   const getPageLink = (pageSlug:string) => {
     switch (pageSlug) {
-      case "timeline": return {url: "/my/timeline", label: "Timeline"};
-      case "groups": return {url: "/my/groups", label: "Groups"};
-      case "community": return {url: "/my/community", label: "Community"};
-      case "plans": return {url: "/my/plans", label: "Plans"};
-      case "checkin": return {url: "/my/checkin", label: "Check-in"};
-      case "lessons": return {url: "/my/lessons", label: "Lessons"};
-      case "donate": return {url: "/my/donate", label: "Donations"};
-      default: return {url: "/my/timeline", label: "Timeline"};
+      case "timeline": return { url: "/my/timeline", label: "Timeline" };
+      case "groups": return { url: "/my/groups", label: "Groups" };
+      case "community": return { url: "/my/community", label: "Community" };
+      case "plans": return { url: "/my/plans", label: "Plans" };
+      case "checkin": return { url: "/my/checkin", label: "Check-in" };
+      case "lessons": return { url: "/my/lessons", label: "Lessons" };
+      case "donate": return { url: "/my/donate", label: "Donations" };
+      default: return { url: "/my/timeline", label: "Timeline" };
     }
-  }
+  };
 
-  const getRootLayout = () => <Container>
-    <div id="mainContent">
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 2 }} sx={{ order: { xs: -1, md: 0 } }}>
-          <div className="sideNav desktopSideNav">
-            <TabsClient config={props.config} />
-          </div>
-        </Grid>
-        <Grid size={{ xs: 12, md: 10 }}>
+  const getRootLayout = () => (
+    <div className="myLayout">
+      <div className="sideNav desktopSideNav">
+        <TabsClient config={props.config} />
+      </div>
+      <div className="myLayoutContent">
+        <div id="mainContent">
           {props.children}
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </div>
-  </Container>
+  );
 
   const getPageLabel = () => {
     const pageLink = getPageLink(props.pageSlug);
-    if (props.idLabel) return <Link href={pageLink.url}>{pageLink.label}</Link>
-    else return <span>{pageLink.label}</span>
-  }
+    if (props.idLabel) return <Link href={pageLink.url}>{pageLink.label}</Link>;
+    else return <span>{pageLink.label}</span>;
+  };
 
   const getIdLabel = () => {
-    if (props.idLabel) return <span>{props.idLabel}</span>
-  }
+    if (props.idLabel) return <span>{props.idLabel}</span>;
+  };
 
   const getChildLayout = () => <Container>
-    <Breadcrumbs separator="›" aria-label="breadcrumb" style={{marginTop:30, marginBottom:30}}>
-      <Link href="/my/timeline">My {props.config?.church?.name}</Link>
+    <Breadcrumbs separator="›" aria-label="breadcrumb" style={{ marginTop: 30, marginBottom: 30 }}>
+      <Link href="/my/timeline" data-testid="breadcrumb-my-link">My {props.config?.church?.name}</Link>
       {getPageLabel()}
       {getIdLabel()}
     </Breadcrumbs>
     {props.children}
 
-  </Container>
+  </Container>;
 
   return (
     <DefaultPageWrapper config={props.config}>

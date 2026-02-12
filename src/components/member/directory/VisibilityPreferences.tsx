@@ -20,7 +20,7 @@ export const VisibilityPreferences = () => {
 
   const handlePrefChange = (e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent<string>) => {
     const p = { ...pref } as VisibilityPreferenceInterface;
-    let value = e.target.value;
+    const value = e.target.value;
     switch (e.target.name) {
       case "address": p.address = value; break;
       case "phoneNumber": p.phoneNumber = value; break;
@@ -44,7 +44,7 @@ export const VisibilityPreferences = () => {
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="address">Address</InputLabel>
-            <Select fullWidth labelId="address" label="Address" name="address" value={pref.address || ""} defaultValue="" onChange={handlePrefChange}>
+            <Select fullWidth labelId="address" label="Address" name="address" value={pref.address || ""} defaultValue="" onChange={handlePrefChange} data-testid="visibility-address-select">
               <MenuItem value="everyone">Everyone</MenuItem>
               <MenuItem value="members">Members</MenuItem>
               <MenuItem value="groups">My Groups Only</MenuItem>
@@ -54,7 +54,7 @@ export const VisibilityPreferences = () => {
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="phone">Phone Number</InputLabel>
-            <Select fullWidth labelId="phone" label="Phone Number" name="phoneNumber" value={pref.phoneNumber || ""} defaultValue="" onChange={handlePrefChange}>
+            <Select fullWidth labelId="phone" label="Phone Number" name="phoneNumber" value={pref.phoneNumber || ""} defaultValue="" onChange={handlePrefChange} data-testid="visibility-phone-select">
               <MenuItem value="everyone">Everyone</MenuItem>
               <MenuItem value="members">Members</MenuItem>
               <MenuItem value="groups">My Groups Only</MenuItem>
@@ -64,7 +64,7 @@ export const VisibilityPreferences = () => {
         <Grid size={{ xs: 12, sm: 12, md: 4 }}>
           <FormControl fullWidth>
             <InputLabel id="email">Email</InputLabel>
-            <Select fullWidth labelId="email" label="Email" name="email" value={pref.email || ""} defaultValue="" onChange={handlePrefChange}>
+            <Select fullWidth labelId="email" label="Email" name="email" value={pref.email || ""} defaultValue="" onChange={handlePrefChange} data-testid="visibility-email-select">
               <MenuItem value="everyone">Everyone</MenuItem>
               <MenuItem value="members">Members</MenuItem>
               <MenuItem value="groups">My Groups Only</MenuItem>

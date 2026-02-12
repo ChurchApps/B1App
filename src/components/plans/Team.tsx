@@ -23,11 +23,11 @@ export const Team: React.FC<Props> = (props) => {
         const person = props.people.find((p) => p.id === assignment.personId);
         rows.push(
           <TableRow key={assignment.id}>
-            <TableCell style={{width:70}}>
-              <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" style={{maxWidth: "50px"}} />
+            <TableCell style={{ width: 70 }}>
+              <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" style={{ maxWidth: "50px" }} />
             </TableCell>
             <TableCell>
-              <Link href={"/my/community/" + person?.id}>{person?.name?.display}</Link>
+              <Link href={"/my/community/" + person?.id} data-testid={`team-member-${person?.id}-link`}>{person?.name?.display}</Link>
               <div>{position.name}</div>
             </TableCell>
           </TableRow>
@@ -36,14 +36,14 @@ export const Team: React.FC<Props> = (props) => {
     });
 
     return rows;
-  }
+  };
 
-  return (<DisplayBox headerIcon="people" headerText={props.name} data-testid={`team-${props.name.toLowerCase().replace(/\s+/g, '-')}-display-box`}>
+  return (<DisplayBox headerIcon="people" headerText={props.name} data-testid={`team-${props.name.toLowerCase().replace(/\s+/g, "-")}-display-box`}>
     <Table size="small">
       <TableBody>
         {getTeam()}
       </TableBody>
     </Table>
   </DisplayBox>);
-}
+};
 

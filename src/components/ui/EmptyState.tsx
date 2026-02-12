@@ -46,7 +46,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ icon, title, description
         backgroundColor: "grey.50",
         border: "1px dashed",
         borderColor: "grey.300",
-        borderRadius: 2,
+        borderRadius: 2
       }}
     >
       {content}

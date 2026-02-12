@@ -4,24 +4,24 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 import "@churchapps/apphelper-website/dist/styles/animations.css";
 import { Animate } from "@churchapps/apphelper-website";
 
 import { TimelinePage } from "../components/TimelinePage";
 import { MyWrapper } from "../components/MyWrapper";
 
-import { PersonPage } from "../components/PersonPage";
 import { PlanClient } from "../components/PlanClient";
 
-type PageParams = Promise<{ sdSlug: string;  pageSlug: string; id:string; }>
+type PageParams = Promise<{ sdSlug: string; pageSlug: string; id:string; }>
 
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug, pageSlug);
-}
+};
 
-export async function generateMetadata({params}: {params:PageParams}): Promise<Metadata> {
-  const { sdSlug, pageSlug } =  await params;
+export async function generateMetadata({ params }: {params:PageParams}): Promise<Metadata> {
+  const { sdSlug, pageSlug } = await params;
   const props = await loadSharedData(sdSlug, pageSlug);
 
   const title = "My....";
@@ -30,15 +30,21 @@ export async function generateMetadata({params}: {params:PageParams}): Promise<M
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  return { config }
-}
+  return { config };
+};
 
 export default async function Home({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug, id } = await params;
 
+  // Redirect detail pages to the master-detail view
+  if (id && id !== "undefined" && id.trim() !== "") {
+    if (pageSlug === "community") redirect(`/${sdSlug}/my/community?id=${id}`);
+    if (pageSlug === "plans") redirect(`/${sdSlug}/my/plans?id=${id}`);
+  }
+
   // Validate id parameter
-  if (!id || id === 'undefined' || id.trim() === '') {
+  if (!id || id === "undefined" || id.trim() === "") {
     return (
       <div>
         <h1>Invalid ID</h1>
@@ -50,22 +56,17 @@ export default async function Home({ params }: { params: PageParams }) {
   const { config } = await loadSharedData(sdSlug, pageSlug);
 
   let label = "Plan Details";
-  switch (pageSlug)
-  {
+  switch (pageSlug) {
     case "plans": label = "Plan Details"; break;
-    case "community": label = "Community Details"; break;
     case "forms": label = "Form"; break;
   }
 
   const getPageContent = () => {
-    switch (pageSlug)
-    {
+    switch (pageSlug) {
       case "plans": return <PlanClient planId={id} />;
-      case "community": return <PersonPage personId={id}  />;
       default: return <TimelinePage />;
-      //default: return notFound();
     }
-  }
+  };
 
   return (
     <>

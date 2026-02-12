@@ -11,7 +11,7 @@ export default function GroupCard(props: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link href={"/groups/details/" + props.group.slug}>
+    <Link href={"/groups/details/" + props.group.slug} data-testid={`group-card-${props.group.slug}-link`}>
       {/* Card */}
       <div
         style={{
@@ -45,7 +45,7 @@ export default function GroupCard(props: Props) {
               right: 0,
               height: "60%",
               background:
-                "linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent)",
+                "linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent)"
             }}
           ></div>
           {/* Group Name */}
@@ -62,7 +62,7 @@ export default function GroupCard(props: Props) {
               width: "80%",
               whiteSpace: "nowrap",
               overflow: "hidden",
-              textOverflow: "ellipsis",
+              textOverflow: "ellipsis"
             }}
           >
             {props.group.name}

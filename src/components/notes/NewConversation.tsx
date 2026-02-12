@@ -20,7 +20,7 @@ interface Props {
 }
 
 export function NewConversation({ context, conversation, ...props }: Props) {
-  const [message, setMessage] = React.useState<MessageInterface>({})
+  const [message, setMessage] = React.useState<MessageInterface>({});
   const [errors, setErrors] = React.useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -31,14 +31,14 @@ export function NewConversation({ context, conversation, ...props }: Props) {
     const m = { ...message } as MessageInterface;
     m.content = e.target.value;
     setMessage(m);
-  }
+  };
 
   const validate = () => {
     const result = [];
     if (!message.content.trim()) result.push(Locale.label("notes.validate.content"));
     setErrors(result);
     return result.length === 0;
-  }
+  };
 
   async function handleSave() {
     if (!validate()) return;
@@ -58,7 +58,7 @@ export function NewConversation({ context, conversation, ...props }: Props) {
           title: `${props.contentType} ${props.contentId} Conversation`,
           groupId: props.groupId,
           visibility: props.visibility,
-          allowAnonymousPosts: false,
+          allowAnonymousPosts: false
         };
         const result = await ApiHelper.post("/conversations", [conv], "MessagingApi");
         cId = result[0].id;
@@ -87,10 +87,10 @@ export function NewConversation({ context, conversation, ...props }: Props) {
         {image ? <img src={image} alt="user" style={{ width: 60, height: 45, borderRadius: 5, marginLeft: 8 }} /> : <Icon>person</Icon>}
         <Stack direction="column" spacing={2} style={{ width: "100%" }} justifyContent="end">
           <div><b>{context?.person?.name?.display}</b></div>
-          <TextField fullWidth name="noteText" aria-label={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} placeholder={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} multiline style={{ marginTop: 0, border: "none" }} variant="standard" onChange={handleChange} value={message.content} />
+          <TextField fullWidth name="noteText" aria-label={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} placeholder={hasConversations ? "Type a message..." : Locale.label("notes.startConversation")} multiline style={{ marginTop: 0, border: "none" }} variant="standard" onChange={handleChange} value={message.content} data-testid="new-conversation-message-input" />
         </Stack>
         <Stack direction="column" spacing={1} justifyContent="end">
-          <SmallButton icon="send" onClick={handleSave} disabled={isSubmitting} />
+          <SmallButton icon="send" onClick={handleSave} disabled={isSubmitting} data-testid="new-conversation-send-button" />
         </Stack>
       </Stack>
     </Paper>

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   useEffect(() => {
     // Only capture in production to avoid Turbopack symlink issues on Windows
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === "production") {
       import("@sentry/nextjs").then((Sentry) => {
         Sentry.captureException(error);
       });

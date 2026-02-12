@@ -23,11 +23,11 @@ export function VotdPage() {
   };
 
   const getDayOfYear = () => {
-    let now = new Date();
-    let start = new Date(now.getFullYear(), 0, 0);
-    let diff = now.getTime() - start.getTime();
-    let oneDay = 1000 * 60 * 60 * 24;
-    let day = Math.floor(diff / oneDay);
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    const day = Math.floor(diff / oneDay);
     return day;
   };
 
@@ -43,15 +43,15 @@ export function VotdPage() {
   if (!isClient || day === null) {
     return (
       <Container>
-        <h1 style={{textAlign:"center"}}>Verse of the Day</h1>
-        <div className="full-frame" style={{minHeight: "200px"}} />
+        <h1 style={{ textAlign: "center" }}>Verse of the Day</h1>
+        <div className="full-frame" style={{ minHeight: "200px" }} />
       </Container>
     );
   }
 
   return (
     <Container>
-      <h1 style={{textAlign:"center"}}>Verse of the Day</h1>
+      <h1 style={{ textAlign: "center" }}>Verse of the Day</h1>
       <img
         src={"https://votd.org/v1/" + day + "/" + shape + ".jpg"}
         className="full-frame"

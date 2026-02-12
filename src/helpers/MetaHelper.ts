@@ -30,18 +30,18 @@ export class MetaHelper {
       openGraph: {
         title,
         description: ogDescription,
-        images: [ogImage],
-      },
+        images: [ogImage]
+      }
     };
 
     if (appearance?.favicon_16x16) {
       metadata.icons = {
         icon: appearance.favicon_16x16,
         shortcut: appearance.favicon_16x16,
-        apple: appearance.favicon_400x400 || appearance.favicon_16x16,
+        apple: appearance.favicon_400x400 || appearance.favicon_16x16
       };
     }
 
     return metadata;
-  }
+  };
 }

@@ -14,7 +14,7 @@ import { UniqueIdHelper } from "@churchapps/apphelper";
 import { CurrencyHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
 import { DonationInterface, PersonInterface, StripePaymentMethod, ChurchInterface } from "@churchapps/helpers";
-import { Table, TableBody, TableRow, TableCell, TableHead, Alert, Button, Icon, Menu, MenuItem } from "@mui/material"
+import { Table, TableBody, TableRow, TableCell, TableHead, Alert, Button, Icon, Menu, MenuItem } from "@mui/material";
 
 import Link from "next/link";
 import { useMountedState } from "@churchapps/apphelper";
@@ -43,7 +43,7 @@ const convertToHelpersPaymentMethod = (appHelperPM: AppHelperStripePaymentMethod
   exp_year: appHelperPM.exp_year,
   status: appHelperPM.status,
   account_holder_name: appHelperPM.account_holder_name,
-  account_holder_type: appHelperPM.account_holder_type,
+  account_holder_type: appHelperPM.account_holder_type
 });
 
 export const BaseDonationPage: React.FC<Props> = (props) => {
@@ -62,7 +62,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-  }
+  };
 
   const loadData = () => {
     if (props?.appName) setAppName(props.appName);
@@ -90,7 +90,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
               const appHelperMethods: AppHelperStripePaymentMethod[] = [];
 
               for (const pm of results) {
-                if (pm.provider === 'stripe') {
+                if (pm.provider === "stripe") {
                   // Create AppHelper version for donation components
                   const appHelperPM = new AppHelperStripePaymentMethod(pm);
                   appHelperMethods.push(appHelperPM);
@@ -116,8 +116,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
               setPerson(data);
             }
           });
-        }
-        else {
+        } else {
           setPaymentMethods([]);
           setAppHelperPaymentMethods([]);
           setIsLoading(false);
@@ -129,15 +128,15 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       setDonations([]);
       setIsLoading(false);
     }
-  }
+  };
 
   const handleDataUpdate = (message?: string) => {
-    setMessage(message)
+    setMessage(message);
     // Add a small delay to allow backend to process the donation
     setTimeout(() => {
       loadData();
     }, 2000);
-  }
+  };
 
   const getEditContent = () => {
     if (!donations) return [];
@@ -146,15 +145,15 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     const currentY = date.getFullYear();
     const lastY = date.getFullYear() - 1;
 
-    const current_year = donations.filter((d: DonationInterface) => new Date(d.donationDate).getFullYear() === currentY);
-    const last_year = donations.filter((d: DonationInterface) => new Date(d.donationDate).getFullYear() === lastY);
+    const current_year = donations.filter((d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear() === currentY);
+    const last_year = donations.filter((d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear() === lastY);
     const customHeaders = [
       { label: "amount", key: "amount" },
       { label: "donationDate", key: "donationDate" },
       { label: "fundName", key: "fund.name" },
       { label: "method", key: "method" },
-      { label: "methodDetails", key: "methodDetails" },
-    ]
+      { label: "methodDetails", key: "methodDetails" }
+    ];
 
     result.push(
       <React.Fragment key="export-menu">
@@ -176,7 +175,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          MenuListProps={{ 'aria-labelledby': "download-button" }}
+          MenuListProps={{ "aria-labelledby": "download-button" }}
         >
           <MenuItem onClick={handleClose} dense data-testid="export-current-year-csv" aria-label="Export current year donations as CSV"><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text="Current Year (CSV)" icon="table_chart" data-testid="current-year-export-link" /></MenuItem>
           <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label="Print current year donations"><Link href="/my/donate/print"><Button data-testid="print-current-year-button" aria-label="Print current year donations"><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
@@ -187,10 +186,10 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     );
 
     return result;
-  }
+  };
 
   const getRows = () => {
-    let rows: React.ReactElement[] = [];
+    const rows: React.ReactElement[] = [];
 
     if (donations.length === 0) {
       rows.push(<TableRow key="0"><TableCell>{Locale.label("donation.page.willAppear")}</TableCell></TableRow>);
@@ -198,12 +197,12 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     }
 
     for (let i = 0; i < donations.length; i++) {
-      let d = donations[i];
+      const d = donations[i];
       const isPending = d.status === "pending";
       rows.push(
         <TableRow key={i} sx={{ opacity: isPending ? 0.8 : 1 }}>
           {appName !== "B1App" && <TableCell><Link href={"/donations/" + d.batchId}>{d.batchId}</Link></TableCell>}
-          <TableCell>{DateHelper.prettyDate(new Date(d.donationDate))}</TableCell>
+          <TableCell>{DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}</TableCell>
           <TableCell>{d.method} - {d.methodDetails}</TableCell>
           <TableCell>{d.fund.name}{isPending && " (Pending)"}</TableCell>
           <TableCell sx={{ color: isPending ? "warning.main" : undefined }}>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>
@@ -211,10 +210,10 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       );
     }
     return rows;
-  }
+  };
 
   const getTableHeader = () => {
-    const rows: React.ReactElement[] = []
+    const rows: React.ReactElement[] = [];
 
     if (donations.length > 0) {
       rows.push(
@@ -229,9 +228,9 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
     }
 
     return rows;
-  }
+  };
 
-  React.useEffect(loadData, [props.personId]); //eslint-disable-line
+  React.useEffect(loadData, [props.personId]);
 
   const getTable = () => (<Table>
     <TableHead>{getTableHeader()}</TableHead>
@@ -266,4 +265,4 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
       <PaymentMethods person={person} customerId={customerId} paymentMethods={appHelperPaymentMethods || []} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
     </>
   );
-}
+};

@@ -24,7 +24,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
     setEdit(false);
   };
 
-  if (edit)
+  if (edit) {
     return (
       <TextField
         size="small"
@@ -34,6 +34,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
         placeholder="John Smith"
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
+        data-testid="embedded-chat-name-input"
         sx={{ marginTop: 0, marginBottom: "4px" }}
         InputProps={{
           endAdornment: (
@@ -41,11 +42,11 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
               <Button size="small" variant="contained" onClick={handleUpdate} data-testid="chat-name-update-button">update</Button>
               <IconButton color="error" size="small" onClick={() => { setEdit(false); setDisplayName(""); }}><CloseIcon fontSize="small" /></IconButton>
             </>
-          ),
+          )
         }}
       />
     );
-  else
+  } else {
     return (
       <>
         {currentUserName.trim() === "" || currentUserName === "Anonymous "
@@ -68,4 +69,5 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
           )}
       </>
     );
+  }
 };

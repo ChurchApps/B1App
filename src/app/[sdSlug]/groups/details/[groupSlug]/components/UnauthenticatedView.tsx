@@ -25,11 +25,11 @@ export function UnauthenticatedView(props: Props) {
         <Grid size={{ md: 4 }} style={{ padding: "5px" }}>
           <Avatar src={l.person.photo ? EnvironmentHelper.Common.ContentRoot + l.person.photo : EnvironmentHelper.Common.ContentRoot + "/public/images/sample-profile.png"} />
         </Grid>
-        <Grid size={{ md: 8 }} style={{ lineHeight: "50px" }}><a href={"/my/community/" + l.person?.id} style={{ color: "black" }}>{l.person?.name?.display}</a></Grid>
+        <Grid size={{ md: 8 }} style={{ lineHeight: "50px" }}><a href={"/my/community/" + l.person?.id} style={{ color: "black" }} data-testid={`group-leader-${l.person?.id}-link`}>{l.person?.name?.display}</a></Grid>
       </Grid>);
     });
     return result;
-  }
+  };
 
   const [hidden, setHidden] = useState("block");
   const [shift, setShift] = useState(8);
@@ -41,8 +41,8 @@ export function UnauthenticatedView(props: Props) {
 
     props.events.forEach((e) => {
       const startDate = new Date(e.start);
-      const monthAbb = startDate.toLocaleString('en-US', { month: 'short' });
-      const dayShort = startDate.toLocaleString('en-Us', { day: '2-digit' });
+      const monthAbb = startDate.toLocaleString("en-US", { month: "short" });
+      const dayShort = startDate.toLocaleString("en-Us", { day: "2-digit" });
 
       if (result.length < 3 && startDate > currDate) {
         result.push(<Grid container key={e.id}>
@@ -101,7 +101,7 @@ export function UnauthenticatedView(props: Props) {
 
     </Container>
 
-  </>
+  </>;
 
 
 }

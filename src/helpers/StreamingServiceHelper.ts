@@ -27,7 +27,7 @@ export class StreamingServiceHelper {
   static updateServiceTimes(config: StreamConfigInterface) {
     if (config.services != null) {
       for (let i = 0; i < config.services.length; i++) {
-        let s = config.services[i];
+        const s = config.services[i];
         s.localCountdownTime = new Date(new Date(s.serviceTime).getTime());
         s.localStartTime = new Date(s.localCountdownTime.getTime());
         s.localStartTime.setSeconds(s.localStartTime.getSeconds() - this.getSeconds(s.earlyStart));
@@ -43,8 +43,8 @@ export class StreamingServiceHelper {
 
   static getSeconds(displayTime: string) {
     try {
-      let parts = displayTime.split(":");
-      let seconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      const parts = displayTime.split(":");
+      const seconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);
       return seconds;
     } catch (ex) { return 0; }
   }
@@ -52,9 +52,9 @@ export class StreamingServiceHelper {
   static determineCurrentService(services: StreamingServiceExtendedInterface[]) {
     let result = null;
     if (services !== undefined) {
-      let currentTime = new Date();
+      const currentTime = new Date();
       for (let i = 0; i < services.length; i++) {
-        let s = services[i];
+        const s = services[i];
         if (s.localChatEnd !== undefined && s.localEndTime !== undefined) {
           if (currentTime <= s.localChatEnd) {
             if (result == null || (result.localEndTime === undefined || s.localEndTime < result.localEndTime)) result = s;

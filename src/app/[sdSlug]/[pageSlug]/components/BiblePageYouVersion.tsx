@@ -23,18 +23,20 @@ function ChapterNavigation({ chapter, onChapterChange }: { chapter: string; onCh
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mb: 2 }}>
+    <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 2 }}>
       <ButtonGroup variant="outlined" size="large">
         <Button
           onClick={handlePrevious}
           disabled={chapterNum <= 1}
           startIcon={<ArrowBackIcon />}
+          data-testid="bible-previous-chapter-button"
         >
           Previous Chapter
         </Button>
         <Button
           onClick={handleNext}
           endIcon={<ArrowForwardIcon />}
+          data-testid="bible-next-chapter-button"
         >
           Next Chapter
         </Button>
@@ -79,11 +81,11 @@ export function BiblePageYouVersion() {
             />
 
             <Box sx={{
-              maxHeight: 'calc(100vh - 350px)',
-              overflowY: 'auto',
-              padding: '20px',
-              border: '1px solid #e0e0e0',
-              borderRadius: '4px'
+              maxHeight: "calc(100vh - 350px)",
+              overflowY: "auto",
+              padding: "20px",
+              border: "1px solid #e0e0e0",
+              borderRadius: "4px"
             }}>
               <BibleReader.Content />
             </Box>

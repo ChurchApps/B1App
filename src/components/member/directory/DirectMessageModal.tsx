@@ -18,7 +18,7 @@ export const DirectMessageModal: React.FC<Props> = (props) => {
 
   const handleMessageSelect = (pm: PrivateMessageInterface) => {
     setSelectedMessage(pm);
-  }
+  };
 
   return (
     <Dialog open={true} onClose={props.onBack} fullWidth scroll="body">
@@ -26,6 +26,6 @@ export const DirectMessageModal: React.FC<Props> = (props) => {
         {!selectedMessage && <NewPrivateMessage context={props.context} selectedPerson={props.person} onSelectMessage={handleMessageSelect} onBack={props.onBack} />}
         {selectedMessage && <PrivateMessageDetails privateMessage={selectedMessage} context={props.context} onBack={props.onBack} refreshKey={1} />}
       </DialogContent>
-    </Dialog>)
+    </Dialog>);
 
-}
+};

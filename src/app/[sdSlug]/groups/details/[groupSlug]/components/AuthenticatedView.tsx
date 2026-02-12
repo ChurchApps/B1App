@@ -45,10 +45,10 @@ export function AuthenticatedView(props: Props) {
 
   const handleChange = (g: GroupInterface) => {
     setGroup(g);
-  }
+  };
 
   const getTabContent = () => {
-    let result = <></>
+    let result = <></>;
     switch (tab) {
       case "details":
         result = <>
@@ -57,29 +57,29 @@ export function AuthenticatedView(props: Props) {
           <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
             <MarkdownPreviewLight value={group.about} />
           </div>
-        </>
+        </>;
         break;
       case "calendar":
-        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>
+        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>;
         break;
       case "conversations":
-        result = <ConversationsTab context={context} groupId={group.id} isLeader={isLeader} />
+        result = <ConversationsTab context={context} groupId={group.id} isLeader={isLeader} />;
         break;
       case "resources":
-        result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>
+        result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>;
         break;
       case "leaderResources":
-        result = <><h2>Resources (Leaders Only)</h2><GroupLeaderResources context={context} groupId={group.id} /></>
+        result = <><h2>Resources (Leaders Only)</h2><GroupLeaderResources context={context} groupId={group.id} /></>;
         break;
       case "members":
-        result = <MembersTab isLeader={isLeader} canEditMembers={canEditMembers} group={group} />
+        result = <MembersTab isLeader={isLeader} canEditMembers={canEditMembers} group={group} />;
         break;
       case "attendance":
-        result = <AttendanceTab group={group} />
+        result = <AttendanceTab group={group} />;
         break;
     }
     return result;
-  }
+  };
 
   return (
     <>
@@ -89,7 +89,7 @@ export function AuthenticatedView(props: Props) {
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, md: 2 }}>
               <div className="sideNav">
-                <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val) }} group={group} />
+                <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val); }} group={group} />
               </div>
             </Grid>
             <Grid size={{ xs: 12, md: 10 }}>

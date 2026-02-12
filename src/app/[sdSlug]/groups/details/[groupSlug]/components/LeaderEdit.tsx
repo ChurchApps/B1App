@@ -6,7 +6,7 @@ import { GalleryModal } from "@churchapps/apphelper";
 import { InputBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { Button, InputLabel, SelectChangeEvent, TextField } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import React from "react";
 import { EnvironmentHelper } from "@/helpers";
@@ -21,13 +21,13 @@ interface Props {
 export function LeaderEdit(props: Props) {
 
   const [formEdits, setFormEdits] = useState<GroupInterface>(props.group);
-  let [hidden, setHidden] = useState("none");
+  const [hidden, setHidden] = useState("none");
   const [selectPhotoField, setSelectPhotoField] = React.useState<string>(null);
 
   useEffect(() => {
     setFormEdits(props.group);
     EnvironmentHelper.initLocale();
-  }, [props.group])
+  }, [props.group]);
 
   const hideForm = () => {
     if (hidden === "none") {
@@ -36,11 +36,11 @@ export function LeaderEdit(props: Props) {
       setHidden("none");
     }
     return;
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const val = e.target.value;
-    const fe = { ...formEdits }
+    const fe = { ...formEdits };
     switch (e.target.name) {
       case "name": fe.name = val; break;
       case "meetingTime": fe.meetingTime = val; break;
@@ -48,18 +48,18 @@ export function LeaderEdit(props: Props) {
       case "about": fe.about = val; break;
     }
     setFormEdits(fe);
-  }
+  };
 
   const handleSubmit = async () => {
     ApiHelper.post("/groups", [formEdits], "MembershipApi").then((groups: GroupInterface[]) => {
       hideForm();
       props.onChange(groups[0]);
     });
-  }
+  };
 
 
   const handlePhotoSelected = (image: string) => {
-    let fe = { ...formEdits };
+    const fe = { ...formEdits };
     fe.photoUrl = image;
     setFormEdits(fe);
     setSelectPhotoField(null);
@@ -95,5 +95,5 @@ export function LeaderEdit(props: Props) {
         )}
       </form>
     </div>
-  </>
+  </>;
 }
