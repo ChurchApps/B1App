@@ -285,6 +285,10 @@ export interface PlanItemInterface {
   description?: string,
   seconds?: number,
   link?: string,
+  providerId?: string,
+  providerPath?: string,
+  providerContentPath?: string,
+  thumbnailUrl?: string,
 
   children?: PlanItemInterface[]
 }

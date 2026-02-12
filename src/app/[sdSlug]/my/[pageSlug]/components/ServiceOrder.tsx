@@ -38,7 +38,7 @@ function instructionToPlanItem(item: InstructionItem, providerId?: string, provi
     itemType,
     relatedId: item.relatedId,
     label: item.label || "",
-    description: item.description,
+    description: item.content,
     seconds: item.seconds ?? 0,
     providerId,
     providerPath,
