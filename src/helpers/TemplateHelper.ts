@@ -1,4 +1,9 @@
-import moment from "moment";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc.js";
+import localizedFormat from "dayjs/plugin/localizedFormat.js";
+
+dayjs.extend(utc);
+dayjs.extend(localizedFormat);
 import { ApiHelper } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface, StreamingServiceInterface } from "@churchapps/helpers";
@@ -96,7 +101,7 @@ export class TemplateHelper {
     if (streamingServices.length > 0) {
       for (let i = 0; i < (streamingServices.length >= 2 ? 2 : 1); i++) {
         const service: StreamingServiceInterface = streamingServices?.[i];
-        const text = `\\n\\n${service.label}\\n\\n*${moment.utc(service.serviceTime).format("LLL")}*`;
+        const text = `\\n\\n${service.label}\\n\\n*${dayjs.utc(service.serviceTime).format("LLL")}*`;
         serviceTimes.push(text);
       }
     }

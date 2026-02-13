@@ -1,5 +1,5 @@
-import { Calendar, momentLocalizer, View } from "react-big-calendar";
-import moment from "moment";
+import { Calendar, dayjsLocalizer, View } from "react-big-calendar";
+import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Snackbar, Stack } from "@mui/material";
 import { EventHelper } from "@churchapps/apphelper";
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function EventCalendar(props: Props) {
-  const localizer = momentLocalizer(moment);
+  const localizer = dayjsLocalizer(dayjs);
   const [editEvent, setEditEvent] = useState<EventInterface | null>(null);
   const [displayEvent, setDisplayEvent] = useState<EventInterface | null>(null);
   const [open, setOpen] = useState<boolean>(false);
