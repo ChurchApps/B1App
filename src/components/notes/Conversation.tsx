@@ -8,7 +8,7 @@ import { Locale } from "@churchapps/apphelper";
 import { ConversationInterface, UserContextInterface } from "@churchapps/helpers";
 import { AddNote } from "@churchapps/apphelper";
 import { Note } from "@churchapps/apphelper";
-import moment from "moment";
+import dayjs from "dayjs";
 
 interface Props {
   conversation: ConversationInterface;
@@ -95,7 +95,7 @@ const getNotes = () => {
 
     const isEditing = message.id === editMessageId;
 
-    const diffMinutes = moment().diff(moment(message.timeSent), "minutes");
+    const diffMinutes = dayjs().diff(dayjs(message.timeSent), "minute");
     const canEdit = diffMinutes <= 45 && message.personId === props.context.person.id;
 
     return (
