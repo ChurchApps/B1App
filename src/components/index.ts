@@ -23,3 +23,4 @@ export { SignInPanel } from "./donationLanding/SignInPanel";
 export { Household } from "./checkin/Household";
 export { CheckinComplete } from "./checkin/CheckinComplete";
 export { Services } from "./checkin/Services";
+export { GuestRegister } from "./checkin/GuestRegister";
