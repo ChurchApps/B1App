@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
-import { getProvider, navigateToPath, type Instructions } from "@churchapps/content-provider-helper";
+import { getProvider, navigateToPath, type Instructions } from "@churchapps/content-providers";
 import { ApiHelper } from "@churchapps/apphelper";
 
 export interface ProviderContentChild {

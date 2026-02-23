@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ApiHelper, DateHelper, ArrayHelper } from "@churchapps/apphelper";
 import { type PlanInterface, type PlanItemInterface, type PositionInterface, type AssignmentInterface, type PersonInterface, PlanHelper, LessonsContentProvider } from "@churchapps/helpers";
-import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-provider-helper";
+import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
 import { Grid } from "@mui/material";
 
 type Params = Promise<{ sdSlug: string; id: string }>;

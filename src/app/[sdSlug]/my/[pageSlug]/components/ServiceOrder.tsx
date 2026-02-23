@@ -5,7 +5,7 @@ import PrintIcon from "@mui/icons-material/Print";
 import { ApiHelper, DisplayBox } from "@churchapps/apphelper";
 import { PlanItem } from "./PlanItem";
 import { type PlanItemInterface, type PlanInterface, LessonsContentProvider } from "@churchapps/helpers";
-import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-provider-helper";
+import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
 import { LessonPreview } from "./LessonPreview";
 
 interface Props {
