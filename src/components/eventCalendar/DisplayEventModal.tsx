@@ -6,6 +6,7 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 import type { EventInterface } from "@churchapps/helpers";
 import { AppBar, Button, Dialog, DialogContent, Icon, IconButton, Toolbar, Typography } from "@mui/material";
 import { useContext } from "react";
+import { useParams } from "next/navigation";
 import UserContext from "@/context/UserContext";
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
 export function DisplayEventModal(props: Props) {
 
   const context = useContext(UserContext);
+  const params = useParams<{ sdSlug: string }>();
 
   const getDisplayTime = () => {
     let result = "";
@@ -58,6 +60,16 @@ export function DisplayEventModal(props: Props) {
           <h1>{props.event.title}</h1>
           <i>{getDisplayTime()}</i>
           <MarkdownPreviewLight value={props.event.description || ""} />
+          {props.event.registrationEnabled && (
+            <Button
+              variant="contained"
+              startIcon={<Icon>how_to_reg</Icon>}
+              href={`/${params.sdSlug}/register/${props.event.id}`}
+              sx={{ my: 2 }}
+            >
+              Register for this Event
+            </Button>
+          )}
           <h2>Discussion</h2>
           <Conversations context={context} contentType="event" contentId={props.event.id} groupId={props.event.groupId} />
 

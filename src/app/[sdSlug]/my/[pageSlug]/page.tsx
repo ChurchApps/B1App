@@ -15,6 +15,7 @@ import { CheckinPage } from "./components/CheckinPage";
 import { LessonsPage } from "./components/LessonsPage";
 import { DirectoryPage } from "./components/DirectoryPage";
 import { DonationsPage } from "./components/DonationPage";
+import { RegistrationsPage } from "./components/RegistrationsPage";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; }>
 
@@ -49,6 +50,7 @@ export default async function Home({ params }: { params: PageParams }) {
       case "lessons": return <LessonsPage />;
       case "community": return <DirectoryPage />;
       case "donate": return <DonationsPage config={config} />;
+      case "registrations": return <RegistrationsPage />;
       default: return <TimelinePage />;
       //default: return notFound();
     }

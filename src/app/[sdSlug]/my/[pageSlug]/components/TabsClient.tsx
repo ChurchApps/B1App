@@ -100,6 +100,9 @@ export const TabsClient = (props: Props) => {
       }
     });
 
+    // Registrations tab - always show for authenticated users
+    tabs.push({ url: "/my/registrations", label: "Registrations" });
+
     // Admin tab uses permission check, not visibility
     if (showAdmin && context.userChurch?.jwt) {
       tabs.push({
