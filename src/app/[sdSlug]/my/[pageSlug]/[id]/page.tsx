@@ -39,8 +39,8 @@ export default async function Home({ params }: { params: PageParams }) {
 
   // Redirect detail pages to the master-detail view
   if (id && id !== "undefined" && id.trim() !== "") {
-    if (pageSlug === "community") redirect(`/${sdSlug}/my/community?id=${id}`);
-    if (pageSlug === "plans") redirect(`/${sdSlug}/my/plans?id=${id}`);
+    if (pageSlug === "community") redirect(`/my/community?id=${id}`);
+    if (pageSlug === "plans") redirect(`/my/plans?id=${id}`);
   }
 
   // Validate id parameter
