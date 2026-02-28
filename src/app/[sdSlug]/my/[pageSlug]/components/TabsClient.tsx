@@ -81,6 +81,7 @@ export const TabsClient = (props: Props) => {
       case "checkin": return "/my/checkin";
       case "lessons": return "/my/lessons";
       case "donation": return "/my/donate";
+      case "volunteer": return "/my/volunteer";
       default: return null; // Other link types (bible, sermons, stream, etc.) don't have /my routes
     }
   };

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ApiHelper, ArrayHelper, DateHelper } from "@churchapps/apphelper";
 import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
+import Link from "next/link";
 
 interface Props {
   selectedId: string | null;
@@ -91,6 +92,17 @@ export function PlansMasterPanel({ selectedId, onSelect }: Props) {
           </div>
           <Icon className="memberChevron">chevron_right</Icon>
         </div>
+
+        <Link href="../volunteer" style={{ textDecoration: "none", color: "inherit" }}>
+          <div className="memberItem">
+            <Icon sx={{ color: "#1565C0", flexShrink: 0 }}>how_to_reg</Icon>
+            <div className="memberInfo">
+              <div className="memberName">Browse Volunteer Opportunities</div>
+              <div className="memberSub">Sign up for open serving positions</div>
+            </div>
+            <Icon className="memberChevron">chevron_right</Icon>
+          </div>
+        </Link>
 
         {servingData.length === 0 && assignments.length === 0 && (
           <div style={{ padding: 20, color: "#666" }}>No serving assignments found.</div>
