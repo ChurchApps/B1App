@@ -1,12 +1,12 @@
 import { Calendar, dayjsLocalizer, View } from "react-big-calendar";
 import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Snackbar, Stack } from "@mui/material";
+import { Chip, Snackbar, Stack } from "@mui/material";
 import { EventHelper } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { EventInterface } from "@churchapps/helpers";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { EditEventModal } from "./EditEventModal";
 import { DisplayEventModal } from "./DisplayEventModal";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
@@ -24,6 +24,28 @@ export function EventCalendar(props: Props) {
   const [open, setOpen] = useState<boolean>(false);
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState<View>("month");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    props.events.forEach((ev) => {
+      if (ev.tags) ev.tags.split(",").forEach((t) => { const trimmed = t.trim(); if (trimmed) tagSet.add(trimmed); });
+    });
+    return Array.from(tagSet).sort();
+  }, [props.events]);
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]);
+  };
+
+  const filteredEvents = useMemo(() => {
+    if (selectedTags.length === 0) return props.events;
+    return props.events.filter((ev) => {
+      if (!ev.tags) return false;
+      const eventTags = ev.tags.split(",").map((t) => t.trim());
+      return selectedTags.some((tag) => eventTags.includes(tag));
+    });
+  }, [props.events, selectedTags]);
 
   const handleSubscribe = () => {
     setOpen(true);
@@ -67,7 +89,7 @@ export function EventCalendar(props: Props) {
   startRange.setFullYear(startRange.getFullYear() - 1);
   endRange.setFullYear(endRange.getFullYear() + 1);
 
-  props.events.forEach((event) => {
+  filteredEvents.forEach((event) => {
     const ev = { ...event };
     ev.start = new Date(ev.start);
     ev.end = new Date(ev.end);
@@ -92,6 +114,23 @@ export function EventCalendar(props: Props) {
           <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }); }} data-testid="event-add-button" />
         </Stack>
       }
+      {allTags.length > 0 && (
+        <Stack direction="row" spacing={0.5} sx={{ marginBottom: 1, flexWrap: "wrap", gap: 0.5 }}>
+          {allTags.map((tag) => (
+            <Chip
+              key={tag}
+              label={tag}
+              size="small"
+              variant={selectedTags.includes(tag) ? "filled" : "outlined"}
+              color={selectedTags.includes(tag) ? "primary" : "default"}
+              onClick={() => toggleTag(tag)}
+            />
+          ))}
+          {selectedTags.length > 0 && (
+            <Chip label="Clear" size="small" variant="outlined" onDelete={() => setSelectedTags([])} onClick={() => setSelectedTags([])} />
+          )}
+        </Stack>
+      )}
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} date={date} view={view} onNavigate={onNavigate} onView={onView} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={handleDone} />}
       {displayEvent && <DisplayEventModal event={displayEvent} onDone={handleDone} canEdit={props.editGroupId !== ""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}

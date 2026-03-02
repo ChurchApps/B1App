@@ -81,6 +81,7 @@ export const TabsClient = (props: Props) => {
       case "checkin": return "/my/checkin";
       case "lessons": return "/my/lessons";
       case "donation": return "/my/donate";
+      case "volunteer": return "/my/volunteer";
       default: return null; // Other link types (bible, sermons, stream, etc.) don't have /my routes
     }
   };
@@ -99,6 +100,9 @@ export const TabsClient = (props: Props) => {
         tabs.push({ url: route, label: link.text });
       }
     });
+
+    // Registrations tab - always show for authenticated users
+    tabs.push({ url: "/my/registrations", label: "Registrations" });
 
     // Admin tab uses permission check, not visibility
     if (showAdmin && context.userChurch?.jwt) {
