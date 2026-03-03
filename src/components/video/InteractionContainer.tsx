@@ -73,12 +73,8 @@ export const InteractionContainer: React.FC<Props> = (props) => {
         </a>);
 
         switch (t.type) {
-          case "chat":
-            if (props.chatState !== null && props.chatState?.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={true} embedded={props.embedded} />);
-            break;
-          case "hostchat":
-            if (props.chatState !== null && props.chatState?.hostRoom !== null) result.push(<HostChat key={i} chatState={props.chatState} visible={visible} />);
-            break;
+          case "chat": if (props.chatState !== null && props.chatState?.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={true} embedded={props.embedded} />); break;
+          case "hostchat": if (props.chatState !== null && props.chatState?.hostRoom !== null) result.push(<HostChat key={i} chatState={props.chatState} visible={visible} />); break;
           case "prayer":
             if (props.chatState !== null) {
               if (props.chatState?.user.isHost) result.push(<ReceivePrayer key={i} chatState={props.chatState} visible={visible} switchToConversationId={props.config.switchToConversationId} />);

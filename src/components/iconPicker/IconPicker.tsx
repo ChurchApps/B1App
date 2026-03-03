@@ -83,10 +83,7 @@ function createSearchIndex() {
       }
       return s;
     });
-    return {
-      iconName: icon,
-      componentName: capitalizedSplit.join("")
-    };
+    return { iconName: icon, componentName: capitalizedSplit.join("") };
   });
 
   // create search index

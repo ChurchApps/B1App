@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { ApiHelper, ArrayHelper, DateHelper } from "@churchapps/apphelper";
-import type { GroupInterface, PersonInterface } from "@churchapps/helpers";
+import { ArrayHelper, DateHelper } from "@churchapps/apphelper";
+import type { GroupInterface } from "@churchapps/helpers";
 import { Icon } from "@mui/material";
-import { TimelineHelper } from "@/helpers/TimelineHelper";
 import { TimelinePostInterface } from "@/helpers";
 
 interface Props {
@@ -19,7 +18,7 @@ const postTypeIcons: Record<string, string> = {
   event: "event",
   group: "forum",
   venue: "school",
-  sermon: "mic",
+  sermon: "mic"
 };
 
 function getPostTitle(post: TimelinePostInterface): string {

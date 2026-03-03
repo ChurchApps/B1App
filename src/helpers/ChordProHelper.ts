@@ -105,9 +105,7 @@ export class ChordProHelper {
       if (line.startsWith("[") && line.endsWith("]")) lineType = "header";
       else if (l.length === 0) lineType = "empty";
       switch (lineType) {
-        case "header":
-          result.push("<h3 style=\"margin-bottom:0px\">" + l.substring(1, l.length - 1) + "</h3>");
-          break;
+        case "header": result.push("<h3 style=\"margin-bottom:0px\">" + l.substring(1, l.length - 1) + "</h3>"); break;
         case "line":
           l = this.transposeChords(l, keyOffset);
           l = this.replaceChords(l);

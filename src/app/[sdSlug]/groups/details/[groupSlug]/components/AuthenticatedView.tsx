@@ -59,24 +59,12 @@ export function AuthenticatedView(props: Props) {
           </div>
         </>;
         break;
-      case "calendar":
-        result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>;
-        break;
-      case "conversations":
-        result = <ConversationsTab context={context} groupId={group.id} isLeader={isLeader} />;
-        break;
-      case "resources":
-        result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>;
-        break;
-      case "leaderResources":
-        result = <><h2>Resources (Leaders Only)</h2><GroupLeaderResources context={context} groupId={group.id} /></>;
-        break;
-      case "members":
-        result = <MembersTab isLeader={isLeader} canEditMembers={canEditMembers} group={group} />;
-        break;
-      case "attendance":
-        result = <AttendanceTab group={group} />;
-        break;
+      case "calendar": result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>; break;
+      case "conversations": result = <ConversationsTab context={context} groupId={group.id} isLeader={isLeader} />; break;
+      case "resources": result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>; break;
+      case "leaderResources": result = <><h2>Resources (Leaders Only)</h2><GroupLeaderResources context={context} groupId={group.id} /></>; break;
+      case "members": result = <MembersTab isLeader={isLeader} canEditMembers={canEditMembers} group={group} />; break;
+      case "attendance": result = <AttendanceTab group={group} />; break;
     }
     return result;
   };

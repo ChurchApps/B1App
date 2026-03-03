@@ -38,7 +38,7 @@ export default async function RegisterPage({ params }: { params: PageParams }) {
             ? <EventRegister churchId={config.church.id} eventId={eventId} event={event} />
             : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
                 Registration is not available for this event.
-              </Typography>
+            </Typography>
           }
         </Container>
       </DefaultPageWrapper>
