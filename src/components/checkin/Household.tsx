@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Button, Icon, Box, CardActionArea, Typography, Chip, Divider } from "@mui/material";
+import { Button, Icon, Box, CardActionArea, Typography, Chip, Divider, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
 import { Groups } from "./Groups";
 import { ArrayHelper } from "@churchapps/apphelper";
@@ -19,6 +19,13 @@ export function Household({ completeHandler = () => { } }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pendingVisits, setPendingVisits] = useState<VisitInterface[]>(null);
   const [selectedMember, setSelectedMember] = useState<PersonInterface>(null);
+  const [showDuplicateDialog, setShowDuplicateDialog] = useState<boolean>(false);
+  const [duplicateNames, setDuplicateNames] = useState<string[]>([]);
+
+  const isCheckedIn = (personId: string): boolean => {
+    const visit = CheckinHelper.getVisitByPersonId(CheckinHelper.existingVisits, personId);
+    return visit !== null && visit !== undefined && visit.id !== null && visit.id !== undefined;
+  };
 
   const handleGroupSelected = (group: GroupInterface) => {
     const groupId = group ? group.id : "";
@@ -177,9 +184,25 @@ export function Household({ completeHandler = () => { } }: Props) {
               />
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginBottom: 1 }}>
+              <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginBottom: isCheckedIn(member.id) ? 0.5 : 1 }}>
                 {member.name?.display}
               </Typography>
+              {isCheckedIn(member.id) && (
+                <Chip
+                  icon={<Icon sx={{ fontSize: "16px !important" }}>check_circle</Icon>}
+                  label="Already checked in"
+                  size="small"
+                  sx={{
+                    backgroundColor: `${colors.success}1A`,
+                    color: colors.success,
+                    fontWeight: 600,
+                    fontSize: 11,
+                    height: 24,
+                    marginBottom: 0.5,
+                    "& .MuiChip-icon": { color: colors.success }
+                  }}
+                />
+              )}
               {!isExpanded && getCondensedGroupList(member)}
             </Box>
           </Box>
@@ -191,6 +214,27 @@ export function Household({ completeHandler = () => { } }: Props) {
   };
 
   const handleCheckin = () => {
+    const alreadyCheckedInNames: string[] = [];
+    CheckinHelper.pendingVisits.forEach(pv => {
+      if (pv.visitSessions && pv.visitSessions.length > 0) {
+        const existingVisit = CheckinHelper.getVisitByPersonId(CheckinHelper.existingVisits, pv.personId || "");
+        if (existingVisit && existingVisit.id) {
+          const person = CheckinHelper.householdMembers.find(m => m.id === pv.personId);
+          if (person) alreadyCheckedInNames.push(person.name?.display || "Unknown");
+        }
+      }
+    });
+
+    if (alreadyCheckedInNames.length > 0) {
+      setDuplicateNames(alreadyCheckedInNames);
+      setShowDuplicateDialog(true);
+    } else {
+      doCheckin();
+    }
+  };
+
+  const doCheckin = () => {
+    setShowDuplicateDialog(false);
     setIsLoading(true);
     const peopleIds: number[] = ArrayHelper.getUniqueValues(CheckinHelper.householdMembers, "id");
     const url = "/visits/checkin?serviceId=" + CheckinHelper.serviceId + "&peopleIds=" + encodeURIComponent(peopleIds.join(","));
@@ -265,6 +309,21 @@ export function Household({ completeHandler = () => { } }: Props) {
           Complete Check-in
         </Button>
       </Box>
+
+      <Dialog open={showDuplicateDialog} onClose={() => setShowDuplicateDialog(false)}>
+        <DialogTitle>Already Checked In</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {duplicateNames.join(", ")} already checked in for this service. Check in again to update their groups.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDuplicateDialog(false)}>Cancel</Button>
+          <Button onClick={doCheckin} variant="contained" sx={{ backgroundColor: colors.primary, "&:hover": { backgroundColor: colors.primaryHover } }}>
+            Check In Again
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
