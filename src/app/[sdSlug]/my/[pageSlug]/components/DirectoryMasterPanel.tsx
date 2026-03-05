@@ -95,9 +95,15 @@ export function DirectoryMasterPanel({ selectedId, onSelect }: Props) {
           <button
             onClick={handleSearch}
             style={{
-              padding: "8px 16px", border: "none", borderRadius: 6,
-              background: "#1565C0", color: "#fff", fontWeight: 500,
-              cursor: "pointer", fontFamily: "inherit", fontSize: "0.875rem"
+              padding: "8px 16px",
+              border: "none",
+              borderRadius: 6,
+              background: "#1565C0",
+              color: "#fff",
+              fontWeight: 500,
+              cursor: "pointer",
+              fontFamily: "inherit",
+              fontSize: "0.875rem"
             }}
           >
             Search

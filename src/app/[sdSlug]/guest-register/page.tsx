@@ -41,7 +41,7 @@ export default async function GuestRegisterPage({ params }: { params: PageParams
             ? <GuestRegister churchId={config.church.id} />
             : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
                 Guest registration is not enabled for this church.
-              </Typography>
+            </Typography>
           }
         </Container>
       </DefaultPageWrapper>

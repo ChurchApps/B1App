@@ -38,7 +38,7 @@ export default async function VolunteerPlanPage({ params }: { params: PageParams
             ? <VolunteerSignup planData={planData} churchId={config.church.id} />
             : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
                 No volunteer positions are currently available for this plan.
-              </Typography>
+            </Typography>
           }
         </Container>
       </DefaultPageWrapper>

@@ -64,8 +64,7 @@ async function fetchPreviewItems(planData: PlanInterface): Promise<PlanItemInter
 
         if (instructions) {
           return instructions.items.map((item, index) =>
-            instructionToPlanItem(item, planData.providerId, planData.providerPlanId, [index])
-          );
+            instructionToPlanItem(item, planData.providerId, planData.providerPlanId, [index]));
         }
       }
     }

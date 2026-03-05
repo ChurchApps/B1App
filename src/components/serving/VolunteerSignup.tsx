@@ -5,7 +5,7 @@ import {
   Card, CardContent, Typography, Stack, Button, LinearProgress, Box, Alert,
   Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Chip
 } from "@mui/material";
-import { ApiHelper, DateHelper, PersonHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper } from "@churchapps/apphelper";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import Link from "next/link";

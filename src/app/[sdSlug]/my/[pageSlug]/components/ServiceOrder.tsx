@@ -111,8 +111,7 @@ export const ServiceOrder = (props: Props) => {
 
         if (instructions) {
           const items: PlanItemInterface[] = instructions.items.map((item, index) =>
-            instructionToPlanItem(item, props.plan.providerId, props.plan.providerPlanId, [index])
-          );
+            instructionToPlanItem(item, props.plan.providerId, props.plan.providerPlanId, [index]));
           setPreviewLessonItems(items);
           setVenueName(props.plan.providerPlanName || instructions.name || "");
           return;

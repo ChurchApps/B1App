@@ -13,7 +13,7 @@ interface Props {
 const sections: { id: DonationSection; label: string; icon: string; description: string }[] = [
   { id: "give", label: "Give Now", icon: "volunteer_activism", description: "Make a one-time or recurring donation" },
   { id: "history", label: "History", icon: "receipt_long", description: "View past donations and export records" },
-  { id: "recurring", label: "Recurring Donations", icon: "autorenew", description: "Manage scheduled giving and payment methods" },
+  { id: "recurring", label: "Recurring Donations", icon: "autorenew", description: "Manage scheduled giving and payment methods" }
 ];
 
 export function DonationsMasterPanel({ activeSection, onSectionChange }: Props) {

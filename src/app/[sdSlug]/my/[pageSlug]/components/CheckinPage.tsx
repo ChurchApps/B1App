@@ -10,15 +10,9 @@ export function CheckinPage() {
 
   let content = null;
   switch (currentStep) {
-    case "household":
-      content = <Household completeHandler={() => setCurrentStep("complete")} />;
-      break;
-    case "complete":
-      content = <CheckinComplete />;
-      break;
-    default:
-      content = <Services selectedHandler={() => setCurrentStep("household")} />;
-      break;
+    case "household": content = <Household completeHandler={() => setCurrentStep("complete")} />; break;
+    case "complete": content = <CheckinComplete />; break;
+    default: content = <Services selectedHandler={() => setCurrentStep("household")} />; break;
   }
 
   return (

@@ -29,24 +29,12 @@ export const TimelinePost: React.FC<Props> = (props) => {
 
     let result = <></>;
     switch (props.post.postType) {
-      case "task":
-        result = getTaskDetails();
-        break;
-      case "event":
-        result = getEventDetails();
-        break;
-      case "group":
-        result = getGroupDetails();
-        break;
-      case "venue":
-        result = getVenueDetails();
-        break;
-      case "sermon":
-        result = getSermonDetails();
-        break;
-      default:
-        result = <>{displayTime} - <b>Message: </b> </>;
-        break;
+      case "task": result = getTaskDetails(); break;
+      case "event": result = getEventDetails(); break;
+      case "group": result = getGroupDetails(); break;
+      case "venue": result = getVenueDetails(); break;
+      case "sermon": result = getSermonDetails(); break;
+      default: result = <>{displayTime} - <b>Message: </b> </>; break;
     }
     return result;
   };

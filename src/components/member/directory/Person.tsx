@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Icon, IconButton, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
+import { Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
@@ -97,34 +97,42 @@ export const Person: React.FC<Props> = (props) => {
     const items: React.ReactElement[] = [];
     if (!person) return null;
     const ci = person.contactInfo;
-    if (ci?.email) items.push(
-      <div className="contactItem" key="email">
-        <Icon>mail_outline</Icon>
-        <span className="contactValue">{ci.email}</span>
-        <span className="contactLabel">Email</span>
-      </div>
-    );
-    if (ci?.mobilePhone) items.push(
-      <div className="contactItem" key="mobile">
-        <Icon>phone</Icon>
-        <span className="contactValue">{ci.mobilePhone}</span>
-        <span className="contactLabel">Mobile</span>
-      </div>
-    );
-    if (ci?.homePhone) items.push(
-      <div className="contactItem" key="home">
-        <Icon>phone</Icon>
-        <span className="contactValue">{ci.homePhone}</span>
-        <span className="contactLabel">Home</span>
-      </div>
-    );
-    if (ci?.workPhone) items.push(
-      <div className="contactItem" key="work">
-        <Icon>phone</Icon>
-        <span className="contactValue">{ci.workPhone}</span>
-        <span className="contactLabel">Work</span>
-      </div>
-    );
+    if (ci?.email) {
+      items.push(
+        <div className="contactItem" key="email">
+          <Icon>mail_outline</Icon>
+          <span className="contactValue">{ci.email}</span>
+          <span className="contactLabel">Email</span>
+        </div>
+      );
+    }
+    if (ci?.mobilePhone) {
+      items.push(
+        <div className="contactItem" key="mobile">
+          <Icon>phone</Icon>
+          <span className="contactValue">{ci.mobilePhone}</span>
+          <span className="contactLabel">Mobile</span>
+        </div>
+      );
+    }
+    if (ci?.homePhone) {
+      items.push(
+        <div className="contactItem" key="home">
+          <Icon>phone</Icon>
+          <span className="contactValue">{ci.homePhone}</span>
+          <span className="contactLabel">Home</span>
+        </div>
+      );
+    }
+    if (ci?.workPhone) {
+      items.push(
+        <div className="contactItem" key="work">
+          <Icon>phone</Icon>
+          <span className="contactValue">{ci.workPhone}</span>
+          <span className="contactLabel">Work</span>
+        </div>
+      );
+    }
     if (ci?.address1) {
       const addr = [ci.address1, ci.address2, ci.city ? `${ci.city}, ${ci.state} ${ci.zip}` : null].filter(Boolean).join(", ");
       items.push(
