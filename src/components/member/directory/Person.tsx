@@ -87,6 +87,12 @@ export const Person: React.FC<Props> = (props) => {
 
   React.useEffect(loadData, [props.personId]);
 
+  React.useEffect(() => {
+    if (window.location.hash === "#edit" && isOwnProfile) {
+      setEditMode(true);
+    }
+  }, [isOwnProfile]);
+
   const handleSaveProfile = () => {
     loadData();
     setEditMode(false);
