@@ -6,7 +6,7 @@ import { MarkdownEditor } from "@churchapps/apphelper-markdown";
 import { ErrorMessages } from "@churchapps/apphelper";
 import { EventHelper } from "@churchapps/apphelper";
 import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";
-import { AppBar, Button, Checkbox, Dialog, DialogContent, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography, Switch, Stack } from "@mui/material";
+import { AppBar, Button, Checkbox, Dialog, DialogContent, Divider, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography, Switch, Stack } from "@mui/material";
 import { useState } from "react";
 import { RRuleEditor } from "./RRuleEditor";
 import { EditRecurringModal } from "./EditRecurringModal";
@@ -106,6 +106,10 @@ export function EditEventModal(props: Props) {
       case "title": env.title = e.target.value; break;
       case "start": env.start = DateHelper.toDate(e.target.value); break;
       case "end": env.end = DateHelper.toDate(e.target.value); break;
+      case "capacity": env.capacity = e.target.value ? parseInt(e.target.value) : undefined; break;
+      case "registrationOpenDate": env.registrationOpenDate = DateHelper.toDate(e.target.value); break;
+      case "registrationCloseDate": env.registrationCloseDate = DateHelper.toDate(e.target.value); break;
+      case "tags": env.tags = e.target.value; break;
     }
     setEvent(env);
   };
@@ -196,6 +200,33 @@ export function EditEventModal(props: Props) {
             <Grid size={{ xs: 12 }}>
               <MarkdownEditor value={event.description || ""} onChange={val => setEvent({ ...event, description: val })} style={{ maxHeight: 200, overflowY: "scroll" }} data-testid="event-description-editor" />
             </Grid>
+            <Grid size={{ xs: 12 }}>
+              <Divider sx={{ my: 1 }} />
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography>Registration: </Typography>
+                <Switch
+                  size="small"
+                  checked={event.registrationEnabled || false}
+                  onChange={(e) => { setEvent({ ...event, registrationEnabled: e.target.checked }); }}
+                  data-testid="event-registration-switch"
+                  aria-label="Toggle event registration"
+                />
+              </Stack>
+            </Grid>
+            {event.registrationEnabled && (<>
+              <Grid size={{ xs: 6 }}>
+                <TextField name="capacity" type="number" value={event.capacity || ""} fullWidth label="Capacity (optional)" onChange={handleChange} size="small" data-testid="event-capacity-input" aria-label="Registration capacity" />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <TextField name="tags" value={event.tags || ""} fullWidth label="Tags (comma-separated)" onChange={handleChange} size="small" data-testid="event-tags-input" aria-label="Event tags" />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <TextField name="registrationOpenDate" type="datetime-local" value={event.registrationOpenDate ? DateHelper.formatHtml5DateTime(event.registrationOpenDate) : ""} fullWidth label="Registration Opens" onChange={handleChange} size="small" InputLabelProps={{ shrink: true }} data-testid="event-reg-open-input" aria-label="Registration open date" />
+              </Grid>
+              <Grid size={{ xs: 6 }}>
+                <TextField name="registrationCloseDate" type="datetime-local" value={event.registrationCloseDate ? DateHelper.formatHtml5DateTime(event.registrationCloseDate) : ""} fullWidth label="Registration Closes" onChange={handleChange} size="small" InputLabelProps={{ shrink: true }} data-testid="event-reg-close-input" aria-label="Registration close date" />
+              </Grid>
+            </>)}
           </Grid>
 
         </DialogContent>
