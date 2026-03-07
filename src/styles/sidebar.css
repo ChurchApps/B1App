@@ -30,21 +30,21 @@
 }
 
 .sideNav li.active a {
-  background-color: #F0F4FF;
-  color: #3578CC;
+  background-color: color-mix(in srgb, var(--app-primary, #3578CC) 8%, white);
+  color: var(--app-primary, #3578CC);
   font-weight: 500;
-  border-right-color: #3578CC;
+  border-right-color: var(--app-primary, #3578CC);
 }
 
 .sideNav li a:hover {
-  background-color: #F0F4FF;
-  color: #3578CC;
+  background-color: color-mix(in srgb, var(--app-primary, #3578CC) 8%, white);
+  color: var(--app-primary, #3578CC);
   text-decoration: none;
 }
 
 .sideNav .subhead {
   margin-top: 30px;
-  background-color: #DDE1FC;
+  background-color: var(--app-secondary, #DDE1FC);
   padding-left: 12px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -111,14 +111,14 @@
 }
 
 .mobileNav .mobileMenuList li.active a {
-  color: #3578CC;
+  color: var(--app-primary, #3578CC);
   font-weight: 500;
 }
 
 .mobileNav .mobileMenuList li a:hover,
 .mobileNav .mobileMenuList li a:active {
   background-color: #f5f5f5;
-  color: #3578CC;
+  color: var(--app-primary, #3578CC);
 }
 
 /* === Desktop Styles (≥900px) === */

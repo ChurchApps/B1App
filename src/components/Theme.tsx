@@ -31,6 +31,16 @@ export const Theme: React.FC<Props> = (props) => {
     if (fonts.body !== fonts.heading) googleFonts.push(fonts.body);
   }
 
+  if (props.config.appTheme?.light) {
+    const at = props.config.appTheme.light;
+    lines.push("--app-primary: " + at.primary + ";");
+    lines.push("--app-primary-contrast: " + at.primaryContrast + ";");
+    lines.push("--app-secondary: " + at.secondary + ";");
+    lines.push("--app-background: " + at.background + ";");
+    lines.push("--app-surface: " + at.surface + ";");
+    lines.push("--app-text: " + at.textColor + ";");
+  }
+
   if (props.config.globalStyles?.customCss) lines.push(props.config.globalStyles?.customCss);
 
   css = ":root { " + lines.join("\n") + " }";
