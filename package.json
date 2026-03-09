@@ -27,7 +27,7 @@
     "@churchapps/apphelper-markdown": "^0.6.15",
     "@churchapps/apphelper-website": "^0.6.17",
     "@churchapps/content-providers": "^0.1.6",
-    "@churchapps/helpers": "1.2.29",
+    "@churchapps/helpers": "1.2.30",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.6",

@@ -9,7 +9,9 @@ export interface ColorsInterface { primary: string, contrast: string, header: st
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
 export interface ServiceInterface { videoUrl: string, serviceTime: string, duration: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string }
-export interface ConfigurationInterface { keyName?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface }
+export interface AppThemeModeColors { background: string, surface: string, primary: string, primaryContrast: string, secondary: string, textColor: string }
+export interface AppThemeConfig { light: AppThemeModeColors, dark: AppThemeModeColors }
+export interface ConfigurationInterface { keyName?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface, appTheme?: AppThemeConfig }
 
 export class ConfigHelper {
 
@@ -27,12 +29,19 @@ export class ConfigHelper {
     const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi", [cacheKey]);
     const gatewayConfigured = await ApiHelper.getAnonymous("/gateways/configured/" + church.id, "GivingApi", [cacheKey]);
     const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
+    let appTheme: AppThemeConfig | undefined;
+    try {
+      if (appearance?.appTheme) {
+        const themeData = typeof appearance.appTheme === "string" ? JSON.parse(appearance.appTheme) : appearance.appTheme;
+        if (themeData && themeData.light) appTheme = themeData;
+      }
+    } catch { /* no app theme configured */ }
 
     // Check if gateway is properly configured with a valid privateKey
     // This prevents showing the donate tab when no payment gateway is set up
     const allowDonations = gatewayConfigured?.configured === true;
 
-    const result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles, homePage };
+    const result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles, homePage, appTheme };
     result.keyName = keyName;
     return result;
   }
