@@ -14,7 +14,7 @@ export default defineConfig({
   },
 
   use: {
-    baseURL: 'https://grace.demo.b1.church',
+    baseURL: process.env.BASE_URL || 'https://grace.demo.b1.church',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'off',
