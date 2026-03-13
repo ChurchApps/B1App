@@ -4,7 +4,7 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
-import "@churchapps/apphelper-website/dist/styles/animations.css";
+import "@/styles/vendor/animations.css";
 import { Animate } from "@churchapps/apphelper-website";
 import { FormPage } from "./components/FormPage";
 import { notFound } from "next/navigation";
