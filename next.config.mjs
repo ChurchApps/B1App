@@ -151,7 +151,10 @@ const nextConfig = {
 
   // Transpile packages
   transpilePackages: [
-    "mui-tel-input"
+    "mui-tel-input",
+    "@churchapps/apphelper-website",
+    "@churchapps/apphelper-markdown",
+    "@churchapps/apphelper-donations"
   ],
 
   // Compiler optimizations

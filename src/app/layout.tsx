@@ -1,11 +1,10 @@
 import "react-activity/dist/Dots.css";
-import "@churchapps/apphelper-website/dist/styles/pages.css";
+import "@/styles/vendor/pages.css";
 import "@/styles/member.css";
 import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@/styles/sidebar.css";
 import "@/styles/master-detail.css";
-import "@churchapps/apphelper-markdown/dist/components/markdownEditor/editor.css";
 import "@youversion/platform-react-ui/styles.css";
 import ClientLayout from "./ClientLayout";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
@@ -34,6 +33,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html className={roboto.className}>
       <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <link rel="stylesheet" href="/apphelper/css/markdown/editor.css" />
       </head>
       <body>
         <ClientLayout>{children}</ClientLayout>

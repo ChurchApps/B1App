@@ -5,7 +5,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import "@churchapps/apphelper-website/dist/styles/animations.css";
+import "@/styles/vendor/animations.css";
 import { Animate } from "@churchapps/apphelper-website";
 
 import { TimelinePage } from "../components/TimelinePage";
