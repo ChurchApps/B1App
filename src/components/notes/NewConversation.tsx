@@ -64,7 +64,7 @@ export function NewConversation({ context, conversation, ...props }: Props) {
         cId = result[0].id;
       }
 
-      const m = { ...message, conversationId: cId };
+      const m = { ...message, conversationId: cId, displayName: context?.person?.name?.display || "" };
       await ApiHelper.post("/messages", [m], "MessagingApi");
 
       setMessage({ ...message, content: "" });
