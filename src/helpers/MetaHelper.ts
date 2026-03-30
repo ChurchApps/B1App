@@ -1,21 +1,5 @@
 import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
-
-interface MetadataIcons {
-  icon: string;
-  shortcut: string;
-  apple: string;
-}
-
-interface Metadata {
-  title: string;
-  description: string;
-  openGraph: {
-    title: string;
-    description: string;
-    images: string[];
-  };
-  icons?: MetadataIcons;
-}
+import type { Metadata } from "next";
 
 export class MetaHelper {
   static getMetaData = (title?: string, description?: string, ogImage?: string, ogDescription?: string, appearance?: AppearanceInterface): Metadata => {
@@ -28,9 +12,10 @@ export class MetaHelper {
       title,
       description,
       openGraph: {
+        type: "website",
         title,
         description: ogDescription,
-        images: [ogImage]
+        images: [{ url: ogImage, width: 1200, height: 630 }]
       }
     };
 
