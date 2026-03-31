@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   const { sdSlug, eventId } = await params;
   const props = await loadSharedData(sdSlug, eventId);
   const title = props.event?.title ? "Register - " + props.event.title : "Event Registration";
-  return MetaHelper.getMetaData(title, "Event Registration", undefined, undefined, props.config.appearance);
+  return MetaHelper.getMetaData(title, "Event Registration", undefined, props.config.appearance);
 }
 
 export default async function RegisterPage({ params }: { params: PageParams }) {
