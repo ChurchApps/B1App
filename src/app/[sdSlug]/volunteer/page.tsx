@@ -19,7 +19,7 @@ const loadSharedData = async (sdSlug: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug } = await params;
   const { config } = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData("Volunteer Opportunities - " + config.church.name, "Browse open volunteer positions", undefined, undefined, config.appearance);
+  return MetaHelper.getMetaData("Volunteer Opportunities - " + config.church.name, "Browse open volunteer positions", undefined, config.appearance);
 }
 
 export default async function VolunteerPage({ params }: { params: PageParams }) {

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   const { sdSlug, planId } = await params;
   const { config, planData } = await loadSharedData(sdSlug, planId);
   const title = planData ? "Volunteer - " + planData.plan.name : "Volunteer";
-  return MetaHelper.getMetaData(title + " - " + config.church.name, "Sign up to volunteer", undefined, undefined, config.appearance);
+  return MetaHelper.getMetaData(title + " - " + config.church.name, "Sign up to volunteer", undefined, config.appearance);
 }
 
 export default async function VolunteerPlanPage({ params }: { params: PageParams }) {
