@@ -71,6 +71,7 @@ export function Header(props: Props) {
         }
       });
     }
+    if (typeof window === "undefined") return;
     const handleScroll = () => {
       if (props.overlayContent) {
         const show = window.scrollY > 100;
