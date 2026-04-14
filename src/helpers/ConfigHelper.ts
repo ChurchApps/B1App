@@ -28,7 +28,7 @@ export class ConfigHelper {
     const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=" + navCategory, "ContentApi", [cacheKey]);
     const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi", [cacheKey]);
     const gatewayConfigured = await ApiHelper.getAnonymous("/gateways/configured/" + church.id, "GivingApi", [cacheKey]);
-    const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
+    const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi", [cacheKey]);
     let appTheme: AppThemeConfig | undefined;
     try {
       if (appearance?.appTheme) {
