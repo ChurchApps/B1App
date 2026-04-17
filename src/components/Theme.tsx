@@ -45,8 +45,6 @@ export const Theme: React.FC<Props> = (props) => {
 
   css = ":root { " + lines.join("\n") + " }";
 
-  if (props?.config.globalStyles?.customJS) customJs = <div dangerouslySetInnerHTML={{ __html: props.config.globalStyles.customJS }} />;
-
   // Generate Google Fonts URL for dynamic loading
   let googleFontsUrl = "";
   if (googleFonts.length > 0) {
@@ -70,10 +68,26 @@ export const Theme: React.FC<Props> = (props) => {
     }
   }, [googleFontsUrl]);
 
+  // Execute customJS scripts properly — dangerouslySetInnerHTML doesn't execute <script> tags
+  const customJsRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const customJS = props?.config?.globalStyles?.customJS;
+    if (!customJS || !customJsRef.current) return;
+    const container = customJsRef.current;
+    container.innerHTML = customJS;
+    const scripts = container.querySelectorAll("script");
+    scripts.forEach((orig) => {
+      const script = document.createElement("script");
+      orig.getAttributeNames().forEach((name) => { script.setAttribute(name, orig.getAttribute(name)); });
+      if (orig.textContent) script.textContent = orig.textContent;
+      orig.replaceWith(script);
+    });
+  }, [props?.config?.globalStyles?.customJS]);
+
   return (<>
     <style jsx>
       {css}
     </style>
-    {customJs}
+    <div ref={customJsRef} />
   </>);
 };
