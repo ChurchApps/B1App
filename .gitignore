@@ -49,3 +49,4 @@ yarn-error.log*
 .env.sentry-build-plugin
 Notes.md
 /src/styles/vendor
+.env*.local
