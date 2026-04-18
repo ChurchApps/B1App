@@ -1,0 +1,487 @@
+"use client";
+
+import React from "react";
+import { useRouter } from "next/navigation";
+import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SendIcon from "@mui/icons-material/Send";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import type { MessageInterface, PersonInterface } from "@churchapps/helpers";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import UserContext from "@/context/UserContext";
+import { mobileTheme } from "../mobileTheme";
+
+interface Props {
+  id: string;
+  config: ConfigurationInterface;
+}
+
+// Shape we expect from /privateMessages (MessagingApi) - ConversationCheckInterface
+interface PrivateMessageRow {
+  id?: string;
+  conversationId?: string;
+  fromPersonId?: string;
+  toPersonId?: string;
+}
+
+// TODO: Verify endpoints. Using these based on B1Mobile reference:
+//   - GET /privateMessages (MessagingApi) to list my conversations and match the counterpart personId
+//   - POST /conversations (MessagingApi) with [{ allowAnonymousPosts, contentType:"privateMessage", contentId, title, visibility:"hidden" }]
+//   - POST /privateMessages (MessagingApi) with [{ fromPersonId, toPersonId, conversationId }]
+//   - GET /messages/conversation/{conversationId} (MessagingApi)
+//   - POST /messages (MessagingApi) with [{ conversationId, content, displayName }]
+//   - GET /people/{id} (MembershipApi) or /people/basic?ids=... to get header info
+// The task hint mentioned GET /privateMessages/existing/{personId}; B1Mobile does not use that,
+// so we follow B1Mobile: find existing by scanning /privateMessages, or create on first send.
+
+export const MessageConversation = ({ id, config }: Props) => {
+  const tc = mobileTheme.colors;
+  const router = useRouter();
+  const userContext = React.useContext(UserContext);
+
+  const [person, setPerson] = React.useState<PersonInterface | null>(null);
+  const [conversationId, setConversationId] = React.useState<string | null>(null);
+  const [messages, setMessages] = React.useState<MessageInterface[] | null>(null);
+  const [text, setText] = React.useState("");
+  const [sending, setSending] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [snack, setSnack] = React.useState<string | null>(null);
+
+  const listRef = React.useRef<HTMLDivElement | null>(null);
+
+  const myPersonId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
+  const myDisplayName = userContext?.person?.name?.display || UserHelper.currentUserChurch?.person?.name?.display || "";
+
+  const scrollToBottom = React.useCallback(() => {
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
+  }, []);
+
+  const loadMessages = React.useCallback(async (convId: string) => {
+    try {
+      const data: MessageInterface[] = await ApiHelper.get(
+        "/messages/conversation/" + convId,
+        "MessagingApi"
+      );
+      setMessages(Array.isArray(data) ? data : []);
+      // TODO: Ack read-receipts if B1Mobile exposes an endpoint for isNew=false.
+    } catch {
+      setMessages([]);
+      setError("Unable to load messages.");
+    }
+  }, []);
+
+  // Initial load: person header + existing conversation id (if any)
+  React.useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      try {
+        // Person header
+        try {
+          const p: PersonInterface = await ApiHelper.get("/people/" + id, "MembershipApi");
+          if (!cancelled) setPerson(p || null);
+        } catch {
+          // fall back to basic batch
+          try {
+            const people: PersonInterface[] = await ApiHelper.get(
+              "/people/basic?ids=" + id,
+              "MembershipApi"
+            );
+            if (!cancelled && Array.isArray(people) && people.length > 0) setPerson(people[0]);
+          } catch {
+            /* ignore */
+          }
+        }
+
+        if (!myPersonId) {
+          if (!cancelled) setMessages([]);
+          return;
+        }
+
+        const pm: PrivateMessageRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+        const match = Array.isArray(pm)
+          ? pm.find(
+              (c) =>
+                (c.fromPersonId === myPersonId && c.toPersonId === id) ||
+                (c.toPersonId === myPersonId && c.fromPersonId === id)
+            )
+          : null;
+        if (match?.conversationId) {
+          if (cancelled) return;
+          setConversationId(match.conversationId);
+          await loadMessages(match.conversationId);
+        } else if (!cancelled) {
+          setMessages([]);
+        }
+      } catch {
+        if (!cancelled) {
+          setMessages([]);
+          setError("Unable to load conversation.");
+        }
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, myPersonId, loadMessages]);
+
+  // Auto-scroll on messages change
+  React.useEffect(() => {
+    if (messages && messages.length > 0) {
+      // next tick so DOM is painted
+      requestAnimationFrame(() => scrollToBottom());
+    }
+  }, [messages, scrollToBottom]);
+
+  const createConversationAndSend = async (content: string) => {
+    if (!myPersonId) return;
+    // Step 1: create conversation
+    const convParams = [
+      {
+        allowAnonymousPosts: false,
+        contentType: "privateMessage",
+        contentId: myPersonId,
+        title: (myDisplayName || "Private") + " Private Message",
+        visibility: "hidden",
+      },
+    ];
+    const convData: any[] = await ApiHelper.post("/conversations", convParams, "MessagingApi");
+    const newConvId: string | undefined = convData?.[0]?.id;
+    if (!newConvId) throw new Error("Could not create conversation");
+
+    // Step 2: link via /privateMessages
+    await ApiHelper.post(
+      "/privateMessages",
+      [{ fromPersonId: myPersonId, toPersonId: id, conversationId: newConvId }],
+      "MessagingApi"
+    );
+
+    setConversationId(newConvId);
+
+    // Step 3: post the message
+    await ApiHelper.post(
+      "/messages",
+      [{ conversationId: newConvId, content, displayName: myDisplayName }],
+      "MessagingApi"
+    );
+    await loadMessages(newConvId);
+  };
+
+  const handleSend = async () => {
+    const content = text.trim();
+    if (!content || sending) return;
+    if (!myPersonId) {
+      setError("You must be signed in to send messages.");
+      return;
+    }
+    setSending(true);
+    setError(null);
+
+    // Optimistic append
+    const optimistic: MessageInterface = {
+      id: "temp-" + Date.now(),
+      conversationId: conversationId || "",
+      content,
+      displayName: myDisplayName,
+      personId: myPersonId,
+      timeSent: new Date(),
+    } as MessageInterface;
+    setMessages((prev) => [...(prev || []), optimistic]);
+    setText("");
+
+    try {
+      if (conversationId) {
+        await ApiHelper.post(
+          "/messages",
+          [{ conversationId, content, displayName: myDisplayName }],
+          "MessagingApi"
+        );
+        await loadMessages(conversationId);
+      } else {
+        await createConversationAndSend(content);
+      }
+    } catch {
+      setError("Message failed to send.");
+      // Remove optimistic entry on failure
+      setMessages((prev) => (prev || []).filter((m) => m.id !== optimistic.id));
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const name = person?.name?.display || "Conversation";
+
+  const getInitials = (n: string) => {
+    const parts = n.trim().split(/\s+/);
+    return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase() || "?";
+  };
+
+  const getPhoto = (): string | "" => {
+    if (!person) return "";
+    try {
+      return PersonHelper.getPhotoUrl(person) || "";
+    } catch {
+      return "";
+    }
+  };
+
+  const formatTime = (t?: Date | string | number) => {
+    if (!t) return "";
+    const d = new Date(t);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  };
+
+  const renderAvatar = () => {
+    const photo = getPhoto();
+    const common = {
+      width: 36,
+      height: 36,
+      borderRadius: "18px",
+      flexShrink: 0,
+      overflow: "hidden",
+    } as const;
+    if (photo) {
+      return <Box component="img" src={photo} alt={name} sx={{ ...common, objectFit: "cover" }} />;
+    }
+    return (
+      <Box
+        sx={{
+          ...common,
+          bgcolor: tc.primaryLight,
+          color: tc.primary,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontWeight: 700,
+          fontSize: 13,
+        }}
+      >
+        {getInitials(name)}
+      </Box>
+    );
+  };
+
+  const renderBubble = (m: MessageInterface, index: number) => {
+    const mine = m.personId === myPersonId;
+    const prev = index > 0 ? messages![index - 1] : undefined;
+    const showTimestamp =
+      !prev ||
+      (m.timeSent &&
+        prev.timeSent &&
+        new Date(m.timeSent).getTime() - new Date(prev.timeSent).getTime() > 5 * 60 * 1000);
+
+    return (
+      <React.Fragment key={m.id || index}>
+        {showTimestamp && m.timeSent && (
+          <Typography
+            sx={{
+              fontSize: 11,
+              color: tc.textSecondary,
+              textAlign: "center",
+              my: "8px",
+            }}
+          >
+            {formatTime(m.timeSent)}
+          </Typography>
+        )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: mine ? "flex-end" : "flex-start",
+            mb: "6px",
+          }}
+        >
+          <Box
+            sx={{
+              maxWidth: "75%",
+              px: "12px",
+              py: "8px",
+              bgcolor: mine ? tc.primary : tc.surface,
+              color: mine ? tc.onPrimary : tc.text,
+              borderRadius: mine ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
+              boxShadow: mobileTheme.shadows.sm,
+              wordBreak: "break-word",
+              fontSize: 14,
+              lineHeight: 1.35,
+            }}
+          >
+            {m.content}
+          </Box>
+        </Box>
+      </React.Fragment>
+    );
+  };
+
+  const renderEmpty = () => (
+    <Box
+      sx={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        color: tc.textMuted,
+        gap: "8px",
+        p: `${mobileTheme.spacing.lg}px`,
+      }}
+    >
+      <Box
+        sx={{
+          width: 56,
+          height: 56,
+          borderRadius: "28px",
+          bgcolor: tc.iconBackground,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <ChatBubbleOutlineIcon sx={{ fontSize: 28, color: tc.primary }} />
+      </Box>
+      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
+        Start the conversation with {name}
+      </Typography>
+    </Box>
+  );
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        minHeight: "100%",
+        bgcolor: tc.background,
+      }}
+    >
+      {/* Header row */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          px: `${mobileTheme.spacing.md}px`,
+          py: "10px",
+          bgcolor: tc.surface,
+          borderBottom: `1px solid ${tc.border}`,
+        }}
+      >
+        <IconButton
+          aria-label="Back"
+          onClick={() => router.back()}
+          sx={{ color: tc.text }}
+          size="small"
+        >
+          <ArrowBackIcon />
+        </IconButton>
+        {renderAvatar()}
+        <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {name}
+        </Typography>
+      </Box>
+
+      {/* Messages list */}
+      <Box
+        ref={listRef}
+        sx={{
+          flex: 1,
+          overflowY: "auto",
+          p: `${mobileTheme.spacing.md}px`,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {messages === null && (
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flex: 1 }}>
+            <CircularProgress size={28} sx={{ color: tc.primary }} />
+          </Box>
+        )}
+        {messages !== null && messages.length === 0 && renderEmpty()}
+        {messages !== null && messages.length > 0 && messages.map(renderBubble)}
+      </Box>
+
+      {/* Composer */}
+      <Box
+        sx={{
+          position: "sticky",
+          bottom: 0,
+          bgcolor: tc.surface,
+          borderTop: `1px solid ${tc.border}`,
+          p: "10px",
+          display: "flex",
+          alignItems: "flex-end",
+          gap: "8px",
+        }}
+      >
+        <TextField
+          multiline
+          maxRows={4}
+          fullWidth
+          placeholder="Type a message…"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          size="small"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "22px",
+              bgcolor: tc.background,
+              fontSize: 14,
+              px: "12px",
+              py: "2px",
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: tc.border,
+            },
+          }}
+        />
+        <IconButton
+          aria-label="Send"
+          onClick={handleSend}
+          disabled={sending || !text.trim()}
+          sx={{
+            bgcolor: tc.primary,
+            color: tc.onPrimary,
+            "&:hover": { bgcolor: tc.primary },
+            "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
+            width: 40,
+            height: 40,
+          }}
+        >
+          {sending ? (
+            <CircularProgress size={18} sx={{ color: tc.onPrimary }} />
+          ) : (
+            <SendIcon sx={{ fontSize: 20 }} />
+          )}
+        </IconButton>
+      </Box>
+
+      <Snackbar
+        open={!!error}
+        autoHideDuration={4000}
+        onClose={() => setError(null)}
+        message={error || ""}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
+      <Snackbar
+        open={!!snack}
+        autoHideDuration={2500}
+        onClose={() => setSnack(null)}
+        message={snack || ""}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
+    </Box>
+  );
+};

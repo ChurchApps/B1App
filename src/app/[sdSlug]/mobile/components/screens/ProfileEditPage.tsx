@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Avatar,
@@ -21,6 +21,27 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
+type FieldKey = "first" | "last" | "email" | "mobilePhone" | "address1" | "city" | "state" | "zip" | "photo";
+
+const fieldLabels: Record<FieldKey, string> = {
+  first: "First Name",
+  last: "Last Name",
+  email: "Email",
+  mobilePhone: "Phone",
+  address1: "Street",
+  city: "City",
+  state: "State",
+  zip: "Zip",
+  photo: "Photo",
+};
+
+const getFieldValue = (p: PersonInterface | null, key: FieldKey): string => {
+  if (!p) return "";
+  if (key === "first" || key === "last") return (p.name as any)?.[key] || "";
+  if (key === "photo") return p.photo || "";
+  return (p.contactInfo as any)?.[key] || "";
+};
+
 const emptyPerson: PersonInterface = {
   name: { first: "", middle: "", last: "", display: "" },
   contactInfo: {
@@ -35,12 +56,16 @@ const emptyPerson: PersonInterface = {
   },
 } as PersonInterface;
 
+const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
+
 export const ProfileEditPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const [person, setPerson] = useState<PersonInterface | null>(null);
+  const [initial, setInitial] = useState<PersonInterface | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [snack, setSnack] = useState<{ open: boolean; msg: string; severity: "success" | "error" }>({
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [snack, setSnack] = useState<{ open: boolean; msg: string; severity: "success" | "error" | "info" }>({
     open: false,
     msg: "",
     severity: "success",
@@ -53,20 +78,25 @@ export const ProfileEditPage = ({ config }: Props) => {
     if (!personId) {
       setLoading(false);
       setPerson({ ...emptyPerson });
+      setInitial({ ...emptyPerson });
       return;
     }
     ApiHelper.get("/people/" + personId, "MembershipApi")
       .then((data: PersonInterface) => {
         if (cancelled) return;
-        setPerson({
+        const merged: PersonInterface = {
           ...emptyPerson,
           ...data,
           name: { ...emptyPerson.name, ...(data?.name || {}) },
           contactInfo: { ...emptyPerson.contactInfo, ...(data?.contactInfo || {}) },
-        });
+        };
+        setPerson(merged);
+        setInitial(JSON.parse(JSON.stringify(merged)));
       })
       .catch(() => {
-        if (!cancelled) setPerson({ ...emptyPerson });
+        if (cancelled) return;
+        setPerson({ ...emptyPerson });
+        setInitial({ ...emptyPerson });
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -91,30 +121,87 @@ export const ProfileEditPage = ({ config }: Props) => {
     };
 
   const handlePhotoClick = () => {
-    // TODO: upload wiring incomplete — this stub opens a file picker but does not yet upload to server.
+    setPhotoError(null);
     fileInputRef.current?.click();
   };
 
   const handleFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = "";
     if (!file || !person) return;
+    if (!file.type.startsWith("image/")) {
+      setPhotoError("Please select an image file.");
+      return;
+    }
+    if (file.size > MAX_PHOTO_BYTES) {
+      setPhotoError("Image must be under 2 MB.");
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
-      setPerson({ ...person, photo: typeof reader.result === "string" ? reader.result : person.photo });
+      setPerson((p) => (p ? { ...p, photo: typeof reader.result === "string" ? reader.result : p.photo } : p));
     };
     reader.readAsDataURL(file);
   };
 
+  const changes = useMemo(() => {
+    if (!person || !initial) return [];
+    const keys: FieldKey[] = ["first", "last", "email", "mobilePhone", "address1", "city", "state", "zip", "photo"];
+    return keys
+      .filter((k) => getFieldValue(person, k) !== getFieldValue(initial, k))
+      .map((k) => ({ field: k, label: fieldLabels[k], value: getFieldValue(person, k) }));
+  }, [person, initial]);
+
   const handleSave = async () => {
-    if (!person) return;
+    if (!person || !initial) return;
+    if (changes.length === 0) {
+      setSnack({ open: true, msg: "No changes to submit.", severity: "info" });
+      return;
+    }
     setSaving(true);
     try {
-      // Canonical person save — same as B1Admin / B1App admin pages.
-      await ApiHelper.post("/people", [person], "MembershipApi");
-      setSnack({ open: true, msg: "Profile saved.", severity: "success" });
+      const churchId = UserHelper.currentUserChurch?.church?.id || config?.church?.id;
+      const personId = person.id || UserHelper.currentUserChurch?.person?.id;
+      const displayName = [person.name?.first, person.name?.last].filter(Boolean).join(" ");
+
+      const task: any = {
+        dateCreated: new Date(),
+        associatedWithType: "person",
+        associatedWithId: personId,
+        associatedWithLabel: displayName,
+        createdByType: "person",
+        createdById: personId,
+        createdByLabel: displayName,
+        title: `Profile changes for ${displayName || "member"}`,
+        status: "Open",
+        data: JSON.stringify(changes),
+      };
+
+      if (churchId) {
+        try {
+          const publicSettings = await ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi");
+          if (publicSettings?.directoryApprovalGroupId) {
+            const group = await ApiHelper.get(`/groups/${publicSettings.directoryApprovalGroupId}`, "MembershipApi");
+            task.assignedToType = "group";
+            task.assignedToId = publicSettings.directoryApprovalGroupId;
+            task.assignedToLabel = group?.name;
+          }
+        } catch {
+          /* no approval group configured — task goes unassigned */
+        }
+      }
+
+      await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
+
+      setInitial(JSON.parse(JSON.stringify(person)));
+      setSnack({
+        open: true,
+        msg: "Your changes have been submitted for approval.",
+        severity: "success",
+      });
     } catch (err: any) {
       console.error("Profile save error", err);
-      setSnack({ open: true, msg: err?.message || "Unable to save profile.", severity: "error" });
+      setSnack({ open: true, msg: err?.message || "Unable to submit changes.", severity: "error" });
     } finally {
       setSaving(false);
     }
@@ -160,6 +247,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   if (!person) return null;
 
   const displayInitial = (person.name?.first?.charAt(0) || "?").toUpperCase();
+  const hasChanges = changes.length > 0;
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -190,7 +278,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             {[person.name?.first, person.name?.last].filter(Boolean).join(" ") || "Your Photo"}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: "2px" }}>
-            PNG or JPG, square images look best.
+            PNG or JPG, under 2 MB. Square images look best.
           </Typography>
           <Button
             variant="outlined"
@@ -206,6 +294,9 @@ export const ProfileEditPage = ({ config }: Props) => {
           >
             Change Photo
           </Button>
+          {photoError && (
+            <Typography sx={{ fontSize: 12, color: tc.error, mt: "6px" }}>{photoError}</Typography>
+          )}
           <input
             ref={fileInputRef}
             type="file"
@@ -228,44 +319,10 @@ export const ProfileEditPage = ({ config }: Props) => {
       >
         {sectionHeader("Contact")}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          <TextField
-            label="First Name"
-            value={person.name?.first || ""}
-            onChange={handleNameChange("first")}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <TextField
-            label="Last Name"
-            value={person.name?.last || ""}
-            onChange={handleNameChange("last")}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <TextField
-            label="Email"
-            type="email"
-            value={person.contactInfo?.email || ""}
-            onChange={handleContactChange("email")}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <TextField
-            label="Phone"
-            type="tel"
-            value={person.contactInfo?.mobilePhone || ""}
-            onChange={handleContactChange("mobilePhone")}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
+          <TextField label="First Name" value={person.name?.first || ""} onChange={handleNameChange("first")} variant="outlined" size="medium" fullWidth sx={inputSx} />
+          <TextField label="Last Name" value={person.name?.last || ""} onChange={handleNameChange("last")} variant="outlined" size="medium" fullWidth sx={inputSx} />
+          <TextField label="Email" type="email" value={person.contactInfo?.email || ""} onChange={handleContactChange("email")} variant="outlined" size="medium" fullWidth sx={inputSx} />
+          <TextField label="Phone" type="tel" value={person.contactInfo?.mobilePhone || ""} onChange={handleContactChange("mobilePhone")} variant="outlined" size="medium" fullWidth sx={inputSx} />
         </Box>
       </Box>
 
@@ -281,55 +338,28 @@ export const ProfileEditPage = ({ config }: Props) => {
       >
         {sectionHeader("Address")}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          <TextField
-            label="Street"
-            value={person.contactInfo?.address1 || ""}
-            onChange={handleContactChange("address1")}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
-          <TextField
-            label="City"
-            value={person.contactInfo?.city || ""}
-            onChange={handleContactChange("city")}
-            variant="outlined"
-            size="medium"
-            fullWidth
-            sx={inputSx}
-          />
+          <TextField label="Street" value={person.contactInfo?.address1 || ""} onChange={handleContactChange("address1")} variant="outlined" size="medium" fullWidth sx={inputSx} />
+          <TextField label="City" value={person.contactInfo?.city || ""} onChange={handleContactChange("city")} variant="outlined" size="medium" fullWidth sx={inputSx} />
           <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px` }}>
-            <TextField
-              label="State"
-              value={person.contactInfo?.state || ""}
-              onChange={handleContactChange("state")}
-              variant="outlined"
-              size="medium"
-              fullWidth
-              sx={inputSx}
-            />
-            <TextField
-              label="Zip"
-              value={person.contactInfo?.zip || ""}
-              onChange={handleContactChange("zip")}
-              variant="outlined"
-              size="medium"
-              fullWidth
-              sx={inputSx}
-            />
+            <TextField label="State" value={person.contactInfo?.state || ""} onChange={handleContactChange("state")} variant="outlined" size="medium" fullWidth sx={inputSx} />
+            <TextField label="Zip" value={person.contactInfo?.zip || ""} onChange={handleContactChange("zip")} variant="outlined" size="medium" fullWidth sx={inputSx} />
           </Box>
         </Box>
       </Box>
 
-      {/* Save button */}
+      {hasChanges && (
+        <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: `${mobileTheme.spacing.md}px`, textAlign: "center" }}>
+          {changes.length} change{changes.length === 1 ? "" : "s"} pending — submission requires approval.
+        </Typography>
+      )}
+
       <Button
         variant="contained"
         onClick={handleSave}
-        disabled={saving}
+        disabled={saving || !hasChanges}
         fullWidth
         sx={{
-          mt: `${mobileTheme.spacing.lg}px`,
+          mt: `${mobileTheme.spacing.sm}px`,
           mb: `${mobileTheme.spacing.md}px`,
           bgcolor: tc.primary,
           py: 1.25,
@@ -339,9 +369,10 @@ export const ProfileEditPage = ({ config }: Props) => {
           fontWeight: 600,
           boxShadow: mobileTheme.shadows.md,
           "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
+          "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
         }}
       >
-        {saving ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Save Changes"}
+        {saving ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Submit Changes"}
       </Button>
 
       <Snackbar
@@ -350,11 +381,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         onClose={() => setSnack({ ...snack, open: false })}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert
-          severity={snack.severity}
-          onClose={() => setSnack({ ...snack, open: false })}
-          sx={{ width: "100%" }}
-        >
+        <Alert severity={snack.severity} onClose={() => setSnack({ ...snack, open: false })} sx={{ width: "100%" }}>
           {snack.msg}
         </Alert>
       </Snackbar>
