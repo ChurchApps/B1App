@@ -18,6 +18,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
 
   let primaryColor = "#0D47A1";
   let initials = sdSlug.substring(0, 2).toUpperCase();
+  let favicon: string | undefined;
   try {
     const base = process.env.NEXT_PUBLIC_MEMBERSHIP_API;
     if (base) {
@@ -30,6 +31,9 @@ export async function GET(_req: Request, { params }: { params: Params }) {
           if (appearanceRes.ok) {
             const appearance = await appearanceRes.json();
             primaryColor = appearance?.primaryColor || primaryColor;
+            favicon = n >= 256
+              ? (appearance?.favicon_400x400 || appearance?.favicon_16x16)
+              : (appearance?.favicon_16x16 || appearance?.favicon_400x400);
           }
         }
       }
@@ -37,6 +41,8 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   } catch {
     /* use default */
   }
+
+  if (favicon) return Response.redirect(favicon, 302);
 
   return new ImageResponse(
     (
