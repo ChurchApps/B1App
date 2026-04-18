@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PwaRegister } from "./PwaRegister";
+import { MobileClientLayout } from "./MobileClientLayout";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -12,14 +13,17 @@ export async function generateMetadata(): Promise<Metadata> {
       userScalable: false,
       viewportFit: "cover",
     },
+    robots: { index: false, follow: false },
   };
 }
 
 export default function MobileLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <MobileClientLayout>
+      <link rel="preconnect" href="https://content.churchapps.org" />
+      <link rel="preconnect" href="https://content.lessons.church" />
       <PwaRegister />
       {children}
-    </>
+    </MobileClientLayout>
   );
 }

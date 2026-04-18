@@ -1,12 +1,3 @@
-import "react-activity/dist/Dots.css";
-import "@/styles/vendor/pages.css";
-import "@/styles/member.css";
-import "@/styles/streaming.css";
-import "@/styles/buttons.css";
-import "@/styles/sidebar.css";
-import "@/styles/master-detail.css";
-import "@youversion/platform-react-ui/styles.css";
-import ClientLayout from "./ClientLayout";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { Roboto } from "next/font/google";
 
@@ -31,13 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html className={roboto.className}>
-      <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-        <link rel="stylesheet" href="/apphelper/css/markdown/editor.css" />
-      </head>
-      <body>
-        <ClientLayout>{children}</ClientLayout>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

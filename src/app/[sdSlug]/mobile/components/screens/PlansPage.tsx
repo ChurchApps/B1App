@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, ArrayHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type {
   AssignmentInterface,
   PlanInterface,
   PositionInterface,
-  TimeInterface,
 } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -29,64 +29,49 @@ interface PlanRow {
 export const PlansPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const loggedIn = !!UserHelper.user?.firstName;
 
-  const [rows, setRows] = useState<PlanRow[] | null>(null);
+  const { data: rows = null } = useQuery<PlanRow[]>({
+    queryKey: ["my-plans", UserHelper.user?.id],
+    queryFn: async () => {
+      const assignments: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
+      if (!assignments || assignments.length === 0) return [];
 
-  useEffect(() => {
-    let cancelled = false;
-    if (!UserHelper.user?.firstName) {
-      setRows([]);
-      return;
-    }
-    const load = async () => {
-      try {
-        const assignments: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
-        if (!assignments || assignments.length === 0) {
-          if (!cancelled) setRows([]);
-          return;
-        }
-        const positionIds = ArrayHelper.getUniqueValues(assignments, "positionId");
-        const positions: PositionInterface[] = await ApiHelper.get(
-          "/positions/ids?ids=" + positionIds,
-          "DoingApi"
-        );
-        const planIds = ArrayHelper.getUniqueValues(positions, "planId");
-        const [plans, _times]: [PlanInterface[], TimeInterface[]] = await Promise.all([
-          ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi"),
-          ApiHelper.get("/times/plans?planIds=" + planIds, "DoingApi"),
-        ]);
+      const positionIds = ArrayHelper.getUniqueValues(assignments, "positionId");
+      const positions: PositionInterface[] = await ApiHelper.get("/positions/ids?ids=" + positionIds, "DoingApi");
+      const planIds = ArrayHelper.getUniqueValues(positions, "planId");
+      const [plans] = await Promise.all([
+        ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi") as Promise<PlanInterface[]>,
+        ApiHelper.get("/times/plans?planIds=" + planIds, "DoingApi"),
+      ]);
 
-        const data: PlanRow[] = [];
-        assignments.forEach((a) => {
-          const position = positions.find((p) => p.id === a.positionId);
-          const plan = plans.find((p) => p.id === position?.planId);
-          if (position && plan) {
-            const existing = data.find((d) => d.planId === plan.id);
-            if (existing) {
-              existing.assignmentCount += 1;
-            } else {
-              data.push({
-                planId: plan.id,
-                planName: plan.name,
-                serviceDate: DateHelper.toDate(plan.serviceDate),
-                position: position.name,
-                status: a.status || "Unconfirmed",
-                assignmentCount: 1,
-              });
-            }
+      const data: PlanRow[] = [];
+      assignments.forEach((a) => {
+        const position = positions.find((p) => p.id === a.positionId);
+        const plan = plans.find((p) => p.id === position?.planId);
+        if (position && plan) {
+          const existing = data.find((d) => d.planId === plan.id);
+          if (existing) {
+            existing.assignmentCount += 1;
+          } else {
+            data.push({
+              planId: plan.id,
+              planName: plan.name,
+              serviceDate: DateHelper.toDate(plan.serviceDate),
+              position: position.name,
+              status: a.status || "Unconfirmed",
+              assignmentCount: 1,
+            });
           }
-        });
-        ArrayHelper.sortBy(data, "serviceDate", true);
-        if (!cancelled) setRows(data);
-      } catch {
-        if (!cancelled) setRows([]);
-      }
-    };
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+        }
+      });
+      ArrayHelper.sortBy(data, "serviceDate", true);
+      return data;
+    },
+    enabled: loggedIn,
+  });
+
+  const effectiveRows = loggedIn ? rows : [];
 
   const getStatusColor = (status: string) => {
     if (status === "Accepted") return tc.success;
@@ -234,9 +219,9 @@ export const PlansPage = ({ config: _config }: Props) => {
         My Plans
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {rows === null && [0, 1, 2].map(renderSkeleton)}
-        {rows !== null && rows.length === 0 && renderEmpty()}
-        {rows !== null && rows.length > 0 && rows.map(renderCard)}
+        {effectiveRows === null && [0, 1, 2].map(renderSkeleton)}
+        {effectiveRows !== null && effectiveRows.length === 0 && renderEmpty()}
+        {effectiveRows !== null && effectiveRows.length > 0 && effectiveRows.map(renderCard)}
       </Box>
     </Box>
   );

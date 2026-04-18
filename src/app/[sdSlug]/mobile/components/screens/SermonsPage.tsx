@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -154,34 +155,20 @@ const SkeletonCard = () => {
 export const SermonsPage = ({ config }: Props) => {
   const router = useRouter();
   const tc = mobileTheme.colors;
-  const [sermons, setSermons] = useState<SermonInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-
   const churchId = config?.church?.id;
 
-  useEffect(() => {
-    if (!churchId) { setLoading(false); return; }
-    let cancelled = false;
-    const load = async () => {
-      setLoading(true);
-      try {
-        const result = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
-        if (cancelled) return;
-        const list: SermonInterface[] = Array.isArray(result)
-          ? result.filter((s: any) => s && s.id && s.title)
-          : [];
-        list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
-        setSermons(list);
-      } catch (err) {
-        console.error("Failed to load sermons", err);
-        if (!cancelled) setSermons([]);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-    load();
-    return () => { cancelled = true; };
-  }, [churchId]);
+  const { data: sermons = [], isLoading } = useQuery<SermonInterface[]>({
+    queryKey: ["sermons", churchId],
+    queryFn: async () => {
+      const result = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
+      const list: SermonInterface[] = Array.isArray(result) ? result.filter((s: any) => s && s.id && s.title) : [];
+      list.sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime());
+      return list;
+    },
+    enabled: !!churchId,
+  });
+
+  const loading = isLoading && sermons.length === 0;
 
   const handleSermonClick = (sermon: SermonInterface) => {
     if (!sermon.id) return;

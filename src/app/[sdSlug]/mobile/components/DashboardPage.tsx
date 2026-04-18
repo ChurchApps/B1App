@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToImage, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
+import { useChurchLinks } from "../hooks/useConfig";
 
 interface Props {
   config: ConfigurationInterface;
@@ -16,32 +16,25 @@ interface Props {
 export const DashboardPage = ({ config }: Props) => {
   const context = useContext(UserContext);
   const router = useRouter();
-  const [links, setLinks] = useState<LinkInterface[]>([]);
-  const [loading, setLoading] = useState(true);
   const tc = mobileTheme.colors;
+  const churchId = config?.church?.id;
+  const jwt = context.userChurch?.jwt;
 
-  useEffect(() => {
-    const churchId = config?.church?.id;
-    if (!churchId) { setLoading(false); return; }
-    const load = async () => {
-      try {
-        if (context.userChurch?.jwt) {
-          const result = await ApiHelper.get(`/links/church/${churchId}/filtered?category=b1Tab`, "ContentApi");
-          const userGroupTags = context.userChurch.groups?.flatMap((g: any) => g.tags?.split(",") || []) || [];
-          setLinks(result.filter((l: any) => l.visibility !== "team" || userGroupTags.includes("team")));
-        } else {
-          const result = await ApiHelper.getAnonymous(`/links/church/${churchId}?category=b1Tab`, "ContentApi");
-          setLinks(result.filter((l: any) => !l.visibility || l.visibility === "everyone"));
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [config?.church?.id, context.userChurch?.jwt]);
+  const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
+
+  const links = useMemo<LinkInterface[]>(() => {
+    if (!Array.isArray(rawLinks)) return [];
+    if (jwt) {
+      const userGroupTags = context.userChurch?.groups?.flatMap((g: any) => g.tags?.split(",") || []) || [];
+      return rawLinks.filter((l: any) => l.visibility !== "team" || userGroupTags.includes("team"));
+    }
+    return rawLinks.filter((l: any) => !l.visibility || l.visibility === "everyone");
+  }, [rawLinks, jwt, context.userChurch?.groups]);
+
+  const loading = isLoading && links.length === 0;
 
   const filtered = useMemo(
-    () => (Array.isArray(links) ? links.filter((l) => l.linkType !== "separator") : []),
+    () => links.filter((l) => l.linkType !== "separator"),
     [links]
   );
 

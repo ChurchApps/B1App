@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -15,34 +16,28 @@ interface Props {
 export const GroupsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [groups, setGroups] = React.useState<GroupInterface[] | null>(null);
-  const [upcomingEvents, setUpcomingEvents] = React.useState<EventInterface[]>([]);
+  const loggedIn = !!UserHelper.user?.firstName;
 
-  React.useEffect(() => {
-    let cancelled = false;
-    if (!UserHelper.user?.firstName) {
-      setGroups([]);
-      return;
-    }
-    // Endpoint matches /my/[pageSlug]/components/GroupsMasterPanel.tsx
-    ApiHelper.get("/groups/my", "MembershipApi")
-      .then((data: GroupInterface[]) => {
-        if (!cancelled) setGroups(Array.isArray(data) ? data : []);
-      })
-      .catch(() => {
-        if (!cancelled) setGroups([]);
-      });
-    ApiHelper.get("/events/registerable", "ContentApi")
-      .then((data: EventInterface[]) => {
-        if (!cancelled) setUpcomingEvents(Array.isArray(data) ? data : []);
-      })
-      .catch(() => {
-        if (!cancelled) setUpcomingEvents([]);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { data: groups = null } = useQuery<GroupInterface[]>({
+    queryKey: ["my-groups", UserHelper.user?.id],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/groups/my", "MembershipApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: loggedIn,
+  });
+
+  const { data: upcomingEvents = [] } = useQuery<EventInterface[]>({
+    queryKey: ["events-registerable", UserHelper.user?.id],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/events/registerable", "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: loggedIn,
+  });
+
+  // Force an empty-state render for logged-out users (match previous behavior).
+  const effectiveGroups = loggedIn ? groups : [];
 
   const formatEventTime = (event: EventInterface) => {
     if (!event.start) return "";
@@ -253,9 +248,9 @@ export const GroupsPage = ({ config }: Props) => {
         My Groups
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {groups === null && [0, 1, 2].map(renderSkeleton)}
-        {groups !== null && groups.length === 0 && renderEmpty()}
-        {groups !== null && groups.length > 0 && groups.map(renderCard)}
+        {effectiveGroups === null && [0, 1, 2].map(renderSkeleton)}
+        {effectiveGroups !== null && effectiveGroups.length === 0 && renderEmpty()}
+        {effectiveGroups !== null && effectiveGroups.length > 0 && effectiveGroups.map(renderCard)}
       </Box>
 
       {upcomingEvents.length > 0 && (

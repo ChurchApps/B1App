@@ -42,7 +42,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     name: safeName,
     short_name: shortName,
     description: `${safeName} mobile app`,
-    start_url: "dashboard",
+    start_url: "dashboard?source=pwa",
     scope: "./",
     display: "standalone",
     orientation: "portrait",
@@ -74,6 +74,9 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   };
 
   return NextResponse.json(manifest, {
-    headers: { "Content-Type": "application/manifest+json" },
+    headers: {
+      "Content-Type": "application/manifest+json",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400",
+    },
   });
 }
