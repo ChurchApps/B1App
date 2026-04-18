@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Icon, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -57,27 +57,41 @@ export const NotificationsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const [notifications, setNotifications] = useState<NotificationItem[] | null>(null);
+  const [filter, setFilter] = useState<"all" | "unread">("all");
 
-  useEffect(() => {
-    let cancelled = false;
+  const load = React.useCallback(() => {
     if (!UserHelper.user?.firstName) {
       setNotifications([]);
       return;
     }
-    // TODO: verify endpoint - matches B1Mobile NotificationView.tsx usage
     ApiHelper.get("/notifications/my", "MessagingApi")
       .then((data: any) => {
-        if (cancelled) return;
         const list = Array.isArray(data) ? (data as NotificationItem[]) : [];
         setNotifications(list);
       })
-      .catch(() => {
-        if (!cancelled) setNotifications([]);
-      });
-    return () => { cancelled = true; };
+      .catch(() => setNotifications([]));
   }, []);
 
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const markAllRead = () => {
+    if (!notifications) return;
+    setNotifications(notifications.map((n) => ({ ...n, isNew: false })));
+    // Note: B1Mobile relies on the server auto-clearing `isNew` when `/notifications/my`
+    // is polled. No client-side markRead endpoint exists, so this is client-only.
+  };
+
+  const markReadLocal = (n: NotificationItem) => {
+    if (!n.id || !n.isNew) return;
+    setNotifications((prev) =>
+      prev ? prev.map((x) => (x.id === n.id ? { ...x, isNew: false } : x)) : prev
+    );
+  };
+
   const handleClick = (n: NotificationItem) => {
+    markReadLocal(n);
     const href = deriveLinkUrl(n);
     if (!href) return;
     if (href.startsWith("http")) {
@@ -251,15 +265,68 @@ export const NotificationsPage = ({ config }: Props) => {
     </Box>
   );
 
+  const filtered = React.useMemo(() => {
+    if (!notifications) return null;
+    if (filter === "unread") return notifications.filter((n) => n.isNew);
+    return notifications;
+  }, [notifications, filter]);
+
+  const unreadCount = (notifications || []).filter((n) => n.isNew).length;
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        Notifications
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: `${mobileTheme.spacing.md}px`,
+          gap: 1,
+          flexWrap: "wrap",
+        }}
+      >
+        <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text }}>Notifications</Typography>
+        {unreadCount > 0 && (
+          <Button
+            size="small"
+            onClick={markAllRead}
+            startIcon={<Icon>done_all</Icon>}
+            sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
+          >
+            Mark all read
+          </Button>
+        )}
+      </Box>
+      <Box sx={{ display: "flex", gap: 1, mb: `${mobileTheme.spacing.sm}px` }}>
+        <Chip
+          label="All"
+          onClick={() => setFilter("all")}
+          variant={filter === "all" ? "filled" : "outlined"}
+          sx={{
+            bgcolor: filter === "all" ? tc.primaryLight : undefined,
+            color: filter === "all" ? tc.primary : tc.text,
+            borderColor: tc.primary,
+            fontWeight: 600,
+          }}
+          size="small"
+        />
+        <Chip
+          label={`Unread${unreadCount > 0 ? ` (${unreadCount})` : ""}`}
+          onClick={() => setFilter("unread")}
+          variant={filter === "unread" ? "filled" : "outlined"}
+          sx={{
+            bgcolor: filter === "unread" ? tc.primaryLight : undefined,
+            color: filter === "unread" ? tc.primary : tc.text,
+            borderColor: tc.primary,
+            fontWeight: 600,
+          }}
+          size="small"
+        />
+      </Box>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {notifications === null && [0, 1, 2].map(renderSkeleton)}
-        {notifications !== null && notifications.length === 0 && renderEmpty()}
-        {notifications !== null && notifications.length > 0 && notifications.map(renderRow)}
+        {filtered === null && [0, 1, 2].map(renderSkeleton)}
+        {filtered !== null && filtered.length === 0 && renderEmpty()}
+        {filtered !== null && filtered.length > 0 && filtered.map(renderRow)}
       </Box>
     </Box>
   );

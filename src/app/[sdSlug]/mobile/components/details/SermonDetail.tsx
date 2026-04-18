@@ -304,13 +304,16 @@ export const SermonDetail = ({ id, config }: Props) => {
           {playlistId ? (
             <Chip
               icon={<Icon sx={{ fontSize: 16 }}>playlist_play</Icon>}
-              label="Playlist"
+              label="View Series"
               size="small"
+              clickable
+              onClick={() => router.push(`/mobile/playlist/${playlistId}`)}
               sx={{
                 bgcolor: tc.primaryLight,
                 color: tc.primary,
                 fontWeight: 600,
                 "& .MuiChip-icon": { color: tc.primary },
+                cursor: "pointer",
               }}
             />
           ) : null}

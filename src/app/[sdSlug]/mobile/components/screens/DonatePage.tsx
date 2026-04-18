@@ -2,7 +2,7 @@
 
 import React, { Suspense, useContext, useEffect, useMemo, useState } from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { Box, Icon, Tab, Tabs, Typography, Alert, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Box, Button, Icon, Tab, Tabs, Typography, Alert, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import {
   ApiHelper,
   AppearanceHelper,
@@ -301,6 +301,12 @@ function DonatePageInner({ config }: Props) {
     );
   };
 
+  const handlePrintStatement = () => {
+    const year = new Date().getFullYear();
+    if (typeof window === "undefined") return;
+    window.open(`/my/donations/print?year=${year}`, "_blank", "noopener,noreferrer");
+  };
+
   const renderHistory = () => (
     <Box
       sx={{
@@ -311,6 +317,18 @@ function DonatePageInner({ config }: Props) {
         overflowX: "auto",
       }}
     >
+      {!donationsLoading && donations.length > 0 && (
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
+          <Button
+            size="small"
+            startIcon={<Icon>print</Icon>}
+            onClick={handlePrintStatement}
+            sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
+          >
+            Print Statement
+          </Button>
+        </Box>
+      )}
       {donationsLoading && <Typography sx={{ color: tc.textMuted }}>Loading...</Typography>}
       {!donationsLoading && donations.length === 0 && (
         <Typography sx={{ color: tc.textMuted }}>

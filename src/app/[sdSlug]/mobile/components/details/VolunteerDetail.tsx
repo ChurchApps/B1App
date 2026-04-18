@@ -9,7 +9,6 @@ import {
   Icon,
   IconButton,
   Skeleton,
-  Snackbar,
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -30,34 +29,26 @@ interface Props {
 }
 
 interface SignupPlanData {
-  plan: PlanInterface;
+  plan: PlanInterface & { signupDeadlineHours?: number; notes?: string };
   positions: (PositionInterface & { filledCount: number })[];
   times: TimeInterface[];
 }
-
-// TODO: Verify endpoints. Following VolunteerPage, we load the public signup list and
-// filter to plan.id === id. If that payload doesn't include positions for this plan,
-// fall back to /plans/{id} + /positions/plan/{id} + /assignments/plan/{id} on DoingApi.
-// Signup POST: /assignments [{ positionId, personId, status:"Unconfirmed" }] on DoingApi.
 
 export const VolunteerDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
 
-  const [plan, setPlan] = React.useState<PlanInterface | null>(null);
-  const [positions, setPositions] = React.useState<
-    (PositionInterface & { filledCount: number; neededCount?: number })[]
-  >([]);
-  const [assignments, setAssignments] = React.useState<AssignmentInterface[]>([]);
+  const [plan, setPlan] = React.useState<SignupPlanData["plan"] | null>(null);
+  const [positions, setPositions] = React.useState<(PositionInterface & { filledCount: number })[]>([]);
+  const [times, setTimes] = React.useState<TimeInterface[]>([]);
+  const [myAssignments, setMyAssignments] = React.useState<AssignmentInterface[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [notFound, setNotFound] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-  const [snack, setSnack] = React.useState<string | null>(null);
-  const [signingUpId, setSigningUpId] = React.useState<string | null>(null);
+  const [message, setMessage] = React.useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [actionId, setActionId] = React.useState<string | null>(null);
 
-  const personId =
-    userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
+  const personId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const signedIn = !!personId;
 
   const load = React.useCallback(async () => {
@@ -75,24 +66,24 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         "DoingApi"
       );
       const match = Array.isArray(data) ? data.find((d) => d?.plan?.id === id) : null;
-      if (match) {
-        setPlan(match.plan);
-        setPositions(match.positions || []);
-        // If signed-in, try to load my existing assignments for this plan so we can
-        // reflect "already signed up" state. Non-fatal if it fails.
-        if (signedIn) {
-          try {
-            const planAssignments: AssignmentInterface[] = await ApiHelper.get(
-              "/assignments/plan/" + match.plan.id,
-              "DoingApi"
-            );
-            setAssignments(Array.isArray(planAssignments) ? planAssignments : []);
-          } catch {
-            setAssignments([]);
-          }
-        }
-      } else {
+      if (!match) {
         setNotFound(true);
+        return;
+      }
+      setPlan(match.plan);
+      setPositions(match.positions || []);
+      setTimes(match.times || []);
+
+      if (signedIn) {
+        try {
+          const mine: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
+          const positionIds = (match.positions || []).map((p) => p.id).filter(Boolean);
+          setMyAssignments(
+            Array.isArray(mine) ? mine.filter((a) => positionIds.includes(a.positionId)) : []
+          );
+        } catch {
+          setMyAssignments([]);
+        }
       }
     } catch {
       setNotFound(true);
@@ -105,153 +96,222 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     load();
   }, [load]);
 
-  const isAssigned = (positionId?: string) => {
-    if (!positionId || !personId) return false;
-    return assignments.some((a) => a.positionId === positionId && a.personId === personId);
+  const isDeadlinePassed = React.useMemo(() => {
+    if (!plan?.signupDeadlineHours || !plan?.serviceDate) return false;
+    const deadline = new Date(plan.serviceDate);
+    deadline.setHours(deadline.getHours() - (plan.signupDeadlineHours || 0));
+    return new Date() > deadline;
+  }, [plan]);
+
+  const getMyAssignment = (positionId?: string) =>
+    positionId ? myAssignments.find((a) => a.positionId === positionId) : undefined;
+
+  const handleSignup = async (pos: PositionInterface & { filledCount: number }) => {
+    if (!pos.id || !signedIn) return;
+    setActionId(pos.id);
+    setMessage(null);
+    try {
+      await ApiHelper.post("/assignments/signup", { positionId: pos.id }, "DoingApi");
+      setMessage({ type: "success", text: "You signed up!" });
+      await load();
+    } catch (err: any) {
+      const msg = (err?.message || err?.toString() || "").toLowerCase();
+      let text = "Sign up failed.";
+      if (msg.includes("full")) text = "This position is full.";
+      else if (msg.includes("deadline")) text = "The signup deadline has passed.";
+      else if (msg.includes("already")) text = "You're already signed up.";
+      setMessage({ type: "error", text });
+    } finally {
+      setActionId(null);
+    }
   };
 
-  const handleVolunteer = async (position: PositionInterface & { filledCount: number }) => {
-    if (!position.id) return;
-    if (!signedIn) {
-      setError("Please sign in to volunteer.");
-      return;
-    }
-    setSigningUpId(position.id);
+  const handleRemove = async (assignment: AssignmentInterface) => {
+    if (!assignment.id) return;
+    if (!window.confirm("Remove your signup?")) return;
+    setActionId(assignment.id);
+    setMessage(null);
     try {
-      await ApiHelper.post(
-        "/assignments",
-        [{ positionId: position.id, personId, status: "Unconfirmed" }],
-        "DoingApi"
-      );
-      setSnack("You signed up!");
-      // Optimistically update local state
-      setAssignments((prev) => [
-        ...prev,
-        { positionId: position.id, personId, status: "Unconfirmed" } as AssignmentInterface,
-      ]);
-      setPositions((prev) =>
-        prev.map((p) =>
-          p.id === position.id ? { ...p, filledCount: (p.filledCount || 0) + 1 } : p
-        )
-      );
-      // Refresh to reconcile with server
-      load();
-    } catch {
-      setError("Unable to sign up. Please try again.");
+      await ApiHelper.delete(`/assignments/signup/${assignment.id}`, "DoingApi");
+      setMessage({ type: "success", text: "Signup removed." });
+      await load();
+    } catch (err: any) {
+      const msg = (err?.message || err?.toString() || "").toLowerCase();
+      const text = msg.includes("deadline") ? "The deadline has passed." : "Could not remove signup.";
+      setMessage({ type: "error", text });
     } finally {
-      setSigningUpId(null);
+      setActionId(null);
     }
   };
+
+  const categories = React.useMemo(() => {
+    const map: Record<string, (PositionInterface & { filledCount: number })[]> = {};
+    positions.forEach((p) => {
+      const cat = p.categoryName || "General";
+      if (!map[cat]) map[cat] = [];
+      map[cat].push(p);
+    });
+    return map;
+  }, [positions]);
 
   const serviceDateStr = plan?.serviceDate
     ? DateHelper.prettyDate(DateHelper.toDate(plan.serviceDate))
     : "";
+  const timesStr = times.length > 0 ? times.map((t) => (t as any).displayName || "").filter(Boolean).join(", ") : "";
 
-  const openCount = positions.reduce(
-    (sum, p) => sum + Math.max(0, (p.count || 0) - (p.filledCount || 0)),
-    0
-  );
-
-  const renderHero = () => (
+  const renderHeader = () => (
     <Box
       sx={{
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`,
-        mb: `${mobileTheme.spacing.md}px`,
       }}
     >
-      <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text }}>
-        {plan?.name || ""}
+      <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text }}>{plan?.name}</Typography>
+      <Typography sx={{ fontSize: 14, color: tc.textSecondary, mt: 0.25 }}>
+        {serviceDateStr}
+        {timesStr && ` · ${timesStr}`}
       </Typography>
-      {serviceDateStr && (
-        <Typography sx={{ fontSize: 14, color: tc.textSecondary, mt: 0.25 }}>
-          {serviceDateStr}
+      {plan?.notes && (
+        <Typography sx={{ fontSize: 14, color: tc.textMuted, mt: 1, whiteSpace: "pre-wrap" }}>
+          {plan.notes}
         </Typography>
       )}
-      <Box
-        sx={{
-          mt: `${mobileTheme.spacing.sm}px`,
-          display: "inline-flex",
-          alignItems: "center",
-          px: "10px",
-          py: "3px",
-          borderRadius: "999px",
-          bgcolor: openCount > 0 ? `${tc.success}1A` : `${tc.textSecondary}1A`,
-          color: openCount > 0 ? tc.success : tc.textSecondary,
-          fontSize: 12,
-          fontWeight: 600,
-        }}
-      >
-        {openCount > 0 ? `${openCount} open position${openCount === 1 ? "" : "s"}` : "Full"}
-      </Box>
     </Box>
   );
 
-  const renderPosition = (
-    p: PositionInterface & { filledCount: number; neededCount?: number }
-  ) => {
+  const renderAlert = (type: "warning" | "info" | "success" | "error", text: string, icon: string) => {
+    const colors = {
+      warning: { bg: "rgba(254,170,36,0.15)", fg: tc.warning },
+      info: { bg: "rgba(86,139,218,0.15)", fg: tc.primary },
+      success: { bg: "rgba(112,220,135,0.2)", fg: tc.success },
+      error: { bg: "rgba(176,18,12,0.15)", fg: tc.error },
+    }[type];
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          bgcolor: colors.bg,
+          color: colors.fg,
+          borderRadius: `${mobileTheme.radius.md}px`,
+          p: `${mobileTheme.spacing.sm}px`,
+        }}
+      >
+        <Icon sx={{ color: colors.fg }}>{icon}</Icon>
+        <Typography sx={{ fontSize: 14, color: colors.fg, flex: 1 }}>{text}</Typography>
+      </Box>
+    );
+  };
+
+  const renderPosition = (p: PositionInterface & { filledCount: number }) => {
     const needed = (p as any).count || 0;
     const filled = p.filledCount || 0;
-    const mine = isAssigned(p.id);
-    const isFull = needed > 0 && filled >= needed;
-    const busy = signingUpId === p.id;
+    const remaining = Math.max(0, needed - filled);
+    const percent = needed > 0 ? Math.min(100, (filled / needed) * 100) : 0;
+    const isFull = remaining === 0 && needed > 0;
+    const mine = getMyAssignment(p.id);
+    const busy = actionId === p.id || (mine?.id ? actionId === mine.id : false);
 
     return (
       <Box
         key={p.id}
         sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.md}px`,
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
+          border: mine ? `1px solid ${tc.success}` : "none",
         }}
       >
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-            {p.name}
-          </Typography>
-          {p.categoryName && (
-            <Typography sx={{ fontSize: 13, color: tc.textSecondary, mt: 0.25 }}>
-              {p.categoryName}
-            </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+              <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>{p.name}</Typography>
+              {mine && (
+                <Box
+                  sx={{
+                    px: 1,
+                    py: "2px",
+                    borderRadius: "999px",
+                    bgcolor: "rgba(112,220,135,0.2)",
+                    color: tc.success,
+                    fontSize: 11,
+                    fontWeight: 700,
+                  }}
+                >
+                  Signed up
+                </Box>
+              )}
+            </Box>
+            {p.description && (
+              <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: "4px" }}>{p.description}</Typography>
+            )}
+          </Box>
+          {mine ? (
+            <Button
+              variant="outlined"
+              size="small"
+              disabled={isDeadlinePassed || busy}
+              onClick={() => handleRemove(mine)}
+              sx={{
+                color: tc.error,
+                borderColor: tc.error,
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                flexShrink: 0,
+              }}
+            >
+              {busy ? "…" : "Remove"}
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              size="small"
+              disabled={isFull || isDeadlinePassed || !signedIn || busy}
+              onClick={() => handleSignup(p)}
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                flexShrink: 0,
+                "&:hover": { bgcolor: tc.primary },
+                "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" },
+              }}
+            >
+              {busy ? "…" : isFull ? "Full" : "Sign Up"}
+            </Button>
           )}
-          <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: 0.5 }}>
-            {filled} / {needed} filled
+        </Box>
+
+        {/* Progress */}
+        <Box sx={{ mt: 1.5 }}>
+          <Box
+            sx={{
+              height: 6,
+              borderRadius: 3,
+              bgcolor: tc.border,
+              overflow: "hidden",
+            }}
+          >
+            <Box
+              sx={{
+                height: "100%",
+                width: `${percent}%`,
+                bgcolor: isFull ? tc.error : tc.primary,
+                transition: "width 300ms ease",
+              }}
+            />
+          </Box>
+          <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: "4px" }}>
+            {remaining > 0 ? `${remaining} of ${needed} slots remaining` : `All ${needed} slots filled`}
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          disabled={mine || isFull || busy}
-          onClick={() => handleVolunteer(p)}
-          sx={{
-            bgcolor: tc.primary,
-            color: tc.onPrimary,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            textTransform: "none",
-            fontWeight: 500,
-            whiteSpace: "nowrap",
-            "&:hover": { bgcolor: tc.primary },
-            "&.Mui-disabled": {
-              bgcolor: tc.border,
-              color: tc.textSecondary,
-            },
-          }}
-        >
-          {busy ? (
-            <CircularProgress size={16} sx={{ color: tc.onPrimary }} />
-          ) : mine ? (
-            "You signed up"
-          ) : isFull ? (
-            "Full"
-          ) : (
-            "Volunteer"
-          )}
-        </Button>
       </Box>
     );
   };
@@ -268,40 +328,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     >
       <Skeleton variant="text" width="60%" height={20} />
       <Skeleton variant="text" width="40%" height={14} />
-      <Skeleton variant="rounded" width={110} height={32} sx={{ mt: 1.5, ml: "auto" }} />
-    </Box>
-  );
-
-  const renderSignedOut = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
-      }}
-    >
-      <Box
-        sx={{
-          width: 56,
-          height: 56,
-          borderRadius: "28px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.sm}px`,
-        }}
-      >
-        <Icon sx={{ fontSize: 28, color: tc.primary }}>lock</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-        Sign in to volunteer
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        You need an account to sign up for serving opportunities.
-      </Typography>
+      <Skeleton variant="rounded" height={32} sx={{ mt: 1.5 }} />
     </Box>
   );
 
@@ -315,25 +342,9 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         textAlign: "center",
       }}
     >
-      <Box
-        sx={{
-          width: 56,
-          height: 56,
-          borderRadius: "28px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.sm}px`,
-        }}
-      >
-        <Icon sx={{ fontSize: 28, color: tc.textSecondary }}>event_busy</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.5 }}>
+      <Icon sx={{ fontSize: 48, color: tc.textSecondary }}>event_busy</Icon>
+      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mt: 1 }}>
         Plan not found
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        This serving opportunity is no longer available.
       </Typography>
     </Box>
   );
@@ -341,12 +352,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: `${mobileTheme.spacing.sm}px` }}>
-        <IconButton
-          aria-label="Back"
-          onClick={() => router.back()}
-          sx={{ color: tc.text }}
-          size="small"
-        >
+        <IconButton aria-label="Back" onClick={() => router.back()} sx={{ color: tc.text }} size="small">
           <ArrowBackIcon />
         </IconButton>
       </Box>
@@ -360,36 +366,30 @@ export const VolunteerDetail = ({ id, config }: Props) => {
       {!loading && notFound && renderNotFound()}
 
       {!loading && !notFound && plan && (
-        <>
-          {renderHero()}
-          {!signedIn && (
-            <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>{renderSignedOut()}</Box>
-          )}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-            {positions.length === 0 && (
-              <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", py: 2 }}>
-                No positions are currently open for this plan.
-              </Typography>
-            )}
-            {positions.map(renderPosition)}
-          </Box>
-        </>
-      )}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
+          {renderHeader()}
+          {isDeadlinePassed && renderAlert("warning", "Signup deadline has passed.", "schedule")}
+          {!signedIn && renderAlert("info", "Sign in to sign up for a position.", "info")}
+          {message && renderAlert(message.type, message.text, message.type === "success" ? "check_circle" : "error")}
 
-      <Snackbar
-        open={!!error}
-        autoHideDuration={4000}
-        onClose={() => setError(null)}
-        message={error || ""}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
-      <Snackbar
-        open={!!snack}
-        autoHideDuration={2500}
-        onClose={() => setSnack(null)}
-        message={snack || ""}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
+          {Object.entries(categories).map(([cat, list]) => (
+            <Box key={cat}>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 1 }}>{cat}</Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+                {list.map(renderPosition)}
+              </Box>
+            </Box>
+          ))}
+
+          {positions.length === 0 && (
+            <Typography sx={{ textAlign: "center", color: tc.textMuted, py: 3 }}>
+              No positions are currently available.
+            </Typography>
+          )}
+        </Box>
+      )}
     </Box>
   );
 };
+
+export default VolunteerDetail;

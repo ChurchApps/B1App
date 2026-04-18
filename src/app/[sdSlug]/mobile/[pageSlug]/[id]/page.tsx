@@ -11,6 +11,8 @@ import { GroupDetail } from "../../components/details/GroupDetail";
 import { CommunityDetail } from "../../components/details/CommunityDetail";
 import { MessageConversation } from "../../components/details/MessageConversation";
 import { VolunteerDetail } from "../../components/details/VolunteerDetail";
+import { PlaylistDetail } from "../../components/details/PlaylistDetail";
+import { MessageComposePage } from "../../components/screens/MessageComposePage";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; id: string }>;
 
@@ -28,16 +30,28 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
 }
 
 const getDetail = (pageSlug: string, id: string, config: ConfigurationInterface) => {
+  // Special case: /mobile/messages/new → compose flow instead of detail
+  if (pageSlug === "messages" && (id === "new" || id === "compose")) {
+    return <MessageComposePage config={config} />;
+  }
   switch (pageSlug) {
-    case "sermons": return <SermonDetail id={id} config={config} />;
+    case "sermons":
+    case "sermonDetails": return <SermonDetail id={id} config={config} />;
     case "plans":
-    case "plan": return <PlanDetail id={id} config={config} />;
+    case "plan":
+    case "planDetails": return <PlanDetail id={id} config={config} />;
     case "groups":
-    case "myGroups": return <GroupDetail id={id} config={config} />;
+    case "myGroups":
+    case "groupDetails": return <GroupDetail id={id} config={config} />;
     case "community":
-    case "membersSearch": return <CommunityDetail id={id} config={config} />;
+    case "membersSearch":
+    case "memberDetail": return <CommunityDetail id={id} config={config} />;
     case "messages": return <MessageConversation id={id} config={config} />;
-    case "volunteer": return <VolunteerDetail id={id} config={config} />;
+    case "volunteer":
+    case "volunteerBrowse":
+    case "volunteerSignup": return <VolunteerDetail id={id} config={config} />;
+    case "playlist":
+    case "playlistDetails": return <PlaylistDetail id={id} config={config} />;
     default: return <PlaceholderPage title={`${pageSlug} detail`} icon="apps" description={`Detail view for '${pageSlug}' isn't available yet.`} />;
   }
 };

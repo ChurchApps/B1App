@@ -1,14 +1,19 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Alert,
   Avatar,
   Box,
   Button,
   CircularProgress,
+  FormControlLabel,
   Icon,
   Snackbar,
+  Switch,
+  Tab,
+  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
@@ -22,6 +27,7 @@ interface Props {
 }
 
 type FieldKey = "first" | "last" | "email" | "mobilePhone" | "address1" | "city" | "state" | "zip" | "photo";
+type TabKey = "profile" | "household" | "privacy";
 
 const fieldLabels: Record<FieldKey, string> = {
   first: "First Name",
@@ -58,10 +64,20 @@ const emptyPerson: PersonInterface = {
 
 const MAX_PHOTO_BYTES = 2 * 1024 * 1024;
 
+interface HouseholdMember extends PersonInterface {
+  householdRole?: string;
+}
+
+interface PersonWithPrivacy extends PersonInterface {
+  optedOut?: boolean;
+}
+
 export const ProfileEditPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
-  const [person, setPerson] = useState<PersonInterface | null>(null);
-  const [initial, setInitial] = useState<PersonInterface | null>(null);
+  const router = useRouter();
+  const [tab, setTab] = useState<TabKey>("profile");
+  const [person, setPerson] = useState<PersonWithPrivacy | null>(null);
+  const [initial, setInitial] = useState<PersonWithPrivacy | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
@@ -71,6 +87,9 @@ export const ProfileEditPage = ({ config }: Props) => {
     severity: "success",
   });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [household, setHousehold] = useState<HouseholdMember[] | null>(null);
+  const [savingPrivacy, setSavingPrivacy] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,9 +101,9 @@ export const ProfileEditPage = ({ config }: Props) => {
       return;
     }
     ApiHelper.get("/people/" + personId, "MembershipApi")
-      .then((data: PersonInterface) => {
+      .then((data: PersonWithPrivacy) => {
         if (cancelled) return;
-        const merged: PersonInterface = {
+        const merged: PersonWithPrivacy = {
           ...emptyPerson,
           ...data,
           name: { ...emptyPerson.name, ...(data?.name || {}) },
@@ -92,6 +111,17 @@ export const ProfileEditPage = ({ config }: Props) => {
         };
         setPerson(merged);
         setInitial(JSON.parse(JSON.stringify(merged)));
+        if (data?.householdId) {
+          ApiHelper.get(`/people/household/${data.householdId}`, "MembershipApi")
+            .then((hh: HouseholdMember[]) => {
+              if (!cancelled) setHousehold(Array.isArray(hh) ? hh : []);
+            })
+            .catch(() => {
+              if (!cancelled) setHousehold([]);
+            });
+        } else {
+          setHousehold([]);
+        }
       })
       .catch(() => {
         if (cancelled) return;
@@ -187,18 +217,14 @@ export const ProfileEditPage = ({ config }: Props) => {
             task.assignedToLabel = group?.name;
           }
         } catch {
-          /* no approval group configured — task goes unassigned */
+          /* no approval group configured */
         }
       }
 
       await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
 
       setInitial(JSON.parse(JSON.stringify(person)));
-      setSnack({
-        open: true,
-        msg: "Your changes have been submitted for approval.",
-        severity: "success",
-      });
+      setSnack({ open: true, msg: "Your changes have been submitted for approval.", severity: "success" });
     } catch (err: any) {
       console.error("Profile save error", err);
       setSnack({ open: true, msg: err?.message || "Unable to submit changes.", severity: "error" });
@@ -207,9 +233,29 @@ export const ProfileEditPage = ({ config }: Props) => {
     }
   };
 
-  const inputSx = {
-    "& .MuiOutlinedInput-root": { borderRadius: `${mobileTheme.radius.md}px` },
+  const handleOptOutChange = async (checked: boolean) => {
+    if (!person?.id) return;
+    setSavingPrivacy(true);
+    try {
+      await ApiHelper.post(
+        "/users/updateOptedOut",
+        { personId: person.id, optedOut: checked },
+        "MembershipApi"
+      );
+      setPerson((p) => (p ? { ...p, optedOut: checked } : p));
+      setSnack({
+        open: true,
+        msg: checked ? "Removed from member directory." : "Visible in member directory.",
+        severity: "success",
+      });
+    } catch (err: any) {
+      setSnack({ open: true, msg: err?.message || "Could not update privacy.", severity: "error" });
+    } finally {
+      setSavingPrivacy(false);
+    }
   };
+
+  const inputSx = { "& .MuiOutlinedInput-root": { borderRadius: `${mobileTheme.radius.md}px` } };
 
   const sectionHeader = (label: string) => (
     <Typography
@@ -249,12 +295,8 @@ export const ProfileEditPage = ({ config }: Props) => {
   const displayInitial = (person.name?.first?.charAt(0) || "?").toUpperCase();
   const hasChanges = changes.length > 0;
 
-  return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        Edit Profile
-      </Typography>
-
+  const renderProfileTab = () => (
+    <>
       {/* Photo card */}
       <Box
         sx={{
@@ -374,6 +416,162 @@ export const ProfileEditPage = ({ config }: Props) => {
       >
         {saving ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Submit Changes"}
       </Button>
+    </>
+  );
+
+  const renderHouseholdTab = () => (
+    <Box
+      sx={{
+        bgcolor: tc.surface,
+        borderRadius: `${mobileTheme.radius.lg}px`,
+        boxShadow: mobileTheme.shadows.sm,
+        p: `${mobileTheme.spacing.md}px`,
+      }}
+    >
+      <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
+        Household Members
+      </Typography>
+      {household === null && <CircularProgress sx={{ color: tc.primary }} size={24} />}
+      {household !== null && household.length === 0 && (
+        <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
+          No other members in your household.
+        </Typography>
+      )}
+      {household !== null &&
+        household
+          .filter((h) => h.id !== person.id)
+          .map((h) => (
+            <Box
+              key={h.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => router.push(`/mobile/community/${h.id}`)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  router.push(`/mobile/community/${h.id}`);
+                }
+              }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: `${mobileTheme.spacing.md}px`,
+                py: 1,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                cursor: "pointer",
+                "&:hover": { bgcolor: tc.iconBackground },
+              }}
+            >
+              <Avatar
+                src={h.photo || undefined}
+                sx={{ width: 48, height: 48, bgcolor: tc.primaryLight, color: tc.primary, fontSize: 16, fontWeight: 700 }}
+              >
+                {(h.name?.first?.charAt(0) || "?").toUpperCase()}
+              </Avatar>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
+                  {h.name?.display || "Unknown"}
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
+                  {h.householdRole || "Household Member"}
+                </Typography>
+              </Box>
+              <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
+            </Box>
+          ))}
+      <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: 2 }}>
+        To add or remove household members, contact your church office.
+      </Typography>
+    </Box>
+  );
+
+  const renderPrivacyTab = () => (
+    <Box
+      sx={{
+        bgcolor: tc.surface,
+        borderRadius: `${mobileTheme.radius.lg}px`,
+        boxShadow: mobileTheme.shadows.sm,
+        p: `${mobileTheme.spacing.md}px`,
+      }}
+    >
+      <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
+        Directory Visibility
+      </Typography>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={!!person.optedOut}
+            disabled={savingPrivacy}
+            onChange={(e) => handleOptOutChange(e.target.checked)}
+          />
+        }
+        label={
+          <Box>
+            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
+              Hide me from the member directory
+            </Typography>
+            <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+              When enabled, other members can&apos;t find your profile.
+            </Typography>
+          </Box>
+        }
+        sx={{ alignItems: "flex-start", m: 0 }}
+      />
+
+      <Box sx={{ borderTop: `1px solid ${tc.border}`, my: 2 }} />
+
+      <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
+        Notifications
+      </Typography>
+      <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 1 }}>
+        Manage how you receive messages and group updates.
+      </Typography>
+      <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+        Coming soon — notification preferences will be configurable here.
+      </Typography>
+    </Box>
+  );
+
+  return (
+    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
+        Edit Profile
+      </Typography>
+
+      <Box
+        sx={{
+          bgcolor: tc.surface,
+          borderRadius: `${mobileTheme.radius.lg}px`,
+          boxShadow: mobileTheme.shadows.sm,
+          overflow: "hidden",
+          mb: `${mobileTheme.spacing.md}px`,
+        }}
+      >
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          variant="fullWidth"
+          sx={{
+            minHeight: 44,
+            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 3 },
+            "& .MuiTab-root": {
+              minHeight: 44,
+              textTransform: "none",
+              fontWeight: 600,
+              color: tc.textSecondary,
+            },
+            "& .Mui-selected": { color: `${tc.primary} !important` },
+          }}
+        >
+          <Tab value="profile" label="Profile" />
+          <Tab value="household" label="Household" />
+          <Tab value="privacy" label="Privacy" />
+        </Tabs>
+      </Box>
+
+      {tab === "profile" && renderProfileTab()}
+      {tab === "household" && renderHouseholdTab()}
+      {tab === "privacy" && renderPrivacyTab()}
 
       <Snackbar
         open={snack.open}

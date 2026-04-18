@@ -22,6 +22,8 @@ import { VolunteerPage } from "../components/screens/VolunteerPage";
 import { NotificationsPage } from "../components/screens/NotificationsPage";
 import { ProfileEditPage } from "../components/screens/ProfileEditPage";
 import { ChurchSearchPage } from "../components/screens/ChurchSearchPage";
+import { WebsiteUrlPage } from "../components/screens/WebsiteUrlPage";
+import { MessageComposePage } from "../components/screens/MessageComposePage";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string }>;
 
@@ -56,12 +58,18 @@ const getPageContent = (pageSlug: string, config: ConfigurationInterface) => {
     case "bible": return <BiblePage />;
     case "notifications": return <NotificationsPage config={config} />;
     case "registrations": return <RegistrationsPage config={config} />;
-    case "volunteer": return <VolunteerPage config={config} />;
-    case "messages": return <MessagesPage config={config} />;
+    case "volunteer":
+    case "volunteerBrowse": return <VolunteerPage config={config} />;
+    case "messages":
+    case "searchMessageUser": return <MessagesPage config={config} />;
+    case "messagesNew":
+    case "composeMessage": return <MessageComposePage config={config} />;
     case "lessons": return <LessonsPage />;
     case "profileEdit": return <ProfileEditPage config={config} />;
     case "churchSearch": return <ChurchSearchPage config={config} />;
     case "stream": return <StreamPage config={config} />;
+    case "websiteUrl":
+    case "page": return <WebsiteUrlPage config={config} />;
     default: return <PlaceholderPage title={pageSlug} icon="apps" description={`The '${pageSlug}' screen is not yet implemented.`} />;
   }
 };
