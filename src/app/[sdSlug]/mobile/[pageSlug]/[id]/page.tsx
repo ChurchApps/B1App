@@ -13,6 +13,7 @@ import { MessageConversation } from "../../components/details/MessageConversatio
 import { VolunteerDetail } from "../../components/details/VolunteerDetail";
 import { PlaylistDetail } from "../../components/details/PlaylistDetail";
 import { MessageComposePage } from "../../components/screens/MessageComposePage";
+import { EventRegisterPage } from "../../components/screens/EventRegisterPage";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; id: string }>;
 
@@ -35,6 +36,7 @@ const getDetail = (pageSlug: string, id: string, config: ConfigurationInterface)
     return <MessageComposePage config={config} />;
   }
   switch (pageSlug) {
+    case "register": return <EventRegisterPage eventId={id} config={config} />;
     case "sermons":
     case "sermonDetails": return <SermonDetail id={id} config={config} />;
     case "plans":

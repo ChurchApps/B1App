@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
-import type { GroupInterface } from "@churchapps/helpers";
+import type { EventInterface, GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 
@@ -16,6 +16,7 @@ export const GroupsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const [groups, setGroups] = React.useState<GroupInterface[] | null>(null);
+  const [upcomingEvents, setUpcomingEvents] = React.useState<EventInterface[]>([]);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -31,10 +32,35 @@ export const GroupsPage = ({ config }: Props) => {
       .catch(() => {
         if (!cancelled) setGroups([]);
       });
+    ApiHelper.get("/events/registerable", "ContentApi")
+      .then((data: EventInterface[]) => {
+        if (!cancelled) setUpcomingEvents(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        if (!cancelled) setUpcomingEvents([]);
+      });
     return () => {
       cancelled = true;
     };
   }, []);
+
+  const formatEventTime = (event: EventInterface) => {
+    if (!event.start) return "";
+    const start = new Date(event.start);
+    if (isNaN(start.getTime())) return "";
+    if (event.allDay) {
+      return start.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) + " (All day)";
+    }
+    const fmtDate = (d: Date) => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    const fmtTime = (d: Date) => d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    if (!event.end) return `${fmtDate(start)} ${fmtTime(start)}`;
+    const end = new Date(event.end);
+    if (isNaN(end.getTime())) return `${fmtDate(start)} ${fmtTime(start)}`;
+    if (start.toDateString() === end.toDateString()) {
+      return `${fmtDate(start)} · ${fmtTime(start)} – ${fmtTime(end)}`;
+    }
+    return `${fmtDate(start)} ${fmtTime(start)} – ${fmtDate(end)} ${fmtTime(end)}`;
+  };
 
   const handleClick = (group: GroupInterface) => {
     router.push(`/mobile/groups/${group.id}`);
@@ -231,6 +257,81 @@ export const GroupsPage = ({ config }: Props) => {
         {groups !== null && groups.length === 0 && renderEmpty()}
         {groups !== null && groups.length > 0 && groups.map(renderCard)}
       </Box>
+
+      {upcomingEvents.length > 0 && (
+        <Box sx={{ mt: `${mobileTheme.spacing.lg}px` }}>
+          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
+            Upcoming Events
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+            {upcomingEvents.map((event) => (
+              <Box
+                key={event.id}
+                sx={{
+                  bgcolor: tc.surface,
+                  borderRadius: `${mobileTheme.radius.lg}px`,
+                  boxShadow: mobileTheme.shadows.sm,
+                  p: `${mobileTheme.spacing.md}px`,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
+                  <Box sx={{
+                    width: 40, height: 40, borderRadius: "20px",
+                    bgcolor: tc.primaryLight,
+                    color: tc.primary,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0,
+                  }}>
+                    <Icon sx={{ fontSize: 22 }}>event</Icon>
+                  </Box>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{
+                      fontSize: 15, fontWeight: 600, color: tc.text,
+                      overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
+                      WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+                    }}>
+                      {event.title}
+                    </Typography>
+                    <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: 0.25 }}>
+                      {formatEventTime(event)}
+                    </Typography>
+                    {event.description && (
+                      <Typography sx={{
+                        fontSize: 13, color: tc.textMuted, mt: 0.5, lineHeight: 1.4,
+                        overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
+                        WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+                      }}>
+                        {event.description}
+                      </Typography>
+                    )}
+                  </Box>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => router.push(`/mobile/register/${event.id}`)}
+                    sx={{
+                      bgcolor: tc.success,
+                      color: "#000",
+                      textTransform: "none",
+                      fontWeight: 600,
+                      borderRadius: `${mobileTheme.radius.md}px`,
+                      px: 2,
+                      "&:hover": { bgcolor: tc.success },
+                    }}
+                  >
+                    Register
+                  </Button>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

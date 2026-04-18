@@ -24,6 +24,7 @@ import { ProfileEditPage } from "../components/screens/ProfileEditPage";
 import { ChurchSearchPage } from "../components/screens/ChurchSearchPage";
 import { WebsiteUrlPage } from "../components/screens/WebsiteUrlPage";
 import { MessageComposePage } from "../components/screens/MessageComposePage";
+import { InstallPage } from "../components/screens/InstallPage";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string }>;
 
@@ -70,6 +71,7 @@ const getPageContent = (pageSlug: string, config: ConfigurationInterface) => {
     case "stream": return <StreamPage config={config} />;
     case "websiteUrl":
     case "page": return <WebsiteUrlPage config={config} />;
+    case "install": return <InstallPage config={config} />;
     default: return <PlaceholderPage title={pageSlug} icon="apps" description={`The '${pageSlug}' screen is not yet implemented.`} />;
   }
 };

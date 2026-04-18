@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
@@ -21,6 +22,7 @@ interface EventRow {
   allDay?: boolean;
   recurrenceRule?: string;
   tags?: string;
+  registrationEnabled?: boolean;
 }
 
 const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
@@ -46,6 +48,7 @@ const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: bo
 
 export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent }: Props) => {
   const tc = mobileTheme.colors;
+  const router = useRouter();
   const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date());
   const [selected, setSelected] = React.useState<string>(isoDate(new Date()));
   const [events, setEvents] = React.useState<EventRow[] | null>(null);
@@ -345,6 +348,26 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent }: Props) => {
                   >
                     {e.description}
                   </Typography>
+                )}
+                {e.registrationEnabled && e.id && (
+                  <Box sx={{ mt: 1.25, display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={() => router.push(`/mobile/register/${e.id}`)}
+                      sx={{
+                        bgcolor: tc.success,
+                        color: "#000",
+                        textTransform: "none",
+                        fontWeight: 600,
+                        borderRadius: `${mobileTheme.radius.md}px`,
+                        px: 2,
+                        "&:hover": { bgcolor: tc.success },
+                      }}
+                    >
+                      Register
+                    </Button>
+                  </Box>
                 )}
               </Box>
             ))}
