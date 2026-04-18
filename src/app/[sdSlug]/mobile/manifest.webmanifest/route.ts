@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 type Params = Promise<{ sdSlug: string }>;
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   const { sdSlug } = await params;
 
+  EnvironmentHelper.init();
+  const apiBase = EnvironmentHelper.Common.MembershipApi;
+
   let themeColor = "#0D47A1";
   let churchName = sdSlug;
   try {
-    const apiBase = process.env.NEXT_PUBLIC_MEMBERSHIP_API;
     if (apiBase) {
       const churchRes = await fetch(`${apiBase}/churches/lookup/?subDomain=${encodeURIComponent(sdSlug)}`, { cache: "no-store" });
       if (churchRes.ok) {

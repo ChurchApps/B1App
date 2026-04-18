@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 type Params = Promise<{ sdSlug: string; size: string }>;
 
@@ -16,11 +17,13 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     return new Response("Not found", { status: 404 });
   }
 
+  EnvironmentHelper.init();
+  const base = EnvironmentHelper.Common.MembershipApi;
+
   let primaryColor = "#0D47A1";
   let initials = sdSlug.substring(0, 2).toUpperCase();
   let favicon: string | undefined;
   try {
-    const base = process.env.NEXT_PUBLIC_MEMBERSHIP_API;
     if (base) {
       const churchRes = await fetch(`${base}/churches/lookup/?subDomain=${encodeURIComponent(sdSlug)}`, { cache: "no-store" });
       if (churchRes.ok) {
