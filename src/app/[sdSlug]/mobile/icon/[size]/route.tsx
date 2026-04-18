@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
 type Params = Promise<{ sdSlug: string; size: string }>;
@@ -44,30 +45,25 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   }
 
   if (favicon) {
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: primaryColor,
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={favicon}
-            width={n}
-            height={n}
-            style={{ objectFit: "contain", width: "100%", height: "100%" }}
-            alt=""
-          />
-        </div>
-      ),
-      { width: n, height: n }
-    );
+    try {
+      const imgRes = await fetch(favicon, { cache: "no-store" });
+      if (imgRes.ok) {
+        const buf = Buffer.from(await imgRes.arrayBuffer());
+        const resized = await sharp(buf)
+          .resize(n, n, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+          .png()
+          .toBuffer();
+        return new Response(new Uint8Array(resized), {
+          status: 200,
+          headers: {
+            "Content-Type": "image/png",
+            "Cache-Control": "public, max-age=3600",
+          },
+        });
+      }
+    } catch {
+      /* fall through to generated initials icon */
+    }
   }
 
   return new ImageResponse(
