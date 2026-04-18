@@ -6,6 +6,22 @@ import { Metadata } from "next";
 import { MobilePageWrapper } from "../components/MobilePageWrapper";
 import { DashboardPage } from "../components/DashboardPage";
 import { PlaceholderPage } from "../components/PlaceholderPage";
+import { SermonsPage } from "../components/screens/SermonsPage";
+import { VotdPage } from "../components/screens/VotdPage";
+import { BiblePage } from "../components/screens/BiblePage";
+import { StreamPage } from "../components/screens/StreamPage";
+import { LessonsPage } from "../components/screens/LessonsPage";
+import { GroupsPage } from "../components/screens/GroupsPage";
+import { CommunityPage } from "../components/screens/CommunityPage";
+import { MessagesPage } from "../components/screens/MessagesPage";
+import { DonatePage } from "../components/screens/DonatePage";
+import { CheckinPage } from "../components/screens/CheckinPage";
+import { PlansPage } from "../components/screens/PlansPage";
+import { RegistrationsPage } from "../components/screens/RegistrationsPage";
+import { VolunteerPage } from "../components/screens/VolunteerPage";
+import { NotificationsPage } from "../components/screens/NotificationsPage";
+import { ProfileEditPage } from "../components/screens/ProfileEditPage";
+import { ChurchSearchPage } from "../components/screens/ChurchSearchPage";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string }>;
 
@@ -25,27 +41,27 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
 const getPageContent = (pageSlug: string, config: ConfigurationInterface) => {
   switch (pageSlug) {
     case "dashboard": return <DashboardPage config={config} />;
-    case "sermons": return <PlaceholderPage title="Sermons" icon="play_circle" />;
-    case "groups": return <PlaceholderPage title="My Groups" icon="groups" />;
-    case "myGroups": return <PlaceholderPage title="My Groups" icon="groups" />;
-    case "community": return <PlaceholderPage title="Directory" icon="people" />;
-    case "membersSearch": return <PlaceholderPage title="Directory" icon="people" />;
-    case "donate": return <PlaceholderPage title="Giving" icon="volunteer_activism" />;
-    case "donation": return <PlaceholderPage title="Giving" icon="volunteer_activism" />;
-    case "checkin": return <PlaceholderPage title="Check-in" icon="how_to_reg" />;
-    case "service": return <PlaceholderPage title="Check-in" icon="how_to_reg" />;
-    case "plans": return <PlaceholderPage title="Plans" icon="event_note" />;
-    case "plan": return <PlaceholderPage title="Plans" icon="event_note" />;
-    case "votd": return <PlaceholderPage title="Verse of the Day" icon="auto_stories" />;
-    case "bible": return <PlaceholderPage title="Bible" icon="menu_book" />;
-    case "notifications": return <PlaceholderPage title="Notifications" icon="notifications" />;
-    case "registrations": return <PlaceholderPage title="Registrations" icon="event_available" />;
-    case "volunteer": return <PlaceholderPage title="Volunteer" icon="handshake" />;
-    case "messages": return <PlaceholderPage title="Messages" icon="chat" />;
-    case "lessons": return <PlaceholderPage title="Lessons" icon="menu_book" />;
-    case "profileEdit": return <PlaceholderPage title="Edit Profile" icon="edit" />;
-    case "churchSearch": return <PlaceholderPage title="Find Your Church" icon="search" />;
-    case "stream": return <PlaceholderPage title="Live Stream" icon="live_tv" />;
+    case "sermons": return <SermonsPage config={config} />;
+    case "groups":
+    case "myGroups": return <GroupsPage config={config} />;
+    case "community":
+    case "membersSearch": return <CommunityPage config={config} />;
+    case "donate":
+    case "donation": return <DonatePage config={config} />;
+    case "checkin":
+    case "service": return <CheckinPage config={config} />;
+    case "plans":
+    case "plan": return <PlansPage config={config} />;
+    case "votd": return <VotdPage />;
+    case "bible": return <BiblePage />;
+    case "notifications": return <NotificationsPage config={config} />;
+    case "registrations": return <RegistrationsPage config={config} />;
+    case "volunteer": return <VolunteerPage config={config} />;
+    case "messages": return <MessagesPage config={config} />;
+    case "lessons": return <LessonsPage />;
+    case "profileEdit": return <ProfileEditPage config={config} />;
+    case "churchSearch": return <ChurchSearchPage config={config} />;
+    case "stream": return <StreamPage config={config} />;
     default: return <PlaceholderPage title={pageSlug} icon="apps" description={`The '${pageSlug}' screen is not yet implemented.`} />;
   }
 };
