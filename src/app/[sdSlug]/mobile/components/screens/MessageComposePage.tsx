@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -24,53 +25,31 @@ interface Props {
 export const MessageComposePage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const loggedIn = !!UserHelper.user?.firstName;
   const [searchText, setSearchText] = React.useState("");
   const [results, setResults] = React.useState<PersonInterface[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const [previous, setPrevious] = React.useState<PersonInterface[] | null>(null);
   const [lastSearched, setLastSearched] = React.useState("");
 
-  React.useEffect(() => {
-    if (!UserHelper.user?.firstName) {
-      setPrevious([]);
-      return;
-    }
-    let cancelled = false;
-    const load = async () => {
-      try {
-        const pms: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
-        if (!Array.isArray(pms) || pms.length === 0) {
-          if (!cancelled) setPrevious([]);
-          return;
-        }
-        const myPersonId = UserHelper.person?.id;
-        const ids = Array.from(
-          new Set(
-            pms
-              .map((pm) =>
-                myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId
-              )
-              .filter(Boolean)
-          )
-        );
-        if (ids.length === 0) {
-          if (!cancelled) setPrevious([]);
-          return;
-        }
-        const people: PersonInterface[] = await ApiHelper.get(
-          `/people/basic?ids=${ids.join(",")}`,
-          "MembershipApi"
-        );
-        if (!cancelled) setPrevious(Array.isArray(people) ? people : []);
-      } catch {
-        if (!cancelled) setPrevious([]);
-      }
-    };
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { data: previous = null } = useQuery<PersonInterface[]>({
+    queryKey: ["compose-previous", UserHelper.user?.id],
+    queryFn: async () => {
+      const pms: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+      if (!Array.isArray(pms) || pms.length === 0) return [];
+      const myPersonId = UserHelper.person?.id;
+      const ids = Array.from(
+        new Set(
+          pms
+            .map((pm) => (myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId))
+            .filter(Boolean)
+        )
+      );
+      if (ids.length === 0) return [];
+      const people: PersonInterface[] = await ApiHelper.get(`/people/basic?ids=${ids.join(",")}`, "MembershipApi");
+      return Array.isArray(people) ? people : [];
+    },
+    enabled: loggedIn,
+  });
 
   const handleSearch = async () => {
     const term = searchText.trim();

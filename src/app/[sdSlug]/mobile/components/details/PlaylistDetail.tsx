@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -27,54 +28,31 @@ const formatDate = (date?: Date | string) => {
 export const PlaylistDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [playlist, setPlaylist] = React.useState<PlaylistInterface | null | undefined>(undefined);
-  const [sermons, setSermons] = React.useState<SermonInterface[] | null>(null);
-
   const churchId = config?.church?.id;
 
-  React.useEffect(() => {
-    let cancelled = false;
-    if (!id) return;
-    setPlaylist(undefined);
-    setSermons(null);
+  const { data: playlistData, isLoading: playlistLoading } = useQuery<PlaylistInterface | null>({
+    queryKey: ["playlist", id],
+    queryFn: async () => {
+      const data = await ApiHelper.getAnonymous(`/playlists/${id}`, "ContentApi");
+      return data && data.id ? (data as PlaylistInterface) : null;
+    },
+    enabled: !!id,
+  });
 
-    ApiHelper.getAnonymous(`/playlists/${id}`, "ContentApi")
-      .then((data: any) => {
-        if (cancelled) return;
-        if (!data || !data.id) setPlaylist(null);
-        else setPlaylist(data as PlaylistInterface);
-      })
-      .catch(() => {
-        if (!cancelled) setPlaylist(null);
-      });
+  const { data: sermons = null } = useQuery<SermonInterface[]>({
+    queryKey: ["playlist-sermons", churchId, id],
+    queryFn: async () => {
+      const data = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
+      if (!Array.isArray(data)) return [];
+      return data
+        .filter((s: any) => s && s.id && s.title && s.playlistId === id)
+        .sort((a: any, b: any) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime()) as SermonInterface[];
+    },
+    enabled: !!churchId && !!id,
+  });
 
-    if (churchId) {
-      ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi")
-        .then((data: any) => {
-          if (cancelled) return;
-          if (!Array.isArray(data)) {
-            setSermons([]);
-            return;
-          }
-          const filtered = data
-            .filter((s: any) => s && s.id && s.title && s.playlistId === id)
-            .sort(
-              (a: any, b: any) =>
-                new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime()
-            ) as SermonInterface[];
-          setSermons(filtered);
-        })
-        .catch(() => {
-          if (!cancelled) setSermons([]);
-        });
-    } else {
-      setSermons([]);
-    }
-
-    return () => {
-      cancelled = true;
-    };
-  }, [id, churchId]);
+  // Preserve the undefined/null/value tri-state the render logic depends on.
+  const playlist: PlaylistInterface | null | undefined = playlistLoading ? undefined : (playlistData ?? null);
 
   const handleBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.back();

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ApiHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   AssignmentInterface,
   PlanInterface,
@@ -38,63 +39,57 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
+  const queryClient = useQueryClient();
 
-  const [plan, setPlan] = React.useState<SignupPlanData["plan"] | null>(null);
-  const [positions, setPositions] = React.useState<(PositionInterface & { filledCount: number })[]>([]);
-  const [times, setTimes] = React.useState<TimeInterface[]>([]);
-  const [myAssignments, setMyAssignments] = React.useState<AssignmentInterface[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [notFound, setNotFound] = React.useState(false);
   const [message, setMessage] = React.useState<{ type: "success" | "error"; text: string } | null>(null);
   const [actionId, setActionId] = React.useState<string | null>(null);
 
   const personId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const signedIn = !!personId;
+  const churchId = config?.church?.id;
 
-  const load = React.useCallback(async () => {
-    const churchId = config?.church?.id;
-    if (!churchId) {
-      setLoading(false);
-      setNotFound(true);
-      return;
-    }
-    setLoading(true);
-    setNotFound(false);
-    try {
-      const data: SignupPlanData[] = await ApiHelper.getAnonymous(
-        "/plans/public/signup/" + churchId,
-        "DoingApi"
-      );
+  interface SignupBundle {
+    plan: SignupPlanData["plan"] | null;
+    positions: (PositionInterface & { filledCount: number })[];
+    times: TimeInterface[];
+    myAssignments: AssignmentInterface[];
+  }
+
+  const { data: bundle, isLoading: loading } = useQuery<SignupBundle>({
+    queryKey: ["volunteer-detail", churchId, id, signedIn],
+    queryFn: async () => {
+      const data: SignupPlanData[] = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
       const match = Array.isArray(data) ? data.find((d) => d?.plan?.id === id) : null;
-      if (!match) {
-        setNotFound(true);
-        return;
-      }
-      setPlan(match.plan);
-      setPositions(match.positions || []);
-      setTimes(match.times || []);
-
+      if (!match) return { plan: null, positions: [], times: [], myAssignments: [] };
+      let myAssignments: AssignmentInterface[] = [];
       if (signedIn) {
         try {
           const mine: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
           const positionIds = (match.positions || []).map((p) => p.id).filter(Boolean);
-          setMyAssignments(
-            Array.isArray(mine) ? mine.filter((a) => positionIds.includes(a.positionId)) : []
-          );
+          if (Array.isArray(mine)) {
+            myAssignments = mine.filter((a) => positionIds.includes(a.positionId));
+          }
         } catch {
-          setMyAssignments([]);
+          myAssignments = [];
         }
       }
-    } catch {
-      setNotFound(true);
-    } finally {
-      setLoading(false);
-    }
-  }, [config?.church?.id, id, signedIn]);
+      return {
+        plan: match.plan,
+        positions: match.positions || [],
+        times: match.times || [],
+        myAssignments,
+      };
+    },
+    enabled: !!churchId && !!id,
+  });
 
-  React.useEffect(() => {
-    load();
-  }, [load]);
+  const plan = bundle?.plan ?? null;
+  const positions = bundle?.positions ?? [];
+  const times = bundle?.times ?? [];
+  const myAssignments = bundle?.myAssignments ?? [];
+  const notFound = !loading && bundle !== undefined && !plan;
+
+  const load = () => queryClient.invalidateQueries({ queryKey: ["volunteer-detail", churchId, id, signedIn] });
 
   const isDeadlinePassed = React.useMemo(() => {
     if (!plan?.signupDeadlineHours || !plan?.serviceDate) return false;

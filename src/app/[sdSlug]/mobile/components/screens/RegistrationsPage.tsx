@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -16,35 +17,23 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const context = useContext(UserContext);
   const personId = context?.person?.id || context?.userChurch?.person?.id || UserHelper.currentUserChurch?.person?.id;
-
-  const [registrations, setRegistrations] = useState<RegistrationInterface[] | null>(null);
+  const queryClient = useQueryClient();
   const [cancelId, setCancelId] = useState<string | null>(null);
 
-  const loadData = async () => {
-    if (!personId) {
-      setRegistrations([]);
-      return;
-    }
-    try {
-      const data: RegistrationInterface[] = await ApiHelper.get(
-        "/registrations/person/" + personId,
-        "ContentApi"
-      );
-      setRegistrations(Array.isArray(data) ? data : []);
-    } catch {
-      setRegistrations([]);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, [personId]);
+  const { data: registrations = null } = useQuery<RegistrationInterface[]>({
+    queryKey: ["registrations", personId],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/registrations/person/" + personId, "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!personId,
+  });
 
   const handleCancel = async () => {
     if (!cancelId) return;
     await ApiHelper.post("/registrations/" + cancelId + "/cancel", {}, "ContentApi");
     setCancelId(null);
-    loadData();
+    queryClient.invalidateQueries({ queryKey: ["registrations", personId] });
   };
 
   const getStatusColor = (status?: string) => {

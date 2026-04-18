@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -95,84 +96,60 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const router = useRouter();
   const userContext = useContext(UserContext);
 
-  const [plan, setPlan] = useState<PlanInterface | null>(null);
-  const [planItems, setPlanItems] = useState<PlanItemInterface[]>([]);
-  const [positions, setPositions] = useState<PositionInterface[]>([]);
-  const [assignments, setAssignments] = useState<AssignmentInterface[]>([]);
-  const [people, setPeople] = useState<PersonInterface[]>([]);
-  const [times, setTimes] = useState<TimeInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
   const [tab, setTab] = useState<"order" | "team" | "songs">("order");
-
   const isLoggedIn = !!userContext?.userChurch?.jwt;
 
-  useEffect(() => {
-    if (!id) return;
-    if (!isLoggedIn) {
-      setLoading(false);
-      return;
-    }
-    let cancelled = false;
-    const load = async () => {
-      setLoading(true);
-      setNotFound(false);
-      try {
-        // Plan + items + positions + assignments can run in parallel
-        const [planRes, itemsRes, positionsRes, assignmentsRes, timesRes] = await Promise.all([
-          ApiHelper.get(`/plans/${id}`, "DoingApi").catch((): null => null),
-          ApiHelper.get(`/planItems/plan/${id}`, "DoingApi").catch((): any[] => []),
-          ApiHelper.get(`/positions/plan/${id}`, "DoingApi").catch((): any[] => []),
-          ApiHelper.get(`/assignments/plan/${id}`, "DoingApi").catch((): any[] => []),
-          // TODO: verify — PlanClient uses `/times/plan/{id}`; PlansPage list uses `/times/plans?planIds=`.
-          ApiHelper.get(`/times/plan/${id}`, "DoingApi").catch((): any[] => []),
-        ]);
+  interface PlanBundle {
+    plan: PlanInterface | null;
+    planItems: PlanItemInterface[];
+    positions: PositionInterface[];
+    assignments: AssignmentInterface[];
+    times: TimeInterface[];
+    people: PersonInterface[];
+  }
 
-        if (cancelled) return;
-
-        if (!planRes || !planRes.id) {
-          setNotFound(true);
-          setLoading(false);
-          return;
-        }
-
-        setPlan(planRes);
-        setPlanItems(Array.isArray(itemsRes) ? itemsRes : []);
-        setPositions(Array.isArray(positionsRes) ? positionsRes : []);
-        setAssignments(Array.isArray(assignmentsRes) ? assignmentsRes : []);
-        setTimes(Array.isArray(timesRes) ? timesRes : []);
-
-        const peopleIds = ArrayHelper.getIds(
-          Array.isArray(assignmentsRes) ? assignmentsRes : [],
-          "personId"
-        );
-        if (peopleIds.length > 0) {
-          try {
-            const peopleRes = await ApiHelper.get(
-              `/people/basic?ids=${encodeURIComponent(peopleIds.join(","))}`,
-              "MembershipApi"
-            );
-            if (!cancelled) setPeople(Array.isArray(peopleRes) ? peopleRes : []);
-          } catch {
-            if (!cancelled) setPeople([]);
-          }
-        } else {
-          setPeople([]);
-        }
-      } catch (err) {
-        console.error("Failed to load plan", err);
-        if (!cancelled) {
-          setNotFound(true);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
+  const { data: planBundle, isLoading: loading } = useQuery<PlanBundle>({
+    queryKey: ["plan-detail", id],
+    queryFn: async () => {
+      const [planRes, itemsRes, positionsRes, assignmentsRes, timesRes] = await Promise.all([
+        ApiHelper.get(`/plans/${id}`, "DoingApi").catch((): null => null),
+        ApiHelper.get(`/planItems/plan/${id}`, "DoingApi").catch((): any[] => []),
+        ApiHelper.get(`/positions/plan/${id}`, "DoingApi").catch((): any[] => []),
+        ApiHelper.get(`/assignments/plan/${id}`, "DoingApi").catch((): any[] => []),
+        ApiHelper.get(`/times/plan/${id}`, "DoingApi").catch((): any[] => []),
+      ]);
+      if (!planRes || !planRes.id) {
+        return { plan: null, planItems: [], positions: [], assignments: [], times: [], people: [] };
       }
-    };
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [id, isLoggedIn]);
+      const peopleIds = ArrayHelper.getIds(Array.isArray(assignmentsRes) ? assignmentsRes : [], "personId");
+      let peopleRes: PersonInterface[] = [];
+      if (peopleIds.length > 0) {
+        try {
+          const raw = await ApiHelper.get(`/people/basic?ids=${encodeURIComponent(peopleIds.join(","))}`, "MembershipApi");
+          if (Array.isArray(raw)) peopleRes = raw;
+        } catch {
+          peopleRes = [];
+        }
+      }
+      return {
+        plan: planRes,
+        planItems: Array.isArray(itemsRes) ? itemsRes : [],
+        positions: Array.isArray(positionsRes) ? positionsRes : [],
+        assignments: Array.isArray(assignmentsRes) ? assignmentsRes : [],
+        times: Array.isArray(timesRes) ? timesRes : [],
+        people: peopleRes,
+      };
+    },
+    enabled: !!id && isLoggedIn,
+  });
+
+  const plan = planBundle?.plan ?? null;
+  const planItems = planBundle?.planItems ?? [];
+  const positions = planBundle?.positions ?? [];
+  const assignments = planBundle?.assignments ?? [];
+  const times = planBundle?.times ?? [];
+  const people = planBundle?.people ?? [];
+  const notFound = !loading && planBundle !== undefined && !plan;
 
   const songs = useMemo(() => flattenSongs(planItems), [planItems]);
 

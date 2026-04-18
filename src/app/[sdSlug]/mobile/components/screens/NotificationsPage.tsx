@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Chip, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 
@@ -56,38 +57,39 @@ const deriveLinkUrl = (n: NotificationItem): string | undefined => {
 export const NotificationsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [notifications, setNotifications] = useState<NotificationItem[] | null>(null);
+  const loggedIn = !!UserHelper.user?.firstName;
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [localOverrides, setLocalOverrides] = useState<Record<string, boolean>>({});
 
-  const load = React.useCallback(() => {
-    if (!UserHelper.user?.firstName) {
-      setNotifications([]);
-      return;
-    }
-    ApiHelper.get("/notifications/my", "MessagingApi")
-      .then((data: any) => {
-        const list = Array.isArray(data) ? (data as NotificationItem[]) : [];
-        setNotifications(list);
-      })
-      .catch(() => setNotifications([]));
-  }, []);
+  const { data: serverNotifications = null } = useQuery<NotificationItem[]>({
+    queryKey: ["notifications", UserHelper.user?.id],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/notifications/my", "MessagingApi");
+      return Array.isArray(data) ? (data as NotificationItem[]) : [];
+    },
+    enabled: loggedIn,
+  });
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  const notifications = React.useMemo<NotificationItem[] | null>(() => {
+    if (!loggedIn) return [];
+    if (serverNotifications == null) return null;
+    return serverNotifications.map((n) =>
+      n.id && localOverrides[n.id] ? { ...n, isNew: false } : n
+    );
+  }, [loggedIn, serverNotifications, localOverrides]);
 
   const markAllRead = () => {
     if (!notifications) return;
-    setNotifications(notifications.map((n) => ({ ...n, isNew: false })));
+    const map: Record<string, boolean> = { ...localOverrides };
+    notifications.forEach((n) => { if (n.id) map[n.id] = true; });
+    setLocalOverrides(map);
     // Note: B1Mobile relies on the server auto-clearing `isNew` when `/notifications/my`
     // is polled. No client-side markRead endpoint exists, so this is client-only.
   };
 
   const markReadLocal = (n: NotificationItem) => {
     if (!n.id || !n.isNew) return;
-    setNotifications((prev) =>
-      prev ? prev.map((x) => (x.id === n.id ? { ...x, isNew: false } : x)) : prev
-    );
+    setLocalOverrides((prev) => ({ ...prev, [n.id!]: true }));
   };
 
   const handleClick = (n: NotificationItem) => {

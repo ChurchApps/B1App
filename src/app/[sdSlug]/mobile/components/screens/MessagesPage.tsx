@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
@@ -34,79 +35,59 @@ export const MessagesPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
-  const [conversations, setConversations] = React.useState<Conversation[] | null>(null);
+  const loggedIn = !!UserHelper.user?.firstName;
+  const myPersonId = userContext?.person?.id;
 
-  React.useEffect(() => {
-    if (!UserHelper.user?.firstName) {
-      setConversations([]);
-      return;
-    }
-    let cancelled = false;
+  const { data: conversations = null } = useQuery<Conversation[]>({
+    queryKey: ["conversations", myPersonId],
+    queryFn: async () => {
+      const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+      if (!Array.isArray(pmData) || pmData.length === 0) return [];
 
-    const load = async () => {
-      try {
-        const myPersonId = userContext?.person?.id;
-        const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
-        if (!Array.isArray(pmData) || pmData.length === 0) {
-          if (!cancelled) setConversations([]);
-          return;
+      const rows = pmData.map((pm) => {
+        const otherId = myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId;
+        return { pm, otherId };
+      });
+
+      const otherIds = Array.from(new Set(rows.map((r) => r.otherId).filter(Boolean)));
+      let peopleById: Record<string, PersonInterface> = {};
+      if (otherIds.length > 0) {
+        const people: PersonInterface[] = await ApiHelper.get(
+          `/people/basic?ids=${otherIds.join(",")}`,
+          "MembershipApi"
+        );
+        if (Array.isArray(people)) {
+          peopleById = people.reduce((acc, p) => {
+            if (p.id) acc[p.id] = p;
+            return acc;
+          }, {} as Record<string, PersonInterface>);
         }
-
-        // Determine the "other" personId for each conversation row
-        const rows = pmData.map((pm) => {
-          const otherId = myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId;
-          return { pm, otherId };
-        });
-
-        const otherIds = Array.from(new Set(rows.map((r) => r.otherId).filter(Boolean)));
-        let peopleById: Record<string, PersonInterface> = {};
-        if (otherIds.length > 0) {
-          const people: PersonInterface[] = await ApiHelper.get(
-            `/people/basic?ids=${otherIds.join(",")}`,
-            "MembershipApi"
-          );
-          if (Array.isArray(people)) {
-            peopleById = people.reduce((acc, p) => {
-              if (p.id) acc[p.id] = p;
-              return acc;
-            }, {} as Record<string, PersonInterface>);
-          }
-        }
-
-        const list: Conversation[] = rows.map(({ pm, otherId }) => {
-          const person = peopleById[otherId];
-          const displayName = person?.name?.display || "Unknown";
-          let photo = "";
-          if (person) {
-            try {
-              photo = PersonHelper.getPhotoUrl(person) || "";
-            } catch {
-              photo = (person as any).photo || "";
-            }
-          }
-          return {
-            id: pm.conversationId || pm.id,
-            personId: otherId,
-            personName: displayName,
-            personPhoto: photo,
-            // TODO: verify these fields — /privateMessages may not return lastMessage/timestamp/unread.
-            lastMessage: pm.lastMessage || pm.content,
-            timestamp: pm.timeSent || pm.timeUpdated || pm.lastMessageTime,
-            unread: !!pm.unread,
-          };
-        });
-
-        if (!cancelled) setConversations(list);
-      } catch {
-        if (!cancelled) setConversations([]);
       }
-    };
 
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [userContext?.person?.id]);
+      return rows.map(({ pm, otherId }) => {
+        const person = peopleById[otherId];
+        const displayName = person?.name?.display || "Unknown";
+        let photo = "";
+        if (person) {
+          try {
+            photo = PersonHelper.getPhotoUrl(person) || "";
+          } catch {
+            photo = (person as any).photo || "";
+          }
+        }
+        return {
+          id: pm.conversationId || pm.id,
+          personId: otherId,
+          personName: displayName,
+          personPhoto: photo,
+          lastMessage: pm.lastMessage || pm.content,
+          timestamp: pm.timeSent || pm.timeUpdated || pm.lastMessageTime,
+          unread: !!pm.unread,
+        };
+      });
+    },
+    enabled: loggedIn,
+  });
 
   const formatTimestamp = (ts?: string | number | Date): string => {
     if (!ts) return "";

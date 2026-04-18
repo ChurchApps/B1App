@@ -1,8 +1,9 @@
 "use client";
 
-import React, { Suspense, useContext, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useContext, useMemo, useState } from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Box, Button, Icon, Tab, Tabs, Typography, Alert, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ApiHelper,
   AppearanceHelper,
@@ -10,7 +11,6 @@ import {
   DateHelper,
   UniqueIdHelper,
   UserHelper,
-  useMountedState,
 } from "@churchapps/apphelper";
 import {
   RecurringDonations,
@@ -39,77 +39,63 @@ function DonatePageInner({ config }: Props) {
   const personId = context?.userChurch?.person?.id || UserHelper.currentUserChurch?.person?.id;
   const church: ChurchInterface | undefined = config?.church;
   const churchLogo = AppearanceHelper.getLogo(config?.appearance, "", "", "#FFF");
-  const isMounted = useMountedState();
+  const queryClient = useQueryClient();
+  const donationsEnabled = config?.allowDonations !== false && !UniqueIdHelper.isMissing(personId);
 
-  const [donations, setDonations] = useState<DonationInterface[]>([]);
-  const [donationsLoading, setDonationsLoading] = useState(true);
-  const [stripePromise, setStripe] = useState<Promise<Stripe> | null>(null);
-  const [paymentMethods, setPaymentMethods] = useState<AppHelperStripePaymentMethod[] | null>(null);
-  const [customerId, setCustomerId] = useState<string | null>(null);
-  const [person, setPerson] = useState<PersonInterface | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [isMethodsLoading, setIsMethodsLoading] = useState(true);
   const [tab, setTab] = useState<TabKey>("give");
 
-  const loadDonations = () => {
-    setDonationsLoading(true);
-    ApiHelper.get("/donations/my", "GivingApi")
-      .then((data: DonationInterface[]) => {
-        if (!isMounted()) return;
-        setDonations(Array.isArray(data) ? data : []);
-      })
-      .finally(() => {
-        if (isMounted()) setDonationsLoading(false);
-      });
-  };
+  const { data: donations = [], isLoading: donationsLoading } = useQuery<DonationInterface[]>({
+    queryKey: ["donations", personId],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/donations/my", "GivingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: donationsEnabled,
+  });
 
-  const loadPaymentData = () => {
-    if (UniqueIdHelper.isMissing(personId)) {
-      setPaymentMethods([]);
-      setIsMethodsLoading(false);
-      return;
-    }
-    setIsMethodsLoading(true);
-    ApiHelper.get("/gateways", "GivingApi").then((data: { publicKey?: string }[]) => {
-      if (data?.length && data[0]?.publicKey) {
-        if (isMounted()) setStripe(loadStripe(data[0].publicKey));
-        ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi").then(
-          (results: { provider?: string; customerId?: string }[]) => {
-            if (!isMounted()) return;
-            if (!Array.isArray(results) || results.length === 0) {
-              setPaymentMethods([]);
-            } else {
-              const pms: AppHelperStripePaymentMethod[] = [];
-              for (const pm of results) {
-                if (pm.provider === "stripe") pms.push(new AppHelperStripePaymentMethod(pm));
-                if (pm.customerId && !customerId) setCustomerId(pm.customerId);
-              }
-              setPaymentMethods(pms);
-            }
-            setIsMethodsLoading(false);
-          }
-        );
-        ApiHelper.get("/people/" + personId, "MembershipApi").then((p: PersonInterface) => {
-          if (isMounted()) setPerson(p);
-        });
-      } else {
-        setPaymentMethods([]);
-        setIsMethodsLoading(false);
+  interface PaymentData {
+    stripePromise: Promise<Stripe> | null;
+    paymentMethods: AppHelperStripePaymentMethod[];
+    customerId: string | null;
+    person: PersonInterface | null;
+  }
+
+  const { data: paymentData, isLoading: isMethodsLoading } = useQuery<PaymentData>({
+    queryKey: ["donate-payment-data", personId],
+    queryFn: async () => {
+      const gateways: { publicKey?: string }[] = await ApiHelper.get("/gateways", "GivingApi");
+      if (!gateways?.length || !gateways[0]?.publicKey) {
+        return { stripePromise: null, paymentMethods: [], customerId: null, person: null };
       }
-    });
-  };
+      const stripePromise = loadStripe(gateways[0].publicKey!) as Promise<Stripe>;
+      const [methodsResult, personResult] = await Promise.all([
+        ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi") as Promise<{ provider?: string; customerId?: string }[]>,
+        ApiHelper.get("/people/" + personId, "MembershipApi") as Promise<PersonInterface>,
+      ]);
+      const pms: AppHelperStripePaymentMethod[] = [];
+      let customerId: string | null = null;
+      if (Array.isArray(methodsResult)) {
+        for (const pm of methodsResult) {
+          if (pm.provider === "stripe") pms.push(new AppHelperStripePaymentMethod(pm));
+          if (pm.customerId && !customerId) customerId = pm.customerId;
+        }
+      }
+      return { stripePromise, paymentMethods: pms, customerId, person: personResult || null };
+    },
+    enabled: donationsEnabled,
+  });
 
-  useEffect(() => {
-    if (config?.allowDonations === false) return;
-    loadDonations();
-    loadPaymentData();
-  }, [personId, config?.allowDonations]);
+  const stripePromise = paymentData?.stripePromise ?? null;
+  const paymentMethods = paymentData?.paymentMethods ?? null;
+  const customerId = paymentData?.customerId ?? null;
+  const person = paymentData?.person ?? null;
 
   const handleDataUpdate = (msg?: string) => {
     setMessage(msg || null);
     setTimeout(() => {
-      loadDonations();
-      loadPaymentData();
+      queryClient.invalidateQueries({ queryKey: ["donations", personId] });
+      queryClient.invalidateQueries({ queryKey: ["donate-payment-data", personId] });
     }, 2000);
   };
 

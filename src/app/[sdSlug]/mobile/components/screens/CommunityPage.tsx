@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -23,9 +24,9 @@ interface Props {
 export const CommunityPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const loggedIn = !!UserHelper.user?.firstName;
   const [searchText, setSearchText] = React.useState("");
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
-  const [people, setPeople] = React.useState<PersonInterface[] | null>(null);
 
   // Debounce input 300ms
   React.useEffect(() => {
@@ -35,47 +36,28 @@ export const CommunityPage = ({ config }: Props) => {
     return () => clearTimeout(handle);
   }, [searchText]);
 
-  React.useEffect(() => {
-    if (!UserHelper.user?.firstName) {
-      setPeople([]);
-      return;
-    }
-    let cancelled = false;
-    setPeople(null);
-
-    // Endpoints match /my/[pageSlug]/components/DirectoryMasterPanel.tsx
-    const term = encodeURIComponent(debouncedSearch);
-    const url = debouncedSearch
-      ? `/people/search?term=${term}`
-      : "/people/directory/all";
-
-    ApiHelper.get(url, "MembershipApi")
-      .then((data: PersonInterface[]) => {
-        if (cancelled) return;
-        const list = Array.isArray(data) ? data : [];
-        // De-dupe by id
-        const unique = list.filter(
-          (p, idx, self) => self.findIndex((x) => x.id === p.id) === idx
-        );
-        // Sort by last, then first
-        unique.sort((a, b) => {
-          const aLast = (a.name?.last || "").toLowerCase();
-          const bLast = (b.name?.last || "").toLowerCase();
-          if (aLast !== bLast) return aLast.localeCompare(bLast);
-          const aFirst = (a.name?.first || "").toLowerCase();
-          const bFirst = (b.name?.first || "").toLowerCase();
-          return aFirst.localeCompare(bFirst);
-        });
-        setPeople(unique);
-      })
-      .catch(() => {
-        if (!cancelled) setPeople([]);
+  const { data: serverPeople = null, isFetching } = useQuery<PersonInterface[]>({
+    queryKey: ["directory", debouncedSearch || "all"],
+    queryFn: async () => {
+      const term = encodeURIComponent(debouncedSearch);
+      const url = debouncedSearch ? `/people/search?term=${term}` : "/people/directory/all";
+      const data = await ApiHelper.get(url, "MembershipApi");
+      const list = Array.isArray(data) ? (data as PersonInterface[]) : [];
+      const unique = list.filter((p, idx, self) => self.findIndex((x) => x.id === p.id) === idx);
+      unique.sort((a, b) => {
+        const aLast = (a.name?.last || "").toLowerCase();
+        const bLast = (b.name?.last || "").toLowerCase();
+        if (aLast !== bLast) return aLast.localeCompare(bLast);
+        const aFirst = (a.name?.first || "").toLowerCase();
+        const bFirst = (b.name?.first || "").toLowerCase();
+        return aFirst.localeCompare(bFirst);
       });
+      return unique;
+    },
+    enabled: loggedIn,
+  });
 
-    return () => {
-      cancelled = true;
-    };
-  }, [debouncedSearch]);
+  const people = loggedIn ? (isFetching && !serverPeople ? null : (serverPeople ?? null)) : [];
 
   const getInitials = (p: PersonInterface) => {
     const f = (p.name?.first || "").trim().charAt(0).toUpperCase();

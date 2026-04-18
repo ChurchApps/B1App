@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Box, Chip, CircularProgress, Icon, IconButton, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import { ApiHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -66,48 +67,30 @@ const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
 export const SermonDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [sermon, setSermon] = useState<SermonInterface | null>(null);
-  const [loading, setLoading] = useState(true);
-
   const churchId = config?.church?.id;
 
-  useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      setLoading(true);
-      try {
-        // B1Mobile loads the full public list and finds by id; we mirror that to guarantee
-        // the same data shape works across deployments.
-        // TODO: verify endpoint shape - alternate might be `/sermons/${id}` on ContentApi.
-        let found: SermonInterface | null = null;
-        if (churchId) {
-          const list = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
-          if (Array.isArray(list)) {
-            found = list.find((s: any) => s && s.id === id) || null;
-          }
+  const { data: sermon = null, isLoading: loading } = useQuery<SermonInterface | null>({
+    queryKey: ["sermon", churchId, id],
+    queryFn: async () => {
+      let found: SermonInterface | null = null;
+      if (churchId) {
+        const list = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
+        if (Array.isArray(list)) {
+          found = list.find((s: any) => s && s.id === id) || null;
         }
-        if (!found) {
-          // Fallback: direct fetch by id
-          try {
-            const direct = await ApiHelper.getAnonymous(`/sermons/${id}`, "ContentApi");
-            if (direct && direct.id) found = direct as SermonInterface;
-          } catch {
-            /* ignore */
-          }
-        }
-        if (!cancelled) setSermon(found);
-      } catch (err) {
-        console.error("Failed to load sermon", err);
-        if (!cancelled) setSermon(null);
-      } finally {
-        if (!cancelled) setLoading(false);
       }
-    };
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [id, churchId]);
+      if (!found) {
+        try {
+          const direct = await ApiHelper.getAnonymous(`/sermons/${id}`, "ContentApi");
+          if (direct && direct.id) found = direct as SermonInterface;
+        } catch {
+          /* ignore */
+        }
+      }
+      return found;
+    },
+    enabled: !!id,
+  });
 
   const embedUrl = useMemo(() => buildEmbedUrl(sermon), [sermon]);
 

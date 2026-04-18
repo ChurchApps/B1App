@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -52,39 +53,34 @@ type TabKey = "about" | "messages" | "members" | "attendance" | "events" | "reso
 export const GroupDetail = ({ id, config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [group, setGroup] = React.useState<GroupWithExtras | null | undefined>(undefined);
-  const [members, setMembers] = React.useState<GroupMember[] | null>(null);
+  const queryClient = useQueryClient();
   const [joining, setJoining] = React.useState(false);
   const [tab, setTab] = React.useState<TabKey>("about");
   const [chatOpen, setChatOpen] = React.useState(false);
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    let cancelled = false;
-    if (!id) return;
-    setGroup(undefined);
-    setMembers(null);
+  const { data: groupData, isLoading: groupLoading } = useQuery<GroupWithExtras | null>({
+    queryKey: ["group-detail", id],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
+      return data || null;
+    },
+    enabled: !!id,
+  });
 
-    ApiHelper.get(`/groups/${id}`, "MembershipApi")
-      .then((data: GroupWithExtras) => {
-        if (!cancelled) setGroup(data || null);
-      })
-      .catch(() => {
-        if (!cancelled) setGroup(null);
-      });
+  const { data: membersData = null } = useQuery<GroupMember[]>({
+    queryKey: ["group-members", id],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/groupmembers?groupId=${id}`, "MembershipApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!id,
+  });
 
-    ApiHelper.get(`/groupmembers?groupId=${id}`, "MembershipApi")
-      .then((data: GroupMember[]) => {
-        if (!cancelled) setMembers(Array.isArray(data) ? data : []);
-      })
-      .catch(() => {
-        if (!cancelled) setMembers([]);
-      });
+  const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
+  const members = membersData;
 
-    return () => {
-      cancelled = true;
-    };
-  }, [id]);
+  const refreshMembers = () => queryClient.invalidateQueries({ queryKey: ["group-members", id] });
 
   const currentPersonId = UserHelper.person?.id;
   const myMembership = members?.find((m) => (m.personId || m.person?.id) === currentPersonId);
@@ -108,7 +104,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     setJoining(true);
     try {
       await ApiHelper.delete(`/groupmembers/${mine.id}`, "MembershipApi");
-      setMembers(members.filter((m) => m.id !== mine.id));
+      refreshMembers();
     } finally {
       setJoining(false);
     }
@@ -123,8 +119,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         [{ groupId: id, personId: currentPersonId }],
         "MembershipApi"
       );
-      const fresh = await ApiHelper.get(`/groupmembers?groupId=${id}`, "MembershipApi");
-      setMembers(Array.isArray(fresh) ? fresh : members || []);
+      refreshMembers();
     } finally {
       setJoining(false);
     }

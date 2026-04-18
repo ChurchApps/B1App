@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Icon, LinearProgress, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, DateHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -21,26 +22,16 @@ interface SignupPlanData {
 export const VolunteerPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [signupPlans, setSignupPlans] = useState<SignupPlanData[] | null>(null);
+  const churchId = config?.church?.id;
 
-  useEffect(() => {
-    let cancelled = false;
-    const churchId = config?.church?.id;
-    if (!churchId) {
-      setSignupPlans([]);
-      return;
-    }
-    ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi")
-      .then((data: SignupPlanData[]) => {
-        if (!cancelled) setSignupPlans(Array.isArray(data) ? data : []);
-      })
-      .catch(() => {
-        if (!cancelled) setSignupPlans([]);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [config?.church?.id]);
+  const { data: signupPlans = null } = useQuery<SignupPlanData[]>({
+    queryKey: ["volunteer-signup", churchId],
+    queryFn: async () => {
+      const data = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!churchId,
+  });
 
   const getSlots = (positions: SignupPlanData["positions"]) => {
     const total = positions.reduce((s, p) => s + (p.count || 0), 0);

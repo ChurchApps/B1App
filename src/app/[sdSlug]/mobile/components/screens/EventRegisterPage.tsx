@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -60,11 +61,6 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     || "";
   const isLoggedIn = !!personId;
 
-  const [event, setEvent] = useState<EventInterface | null>(null);
-  const [activeCount, setActiveCount] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(false);
-
   const [step, setStep] = useState<Step>("info");
   const [guestFirstName, setGuestFirstName] = useState("");
   const [guestLastName, setGuestLastName] = useState("");
@@ -76,30 +72,20 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   const [submitting, setSubmitting] = useState(false);
   const [registration, setRegistration] = useState<RegistrationInterface | null>(null);
 
-  useEffect(() => {
-    if (!churchId || !eventId) return;
-    let cancelled = false;
-    setLoading(true);
-    setLoadError(false);
-    Promise.all([
-      ApiHelper.getAnonymous(`/events/public/${churchId}/${eventId}`, "ContentApi"),
-      ApiHelper.getAnonymous(`/registrations/event/${eventId}/count?churchId=${churchId}`, "ContentApi").catch(() => ({ count: 0 })),
-    ])
-      .then(([eventData, countData]) => {
-        if (cancelled) return;
-        setEvent(eventData || null);
-        setActiveCount(countData?.count || 0);
-      })
-      .catch(() => {
-        if (!cancelled) setLoadError(true);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [churchId, eventId]);
+  const { data: eventData, isLoading: loading, isError: loadError } = useQuery<{ event: EventInterface | null; activeCount: number }>({
+    queryKey: ["event-register", churchId, eventId],
+    queryFn: async () => {
+      const [eventResp, countResp] = await Promise.all([
+        ApiHelper.getAnonymous(`/events/public/${churchId}/${eventId}`, "ContentApi"),
+        ApiHelper.getAnonymous(`/registrations/event/${eventId}/count?churchId=${churchId}`, "ContentApi").catch(() => ({ count: 0 })),
+      ]);
+      return { event: (eventResp as EventInterface) || null, activeCount: (countResp as any)?.count || 0 };
+    },
+    enabled: !!churchId && !!eventId,
+  });
+
+  const event = eventData?.event ?? null;
+  const activeCount = eventData?.activeCount ?? 0;
 
   const handleBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.back();

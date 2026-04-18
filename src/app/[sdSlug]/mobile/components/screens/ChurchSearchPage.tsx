@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Avatar,
@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -42,42 +43,32 @@ export const ChurchSearchPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
-  const [results, setResults] = useState<ChurchInterface[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selecting, setSelecting] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
     const term = searchText.trim();
     if (term.length < 3) {
-      setResults([]);
-      setLoading(false);
-      setHasSearched(false);
+      setDebouncedSearch("");
       return;
     }
-    setLoading(true);
-    debounceRef.current = setTimeout(async () => {
-      try {
-        // Matches B1Mobile churchSearch.tsx endpoint.
-        const data = await ApiHelper.getAnonymous(
-          `/churches/search/?name=${encodeURIComponent(term)}&app=B1&include=favicon_400x400`,
-          "MembershipApi"
-        );
-        setResults(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Church search error", err);
-        setResults([]);
-      } finally {
-        setLoading(false);
-        setHasSearched(true);
-      }
-    }, 300);
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
+    const handle = setTimeout(() => setDebouncedSearch(term), 300);
+    return () => clearTimeout(handle);
   }, [searchText]);
+
+  const { data: results = [], isFetching: loading } = useQuery<ChurchInterface[]>({
+    queryKey: ["church-search", debouncedSearch],
+    queryFn: async () => {
+      const data = await ApiHelper.getAnonymous(
+        `/churches/search/?name=${encodeURIComponent(debouncedSearch)}&app=B1&include=favicon_400x400`,
+        "MembershipApi"
+      );
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: debouncedSearch.length >= 3,
+  });
+
+  const hasSearched = debouncedSearch.length >= 3 && !loading;
 
   const handleSelect = async (church: ChurchInterface) => {
     if (!church?.id || selecting) return;

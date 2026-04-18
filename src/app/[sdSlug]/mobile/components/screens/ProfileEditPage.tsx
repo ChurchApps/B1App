@@ -18,6 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -75,10 +76,10 @@ interface PersonWithPrivacy extends PersonInterface {
 export const ProfileEditPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const personId = UserHelper.currentUserChurch?.person?.id;
   const [tab, setTab] = useState<TabKey>("profile");
   const [person, setPerson] = useState<PersonWithPrivacy | null>(null);
   const [initial, setInitial] = useState<PersonWithPrivacy | null>(null);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const [snack, setSnack] = useState<{ open: boolean; msg: string; severity: "success" | "error" | "info" }>({
@@ -87,54 +88,43 @@ export const ProfileEditPage = ({ config }: Props) => {
     severity: "success",
   });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [household, setHousehold] = useState<HouseholdMember[] | null>(null);
   const [savingPrivacy, setSavingPrivacy] = useState(false);
 
+  const { data: serverPerson, isLoading: personLoading } = useQuery<PersonWithPrivacy>({
+    queryKey: ["person", personId],
+    queryFn: () => ApiHelper.get("/people/" + personId, "MembershipApi"),
+    enabled: !!personId,
+  });
+
+  const householdId = serverPerson?.householdId;
+
+  const { data: household = null } = useQuery<HouseholdMember[]>({
+    queryKey: ["household", householdId],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/people/household/${householdId}`, "MembershipApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!householdId,
+  });
+
   useEffect(() => {
-    let cancelled = false;
-    const personId = UserHelper.currentUserChurch?.person?.id;
     if (!personId) {
-      setLoading(false);
       setPerson({ ...emptyPerson });
       setInitial({ ...emptyPerson });
       return;
     }
-    ApiHelper.get("/people/" + personId, "MembershipApi")
-      .then((data: PersonWithPrivacy) => {
-        if (cancelled) return;
-        const merged: PersonWithPrivacy = {
-          ...emptyPerson,
-          ...data,
-          name: { ...emptyPerson.name, ...(data?.name || {}) },
-          contactInfo: { ...emptyPerson.contactInfo, ...(data?.contactInfo || {}) },
-        };
-        setPerson(merged);
-        setInitial(JSON.parse(JSON.stringify(merged)));
-        if (data?.householdId) {
-          ApiHelper.get(`/people/household/${data.householdId}`, "MembershipApi")
-            .then((hh: HouseholdMember[]) => {
-              if (!cancelled) setHousehold(Array.isArray(hh) ? hh : []);
-            })
-            .catch(() => {
-              if (!cancelled) setHousehold([]);
-            });
-        } else {
-          setHousehold([]);
-        }
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setPerson({ ...emptyPerson });
-        setInitial({ ...emptyPerson });
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
+    if (!serverPerson) return;
+    const merged: PersonWithPrivacy = {
+      ...emptyPerson,
+      ...serverPerson,
+      name: { ...emptyPerson.name, ...(serverPerson.name || {}) },
+      contactInfo: { ...emptyPerson.contactInfo, ...(serverPerson.contactInfo || {}) },
     };
-  }, []);
+    setPerson(merged);
+    setInitial(JSON.parse(JSON.stringify(merged)));
+  }, [personId, serverPerson]);
+
+  const loading = personLoading && !person;
 
   const handleNameChange = (key: "first" | "last") => (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!person) return;

@@ -7,6 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { MessageInterface, PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
@@ -40,7 +41,6 @@ export const MessageConversation = ({ id, config }: Props) => {
   const router = useRouter();
   const userContext = React.useContext(UserContext);
 
-  const [person, setPerson] = React.useState<PersonInterface | null>(null);
   const [conversationId, setConversationId] = React.useState<string | null>(null);
   const [messages, setMessages] = React.useState<MessageInterface[] | null>(null);
   const [text, setText] = React.useState("");
@@ -52,6 +52,43 @@ export const MessageConversation = ({ id, config }: Props) => {
 
   const myPersonId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const myDisplayName = userContext?.person?.name?.display || UserHelper.currentUserChurch?.person?.name?.display || "";
+
+  const { data: personData } = useQuery<PersonInterface | null>({
+    queryKey: ["community-person", id],
+    queryFn: async () => {
+      try {
+        const p = await ApiHelper.get("/people/" + id, "MembershipApi");
+        if (p) return p as PersonInterface;
+      } catch {
+        /* fall through */
+      }
+      try {
+        const people = await ApiHelper.get("/people/basic?ids=" + id, "MembershipApi");
+        if (Array.isArray(people) && people.length > 0) return people[0] as PersonInterface;
+      } catch {
+        /* ignore */
+      }
+      return null;
+    },
+    enabled: !!id,
+  });
+  const person = personData ?? null;
+
+  const { data: existingConvId } = useQuery<string | null>({
+    queryKey: ["private-message-conv", myPersonId, id],
+    queryFn: async () => {
+      const pm: PrivateMessageRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+      const match = Array.isArray(pm)
+        ? pm.find(
+            (c) =>
+              (c.fromPersonId === myPersonId && c.toPersonId === id) ||
+              (c.toPersonId === myPersonId && c.fromPersonId === id)
+          )
+        : null;
+      return match?.conversationId ?? null;
+    },
+    enabled: !!id && !!myPersonId,
+  });
 
   const scrollToBottom = React.useCallback(() => {
     if (listRef.current) {
@@ -66,69 +103,24 @@ export const MessageConversation = ({ id, config }: Props) => {
         "MessagingApi"
       );
       setMessages(Array.isArray(data) ? data : []);
-      // TODO: Ack read-receipts if B1Mobile exposes an endpoint for isNew=false.
     } catch {
       setMessages([]);
       setError("Unable to load messages.");
     }
   }, []);
 
-  // Initial load: person header + existing conversation id (if any)
   React.useEffect(() => {
-    let cancelled = false;
-
-    const load = async () => {
-      try {
-        // Person header
-        try {
-          const p: PersonInterface = await ApiHelper.get("/people/" + id, "MembershipApi");
-          if (!cancelled) setPerson(p || null);
-        } catch {
-          // fall back to basic batch
-          try {
-            const people: PersonInterface[] = await ApiHelper.get(
-              "/people/basic?ids=" + id,
-              "MembershipApi"
-            );
-            if (!cancelled && Array.isArray(people) && people.length > 0) setPerson(people[0]);
-          } catch {
-            /* ignore */
-          }
-        }
-
-        if (!myPersonId) {
-          if (!cancelled) setMessages([]);
-          return;
-        }
-
-        const pm: PrivateMessageRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
-        const match = Array.isArray(pm)
-          ? pm.find(
-              (c) =>
-                (c.fromPersonId === myPersonId && c.toPersonId === id) ||
-                (c.toPersonId === myPersonId && c.fromPersonId === id)
-            )
-          : null;
-        if (match?.conversationId) {
-          if (cancelled) return;
-          setConversationId(match.conversationId);
-          await loadMessages(match.conversationId);
-        } else if (!cancelled) {
-          setMessages([]);
-        }
-      } catch {
-        if (!cancelled) {
-          setMessages([]);
-          setError("Unable to load conversation.");
-        }
-      }
-    };
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [id, myPersonId, loadMessages]);
+    if (!myPersonId) {
+      setMessages([]);
+      return;
+    }
+    if (existingConvId) {
+      setConversationId(existingConvId);
+      loadMessages(existingConvId);
+    } else if (existingConvId === null) {
+      setMessages([]);
+    }
+  }, [existingConvId, myPersonId, loadMessages]);
 
   // Auto-scroll on messages change
   React.useEffect(() => {

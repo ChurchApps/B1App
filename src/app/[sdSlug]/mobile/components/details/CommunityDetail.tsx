@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -31,39 +32,27 @@ interface PersonWithPrivacy extends PersonInterface {
 export const CommunityDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [person, setPerson] = React.useState<PersonWithPrivacy | null | undefined>(undefined);
-  const [household, setHousehold] = React.useState<HouseholdMember[] | null>(null);
 
-  React.useEffect(() => {
-    let cancelled = false;
-    if (!id) return;
-    setPerson(undefined);
-    setHousehold(null);
+  const { data: personData, isLoading: personLoading } = useQuery<PersonWithPrivacy | null>({
+    queryKey: ["community-person", id],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/people/${id}`, "MembershipApi");
+      return data || null;
+    },
+    enabled: !!id,
+  });
 
-    ApiHelper.get(`/people/${id}`, "MembershipApi")
-      .then((data: PersonWithPrivacy) => {
-        if (cancelled) return;
-        setPerson(data || null);
-        if (data?.householdId) {
-          ApiHelper.get(`/people/household/${data.householdId}`, "MembershipApi")
-            .then((hh: HouseholdMember[]) => {
-              if (!cancelled) setHousehold(Array.isArray(hh) ? hh : []);
-            })
-            .catch(() => {
-              if (!cancelled) setHousehold([]);
-            });
-        } else {
-          setHousehold([]);
-        }
-      })
-      .catch(() => {
-        if (!cancelled) setPerson(null);
-      });
+  const householdId = personData?.householdId;
+  const { data: household = null } = useQuery<HouseholdMember[]>({
+    queryKey: ["community-household", householdId],
+    queryFn: async () => {
+      const hh = await ApiHelper.get(`/people/household/${householdId}`, "MembershipApi");
+      return Array.isArray(hh) ? hh : [];
+    },
+    enabled: !!householdId,
+  });
 
-    return () => {
-      cancelled = true;
-    };
-  }, [id]);
+  const person: PersonWithPrivacy | null | undefined = personLoading ? undefined : (personData ?? null);
 
   const currentPersonId = UserHelper.person?.id;
   const isOwnProfile = !!currentPersonId && currentPersonId === person?.id;
