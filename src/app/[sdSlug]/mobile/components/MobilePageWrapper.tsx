@@ -1,6 +1,5 @@
 import React from "react";
 import { Theme } from "@/components";
-import { AuthGuard } from "@/components/AuthGuard";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MobileShell } from "./MobileShell";
 
@@ -10,13 +9,14 @@ interface Props {
   children: React.ReactNode;
 }
 
-export function MobilePageWrapper({ sdSlug, config, children }: Props) {
+export function MobilePageWrapper({ sdSlug: _sdSlug, config, children }: Props) {
+  // Matches B1Mobile: public screens render without login. Screens that require
+  // auth (CheckinPage, DonatePage, ProfileEditPage, NotificationsPage, MessagesPage)
+  // gate themselves inline via UserHelper.user checks.
   return (
     <>
       <Theme config={config} />
-      <AuthGuard sdSlug={sdSlug}>
-        <MobileShell config={config}>{children}</MobileShell>
-      </AuthGuard>
+      <MobileShell config={config}>{children}</MobileShell>
     </>
   );
 }

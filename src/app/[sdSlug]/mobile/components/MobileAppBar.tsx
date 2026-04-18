@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AppBar, Avatar, Badge, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Badge, Icon, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { UserHelper } from "@churchapps/apphelper";
@@ -19,10 +19,20 @@ interface Props {
 
 export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, onAvatarClick, onBellClick }: Props) => {
   const logoLight = config?.appearance?.logoLight;
+  const signedIn = !!UserHelper.user?.firstName;
   const initials = [UserHelper.user?.firstName?.[0], UserHelper.user?.lastName?.[0]]
     .filter(Boolean)
     .join("")
-    .toUpperCase() || "?";
+    .toUpperCase();
+
+  const handleAvatarClick = () => {
+    if (signedIn) {
+      onAvatarClick();
+    } else {
+      const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
+      window.location.href = returnUrl ? `/login?returnUrl=${returnUrl}` : "/login";
+    }
+  };
 
   return (
     <AppBar
@@ -58,22 +68,28 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
           )}
         </div>
         <Stack direction="row" alignItems="center" spacing={0.5} sx={{ pr: 1 }}>
-          <IconButton onClick={onBellClick} aria-label="Notifications" sx={{ color: "#FFFFFF" }}>
-            <Badge variant="dot" color="error" invisible>
-              <NotificationsNoneIcon sx={{ fontSize: 24 }} />
-            </Badge>
-          </IconButton>
-          <IconButton onClick={onAvatarClick} aria-label="Profile" sx={{ p: 0.5 }}>
-            <Avatar sx={{
-              width: 30,
-              height: 30,
-              bgcolor: "rgba(255,255,255,0.25)",
-              color: "#FFFFFF",
-              fontSize: 13,
-              fontWeight: 600,
-            }}>
-              {initials}
-            </Avatar>
+          {signedIn && (
+            <IconButton onClick={onBellClick} aria-label="Notifications" sx={{ color: "#FFFFFF" }}>
+              <Badge variant="dot" color="error" invisible>
+                <NotificationsNoneIcon sx={{ fontSize: 24 }} />
+              </Badge>
+            </IconButton>
+          )}
+          <IconButton onClick={handleAvatarClick} aria-label={signedIn ? "Profile" : "Sign in"} sx={{ p: 0.5 }}>
+            {signedIn ? (
+              <Avatar sx={{
+                width: 30,
+                height: 30,
+                bgcolor: "rgba(255,255,255,0.25)",
+                color: "#FFFFFF",
+                fontSize: 13,
+                fontWeight: 600,
+              }}>
+                {initials || "?"}
+              </Avatar>
+            ) : (
+              <Icon sx={{ color: "#FFFFFF", fontSize: 26 }}>login</Icon>
+            )}
           </IconButton>
         </Stack>
       </Toolbar>

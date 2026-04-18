@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Avatar, Box, Button, Divider, Icon, Stack, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 import ChurchIcon from "@mui/icons-material/Church";
 import SearchIcon from "@mui/icons-material/Search";
 import { UserHelper } from "@churchapps/apphelper";
@@ -172,26 +173,54 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
         borderTop: `1px solid ${tc.border}`,
         boxShadow: mobileTheme.shadows.sm,
       }}>
-        <Button
-          variant="outlined"
-          fullWidth
-          startIcon={<LogoutIcon sx={{ fontSize: 24, color: tc.primary }} />}
-          component="a"
-          href="/logout"
-          sx={{
-            color: tc.primary,
-            borderColor: tc.primary,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            textTransform: "none",
-            fontWeight: 500,
-            fontSize: 14,
-            justifyContent: "flex-start",
-            py: 1,
-            mb: 1,
-          }}
-        >
-          Logout
-        </Button>
+        {UserHelper.user ? (
+          <Button
+            variant="outlined"
+            fullWidth
+            startIcon={<LogoutIcon sx={{ fontSize: 24, color: tc.primary }} />}
+            component="a"
+            href="/logout"
+            sx={{
+              color: tc.primary,
+              borderColor: tc.primary,
+              borderRadius: `${mobileTheme.radius.md}px`,
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: 14,
+              justifyContent: "flex-start",
+              py: 1,
+              mb: 1,
+            }}
+          >
+            Logout
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            fullWidth
+            disableElevation
+            startIcon={<LoginIcon sx={{ fontSize: 24 }} />}
+            component="a"
+            href={(() => {
+              const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
+              return returnUrl ? `/login?returnUrl=${returnUrl}` : "/login";
+            })()}
+            sx={{
+              bgcolor: tc.primary,
+              color: tc.onPrimary,
+              borderRadius: `${mobileTheme.radius.md}px`,
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: 14,
+              justifyContent: "flex-start",
+              py: 1,
+              mb: 1,
+              "&:hover": { bgcolor: tc.primary },
+            }}
+          >
+            Sign In
+          </Button>
+        )}
         <Typography sx={{ fontSize: 12, color: tc.disabled, textAlign: "center" }}>
           B1 Mobile Web
         </Typography>
