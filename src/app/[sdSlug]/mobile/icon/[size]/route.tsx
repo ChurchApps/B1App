@@ -31,9 +31,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
           if (appearanceRes.ok) {
             const appearance = await appearanceRes.json();
             primaryColor = appearance?.primaryColor || primaryColor;
-            favicon = n >= 256
-              ? (appearance?.favicon_400x400 || appearance?.favicon_16x16)
-              : (appearance?.favicon_16x16 || appearance?.favicon_400x400);
+            favicon = appearance?.favicon_400x400 || appearance?.favicon_16x16;
           }
         }
       }
@@ -42,7 +40,32 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     /* use default */
   }
 
-  if (favicon) return Response.redirect(favicon, 302);
+  if (favicon) {
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: primaryColor,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={favicon}
+            width={n}
+            height={n}
+            style={{ objectFit: "contain", width: "100%", height: "100%" }}
+            alt=""
+          />
+        </div>
+      ),
+      { width: n, height: n }
+    );
+  }
 
   return new ImageResponse(
     (
