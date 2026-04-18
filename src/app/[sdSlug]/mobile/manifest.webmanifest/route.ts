@@ -1,13 +1,9 @@
 import { NextResponse } from "next/server";
-import { isMobileShellEnabled } from "@/helpers/MobileShellHelper";
 
 type Params = Promise<{ sdSlug: string }>;
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   const { sdSlug } = await params;
-  if (!isMobileShellEnabled(sdSlug)) {
-    return new NextResponse("Not found", { status: 404 });
-  }
 
   let themeColor = "#0D47A1";
   let churchName = sdSlug;
