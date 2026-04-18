@@ -1,5 +1,4 @@
 import { ImageResponse } from "next/og";
-import { isMobileShellEnabled } from "@/helpers/MobileShellHelper";
 
 type Params = Promise<{ sdSlug: string; size: string }>;
 
@@ -12,9 +11,6 @@ const getInitials = (name: string): string => {
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   const { sdSlug, size } = await params;
-  if (!isMobileShellEnabled(sdSlug)) {
-    return new Response("Not found", { status: 404 });
-  }
   const n = parseInt(size, 10);
   if (n !== 192 && n !== 512) {
     return new Response("Not found", { status: 404 });
