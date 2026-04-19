@@ -285,6 +285,17 @@ export const CommunityDetail = ({ id, config }: Props) => {
           }}
         />
       );
+      actions.push(
+        <QuickAction
+          key="sms"
+          icon="sms"
+          label="Text"
+          ariaLabel="Send text message"
+          onClick={() => {
+            window.location.href = `sms:${primaryPhone}`;
+          }}
+        />
+      );
     }
     if (email) {
       actions.push(

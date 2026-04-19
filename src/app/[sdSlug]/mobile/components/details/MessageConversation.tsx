@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
@@ -40,9 +40,13 @@ interface PrivateMessageRow {
 export const MessageConversation = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const searchParams = useSearchParams();
   const userContext = React.useContext(UserContext);
 
-  const [conversationId, setConversationId] = React.useState<string | null>(null);
+  // Callers (MessagesPage) may forward the conversationId via query string so
+  // we can skip the /privateMessages round-trip when we already know it.
+  const conversationIdParam = searchParams?.get("conversationId") || null;
+  const [conversationId, setConversationId] = React.useState<string | null>(conversationIdParam);
   const [pending, setPending] = React.useState<MessageInterface[]>([]);
   const [text, setText] = React.useState("");
   const [sending, setSending] = React.useState(false);
@@ -88,7 +92,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         : null;
       return match?.conversationId ?? null;
     },
-    enabled: !!id && !!myPersonId,
+    enabled: !!id && !!myPersonId && !conversationIdParam,
   });
 
   const scrollToBottom = React.useCallback(() => {

@@ -14,22 +14,19 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
-// Shape the UI renders. We hydrate this from the private messages API.
+// Shape the UI renders. Hydrated from /privateMessages + /people/basic.
+// The /privateMessages endpoint returns ConversationCheckInterface-style rows
+// (id, churchId, fromPersonId, toPersonId, conversationId, notifyPersonId, conversation)
+// with no per-conversation last-message preview / timestamp / unread flag — those
+// fields were previously rendered but were never populated by the API. Parity with
+// B1Mobile (the authority) means keeping this screen a simple name-only list.
 interface Conversation {
   id: string;
   personId: string;
+  conversationId?: string;
   personName: string;
   personPhoto?: string;
-  lastMessage?: string;
-  timestamp?: string | number | Date;
-  unread?: boolean;
 }
-
-// TODO: Verify messaging endpoints. Currently using:
-//   - GET /privateMessages (MessagingApi) - returns ConversationCheckInterface[]
-//   - GET /people/basic?ids=... (MembershipApi) - returns PersonInterface[]
-// Last-message / timestamp / unread fields may require a different endpoint
-// (e.g. /messages/conversation/{conversationId} or a conversation summary endpoint).
 
 export const MessagesPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
@@ -78,36 +75,14 @@ export const MessagesPage = ({ config }: Props) => {
         return {
           id: pm.conversationId || pm.id,
           personId: otherId,
+          conversationId: pm.conversationId,
           personName: displayName,
           personPhoto: photo,
-          lastMessage: pm.lastMessage || pm.content,
-          timestamp: pm.timeSent || pm.timeUpdated || pm.lastMessageTime,
-          unread: !!pm.unread,
         };
       });
     },
     enabled: loggedIn,
   });
-
-  const formatTimestamp = (ts?: string | number | Date): string => {
-    if (!ts) return "";
-    const d = new Date(ts);
-    if (isNaN(d.getTime())) return "";
-    const now = new Date();
-    const sameDay =
-      d.getFullYear() === now.getFullYear() &&
-      d.getMonth() === now.getMonth() &&
-      d.getDate() === now.getDate();
-    if (sameDay) {
-      return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-    }
-    const diffMs = now.getTime() - d.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffDays < 7) {
-      return d.toLocaleDateString(undefined, { weekday: "short" });
-    }
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  };
 
   const getInitials = (name: string) => {
     const parts = name.trim().split(/\s+/);
@@ -153,7 +128,12 @@ export const MessagesPage = ({ config }: Props) => {
   };
 
   const handleClick = (c: Conversation) => {
-    router.push(`/mobile/messages/${c.personId}`);
+    // Mirror B1Mobile, which forwards the full UserSearchInterface (including
+    // conversationId) to the conversation screen. On web the route key is the
+    // person id, but we still hand off the conversationId via query string so
+    // the detail view can skip the re-lookup when we already have it.
+    const path = `/mobile/messages/${c.personId}`;
+    router.push(c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path);
   };
 
   const renderRow = (c: Conversation) => (
@@ -197,48 +177,8 @@ export const MessagesPage = ({ config }: Props) => {
         >
           {c.personName}
         </Typography>
-        {c.lastMessage && (
-          <Typography
-            sx={{
-              fontSize: 14,
-              fontWeight: 400,
-              color: tc.textSecondary,
-              mt: "2px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {c.lastMessage}
-          </Typography>
-        )}
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          gap: "4px",
-          flexShrink: 0,
-          minWidth: 40,
-        }}
-      >
-        {c.timestamp && (
-          <Typography sx={{ fontSize: 12, fontWeight: 400, color: tc.textSecondary }}>
-            {formatTimestamp(c.timestamp)}
-          </Typography>
-        )}
-        {c.unread && (
-          <Box
-            sx={{
-              width: 8,
-              height: 8,
-              borderRadius: "4px",
-              bgcolor: tc.primary,
-            }}
-          />
-        )}
-      </Box>
+      <Icon sx={{ color: tc.textSecondary, flexShrink: 0 }}>chevron_right</Icon>
     </Box>
   );
 
@@ -259,9 +199,7 @@ export const MessagesPage = ({ config }: Props) => {
       <Skeleton variant="circular" width={44} height={44} />
       <Box sx={{ flex: 1 }}>
         <Skeleton variant="text" width="50%" height={18} />
-        <Skeleton variant="text" width="70%" height={14} />
       </Box>
-      <Skeleton variant="text" width={32} height={12} />
     </Box>
   );
 

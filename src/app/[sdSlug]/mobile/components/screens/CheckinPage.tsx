@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Box, Typography, Icon } from "@mui/material";
 import { UserHelper } from "@churchapps/apphelper";
 import { CheckinComplete, Household, Services } from "@/components";
+import { CheckinHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 
@@ -54,10 +55,15 @@ export const CheckinPage = ({ config: _config }: Props) => {
     );
   }
 
+  const handleCompleteDone = useCallback(() => {
+    CheckinHelper.clearData();
+    setStep("services");
+  }, []);
+
   let content: React.ReactNode = null;
   if (step === "services") content = <Services selectedHandler={() => setStep("household")} />;
   else if (step === "household") content = <Household completeHandler={() => setStep("complete")} />;
-  else if (step === "complete") content = <CheckinComplete />;
+  else if (step === "complete") content = <CheckinComplete onDone={handleCompleteDone} />;
 
   return (
     <Box

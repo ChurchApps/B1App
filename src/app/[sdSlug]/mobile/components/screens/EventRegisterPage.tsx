@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
+  Chip,
   CircularProgress,
   Icon,
   IconButton,
@@ -15,9 +16,13 @@ import {
 import { ApiHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, RegistrationInterface } from "@churchapps/helpers";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat.js";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+
+dayjs.extend(localizedFormat);
 
 interface Props {
   eventId: string;
@@ -33,21 +38,13 @@ type Step = "info" | "members" | "confirm";
 
 const formatEventTime = (event: EventInterface) => {
   if (!event.start) return "";
-  const start = new Date(event.start);
-  if (isNaN(start.getTime())) return "";
-  if (event.allDay) {
-    return start.toLocaleDateString(undefined, { weekday: "short", month: "long", day: "numeric", year: "numeric" }) + " (All day)";
-  }
-  const fmtFull = (d: Date) =>
-    d.toLocaleString(undefined, { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
-  const fmtTime = (d: Date) => d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-  if (!event.end) return fmtFull(start);
-  const end = new Date(event.end);
-  if (isNaN(end.getTime())) return fmtFull(start);
-  if (start.toDateString() === end.toDateString()) {
-    return `${fmtFull(start)} – ${fmtTime(end)}`;
-  }
-  return `${fmtFull(start)} – ${fmtFull(end)}`;
+  const start = dayjs(event.start);
+  if (!start.isValid()) return "";
+  if (event.allDay) return start.format("LL");
+  if (!event.end) return start.format("LLL");
+  const end = dayjs(event.end);
+  if (!end.isValid()) return start.format("LLL");
+  return `${start.format("LLL")} - ${end.format("LT")}`;
 };
 
 export const EventRegisterPage = ({ eventId, config }: Props) => {
@@ -77,15 +74,24 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     queryFn: async () => {
       const [eventResp, countResp] = await Promise.all([
         ApiHelper.getAnonymous(`/events/public/${churchId}/${eventId}`, "ContentApi"),
-        ApiHelper.getAnonymous(`/registrations/event/${eventId}/count?churchId=${churchId}`, "ContentApi").catch(() => ({ count: 0 })),
+        ApiHelper.getAnonymous(`/registrations/event/${eventId}/count?churchId=${churchId}`, "ContentApi"),
       ]);
       return { event: (eventResp as EventInterface) || null, activeCount: (countResp as any)?.count || 0 };
     },
     enabled: !!churchId && !!eventId,
+    retry: false,
   });
 
   const event = eventData?.event ?? null;
   const activeCount = eventData?.activeCount ?? 0;
+
+  const [loadErrorAlerted, setLoadErrorAlerted] = useState(false);
+  useEffect(() => {
+    if (loadError && !loadErrorAlerted) {
+      setLoadErrorAlerted(true);
+      if (typeof window !== "undefined") window.alert("Could not load event details.");
+    }
+  }, [loadError, loadErrorAlerted]);
 
   const handleBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.back();
@@ -243,7 +249,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   if (!isOpen) {
     const opensLater = event.registrationOpenDate && new Date(event.registrationOpenDate) > new Date();
     const dateLabel = opensLater
-      ? `Registration opens ${new Date(event.registrationOpenDate!).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}.`
+      ? `Registration opens ${dayjs(event.registrationOpenDate!).format("LL")}.`
       : "Registration for this event has closed.";
     return (
       <Shell>
@@ -289,6 +295,19 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
             See you at <b>{event.title}</b>.
           </Typography>
+          {registration.status && (
+            <Chip
+              label={registration.status}
+              size="small"
+              sx={{
+                mb: 1,
+                bgcolor: `${tc.success}22`,
+                color: tc.success,
+                fontWeight: 600,
+                textTransform: "capitalize",
+              }}
+            />
+          )}
           {registration.members && registration.members.length > 0 && (
             <Box sx={{
               mt: 2, p: 1.5,
@@ -353,23 +372,27 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           {formatEventTime(event)}
         </Typography>
       )}
-      {event.capacity ? (
-        <Box sx={{ mt: 1.5 }}>
-          <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.9)", mb: 0.5 }}>
-            {activeCount} / {event.capacity} spots filled
-          </Typography>
-          <LinearProgress
-            variant="determinate"
-            value={Math.min((activeCount / event.capacity) * 100, 100)}
-            sx={{
-              height: 6,
-              borderRadius: 3,
-              bgcolor: "rgba(255,255,255,0.25)",
-              "& .MuiLinearProgress-bar": { bgcolor: "#FFFFFF" },
-            }}
-          />
-        </Box>
-      ) : null}
+      {event.capacity ? (() => {
+        const pct = Math.min((activeCount / event.capacity) * 100, 100);
+        const barColor = pct >= 90 ? tc.error : pct >= 70 ? tc.warning : tc.success;
+        return (
+          <Box sx={{ mt: 1.5 }}>
+            <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.9)", mb: 0.5 }}>
+              {activeCount} / {event.capacity} spots filled
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={pct}
+              sx={{
+                height: 6,
+                borderRadius: 3,
+                bgcolor: "rgba(255,255,255,0.25)",
+                "& .MuiLinearProgress-bar": { bgcolor: barColor },
+              }}
+            />
+          </Box>
+        );
+      })() : null}
     </Box>
   );
 
@@ -411,17 +434,9 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           </Typography>
 
           {members.length === 0 && (
-            <Box sx={{
-              p: 2,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              bgcolor: tc.surfaceVariant,
-              textAlign: "center",
-              mb: 2,
-            }}>
-              <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-                No additional members. Tap below to add family or guests.
-              </Typography>
-            </Box>
+            <Typography sx={{ fontSize: 13, color: tc.textMuted, textAlign: "center", mb: 2 }}>
+              No additional members added
+            </Typography>
           )}
 
           {members.map((member, idx) => (
