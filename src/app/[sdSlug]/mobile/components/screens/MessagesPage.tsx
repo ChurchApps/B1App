@@ -9,17 +9,15 @@ import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
+import { getInitials } from "../util";
 
 interface Props {
   config?: ConfigurationInterface;
 }
 
-// Shape the UI renders. Hydrated from /privateMessages + /people/basic.
-// The /privateMessages endpoint returns ConversationCheckInterface-style rows
-// (id, churchId, fromPersonId, toPersonId, conversationId, notifyPersonId, conversation)
-// with no per-conversation last-message preview / timestamp / unread flag — those
-// fields were previously rendered but were never populated by the API. Parity with
-// B1Mobile (the authority) means keeping this screen a simple name-only list.
+// Hydrated from /privateMessages + /people/basic. The /privateMessages
+// endpoint doesn't return a last-message preview / timestamp / unread flag,
+// so this list is name-only by design.
 interface Conversation {
   id: string;
   personId: string;
@@ -84,13 +82,6 @@ export const MessagesPage = ({ config }: Props) => {
     enabled: loggedIn,
   });
 
-  const getInitials = (name: string) => {
-    const parts = name.trim().split(/\s+/);
-    const first = parts[0]?.charAt(0) || "";
-    const last = parts.length > 1 ? parts[parts.length - 1].charAt(0) : "";
-    return (first + last).toUpperCase() || "?";
-  };
-
   const renderAvatar = (c: Conversation) => {
     const common = {
       width: 44,
@@ -128,10 +119,8 @@ export const MessagesPage = ({ config }: Props) => {
   };
 
   const handleClick = (c: Conversation) => {
-    // Mirror B1Mobile, which forwards the full UserSearchInterface (including
-    // conversationId) to the conversation screen. On web the route key is the
-    // person id, but we still hand off the conversationId via query string so
-    // the detail view can skip the re-lookup when we already have it.
+    // Pass conversationId via query string when we already have it so the
+    // detail view can skip the re-lookup.
     const path = `/mobile/messages/${c.personId}`;
     router.push(c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path);
   };

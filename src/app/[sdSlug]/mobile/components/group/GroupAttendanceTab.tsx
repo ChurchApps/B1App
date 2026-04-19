@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
+import { getInitials } from "../util";
 
 interface Person {
   id: string;
@@ -257,12 +258,6 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
     } finally {
       setSaving(false);
     }
-  };
-
-  const getInitials = (p: { name: { display?: string } }) => {
-    const name = p.name?.display || "?";
-    const parts = name.trim().split(/\s+/);
-    return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase() || "?";
   };
 
   return (

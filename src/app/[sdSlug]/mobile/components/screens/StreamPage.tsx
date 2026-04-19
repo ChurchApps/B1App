@@ -14,10 +14,9 @@ export const StreamPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const keyName = config?.church?.subDomain;
 
-  // Offline placeholder matches B1Mobile's live_tv fallback when no service is live
-  // or scheduled within the next hour. The shared LiveStream component handles
-  // countdown, live badge (via VideoContainer), chat, prayer, and any church-configured
-  // interaction tabs — same surface area as B1Mobile's remote `b1.church/stream` page.
+  // Offline placeholder shown when no service is live or scheduled within the
+  // next hour. LiveStream itself handles countdown, live badge, chat, prayer,
+  // and any church-configured interaction tabs when a stream is active.
   const offlineContent = (
     <Box sx={{
       position: "relative",

@@ -97,7 +97,6 @@ export const GroupChatModal = ({
     if (!groupId) return;
     setLoading(true);
     try {
-      // B1Mobile uses the same endpoint for both content types, unified.
       const data: Conversation[] = await ApiHelper.get(
         `/conversations/messages/${currentContentType}/${groupId}?page=1&limit=50`,
         "MessagingApi"
@@ -142,7 +141,6 @@ export const GroupChatModal = ({
     if (open) loadAnnouncementsPreflight();
   }, [open, loadAnnouncementsPreflight]);
 
-  // Flat message list across all conversations of the current type (matches B1Mobile).
   const messages = React.useMemo(() => {
     const flat: Message[] = [];
     conversations.forEach((c) =>

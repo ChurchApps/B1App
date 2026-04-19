@@ -91,9 +91,9 @@ export const GroupsPage = ({ config }: Props) => {
     decorated.sort((a, b) => (a.count === b.count ? a.index - b.index : b.count - a.count));
     const ordered = decorated.map((d) => d.group);
 
-    // Hero = top group; Featured grid = next 2 (matches B1Mobile); Regular = remainder.
+    // Hero = top group; Featured grid = next 2; Regular = remainder.
     const hero = ordered[0] || null;
-    const featured = ordered.slice(1, 3); // up to 2 featured (matches B1Mobile)
+    const featured = ordered.slice(1, 3);
     const regular = ordered.slice(3);
     return { hero, featured, regular };
   }, [effectiveGroups, viewCounts]);
@@ -255,7 +255,7 @@ export const GroupsPage = ({ config }: Props) => {
     );
   };
 
-  // Regular card — compact horizontal row (matches B1Mobile compact list item).
+  // Regular card — compact horizontal row.
   const renderCard = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
     return (

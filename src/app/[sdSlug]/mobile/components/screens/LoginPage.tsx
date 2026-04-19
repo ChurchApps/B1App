@@ -21,9 +21,6 @@ import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 
-// Matches B1Mobile's `auth/login.tsx` lightly tighter email regex (web form uses
-// browser-level validation anyway, but we mirror the native check so failures
-// have parity).
 const EMAIL_REGEX = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,6})+$/;
 
 interface CheckEmailResponseInterface {
@@ -38,22 +35,13 @@ interface CheckEmailResponseInterface {
 
 interface Props {
   config?: ConfigurationInterface;
-  /** Legacy keyName prop (kept for parity with the previous wrapper); unused
-   *  now that we hand-roll the form, but accepted so existing callers compile. */
-  keyName?: string;
 }
 
 /**
- * Mobile-shell login screen.
- *
- * Hand-rolled to mirror `B1Mobile/app/auth/login.tsx` — hero banner + email /
- * password / forgot / sign-in / register card — so users stay inside the
- * mobile UI instead of being bounced to the public desktop login page.
- *
- * Authenticates via `POST /users/login` (same endpoint as the shared
- * `LoginPage`), then hydrates `UserHelper` + `UserContext` and picks the
- * userChurch matching the current subdomain (sdSlug) before redirecting to
- * the mobile dashboard.
+ * Mobile-shell login screen. Hand-rolled (vs. the shared `LoginPage`) so the
+ * user stays inside the mobile UI. Authenticates via `POST /users/login`,
+ * hydrates `UserHelper` + `UserContext`, then picks the `userChurch` matching
+ * the current subdomain before redirecting to `/mobile/dashboard`.
  */
 export const MobileLoginScreen = ({ config }: Props) => {
   const tc = mobileTheme.colors;
@@ -104,21 +92,16 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const churchName = config?.church?.name || "";
   const logoLight = config?.appearance?.logoLight;
   const primaryColor = config?.appearance?.primaryColor || tc.primary;
-  // Two shades of the configured primary color (B1Mobile uses adjustHexColor
-  // -12 / +18; we approximate with a simple alpha overlay — good enough for a
-  // 135deg linear gradient without pulling in a color-math dep on web).
+  // Alpha overlay stands in for hex arithmetic, which doesn't work on CSS vars.
   const heroGradient = `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}CC 100%)`;
 
-  // --- Post-login hydration (mirrors useHydrateSession) -----------------
   const hydrateFromLoginResponse = async (resp: LoginResponseInterface) => {
     ApiHelper.setDefaultPermissions(resp.user.jwt);
     (resp.userChurches || []).forEach((uc: any) => { if (!uc.apis) uc.apis = []; });
     UserHelper.user = resp.user;
     UserHelper.userChurches = resp.userChurches || [];
 
-    // Match by subdomain; fall back to the first userChurch (mirrors the
-    // shared LoginPage's selectChurch(keyName) behavior for a single-church
-    // sign-in).
+    // Match by subdomain; fall back to the first userChurch.
     let matched: any = null;
     if (sdSlug) {
       matched = UserHelper.userChurches?.find(
@@ -131,7 +114,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
       UserHelper.setupApiHelper(target);
     }
 
-    // Best-effort person hydration (mirrors LoginPage.continueLoginProcess).
+    // Best-effort person hydration.
     let person: any = null;
     const personId = UserHelper.currentUserChurch?.person?.id;
     const churchId = UserHelper.currentUserChurch?.church?.id;
@@ -169,7 +152,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
     }
   };
 
-  // --- Error recovery: /users/checkEmail (mirrors B1Mobile handleLoginFailure)
+  // On login failure, ask /users/checkEmail whether the email even exists —
+  // if not, offer "Register" with preloaded first/last name.
   const handleLoginFailure = async () => {
     try {
       const resp: CheckEmailResponseInterface = await ApiHelper.postAnonymous(
@@ -400,7 +384,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
             disabled={loading}
           />
 
-          {/* Forgot password — right-aligned, matches B1Mobile alignSelf: flex-end */}
+          {/* Forgot password — right-aligned */}
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: `${spacing.sm}px`, mb: `${spacing.lg}px` }}>
             <Box
               component="a"
@@ -475,9 +459,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* "No account found" inline prompt (mirrors B1Mobile Alert with Register
-           action from handleLoginFailure). Rendered as an MUI Snackbar with an
-           Alert action so it doesn't block the whole screen. */}
+      {/* "No account found" prompt — Snackbar so it doesn't block the form. */}
       <Snackbar
         open={!!noAccountPrompt}
         autoHideDuration={8000}

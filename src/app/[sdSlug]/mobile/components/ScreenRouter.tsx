@@ -83,7 +83,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "websiteUrl":
     case "page": return <WebsiteUrlPage config={config} />;
     case "install": return <InstallPage config={config} />;
-    case "login": return <MobileLoginScreen config={config} keyName={config?.keyName} />;
+    case "login": return <MobileLoginScreen config={config} />;
     default: return <PlaceholderPage title={pageSlug} icon="apps" description={`The '${pageSlug}' screen is not yet implemented.`} />;
   }
 }

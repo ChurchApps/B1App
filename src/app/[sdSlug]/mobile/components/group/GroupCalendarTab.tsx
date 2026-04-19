@@ -159,7 +159,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
   };
 
   const handleAddEvent = () => {
-    // Match B1Mobile: tomorrow 2pm when no day is selected; otherwise selected day 2pm.
+    // Default: tomorrow 2pm when no day is selected; otherwise selected day 2pm.
     const base = selected ? new Date(selected) : new Date();
     if (!selected) base.setDate(base.getDate() + 1);
     base.setHours(14, 0, 0, 0);
@@ -188,7 +188,6 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-      {/* Header / controls — stacked (matches B1Mobile) */}
       <Box
         sx={{
           display: "flex",

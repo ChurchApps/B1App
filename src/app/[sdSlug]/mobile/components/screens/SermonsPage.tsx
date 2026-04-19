@@ -9,6 +9,9 @@ import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
+import { formatDate as formatDateShared, formatDuration } from "../util";
+
+const formatDate = (date?: Date | string) => formatDateShared(date, "short");
 
 interface Props {
   config: ConfigurationInterface;
@@ -32,24 +35,6 @@ interface UpcomingStream {
   description: string;
   isLive: boolean;
 }
-
-const formatDuration = (seconds?: number) => {
-  if (!seconds) return "";
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
-
-const formatDate = (date?: Date | string) => {
-  if (!date) return "";
-  try {
-    const d = typeof date === "string" ? new Date(date) : date;
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return "";
-  }
-};
 
 const formatPrettyDateTime = (date: Date) => {
   try {

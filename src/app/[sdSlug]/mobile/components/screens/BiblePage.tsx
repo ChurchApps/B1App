@@ -176,7 +176,6 @@ export const BiblePage = () => {
 
   return (
     <Box sx={{
-      // Matches B1Mobile `Bible` container (`backgroundColor: tc.surface`).
       bgcolor: tc.surface,
       minHeight: "100%",
       display: "flex",

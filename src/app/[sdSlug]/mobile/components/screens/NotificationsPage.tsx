@@ -7,6 +7,7 @@ import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { formatRelative } from "../util";
 
 interface NotificationItem {
   id?: string;
@@ -23,31 +24,7 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
-// Matches B1Mobile NotificationView.getTimeDisplay:
-// - same day & same hour -> "now"
-// - same day -> "Nh"
-// - 1 day -> "yesterday"
-// - <7 days -> "Nd"
-// - else locale date
-const formatRelative = (value?: string | Date): string => {
-  if (!value) return "";
-  const d = typeof value === "string" ? new Date(value) : value;
-  if (isNaN(d.getTime())) return "";
-  const now = new Date();
-  const diffMs = now.getTime() - d.getTime();
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-  if (diffDays === 0) {
-    if (diffHours === 0) return "now";
-    return `${diffHours}h`;
-  }
-  if (diffDays === 1) return "yesterday";
-  if (diffDays < 7) return `${diffDays}d`;
-  return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-};
-
-// B1Mobile's handleNotificationPress only routes these types; other types
-// (message/privateMessage/sentText/donation) are icon-only and unclickable.
+// Only these content types open a route when tapped; others are icon-only.
 const deriveLinkUrl = (n: NotificationItem): string | undefined => {
   if (!n.contentId) return undefined;
   const type = String(n.contentType || "").toLowerCase();
@@ -62,8 +39,6 @@ const deriveLinkUrl = (n: NotificationItem): string | undefined => {
   }
 };
 
-// B1Mobile uses vector-icon names; MUI Material Symbols equivalents below.
-// plan/schedule uses "calendar-today" in B1Mobile -> "calendar_today" here.
 const getIconName = (contentType?: string): string => {
   switch (String(contentType || "").toLowerCase()) {
     case "plan":
@@ -211,7 +186,6 @@ export const NotificationsPage = ({ config }: Props) => {
     </Box>
   );
 
-  // B1Mobile empty: centered icon (64px, divider) + headline + body, no card wrapper.
   const renderEmpty = () => (
     <Box
       sx={{

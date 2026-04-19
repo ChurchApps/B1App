@@ -18,6 +18,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { getInitials } from "../util";
 import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
 import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
 import { GroupResourcesTab } from "../group/GroupResourcesTab";
@@ -152,14 +153,6 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     }
   };
 
-  const getMemberInitials = (m: GroupMember) => {
-    const first = (m.person?.name?.first || m.person?.name?.display || "").trim();
-    const last = (m.person?.name?.last || "").trim();
-    const f = first.charAt(0).toUpperCase();
-    const l = last.charAt(0).toUpperCase();
-    return (f + l).trim() || "?";
-  };
-
   const renderMemberAvatar = (m: GroupMember) => {
     const common = { width: 40, height: 40, borderRadius: "20px", flexShrink: 0, overflow: "hidden" } as const;
     if (m.person?.photo) {
@@ -185,7 +178,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           fontSize: 14,
         }}
       >
-        {getMemberInitials(m)}
+        {getInitials(m.person)}
       </Box>
     );
   };
@@ -526,7 +519,6 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     </Box>
   );
 
-  // Match B1Mobile tab order: about, messages, members, attendance, events, resources
   const availableTabs: { key: TabKey; label: string; icon: string }[] = [
     { key: "about", label: "About", icon: "info" },
   ];

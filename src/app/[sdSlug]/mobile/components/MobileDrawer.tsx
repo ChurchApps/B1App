@@ -13,6 +13,7 @@ import { UserHelper } from "@churchapps/apphelper";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
+import { getInitials } from "./util";
 import { useMobileThemeMode } from "./MobileThemeProvider";
 
 interface Props {
@@ -32,7 +33,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const photoUrl = personPhoto ? (personPhoto.startsWith("http") ? personPhoto : `${contentRoot}${personPhoto}`) : undefined;
   const firstName = UserHelper.user?.firstName || "";
   const lastName = UserHelper.user?.lastName || "";
-  const initials = [firstName[0], lastName[0]].filter(Boolean).join("").toUpperCase() || "?";
+  const initials = getInitials({ name: { first: firstName, last: lastName } });
 
   const isActive = (url: string): boolean => {
     if (!pathname || url.startsWith("http")) return false;

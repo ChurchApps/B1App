@@ -10,9 +10,8 @@ import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { useChurchLinks } from "../../hooks/useConfig";
 import { mobileTheme } from "../mobileTheme";
 
-// Internal B1Mobile-style paths that should pop out of the iframe into native
-// /mobile equivalents. Mirrors the `onNavigationStateChange` intercepts in
-// `B1Mobile/app/(drawer)/lessons.tsx`.
+// Internal paths inside the Lessons iframe that should pop out into native
+// /mobile routes instead of navigating inside the frame.
 const INTERNAL_ROUTE_MAP: Array<{ match: RegExp; to: (m: RegExpMatchArray) => string }> = [
   { match: /\/my\/groups(?:\/|$|\?)/, to: () => "/mobile/groups" },
   { match: /\/my\/plans(?:\/|$|\?)/, to: () => "/mobile/plans" },
@@ -50,8 +49,7 @@ export const LessonsPage = () => {
   const jwt = context.userChurch?.jwt;
   const churchId = context.userChurch?.church?.id;
 
-  // Pull admin-configured links so we can use the label the admin set on the
-  // lessons tab/link (parity with B1Mobile's `item.text`).
+  // Use the label the admin set on the lessons tab/link when available.
   const { data: rawLinks } = useChurchLinks(churchId, jwt);
   const linkTitle = useMemo(() => {
     if (!Array.isArray(rawLinks)) return null;
@@ -71,9 +69,7 @@ export const LessonsPage = () => {
       ? `${EnvironmentHelper.Common.LessonsRoot}/login?jwt=${jwt}&returnUrl=/b1/person&churchId=${churchId}`
       : null;
 
-  // Re-fetch / rehydrate user after a profile_updated event (parity with
-  // B1Mobile's re-login flow — on web we have no SecureStorage JWT, so we
-  // refresh the current user via the existing JWT).
+  // Rehydrate the user from the existing JWT after a profile_updated event.
   const reauthenticate = async () => {
     try {
       if (!jwt) return;
@@ -130,14 +126,12 @@ export const LessonsPage = () => {
           ? data
           : data.type || data.event || data.message || null;
 
-      // Parity contract with B1Mobile `onMessage`.
       if (type === "profile_updated") {
         void reauthenticate();
         return;
       }
       if (type === "profile_deleted") {
-        // Web equivalent of B1Mobile's `do_logout`: server-side logout route
-        // clears the jwt cookie and redirects home.
+        // Server-side logout clears the jwt cookie and redirects home.
         window.location.href = "/logout";
         return;
       }
@@ -277,7 +271,6 @@ export const LessonsPage = () => {
 
   return (
     <Box sx={{
-      // Matches B1Mobile `WebsiteScreen` (`backgroundColor: colors.surface`).
       bgcolor: tc.surface,
       minHeight: "100%",
       display: "flex",
@@ -329,11 +322,7 @@ export const LessonsPage = () => {
   );
 };
 
-// Follow-up (LessonsApp-side): to complete parity, LessonsApp should emit
-// `window.parent.postMessage({ type: "profile_updated" | "profile_deleted" }, "*")`
-// after profile save/delete, `{ type: "autoPrint" }` (or the legacy `"print"`
-// string) from Venue/print flows when running inside a parent frame (not only
-// via ReactNativeWebView), and `{ type: "navigate", url: "/my/groups" }` on
-// internal link clicks so the host can route natively. Until those fire on
-// web, this listener is a no-op for cross-origin navigation events (the iframe
-// same-origin policy prevents the host from reading the inner URL).
+// TODO: LessonsApp should also emit `postMessage({ type: "navigate", url })`
+// on internal link clicks and `{ type: "autoPrint" }` from print flows via
+// `window.parent` (not only `ReactNativeWebView`). Until those fire on web,
+// this listener can't intercept cross-origin navigation inside the iframe.

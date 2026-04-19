@@ -35,7 +35,7 @@ interface Props {
 type TabKey = "profile" | "household" | "account" | "visibility";
 type VisibilityScope = "everyone" | "members" | "groups";
 
-// Full field definitions matching B1Mobile authority (14 directory-updatable fields)
+// 14 directory-updatable fields.
 const fieldDefinitions: { key: string; label: string }[] = [
   { key: "name.first", label: "First Name" },
   { key: "name.middle", label: "Middle Name" },
@@ -343,7 +343,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       setModifiedFields(new Set());
       setPendingFamilyMembers([]);
       setSnack({ open: true, msg: "Your changes have been submitted for approval.", severity: "success" });
-      // Redirect back on success (mirror B1Mobile router.back())
+      // Redirect back on success.
       setTimeout(() => {
         try { router.back(); } catch { /* noop */ }
       }, 900);
@@ -374,8 +374,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     setPendingFamilyMembers((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Visibility tab tracks optedOut locally; saved together with the dropdowns
-  // in handleSaveVisibility (matching B1Mobile's combined Save button).
+  // optedOut is tracked locally and saved alongside the dropdown prefs.
   const [optedOutLocal, setOptedOutLocal] = useState<boolean>(false);
   const [initialOptedOut, setInitialOptedOut] = useState<boolean>(false);
   useEffect(() => {
@@ -1148,8 +1147,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     </>
   );
 
-  // Match B1Mobile's `PendingChangesView`: shown in-flow on profile/household tabs
-  // (not account or visibility).
+  // Pending changes show in-flow on profile/household (not account/visibility).
   const showPendingChanges = hasChanges && tab !== "visibility" && tab !== "account";
 
   return (
@@ -1204,7 +1202,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       {tab === "account" && renderAccountTab()}
       {tab === "visibility" && renderPrivacyTab()}
 
-      {/* Pending changes card (mirrors B1Mobile PendingChangesView) */}
+      {/* Pending changes card */}
       {showPendingChanges && (
         <Box
           sx={{

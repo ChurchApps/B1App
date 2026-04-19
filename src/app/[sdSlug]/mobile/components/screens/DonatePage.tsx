@@ -65,8 +65,7 @@ function DonatePageInner({ config }: Props) {
   const donationsEnabled = config?.allowDonations !== false && isAuthenticated;
 
   const [message, setMessage] = useState<string | null>(null);
-  // Guests can't have overview/manage/history data, so they default straight
-  // to the Donate tab; authenticated users land on Overview like B1Mobile.
+  // Guests land on Donate (no overview/manage/history data); users on Overview.
   const [tab, setTab] = useState<TabKey>(isAuthenticated ? "overview" : "donate");
   const [period, setPeriod] = useState<PeriodKey>("all");
   const [periodAnchor, setPeriodAnchor] = useState<HTMLElement | null>(null);
@@ -117,7 +116,6 @@ function DonatePageInner({ config }: Props) {
   const customerId = paymentData?.customerId ?? null;
   const person = paymentData?.person ?? null;
 
-  // B1Mobile shows active recurring subscriptions on the History tab. We
   const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
     queryKey: ["donate-subscriptions", customerId],
     queryFn: async () => {
@@ -217,11 +215,7 @@ function DonatePageInner({ config }: Props) {
     );
   }
 
-  // Three-part overview, matching B1Mobile's GivingOverview.tsx:
-  //   1. Gradient hero card (centered YTD amount, gift count)
-  //   2. Recent Activity section (heading + View all, last-gift card w/ Repeat)
-  //   3. Call-to-action card (volunteer_activism icon, Give Now button)
-  // Guests see a simplified hero + CTA only (no activity row).
+  // Hero + Recent Activity + CTA. Guests see hero + CTA only (no activity).
   const renderOverview = () => {
     const gradient = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
@@ -463,8 +457,7 @@ function DonatePageInner({ config }: Props) {
     );
   };
 
-  // Manage tab: payment methods only (matches B1Mobile's ManagePayments.tsx).
-  // Recurring donations live on the History tab, also matching B1Mobile.
+  // Manage tab: payment methods only. Recurring donations live on History.
   const renderManage = () => {
     if (isMethodsLoading) {
       return (
@@ -534,8 +527,7 @@ function DonatePageInner({ config }: Props) {
     return `${(pm as any).name} ****${(pm as any).last4 || ""}`;
   };
 
-  // History tab — mirrors B1Mobile's EnhancedGivingHistory layout:
-  // summary card w/ period filter, recurring donations section, card-row list.
+  // History: summary card w/ period filter, recurring section, card-row list.
   const renderHistory = () => (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
       {/* Summary card */}
@@ -623,7 +615,7 @@ function DonatePageInner({ config }: Props) {
         </Box>
       )}
 
-      {/* Recurring donations — B1Mobile shows active subscriptions here */}
+      {/* Active recurring subscriptions */}
       {subscriptions.length > 0 && (
         <Box>
           <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}>
@@ -686,8 +678,7 @@ function DonatePageInner({ config }: Props) {
               );
             })}
           </Box>
-          {/* Inline RecurringDonations manager for edit/cancel — shared web control,
-              closest equivalent to B1Mobile's modal manager. */}
+          {/* Shared web control for edit/cancel of recurring donations. */}
           <Box sx={{ mt: `${mobileTheme.spacing.md}px` }}>
             <RecurringDonations
               customerId={customerId!}

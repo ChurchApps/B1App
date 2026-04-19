@@ -13,6 +13,7 @@ import type {
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { BlockoutDatesSection } from "../plans/BlockoutDatesSection";
+import { shadePrimary } from "../util";
 
 interface Props {
   config: ConfigurationInterface;
@@ -39,14 +40,6 @@ const getStatusMeta = (status: string, tc: typeof mobileTheme.colors) => {
   if (s === "pending") return { color: tc.warning, label: "Pending Response" };
   if (!s || s === "unconfirmed") return { color: tc.disabled, label: "Unconfirmed" };
   return { color: tc.disabled, label: status };
-};
-
-// `tc.primary` resolves to a `var(--mb-primary)` reference at runtime, so JS
-// hex math can't touch it. Mix via CSS `color-mix` instead — works for both
-// light and dark palettes.
-const shadePrimary = (cssColor: string, percent: number) => {
-  const mixer = percent < 0 ? "black" : "white";
-  return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;
 };
 
 export const PlansPage = ({ config: _config }: Props) => {

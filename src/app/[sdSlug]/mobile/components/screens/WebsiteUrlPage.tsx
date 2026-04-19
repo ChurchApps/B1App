@@ -10,9 +10,8 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-// Internal URL paths (as rendered inside the embedded B1 page) mapped to
-// their `/mobile/*` equivalents. Matches the native mirror in
-// B1Mobile's WebsiteScreen.tsx (`urlToScreenMapping`).
+// Paths inside the embedded B1 page that should pop out into native
+// /mobile/* routes instead of navigating inside the iframe.
 const INTERNAL_PATH_MAP: Array<{ match: RegExp; build: (id?: string) => string }> = [
   { match: /^\/donate\/?$/, build: () => "/mobile/donate" },
   { match: /^\/votd\/?$/, build: () => "/mobile/votd" },
@@ -49,10 +48,8 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
   const pathname = usePathname();
   const params = useSearchParams();
 
-  // `/mobile/page` passes the church-authored page slug as `id`; we resolve
-  // it against the current origin so the iframe stays within the B1 app host
-  // (matching B1Mobile's `B1WebRoot + item.url` behaviour on native).
-  // `/mobile/websiteUrl` passes a full external URL as `url`.
+  // `/mobile/page?id=<slug>` → resolve against origin (church-authored page).
+  // `/mobile/websiteUrl?url=<absolute>` → external URL passed through as-is.
   const isPage = (pathname || "").includes("/mobile/page");
   const rawUrl = params?.get("url") || "";
   const rawId = params?.get("id") || "";
@@ -68,11 +65,9 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
     return rawUrl;
   }, [isPage, rawId, rawUrl]);
 
-  // External URLs almost always set `X-Frame-Options: DENY`/`SAMEORIGIN` or a
-  // `frame-ancestors` CSP, which silently blanks the iframe on web. B1Mobile's
-  // `react-native-webview` has no such restriction. On the PWA we keep the
-  // mobile shell intact and offer a one-tap "Open Website" action instead of
-  // blasting the user out of the app or showing a blank iframe for 15 seconds.
+  // Most external sites set `X-Frame-Options` / `frame-ancestors`, which
+  // silently blanks the iframe. For cross-origin URLs we keep the shell
+  // visible and offer an "Open Website" action that opens in a new tab.
   const isCrossOrigin = useMemo(() => {
     if (!resolvedUrl) return false;
     if (typeof window === "undefined") return false;

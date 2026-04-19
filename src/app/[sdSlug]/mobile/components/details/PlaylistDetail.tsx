@@ -8,49 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { formatDate, formatDuration, shadePrimary } from "../util";
 
 interface Props {
   id: string;
   config: ConfigurationInterface;
 }
-
-const formatDate = (date?: Date | string) => {
-  if (!date) return "";
-  try {
-    const d = typeof date === "string" ? new Date(date) : date;
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
-  } catch {
-    return "";
-  }
-};
-
-const formatShortDate = (date?: Date | string) => {
-  if (!date) return "";
-  try {
-    const d = typeof date === "string" ? new Date(date) : date;
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-  } catch {
-    return "";
-  }
-};
-
-const formatDuration = (seconds?: number) => {
-  if (!seconds) return "";
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
-
-// The hero uses a 3-stop gradient built around the primary color. `tc.primary`
-// is now a `var(--mb-primary)` reference (see mobileTheme.ts), so we can't do
-// RGB math on it in JS — we mix via CSS `color-mix` instead, which works for
-// both the light and dark palettes.
-const shade = (cssColor: string, percent: number): string => {
-  const mixer = percent < 0 ? "black" : "white";
-  return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;
-};
 
 const SermonCard = ({ sermon, onClick }: { sermon: SermonInterface; onClick: () => void }) => {
   const tc = mobileTheme.colors;
@@ -146,7 +109,7 @@ const SermonCard = ({ sermon, onClick }: { sermon: SermonInterface; onClick: () 
           {sermon.title || "Untitled Sermon"}
         </Typography>
         <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 12, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
-          {formatShortDate(sermon.publishDate)}
+          {formatDate(sermon.publishDate, "short")}
         </Typography>
       </Box>
     </Box>
@@ -209,7 +172,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     if (sermonsError) refetchSermons();
   };
 
-  const heroGradient = `linear-gradient(135deg, ${shade(tc.primary, -12)} 0%, ${shade(tc.primary, 18)} 55%, ${shade(tc.primary, 28)} 100%)`;
+  const heroGradient = `linear-gradient(135deg, ${shadePrimary(tc.primary, -12)} 0%, ${shadePrimary(tc.primary, 18)} 55%, ${shadePrimary(tc.primary, 28)} 100%)`;
 
   const renderHero = () => {
     const hasImage = !!playlist?.thumbnail && playlist.thumbnail.trim() !== "";

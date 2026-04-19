@@ -12,34 +12,14 @@ import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { formatDate, formatDuration } from "../util";
 
 interface Props {
   id: string;
   config: ConfigurationInterface;
 }
 
-const formatDuration = (seconds?: number) => {
-  if (!seconds) return "";
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
-
-const formatDate = (date?: Date | string) => {
-  if (!date) return "";
-  try {
-    const d = typeof date === "string" ? new Date(date) : date;
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
-  } catch {
-    return "";
-  }
-};
-
-/**
- * Build an embeddable iframe src URL from the sermon's video fields.
- * Mirrors B1Mobile's sermonDetails screen.
- */
+// Build an embeddable iframe src URL from the sermon's video fields.
 const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
   if (!sermon) return null;
   const videoType = (sermon as any).videoType as string | undefined;

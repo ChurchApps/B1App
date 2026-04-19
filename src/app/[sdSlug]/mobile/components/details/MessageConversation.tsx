@@ -8,10 +8,11 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import { ArrayHelper, type MessageInterface, type PersonInterface } from "@churchapps/helpers";
+import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
+import { getInitials } from "../util";
 
 interface Props {
   id: string;
@@ -26,15 +27,9 @@ interface PrivateMessageRow {
   toPersonId?: string;
 }
 
-// TODO: Verify endpoints. Using these based on B1Mobile reference:
-//   - GET /privateMessages (MessagingApi) to list my conversations and match the counterpart personId
-//   - POST /conversations (MessagingApi) with [{ allowAnonymousPosts, contentType:"privateMessage", contentId, title, visibility:"hidden" }]
-//   - POST /privateMessages (MessagingApi) with [{ fromPersonId, toPersonId, conversationId }]
-//   - GET /messages/conversation/{conversationId} (MessagingApi)
-//   - POST /messages (MessagingApi) with [{ conversationId, content, displayName }]
-//   - GET /people/{id} (MembershipApi) or /people/basic?ids=... to get header info
-// The task hint mentioned GET /privateMessages/existing/{personId}; B1Mobile does not use that,
-// so we follow B1Mobile: find existing by scanning /privateMessages, or create on first send.
+// To find an existing conversation with a person we scan `/privateMessages`
+// rather than calling `/privateMessages/existing/{personId}` — the latter
+// endpoint isn't wired up; if none matches, we create one on first send.
 
 export const MessageConversation = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
@@ -100,12 +95,16 @@ export const MessageConversation = ({ id, config }: Props) => {
     }
   }, []);
 
+  // Keep a person map across polls so the 5s refetch only pulls ids it hasn't
+  // seen — sending `/people/basic?ids=…` again for people already rendered.
+  const peopleCache = React.useRef<Map<string, PersonInterface>>(new Map());
+
   // Seed the conversation id from the /privateMessages lookup.
   React.useEffect(() => {
     if (existingConvId && !conversationId) setConversationId(existingConvId);
   }, [existingConvId, conversationId]);
 
-  // Poll the conversation every 5s while the tab is visible (matches B1Mobile).
+  // Poll the conversation every 5s while the tab is visible.
   // Hydrate each message's `person` via /people/basic so displayName falls back correctly.
   const {
     data: serverMessages,
@@ -128,17 +127,19 @@ export const MessageConversation = ({ id, config }: Props) => {
               .filter((pid): pid is string => !!pid)
           )
         );
-        if (personIds.length > 0) {
+        const missing = personIds.filter((pid) => !peopleCache.current.has(pid));
+        if (missing.length > 0) {
           const people: PersonInterface[] = await ApiHelper.get(
-            "/people/basic?ids=" + personIds.join(","),
+            "/people/basic?ids=" + missing.join(","),
             "MembershipApi"
           );
           if (Array.isArray(people)) {
-            data.forEach((m) => {
-              m.person = ArrayHelper.getOne(people, "id", m.personId);
-            });
+            people.forEach((p) => { if (p.id) peopleCache.current.set(p.id, p); });
           }
         }
+        data.forEach((m) => {
+          if (m.personId) m.person = peopleCache.current.get(m.personId);
+        });
       } catch {
         /* hydration is best-effort */
       }
@@ -259,11 +260,6 @@ export const MessageConversation = ({ id, config }: Props) => {
 
   const name = person?.name?.display || "Conversation";
 
-  const getInitials = (n: string) => {
-    const parts = n.trim().split(/\s+/);
-    return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase() || "?";
-  };
-
   const getPhoto = (): string | "" => {
     if (!person) return "";
     try {
@@ -303,9 +299,6 @@ export const MessageConversation = ({ id, config }: Props) => {
     );
   };
 
-  // B1Mobile renders each message as a surface with the sender's display name
-  // on top (labelSmall, 600 weight) and the content below, with uniform
-  // theme.roundness corners. No timestamp divider / read receipts (parity).
   const renderBubble = (m: MessageInterface, index: number) => {
     const mine = m.personId === myPersonId;
     const bubbleName = m.displayName || m.person?.name?.display || "";

@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { getInitials } from "../util";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -34,9 +35,8 @@ export const CommunityPage = ({ config: _config }: Props) => {
   const [searchText, setSearchText] = React.useState("");
 
   if (!loggedIn) {
-    // Mirrors B1Mobile: the directory is a members-only feature. The drawer
-    // normally hides the link for anonymous users, but this gate also covers
-    // people who land here via direct URL or a cached deep link.
+    // Directory is members-only. The drawer already hides the link for
+    // anonymous users; this gate also catches direct-URL / deep-link visits.
     const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
     const loginHref = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
     return (
@@ -89,8 +89,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
     );
   }
 
-  // B1Mobile authority fetches the full list once via GET /people and filters locally,
-  // so we match that. The full directory is cached 10min/30min for parity.
+  // Fetch the full directory once and filter locally; cached 10m/30m.
   const { data: serverPeople = null, isFetching } = useQuery<PersonInterface[]>({
     queryKey: ["/people", "MembershipApi"],
     queryFn: async () => {
@@ -131,7 +130,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
       if (lastRaw) {
         letter = lastRaw.charAt(0).toUpperCase();
       } else if (displayRaw) {
-        // Fall back to the last token of display (mirrors B1Mobile behavior when last is missing).
+        // When `last` is missing, group by the last token of `display`.
         const parts = displayRaw.split(" ");
         const fallback = parts.length > 1 ? parts[parts.length - 1] : parts[0];
         if (fallback) letter = fallback.charAt(0).toUpperCase();
@@ -164,13 +163,6 @@ export const CommunityPage = ({ config: _config }: Props) => {
 
     return letters.map((letter) => ({ title: letter, people: groups[letter] }));
   }, [filteredPeople]);
-
-  const getInitials = (p: PersonInterface) => {
-    const f = (p.name?.first || "").trim().charAt(0).toUpperCase();
-    const l = (p.name?.last || "").trim().charAt(0).toUpperCase();
-    const initials = `${f}${l}`.trim();
-    return initials || (p.name?.display || "?").charAt(0).toUpperCase();
-  };
 
   const getPhoto = (p: PersonInterface): string => {
     try {

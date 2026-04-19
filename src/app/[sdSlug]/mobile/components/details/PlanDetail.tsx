@@ -83,7 +83,7 @@ const formatTimeShort = (date?: Date | string) => {
   }
 };
 
-/* Helpers for provider/lesson preview fallback (mirrors B1Mobile + B1App /my ServiceOrder) */
+// Helpers for provider/lesson preview fallback.
 function findThumbnailRecursive(item: InstructionItem): string | undefined {
   if (item.thumbnail) return item.thumbnail;
   if (item.children) {

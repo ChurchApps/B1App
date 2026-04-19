@@ -44,6 +44,59 @@ export const mobileTheme = {
   headerHeight: 56,
 };
 
+// Page-slug registry — source of truth for the AppBar title and anything
+// else that needs to map a URL slug back to a human-readable name. Aliases
+// (left of `=`) render the same title as the canonical slug; unlisted slugs
+// fall back to an empty string (dashboard uses the church logo instead).
+export const SCREEN_TITLES: Record<string, string> = {
+  myGroups: "My Groups",
+  groups: "My Groups",
+  groupDetails: "Group",
+  notifications: "Notifications",
+  votd: "Verse of the Day",
+  service: "Check-in",
+  checkin: "Check-in",
+  donation: "Giving",
+  donate: "Giving",
+  membersSearch: "Directory",
+  community: "Directory",
+  memberDetail: "Member Details",
+  plan: "Plans",
+  plans: "Plans",
+  planDetails: "Plan",
+  sermons: "Sermons",
+  sermonDetails: "Sermon",
+  playlist: "Playlist",
+  playlistDetails: "Playlist",
+  searchMessageUser: "Messages",
+  messages: "Messages",
+  messagesNew: "New Message",
+  composeMessage: "New Message",
+  registrations: "Registrations",
+  register: "Register",
+  volunteerBrowse: "Volunteer Opportunities",
+  volunteer: "Volunteer",
+  volunteerSignup: "Volunteer",
+  profileEdit: "Edit Profile",
+  stream: "Stream",
+  bible: "Bible",
+  lessons: "Lessons",
+  login: "Sign In",
+  install: "Install App",
+  page: "",
+  websiteUrl: "",
+};
+
+// Extract the mobile page slug from a URL whether it's `/{sdSlug}/mobile/X`
+// (rewritten) or `/mobile/X` (direct). Returns `"dashboard"` for the root.
+export const mobileSlugFromPath = (pathname: string | null | undefined): string => {
+  if (!pathname) return "";
+  const parts = pathname.split("/").filter(Boolean);
+  const idx = parts.indexOf("mobile");
+  if (idx === -1) return "";
+  return parts[idx + 1] || "dashboard";
+};
+
 export const linkTypeToImage = (linkType?: string, text?: string): string => {
   if (text && text.toLowerCase() === "chums") return "/mobile/images/dash_chums.png";
   switch ((linkType || "").toLowerCase()) {
@@ -59,10 +112,9 @@ export const linkTypeToImage = (linkType?: string, text?: string): string => {
   }
 };
 
-// For `url` and `page` link types the actual destination lives in `link.url`
-// (not `link.linkData`) — B1Mobile reads it as `item.url` in NavigationUtils.
-// Earlier versions here read only `linkData`, which was usually empty, so the
-// "Website" tab silently fell back to `/mobile/dashboard`.
+// For `url` and `page` link types the destination lives in `link.url`, not
+// `link.linkData`. Reading only `linkData` was the cause of the "Website"
+// tab silently falling back to `/mobile/dashboard` earlier.
 export const linkTypeToRoute = (
   linkType?: string,
   linkData?: string,

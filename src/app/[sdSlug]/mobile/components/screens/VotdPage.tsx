@@ -12,12 +12,8 @@ const getDayOfYear = () => {
   return Math.floor(diff / oneDay);
 };
 
-/**
- * Shape picker matches B1Mobile's rule exactly (`app/(drawer)/votd.tsx`):
- * pick `16x9` whenever it beats `1x1`, else `9x16` when it beats `1x1`,
- * else fall back to `1x1`. Previously this required `diff16x9` to also
- * beat `diff9x16`, which could disagree with native on near-square viewports.
- */
+// Pick `16x9` whenever it beats `1x1`, else `9x16` when it beats `1x1`,
+// else fall back to `1x1`.
 const getShape = () => {
   if (typeof window === "undefined") return "16x9";
   const ratio = window.innerWidth / window.innerHeight;
@@ -52,8 +48,6 @@ export const VotdPage = () => {
     return `https://votd.org/v1/${day}/${shape}.jpg`;
   }, [day, shape]);
 
-  // Web-only enrichment beyond B1Mobile (which has no share affordance).
-  // Kept intentionally — see `.notes/parity/votd.md`.
   const handleShare = async () => {
     const shareData = {
       title: "Verse of the Day",
@@ -82,11 +76,6 @@ export const VotdPage = () => {
 
   return (
     <Box sx={{ bgcolor: tc.surface, minHeight: "100%", display: "flex", flexDirection: "column" }}>
-      {/* Edge-to-edge image area — matches B1Mobile `globalStyles.webViewContainer`
-          (`flex: 1, height: "100%", width: "100%"`, no background fill).
-          Outer `bgcolor: tc.surface` mirrors B1Mobile's `homeContainer`
-          `backgroundColor: tc.surface`. The AppBar already shows
-          "Verse of the Day"; no in-body title. */}
       <Box sx={{
         position: "relative",
         flex: 1,
@@ -110,9 +99,8 @@ export const VotdPage = () => {
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
               style={{
-                // Matches B1Mobile's `contentFit="fill"`: stretch to the
-                // container so the verse fills the available space even when
-                // the viewport ratio doesn't match the chosen shape.
+                // Stretch to fill the container so the verse always spans
+                // the screen even when the viewport ratio doesn't match.
                 position: "absolute",
                 inset: 0,
                 width: "100%",
@@ -133,8 +121,7 @@ export const VotdPage = () => {
         ) : null}
       </Box>
 
-      {/* Share pill — web-only additive feature (Web Share API + clipboard
-          fallback). B1Mobile has no share action; keeping this on web. */}
+      {/* Web Share API with clipboard fallback. */}
       <Box sx={{
         display: "flex",
         alignItems: "center",

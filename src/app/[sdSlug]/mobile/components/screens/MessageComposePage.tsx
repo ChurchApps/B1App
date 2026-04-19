@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { getInitials } from "../util";
 
 interface Props {
   config: ConfigurationInterface;
@@ -67,13 +68,6 @@ export const MessageComposePage = ({ config: _config }: Props) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const getInitials = (p?: PersonInterface | null) => {
-    if (!p) return "?";
-    const f = (p.name?.first || "").trim().charAt(0).toUpperCase();
-    const l = (p.name?.last || "").trim().charAt(0).toUpperCase();
-    return (f + l).trim() || (p.name?.display || "?").charAt(0).toUpperCase();
   };
 
   const getPhoto = (p: PersonInterface) => {

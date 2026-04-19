@@ -18,12 +18,10 @@ function readCookie(name: string): string | undefined {
 }
 
 /**
- * One-shot session rehydration for /mobile.
- *
- * Mirrors the auth slice of B1Mobile's splash (`app/index.tsx`): if a `jwt`
- * cookie is present we POST `/users/login` to re-authenticate, hydrate
- * `UserHelper` + `UserContext` (user, userChurches, currentUserChurch, person),
- * and pick the userChurch that matches the current subdomain (sdSlug).
+ * One-shot session rehydration for /mobile. If a `jwt` cookie is present we
+ * POST `/users/login` to re-authenticate, hydrate `UserHelper` + `UserContext`
+ * (user, userChurches, currentUserChurch, person), and pick the userChurch
+ * that matches the current subdomain.
  *
  * Returns a status the layout can gate rendering on so returning users are
  * treated as logged-in before individual screens probe `UserHelper.user`.
@@ -71,8 +69,7 @@ export function useHydrateSession(): HydrationStatus {
         UserHelper.user = resp.user;
         UserHelper.userChurches = resp.userChurches || [];
 
-        // Pick the userChurch that matches this subdomain; fall back to the
-        // first userChurch (matches LoginPage's `selectChurch` default).
+        // Pick the userChurch that matches this subdomain, else the first.
         let matched = null as any;
         if (sdSlug) {
           matched = UserHelper.userChurches?.find(
