@@ -32,7 +32,7 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-type TabKey = "give" | "recurring" | "history";
+type TabKey = "overview" | "donate" | "manage" | "history";
 
 function DonatePageInner({ config }: Props) {
   const tc = mobileTheme.colors;
@@ -45,7 +45,9 @@ function DonatePageInner({ config }: Props) {
   const donationsEnabled = config?.allowDonations !== false && isAuthenticated;
 
   const [message, setMessage] = useState<string | null>(null);
-  const [tab, setTab] = useState<TabKey>("give");
+  // Guests can't have overview/manage/history data, so they default straight
+  // to the Donate tab; authenticated users land on Overview like B1Mobile.
+  const [tab, setTab] = useState<TabKey>(isAuthenticated ? "overview" : "donate");
 
   const { data: donations = [], isLoading: donationsLoading } = useQuery<DonationInterface[]>({
     queryKey: ["donations", personId],
@@ -121,8 +123,8 @@ function DonatePageInner({ config }: Props) {
   }, [donations]);
 
   const handleRepeatGift = () => {
-    // Shared DonationForm doesn't accept initialDonation props; just jump to Give tab.
-    setTab("give");
+    // Shared DonationForm doesn't accept initialDonation props; just jump to Donate tab.
+    setTab("donate");
   };
 
   if (config?.allowDonations === false) {
@@ -410,25 +412,11 @@ function DonatePageInner({ config }: Props) {
   );
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        Giving
-      </Typography>
-
-      {message && (
-        <Alert severity="success" sx={{ mb: 2, borderRadius: `${mobileTheme.radius.md}px` }}>
-          {message}
-        </Alert>
-      )}
-
-      {renderOverview()}
-
+    <Box sx={{ bgcolor: tc.background, minHeight: "100%" }}>
       <Box
         sx={{
           bgcolor: tc.surface,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
-          mb: `${mobileTheme.spacing.md}px`,
+          borderBottom: `1px solid ${tc.border}`,
         }}
       >
         <Tabs
@@ -444,31 +432,41 @@ function DonatePageInner({ config }: Props) {
               minHeight: 44,
               color: tc.textSecondary,
             },
-            "& .Mui-selected": { color: `${tc.primary} !important` },
+            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
             "& .MuiTabs-indicator": { backgroundColor: tc.primary },
           }}
         >
-          <Tab value="give" label="Make a Donation" />
-          {isAuthenticated && <Tab value="recurring" label="Recurring" />}
+          {isAuthenticated && <Tab value="overview" label="Overview" />}
+          <Tab value="donate" label="Donate" />
+          {isAuthenticated && <Tab value="manage" label="Manage" />}
           {isAuthenticated && <Tab value="history" label="History" />}
         </Tabs>
       </Box>
 
-      {tab === "give" && renderGive()}
-      {tab === "recurring" && isAuthenticated && renderRecurring()}
-      {tab === "history" && isAuthenticated && renderHistory()}
+      <Box sx={{ p: `${mobileTheme.spacing.md}px` }}>
+        {message && (
+          <Alert severity="success" sx={{ mb: 2, borderRadius: `${mobileTheme.radius.md}px` }}>
+            {message}
+          </Alert>
+        )}
 
-      {!isAuthenticated && (
-        <Box sx={{ mt: 2, textAlign: "center" }}>
-          <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-            Already have an account?{" "}
-            <a href="/mobile/login?returnUrl=/mobile/donate" style={{ color: tc.primary, fontWeight: 600 }}>
-              Sign in
-            </a>{" "}
-            to manage recurring gifts and view history.
-          </Typography>
-        </Box>
-      )}
+        {tab === "overview" && isAuthenticated && renderOverview()}
+        {tab === "donate" && renderGive()}
+        {tab === "manage" && isAuthenticated && renderRecurring()}
+        {tab === "history" && isAuthenticated && renderHistory()}
+
+        {!isAuthenticated && tab === "donate" && (
+          <Box sx={{ mt: 2, textAlign: "center" }}>
+            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
+              Already have an account?{" "}
+              <a href="/mobile/login?returnUrl=/mobile/donate" style={{ color: tc.primary, fontWeight: 600 }}>
+                Sign in
+              </a>{" "}
+              to manage recurring gifts and view history.
+            </Typography>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 }

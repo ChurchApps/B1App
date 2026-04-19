@@ -720,11 +720,6 @@ export const SermonsPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%" }}>
-      <Box sx={{ px: `${mobileTheme.spacing.md}px`, pt: `${mobileTheme.spacing.md}px` }}>
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 1.5 }}>
-          Sermons
-        </Typography>
-      </Box>
       <Box sx={{
         borderBottom: 1,
         borderColor: tc.border,

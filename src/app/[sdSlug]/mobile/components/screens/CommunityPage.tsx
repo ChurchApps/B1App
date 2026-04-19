@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
+  Button,
   Icon,
   IconButton,
   InputAdornment,
@@ -26,11 +27,67 @@ interface PeopleSection {
   people: PersonInterface[];
 }
 
-export const CommunityPage = ({ config }: Props) => {
+export const CommunityPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const loggedIn = !!UserHelper.user?.firstName;
   const [searchText, setSearchText] = React.useState("");
+
+  if (!loggedIn) {
+    // Mirrors B1Mobile: the directory is a members-only feature. The drawer
+    // normally hides the link for anonymous users, but this gate also covers
+    // people who land here via direct URL or a cached deep link.
+    const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
+    const loginHref = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
+    return (
+      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.xl}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            p: `${mobileTheme.spacing.lg}px`,
+            textAlign: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: "32px",
+              bgcolor: tc.iconBackground,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: `${mobileTheme.spacing.md}px`,
+            }}
+          >
+            <Icon sx={{ fontSize: 32, color: tc.primary }}>lock</Icon>
+          </Box>
+          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+            Sign In Required
+          </Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
+            The member directory is available to signed-in members of your church.
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => { window.location.href = loginHref; }}
+            sx={{
+              bgcolor: tc.primary,
+              color: tc.onPrimary,
+              textTransform: "none",
+              fontWeight: 500,
+              borderRadius: `${mobileTheme.radius.md}px`,
+              "&:hover": { bgcolor: tc.primary },
+            }}
+          >
+            Sign In
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
 
   // B1Mobile authority fetches the full list once via GET /people and filters locally,
   // so we match that. The full directory is cached 10min/30min for parity.
@@ -381,10 +438,6 @@ export const CommunityPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        Directory
-      </Typography>
-
       <TextField
         fullWidth
         size="small"

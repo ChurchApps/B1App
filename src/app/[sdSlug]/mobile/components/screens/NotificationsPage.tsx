@@ -284,18 +284,15 @@ export const NotificationsPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: `${mobileTheme.spacing.md}px`,
-          gap: 1,
-          flexWrap: "wrap",
-        }}
-      >
-        <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text }}>Notifications</Typography>
-        {unreadCount > 0 && (
+      {unreadCount > 0 && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            mb: `${mobileTheme.spacing.md}px`,
+          }}
+        >
           <Button
             size="small"
             onClick={markAllRead}
@@ -304,8 +301,8 @@ export const NotificationsPage = ({ config }: Props) => {
           >
             Mark all read
           </Button>
-        )}
-      </Box>
+        </Box>
+      )}
       <Box sx={{ display: "flex", gap: 1, mb: `${mobileTheme.spacing.sm}px` }}>
         <Chip
           label="All"

@@ -442,10 +442,6 @@ export const GroupsPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        My Groups
-      </Typography>
-
       {effectiveGroups === null && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
           {[0, 1, 2].map(renderSkeleton)}

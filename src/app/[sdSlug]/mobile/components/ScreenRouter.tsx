@@ -25,7 +25,6 @@ const RegistrationsPage = dynamic(() => import("./screens/RegistrationsPage").th
 const VolunteerPage = dynamic(() => import("./screens/VolunteerPage").then(m => ({ default: m.VolunteerPage })), { loading });
 const NotificationsPage = dynamic(() => import("./screens/NotificationsPage").then(m => ({ default: m.NotificationsPage })), { loading });
 const ProfileEditPage = dynamic(() => import("./screens/ProfileEditPage").then(m => ({ default: m.ProfileEditPage })), { loading });
-const ChurchSearchPage = dynamic(() => import("./screens/ChurchSearchPage").then(m => ({ default: m.ChurchSearchPage })), { loading });
 const WebsiteUrlPage = dynamic(() => import("./screens/WebsiteUrlPage").then(m => ({ default: m.WebsiteUrlPage })), { loading });
 const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").then(m => ({ default: m.MessageComposePage })), { loading });
 const InstallPage = dynamic(() => import("./screens/InstallPage").then(m => ({ default: m.InstallPage })), { loading });
@@ -80,7 +79,6 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "composeMessage": return <MessageComposePage config={config} />;
     case "lessons": return <LessonsPage />;
     case "profileEdit": return <ProfileEditPage config={config} />;
-    case "churchSearch": return <ChurchSearchPage config={config} />;
     case "stream": return <StreamPage config={config} />;
     case "websiteUrl":
     case "page": return <WebsiteUrlPage config={config} />;

@@ -156,20 +156,6 @@ export const MessageComposePage = ({ config: _config }: Props) => {
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.sm}px`,
-          mb: `${mobileTheme.spacing.md}px`,
-        }}
-      >
-        <IconButton aria-label="Back" onClick={() => router.back()} sx={{ color: tc.text }}>
-          <Icon>arrow_back</Icon>
-        </IconButton>
-        <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text }}>New Message</Typography>
-      </Box>
-
-      <Box
-        sx={{
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,

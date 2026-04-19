@@ -79,9 +79,6 @@ export const CheckinPage = ({ config: _config }: Props) => {
         },
       }}
     >
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        Check-in
-      </Typography>
       {content}
     </Box>
   );

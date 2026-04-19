@@ -1,14 +1,14 @@
 "use client";
 
-import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { AppBar, Avatar, Badge, Icon, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Badge, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { UserHelper } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "./mobileTheme";
+import { useMobileThemeMode } from "./MobileThemeProvider";
 
 interface Props {
   config: ConfigurationInterface;
@@ -51,7 +51,6 @@ const SCREEN_TITLES: Record<string, string> = {
   volunteer: "Volunteer",
   volunteerSignup: "Volunteer",
   profileEdit: "Edit Profile",
-  churchSearch: "Church Search",
   stream: "Stream",
   bible: "Bible",
   lessons: "Lessons",
@@ -74,27 +73,22 @@ const pageSlugFromPath = (pathname: string | null): string => {
 export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, onAvatarClick, onBellClick }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
+  const { mode } = useMobileThemeMode();
   const slug = pageSlugFromPath(pathname);
   const isDashboard = !slug || slug === "dashboard";
   const title = SCREEN_TITLES[slug] ?? "";
 
+  // Matches B1Mobile's header logo picking: in light mode prefer the
+  // dark-inked logo, in dark mode prefer the light-inked logo. Falls back
+  // to the other variant if the preferred one isn't configured.
   const logoLight = config?.appearance?.logoLight;
+  const logoDark = (config?.appearance as any)?.logoDark;
+  const headerLogo = mode === "dark" ? (logoLight || logoDark) : (logoDark || logoLight);
   const signedIn = !!UserHelper.user?.firstName;
   const initials = [UserHelper.user?.firstName?.[0], UserHelper.user?.lastName?.[0]]
     .filter(Boolean)
     .join("")
     .toUpperCase();
-
-  const handleAvatarClick = () => {
-    if (signedIn) {
-      onAvatarClick();
-    } else {
-      // Route within the mobile shell so the user keeps the church-branded UI
-      // instead of bouncing out to the public desktop login page.
-      const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
-      window.location.href = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
-    }
-  };
 
   const handleBack = () => {
     router.push("/mobile/dashboard");
@@ -133,9 +127,9 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
         </Stack>
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
           {isDashboard ? (
-            logoLight ? (
+            headerLogo ? (
               <img
-                src={logoLight}
+                src={headerLogo}
                 alt={config?.church?.name || ""}
                 style={{ height: 30, width: "auto", maxWidth: "60%", objectFit: "contain" }}
               />
@@ -152,28 +146,26 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
         </div>
         <Stack direction="row" alignItems="center" spacing={0.5} sx={{ pr: 1 }}>
           {signedIn && (
-            <IconButton onClick={onBellClick} aria-label="Notifications" sx={{ color: "#FFFFFF" }}>
-              <Badge variant="dot" color="error" invisible>
-                <NotificationsNoneIcon sx={{ fontSize: 24 }} />
-              </Badge>
-            </IconButton>
+            <>
+              <IconButton onClick={onBellClick} aria-label="Notifications" sx={{ color: "#FFFFFF" }}>
+                <Badge variant="dot" color="error" invisible>
+                  <NotificationsNoneIcon sx={{ fontSize: 24 }} />
+                </Badge>
+              </IconButton>
+              <IconButton onClick={onAvatarClick} aria-label="Profile" sx={{ p: 0.5 }}>
+                <Avatar sx={{
+                  width: 30,
+                  height: 30,
+                  bgcolor: "rgba(255,255,255,0.25)",
+                  color: "#FFFFFF",
+                  fontSize: 13,
+                  fontWeight: 600,
+                }}>
+                  {initials || "?"}
+                </Avatar>
+              </IconButton>
+            </>
           )}
-          <IconButton onClick={handleAvatarClick} aria-label={signedIn ? "Profile" : "Sign in"} sx={{ p: 0.5 }}>
-            {signedIn ? (
-              <Avatar sx={{
-                width: 30,
-                height: 30,
-                bgcolor: "rgba(255,255,255,0.25)",
-                color: "#FFFFFF",
-                fontSize: 13,
-                fontWeight: 600,
-              }}>
-                {initials || "?"}
-              </Avatar>
-            ) : (
-              <Icon sx={{ color: "#FFFFFF", fontSize: 26 }}>login</Icon>
-            )}
-          </IconButton>
         </Stack>
       </Toolbar>
     </AppBar>

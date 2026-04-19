@@ -7,24 +7,20 @@ import { Avatar, Box, Button, Divider, Icon, Stack, Typography } from "@mui/mate
 import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
-import ChurchIcon from "@mui/icons-material/Church";
-import SearchIcon from "@mui/icons-material/Search";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { UserHelper } from "@churchapps/apphelper";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
 import { useMobileThemeMode } from "./MobileThemeProvider";
 
 interface Props {
-  config: ConfigurationInterface;
   links: LinkInterface[];
   onNavigate?: () => void;
 }
 
-export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
+export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const context = useContext(UserContext);
   const router = useRouter();
   const pathname = usePathname();
@@ -42,18 +38,18 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
     if (!pathname || url.startsWith("http")) return false;
     const idx = pathname.indexOf("/mobile");
     if (idx === -1) return false;
-    const relevant = pathname.substring(idx);
-    return relevant === url || relevant.startsWith(url + "/");
+    const relevant = pathname.substring(idx).split("?")[0];
+    const target = url.split("?")[0];
+    // Dashboard is the root of the mobile shell and isn't itself a drawer
+    // item — any `url`-type link with empty `linkData` currently falls back
+    // to `/mobile/dashboard`, so we explicitly refuse to highlight there.
+    if (target === "/mobile/dashboard") return false;
+    return relevant === target || relevant.startsWith(target + "/");
   };
 
   const handleEditProfile = () => {
     onNavigate?.();
     router.push("/mobile/profileEdit");
-  };
-
-  const handleChurchSelect = () => {
-    onNavigate?.();
-    router.push("/mobile/churchSearch");
   };
 
   return (
@@ -101,27 +97,6 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
             </Box>
           </Stack>
         )}
-        <Button
-          variant="contained"
-          fullWidth
-          disableElevation
-          startIcon={config?.appearance ? <ChurchIcon sx={{ fontSize: 20 }} /> : <SearchIcon sx={{ fontSize: 20 }} />}
-          onClick={handleChurchSelect}
-          sx={{
-            bgcolor: tc.surface,
-            color: tc.primary,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            textTransform: "none",
-            fontWeight: 500,
-            fontSize: 14,
-            boxShadow: mobileTheme.shadows.sm,
-            justifyContent: "flex-start",
-            py: 1,
-            "&:hover": { bgcolor: tc.iconBackground, boxShadow: mobileTheme.shadows.sm },
-          }}
-        >
-          {config?.church?.name || "Select Church"}
-        </Button>
       </Box>
 
       {/* Nav list */}

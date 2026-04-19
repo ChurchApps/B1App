@@ -72,11 +72,29 @@ const darkVars = {
 // mount outside `.mobileAppRoot` — still resolve `var(--mb-*)` correctly.
 // Light palette lives on `:root` as the fallback (used during SSR before the
 // mount effect sets the data attribute) and as the explicit light mode.
+// Dark-mode input overrides: MUI's default colors are baked into the
+// Emotion-generated classes for `.MuiInputBase-input`, `.MuiInputLabel-root`
+// etc. — they don't respond to CSS variables, so we have to restate them.
+const darkInputStyles = {
+  "html[data-mobile-theme=\"dark\"] .MuiInputBase-input": { color: "var(--mb-text)" },
+  "html[data-mobile-theme=\"dark\"] .MuiInputBase-input::placeholder": { color: "var(--mb-text-hint)", opacity: 1 },
+  "html[data-mobile-theme=\"dark\"] .MuiFormLabel-root": { color: "var(--mb-text-secondary)" },
+  "html[data-mobile-theme=\"dark\"] .MuiFormLabel-root.Mui-focused": { color: "var(--mb-primary)" },
+  "html[data-mobile-theme=\"dark\"] .MuiOutlinedInput-notchedOutline": { borderColor: "var(--mb-border)" },
+  "html[data-mobile-theme=\"dark\"] .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": { borderColor: "var(--mb-border-light)" },
+  "html[data-mobile-theme=\"dark\"] .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "var(--mb-primary)" },
+  "html[data-mobile-theme=\"dark\"] .MuiFilledInput-root": { backgroundColor: "var(--mb-surface-variant)" },
+  "html[data-mobile-theme=\"dark\"] .MuiInput-underline:before": { borderBottomColor: "var(--mb-border)" },
+  "html[data-mobile-theme=\"dark\"] .MuiSelect-icon": { color: "var(--mb-text-secondary)" },
+  "html[data-mobile-theme=\"dark\"] .MuiFormHelperText-root": { color: "var(--mb-text-secondary)" },
+};
+
 const mobileThemeGlobalStyles = (
   <GlobalStyles
     styles={{
       ":root": lightVars,
       'html[data-mobile-theme="dark"]': { ...darkVars, colorScheme: "dark" },
+      ...darkInputStyles,
     }}
   />
 );

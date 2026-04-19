@@ -242,11 +242,10 @@ export const MessagesPage = ({ config }: Props) => {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           mb: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text }}>Messages</Typography>
         <IconButton
           aria-label="New message"
           onClick={() => router.push("/mobile/messages/new")}
