@@ -9,11 +9,14 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import ChurchIcon from "@mui/icons-material/Church";
 import SearchIcon from "@mui/icons-material/Search";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { UserHelper } from "@churchapps/apphelper";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
+import { useMobileThemeMode } from "./MobileThemeProvider";
 
 interface Props {
   config: ConfigurationInterface;
@@ -26,6 +29,7 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const tc = mobileTheme.colors;
+  const { mode, toggle } = useMobileThemeMode();
 
   const personPhoto = context?.person?.photo;
   const contentRoot = (typeof window !== "undefined" ? (window as any).__envVars?.ContentRoot : undefined) || "";
@@ -173,6 +177,28 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
         borderTop: `1px solid ${tc.border}`,
         boxShadow: mobileTheme.shadows.sm,
       }}>
+        <Button
+          variant="outlined"
+          fullWidth
+          startIcon={mode === "dark"
+            ? <LightModeIcon sx={{ fontSize: 24, color: tc.primary }} />
+            : <DarkModeIcon sx={{ fontSize: 24, color: tc.primary }} />}
+          onClick={toggle}
+          aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          sx={{
+            color: tc.primary,
+            borderColor: tc.primary,
+            borderRadius: `${mobileTheme.radius.md}px`,
+            textTransform: "none",
+            fontWeight: 500,
+            fontSize: 14,
+            justifyContent: "flex-start",
+            py: 1,
+            mb: 1,
+          }}
+        >
+          {mode === "dark" ? "Light Mode" : "Dark Mode"}
+        </Button>
         {UserHelper.user ? (
           <Button
             variant="outlined"

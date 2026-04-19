@@ -9,13 +9,20 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MobileAppBar } from "./MobileAppBar";
 import { MobileDrawer } from "./MobileDrawer";
 import { mobileTheme } from "./mobileTheme";
+import { MobileThemeProvider } from "./MobileThemeProvider";
 
 interface Props {
   config: ConfigurationInterface;
   children: React.ReactNode;
 }
 
-export const MobileShell = ({ config, children }: Props) => {
+export const MobileShell = (props: Props) => (
+  <MobileThemeProvider>
+    <MobileShellInner {...props} />
+  </MobileThemeProvider>
+);
+
+const MobileShellInner = ({ config, children }: Props) => {
   const [open, setOpen] = useState(false);
   const [links, setLinks] = useState<LinkInterface[]>([]);
   const context = useContext(UserContext);

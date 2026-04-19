@@ -43,18 +43,13 @@ const formatDuration = (seconds?: number) => {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 };
 
-// Lightweight hex-adjust helper: shifts each RGB channel by `amount` (-255..255).
-// Mirrors the B1Mobile `adjustHexColor` behavior so the 3-stop gradient lines up
-// with the native app's hero without pulling in a color-math dependency.
-const adjustHexColor = (hex: string, amount: number): string => {
-  const cleaned = hex.replace("#", "");
-  if (cleaned.length !== 6) return hex;
-  const clamp = (n: number) => Math.max(0, Math.min(255, n));
-  const r = clamp(parseInt(cleaned.slice(0, 2), 16) + amount);
-  const g = clamp(parseInt(cleaned.slice(2, 4), 16) + amount);
-  const b = clamp(parseInt(cleaned.slice(4, 6), 16) + amount);
-  const toHex = (n: number) => n.toString(16).padStart(2, "0");
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+// The hero uses a 3-stop gradient built around the primary color. `tc.primary`
+// is now a `var(--mb-primary)` reference (see mobileTheme.ts), so we can't do
+// RGB math on it in JS — we mix via CSS `color-mix` instead, which works for
+// both the light and dark palettes.
+const shade = (cssColor: string, percent: number): string => {
+  const mixer = percent < 0 ? "black" : "white";
+  return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;
 };
 
 const SermonCard = ({ sermon, onClick }: { sermon: SermonInterface; onClick: () => void }) => {
@@ -237,7 +232,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     </IconButton>
   );
 
-  const heroGradient = `linear-gradient(135deg, ${adjustHexColor(tc.primary, -12)} 0%, ${adjustHexColor(tc.primary, 18)} 55%, ${adjustHexColor(tc.primary, 28)} 100%)`;
+  const heroGradient = `linear-gradient(135deg, ${shade(tc.primary, -12)} 0%, ${shade(tc.primary, 18)} 55%, ${shade(tc.primary, 28)} 100%)`;
 
   const renderHero = () => {
     const hasImage = !!playlist?.thumbnail && playlist.thumbnail.trim() !== "";
