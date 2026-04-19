@@ -45,6 +45,15 @@ interface Props {
 type TabKey = "overview" | "donate" | "manage" | "history";
 type PeriodKey = "ytd" | "30d" | "90d" | "all";
 
+interface SubscriptionRow {
+  id: string;
+  plan?: { amount?: number; interval?: string; interval_count?: number };
+  billing_cycle_anchor?: number;
+  default_payment_method?: string;
+  default_source?: string;
+  funds?: { id: string; name: string; amount: number }[];
+}
+
 function DonatePageInner({ config }: Props) {
   const tc = mobileTheme.colors;
   const context = useContext(UserContext);
@@ -109,15 +118,6 @@ function DonatePageInner({ config }: Props) {
   const person = paymentData?.person ?? null;
 
   // B1Mobile shows active recurring subscriptions on the History tab. We
-  // mirror that here — fetch subscriptions once we know the customer.
-  interface SubscriptionRow {
-    id: string;
-    plan?: { amount?: number; interval?: string; interval_count?: number };
-    billing_cycle_anchor?: number;
-    default_payment_method?: string;
-    default_source?: string;
-    funds?: { id: string; name: string; amount: number }[];
-  }
   const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
     queryKey: ["donate-subscriptions", customerId],
     queryFn: async () => {
@@ -126,19 +126,16 @@ function DonatePageInner({ config }: Props) {
         "/customers/" + customerId + "/subscriptions",
         "GivingApi"
       );
-      const subs: SubscriptionRow[] = [];
-      const rows = subResult?.data || [];
-      await Promise.all(
-        rows.map(async (s: any) => {
-          const fundsResp: any = await ApiHelper.get(
+      const rows: any[] = subResult?.data || [];
+      return Promise.all(
+        rows.map(async (s): Promise<SubscriptionRow> => {
+          const funds: any = await ApiHelper.get(
             "/subscriptionfunds?subscriptionId=" + s.id,
             "GivingApi"
           );
-          s.funds = fundsResp;
-          subs.push(s);
+          return { ...s, funds };
         })
       );
-      return subs;
     },
     enabled: donationsEnabled && !!customerId,
   });

@@ -135,11 +135,12 @@ export const GroupChatModal = ({
   }, [groupId, currentContentType]);
 
   React.useEffect(() => {
-    if (open) {
-      loadConversations();
-      loadAnnouncementsPreflight();
-    }
-  }, [open, subTab, loadConversations, loadAnnouncementsPreflight]);
+    if (open) loadConversations();
+  }, [open, subTab, loadConversations]);
+
+  React.useEffect(() => {
+    if (open) loadAnnouncementsPreflight();
+  }, [open, loadAnnouncementsPreflight]);
 
   // Flat message list across all conversations of the current type (matches B1Mobile).
   const messages = React.useMemo(() => {
@@ -372,14 +373,9 @@ export const GroupChatModal = ({
           borderBottom: `1px solid ${tc.border}`,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label="Back">
-            <Icon>arrow_back</Icon>
-          </IconButton>
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-            {groupName || "Group Chat"}
-          </Typography>
-        </Box>
+        <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
+          {groupName || "Group Chat"}
+        </Typography>
         <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label="Close">
           <Icon>close</Icon>
         </IconButton>

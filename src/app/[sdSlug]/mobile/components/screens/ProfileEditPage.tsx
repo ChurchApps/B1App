@@ -92,17 +92,21 @@ const readField = (obj: any, key: string): string => {
   return v == null ? "" : String(v);
 };
 
-// Write a field by dotted path, returning a new object
+// Write a field by dotted path, returning a new object. Spreads only the
+// branches we touch, so the rest of the object retains identity (keeps
+// React Query structural sharing and downstream memo checks honest).
 const writeField = (obj: any, key: string, value: string): any => {
-  const next = JSON.parse(JSON.stringify(obj || {}));
   const parts = key.split(".");
-  let tgt: any = next;
-  for (let i = 0; i < parts.length - 1; i++) {
-    if (!tgt[parts[i]]) tgt[parts[i]] = {};
-    tgt = tgt[parts[i]];
-  }
-  tgt[parts[parts.length - 1]] = value;
-  return next;
+  const clone = (src: any, depth: number): any => {
+    const copy = { ...(src || {}) };
+    if (depth === parts.length - 1) {
+      copy[parts[depth]] = value;
+    } else {
+      copy[parts[depth]] = clone(src?.[parts[depth]], depth + 1);
+    }
+    return copy;
+  };
+  return clone(obj, 0);
 };
 
 // Resize an image File to fit within 4:3 at 300px tall, output JPEG quality 0.8 as data URL

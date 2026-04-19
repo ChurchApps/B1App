@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -149,16 +150,17 @@ const EmptyState = ({
 // ---------------- Step 1: Services ---------------- //
 
 const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [services, setServices] = useState<ServiceInterface[]>([]);
   const [selectingId, setSelectingId] = useState<string>("");
 
-  useEffect(() => {
-    setIsLoading(true);
-    ApiHelper.get("/services", "AttendanceApi")
-      .then((data: ServiceInterface[]) => setServices(data || []))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const { data: services = [], isLoading } = useQuery<ServiceInterface[]>({
+    queryKey: ["/services", "AttendanceApi"],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/services", "AttendanceApi");
+      return Array.isArray(data) ? data : [];
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+  });
 
   const selectService = async (serviceId: string) => {
     setSelectingId(serviceId);

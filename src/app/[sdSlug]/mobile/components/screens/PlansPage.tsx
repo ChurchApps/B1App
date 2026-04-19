@@ -41,17 +41,12 @@ const getStatusMeta = (status: string, tc: typeof mobileTheme.colors) => {
   return { color: tc.disabled, label: status };
 };
 
-const adjustHex = (hex: string, amount: number) => {
-  const clean = hex.replace("#", "");
-  if (clean.length !== 6) return hex;
-  const num = parseInt(clean, 16);
-  let r = (num >> 16) + amount;
-  let g = ((num >> 8) & 0xff) + amount;
-  let b = (num & 0xff) + amount;
-  r = Math.max(0, Math.min(255, r));
-  g = Math.max(0, Math.min(255, g));
-  b = Math.max(0, Math.min(255, b));
-  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+// `tc.primary` resolves to a `var(--mb-primary)` reference at runtime, so JS
+// hex math can't touch it. Mix via CSS `color-mix` instead — works for both
+// light and dark palettes.
+const shadePrimary = (cssColor: string, percent: number) => {
+  const mixer = percent < 0 ? "black" : "white";
+  return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;
 };
 
 export const PlansPage = ({ config: _config }: Props) => {
@@ -72,14 +67,16 @@ export const PlansPage = ({ config: _config }: Props) => {
   });
 
   const positionIds = useMemo(
-    () => ArrayHelper.getUniqueValues(assignments, "positionId"),
+    () => [...ArrayHelper.getUniqueValues(assignments, "positionId")].sort(),
     [assignments]
   );
 
+  const positionIdsKey = positionIds.join(",");
+
   const { data: positions = [], isLoading: positionsLoading } = useQuery<PositionInterface[]>({
-    queryKey: ["/positions/ids", "DoingApi", positionIds.join(",")],
+    queryKey: ["/positions/ids", "DoingApi", positionIdsKey],
     queryFn: async () => {
-      const data = await ApiHelper.get("/positions/ids?ids=" + positionIds, "DoingApi");
+      const data = await ApiHelper.get("/positions/ids?ids=" + positionIdsKey, "DoingApi");
       return Array.isArray(data) ? data : [];
     },
     enabled: loggedIn && assignments.length > 0 && positionIds.length > 0,
@@ -88,14 +85,16 @@ export const PlansPage = ({ config: _config }: Props) => {
   });
 
   const planIds = useMemo(
-    () => ArrayHelper.getUniqueValues(positions, "planId"),
+    () => [...ArrayHelper.getUniqueValues(positions, "planId")].sort(),
     [positions]
   );
 
+  const planIdsKey = planIds.join(",");
+
   const { data: plans = [], isLoading: plansLoading } = useQuery<PlanInterface[]>({
-    queryKey: ["/plans/ids", "DoingApi", planIds.join(",")],
+    queryKey: ["/plans/ids", "DoingApi", planIdsKey],
     queryFn: async () => {
-      const data = await ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi");
+      const data = await ApiHelper.get("/plans/ids?ids=" + planIdsKey, "DoingApi");
       return Array.isArray(data) ? data : [];
     },
     enabled: loggedIn && positions.length > 0 && planIds.length > 0,
@@ -159,8 +158,8 @@ export const PlansPage = ({ config: _config }: Props) => {
   }, [upcomingAssignments, upcomingRows]);
 
   const renderHero = () => {
-    const gradientFrom = adjustHex(tc.primary, -12);
-    const gradientTo = adjustHex(tc.primary, 18);
+    const gradientFrom = shadePrimary(tc.primary, -12);
+    const gradientTo = shadePrimary(tc.primary, 18);
     return (
       <Box
         sx={{

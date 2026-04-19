@@ -13,16 +13,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, RegistrationInterface } from "@churchapps/helpers";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat.js";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-
-dayjs.extend(localizedFormat);
 
 interface Props {
   eventId: string;
@@ -38,13 +34,13 @@ type Step = "info" | "members" | "confirm";
 
 const formatEventTime = (event: EventInterface) => {
   if (!event.start) return "";
-  const start = dayjs(event.start);
-  if (!start.isValid()) return "";
-  if (event.allDay) return start.format("LL");
-  if (!event.end) return start.format("LLL");
-  const end = dayjs(event.end);
-  if (!end.isValid()) return start.format("LLL");
-  return `${start.format("LLL")} - ${end.format("LT")}`;
+  const start = new Date(event.start);
+  if (isNaN(start.getTime())) return "";
+  if (event.allDay) return DateHelper.prettyDate(start);
+  if (!event.end) return DateHelper.prettyDateTime(start);
+  const end = new Date(event.end);
+  if (isNaN(end.getTime())) return DateHelper.prettyDateTime(start);
+  return `${DateHelper.prettyDateTime(start)} - ${DateHelper.prettyTime(end)}`;
 };
 
 export const EventRegisterPage = ({ eventId, config }: Props) => {
@@ -249,7 +245,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   if (!isOpen) {
     const opensLater = event.registrationOpenDate && new Date(event.registrationOpenDate) > new Date();
     const dateLabel = opensLater
-      ? `Registration opens ${dayjs(event.registrationOpenDate!).format("LL")}.`
+      ? `Registration opens ${DateHelper.prettyDate(new Date(event.registrationOpenDate!))}.`
       : "Registration for this event has closed.";
     return (
       <Shell>

@@ -96,7 +96,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
     queryFn: async () => {
       const data = await ApiHelper.get("/people", "MembershipApi");
       const list = Array.isArray(data) ? (data as PersonInterface[]) : [];
-      return list.filter((p, idx, self) => self.findIndex((x) => x.id === p.id) === idx);
+      return Array.from(new Map(list.map((p) => [p.id, p])).values());
     },
     enabled: loggedIn,
     staleTime: 10 * 60 * 1000,
