@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Box,
   Button,
@@ -13,14 +13,15 @@ import {
   Typography,
 } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { GroupCalendarTab } from "../group/GroupCalendarTab";
+import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
 import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
 import { GroupResourcesTab } from "../group/GroupResourcesTab";
-import { GroupChatModal } from "../group/GroupChatModal";
+import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
 
 interface Props {
@@ -53,11 +54,37 @@ type TabKey = "about" | "messages" | "members" | "attendance" | "events" | "reso
 export const GroupDetail = ({ id, config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [joining, setJoining] = React.useState(false);
   const [tab, setTab] = React.useState<TabKey>("about");
   const [chatOpen, setChatOpen] = React.useState(false);
+  const [chatInitialTab, setChatInitialTab] = React.useState<ChatSubTab>("discussions");
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
+  const [editEvent, setEditEvent] = React.useState<EventRow | null>(null);
+
+  // Deep-link param handling: activeTab, openChat, chatTab
+  React.useEffect(() => {
+    if (!searchParams) return;
+    const activeTabParam = searchParams.get("activeTab");
+    if (activeTabParam) {
+      const allowed: TabKey[] = ["about", "messages", "members", "attendance", "events", "resources"];
+      if ((allowed as string[]).includes(activeTabParam)) {
+        if (activeTabParam === "messages") {
+          setChatOpen(true);
+        } else {
+          setTab(activeTabParam as TabKey);
+        }
+      }
+    }
+    const openChatParam = searchParams.get("openChat");
+    if (openChatParam === "1" || openChatParam === "true") {
+      const chatTabParam = searchParams.get("chatTab");
+      setChatInitialTab(chatTabParam === "announcements" ? "announcements" : "discussions");
+      setChatOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { data: groupData, isLoading: groupLoading } = useQuery<GroupWithExtras | null>({
     queryKey: ["group-detail", id],
@@ -270,18 +297,21 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
               About
             </Typography>
             {hasAbout && (
-              <Typography
+              <Box
                 sx={{
                   fontSize: 14,
-                  fontWeight: 400,
                   color: tc.textMuted,
                   lineHeight: 1.6,
                   mb: rows.length ? `${mobileTheme.spacing.md}px` : 0,
-                  whiteSpace: "pre-wrap",
+                  "& p": { mt: 0, mb: 1 },
+                  "& p:last-child": { mb: 0 },
+                  "& a": { color: tc.primary },
+                  "& h1, & h2, & h3, & h4": { color: tc.text, fontWeight: 700, mt: 1, mb: 0.5 },
+                  "& ul, & ol": { pl: 3, mt: 0, mb: 1 },
                 }}
               >
-                {group?.about}
-              </Typography>
+                <MarkdownPreviewLight value={group?.about || ""} />
+              </Box>
             )}
             {rows.map((r, idx) => (
               <Box
@@ -511,6 +541,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
               value={tab}
               onChange={(_, v) => {
                 if (v === "messages") {
+                  setChatInitialTab("discussions");
                   setChatOpen(true);
                   return;
                 }
@@ -553,6 +584,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
               groupId={id}
               isLeader={isLeader}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
+              onEditEvent={(ev) => setEditEvent(ev)}
             />
           )}
           {tab === "attendance" && members !== null && (
@@ -578,6 +610,8 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         open={chatOpen}
         groupId={id}
         groupName={group?.name}
+        isLeader={isLeader}
+        initialSubTab={chatInitialTab}
         onClose={() => setChatOpen(false)}
       />
       <CreateEventModal
@@ -588,6 +622,17 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         onSaved={() => {
           setCreateEvent(null);
           // GroupCalendarTab reloads on its own via month change; bump key by toggling tab
+          setTab("about");
+          setTimeout(() => setTab("events"), 0);
+        }}
+      />
+      <CreateEventModal
+        open={!!editEvent}
+        groupId={id}
+        event={editEvent as any}
+        onClose={() => setEditEvent(null)}
+        onSaved={() => {
+          setEditEvent(null);
           setTab("about");
           setTimeout(() => setTab("events"), 0);
         }}

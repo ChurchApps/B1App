@@ -202,8 +202,10 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
             startIcon={<LoginIcon sx={{ fontSize: 24 }} />}
             component="a"
             href={(() => {
+              // Stay inside the mobile shell instead of bouncing to the public
+              // desktop login page.
               const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
-              return returnUrl ? `/login?returnUrl=${returnUrl}` : "/login";
+              return returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
             })()}
             sx={{
               bgcolor: tc.primary,
@@ -223,6 +225,17 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
         )}
         <Typography sx={{ fontSize: 12, color: tc.disabled, textAlign: "center" }}>
           B1 Mobile Web
+        </Typography>
+        <Typography sx={{ fontSize: 12, textAlign: "center", mt: 0.5 }}>
+          <Box
+            component="a"
+            href="https://churchapps.org/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ color: tc.primary, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+          >
+            Privacy Policy
+          </Box>
         </Typography>
       </Box>
     </Box>

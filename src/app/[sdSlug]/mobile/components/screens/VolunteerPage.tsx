@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Icon, LinearProgress, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, Icon, LinearProgress, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, DateHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
@@ -25,12 +25,14 @@ export const VolunteerPage = ({ config }: Props) => {
   const churchId = config?.church?.id;
 
   const { data: signupPlans = null } = useQuery<SignupPlanData[]>({
-    queryKey: ["volunteer-signup", churchId],
+    queryKey: ["/plans/public/signup/" + churchId, "DoingApi-anon"],
     queryFn: async () => {
       const data = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
       return Array.isArray(data) ? data : [];
     },
     enabled: !!churchId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
 
   const getSlots = (positions: SignupPlanData["positions"]) => {
@@ -39,20 +41,15 @@ export const VolunteerPage = ({ config }: Props) => {
     return { total, filled, remaining: Math.max(0, total - filled) };
   };
 
-  const getDescription = (item: SignupPlanData) => {
-    const parts: string[] = [];
-    if (item.times?.length) parts.push(item.times.map((t) => t.displayName).filter(Boolean).join(", "));
-    if (item.positions?.length) {
-      const posNames = item.positions.map((p) => p.name).filter(Boolean).slice(0, 3).join(", ");
-      if (posNames) parts.push(posNames);
-    }
-    return parts.join(" \u00b7 ");
+  const getTimesLabel = (item: SignupPlanData) => {
+    if (!item.times?.length) return "";
+    return item.times.map((t) => t.displayName).filter(Boolean).join(", ");
   };
 
   const renderCard = (item: SignupPlanData) => {
     const { total, filled, remaining } = getSlots(item.positions);
     const progress = total > 0 ? (filled / total) * 100 : 0;
-    const description = getDescription(item);
+    const timesLabel = getTimesLabel(item);
     const isFull = remaining === 0;
 
     return (
@@ -72,22 +69,8 @@ export const VolunteerPage = ({ config }: Props) => {
             </Typography>
             <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
               {DateHelper.prettyDate(DateHelper.toDate(item.plan.serviceDate))}
+              {timesLabel ? ` \u00b7 ${timesLabel}` : ""}
             </Typography>
-            {description && (
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: tc.textSecondary,
-                  mt: 0.5,
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}
-              >
-                {description}
-              </Typography>
-            )}
           </Box>
           <Box
             sx={{
@@ -123,23 +106,48 @@ export const VolunteerPage = ({ config }: Props) => {
           </Box>
         )}
 
-        <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            disabled={isFull}
-            onClick={() => router.push(`/mobile/volunteer/${item.plan.id}`)}
-            sx={{
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              textTransform: "none",
-              fontWeight: 500,
-              "&:hover": { bgcolor: tc.primary },
-            }}
-          >
-            {isFull ? "Full" : "Volunteer"}
-          </Button>
-        </Box>
+        {item.positions?.length > 0 && (
+          <Box sx={{ mt: 1.5, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {item.positions.map((p) => {
+              const posOpen = Math.max(0, (p.count || 0) - (p.filledCount || 0));
+              const posFull = posOpen === 0;
+              return (
+                <Chip
+                  key={p.id || p.name}
+                  label={`${p.name}: ${posOpen} open`}
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    bgcolor: posFull ? `${tc.textSecondary}1A` : tc.primaryLight,
+                    color: posFull ? tc.textSecondary : tc.primary,
+                    "& .MuiChip-label": { px: 1 },
+                  }}
+                />
+              );
+            })}
+          </Box>
+        )}
+
+        {!isFull && (
+          <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              onClick={() => router.push(`/mobile/volunteer/${item.plan.id}`)}
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                textTransform: "none",
+                fontWeight: 500,
+                "&:hover": { bgcolor: tc.primary },
+              }}
+            >
+              Volunteer
+            </Button>
+          </Box>
+        )}
       </Box>
     );
   };

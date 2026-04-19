@@ -17,6 +17,7 @@ import {
   PaymentMethods,
   StripePaymentMethod as AppHelperStripePaymentMethod,
 } from "@churchapps/apphelper-donations";
+import { NonAuthDonationWrapper } from "@churchapps/apphelper-website";
 import type {
   ChurchInterface,
   DonationInterface,
@@ -40,7 +41,8 @@ function DonatePageInner({ config }: Props) {
   const church: ChurchInterface | undefined = config?.church;
   const churchLogo = AppearanceHelper.getLogo(config?.appearance, "", "", "#FFF");
   const queryClient = useQueryClient();
-  const donationsEnabled = config?.allowDonations !== false && !UniqueIdHelper.isMissing(personId);
+  const isAuthenticated = !!UserHelper.user?.firstName && !UniqueIdHelper.isMissing(personId);
+  const donationsEnabled = config?.allowDonations !== false && isAuthenticated;
 
   const [message, setMessage] = useState<string | null>(null);
   const [tab, setTab] = useState<TabKey>("give");
@@ -102,6 +104,7 @@ function DonatePageInner({ config }: Props) {
   const givingStats = useMemo(() => {
     const currentYear = new Date().getFullYear();
     let ytd = 0;
+    let totalGifts = 0;
     let lastGift: DonationInterface | null = null;
     const sorted = [...donations].sort(
       (a, b) => DateHelper.toDate(b.donationDate).getTime() - DateHelper.toDate(a.donationDate).getTime()
@@ -110,12 +113,17 @@ function DonatePageInner({ config }: Props) {
     for (const d of donations) {
       const dt = DateHelper.toDate(d.donationDate);
       if (dt.getFullYear() === currentYear) {
-        // d.fund?.amount is the shape used in the existing /my donation page
         ytd += ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
+        totalGifts += 1;
       }
     }
-    return { ytd, lastGift };
+    return { ytd, totalGifts, lastGift };
   }, [donations]);
+
+  const handleRepeatGift = () => {
+    // Shared DonationForm doesn't accept initialDonation props; just jump to Give tab.
+    setTab("give");
+  };
 
   if (config?.allowDonations === false) {
     return (
@@ -154,56 +162,62 @@ function DonatePageInner({ config }: Props) {
     );
   }
 
-  if (!UserHelper.user?.firstName) {
+  // Gradient hero: shown for both guests and signed-in users. For signed-in users
+  // it surfaces YTD total + gift count; for guests it acts as a welcoming call to action.
+  const renderOverview = () => {
+    const gradient = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+      <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>
         <Box
           sx={{
-            bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.sm,
+            boxShadow: mobileTheme.shadows.md,
             p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
+            background: gradient,
+            color: tc.onPrimary,
           }}
         >
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text }}>
-            Please sign in to give
+          <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.85, letterSpacing: 0.5, textTransform: "uppercase" }}>
+            {isAuthenticated ? "Your Giving Impact" : "Make a Difference Today"}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mt: 1 }}>
-            Log in to access donations and giving history.
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
-
-  const renderOverview = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.md,
-        p: `${mobileTheme.spacing.md}px`,
-        mb: `${mobileTheme.spacing.md}px`,
-      }}
-    >
-      <Typography sx={{ fontSize: 14, fontWeight: 500, color: tc.textSecondary, mb: 1 }}>
-        Giving Overview
-      </Typography>
-      <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-            {new Date().getFullYear()} Total
-          </Typography>
-          <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.primary }}>
-            {CurrencyHelper.formatCurrency(givingStats.ytd || 0)}
-          </Typography>
-        </Box>
-        <Box sx={{ flex: 1, textAlign: "right" }}>
-          <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>Last Gift</Typography>
-          {givingStats.lastGift ? (
+          {isAuthenticated ? (
             <>
-              <Typography sx={{ fontSize: 20, fontWeight: 600, color: tc.text }}>
+              <Typography sx={{ fontSize: 32, fontWeight: 700, mt: 0.5 }}>
+                {CurrencyHelper.formatCurrency(givingStats.ytd || 0)}
+              </Typography>
+              <Typography sx={{ fontSize: 13, opacity: 0.9 }}>
+                {givingStats.totalGifts} {givingStats.totalGifts === 1 ? "gift" : "gifts"} this year
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography sx={{ fontSize: 20, fontWeight: 600, mt: 0.5 }}>
+                Support {church?.name || "our church"}
+              </Typography>
+              <Typography sx={{ fontSize: 13, opacity: 0.9, mt: 0.5 }}>
+                Give securely as a guest — no account required.
+              </Typography>
+            </>
+          )}
+        </Box>
+
+        {isAuthenticated && givingStats.lastGift && (
+          <Box
+            sx={{
+              mt: `${mobileTheme.spacing.md}px`,
+              bgcolor: tc.surface,
+              borderRadius: `${mobileTheme.radius.lg}px`,
+              boxShadow: mobileTheme.shadows.sm,
+              p: `${mobileTheme.spacing.md}px`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+            }}
+          >
+            <Box>
+              <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>Last Gift</Typography>
+              <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>
                 {CurrencyHelper.formatCurrency(
                   ((givingStats.lastGift as any).fund?.amount ?? (givingStats.lastGift as any).amount ?? 0) as number
                 )}
@@ -211,16 +225,56 @@ function DonatePageInner({ config }: Props) {
               <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
                 {DateHelper.prettyDate(DateHelper.toDate(givingStats.lastGift.donationDate))}
               </Typography>
-            </>
-          ) : (
-            <Typography sx={{ fontSize: 14, color: tc.textMuted }}>No gifts yet</Typography>
-          )}
-        </Box>
+            </Box>
+            <Button
+              variant="contained"
+              startIcon={<Icon>replay</Icon>}
+              onClick={handleRepeatGift}
+              sx={{
+                textTransform: "none",
+                fontWeight: 600,
+                bgcolor: tc.primary,
+                "&:hover": { bgcolor: tc.primary, opacity: 0.9 },
+              }}
+            >
+              Repeat Gift
+            </Button>
+          </Box>
+        )}
       </Box>
-    </Box>
-  );
+    );
+  };
 
   const renderGive = () => {
+    // Guest (unauthenticated) flow — use shared NonAuthDonationWrapper which
+    // supports guest card + guest ACH and auto-creates user/person records.
+    if (!isAuthenticated) {
+      if (!church?.id) {
+        return (
+          <Box sx={{ p: 3, textAlign: "center" }}>
+            <Typography sx={{ color: tc.textMuted }}>Unable to load church configuration.</Typography>
+          </Box>
+        );
+      }
+      return (
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            p: `${mobileTheme.spacing.md}px`,
+          }}
+        >
+          <NonAuthDonationWrapper
+            churchId={church.id}
+            showHeader={false}
+            churchLogo={churchLogo}
+            mainContainerCssProps={{ sx: { boxShadow: "none", padding: 0 } }}
+          />
+        </Box>
+      );
+    }
+
     if (isMethodsLoading) {
       return (
         <Box sx={{ p: 3, textAlign: "center" }}>
@@ -395,14 +449,26 @@ function DonatePageInner({ config }: Props) {
           }}
         >
           <Tab value="give" label="Make a Donation" />
-          <Tab value="recurring" label="Recurring" />
-          <Tab value="history" label="History" />
+          {isAuthenticated && <Tab value="recurring" label="Recurring" />}
+          {isAuthenticated && <Tab value="history" label="History" />}
         </Tabs>
       </Box>
 
       {tab === "give" && renderGive()}
-      {tab === "recurring" && renderRecurring()}
-      {tab === "history" && renderHistory()}
+      {tab === "recurring" && isAuthenticated && renderRecurring()}
+      {tab === "history" && isAuthenticated && renderHistory()}
+
+      {!isAuthenticated && (
+        <Box sx={{ mt: 2, textAlign: "center" }}>
+          <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
+            Already have an account?{" "}
+            <a href="/mobile/login?returnUrl=/mobile/donate" style={{ color: tc.primary, fontWeight: 600 }}>
+              Sign in
+            </a>{" "}
+            to manage recurring gifts and view history.
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 }

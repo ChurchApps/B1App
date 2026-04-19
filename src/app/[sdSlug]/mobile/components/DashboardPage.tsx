@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useContext, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Icon, Typography } from "@mui/material";
+import { Box, Icon, IconButton, Typography } from "@mui/material";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -13,6 +13,37 @@ interface Props {
   config: ConfigurationInterface;
 }
 
+const ENGAGEMENT_STORAGE_KEY = "b1app-link-view-counts";
+
+const readViewCounts = (): Record<string, number> => {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(ENGAGEMENT_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+
+const writeViewCounts = (counts: Record<string, number>) => {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(ENGAGEMENT_STORAGE_KEY, JSON.stringify(counts));
+  } catch {
+    /* ignore quota / private-mode failures */
+  }
+};
+
+const generateLinkId = (item: LinkInterface): string => item.id || `${item.linkType}_${item.text}`;
+
+const resolvePhoto = (item: LinkInterface): string => {
+  const photo = (item as unknown as { photo?: string }).photo;
+  if (photo) return photo;
+  return linkTypeToImage(item.linkType, item.text);
+};
+
 export const DashboardPage = ({ config }: Props) => {
   const context = useContext(UserContext);
   const router = useRouter();
@@ -20,7 +51,30 @@ export const DashboardPage = ({ config }: Props) => {
   const churchId = config?.church?.id;
   const jwt = context.userChurch?.jwt;
 
-  const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
+  const { data: rawLinks, isLoading, refetch, isFetching } = useChurchLinks(churchId, jwt);
+
+  const [viewCounts, setViewCounts] = useState<Record<string, number>>({});
+
+  // Hydrate view counts from localStorage once on mount.
+  useEffect(() => {
+    setViewCounts(readViewCounts());
+  }, []);
+
+  // Re-fetch on window focus (web equivalent of pull-to-refresh).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handler = () => { refetch(); };
+    window.addEventListener("focus", handler);
+    return () => { window.removeEventListener("focus", handler); };
+  }, [refetch]);
+
+  const incrementViewCount = useCallback((linkId: string) => {
+    setViewCounts((prev) => {
+      const next = { ...prev, [linkId]: (prev[linkId] || 0) + 1 };
+      writeViewCounts(next);
+      return next;
+    });
+  }, []);
 
   const links = useMemo<LinkInterface[]>(() => {
     if (!Array.isArray(rawLinks)) return [];
@@ -33,13 +87,18 @@ export const DashboardPage = ({ config }: Props) => {
 
   const loading = isLoading && links.length === 0;
 
-  const filtered = useMemo(
-    () => links.filter((l) => l.linkType !== "separator"),
-    [links]
-  );
+  const filtered = useMemo(() => {
+    const list = links.filter((l) => l.linkType !== "separator");
+    // Stable sort descending by view count, ties preserve original order.
+    return list
+      .map((link, index) => ({ link, index, count: viewCounts[generateLinkId(link)] || 0 }))
+      .sort((a, b) => (a.count === b.count ? a.index - b.index : b.count - a.count))
+      .map((entry) => entry.link);
+  }, [links, viewCounts]);
 
   const navigate = (link: LinkInterface) => {
-    const route = linkTypeToRoute(link.linkType, link.linkData);
+    incrementViewCount(generateLinkId(link));
+    const route = linkTypeToRoute(link.linkType, link.linkData, link.text);
     if (route) {
       if (route.startsWith("http")) window.location.href = route;
       else router.push(route);
@@ -63,12 +122,37 @@ export const DashboardPage = ({ config }: Props) => {
           <Box sx={{ flex: 1, bgcolor: tc.surfaceVariant, height: 120, borderRadius: `${mobileTheme.radius.lg}px` }} />
           <Box sx={{ flex: 1, bgcolor: tc.surfaceVariant, height: 120, borderRadius: `${mobileTheme.radius.lg}px` }} />
         </Box>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: `${mobileTheme.spacing.md - 4}px`, px: `${mobileTheme.spacing.md}px` }}>
+          {[0, 1, 2, 3].map((i) => (
+            <Box key={i} sx={{ width: "calc(25% - 9px)", height: 96, bgcolor: tc.surfaceVariant, borderRadius: `${mobileTheme.radius.lg}px` }} />
+          ))}
+        </Box>
       </Box>
     );
   }
 
+  const handleKey = (e: React.KeyboardEvent, link: LinkInterface) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      navigate(link);
+    }
+  };
+
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pt: 2, pb: 3 }}>
+      {/* Refresh button (web equivalent of pull-to-refresh) */}
+      <Box sx={{ display: "flex", justifyContent: "flex-end", px: `${mobileTheme.spacing.md}px`, mb: 1 }}>
+        <IconButton
+          size="small"
+          aria-label="Refresh"
+          onClick={() => { refetch(); }}
+          disabled={isFetching}
+          sx={{ color: tc.primary }}
+        >
+          <Icon sx={{ fontSize: 20 }}>refresh</Icon>
+        </IconButton>
+      </Box>
+
       {/* Hero Section */}
       {hero && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
@@ -76,6 +160,7 @@ export const DashboardPage = ({ config }: Props) => {
             role="button"
             tabIndex={0}
             onClick={() => navigate(hero)}
+            onKeyDown={(e) => handleKey(e, hero)}
             sx={{
               position: "relative",
               height: 200,
@@ -84,7 +169,7 @@ export const DashboardPage = ({ config }: Props) => {
               boxShadow: cardShadow,
               cursor: "pointer",
               bgcolor: tc.primary,
-              backgroundImage: `url(${linkTypeToImage(hero.linkType, hero.text)})`,
+              backgroundImage: `url(${resolvePhoto(hero)})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -135,10 +220,11 @@ export const DashboardPage = ({ config }: Props) => {
           <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.md - 4}px` }}>
             {featuredTwo.map((item) => (
               <Box
-                key={item.id || `${item.linkType}-${item.text}`}
+                key={generateLinkId(item)}
                 role="button"
                 tabIndex={0}
                 onClick={() => navigate(item)}
+                onKeyDown={(e) => handleKey(e, item)}
                 sx={{
                   flex: 1,
                   position: "relative",
@@ -148,7 +234,7 @@ export const DashboardPage = ({ config }: Props) => {
                   boxShadow: featuredShadow,
                   cursor: "pointer",
                   bgcolor: tc.primary,
-                  backgroundImage: `url(${linkTypeToImage(item.linkType, item.text)})`,
+                  backgroundImage: `url(${resolvePhoto(item)})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
@@ -192,10 +278,11 @@ export const DashboardPage = ({ config }: Props) => {
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: `${mobileTheme.spacing.md - 4}px` }}>
             {others.map((item) => (
               <Box
-                key={item.id || `${item.linkType}-${item.text}`}
+                key={generateLinkId(item)}
                 role="button"
                 tabIndex={0}
                 onClick={() => navigate(item)}
+                onKeyDown={(e) => handleKey(e, item)}
                 sx={{
                   width: { xs: "calc(25% - 9px)", sm: "calc(20% - 10px)", md: "calc(16.666% - 10px)" },
                   minWidth: 70,

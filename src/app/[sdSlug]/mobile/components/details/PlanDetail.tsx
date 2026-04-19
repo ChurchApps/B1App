@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useContext, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Avatar,
   Box,
+  Button,
   Chip,
   CircularProgress,
   Icon,
@@ -25,7 +26,12 @@ import type {
   PlanItemInterface,
   PositionInterface,
   TimeInterface,
+  VenuePlanItemsResponseInterface,
 } from "@churchapps/helpers";
+import { LessonsContentProvider } from "@churchapps/helpers";
+import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
+import { PlanItem as PlanItemRow } from "@/app/[sdSlug]/(public)/my/[pageSlug]/components/PlanItem";
+import { LessonPreview } from "@/app/[sdSlug]/(public)/my/[pageSlug]/components/LessonPreview";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
@@ -68,6 +74,34 @@ const formatServiceDate = (date?: Date | string) => {
   }
 };
 
+const formatDateTime = (date?: Date | string) => {
+  if (!date) return "";
+  try {
+    const d = typeof date === "string" ? new Date(date) : date;
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
+};
+
+const formatTimeShort = (date?: Date | string) => {
+  if (!date) return "";
+  try {
+    const d = typeof date === "string" ? new Date(date) : date;
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  } catch {
+    return "";
+  }
+};
+
 const flattenSongs = (items: PlanItemInterface[]): SongRow[] => {
   const songs: SongRow[] = [];
   const walk = (arr: PlanItemInterface[]) => {
@@ -91,13 +125,51 @@ const flattenSongs = (items: PlanItemInterface[]): SongRow[] => {
   return songs;
 };
 
+/* Helpers for provider/lesson preview fallback (mirrors B1Mobile + B1App /my ServiceOrder) */
+function findThumbnailRecursive(item: InstructionItem): string | undefined {
+  if (item.thumbnail) return item.thumbnail;
+  if (item.children) {
+    for (const child of item.children) {
+      const found = findThumbnailRecursive(child);
+      if (found) return found;
+    }
+  }
+  return undefined;
+}
+
+function instructionToPlanItem(item: InstructionItem, providerId?: string, providerPath?: string, pathIndices: number[] = []): PlanItemInterface {
+  let itemType = item.itemType || "item";
+  if (itemType === "section") itemType = "providerSection";
+  else if (itemType === "action") itemType = "providerPresentation";
+  else if (itemType === "file") itemType = "providerFile";
+
+  const contentPath = pathIndices.length > 0 ? pathIndices.join(".") : undefined;
+  const thumbnail = findThumbnailRecursive(item);
+
+  return {
+    itemType,
+    relatedId: item.relatedId,
+    label: item.label || "",
+    description: (item as any).content,
+    seconds: item.seconds ?? 0,
+    providerId,
+    providerPath,
+    providerContentPath: contentPath,
+    thumbnailUrl: thumbnail,
+    children: item.children?.map((child, index) => instructionToPlanItem(child, providerId, providerPath, [...pathIndices, index]))
+  };
+}
+
 export const PlanDetail = ({ id, config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = useContext(UserContext);
+  const queryClient = useQueryClient();
 
-  const [tab, setTab] = useState<"order" | "team" | "songs">("order");
+  type TabKey = "overview" | "order" | "team" | "songs";
+  const [tab, setTab] = useState<TabKey>("overview");
   const isLoggedIn = !!userContext?.userChurch?.jwt;
+  const myPersonId = userContext?.person?.id || userContext?.userChurch?.person?.id;
 
   interface PlanBundle {
     plan: PlanInterface | null;
@@ -108,8 +180,10 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     people: PersonInterface[];
   }
 
+  const queryKey = useMemo(() => ["plan-detail", id], [id]);
+
   const { data: planBundle, isLoading: loading } = useQuery<PlanBundle>({
-    queryKey: ["plan-detail", id],
+    queryKey,
     queryFn: async () => {
       const [planRes, itemsRes, positionsRes, assignmentsRes, timesRes] = await Promise.all([
         ApiHelper.get(`/plans/${id}`, "DoingApi").catch((): null => null),
@@ -164,6 +238,61 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     });
     return groups;
   }, [positions]);
+
+  const myAssignments = useMemo(
+    () => (myPersonId ? ArrayHelper.getAll(assignments, "personId", myPersonId) : []),
+    [assignments, myPersonId]
+  );
+
+  /* Provider / lesson preview fallback */
+  const lessonsProvider = useMemo(() => new LessonsContentProvider(), []);
+  const hasAssociatedLesson = !!plan && lessonsProvider.hasAssociatedLesson(plan);
+  const externalRef = plan ? lessonsProvider.getExternalRef(plan) : null;
+  const provider: IProvider | null = useMemo(() => {
+    if (plan?.providerId) return getProvider(plan.providerId);
+    return null;
+  }, [plan?.providerId]);
+  const hasAssociatedContent = !!provider || hasAssociatedLesson;
+
+  const { data: lessonPreview } = useQuery<VenuePlanItemsResponseInterface>({
+    queryKey: ["plan-preview", id, plan?.providerId, plan?.providerPlanId, plan?.contentType, plan?.contentId],
+    queryFn: async () => {
+      if (provider && plan?.providerPlanId) {
+        let instructions: Instructions | null = null;
+        if (!provider.requiresAuth && provider.capabilities.instructions && provider.getInstructions) {
+          try { instructions = await provider.getInstructions(plan.providerPlanId); } catch { /* ignore */ }
+        }
+        if (!instructions) {
+          try {
+            instructions = await ApiHelper.post(
+              "/providerProxy/getInstructions",
+              { providerId: plan.providerId, path: plan.providerPlanId },
+              "DoingApi"
+            );
+          } catch { /* ignore */ }
+        }
+        if (instructions) {
+          const items: PlanItemInterface[] = instructions.items.map((item, index) =>
+            instructionToPlanItem(item, plan.providerId, plan.providerPlanId, [index]));
+          return { items, venueName: plan.providerPlanName || instructions.name || "" };
+        }
+      }
+      if (plan && hasAssociatedLesson) {
+        try {
+          return await lessonsProvider.fetchVenuePlanItems(plan);
+        } catch {
+          return { items: [] };
+        }
+      }
+      return { items: [] };
+    },
+    enabled: isLoggedIn && !!plan && hasAssociatedContent && planItems.length === 0,
+  });
+  const showPreviewMode = hasAssociatedContent && planItems.length === 0 && (lessonPreview?.items?.length ?? 0) > 0;
+
+  const refreshAssignments = () => {
+    queryClient.invalidateQueries({ queryKey });
+  };
 
   const BackButton = (
     <IconButton
@@ -302,6 +431,15 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     </Box>
   );
 
+  const planItemsWithStartTime = (() => {
+    let cumulativeTime = 0;
+    return planItems.map((pi) => {
+      const startTime = cumulativeTime;
+      cumulativeTime += pi.seconds || 0;
+      return { pi, startTime };
+    });
+  })();
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>{BackButton}</Box>
@@ -320,7 +458,9 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         <Tabs
           value={tab}
           onChange={(_e, v) => setTab(v)}
-          variant="fullWidth"
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
           TabIndicatorProps={{ sx: { backgroundColor: tc.primary, height: 3, borderRadius: "3px 3px 0 0" } }}
           sx={{
             minHeight: 48,
@@ -334,30 +474,150 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             "& .Mui-selected": { color: `${tc.primary} !important` },
           }}
         >
-          <Tab value="order" label="Order of Service" />
+          <Tab value="overview" label="Overview" />
+          <Tab value="order" label="Service Order" />
           <Tab value="team" label="Team" />
           <Tab value="songs" label="Songs" />
         </Tabs>
       </Box>
 
-      {tab === "order" && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-          {planItems.length === 0 ? (
+      {tab === "overview" && (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
+          {/* My Assignments */}
+          <Box>
             <Box
               sx={{
-                bgcolor: tc.surface,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                px: `${mobileTheme.spacing.md}px`,
+                py: `${mobileTheme.spacing.sm}px`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
-                boxShadow: mobileTheme.shadows.sm,
-                p: `${mobileTheme.spacing.lg}px`,
-                textAlign: "center",
+                bgcolor: `${tc.primary}14`,
+                mb: `${mobileTheme.spacing.sm}px`,
               }}
             >
-              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-                No items in the order of service.
+              <Icon sx={{ color: tc.primary, fontSize: 22 }}>assignment_ind</Icon>
+              <Typography sx={{ flex: 1, fontSize: 16, fontWeight: 700, color: tc.primary }}>
+                My Assignments
               </Typography>
+              <Box
+                sx={{
+                  bgcolor: tc.primary,
+                  color: "#FFFFFF",
+                  borderRadius: "999px",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  px: 1.25,
+                  py: 0.25,
+                  minWidth: 28,
+                  textAlign: "center",
+                }}
+              >
+                {myAssignments.length}
+              </Box>
             </Box>
+
+            {myAssignments.length === 0 ? (
+              <Box
+                sx={{
+                  bgcolor: tc.surface,
+                  borderRadius: `${mobileTheme.radius.lg}px`,
+                  boxShadow: mobileTheme.shadows.sm,
+                  p: `${mobileTheme.spacing.lg}px`,
+                  textAlign: "center",
+                }}
+              >
+                <Icon sx={{ fontSize: 48, color: tc.textSecondary, mb: 1 }}>assignment_late</Icon>
+                <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
+                  No assignments for this plan
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: 0.5 }}>
+                  Check with your team leader if you expected one.
+                </Typography>
+              </Box>
+            ) : (
+              <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+                {myAssignments.map((assignment) => {
+                  const position = ArrayHelper.getOne(positions, "id", assignment.positionId) as PositionInterface | null;
+                  const posTimes = (times || []).filter(
+                    (t: any) => position?.categoryName && typeof t?.teams === "string" && t.teams.indexOf(position.categoryName) > -1
+                  );
+                  return (
+                    <PositionDetailsCard
+                      key={assignment.id}
+                      position={position}
+                      assignment={assignment}
+                      times={posTimes}
+                      onUpdate={refreshAssignments}
+                    />
+                  );
+                })}
+              </Box>
+            )}
+          </Box>
+
+          {/* Plan Notes */}
+          <Box
+            sx={{
+              bgcolor: tc.surface,
+              borderRadius: `${mobileTheme.radius.lg}px`,
+              boxShadow: mobileTheme.shadows.sm,
+              p: `${mobileTheme.spacing.md}px`,
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+              <Icon sx={{ color: tc.primary }}>note</Icon>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Plan Notes</Typography>
+            </Box>
+            {plan.notes ? (
+              <Typography sx={{ fontSize: 14, color: tc.textMuted, whiteSpace: "pre-wrap", lineHeight: 1.5 }}>
+                {plan.notes}
+              </Typography>
+            ) : (
+              <Typography sx={{ fontSize: 13, color: tc.textSecondary, fontStyle: "italic" }}>
+                No notes available.
+              </Typography>
+            )}
+          </Box>
+        </Box>
+      )}
+
+      {tab === "order" && (
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            p: `${mobileTheme.spacing.md}px`,
+          }}
+        >
+          {planItems.length === 0 && showPreviewMode && lessonPreview?.items ? (
+            <LessonPreview
+              lessonItems={lessonPreview.items}
+              venueName={lessonPreview.venueName || ""}
+              externalRef={externalRef}
+              associatedProviderId={plan.providerId}
+              associatedVenueId={plan.providerPlanId}
+              ministryId={plan.ministryId}
+            />
+          ) : planItems.length === 0 ? (
+            <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", py: 2 }}>
+              No items in the order of service.
+            </Typography>
           ) : (
-            planItems.map((pi) => <OrderItemCard key={pi.id} item={pi} />)
+            <Box>
+              {planItemsWithStartTime.map(({ pi, startTime }) => (
+                <PlanItemRow
+                  key={pi.id}
+                  planItem={pi}
+                  startTime={startTime}
+                  associatedProviderId={plan.providerId}
+                  associatedVenueId={plan.providerPlanId}
+                  ministryId={plan.ministryId}
+                />
+              ))}
+            </Box>
           )}
         </Box>
       )}
@@ -419,10 +679,57 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
 
 /* ---------- Subcomponents ---------- */
 
-const OrderItemCard = ({ item }: { item: PlanItemInterface }) => {
+const statusMeta = (status?: string) => {
+  switch ((status || "").toLowerCase()) {
+    case "accepted": return { label: "Accepted", color: mobileTheme.colors.success, icon: "check_circle" };
+    case "confirmed": return { label: "Confirmed", color: mobileTheme.colors.success, icon: "check_circle" };
+    case "declined": return { label: "Declined", color: mobileTheme.colors.error, icon: "cancel" };
+    default: return { label: "Pending Response", color: mobileTheme.colors.warning, icon: "schedule" };
+  }
+};
+
+const PositionDetailsCard = ({
+  position,
+  assignment,
+  times,
+  onUpdate,
+}: {
+  position: PositionInterface | null;
+  assignment: AssignmentInterface;
+  times: TimeInterface[];
+  onUpdate: () => void;
+}) => {
   const tc = mobileTheme.colors;
-  const isHeader = item.itemType === "header";
-  const duration = formatDuration(item.seconds);
+  const [busy, setBusy] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => { setErrorMessage(null); }, [assignment?.status]);
+
+  if (!position || !assignment) return null;
+
+  const meta = statusMeta(assignment.status);
+
+  const sortedTimes = [...times].sort((a: any, b: any) => (a?.startTime > b?.startTime ? 1 : -1));
+  let latestEnd = new Date();
+  sortedTimes.forEach((t: any) => {
+    if (t?.endTime && new Date(t.endTime) > latestEnd) latestEnd = new Date(t.endTime);
+  });
+  const canRespond = assignment.status === "Unconfirmed" && (sortedTimes.length === 0 || new Date() < latestEnd);
+
+  const handleRespond = async (action: "accept" | "decline") => {
+    if (!assignment.id || busy) return;
+    setBusy(true);
+    setErrorMessage(null);
+    try {
+      await ApiHelper.post(`/assignments/${action}/${assignment.id}`, [], "DoingApi");
+      onUpdate();
+    } catch (err: any) {
+      console.error(`Error ${action}ing assignment:`, err);
+      setErrorMessage(err?.message || `Unable to ${action} assignment. Please try again.`);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <Box
@@ -431,53 +738,100 @@ const OrderItemCard = ({ item }: { item: PlanItemInterface }) => {
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`,
-        borderLeft: isHeader ? `4px solid ${tc.primary}` : "none",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <Typography
+        <Icon sx={{ color: tc.primary }}>assignment_ind</Icon>
+        <Typography sx={{ flex: 1, fontSize: 16, fontWeight: 700, color: tc.text }}>
+          {position.name || "Position"}
+        </Typography>
+        <Box
           sx={{
-            flex: 1,
-            fontSize: isHeader ? 16 : 15,
-            fontWeight: isHeader ? 700 : 500,
-            color: tc.text,
-            textTransform: isHeader ? "uppercase" : "none",
-            letterSpacing: isHeader ? 0.5 : 0,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 0.5,
+            bgcolor: meta.color,
+            color: "#FFFFFF",
+            borderRadius: "999px",
+            px: 1.25,
+            py: 0.25,
+            fontSize: 12,
+            fontWeight: 600,
           }}
         >
-          {item.label || "(untitled)"}
-        </Typography>
-        {duration ? (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: tc.textMuted }}>
-            <Icon sx={{ fontSize: 14 }}>schedule</Icon>
-            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>{duration}</Typography>
-          </Box>
-        ) : null}
-      </Box>
-      {item.description ? (
-        <Typography sx={{ mt: 1, fontSize: 13, color: tc.textMuted, whiteSpace: "pre-wrap" }}>
-          {item.description}
-        </Typography>
-      ) : null}
-      {item.children && item.children.length > 0 ? (
-        <Box sx={{ mt: 1.5, display: "flex", flexDirection: "column", gap: 1, pl: 1.5, borderLeft: `2px solid ${tc.border}` }}>
-          {item.children.map((child) => (
-            <Box key={child.id} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Icon sx={{ fontSize: 14, color: tc.textSecondary }}>
-                {child.itemType === "song" ? "music_note" : "chevron_right"}
-              </Icon>
-              <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>
-                {child.label || "(untitled)"}
-              </Typography>
-              {formatDuration(child.seconds) ? (
-                <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-                  {formatDuration(child.seconds)}
-                </Typography>
-              ) : null}
-            </Box>
-          ))}
+          <Icon sx={{ fontSize: 14, color: "#FFFFFF" }}>{meta.icon}</Icon>
+          <span>{meta.label}</span>
         </Box>
-      ) : null}
+      </Box>
+
+      {sortedTimes.length > 0 && (
+        <Box sx={{ mt: 1.25 }}>
+          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.textMuted, mb: 0.75 }}>
+            Service Times
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+            {sortedTimes.map((time) => (
+              <Box
+                key={time.id}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 1,
+                  p: 1,
+                  borderRadius: `${mobileTheme.radius.md}px`,
+                  bgcolor: `${tc.primary}0D`,
+                }}
+              >
+                <Icon sx={{ color: tc.primary, fontSize: 18, mt: 0.25 }}>access_time</Icon>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
+                    {time.displayName || "Service"}
+                  </Typography>
+                  <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+                    {formatDateTime(time.startTime)}{time.endTime ? ` - ${formatTimeShort(time.endTime)}` : ""}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
+
+      {canRespond && (
+        <Box sx={{ display: "flex", gap: 1, mt: `${mobileTheme.spacing.md}px` }}>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<Icon>close</Icon>}
+            onClick={() => handleRespond("decline")}
+            disabled={busy}
+            sx={{ flex: 1, textTransform: "none", fontWeight: 600 }}
+          >
+            Decline
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<Icon>check</Icon>}
+            onClick={() => handleRespond("accept")}
+            disabled={busy}
+            sx={{
+              flex: 1,
+              textTransform: "none",
+              fontWeight: 600,
+              bgcolor: tc.success,
+              "&:hover": { bgcolor: tc.success, filter: "brightness(0.95)" },
+            }}
+          >
+            Accept
+          </Button>
+        </Box>
+      )}
+
+      {errorMessage && (
+        <Typography sx={{ fontSize: 12, color: tc.error, mt: 1 }}>
+          {errorMessage}
+        </Typography>
+      )}
     </Box>
   );
 };

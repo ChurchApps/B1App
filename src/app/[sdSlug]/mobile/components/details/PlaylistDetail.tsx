@@ -25,21 +25,165 @@ const formatDate = (date?: Date | string) => {
   }
 };
 
+const formatShortDate = (date?: Date | string) => {
+  if (!date) return "";
+  try {
+    const d = typeof date === "string" ? new Date(date) : date;
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return "";
+  }
+};
+
+const formatDuration = (seconds?: number) => {
+  if (!seconds) return "";
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+};
+
+// Lightweight hex-adjust helper: shifts each RGB channel by `amount` (-255..255).
+// Mirrors the B1Mobile `adjustHexColor` behavior so the 3-stop gradient lines up
+// with the native app's hero without pulling in a color-math dependency.
+const adjustHexColor = (hex: string, amount: number): string => {
+  const cleaned = hex.replace("#", "");
+  if (cleaned.length !== 6) return hex;
+  const clamp = (n: number) => Math.max(0, Math.min(255, n));
+  const r = clamp(parseInt(cleaned.slice(0, 2), 16) + amount);
+  const g = clamp(parseInt(cleaned.slice(2, 4), 16) + amount);
+  const b = clamp(parseInt(cleaned.slice(4, 6), 16) + amount);
+  const toHex = (n: number) => n.toString(16).padStart(2, "0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
+const SermonCard = ({ sermon, onClick }: { sermon: SermonInterface; onClick: () => void }) => {
+  const tc = mobileTheme.colors;
+  const hasImage = !!(sermon.thumbnail && sermon.thumbnail.trim() !== "");
+
+  return (
+    <Box
+      role="button"
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } }}
+      sx={{
+        position: "relative",
+        width: "100%",
+        paddingTop: "56.25%",
+        borderRadius: `${mobileTheme.radius.xl}px`,
+        overflow: "hidden",
+        boxShadow: mobileTheme.shadows.md,
+        cursor: "pointer",
+        bgcolor: tc.primary,
+        backgroundImage: hasImage ? `url(${sermon.thumbnail})` : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        transition: "box-shadow 200ms ease",
+        "&:hover": { boxShadow: mobileTheme.shadows.lg },
+      }}
+    >
+      {!hasImage && (
+        <Box sx={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: 0.9,
+        }}>
+          <Icon sx={{ fontSize: 56, color: "#FFFFFF" }}>play_circle_outline</Icon>
+        </Box>
+      )}
+
+      <Box sx={{
+        position: "absolute",
+        top: 12,
+        right: 12,
+        bgcolor: "rgba(0,0,0,0.7)",
+        borderRadius: "20px",
+        width: 36,
+        height: 36,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <Icon sx={{ fontSize: 24, color: "#FFFFFF" }}>play_circle_filled</Icon>
+      </Box>
+
+      {sermon.duration ? (
+        <Box sx={{
+          position: "absolute",
+          top: 12,
+          left: 12,
+          bgcolor: "rgba(0,0,0,0.8)",
+          borderRadius: `${mobileTheme.radius.sm + 4}px`,
+          px: "8px",
+          py: "4px",
+        }}>
+          <Typography sx={{ color: "#FFFFFF", fontSize: 12, fontWeight: 600 }}>
+            {formatDuration(sermon.duration)}
+          </Typography>
+        </Box>
+      ) : null}
+
+      <Box sx={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.0) 100%)",
+        p: "16px",
+        pt: "32px",
+      }}>
+        <Typography sx={{
+          color: "#FFFFFF",
+          fontWeight: 600,
+          fontSize: 16,
+          mb: 0.5,
+          lineHeight: 1.2,
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          textShadow: "0 1px 2px rgba(0,0,0,0.4)",
+        }}>
+          {sermon.title || "Untitled Sermon"}
+        </Typography>
+        <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 12, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
+          {formatShortDate(sermon.publishDate)}
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
 export const PlaylistDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const churchId = config?.church?.id;
 
-  const { data: playlistData, isLoading: playlistLoading } = useQuery<PlaylistInterface | null>({
+  const {
+    data: playlistData,
+    isLoading: playlistLoading,
+    error: playlistError,
+    refetch: refetchPlaylist,
+  } = useQuery<PlaylistInterface | null>({
     queryKey: ["playlist", id],
     queryFn: async () => {
       const data = await ApiHelper.getAnonymous(`/playlists/${id}`, "ContentApi");
       return data && data.id ? (data as PlaylistInterface) : null;
     },
     enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
 
-  const { data: sermons = null } = useQuery<SermonInterface[]>({
+  const {
+    data: sermons = null,
+    error: sermonsError,
+    refetch: refetchSermons,
+  } = useQuery<SermonInterface[]>({
     queryKey: ["playlist-sermons", churchId, id],
     queryFn: async () => {
       const data = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
@@ -49,7 +193,11 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         .sort((a: any, b: any) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime()) as SermonInterface[];
     },
     enabled: !!churchId && !!id,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
+
+  const hasError = !!playlistError || !!sermonsError;
 
   // Preserve the undefined/null/value tri-state the render logic depends on.
   const playlist: PlaylistInterface | null | undefined = playlistLoading ? undefined : (playlistData ?? null);
@@ -57,6 +205,11 @@ export const PlaylistDetail = ({ id, config }: Props) => {
   const handleBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.back();
     else router.push("/mobile/sermons");
+  };
+
+  const handleRetry = () => {
+    if (playlistError) refetchPlaylist();
+    if (sermonsError) refetchSermons();
   };
 
   const renderBack = () => (
@@ -77,6 +230,8 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     </IconButton>
   );
 
+  const heroGradient = `linear-gradient(135deg, ${adjustHexColor(tc.primary, -12)} 0%, ${adjustHexColor(tc.primary, 18)} 55%, ${adjustHexColor(tc.primary, 28)} 100%)`;
+
   const renderHero = () => {
     const hasImage = !!playlist?.thumbnail && playlist.thumbnail.trim() !== "";
     return (
@@ -88,9 +243,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           overflow: "hidden",
           boxShadow: mobileTheme.shadows.md,
-          background: hasImage
-            ? undefined
-            : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
+          background: hasImage ? undefined : heroGradient,
         }}
       >
         {hasImage && (
@@ -101,11 +254,42 @@ export const PlaylistDetail = ({ id, config }: Props) => {
             sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           />
         )}
+        {!hasImage && (
+          <>
+            <Box sx={{
+              position: "absolute",
+              width: 150,
+              height: 150,
+              borderRadius: "75px",
+              bgcolor: "rgba(255,255,255,0.1)",
+              top: -30,
+              right: -30,
+            }} />
+            <Box sx={{
+              position: "absolute",
+              width: 100,
+              height: 100,
+              borderRadius: "50px",
+              bgcolor: "rgba(255,255,255,0.08)",
+              bottom: -25,
+              left: -25,
+            }} />
+            <Box sx={{
+              position: "absolute",
+              width: 80,
+              height: 80,
+              borderRadius: "40px",
+              bgcolor: "rgba(255,255,255,0.12)",
+              top: "40%",
+              left: "30%",
+            }} />
+          </>
+        )}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
-            bgcolor: hasImage ? "rgba(0,0,0,0.5)" : "transparent",
+            bgcolor: "rgba(0,0,0,0.5)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -146,7 +330,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
             )}
             {sermons && sermons.length > 0 && (
               <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.85)" }}>
-                · {sermons.length} sermon{sermons.length !== 1 ? "s" : ""}
+                • {sermons.length} sermon{sermons.length !== 1 ? "s" : ""}
               </Typography>
             )}
           </Box>
@@ -155,87 +339,6 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     );
   };
 
-  const renderSermon = (sermon: SermonInterface) => (
-    <Box
-      key={sermon.id}
-      role="button"
-      tabIndex={0}
-      onClick={() => router.push(`/mobile/sermons/${sermon.id}`)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          router.push(`/mobile/sermons/${sermon.id}`);
-        }
-      }}
-      sx={{
-        display: "flex",
-        gap: `${mobileTheme.spacing.md}px`,
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.sm}px`,
-        cursor: "pointer",
-        transition: "box-shadow 150ms ease, transform 150ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.md },
-        "&:active": { transform: "scale(0.995)" },
-      }}
-    >
-      <Box
-        sx={{
-          position: "relative",
-          width: 112,
-          aspectRatio: "16 / 9",
-          flexShrink: 0,
-          borderRadius: `${mobileTheme.radius.md}px`,
-          overflow: "hidden",
-          bgcolor: tc.primaryLight,
-        }}
-      >
-        {sermon.thumbnail ? (
-          <Box
-            component="img"
-            src={sermon.thumbnail}
-            alt={sermon.title || "Sermon"}
-            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <Box
-            sx={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: tc.primary,
-            }}
-          >
-            <Icon sx={{ fontSize: 32 }}>play_circle_outline</Icon>
-          </Box>
-        )}
-      </Box>
-      <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <Typography
-          sx={{
-            fontSize: 15,
-            fontWeight: 600,
-            color: tc.text,
-            overflow: "hidden",
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-          }}
-        >
-          {sermon.title || "Untitled"}
-        </Typography>
-        {sermon.publishDate && (
-          <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "4px" }}>
-            {formatDate(sermon.publishDate)}
-          </Typography>
-        )}
-      </Box>
-    </Box>
-  );
-
   const renderSkeleton = () => (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
       <Skeleton
@@ -243,23 +346,59 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         sx={{ width: "100%", paddingTop: "56.25%", borderRadius: `${mobileTheme.radius.lg}px` }}
       />
       {[0, 1, 2].map((i) => (
-        <Box
+        <Skeleton
           key={`sk-${i}`}
-          sx={{
-            display: "flex",
-            gap: `${mobileTheme.spacing.md}px`,
-            bgcolor: tc.surface,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.sm}px`,
-          }}
-        >
-          <Skeleton variant="rectangular" sx={{ width: 112, height: 63, borderRadius: `${mobileTheme.radius.md}px` }} />
-          <Box sx={{ flex: 1 }}>
-            <Skeleton variant="text" width="70%" height={18} />
-            <Skeleton variant="text" width="40%" height={14} />
-          </Box>
-        </Box>
+          variant="rounded"
+          sx={{ width: "100%", paddingTop: "56.25%", borderRadius: `${mobileTheme.radius.xl}px` }}
+        />
       ))}
+    </Box>
+  );
+
+  const renderError = () => (
+    <Box
+      sx={{
+        bgcolor: tc.surface,
+        borderRadius: `${mobileTheme.radius.xl}px`,
+        boxShadow: mobileTheme.shadows.sm,
+        p: `${mobileTheme.spacing.lg}px`,
+        textAlign: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: 64,
+          height: 64,
+          borderRadius: "32px",
+          bgcolor: tc.iconBackground,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: `${mobileTheme.spacing.md}px`,
+        }}
+      >
+        <Icon sx={{ fontSize: 32, color: tc.error }}>error_outline</Icon>
+      </Box>
+      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+        Unable to Load Playlist
+      </Typography>
+      <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
+        Please check your connection and try again.
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={handleRetry}
+        sx={{
+          bgcolor: tc.primary,
+          color: tc.onPrimary,
+          textTransform: "none",
+          fontWeight: 500,
+          borderRadius: `${mobileTheme.radius.md}px`,
+          "&:hover": { bgcolor: tc.primary },
+        }}
+      >
+        Retry
+      </Button>
     </Box>
   );
 
@@ -329,12 +468,18 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     </Box>
   );
 
+  const handleSermonClick = (sermon: SermonInterface) => {
+    if (!sermon.id) return;
+    router.push(`/mobile/sermons/${sermon.id}`);
+  };
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       {renderBack()}
-      {playlist === undefined && renderSkeleton()}
-      {playlist === null && renderNotFound()}
-      {playlist && (
+      {hasError && renderError()}
+      {!hasError && playlist === undefined && renderSkeleton()}
+      {!hasError && playlist === null && renderNotFound()}
+      {!hasError && playlist && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
           {renderHero()}
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -346,20 +491,22 @@ export const PlaylistDetail = ({ id, config }: Props) => {
             )}
           </Box>
           {sermons === null && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
               {[0, 1].map((i) => (
                 <Skeleton
                   key={`s-${i}`}
                   variant="rounded"
-                  sx={{ height: 80, borderRadius: `${mobileTheme.radius.lg}px` }}
+                  sx={{ width: "100%", paddingTop: "56.25%", borderRadius: `${mobileTheme.radius.xl}px` }}
                 />
               ))}
             </Box>
           )}
           {sermons && sermons.length === 0 && renderEmptySermons()}
           {sermons && sermons.length > 0 && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-              {sermons.map(renderSermon)}
+            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
+              {sermons.map((s) => (
+                <SermonCard key={s.id} sermon={s} onClick={() => handleSermonClick(s)} />
+              ))}
             </Box>
           )}
         </Box>

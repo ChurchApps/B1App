@@ -1,7 +1,18 @@
 "use client";
 
 import React from "react";
-import { Box, Button, Icon, IconButton, LinearProgress, Skeleton, Typography } from "@mui/material";
+import axios, { type AxiosProgressEvent } from "axios";
+import {
+  Box,
+  Button,
+  Collapse,
+  Icon,
+  IconButton,
+  LinearProgress,
+  Skeleton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
 
@@ -34,10 +45,33 @@ const formatSize = (bytes: number) => {
   return `${bytes}b`;
 };
 
+const convertBase64 = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (err) => reject(err);
+  });
+
+interface PresignedResponse {
+  url: string;
+  key?: string;
+  fields: Record<string, string>;
+}
+
 export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
   const tc = mobileTheme.colors;
   const [files, setFiles] = React.useState<FileRow[] | null>(null);
   const [links, setLinks] = React.useState<LinkRow[] | null>(null);
+  const [showAddLink, setShowAddLink] = React.useState(false);
+  const [linkText, setLinkText] = React.useState("");
+  const [linkUrl, setLinkUrl] = React.useState("");
+  const [linkSaving, setLinkSaving] = React.useState(false);
+  const [linkError, setLinkError] = React.useState<string | null>(null);
+  const [pendingFile, setPendingFile] = React.useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = React.useState<number>(-1);
+  const [uploadError, setUploadError] = React.useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const load = React.useCallback(async () => {
     setFiles(null);
@@ -83,8 +117,99 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
     }
   };
 
+  const handleAddLink = async () => {
+    setLinkError(null);
+    if (!linkText.trim()) {
+      setLinkError("Please enter link text.");
+      return;
+    }
+    if (!linkUrl.trim()) {
+      setLinkError("Please enter a URL.");
+      return;
+    }
+    setLinkSaving(true);
+    try {
+      const payload = {
+        category: "groupLink",
+        url: linkUrl.trim(),
+        linkType: "url",
+        text: linkText.trim(),
+        linkData: groupId,
+        icon: "",
+      };
+      await ApiHelper.post("/links", [payload], "ContentApi");
+      setLinkText("");
+      setLinkUrl("");
+      setShowAddLink(false);
+      load();
+    } catch (e: any) {
+      setLinkError(e?.message || "Failed to add link.");
+    } finally {
+      setLinkSaving(false);
+    }
+  };
+
+  const postPresigned = async (presigned: PresignedResponse, file: File) => {
+    const formData = new FormData();
+    formData.append("acl", "public-read");
+    formData.append("Content-Type", file.type);
+    for (const prop in presigned.fields) formData.append(prop, presigned.fields[prop]);
+    formData.append("file", file);
+    await axios.post(presigned.url, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      onUploadProgress: (evt: AxiosProgressEvent) => {
+        if (evt.total) {
+          setUploadProgress(Math.round((100 * evt.loaded) / evt.total));
+        }
+      },
+    });
+  };
+
+  const doUpload = async (file: File) => {
+    setUploadError(null);
+    setUploadProgress(0);
+    try {
+      const params = { fileName: file.name, contentType: "group", contentId: groupId };
+      let presigned: PresignedResponse | null = null;
+      try {
+        presigned = await ApiHelper.post("/files/postUrl", params, "ContentApi");
+      } catch {
+        presigned = null;
+      }
+      const record: any = {
+        fileName: file.name,
+        fileType: file.type,
+        size: file.size,
+        contentType: "group",
+        contentId: groupId,
+      };
+      if (presigned && presigned.key) {
+        await postPresigned(presigned, file);
+      } else {
+        const base64 = await convertBase64(file);
+        record.fileContents = base64;
+      }
+      await ApiHelper.post("/files", [record], "ContentApi");
+      setPendingFile(null);
+      setUploadProgress(-1);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      load();
+    } catch (e: any) {
+      setUploadError(e?.message || "Upload failed.");
+      setUploadProgress(-1);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setPendingFile(f);
+    doUpload(f);
+  };
+
   const used = (files || []).reduce((s, f) => s + (f.size || 0), 0);
   const percent = Math.min(100, (used / STORAGE_CAP) * 100);
+  const storageFull = used >= STORAGE_CAP;
 
   const renderFileRow = (f: FileRow) => {
     const href = f.contentPath
@@ -224,9 +349,99 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
       {/* Links */}
       <Box>
-        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-          Links
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: `${mobileTheme.spacing.sm}px`,
+          }}
+        >
+          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Links</Typography>
+          {canEdit && (
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<Icon>add_link</Icon>}
+              onClick={() => setShowAddLink((v) => !v)}
+              sx={{
+                textTransform: "none",
+                fontWeight: 600,
+                borderColor: tc.primary,
+                color: tc.primary,
+                borderRadius: `${mobileTheme.radius.md}px`,
+              }}
+            >
+              {showAddLink ? "Cancel" : "Add Link"}
+            </Button>
+          )}
+        </Box>
+
+        {canEdit && (
+          <Collapse in={showAddLink} unmountOnExit>
+            <Box
+              sx={{
+                bgcolor: tc.surface,
+                borderRadius: `${mobileTheme.radius.lg}px`,
+                boxShadow: mobileTheme.shadows.sm,
+                p: `${mobileTheme.spacing.md}px`,
+                mb: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+              }}
+            >
+              <TextField
+                size="small"
+                label="Link text"
+                value={linkText}
+                onChange={(e) => setLinkText(e.target.value)}
+                fullWidth
+              />
+              <TextField
+                size="small"
+                label="URL"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                placeholder="https://…"
+                fullWidth
+              />
+              {linkError && (
+                <Typography sx={{ color: tc.error, fontSize: 12 }}>{linkError}</Typography>
+              )}
+              <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+                <Button
+                  size="small"
+                  onClick={() => {
+                    setShowAddLink(false);
+                    setLinkError(null);
+                    setLinkText("");
+                    setLinkUrl("");
+                  }}
+                  sx={{ textTransform: "none", color: tc.text }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  disabled={linkSaving}
+                  onClick={handleAddLink}
+                  sx={{
+                    bgcolor: tc.primary,
+                    color: tc.onPrimary,
+                    textTransform: "none",
+                    fontWeight: 600,
+                    "&:hover": { bgcolor: tc.primary },
+                  }}
+                >
+                  {linkSaving ? "Saving…" : "Add"}
+                </Button>
+              </Box>
+            </Box>
+          </Collapse>
+        )}
+
         {links === null && (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {[0, 1].map((i) => (
@@ -258,9 +473,61 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
 
       {/* Files */}
       <Box>
-        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-          Files
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: `${mobileTheme.spacing.sm}px`,
+          }}
+        >
+          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Files</Typography>
+          {canEdit && !storageFull && (
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={<Icon>upload_file</Icon>}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadProgress >= 0}
+              sx={{
+                textTransform: "none",
+                fontWeight: 600,
+                borderColor: tc.primary,
+                color: tc.primary,
+                borderRadius: `${mobileTheme.radius.md}px`,
+              }}
+            >
+              Upload
+            </Button>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
+        </Box>
+        {uploadProgress >= 0 && (
+          <Box sx={{ mb: 1 }}>
+            <Typography sx={{ fontSize: 12, color: tc.textSecondary, mb: 0.5 }}>
+              Uploading {pendingFile?.name}… {uploadProgress}%
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={uploadProgress}
+              sx={{
+                height: 6,
+                borderRadius: 3,
+                bgcolor: tc.border,
+                "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 3 },
+              }}
+            />
+          </Box>
+        )}
+        {uploadError && (
+          <Typography sx={{ color: tc.error, fontSize: 12, mb: 1 }}>{uploadError}</Typography>
+        )}
+
         {files === null && (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {[0, 1].map((i) => (
@@ -299,9 +566,14 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             p: `${mobileTheme.spacing.md}px`,
           }}
         >
-          <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 1 }}>
-            {formatSize(used)} of 100MB used
-          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: 1 }}>
+            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
+              Used {formatSize(used)} / 100MB
+            </Typography>
+            <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
+              {Math.round(percent)}%
+            </Typography>
+          </Box>
           <LinearProgress
             variant="determinate"
             value={percent}
@@ -313,12 +585,6 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             }}
           />
         </Box>
-      )}
-
-      {canEdit && (
-        <Typography sx={{ fontSize: 12, color: tc.textMuted, textAlign: "center" }}>
-          Use the desktop site to upload new files or add links.
-        </Typography>
       )}
     </Box>
   );

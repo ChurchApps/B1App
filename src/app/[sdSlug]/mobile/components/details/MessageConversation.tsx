@@ -6,9 +6,10 @@ import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } fr
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { MessageInterface, PersonInterface } from "@churchapps/helpers";
+import { ArrayHelper, type MessageInterface, type PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
@@ -42,7 +43,7 @@ export const MessageConversation = ({ id, config }: Props) => {
   const userContext = React.useContext(UserContext);
 
   const [conversationId, setConversationId] = React.useState<string | null>(null);
-  const [messages, setMessages] = React.useState<MessageInterface[] | null>(null);
+  const [pending, setPending] = React.useState<MessageInterface[]>([]);
   const [text, setText] = React.useState("");
   const [sending, setSending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -96,31 +97,78 @@ export const MessageConversation = ({ id, config }: Props) => {
     }
   }, []);
 
-  const loadMessages = React.useCallback(async (convId: string) => {
-    try {
+  // Seed the conversation id from the /privateMessages lookup.
+  React.useEffect(() => {
+    if (existingConvId && !conversationId) setConversationId(existingConvId);
+  }, [existingConvId, conversationId]);
+
+  // Poll the conversation every 5s while the tab is visible (matches B1Mobile).
+  // Hydrate each message's `person` via /people/basic so displayName falls back correctly.
+  const {
+    data: serverMessages,
+    isError: messagesErrored,
+    refetch: refetchMessages,
+  } = useQuery<MessageInterface[]>({
+    queryKey: ["mobile-message-conversation", conversationId],
+    queryFn: async () => {
+      if (!conversationId) return [];
       const data: MessageInterface[] = await ApiHelper.get(
-        "/messages/conversation/" + convId,
+        "/messages/conversation/" + conversationId,
         "MessagingApi"
       );
-      setMessages(Array.isArray(data) ? data : []);
-    } catch {
-      setMessages([]);
-      setError("Unable to load messages.");
-    }
-  }, []);
+      if (!Array.isArray(data) || data.length === 0) return [];
+      try {
+        const personIds = Array.from(
+          new Set(
+            data
+              .map((m) => m.personId)
+              .filter((pid): pid is string => !!pid)
+          )
+        );
+        if (personIds.length > 0) {
+          const people: PersonInterface[] = await ApiHelper.get(
+            "/people/basic?ids=" + personIds.join(","),
+            "MembershipApi"
+          );
+          if (Array.isArray(people)) {
+            data.forEach((m) => {
+              m.person = ArrayHelper.getOne(people, "id", m.personId);
+            });
+          }
+        }
+      } catch {
+        /* hydration is best-effort */
+      }
+      return data;
+    },
+    enabled: !!conversationId,
+    // Gate polling on tab visibility so background tabs don't hammer the API.
+    refetchInterval: () =>
+      typeof document !== "undefined" && document.visibilityState === "visible" ? 5000 : false,
+    refetchIntervalInBackground: false,
+  });
 
   React.useEffect(() => {
-    if (!myPersonId) {
-      setMessages([]);
-      return;
-    }
-    if (existingConvId) {
-      setConversationId(existingConvId);
-      loadMessages(existingConvId);
-    } else if (existingConvId === null) {
-      setMessages([]);
-    }
-  }, [existingConvId, myPersonId, loadMessages]);
+    if (messagesErrored) setError("Unable to load messages.");
+  }, [messagesErrored]);
+
+  // Drop optimistic entries whose content has shown up in the server list.
+  React.useEffect(() => {
+    if (!serverMessages || pending.length === 0) return;
+    setPending((prev) =>
+      prev.filter((p) => !serverMessages.some((s) => s.content === p.content && s.personId === p.personId))
+    );
+  }, [serverMessages, pending.length]);
+
+  const messages: MessageInterface[] | null = React.useMemo(() => {
+    if (!conversationId) return myPersonId ? [] : null;
+    if (serverMessages === undefined) return null;
+    return [...serverMessages, ...pending];
+  }, [conversationId, myPersonId, serverMessages, pending]);
+
+  const loadMessages = React.useCallback(async () => {
+    await refetchMessages();
+  }, [refetchMessages]);
 
   // Auto-scroll on messages change
   React.useEffect(() => {
@@ -161,7 +209,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       [{ conversationId: newConvId, content, displayName: myDisplayName }],
       "MessagingApi"
     );
-    await loadMessages(newConvId);
+    await loadMessages();
   };
 
   const handleSend = async () => {
@@ -183,7 +231,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       personId: myPersonId,
       timeSent: new Date(),
     } as MessageInterface;
-    setMessages((prev) => [...(prev || []), optimistic]);
+    setPending((prev) => [...prev, optimistic]);
     setText("");
 
     try {
@@ -193,14 +241,14 @@ export const MessageConversation = ({ id, config }: Props) => {
           [{ conversationId, content, displayName: myDisplayName }],
           "MessagingApi"
         );
-        await loadMessages(conversationId);
+        await loadMessages();
       } else {
         await createConversationAndSend(content);
       }
     } catch {
       setError("Message failed to send.");
       // Remove optimistic entry on failure
-      setMessages((prev) => (prev || []).filter((m) => m.id !== optimistic.id));
+      setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
     } finally {
       setSending(false);
     }
@@ -267,6 +315,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       (m.timeSent &&
         prev.timeSent &&
         new Date(m.timeSent).getTime() - new Date(prev.timeSent).getTime() > 5 * 60 * 1000);
+    const bubbleName = m.displayName || m.person?.name?.display || "";
 
     return (
       <React.Fragment key={m.id || index}>
@@ -303,6 +352,21 @@ export const MessageConversation = ({ id, config }: Props) => {
               lineHeight: 1.35,
             }}
           >
+            {bubbleName && (
+              <Typography
+                component="div"
+                sx={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: mine ? tc.onPrimary : tc.primary,
+                  opacity: mine ? 0.9 : 1,
+                  mb: "2px",
+                  lineHeight: 1.2,
+                }}
+              >
+                {bubbleName}
+              </Typography>
+            )}
             {m.content}
           </Box>
         </Box>
@@ -377,6 +441,14 @@ export const MessageConversation = ({ id, config }: Props) => {
         <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {name}
         </Typography>
+        <IconButton
+          aria-label="New conversation"
+          onClick={() => router.push("/mobile/messages/new")}
+          sx={{ color: tc.text }}
+          size="small"
+        >
+          <PersonAddAlt1Icon />
+        </IconButton>
       </Box>
 
       {/* Messages list */}

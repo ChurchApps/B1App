@@ -153,6 +153,12 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
           </Box>
         )}
 
+        {(reg as any).registeredDate && (
+          <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: 1 }}>
+            Registered: {DateHelper.prettyDate(new Date((reg as any).registeredDate))}
+          </Typography>
+        )}
+
         {!isCancelled ? (
           <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end", gap: 1 }}>
             <Button
@@ -163,26 +169,19 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
             >
               Cancel
             </Button>
-            <Button
-              size="small"
-              variant="contained"
-              disabled
-              sx={{
-                bgcolor: tc.success,
-                color: tc.onPrimary,
-                textTransform: "none",
-                fontWeight: 500,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                "&.Mui-disabled": { bgcolor: `${tc.success}B3`, color: tc.onPrimary },
-              }}
-            >
-              Registered
-            </Button>
           </Box>
         ) : null}
       </Box>
     );
   };
+
+  const sortedRegistrations = registrations
+    ? [...registrations].sort((a, b) => {
+        const aCancelled = a.status === "cancelled" ? 1 : 0;
+        const bCancelled = b.status === "cancelled" ? 1 : 0;
+        return aCancelled - bCancelled;
+      })
+    : null;
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -190,9 +189,9 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
         My Registrations
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {registrations === null && [0, 1].map(renderSkeleton)}
-        {registrations !== null && registrations.length === 0 && renderEmpty()}
-        {registrations !== null && registrations.length > 0 && registrations.map(renderCard)}
+        {sortedRegistrations === null && [0, 1].map(renderSkeleton)}
+        {sortedRegistrations !== null && sortedRegistrations.length === 0 && renderEmpty()}
+        {sortedRegistrations !== null && sortedRegistrations.length > 0 && sortedRegistrations.map(renderCard)}
       </Box>
 
       <Dialog open={!!cancelId} onClose={() => setCancelId(null)}>

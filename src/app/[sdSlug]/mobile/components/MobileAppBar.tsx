@@ -29,8 +29,10 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
     if (signedIn) {
       onAvatarClick();
     } else {
+      // Route within the mobile shell so the user keeps the church-branded UI
+      // instead of bouncing out to the public desktop login page.
       const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
-      window.location.href = returnUrl ? `/login?returnUrl=${returnUrl}` : "/login";
+      window.location.href = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
     }
   };
 

@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ScreenSkeleton } from "./ScreenSkeleton";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -27,20 +29,39 @@ const ChurchSearchPage = dynamic(() => import("./screens/ChurchSearchPage").then
 const WebsiteUrlPage = dynamic(() => import("./screens/WebsiteUrlPage").then(m => ({ default: m.WebsiteUrlPage })), { loading });
 const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").then(m => ({ default: m.MessageComposePage })), { loading });
 const InstallPage = dynamic(() => import("./screens/InstallPage").then(m => ({ default: m.InstallPage })), { loading });
+const MobileLoginScreen = dynamic(() => import("./screens/LoginPage").then(m => ({ default: m.MobileLoginScreen })), { loading });
 
 interface Props {
   pageSlug: string;
   config: ConfigurationInterface;
 }
 
+// Canonical slugs: some screens are reachable via multiple legacy paths (e.g. the
+// member directory was once exposed as both /mobile/community and /mobile/membersSearch).
+// We pick a single canonical slug and redirect the alias to it so the URL bar stays tidy,
+// while still keeping the alias routable (no 404s) for outstanding links / bookmarks.
+const ALIAS_TO_CANONICAL: Record<string, string> = {
+  membersSearch: "community",
+};
+
 export function ScreenRouter({ pageSlug, config }: Props) {
-  switch (pageSlug) {
+  const router = useRouter();
+
+  React.useEffect(() => {
+    const canonical = ALIAS_TO_CANONICAL[pageSlug];
+    if (canonical) router.replace(`/mobile/${canonical}`);
+  }, [pageSlug, router]);
+
+  // While the redirect is happening, render the canonical screen so the user
+  // sees the correct UI immediately (no flash / no skeleton churn).
+  const effectiveSlug = ALIAS_TO_CANONICAL[pageSlug] ?? pageSlug;
+
+  switch (effectiveSlug) {
     case "dashboard": return <DashboardPage config={config} />;
     case "sermons": return <SermonsPage config={config} />;
     case "groups":
     case "myGroups": return <GroupsPage config={config} />;
-    case "community":
-    case "membersSearch": return <CommunityPage config={config} />;
+    case "community": return <CommunityPage config={config} />;
     case "donate":
     case "donation": return <DonatePage config={config} />;
     case "checkin":
@@ -64,6 +85,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "websiteUrl":
     case "page": return <WebsiteUrlPage config={config} />;
     case "install": return <InstallPage config={config} />;
+    case "login": return <MobileLoginScreen config={config} keyName={config?.keyName} />;
     default: return <PlaceholderPage title={pageSlug} icon="apps" description={`The '${pageSlug}' screen is not yet implemented.`} />;
   }
 }

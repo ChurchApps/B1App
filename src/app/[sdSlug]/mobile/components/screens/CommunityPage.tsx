@@ -21,30 +21,75 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
+interface PeopleSection {
+  title: string;
+  people: PersonInterface[];
+}
+
 export const CommunityPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const loggedIn = !!UserHelper.user?.firstName;
   const [searchText, setSearchText] = React.useState("");
-  const [debouncedSearch, setDebouncedSearch] = React.useState("");
 
-  // Debounce input 300ms
-  React.useEffect(() => {
-    const handle = setTimeout(() => {
-      setDebouncedSearch(searchText.trim());
-    }, 300);
-    return () => clearTimeout(handle);
-  }, [searchText]);
-
+  // B1Mobile authority fetches the full list once via GET /people and filters locally,
+  // so we match that. The full directory is cached 10min/30min for parity.
   const { data: serverPeople = null, isFetching } = useQuery<PersonInterface[]>({
-    queryKey: ["directory", debouncedSearch || "all"],
+    queryKey: ["/people", "MembershipApi"],
     queryFn: async () => {
-      const term = encodeURIComponent(debouncedSearch);
-      const url = debouncedSearch ? `/people/search?term=${term}` : "/people/directory/all";
-      const data = await ApiHelper.get(url, "MembershipApi");
+      const data = await ApiHelper.get("/people", "MembershipApi");
       const list = Array.isArray(data) ? (data as PersonInterface[]) : [];
-      const unique = list.filter((p, idx, self) => self.findIndex((x) => x.id === p.id) === idx);
-      unique.sort((a, b) => {
+      return list.filter((p, idx, self) => self.findIndex((x) => x.id === p.id) === idx);
+    },
+    enabled: loggedIn,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
+  const people = loggedIn ? (isFetching && !serverPeople ? null : (serverPeople ?? null)) : [];
+
+  const filteredPeople = React.useMemo<PersonInterface[] | null>(() => {
+    if (people === null) return null;
+    if (!searchText.trim()) return people;
+    const needle = searchText.toLowerCase();
+    return people.filter((p) => {
+      const display = p.name?.display || `${p.name?.first || ""} ${p.name?.last || ""}`.trim();
+      return display.toLowerCase().includes(needle);
+    });
+  }, [people, searchText]);
+
+  // Group by first letter of last name, with an "Other" bucket for missing last names.
+  // Within each group, sort by last name, then first name. Groups sorted alphabetically
+  // with "Other" always pushed to the end.
+  const sections = React.useMemo<PeopleSection[]>(() => {
+    if (!filteredPeople || filteredPeople.length === 0) return [];
+    const groups: { [key: string]: PersonInterface[] } = {};
+
+    filteredPeople.forEach((p) => {
+      const lastRaw = (p.name?.last || "").trim();
+      const firstRaw = (p.name?.first || "").trim();
+      const displayRaw = (p.name?.display || "").trim();
+
+      let letter = "Other";
+      if (lastRaw) {
+        letter = lastRaw.charAt(0).toUpperCase();
+      } else if (displayRaw) {
+        // Fall back to the last token of display (mirrors B1Mobile behavior when last is missing).
+        const parts = displayRaw.split(" ");
+        const fallback = parts.length > 1 ? parts[parts.length - 1] : parts[0];
+        if (fallback) letter = fallback.charAt(0).toUpperCase();
+      } else if (firstRaw) {
+        letter = firstRaw.charAt(0).toUpperCase();
+      }
+
+      if (!/^[A-Z]$/.test(letter)) letter = "Other";
+
+      if (!groups[letter]) groups[letter] = [];
+      groups[letter].push(p);
+    });
+
+    Object.keys(groups).forEach((letter) => {
+      groups[letter].sort((a, b) => {
         const aLast = (a.name?.last || "").toLowerCase();
         const bLast = (b.name?.last || "").toLowerCase();
         if (aLast !== bLast) return aLast.localeCompare(bLast);
@@ -52,12 +97,16 @@ export const CommunityPage = ({ config }: Props) => {
         const bFirst = (b.name?.first || "").toLowerCase();
         return aFirst.localeCompare(bFirst);
       });
-      return unique;
-    },
-    enabled: loggedIn,
-  });
+    });
 
-  const people = loggedIn ? (isFetching && !serverPeople ? null : (serverPeople ?? null)) : [];
+    const letters = Object.keys(groups).sort((a, b) => {
+      if (a === "Other") return 1;
+      if (b === "Other") return -1;
+      return a.localeCompare(b);
+    });
+
+    return letters.map((letter) => ({ title: letter, people: groups[letter] }));
+  }, [filteredPeople]);
 
   const getInitials = (p: PersonInterface) => {
     const f = (p.name?.first || "").trim().charAt(0).toUpperCase();
@@ -247,6 +296,34 @@ export const CommunityPage = ({ config }: Props) => {
     );
   };
 
+  const renderSectionHeader = (title: string) => (
+    <Box
+      sx={{
+        position: "sticky",
+        top: 0,
+        zIndex: 2,
+        bgcolor: tc.background,
+        py: "6px",
+        mb: `${mobileTheme.spacing.xs}px`,
+        display: "flex",
+        alignItems: "center",
+        gap: `${mobileTheme.spacing.md}px`,
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: 18,
+          fontWeight: 700,
+          color: tc.primary,
+          minWidth: 32,
+        }}
+      >
+        {title}
+      </Typography>
+      <Box sx={{ flex: 1, height: "1px", bgcolor: tc.border }} />
+    </Box>
+  );
+
   const renderSkeleton = (key: number) => (
     <Box
       key={`skeleton-${key}`}
@@ -294,10 +371,10 @@ export const CommunityPage = ({ config }: Props) => {
         <Icon sx={{ fontSize: 32, color: tc.primary }}>people_outline</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        {debouncedSearch ? "No members found" : "Directory"}
+        {searchText ? "No members found" : "Directory"}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        {debouncedSearch ? "Try a different name." : "Search for members in your church."}
+        {searchText ? "Try a different name." : "Search for members in your church."}
       </Typography>
     </Box>
   );
@@ -305,7 +382,7 @@ export const CommunityPage = ({ config }: Props) => {
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        Community
+        Directory
       </Typography>
 
       <TextField
@@ -337,9 +414,16 @@ export const CommunityPage = ({ config }: Props) => {
       />
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {people === null && [0, 1, 2, 3].map(renderSkeleton)}
-        {people !== null && people.length === 0 && renderEmpty()}
-        {people !== null && people.length > 0 && people.map(renderCard)}
+        {filteredPeople === null && [0, 1, 2, 3].map(renderSkeleton)}
+        {filteredPeople !== null && sections.length === 0 && renderEmpty()}
+        {filteredPeople !== null &&
+          sections.length > 0 &&
+          sections.map((section) => (
+            <Box key={section.title} sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+              {renderSectionHeader(section.title)}
+              {section.people.map(renderCard)}
+            </Box>
+          ))}
       </Box>
     </Box>
   );

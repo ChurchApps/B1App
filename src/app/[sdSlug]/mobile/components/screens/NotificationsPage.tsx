@@ -46,11 +46,31 @@ const deriveLinkUrl = (n: NotificationItem): string | undefined => {
   if (!id) return undefined;
   switch (type) {
     case "plan":
-    case "schedule": return "/mobile/plans";
-    case "group":
-    case "groupannouncement": return `/mobile/groups/${id}`;
+    case "schedule": return `/mobile/plans/${id}`;
+    case "group": return `/mobile/groups/${id}`;
+    case "groupannouncement": return `/mobile/groups/${id}?openChat=1&chatTab=announcements`;
     case "assignment": return "/mobile/plans";
+    // B1Mobile's deriveLinkUrl does not route these types; icon-only handling.
+    case "donation":
+    case "message":
+    case "privatemessage":
+    case "senttext": return undefined;
     default: return undefined;
+  }
+};
+
+const getIconName = (contentType?: string): string => {
+  switch (String(contentType || "").toLowerCase()) {
+    case "plan":
+    case "schedule": return "event";
+    case "message":
+    case "privatemessage":
+    case "senttext": return "message";
+    case "group":
+    case "groupannouncement": return "group";
+    case "assignment": return "assignment";
+    case "donation": return "payment";
+    default: return "notifications";
   }
 };
 
@@ -106,8 +126,8 @@ export const NotificationsPage = ({ config }: Props) => {
   const renderRow = (n: NotificationItem, idx: number) => {
     const href = deriveLinkUrl(n);
     const isUnread = !!n.isNew;
-    const title = n.title || (n.contentType ? n.contentType.charAt(0).toUpperCase() + n.contentType.slice(1) : "Notification");
     const body = n.message || "";
+    const iconName = getIconName(n.contentType);
     return (
       <Box
         key={n.id || `n-${idx}`}
@@ -162,30 +182,17 @@ export const NotificationsPage = ({ config }: Props) => {
             justifyContent: "center",
           }}
         >
-          <Icon sx={{ color: tc.primary, fontSize: 22 }}>notifications</Icon>
+          <Icon sx={{ color: tc.primary, fontSize: 22 }}>{iconName}</Icon>
         </Box>
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography
-            sx={{
-              fontSize: 15,
-              fontWeight: 600,
-              color: tc.text,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {title}
-          </Typography>
           {body && (
             <Typography
               sx={{
-                fontSize: 13,
-                fontWeight: 400,
-                color: tc.textMuted,
-                mt: "2px",
+                fontSize: 14,
+                fontWeight: 500,
+                color: tc.text,
                 display: "-webkit-box",
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 3,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
               }}

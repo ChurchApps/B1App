@@ -183,7 +183,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
         <TextField
           fullWidth
           size="small"
-          placeholder="Name"
+          placeholder="Search for a person to message"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           onKeyDown={(e) => {

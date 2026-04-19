@@ -55,7 +55,7 @@ export const linkTypeToImage = (linkType?: string, text?: string): string => {
   }
 };
 
-export const linkTypeToRoute = (linkType?: string, linkData?: string): string | null => {
+export const linkTypeToRoute = (linkType?: string, linkData?: string, text?: string): string | null => {
   switch (linkType) {
     case "groups": return "/mobile/groups";
     case "directory": return "/mobile/community";
@@ -68,7 +68,28 @@ export const linkTypeToRoute = (linkType?: string, linkData?: string): string | 
     case "votd": return "/mobile/votd";
     case "sermons": return "/mobile/sermons";
     case "stream": return "/mobile/stream";
-    case "url": return linkData || "/mobile/dashboard";
+    case "registrations": return "/mobile/registrations";
+    case "page": {
+      // linkData is the page slug/url of a church-authored B1 page.
+      // The embed shell (`/mobile/page`) resolves it against the current
+      // origin and iframes it so the mobile chrome stays in place.
+      const id = linkData || "";
+      const params = new URLSearchParams();
+      if (id) params.set("id", id);
+      if (text) params.set("title", text);
+      const qs = params.toString();
+      return qs ? `/mobile/page?${qs}` : "/mobile/page";
+    }
+    case "url": {
+      // External URL — embed it inside the mobile shell rather than
+      // navigating the browser away from /mobile/*.
+      const url = linkData || "";
+      if (!url) return "/mobile/dashboard";
+      const params = new URLSearchParams();
+      params.set("url", url);
+      if (text) params.set("title", text);
+      return `/mobile/websiteUrl?${params.toString()}`;
+    }
     default: return null;
   }
 };

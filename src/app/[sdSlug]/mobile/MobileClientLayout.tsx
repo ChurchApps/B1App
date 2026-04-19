@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Box, CircularProgress } from "@mui/material";
 import { ErrorHelper, UserHelper } from "@churchapps/apphelper";
 import type { ErrorAppDataInterface } from "@churchapps/helpers";
 import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
@@ -9,6 +10,7 @@ import { EnvironmentHelper } from "@/helpers";
 import { UserProvider } from "@/context/UserContext";
 import { MobileQueryProvider } from "./MobileQueryProvider";
 import MobileGoogleAnalytics from "./MobileGoogleAnalytics";
+import { useHydrateSession } from "./hooks/useHydrateSession";
 
 if (typeof window !== "undefined") EnvironmentHelper.init();
 
@@ -20,6 +22,38 @@ const mobileMuiTheme = createTheme({
     MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } },
   },
 });
+
+/**
+ * Gates rendering on one-shot JWT-cookie rehydration so returning users with a
+ * valid session are treated as logged-in before any child screen probes
+ * `UserHelper.user`. The signed-out path (no cookie / expired cookie) falls
+ * through immediately to the normal anonymous render.
+ */
+function MobileHydrationGate({ children }: { children: React.ReactNode }) {
+  const status = useHydrateSession();
+  const showSpinner = status === "idle" || status === "hydrating";
+
+  if (showSpinner) {
+    return (
+      <Box
+        role="status"
+        aria-live="polite"
+        aria-label="Loading"
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "#FFFFFF",
+        }}
+      >
+        <CircularProgress size={40} />
+      </Box>
+    );
+  }
+
+  return <>{children}</>;
+}
 
 export function MobileClientLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -50,7 +84,7 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
         <UserProvider>
           <MobileQueryProvider>
             <MobileGoogleAnalytics />
-            {children}
+            <MobileHydrationGate>{children}</MobileHydrationGate>
           </MobileQueryProvider>
         </UserProvider>
       </ThemeProvider>

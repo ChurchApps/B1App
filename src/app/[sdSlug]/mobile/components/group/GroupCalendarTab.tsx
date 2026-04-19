@@ -3,16 +3,37 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 
 interface Props {
   groupId: string;
   isLeader: boolean;
   onAddEvent: (dateIso: string) => void;
+  onEditEvent?: (event: EventRow) => void;
 }
 
-interface EventRow {
+const describeRecurrence = (rule?: string) => {
+  if (!rule) return "";
+  const parts = rule.split(";").reduce<Record<string, string>>((acc, p) => {
+    const [k, v] = p.split("=");
+    if (k) acc[k.toUpperCase()] = v || "";
+    return acc;
+  }, {});
+  const freq = parts.FREQ;
+  const interval = parts.INTERVAL ? parseInt(parts.INTERVAL, 10) : 1;
+  if (!freq) return "Repeats";
+  const map: Record<string, string> = {
+    DAILY: interval === 1 ? "Daily" : `Every ${interval} days`,
+    WEEKLY: interval === 1 ? "Weekly" : `Every ${interval} weeks`,
+    MONTHLY: interval === 1 ? "Monthly" : `Every ${interval} months`,
+    YEARLY: interval === 1 ? "Yearly" : `Every ${interval} years`,
+  };
+  return map[freq] || "Repeats";
+};
+
+export interface EventRow {
   id?: string;
   groupId?: string;
   title?: string;
@@ -20,6 +41,7 @@ interface EventRow {
   start?: string | Date;
   end?: string | Date;
   allDay?: boolean;
+  visibility?: string;
   recurrenceRule?: string;
   tags?: string;
   registrationEnabled?: boolean;
@@ -46,7 +68,7 @@ const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: bo
   return `${fmt(s)} – ${fmt(e)}`;
 };
 
-export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent }: Props) => {
+export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date());
@@ -146,6 +168,22 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent }: Props) => {
     setSelectedTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
   };
 
+  const handleSubscribe = () => {
+    const churchId = UserHelper.currentUserChurch?.church?.id;
+    const contentApi = EnvironmentHelper.Common?.ContentApi || "";
+    if (!contentApi) return;
+    const httpsUrl = `${contentApi}/events/subscribe?groupId=${groupId}${churchId ? `&churchId=${churchId}` : ""}`;
+    const webcalUrl = httpsUrl.replace(/^https?:\/\//, "webcal://");
+    // webcal:// is handed to the OS calendar app; fall back to a new tab if it throws
+    if (typeof window !== "undefined") {
+      try {
+        window.location.href = webcalUrl;
+      } catch {
+        window.open(httpsUrl, "_blank", "noopener,noreferrer");
+      }
+    }
+  };
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
       {/* Header / controls */}
@@ -174,6 +212,20 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent }: Props) => {
             Add Event
           </Button>
         )}
+        <Button
+          variant="outlined"
+          onClick={handleSubscribe}
+          startIcon={<Icon>calendar_month</Icon>}
+          sx={{
+            borderColor: tc.primary,
+            color: tc.primary,
+            textTransform: "none",
+            fontWeight: 600,
+            borderRadius: `${mobileTheme.radius.md}px`,
+          }}
+        >
+          Subscribe
+        </Button>
       </Box>
 
       {allTags.length > 0 && (
@@ -325,14 +377,79 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent }: Props) => {
                   boxShadow: mobileTheme.shadows.sm,
                   p: `${mobileTheme.spacing.md}px`,
                   borderLeft: `4px solid ${tc.primary}`,
+                  position: "relative",
                 }}
               >
-                <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                  {e.title || "Event"}
-                </Typography>
-                <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
-                  {formatTimeRange(e.start, e.end, e.allDay)}
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
+                      {e.title || "Event"}
+                    </Typography>
+                    <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
+                      {formatTimeRange(e.start, e.end, e.allDay)}
+                    </Typography>
+                    {(e.visibility === "private" || e.recurrenceRule || e.allDay) && (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: "6px" }}>
+                        {e.visibility === "private" && (
+                          <Chip
+                            size="small"
+                            icon={<Icon sx={{ fontSize: 14 }}>lock</Icon>}
+                            label="Private"
+                            sx={{
+                              height: 22,
+                              fontSize: 11,
+                              fontWeight: 600,
+                              bgcolor: tc.iconBackground,
+                              color: tc.textSecondary,
+                              "& .MuiChip-icon": { color: tc.textSecondary, ml: "4px" },
+                            }}
+                          />
+                        )}
+                        {e.allDay && (
+                          <Chip
+                            size="small"
+                            label="All day"
+                            sx={{
+                              height: 22,
+                              fontSize: 11,
+                              fontWeight: 600,
+                              bgcolor: tc.primaryLight,
+                              color: tc.primary,
+                            }}
+                          />
+                        )}
+                        {e.recurrenceRule && (
+                          <Chip
+                            size="small"
+                            icon={<Icon sx={{ fontSize: 14 }}>autorenew</Icon>}
+                            label={describeRecurrence(e.recurrenceRule)}
+                            sx={{
+                              height: 22,
+                              fontSize: 11,
+                              fontWeight: 600,
+                              bgcolor: tc.iconBackground,
+                              color: tc.text,
+                              "& .MuiChip-icon": { color: tc.primary, ml: "4px" },
+                            }}
+                          />
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+                  {isLeader && onEditEvent && (
+                    <IconButton
+                      size="small"
+                      aria-label="Edit event"
+                      onClick={(ev) => {
+                        ev.stopPropagation();
+                        onEditEvent(e);
+                      }}
+                      sx={{ color: tc.primary, ml: "auto", mt: "-4px" }}
+                    >
+                      <Icon sx={{ fontSize: 18 }}>edit</Icon>
+                    </IconButton>
+                  )}
+                </Box>
                 {e.description && (
                   <Typography
                     sx={{
@@ -354,7 +471,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent }: Props) => {
                     <Button
                       variant="contained"
                       size="small"
-                      onClick={() => router.push(`/mobile/register/${e.id}`)}
+                      onClick={(ev) => { ev.stopPropagation(); router.push(`/mobile/register/${e.id}`); }}
                       sx={{
                         bgcolor: tc.success,
                         color: "#000",

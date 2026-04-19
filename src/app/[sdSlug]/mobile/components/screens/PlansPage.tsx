@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Icon, Skeleton, Typography } from "@mui/material";
+import { Box, Icon, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import { ApiHelper, ArrayHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type {
@@ -12,152 +12,329 @@ import type {
 } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { BlockoutDatesSection } from "../plans/BlockoutDatesSection";
 
 interface Props {
   config: ConfigurationInterface;
 }
 
-interface PlanRow {
+type TabKey = "upcoming" | "past";
+
+interface AssignmentRow {
+  assignmentId: string;
   planId: string;
   planName: string;
   serviceDate: Date;
   position: string;
   status: string;
-  assignmentCount: number;
 }
+
+const normalizeStatus = (s: string | undefined | null) => (s || "").toLowerCase();
+
+const getStatusMeta = (status: string, tc: typeof mobileTheme.colors) => {
+  const s = normalizeStatus(status);
+  if (s === "accepted" || s === "confirmed") return { color: tc.success, label: "Confirmed" };
+  if (s === "declined") return { color: tc.error, label: "Declined" };
+  if (s === "pending") return { color: tc.warning, label: "Pending" };
+  if (!s || s === "unconfirmed") return { color: tc.textSecondary, label: "Unconfirmed" };
+  return { color: tc.textSecondary, label: status };
+};
+
+const adjustHex = (hex: string, amount: number) => {
+  const clean = hex.replace("#", "");
+  if (clean.length !== 6) return hex;
+  const num = parseInt(clean, 16);
+  let r = (num >> 16) + amount;
+  let g = ((num >> 8) & 0xff) + amount;
+  let b = (num & 0xff) + amount;
+  r = Math.max(0, Math.min(255, r));
+  g = Math.max(0, Math.min(255, g));
+  b = Math.max(0, Math.min(255, b));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, "0")}`;
+};
 
 export const PlansPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const loggedIn = !!UserHelper.user?.firstName;
+  const [tab, setTab] = useState<TabKey>("upcoming");
 
-  const { data: rows = null } = useQuery<PlanRow[]>({
-    queryKey: ["my-plans", UserHelper.user?.id],
+  const { data: assignments = [], isLoading: assignmentsLoading } = useQuery<AssignmentInterface[]>({
+    queryKey: ["/assignments/my", "DoingApi", UserHelper.user?.id],
     queryFn: async () => {
-      const assignments: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
-      if (!assignments || assignments.length === 0) return [];
-
-      const positionIds = ArrayHelper.getUniqueValues(assignments, "positionId");
-      const positions: PositionInterface[] = await ApiHelper.get("/positions/ids?ids=" + positionIds, "DoingApi");
-      const planIds = ArrayHelper.getUniqueValues(positions, "planId");
-      const [plans] = await Promise.all([
-        ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi") as Promise<PlanInterface[]>,
-        ApiHelper.get("/times/plans?planIds=" + planIds, "DoingApi"),
-      ]);
-
-      const data: PlanRow[] = [];
-      assignments.forEach((a) => {
-        const position = positions.find((p) => p.id === a.positionId);
-        const plan = plans.find((p) => p.id === position?.planId);
-        if (position && plan) {
-          const existing = data.find((d) => d.planId === plan.id);
-          if (existing) {
-            existing.assignmentCount += 1;
-          } else {
-            data.push({
-              planId: plan.id,
-              planName: plan.name,
-              serviceDate: DateHelper.toDate(plan.serviceDate),
-              position: position.name,
-              status: a.status || "Unconfirmed",
-              assignmentCount: 1,
-            });
-          }
-        }
-      });
-      ArrayHelper.sortBy(data, "serviceDate", true);
-      return data;
+      const data = await ApiHelper.get("/assignments/my", "DoingApi");
+      return Array.isArray(data) ? data : [];
     },
     enabled: loggedIn,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
 
-  const effectiveRows = loggedIn ? rows : [];
+  const positionIds = useMemo(
+    () => ArrayHelper.getUniqueValues(assignments, "positionId"),
+    [assignments]
+  );
 
-  const getStatusColor = (status: string) => {
-    if (status === "Accepted") return tc.success;
-    if (status === "Declined") return tc.error;
-    return tc.warning;
+  const { data: positions = [], isLoading: positionsLoading } = useQuery<PositionInterface[]>({
+    queryKey: ["/positions/ids", "DoingApi", positionIds.join(",")],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/positions/ids?ids=" + positionIds, "DoingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: loggedIn && assignments.length > 0 && positionIds.length > 0,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
+  const planIds = useMemo(
+    () => ArrayHelper.getUniqueValues(positions, "planId"),
+    [positions]
+  );
+
+  const { data: plans = [], isLoading: plansLoading } = useQuery<PlanInterface[]>({
+    queryKey: ["/plans/ids", "DoingApi", planIds.join(",")],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/plans/ids?ids=" + planIds, "DoingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: loggedIn && positions.length > 0 && planIds.length > 0,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
+  const isLoading = loggedIn && (assignmentsLoading || positionsLoading || plansLoading);
+
+  const startOfToday = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
+
+  const { upcomingRows, pastRows, upcomingAssignments } = useMemo(() => {
+    const upcomingRows: AssignmentRow[] = [];
+    const pastRows: AssignmentRow[] = [];
+    const upcomingAssignments: AssignmentInterface[] = [];
+
+    assignments.forEach((a) => {
+      const position = positions.find((p) => p.id === a.positionId);
+      if (!position) return;
+      const plan = plans.find((p) => p.id === position.planId);
+      if (!plan || !plan.serviceDate) return;
+      const serviceDate = DateHelper.toDate(plan.serviceDate);
+      const row: AssignmentRow = {
+        assignmentId: a.id || "",
+        planId: plan.id as string,
+        planName: plan.name || "Untitled plan",
+        serviceDate,
+        position: position.name || "Position",
+        status: a.status || "",
+      };
+      if (serviceDate >= startOfToday) {
+        upcomingRows.push(row);
+        upcomingAssignments.push(a);
+      } else {
+        pastRows.push(row);
+      }
+    });
+
+    upcomingRows.sort((a, b) => a.serviceDate.getTime() - b.serviceDate.getTime());
+    pastRows.sort((a, b) => b.serviceDate.getTime() - a.serviceDate.getTime());
+
+    return { upcomingRows, pastRows, upcomingAssignments };
+  }, [assignments, positions, plans, startOfToday]);
+
+  const stats = useMemo(() => {
+    const requested = upcomingAssignments.length;
+    const confirmed = upcomingAssignments.filter((a) => {
+      const s = normalizeStatus(a.status);
+      return s === "confirmed" || s === "accepted";
+    }).length;
+    const pending = upcomingAssignments.filter((a) => {
+      const s = normalizeStatus(a.status);
+      return !s || s === "unconfirmed" || s === "pending";
+    }).length;
+    const nextRow = upcomingRows[0];
+    return { requested, confirmed, pending, nextRow };
+  }, [upcomingAssignments, upcomingRows]);
+
+  const renderHero = () => {
+    const gradientFrom = adjustHex(tc.primary, -12);
+    const gradientTo = adjustHex(tc.primary, 18);
+    return (
+      <Box
+        sx={{
+          borderRadius: `${mobileTheme.radius.xl}px`,
+          overflow: "hidden",
+          mb: `${mobileTheme.spacing.md}px`,
+          background: `linear-gradient(135deg, ${gradientFrom} 0%, ${gradientTo} 100%)`,
+          p: `${mobileTheme.spacing.lg}px`,
+          color: "#FFFFFF",
+          textAlign: "center",
+          boxShadow: mobileTheme.shadows.md,
+        }}
+      >
+        {isLoading ? (
+          <Box sx={{ py: 4 }}>
+            <Skeleton variant="rounded" height={32} sx={{ bgcolor: "rgba(255,255,255,0.2)", mx: "auto", width: "60%", mb: 1 }} />
+            <Skeleton variant="rounded" height={18} sx={{ bgcolor: "rgba(255,255,255,0.2)", mx: "auto", width: "40%" }} />
+          </Box>
+        ) : (
+          <>
+            <Icon sx={{ fontSize: 44, mb: 1 }}>assignment</Icon>
+            <Typography sx={{ fontSize: 22, fontWeight: 700, mb: 0.5 }}>
+              Your serving schedule
+            </Typography>
+            <Typography sx={{ fontSize: 14, opacity: 0.9, mb: stats.nextRow ? 2 : 0 }}>
+              {stats.confirmed} confirmed &middot; {stats.pending} pending
+            </Typography>
+            {stats.nextRow && (
+              <Box
+                sx={{
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  borderRadius: `${mobileTheme.radius.md}px`,
+                  px: 2,
+                  py: 1.25,
+                  display: "inline-block",
+                  minWidth: 180,
+                }}
+              >
+                <Typography sx={{ fontSize: 12, opacity: 0.85 }}>Next service</Typography>
+                <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+                  {DateHelper.prettyDate(stats.nextRow.serviceDate)}
+                </Typography>
+              </Box>
+            )}
+          </>
+        )}
+      </Box>
+    );
   };
 
-  const renderCard = (row: PlanRow) => (
+  const renderStatCard = (
+    iconName: string,
+    iconColor: string,
+    value: number,
+    label: string
+  ) => (
     <Box
-      key={row.planId}
-      onClick={() => router.push(`/mobile/plans/${row.planId}`)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          router.push(`/mobile/plans/${row.planId}`);
-        }
-      }}
       sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
+        flex: 1,
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        px: `${mobileTheme.spacing.md}px`,
-        py: "14px",
-        cursor: "pointer",
-        transition: "box-shadow 150ms ease, transform 150ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.md },
-        "&:active": { transform: "scale(0.995)" },
+        p: `${mobileTheme.spacing.md}px`,
+        textAlign: "center",
       }}
     >
-      <Box
-        sx={{
-          width: 44,
-          height: 44,
-          borderRadius: `${mobileTheme.radius.md}px`,
-          bgcolor: tc.primaryLight,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <Icon sx={{ color: tc.primary }}>event_note</Icon>
-      </Box>
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography
-          sx={{
-            fontSize: 16,
-            fontWeight: 600,
-            color: tc.text,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {row.planName}
-        </Typography>
-        <Typography sx={{ fontSize: 14, color: tc.textSecondary }}>
-          {DateHelper.prettyDate(row.serviceDate)} &middot; {row.position}
-        </Typography>
-      </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 0.5 }}>
-        <Box
-          sx={{
-            px: 1,
-            py: 0.25,
-            borderRadius: "999px",
-            bgcolor: `${getStatusColor(row.status)}1A`,
-            color: getStatusColor(row.status),
-            fontSize: 11,
-            fontWeight: 600,
-            whiteSpace: "nowrap",
-          }}
-        >
-          {row.assignmentCount > 1 ? `${row.assignmentCount} assignments` : "You're assigned"}
-        </Box>
-        <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>chevron_right</Icon>
-      </Box>
+      <Icon sx={{ fontSize: 28, color: iconColor }}>{iconName}</Icon>
+      {isLoading ? (
+        <>
+          <Skeleton variant="text" width="40%" height={28} sx={{ mx: "auto", mt: 0.5 }} />
+          <Skeleton variant="text" width="60%" height={14} sx={{ mx: "auto" }} />
+        </>
+      ) : (
+        <>
+          <Typography sx={{ fontSize: 22, fontWeight: 800, color: tc.text, mt: 0.5 }}>
+            {value}
+          </Typography>
+          <Typography sx={{ fontSize: 12, color: tc.textSecondary, fontWeight: 500 }}>
+            {label}
+          </Typography>
+        </>
+      )}
     </Box>
   );
 
-  const renderSkeleton = (key: number) => (
+  const renderStats = () => (
+    <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px`, mb: `${mobileTheme.spacing.lg}px` }}>
+      {renderStatCard("assignment", "#2196F3", stats.requested, "Requested")}
+      {renderStatCard("event_available", tc.success, stats.confirmed, "Confirmed")}
+      {renderStatCard("schedule", tc.warning, stats.pending, "Pending")}
+    </Box>
+  );
+
+  const renderAssignmentRow = (row: AssignmentRow) => {
+    const meta = getStatusMeta(row.status, tc);
+    return (
+      <Box
+        key={row.assignmentId || `${row.planId}-${row.position}`}
+        onClick={() => router.push(`/mobile/plans/${row.planId}`)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            router.push(`/mobile/plans/${row.planId}`);
+          }
+        }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: `${mobileTheme.spacing.md}px`,
+          bgcolor: tc.surface,
+          borderRadius: `${mobileTheme.radius.lg}px`,
+          boxShadow: mobileTheme.shadows.sm,
+          px: `${mobileTheme.spacing.md}px`,
+          py: "14px",
+          cursor: "pointer",
+          transition: "box-shadow 150ms ease, transform 150ms ease",
+          "&:hover": { boxShadow: mobileTheme.shadows.md },
+          "&:active": { transform: "scale(0.995)" },
+        }}
+      >
+        <Box
+          sx={{
+            width: 44,
+            height: 44,
+            borderRadius: `${mobileTheme.radius.md}px`,
+            bgcolor: tc.primaryLight,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <Icon sx={{ color: tc.primary }}>event_note</Icon>
+        </Box>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography
+            sx={{
+              fontSize: 16,
+              fontWeight: 600,
+              color: tc.text,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {row.planName}
+          </Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textSecondary }}>
+            {DateHelper.prettyDate(row.serviceDate)} &middot; {row.position}
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 0.5 }}>
+          <Box
+            sx={{
+              px: 1,
+              py: 0.25,
+              borderRadius: "999px",
+              bgcolor: `${meta.color}1A`,
+              color: meta.color,
+              fontSize: 11,
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+            }}
+          >
+            {meta.label}
+          </Box>
+          <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>chevron_right</Icon>
+        </Box>
+      </Box>
+    );
+  };
+
+  const renderSkeletonRow = (key: number) => (
     <Box
       key={`sk-${key}`}
       sx={{
@@ -180,7 +357,7 @@ export const PlansPage = ({ config: _config }: Props) => {
     </Box>
   );
 
-  const renderEmpty = () => (
+  const renderEmpty = (message: string, subtext: string) => (
     <Box
       sx={{
         bgcolor: tc.surface,
@@ -205,11 +382,80 @@ export const PlansPage = ({ config: _config }: Props) => {
         <Icon sx={{ fontSize: 32, color: tc.primary }}>event_note</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-        No plans yet
+        {message}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        Your upcoming serving plans will appear here.
+        {subtext}
       </Typography>
+    </Box>
+  );
+
+  const renderServingList = (rows: AssignmentRow[], emptyMessage: string, emptySubtext: string) => (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+      {isLoading && rows.length === 0
+        ? [0, 1, 2].map(renderSkeletonRow)
+        : rows.length === 0
+          ? renderEmpty(emptyMessage, emptySubtext)
+          : rows.map(renderAssignmentRow)}
+    </Box>
+  );
+
+  const renderSectionHeader = (iconName: string, title: string) => (
+    <Box sx={{ display: "flex", alignItems: "center", mt: `${mobileTheme.spacing.md}px`, mb: `${mobileTheme.spacing.sm}px`, pl: 0.5 }}>
+      <Icon sx={{ color: tc.primary, mr: 1, fontSize: 22 }}>{iconName}</Icon>
+      <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>{title}</Typography>
+    </Box>
+  );
+
+  const renderBrowseVolunteerCard = () => (
+    <Box
+      onClick={() => router.push("/mobile/volunteer")}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          router.push("/mobile/volunteer");
+        }
+      }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: `${mobileTheme.spacing.md}px`,
+        bgcolor: tc.surface,
+        borderRadius: `${mobileTheme.radius.lg}px`,
+        boxShadow: mobileTheme.shadows.sm,
+        px: `${mobileTheme.spacing.md}px`,
+        py: "16px",
+        cursor: "pointer",
+        mt: `${mobileTheme.spacing.md}px`,
+        transition: "box-shadow 150ms ease",
+        "&:hover": { boxShadow: mobileTheme.shadows.md },
+      }}
+    >
+      <Box
+        sx={{
+          width: 44,
+          height: 44,
+          borderRadius: `${mobileTheme.radius.md}px`,
+          bgcolor: tc.primaryLight,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
+        <Icon sx={{ color: tc.primary }}>volunteer_activism</Icon>
+      </Box>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
+          Browse Volunteer
+        </Typography>
+        <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
+          Find new opportunities to serve.
+        </Typography>
+      </Box>
+      <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>chevron_right</Icon>
     </Box>
   );
 
@@ -218,11 +464,66 @@ export const PlansPage = ({ config: _config }: Props) => {
       <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
         My Plans
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {effectiveRows === null && [0, 1, 2].map(renderSkeleton)}
-        {effectiveRows !== null && effectiveRows.length === 0 && renderEmpty()}
-        {effectiveRows !== null && effectiveRows.length > 0 && effectiveRows.map(renderCard)}
+
+      <Box
+        sx={{
+          bgcolor: tc.surface,
+          borderRadius: `${mobileTheme.radius.lg}px`,
+          boxShadow: mobileTheme.shadows.sm,
+          mb: `${mobileTheme.spacing.md}px`,
+        }}
+      >
+        <Tabs
+          value={tab}
+          onChange={(_, v: TabKey) => setTab(v)}
+          variant="fullWidth"
+          sx={{
+            minHeight: 44,
+            "& .MuiTab-root": {
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: 14,
+              minHeight: 44,
+              color: tc.textSecondary,
+            },
+            "& .Mui-selected": { color: `${tc.primary} !important` },
+            "& .MuiTabs-indicator": { backgroundColor: tc.primary },
+          }}
+        >
+          <Tab value="upcoming" label="Upcoming" />
+          <Tab value="past" label="Past" />
+        </Tabs>
       </Box>
+
+      {tab === "upcoming" && (
+        <>
+          {renderHero()}
+          {renderStats()}
+          {renderSectionHeader("schedule", "Serving Times")}
+          {renderServingList(
+            upcomingRows,
+            "No upcoming serving times",
+            "Your upcoming assignments will appear here."
+          )}
+          {loggedIn && (
+            <Box sx={{ mt: `${mobileTheme.spacing.lg}px` }}>
+              <BlockoutDatesSection enabled={loggedIn} />
+            </Box>
+          )}
+          {renderBrowseVolunteerCard()}
+        </>
+      )}
+
+      {tab === "past" && (
+        <>
+          {renderSectionHeader("history", "Past Assignments")}
+          {renderServingList(
+            pastRows,
+            "No past assignments",
+            "Your past serving history will appear here."
+          )}
+        </>
+      )}
     </Box>
   );
 };

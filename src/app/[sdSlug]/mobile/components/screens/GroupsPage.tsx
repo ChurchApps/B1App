@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
@@ -12,6 +12,29 @@ import { mobileTheme } from "../mobileTheme";
 interface Props {
   config?: ConfigurationInterface;
 }
+
+const ENGAGEMENT_STORAGE_KEY = "b1app-group-view-counts";
+
+const readViewCounts = (): Record<string, number> => {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(ENGAGEMENT_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+};
+
+const writeViewCounts = (counts: Record<string, number>) => {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(ENGAGEMENT_STORAGE_KEY, JSON.stringify(counts));
+  } catch {
+    /* ignore quota / private-mode failures */
+  }
+};
 
 export const GroupsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
@@ -39,6 +62,42 @@ export const GroupsPage = ({ config }: Props) => {
   // Force an empty-state render for logged-out users (match previous behavior).
   const effectiveGroups = loggedIn ? groups : [];
 
+  // Engagement store — localStorage-backed view counts, hydrated once on mount.
+  const [viewCounts, setViewCounts] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    setViewCounts(readViewCounts());
+  }, []);
+
+  const incrementViewCount = useCallback((groupId: string) => {
+    if (!groupId) return;
+    setViewCounts((prev) => {
+      const next = { ...prev, [groupId]: (prev[groupId] || 0) + 1 };
+      writeViewCounts(next);
+      return next;
+    });
+  }, []);
+
+  // Sort descending by view count; ties preserve original (server) order.
+  const sortedGroups = useMemo(() => {
+    if (!Array.isArray(effectiveGroups) || effectiveGroups.length === 0) {
+      return { hero: null as GroupInterface | null, featured: [] as GroupInterface[], regular: [] as GroupInterface[] };
+    }
+    const decorated = effectiveGroups.map((group, index) => ({
+      group,
+      index,
+      count: viewCounts[group.id || ""] || 0,
+    }));
+    decorated.sort((a, b) => (a.count === b.count ? a.index - b.index : b.count - a.count));
+    const ordered = decorated.map((d) => d.group);
+
+    // Hero = top group; Featured grid = next 2-4; Regular = remainder.
+    const hero = ordered[0] || null;
+    const featured = ordered.slice(1, 5); // up to 4 featured
+    const regular = ordered.slice(5);
+    return { hero, featured, regular };
+  }, [effectiveGroups, viewCounts]);
+
   const formatEventTime = (event: EventInterface) => {
     if (!event.start) return "";
     const start = new Date(event.start);
@@ -58,6 +117,7 @@ export const GroupsPage = ({ config }: Props) => {
   };
 
   const handleClick = (group: GroupInterface) => {
+    if (group.id) incrementViewCount(group.id);
     router.push(`/mobile/groups/${group.id}`);
   };
 
@@ -102,6 +162,141 @@ export const GroupsPage = ({ config }: Props) => {
     );
   };
 
+  // Hero card — large, full-width, photo cover with gradient overlay.
+  const renderHero = (group: GroupInterface) => {
+    const hasPhoto = !!group.photoUrl;
+    return (
+      <Box
+        key={`hero-${group.id}`}
+        onClick={() => handleClick(group)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleClick(group);
+          }
+        }}
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: 200,
+          borderRadius: `${mobileTheme.radius.xl}px`,
+          overflow: "hidden",
+          boxShadow: mobileTheme.shadows.md,
+          cursor: "pointer",
+          bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
+          transition: "box-shadow 150ms ease, transform 150ms ease",
+          "&:hover": { boxShadow: mobileTheme.shadows.lg },
+          "&:active": { transform: "scale(0.995)" },
+        }}
+      >
+        {hasPhoto ? (
+          <Box
+            component="img"
+            src={group.photoUrl}
+            alt={group.name || "Group"}
+            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Icon sx={{ fontSize: 72, color: tc.primary, opacity: 0.5 }}>groups</Icon>
+          </Box>
+        )}
+        <Box
+          sx={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            p: `${mobileTheme.spacing.md}px`,
+            background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)",
+          }}
+        >
+          <Typography sx={{ color: "#FFFFFF", fontSize: 24, fontWeight: 700, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+            {group.name}
+          </Typography>
+          <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+            Tap to explore
+          </Typography>
+        </Box>
+      </Box>
+    );
+  };
+
+  // Featured card — medium tile, photo cover with dark overlay + centered name.
+  const renderFeatured = (group: GroupInterface) => {
+    const hasPhoto = !!group.photoUrl;
+    return (
+      <Box
+        key={`featured-${group.id}`}
+        onClick={() => handleClick(group)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleClick(group);
+          }
+        }}
+        sx={{
+          position: "relative",
+          height: 120,
+          borderRadius: `${mobileTheme.radius.lg}px`,
+          overflow: "hidden",
+          boxShadow: mobileTheme.shadows.sm,
+          cursor: "pointer",
+          bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
+          transition: "box-shadow 150ms ease, transform 150ms ease",
+          "&:hover": { boxShadow: mobileTheme.shadows.md },
+          "&:active": { transform: "scale(0.995)" },
+        }}
+      >
+        {hasPhoto ? (
+          <Box
+            component="img"
+            src={group.photoUrl}
+            alt={group.name || "Group"}
+            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Icon sx={{ fontSize: 40, color: tc.primary, opacity: 0.5 }}>groups</Icon>
+          </Box>
+        )}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            p: "12px",
+            background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0) 100%)",
+          }}
+        >
+          <Typography
+            sx={{
+              color: "#FFFFFF",
+              fontSize: 14,
+              fontWeight: 600,
+              textAlign: "center",
+              textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {group.name}
+          </Typography>
+        </Box>
+      </Box>
+    );
+  };
+
+  // Regular card — compact horizontal row (preserves prior design).
   const renderCard = (group: GroupInterface) => {
     const meetsSubtitle = [group.meetingTime, group.meetingLocation].filter(Boolean).join(" \u00B7 ");
     const memberCount = (group as any).memberCount;
@@ -228,7 +423,7 @@ export const GroupsPage = ({ config }: Props) => {
       </Typography>
       <Button
         variant="outlined"
-        onClick={() => router.push("/mobile/groups")}
+        onClick={() => router.push("/mobile/community")}
         sx={{
           borderColor: tc.primary,
           color: tc.primary,
@@ -237,21 +432,64 @@ export const GroupsPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.md}px`,
         }}
       >
-        Browse Groups
+        Explore Community
       </Button>
     </Box>
   );
+
+  const { hero, featured, regular } = sortedGroups;
+  const hasAnyGroups = effectiveGroups !== null && effectiveGroups.length > 0;
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
         My Groups
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {effectiveGroups === null && [0, 1, 2].map(renderSkeleton)}
-        {effectiveGroups !== null && effectiveGroups.length === 0 && renderEmpty()}
-        {effectiveGroups !== null && effectiveGroups.length > 0 && effectiveGroups.map(renderCard)}
-      </Box>
+
+      {effectiveGroups === null && (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+          {[0, 1, 2].map(renderSkeleton)}
+        </Box>
+      )}
+
+      {effectiveGroups !== null && effectiveGroups.length === 0 && renderEmpty()}
+
+      {hasAnyGroups && (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.lg}px` }}>
+          {/* Hero */}
+          {hero && <Box>{renderHero(hero)}</Box>}
+
+          {/* Featured grid — 2 columns */}
+          {featured.length > 0 && (
+            <Box>
+              <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
+                Featured
+              </Typography>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: `${mobileTheme.spacing.sm}px`,
+                }}
+              >
+                {featured.map((g) => renderFeatured(g))}
+              </Box>
+            </Box>
+          )}
+
+          {/* Regular list */}
+          {regular.length > 0 && (
+            <Box>
+              <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
+                Other Groups
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+                {regular.map(renderCard)}
+              </Box>
+            </Box>
+          )}
+        </Box>
+      )}
 
       {upcomingEvents.length > 0 && (
         <Box sx={{ mt: `${mobileTheme.spacing.lg}px` }}>

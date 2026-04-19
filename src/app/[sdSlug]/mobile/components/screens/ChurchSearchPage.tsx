@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Avatar,
   Box,
   CircularProgress,
   Icon,
+  IconButton,
   InputAdornment,
   TextField,
   Typography,
@@ -21,6 +22,9 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
+const RECENT_CHURCHES_STORAGE_KEY = "b1app-recent-churches";
+const MAX_RECENT_CHURCHES = 5;
+
 const getChurchImage = (church: ChurchInterface): string | undefined => {
   const settings = (church as any).settings as Array<{ keyName?: string; value?: string }> | undefined;
   if (!settings || settings.length === 0) return undefined;
@@ -33,54 +37,71 @@ const getChurchImage = (church: ChurchInterface): string | undefined => {
   return first?.value;
 };
 
-const getLocation = (church: ChurchInterface): string => {
-  const ci: any = (church as any).address || (church as any).contactInfo || {};
-  const parts = [ci.city, ci.state].filter(Boolean);
-  return parts.join(", ");
+const readRecentChurches = (): ChurchInterface[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(RECENT_CHURCHES_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeRecentChurches = (churches: ChurchInterface[]) => {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(RECENT_CHURCHES_STORAGE_KEY, JSON.stringify(churches));
+  } catch {
+    /* ignore quota / private-mode failures */
+  }
 };
 
 export const ChurchSearchPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selecting, setSelecting] = useState(false);
+  const [recentChurches, setRecentChurches] = useState<ChurchInterface[]>([]);
 
+  // Hydrate recent churches from localStorage once on mount.
   useEffect(() => {
-    const term = searchText.trim();
-    if (term.length < 3) {
-      setDebouncedSearch("");
-      return;
-    }
-    const handle = setTimeout(() => setDebouncedSearch(term), 300);
-    return () => clearTimeout(handle);
-  }, [searchText]);
+    setRecentChurches(readRecentChurches());
+  }, []);
+
+  const trimmedSearch = searchText.trim();
 
   const { data: results = [], isFetching: loading } = useQuery<ChurchInterface[]>({
-    queryKey: ["church-search", debouncedSearch],
+    queryKey: ["church-search", trimmedSearch],
     queryFn: async () => {
       const data = await ApiHelper.getAnonymous(
-        `/churches/search/?name=${encodeURIComponent(debouncedSearch)}&app=B1&include=favicon_400x400`,
+        `/churches/search/?name=${encodeURIComponent(trimmedSearch)}&app=B1&include=favicon_400x400`,
         "MembershipApi"
       );
       return Array.isArray(data) ? data : [];
     },
-    enabled: debouncedSearch.length >= 3,
+    enabled: trimmedSearch.length >= 3,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
-  const hasSearched = debouncedSearch.length >= 3 && !loading;
+  const hasSearched = trimmedSearch.length >= 3 && !loading;
+
+  const addRecentChurch = useCallback((church: ChurchInterface) => {
+    setRecentChurches((prev) => {
+      const filtered = prev.filter((c) => c.id !== church.id);
+      const next = [church, ...filtered].slice(0, MAX_RECENT_CHURCHES);
+      writeRecentChurches(next);
+      return next;
+    });
+  }, []);
 
   const handleSelect = async (church: ChurchInterface) => {
     if (!church?.id || selecting) return;
     setSelecting(true);
     try {
-      // TODO: verify - B1App currently relies on subdomain routing; this endpoint mirrors
-      // the B1Mobile selectChurch store, but the web equivalent may simply navigate by subdomain.
-      try {
-        await ApiHelper.post("/churches/select", { id: church.id }, "MembershipApi");
-      } catch {
-        // non-fatal — fall through to navigation
-      }
+      addRecentChurch(church);
       const subDomain = (church as any).subDomain;
       if (subDomain && typeof window !== "undefined") {
         // Navigate by subdomain (B1App is subdomain-based).
@@ -98,8 +119,118 @@ export const ChurchSearchPage = ({ config }: Props) => {
     }
   };
 
+  const showingRecents = trimmedSearch.length < 3;
+  const displayedChurches = useMemo(
+    () => (showingRecents ? recentChurches : results),
+    [showingRecents, recentChurches, results]
+  );
+
+  const renderChurchRow = (church: ChurchInterface) => {
+    const image = getChurchImage(church);
+    return (
+      <Box
+        key={church.id || church.name}
+        role="button"
+        tabIndex={0}
+        onClick={() => handleSelect(church)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleSelect(church);
+          }
+        }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: `${mobileTheme.spacing.md}px`,
+          bgcolor: tc.surface,
+          borderRadius: `${mobileTheme.radius.lg}px`,
+          boxShadow: mobileTheme.shadows.sm,
+          px: `${mobileTheme.spacing.md}px`,
+          py: "12px",
+          cursor: selecting ? "wait" : "pointer",
+          opacity: selecting ? 0.6 : 1,
+          transition: "box-shadow 150ms ease, transform 150ms ease",
+          "&:hover": { boxShadow: mobileTheme.shadows.md },
+          "&:active": { transform: "scale(0.995)" },
+        }}
+      >
+        <Avatar
+          src={image}
+          sx={{
+            width: 48,
+            height: 48,
+            bgcolor: tc.iconBackground,
+            color: tc.primary,
+            fontWeight: 700,
+          }}
+        >
+          {(church.name || "?").charAt(0).toUpperCase()}
+        </Avatar>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography
+            sx={{
+              fontSize: 16,
+              fontWeight: 600,
+              color: tc.text,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {church.name}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: 13,
+              color: tc.textSecondary,
+              mt: "2px",
+            }}
+          >
+            {selecting ? "Connecting" : "Tap to connect"}
+          </Typography>
+        </Box>
+        {selecting ? (
+          <CircularProgress size={18} sx={{ color: tc.primary }} />
+        ) : (
+          <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+      {/* Full-screen "Connecting..." overlay */}
+      {selecting && (
+        <Box
+          sx={{
+            position: "fixed",
+            inset: 0,
+            bgcolor: "rgba(0,0,0,0.55)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1500,
+          }}
+          role="status"
+          aria-live="polite"
+        >
+          <CircularProgress size={48} sx={{ color: tc.onPrimary }} />
+          <Typography
+            sx={{
+              mt: `${mobileTheme.spacing.md}px`,
+              color: tc.onPrimary,
+              fontSize: 16,
+              fontWeight: 600,
+            }}
+          >
+            Connecting to church...
+          </Typography>
+        </Box>
+      )}
+
       {/* Hero */}
       <Box
         sx={{
@@ -158,17 +289,41 @@ export const ChurchSearchPage = ({ config }: Props) => {
               <Icon sx={{ color: tc.textSecondary }}>search</Icon>
             </InputAdornment>
           ),
-          endAdornment: loading ? (
+          endAdornment: (
             <InputAdornment position="end">
-              <CircularProgress size={18} sx={{ color: tc.primary }} />
+              {loading && <CircularProgress size={18} sx={{ color: tc.primary, mr: searchText ? "4px" : 0 }} />}
+              {searchText && (
+                <IconButton
+                  aria-label="Clear search"
+                  onClick={() => setSearchText("")}
+                  edge="end"
+                  size="small"
+                  sx={{ color: tc.textSecondary }}
+                >
+                  <Icon>cancel</Icon>
+                </IconButton>
+              )}
             </InputAdornment>
-          ) : null,
+          ),
         }}
       />
 
       {/* Results area */}
       <Box sx={{ mt: `${mobileTheme.spacing.md}px`, display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {searchText.trim().length < 3 && (
+        {/* Section heading */}
+        <Typography
+          sx={{
+            fontSize: 18,
+            fontWeight: 700,
+            color: tc.text,
+            mb: "4px",
+          }}
+        >
+          {showingRecents ? "Recent churches" : "Search results"}
+        </Typography>
+
+        {/* Empty state: recents */}
+        {showingRecents && recentChurches.length === 0 && (
           <Box
             sx={{
               bgcolor: tc.surface,
@@ -196,12 +351,13 @@ export const ChurchSearchPage = ({ config }: Props) => {
               Start your search
             </Typography>
             <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-              Type at least 3 characters to find a church.
+              Search above to find your church.
             </Typography>
           </Box>
         )}
 
-        {searchText.trim().length >= 3 && !loading && hasSearched && results.length === 0 && (
+        {/* Empty state: no search results */}
+        {!showingRecents && hasSearched && results.length === 0 && (
           <Box
             sx={{
               bgcolor: tc.surface,
@@ -217,81 +373,8 @@ export const ChurchSearchPage = ({ config }: Props) => {
           </Box>
         )}
 
-        {results.map((church) => {
-          const image = getChurchImage(church);
-          const location = getLocation(church);
-          return (
-            <Box
-              key={church.id || church.name}
-              role="button"
-              tabIndex={0}
-              onClick={() => handleSelect(church)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleSelect(church);
-                }
-              }}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: `${mobileTheme.spacing.md}px`,
-                bgcolor: tc.surface,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                boxShadow: mobileTheme.shadows.sm,
-                px: `${mobileTheme.spacing.md}px`,
-                py: "12px",
-                cursor: selecting ? "wait" : "pointer",
-                opacity: selecting ? 0.6 : 1,
-                transition: "box-shadow 150ms ease, transform 150ms ease",
-                "&:hover": { boxShadow: mobileTheme.shadows.md },
-                "&:active": { transform: "scale(0.995)" },
-              }}
-            >
-              <Avatar
-                src={image}
-                sx={{
-                  width: 48,
-                  height: 48,
-                  bgcolor: tc.iconBackground,
-                  color: tc.primary,
-                  fontWeight: 700,
-                }}
-              >
-                {(church.name || "?").charAt(0).toUpperCase()}
-              </Avatar>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 600,
-                    color: tc.text,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {church.name}
-                </Typography>
-                {location && (
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      color: tc.textSecondary,
-                      mt: "2px",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {location}
-                  </Typography>
-                )}
-              </Box>
-              <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
-            </Box>
-          );
-        })}
+        {/* Church rows */}
+        {displayedChurches.map(renderChurchRow)}
       </Box>
     </Box>
   );
