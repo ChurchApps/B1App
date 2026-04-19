@@ -180,43 +180,19 @@ export const CommunityPage = ({ config: _config }: Props) => {
     }
   };
 
-  const getPhone = (p: PersonInterface): string => {
-    const ci = (p as any).contactInfo || {};
-    return ci.mobilePhone || ci.homePhone || ci.workPhone || "";
-  };
-
-  const getEmail = (p: PersonInterface): string => {
-    const ci = (p as any).contactInfo || {};
-    return ci.email || "";
-  };
-
-  const getSubtitle = (p: PersonInterface): string => {
-    const ci = (p as any).contactInfo || {};
-    return ci.city || (p as any).role || "";
-  };
-
   const handleCardClick = (p: PersonInterface) => {
     router.push(`/mobile/community/${p.id}`);
-  };
-
-  const handlePhone = (e: React.MouseEvent, phone: string) => {
-    e.stopPropagation();
-    window.location.href = `tel:${phone}`;
-  };
-
-  const handleEmail = (e: React.MouseEvent, email: string) => {
-    e.stopPropagation();
-    window.location.href = `mailto:${email}`;
   };
 
   const renderAvatar = (p: PersonInterface) => {
     const photo = getPhoto(p);
     const common = {
-      width: 40,
-      height: 40,
-      borderRadius: "20px",
+      width: 48,
+      height: 48,
+      borderRadius: "24px",
       flexShrink: 0,
       overflow: "hidden",
+      mr: "16px",
     } as const;
     if (photo) {
       return (
@@ -238,7 +214,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 16,
         }}
       >
         {getInitials(p)}
@@ -247,9 +223,6 @@ export const CommunityPage = ({ config: _config }: Props) => {
   };
 
   const renderCard = (p: PersonInterface) => {
-    const phone = getPhone(p);
-    const email = getEmail(p);
-    const subtitle = getSubtitle(p);
     const first = p.name?.first || "";
     const last = p.name?.last || "";
 
@@ -268,11 +241,10 @@ export const CommunityPage = ({ config: _config }: Props) => {
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: `${mobileTheme.spacing.md}px`,
           bgcolor: tc.surface,
-          borderRadius: `${mobileTheme.radius.lg}px`,
+          borderRadius: "12px",
           boxShadow: mobileTheme.shadows.sm,
-          px: `${mobileTheme.spacing.md}px`,
+          px: "16px",
           py: "12px",
           cursor: "pointer",
           transition: "box-shadow 150ms ease, transform 150ms ease",
@@ -282,10 +254,10 @@ export const CommunityPage = ({ config: _config }: Props) => {
       >
         {renderAvatar(p)}
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ display: "flex", gap: "4px", alignItems: "baseline", flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "baseline" }}>
             <Typography
               component="span"
-              sx={{ fontSize: 16, fontWeight: 600, color: tc.text, lineHeight: 1.3 }}
+              sx={{ fontSize: 16, fontWeight: 600, color: tc.text, lineHeight: 1.3, mr: last ? "4px" : 0 }}
             >
               {first}
             </Typography>
@@ -298,73 +270,33 @@ export const CommunityPage = ({ config: _config }: Props) => {
               </Typography>
             )}
           </Box>
-          {subtitle && (
-            <Typography
-              sx={{
-                fontSize: 12,
-                fontWeight: 400,
-                color: tc.textSecondary,
-                mt: "2px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {subtitle}
-            </Typography>
-          )}
         </Box>
-        <Box sx={{ display: "flex", alignItems: "center", gap: `${mobileTheme.spacing.xs}px` }}>
-          {phone && (
-            <IconButton
-              size="small"
-              onClick={(e) => handlePhone(e, phone)}
-              aria-label="Call"
-              sx={{
-                width: 36,
-                height: 36,
-                bgcolor: tc.iconBackground,
-                color: tc.primary,
-                "&:hover": { bgcolor: tc.iconBackground },
-              }}
-            >
-              <Icon sx={{ fontSize: 18 }}>phone</Icon>
-            </IconButton>
-          )}
-          {email && (
-            <IconButton
-              size="small"
-              onClick={(e) => handleEmail(e, email)}
-              aria-label="Email"
-              sx={{
-                width: 36,
-                height: 36,
-                bgcolor: tc.iconBackground,
-                color: tc.primary,
-                "&:hover": { bgcolor: tc.iconBackground },
-              }}
-            >
-              <Icon sx={{ fontSize: 18 }}>email</Icon>
-            </IconButton>
-          )}
-          <Icon sx={{ color: tc.textSecondary, ml: "2px" }}>chevron_right</Icon>
+        <Box
+          sx={{
+            width: 36,
+            height: 36,
+            borderRadius: "18px",
+            bgcolor: tc.iconBackground,
+            color: tc.textSecondary,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <Icon sx={{ fontSize: 20 }}>chevron_right</Icon>
         </Box>
       </Box>
     );
   };
 
-  const renderSectionHeader = (title: string) => (
+  const renderSectionHeader = (title: string, isFirst: boolean) => (
     <Box
       sx={{
-        position: "sticky",
-        top: 0,
-        zIndex: 2,
-        bgcolor: tc.background,
-        py: "6px",
-        mb: `${mobileTheme.spacing.xs}px`,
+        mt: isFirst ? 0 : "24px",
+        mb: "12px",
         display: "flex",
         alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
       }}
     >
       <Typography
@@ -377,7 +309,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
       >
         {title}
       </Typography>
-      <Box sx={{ flex: 1, height: "1px", bgcolor: tc.border }} />
+      <Box sx={{ flex: 1, height: "1px", bgcolor: tc.border, ml: "16px" }} />
     </Box>
   );
 
@@ -387,15 +319,15 @@ export const CommunityPage = ({ config: _config }: Props) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
         bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
+        borderRadius: "12px",
         boxShadow: mobileTheme.shadows.sm,
-        px: `${mobileTheme.spacing.md}px`,
+        px: "16px",
         py: "12px",
+        mb: "8px",
       }}
     >
-      <Skeleton variant="circular" width={40} height={40} />
+      <Skeleton variant="circular" width={48} height={48} sx={{ mr: "16px" }} />
       <Box sx={{ flex: 1 }}>
         <Skeleton variant="text" width="50%" height={18} />
         <Skeleton variant="text" width="30%" height={14} />
@@ -406,78 +338,90 @@ export const CommunityPage = ({ config: _config }: Props) => {
   const renderEmpty = () => (
     <Box
       sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.lg}px`,
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        px: `${mobileTheme.spacing.lg}px`,
+        py: `${mobileTheme.spacing.xl}px`,
         textAlign: "center",
       }}
     >
-      <Box
+      <Icon sx={{ fontSize: 64, color: tc.textSecondary }}>people_outline</Icon>
+      <Typography
         sx={{
-          width: 64,
-          height: 64,
-          borderRadius: "32px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          fontSize: 22,
+          fontWeight: 600,
+          color: tc.text,
+          mt: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.xs}px`,
         }}
       >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>people_outline</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
         {searchText ? "No members found" : "Directory"}
       </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        {searchText ? "Try a different name." : "Search for members in your church."}
+      <Typography sx={{ fontSize: 14, color: tc.textSecondary, lineHeight: "20px" }}>
+        {searchText ? "Try adjusting your search." : "Search for members in your church."}
       </Typography>
     </Box>
   );
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <TextField
-        fullWidth
-        size="small"
-        placeholder="Search members..."
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>search</Icon>
-            </InputAdornment>
-          ),
-          endAdornment: searchText ? (
-            <InputAdornment position="end">
-              <IconButton size="small" onClick={() => setSearchText("")} aria-label="Clear">
-                <Icon sx={{ fontSize: 18 }}>close</Icon>
-              </IconButton>
-            </InputAdornment>
-          ) : undefined,
-          sx: {
-            bgcolor: tc.surface,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            "& fieldset": { borderColor: tc.border },
-          },
+    <Box sx={{ bgcolor: tc.background, minHeight: "100%", display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          bgcolor: tc.surface,
+          borderBottom: `1px solid ${tc.border}`,
+          px: "16px",
+          py: "16px",
         }}
-        sx={{ mb: `${mobileTheme.spacing.md}px` }}
-      />
+      >
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="Search Members"
+          placeholder="Enter name"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>search</Icon>
+              </InputAdornment>
+            ),
+            endAdornment: searchText ? (
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => setSearchText("")} aria-label="Clear">
+                  <Icon sx={{ fontSize: 18 }}>close</Icon>
+                </IconButton>
+              </InputAdornment>
+            ) : undefined,
+            sx: {
+              bgcolor: tc.surface,
+              borderRadius: `${mobileTheme.radius.md}px`,
+            },
+          }}
+        />
+      </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {filteredPeople === null && [0, 1, 2, 3].map(renderSkeleton)}
-        {filteredPeople !== null && sections.length === 0 && renderEmpty()}
-        {filteredPeople !== null &&
-          sections.length > 0 &&
-          sections.map((section) => (
-            <Box key={section.title} sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-              {renderSectionHeader(section.title)}
-              {section.people.map(renderCard)}
+      {filteredPeople === null && (
+        <Box sx={{ p: "16px" }}>
+          {[0, 1, 2, 3].map(renderSkeleton)}
+        </Box>
+      )}
+      {filteredPeople !== null && sections.length === 0 && renderEmpty()}
+      {filteredPeople !== null && sections.length > 0 && (
+        <Box sx={{ p: "16px", pb: "32px" }}>
+          {sections.map((section, idx) => (
+            <Box key={section.title}>
+              {renderSectionHeader(section.title, idx === 0)}
+              <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {section.people.map(renderCard)}
+              </Box>
             </Box>
           ))}
-      </Box>
+        </Box>
+      )}
     </Box>
   );
 };

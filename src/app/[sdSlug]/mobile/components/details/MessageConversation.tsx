@@ -3,7 +3,6 @@
 import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
@@ -274,13 +273,6 @@ export const MessageConversation = ({ id, config }: Props) => {
     }
   };
 
-  const formatTime = (t?: Date | string | number) => {
-    if (!t) return "";
-    const d = new Date(t);
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-  };
-
   const renderAvatar = () => {
     const photo = getPhoto();
     const common = {
@@ -311,70 +303,54 @@ export const MessageConversation = ({ id, config }: Props) => {
     );
   };
 
+  // B1Mobile renders each message as a surface with the sender's display name
+  // on top (labelSmall, 600 weight) and the content below, with uniform
+  // theme.roundness corners. No timestamp divider / read receipts (parity).
   const renderBubble = (m: MessageInterface, index: number) => {
     const mine = m.personId === myPersonId;
-    const prev = index > 0 ? messages![index - 1] : undefined;
-    const showTimestamp =
-      !prev ||
-      (m.timeSent &&
-        prev.timeSent &&
-        new Date(m.timeSent).getTime() - new Date(prev.timeSent).getTime() > 5 * 60 * 1000);
     const bubbleName = m.displayName || m.person?.name?.display || "";
 
     return (
-      <React.Fragment key={m.id || index}>
-        {showTimestamp && m.timeSent && (
-          <Typography
-            sx={{
-              fontSize: 11,
-              color: tc.textSecondary,
-              textAlign: "center",
-              my: "8px",
-            }}
-          >
-            {formatTime(m.timeSent)}
-          </Typography>
-        )}
+      <Box
+        key={m.id || index}
+        sx={{
+          display: "flex",
+          justifyContent: mine ? "flex-end" : "flex-start",
+          mb: "6px",
+        }}
+      >
         <Box
           sx={{
-            display: "flex",
-            justifyContent: mine ? "flex-end" : "flex-start",
-            mb: "6px",
+            maxWidth: "75%",
+            px: "12px",
+            py: "8px",
+            bgcolor: mine ? tc.primary : tc.surfaceVariant,
+            color: mine ? tc.onPrimary : tc.text,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            wordBreak: "break-word",
+            fontSize: 14,
+            lineHeight: 1.35,
           }}
         >
-          <Box
-            sx={{
-              maxWidth: "75%",
-              px: "12px",
-              py: "8px",
-              bgcolor: mine ? tc.primary : tc.surface,
-              color: mine ? tc.onPrimary : tc.text,
-              borderRadius: mine ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
-              boxShadow: mobileTheme.shadows.sm,
-              wordBreak: "break-word",
-              fontSize: 14,
-              lineHeight: 1.35,
-            }}
-          >
-            {bubbleName && (
-              <Typography
-                component="div"
-                sx={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: mine ? tc.onPrimary : tc.primary,
-                  opacity: mine ? 0.9 : 1,
-                  mb: "2px",
-                  lineHeight: 1.2,
-                }}
-              >
-                {bubbleName}
-              </Typography>
-            )}
-            {m.content}
-          </Box>
+          {bubbleName && (
+            <Typography
+              component="div"
+              sx={{
+                fontSize: 11,
+                fontWeight: 600,
+                color: mine ? tc.onPrimary : tc.primary,
+                opacity: mine ? 0.9 : 1,
+                mb: "2px",
+                lineHeight: 1.2,
+              }}
+            >
+              {bubbleName}
+            </Typography>
+          )}
+          {m.content}
         </Box>
-      </React.Fragment>
+      </Box>
     );
   };
 
@@ -421,34 +397,43 @@ export const MessageConversation = ({ id, config }: Props) => {
         bgcolor: tc.background,
       }}
     >
-      {/* Header row */}
+      {/* Contextual row: who the conversation is with + start-new icon.
+          The AppBar already carries the "Messages" title (design std #3), so
+          this row is body-level context, not a page header. */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: "8px",
+          gap: `${mobileTheme.spacing.sm}px`,
           px: `${mobileTheme.spacing.md}px`,
           py: "10px",
           bgcolor: tc.surface,
           borderBottom: `1px solid ${tc.border}`,
         }}
       >
-        <IconButton
-          aria-label="Back"
-          onClick={() => router.back()}
-          sx={{ color: tc.text }}
-          size="small"
-        >
-          <ArrowBackIcon />
-        </IconButton>
         {renderAvatar()}
-        <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <Typography
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            fontSize: 16,
+            fontWeight: 600,
+            color: tc.text,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
           {name}
         </Typography>
         <IconButton
           aria-label="New conversation"
           onClick={() => router.push("/mobile/messages/new")}
-          sx={{ color: tc.text }}
+          sx={{
+            bgcolor: tc.iconBackground,
+            color: tc.primary,
+            "&:hover": { bgcolor: tc.iconBackground },
+          }}
           size="small"
         >
           <PersonAddAlt1Icon />

@@ -91,10 +91,10 @@ export const GroupsPage = ({ config }: Props) => {
     decorated.sort((a, b) => (a.count === b.count ? a.index - b.index : b.count - a.count));
     const ordered = decorated.map((d) => d.group);
 
-    // Hero = top group; Featured grid = next 2-4; Regular = remainder.
+    // Hero = top group; Featured grid = next 2 (matches B1Mobile); Regular = remainder.
     const hero = ordered[0] || null;
-    const featured = ordered.slice(1, 5); // up to 4 featured
-    const regular = ordered.slice(5);
+    const featured = ordered.slice(1, 3); // up to 2 featured (matches B1Mobile)
+    const regular = ordered.slice(3);
     return { hero, featured, regular };
   }, [effectiveGroups, viewCounts]);
 
@@ -119,47 +119,6 @@ export const GroupsPage = ({ config }: Props) => {
   const handleClick = (group: GroupInterface) => {
     if (group.id) incrementViewCount(group.id);
     router.push(`/mobile/groups/${group.id}`);
-  };
-
-  const getInitial = (name?: string) => {
-    if (!name) return "?";
-    return name.trim().charAt(0).toUpperCase();
-  };
-
-  const renderThumbnail = (group: GroupInterface) => {
-    const common = {
-      width: 48,
-      height: 48,
-      borderRadius: `${mobileTheme.radius.md}px`,
-      flexShrink: 0,
-      overflow: "hidden",
-    } as const;
-    if (group.photoUrl) {
-      return (
-        <Box
-          component="img"
-          src={group.photoUrl}
-          alt={group.name || "Group"}
-          sx={{ ...common, objectFit: "cover" }}
-        />
-      );
-    }
-    return (
-      <Box
-        sx={{
-          ...common,
-          bgcolor: tc.primaryLight,
-          color: tc.primary,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 700,
-          fontSize: 18,
-        }}
-      >
-        {getInitial(group.name)}
-      </Box>
-    );
   };
 
   // Hero card — large, full-width, photo cover with gradient overlay.
@@ -296,16 +255,9 @@ export const GroupsPage = ({ config }: Props) => {
     );
   };
 
-  // Regular card — compact horizontal row (preserves prior design).
+  // Regular card — compact horizontal row (matches B1Mobile compact list item).
   const renderCard = (group: GroupInterface) => {
-    const meetsSubtitle = [group.meetingTime, group.meetingLocation].filter(Boolean).join(" \u00B7 ");
-    const memberCount = (group as any).memberCount;
-    const subtitle = meetsSubtitle
-      ? `Meets: ${meetsSubtitle}`
-      : typeof memberCount === "number"
-        ? `Members: ${memberCount}`
-        : "";
-
+    const hasPhoto = !!group.photoUrl;
     return (
       <Box
         key={group.id}
@@ -325,45 +277,58 @@ export const GroupsPage = ({ config }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          px: `${mobileTheme.spacing.md}px`,
-          py: "12px",
+          p: "12px",
           cursor: "pointer",
           transition: "box-shadow 150ms ease, transform 150ms ease",
+          overflow: "hidden",
           "&:hover": { boxShadow: mobileTheme.shadows.md },
           "&:active": { transform: "scale(0.995)" },
         }}
       >
-        {renderThumbnail(group)}
+        <Box
+          sx={{
+            width: 60,
+            height: 60,
+            borderRadius: `${mobileTheme.radius.md}px`,
+            overflow: "hidden",
+            flexShrink: 0,
+            bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {hasPhoto ? (
+            <Box
+              component="img"
+              src={group.photoUrl}
+              alt={group.name || "Group"}
+              sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          ) : (
+            <Icon sx={{ fontSize: 28, color: tc.primary, opacity: 0.6 }}>groups</Icon>
+          )}
+        </Box>
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Typography
             sx={{
               fontSize: 16,
               fontWeight: 600,
               color: tc.text,
+              mb: "2px",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
             }}
           >
             {group.name}
           </Typography>
-          {subtitle && (
-            <Typography
-              sx={{
-                fontSize: 12,
-                fontWeight: 400,
-                color: tc.textSecondary,
-                mt: "2px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {subtitle}
-            </Typography>
-          )}
+          <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
+            Tap to explore
+          </Typography>
         </Box>
-        <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
       </Box>
     );
   };

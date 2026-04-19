@@ -108,8 +108,8 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
   };
 
   const renderHeader = () => (
-    <Box sx={{ display: "flex", alignItems: "center", mb: `${mobileTheme.spacing.sm}px`, pl: 0.5 }}>
-      <Icon sx={{ color: tc.primary, mr: 1, fontSize: 22 }}>event_busy</Icon>
+    <Box sx={{ display: "flex", alignItems: "center", mb: `${mobileTheme.spacing.md}px`, pl: 0.5 }}>
+      <Icon sx={{ color: tc.primary, mr: 1, fontSize: 24 }}>event_busy</Icon>
       <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
         Blockout Dates
       </Typography>
@@ -118,11 +118,11 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
 
   const renderEmpty = () => (
     <Box sx={{ textAlign: "center", p: `${mobileTheme.spacing.lg}px` }}>
-      <Icon sx={{ fontSize: 40, color: tc.disabled }}>event_busy</Icon>
-      <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text, mt: 1 }}>
+      <Icon sx={{ fontSize: 48, color: tc.disabled }}>event_busy</Icon>
+      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mt: 2 }}>
         No blockout dates set
       </Typography>
-      <Typography sx={{ fontSize: 13, color: tc.textSecondary, mt: 0.5, mb: 2 }}>
+      <Typography sx={{ fontSize: 14, color: tc.disabled, mt: 1, mb: 3 }}>
         Block dates when you&apos;re unavailable to serve.
       </Typography>
       <Button
@@ -132,9 +132,10 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
         sx={{
           bgcolor: tc.primary,
           color: tc.onPrimary,
-          borderRadius: `${mobileTheme.radius.md}px`,
+          borderRadius: `${mobileTheme.radius.lg}px`,
           textTransform: "none",
           fontWeight: 600,
+          px: 2,
           "&:hover": { bgcolor: tc.primary },
         }}
       >
@@ -200,16 +201,15 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
   );
 
   const renderList = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 0.5,
         }}
       >
-        <Typography sx={{ fontSize: 13, color: tc.textSecondary, fontWeight: 500 }}>
+        <Typography sx={{ fontSize: 14, color: tc.disabled, fontWeight: 500 }}>
           {upcoming.length} upcoming
         </Typography>
         <Button
@@ -232,34 +232,46 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 1.5,
-            bgcolor: tc.surfaceVariant,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            px: 1.5,
-            py: 1.25,
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            p: `${mobileTheme.spacing.md}px`,
           }}
         >
-          <Icon sx={{ color: tc.error, fontSize: 20 }}>event_busy</Icon>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-              {DateHelper.prettyDate(DateHelper.toDate(b.startDate))}
-              {b.endDate && b.endDate !== b.startDate
-                ? ` - ${DateHelper.prettyDate(DateHelper.toDate(b.endDate))}`
-                : ""}
-            </Typography>
-            {b.notes && (
-              <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: 0.25 }}>
-                {b.notes}
+          <Box sx={{ flex: 1, minWidth: 0, mr: 1.5 }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Icon sx={{ color: tc.error, fontSize: 20, mr: 1 }}>event_busy</Icon>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
+                {DateHelper.prettyDate(DateHelper.toDate(b.startDate))}
+                {b.endDate && b.endDate !== b.startDate
+                  ? ` - ${DateHelper.prettyDate(DateHelper.toDate(b.endDate))}`
+                  : ""}
               </Typography>
+            </Box>
+            {b.notes && (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  bgcolor: `${tc.disabled}14`,
+                  borderRadius: `${mobileTheme.radius.md}px`,
+                  p: 1.5,
+                  mt: 1,
+                }}
+              >
+                <Icon sx={{ color: tc.disabled, fontSize: 16, mr: 1, mt: 0.25 }}>note</Icon>
+                <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
+                  {b.notes}
+                </Typography>
+              </Box>
             )}
           </Box>
           <IconButton
-            size="small"
             onClick={() => setDeleteId(b.id)}
             aria-label="Delete blockout"
             sx={{ color: tc.error }}
           >
-            <Icon fontSize="small">delete_outline</Icon>
+            <Icon>delete_outline</Icon>
           </IconButton>
         </Box>
       ))}
@@ -272,7 +284,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
-          borderRadius: `${mobileTheme.radius.lg}px`,
+          borderRadius: `${mobileTheme.radius.xl}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
         }}

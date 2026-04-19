@@ -33,7 +33,7 @@ const SCREEN_TITLES: Record<string, string> = {
   donate: "Giving",
   membersSearch: "Directory",
   community: "Directory",
-  memberDetail: "Profile",
+  memberDetail: "Member Details",
   plan: "Plans",
   plans: "Plans",
   planDetails: "Plan",

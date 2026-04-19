@@ -290,10 +290,10 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
             <Icon sx={{ fontSize: 40, color: tc.success }}>check_circle</Icon>
           </Box>
           <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text, mb: 0.5 }}>
-            You&apos;re registered!
+            Registration Confirmed!
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            See you at <b>{event.title}</b>.
+            You are registered for <b>{event.title}</b>
           </Typography>
           {registration.status && (
             <Chip
@@ -328,7 +328,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           <Button
             variant="contained"
             fullWidth
-            onClick={() => router.push("/mobile/registrations")}
+            onClick={handleBack}
             sx={{
               mt: 3,
               bgcolor: tc.primary,
@@ -340,7 +340,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               "&:hover": { bgcolor: tc.primary },
             }}
           >
-            View My Registrations
+            Done
           </Button>
         </Box>
       </Shell>
@@ -350,34 +350,34 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   // Event header card (used in both info/members steps)
   const eventCard = (
     <Box sx={{
-      borderRadius: `${mobileTheme.radius.xl}px`,
-      overflow: "hidden",
-      boxShadow: mobileTheme.shadows.md,
-      background: `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
-      color: "#FFFFFF",
+      bgcolor: tc.surface,
+      borderRadius: `${mobileTheme.radius.lg}px`,
+      boxShadow: mobileTheme.shadows.sm,
       p: `${mobileTheme.spacing.md}px`,
       mb: `${mobileTheme.spacing.md}px`,
     }}>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 0.5 }}>
-        <Icon sx={{ fontSize: 18, color: "#FFFFFF", opacity: 0.9 }}>event</Icon>
-        <Typography sx={{ fontSize: 11, color: "#FFFFFF", opacity: 0.85, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>
-          Event Registration
-        </Typography>
-      </Box>
-      <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.2, mb: 0.5 }}>
+      <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text, lineHeight: 1.2, mb: 1 }}>
         {event.title}
       </Typography>
       {event.start && (
-        <Typography sx={{ fontSize: 13, color: "rgba(255,255,255,0.92)" }}>
-          {formatEventTime(event)}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mb: event.description ? 1 : 0 }}>
+          <Icon sx={{ fontSize: 16, color: tc.textMuted }}>schedule</Icon>
+          <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
+            {formatEventTime(event)}
+          </Typography>
+        </Box>
+      )}
+      {event.description && (
+        <Typography sx={{ fontSize: 14, color: tc.text, lineHeight: 1.5, whiteSpace: "pre-wrap", my: 1 }}>
+          {event.description}
         </Typography>
       )}
       {event.capacity ? (() => {
         const pct = Math.min((activeCount / event.capacity) * 100, 100);
-        const barColor = pct >= 90 ? tc.error : pct >= 70 ? tc.warning : tc.success;
+        const barColor = pct >= 90 ? tc.warning : tc.primary;
         return (
-          <Box sx={{ mt: 1.5 }}>
-            <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.9)", mb: 0.5 }}>
+          <Box sx={{ mt: 1 }}>
+            <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 0.5 }}>
               {activeCount} / {event.capacity} spots filled
             </Typography>
             <LinearProgress
@@ -386,7 +386,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               sx={{
                 height: 6,
                 borderRadius: 3,
-                bgcolor: "rgba(255,255,255,0.25)",
+                bgcolor: tc.border,
                 "& .MuiLinearProgress-bar": { bgcolor: barColor },
               }}
             />
@@ -396,29 +396,11 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     </Box>
   );
 
-  const stepDots = (
-    <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mb: 2 }}>
-      {(["info", "members"] as Step[]).map((s) => (
-        <Box
-          key={s}
-          sx={{
-            width: step === s ? 24 : 8,
-            height: 8,
-            borderRadius: 4,
-            bgcolor: step === s ? tc.primary : tc.borderLight,
-            transition: "width 200ms ease, background-color 200ms ease",
-          }}
-        />
-      ))}
-    </Box>
-  );
-
   // Members step
   if (step === "members") {
     return (
       <Shell>
         {eventCard}
-        {stepDots}
         <Box sx={{
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
@@ -538,21 +520,6 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   return (
     <Shell>
       {eventCard}
-      {stepDots}
-
-      {event.description && (
-        <Box sx={{
-          bgcolor: tc.surface,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
-          mb: `${mobileTheme.spacing.md}px`,
-        }}>
-          <Typography sx={{ fontSize: 14, color: tc.text, lineHeight: 1.55, whiteSpace: "pre-wrap" }}>
-            {event.description}
-          </Typography>
-        </Box>
-      )}
 
       <Box sx={{
         bgcolor: tc.surface,

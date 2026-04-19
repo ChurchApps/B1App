@@ -114,7 +114,7 @@ export const VolunteerPage = ({ config }: Props) => {
               return (
                 <Chip
                   key={p.id || p.name}
-                  label={`${p.name}: ${posOpen} open`}
+                  label={`${p.name} (${posOpen} open)`}
                   size="small"
                   sx={{
                     height: 22,
@@ -144,7 +144,7 @@ export const VolunteerPage = ({ config }: Props) => {
                 "&:hover": { bgcolor: tc.primary },
               }}
             >
-              Volunteer
+              View & Sign Up
             </Button>
           </Box>
         )}
@@ -191,13 +191,13 @@ export const VolunteerPage = ({ config }: Props) => {
           mb: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>handshake</Icon>
+        <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-        No opportunities right now
+        Browse Opportunities
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        Check back soon for new ways to serve.
+        There are no volunteer opportunities available right now. Check back soon!
       </Typography>
     </Box>
   );

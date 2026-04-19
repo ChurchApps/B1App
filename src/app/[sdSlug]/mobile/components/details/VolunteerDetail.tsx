@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
-  CircularProgress,
   Icon,
   IconButton,
   Skeleton,
@@ -107,7 +106,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     setMessage(null);
     try {
       await ApiHelper.post("/assignments/signup", { positionId: pos.id }, "DoingApi");
-      setMessage({ type: "success", text: "You signed up!" });
+      setMessage({ type: "success", text: "You've been signed up!" });
       await load();
     } catch (err: any) {
       const msg = (err?.message || err?.toString() || "").toLowerCase();
@@ -123,12 +122,12 @@ export const VolunteerDetail = ({ id, config }: Props) => {
 
   const handleRemove = async (assignment: AssignmentInterface) => {
     if (!assignment.id) return;
-    if (!window.confirm("Remove your signup?")) return;
+    if (!window.confirm("Are you sure you want to remove your signup?")) return;
     setActionId(assignment.id);
     setMessage(null);
     try {
       await ApiHelper.delete(`/assignments/signup/${assignment.id}`, "DoingApi");
-      setMessage({ type: "success", text: "Signup removed." });
+      setMessage({ type: "success", text: "Your signup has been removed." });
       await load();
     } catch (err: any) {
       const msg = (err?.message || err?.toString() || "").toLowerCase();
@@ -155,21 +154,14 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const timesStr = times.length > 0 ? times.map((t) => (t as any).displayName || "").filter(Boolean).join(", ") : "";
 
   const renderHeader = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
-      }}
-    >
-      <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text }}>{plan?.name}</Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textSecondary, mt: 0.25 }}>
+    <Box>
+      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: "4px" }}>{plan?.name}</Typography>
+      <Typography sx={{ fontSize: 15, color: tc.textMuted, mb: plan?.notes ? "8px" : 0 }}>
         {serviceDateStr}
         {timesStr && ` · ${timesStr}`}
       </Typography>
       {plan?.notes && (
-        <Typography sx={{ fontSize: 14, color: tc.textMuted, mt: 1, whiteSpace: "pre-wrap" }}>
+        <Typography sx={{ fontSize: 14, color: tc.textMuted, whiteSpace: "pre-wrap" }}>
           {plan.notes}
         </Typography>
       )}
@@ -260,7 +252,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 flexShrink: 0,
               }}
             >
-              {busy ? "…" : "Remove"}
+              {busy ? "Removing..." : "Remove"}
             </Button>
           ) : (
             <Button
@@ -279,7 +271,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" },
               }}
             >
-              {busy ? "…" : isFull ? "Full" : "Sign Up"}
+              {busy ? "Signing Up..." : isFull ? "Full" : "Sign Up"}
             </Button>
           )}
         </Box>

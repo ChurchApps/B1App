@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Icon,
-  IconButton,
   Skeleton,
   Typography,
 } from "@mui/material";
@@ -29,7 +28,7 @@ interface PersonWithPrivacy extends PersonInterface {
   optedOut?: boolean;
 }
 
-export const CommunityDetail = ({ id, config }: Props) => {
+export const CommunityDetail = ({ id, config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
 
@@ -56,11 +55,6 @@ export const CommunityDetail = ({ id, config }: Props) => {
 
   const currentPersonId = UserHelper.person?.id;
   const isOwnProfile = !!currentPersonId && currentPersonId === person?.id;
-
-  const handleBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) router.back();
-    else router.push("/mobile/community");
-  };
 
   const getInitials = (p?: PersonInterface | null) => {
     if (!p) return "?";
@@ -102,24 +96,6 @@ export const CommunityDetail = ({ id, config }: Props) => {
     if (!person?.id) return;
     router.push(`/mobile/messages/${person.id}`);
   };
-
-  const renderBack = () => (
-    <IconButton
-      aria-label="Back"
-      onClick={handleBack}
-      sx={{
-        width: 40,
-        height: 40,
-        bgcolor: tc.surface,
-        color: tc.text,
-        boxShadow: mobileTheme.shadows.sm,
-        mb: `${mobileTheme.spacing.md}px`,
-        "&:hover": { bgcolor: tc.surface },
-      }}
-    >
-      <Icon>arrow_back</Icon>
-    </IconButton>
-  );
 
   const renderHero = () => {
     const photo = getPhoto(person);
@@ -262,17 +238,16 @@ export const CommunityDetail = ({ id, config }: Props) => {
           onClick={() => router.push("/mobile/profileEdit")}
         />
       );
-    } else {
-      actions.push(
-        <QuickAction
-          key="msg"
-          icon="message"
-          label="Message"
-          ariaLabel="Send message"
-          onClick={handleMessage}
-        />
-      );
     }
+    actions.push(
+      <QuickAction
+        key="msg"
+        icon="message"
+        label="Message"
+        ariaLabel="Send message"
+        onClick={handleMessage}
+      />
+    );
     if (primaryPhone) {
       actions.push(
         <QuickAction
@@ -282,17 +257,6 @@ export const CommunityDetail = ({ id, config }: Props) => {
           ariaLabel="Call"
           onClick={() => {
             window.location.href = `tel:${primaryPhone}`;
-          }}
-        />
-      );
-      actions.push(
-        <QuickAction
-          key="sms"
-          icon="sms"
-          label="Text"
-          ariaLabel="Send text message"
-          onClick={() => {
-            window.location.href = `sms:${primaryPhone}`;
           }}
         />
       );
@@ -355,11 +319,11 @@ export const CommunityDetail = ({ id, config }: Props) => {
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
         bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
+        borderRadius: "16px",
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        px: "16px",
+        py: "16px",
         cursor: onClick ? "pointer" : "default",
         "&:hover": onClick ? { boxShadow: mobileTheme.shadows.md } : undefined,
       }}
@@ -369,14 +333,15 @@ export const CommunityDetail = ({ id, config }: Props) => {
           width: 48,
           height: 48,
           borderRadius: "24px",
-          bgcolor: tc.iconBackground,
+          bgcolor: tc.background,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
+          mr: "16px",
         }}
       >
-        <Icon sx={{ fontSize: 22, color: tc.primary }}>{icon}</Icon>
+        <Icon sx={{ fontSize: 24, color: tc.primary }}>{icon}</Icon>
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Typography sx={{ fontSize: 12, fontWeight: 500, color: tc.textSecondary, mb: "2px" }}>
@@ -394,10 +359,10 @@ export const CommunityDetail = ({ id, config }: Props) => {
           {value}
         </Typography>
         {subValue && (
-          <Typography sx={{ fontSize: 13, color: tc.textSecondary, mt: "2px" }}>{subValue}</Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textSecondary, mt: "2px" }}>{subValue}</Typography>
         )}
       </Box>
-      {onClick && <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>}
+      {onClick && <Icon sx={{ color: tc.textSecondary, fontSize: 24 }}>chevron_right</Icon>}
     </Box>
   );
 
@@ -446,10 +411,10 @@ export const CommunityDetail = ({ id, config }: Props) => {
     if (rows.length === 0) return null;
     return (
       <Box>
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
+        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: "16px" }}>
           Contact Information
         </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {rows}
         </Box>
       </Box>
@@ -459,14 +424,23 @@ export const CommunityDetail = ({ id, config }: Props) => {
   const renderHousehold = () => {
     const others = (household || []).filter((h) => h.id !== person?.id);
     if (others.length === 0) return null;
+    const formatName = (display: string) => {
+      const parts = display.trim().split(" ");
+      if (parts.length > 1) {
+        return { firstName: parts.slice(0, -1).join(" "), lastName: parts[parts.length - 1] };
+      }
+      return { firstName: display, lastName: "" };
+    };
     return (
       <Box>
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
+        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: "16px" }}>
           Household Members
         </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           {others.map((h) => {
             const hphoto = getPhoto(h);
+            const display = h.name?.display || "Unknown";
+            const { firstName, lastName } = formatName(display);
             return (
               <Box
                 key={h.id}
@@ -482,11 +456,11 @@ export const CommunityDetail = ({ id, config }: Props) => {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: `${mobileTheme.spacing.md}px`,
                   bgcolor: tc.surface,
-                  borderRadius: `${mobileTheme.radius.lg}px`,
+                  borderRadius: "12px",
                   boxShadow: mobileTheme.shadows.sm,
-                  p: `${mobileTheme.spacing.md}px`,
+                  px: "16px",
+                  py: "12px",
                   cursor: "pointer",
                   "&:hover": { boxShadow: mobileTheme.shadows.md },
                 }}
@@ -495,8 +469,8 @@ export const CommunityDetail = ({ id, config }: Props) => {
                   <Box
                     component="img"
                     src={hphoto}
-                    alt={h.name?.display || "Member"}
-                    sx={{ width: 48, height: 48, borderRadius: "24px", objectFit: "cover", flexShrink: 0 }}
+                    alt={display}
+                    sx={{ width: 48, height: 48, borderRadius: "24px", objectFit: "cover", flexShrink: 0, mr: "16px" }}
                   />
                 ) : (
                   <Box
@@ -512,20 +486,48 @@ export const CommunityDetail = ({ id, config }: Props) => {
                       fontWeight: 700,
                       fontSize: 16,
                       flexShrink: 0,
+                      mr: "16px",
                     }}
                   >
                     {getInitials(h)}
                   </Box>
                 )}
                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                    {h.name?.display || "Unknown"}
-                  </Typography>
-                  <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "baseline" }}>
+                    <Typography
+                      component="span"
+                      sx={{ fontSize: 16, fontWeight: 600, color: tc.text, lineHeight: 1.3, mr: lastName ? "4px" : 0 }}
+                    >
+                      {firstName}
+                    </Typography>
+                    {lastName && (
+                      <Typography
+                        component="span"
+                        sx={{ fontSize: 16, fontWeight: 800, color: tc.text, lineHeight: 1.3 }}
+                      >
+                        {lastName}
+                      </Typography>
+                    )}
+                  </Box>
+                  <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
                     {h.householdRole || "Household Member"}
                   </Typography>
                 </Box>
-                <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
+                <Box
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: "18px",
+                    bgcolor: tc.iconBackground,
+                    color: tc.textSecondary,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Icon sx={{ fontSize: 20 }}>chevron_right</Icon>
+                </Box>
               </Box>
             );
           })}
@@ -621,19 +623,40 @@ export const CommunityDetail = ({ id, config }: Props) => {
   const isPrivate = !!person?.optedOut;
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderBack()}
-      {person === undefined && renderSkeleton()}
-      {person === null && renderNotFound()}
-      {person && isPrivate && renderPrivateProfile()}
-      {person && !isPrivate && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.lg}px` }}>
-          {renderHero()}
-          {renderQuickActions()}
-          {renderDetailsSection()}
-          {renderHousehold()}
-        </Box>
+    <Box sx={{ bgcolor: tc.background, minHeight: "100%", pb: "32px" }}>
+      {person === undefined && (
+        <Box sx={{ p: "16px" }}>{renderSkeleton()}</Box>
       )}
+      {person === null && (
+        <Box sx={{ p: "16px" }}>{renderNotFound()}</Box>
+      )}
+      {person && isPrivate && (
+        <Box sx={{ p: "16px" }}>{renderPrivateProfile()}</Box>
+      )}
+      {person && !isPrivate && (() => {
+        const details = renderDetailsSection();
+        const householdSection = renderHousehold();
+        return (
+          <>
+            <Box sx={{ px: "16px", pt: "16px" }}>
+              {renderHero()}
+            </Box>
+            <Box sx={{ px: "16px", mt: "16px", mb: "24px" }}>
+              {renderQuickActions()}
+            </Box>
+            {details && (
+              <Box sx={{ px: "16px", mb: "24px" }}>
+                {details}
+              </Box>
+            )}
+            {householdSection && (
+              <Box sx={{ px: "16px", mb: "24px" }}>
+                {householdSection}
+              </Box>
+            )}
+          </>
+        );
+      })()}
     </Box>
   );
 };

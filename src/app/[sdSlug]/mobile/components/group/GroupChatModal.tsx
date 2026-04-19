@@ -58,12 +58,12 @@ export const GroupChatModal = ({
   const tc = mobileTheme.colors;
   const [subTab, setSubTab] = React.useState<ChatSubTab>(initialSubTab);
   const [conversations, setConversations] = React.useState<Conversation[]>([]);
-  const [active, setActive] = React.useState<Conversation | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [draft, setDraft] = React.useState("");
   const [sending, setSending] = React.useState(false);
   const [people, setPeople] = React.useState<Record<string, PersonInterface>>({});
   const [hasAnnouncements, setHasAnnouncements] = React.useState(false);
+  const scrollRef = React.useRef<HTMLDivElement | null>(null);
 
   const currentContentType: ContentType = subTab === "announcements" ? "groupAnnouncement" : "group";
   const canPost = subTab === "announcements" ? isLeader : true;
@@ -97,20 +97,12 @@ export const GroupChatModal = ({
     if (!groupId) return;
     setLoading(true);
     try {
-      let list: Conversation[] = [];
-      if (currentContentType === "group") {
-        const data: Conversation[] = await ApiHelper.get(
-          `/conversations/group/${groupId}`,
-          "MessagingApi"
-        );
-        list = Array.isArray(data) ? data : [];
-      } else {
-        const data: Conversation[] = await ApiHelper.get(
-          `/conversations/messages/groupAnnouncement/${groupId}?page=1&limit=50`,
-          "MessagingApi"
-        );
-        list = Array.isArray(data) ? data : [];
-      }
+      // B1Mobile uses the same endpoint for both content types, unified.
+      const data: Conversation[] = await ApiHelper.get(
+        `/conversations/messages/${currentContentType}/${groupId}?page=1&limit=50`,
+        "MessagingApi"
+      );
+      const list = Array.isArray(data) ? data : [];
       setConversations(list);
 
       const ids = new Set<string>();
@@ -144,11 +136,30 @@ export const GroupChatModal = ({
 
   React.useEffect(() => {
     if (open) {
-      setActive(null);
       loadConversations();
       loadAnnouncementsPreflight();
     }
   }, [open, subTab, loadConversations, loadAnnouncementsPreflight]);
+
+  // Flat message list across all conversations of the current type (matches B1Mobile).
+  const messages = React.useMemo(() => {
+    const flat: Message[] = [];
+    conversations.forEach((c) =>
+      (c.messages || []).forEach((m) => flat.push(m))
+    );
+    flat.sort((a, b) => {
+      const ta = a.timeSent ? new Date(a.timeSent).getTime() : 0;
+      const tb = b.timeSent ? new Date(b.timeSent).getTime() : 0;
+      return ta - tb;
+    });
+    return flat;
+  }, [conversations]);
+
+  // Auto-scroll to bottom on new messages.
+  React.useEffect(() => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, [messages.length, loading]);
 
   const myPersonId = UserHelper.person?.id;
 
@@ -159,9 +170,8 @@ export const GroupChatModal = ({
     setSending(true);
     try {
       // Ensure we have a conversation
-      let conversationId = active?.id;
+      let conversationId = conversations[0]?.id;
       if (!conversationId) {
-        // Create conversation for this content type
         const convPayload = {
           groupId,
           allowAnonymousPosts: false,
@@ -193,11 +203,6 @@ export const GroupChatModal = ({
       );
       setDraft("");
       await loadConversations();
-      // Keep focus on the same conversation if possible
-      if (active?.id) {
-        const fresh = conversations.find((c) => c.id === active.id);
-        if (fresh) setActive(fresh);
-      }
     } catch {
       /* ignore */
     } finally {
@@ -205,169 +210,88 @@ export const GroupChatModal = ({
     }
   };
 
-  const formatTime = (t?: string | Date) => {
+  const formatRelative = (t?: string | Date) => {
     if (!t) return "";
     const d = typeof t === "string" ? new Date(t) : t;
     if (isNaN(d.getTime())) return "";
-    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    const diff = Math.floor((Date.now() - d.getTime()) / 60000);
+    if (diff < 1) return "now";
+    if (diff < 60) return `${diff}m`;
+    if (diff < 1440) return `${Math.floor(diff / 60)}h`;
+    return `${Math.floor(diff / 1440)}d`;
   };
 
-  const renderList = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      {conversations.length === 0 && (
-        <Box sx={{ textAlign: "center", p: `${mobileTheme.spacing.lg}px` }}>
-          <Icon sx={{ fontSize: 40, color: tc.textSecondary, mb: 1 }}>
-            {subTab === "announcements" ? "campaign" : "forum"}
-          </Icon>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-            {subTab === "announcements"
-              ? "No announcements yet."
-              : "No conversations yet."}
-          </Typography>
-          {subTab === "announcements" && !isLeader && (
-            <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: 0.5 }}>
-              Leaders can post announcements here.
-            </Typography>
-          )}
-        </Box>
-      )}
-      {conversations.map((c) => {
-        const last = c.messages?.[c.messages.length - 1];
-        return (
-          <Box
-            key={c.id}
-            role="button"
-            tabIndex={0}
-            onClick={() => setActive(c)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                setActive(c);
-              }
-            }}
-            sx={{
-              display: "flex",
-              gap: 1.5,
-              alignItems: "center",
-              bgcolor: tc.surface,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
-              px: `${mobileTheme.spacing.md}px`,
-              py: "10px",
-              cursor: "pointer",
-              "&:hover": { boxShadow: mobileTheme.shadows.md },
-            }}
-          >
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                borderRadius: "20px",
-                bgcolor: tc.primaryLight,
-                color: tc.primary,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Icon>{subTab === "announcements" ? "campaign" : "forum"}</Icon>
-            </Box>
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-                {c.title || (subTab === "announcements" ? "Announcements" : "Conversation")}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  color: tc.textSecondary,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {last?.content || "No messages yet"}
-              </Typography>
-            </Box>
-            {last?.timeSent && (
-              <Typography sx={{ fontSize: 11, color: tc.textSecondary }}>
-                {formatTime(last.timeSent)}
-              </Typography>
-            )}
-          </Box>
-        );
-      })}
-      {canPost && conversations.length === 0 && (
-        <Box sx={{ mt: 1 }}>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted, textAlign: "center" }}>
-            Send a message below to start a new{" "}
-            {subTab === "announcements" ? "announcement" : "conversation"}.
-          </Typography>
-        </Box>
-      )}
+  const renderEmpty = () => (
+    <Box sx={{ textAlign: "center", p: `${mobileTheme.spacing.lg}px`, mt: 2 }}>
+      <Box
+        sx={{
+          width: 64,
+          height: 64,
+          borderRadius: "32px",
+          bgcolor: tc.iconBackground,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mb: `${mobileTheme.spacing.md}px`,
+        }}
+      >
+        <Icon sx={{ fontSize: 32, color: tc.primary }}>
+          {subTab === "announcements" ? "campaign" : "chat"}
+        </Icon>
+      </Box>
+      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+        {subTab === "announcements" ? "No announcements yet" : "Start the conversation"}
+      </Typography>
+      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
+        {subTab === "announcements"
+          ? isLeader
+            ? "Post an announcement below."
+            : "Leaders can post announcements here."
+          : "Be the first to share something with the group."}
+      </Typography>
     </Box>
   );
 
-  const renderConversation = () => {
-    if (!active) return null;
-    const msgs = active.messages || [];
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            pb: 1,
-            borderBottom: `1px solid ${tc.border}`,
-          }}
-        >
-          <IconButton aria-label="Back" onClick={() => setActive(null)} sx={{ color: tc.text }}>
-            <Icon>arrow_back</Icon>
-          </IconButton>
-          <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-            {active.title || (subTab === "announcements" ? "Announcement" : "Conversation")}
-          </Typography>
-        </Box>
-
-        <Box sx={{ flex: 1, overflowY: "auto", py: `${mobileTheme.spacing.sm}px` }}>
-          {msgs.length === 0 && (
-            <Typography sx={{ textAlign: "center", color: tc.textMuted, mt: 4 }}>
-              No messages yet.
-            </Typography>
-          )}
-          {msgs.map((m, i) => {
-            const isMine = m.personId === myPersonId;
-            const p = m.personId ? people[m.personId] : undefined;
-            const name = p?.name?.display || "";
-            const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
-            return (
-              <Box
-                key={m.id || `m-${i}`}
-                sx={{
-                  display: "flex",
-                  flexDirection: isMine ? "row-reverse" : "row",
-                  alignItems: "flex-end",
-                  gap: 1,
-                  mb: 1,
-                }}
-              >
-                {!isMine && (
+  const renderMessages = () => (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "2px", py: `${mobileTheme.spacing.sm}px` }}>
+      {messages.map((m, i) => {
+        const isMine = m.personId === myPersonId;
+        const p = m.personId ? people[m.personId] : undefined;
+        const name = p?.name?.display || "";
+        const prev = messages[i - 1];
+        const next = messages[i + 1];
+        const showName = !isMine && (!prev || prev.personId !== m.personId);
+        const showAvatar = !isMine && (!next || next.personId !== m.personId);
+        const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
+        return (
+          <Box
+            key={m.id || `m-${i}`}
+            sx={{
+              display: "flex",
+              flexDirection: isMine ? "row-reverse" : "row",
+              alignItems: "flex-end",
+              gap: 1,
+            }}
+          >
+            {!isMine && (
+              <Box sx={{ width: 32, flexShrink: 0 }}>
+                {showAvatar ? (
                   photo ? (
                     <Box
                       component="img"
                       src={photo}
                       alt={name}
-                      sx={{ width: 28, height: 28, borderRadius: "14px", objectFit: "cover" }}
+                      sx={{ width: 32, height: 32, borderRadius: "16px", objectFit: "cover" }}
                     />
                   ) : (
                     <Box
                       sx={{
-                        width: 28,
-                        height: 28,
-                        borderRadius: "14px",
+                        width: 32,
+                        height: 32,
+                        borderRadius: "16px",
                         bgcolor: tc.primaryLight,
                         color: tc.primary,
-                        fontSize: 11,
+                        fontSize: 12,
                         fontWeight: 700,
                         display: "flex",
                         alignItems: "center",
@@ -377,83 +301,47 @@ export const GroupChatModal = ({
                       {(name[0] || "?").toUpperCase()}
                     </Box>
                   )
-                )}
-                <Box
-                  sx={{
-                    maxWidth: "78%",
-                    bgcolor: isMine ? tc.primary : tc.surface,
-                    color: isMine ? tc.onPrimary : tc.text,
-                    px: 1.5,
-                    py: 1,
-                    borderRadius: `${mobileTheme.radius.lg}px`,
-                    boxShadow: mobileTheme.shadows.sm,
-                  }}
-                >
-                  {!isMine && name && (
-                    <Typography sx={{ fontSize: 11, fontWeight: 600, color: tc.primary, mb: "2px" }}>
-                      {name}
-                    </Typography>
-                  )}
-                  <Typography sx={{ fontSize: 14, whiteSpace: "pre-wrap" }}>{m.content}</Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 10,
-                      mt: "2px",
-                      opacity: 0.8,
-                      color: isMine ? "rgba(255,255,255,0.9)" : tc.textSecondary,
-                      textAlign: "right",
-                    }}
-                  >
-                    {formatTime(m.timeSent)}
-                  </Typography>
-                </Box>
+                ) : null}
               </Box>
-            );
-          })}
-        </Box>
-
-        {canPost && (
-          <Box sx={{ display: "flex", gap: 1, pt: 1, borderTop: `1px solid ${tc.border}` }}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder={
-                subTab === "announcements" ? "Post an announcement…" : "Type a message…"
-              }
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
+            )}
+            <Box
+              sx={{
+                maxWidth: "75%",
+                bgcolor: isMine ? tc.primary : tc.surface,
+                color: isMine ? tc.onPrimary : tc.text,
+                px: 1.5,
+                py: 1,
+                borderRadius: "18px",
+                borderBottomLeftRadius: !isMine ? "4px" : "18px",
+                borderBottomRightRadius: isMine ? "4px" : "18px",
+                boxShadow: mobileTheme.shadows.sm,
               }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleSend}
-                      disabled={sending || !draft.trim()}
-                      sx={{ color: tc.primary }}
-                    >
-                      <Icon>send</Icon>
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+            >
+              {showName && name && (
+                <Typography sx={{ fontSize: 12, fontWeight: 600, color: tc.primary, mb: "2px" }}>
+                  {name}
+                </Typography>
+              )}
+              <Typography sx={{ fontSize: 15, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
+                {m.content}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  mt: "2px",
+                  opacity: 0.8,
+                  color: isMine ? "rgba(255,255,255,0.85)" : tc.textSecondary,
+                  textAlign: "right",
+                }}
+              >
+                {formatRelative(m.timeSent)}
+              </Typography>
+            </Box>
           </Box>
-        )}
-        {!canPost && (
-          <Box sx={{ pt: 1, borderTop: `1px solid ${tc.border}` }}>
-            <Typography sx={{ fontSize: 12, color: tc.textMuted, textAlign: "center", py: 1 }}>
-              Only group leaders can post announcements.
-            </Typography>
-          </Box>
-        )}
-      </Box>
-    );
-  };
+        );
+      })}
+    </Box>
+  );
 
   const showAnnouncementsTab = isLeader || hasAnnouncements;
 
@@ -466,8 +354,8 @@ export const GroupChatModal = ({
       PaperProps={{
         sx: {
           borderRadius: `${mobileTheme.radius.xl}px`,
-          height: "80dvh",
-          maxHeight: "80dvh",
+          height: "85dvh",
+          maxHeight: "85dvh",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
@@ -484,9 +372,14 @@ export const GroupChatModal = ({
           borderBottom: `1px solid ${tc.border}`,
         }}
       >
-        <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-          {groupName ? `${groupName} Chat` : "Group Chat"}
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label="Back">
+            <Icon>arrow_back</Icon>
+          </IconButton>
+          <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
+            {groupName || "Group Chat"}
+          </Typography>
+        </Box>
         <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label="Close">
           <Icon>close</Icon>
         </IconButton>
@@ -495,10 +388,7 @@ export const GroupChatModal = ({
         <Box sx={{ borderBottom: `1px solid ${tc.border}` }}>
           <Tabs
             value={subTab}
-            onChange={(_, v) => {
-              setSubTab(v);
-              setActive(null);
-            }}
+            onChange={(_, v) => setSubTab(v)}
             variant="fullWidth"
             textColor="primary"
             indicatorColor="primary"
@@ -520,15 +410,75 @@ export const GroupChatModal = ({
           </Tabs>
         </Box>
       )}
-      <DialogContent sx={{ p: `${mobileTheme.spacing.md}px`, flex: 1, overflow: "auto" }}>
+      <DialogContent
+        ref={scrollRef}
+        sx={{ px: `${mobileTheme.spacing.md}px`, py: 0, flex: 1, overflow: "auto", bgcolor: tc.background }}
+      >
         {loading && (
           <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
             <CircularProgress sx={{ color: tc.primary }} />
           </Box>
         )}
-        {!loading && !active && renderList()}
-        {!loading && active && renderConversation()}
+        {!loading && messages.length === 0 && renderEmpty()}
+        {!loading && messages.length > 0 && renderMessages()}
       </DialogContent>
+      {canPost ? (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            px: `${mobileTheme.spacing.md}px`,
+            py: `${mobileTheme.spacing.sm}px`,
+            borderTop: `1px solid ${tc.border}`,
+            bgcolor: tc.surface,
+          }}
+        >
+          <TextField
+            fullWidth
+            size="small"
+            placeholder={
+              subTab === "announcements" ? "Post an announcement…" : "Send a message…"
+            }
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            multiline
+            maxRows={4}
+            InputProps={{
+              sx: { borderRadius: "20px" },
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleSend}
+                    disabled={sending || !draft.trim()}
+                    sx={{
+                      color: draft.trim() ? "#fff" : tc.disabled,
+                      bgcolor: draft.trim() ? tc.primary : tc.iconBackground,
+                      "&:hover": { bgcolor: draft.trim() ? tc.primary : tc.iconBackground },
+                      width: 36,
+                      height: 36,
+                    }}
+                  >
+                    <Icon sx={{ fontSize: 20 }}>send</Icon>
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+      ) : (
+        <Box sx={{ py: 1.5, borderTop: `1px solid ${tc.border}`, bgcolor: tc.surface }}>
+          <Typography sx={{ fontSize: 12, color: tc.textMuted, textAlign: "center" }}>
+            Only group leaders can post announcements.
+          </Typography>
+        </Box>
+      )}
     </Dialog>
   );
 };

@@ -81,9 +81,12 @@ export const VotdPage = () => {
   };
 
   return (
-    <Box sx={{ bgcolor: tc.background, minHeight: "100%", display: "flex", flexDirection: "column" }}>
-      {/* Edge-to-edge image area — matches B1Mobile `globalStyles.webViewContainer`.
-          The AppBar already shows "Verse of the Day"; no in-body title. */}
+    <Box sx={{ bgcolor: tc.surface, minHeight: "100%", display: "flex", flexDirection: "column" }}>
+      {/* Edge-to-edge image area — matches B1Mobile `globalStyles.webViewContainer`
+          (`flex: 1, height: "100%", width: "100%"`, no background fill).
+          Outer `bgcolor: tc.surface` mirrors B1Mobile's `homeContainer`
+          `backgroundColor: tc.surface`. The AppBar already shows
+          "Verse of the Day"; no in-body title. */}
       <Box sx={{
         position: "relative",
         flex: 1,
@@ -91,7 +94,6 @@ export const VotdPage = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        bgcolor: tc.surface,
       }}>
         {isClient && imageUrl && !imageError ? (
           <>

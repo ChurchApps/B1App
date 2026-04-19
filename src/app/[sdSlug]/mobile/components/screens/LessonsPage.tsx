@@ -277,7 +277,8 @@ export const LessonsPage = () => {
 
   return (
     <Box sx={{
-      bgcolor: tc.background,
+      // Matches B1Mobile `WebsiteScreen` (`backgroundColor: colors.surface`).
+      bgcolor: tc.surface,
       minHeight: "100%",
       display: "flex",
       flexDirection: "column",

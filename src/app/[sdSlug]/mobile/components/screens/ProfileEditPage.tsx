@@ -7,10 +7,8 @@ import {
   Avatar,
   Box,
   Button,
-  Chip,
   CircularProgress,
   FormControl,
-  FormControlLabel,
   Icon,
   IconButton,
   InputLabel,
@@ -372,27 +370,16 @@ export const ProfileEditPage = ({ config }: Props) => {
     setPendingFamilyMembers((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleOptOutChange = async (checked: boolean) => {
-    if (!person?.id) return;
-    setSavingPrivacy(true);
-    try {
-      await ApiHelper.post(
-        "/users/updateOptedOut",
-        { personId: person.id, optedOut: checked },
-        "MembershipApi"
-      );
-      setPerson((p) => (p ? { ...p, optedOut: checked } : p));
-      setSnack({
-        open: true,
-        msg: checked ? "Removed from member directory." : "Visible in member directory.",
-        severity: "success",
-      });
-    } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || "Could not update privacy.", severity: "error" });
-    } finally {
-      setSavingPrivacy(false);
+  // Visibility tab tracks optedOut locally; saved together with the dropdowns
+  // in handleSaveVisibility (matching B1Mobile's combined Save button).
+  const [optedOutLocal, setOptedOutLocal] = useState<boolean>(false);
+  const [initialOptedOut, setInitialOptedOut] = useState<boolean>(false);
+  useEffect(() => {
+    if (person) {
+      setOptedOutLocal(!!person.optedOut);
+      setInitialOptedOut(!!person.optedOut);
     }
-  };
+  }, [person?.optedOut]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Account tab handlers
   const handleSaveDisplayName = async () => {
@@ -466,21 +453,40 @@ export const ProfileEditPage = ({ config }: Props) => {
     }
   };
 
-  const visChanged = initialVis
+  const prefsChanged = initialVis
     ? addressVis !== initialVis.address || phoneVis !== initialVis.phone || emailVis !== initialVis.email
     : false;
+  const optedOutChanged = optedOutLocal !== initialOptedOut;
+  const visChanged = prefsChanged || optedOutChanged;
 
   const handleSaveVisibility = async () => {
     setSavingPrivacy(true);
     try {
-      const payload: VisibilityPreferenceInterface = {
-        ...(visibilityPrefs || {}),
-        address: addressVis,
-        phoneNumber: phoneVis,
-        email: emailVis,
-      };
-      await ApiHelper.post("/visibilityPreferences", [payload], "MembershipApi");
-      setInitialVis({ address: addressVis, phone: phoneVis, email: emailVis });
+      const tasks: Promise<any>[] = [];
+      if (prefsChanged) {
+        const payload: VisibilityPreferenceInterface = {
+          ...(visibilityPrefs || {}),
+          address: addressVis,
+          phoneNumber: phoneVis,
+          email: emailVis,
+        };
+        tasks.push(ApiHelper.post("/visibilityPreferences", [payload], "MembershipApi"));
+      }
+      if (optedOutChanged && person?.id) {
+        tasks.push(
+          ApiHelper.post(
+            "/users/updateOptedOut",
+            { personId: person.id, optedOut: optedOutLocal },
+            "MembershipApi"
+          )
+        );
+      }
+      await Promise.all(tasks);
+      if (prefsChanged) setInitialVis({ address: addressVis, phone: phoneVis, email: emailVis });
+      if (optedOutChanged) {
+        setInitialOptedOut(optedOutLocal);
+        setPerson((p) => (p ? { ...p, optedOut: optedOutLocal } : p));
+      }
       setSnack({ open: true, msg: "Visibility preferences saved.", severity: "success" });
     } catch (err: any) {
       setSnack({ open: true, msg: err?.message || "Could not save visibility preferences.", severity: "error" });
@@ -516,20 +522,22 @@ export const ProfileEditPage = ({ config }: Props) => {
     />
   ) : null;
 
-  const sectionHeader = (label: string) => (
-    <Typography
+  const sectionHeader = (label: string, icon?: string) => (
+    <Box
       sx={{
-        fontSize: 14,
-        fontWeight: 600,
-        color: tc.text,
-        mb: `${mobileTheme.spacing.sm}px`,
-        mt: `${mobileTheme.spacing.md}px`,
-        textTransform: "uppercase",
-        letterSpacing: "0.4px",
+        display: "flex",
+        alignItems: "center",
+        gap: `${mobileTheme.spacing.sm}px`,
+        borderBottom: `1px solid ${tc.border}`,
+        pb: 1,
+        mb: 2,
       }}
     >
-      {label}
-    </Typography>
+      {icon && <Icon sx={{ color: tc.primary, fontSize: 24 }}>{icon}</Icon>}
+      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
+        {label}
+      </Typography>
+    </Box>
   );
 
   if (loading) {
@@ -706,7 +714,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       </Box>
 
       {/* spacer so the sticky footer doesn't cover content */}
-      <Box sx={{ height: hasChanges ? 140 : 24 }} />
+      <Box sx={{ height: 24 }} />
     </>
   );
 
@@ -720,12 +728,10 @@ export const ProfileEditPage = ({ config }: Props) => {
           p: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-          Household Members
-        </Typography>
+        {sectionHeader("Current Household", "people")}
         {household === null && <CircularProgress sx={{ color: tc.primary }} size={24} />}
-        {household !== null && household.length === 0 && (
-          <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
+        {household !== null && household.filter((h) => h.id !== person.id).length === 0 && (
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, fontStyle: "italic", textAlign: "center", py: 2 }}>
             No other members in your household.
           </Typography>
         )}
@@ -783,9 +789,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-          Add Family Member
-        </Typography>
+        {sectionHeader("Add Family Member", "person_add")}
         <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
           New members will be reviewed along with your other profile changes.
         </Typography>
@@ -819,23 +823,30 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
 
         {pendingFamilyMembers.length > 0 && (
-          <Box sx={{ mt: 2 }}>
-            <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text, mb: 1 }}>
+          <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${tc.warning}44` }}>
+            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text, mb: 1.5 }}>
               Pending Family Members
             </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               {pendingFamilyMembers.map((name, idx) => (
-                <Chip
+                <Box
                   key={`${name}-${idx}`}
-                  label={name}
-                  onDelete={() => handleRemoveFamilyMember(idx)}
                   sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
                     bgcolor: `${tc.warning}22`,
-                    color: tc.text,
-                    border: `1px solid ${tc.warning}`,
-                    "& .MuiChip-deleteIcon": { color: tc.warning },
+                    borderRadius: `${mobileTheme.radius.md}px`,
+                    px: 1.5,
+                    py: 1,
                   }}
-                />
+                >
+                  <Icon sx={{ color: tc.warning, fontSize: 20 }}>person_outline</Icon>
+                  <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>{name}</Typography>
+                  <IconButton size="small" onClick={() => handleRemoveFamilyMember(idx)} aria-label="Remove">
+                    <Icon sx={{ color: tc.error, fontSize: 20 }}>close</Icon>
+                  </IconButton>
+                </Box>
               ))}
             </Box>
             <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: 1, fontStyle: "italic" }}>
@@ -845,7 +856,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         )}
       </Box>
 
-      <Box sx={{ height: hasChanges ? 140 : 24 }} />
+      <Box sx={{ height: 24 }} />
     </>
   );
 
@@ -860,11 +871,8 @@ export const ProfileEditPage = ({ config }: Props) => {
           p: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-          <Icon sx={{ color: tc.primary }}>person</Icon>
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Display Name</Typography>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px`, mt: 1 }}>
+        {sectionHeader("Display Name", "person")}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
             label="First Name"
             value={acctFirstName}
@@ -886,24 +894,23 @@ export const ProfileEditPage = ({ config }: Props) => {
           {acctNameError && (
             <Typography sx={{ fontSize: 12, color: tc.error }}>{acctNameError}</Typography>
           )}
-          <Button
-            variant="contained"
-            onClick={handleSaveDisplayName}
-            disabled={
-              savingAcctName
-              || (acctFirstName === (accountUser?.firstName || "") && acctLastName === (accountUser?.lastName || ""))
-            }
-            sx={{
-              bgcolor: tc.primary,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              textTransform: "none",
-              py: 1.1,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
-            }}
-          >
-            {savingAcctName ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
-          </Button>
+          {(acctFirstName !== (accountUser?.firstName || "") || acctLastName !== (accountUser?.lastName || "")) && (
+            <Button
+              variant="contained"
+              onClick={handleSaveDisplayName}
+              disabled={savingAcctName}
+              sx={{
+                bgcolor: tc.primary,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                textTransform: "none",
+                py: 1.1,
+                "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
+                "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+              }}
+            >
+              {savingAcctName ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
+            </Button>
+          )}
         </Box>
       </Box>
 
@@ -917,12 +924,9 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-          <Icon sx={{ color: tc.primary }}>email</Icon>
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Change Email</Typography>
-        </Box>
-        <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 1 }}>
-          Current: {accountUser?.email || "—"}
+        {sectionHeader("Change Email", "email")}
+        <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 2 }}>
+          Email: {accountUser?.email || "—"}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
@@ -967,11 +971,8 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-          <Icon sx={{ color: tc.primary }}>lock</Icon>
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Change Password</Typography>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px`, mt: 1 }}>
+        {sectionHeader("Change Password", "lock")}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
             label="New Password"
             value={newPassword}
@@ -1054,42 +1055,34 @@ export const ProfileEditPage = ({ config }: Props) => {
           p: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-          Directory Visibility
-        </Typography>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={!!person.optedOut}
-              disabled={savingPrivacy}
-              onChange={(e) => handleOptOutChange(e.target.checked)}
-            />
-          }
-          label={
-            <Box>
-              <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-                Hide me from the member directory
-              </Typography>
-              <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-                When enabled, other members can&apos;t find your profile.
-              </Typography>
-            </Box>
-          }
-          sx={{ alignItems: "flex-start", m: 0 }}
-        />
-
-        <Box sx={{ borderTop: `1px solid ${tc.border}`, my: 2 }} />
-
-        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 0.5 }}>
-          Visibility Preferences
-        </Typography>
-        <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 1 }}>
+        {sectionHeader("Visibility Preferences", "visibility")}
+        <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 2 }}>
           Choose who can see each type of contact information.
         </Typography>
 
-        {renderVisDropdown("Address", addressVis, setAddressVis, "vis-address")}
-        {renderVisDropdown("Phone", phoneVis, setPhoneVis, "vis-phone")}
-        {renderVisDropdown("Email", emailVis, setEmailVis, "vis-email")}
+        {/* Hide from Directory row */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            py: 1.5,
+            borderBottom: `1px solid ${tc.border}`,
+            mb: 2,
+          }}
+        >
+          <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>
+            Hide me from the member directory
+          </Typography>
+          <Switch
+            checked={optedOutLocal}
+            onChange={(e) => setOptedOutLocal(e.target.checked)}
+          />
+        </Box>
+
+        {renderVisDropdown("Address Visibility", addressVis, setAddressVis, "vis-address")}
+        {renderVisDropdown("Phone Visibility", phoneVis, setPhoneVis, "vis-phone")}
+        {renderVisDropdown("Email Visibility", emailVis, setEmailVis, "vis-email")}
 
         {visChanged && (
           <Button
@@ -1107,7 +1100,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
             }}
           >
-            {savingPrivacy ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save Visibility"}
+            {savingPrivacy ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
           </Button>
         )}
       </Box>
@@ -1151,7 +1144,9 @@ export const ProfileEditPage = ({ config }: Props) => {
     </>
   );
 
-  const showStickyFooter = hasChanges && tab !== "visibility" && tab !== "account";
+  // Match B1Mobile's `PendingChangesView`: shown in-flow on profile/household tabs
+  // (not account or visibility).
+  const showPendingChanges = hasChanges && tab !== "visibility" && tab !== "account";
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -1205,51 +1200,58 @@ export const ProfileEditPage = ({ config }: Props) => {
       {tab === "account" && renderAccountTab()}
       {tab === "visibility" && renderPrivacyTab()}
 
-      {/* Sticky pending-changes footer */}
-      {showStickyFooter && (
+      {/* Pending changes card (mirrors B1Mobile PendingChangesView) */}
+      {showPendingChanges && (
         <Box
           sx={{
-            position: "sticky",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            bgcolor: tc.surface,
-            borderTop: `1px solid ${tc.border}`,
-            boxShadow: mobileTheme.shadows.md,
+            bgcolor: `${tc.warning}22`,
+            border: `1px solid ${tc.warning}`,
+            borderRadius: `${mobileTheme.radius.lg}px`,
             p: `${mobileTheme.spacing.md}px`,
-            mx: `-${mobileTheme.spacing.md}px`,
             mt: `${mobileTheme.spacing.md}px`,
-            zIndex: 5,
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
-            <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>
-              {profileChanges.length} pending change{profileChanges.length === 1 ? "" : "s"}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+            <Icon sx={{ color: tc.warning, fontSize: 24 }}>pending_actions</Icon>
+            <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
+              Pending Changes
             </Typography>
-            <IconButton size="small" onClick={handleCancel} aria-label="Discard changes">
-              <Icon sx={{ color: tc.textSecondary }}>close</Icon>
-            </IconButton>
           </Box>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 1, maxHeight: 54, overflow: "hidden" }}>
-            {profileChanges.slice(0, 6).map((c, i) => (
-              <Chip
+          <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
+            Review your changes before submitting for approval.
+          </Typography>
+          <Box sx={{ maxHeight: 240, overflowY: "auto", mb: 2 }}>
+            {profileChanges.map((c, i) => (
+              <Box
                 key={`${c.field}-${i}`}
-                size="small"
-                label={c.label}
-                sx={{ bgcolor: `${tc.warning}22`, color: tc.text, border: `1px solid ${tc.warning}` }}
-              />
+                sx={{ py: 1, borderBottom: `1px solid ${tc.warning}33` }}
+              >
+                <Typography sx={{ fontSize: 12, fontWeight: 600, color: tc.text, mb: 0.5 }}>
+                  {c.label}
+                </Typography>
+                {c.field === "photo" && c.value.startsWith("data:") ? (
+                  <Box
+                    component="img"
+                    src={c.value}
+                    alt="Pending photo"
+                    sx={{ width: 60, height: 45, borderRadius: `${mobileTheme.radius.sm}px`, objectFit: "cover" }}
+                  />
+                ) : (
+                  <Typography sx={{ fontSize: 14, color: tc.text, wordBreak: "break-word" }}>
+                    {c.value || "(empty)"}
+                  </Typography>
+                )}
+              </Box>
             ))}
-            {profileChanges.length > 6 && (
-              <Chip size="small" label={`+${profileChanges.length - 6} more`} sx={{ bgcolor: tc.iconBackground }} />
-            )}
           </Box>
-          <Box sx={{ display: "flex", gap: 1 }}>
+          <Box sx={{ display: "flex", gap: 1.5 }}>
             <Button
               variant="outlined"
               onClick={handleCancel}
+              disabled={saving}
               sx={{
                 flex: 1,
-                borderColor: tc.border,
+                borderColor: tc.textMuted,
                 color: tc.text,
                 textTransform: "none",
                 borderRadius: `${mobileTheme.radius.md}px`,
@@ -1271,7 +1273,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
               }}
             >
-              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Submit Changes"}
+              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Submit for Approval"}
             </Button>
           </Box>
         </Box>

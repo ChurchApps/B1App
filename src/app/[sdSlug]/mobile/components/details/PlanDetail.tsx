@@ -8,7 +8,6 @@ import {
   Avatar,
   Box,
   Button,
-  Chip,
   CircularProgress,
   Icon,
   IconButton,
@@ -17,7 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import LinkIcon from "@mui/icons-material/Link";
 import { ApiHelper, ArrayHelper } from "@churchapps/apphelper";
 import type {
   AssignmentInterface,
@@ -40,23 +38,6 @@ interface Props {
   id: string;
   config: ConfigurationInterface;
 }
-
-interface SongRow {
-  id?: string;
-  label: string;
-  description?: string;
-  seconds?: number;
-  link?: string;
-  key?: string;
-  arrangement?: string;
-}
-
-const formatDuration = (seconds?: number) => {
-  if (!seconds || seconds <= 0) return "";
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
 
 const formatServiceDate = (date?: Date | string) => {
   if (!date) return "";
@@ -102,29 +83,6 @@ const formatTimeShort = (date?: Date | string) => {
   }
 };
 
-const flattenSongs = (items: PlanItemInterface[]): SongRow[] => {
-  const songs: SongRow[] = [];
-  const walk = (arr: PlanItemInterface[]) => {
-    arr.forEach((pi) => {
-      if (pi.itemType === "song") {
-        const extras = pi as unknown as Record<string, any>;
-        songs.push({
-          id: pi.id,
-          label: pi.label || "Untitled Song",
-          description: pi.description,
-          seconds: pi.seconds,
-          link: pi.link || extras.link,
-          key: extras.key || extras.songKey,
-          arrangement: extras.arrangement,
-        });
-      }
-      if (pi.children?.length) walk(pi.children);
-    });
-  };
-  walk(items);
-  return songs;
-};
-
 /* Helpers for provider/lesson preview fallback (mirrors B1Mobile + B1App /my ServiceOrder) */
 function findThumbnailRecursive(item: InstructionItem): string | undefined {
   if (item.thumbnail) return item.thumbnail;
@@ -166,7 +124,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const userContext = useContext(UserContext);
   const queryClient = useQueryClient();
 
-  type TabKey = "overview" | "order" | "team" | "songs";
+  type TabKey = "overview" | "order" | "team";
   const [tab, setTab] = useState<TabKey>("overview");
   const isLoggedIn = !!userContext?.userChurch?.jwt;
   const myPersonId = userContext?.person?.id || userContext?.userChurch?.person?.id;
@@ -224,8 +182,6 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const times = planBundle?.times ?? [];
   const people = planBundle?.people ?? [];
   const notFound = !loading && planBundle !== undefined && !plan;
-
-  const songs = useMemo(() => flattenSongs(planItems), [planItems]);
 
   const teamGroups = useMemo(() => {
     const groups: { category: string; positions: PositionInterface[] }[] = [];
@@ -390,44 +346,30 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const headerCard = (
     <Box
       sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
+        borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.md,
-        p: `${mobileTheme.spacing.md}px`,
-        mb: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.lg}px`,
+        mb: `${mobileTheme.spacing.lg}px`,
         background: `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
-        color: tc.onPrimary,
+        color: "#FFFFFF",
+        textAlign: "center",
+        minHeight: 140,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-        <Icon sx={{ color: "#FFFFFF" }}>assignment</Icon>
-        <Typography sx={{ fontSize: 12, color: "#FFFFFF", opacity: 0.85, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}>
-          Service Plan
+      <Box sx={{ width: "100%" }}>
+        <Icon sx={{ fontSize: 48, color: "#FFFFFF", mb: 1.5 }}>assignment</Icon>
+        <Typography sx={{ fontSize: 24, fontWeight: 700, color: "#FFFFFF", textAlign: "center", mb: 1 }}>
+          {plan.name}
         </Typography>
+        {plan.serviceDate ? (
+          <Typography sx={{ fontSize: 16, fontWeight: 500, color: "#FFFFFF", opacity: 0.9 }}>
+            {formatServiceDate(plan.serviceDate)}
+          </Typography>
+        ) : null}
       </Box>
-      <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.25 }}>
-        {plan.name}
-      </Typography>
-      {plan.serviceDate ? (
-        <Typography sx={{ fontSize: 14, color: "#FFFFFF", opacity: 0.9, mt: 0.5 }}>
-          {formatServiceDate(plan.serviceDate)}
-        </Typography>
-      ) : null}
-      {times.length > 0 ? (
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1.5 }}>
-          {times.slice(0, 4).map((t) => {
-            const teamLabel = t.teamList && t.teamList.length ? t.teamList.join(", ") : t.teams || "";
-            return (
-              <Chip
-                key={t.id}
-                label={t.displayName || teamLabel || "Time"}
-                size="small"
-                sx={{ bgcolor: "rgba(255,255,255,0.2)", color: "#FFFFFF", fontWeight: 500 }}
-              />
-            );
-          })}
-        </Box>
-      ) : null}
     </Box>
   );
 
@@ -476,8 +418,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         >
           <Tab value="overview" label="Overview" />
           <Tab value="order" label="Service Order" />
-          <Tab value="team" label="Team" />
-          <Tab value="songs" label="Songs" />
+          <Tab value="team" label="Teams" />
         </Tabs>
       </Box>
 
@@ -491,26 +432,26 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                 alignItems: "center",
                 gap: 1,
                 px: `${mobileTheme.spacing.md}px`,
-                py: `${mobileTheme.spacing.sm}px`,
+                py: `${mobileTheme.spacing.md}px`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
                 bgcolor: `${tc.primary}14`,
-                mb: `${mobileTheme.spacing.sm}px`,
+                mb: `${mobileTheme.spacing.md}px`,
               }}
             >
-              <Icon sx={{ color: tc.primary, fontSize: 22 }}>assignment_ind</Icon>
-              <Typography sx={{ flex: 1, fontSize: 16, fontWeight: 700, color: tc.primary }}>
+              <Icon sx={{ color: tc.primary, fontSize: 24 }}>assignment_ind</Icon>
+              <Typography sx={{ flex: 1, fontSize: 18, fontWeight: 700, color: tc.primary, ml: 0.5 }}>
                 My Assignments
               </Typography>
               <Box
                 sx={{
                   bgcolor: tc.primary,
                   color: "#FFFFFF",
-                  borderRadius: "999px",
-                  fontSize: 13,
+                  borderRadius: "16px",
+                  fontSize: 14,
                   fontWeight: 700,
-                  px: 1.25,
-                  py: 0.25,
-                  minWidth: 28,
+                  px: 1.5,
+                  py: 0.75,
+                  minWidth: 32,
                   textAlign: "center",
                 }}
               >
@@ -571,8 +512,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Plan Notes</Typography>
             </Box>
             {plan.notes ? (
-              <Typography sx={{ fontSize: 14, color: tc.textMuted, whiteSpace: "pre-wrap", lineHeight: 1.5 }}>
-                {plan.notes}
+              <Typography sx={{ fontSize: 14, color: tc.textSecondary, lineHeight: 1.5 }}>
+                {plan.notes.replace(/\n/g, " ")}
               </Typography>
             ) : (
               <Typography sx={{ fontSize: 13, color: tc.textSecondary, fontStyle: "italic" }}>
@@ -652,27 +593,6 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         </Box>
       )}
 
-      {tab === "songs" && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-          {songs.length === 0 ? (
-            <Box
-              sx={{
-                bgcolor: tc.surface,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                boxShadow: mobileTheme.shadows.sm,
-                p: `${mobileTheme.spacing.lg}px`,
-                textAlign: "center",
-              }}
-            >
-              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-                No songs scheduled.
-              </Typography>
-            </Box>
-          ) : (
-            songs.map((song, i) => <SongCard key={song.id || `${song.label}-${i}`} song={song} />)
-          )}
-        </Box>
-      )}
     </Box>
   );
 };
@@ -849,173 +769,109 @@ const TeamGroupCard = ({
 }) => {
   const tc = mobileTheme.colors;
 
-  const statusColor = (status?: string) => {
-    if (status === "Accepted") return tc.success;
-    if (status === "Declined") return tc.error;
-    return tc.warning;
-  };
+  // Build flat member list across positions in this category
+  const members: { id?: string; personId?: string; name: string; position: string; photo?: string }[] = [];
+  positions.forEach((position) => {
+    const posAssignments = ArrayHelper.getAll(assignments, "positionId", position.id);
+    posAssignments.forEach((a: AssignmentInterface) => {
+      const person = ArrayHelper.getOne(people, "id", a.personId) as PersonInterface | null;
+      if (!person) return;
+      const displayName =
+        person.name?.display ||
+        [person.name?.first, person.name?.last].filter(Boolean).join(" ") ||
+        "Unknown";
+      members.push({
+        id: a.id,
+        personId: person.id,
+        name: displayName,
+        position: position.name || "Position",
+        photo: person.photo,
+      });
+    });
+  });
 
   return (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        overflow: "hidden",
-      }}
-    >
+    <Box>
       <Box
         sx={{
+          display: "flex",
+          alignItems: "center",
           px: `${mobileTheme.spacing.md}px`,
           py: `${mobileTheme.spacing.sm}px`,
-          bgcolor: tc.primaryLight,
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
+          bgcolor: `${tc.primary}0D`,
+          borderRadius: `${mobileTheme.radius.lg}px`,
+          mb: `${mobileTheme.spacing.sm}px`,
         }}
       >
-        <Icon sx={{ color: tc.primary, fontSize: 20 }}>groups</Icon>
-        <Typography sx={{ fontSize: 15, fontWeight: 700, color: tc.primary }}>{category}</Typography>
-      </Box>
-
-      <Box>
-        {positions.map((pos) => {
-          const posAssignments = ArrayHelper.getAll(assignments, "positionId", pos.id);
-          return (
-            <Box key={pos.id} sx={{ px: `${mobileTheme.spacing.md}px`, py: `${mobileTheme.spacing.sm}px`, borderTop: `1px solid ${tc.border}` }}>
-              <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.textSecondary, mb: 0.5 }}>
-                {pos.name} {pos.count && pos.count > 1 ? `(${posAssignments.length}/${pos.count})` : ""}
-              </Typography>
-              {posAssignments.length === 0 ? (
-                <Typography sx={{ fontSize: 13, color: tc.textMuted, fontStyle: "italic" }}>
-                  Unassigned
-                </Typography>
-              ) : (
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-                  {posAssignments.map((a) => {
-                    const person = ArrayHelper.getOne(people, "id", a.personId);
-                    const displayName =
-                      person?.name?.display ||
-                      [person?.name?.first, person?.name?.last].filter(Boolean).join(" ") ||
-                      "Unknown";
-                    const photo = person?.photo;
-                    return (
-                      <Box key={a.id} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <Avatar
-                          src={photo || undefined}
-                          sx={{ width: 28, height: 28, fontSize: 12, bgcolor: tc.primaryLight, color: tc.primary }}
-                        >
-                          {displayName[0]?.toUpperCase() || "?"}
-                        </Avatar>
-                        <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>{displayName}</Typography>
-                        {a.status ? (
-                          <Box
-                            sx={{
-                              px: 1,
-                              py: 0.25,
-                              borderRadius: "999px",
-                              bgcolor: `${statusColor(a.status)}1A`,
-                              color: statusColor(a.status),
-                              fontSize: 11,
-                              fontWeight: 600,
-                            }}
-                          >
-                            {a.status}
-                          </Box>
-                        ) : null}
-                      </Box>
-                    );
-                  })}
-                </Box>
-              )}
-            </Box>
-          );
-        })}
-      </Box>
-    </Box>
-  );
-};
-
-const SongCard = ({ song }: { song: SongRow }) => {
-  const tc = mobileTheme.colors;
-  const openLink = () => {
-    if (song.link) window.open(song.link, "_blank", "noopener,noreferrer");
-  };
-  return (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
-        display: "flex",
-        alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
-      }}
-    >
-      <Box
-        sx={{
-          width: 44,
-          height: 44,
-          borderRadius: `${mobileTheme.radius.md}px`,
-          bgcolor: tc.primaryLight,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <Icon sx={{ color: tc.primary }}>music_note</Icon>
-      </Box>
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography
+        <Icon sx={{ color: tc.primary, fontSize: 24, mr: 1 }}>group</Icon>
+        <Typography sx={{ flex: 1, fontSize: 16, fontWeight: 700, color: tc.primary }}>
+          {category}
+        </Typography>
+        <Box
           sx={{
-            fontSize: 15,
+            bgcolor: tc.primary,
+            color: "#FFFFFF",
+            borderRadius: "12px",
+            px: 1,
+            py: 0.5,
+            fontSize: 12,
             fontWeight: 600,
-            color: tc.text,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            minWidth: 24,
+            textAlign: "center",
           }}
         >
-          {song.label}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 0.25, flexWrap: "wrap" }}>
-          {song.arrangement ? (
-            <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>{song.arrangement}</Typography>
-          ) : null}
-          {song.key ? (
-            <Box
-              sx={{
-                px: 0.75,
-                py: 0.1,
-                borderRadius: `${mobileTheme.radius.sm}px`,
-                bgcolor: tc.iconBackground,
-                color: tc.text,
-                fontSize: 11,
-                fontWeight: 600,
-              }}
-            >
-              Key: {song.key}
-            </Box>
-          ) : null}
-          {formatDuration(song.seconds) ? (
-            <Typography sx={{ fontSize: 12, color: tc.textMuted, display: "inline-flex", alignItems: "center", gap: 0.25 }}>
-              <Icon sx={{ fontSize: 12 }}>schedule</Icon>
-              {formatDuration(song.seconds)}
-            </Typography>
-          ) : null}
+          {members.length}
         </Box>
       </Box>
-      {song.link ? (
-        <IconButton
-          aria-label="Open song link"
-          onClick={openLink}
-          sx={{ color: tc.primary }}
+
+      {members.length === 0 ? (
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            border: `1px solid ${tc.border}`,
+            p: `${mobileTheme.spacing.md}px`,
+            textAlign: "center",
+          }}
         >
-          <LinkIcon />
-        </IconButton>
-      ) : null}
+          <Typography sx={{ fontSize: 13, color: tc.textMuted, fontStyle: "italic" }}>
+            No assigned members.
+          </Typography>
+        </Box>
+      ) : (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          {members.map((m) => (
+            <Box
+              key={m.id || `${m.personId}-${m.position}`}
+              sx={{
+                bgcolor: tc.surface,
+                borderRadius: `${mobileTheme.radius.lg}px`,
+                border: `1px solid ${tc.border}`,
+                px: `${mobileTheme.spacing.md}px`,
+                py: `${mobileTheme.spacing.sm}px`,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Avatar
+                src={m.photo || undefined}
+                sx={{ width: 48, height: 48, fontSize: 16, bgcolor: tc.primaryLight, color: tc.primary, mr: 1.5 }}
+              >
+                {m.name[0]?.toUpperCase() || "?"}
+              </Avatar>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
+                  {m.name}
+                </Typography>
+                <Typography sx={{ fontSize: 14, fontWeight: 500, color: tc.textMuted, mt: 0.25 }}>
+                  {m.position}
+                </Typography>
+              </Box>
+              <Icon sx={{ color: tc.disabled, fontSize: 24 }}>chevron_right</Icon>
+            </Box>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 };

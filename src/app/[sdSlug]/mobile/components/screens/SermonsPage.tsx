@@ -116,68 +116,63 @@ const FeaturedSermonHero = ({ sermon, onClick }: { sermon: SermonInterface; onCl
       <Box sx={{
         position: "absolute",
         inset: 0,
-        background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.1) 100%)",
+        bgcolor: "rgba(0,0,0,0.5)",
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
+        alignItems: "flex-end",
+        justifyContent: "space-between",
+        gap: `${mobileTheme.spacing.md}px`,
         p: `${mobileTheme.spacing.lg}px`,
       }}>
-        <Typography sx={{
-          color: "#FFFFFF",
-          fontSize: 11,
-          fontWeight: 700,
-          letterSpacing: 1.5,
-          textTransform: "uppercase",
-          opacity: 0.9,
-          mb: 0.5,
-        }}>
-          Latest Sermon
-        </Typography>
-        <Typography sx={{
-          color: "#FFFFFF",
-          fontWeight: 700,
-          fontSize: 22,
-          lineHeight: 1.2,
-          mb: 1,
-          display: "-webkit-box",
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          textShadow: "0 1px 2px rgba(0,0,0,0.5)",
-        }}>
-          {sermon.title || "Untitled Sermon"}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography sx={{
+            color: "#FFFFFF",
+            fontSize: 12,
+            fontWeight: 600,
+            letterSpacing: 1,
+            textTransform: "uppercase",
+            opacity: 0.9,
+            mb: 1,
+          }}>
+            Latest Sermon
+          </Typography>
+          <Typography sx={{
+            color: "#FFFFFF",
+            fontWeight: 700,
+            fontSize: 22,
+            lineHeight: 1.2,
+            mb: 1,
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+            textShadow: "0 1px 2px rgba(0,0,0,0.5)",
+          }}>
+            {sermon.title || "Untitled Sermon"}
+          </Typography>
           {sermon.publishDate && (
-            <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 13 }}>
+            <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, mb: 0.5 }}>
               {formatDate(sermon.publishDate)}
             </Typography>
           )}
           {sermon.duration ? (
-            <>
-              <Typography sx={{ color: "#FFFFFF", opacity: 0.7, fontSize: 13 }}>·</Typography>
-              <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 13 }}>
-                {formatDuration(sermon.duration)}
-              </Typography>
-            </>
+            <Typography sx={{ color: "#FFFFFF", opacity: 0.8, fontSize: 12 }}>
+              {formatDuration(sermon.duration)}
+            </Typography>
           ) : null}
         </Box>
-      </Box>
-
-      <Box sx={{
-        position: "absolute",
-        top: 16,
-        right: 16,
-        bgcolor: "rgba(0,0,0,0.65)",
-        borderRadius: "28px",
-        width: 56,
-        height: 56,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        boxShadow: mobileTheme.shadows.md,
-      }}>
-        <Icon sx={{ fontSize: 32, color: "#FFFFFF" }}>play_arrow</Icon>
+        <Box sx={{
+          flexShrink: 0,
+          bgcolor: `color-mix(in srgb, ${tc.primary} 90%, transparent)`,
+          borderRadius: "28px",
+          width: 56,
+          height: 56,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: mobileTheme.shadows.md,
+        }}>
+          <Icon sx={{ fontSize: 32, color: tc.onPrimary }}>play_arrow</Icon>
+        </Box>
       </Box>
     </Box>
   );
@@ -481,9 +476,10 @@ const PlaylistCard = ({ playlist, onClick }: { playlist: PlaylistInterface; onCl
             <Typography sx={{
               color: "#FFFFFF",
               opacity: 0.9,
-              fontSize: 12,
+              fontSize: 14,
+              mb: 0.5,
               display: "-webkit-box",
-              WebkitLineClamp: 1,
+              WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
               overflow: "hidden",
               textShadow: "0 1px 2px rgba(0,0,0,0.4)",
@@ -542,16 +538,16 @@ const EmptyState = ({ type }: { type: "sermons" | "playlists" }) => {
         mb: 2,
       }}>
         <Icon sx={{ fontSize: 36, color: tc.primary }}>
-          {isPlaylists ? "playlist_play" : "play_circle"}
+          {isPlaylists ? "playlist_add" : "video_library"}
         </Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-        {isPlaylists ? "No sermon series yet" : "No sermons yet"}
+        {isPlaylists ? "No Sermon Series Available" : "No Recent Sermons"}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
         {isPlaylists
-          ? "Sermon series will appear here once they're published."
-          : "Check back soon for the latest messages."}
+          ? "Check back later for new sermon series from your church."
+          : "Check back later for new sermons from your church."}
       </Typography>
     </Box>
   );
@@ -686,7 +682,7 @@ export const SermonsPage = ({ config }: Props) => {
           <FeaturedSermonHero sermon={featuredSermon} onClick={() => handleSermonClick(featuredSermon)} />
         ) : null}
 
-        <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 1.5 }}>
+        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 2 }}>
           Sermon Series
         </Typography>
 
@@ -705,7 +701,7 @@ export const SermonsPage = ({ config }: Props) => {
       <>
         {upcomingStream ? <LiveStreamCard stream={upcomingStream} /> : null}
 
-        <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 1.5 }}>
+        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 2 }}>
           Recent Sermons
         </Typography>
 

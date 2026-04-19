@@ -2,9 +2,7 @@
 
 import React, { useMemo, useState, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Box, Button, Chip, CircularProgress, Icon, IconButton, Snackbar, Typography } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Box, Button, CircularProgress, Icon, Snackbar, Typography } from "@mui/material";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ShareIcon from "@mui/icons-material/Share";
@@ -97,7 +95,6 @@ const buildExternalUrl = (sermon: SermonInterface | null): string | null => {
 
 export const SermonDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
-  const router = useRouter();
   const churchId = config?.church?.id;
 
   const [showVideo, setShowVideo] = useState(false);
@@ -152,14 +149,6 @@ export const SermonDetail = ({ id, config }: Props) => {
   const embedUrl = useMemo(() => buildEmbedUrl(sermon), [sermon]);
   const externalUrl = useMemo(() => buildExternalUrl(sermon), [sermon]);
 
-  const handleBack = useCallback(() => {
-    if (typeof window !== "undefined" && window.history.length > 1) {
-      router.back();
-    } else {
-      router.push("/mobile/sermons");
-    }
-  }, [router]);
-
   const handleShare = useCallback(async () => {
     if (!sermon) return;
     const shareUrl =
@@ -194,27 +183,9 @@ export const SermonDetail = ({ id, config }: Props) => {
     window.open(externalUrl, "_blank", "noopener,noreferrer");
   }, [externalUrl]);
 
-  const BackButton = (
-    <IconButton
-      onClick={handleBack}
-      aria-label="Back"
-      sx={{
-        color: tc.primary,
-        bgcolor: tc.surface,
-        width: 40,
-        height: 40,
-        boxShadow: mobileTheme.shadows.sm,
-        "&:hover": { bgcolor: tc.surfaceVariant },
-      }}
-    >
-      <ArrowBackIcon sx={{ fontSize: 24 }} />
-    </IconButton>
-  );
-
   if (loading) {
     return (
       <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box sx={{ mb: 2 }}>{BackButton}</Box>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
           <CircularProgress sx={{ color: tc.primary }} />
         </Box>
@@ -225,11 +196,10 @@ export const SermonDetail = ({ id, config }: Props) => {
   if (!sermon) {
     return (
       <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box sx={{ mb: 2 }}>{BackButton}</Box>
         <Box
           sx={{
             bgcolor: tc.surface,
-            borderRadius: `${mobileTheme.radius.lg}px`,
+            borderRadius: `${mobileTheme.radius.xl}px`,
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center",
@@ -251,28 +221,12 @@ export const SermonDetail = ({ id, config }: Props) => {
     );
   }
 
-  const keywordList: string[] = (() => {
-    const k = (sermon as any).keywords;
-    if (!k) return [];
-    if (Array.isArray(k)) return k.filter(Boolean);
-    if (typeof k === "string") {
-      return k
-        .split(/[,;\n]/)
-        .map((s) => s.trim())
-        .filter(Boolean);
-    }
-    return [];
-  })();
-
   const description = (sermon as any).description as string | undefined;
   const canPlay = !!embedUrl;
   const showPlayer = showVideo && canPlay;
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {/* Back button */}
-      <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>{BackButton}</Box>
-
       {/* Video / thumbnail preview with tap-to-play gate */}
       <Box
         sx={{
@@ -377,28 +331,17 @@ export const SermonDetail = ({ id, config }: Props) => {
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
           {sermon.publishDate && (
-            <Typography sx={{ fontSize: 14, fontWeight: 400, color: tc.textSecondary }}>
+            <Typography sx={{ fontSize: 14, fontWeight: 400, color: tc.textMuted }}>
               {formatDate(sermon.publishDate)}
             </Typography>
           )}
           {sermon.duration ? (
-            <Box
-              sx={{
-                px: "10px",
-                py: "2px",
-                borderRadius: "999px",
-                bgcolor: tc.primaryLight,
-                color: tc.primary,
-                fontSize: 12,
-                fontWeight: 600,
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 0.5,
-              }}
-            >
-              <Icon sx={{ fontSize: 14 }}>schedule</Icon>
-              {formatDuration(sermon.duration)}
-            </Box>
+            <>
+              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>•</Typography>
+              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
+                {formatDuration(sermon.duration)}
+              </Typography>
+            </>
           ) : null}
         </Box>
 
@@ -484,46 +427,6 @@ export const SermonDetail = ({ id, config }: Props) => {
           </Button>
         )}
       </Box>
-
-      {/* Chips */}
-      {(playlistId || keywordList.length > 0) && (
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
-            p: `${mobileTheme.spacing.md}px`,
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 1,
-          }}
-        >
-          {playlistId ? (
-            <Chip
-              icon={<Icon sx={{ fontSize: 16 }}>playlist_play</Icon>}
-              label="View Series"
-              size="small"
-              clickable
-              onClick={() => router.push(`/mobile/playlist/${playlistId}`)}
-              sx={{
-                bgcolor: tc.primaryLight,
-                color: tc.primary,
-                fontWeight: 600,
-                "& .MuiChip-icon": { color: tc.primary },
-                cursor: "pointer",
-              }}
-            />
-          ) : null}
-          {keywordList.map((kw) => (
-            <Chip
-              key={kw}
-              label={kw}
-              size="small"
-              sx={{ bgcolor: tc.iconBackground, color: tc.text, fontWeight: 500 }}
-            />
-          ))}
-        </Box>
-      )}
 
       <Snackbar
         open={!!snackbar}

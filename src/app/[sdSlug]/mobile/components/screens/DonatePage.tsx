@@ -1,8 +1,18 @@
 "use client";
 
-import React, { Suspense, useContext, useMemo, useState } from "react";
+import React, { Suspense, useContext, useEffect, useMemo, useState } from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { Box, Button, Icon, Tab, Tabs, Typography, Alert, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import {
+  Box,
+  Button,
+  Icon,
+  Menu,
+  MenuItem,
+  Tab,
+  Tabs,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ApiHelper,
@@ -33,6 +43,7 @@ interface Props {
 }
 
 type TabKey = "overview" | "donate" | "manage" | "history";
+type PeriodKey = "ytd" | "30d" | "90d" | "all";
 
 function DonatePageInner({ config }: Props) {
   const tc = mobileTheme.colors;
@@ -48,6 +59,8 @@ function DonatePageInner({ config }: Props) {
   // Guests can't have overview/manage/history data, so they default straight
   // to the Donate tab; authenticated users land on Overview like B1Mobile.
   const [tab, setTab] = useState<TabKey>(isAuthenticated ? "overview" : "donate");
+  const [period, setPeriod] = useState<PeriodKey>("all");
+  const [periodAnchor, setPeriodAnchor] = useState<HTMLElement | null>(null);
 
   const { data: donations = [], isLoading: donationsLoading } = useQuery<DonationInterface[]>({
     queryKey: ["donations", personId],
@@ -95,13 +108,56 @@ function DonatePageInner({ config }: Props) {
   const customerId = paymentData?.customerId ?? null;
   const person = paymentData?.person ?? null;
 
+  // B1Mobile shows active recurring subscriptions on the History tab. We
+  // mirror that here — fetch subscriptions once we know the customer.
+  interface SubscriptionRow {
+    id: string;
+    plan?: { amount?: number; interval?: string; interval_count?: number };
+    billing_cycle_anchor?: number;
+    default_payment_method?: string;
+    default_source?: string;
+    funds?: { id: string; name: string; amount: number }[];
+  }
+  const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
+    queryKey: ["donate-subscriptions", customerId],
+    queryFn: async () => {
+      if (!customerId) return [];
+      const subResult: any = await ApiHelper.get(
+        "/customers/" + customerId + "/subscriptions",
+        "GivingApi"
+      );
+      const subs: SubscriptionRow[] = [];
+      const rows = subResult?.data || [];
+      await Promise.all(
+        rows.map(async (s: any) => {
+          const fundsResp: any = await ApiHelper.get(
+            "/subscriptionfunds?subscriptionId=" + s.id,
+            "GivingApi"
+          );
+          s.funds = fundsResp;
+          subs.push(s);
+        })
+      );
+      return subs;
+    },
+    enabled: donationsEnabled && !!customerId,
+  });
+
   const handleDataUpdate = (msg?: string) => {
     setMessage(msg || null);
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ["donations", personId] });
       queryClient.invalidateQueries({ queryKey: ["donate-payment-data", personId] });
+      queryClient.invalidateQueries({ queryKey: ["donate-subscriptions", customerId] });
     }, 2000);
   };
+
+  // Auto-clear the toast so the next tab switch doesn't still show an old "thank you"
+  useEffect(() => {
+    if (!message) return;
+    const id = window.setTimeout(() => setMessage(null), 5000);
+    return () => window.clearTimeout(id);
+  }, [message]);
 
   const givingStats = useMemo(() => {
     const currentYear = new Date().getFullYear();
@@ -164,12 +220,16 @@ function DonatePageInner({ config }: Props) {
     );
   }
 
-  // Gradient hero: shown for both guests and signed-in users. For signed-in users
-  // it surfaces YTD total + gift count; for guests it acts as a welcoming call to action.
+  // Three-part overview, matching B1Mobile's GivingOverview.tsx:
+  //   1. Gradient hero card (centered YTD amount, gift count)
+  //   2. Recent Activity section (heading + View all, last-gift card w/ Repeat)
+  //   3. Call-to-action card (volunteer_activism icon, Give Now button)
+  // Guests see a simplified hero + CTA only (no activity row).
   const renderOverview = () => {
     const gradient = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
-      <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>
+      <Box>
+        {/* Hero */}
         <Box
           sx={{
             borderRadius: `${mobileTheme.radius.xl}px`,
@@ -177,72 +237,172 @@ function DonatePageInner({ config }: Props) {
             p: `${mobileTheme.spacing.lg}px`,
             background: gradient,
             color: tc.onPrimary,
+            textAlign: "center",
+            mb: `${mobileTheme.spacing.lg}px`,
+            minHeight: 160,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
           }}
         >
-          <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.85, letterSpacing: 0.5, textTransform: "uppercase" }}>
-            {isAuthenticated ? "Your Giving Impact" : "Make a Difference Today"}
-          </Typography>
           {isAuthenticated ? (
             <>
-              <Typography sx={{ fontSize: 32, fontWeight: 700, mt: 0.5 }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
+                Your Giving Impact
+              </Typography>
+              <Typography sx={{ fontSize: 36, fontWeight: 800, mb: 1 }}>
                 {CurrencyHelper.formatCurrency(givingStats.ytd || 0)}
               </Typography>
-              <Typography sx={{ fontSize: 13, opacity: 0.9 }}>
-                {givingStats.totalGifts} {givingStats.totalGifts === 1 ? "gift" : "gifts"} this year
+              <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
+                Total this year • {givingStats.totalGifts}{" "}
+                {givingStats.totalGifts === 1 ? "gift" : "gifts"}
               </Typography>
             </>
           ) : (
             <>
-              <Typography sx={{ fontSize: 20, fontWeight: 600, mt: 0.5 }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
+                Make a Difference Today
+              </Typography>
+              <Typography sx={{ fontSize: 20, fontWeight: 700, mb: 1 }}>
                 Support {church?.name || "our church"}
               </Typography>
-              <Typography sx={{ fontSize: 13, opacity: 0.9, mt: 0.5 }}>
+              <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
                 Give securely as a guest — no account required.
               </Typography>
             </>
           )}
         </Box>
 
-        {isAuthenticated && givingStats.lastGift && (
-          <Box
-            sx={{
-              mt: `${mobileTheme.spacing.md}px`,
-              bgcolor: tc.surface,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
-              p: `${mobileTheme.spacing.md}px`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 2,
-            }}
-          >
-            <Box>
-              <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>Last Gift</Typography>
-              <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>
-                {CurrencyHelper.formatCurrency(
-                  ((givingStats.lastGift as any).fund?.amount ?? (givingStats.lastGift as any).amount ?? 0) as number
-                )}
-              </Typography>
-              <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-                {DateHelper.prettyDate(DateHelper.toDate(givingStats.lastGift.donationDate))}
-              </Typography>
-            </Box>
-            <Button
-              variant="contained"
-              startIcon={<Icon>replay</Icon>}
-              onClick={handleRepeatGift}
+        {/* Recent Activity — auth only */}
+        {isAuthenticated && (
+          <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>
+            <Box
               sx={{
-                textTransform: "none",
-                fontWeight: 600,
-                bgcolor: tc.primary,
-                "&:hover": { bgcolor: tc.primary, opacity: 0.9 },
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: `${mobileTheme.spacing.md}px`,
               }}
             >
-              Repeat Gift
-            </Button>
+              <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>
+                Recent Activity
+              </Typography>
+              <Button
+                onClick={() => setTab("history")}
+                sx={{
+                  textTransform: "none",
+                  color: tc.primary,
+                  fontWeight: 600,
+                  minWidth: 0,
+                }}
+              >
+                View All
+              </Button>
+            </Box>
+
+            <Box
+              sx={{
+                bgcolor: tc.surface,
+                borderRadius: `${mobileTheme.radius.lg}px`,
+                boxShadow: mobileTheme.shadows.sm,
+                p: `${mobileTheme.spacing.md}px`,
+                display: "flex",
+                alignItems: "center",
+                gap: `${mobileTheme.spacing.md}px`,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: "24px",
+                  bgcolor: tc.iconBackground,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <Icon sx={{ color: tc.success }}>favorite</Icon>
+              </Box>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
+                  Last Gift
+                </Typography>
+                <Typography sx={{ fontSize: 15, fontWeight: 700, color: tc.primary }}>
+                  {givingStats.lastGift
+                    ? CurrencyHelper.formatCurrency(
+                        ((givingStats.lastGift as any).fund?.amount
+                          ?? (givingStats.lastGift as any).amount
+                          ?? 0) as number
+                      )
+                    : CurrencyHelper.formatCurrency(0)}
+                </Typography>
+                <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+                  {givingStats.lastGift
+                    ? DateHelper.prettyDate(DateHelper.toDate(givingStats.lastGift.donationDate))
+                    : "No recent gift"}
+                </Typography>
+              </Box>
+              {givingStats.lastGift && (
+                <Button
+                  onClick={handleRepeatGift}
+                  sx={{
+                    textTransform: "none",
+                    color: tc.primary,
+                    bgcolor: tc.iconBackground,
+                    borderRadius: "20px",
+                    fontWeight: 600,
+                    fontSize: 13,
+                    px: 2,
+                    "&:hover": { bgcolor: tc.iconBackground, opacity: 0.85 },
+                  }}
+                >
+                  Repeat
+                </Button>
+              )}
+            </Box>
           </Box>
         )}
+
+        {/* CTA card — Give Now */}
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.xl}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            border: `1px solid ${tc.borderLight}`,
+            p: `${mobileTheme.spacing.lg}px`,
+            textAlign: "center",
+          }}
+        >
+          <Icon sx={{ fontSize: 48, color: tc.primary, mb: `${mobileTheme.spacing.md}px` }}>
+            volunteer_activism
+          </Icon>
+          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 1 }}>
+            Make a Difference Today
+          </Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.lg}px`, px: 2 }}>
+            Your generosity helps us continue our mission and support our community.
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => setTab("donate")}
+            sx={{
+              textTransform: "none",
+              bgcolor: tc.primary,
+              color: tc.onPrimary,
+              fontWeight: 700,
+              fontSize: 16,
+              px: 4,
+              py: 1,
+              borderRadius: `${mobileTheme.radius.lg}px`,
+              "&:hover": { bgcolor: tc.primary, opacity: 0.9 },
+            }}
+          >
+            Give Now
+          </Button>
+        </Box>
       </Box>
     );
   };
@@ -306,7 +466,9 @@ function DonatePageInner({ config }: Props) {
     );
   };
 
-  const renderRecurring = () => {
+  // Manage tab: payment methods only (matches B1Mobile's ManagePayments.tsx).
+  // Recurring donations live on the History tab, also matching B1Mobile.
+  const renderManage = () => {
     if (isMethodsLoading) {
       return (
         <Box sx={{ p: 3, textAlign: "center" }}>
@@ -323,22 +485,14 @@ function DonatePageInner({ config }: Props) {
           p: `${mobileTheme.spacing.md}px`,
         }}
       >
-        <RecurringDonations
+        <PaymentMethods
+          person={person!}
           customerId={customerId!}
           paymentMethods={paymentMethods || []}
           appName="B1App"
+          stripePromise={stripePromise!}
           dataUpdate={handleDataUpdate}
         />
-        <Box sx={{ mt: 2 }}>
-          <PaymentMethods
-            person={person!}
-            customerId={customerId!}
-            paymentMethods={paymentMethods || []}
-            appName="B1App"
-            stripePromise={stripePromise!}
-            dataUpdate={handleDataUpdate}
-          />
-        </Box>
       </Box>
     );
   };
@@ -349,18 +503,118 @@ function DonatePageInner({ config }: Props) {
     window.open(`/my/donations/print?year=${year}`, "_blank", "noopener,noreferrer");
   };
 
+  const periodLabels: Record<PeriodKey, string> = {
+    ytd: "Year to Date",
+    "30d": "Last 30 Days",
+    "90d": "Last 90 Days",
+    all: "All Time",
+  };
+
+  const filteredDonations = useMemo(() => {
+    const now = new Date();
+    let cutoff: Date | null = null;
+    if (period === "30d") cutoff = new Date(now.getTime() - 30 * 86400000);
+    else if (period === "90d") cutoff = new Date(now.getTime() - 90 * 86400000);
+    else if (period === "ytd") cutoff = new Date(now.getFullYear(), 0, 1);
+    if (!cutoff) return donations;
+    return donations.filter((d) => DateHelper.toDate(d.donationDate) >= cutoff!);
+  }, [donations, period]);
+
+  const filteredTotal = useMemo(
+    () =>
+      filteredDonations.reduce(
+        (sum, d) => sum + (((d as any).fund?.amount ?? (d as any).amount ?? 0) as number),
+        0
+      ),
+    [filteredDonations]
+  );
+
+  const getSubPaymentMethod = (sub: SubscriptionRow) => {
+    const pm = (paymentMethods || []).find(
+      (p) => (p as any).id === (sub.default_payment_method || sub.default_source)
+    );
+    if (!pm) return "Payment method not found";
+    return `${(pm as any).name} ****${(pm as any).last4 || ""}`;
+  };
+
+  // History tab — mirrors B1Mobile's EnhancedGivingHistory layout:
+  // summary card w/ period filter, recurring donations section, card-row list.
   const renderHistory = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
-        overflowX: "auto",
-      }}
-    >
+    <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
+      {/* Summary card */}
+      <Box
+        sx={{
+          bgcolor: tc.surface,
+          borderRadius: `${mobileTheme.radius.xl}px`,
+          boxShadow: mobileTheme.shadows.md,
+          p: `${mobileTheme.spacing.md}px`,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            mb: `${mobileTheme.spacing.md}px`,
+            gap: 1,
+          }}
+        >
+          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>Giving</Typography>
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            <Button
+              size="small"
+              endIcon={<Icon>expand_more</Icon>}
+              onClick={(e) => setPeriodAnchor(e.currentTarget)}
+              sx={{
+                textTransform: "none",
+                bgcolor: tc.iconBackground,
+                color: tc.primary,
+                fontWeight: 600,
+                borderRadius: "20px",
+                px: 2,
+                "&:hover": { bgcolor: tc.iconBackground, opacity: 0.9 },
+              }}
+            >
+              {periodLabels[period]}
+            </Button>
+            <Menu
+              anchorEl={periodAnchor}
+              open={!!periodAnchor}
+              onClose={() => setPeriodAnchor(null)}
+            >
+              {(Object.keys(periodLabels) as PeriodKey[]).map((k) => (
+                <MenuItem
+                  key={k}
+                  selected={period === k}
+                  onClick={() => {
+                    setPeriod(k);
+                    setPeriodAnchor(null);
+                  }}
+                >
+                  {periodLabels[k]}
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Box>
+
+        {donationsLoading ? (
+          <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 3 }}>Loading...</Typography>
+        ) : (
+          <Box sx={{ textAlign: "center", py: 1 }}>
+            <Typography sx={{ fontSize: 32, fontWeight: 800, color: tc.primary }}>
+              {CurrencyHelper.formatCurrency(filteredTotal)}
+            </Typography>
+            <Typography sx={{ fontSize: 14, color: tc.textMuted, fontWeight: 500 }}>
+              {periodLabels[period]}
+            </Typography>
+          </Box>
+        )}
+      </Box>
+
+      {/* Print Statement (web-only, B1App feature) */}
       {!donationsLoading && donations.length > 0 && (
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             size="small"
             startIcon={<Icon>print</Icon>}
@@ -371,43 +625,170 @@ function DonatePageInner({ config }: Props) {
           </Button>
         </Box>
       )}
-      {donationsLoading && <Typography sx={{ color: tc.textMuted }}>Loading...</Typography>}
-      {!donationsLoading && donations.length === 0 && (
-        <Typography sx={{ color: tc.textMuted }}>
-          Your donations will appear here once you make your first gift.
-        </Typography>
-      )}
-      {!donationsLoading && donations.length > 0 && (
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell>Fund</TableCell>
-              <TableCell align="right">Amount</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {donations.map((d, i) => {
-              const isPending = (d as any).status === "pending";
-              const amount = ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
+
+      {/* Recurring donations — B1Mobile shows active subscriptions here */}
+      {subscriptions.length > 0 && (
+        <Box>
+          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}>
+            Recurring
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+            {subscriptions.map((sub) => {
+              const interval = `${sub.plan?.interval_count || 1} ${sub.plan?.interval || "month"}${
+                (sub.plan?.interval_count || 1) > 1 ? "s" : ""
+              }`;
+              const total = (sub.plan?.amount || 0) / 100;
+              const startDate = sub.billing_cycle_anchor
+                ? DateHelper.prettyDate(new Date(sub.billing_cycle_anchor * 1000))
+                : "";
               return (
-                <TableRow key={i} sx={{ opacity: isPending ? 0.8 : 1 }}>
-                  <TableCell>
-                    {DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}
-                  </TableCell>
-                  <TableCell>
-                    {(d as any).fund?.name || "—"}
-                    {isPending && " (Pending)"}
-                  </TableCell>
-                  <TableCell align="right" sx={{ color: isPending ? tc.warning : undefined }}>
-                    {CurrencyHelper.formatCurrency(amount)}
-                  </TableCell>
-                </TableRow>
+                <Box
+                  key={sub.id}
+                  sx={{
+                    bgcolor: tc.surface,
+                    borderRadius: `${mobileTheme.radius.lg}px`,
+                    boxShadow: mobileTheme.shadows.sm,
+                    p: `${mobileTheme.spacing.md}px`,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: `${mobileTheme.spacing.md}px`,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "20px",
+                      bgcolor: tc.iconBackground,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Icon sx={{ color: tc.primary, fontSize: 22 }}>autorenew</Icon>
+                  </Box>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    {sub.funds?.map((f) => (
+                      <Typography key={f.id} sx={{ fontSize: 14, fontWeight: 500, color: tc.text }}>
+                        {f.name} — {CurrencyHelper.formatCurrency(f.amount)}
+                      </Typography>
+                    ))}
+                    <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.primary }}>
+                      Total: {CurrencyHelper.formatCurrency(total)}
+                    </Typography>
+                    <Typography sx={{ fontSize: 13, color: tc.text }}>Every {interval}</Typography>
+                    <Typography sx={{ fontSize: 13, color: tc.text }}>
+                      {getSubPaymentMethod(sub)}
+                    </Typography>
+                    {startDate && (
+                      <Typography sx={{ fontSize: 12, color: tc.textMuted }}>{startDate}</Typography>
+                    )}
+                  </Box>
+                </Box>
               );
             })}
-          </TableBody>
-        </Table>
+          </Box>
+          {/* Inline RecurringDonations manager for edit/cancel — shared web control,
+              closest equivalent to B1Mobile's modal manager. */}
+          <Box sx={{ mt: `${mobileTheme.spacing.md}px` }}>
+            <RecurringDonations
+              customerId={customerId!}
+              paymentMethods={paymentMethods || []}
+              appName="B1App"
+              dataUpdate={handleDataUpdate}
+            />
+          </Box>
+        </Box>
       )}
+
+      {/* Transaction list */}
+      <Box>
+        <Typography
+          sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}
+        >
+          Recent Activity
+        </Typography>
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            overflow: "hidden",
+          }}
+        >
+          {donationsLoading && (
+            <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 4 }}>Loading...</Typography>
+          )}
+          {!donationsLoading && filteredDonations.length === 0 && (
+            <Box sx={{ py: 5, textAlign: "center", px: 2 }}>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
+                No recent transactions
+              </Typography>
+              <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: 0.5 }}>
+                Your donations will appear here once you make your first gift.
+              </Typography>
+            </Box>
+          )}
+          {!donationsLoading &&
+            filteredDonations.map((d, i) => {
+              const isPending = (d as any).status === "pending";
+              const amount = ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
+              const fundName = (d as any).fund?.name || "—";
+              const method = (d as any).method;
+              const methodDetails = (d as any).methodDetails;
+              return (
+                <Box
+                  key={i}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: `${mobileTheme.spacing.md}px`,
+                    p: `${mobileTheme.spacing.md}px`,
+                    borderBottom:
+                      i < filteredDonations.length - 1 ? `1px solid ${tc.divider}` : "none",
+                    opacity: isPending ? 0.85 : 1,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: "24px",
+                      bgcolor: tc.iconBackground,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Icon sx={{ color: tc.primary }}>favorite</Icon>
+                  </Box>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
+                      {fundName}
+                      {isPending && " (Pending)"}
+                    </Typography>
+                    <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+                      {DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}
+                      {method ? ` • ${method}${methodDetails ? ` - ${methodDetails}` : ""}` : ""}
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      fontWeight: 700,
+                      color: isPending ? tc.warning : tc.text,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {CurrencyHelper.formatCurrency(amount)}
+                  </Typography>
+                </Box>
+              );
+            })}
+        </Box>
+      </Box>
     </Box>
   );
 
@@ -454,7 +835,7 @@ function DonatePageInner({ config }: Props) {
 
         {tab === "overview" && isAuthenticated && renderOverview()}
         {tab === "donate" && renderGive()}
-        {tab === "manage" && isAuthenticated && renderRecurring()}
+        {tab === "manage" && isAuthenticated && renderManage()}
         {tab === "history" && isAuthenticated && renderHistory()}
 
         {!isAuthenticated && tab === "donate" && (

@@ -159,7 +159,9 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
   };
 
   const handleAddEvent = () => {
-    const base = new Date(selected);
+    // Match B1Mobile: tomorrow 2pm when no day is selected; otherwise selected day 2pm.
+    const base = selected ? new Date(selected) : new Date();
+    if (!selected) base.setDate(base.getDate() + 1);
     base.setHours(14, 0, 0, 0);
     onAddEvent(base.toISOString());
   };
@@ -186,18 +188,18 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-      {/* Header / controls */}
+      {/* Header / controls — stacked (matches B1Mobile) */}
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column",
           gap: `${mobileTheme.spacing.sm}px`,
-          flexWrap: "wrap",
-          alignItems: "center",
         }}
       >
         {isLeader && (
           <Button
             variant="contained"
+            fullWidth
             onClick={handleAddEvent}
             startIcon={<Icon>event</Icon>}
             sx={{
@@ -206,6 +208,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
               textTransform: "none",
               fontWeight: 600,
               borderRadius: `${mobileTheme.radius.md}px`,
+              py: "10px",
               "&:hover": { bgcolor: tc.success },
             }}
           >
@@ -214,6 +217,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
         )}
         <Button
           variant="outlined"
+          fullWidth
           onClick={handleSubscribe}
           startIcon={<Icon>calendar_month</Icon>}
           sx={{
@@ -222,6 +226,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
             textTransform: "none",
             fontWeight: 600,
             borderRadius: `${mobileTheme.radius.md}px`,
+            py: "10px",
           }}
         >
           Subscribe

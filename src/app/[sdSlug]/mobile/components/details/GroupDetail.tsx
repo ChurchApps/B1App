@@ -210,66 +210,81 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
 
   const renderHero = () => {
     const memberCount = members?.length ?? 0;
+    const hasPhoto = !!group?.photoUrl;
     const overlaySx = {
       position: "absolute",
       left: 0,
       right: 0,
       bottom: 0,
-      p: `${mobileTheme.spacing.md}px`,
-      background: "linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0))",
+      px: "20px",
+      py: "20px",
+      background: "rgba(0,0,0,0.6)",
     } as const;
-    if (group?.photoUrl) {
-      return (
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            paddingTop: "56.25%",
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            overflow: "hidden",
-            bgcolor: tc.primaryLight,
-            boxShadow: mobileTheme.shadows.md,
-          }}
-        >
-          <Box
-            component="img"
-            src={group.photoUrl}
-            alt={group.name || "Group"}
-            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-          <Box sx={overlaySx}>
-            <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.2 }}>
-              {group?.name}
-            </Typography>
-            <Typography sx={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.9)", mt: "4px" }}>
-              {memberCount} {memberCount === 1 ? "member" : "members"}
-            </Typography>
-          </Box>
-        </Box>
-      );
-    }
+    const chipSx = {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "4px",
+      bgcolor: "rgba(255,255,255,0.9)",
+      color: "#000",
+      fontSize: 12,
+      fontWeight: 600,
+      px: "8px",
+      py: "4px",
+      borderRadius: "12px",
+    } as const;
+    const leaderChipSx = { ...chipSx, bgcolor: "rgba(255,193,7,0.9)" } as const;
+
     return (
       <Box
         sx={{
           position: "relative",
           width: "100%",
-          paddingTop: "56.25%",
-          borderRadius: `${mobileTheme.radius.lg}px`,
+          height: 220,
+          borderRadius: "20px",
           overflow: "hidden",
-          bgcolor: tc.primary,
-          boxShadow: mobileTheme.shadows.md,
+          bgcolor: hasPhoto ? "transparent" : tc.primary,
+          boxShadow: mobileTheme.shadows.lg,
         }}
       >
-        <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Icon sx={{ fontSize: 48, color: "#FFFFFF" }}>groups</Icon>
-        </Box>
+        {hasPhoto ? (
+          <Box
+            component="img"
+            src={group!.photoUrl}
+            alt={group?.name || "Group"}
+            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Icon sx={{ fontSize: 48, color: "#FFFFFF" }}>groups</Icon>
+          </Box>
+        )}
         <Box sx={overlaySx}>
-          <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.2 }}>
+          <Typography
+            sx={{
+              fontSize: 26,
+              fontWeight: 800,
+              color: "#FFFFFF",
+              lineHeight: 1.2,
+              mb: "12px",
+              textShadow: "0 1px 3px rgba(0,0,0,0.4)",
+            }}
+          >
             {group?.name}
           </Typography>
-          <Typography sx={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.9)", mt: "4px" }}>
-            {memberCount} {memberCount === 1 ? "member" : "members"}
-          </Typography>
+          <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <Box sx={chipSx}>
+              <Icon sx={{ fontSize: 14 }}>group</Icon>
+              <span>
+                {memberCount} {memberCount === 1 ? "member" : "members"}
+              </span>
+            </Box>
+            {isLeader && (
+              <Box sx={leaderChipSx}>
+                <Icon sx={{ fontSize: 14 }}>workspace_premium</Icon>
+                <span>Leader</span>
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
     );
@@ -511,14 +526,15 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     </Box>
   );
 
+  // Match B1Mobile tab order: about, messages, members, attendance, events, resources
   const availableTabs: { key: TabKey; label: string; icon: string }[] = [
     { key: "about", label: "About", icon: "info" },
-    { key: "members", label: "Members", icon: "group" },
-    { key: "events", label: "Events", icon: "event" },
   ];
+  if (isMember) availableTabs.push({ key: "messages", label: "Messages", icon: "forum" });
+  availableTabs.push({ key: "members", label: "Members", icon: "group" });
   if (isLeader) availableTabs.push({ key: "attendance", label: "Attendance", icon: "fact_check" });
+  availableTabs.push({ key: "events", label: "Events", icon: "event" });
   availableTabs.push({ key: "resources", label: "Resources", icon: "folder" });
-  if (isMember) availableTabs.splice(1, 0, { key: "messages", label: "Messages", icon: "forum" });
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>

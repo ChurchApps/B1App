@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
@@ -204,33 +204,10 @@ export const PlaylistDetail = ({ id, config }: Props) => {
   const playlist: PlaylistInterface | null | undefined =
     playlistLoading || !churchId ? undefined : (playlistData ?? null);
 
-  const handleBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) router.back();
-    else router.push("/mobile/sermons");
-  };
-
   const handleRetry = () => {
     if (playlistError) refetchPlaylist();
     if (sermonsError) refetchSermons();
   };
-
-  const renderBack = () => (
-    <IconButton
-      aria-label="Back"
-      onClick={handleBack}
-      sx={{
-        width: 40,
-        height: 40,
-        bgcolor: tc.surface,
-        color: tc.text,
-        boxShadow: mobileTheme.shadows.sm,
-        mb: `${mobileTheme.spacing.md}px`,
-        "&:hover": { bgcolor: tc.surface },
-      }}
-    >
-      <Icon>arrow_back</Icon>
-    </IconButton>
-  );
 
   const heroGradient = `linear-gradient(135deg, ${shade(tc.primary, -12)} 0%, ${shade(tc.primary, 18)} 55%, ${shade(tc.primary, 28)} 100%)`;
 
@@ -242,7 +219,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           position: "relative",
           width: "100%",
           paddingTop: "56.25%",
-          borderRadius: `${mobileTheme.radius.lg}px`,
+          borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
           boxShadow: mobileTheme.shadows.md,
           background: hasImage ? undefined : heroGradient,
@@ -345,7 +322,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
       <Skeleton
         variant="rounded"
-        sx={{ width: "100%", paddingTop: "56.25%", borderRadius: `${mobileTheme.radius.lg}px` }}
+        sx={{ width: "100%", paddingTop: "56.25%", borderRadius: `${mobileTheme.radius.xl}px` }}
       />
       {[0, 1, 2].map((i) => (
         <Skeleton
@@ -454,13 +431,13 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
+        borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center",
       }}
     >
-      <Icon sx={{ fontSize: 40, color: tc.textSecondary, mb: 1 }}>video_library</Icon>
+      <Icon sx={{ fontSize: 48, color: tc.textSecondary, mb: 2 }}>video_library</Icon>
       <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.5 }}>
         No Sermons in This Series
       </Typography>
@@ -477,7 +454,6 @@ export const PlaylistDetail = ({ id, config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderBack()}
       {hasError && renderError()}
       {!hasError && playlist === undefined && renderSkeleton()}
       {!hasError && playlist === null && renderNotFound()}

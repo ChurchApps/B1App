@@ -167,7 +167,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
               sx={{ color: tc.error, textTransform: "none", fontWeight: 500, borderRadius: `${mobileTheme.radius.md}px` }}
               startIcon={<Icon>cancel</Icon>}
             >
-              Cancel
+              Cancel Registration
             </Button>
           </Box>
         ) : null}
