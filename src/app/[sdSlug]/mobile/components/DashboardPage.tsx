@@ -2,7 +2,7 @@
 
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Icon, IconButton, Typography } from "@mui/material";
+import { Box, Icon, Typography } from "@mui/material";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -51,7 +51,7 @@ export const DashboardPage = ({ config }: Props) => {
   const churchId = config?.church?.id;
   const jwt = context.userChurch?.jwt;
 
-  const { data: rawLinks, isLoading, refetch, isFetching } = useChurchLinks(churchId, jwt);
+  const { data: rawLinks, isLoading, refetch } = useChurchLinks(churchId, jwt);
 
   const [viewCounts, setViewCounts] = useState<Record<string, number>>({});
 
@@ -98,10 +98,14 @@ export const DashboardPage = ({ config }: Props) => {
 
   const navigate = (link: LinkInterface) => {
     incrementViewCount(generateLinkId(link));
-    const route = linkTypeToRoute(link.linkType, link.linkData, link.text);
-    if (route) {
-      if (route.startsWith("http")) window.location.href = route;
-      else router.push(route);
+    const route = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
+    if (!route) return;
+    if (route.startsWith("http")) {
+      // External site — open in a new tab so the PWA stays mounted. Browsers
+      // block iframing most third-party sites, so this beats a blank embed.
+      window.open(route, "_blank", "noopener,noreferrer");
+    } else {
+      router.push(route);
     }
   };
 
@@ -140,19 +144,6 @@ export const DashboardPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pt: 2, pb: 3 }}>
-      {/* Refresh button (web equivalent of pull-to-refresh) */}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", px: `${mobileTheme.spacing.md}px`, mb: 1 }}>
-        <IconButton
-          size="small"
-          aria-label="Refresh"
-          onClick={() => { refetch(); }}
-          disabled={isFetching}
-          sx={{ color: tc.primary }}
-        >
-          <Icon sx={{ fontSize: 20 }}>refresh</Icon>
-        </IconButton>
-      </Box>
-
       {/* Hero Section */}
       {hero && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>

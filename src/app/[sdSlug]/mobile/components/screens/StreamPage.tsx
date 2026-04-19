@@ -51,10 +51,6 @@ export const StreamPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 2 }}>
-        Live Stream
-      </Typography>
-
       {keyName ? (
         <LiveStream
           keyName={keyName}

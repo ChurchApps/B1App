@@ -105,42 +105,58 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
           if (link.linkType === "separator") {
             return <Divider key={`sep-${idx}`} sx={{ my: 1 }} />;
           }
-          const route = linkTypeToRoute(link.linkType, link.linkData);
+          const route = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
           if (!route) return null;
-          const active = isActive(route);
+          const isExternal = route.startsWith("http");
+          const active = !isExternal && isActive(route);
           const iconName = linkTypeToIcon(link.linkType, link.icon);
-          return (
-            <Link key={link.id || `${link.linkType}-${idx}`} href={route} style={{ textDecoration: "none", color: "inherit" }} onClick={onNavigate}>
-              <Box sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1.5,
-                minHeight: 48,
-                px: `${mobileTheme.spacing.md}px`,
-                py: `${mobileTheme.spacing.sm + 4}px`,
-                borderBottom: `1px solid ${tc.border}`,
-                bgcolor: active ? tc.primary : "transparent",
-                cursor: "pointer",
-                "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground },
+          const key = link.id || `${link.linkType}-${idx}`;
+          const anchorStyle = { textDecoration: "none", color: "inherit" } as const;
+          const body = (
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              minHeight: 48,
+              px: `${mobileTheme.spacing.md}px`,
+              py: `${mobileTheme.spacing.sm + 4}px`,
+              borderBottom: `1px solid ${tc.border}`,
+              bgcolor: active ? tc.primary : "transparent",
+              cursor: "pointer",
+              "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground },
+            }}>
+              {(link as any).photo ? (
+                <Box component="img" src={(link as any).photo} alt="" sx={{ width: 24, height: 24, objectFit: "cover", borderRadius: 0.5 }} />
+              ) : (
+                <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
+              )}
+              <Typography sx={{
+                fontSize: 16,
+                fontWeight: active ? 600 : 500,
+                color: active ? "#FFFFFF" : tc.text,
+                flex: 1,
+                minWidth: 0,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}>
-                {(link as any).photo ? (
-                  <Box component="img" src={(link as any).photo} alt="" sx={{ width: 24, height: 24, objectFit: "cover", borderRadius: 0.5 }} />
-                ) : (
-                  <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
-                )}
-                <Typography sx={{
-                  fontSize: 16,
-                  fontWeight: active ? 600 : 500,
-                  color: active ? "#FFFFFF" : tc.text,
-                  flex: 1,
-                  minWidth: 0,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}>
-                  {link.text}
-                </Typography>
-              </Box>
+                {link.text}
+              </Typography>
+            </Box>
+          );
+          // External URLs get a plain anchor with `target="_blank"` so the
+          // browser handles them — embedding cross-origin sites in an iframe
+          // is unreliable, so we skip the in-app shell for them entirely.
+          if (isExternal) {
+            return (
+              <a key={key} href={route} target="_blank" rel="noopener noreferrer" style={anchorStyle} onClick={onNavigate}>
+                {body}
+              </a>
+            );
+          }
+          return (
+            <Link key={key} href={route} style={anchorStyle} onClick={onNavigate}>
+              {body}
             </Link>
           );
         })}

@@ -108,7 +108,7 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
     >
       <Toolbar disableGutters sx={{ minHeight: `${mobileTheme.headerHeight}px !important`, px: 1 }}>
         <Stack direction="row" alignItems="center">
-          {!isDashboard && (
+          {!isDashboard ? (
             <IconButton
               onClick={handleBack}
               aria-label="Back to dashboard"
@@ -116,14 +116,15 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
             >
               <ChevronLeftIcon sx={{ fontSize: 27 }} />
             </IconButton>
+          ) : (
+            <IconButton
+              onClick={onMenuClick}
+              aria-label="Open navigation menu"
+              sx={{ color: "#FFFFFF", mx: 0.5, display: { md: "none" } }}
+            >
+              <MenuIcon sx={{ fontSize: 27 }} />
+            </IconButton>
           )}
-          <IconButton
-            onClick={onMenuClick}
-            aria-label="Open navigation menu"
-            sx={{ color: "#FFFFFF", mx: 0.5, display: { md: "none" } }}
-          >
-            <MenuIcon sx={{ fontSize: 27 }} />
-          </IconButton>
         </Stack>
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
           {isDashboard ? (

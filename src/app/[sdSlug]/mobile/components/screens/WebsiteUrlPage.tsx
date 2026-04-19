@@ -68,6 +68,31 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
     return rawUrl;
   }, [isPage, rawId, rawUrl]);
 
+  // External URLs almost always set `X-Frame-Options: DENY`/`SAMEORIGIN` or a
+  // `frame-ancestors` CSP, which silently blanks the iframe on web. B1Mobile's
+  // `react-native-webview` has no such restriction. On the PWA we keep the
+  // mobile shell intact and offer a one-tap "Open Website" action instead of
+  // blasting the user out of the app or showing a blank iframe for 15 seconds.
+  const isCrossOrigin = useMemo(() => {
+    if (!resolvedUrl) return false;
+    if (typeof window === "undefined") return false;
+    try {
+      const parsed = new URL(resolvedUrl, window.location.href);
+      return parsed.origin !== window.location.origin;
+    } catch {
+      return false;
+    }
+  }, [resolvedUrl]);
+
+  const externalHost = useMemo(() => {
+    if (!resolvedUrl) return "";
+    try {
+      return new URL(resolvedUrl, typeof window !== "undefined" ? window.location.href : "http://localhost/").host;
+    } catch {
+      return resolvedUrl;
+    }
+  }, [resolvedUrl]);
+
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -133,6 +158,70 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
   };
 
   const [iframeKey, setIframeKey] = useState(0);
+
+  if (resolvedUrl && isCrossOrigin) {
+    return (
+      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            borderRadius: `${mobileTheme.radius.xl}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            p: `${mobileTheme.spacing.lg}px`,
+            textAlign: "center",
+          }}
+        >
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: "32px",
+              bgcolor: tc.iconBackground,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: `${mobileTheme.spacing.md}px`,
+            }}
+          >
+            <Icon sx={{ fontSize: 32, color: tc.primary }}>public</Icon>
+          </Box>
+          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+            {title}
+          </Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px`, wordBreak: "break-all" }}>
+            {externalHost}
+          </Typography>
+          <Box
+            component="a"
+            href={resolvedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 1,
+              bgcolor: tc.primary,
+              color: tc.onPrimary,
+              textDecoration: "none",
+              borderRadius: `${mobileTheme.radius.md}px`,
+              px: 2,
+              py: 1,
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: "pointer",
+              "&:hover": { opacity: 0.9 },
+            }}
+          >
+            <Icon sx={{ fontSize: 18 }}>open_in_new</Icon>
+            Open Website
+          </Box>
+          <Typography sx={{ fontSize: 12, color: tc.textHint, mt: `${mobileTheme.spacing.sm}px` }}>
+            This site can&apos;t be shown inside the app.
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   if (!resolvedUrl) {
     return (

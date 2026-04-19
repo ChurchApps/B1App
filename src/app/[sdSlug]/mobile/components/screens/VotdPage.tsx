@@ -82,17 +82,8 @@ export const VotdPage = () => {
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", display: "flex", flexDirection: "column" }}>
-      {/* Screen-level header — matches SermonsPage/GroupsPage pattern.
-          B1Mobile gets this from `MainHeader`; web gets the global chrome from
-          `MobileAppBar`, so the in-screen title lives here. */}
-      <Box sx={{ px: `${mobileTheme.spacing.md}px`, pt: `${mobileTheme.spacing.md}px` }}>
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-          Verse of the Day
-        </Typography>
-      </Box>
-
-      {/* Edge-to-edge image area — matches B1Mobile `globalStyles.webViewContainer`
-          under MainHeader. No gradient card, no icon header. */}
+      {/* Edge-to-edge image area — matches B1Mobile `globalStyles.webViewContainer`.
+          The AppBar already shows "Verse of the Day"; no in-body title. */}
       <Box sx={{
         position: "relative",
         flex: 1,
@@ -117,9 +108,14 @@ export const VotdPage = () => {
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
               style={{
-                display: "block",
+                // Matches B1Mobile's `contentFit="fill"`: stretch to the
+                // container so the verse fills the available space even when
+                // the viewport ratio doesn't match the chosen shape.
+                position: "absolute",
+                inset: 0,
                 width: "100%",
-                height: "auto",
+                height: "100%",
+                objectFit: "fill",
               }}
             />
           </>

@@ -59,7 +59,16 @@ export const linkTypeToImage = (linkType?: string, text?: string): string => {
   }
 };
 
-export const linkTypeToRoute = (linkType?: string, linkData?: string, text?: string): string | null => {
+// For `url` and `page` link types the actual destination lives in `link.url`
+// (not `link.linkData`) — B1Mobile reads it as `item.url` in NavigationUtils.
+// Earlier versions here read only `linkData`, which was usually empty, so the
+// "Website" tab silently fell back to `/mobile/dashboard`.
+export const linkTypeToRoute = (
+  linkType?: string,
+  linkData?: string,
+  text?: string,
+  url?: string
+): string | null => {
   switch (linkType) {
     case "groups": return "/mobile/groups";
     case "directory": return "/mobile/community";
@@ -74,10 +83,7 @@ export const linkTypeToRoute = (linkType?: string, linkData?: string, text?: str
     case "stream": return "/mobile/stream";
     case "registrations": return "/mobile/registrations";
     case "page": {
-      // linkData is the page slug/url of a church-authored B1 page.
-      // The embed shell (`/mobile/page`) resolves it against the current
-      // origin and iframes it so the mobile chrome stays in place.
-      const id = linkData || "";
+      const id = url || linkData || "";
       const params = new URLSearchParams();
       if (id) params.set("id", id);
       if (text) params.set("title", text);
@@ -85,14 +91,12 @@ export const linkTypeToRoute = (linkType?: string, linkData?: string, text?: str
       return qs ? `/mobile/page?${qs}` : "/mobile/page";
     }
     case "url": {
-      // External URL — embed it inside the mobile shell rather than
-      // navigating the browser away from /mobile/*.
-      const url = linkData || "";
-      if (!url) return "/mobile/dashboard";
-      const params = new URLSearchParams();
-      params.set("url", url);
-      if (text) params.set("title", text);
-      return `/mobile/websiteUrl?${params.toString()}`;
+      // Return the raw external URL. Browsers block most cross-origin iframes
+      // via `X-Frame-Options` / CSP `frame-ancestors`, so embedding inside the
+      // shell is unreliable. Callers detect `startsWith("http")` and open in a
+      // new tab — the PWA stays put and the user can switch back.
+      const target = url || linkData || "";
+      return target || null;
     }
     default: return null;
   }

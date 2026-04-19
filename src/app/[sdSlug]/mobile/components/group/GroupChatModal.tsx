@@ -500,16 +500,19 @@ export const GroupChatModal = ({
               setActive(null);
             }}
             variant="fullWidth"
+            textColor="primary"
+            indicatorColor="primary"
             sx={{
-              minHeight: 40,
-              "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 3 },
+              minHeight: 52,
+              "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
               "& .MuiTab-root": {
-                minHeight: 40,
+                minHeight: 52,
                 textTransform: "none",
-                fontWeight: 600,
+                fontWeight: 500,
+                fontSize: 14,
                 color: tc.textSecondary,
               },
-              "& .Mui-selected": { color: `${tc.primary} !important` },
+              "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
             }}
           >
             <Tab value="discussions" label="Discussions" />

@@ -458,20 +458,20 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         <Tabs
           value={tab}
           onChange={(_e, v) => setTab(v)}
-          variant="scrollable"
-          scrollButtons="auto"
-          allowScrollButtonsMobile
-          TabIndicatorProps={{ sx: { backgroundColor: tc.primary, height: 3, borderRadius: "3px 3px 0 0" } }}
+          variant="fullWidth"
+          textColor="primary"
+          indicatorColor="primary"
+          TabIndicatorProps={{ sx: { backgroundColor: tc.primary, height: 2 } }}
           sx={{
-            minHeight: 48,
+            minHeight: 52,
             "& .MuiTab-root": {
               textTransform: "none",
-              fontWeight: 600,
+              fontWeight: 500,
               fontSize: 14,
               color: tc.textSecondary,
-              minHeight: 48,
+              minHeight: 52,
             },
-            "& .Mui-selected": { color: `${tc.primary} !important` },
+            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
           }}
         >
           <Tab value="overview" label="Overview" />

@@ -721,26 +721,26 @@ export const SermonsPage = ({ config }: Props) => {
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{
-        borderBottom: 1,
-        borderColor: tc.border,
+        borderBottom: `1px solid ${tc.border}`,
         bgcolor: tc.surface,
-        px: `${mobileTheme.spacing.md}px`,
       }}>
         <Tabs
           value={activeTab}
           onChange={(_, value) => setActiveTab(value)}
+          variant="fullWidth"
           textColor="primary"
           indicatorColor="primary"
           sx={{
-            minHeight: 44,
+            minHeight: 52,
             "& .MuiTab-root": {
               textTransform: "none",
-              fontWeight: 600,
+              fontWeight: 500,
               fontSize: 14,
-              minHeight: 44,
+              minHeight: 52,
               color: tc.textSecondary,
             },
-            "& .Mui-selected": { color: tc.primary },
+            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
+            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
           }}
         >
           <Tab value="series" label="Series" />

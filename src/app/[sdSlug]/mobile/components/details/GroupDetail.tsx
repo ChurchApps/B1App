@@ -547,19 +547,20 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                 }
                 setTab(v);
               }}
-              variant="scrollable"
-              scrollButtons={false}
+              variant="fullWidth"
+              textColor="primary"
+              indicatorColor="primary"
               sx={{
-                minHeight: 44,
-                "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 3 },
+                minHeight: 52,
+                "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
                 "& .MuiTab-root": {
-                  minHeight: 44,
+                  minHeight: 52,
                   textTransform: "none",
-                  fontWeight: 600,
+                  fontWeight: 500,
+                  fontSize: 14,
                   color: tc.textSecondary,
-                  minWidth: 80,
                 },
-                "& .Mui-selected": { color: `${tc.primary} !important` },
+                "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
               }}
             >
               {availableTabs.map((t) => (
