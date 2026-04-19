@@ -94,6 +94,12 @@ const mobileThemeGlobalStyles = (
     styles={{
       ":root": lightVars,
       'html[data-mobile-theme="dark"]': { ...darkVars, colorScheme: "dark" },
+      // The UA default `body { margin: 8px }` leaves a thin strip of the
+      // document-level background on the left and right of the mobile shell,
+      // which reads as a "white border" around the dark content. The rest of
+      // the B1 app mounts `CssBaseline` inside its own layouts; the mobile
+      // shell doesn't, so we zero the body margin here.
+      "body": { margin: 0 },
       ...darkInputStyles,
     }}
   />
