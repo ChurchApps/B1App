@@ -20,6 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function MobileLayout({ children }: { children: React.ReactNode }) {
   return (
     <MobileClientLayout>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
       <PwaRegister />

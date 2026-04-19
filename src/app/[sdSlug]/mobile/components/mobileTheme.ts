@@ -95,7 +95,7 @@ export const linkTypeToRoute = (linkType?: string, linkData?: string, text?: str
 };
 
 export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => {
-  if (itemIcon) return itemIcon.split("_").join("-");
+  if (itemIcon) return itemIcon;
   switch ((linkType || "").toLowerCase()) {
     case "groups": return "groups";
     case "directory": return "people";

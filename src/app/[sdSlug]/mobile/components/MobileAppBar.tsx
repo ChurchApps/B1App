@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { AppBar, Avatar, Badge, Icon, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { UserHelper } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -17,7 +19,65 @@ interface Props {
   onBellClick: () => void;
 }
 
+// Per-screen titles shown in the header (center). Keys are mobile page slugs.
+// Dashboard is special-cased (renders the church logo/name instead of a title).
+const SCREEN_TITLES: Record<string, string> = {
+  myGroups: "My Groups",
+  groups: "My Groups",
+  groupDetails: "Group",
+  notifications: "Notifications",
+  votd: "Verse of the Day",
+  service: "Check-in",
+  checkin: "Check-in",
+  donation: "Giving",
+  donate: "Giving",
+  membersSearch: "Directory",
+  community: "Directory",
+  memberDetail: "Profile",
+  plan: "Plans",
+  plans: "Plans",
+  planDetails: "Plan",
+  sermons: "Sermons",
+  sermonDetails: "Sermon",
+  playlist: "Playlist",
+  playlistDetails: "Playlist",
+  searchMessageUser: "Messages",
+  messages: "Messages",
+  messagesNew: "New Message",
+  composeMessage: "New Message",
+  registrations: "Registrations",
+  register: "Register",
+  volunteerBrowse: "Volunteer Opportunities",
+  volunteer: "Volunteer",
+  volunteerSignup: "Volunteer",
+  profileEdit: "Edit Profile",
+  churchSearch: "Church Search",
+  stream: "Stream",
+  bible: "Bible",
+  lessons: "Lessons",
+  login: "Sign In",
+  install: "Install App",
+  page: "",
+  websiteUrl: "",
+};
+
+// Extract the current mobile page slug from the pathname. Works whether the
+// URL is rewritten (/{sdSlug}/mobile/X) or direct (/mobile/X).
+const pageSlugFromPath = (pathname: string | null): string => {
+  if (!pathname) return "";
+  const parts = pathname.split("/").filter(Boolean);
+  const idx = parts.indexOf("mobile");
+  if (idx === -1) return "";
+  return parts[idx + 1] || "dashboard";
+};
+
 export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, onAvatarClick, onBellClick }: Props) => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const slug = pageSlugFromPath(pathname);
+  const isDashboard = !slug || slug === "dashboard";
+  const title = SCREEN_TITLES[slug] ?? "";
+
   const logoLight = config?.appearance?.logoLight;
   const signedIn = !!UserHelper.user?.firstName;
   const initials = [UserHelper.user?.firstName?.[0], UserHelper.user?.lastName?.[0]]
@@ -36,6 +96,10 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
     }
   };
 
+  const handleBack = () => {
+    router.push("/mobile/dashboard");
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -49,23 +113,40 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
       }}
     >
       <Toolbar disableGutters sx={{ minHeight: `${mobileTheme.headerHeight}px !important`, px: 1 }}>
-        <IconButton
-          onClick={onMenuClick}
-          aria-label="Open navigation menu"
-          sx={{ color: "#FFFFFF", mx: 0.5, display: { md: "none" } }}
-        >
-          <MenuIcon sx={{ fontSize: 27 }} />
-        </IconButton>
+        <Stack direction="row" alignItems="center">
+          {!isDashboard && (
+            <IconButton
+              onClick={handleBack}
+              aria-label="Back to dashboard"
+              sx={{ color: "#FFFFFF", mx: 0.25 }}
+            >
+              <ChevronLeftIcon sx={{ fontSize: 27 }} />
+            </IconButton>
+          )}
+          <IconButton
+            onClick={onMenuClick}
+            aria-label="Open navigation menu"
+            sx={{ color: "#FFFFFF", mx: 0.5, display: { md: "none" } }}
+          >
+            <MenuIcon sx={{ fontSize: 27 }} />
+          </IconButton>
+        </Stack>
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-          {logoLight ? (
-            <img
-              src={logoLight}
-              alt={config?.church?.name || ""}
-              style={{ height: 30, width: "auto", maxWidth: "60%", objectFit: "contain" }}
-            />
+          {isDashboard ? (
+            logoLight ? (
+              <img
+                src={logoLight}
+                alt={config?.church?.name || ""}
+                style={{ height: 30, width: "auto", maxWidth: "60%", objectFit: "contain" }}
+              />
+            ) : (
+              <Typography noWrap sx={{ fontSize: 16, fontWeight: 600, color: "#FFFFFF", px: 1 }}>
+                {config?.church?.name || ""}
+              </Typography>
+            )
           ) : (
-            <Typography noWrap sx={{ fontSize: 16, fontWeight: 600, color: "#FFFFFF", px: 1 }}>
-              {config?.church?.name || ""}
+            <Typography noWrap sx={{ fontSize: 18, fontWeight: 600, color: "#FFFFFF", px: 1 }}>
+              {title}
             </Typography>
           )}
         </div>

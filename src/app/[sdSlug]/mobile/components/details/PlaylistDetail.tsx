@@ -169,12 +169,16 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     error: playlistError,
     refetch: refetchPlaylist,
   } = useQuery<PlaylistInterface | null>({
-    queryKey: ["playlist", id],
+    queryKey: ["playlist", churchId, id],
     queryFn: async () => {
-      const data = await ApiHelper.getAnonymous(`/playlists/${id}`, "ContentApi");
-      return data && data.id ? (data as PlaylistInterface) : null;
+      // `/playlists/:id` is authenticated, so anonymous mobile visitors must
+      // look the playlist up in the public list for their church.
+      const list = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
+      if (!Array.isArray(list)) return null;
+      const match = list.find((p: any) => p && p.id === id) as PlaylistInterface | undefined;
+      return match ?? null;
     },
-    enabled: !!id,
+    enabled: !!churchId && !!id,
     staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
   });
@@ -200,7 +204,10 @@ export const PlaylistDetail = ({ id, config }: Props) => {
   const hasError = !!playlistError || !!sermonsError;
 
   // Preserve the undefined/null/value tri-state the render logic depends on.
-  const playlist: PlaylistInterface | null | undefined = playlistLoading ? undefined : (playlistData ?? null);
+  // While the config hasn't provided a churchId yet, the query is disabled and
+  // `playlistData` is undefined — treat that as loading, not "not found".
+  const playlist: PlaylistInterface | null | undefined =
+    playlistLoading || !churchId ? undefined : (playlistData ?? null);
 
   const handleBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.back();
