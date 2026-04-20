@@ -8,7 +8,7 @@ import {
   StaleWhileRevalidate,
   CacheFirst,
   ExpirationPlugin,
-  CacheableResponsePlugin,
+  CacheableResponsePlugin
 } from "serwist";
 
 declare global {
@@ -47,7 +47,7 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
   // Never cache auth exchanges.
   {
     matcher: isAuthApi,
-    handler: new NetworkOnly(),
+    handler: new NetworkOnly()
   },
   // Config-shape API responses: stale-while-revalidate, 1 day.
   {
@@ -56,9 +56,9 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
       cacheName: "api-config",
       plugins: [
         new CacheableResponsePlugin({ statuses: [0, 200] }),
-        new ExpirationPlugin({ maxEntries: 60, maxAgeSeconds: 24 * 60 * 60 }),
-      ],
-    }),
+        new ExpirationPlugin({ maxEntries: 60, maxAgeSeconds: 24 * 60 * 60 })
+      ]
+    })
   },
   // Content-shape API responses: stale-while-revalidate, 12h.
   {
@@ -67,9 +67,9 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
       cacheName: "api-content",
       plugins: [
         new CacheableResponsePlugin({ statuses: [0, 200] }),
-        new ExpirationPlugin({ maxEntries: 200, maxAgeSeconds: 12 * 60 * 60 }),
-      ],
-    }),
+        new ExpirationPlugin({ maxEntries: 200, maxAgeSeconds: 12 * 60 * 60 })
+      ]
+    })
   },
   // Church-hosted images: cache-first, 30 days.
   {
@@ -78,9 +78,9 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
       cacheName: "church-images",
       plugins: [
         new CacheableResponsePlugin({ statuses: [0, 200] }),
-        new ExpirationPlugin({ maxEntries: 120, maxAgeSeconds: 30 * 24 * 60 * 60 }),
-      ],
-    }),
+        new ExpirationPlugin({ maxEntries: 120, maxAgeSeconds: 30 * 24 * 60 * 60 })
+      ]
+    })
   },
   // Mobile app shell navigations: network-first so updates propagate, fall back to cache offline.
   {
@@ -91,12 +91,12 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
       networkTimeoutSeconds: 3,
       plugins: [
         new CacheableResponsePlugin({ statuses: [0, 200] }),
-        new ExpirationPlugin({ maxEntries: 40, maxAgeSeconds: 7 * 24 * 60 * 60 }),
-      ],
-    }),
+        new ExpirationPlugin({ maxEntries: 40, maxAgeSeconds: 7 * 24 * 60 * 60 })
+      ]
+    })
   },
   // Everything else Next.js recommends (static assets, RSC, fonts, etc.).
-  ...defaultCache,
+  ...defaultCache
 ];
 
 const serwist = new Serwist({
@@ -104,7 +104,7 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: mobileRuntimeCaching,
+  runtimeCaching: mobileRuntimeCaching
 });
 
 serwist.addEventListeners();
