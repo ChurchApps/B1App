@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -16,35 +17,23 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const context = useContext(UserContext);
   const personId = context?.person?.id || context?.userChurch?.person?.id || UserHelper.currentUserChurch?.person?.id;
-
-  const [registrations, setRegistrations] = useState<RegistrationInterface[] | null>(null);
+  const queryClient = useQueryClient();
   const [cancelId, setCancelId] = useState<string | null>(null);
 
-  const loadData = async () => {
-    if (!personId) {
-      setRegistrations([]);
-      return;
-    }
-    try {
-      const data: RegistrationInterface[] = await ApiHelper.get(
-        "/registrations/person/" + personId,
-        "ContentApi"
-      );
-      setRegistrations(Array.isArray(data) ? data : []);
-    } catch {
-      setRegistrations([]);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, [personId]);
+  const { data: registrations = null } = useQuery<RegistrationInterface[]>({
+    queryKey: ["registrations", personId],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/registrations/person/" + personId, "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!personId
+  });
 
   const handleCancel = async () => {
     if (!cancelId) return;
     await ApiHelper.post("/registrations/" + cancelId + "/cancel", {}, "ContentApi");
     setCancelId(null);
-    loadData();
+    queryClient.invalidateQueries({ queryKey: ["registrations", personId] });
   };
 
   const getStatusColor = (status?: string) => {
@@ -63,7 +52,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Skeleton variant="text" width="60%" height={22} />
@@ -79,7 +68,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -91,7 +80,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>event_available</Icon>
@@ -119,7 +108,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          opacity: isCancelled ? 0.65 : 1,
+          opacity: isCancelled ? 0.65 : 1
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
@@ -144,7 +133,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
               fontSize: 11,
               fontWeight: 600,
               textTransform: "capitalize",
-              whiteSpace: "nowrap",
+              whiteSpace: "nowrap"
             }}
           >
             {reg.status || "registered"}
@@ -164,6 +153,12 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
           </Box>
         )}
 
+        {(reg as any).registeredDate && (
+          <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: 1 }}>
+            Registered: {DateHelper.prettyDate(new Date((reg as any).registeredDate))}
+          </Typography>
+        )}
+
         {!isCancelled ? (
           <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end", gap: 1 }}>
             <Button
@@ -172,22 +167,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
               sx={{ color: tc.error, textTransform: "none", fontWeight: 500, borderRadius: `${mobileTheme.radius.md}px` }}
               startIcon={<Icon>cancel</Icon>}
             >
-              Cancel
-            </Button>
-            <Button
-              size="small"
-              variant="contained"
-              disabled
-              sx={{
-                bgcolor: tc.success,
-                color: tc.onPrimary,
-                textTransform: "none",
-                fontWeight: 500,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                "&.Mui-disabled": { bgcolor: `${tc.success}B3`, color: tc.onPrimary },
-              }}
-            >
-              Registered
+              Cancel Registration
             </Button>
           </Box>
         ) : null}
@@ -195,15 +175,20 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
     );
   };
 
+  const sortedRegistrations = registrations
+    ? [...registrations].sort((a, b) => {
+      const aCancelled = a.status === "cancelled" ? 1 : 0;
+      const bCancelled = b.status === "cancelled" ? 1 : 0;
+      return aCancelled - bCancelled;
+    })
+    : null;
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        My Registrations
-      </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {registrations === null && [0, 1].map(renderSkeleton)}
-        {registrations !== null && registrations.length === 0 && renderEmpty()}
-        {registrations !== null && registrations.length > 0 && registrations.map(renderCard)}
+        {sortedRegistrations === null && [0, 1].map(renderSkeleton)}
+        {sortedRegistrations !== null && sortedRegistrations.length === 0 && renderEmpty()}
+        {sortedRegistrations !== null && sortedRegistrations.length > 0 && sortedRegistrations.map(renderCard)}
       </Box>
 
       <Dialog open={!!cancelId} onClose={() => setCancelId(null)}>

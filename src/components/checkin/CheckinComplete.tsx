@@ -1,37 +1,72 @@
-import { Box, Icon, Typography, Button } from "@mui/material";
-import Link from "next/link";
-import { SuccessIconContainer, EmptyStateCard, colors } from "./CheckinStyles";
+"use client";
+import React, { useEffect } from "react";
+import { Box, Icon, Typography } from "@mui/material";
+import { colors } from "./CheckinStyles";
 
-export function CheckinComplete() {
+interface Props {
+  onDone?: () => void;
+}
+
+export function CheckinComplete({ onDone }: Props) {
+  useEffect(() => {
+    if (!onDone) return;
+    const id = setTimeout(() => {
+      onDone();
+    }, 1500);
+    return () => clearTimeout(id);
+  }, [onDone]);
+
   return (
-    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", paddingY: 6 }}>
-      <EmptyStateCard sx={{ maxWidth: 500, width: "100%" }}>
-        <SuccessIconContainer>
-          <Icon sx={{ fontSize: 48, color: colors.success }}>check_circle</Icon>
-        </SuccessIconContainer>
-        <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 2 }}>
-          Check-in Complete!
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "60vh",
+        borderRadius: 3,
+        background: `linear-gradient(135deg, ${colors.primary} 0%, #568BDA 100%)`,
+        padding: 4
+      }}
+      data-testid="checkin-complete"
+    >
+      <Box sx={{ textAlign: "center", maxWidth: 400, width: "100%" }}>
+        <Box
+          sx={{
+            width: 120,
+            height: 120,
+            borderRadius: "50%",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            display: "inline-flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "0 auto 24px",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.2)"
+          }}
+        >
+          <Icon sx={{ fontSize: 80, color: colors.success }}>check_circle</Icon>
+        </Box>
+        <Typography
+          variant="h4"
+          sx={{
+            color: "#FFFFFF",
+            fontWeight: 800,
+            marginBottom: 2,
+            textShadow: "0 2px 4px rgba(0,0,0,0.3)"
+          }}
+        >
+          Check-in Complete
         </Typography>
-        <Typography variant="body1" sx={{ color: colors.textSecondary, marginBottom: 3 }}>
-          Your attendance has been saved. Thank you for checking in!
+        <Typography
+          variant="body1"
+          sx={{
+            color: "#FFFFFF",
+            opacity: 0.9,
+            textShadow: "0 1px 2px rgba(0,0,0,0.2)"
+          }}
+        >
+          Your attendance has been saved. Thank you!
         </Typography>
-        <Link href="/my/timeline" style={{ textDecoration: "none" }} data-testid="checkin-timeline-link">
-          <Button
-            variant="contained"
-            fullWidth
-            data-testid="checkin-back-button"
-            sx={{
-              backgroundColor: colors.primary,
-              borderRadius: 3,
-              height: 48,
-              fontWeight: 600,
-              "&:hover": { backgroundColor: colors.primaryHover }
-            }}
-          >
-            Back to My Page
-          </Button>
-        </Link>
-      </EmptyStateCard>
+      </Box>
     </Box>
   );
 }

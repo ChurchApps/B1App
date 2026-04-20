@@ -7,39 +7,43 @@ import { Avatar, Box, Button, Divider, Icon, Stack, Typography } from "@mui/mate
 import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
-import ChurchIcon from "@mui/icons-material/Church";
-import SearchIcon from "@mui/icons-material/Search";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import { UserHelper } from "@churchapps/apphelper";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
+import { getInitials } from "./util";
+import { useMobileThemeMode } from "./MobileThemeProvider";
 
 interface Props {
-  config: ConfigurationInterface;
   links: LinkInterface[];
   onNavigate?: () => void;
 }
 
-export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
+export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const context = useContext(UserContext);
   const router = useRouter();
   const pathname = usePathname();
   const tc = mobileTheme.colors;
+  const { mode, toggle } = useMobileThemeMode();
 
   const personPhoto = context?.person?.photo;
   const contentRoot = (typeof window !== "undefined" ? (window as any).__envVars?.ContentRoot : undefined) || "";
   const photoUrl = personPhoto ? (personPhoto.startsWith("http") ? personPhoto : `${contentRoot}${personPhoto}`) : undefined;
   const firstName = UserHelper.user?.firstName || "";
   const lastName = UserHelper.user?.lastName || "";
-  const initials = [firstName[0], lastName[0]].filter(Boolean).join("").toUpperCase() || "?";
+  const initials = getInitials({ name: { first: firstName, last: lastName } });
 
   const isActive = (url: string): boolean => {
     if (!pathname || url.startsWith("http")) return false;
     const idx = pathname.indexOf("/mobile");
     if (idx === -1) return false;
-    const relevant = pathname.substring(idx);
-    return relevant === url || relevant.startsWith(url + "/");
+    const relevant = pathname.substring(idx).split("?")[0];
+    const target = url.split("?")[0];
+
+    if (target === "/mobile/dashboard") return false;
+    return relevant === target || relevant.startsWith(target + "/");
   };
 
   const handleEditProfile = () => {
@@ -47,18 +51,13 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
     router.push("/mobile/profileEdit");
   };
 
-  const handleChurchSelect = () => {
-    onNavigate?.();
-    router.push("/mobile/churchSearch");
-  };
-
   return (
     <Box role="navigation" aria-label="Main navigation" sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: tc.surface }}>
-      {/* Header with user + church select */}
+
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,
         borderBottom: `1px solid ${tc.border}`,
-        boxShadow: mobileTheme.shadows.sm,
+        boxShadow: mobileTheme.shadows.sm
       }}>
         {UserHelper.user && (
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2 }}>
@@ -88,7 +87,7 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
                   color: tc.primary,
                   fontSize: 14,
                   fontWeight: 500,
-                  lineHeight: 1,
+                  lineHeight: 1
                 }}
               >
                 <EditIcon sx={{ fontSize: 16, color: tc.primary }} />
@@ -97,82 +96,91 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
             </Box>
           </Stack>
         )}
-        <Button
-          variant="contained"
-          fullWidth
-          disableElevation
-          startIcon={config?.appearance ? <ChurchIcon sx={{ fontSize: 20 }} /> : <SearchIcon sx={{ fontSize: 20 }} />}
-          onClick={handleChurchSelect}
-          sx={{
-            bgcolor: tc.surface,
-            color: tc.primary,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            textTransform: "none",
-            fontWeight: 500,
-            fontSize: 14,
-            boxShadow: mobileTheme.shadows.sm,
-            justifyContent: "flex-start",
-            py: 1,
-            "&:hover": { bgcolor: tc.iconBackground, boxShadow: mobileTheme.shadows.sm },
-          }}
-        >
-          {config?.church?.name || "Select Church"}
-        </Button>
       </Box>
 
-      {/* Nav list */}
       <Box sx={{ flex: 1, overflowY: "auto" }}>
         {links.map((link, idx) => {
           if (link.linkType === "separator") {
             return <Divider key={`sep-${idx}`} sx={{ my: 1 }} />;
           }
-          const route = linkTypeToRoute(link.linkType, link.linkData);
+          const route = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
           if (!route) return null;
-          const active = isActive(route);
+          const isExternal = route.startsWith("http");
+          const active = !isExternal && isActive(route);
           const iconName = linkTypeToIcon(link.linkType, link.icon);
-          return (
-            <Link key={link.id || `${link.linkType}-${idx}`} href={route} style={{ textDecoration: "none", color: "inherit" }} onClick={onNavigate}>
-              <Box sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1.5,
-                minHeight: 48,
-                px: `${mobileTheme.spacing.md}px`,
-                py: `${mobileTheme.spacing.sm + 4}px`,
-                borderBottom: `1px solid ${tc.border}`,
-                bgcolor: active ? tc.primary : "transparent",
-                cursor: "pointer",
-                "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground },
+          const key = link.id || `${link.linkType}-${idx}`;
+          const anchorStyle = { textDecoration: "none", color: "inherit" } as const;
+          const body = (
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              minHeight: 48,
+              px: `${mobileTheme.spacing.md}px`,
+              py: `${mobileTheme.spacing.sm + 4}px`,
+              borderBottom: `1px solid ${tc.border}`,
+              bgcolor: active ? tc.primary : "transparent",
+              cursor: "pointer",
+              "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground }
+            }}>
+              <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
+              <Typography sx={{
+                fontSize: 16,
+                fontWeight: active ? 600 : 500,
+                color: active ? "#FFFFFF" : tc.text,
+                flex: 1,
+                minWidth: 0,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
               }}>
-                {(link as any).photo ? (
-                  <Box component="img" src={(link as any).photo} alt="" sx={{ width: 24, height: 24, objectFit: "cover", borderRadius: 0.5 }} />
-                ) : (
-                  <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
-                )}
-                <Typography sx={{
-                  fontSize: 16,
-                  fontWeight: active ? 600 : 500,
-                  color: active ? "#FFFFFF" : tc.text,
-                  flex: 1,
-                  minWidth: 0,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}>
-                  {link.text}
-                </Typography>
-              </Box>
+                {link.text}
+              </Typography>
+            </Box>
+          );
+
+          if (isExternal) {
+            return (
+              <a key={key} href={route} target="_blank" rel="noopener noreferrer" style={anchorStyle} onClick={onNavigate}>
+                {body}
+              </a>
+            );
+          }
+          return (
+            <Link key={key} href={route} style={anchorStyle} onClick={onNavigate}>
+              {body}
             </Link>
           );
         })}
       </Box>
 
-      {/* Footer */}
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,
         borderTop: `1px solid ${tc.border}`,
-        boxShadow: mobileTheme.shadows.sm,
+        boxShadow: mobileTheme.shadows.sm
       }}>
+        <Button
+          variant="outlined"
+          fullWidth
+          startIcon={mode === "dark"
+            ? <LightModeIcon sx={{ fontSize: 24, color: tc.primary }} />
+            : <DarkModeIcon sx={{ fontSize: 24, color: tc.primary }} />}
+          onClick={toggle}
+          aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          sx={{
+            color: tc.primary,
+            borderColor: tc.primary,
+            borderRadius: `${mobileTheme.radius.md}px`,
+            textTransform: "none",
+            fontWeight: 500,
+            fontSize: 14,
+            justifyContent: "flex-start",
+            py: 1,
+            mb: 1
+          }}
+        >
+          {mode === "dark" ? "Light Mode" : "Dark Mode"}
+        </Button>
         {UserHelper.user ? (
           <Button
             variant="outlined"
@@ -189,7 +197,7 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
               fontSize: 14,
               justifyContent: "flex-start",
               py: 1,
-              mb: 1,
+              mb: 1
             }}
           >
             Logout
@@ -202,8 +210,9 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
             startIcon={<LoginIcon sx={{ fontSize: 24 }} />}
             component="a"
             href={(() => {
+
               const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
-              return returnUrl ? `/login?returnUrl=${returnUrl}` : "/login";
+              return returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
             })()}
             sx={{
               bgcolor: tc.primary,
@@ -215,7 +224,7 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
               justifyContent: "flex-start",
               py: 1,
               mb: 1,
-              "&:hover": { bgcolor: tc.primary },
+              "&:hover": { bgcolor: tc.primary }
             }}
           >
             Sign In
@@ -223,6 +232,17 @@ export const MobileDrawer = ({ config, links, onNavigate }: Props) => {
         )}
         <Typography sx={{ fontSize: 12, color: tc.disabled, textAlign: "center" }}>
           B1 Mobile Web
+        </Typography>
+        <Typography sx={{ fontSize: 12, textAlign: "center", mt: 0.5 }}>
+          <Box
+            component="a"
+            href="https://churchapps.org/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ color: tc.primary, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+          >
+            Privacy Policy
+          </Box>
         </Typography>
       </Box>
     </Box>

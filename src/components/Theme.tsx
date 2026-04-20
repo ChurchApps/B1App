@@ -9,7 +9,7 @@ export const Theme: React.FC<Props> = (props) => {
 
   let css = null;
   const googleFonts = [];
-  let customJs = <></>;
+  const customJs = <></>;
   const lines:string[] = [];
 
 

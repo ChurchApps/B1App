@@ -1,8 +1,19 @@
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import withSerwistInit from '@serwist/next';
 
 const isDev = process.env.NODE_ENV !== 'production';
+
+const withSerwist = withSerwistInit({
+  swSrc: 'src/app/sw.ts',
+  swDest: 'public/sw.js',
+  scope: '/mobile',
+  register: false,
+  reloadOnOnline: false,
+  cacheOnNavigation: true,
+  disable: isDev,
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,9 +31,7 @@ const nextConfig = {
       "@mui/x-date-pickers",
       "@churchapps/apphelper",
       "@churchapps/helpers",
-      "react-big-calendar",
-      "react-dnd",
-      "react-dnd-html5-backend"
+      "react-big-calendar"
     ]
   },
 
@@ -105,6 +114,19 @@ const nextConfig = {
     return config;
   },
 
+  // Headers: allow root-scoped SW to control /mobile.
+  async headers() {
+    return [
+      {
+        source: '/sw.js',
+        headers: [
+          { key: 'Service-Worker-Allowed', value: '/' },
+          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+        ],
+      },
+    ];
+  },
+
   // Rewrites for subdomain routing
   async rewrites() {
     return [
@@ -173,6 +195,9 @@ const nextConfig = {
     },
     '@mui/material': {
       transform: '@mui/material/{{member}}'
+    },
+    '@mui/x-date-pickers': {
+      transform: '@mui/x-date-pickers/{{member}}'
     }
   },
 
@@ -188,11 +213,11 @@ const nextConfig = {
 
 
 // In development, skip Sentry config wrapper to avoid Turbopack symlink issues on Windows
-let exportedConfig = nextConfig;
+let exportedConfig = withSerwist(nextConfig);
 
 if (!isDev) {
   const { withSentryConfig } = await import("@sentry/nextjs");
-  exportedConfig = withSentryConfig(nextConfig, {
+  exportedConfig = withSentryConfig(exportedConfig, {
     // For all available options, see:
     // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 

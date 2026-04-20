@@ -47,4 +47,15 @@ export class CheckinHelper {
     const group: GroupInterface = ArrayHelper.getOne(st?.groups || [], "id", visitSession.session?.groupId || "");
     return (st?.name || "") + " - " + (group?.name || "");
   };
+
+  public static clearData = () => {
+    CheckinHelper.pendingVisits = [];
+    CheckinHelper.existingVisits = [];
+    CheckinHelper.serviceId = undefined as unknown as string;
+    CheckinHelper.serviceTimes = undefined as unknown as ServiceTimeInterface[];
+    CheckinHelper.groupServiceTimes = undefined as unknown as GroupServiceTimeInterface[];
+    CheckinHelper.groups = undefined as unknown as GroupInterface[];
+    CheckinHelper.householdMembers = undefined as unknown as PersonInterface[];
+    CheckinHelper.selectedServiceTime = undefined as unknown as ServiceTimeInterface;
+  };
 }

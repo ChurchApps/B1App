@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
-import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
+import { loadChurchAppearance } from "../../loadChurchAppearance";
 
 type Params = Promise<{ sdSlug: string; size: string }>;
 
@@ -18,35 +18,14 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     return new Response("Not found", { status: 404 });
   }
 
-  EnvironmentHelper.init();
-  const base = EnvironmentHelper.Common.MembershipApi;
-
-  let primaryColor = "#0D47A1";
-  let initials = sdSlug.substring(0, 2).toUpperCase();
-  let favicon: string | undefined;
-  try {
-    if (base) {
-      const churchRes = await fetch(`${base}/churches/lookup/?subDomain=${encodeURIComponent(sdSlug)}`, { cache: "no-store" });
-      if (churchRes.ok) {
-        const church = await churchRes.json();
-        if (church?.name) initials = getInitials(church.name);
-        if (church?.id) {
-          const appearanceRes = await fetch(`${base}/settings/public/${church.id}`, { cache: "no-store" });
-          if (appearanceRes.ok) {
-            const appearance = await appearanceRes.json();
-            primaryColor = appearance?.primaryColor || primaryColor;
-            favicon = appearance?.favicon_400x400 || appearance?.favicon_16x16;
-          }
-        }
-      }
-    }
-  } catch {
-    /* use default */
-  }
+  const { churchName, primaryColor, favicon } = await loadChurchAppearance(sdSlug);
+  const fallbackInitials = sdSlug.substring(0, 2).toUpperCase();
+  const initials = churchName ? getInitials(churchName) : fallbackInitials;
+  const bgColor = primaryColor || "#0D47A1";
 
   if (favicon) {
     try {
-      const imgRes = await fetch(favicon, { cache: "no-store" });
+      const imgRes = await fetch(favicon, { next: { revalidate: 3600 } });
       if (imgRes.ok) {
         const buf = Buffer.from(await imgRes.arrayBuffer());
         const resized = await sharp(buf)
@@ -57,12 +36,12 @@ export async function GET(_req: Request, { params }: { params: Params }) {
           status: 200,
           headers: {
             "Content-Type": "image/png",
-            "Cache-Control": "public, max-age=3600",
-          },
+            "Cache-Control": "public, max-age=3600"
+          }
         });
       }
     } catch {
-      /* fall through to generated initials icon */
+
     }
   }
 
@@ -75,12 +54,12 @@ export async function GET(_req: Request, { params }: { params: Params }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: primaryColor,
+          background: bgColor,
           color: "white",
           fontSize: Math.floor(n * 0.38),
           fontWeight: 700,
           letterSpacing: "-0.03em",
-          fontFamily: "sans-serif",
+          fontFamily: "sans-serif"
         }}
       >
         {initials}

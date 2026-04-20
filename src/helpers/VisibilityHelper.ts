@@ -25,8 +25,7 @@ export function isLinkVisible(link: LinkInterface, userChurch: LoginUserChurchIn
       }
     }
 
-    default:
-      return true;
+    default: return true;
   }
 }
 

@@ -1,23 +1,24 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
-import type { MessageInterface, PersonInterface } from "@churchapps/helpers";
+import { useQuery } from "@tanstack/react-query";
+import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
+import { getInitials } from "../util";
 
 interface Props {
   id: string;
   config: ConfigurationInterface;
 }
 
-// Shape we expect from /privateMessages (MessagingApi) - ConversationCheckInterface
 interface PrivateMessageRow {
   id?: string;
   conversationId?: string;
@@ -25,24 +26,15 @@ interface PrivateMessageRow {
   toPersonId?: string;
 }
 
-// TODO: Verify endpoints. Using these based on B1Mobile reference:
-//   - GET /privateMessages (MessagingApi) to list my conversations and match the counterpart personId
-//   - POST /conversations (MessagingApi) with [{ allowAnonymousPosts, contentType:"privateMessage", contentId, title, visibility:"hidden" }]
-//   - POST /privateMessages (MessagingApi) with [{ fromPersonId, toPersonId, conversationId }]
-//   - GET /messages/conversation/{conversationId} (MessagingApi)
-//   - POST /messages (MessagingApi) with [{ conversationId, content, displayName }]
-//   - GET /people/{id} (MembershipApi) or /people/basic?ids=... to get header info
-// The task hint mentioned GET /privateMessages/existing/{personId}; B1Mobile does not use that,
-// so we follow B1Mobile: find existing by scanning /privateMessages, or create on first send.
-
 export const MessageConversation = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const searchParams = useSearchParams();
   const userContext = React.useContext(UserContext);
 
-  const [person, setPerson] = React.useState<PersonInterface | null>(null);
-  const [conversationId, setConversationId] = React.useState<string | null>(null);
-  const [messages, setMessages] = React.useState<MessageInterface[] | null>(null);
+  const conversationIdParam = searchParams?.get("conversationId") || null;
+  const [conversationId, setConversationId] = React.useState<string | null>(conversationIdParam);
+  const [pending, setPending] = React.useState<MessageInterface[]>([]);
   const [text, setText] = React.useState("");
   const [sending, setSending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -53,108 +45,144 @@ export const MessageConversation = ({ id, config }: Props) => {
   const myPersonId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const myDisplayName = userContext?.person?.name?.display || UserHelper.currentUserChurch?.person?.name?.display || "";
 
+  const { data: personData } = useQuery<PersonInterface | null>({
+    queryKey: ["community-person", id],
+    queryFn: async () => {
+      try {
+        const p = await ApiHelper.get("/people/" + id, "MembershipApi");
+        if (p) return p as PersonInterface;
+      } catch {
+
+      }
+      try {
+        const people = await ApiHelper.get("/people/basic?ids=" + id, "MembershipApi");
+        if (Array.isArray(people) && people.length > 0) return people[0] as PersonInterface;
+      } catch {
+
+      }
+      return null;
+    },
+    enabled: !!id
+  });
+  const person = personData ?? null;
+
+  const { data: existingConvId } = useQuery<string | null>({
+    queryKey: ["private-message-conv", myPersonId, id],
+    queryFn: async () => {
+      const pm: PrivateMessageRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+      const match = Array.isArray(pm)
+        ? pm.find(
+          (c) =>
+            (c.fromPersonId === myPersonId && c.toPersonId === id) ||
+              (c.toPersonId === myPersonId && c.fromPersonId === id)
+        )
+        : null;
+      return match?.conversationId ?? null;
+    },
+    enabled: !!id && !!myPersonId && !conversationIdParam
+  });
+
   const scrollToBottom = React.useCallback(() => {
     if (listRef.current) {
       listRef.current.scrollTop = listRef.current.scrollHeight;
     }
   }, []);
 
-  const loadMessages = React.useCallback(async (convId: string) => {
-    try {
+  const peopleCache = React.useRef<Map<string, PersonInterface>>(new Map());
+
+  React.useEffect(() => {
+    if (existingConvId && !conversationId) setConversationId(existingConvId);
+  }, [existingConvId, conversationId]);
+
+  const {
+    data: serverMessages,
+    isError: messagesErrored,
+    refetch: refetchMessages
+  } = useQuery<MessageInterface[]>({
+    queryKey: ["mobile-message-conversation", conversationId],
+    queryFn: async () => {
+      if (!conversationId) return [];
       const data: MessageInterface[] = await ApiHelper.get(
-        "/messages/conversation/" + convId,
+        "/messages/conversation/" + conversationId,
         "MessagingApi"
       );
-      setMessages(Array.isArray(data) ? data : []);
-      // TODO: Ack read-receipts if B1Mobile exposes an endpoint for isNew=false.
-    } catch {
-      setMessages([]);
-      setError("Unable to load messages.");
-    }
-  }, []);
-
-  // Initial load: person header + existing conversation id (if any)
-  React.useEffect(() => {
-    let cancelled = false;
-
-    const load = async () => {
+      if (!Array.isArray(data) || data.length === 0) return [];
       try {
-        // Person header
-        try {
-          const p: PersonInterface = await ApiHelper.get("/people/" + id, "MembershipApi");
-          if (!cancelled) setPerson(p || null);
-        } catch {
-          // fall back to basic batch
-          try {
-            const people: PersonInterface[] = await ApiHelper.get(
-              "/people/basic?ids=" + id,
-              "MembershipApi"
-            );
-            if (!cancelled && Array.isArray(people) && people.length > 0) setPerson(people[0]);
-          } catch {
-            /* ignore */
+        const personIds = Array.from(
+          new Set(
+            data
+              .map((m) => m.personId)
+              .filter((pid): pid is string => !!pid)
+          )
+        );
+        const missing = personIds.filter((pid) => !peopleCache.current.has(pid));
+        if (missing.length > 0) {
+          const people: PersonInterface[] = await ApiHelper.get(
+            "/people/basic?ids=" + missing.join(","),
+            "MembershipApi"
+          );
+          if (Array.isArray(people)) {
+            people.forEach((p) => { if (p.id) peopleCache.current.set(p.id, p); });
           }
         }
-
-        if (!myPersonId) {
-          if (!cancelled) setMessages([]);
-          return;
-        }
-
-        const pm: PrivateMessageRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
-        const match = Array.isArray(pm)
-          ? pm.find(
-              (c) =>
-                (c.fromPersonId === myPersonId && c.toPersonId === id) ||
-                (c.toPersonId === myPersonId && c.fromPersonId === id)
-            )
-          : null;
-        if (match?.conversationId) {
-          if (cancelled) return;
-          setConversationId(match.conversationId);
-          await loadMessages(match.conversationId);
-        } else if (!cancelled) {
-          setMessages([]);
-        }
+        data.forEach((m) => {
+          if (m.personId) m.person = peopleCache.current.get(m.personId);
+        });
       } catch {
-        if (!cancelled) {
-          setMessages([]);
-          setError("Unable to load conversation.");
-        }
+
       }
-    };
+      return data;
+    },
+    enabled: !!conversationId,
 
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [id, myPersonId, loadMessages]);
+    refetchInterval: () =>
+      typeof document !== "undefined" && document.visibilityState === "visible" ? 5000 : false,
+    refetchIntervalInBackground: false
+  });
 
-  // Auto-scroll on messages change
+  React.useEffect(() => {
+    if (messagesErrored) setError("Unable to load messages.");
+  }, [messagesErrored]);
+
+  React.useEffect(() => {
+    if (!serverMessages || pending.length === 0) return;
+    setPending((prev) =>
+      prev.filter((p) => !serverMessages.some((s) => s.content === p.content && s.personId === p.personId)));
+  }, [serverMessages, pending.length]);
+
+  const messages: MessageInterface[] | null = React.useMemo(() => {
+    if (!conversationId) return myPersonId ? [] : null;
+    if (serverMessages === undefined) return null;
+    return [...serverMessages, ...pending];
+  }, [conversationId, myPersonId, serverMessages, pending]);
+
+  const loadMessages = React.useCallback(async () => {
+    await refetchMessages();
+  }, [refetchMessages]);
+
   React.useEffect(() => {
     if (messages && messages.length > 0) {
-      // next tick so DOM is painted
+
       requestAnimationFrame(() => scrollToBottom());
     }
   }, [messages, scrollToBottom]);
 
   const createConversationAndSend = async (content: string) => {
     if (!myPersonId) return;
-    // Step 1: create conversation
+
     const convParams = [
       {
         allowAnonymousPosts: false,
         contentType: "privateMessage",
         contentId: myPersonId,
         title: (myDisplayName || "Private") + " Private Message",
-        visibility: "hidden",
-      },
+        visibility: "hidden"
+      }
     ];
     const convData: any[] = await ApiHelper.post("/conversations", convParams, "MessagingApi");
     const newConvId: string | undefined = convData?.[0]?.id;
     if (!newConvId) throw new Error("Could not create conversation");
 
-    // Step 2: link via /privateMessages
     await ApiHelper.post(
       "/privateMessages",
       [{ fromPersonId: myPersonId, toPersonId: id, conversationId: newConvId }],
@@ -163,13 +191,12 @@ export const MessageConversation = ({ id, config }: Props) => {
 
     setConversationId(newConvId);
 
-    // Step 3: post the message
     await ApiHelper.post(
       "/messages",
       [{ conversationId: newConvId, content, displayName: myDisplayName }],
       "MessagingApi"
     );
-    await loadMessages(newConvId);
+    await loadMessages();
   };
 
   const handleSend = async () => {
@@ -182,16 +209,15 @@ export const MessageConversation = ({ id, config }: Props) => {
     setSending(true);
     setError(null);
 
-    // Optimistic append
     const optimistic: MessageInterface = {
       id: "temp-" + Date.now(),
       conversationId: conversationId || "",
       content,
       displayName: myDisplayName,
       personId: myPersonId,
-      timeSent: new Date(),
+      timeSent: new Date()
     } as MessageInterface;
-    setMessages((prev) => [...(prev || []), optimistic]);
+    setPending((prev) => [...prev, optimistic]);
     setText("");
 
     try {
@@ -201,25 +227,20 @@ export const MessageConversation = ({ id, config }: Props) => {
           [{ conversationId, content, displayName: myDisplayName }],
           "MessagingApi"
         );
-        await loadMessages(conversationId);
+        await loadMessages();
       } else {
         await createConversationAndSend(content);
       }
     } catch {
       setError("Message failed to send.");
-      // Remove optimistic entry on failure
-      setMessages((prev) => (prev || []).filter((m) => m.id !== optimistic.id));
+
+      setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
     } finally {
       setSending(false);
     }
   };
 
   const name = person?.name?.display || "Conversation";
-
-  const getInitials = (n: string) => {
-    const parts = n.trim().split(/\s+/);
-    return ((parts[0]?.[0] || "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase() || "?";
-  };
 
   const getPhoto = (): string | "" => {
     if (!person) return "";
@@ -230,13 +251,6 @@ export const MessageConversation = ({ id, config }: Props) => {
     }
   };
 
-  const formatTime = (t?: Date | string | number) => {
-    if (!t) return "";
-    const d = new Date(t);
-    if (isNaN(d.getTime())) return "";
-    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-  };
-
   const renderAvatar = () => {
     const photo = getPhoto();
     const common = {
@@ -244,7 +258,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       height: 36,
       borderRadius: "18px",
       flexShrink: 0,
-      overflow: "hidden",
+      overflow: "hidden"
     } as const;
     if (photo) {
       return <Box component="img" src={photo} alt={name} sx={{ ...common, objectFit: "cover" }} />;
@@ -259,7 +273,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 700,
-          fontSize: 13,
+          fontSize: 13
         }}
       >
         {getInitials(name)}
@@ -269,52 +283,49 @@ export const MessageConversation = ({ id, config }: Props) => {
 
   const renderBubble = (m: MessageInterface, index: number) => {
     const mine = m.personId === myPersonId;
-    const prev = index > 0 ? messages![index - 1] : undefined;
-    const showTimestamp =
-      !prev ||
-      (m.timeSent &&
-        prev.timeSent &&
-        new Date(m.timeSent).getTime() - new Date(prev.timeSent).getTime() > 5 * 60 * 1000);
+    const bubbleName = m.displayName || m.person?.name?.display || "";
 
     return (
-      <React.Fragment key={m.id || index}>
-        {showTimestamp && m.timeSent && (
-          <Typography
-            sx={{
-              fontSize: 11,
-              color: tc.textSecondary,
-              textAlign: "center",
-              my: "8px",
-            }}
-          >
-            {formatTime(m.timeSent)}
-          </Typography>
-        )}
+      <Box
+        key={m.id || index}
+        sx={{
+          display: "flex",
+          justifyContent: mine ? "flex-end" : "flex-start",
+          mb: "6px"
+        }}
+      >
         <Box
           sx={{
-            display: "flex",
-            justifyContent: mine ? "flex-end" : "flex-start",
-            mb: "6px",
+            maxWidth: "75%",
+            px: "12px",
+            py: "8px",
+            bgcolor: mine ? tc.primary : tc.surfaceVariant,
+            color: mine ? tc.onPrimary : tc.text,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            boxShadow: mobileTheme.shadows.sm,
+            wordBreak: "break-word",
+            fontSize: 14,
+            lineHeight: 1.35
           }}
         >
-          <Box
-            sx={{
-              maxWidth: "75%",
-              px: "12px",
-              py: "8px",
-              bgcolor: mine ? tc.primary : tc.surface,
-              color: mine ? tc.onPrimary : tc.text,
-              borderRadius: mine ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
-              boxShadow: mobileTheme.shadows.sm,
-              wordBreak: "break-word",
-              fontSize: 14,
-              lineHeight: 1.35,
-            }}
-          >
-            {m.content}
-          </Box>
+          {bubbleName && (
+            <Typography
+              component="div"
+              sx={{
+                fontSize: 11,
+                fontWeight: 600,
+                color: mine ? tc.onPrimary : tc.primary,
+                opacity: mine ? 0.9 : 1,
+                mb: "2px",
+                lineHeight: 1.2
+              }}
+            >
+              {bubbleName}
+            </Typography>
+          )}
+          {m.content}
         </Box>
-      </React.Fragment>
+      </Box>
     );
   };
 
@@ -329,7 +340,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         textAlign: "center",
         color: tc.textMuted,
         gap: "8px",
-        p: `${mobileTheme.spacing.lg}px`,
+        p: `${mobileTheme.spacing.lg}px`
       }}
     >
       <Box
@@ -340,7 +351,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         <ChatBubbleOutlineIcon sx={{ fontSize: 28, color: tc.primary }} />
@@ -358,36 +369,50 @@ export const MessageConversation = ({ id, config }: Props) => {
         flexDirection: "column",
         height: "100%",
         minHeight: "100%",
-        bgcolor: tc.background,
+        bgcolor: tc.background
       }}
     >
-      {/* Header row */}
+
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: "8px",
+          gap: `${mobileTheme.spacing.sm}px`,
           px: `${mobileTheme.spacing.md}px`,
           py: "10px",
           bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`,
+          borderBottom: `1px solid ${tc.border}`
         }}
       >
-        <IconButton
-          aria-label="Back"
-          onClick={() => router.back()}
-          sx={{ color: tc.text }}
-          size="small"
-        >
-          <ArrowBackIcon />
-        </IconButton>
         {renderAvatar()}
-        <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <Typography
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            fontSize: 16,
+            fontWeight: 600,
+            color: tc.text,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap"
+          }}
+        >
           {name}
         </Typography>
+        <IconButton
+          aria-label="New conversation"
+          onClick={() => router.push("/mobile/messages/new")}
+          sx={{
+            bgcolor: tc.iconBackground,
+            color: tc.primary,
+            "&:hover": { bgcolor: tc.iconBackground }
+          }}
+          size="small"
+        >
+          <PersonAddAlt1Icon />
+        </IconButton>
       </Box>
 
-      {/* Messages list */}
       <Box
         ref={listRef}
         sx={{
@@ -395,7 +420,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           overflowY: "auto",
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "column"
         }}
       >
         {messages === null && (
@@ -407,7 +432,6 @@ export const MessageConversation = ({ id, config }: Props) => {
         {messages !== null && messages.length > 0 && messages.map(renderBubble)}
       </Box>
 
-      {/* Composer */}
       <Box
         sx={{
           position: "sticky",
@@ -417,7 +441,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           p: "10px",
           display: "flex",
           alignItems: "flex-end",
-          gap: "8px",
+          gap: "8px"
         }}
       >
         <TextField
@@ -440,11 +464,9 @@ export const MessageConversation = ({ id, config }: Props) => {
               bgcolor: tc.background,
               fontSize: 14,
               px: "12px",
-              py: "2px",
+              py: "2px"
             },
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: tc.border,
-            },
+            "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
           }}
         />
         <IconButton
@@ -457,7 +479,7 @@ export const MessageConversation = ({ id, config }: Props) => {
             "&:hover": { bgcolor: tc.primary },
             "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
             width: 40,
-            height: 40,
+            height: 40
           }}
         >
           {sending ? (

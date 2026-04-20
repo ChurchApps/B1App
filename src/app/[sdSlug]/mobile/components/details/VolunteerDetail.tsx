@@ -5,19 +5,24 @@ import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
-  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   IconButton,
   Skeleton,
-  Typography,
+  Typography
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ApiHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   AssignmentInterface,
   PlanInterface,
   PositionInterface,
-  TimeInterface,
+  TimeInterface
 } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
@@ -38,63 +43,58 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
+  const queryClient = useQueryClient();
 
-  const [plan, setPlan] = React.useState<SignupPlanData["plan"] | null>(null);
-  const [positions, setPositions] = React.useState<(PositionInterface & { filledCount: number })[]>([]);
-  const [times, setTimes] = React.useState<TimeInterface[]>([]);
-  const [myAssignments, setMyAssignments] = React.useState<AssignmentInterface[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [notFound, setNotFound] = React.useState(false);
   const [message, setMessage] = React.useState<{ type: "success" | "error"; text: string } | null>(null);
   const [actionId, setActionId] = React.useState<string | null>(null);
+  const [pendingRemoval, setPendingRemoval] = React.useState<AssignmentInterface | null>(null);
 
   const personId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const signedIn = !!personId;
+  const churchId = config?.church?.id;
 
-  const load = React.useCallback(async () => {
-    const churchId = config?.church?.id;
-    if (!churchId) {
-      setLoading(false);
-      setNotFound(true);
-      return;
-    }
-    setLoading(true);
-    setNotFound(false);
-    try {
-      const data: SignupPlanData[] = await ApiHelper.getAnonymous(
-        "/plans/public/signup/" + churchId,
-        "DoingApi"
-      );
+  interface SignupBundle {
+    plan: SignupPlanData["plan"] | null;
+    positions: (PositionInterface & { filledCount: number })[];
+    times: TimeInterface[];
+    myAssignments: AssignmentInterface[];
+  }
+
+  const { data: bundle, isLoading: loading } = useQuery<SignupBundle>({
+    queryKey: ["volunteer-detail", churchId, id, signedIn],
+    queryFn: async () => {
+      const data: SignupPlanData[] = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
       const match = Array.isArray(data) ? data.find((d) => d?.plan?.id === id) : null;
-      if (!match) {
-        setNotFound(true);
-        return;
-      }
-      setPlan(match.plan);
-      setPositions(match.positions || []);
-      setTimes(match.times || []);
-
+      if (!match) return { plan: null, positions: [], times: [], myAssignments: [] };
+      let myAssignments: AssignmentInterface[] = [];
       if (signedIn) {
         try {
           const mine: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
           const positionIds = (match.positions || []).map((p) => p.id).filter(Boolean);
-          setMyAssignments(
-            Array.isArray(mine) ? mine.filter((a) => positionIds.includes(a.positionId)) : []
-          );
+          if (Array.isArray(mine)) {
+            myAssignments = mine.filter((a) => positionIds.includes(a.positionId));
+          }
         } catch {
-          setMyAssignments([]);
+          myAssignments = [];
         }
       }
-    } catch {
-      setNotFound(true);
-    } finally {
-      setLoading(false);
-    }
-  }, [config?.church?.id, id, signedIn]);
+      return {
+        plan: match.plan,
+        positions: match.positions || [],
+        times: match.times || [],
+        myAssignments
+      };
+    },
+    enabled: !!churchId && !!id
+  });
 
-  React.useEffect(() => {
-    load();
-  }, [load]);
+  const plan = bundle?.plan ?? null;
+  const positions = bundle?.positions ?? [];
+  const times = bundle?.times ?? [];
+  const myAssignments = bundle?.myAssignments ?? [];
+  const notFound = !loading && bundle !== undefined && !plan;
+
+  const load = () => queryClient.invalidateQueries({ queryKey: ["volunteer-detail", churchId, id, signedIn] });
 
   const isDeadlinePassed = React.useMemo(() => {
     if (!plan?.signupDeadlineHours || !plan?.serviceDate) return false;
@@ -112,7 +112,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     setMessage(null);
     try {
       await ApiHelper.post("/assignments/signup", { positionId: pos.id }, "DoingApi");
-      setMessage({ type: "success", text: "You signed up!" });
+      setMessage({ type: "success", text: "You've been signed up!" });
       await load();
     } catch (err: any) {
       const msg = (err?.message || err?.toString() || "").toLowerCase();
@@ -126,14 +126,20 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     }
   };
 
-  const handleRemove = async (assignment: AssignmentInterface) => {
+  const requestRemove = (assignment: AssignmentInterface) => {
     if (!assignment.id) return;
-    if (!window.confirm("Remove your signup?")) return;
+    setPendingRemoval(assignment);
+  };
+
+  const confirmRemove = async () => {
+    const assignment = pendingRemoval;
+    setPendingRemoval(null);
+    if (!assignment?.id) return;
     setActionId(assignment.id);
     setMessage(null);
     try {
       await ApiHelper.delete(`/assignments/signup/${assignment.id}`, "DoingApi");
-      setMessage({ type: "success", text: "Signup removed." });
+      setMessage({ type: "success", text: "Your signup has been removed." });
       await load();
     } catch (err: any) {
       const msg = (err?.message || err?.toString() || "").toLowerCase();
@@ -160,21 +166,14 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const timesStr = times.length > 0 ? times.map((t) => (t as any).displayName || "").filter(Boolean).join(", ") : "";
 
   const renderHeader = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
-      }}
-    >
-      <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text }}>{plan?.name}</Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textSecondary, mt: 0.25 }}>
+    <Box>
+      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: "4px" }}>{plan?.name}</Typography>
+      <Typography sx={{ fontSize: 15, color: tc.textMuted, mb: plan?.notes ? "8px" : 0 }}>
         {serviceDateStr}
         {timesStr && ` · ${timesStr}`}
       </Typography>
       {plan?.notes && (
-        <Typography sx={{ fontSize: 14, color: tc.textMuted, mt: 1, whiteSpace: "pre-wrap" }}>
+        <Typography sx={{ fontSize: 14, color: tc.textMuted, whiteSpace: "pre-wrap" }}>
           {plan.notes}
         </Typography>
       )}
@@ -186,7 +185,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
       warning: { bg: "rgba(254,170,36,0.15)", fg: tc.warning },
       info: { bg: "rgba(86,139,218,0.15)", fg: tc.primary },
       success: { bg: "rgba(112,220,135,0.2)", fg: tc.success },
-      error: { bg: "rgba(176,18,12,0.15)", fg: tc.error },
+      error: { bg: "rgba(176,18,12,0.15)", fg: tc.error }
     }[type];
     return (
       <Box
@@ -197,7 +196,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           bgcolor: colors.bg,
           color: colors.fg,
           borderRadius: `${mobileTheme.radius.md}px`,
-          p: `${mobileTheme.spacing.sm}px`,
+          p: `${mobileTheme.spacing.sm}px`
         }}
       >
         <Icon sx={{ color: colors.fg }}>{icon}</Icon>
@@ -223,7 +222,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          border: mine ? `1px solid ${tc.success}` : "none",
+          border: mine ? `1px solid ${tc.success}` : "none"
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
@@ -239,7 +238,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                     bgcolor: "rgba(112,220,135,0.2)",
                     color: tc.success,
                     fontSize: 11,
-                    fontWeight: 700,
+                    fontWeight: 700
                   }}
                 >
                   Signed up
@@ -255,17 +254,17 @@ export const VolunteerDetail = ({ id, config }: Props) => {
               variant="outlined"
               size="small"
               disabled={isDeadlinePassed || busy}
-              onClick={() => handleRemove(mine)}
+              onClick={() => requestRemove(mine)}
               sx={{
                 color: tc.error,
                 borderColor: tc.error,
                 textTransform: "none",
                 fontWeight: 600,
                 borderRadius: `${mobileTheme.radius.md}px`,
-                flexShrink: 0,
+                flexShrink: 0
               }}
             >
-              {busy ? "…" : "Remove"}
+              {busy ? "Removing..." : "Remove"}
             </Button>
           ) : (
             <Button
@@ -281,22 +280,21 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 borderRadius: `${mobileTheme.radius.md}px`,
                 flexShrink: 0,
                 "&:hover": { bgcolor: tc.primary },
-                "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" },
+                "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" }
               }}
             >
-              {busy ? "…" : isFull ? "Full" : "Sign Up"}
+              {busy ? "Signing Up..." : isFull ? "Full" : "Sign Up"}
             </Button>
           )}
         </Box>
 
-        {/* Progress */}
         <Box sx={{ mt: 1.5 }}>
           <Box
             sx={{
               height: 6,
               borderRadius: 3,
               bgcolor: tc.border,
-              overflow: "hidden",
+              overflow: "hidden"
             }}
           >
             <Box
@@ -304,7 +302,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 height: "100%",
                 width: `${percent}%`,
                 bgcolor: isFull ? tc.error : tc.primary,
-                transition: "width 300ms ease",
+                transition: "width 300ms ease"
               }}
             />
           </Box>
@@ -323,7 +321,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Skeleton variant="text" width="60%" height={20} />
@@ -339,7 +337,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Icon sx={{ fontSize: 48, color: tc.textSecondary }}>event_busy</Icon>
@@ -388,6 +386,30 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           )}
         </Box>
       )}
+
+      <Dialog
+        open={!!pendingRemoval}
+        onClose={() => setPendingRemoval(null)}
+        aria-labelledby="remove-signup-title"
+      >
+        <DialogTitle id="remove-signup-title">Remove signup?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to remove your signup for this position?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPendingRemoval(null)} sx={{ color: tc.textMuted, textTransform: "none" }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmRemove}
+            sx={{ color: tc.error, textTransform: "none", fontWeight: 600 }}
+          >
+            Remove
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

@@ -4,136 +4,80 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
+import { getInitials } from "../util";
 
 interface Props {
   config?: ConfigurationInterface;
 }
 
-// Shape the UI renders. We hydrate this from the private messages API.
 interface Conversation {
   id: string;
   personId: string;
+  conversationId?: string;
   personName: string;
   personPhoto?: string;
-  lastMessage?: string;
-  timestamp?: string | number | Date;
-  unread?: boolean;
 }
-
-// TODO: Verify messaging endpoints. Currently using:
-//   - GET /privateMessages (MessagingApi) - returns ConversationCheckInterface[]
-//   - GET /people/basic?ids=... (MembershipApi) - returns PersonInterface[]
-// Last-message / timestamp / unread fields may require a different endpoint
-// (e.g. /messages/conversation/{conversationId} or a conversation summary endpoint).
 
 export const MessagesPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
-  const [conversations, setConversations] = React.useState<Conversation[] | null>(null);
+  const loggedIn = !!UserHelper.user?.firstName;
+  const myPersonId = userContext?.person?.id;
 
-  React.useEffect(() => {
-    if (!UserHelper.user?.firstName) {
-      setConversations([]);
-      return;
-    }
-    let cancelled = false;
+  const { data: conversations = null } = useQuery<Conversation[]>({
+    queryKey: ["conversations", myPersonId],
+    queryFn: async () => {
+      const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+      if (!Array.isArray(pmData) || pmData.length === 0) return [];
 
-    const load = async () => {
-      try {
-        const myPersonId = userContext?.person?.id;
-        const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
-        if (!Array.isArray(pmData) || pmData.length === 0) {
-          if (!cancelled) setConversations([]);
-          return;
+      const rows = pmData.map((pm) => {
+        const otherId = myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId;
+        return { pm, otherId };
+      });
+
+      const otherIds = Array.from(new Set(rows.map((r) => r.otherId).filter(Boolean)));
+      let peopleById: Record<string, PersonInterface> = {};
+      if (otherIds.length > 0) {
+        const people: PersonInterface[] = await ApiHelper.get(
+          `/people/basic?ids=${otherIds.join(",")}`,
+          "MembershipApi"
+        );
+        if (Array.isArray(people)) {
+          peopleById = people.reduce((acc, p) => {
+            if (p.id) acc[p.id] = p;
+            return acc;
+          }, {} as Record<string, PersonInterface>);
         }
-
-        // Determine the "other" personId for each conversation row
-        const rows = pmData.map((pm) => {
-          const otherId = myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId;
-          return { pm, otherId };
-        });
-
-        const otherIds = Array.from(new Set(rows.map((r) => r.otherId).filter(Boolean)));
-        let peopleById: Record<string, PersonInterface> = {};
-        if (otherIds.length > 0) {
-          const people: PersonInterface[] = await ApiHelper.get(
-            `/people/basic?ids=${otherIds.join(",")}`,
-            "MembershipApi"
-          );
-          if (Array.isArray(people)) {
-            peopleById = people.reduce((acc, p) => {
-              if (p.id) acc[p.id] = p;
-              return acc;
-            }, {} as Record<string, PersonInterface>);
-          }
-        }
-
-        const list: Conversation[] = rows.map(({ pm, otherId }) => {
-          const person = peopleById[otherId];
-          const displayName = person?.name?.display || "Unknown";
-          let photo = "";
-          if (person) {
-            try {
-              photo = PersonHelper.getPhotoUrl(person) || "";
-            } catch {
-              photo = (person as any).photo || "";
-            }
-          }
-          return {
-            id: pm.conversationId || pm.id,
-            personId: otherId,
-            personName: displayName,
-            personPhoto: photo,
-            // TODO: verify these fields — /privateMessages may not return lastMessage/timestamp/unread.
-            lastMessage: pm.lastMessage || pm.content,
-            timestamp: pm.timeSent || pm.timeUpdated || pm.lastMessageTime,
-            unread: !!pm.unread,
-          };
-        });
-
-        if (!cancelled) setConversations(list);
-      } catch {
-        if (!cancelled) setConversations([]);
       }
-    };
 
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [userContext?.person?.id]);
-
-  const formatTimestamp = (ts?: string | number | Date): string => {
-    if (!ts) return "";
-    const d = new Date(ts);
-    if (isNaN(d.getTime())) return "";
-    const now = new Date();
-    const sameDay =
-      d.getFullYear() === now.getFullYear() &&
-      d.getMonth() === now.getMonth() &&
-      d.getDate() === now.getDate();
-    if (sameDay) {
-      return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-    }
-    const diffMs = now.getTime() - d.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    if (diffDays < 7) {
-      return d.toLocaleDateString(undefined, { weekday: "short" });
-    }
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  };
-
-  const getInitials = (name: string) => {
-    const parts = name.trim().split(/\s+/);
-    const first = parts[0]?.charAt(0) || "";
-    const last = parts.length > 1 ? parts[parts.length - 1].charAt(0) : "";
-    return (first + last).toUpperCase() || "?";
-  };
+      return rows.map(({ pm, otherId }) => {
+        const person = peopleById[otherId];
+        const displayName = person?.name?.display || "Unknown";
+        let photo = "";
+        if (person) {
+          try {
+            photo = PersonHelper.getPhotoUrl(person) || "";
+          } catch {
+            photo = (person as any).photo || "";
+          }
+        }
+        return {
+          id: pm.conversationId || pm.id,
+          personId: otherId,
+          conversationId: pm.conversationId,
+          personName: displayName,
+          personPhoto: photo
+        };
+      });
+    },
+    enabled: loggedIn
+  });
 
   const renderAvatar = (c: Conversation) => {
     const common = {
@@ -141,7 +85,7 @@ export const MessagesPage = ({ config }: Props) => {
       height: 44,
       borderRadius: "22px",
       flexShrink: 0,
-      overflow: "hidden",
+      overflow: "hidden"
     } as const;
     if (c.personPhoto) {
       return (
@@ -163,7 +107,7 @@ export const MessagesPage = ({ config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 14
         }}
       >
         {getInitials(c.personName)}
@@ -172,7 +116,9 @@ export const MessagesPage = ({ config }: Props) => {
   };
 
   const handleClick = (c: Conversation) => {
-    router.push(`/mobile/messages/${c.personId}`);
+
+    const path = `/mobile/messages/${c.personId}`;
+    router.push(c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path);
   };
 
   const renderRow = (c: Conversation) => (
@@ -199,7 +145,7 @@ export const MessagesPage = ({ config }: Props) => {
         cursor: "pointer",
         transition: "box-shadow 150ms ease, transform 150ms ease",
         "&:hover": { boxShadow: mobileTheme.shadows.md },
-        "&:active": { transform: "scale(0.995)" },
+        "&:active": { transform: "scale(0.995)" }
       }}
     >
       {renderAvatar(c)}
@@ -211,53 +157,13 @@ export const MessagesPage = ({ config }: Props) => {
             color: tc.text,
             overflow: "hidden",
             textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap"
           }}
         >
           {c.personName}
         </Typography>
-        {c.lastMessage && (
-          <Typography
-            sx={{
-              fontSize: 14,
-              fontWeight: 400,
-              color: tc.textSecondary,
-              mt: "2px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {c.lastMessage}
-          </Typography>
-        )}
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          gap: "4px",
-          flexShrink: 0,
-          minWidth: 40,
-        }}
-      >
-        {c.timestamp && (
-          <Typography sx={{ fontSize: 12, fontWeight: 400, color: tc.textSecondary }}>
-            {formatTimestamp(c.timestamp)}
-          </Typography>
-        )}
-        {c.unread && (
-          <Box
-            sx={{
-              width: 8,
-              height: 8,
-              borderRadius: "4px",
-              bgcolor: tc.primary,
-            }}
-          />
-        )}
-      </Box>
+      <Icon sx={{ color: tc.textSecondary, flexShrink: 0 }}>chevron_right</Icon>
     </Box>
   );
 
@@ -272,15 +178,13 @@ export const MessagesPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
         px: `${mobileTheme.spacing.md}px`,
-        py: "12px",
+        py: "12px"
       }}
     >
       <Skeleton variant="circular" width={44} height={44} />
       <Box sx={{ flex: 1 }}>
         <Skeleton variant="text" width="50%" height={18} />
-        <Skeleton variant="text" width="70%" height={14} />
       </Box>
-      <Skeleton variant="text" width={32} height={12} />
     </Box>
   );
 
@@ -291,7 +195,7 @@ export const MessagesPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -303,7 +207,7 @@ export const MessagesPage = ({ config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>chat_bubble_outline</Icon>
@@ -323,18 +227,17 @@ export const MessagesPage = ({ config }: Props) => {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          mb: `${mobileTheme.spacing.md}px`,
+          justifyContent: "flex-end",
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
-        <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text }}>Messages</Typography>
         <IconButton
           aria-label="New message"
           onClick={() => router.push("/mobile/messages/new")}
           sx={{
             bgcolor: tc.iconBackground,
             color: tc.primary,
-            "&:hover": { bgcolor: tc.iconBackground },
+            "&:hover": { bgcolor: tc.iconBackground }
           }}
         >
           <Icon>edit</Icon>
