@@ -126,8 +126,6 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     }
   };
 
-  // Staged behind a confirmation Dialog rather than window.confirm — the
-  // native prompt is blocked in PWA-standalone and some WebView wrappers.
   const requestRemove = (assignment: AssignmentInterface) => {
     if (!assignment.id) return;
     setPendingRemoval(assignment);
@@ -290,7 +288,6 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           )}
         </Box>
 
-        {/* Progress */}
         <Box sx={{ mt: 1.5 }}>
           <Box
             sx={{

@@ -2,10 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-// localStorage-backed view-count tracker, used to re-order cards so the most
-// engaged items float to the top. Previously duplicated in DashboardPage and
-// GroupsPage with different storage keys.
-
 const readViewCounts = (storageKey: string): Record<string, number> => {
   if (typeof window === "undefined") return {};
   try {
@@ -23,7 +19,7 @@ const writeViewCounts = (storageKey: string, counts: Record<string, number>) => 
   try {
     window.localStorage.setItem(storageKey, JSON.stringify(counts));
   } catch {
-    /* ignore quota / private-mode failures */
+
   }
 };
 
@@ -33,8 +29,6 @@ export interface UseEngagementSortResult<T> {
   viewCounts: Record<string, number>;
 }
 
-// Stable descending sort by view count. Ties preserve the original (input) order.
-// `getId` extracts the identity used to store/read counts.
 export function useEngagementSort<T>(
   items: T[] | null | undefined,
   storageKey: string,

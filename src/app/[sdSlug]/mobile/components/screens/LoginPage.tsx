@@ -37,12 +37,6 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
-/**
- * Mobile-shell login screen. Hand-rolled (vs. the shared `LoginPage`) so the
- * user stays inside the mobile UI. Authenticates via `POST /users/login`,
- * hydrates `UserHelper` + `UserContext`, then picks the `userChurch` matching
- * the current subdomain before redirecting to `/mobile/dashboard`.
- */
 export const MobileLoginScreen = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const { spacing, radius, shadows } = mobileTheme;
@@ -51,7 +45,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const router = useRouter();
   const context = useContext(UserContext);
 
-  // --- sdSlug / redirect target -----------------------------------------
   const sdSlug = React.useMemo(() => {
     if (config?.church?.subDomain) return config.church.subDomain;
     if (!pathname) return "";
@@ -62,7 +55,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const defaultReturnUrl = sdSlug ? `/${sdSlug}/mobile/dashboard` : "/mobile/dashboard";
   const returnUrl = searchParams?.get("returnUrl") || defaultReturnUrl;
 
-  // --- Form state --------------------------------------------------------
   const [email, setEmail] = useState<string>(
     process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@b1.church" : ""
   );
@@ -88,18 +80,15 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const showError = (msg: string) =>
     setSnack({ open: true, msg, severity: "error" });
 
-  // --- Church branding ---------------------------------------------------
   const churchName = config?.church?.name || "";
   const logoLight = config?.appearance?.logoLight;
   const primaryColor = config?.appearance?.primaryColor || tc.primary;
-  // Alpha overlay stands in for hex arithmetic, which doesn't work on CSS vars.
+
   const heroGradient = `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}CC 100%)`;
 
   const hydrateFromLoginResponse = (resp: LoginResponseInterface) =>
     hydrateUserSession(resp, context, { sdSlug, writeCookies: true });
 
-  // On login failure, ask /users/checkEmail whether the email even exists —
-  // if not, offer "Register" with preloaded first/last name.
   const handleLoginFailure = async () => {
     try {
       const resp: CheckEmailResponseInterface = await ApiHelper.postAnonymous(
@@ -150,12 +139,12 @@ export const MobileLoginScreen = ({ config }: Props) => {
       );
       if (data?.user != null) {
         await hydrateFromLoginResponse(data);
-        // Same-origin path → use client nav; absolute URL → hard redirect.
+
         if (returnUrl.startsWith("http")) window.location.href = returnUrl;
         else router.push(returnUrl);
         return;
       }
-      // Password path: surface the "no account / register" prompt.
+
       if ("password" in payload) await handleLoginFailure();
     } catch {
       if ("password" in payload) await handleLoginFailure();
@@ -170,8 +159,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
     loginApiCall({ email, password });
   };
 
-  // Auto-login via ?jwt= in URL (or jwt cookie), matching SharedLoginPage's
-  // init() — lets deep links from email / native wrappers sign in silently.
   useEffect(() => {
     if (attemptedAutoLoginRef.current) return;
     attemptedAutoLoginRef.current = true;
@@ -188,10 +175,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   }, []);
 
-  // --- External auth link helpers ---------------------------------------
-  // /login?action=... is the public SharedLoginPage route; it handles forgot /
-  // register flows end-to-end. We bounce out of the mobile shell because
-  // there's no mobile-native forgot/register screen yet.
   const forgotHref = sdSlug ? `/${sdSlug}/login?action=forgot` : "/login?action=forgot";
   const registerHref = sdSlug ? `/${sdSlug}/login?action=register` : "/login?action=register";
   const registerWithEmail = (prefill: { email?: string; firstName?: string; lastName?: string; churchId?: string }) => {
@@ -203,7 +186,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
     return sdSlug ? `/${sdSlug}/login?${qs.toString()}` : `/login?${qs.toString()}`;
   };
 
-  // --- Render ------------------------------------------------------------
   const inputSx = {
     "& .MuiOutlinedInput-root": {
       borderRadius: `${radius.md}px`,
@@ -213,7 +195,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pb: `${spacing.xl}px` }}>
-      {/* Hero */}
+
       <Box sx={{ px: `${spacing.md}px`, pt: `${spacing.lg}px`, pb: `${spacing.md}px` }}>
         <Box
           sx={{
@@ -260,7 +242,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* Form card */}
       <Box sx={{ px: `${spacing.md}px` }}>
         <Box
           component="form"
@@ -330,7 +311,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
             disabled={loading}
           />
 
-          {/* Forgot password — right-aligned */}
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: `${spacing.sm}px`, mb: `${spacing.lg}px` }}>
             <Box
               component="a"
@@ -367,7 +347,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
             {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Sign In"}
           </Button>
 
-          {/* Privacy */}
           <Box sx={{ mt: `${spacing.lg}px`, textAlign: "center" }}>
             <Typography sx={{ fontSize: 12, color: tc.textMuted, lineHeight: 1.5 }}>
               By signing in, you agree to our{" "}
@@ -384,7 +363,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
             </Typography>
           </Box>
 
-          {/* Register */}
           <Box sx={{ mt: `${spacing.md}px`, textAlign: "center" }}>
             <Typography sx={{ fontSize: 14, color: tc.text }}>
               Don&apos;t have an account?{" "}
@@ -405,7 +383,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* "No account found" prompt — Snackbar so it doesn't block the form. */}
       <Snackbar
         open={!!noAccountPrompt}
         autoHideDuration={8000}
@@ -433,7 +410,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
         </Alert>
       </Snackbar>
 
-      {/* Error snackbar */}
       <Snackbar
         open={snack.open}
         autoHideDuration={4000}

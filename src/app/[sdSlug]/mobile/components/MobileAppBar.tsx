@@ -28,8 +28,6 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
   const isDashboard = !slug || slug === "dashboard";
   const title = SCREEN_TITLES[slug] ?? "";
 
-  // Light mode prefers the dark-inked logo; dark mode prefers the light-inked
-  // one. Fall back to the other variant if the preferred one isn't configured.
   const logoLight = config?.appearance?.logoLight;
   const logoDark = (config?.appearance as any)?.logoDark;
   const headerLogo = mode === "dark" ? (logoLight || logoDark) : (logoDark || logoLight);

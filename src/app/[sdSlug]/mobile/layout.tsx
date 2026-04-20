@@ -10,13 +10,10 @@ export async function generateMetadata({ params }: { params: LayoutParams }): Pr
   const { primaryColor } = await loadChurchAppearance(sdSlug);
   return {
     manifest: "/mobile/manifest.webmanifest",
-    // Matches the church's brand color in Android's browser chrome and PWA
-    // task switcher. Falls back to the default B1 blue.
+
     themeColor: primaryColor || "#0D47A1",
     viewport: {
-      // userScalable / maximumScale intentionally omitted — disabling zoom is a
-      // WCAG 1.4.4 failure for low-vision users, and the old iOS input-focus
-      // zoom bug is fixed in iOS 16+.
+
       width: "device-width",
       initialScale: 1,
       viewportFit: "cover"

@@ -11,10 +11,6 @@ import { get as idbGet, set as idbSet, del as idbDel } from "idb-keyval";
 
 const CACHE_KEY = "b1-mobile-query-cache";
 
-// Async IDB persister. The built-in createSyncStoragePersister is synchronous
-// and would read IDB Promises into JSON.parse verbatim (silently discarding
-// the cache on every load). persistQueryClient supports async persisters via
-// Promise return types on all three methods.
 function createIdbPersister(): Persister {
   return {
     persistClient: async (client: PersistedClient) => {
@@ -35,9 +31,7 @@ function buildQueryClient() {
     defaultOptions: {
       queries: {
         networkMode: "offlineFirst",
-        // 60s keeps cached data fresh across normal tab-to-tab navigation
-        // without suppressing updates that matter. Screens that need tighter
-        // freshness still set their own staleTime.
+
         staleTime: 60 * 1000,
         gcTime: 24 * 60 * 60 * 1000,
         refetchOnWindowFocus: true,

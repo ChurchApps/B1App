@@ -39,7 +39,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
     enabled: loggedIn
   });
 
-  // Force an empty-state render for logged-out users (match previous behavior).
   const effectiveGroups = loggedIn ? groups : [];
 
   const getGroupId = useCallback((g: GroupInterface) => g.id || "", []);
@@ -49,7 +48,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
     getGroupId
   );
 
-  // Hero = top group; Featured grid = next 2; Regular = remainder.
   const sortedGroups = useMemo(() => ({
     hero: orderedGroups[0] || (null as GroupInterface | null),
     featured: orderedGroups.slice(1, 3),
@@ -79,7 +77,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
     router.push(`/mobile/groups/${group.id}`);
   };
 
-  // Hero card — large, full-width, photo cover with gradient overlay.
   const renderHero = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
     return (
@@ -141,7 +138,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
     );
   };
 
-  // Featured card — medium tile, photo cover with dark overlay + centered name.
   const renderFeatured = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
     return (
@@ -213,7 +209,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
     );
   };
 
-  // Regular card — compact horizontal row.
   const renderCard = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
     return (
@@ -375,10 +370,9 @@ export const GroupsPage = ({ config: _config }: Props) => {
 
       {hasAnyGroups && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.lg}px` }}>
-          {/* Hero */}
+
           {hero && <Box>{renderHero(hero)}</Box>}
 
-          {/* Featured grid — 2 columns */}
           {featured.length > 0 && (
             <Box>
               <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
@@ -396,7 +390,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
             </Box>
           )}
 
-          {/* Regular list */}
           {regular.length > 0 && (
             <Box>
               <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>

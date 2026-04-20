@@ -18,24 +18,12 @@ function readCookie(name: string): string | undefined {
   return match?.[1] ? decodeURIComponent(match[1]) : undefined;
 }
 
-/**
- * One-shot session rehydration for /mobile. If a `jwt` cookie is present we
- * POST `/users/login` to re-authenticate, hydrate `UserHelper` + `UserContext`
- * (user, userChurches, currentUserChurch, person), and pick the userChurch
- * that matches the current subdomain.
- *
- * Returns a status the layout can gate rendering on so returning users are
- * treated as logged-in before individual screens probe `UserHelper.user`.
- */
 export function useHydrateSession(): HydrationStatus {
   const params = useParams<{ sdSlug?: string }>();
   const sdSlug = params?.sdSlug;
   const context = useContext(UserContext);
   const [status, setStatus] = useState<HydrationStatus>("idle");
 
-  // Stable ref so the effect can read the latest context setters without
-  // listing `context` in its dep array (which would re-run hydration on every
-  // context change and fire a redundant login request).
   const contextRef = useRef(context);
   useEffect(() => { contextRef.current = context; });
 
@@ -43,7 +31,7 @@ export function useHydrateSession(): HydrationStatus {
     let cancelled = false;
 
     const hydrate = async () => {
-      // Already hydrated in this session (e.g. user just logged in via LoginPage).
+
       if (UserHelper.user?.id && UserHelper.currentUserChurch) {
         if (!cancelled) setStatus("ready");
         return;

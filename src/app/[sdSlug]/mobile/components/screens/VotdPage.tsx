@@ -12,8 +12,6 @@ const getDayOfYear = () => {
   return Math.floor(diff / oneDay);
 };
 
-// Pick `16x9` whenever it beats `1x1`, else `9x16` when it beats `1x1`,
-// else fall back to `1x1`.
 const getShape = () => {
   if (typeof window === "undefined") return "16x9";
   const ratio = window.innerWidth / window.innerHeight;
@@ -60,7 +58,7 @@ export const VotdPage = () => {
         return;
       }
     } catch {
-      // user dismissed or error; fall through to clipboard
+
     }
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -99,8 +97,7 @@ export const VotdPage = () => {
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
               style={{
-                // Stretch to fill the container so the verse always spans
-                // the screen even when the viewport ratio doesn't match.
+
                 position: "absolute",
                 inset: 0,
                 width: "100%",
@@ -121,7 +118,6 @@ export const VotdPage = () => {
         ) : null}
       </Box>
 
-      {/* Web Share API with clipboard fallback. */}
       <Box sx={{
         display: "flex",
         alignItems: "center",

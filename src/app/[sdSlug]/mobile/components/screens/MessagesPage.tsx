@@ -15,9 +15,6 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
-// Hydrated from /privateMessages + /people/basic. The /privateMessages
-// endpoint doesn't return a last-message preview / timestamp / unread flag,
-// so this list is name-only by design.
 interface Conversation {
   id: string;
   personId: string;
@@ -119,8 +116,7 @@ export const MessagesPage = ({ config }: Props) => {
   };
 
   const handleClick = (c: Conversation) => {
-    // Pass conversationId via query string when we already have it so the
-    // detail view can skip the re-lookup.
+
     const path = `/mobile/messages/${c.personId}`;
     router.push(c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path);
   };

@@ -47,8 +47,6 @@ const spacing = mobileTheme.spacing;
 const radius = mobileTheme.radius;
 const shadows = mobileTheme.shadows;
 
-// ---------------- Shared presentation helpers ---------------- //
-
 const SurfaceCard = ({ children, sx }: { children: React.ReactNode; sx?: object }) => (
   <Box
     sx={{
@@ -146,8 +144,6 @@ const EmptyState = ({
     <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{message}</Typography>
   </Box>
 );
-
-// ---------------- Step 1: Services ---------------- //
 
 const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   const [selectingId, setSelectingId] = useState<string>("");
@@ -272,8 +268,6 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
     </>
   );
 };
-
-// ---------------- Step 3: Groups (per person/time) ---------------- //
 
 const GroupsStep = ({
   member,
@@ -443,8 +437,6 @@ const GroupsStep = ({
     </>
   );
 };
-
-// ---------------- Step 2: Household ---------------- //
 
 const HouseholdStep = ({
   onShowGroups,
@@ -803,8 +795,6 @@ const HouseholdStep = ({
   );
 };
 
-// ---------------- Step 4: Complete ---------------- //
-
 const CompleteStep = ({ onDone }: { onDone: () => void }) => {
   useEffect(() => {
     const id = setTimeout(() => onDone(), 1500);
@@ -865,8 +855,6 @@ const CompleteStep = ({ onDone }: { onDone: () => void }) => {
     </Box>
   );
 };
-
-// ---------------- Root ---------------- //
 
 export const CheckinPage = ({ config: _config }: Props) => {
   const [step, setStep] = useState<Step>("services");

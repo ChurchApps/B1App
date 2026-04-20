@@ -41,7 +41,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
         });
       }
     } catch {
-      /* fall through to generated initials icon */
+
     }
   }
 

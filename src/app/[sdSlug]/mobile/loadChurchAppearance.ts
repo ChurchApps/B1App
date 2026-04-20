@@ -7,13 +7,6 @@ export interface ChurchAppearance {
   favicon?: string;
 }
 
-// Fetch a church's public identity + appearance for the three PWA-asset routes
-// (manifest, icon, screenshot). All three need the same two upstream calls, so
-// the boilerplate lives here.
-//
-// Uses `next: { revalidate: 3600 }` instead of `cache: "no-store"` so the Next
-// data cache absorbs repeated requests — otherwise each browser install check
-// hits the API cold. Appearance changes rarely; 1h is a reasonable ceiling.
 export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppearance> {
   EnvironmentHelper.init();
   const base = EnvironmentHelper.Common.MembershipApi;

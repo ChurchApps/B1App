@@ -21,9 +21,6 @@ const MobileThemeContext = createContext<MobileThemeContextValue>({
 
 export const useMobileThemeMode = () => useContext(MobileThemeContext);
 
-// CSS variables are the single source of truth for mobile-shell colors. The
-// `mobileTheme.colors.*` constants resolve to these var() references, so every
-// consumer automatically picks up whichever palette is active.
 const lightVars = {
   "--mb-primary": "#0D47A1",
   "--mb-primary-light": "#E3F2FD",
@@ -68,13 +65,6 @@ const darkVars = {
   "--mb-disabled": "#555555"
 };
 
-// Scope variables to `<html>` so MUI portals (Drawer, Modal, Menu) — which
-// mount outside `.mobileAppRoot` — still resolve `var(--mb-*)` correctly.
-// Light palette lives on `:root` as the fallback (used during SSR before the
-// mount effect sets the data attribute) and as the explicit light mode.
-// Dark-mode input overrides: MUI's default colors are baked into the
-// Emotion-generated classes for `.MuiInputBase-input`, `.MuiInputLabel-root`
-// etc. — they don't respond to CSS variables, so we have to restate them.
 const darkInputStyles = {
   "html[data-mobile-theme=\"dark\"] .MuiInputBase-input": { color: "var(--mb-text)" },
   "html[data-mobile-theme=\"dark\"] .MuiInputBase-input::placeholder": { color: "var(--mb-text-hint)", opacity: 1 },
@@ -94,11 +84,7 @@ const mobileThemeGlobalStyles = (
     styles={{
       ":root": lightVars,
       'html[data-mobile-theme="dark"]': { ...darkVars, colorScheme: "dark" },
-      // The UA default `body { margin: 8px }` leaves a thin strip of the
-      // document-level background on the left and right of the mobile shell,
-      // which reads as a "white border" around the dark content. The rest of
-      // the B1 app mounts `CssBaseline` inside its own layouts; the mobile
-      // shell doesn't, so we zero the body margin here.
+
       "body": { margin: 0 },
       ...darkInputStyles
     }}
@@ -112,11 +98,9 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored === "light" || stored === "dark") setModeState(stored);
-    } catch { /* localStorage may be unavailable */ }
+    } catch { }
   }, []);
 
-  // The CSS variables live on `<html>`, so we mirror the mode there. Clear the
-  // attribute on unmount so desktop routes don't keep mobile styling.
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.documentElement.setAttribute("data-mobile-theme", mode);
@@ -125,13 +109,13 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const setMode = useCallback((next: MobileThemeMode) => {
     setModeState(next);
-    try { window.localStorage.setItem(STORAGE_KEY, next); } catch { /* ignore */ }
+    try { window.localStorage.setItem(STORAGE_KEY, next); } catch { }
   }, []);
 
   const toggle = useCallback(() => {
     setModeState(prev => {
       const next: MobileThemeMode = prev === "light" ? "dark" : "light";
-      try { window.localStorage.setItem(STORAGE_KEY, next); } catch { /* ignore */ }
+      try { window.localStorage.setItem(STORAGE_KEY, next); } catch { }
       return next;
     });
   }, []);

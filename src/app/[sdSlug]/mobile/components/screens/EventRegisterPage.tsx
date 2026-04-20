@@ -270,7 +270,6 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     );
   }
 
-  // Confirm step
   if (step === "confirm" && registration) {
     return (
       <Shell>
@@ -352,7 +351,6 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     );
   }
 
-  // Event header card (used in both info/members steps)
   const eventCard = (
     <Box sx={{
       bgcolor: tc.surface,
@@ -401,7 +399,6 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     </Box>
   );
 
-  // Members step
   if (step === "members") {
     return (
       <Shell>
@@ -524,7 +521,6 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     );
   }
 
-  // Info step (default)
   return (
     <Shell>
       {eventCard}

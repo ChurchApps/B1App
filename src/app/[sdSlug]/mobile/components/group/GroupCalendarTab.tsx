@@ -159,7 +159,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
   };
 
   const handleAddEvent = () => {
-    // Default: tomorrow 2pm when no day is selected; otherwise selected day 2pm.
+
     const base = selected ? new Date(selected) : new Date();
     if (!selected) base.setDate(base.getDate() + 1);
     base.setHours(14, 0, 0, 0);
@@ -176,7 +176,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
     if (!contentApi) return;
     const httpsUrl = `${contentApi}/events/subscribe?groupId=${groupId}${churchId ? `&churchId=${churchId}` : ""}`;
     const webcalUrl = httpsUrl.replace(/^https?:\/\//, "webcal://");
-    // webcal:// is handed to the OS calendar app; fall back to a new tab if it throws
+
     if (typeof window !== "undefined") {
       try {
         window.location.href = webcalUrl;
@@ -260,7 +260,6 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
         </Box>
       )}
 
-      {/* Calendar grid */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -341,7 +340,6 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
         </Box>
       </Box>
 
-      {/* Events for selected date */}
       <Box>
         <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
           {new Date(selected).toLocaleDateString(undefined, {

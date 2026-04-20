@@ -68,7 +68,6 @@ export const GroupChatModal = ({
   const currentContentType: ContentType = subTab === "announcements" ? "groupAnnouncement" : "group";
   const canPost = subTab === "announcements" ? isLeader : true;
 
-  // Sync initialSubTab when modal opens (used by deep-link params)
   React.useEffect(() => {
     if (open) setSubTab(initialSubTab);
   }, [open, initialSubTab]);
@@ -122,7 +121,7 @@ export const GroupChatModal = ({
             setPeople((prev) => ({ ...prev, ...map }));
           }
         } catch {
-          /* ignore */
+
         }
       }
     } catch {
@@ -152,7 +151,6 @@ export const GroupChatModal = ({
     return flat;
   }, [conversations]);
 
-  // Auto-scroll to bottom on new messages.
   React.useEffect(() => {
     if (!scrollRef.current) return;
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -166,7 +164,7 @@ export const GroupChatModal = ({
     if (!canPost) return;
     setSending(true);
     try {
-      // Ensure we have a conversation
+
       let conversationId = conversations[0]?.id;
       if (!conversationId) {
         const convPayload = {
@@ -201,7 +199,7 @@ export const GroupChatModal = ({
       setDraft("");
       await loadConversations();
     } catch {
-      /* ignore */
+
     } finally {
       setSending(false);
     }

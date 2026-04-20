@@ -34,10 +34,6 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-// Canonical slugs: some screens are reachable via multiple legacy paths (e.g. the
-// member directory was once exposed as both /mobile/community and /mobile/membersSearch).
-// We pick a single canonical slug and redirect the alias to it so the URL bar stays tidy,
-// while still keeping the alias routable (no 404s) for outstanding links / bookmarks.
 const ALIAS_TO_CANONICAL: Record<string, string> = { membersSearch: "community" };
 
 export function ScreenRouter({ pageSlug, config }: Props) {
@@ -48,8 +44,6 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     if (canonical) router.replace(`/mobile/${canonical}`);
   }, [pageSlug, router]);
 
-  // While the redirect is happening, render the canonical screen so the user
-  // sees the correct UI immediately (no flash / no skeleton churn).
   const effectiveSlug = ALIAS_TO_CANONICAL[pageSlug] ?? pageSlug;
 
   switch (effectiveSlug) {

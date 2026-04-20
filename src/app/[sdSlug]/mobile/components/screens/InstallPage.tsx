@@ -31,8 +31,6 @@ const detectStandalone = (): boolean => {
   return false;
 };
 
-// Darken a hex color by the given amount (0–1). Used to build a two-stop
-// gradient from the church's primary brand color alone.
 const darken = (hex: string, amount: number): string => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!m) return hex;
@@ -119,8 +117,6 @@ export const InstallPage = ({ config }: Props) => {
     { icon: "fullscreen", label: "Full-screen, app-like" }
   ]), []);
 
-  // Scope margin-reset / scroll behavior to just this splash. Avoids touching
-  // body styles for any other mobile routes that share the layout.
   const globalStyles = (
     <GlobalStyles styles={{
       "html, body": { margin: 0, padding: 0, scrollBehavior: "smooth" },
@@ -184,7 +180,7 @@ export const InstallPage = ({ config }: Props) => {
                      radial-gradient(ellipse 800px 600px at 95% 90%, ${primary}8c 0%, transparent 55%),
                      linear-gradient(135deg, ${primaryDark} 0%, ${primary} 45%, ${primary} 100%)`
       }}>
-        {/* Animated orbs */}
+
         <Box aria-hidden sx={{
           position: "absolute",
           width: 400,
@@ -227,7 +223,6 @@ export const InstallPage = ({ config }: Props) => {
           animationDelay: "-12s"
         }} />
 
-        {/* Grid overlay */}
         <Box aria-hidden sx={{
           position: "absolute",
           inset: 0,
@@ -248,7 +243,7 @@ export const InstallPage = ({ config }: Props) => {
           pb: { xs: 6, sm: 10 },
           fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
         }}>
-          {/* Top bar — church logo + name */}
+
           <Box sx={{
             display: "flex",
             alignItems: "center",
@@ -281,7 +276,6 @@ export const InstallPage = ({ config }: Props) => {
             </Typography>
           </Box>
 
-          {/* Hero */}
           <Box sx={{
             display: "grid",
             gridTemplateColumns: { xs: "1fr", md: "1.15fr 1fr" },
@@ -289,7 +283,7 @@ export const InstallPage = ({ config }: Props) => {
             alignItems: "center",
             mb: { xs: 5, md: 7 }
           }}>
-            {/* Hero content */}
+
             <Box sx={{ color: "#f8fafc" }}>
               <Box sx={{
                 display: "inline-flex",
@@ -384,7 +378,6 @@ export const InstallPage = ({ config }: Props) => {
               </Box>
             </Box>
 
-            {/* Phone mockup */}
             <PhoneMockup
               churchName={churchName}
               iconUrl={iconUrl}
@@ -395,7 +388,6 @@ export const InstallPage = ({ config }: Props) => {
             />
           </Box>
 
-          {/* Install panel */}
           <Box sx={{
             bgcolor: "#ffffff",
             borderRadius: { xs: "22px", sm: "28px" },
@@ -404,7 +396,7 @@ export const InstallPage = ({ config }: Props) => {
             position: "relative",
             zIndex: 3
           }}>
-            {/* Platform-specific content */}
+
             {platform === null ? (
               <Box sx={{ minHeight: 280, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Typography sx={{ color: "#64748b", fontSize: 14 }}>Detecting your device…</Typography>
@@ -431,7 +423,6 @@ export const InstallPage = ({ config }: Props) => {
             )}
           </Box>
 
-          {/* Footer strip */}
           <Typography sx={{
             textAlign: "center",
             mt: 4.5,
@@ -476,7 +467,7 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
       transform: "rotate(-4deg)",
       animation: `${phonefloat} 6s ease-in-out infinite`
     }}>
-      {/* Notch */}
+
       <Box sx={{
         position: "absolute",
         top: 8,
@@ -489,7 +480,6 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
         zIndex: 10
       }} />
 
-      {/* Screen */}
       <Box sx={{
         position: "absolute",
         inset: 0,
@@ -599,8 +589,6 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
     </Box>
   </Box>
 );
-
-// === Platform panels ===
 
 const panelHeader = (title: string, subtitle: string) => (
   <Box sx={{ mb: 3.5 }}>

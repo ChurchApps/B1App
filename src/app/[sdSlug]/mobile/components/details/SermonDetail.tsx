@@ -19,7 +19,6 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-// Build an embeddable iframe src URL from the sermon's video fields.
 const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
   if (!sermon) return null;
   const videoType = (sermon as any).videoType as string | undefined;
@@ -40,9 +39,6 @@ const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
   return null;
 };
 
-/**
- * Build a non-embed external URL suitable for opening on the provider's site.
- */
 const buildExternalUrl = (sermon: SermonInterface | null): string | null => {
   if (!sermon) return null;
   const videoType = (sermon as any).videoType as string | undefined;
@@ -85,7 +81,7 @@ export const SermonDetail = ({ id, config }: Props) => {
           const direct = await ApiHelper.getAnonymous(`/sermons/${id}`, "ContentApi");
           if (direct && direct.id) found = direct as SermonInterface;
         } catch {
-          /* ignore */
+
         }
       }
       return found;
@@ -95,7 +91,6 @@ export const SermonDetail = ({ id, config }: Props) => {
 
   const playlistId = (sermon as any)?.playlistId as string | undefined;
 
-  // Lazily resolve the playlist title when a sermon is in a series.
   const { data: playlistTitle } = useQuery<string | null>({
     queryKey: ["sermon-playlist-title", churchId, playlistId],
     queryFn: async () => {
@@ -107,7 +102,7 @@ export const SermonDetail = ({ id, config }: Props) => {
           return match?.title || null;
         }
       } catch {
-        /* ignore */
+
       }
       return null;
     },
@@ -133,7 +128,7 @@ export const SermonDetail = ({ id, config }: Props) => {
         return;
       }
     } catch {
-      /* fall through to clipboard */
+
     }
 
     try {
@@ -143,7 +138,7 @@ export const SermonDetail = ({ id, config }: Props) => {
         return;
       }
     } catch {
-      /* ignore */
+
     }
     setSnackbar("Unable to share on this device");
   }, [sermon, externalUrl]);
@@ -197,7 +192,7 @@ export const SermonDetail = ({ id, config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {/* Video / thumbnail preview with tap-to-play gate */}
+
       <Box
         sx={{
           position: "relative",
@@ -272,7 +267,6 @@ export const SermonDetail = ({ id, config }: Props) => {
         )}
       </Box>
 
-      {/* Title + meta */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -315,7 +309,6 @@ export const SermonDetail = ({ id, config }: Props) => {
           ) : null}
         </Box>
 
-        {/* Description */}
         {description ? (
           <Typography
             sx={{
@@ -332,7 +325,6 @@ export const SermonDetail = ({ id, config }: Props) => {
         ) : null}
       </Box>
 
-      {/* Action buttons */}
       <Box
         sx={{
           display: "flex",

@@ -65,7 +65,7 @@ function DonatePageInner({ config }: Props) {
   const donationsEnabled = config?.allowDonations !== false && isAuthenticated;
 
   const [message, setMessage] = useState<string | null>(null);
-  // Guests land on Donate (no overview/manage/history data); users on Overview.
+
   const [tab, setTab] = useState<TabKey>(isAuthenticated ? "overview" : "donate");
   const [period, setPeriod] = useState<PeriodKey>("all");
   const [periodAnchor, setPeriodAnchor] = useState<HTMLElement | null>(null);
@@ -147,7 +147,6 @@ function DonatePageInner({ config }: Props) {
     }, 2000);
   };
 
-  // Auto-clear the toast so the next tab switch doesn't still show an old "thank you"
   useEffect(() => {
     if (!message) return;
     const id = window.setTimeout(() => setMessage(null), 5000);
@@ -174,7 +173,7 @@ function DonatePageInner({ config }: Props) {
   }, [donations]);
 
   const handleRepeatGift = () => {
-    // Shared DonationForm doesn't accept initialDonation props; just jump to Donate tab.
+
     setTab("donate");
   };
 
@@ -215,12 +214,11 @@ function DonatePageInner({ config }: Props) {
     );
   }
 
-  // Hero + Recent Activity + CTA. Guests see hero + CTA only (no activity).
   const renderOverview = () => {
     const gradient = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
       <Box>
-        {/* Hero */}
+
         <Box
           sx={{
             borderRadius: `${mobileTheme.radius.xl}px`,
@@ -264,7 +262,6 @@ function DonatePageInner({ config }: Props) {
           )}
         </Box>
 
-        {/* Recent Activity — auth only */}
         {isAuthenticated && (
           <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>
             <Box
@@ -356,7 +353,6 @@ function DonatePageInner({ config }: Props) {
           </Box>
         )}
 
-        {/* CTA card — Give Now */}
         <Box
           sx={{
             bgcolor: tc.surface,
@@ -399,8 +395,7 @@ function DonatePageInner({ config }: Props) {
   };
 
   const renderGive = () => {
-    // Guest (unauthenticated) flow — use shared NonAuthDonationWrapper which
-    // supports guest card + guest ACH and auto-creates user/person records.
+
     if (!isAuthenticated) {
       if (!church?.id) {
         return (
@@ -457,7 +452,6 @@ function DonatePageInner({ config }: Props) {
     );
   };
 
-  // Manage tab: payment methods only. Recurring donations live on History.
   const renderManage = () => {
     if (isMethodsLoading) {
       return (
@@ -527,10 +521,9 @@ function DonatePageInner({ config }: Props) {
     return `${(pm as any).name} ****${(pm as any).last4 || ""}`;
   };
 
-  // History: summary card w/ period filter, recurring section, card-row list.
   const renderHistory = () => (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-      {/* Summary card */}
+
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -601,7 +594,6 @@ function DonatePageInner({ config }: Props) {
         )}
       </Box>
 
-      {/* Print Statement (web-only, B1App feature) */}
       {!donationsLoading && donations.length > 0 && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
@@ -615,7 +607,6 @@ function DonatePageInner({ config }: Props) {
         </Box>
       )}
 
-      {/* Active recurring subscriptions */}
       {subscriptions.length > 0 && (
         <Box>
           <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}>
@@ -678,7 +669,7 @@ function DonatePageInner({ config }: Props) {
               );
             })}
           </Box>
-          {/* Shared web control for edit/cancel of recurring donations. */}
+
           <Box sx={{ mt: `${mobileTheme.spacing.md}px` }}>
             <RecurringDonations
               customerId={customerId!}
@@ -690,7 +681,6 @@ function DonatePageInner({ config }: Props) {
         </Box>
       )}
 
-      {/* Transaction list */}
       <Box>
         <Typography
           sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}

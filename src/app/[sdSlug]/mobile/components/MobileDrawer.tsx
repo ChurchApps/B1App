@@ -41,9 +41,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
     if (idx === -1) return false;
     const relevant = pathname.substring(idx).split("?")[0];
     const target = url.split("?")[0];
-    // Dashboard is the root of the mobile shell and isn't itself a drawer
-    // item — any `url`-type link with empty `linkData` currently falls back
-    // to `/mobile/dashboard`, so we explicitly refuse to highlight there.
+
     if (target === "/mobile/dashboard") return false;
     return relevant === target || relevant.startsWith(target + "/");
   };
@@ -55,7 +53,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
 
   return (
     <Box role="navigation" aria-label="Main navigation" sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: tc.surface }}>
-      {/* Header with user + church select */}
+
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,
         borderBottom: `1px solid ${tc.border}`,
@@ -100,7 +98,6 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
         )}
       </Box>
 
-      {/* Nav list */}
       <Box sx={{ flex: 1, overflowY: "auto" }}>
         {links.map((link, idx) => {
           if (link.linkType === "separator") {
@@ -141,9 +138,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               </Typography>
             </Box>
           );
-          // External URLs get a plain anchor with `target="_blank"` so the
-          // browser handles them — embedding cross-origin sites in an iframe
-          // is unreliable, so we skip the in-app shell for them entirely.
+
           if (isExternal) {
             return (
               <a key={key} href={route} target="_blank" rel="noopener noreferrer" style={anchorStyle} onClick={onNavigate}>
@@ -159,7 +154,6 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
         })}
       </Box>
 
-      {/* Footer */}
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,
         borderTop: `1px solid ${tc.border}`,
@@ -216,8 +210,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
             startIcon={<LoginIcon sx={{ fontSize: 24 }} />}
             component="a"
             href={(() => {
-              // Stay inside the mobile shell instead of bouncing to the public
-              // desktop login page.
+
               const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
               return returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
             })()}

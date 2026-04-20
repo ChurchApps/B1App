@@ -12,19 +12,12 @@ export interface SessionContext {
 }
 
 export interface HydrateOptions {
-  /** Current subdomain, used to pick the matching userChurch. */
+
   sdSlug?: string;
-  /** Also mirror the session into PersonHelper and jwt/name/email cookies. */
+
   writeCookies?: boolean;
 }
 
-// Shared user-session hydration. Sets UserHelper statics, picks the userChurch
-// that matches sdSlug, loads the person record, and pushes everything into
-// React context. When writeCookies is true, also persists jwt/name/email
-// cookies so `useHydrateSession` can restore the session on reload.
-//
-// Returns the hydrated person (may be null if the person record can't be
-// loaded — UserHelper.user and currentUserChurch are still populated).
 export async function hydrateUserSession(
   resp: LoginResponseInterface,
   context: SessionContext,
@@ -37,7 +30,6 @@ export async function hydrateUserSession(
   UserHelper.user = resp.user;
   UserHelper.userChurches = resp.userChurches || [];
 
-  // Pick the userChurch that matches the subdomain; fall back to the first.
   let matched: any = null;
   if (sdSlug) {
     matched = UserHelper.userChurches?.find(
@@ -50,9 +42,6 @@ export async function hydrateUserSession(
     UserHelper.setupApiHelper(target);
   }
 
-  // Best-effort person hydration. Try by personId first, then fall back to
-  // the church's claim endpoint. Both endpoints can 404 for new signups —
-  // that's fine, the rest of the session still works.
   let person: any = null;
   const personId = UserHelper.currentUserChurch?.person?.id;
   const churchId = UserHelper.currentUserChurch?.church?.id;
@@ -61,11 +50,11 @@ export async function hydrateUserSession(
       person = await ApiHelper.get(`/people/${personId}`, "MembershipApi");
     } catch {
       if (churchId) {
-        try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { /* ignore */ }
+        try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { }
       }
     }
   } else if (churchId) {
-    try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { /* ignore */ }
+    try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { }
   }
   if (person) {
     UserHelper.person = person;
@@ -78,7 +67,7 @@ export async function hydrateUserSession(
   if (person) context.setPerson(person);
 
   if (writeCookies && typeof document !== "undefined") {
-    const maxAge = 180 * 24 * 60 * 60; // 180 days, matches SharedLoginPage
+    const maxAge = 180 * 24 * 60 * 60;
     document.cookie = `jwt=${resp.user.jwt}; path=/; max-age=${maxAge}; SameSite=Lax`;
     document.cookie = `name=${encodeURIComponent(`${resp.user.firstName || ""} ${resp.user.lastName || ""}`.trim())}; path=/; max-age=${maxAge}; SameSite=Lax`;
     document.cookie = `email=${encodeURIComponent(resp.user.email || "")}; path=/; max-age=${maxAge}; SameSite=Lax`;

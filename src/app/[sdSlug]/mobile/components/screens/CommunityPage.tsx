@@ -35,8 +35,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
   const [searchText, setSearchText] = React.useState("");
 
   if (!loggedIn) {
-    // Directory is members-only. The drawer already hides the link for
-    // anonymous users; this gate also catches direct-URL / deep-link visits.
+
     const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
     const loginHref = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
     return (
@@ -89,7 +88,6 @@ export const CommunityPage = ({ config: _config }: Props) => {
     );
   }
 
-  // Fetch the full directory once and filter locally; cached 10m/30m.
   const { data: serverPeople = null, isFetching } = useQuery<PersonInterface[]>({
     queryKey: ["/people", "MembershipApi"],
     queryFn: async () => {
@@ -114,9 +112,6 @@ export const CommunityPage = ({ config: _config }: Props) => {
     });
   }, [people, searchText]);
 
-  // Group by first letter of last name, with an "Other" bucket for missing last names.
-  // Within each group, sort by last name, then first name. Groups sorted alphabetically
-  // with "Other" always pushed to the end.
   const sections = React.useMemo<PeopleSection[]>(() => {
     if (!filteredPeople || filteredPeople.length === 0) return [];
     const groups: { [key: string]: PersonInterface[] } = {};
@@ -130,7 +125,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
       if (lastRaw) {
         letter = lastRaw.charAt(0).toUpperCase();
       } else if (displayRaw) {
-        // When `last` is missing, group by the last token of `display`.
+
         const parts = displayRaw.split(" ");
         const fallback = parts.length > 1 ? parts[parts.length - 1] : parts[0];
         if (fallback) letter = fallback.charAt(0).toUpperCase();

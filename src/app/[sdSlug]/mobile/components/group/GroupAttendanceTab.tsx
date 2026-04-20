@@ -261,7 +261,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-      {/* Date selector */}
+
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -284,7 +284,6 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         />
       </Box>
 
-      {/* Controls */}
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Typography sx={{ fontSize: 14, fontWeight: 500, color: tc.textMuted }}>
           {presentCount} of {allPeople.length} present
@@ -318,7 +317,6 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         </Box>
       </Box>
 
-      {/* Search */}
       {showSearch && (
         <Box
           sx={{
@@ -415,7 +413,6 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         </Box>
       )}
 
-      {/* Members list */}
       {loading && (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
           <CircularProgress sx={{ color: tc.primary }} />
@@ -486,7 +483,6 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         </Box>
       )}
 
-      {/* Messages */}
       {message && (
         <Box
           sx={{
@@ -502,7 +498,6 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         </Box>
       )}
 
-      {/* Save */}
       <Button
         variant="contained"
         onClick={handleSave}

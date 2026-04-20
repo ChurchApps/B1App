@@ -11,8 +11,6 @@ interface Props {
   onClick: () => void;
 }
 
-// Shared sermon thumbnail card. Used on the Sermons listing and inside a
-// Playlist's sermon grid — keep both in sync by editing here.
 export const SermonCard = ({ sermon, onClick }: Props) => {
   const tc = mobileTheme.colors;
   const hasImage = !!(sermon.thumbnail && sermon.thumbnail.trim() !== "");

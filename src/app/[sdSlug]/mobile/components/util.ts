@@ -1,6 +1,3 @@
-// Shared helpers for the mobile shell. Each was previously duplicated across
-// 3-9 files; consolidate here so future edits stay in sync.
-
 interface NamedLike {
   name?: {
     first?: string;
@@ -60,9 +57,6 @@ export const formatDate = (
   });
 };
 
-// Compact relative time:
-//  same day, same hour → "now"; same day → "Nh"; yesterday → "yesterday";
-//  <7 days → "Nd"; else → locale date (MMM d, yyyy).
 export const formatRelative = (value?: Date | string | number | null): string => {
   const d = toDate(value);
   if (!d) return "";
@@ -79,9 +73,6 @@ export const formatRelative = (value?: Date | string | number | null): string =>
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 };
 
-// Back-nav that stays inside the app: prefer router.back() when there's real
-// history, otherwise push a predictable in-app fallback. `window.history.length`
-// is unreliable (counts pre-app entries), but it's the best signal available.
 export const navigateBack = (
   router: { back: () => void; push: (path: string) => void },
   fallback: string
@@ -90,10 +81,6 @@ export const navigateBack = (
   else router.push(fallback);
 };
 
-// Mix a CSS color (hex, rgb, or var()) with black/white via CSS `color-mix`.
-// Negative percent darkens; positive lightens. Works with CSS variables
-// (unlike JS hex math), so `tc.primary` — which resolves to `var(--mb-primary)` —
-// stays theme-aware in both light and dark palettes.
 export const shadePrimary = (cssColor: string, percent: number): string => {
   const mixer = percent < 0 ? "black" : "white";
   return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;

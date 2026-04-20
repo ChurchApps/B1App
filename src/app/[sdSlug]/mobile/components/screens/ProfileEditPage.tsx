@@ -35,7 +35,6 @@ interface Props {
 type TabKey = "profile" | "household" | "account" | "visibility";
 type VisibilityScope = "everyone" | "members" | "groups";
 
-// 14 directory-updatable fields.
 const fieldDefinitions: { key: string; label: string }[] = [
   { key: "name.first", label: "First Name" },
   { key: "name.middle", label: "Middle Name" },
@@ -76,7 +75,6 @@ interface PersonWithPrivacy extends PersonInterface {
   optedOut?: boolean;
 }
 
-// Read a field by dotted path (e.g. "contactInfo.address1")
 const readField = (obj: any, key: string): string => {
   if (!obj) return "";
   const parts = key.split(".");
@@ -92,9 +90,6 @@ const readField = (obj: any, key: string): string => {
   return v == null ? "" : String(v);
 };
 
-// Write a field by dotted path, returning a new object. Spreads only the
-// branches we touch, so the rest of the object retains identity (keeps
-// React Query structural sharing and downstream memo checks honest).
 const writeField = (obj: any, key: string, value: string): any => {
   const parts = key.split(".");
   const clone = (src: any, depth: number): any => {
@@ -109,7 +104,6 @@ const writeField = (obj: any, key: string, value: string): any => {
   return clone(obj, 0);
 };
 
-// Resize an image File to fit within 4:3 at 300px tall, output JPEG quality 0.8 as data URL
 const resizePhotoToDataUrl = async (file: File): Promise<string> => new Promise((resolve, reject) => {
   const reader = new FileReader();
   reader.onerror = () => reject(new Error("Unable to read image file."));
@@ -120,22 +114,22 @@ const resizePhotoToDataUrl = async (file: File): Promise<string> => new Promise(
     img.onerror = () => reject(new Error("Unable to decode image."));
     img.onload = () => {
       const targetH = 300;
-      const targetW = Math.round((targetH * 4) / 3); // 400x300 (4:3)
+      const targetW = Math.round((targetH * 4) / 3);
       const canvas = document.createElement("canvas");
       canvas.width = targetW;
       canvas.height = targetH;
       const ctx = canvas.getContext("2d");
       if (!ctx) { reject(new Error("Canvas not available.")); return; }
-      // Center-crop to 4:3 aspect then draw at targetW x targetH
+
       const srcAspect = img.width / img.height;
       const dstAspect = targetW / targetH;
       let sx = 0, sy = 0, sw = img.width, sh = img.height;
       if (srcAspect > dstAspect) {
-        // source is wider; crop horizontally
+
         sw = Math.round(img.height * dstAspect);
         sx = Math.round((img.width - sw) / 2);
       } else if (srcAspect < dstAspect) {
-        // source is taller; crop vertically
+
         sh = Math.round(img.width / dstAspect);
         sy = Math.round((img.height - sh) / 2);
       }
@@ -170,7 +164,6 @@ export const ProfileEditPage = ({ config }: Props) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [savingPrivacy, setSavingPrivacy] = useState(false);
 
-  // Account tab state
   const accountUser = UserHelper.user;
   const [acctFirstName, setAcctFirstName] = useState<string>(accountUser?.firstName || "");
   const [acctLastName, setAcctLastName] = useState<string>(accountUser?.lastName || "");
@@ -184,7 +177,6 @@ export const ProfileEditPage = ({ config }: Props) => {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [savingPassword, setSavingPassword] = useState(false);
 
-  // Visibility state
   const [addressVis, setAddressVis] = useState<VisibilityScope>("members");
   const [phoneVis, setPhoneVis] = useState<VisibilityScope>("members");
   const [emailVis, setEmailVis] = useState<VisibilityScope>("members");
@@ -333,7 +325,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             task.assignedToLabel = group?.name;
           }
         } catch {
-          /* no approval group configured */
+
         }
       }
 
@@ -343,9 +335,9 @@ export const ProfileEditPage = ({ config }: Props) => {
       setModifiedFields(new Set());
       setPendingFamilyMembers([]);
       setSnack({ open: true, msg: "Your changes have been submitted for approval.", severity: "success" });
-      // Redirect back on success.
+
       setTimeout(() => {
-        try { router.back(); } catch { /* noop */ }
+        try { router.back(); } catch { }
       }, 900);
     } catch (err: any) {
       console.error("Profile save error", err);
@@ -374,7 +366,6 @@ export const ProfileEditPage = ({ config }: Props) => {
     setPendingFamilyMembers((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // optedOut is tracked locally and saved alongside the dropdown prefs.
   const [optedOutLocal, setOptedOutLocal] = useState<boolean>(false);
   const [initialOptedOut, setInitialOptedOut] = useState<boolean>(false);
   useEffect(() => {
@@ -384,7 +375,6 @@ export const ProfileEditPage = ({ config }: Props) => {
     }
   }, [person?.optedOut]);
 
-  // Account tab handlers
   const handleSaveDisplayName = async () => {
     setAcctNameError(null);
     if (!acctFirstName.trim() || !acctLastName.trim()) {
@@ -419,10 +409,9 @@ export const ProfileEditPage = ({ config }: Props) => {
     try {
       const resp: any = await ApiHelper.post("/users/updateEmail", { email: trimmed }, "MembershipApi");
       if (UserHelper.user) UserHelper.user.email = trimmed;
-      // Note: web cannot rotate JWT via native SecureStorage. If the response
-      // includes a JWT it would need to be handled by an app-level auth flow.
+
       if (resp?.jwt && UserHelper.currentUserChurch) {
-        try { UserHelper.currentUserChurch.jwt = resp.jwt; } catch { /* noop */ }
+        try { UserHelper.currentUserChurch.jwt = resp.jwt; } catch { }
       }
       setNewEmail("");
       setSnack({ open: true, msg: "Email updated.", severity: "success" });
@@ -588,7 +577,7 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const renderProfileTab = () => (
     <>
-      {/* Photo card */}
+
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -641,7 +630,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* Name section */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -659,7 +647,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* Contact section */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -676,7 +663,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* Address section */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -698,7 +684,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* Phone section */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -716,7 +701,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* spacer so the sticky footer doesn't cover content */}
       <Box sx={{ height: 24 }} />
     </>
   );
@@ -782,7 +766,6 @@ export const ProfileEditPage = ({ config }: Props) => {
             ))}
       </Box>
 
-      {/* Add family member card */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -865,7 +848,7 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const renderAccountTab = () => (
     <>
-      {/* Display Name */}
+
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -917,7 +900,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* Email */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -964,7 +946,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Box>
       </Box>
 
-      {/* Password */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -1063,7 +1044,6 @@ export const ProfileEditPage = ({ config }: Props) => {
           Choose who can see each type of contact information.
         </Typography>
 
-        {/* Hide from Directory row */}
         <Box
           sx={{
             display: "flex",
@@ -1108,7 +1088,6 @@ export const ProfileEditPage = ({ config }: Props) => {
         )}
       </Box>
 
-      {/* Info card */}
       <Box
         sx={{
           bgcolor: tc.iconBackground,
@@ -1147,7 +1126,6 @@ export const ProfileEditPage = ({ config }: Props) => {
     </>
   );
 
-  // Pending changes show in-flow on profile/household (not account/visibility).
   const showPendingChanges = hasChanges && tab !== "visibility" && tab !== "account";
 
   return (
@@ -1202,7 +1180,6 @@ export const ProfileEditPage = ({ config }: Props) => {
       {tab === "account" && renderAccountTab()}
       {tab === "visibility" && renderPrivacyTab()}
 
-      {/* Pending changes card */}
       {showPendingChanges && (
         <Box
           sx={{

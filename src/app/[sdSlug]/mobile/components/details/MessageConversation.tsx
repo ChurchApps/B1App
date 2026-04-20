@@ -19,7 +19,6 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-// Shape we expect from /privateMessages (MessagingApi) - ConversationCheckInterface
 interface PrivateMessageRow {
   id?: string;
   conversationId?: string;
@@ -27,18 +26,12 @@ interface PrivateMessageRow {
   toPersonId?: string;
 }
 
-// To find an existing conversation with a person we scan `/privateMessages`
-// rather than calling `/privateMessages/existing/{personId}` — the latter
-// endpoint isn't wired up; if none matches, we create one on first send.
-
 export const MessageConversation = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const searchParams = useSearchParams();
   const userContext = React.useContext(UserContext);
 
-  // Callers (MessagesPage) may forward the conversationId via query string so
-  // we can skip the /privateMessages round-trip when we already know it.
   const conversationIdParam = searchParams?.get("conversationId") || null;
   const [conversationId, setConversationId] = React.useState<string | null>(conversationIdParam);
   const [pending, setPending] = React.useState<MessageInterface[]>([]);
@@ -59,13 +52,13 @@ export const MessageConversation = ({ id, config }: Props) => {
         const p = await ApiHelper.get("/people/" + id, "MembershipApi");
         if (p) return p as PersonInterface;
       } catch {
-        /* fall through */
+
       }
       try {
         const people = await ApiHelper.get("/people/basic?ids=" + id, "MembershipApi");
         if (Array.isArray(people) && people.length > 0) return people[0] as PersonInterface;
       } catch {
-        /* ignore */
+
       }
       return null;
     },
@@ -95,17 +88,12 @@ export const MessageConversation = ({ id, config }: Props) => {
     }
   }, []);
 
-  // Keep a person map across polls so the 5s refetch only pulls ids it hasn't
-  // seen — sending `/people/basic?ids=…` again for people already rendered.
   const peopleCache = React.useRef<Map<string, PersonInterface>>(new Map());
 
-  // Seed the conversation id from the /privateMessages lookup.
   React.useEffect(() => {
     if (existingConvId && !conversationId) setConversationId(existingConvId);
   }, [existingConvId, conversationId]);
 
-  // Poll the conversation every 5s while the tab is visible.
-  // Hydrate each message's `person` via /people/basic so displayName falls back correctly.
   const {
     data: serverMessages,
     isError: messagesErrored,
@@ -141,12 +129,12 @@ export const MessageConversation = ({ id, config }: Props) => {
           if (m.personId) m.person = peopleCache.current.get(m.personId);
         });
       } catch {
-        /* hydration is best-effort */
+
       }
       return data;
     },
     enabled: !!conversationId,
-    // Gate polling on tab visibility so background tabs don't hammer the API.
+
     refetchInterval: () =>
       typeof document !== "undefined" && document.visibilityState === "visible" ? 5000 : false,
     refetchIntervalInBackground: false
@@ -156,7 +144,6 @@ export const MessageConversation = ({ id, config }: Props) => {
     if (messagesErrored) setError("Unable to load messages.");
   }, [messagesErrored]);
 
-  // Drop optimistic entries whose content has shown up in the server list.
   React.useEffect(() => {
     if (!serverMessages || pending.length === 0) return;
     setPending((prev) =>
@@ -173,17 +160,16 @@ export const MessageConversation = ({ id, config }: Props) => {
     await refetchMessages();
   }, [refetchMessages]);
 
-  // Auto-scroll on messages change
   React.useEffect(() => {
     if (messages && messages.length > 0) {
-      // next tick so DOM is painted
+
       requestAnimationFrame(() => scrollToBottom());
     }
   }, [messages, scrollToBottom]);
 
   const createConversationAndSend = async (content: string) => {
     if (!myPersonId) return;
-    // Step 1: create conversation
+
     const convParams = [
       {
         allowAnonymousPosts: false,
@@ -197,7 +183,6 @@ export const MessageConversation = ({ id, config }: Props) => {
     const newConvId: string | undefined = convData?.[0]?.id;
     if (!newConvId) throw new Error("Could not create conversation");
 
-    // Step 2: link via /privateMessages
     await ApiHelper.post(
       "/privateMessages",
       [{ fromPersonId: myPersonId, toPersonId: id, conversationId: newConvId }],
@@ -206,7 +191,6 @@ export const MessageConversation = ({ id, config }: Props) => {
 
     setConversationId(newConvId);
 
-    // Step 3: post the message
     await ApiHelper.post(
       "/messages",
       [{ conversationId: newConvId, content, displayName: myDisplayName }],
@@ -225,7 +209,6 @@ export const MessageConversation = ({ id, config }: Props) => {
     setSending(true);
     setError(null);
 
-    // Optimistic append
     const optimistic: MessageInterface = {
       id: "temp-" + Date.now(),
       conversationId: conversationId || "",
@@ -250,7 +233,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       }
     } catch {
       setError("Message failed to send.");
-      // Remove optimistic entry on failure
+
       setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
     } finally {
       setSending(false);
@@ -389,9 +372,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         bgcolor: tc.background
       }}
     >
-      {/* Contextual row: who the conversation is with + start-new icon.
-          The AppBar already carries the "Messages" title (design std #3), so
-          this row is body-level context, not a page header. */}
+
       <Box
         sx={{
           display: "flex",
@@ -432,7 +413,6 @@ export const MessageConversation = ({ id, config }: Props) => {
         </IconButton>
       </Box>
 
-      {/* Messages list */}
       <Box
         ref={listRef}
         sx={{
@@ -452,7 +432,6 @@ export const MessageConversation = ({ id, config }: Props) => {
         {messages !== null && messages.length > 0 && messages.map(renderBubble)}
       </Box>
 
-      {/* Composer */}
       <Box
         sx={{
           position: "sticky",

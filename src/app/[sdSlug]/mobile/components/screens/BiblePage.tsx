@@ -5,12 +5,6 @@ import { Box, Button, Icon, Typography } from "@mui/material";
 import { mobileTheme } from "../mobileTheme";
 import "@youversion/platform-react-ui/styles.css";
 
-/**
- * Last-selection persistence key. Shared across /mobile/bible sessions so a
- * returning user re-enters the reader on the same book/chapter/translation
- * rather than the hard-coded Genesis-1/NIrV default the previous biblia.com
- * iframe used.
- */
 const STORAGE_KEY = "b1.mobile.bible.selection";
 
 type Selection = {
@@ -22,7 +16,7 @@ type Selection = {
 const DEFAULT_SELECTION: Selection = {
   book: "GEN",
   chapter: "1",
-  versionId: 111 // YouVersion NIV; previous NIrV (biblia) has no direct YV equivalent we can hard-pick, NIV is the closest common default.
+  versionId: 111
 };
 
 const loadSelection = (): Selection => {
@@ -39,7 +33,7 @@ const loadSelection = (): Selection => {
       return parsed as Selection;
     }
   } catch {
-    /* corrupt JSON — fall through to default */
+
   }
   return DEFAULT_SELECTION;
 };
@@ -49,14 +43,10 @@ const saveSelection = (sel: Selection) => {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sel));
   } catch {
-    /* quota / private mode — non-fatal */
+
   }
 };
 
-/**
- * Error boundary around the YouVersion reader. Any runtime failure inside the
- * SDK surfaces the fallback card instead of crashing the whole mobile shell.
- */
 class BibleErrorBoundary extends React.Component<
   { fallback: React.ReactNode; children: React.ReactNode },
   { hasError: boolean }
@@ -69,7 +59,7 @@ class BibleErrorBoundary extends React.Component<
     return { hasError: true };
   }
   componentDidCatch(error: unknown) {
-    // Intentionally quiet — fallback UI already communicates the failure.
+
     if (process.env.NODE_ENV !== "production") {
 
       console.warn("[BiblePage] YouVersion reader crashed:", error);
@@ -133,11 +123,6 @@ const FallbackCard = () => {
   );
 };
 
-/**
- * YouVersion SDK is pulled via `require` so that a missing/broken module
- * degrades to the fallback card rather than failing the build-time import
- * graph of the mobile shell.
- */
 const loadYouVersion = (): {
   BibleSDKProvider: React.ComponentType<any>;
   BibleReader: any;

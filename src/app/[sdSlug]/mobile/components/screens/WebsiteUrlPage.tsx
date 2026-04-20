@@ -11,8 +11,6 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-// Paths inside the embedded B1 page that should pop out into native
-// /mobile/* routes instead of navigating inside the iframe.
 const INTERNAL_PATH_MAP: Array<{ match: RegExp; build: (id?: string) => string }> = [
   { match: /^\/donate\/?$/, build: () => "/mobile/donate" },
   { match: /^\/votd\/?$/, build: () => "/mobile/votd" },
@@ -28,7 +26,7 @@ const INTERNAL_PATH_MAP: Array<{ match: RegExp; build: (id?: string) => string }
 const resolveInternalPath = (rawUrl: string): string | null => {
   try {
     const parsed = new URL(rawUrl, typeof window !== "undefined" ? window.location.href : "http://localhost/");
-    // Only intercept same-origin links; external URLs get left alone.
+
     if (typeof window !== "undefined" && parsed.origin !== window.location.origin) return null;
     const path = parsed.pathname;
     for (const entry of INTERNAL_PATH_MAP) {
@@ -49,8 +47,6 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
   const pathname = usePathname();
   const params = useSearchParams();
 
-  // `/mobile/page?id=<slug>` → resolve against origin (church-authored page).
-  // `/mobile/websiteUrl?url=<absolute>` → external URL passed through as-is.
   const isPage = (pathname || "").includes("/mobile/page");
   const rawUrl = params?.get("url") || "";
   const rawId = params?.get("id") || "";
@@ -66,9 +62,6 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
     return rawUrl;
   }, [isPage, rawId, rawUrl]);
 
-  // Most external sites set `X-Frame-Options` / `frame-ancestors`, which
-  // silently blanks the iframe. For cross-origin URLs we keep the shell
-  // visible and offer an "Open Website" action that opens in a new tab.
   const isCrossOrigin = useMemo(() => {
     if (!resolvedUrl) return false;
     if (typeof window === "undefined") return false;
@@ -94,16 +87,10 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
 
   const handleBack = () => navigateBack(router, "/mobile/dashboard");
 
-  // Internal-link interception via postMessage. The embedded B1 page (same
-  // origin) can emit `{ type: "navigate", url }` and we'll rewrite
-  // recognised internal paths into /mobile/* native routes. If the embedded
-  // page doesn't emit these, this is a no-op — follow-up: wire an emitter
-  // into the shared page renderer.
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handler = (event: MessageEvent) => {
-      // Same-origin guard: only trust messages from the embedded iframe when
-      // it's hosted on the same origin as the app shell.
+
       if (event.origin !== window.location.origin) return;
       const data: any = event.data;
       if (!data || typeof data !== "object") return;
@@ -115,14 +102,12 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
     return () => { window.removeEventListener("message", handler); };
   }, [router]);
 
-  // Loading / error timing. Reset whenever the resolved URL changes.
   useEffect(() => {
     if (!resolvedUrl) return;
     setStatus("loading");
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
-      // If we never heard an onLoad in the timeout window, surface an error
-      // fallback. (Cross-origin iframes can swallow errors silently.)
+
       setStatus((current) => (current === "loading" ? "error" : current));
     }, IFRAME_LOAD_TIMEOUT_MS);
     return () => {
@@ -146,7 +131,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
     timeoutRef.current = setTimeout(() => {
       setStatus((current) => (current === "loading" ? "error" : current));
     }, IFRAME_LOAD_TIMEOUT_MS);
-    // Force an iframe remount via key change.
+
     setIframeKey((k) => k + 1);
   };
 

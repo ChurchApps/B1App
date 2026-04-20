@@ -10,8 +10,6 @@ import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { useChurchLinks } from "../../hooks/useConfig";
 import { mobileTheme } from "../mobileTheme";
 
-// Internal paths inside the Lessons iframe that should pop out into native
-// /mobile routes instead of navigating inside the frame.
 const INTERNAL_ROUTE_MAP: Array<{ match: RegExp; to: (m: RegExpMatchArray) => string }> = [
   { match: /\/my\/groups(?:\/|$|\?)/, to: () => "/mobile/groups" },
   { match: /\/my\/plans(?:\/|$|\?)/, to: () => "/mobile/plans" },
@@ -24,14 +22,14 @@ const INTERNAL_ROUTE_MAP: Array<{ match: RegExp; to: (m: RegExpMatchArray) => st
 
 const resolveInternalRoute = (url: string): string | null => {
   try {
-    // Accept either a full URL or a bare path.
+
     const path = url.startsWith("http") ? new URL(url).pathname + new URL(url).search : url;
     for (const entry of INTERNAL_ROUTE_MAP) {
       const m = path.match(entry.match);
       if (m) return entry.to(m);
     }
   } catch {
-    /* ignore malformed URLs */
+
   }
   return null;
 };
@@ -49,7 +47,6 @@ export const LessonsPage = () => {
   const jwt = context.userChurch?.jwt;
   const churchId = context.userChurch?.church?.id;
 
-  // Use the label the admin set on the lessons tab/link when available.
   const { data: rawLinks } = useChurchLinks(churchId, jwt);
   const linkTitle = useMemo(() => {
     if (!Array.isArray(rawLinks)) return null;
@@ -69,7 +66,6 @@ export const LessonsPage = () => {
       ? `${EnvironmentHelper.Common.LessonsRoot}/login?jwt=${jwt}&returnUrl=/b1/person&churchId=${churchId}`
       : null;
 
-  // Rehydrate the user from the existing JWT after a profile_updated event.
   const reauthenticate = async () => {
     try {
       if (!jwt) return;
@@ -98,29 +94,21 @@ export const LessonsPage = () => {
     }
   };
 
-  // postMessage bridge. LessonsApp currently only emits a few message shapes
-  // to `window.parent` (height events from embed routes), and
-  // `ReactNativeWebView.postMessage("print")` which only reaches native. We
-  // still wire the listener for the expected profile_updated / profile_deleted
-  // / autoPrint contracts so that once LessonsApp emits them to window.parent
-  // the web client will honor them. See follow-up note at the bottom of this
-  // file.
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const handleMessage = (event: MessageEvent) => {
-      // Only accept messages from the LessonsRoot origin.
+
       try {
         const lessonsOrigin = new URL(EnvironmentHelper.Common.LessonsRoot).origin;
         if (event.origin && event.origin !== lessonsOrigin) return;
       } catch {
-        /* ignore */
+
       }
 
       const data: any = event.data;
       if (!data) return;
 
-      // Accept string or object shapes.
       const type =
         typeof data === "string"
           ? data
@@ -131,7 +119,7 @@ export const LessonsPage = () => {
         return;
       }
       if (type === "profile_deleted") {
-        // Server-side logout clears the jwt cookie and redirects home.
+
         window.location.href = "/logout";
         return;
       }
@@ -144,10 +132,6 @@ export const LessonsPage = () => {
         return;
       }
 
-      // Internal-route interception hook. If LessonsApp ever posts a
-      // structured nav event (e.g. { type: "navigate", url: "/my/groups" })
-      // we'll route it natively. Cross-origin iframe URL sniffing is not
-      // possible on web so we rely on this cooperative contract.
       if (type === "navigate" && typeof data?.url === "string") {
         const route = resolveInternalRoute(data.url);
         if (route) router.push(route);
@@ -159,9 +143,6 @@ export const LessonsPage = () => {
 
   }, [jwt, churchId]);
 
-  // Error fallback: if the iframe never fires `load` within a reasonable
-  // window, surface a retry card. (Cross-origin iframe `error` events are
-  // unreliable on web, so we also use a load-timeout.)
   useEffect(() => {
     if (!iframeSrc) return;
     setIframeError(false);
@@ -189,7 +170,7 @@ export const LessonsPage = () => {
   const handleRetry = () => {
     setIframeError(false);
     setIframeLoaded(false);
-    // Force a reload by re-assigning the iframe's src.
+
     if (iframeRef.current && iframeSrc) {
       iframeRef.current.src = iframeSrc;
     }
@@ -199,7 +180,6 @@ export const LessonsPage = () => {
     }, 15000);
   };
 
-  // Signed-out state — friendly empty card
   if (!jwt || !churchId) {
     return (
       <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -321,8 +301,3 @@ export const LessonsPage = () => {
     </Box>
   );
 };
-
-// TODO: LessonsApp should also emit `postMessage({ type: "navigate", url })`
-// on internal link clicks and `{ type: "autoPrint" }` from print flows via
-// `window.parent` (not only `ReactNativeWebView`). Until those fire on web,
-// this listener can't intercept cross-origin navigation inside the iframe.

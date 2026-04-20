@@ -24,7 +24,6 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
-// Only these content types open a route when tapped; others are icon-only.
 const deriveLinkUrl = (n: NotificationItem): string | undefined => {
   if (!n.contentId) return undefined;
   const type = String(n.contentType || "").toLowerCase();

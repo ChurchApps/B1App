@@ -29,8 +29,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
   } = useQuery<PlaylistInterface | null>({
     queryKey: ["playlist", churchId, id],
     queryFn: async () => {
-      // `/playlists/:id` is authenticated, so anonymous mobile visitors must
-      // look the playlist up in the public list for their church.
+
       const list = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
       if (!Array.isArray(list)) return null;
       const match = list.find((p: any) => p && p.id === id) as PlaylistInterface | undefined;
@@ -61,9 +60,6 @@ export const PlaylistDetail = ({ id, config }: Props) => {
 
   const hasError = !!playlistError || !!sermonsError;
 
-  // Preserve the undefined/null/value tri-state the render logic depends on.
-  // While the config hasn't provided a churchId yet, the query is disabled and
-  // `playlistData` is undefined — treat that as loading, not "not found".
   const playlist: PlaylistInterface | null | undefined =
     playlistLoading || !churchId ? undefined : (playlistData ?? null);
 

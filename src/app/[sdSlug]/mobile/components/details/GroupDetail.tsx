@@ -64,7 +64,6 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
   const [editEvent, setEditEvent] = React.useState<EventRow | null>(null);
 
-  // Deep-link param handling: activeTab, openChat, chatTab
   React.useEffect(() => {
     if (!searchParams) return;
     const activeTabParam = searchParams.get("activeTab");
@@ -625,7 +624,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         onClose={() => setCreateEvent(null)}
         onSaved={() => {
           setCreateEvent(null);
-          // GroupCalendarTab reloads on its own via month change; bump key by toggling tab
+
           setTab("about");
           setTimeout(() => setTab("events"), 0);
         }}

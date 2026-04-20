@@ -11,10 +11,6 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   const safeName = (churchName && churchName.trim()) || sdSlug || "Church";
   const shortName = safeName.length > 12 ? safeName.substring(0, 12) : safeName;
 
-  // Use paths relative to the manifest URL. The browser resolves them against the
-  // origin that actually served the manifest (custom domain or b1.church subdomain),
-  // which keeps start_url / scope / icons / screenshots same-origin and valid.
-  // Manifest URL: <origin>/mobile/manifest.webmanifest, so "dashboard" → /mobile/dashboard
   const manifest = {
     id: "dashboard",
     name: safeName,

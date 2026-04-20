@@ -14,9 +14,6 @@ export const StreamPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const keyName = config?.church?.subDomain;
 
-  // Offline placeholder shown when no service is live or scheduled within the
-  // next hour. LiveStream itself handles countdown, live badge, chat, prayer,
-  // and any church-configured interaction tabs when a stream is active.
   const offlineContent = (
     <Box sx={{
       position: "relative",

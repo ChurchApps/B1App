@@ -83,7 +83,6 @@ const formatTimeShort = (date?: Date | string) => {
   }
 };
 
-// Helpers for provider/lesson preview fallback.
 function findThumbnailRecursive(item: InstructionItem): string | undefined {
   if (item.thumbnail) return item.thumbnail;
   if (item.children) {
@@ -200,7 +199,6 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     [assignments, myPersonId]
   );
 
-  /* Provider / lesson preview fallback */
   const lessonsProvider = useMemo(() => new LessonsContentProvider(), []);
   const hasAssociatedLesson = !!plan && lessonsProvider.hasAssociatedLesson(plan);
   const externalRef = plan ? lessonsProvider.getExternalRef(plan) : null;
@@ -216,7 +214,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
       if (provider && plan?.providerPlanId) {
         let instructions: Instructions | null = null;
         if (!provider.requiresAuth && provider.capabilities.instructions && provider.getInstructions) {
-          try { instructions = await provider.getInstructions(plan.providerPlanId); } catch { /* ignore */ }
+          try { instructions = await provider.getInstructions(plan.providerPlanId); } catch { }
         }
         if (!instructions) {
           try {
@@ -225,7 +223,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               { providerId: plan.providerId, path: plan.providerPlanId },
               "DoingApi"
             );
-          } catch { /* ignore */ }
+          } catch { }
         }
         if (instructions) {
           const items: PlanItemInterface[] = instructions.items.map((item, index) =>
@@ -387,7 +385,6 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
       <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>{BackButton}</Box>
       {headerCard}
 
-      {/* Tabs */}
       <Box
         sx={{
           bgcolor: tc.surface,
@@ -424,7 +421,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
 
       {tab === "overview" && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-          {/* My Assignments */}
+
           <Box>
             <Box
               sx={{
@@ -498,7 +495,6 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             )}
           </Box>
 
-          {/* Plan Notes */}
           <Box
             sx={{
               bgcolor: tc.surface,
@@ -596,8 +592,6 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     </Box>
   );
 };
-
-/* ---------- Subcomponents ---------- */
 
 const statusMeta = (status?: string) => {
   switch ((status || "").toLowerCase()) {
@@ -769,7 +763,6 @@ const TeamGroupCard = ({
 }) => {
   const tc = mobileTheme.colors;
 
-  // Build flat member list across positions in this category
   const members: { id?: string; personId?: string; name: string; position: string; photo?: string }[] = [];
   positions.forEach((position) => {
     const posAssignments = ArrayHelper.getAll(assignments, "positionId", position.id);

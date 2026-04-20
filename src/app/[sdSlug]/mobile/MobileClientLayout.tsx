@@ -21,12 +21,6 @@ const mobileMuiTheme = createTheme({
   components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } } }
 });
 
-/**
- * Gates rendering on one-shot JWT-cookie rehydration so returning users with a
- * valid session are treated as logged-in before any child screen probes
- * `UserHelper.user`. The signed-out path (no cookie / expired cookie) falls
- * through immediately to the normal anonymous render.
- */
 function MobileHydrationGate({ children }: { children: React.ReactNode }) {
   const status = useHydrateSession();
   const showSpinner = status === "idle" || status === "hydrating";
@@ -70,7 +64,7 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const onVisible = () => {
       if (document.visibilityState !== "visible") return;
-      // Session resume hook — screens using useQuery will refetch on focus automatically.
+
     };
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);

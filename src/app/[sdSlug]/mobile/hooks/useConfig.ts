@@ -4,10 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 
-// Apply the visibility rules once, for both drawer tabs and dashboard tiles.
-// Anonymous users: only links without visibility or visibility === "everyone".
-// Authenticated users: hide "team" links unless one of the user's group tags
-// contains "team". Other visibility values pass through unchanged.
 export function filterVisibleLinks(
   links: LinkInterface[] | null | undefined,
   userGroups?: Array<{ tags?: string }> | null

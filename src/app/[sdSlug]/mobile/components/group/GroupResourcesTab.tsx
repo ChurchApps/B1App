@@ -37,7 +37,7 @@ interface Props {
   canEdit: boolean;
 }
 
-const STORAGE_CAP = 100_000_000; // 100 MB
+const STORAGE_CAP = 100_000_000;
 
 const formatSize = (bytes: number) => {
   if (bytes > 1_000_000) return `${(Math.round(bytes / 10_000) / 100).toFixed(2)}MB`;
@@ -102,7 +102,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       await ApiHelper.delete(`/files/${f.id}`, "ContentApi");
       load();
     } catch {
-      /* ignore */
+
     }
   };
 
@@ -113,7 +113,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       await ApiHelper.delete(`/links/${l.id}`, "ContentApi");
       load();
     } catch {
-      /* ignore */
+
     }
   };
 
@@ -347,7 +347,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-      {/* Links */}
+
       <Box>
         <Box
           sx={{
@@ -471,7 +471,6 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         )}
       </Box>
 
-      {/* Files */}
       <Box>
         <Box
           sx={{
@@ -557,7 +556,6 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         )}
       </Box>
 
-      {/* Storage usage */}
       {files !== null && (
         <Box
           sx={{

@@ -52,8 +52,7 @@ export const DashboardPage = ({ config }: Props) => {
     const route = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
     if (!route) return;
     if (route.startsWith("http")) {
-      // External site — open in a new tab so the PWA stays mounted. Browsers
-      // block iframing most third-party sites, so this beats a blank embed.
+
       window.open(route, "_blank", "noopener,noreferrer");
     } else {
       router.push(route);
@@ -95,7 +94,7 @@ export const DashboardPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pt: 2, pb: 3 }}>
-      {/* Hero Section */}
+
       {hero && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
           <Box
@@ -147,7 +146,6 @@ export const DashboardPage = ({ config }: Props) => {
         </Box>
       )}
 
-      {/* Featured */}
       {featuredTwo.length > 0 && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
           <Typography sx={{
@@ -205,7 +203,6 @@ export const DashboardPage = ({ config }: Props) => {
         </Box>
       )}
 
-      {/* Quick Actions */}
       {others.length > 0 && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
           <Typography sx={{

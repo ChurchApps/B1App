@@ -445,7 +445,7 @@ export const SermonsPage = ({ config }: Props) => {
   const churchId = config?.church?.id;
   const keyName = config?.church?.subDomain;
   const [activeTab, setActiveTab] = useState<"series" | "recent">("series");
-  // Re-render the countdown roughly every minute so the timer stays accurate.
+
   const [, setTick] = useState(0);
 
   useEffect(() => {
@@ -483,8 +483,6 @@ export const SermonsPage = ({ config }: Props) => {
     gcTime: 30 * 60 * 1000
   });
 
-  // Fetch real stream schedule from ContentApi preview/data so the countdown
-  // reflects the church's actual configured services (not hard-coded sample data).
   const { data: streamConfig } = useQuery<StreamConfigPayload | null>({
     queryKey: ["sermons-stream", keyName],
     queryFn: async () => {
@@ -512,7 +510,7 @@ export const SermonsPage = ({ config }: Props) => {
       if (isNaN(start.getTime())) continue;
       const earlySeconds = getSecondsFromDisplay(s.earlyStart);
       const liveStart = new Date(start.getTime() - earlySeconds * 1000);
-      // Assume ~90 minutes of run time if the sermon duration isn't published.
+
       const runSeconds = s.sermon?.duration || 5400;
       const end = new Date(start.getTime() + runSeconds * 1000);
       if (end <= now) continue;

@@ -1,7 +1,3 @@
-// Color values resolve at runtime from CSS custom properties set on
-// `.mobileAppRoot[data-mobile-theme="..."]` (see MobileThemeProvider). That
-// lets the whole mobile shell swap between light and dark without rewriting
-// the ~40 components that read `mobileTheme.colors.*` in MUI `sx` props.
 export const mobileTheme = {
   colors: {
     primary: "var(--mb-primary)",
@@ -44,10 +40,6 @@ export const mobileTheme = {
   headerHeight: 56
 };
 
-// Page-slug registry — source of truth for the AppBar title and anything
-// else that needs to map a URL slug back to a human-readable name. Aliases
-// (left of `=`) render the same title as the canonical slug; unlisted slugs
-// fall back to an empty string (dashboard uses the church logo instead).
 export const SCREEN_TITLES: Record<string, string> = {
   myGroups: "My Groups",
   groups: "My Groups",
@@ -87,8 +79,6 @@ export const SCREEN_TITLES: Record<string, string> = {
   websiteUrl: ""
 };
 
-// Extract the mobile page slug from a URL whether it's `/{sdSlug}/mobile/X`
-// (rewritten) or `/mobile/X` (direct). Returns `"dashboard"` for the root.
 export const mobileSlugFromPath = (pathname: string | null | undefined): string => {
   if (!pathname) return "";
   const parts = pathname.split("/").filter(Boolean);
@@ -112,9 +102,6 @@ export const linkTypeToImage = (linkType?: string, text?: string): string => {
   }
 };
 
-// For `url` and `page` link types the destination lives in `link.url`, not
-// `link.linkData`. Reading only `linkData` was the cause of the "Website"
-// tab silently falling back to `/mobile/dashboard` earlier.
 export const linkTypeToRoute = (
   linkType?: string,
   linkData?: string,
@@ -143,10 +130,7 @@ export const linkTypeToRoute = (
       return qs ? `/mobile/page?${qs}` : "/mobile/page";
     }
     case "url": {
-      // Return the raw external URL. Browsers block most cross-origin iframes
-      // via `X-Frame-Options` / CSP `frame-ancestors`, so embedding inside the
-      // shell is unreliable. Callers detect `startsWith("http")` and open in a
-      // new tab — the PWA stays put and the user can switch back.
+
       const target = url || linkData || "";
       return target || null;
     }

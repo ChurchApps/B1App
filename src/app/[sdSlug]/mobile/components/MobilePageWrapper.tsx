@@ -10,9 +10,7 @@ interface Props {
 }
 
 export function MobilePageWrapper({ sdSlug: _sdSlug, config, children }: Props) {
-  // Screens that require auth (CheckinPage, DonatePage, ProfileEditPage,
-  // NotificationsPage, MessagesPage) gate themselves inline via
-  // UserHelper.user checks — the shell itself is public.
+
   return (
     <>
       <Theme config={config} />

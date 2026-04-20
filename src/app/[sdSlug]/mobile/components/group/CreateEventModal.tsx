@@ -27,7 +27,7 @@ interface Props {
   open: boolean;
   groupId: string;
   initialDateIso?: string;
-  /** When supplied, the modal switches to edit mode. */
+
   event?: EventInterface | null;
   onClose: () => void;
   onSaved?: () => void;
@@ -45,7 +45,7 @@ const toLocal = (iso: string | Date) => {
 };
 
 const localToIsoString = (localValue: string) => {
-  // Interpret as local time and convert to ISO
+
   if (!localValue) return "";
   const d = new Date(localValue);
   return isNaN(d.getTime()) ? "" : d.toISOString();
@@ -164,7 +164,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   const handleSave = () => {
     if (!validate()) return;
     if (isEdit && eventProp?.recurrenceRule) {
-      // Prompt this / future / all
+
       setRecurrenceModalType("save");
       return;
     }
