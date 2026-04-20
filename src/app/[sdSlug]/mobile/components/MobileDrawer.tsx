@@ -126,11 +126,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               cursor: "pointer",
               "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground },
             }}>
-              {(link as any).photo ? (
-                <Box component="img" src={(link as any).photo} alt="" sx={{ width: 24, height: 24, objectFit: "cover", borderRadius: 0.5 }} />
-              ) : (
-                <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
-              )}
+              <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
               <Typography sx={{
                 fontSize: 16,
                 fontWeight: active ? 600 : 500,
