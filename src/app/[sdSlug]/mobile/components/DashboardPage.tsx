@@ -1,55 +1,61 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToImage, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
+import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
+import { useEngagementSort } from "../hooks/useEngagementSort";
 
 interface Props {
   config: ConfigurationInterface;
 }
 
+const ENGAGEMENT_STORAGE_KEY = "b1app-link-view-counts";
+
+const generateLinkId = (item: LinkInterface): string => item.id || `${item.linkType}_${item.text}`;
+
+const resolvePhoto = (item: LinkInterface): string => {
+  const photo = (item as unknown as { photo?: string }).photo;
+  if (photo) return photo;
+  return linkTypeToImage(item.linkType, item.text);
+};
+
 export const DashboardPage = ({ config }: Props) => {
   const context = useContext(UserContext);
   const router = useRouter();
-  const [links, setLinks] = useState<LinkInterface[]>([]);
-  const [loading, setLoading] = useState(true);
   const tc = mobileTheme.colors;
+  const churchId = config?.church?.id;
+  const jwt = context.userChurch?.jwt;
 
-  useEffect(() => {
-    const churchId = config?.church?.id;
-    if (!churchId) { setLoading(false); return; }
-    const load = async () => {
-      try {
-        if (context.userChurch?.jwt) {
-          const result = await ApiHelper.get(`/links/church/${churchId}/filtered?category=b1Tab`, "ContentApi");
-          const userGroupTags = context.userChurch.groups?.flatMap((g: any) => g.tags?.split(",") || []) || [];
-          setLinks(result.filter((l: any) => l.visibility !== "team" || userGroupTags.includes("team")));
-        } else {
-          const result = await ApiHelper.getAnonymous(`/links/church/${churchId}?category=b1Tab`, "ContentApi");
-          setLinks(result.filter((l: any) => !l.visibility || l.visibility === "everyone"));
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [config?.church?.id, context.userChurch?.jwt]);
+  const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
 
-  const filtered = useMemo(
-    () => (Array.isArray(links) ? links.filter((l) => l.linkType !== "separator") : []),
-    [links]
+  const links = useMemo<LinkInterface[]>(() => {
+    const visible = filterVisibleLinks(rawLinks, jwt ? context.userChurch?.groups : null);
+    return visible.filter((l) => l.linkType !== "separator");
+  }, [rawLinks, jwt, context.userChurch?.groups]);
+
+  const loading = isLoading && links.length === 0;
+
+  const getLinkId = useCallback((link: LinkInterface) => generateLinkId(link), []);
+  const { sorted: filtered, increment: incrementViewCount } = useEngagementSort(
+    links,
+    ENGAGEMENT_STORAGE_KEY,
+    getLinkId
   );
 
   const navigate = (link: LinkInterface) => {
-    const route = linkTypeToRoute(link.linkType, link.linkData);
-    if (route) {
-      if (route.startsWith("http")) window.location.href = route;
-      else router.push(route);
+    incrementViewCount(generateLinkId(link));
+    const route = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
+    if (!route) return;
+    if (route.startsWith("http")) {
+
+      window.open(route, "_blank", "noopener,noreferrer");
+    } else {
+      router.push(route);
     }
   };
 
@@ -70,19 +76,32 @@ export const DashboardPage = ({ config }: Props) => {
           <Box sx={{ flex: 1, bgcolor: tc.surfaceVariant, height: 120, borderRadius: `${mobileTheme.radius.lg}px` }} />
           <Box sx={{ flex: 1, bgcolor: tc.surfaceVariant, height: 120, borderRadius: `${mobileTheme.radius.lg}px` }} />
         </Box>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: `${mobileTheme.spacing.md - 4}px`, px: `${mobileTheme.spacing.md}px` }}>
+          {[0, 1, 2, 3].map((i) => (
+            <Box key={i} sx={{ width: "calc(25% - 9px)", height: 96, bgcolor: tc.surfaceVariant, borderRadius: `${mobileTheme.radius.lg}px` }} />
+          ))}
+        </Box>
       </Box>
     );
   }
 
+  const handleKey = (e: React.KeyboardEvent, link: LinkInterface) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      navigate(link);
+    }
+  };
+
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pt: 2, pb: 3 }}>
-      {/* Hero Section */}
+
       {hero && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
           <Box
             role="button"
             tabIndex={0}
             onClick={() => navigate(hero)}
+            onKeyDown={(e) => handleKey(e, hero)}
             sx={{
               position: "relative",
               height: 200,
@@ -91,9 +110,9 @@ export const DashboardPage = ({ config }: Props) => {
               boxShadow: cardShadow,
               cursor: "pointer",
               bgcolor: tc.primary,
-              backgroundImage: `url(${linkTypeToImage(hero.linkType, hero.text)})`,
+              backgroundImage: `url(${resolvePhoto(hero)})`,
               backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundPosition: "center"
             }}
           >
             <Box sx={{
@@ -102,7 +121,7 @@ export const DashboardPage = ({ config }: Props) => {
               left: 0,
               right: 0,
               bgcolor: "rgba(0,0,0,0.5)",
-              p: "20px",
+              p: "20px"
             }}>
               <Typography sx={{
                 color: "#FFFFFF",
@@ -110,7 +129,7 @@ export const DashboardPage = ({ config }: Props) => {
                 fontSize: 32,
                 lineHeight: 1.1,
                 mb: 0.5,
-                textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+                textShadow: "0 1px 2px rgba(0,0,0,0.3)"
               }}>
                 {hero.text}
               </Typography>
@@ -118,7 +137,7 @@ export const DashboardPage = ({ config }: Props) => {
                 color: "#FFFFFF",
                 opacity: 0.9,
                 fontSize: 16,
-                textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+                textShadow: "0 1px 2px rgba(0,0,0,0.3)"
               }}>
                 Tap to explore
               </Typography>
@@ -127,7 +146,6 @@ export const DashboardPage = ({ config }: Props) => {
         </Box>
       )}
 
-      {/* Featured */}
       {featuredTwo.length > 0 && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
           <Typography sx={{
@@ -135,17 +153,18 @@ export const DashboardPage = ({ config }: Props) => {
             fontWeight: 600,
             color: tc.text,
             mb: 2,
-            pl: 0.5,
+            pl: 0.5
           }}>
             Featured
           </Typography>
           <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.md - 4}px` }}>
             {featuredTwo.map((item) => (
               <Box
-                key={item.id || `${item.linkType}-${item.text}`}
+                key={generateLinkId(item)}
                 role="button"
                 tabIndex={0}
                 onClick={() => navigate(item)}
+                onKeyDown={(e) => handleKey(e, item)}
                 sx={{
                   flex: 1,
                   position: "relative",
@@ -155,9 +174,9 @@ export const DashboardPage = ({ config }: Props) => {
                   boxShadow: featuredShadow,
                   cursor: "pointer",
                   bgcolor: tc.primary,
-                  backgroundImage: `url(${linkTypeToImage(item.linkType, item.text)})`,
+                  backgroundImage: `url(${resolvePhoto(item)})`,
                   backgroundSize: "cover",
-                  backgroundPosition: "center",
+                  backgroundPosition: "center"
                 }}
               >
                 <Box sx={{
@@ -166,14 +185,14 @@ export const DashboardPage = ({ config }: Props) => {
                   left: 0,
                   right: 0,
                   bgcolor: "rgba(0,0,0,0.6)",
-                  p: "12px",
+                  p: "12px"
                 }}>
                   <Typography sx={{
                     color: "#FFFFFF",
                     fontWeight: 600,
                     fontSize: 16,
                     textAlign: "center",
-                    textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.3)"
                   }}>
                     {item.text}
                   </Typography>
@@ -184,7 +203,6 @@ export const DashboardPage = ({ config }: Props) => {
         </Box>
       )}
 
-      {/* Quick Actions */}
       {others.length > 0 && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
           <Typography sx={{
@@ -192,17 +210,18 @@ export const DashboardPage = ({ config }: Props) => {
             fontWeight: 600,
             color: tc.text,
             mb: 2,
-            pl: 0.5,
+            pl: 0.5
           }}>
             Quick Actions
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: `${mobileTheme.spacing.md - 4}px` }}>
             {others.map((item) => (
               <Box
-                key={item.id || `${item.linkType}-${item.text}`}
+                key={generateLinkId(item)}
                 role="button"
                 tabIndex={0}
                 onClick={() => navigate(item)}
+                onKeyDown={(e) => handleKey(e, item)}
                 sx={{
                   width: { xs: "calc(25% - 9px)", sm: "calc(20% - 10px)", md: "calc(16.666% - 10px)" },
                   minWidth: 70,
@@ -214,7 +233,7 @@ export const DashboardPage = ({ config }: Props) => {
                   borderRadius: `${mobileTheme.radius.lg}px`,
                   boxShadow: quickShadow,
                   cursor: "pointer",
-                  "&:hover": { boxShadow: featuredShadow },
+                  "&:hover": { boxShadow: featuredShadow }
                 }}
               >
                 <Box sx={{
@@ -225,7 +244,7 @@ export const DashboardPage = ({ config }: Props) => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  mb: 1,
+                  mb: 1
                 }}>
                   <Icon sx={{ fontSize: 24, color: tc.primary }}>{linkTypeToIcon(item.linkType, item.icon)}</Icon>
                 </Box>
@@ -238,7 +257,7 @@ export const DashboardPage = ({ config }: Props) => {
                   display: "-webkit-box",
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
+                  overflow: "hidden"
                 }}>
                   {item.text}
                 </Typography>

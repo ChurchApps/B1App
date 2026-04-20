@@ -19,7 +19,7 @@ export const PlaceholderPage = ({ title, icon = "construction", description }: P
         borderRadius: `${mobileTheme.radius.xl}px`,
         p: 4,
         textAlign: "center",
-        boxShadow: mobileTheme.shadows.md,
+        boxShadow: mobileTheme.shadows.md
       }}>
         <Box sx={{
           width: 72,
@@ -29,7 +29,7 @@ export const PlaceholderPage = ({ title, icon = "construction", description }: P
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: 2,
+          mb: 2
         }}>
           <Icon sx={{ fontSize: 36, color: tc.primary }}>{icon}</Icon>
         </Box>

@@ -113,6 +113,7 @@ export class ChordProHelper {
           break;
       }
 
+
     });
     return result.join("\n");
   };

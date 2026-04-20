@@ -1,24 +1,24 @@
 export const mobileTheme = {
   colors: {
-    primary: "#0D47A1",
-    primaryLight: "#E3F2FD",
-    secondary: "#568BDA",
-    background: "#F6F6F8",
-    surface: "#FFFFFF",
-    surfaceVariant: "#F6F6F8",
-    text: "#3c3c3c",
-    textSecondary: "#9E9E9E",
-    textMuted: "#666666",
-    textHint: "#999999",
-    onPrimary: "#FFFFFF",
-    success: "#70DC87",
-    warning: "#FEAA24",
-    error: "#B0120C",
-    border: "#F0F0F0",
-    borderLight: "#E5E7EB",
-    divider: "#E0E0E0",
-    iconBackground: "#F6F6F8",
-    disabled: "#BDBDBD",
+    primary: "var(--mb-primary)",
+    primaryLight: "var(--mb-primary-light)",
+    secondary: "var(--mb-secondary)",
+    background: "var(--mb-background)",
+    surface: "var(--mb-surface)",
+    surfaceVariant: "var(--mb-surface-variant)",
+    text: "var(--mb-text)",
+    textSecondary: "var(--mb-text-secondary)",
+    textMuted: "var(--mb-text-muted)",
+    textHint: "var(--mb-text-hint)",
+    onPrimary: "var(--mb-on-primary)",
+    success: "var(--mb-success)",
+    warning: "var(--mb-warning)",
+    error: "var(--mb-error)",
+    border: "var(--mb-border)",
+    borderLight: "var(--mb-border-light)",
+    divider: "var(--mb-divider)",
+    iconBackground: "var(--mb-icon-background)",
+    disabled: "var(--mb-disabled)"
   },
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
   radius: { sm: 4, md: 8, lg: 12, xl: 16 },
@@ -29,15 +29,62 @@ export const mobileTheme = {
     body: { fontSize: 16, fontWeight: 400 },
     bodySmall: { fontSize: 14, fontWeight: 400 },
     caption: { fontSize: 12, fontWeight: 400 },
-    label: { fontSize: 14, fontWeight: 500 },
+    label: { fontSize: 14, fontWeight: 500 }
   },
   shadows: {
     sm: "0 1px 2px rgba(0,0,0,0.05)",
     md: "0 2px 4px rgba(0,0,0,0.1)",
-    lg: "0 4px 8px rgba(0,0,0,0.15)",
+    lg: "0 4px 8px rgba(0,0,0,0.15)"
   },
   drawerWidth: 280,
-  headerHeight: 56,
+  headerHeight: 56
+};
+
+export const SCREEN_TITLES: Record<string, string> = {
+  myGroups: "My Groups",
+  groups: "My Groups",
+  groupDetails: "Group",
+  notifications: "Notifications",
+  votd: "Verse of the Day",
+  service: "Check-in",
+  checkin: "Check-in",
+  donation: "Giving",
+  donate: "Giving",
+  membersSearch: "Directory",
+  community: "Directory",
+  memberDetail: "Member Details",
+  plan: "Plans",
+  plans: "Plans",
+  planDetails: "Plan",
+  sermons: "Sermons",
+  sermonDetails: "Sermon",
+  playlist: "Playlist",
+  playlistDetails: "Playlist",
+  searchMessageUser: "Messages",
+  messages: "Messages",
+  messagesNew: "New Message",
+  composeMessage: "New Message",
+  registrations: "Registrations",
+  register: "Register",
+  volunteerBrowse: "Volunteer Opportunities",
+  volunteer: "Volunteer",
+  volunteerSignup: "Volunteer",
+  profileEdit: "Edit Profile",
+  stream: "Stream",
+  bible: "Bible",
+  lessons: "Lessons",
+  login: "Sign In",
+  install: "Install App",
+  page: "",
+  websiteUrl: ""
+};
+
+export const mobileSlugFromPath = (pathname: string | null | undefined): string => {
+  if (!pathname) return "";
+  const parts = pathname.split("/").filter(Boolean);
+  const idx = parts.indexOf("mobile");
+  if (idx === -1) return "";
+  return parts[idx + 1] || "dashboard";
 };
 
 export const linkTypeToImage = (linkType?: string, text?: string): string => {
@@ -55,7 +102,12 @@ export const linkTypeToImage = (linkType?: string, text?: string): string => {
   }
 };
 
-export const linkTypeToRoute = (linkType?: string, linkData?: string): string | null => {
+export const linkTypeToRoute = (
+  linkType?: string,
+  linkData?: string,
+  text?: string,
+  url?: string
+): string | null => {
   switch (linkType) {
     case "groups": return "/mobile/groups";
     case "directory": return "/mobile/community";
@@ -68,13 +120,26 @@ export const linkTypeToRoute = (linkType?: string, linkData?: string): string | 
     case "votd": return "/mobile/votd";
     case "sermons": return "/mobile/sermons";
     case "stream": return "/mobile/stream";
-    case "url": return linkData || "/mobile/dashboard";
+    case "registrations": return "/mobile/registrations";
+    case "page": {
+      const id = url || linkData || "";
+      const params = new URLSearchParams();
+      if (id) params.set("id", id);
+      if (text) params.set("title", text);
+      const qs = params.toString();
+      return qs ? `/mobile/page?${qs}` : "/mobile/page";
+    }
+    case "url": {
+
+      const target = url || linkData || "";
+      return target || null;
+    }
     default: return null;
   }
 };
 
 export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => {
-  if (itemIcon) return itemIcon.split("_").join("-");
+  if (itemIcon) return itemIcon;
   switch ((linkType || "").toLowerCase()) {
     case "groups": return "groups";
     case "directory": return "people";

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Icon, LinearProgress, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, Icon, LinearProgress, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, DateHelper } from "@churchapps/apphelper";
+import { useQuery } from "@tanstack/react-query";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -21,26 +22,18 @@ interface SignupPlanData {
 export const VolunteerPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const [signupPlans, setSignupPlans] = useState<SignupPlanData[] | null>(null);
+  const churchId = config?.church?.id;
 
-  useEffect(() => {
-    let cancelled = false;
-    const churchId = config?.church?.id;
-    if (!churchId) {
-      setSignupPlans([]);
-      return;
-    }
-    ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi")
-      .then((data: SignupPlanData[]) => {
-        if (!cancelled) setSignupPlans(Array.isArray(data) ? data : []);
-      })
-      .catch(() => {
-        if (!cancelled) setSignupPlans([]);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [config?.church?.id]);
+  const { data: signupPlans = null } = useQuery<SignupPlanData[]>({
+    queryKey: ["/plans/public/signup/" + churchId, "DoingApi-anon"],
+    queryFn: async () => {
+      const data = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!churchId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
+  });
 
   const getSlots = (positions: SignupPlanData["positions"]) => {
     const total = positions.reduce((s, p) => s + (p.count || 0), 0);
@@ -48,20 +41,15 @@ export const VolunteerPage = ({ config }: Props) => {
     return { total, filled, remaining: Math.max(0, total - filled) };
   };
 
-  const getDescription = (item: SignupPlanData) => {
-    const parts: string[] = [];
-    if (item.times?.length) parts.push(item.times.map((t) => t.displayName).filter(Boolean).join(", "));
-    if (item.positions?.length) {
-      const posNames = item.positions.map((p) => p.name).filter(Boolean).slice(0, 3).join(", ");
-      if (posNames) parts.push(posNames);
-    }
-    return parts.join(" \u00b7 ");
+  const getTimesLabel = (item: SignupPlanData) => {
+    if (!item.times?.length) return "";
+    return item.times.map((t) => t.displayName).filter(Boolean).join(", ");
   };
 
   const renderCard = (item: SignupPlanData) => {
     const { total, filled, remaining } = getSlots(item.positions);
     const progress = total > 0 ? (filled / total) * 100 : 0;
-    const description = getDescription(item);
+    const timesLabel = getTimesLabel(item);
     const isFull = remaining === 0;
 
     return (
@@ -71,7 +59,7 @@ export const VolunteerPage = ({ config }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
@@ -81,22 +69,8 @@ export const VolunteerPage = ({ config }: Props) => {
             </Typography>
             <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
               {DateHelper.prettyDate(DateHelper.toDate(item.plan.serviceDate))}
+              {timesLabel ? ` \u00b7 ${timesLabel}` : ""}
             </Typography>
-            {description && (
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: tc.textSecondary,
-                  mt: 0.5,
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}
-              >
-                {description}
-              </Typography>
-            )}
           </Box>
           <Box
             sx={{
@@ -107,7 +81,7 @@ export const VolunteerPage = ({ config }: Props) => {
               color: isFull ? tc.textSecondary : tc.success,
               fontSize: 11,
               fontWeight: 600,
-              whiteSpace: "nowrap",
+              whiteSpace: "nowrap"
             }}
           >
             {isFull ? "Full" : `${remaining} open`}
@@ -123,7 +97,7 @@ export const VolunteerPage = ({ config }: Props) => {
                 height: 6,
                 borderRadius: 3,
                 bgcolor: tc.border,
-                "& .MuiLinearProgress-bar": { bgcolor: tc.primary },
+                "& .MuiLinearProgress-bar": { bgcolor: tc.primary }
               }}
             />
             <Typography sx={{ fontSize: 11, color: tc.textSecondary, mt: 0.5 }}>
@@ -132,23 +106,48 @@ export const VolunteerPage = ({ config }: Props) => {
           </Box>
         )}
 
-        <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            disabled={isFull}
-            onClick={() => router.push(`/mobile/volunteer/${item.plan.id}`)}
-            sx={{
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              textTransform: "none",
-              fontWeight: 500,
-              "&:hover": { bgcolor: tc.primary },
-            }}
-          >
-            {isFull ? "Full" : "Volunteer"}
-          </Button>
-        </Box>
+        {item.positions?.length > 0 && (
+          <Box sx={{ mt: 1.5, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {item.positions.map((p) => {
+              const posOpen = Math.max(0, (p.count || 0) - (p.filledCount || 0));
+              const posFull = posOpen === 0;
+              return (
+                <Chip
+                  key={p.id || p.name}
+                  label={`${p.name} (${posOpen} open)`}
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    bgcolor: posFull ? `${tc.textSecondary}1A` : tc.primaryLight,
+                    color: posFull ? tc.textSecondary : tc.primary,
+                    "& .MuiChip-label": { px: 1 }
+                  }}
+                />
+              );
+            })}
+          </Box>
+        )}
+
+        {!isFull && (
+          <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="contained"
+              onClick={() => router.push(`/mobile/volunteer/${item.plan.id}`)}
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                textTransform: "none",
+                fontWeight: 500,
+                "&:hover": { bgcolor: tc.primary }
+              }}
+            >
+              View & Sign Up
+            </Button>
+          </Box>
+        )}
       </Box>
     );
   };
@@ -160,7 +159,7 @@ export const VolunteerPage = ({ config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Skeleton variant="text" width="60%" height={22} />
@@ -177,7 +176,7 @@ export const VolunteerPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -189,25 +188,22 @@ export const VolunteerPage = ({ config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>handshake</Icon>
+        <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-        No opportunities right now
+        Browse Opportunities
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        Check back soon for new ways to serve.
+        There are no volunteer opportunities available right now. Check back soon!
       </Typography>
     </Box>
   );
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
-        Volunteer
-      </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
         {signupPlans === null && [0, 1].map(renderSkeleton)}
         {signupPlans !== null && signupPlans.length === 0 && renderEmpty()}
