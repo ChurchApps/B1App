@@ -52,7 +52,7 @@ export const VotdPage = () => {
     const shareData = {
       title: "Verse of the Day",
       text: "Check out today's Verse of the Day",
-      url: imageUrl || window.location.href,
+      url: imageUrl || window.location.href
     };
     try {
       if (typeof navigator !== "undefined" && (navigator as any).share) {
@@ -82,7 +82,7 @@ export const VotdPage = () => {
         minHeight: 240,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "center"
       }}>
         {isClient && imageUrl && !imageError ? (
           <>
@@ -92,7 +92,7 @@ export const VotdPage = () => {
                 sx={{ position: "absolute", top: "50%", left: "50%", mt: "-16px", ml: "-16px", color: tc.text }}
               />
             )}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img
               src={imageUrl}
               alt="Verse of the Day"
@@ -105,7 +105,7 @@ export const VotdPage = () => {
                 inset: 0,
                 width: "100%",
                 height: "100%",
-                objectFit: "fill",
+                objectFit: "fill"
               }}
             />
           </>
@@ -128,7 +128,7 @@ export const VotdPage = () => {
         justifyContent: "flex-end",
         px: `${mobileTheme.spacing.md}px`,
         py: `${mobileTheme.spacing.sm}px`,
-        gap: 1,
+        gap: 1
       }}>
         {shareMessage && (
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
@@ -152,7 +152,7 @@ export const VotdPage = () => {
             color: tc.onPrimary,
             cursor: "pointer",
             transition: "opacity 150ms ease",
-            "&:hover": { opacity: 0.9 },
+            "&:hover": { opacity: 0.9 }
           }}
         >
           <Icon sx={{ fontSize: 18, color: tc.onPrimary }}>share</Icon>

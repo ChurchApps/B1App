@@ -19,7 +19,7 @@ import {
   Tab,
   Tabs,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
@@ -50,7 +50,7 @@ const fieldDefinitions: { key: string; label: string }[] = [
   { key: "contactInfo.zip", label: "Zip" },
   { key: "contactInfo.homePhone", label: "Home Phone" },
   { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
-  { key: "contactInfo.workPhone", label: "Work Phone" },
+  { key: "contactInfo.workPhone", label: "Work Phone" }
 ];
 
 const emptyPerson: PersonInterface = {
@@ -64,8 +64,8 @@ const emptyPerson: PersonInterface = {
     address2: "",
     city: "",
     state: "",
-    zip: "",
-  },
+    zip: ""
+  }
 } as PersonInterface;
 
 interface HouseholdMember extends PersonInterface {
@@ -165,7 +165,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const [snack, setSnack] = useState<{ open: boolean; msg: string; severity: "success" | "error" | "info" }>({
     open: false,
     msg: "",
-    severity: "success",
+    severity: "success"
   });
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [savingPrivacy, setSavingPrivacy] = useState(false);
@@ -193,7 +193,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const { data: serverPerson, isLoading: personLoading } = useQuery<PersonWithPrivacy>({
     queryKey: ["person", personId],
     queryFn: () => ApiHelper.get("/people/" + personId, "MembershipApi"),
-    enabled: !!personId,
+    enabled: !!personId
   });
 
   const householdId = serverPerson?.householdId;
@@ -204,13 +204,13 @@ export const ProfileEditPage = ({ config }: Props) => {
       const data = await ApiHelper.get(`/people/household/${householdId}`, "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: !!householdId,
+    enabled: !!householdId
   });
 
   const { data: visibilityPrefs } = useQuery<VisibilityPreferenceInterface>({
     queryKey: ["visibilityPreferences", "my"],
     queryFn: () => ApiHelper.get("/visibilityPreferences/my", "MembershipApi"),
-    enabled: !!personId,
+    enabled: !!personId
   });
 
   useEffect(() => {
@@ -224,7 +224,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       ...emptyPerson,
       ...serverPerson,
       name: { ...emptyPerson.name, ...(serverPerson.name || {}) },
-      contactInfo: { ...emptyPerson.contactInfo, ...(serverPerson.contactInfo || {}) },
+      contactInfo: { ...emptyPerson.contactInfo, ...(serverPerson.contactInfo || {}) }
     };
     setPerson(merged);
     setInitial(JSON.parse(JSON.stringify(merged)));
@@ -320,7 +320,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         createdByLabel: displayName,
         title: `Profile changes for ${displayName || "member"}`,
         status: "Open",
-        data: JSON.stringify(profileChanges),
+        data: JSON.stringify(profileChanges)
       };
 
       if (churchId) {
@@ -382,7 +382,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       setOptedOutLocal(!!person.optedOut);
       setInitialOptedOut(!!person.optedOut);
     }
-  }, [person?.optedOut]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [person?.optedOut]);
 
   // Account tab handlers
   const handleSaveDisplayName = async () => {
@@ -471,7 +471,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           ...(visibilityPrefs || {}),
           address: addressVis,
           phoneNumber: phoneVis,
-          email: emailVis,
+          email: emailVis
         };
         tasks.push(ApiHelper.post("/visibilityPreferences", [payload], "MembershipApi"));
       }
@@ -504,7 +504,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     isModified(key)
       ? {
         "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.warning, borderWidth: 2 },
-        "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: tc.warning },
+        "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: tc.warning }
       }
       : {}
   );
@@ -519,7 +519,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         position: "absolute",
         top: 10,
         right: 12,
-        pointerEvents: "none",
+        pointerEvents: "none"
       }}
       aria-hidden
     />
@@ -533,7 +533,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         gap: `${mobileTheme.spacing.sm}px`,
         borderBottom: `1px solid ${tc.border}`,
         pb: 1,
-        mb: 2,
+        mb: 2
       }}
     >
       {icon && <Icon sx={{ color: tc.primary, fontSize: 24 }}>{icon}</Icon>}
@@ -552,7 +552,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           minHeight: "100%",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         <CircularProgress sx={{ color: tc.primary }} />
@@ -598,7 +598,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           display: "flex",
           alignItems: "center",
           gap: `${mobileTheme.spacing.md}px`,
-          ...(isModified("photo") ? { outline: `2px solid ${tc.warning}` } : {}),
+          ...(isModified("photo") ? { outline: `2px solid ${tc.warning}` } : {})
         }}
       >
         <Avatar
@@ -623,7 +623,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               borderColor: tc.primary,
               color: tc.primary,
               textTransform: "none",
-              borderRadius: `${mobileTheme.radius.md}px`,
+              borderRadius: `${mobileTheme.radius.md}px`
             }}
           >
             Change Photo
@@ -648,7 +648,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Name")}
@@ -666,7 +666,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Contact")}
@@ -683,7 +683,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Address")}
@@ -705,7 +705,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Phone")}
@@ -728,7 +728,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Current Household", "people")}
@@ -760,7 +760,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                   py: 1,
                   borderRadius: `${mobileTheme.radius.md}px`,
                   cursor: "pointer",
-                  "&:hover": { bgcolor: tc.iconBackground },
+                  "&:hover": { bgcolor: tc.iconBackground }
                 }}
               >
                 <Avatar
@@ -789,7 +789,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Add Family Member", "person_add")}
@@ -818,7 +818,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               px: 3,
               py: 1.6,
               "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
             Add
@@ -841,7 +841,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                     bgcolor: `${tc.warning}22`,
                     borderRadius: `${mobileTheme.radius.md}px`,
                     px: 1.5,
-                    py: 1,
+                    py: 1
                   }}
                 >
                   <Icon sx={{ color: tc.warning, fontSize: 20 }}>person_outline</Icon>
@@ -871,7 +871,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Display Name", "person")}
@@ -908,7 +908,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 textTransform: "none",
                 py: 1.1,
                 "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-                "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+                "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
               }}
             >
               {savingAcctName ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
@@ -924,7 +924,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Change Email", "email")}
@@ -956,7 +956,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               textTransform: "none",
               py: 1.1,
               "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
             {savingEmail ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
@@ -971,7 +971,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Change Password", "lock")}
@@ -1014,7 +1014,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               textTransform: "none",
               py: 1.1,
               "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
             {savingPassword ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
@@ -1030,7 +1030,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     label: string,
     value: VisibilityScope,
     onChange: (v: VisibilityScope) => void,
-    id: string,
+    id: string
   ) => (
     <FormControl fullWidth sx={{ mt: 1 }}>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
@@ -1055,7 +1055,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         {sectionHeader("Visibility Preferences", "visibility")}
@@ -1071,7 +1071,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             justifyContent: "space-between",
             py: 1.5,
             borderBottom: `1px solid ${tc.border}`,
-            mb: 2,
+            mb: 2
           }}
         >
           <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>
@@ -1100,7 +1100,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               textTransform: "none",
               py: 1.1,
               "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
             {savingPrivacy ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
@@ -1114,7 +1114,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           bgcolor: tc.iconBackground,
           borderRadius: `${mobileTheme.radius.lg}px`,
           p: `${mobileTheme.spacing.md}px`,
-          mt: `${mobileTheme.spacing.md}px`,
+          mt: `${mobileTheme.spacing.md}px`
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
@@ -1158,7 +1158,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           overflow: "hidden",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Tabs
@@ -1175,9 +1175,9 @@ export const ProfileEditPage = ({ config }: Props) => {
               textTransform: "none",
               fontWeight: 500,
               fontSize: 14,
-              color: tc.textSecondary,
+              color: tc.textSecondary
             },
-            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
+            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
           }}
         >
           <Tab
@@ -1210,7 +1210,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             border: `1px solid ${tc.warning}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
             p: `${mobileTheme.spacing.md}px`,
-            mt: `${mobileTheme.spacing.md}px`,
+            mt: `${mobileTheme.spacing.md}px`
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
@@ -1256,7 +1256,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 borderColor: tc.textMuted,
                 color: tc.text,
                 textTransform: "none",
-                borderRadius: `${mobileTheme.radius.md}px`,
+                borderRadius: `${mobileTheme.radius.md}px`
               }}
             >
               Cancel
@@ -1272,7 +1272,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 textTransform: "none",
                 fontWeight: 600,
                 "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-                "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+                "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
               }}
             >
               {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Submit for Approval"}

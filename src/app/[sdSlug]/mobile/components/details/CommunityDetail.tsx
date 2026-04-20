@@ -7,7 +7,7 @@ import {
   Button,
   Icon,
   Skeleton,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
@@ -39,7 +39,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
       const data = await ApiHelper.get(`/people/${id}`, "MembershipApi");
       return data || null;
     },
-    enabled: !!id,
+    enabled: !!id
   });
 
   const householdId = personData?.householdId;
@@ -49,7 +49,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
       const hh = await ApiHelper.get(`/people/household/${householdId}`, "MembershipApi");
       return Array.isArray(hh) ? hh : [];
     },
-    enabled: !!householdId,
+    enabled: !!householdId
   });
 
   const person: PersonWithPrivacy | null | undefined = personLoading ? undefined : (personData ?? null);
@@ -105,7 +105,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          textAlign: "center",
+          textAlign: "center"
         }}
       >
         {photo ? (
@@ -119,7 +119,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
               borderRadius: "60px",
               objectFit: "cover",
               border: "4px solid rgba(255,255,255,0.3)",
-              mb: `${mobileTheme.spacing.md}px`,
+              mb: `${mobileTheme.spacing.md}px`
             }}
           />
         ) : (
@@ -136,7 +136,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
               fontWeight: 700,
               fontSize: 44,
               border: "4px solid rgba(255,255,255,0.3)",
-              mb: `${mobileTheme.spacing.md}px`,
+              mb: `${mobileTheme.spacing.md}px`
             }}
           >
             {getInitials(person)}
@@ -148,7 +148,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
             fontWeight: 700,
             color: "#FFFFFF",
             lineHeight: 1.2,
-            textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+            textShadow: "0 1px 2px rgba(0,0,0,0.3)"
           }}
         >
           {person?.name?.display || "Unknown"}
@@ -158,7 +158,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
             fontSize: 14,
             color: "rgba(255,255,255,0.9)",
             mt: "4px",
-            textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+            textShadow: "0 1px 2px rgba(0,0,0,0.3)"
           }}
         >
           {(person as any)?.membershipStatus || "Church Member"}
@@ -172,7 +172,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
     label,
     onClick,
     ariaLabel,
-    background,
+    background
   }: {
     icon: string;
     label: string;
@@ -196,7 +196,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         alignItems: "center",
         gap: "8px",
         cursor: "pointer",
-        minWidth: 72,
+        minWidth: 72
       }}
       aria-label={ariaLabel}
     >
@@ -210,7 +210,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: mobileTheme.shadows.md,
+          boxShadow: mobileTheme.shadows.md
         }}
       >
         <Icon sx={{ fontSize: 24 }}>{icon}</Icon>
@@ -275,7 +275,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           display: "flex",
           justifyContent: "center",
           gap: `${mobileTheme.spacing.md}px`,
-          flexWrap: "wrap",
+          flexWrap: "wrap"
         }}
       >
         {actions}
@@ -288,7 +288,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
     label,
     value,
     onClick,
-    subValue,
+    subValue
   }: {
     icon: string;
     label: string;
@@ -303,11 +303,11 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
       onKeyDown={
         onClick
           ? (e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                onClick();
-              }
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onClick();
             }
+          }
           : undefined
       }
       sx={{
@@ -319,7 +319,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         px: "16px",
         py: "16px",
         cursor: onClick ? "pointer" : "default",
-        "&:hover": onClick ? { boxShadow: mobileTheme.shadows.md } : undefined,
+        "&:hover": onClick ? { boxShadow: mobileTheme.shadows.md } : undefined
       }}
     >
       <Box
@@ -332,7 +332,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
-          mr: "16px",
+          mr: "16px"
         }}
       >
         <Icon sx={{ fontSize: 24, color: tc.primary }}>{icon}</Icon>
@@ -347,7 +347,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
             fontWeight: 600,
             color: tc.text,
             wordBreak: "break-word",
-            whiteSpace: "pre-wrap",
+            whiteSpace: "pre-wrap"
           }}
         >
           {value}
@@ -456,7 +456,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
                   px: "16px",
                   py: "12px",
                   cursor: "pointer",
-                  "&:hover": { boxShadow: mobileTheme.shadows.md },
+                  "&:hover": { boxShadow: mobileTheme.shadows.md }
                 }}
               >
                 {hphoto ? (
@@ -480,7 +480,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
                       fontWeight: 700,
                       fontSize: 16,
                       flexShrink: 0,
-                      mr: "16px",
+                      mr: "16px"
                     }}
                   >
                     {getInitials(h)}
@@ -517,7 +517,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexShrink: 0,
+                    flexShrink: 0
                   }}
                 >
                   <Icon sx={{ fontSize: 20 }}>chevron_right</Icon>
@@ -539,7 +539,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          textAlign: "center",
+          textAlign: "center"
         }}
       >
         <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
@@ -558,7 +558,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           p: `${mobileTheme.spacing.lg}px`,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         <Skeleton variant="circular" width={120} height={120} />
@@ -575,7 +575,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -587,7 +587,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>person_off</Icon>
@@ -606,7 +606,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           color: tc.primary,
           textTransform: "none",
           fontWeight: 500,
-          borderRadius: `${mobileTheme.radius.md}px`,
+          borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
         Back to Community

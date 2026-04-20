@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { useEngagementSort } from "../../hooks/useEngagementSort";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -15,28 +16,7 @@ interface Props {
 
 const ENGAGEMENT_STORAGE_KEY = "b1app-group-view-counts";
 
-const readViewCounts = (): Record<string, number> => {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = window.localStorage.getItem(ENGAGEMENT_STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === "object" ? parsed : {};
-  } catch {
-    return {};
-  }
-};
-
-const writeViewCounts = (counts: Record<string, number>) => {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(ENGAGEMENT_STORAGE_KEY, JSON.stringify(counts));
-  } catch {
-    /* ignore quota / private-mode failures */
-  }
-};
-
-export const GroupsPage = ({ config }: Props) => {
+export const GroupsPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const loggedIn = !!UserHelper.user?.firstName;
@@ -47,7 +27,7 @@ export const GroupsPage = ({ config }: Props) => {
       const data = await ApiHelper.get("/groups/my", "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: loggedIn,
+    enabled: loggedIn
   });
 
   const { data: upcomingEvents = [] } = useQuery<EventInterface[]>({
@@ -56,47 +36,25 @@ export const GroupsPage = ({ config }: Props) => {
       const data = await ApiHelper.get("/events/registerable", "ContentApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: loggedIn,
+    enabled: loggedIn
   });
 
   // Force an empty-state render for logged-out users (match previous behavior).
   const effectiveGroups = loggedIn ? groups : [];
 
-  // Engagement store — localStorage-backed view counts, hydrated once on mount.
-  const [viewCounts, setViewCounts] = useState<Record<string, number>>({});
+  const getGroupId = useCallback((g: GroupInterface) => g.id || "", []);
+  const { sorted: orderedGroups, increment: incrementViewCount } = useEngagementSort(
+    effectiveGroups,
+    ENGAGEMENT_STORAGE_KEY,
+    getGroupId
+  );
 
-  useEffect(() => {
-    setViewCounts(readViewCounts());
-  }, []);
-
-  const incrementViewCount = useCallback((groupId: string) => {
-    if (!groupId) return;
-    setViewCounts((prev) => {
-      const next = { ...prev, [groupId]: (prev[groupId] || 0) + 1 };
-      writeViewCounts(next);
-      return next;
-    });
-  }, []);
-
-  // Sort descending by view count; ties preserve original (server) order.
-  const sortedGroups = useMemo(() => {
-    if (!Array.isArray(effectiveGroups) || effectiveGroups.length === 0) {
-      return { hero: null as GroupInterface | null, featured: [] as GroupInterface[], regular: [] as GroupInterface[] };
-    }
-    const decorated = effectiveGroups.map((group, index) => ({
-      group,
-      index,
-      count: viewCounts[group.id || ""] || 0,
-    }));
-    decorated.sort((a, b) => (a.count === b.count ? a.index - b.index : b.count - a.count));
-    const ordered = decorated.map((d) => d.group);
-
-    // Hero = top group; Featured grid = next 2; Regular = remainder.
-    const hero = ordered[0] || null;
-    const featured = ordered.slice(1, 3);
-    const regular = ordered.slice(3);
-    return { hero, featured, regular };
-  }, [effectiveGroups, viewCounts]);
+  // Hero = top group; Featured grid = next 2; Regular = remainder.
+  const sortedGroups = useMemo(() => ({
+    hero: orderedGroups[0] || (null as GroupInterface | null),
+    featured: orderedGroups.slice(1, 3),
+    regular: orderedGroups.slice(3)
+  }), [orderedGroups]);
 
   const formatEventTime = (event: EventInterface) => {
     if (!event.start) return "";
@@ -147,7 +105,7 @@ export const GroupsPage = ({ config }: Props) => {
           bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
           transition: "box-shadow 150ms ease, transform 150ms ease",
           "&:hover": { boxShadow: mobileTheme.shadows.lg },
-          "&:active": { transform: "scale(0.995)" },
+          "&:active": { transform: "scale(0.995)" }
         }}
       >
         {hasPhoto ? (
@@ -169,7 +127,7 @@ export const GroupsPage = ({ config }: Props) => {
             right: 0,
             bottom: 0,
             p: `${mobileTheme.spacing.md}px`,
-            background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)",
+            background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)"
           }}
         >
           <Typography sx={{ color: "#FFFFFF", fontSize: 24, fontWeight: 700, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
@@ -208,7 +166,7 @@ export const GroupsPage = ({ config }: Props) => {
           bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
           transition: "box-shadow 150ms ease, transform 150ms ease",
           "&:hover": { boxShadow: mobileTheme.shadows.md },
-          "&:active": { transform: "scale(0.995)" },
+          "&:active": { transform: "scale(0.995)" }
         }}
       >
         {hasPhoto ? (
@@ -231,7 +189,7 @@ export const GroupsPage = ({ config }: Props) => {
             alignItems: "flex-end",
             justifyContent: "center",
             p: "12px",
-            background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0) 100%)",
+            background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0) 100%)"
           }}
         >
           <Typography
@@ -245,7 +203,7 @@ export const GroupsPage = ({ config }: Props) => {
               textOverflow: "ellipsis",
               display: "-webkit-box",
               WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
+              WebkitBoxOrient: "vertical"
             }}
           >
             {group.name}
@@ -282,7 +240,7 @@ export const GroupsPage = ({ config }: Props) => {
           transition: "box-shadow 150ms ease, transform 150ms ease",
           overflow: "hidden",
           "&:hover": { boxShadow: mobileTheme.shadows.md },
-          "&:active": { transform: "scale(0.995)" },
+          "&:active": { transform: "scale(0.995)" }
         }}
       >
         <Box
@@ -295,7 +253,7 @@ export const GroupsPage = ({ config }: Props) => {
             bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "center"
           }}
         >
           {hasPhoto ? (
@@ -320,7 +278,7 @@ export const GroupsPage = ({ config }: Props) => {
               textOverflow: "ellipsis",
               display: "-webkit-box",
               WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
+              WebkitBoxOrient: "vertical"
             }}
           >
             {group.name}
@@ -344,7 +302,7 @@ export const GroupsPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
         px: `${mobileTheme.spacing.md}px`,
-        py: "12px",
+        py: "12px"
       }}
     >
       <Skeleton variant="rounded" width={48} height={48} sx={{ borderRadius: `${mobileTheme.radius.md}px` }} />
@@ -363,7 +321,7 @@ export const GroupsPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -375,7 +333,7 @@ export const GroupsPage = ({ config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>groups</Icon>
@@ -394,7 +352,7 @@ export const GroupsPage = ({ config }: Props) => {
           color: tc.primary,
           textTransform: "none",
           fontWeight: 500,
-          borderRadius: `${mobileTheme.radius.md}px`,
+          borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
         Explore Community
@@ -430,7 +388,7 @@ export const GroupsPage = ({ config }: Props) => {
                 sx={{
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: `${mobileTheme.spacing.sm}px`,
+                  gap: `${mobileTheme.spacing.sm}px`
                 }}
               >
                 {featured.map((g) => renderFeatured(g))}
@@ -468,24 +426,33 @@ export const GroupsPage = ({ config }: Props) => {
                   p: `${mobileTheme.spacing.md}px`,
                   display: "flex",
                   flexDirection: "column",
-                  gap: 1,
+                  gap: 1
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
                   <Box sx={{
-                    width: 40, height: 40, borderRadius: "20px",
+                    width: 40,
+                    height: 40,
+                    borderRadius: "20px",
                     bgcolor: tc.primaryLight,
                     color: tc.primary,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0
                   }}>
                     <Icon sx={{ fontSize: 22 }}>event</Icon>
                   </Box>
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography sx={{
-                      fontSize: 15, fontWeight: 600, color: tc.text,
-                      overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
-                      WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: tc.text,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical"
                     }}>
                       {event.title}
                     </Typography>
@@ -494,9 +461,15 @@ export const GroupsPage = ({ config }: Props) => {
                     </Typography>
                     {event.description && (
                       <Typography sx={{
-                        fontSize: 13, color: tc.textMuted, mt: 0.5, lineHeight: 1.4,
-                        overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box",
-                        WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+                        fontSize: 13,
+                        color: tc.textMuted,
+                        mt: 0.5,
+                        lineHeight: 1.4,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical"
                       }}>
                         {event.description}
                       </Typography>
@@ -515,7 +488,7 @@ export const GroupsPage = ({ config }: Props) => {
                       fontWeight: 600,
                       borderRadius: `${mobileTheme.radius.md}px`,
                       px: 2,
-                      "&:hover": { bgcolor: tc.success },
+                      "&:hover": { bgcolor: tc.success }
                     }}
                   >
                     Register

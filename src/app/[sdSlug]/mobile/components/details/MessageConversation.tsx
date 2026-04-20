@@ -69,7 +69,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       }
       return null;
     },
-    enabled: !!id,
+    enabled: !!id
   });
   const person = personData ?? null;
 
@@ -79,14 +79,14 @@ export const MessageConversation = ({ id, config }: Props) => {
       const pm: PrivateMessageRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
       const match = Array.isArray(pm)
         ? pm.find(
-            (c) =>
-              (c.fromPersonId === myPersonId && c.toPersonId === id) ||
+          (c) =>
+            (c.fromPersonId === myPersonId && c.toPersonId === id) ||
               (c.toPersonId === myPersonId && c.fromPersonId === id)
-          )
+        )
         : null;
       return match?.conversationId ?? null;
     },
-    enabled: !!id && !!myPersonId && !conversationIdParam,
+    enabled: !!id && !!myPersonId && !conversationIdParam
   });
 
   const scrollToBottom = React.useCallback(() => {
@@ -109,7 +109,7 @@ export const MessageConversation = ({ id, config }: Props) => {
   const {
     data: serverMessages,
     isError: messagesErrored,
-    refetch: refetchMessages,
+    refetch: refetchMessages
   } = useQuery<MessageInterface[]>({
     queryKey: ["mobile-message-conversation", conversationId],
     queryFn: async () => {
@@ -149,7 +149,7 @@ export const MessageConversation = ({ id, config }: Props) => {
     // Gate polling on tab visibility so background tabs don't hammer the API.
     refetchInterval: () =>
       typeof document !== "undefined" && document.visibilityState === "visible" ? 5000 : false,
-    refetchIntervalInBackground: false,
+    refetchIntervalInBackground: false
   });
 
   React.useEffect(() => {
@@ -160,8 +160,7 @@ export const MessageConversation = ({ id, config }: Props) => {
   React.useEffect(() => {
     if (!serverMessages || pending.length === 0) return;
     setPending((prev) =>
-      prev.filter((p) => !serverMessages.some((s) => s.content === p.content && s.personId === p.personId))
-    );
+      prev.filter((p) => !serverMessages.some((s) => s.content === p.content && s.personId === p.personId)));
   }, [serverMessages, pending.length]);
 
   const messages: MessageInterface[] | null = React.useMemo(() => {
@@ -191,8 +190,8 @@ export const MessageConversation = ({ id, config }: Props) => {
         contentType: "privateMessage",
         contentId: myPersonId,
         title: (myDisplayName || "Private") + " Private Message",
-        visibility: "hidden",
-      },
+        visibility: "hidden"
+      }
     ];
     const convData: any[] = await ApiHelper.post("/conversations", convParams, "MessagingApi");
     const newConvId: string | undefined = convData?.[0]?.id;
@@ -233,7 +232,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       content,
       displayName: myDisplayName,
       personId: myPersonId,
-      timeSent: new Date(),
+      timeSent: new Date()
     } as MessageInterface;
     setPending((prev) => [...prev, optimistic]);
     setText("");
@@ -276,7 +275,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       height: 36,
       borderRadius: "18px",
       flexShrink: 0,
-      overflow: "hidden",
+      overflow: "hidden"
     } as const;
     if (photo) {
       return <Box component="img" src={photo} alt={name} sx={{ ...common, objectFit: "cover" }} />;
@@ -291,7 +290,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 700,
-          fontSize: 13,
+          fontSize: 13
         }}
       >
         {getInitials(name)}
@@ -309,7 +308,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         sx={{
           display: "flex",
           justifyContent: mine ? "flex-end" : "flex-start",
-          mb: "6px",
+          mb: "6px"
         }}
       >
         <Box
@@ -323,7 +322,7 @@ export const MessageConversation = ({ id, config }: Props) => {
             boxShadow: mobileTheme.shadows.sm,
             wordBreak: "break-word",
             fontSize: 14,
-            lineHeight: 1.35,
+            lineHeight: 1.35
           }}
         >
           {bubbleName && (
@@ -335,7 +334,7 @@ export const MessageConversation = ({ id, config }: Props) => {
                 color: mine ? tc.onPrimary : tc.primary,
                 opacity: mine ? 0.9 : 1,
                 mb: "2px",
-                lineHeight: 1.2,
+                lineHeight: 1.2
               }}
             >
               {bubbleName}
@@ -358,7 +357,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         textAlign: "center",
         color: tc.textMuted,
         gap: "8px",
-        p: `${mobileTheme.spacing.lg}px`,
+        p: `${mobileTheme.spacing.lg}px`
       }}
     >
       <Box
@@ -369,7 +368,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         <ChatBubbleOutlineIcon sx={{ fontSize: 28, color: tc.primary }} />
@@ -387,7 +386,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         flexDirection: "column",
         height: "100%",
         minHeight: "100%",
-        bgcolor: tc.background,
+        bgcolor: tc.background
       }}
     >
       {/* Contextual row: who the conversation is with + start-new icon.
@@ -401,7 +400,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           px: `${mobileTheme.spacing.md}px`,
           py: "10px",
           bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`,
+          borderBottom: `1px solid ${tc.border}`
         }}
       >
         {renderAvatar()}
@@ -414,7 +413,7 @@ export const MessageConversation = ({ id, config }: Props) => {
             color: tc.text,
             overflow: "hidden",
             textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap"
           }}
         >
           {name}
@@ -425,7 +424,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           sx={{
             bgcolor: tc.iconBackground,
             color: tc.primary,
-            "&:hover": { bgcolor: tc.iconBackground },
+            "&:hover": { bgcolor: tc.iconBackground }
           }}
           size="small"
         >
@@ -441,7 +440,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           overflowY: "auto",
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "column"
         }}
       >
         {messages === null && (
@@ -463,7 +462,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           p: "10px",
           display: "flex",
           alignItems: "flex-end",
-          gap: "8px",
+          gap: "8px"
         }}
       >
         <TextField
@@ -486,11 +485,9 @@ export const MessageConversation = ({ id, config }: Props) => {
               bgcolor: tc.background,
               fontSize: 14,
               px: "12px",
-              py: "2px",
+              py: "2px"
             },
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: tc.border,
-            },
+            "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
           }}
         />
         <IconButton
@@ -503,7 +500,7 @@ export const MessageConversation = ({ id, config }: Props) => {
             "&:hover": { bgcolor: tc.primary },
             "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
             width: 40,
-            height: 40,
+            height: 40
           }}
         >
           {sending ? (

@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Box, CircularProgress, Icon, IconButton, Typography } from "@mui/material";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { navigateBack } from "../util";
 
 interface Props {
   config: ConfigurationInterface;
@@ -21,7 +22,7 @@ const INTERNAL_PATH_MAP: Array<{ match: RegExp; build: (id?: string) => string }
   { match: /^\/my\/groups\/?$/, build: () => "/mobile/groups" },
   { match: /^\/my\/plans\/?$/, build: () => "/mobile/plans" },
   { match: /^\/my\/plans\/([^/?#]+)\/?$/, build: (id) => `/mobile/plans/${id}` },
-  { match: /^\/groups\/details\/([^/?#]+)\/?$/, build: (id) => `/mobile/groups/${id}` },
+  { match: /^\/groups\/details\/([^/?#]+)\/?$/, build: (id) => `/mobile/groups/${id}` }
 ];
 
 const resolveInternalPath = (rawUrl: string): string | null => {
@@ -91,10 +92,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) router.back();
-    else router.push("/mobile/dashboard");
-  };
+  const handleBack = () => navigateBack(router, "/mobile/dashboard");
 
   // Internal-link interception via postMessage. The embedded B1 page (same
   // origin) can emit `{ type: "navigate", url }` and we'll rewrite
@@ -163,7 +161,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             borderRadius: `${mobileTheme.radius.xl}px`,
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Box
@@ -175,7 +173,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              mb: `${mobileTheme.spacing.md}px`,
+              mb: `${mobileTheme.spacing.md}px`
             }}
           >
             <Icon sx={{ fontSize: 32, color: tc.primary }}>public</Icon>
@@ -204,7 +202,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
               fontSize: 14,
               fontWeight: 600,
               cursor: "pointer",
-              "&:hover": { opacity: 0.9 },
+              "&:hover": { opacity: 0.9 }
             }}
           >
             <Icon sx={{ fontSize: 18 }}>open_in_new</Icon>
@@ -227,7 +225,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             borderRadius: `${mobileTheme.radius.xl}px`,
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Icon sx={{ fontSize: 32, color: tc.primary, mb: 1 }}>link_off</Icon>
@@ -243,7 +241,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
         display: "flex",
         flexDirection: "column",
         height: "100dvh",
-        bgcolor: tc.background,
+        bgcolor: tc.background
       }}
     >
       <Box
@@ -254,7 +252,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
           px: `${mobileTheme.spacing.md}px`,
           py: `${mobileTheme.spacing.sm}px`,
           bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`,
+          borderBottom: `1px solid ${tc.border}`
         }}
       >
         <IconButton aria-label="Back" onClick={handleBack} sx={{ color: tc.text }}>
@@ -268,7 +266,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             color: tc.text,
             overflow: "hidden",
             textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap"
           }}
         >
           {title}
@@ -294,7 +292,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             height: "100%",
             border: 0,
             bgcolor: tc.surface,
-            display: status === "error" ? "none" : "block",
+            display: status === "error" ? "none" : "block"
           }}
         />
         {status === "loading" && (
@@ -306,7 +304,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
               alignItems: "center",
               justifyContent: "center",
               bgcolor: tc.surface,
-              pointerEvents: "none",
+              pointerEvents: "none"
             }}
           >
             <CircularProgress size={32} sx={{ color: tc.primary }} />
@@ -321,7 +319,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
               alignItems: "center",
               justifyContent: "center",
               p: `${mobileTheme.spacing.md}px`,
-              bgcolor: tc.background,
+              bgcolor: tc.background
             }}
           >
             <Box
@@ -332,7 +330,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
                 p: `${mobileTheme.spacing.lg}px`,
                 textAlign: "center",
                 maxWidth: 320,
-                width: "100%",
+                width: "100%"
               }}
             >
               <Icon sx={{ fontSize: 32, color: tc.error, mb: 1 }}>error_outline</Icon>
@@ -354,7 +352,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
                   py: 1,
                   fontSize: 14,
                   fontWeight: 500,
-                  cursor: "pointer",
+                  cursor: "pointer"
                 }}
               >
                 Retry

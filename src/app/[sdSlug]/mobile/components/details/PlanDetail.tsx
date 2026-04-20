@@ -13,7 +13,7 @@ import {
   IconButton,
   Tab,
   Tabs,
-  Typography,
+  Typography
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ApiHelper, ArrayHelper } from "@churchapps/apphelper";
@@ -24,7 +24,7 @@ import type {
   PlanItemInterface,
   PositionInterface,
   TimeInterface,
-  VenuePlanItemsResponseInterface,
+  VenuePlanItemsResponseInterface
 } from "@churchapps/helpers";
 import { LessonsContentProvider } from "@churchapps/helpers";
 import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
@@ -48,7 +48,7 @@ const formatServiceDate = (date?: Date | string) => {
       weekday: "short",
       month: "short",
       day: "numeric",
-      year: "numeric",
+      year: "numeric"
     });
   } catch {
     return "";
@@ -65,7 +65,7 @@ const formatDateTime = (date?: Date | string) => {
       day: "numeric",
       year: "numeric",
       hour: "numeric",
-      minute: "2-digit",
+      minute: "2-digit"
     });
   } catch {
     return "";
@@ -148,7 +148,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         ApiHelper.get(`/planItems/plan/${id}`, "DoingApi").catch((): any[] => []),
         ApiHelper.get(`/positions/plan/${id}`, "DoingApi").catch((): any[] => []),
         ApiHelper.get(`/assignments/plan/${id}`, "DoingApi").catch((): any[] => []),
-        ApiHelper.get(`/times/plan/${id}`, "DoingApi").catch((): any[] => []),
+        ApiHelper.get(`/times/plan/${id}`, "DoingApi").catch((): any[] => [])
       ]);
       if (!planRes || !planRes.id) {
         return { plan: null, planItems: [], positions: [], assignments: [], times: [], people: [] };
@@ -169,10 +169,10 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         positions: Array.isArray(positionsRes) ? positionsRes : [],
         assignments: Array.isArray(assignmentsRes) ? assignmentsRes : [],
         times: Array.isArray(timesRes) ? timesRes : [],
-        people: peopleRes,
+        people: peopleRes
       };
     },
-    enabled: !!id && isLoggedIn,
+    enabled: !!id && isLoggedIn
   });
 
   const plan = planBundle?.plan ?? null;
@@ -189,7 +189,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     categories.forEach((category: string) => {
       groups.push({
         category: category || "Team",
-        positions: ArrayHelper.getAll(positions, "categoryName", category),
+        positions: ArrayHelper.getAll(positions, "categoryName", category)
       });
     });
     return groups;
@@ -242,7 +242,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
       }
       return { items: [] };
     },
-    enabled: isLoggedIn && !!plan && hasAssociatedContent && planItems.length === 0,
+    enabled: isLoggedIn && !!plan && hasAssociatedContent && planItems.length === 0
   });
   const showPreviewMode = hasAssociatedContent && planItems.length === 0 && (lessonPreview?.items?.length ?? 0) > 0;
 
@@ -260,7 +260,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         width: 40,
         height: 40,
         boxShadow: mobileTheme.shadows.sm,
-        "&:hover": { bgcolor: tc.surfaceVariant },
+        "&:hover": { bgcolor: tc.surfaceVariant }
       }}
     >
       <ArrowBackIcon sx={{ fontSize: 24 }} />
@@ -284,7 +284,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center",
-            mt: 4,
+            mt: 4
           }}
         >
           <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>lock</Icon>
@@ -325,7 +325,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center",
-            mt: 4,
+            mt: 4
           }}
         >
           <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>event_busy</Icon>
@@ -356,7 +356,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         minHeight: 140,
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "center"
       }}
     >
       <Box sx={{ width: "100%" }}>
@@ -394,7 +394,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           mb: `${mobileTheme.spacing.md}px`,
-          overflow: "hidden",
+          overflow: "hidden"
         }}
       >
         <Tabs
@@ -411,9 +411,9 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               fontWeight: 500,
               fontSize: 14,
               color: tc.textSecondary,
-              minHeight: 52,
+              minHeight: 52
             },
-            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
+            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
           }}
         >
           <Tab value="overview" label="Overview" />
@@ -435,7 +435,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                 py: `${mobileTheme.spacing.md}px`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
                 bgcolor: `${tc.primary}14`,
-                mb: `${mobileTheme.spacing.md}px`,
+                mb: `${mobileTheme.spacing.md}px`
               }}
             >
               <Icon sx={{ color: tc.primary, fontSize: 24 }}>assignment_ind</Icon>
@@ -452,7 +452,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                   px: 1.5,
                   py: 0.75,
                   minWidth: 32,
-                  textAlign: "center",
+                  textAlign: "center"
                 }}
               >
                 {myAssignments.length}
@@ -466,7 +466,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                   borderRadius: `${mobileTheme.radius.lg}px`,
                   boxShadow: mobileTheme.shadows.sm,
                   p: `${mobileTheme.spacing.lg}px`,
-                  textAlign: "center",
+                  textAlign: "center"
                 }}
               >
                 <Icon sx={{ fontSize: 48, color: tc.textSecondary, mb: 1 }}>assignment_late</Icon>
@@ -504,7 +504,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               bgcolor: tc.surface,
               borderRadius: `${mobileTheme.radius.lg}px`,
               boxShadow: mobileTheme.shadows.sm,
-              p: `${mobileTheme.spacing.md}px`,
+              p: `${mobileTheme.spacing.md}px`
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
@@ -530,7 +530,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.lg}px`,
             boxShadow: mobileTheme.shadows.sm,
-            p: `${mobileTheme.spacing.md}px`,
+            p: `${mobileTheme.spacing.md}px`
           }}
         >
           {planItems.length === 0 && showPreviewMode && lessonPreview?.items ? (
@@ -572,7 +572,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                 borderRadius: `${mobileTheme.radius.lg}px`,
                 boxShadow: mobileTheme.shadows.sm,
                 p: `${mobileTheme.spacing.lg}px`,
-                textAlign: "center",
+                textAlign: "center"
               }}
             >
               <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
@@ -612,7 +612,7 @@ const PositionDetailsCard = ({
   position,
   assignment,
   times,
-  onUpdate,
+  onUpdate
 }: {
   position: PositionInterface | null;
   assignment: AssignmentInterface;
@@ -657,7 +657,7 @@ const PositionDetailsCard = ({
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -676,7 +676,7 @@ const PositionDetailsCard = ({
             px: 1.25,
             py: 0.25,
             fontSize: 12,
-            fontWeight: 600,
+            fontWeight: 600
           }}
         >
           <Icon sx={{ fontSize: 14, color: "#FFFFFF" }}>{meta.icon}</Icon>
@@ -699,7 +699,7 @@ const PositionDetailsCard = ({
                   gap: 1,
                   p: 1,
                   borderRadius: `${mobileTheme.radius.md}px`,
-                  bgcolor: `${tc.primary}0D`,
+                  bgcolor: `${tc.primary}0D`
                 }}
               >
                 <Icon sx={{ color: tc.primary, fontSize: 18, mt: 0.25 }}>access_time</Icon>
@@ -739,7 +739,7 @@ const PositionDetailsCard = ({
               textTransform: "none",
               fontWeight: 600,
               bgcolor: tc.success,
-              "&:hover": { bgcolor: tc.success, filter: "brightness(0.95)" },
+              "&:hover": { bgcolor: tc.success, filter: "brightness(0.95)" }
             }}
           >
             Accept
@@ -760,7 +760,7 @@ const TeamGroupCard = ({
   category,
   positions,
   assignments,
-  people,
+  people
 }: {
   category: string;
   positions: PositionInterface[];
@@ -785,7 +785,7 @@ const TeamGroupCard = ({
         personId: person.id,
         name: displayName,
         position: position.name || "Position",
-        photo: person.photo,
+        photo: person.photo
       });
     });
   });
@@ -800,7 +800,7 @@ const TeamGroupCard = ({
           py: `${mobileTheme.spacing.sm}px`,
           bgcolor: `${tc.primary}0D`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          mb: `${mobileTheme.spacing.sm}px`,
+          mb: `${mobileTheme.spacing.sm}px`
         }}
       >
         <Icon sx={{ color: tc.primary, fontSize: 24, mr: 1 }}>group</Icon>
@@ -817,7 +817,7 @@ const TeamGroupCard = ({
             fontSize: 12,
             fontWeight: 600,
             minWidth: 24,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           {members.length}
@@ -831,7 +831,7 @@ const TeamGroupCard = ({
             borderRadius: `${mobileTheme.radius.lg}px`,
             border: `1px solid ${tc.border}`,
             p: `${mobileTheme.spacing.md}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Typography sx={{ fontSize: 13, color: tc.textMuted, fontStyle: "italic" }}>
@@ -850,7 +850,7 @@ const TeamGroupCard = ({
                 px: `${mobileTheme.spacing.md}px`,
                 py: `${mobileTheme.spacing.sm}px`,
                 display: "flex",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <Avatar

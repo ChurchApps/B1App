@@ -19,7 +19,7 @@ const INTERNAL_ROUTE_MAP: Array<{ match: RegExp; to: (m: RegExpMatchArray) => st
   { match: /\/my\/checkin(?:\/|$|\?)/, to: () => "/mobile/checkin" },
   { match: /\/groups\/details\/([\w-]+)/, to: (m) => `/mobile/groups?groupId=${m[1]}` },
   { match: /\/votd(?:\/|$|\?)/, to: () => "/mobile/votd" },
-  { match: /\/donate(?:\/|$|\?)/, to: () => "/mobile/donate" },
+  { match: /\/donate(?:\/|$|\?)/, to: () => "/mobile/donate" }
 ];
 
 const resolveInternalRoute = (url: string): string | null => {
@@ -156,7 +156,7 @@ export const LessonsPage = () => {
 
     window.addEventListener("message", handleMessage);
     return () => { window.removeEventListener("message", handleMessage); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [jwt, churchId]);
 
   // Error fallback: if the iframe never fires `load` within a reasonable
@@ -173,7 +173,7 @@ export const LessonsPage = () => {
     return () => {
       if (loadTimeoutRef.current) clearTimeout(loadTimeoutRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [iframeSrc]);
 
   const handleIframeLoad = () => {
@@ -208,7 +208,7 @@ export const LessonsPage = () => {
           borderRadius: `${mobileTheme.radius.xl}px`,
           p: 4,
           textAlign: "center",
-          boxShadow: mobileTheme.shadows.md,
+          boxShadow: mobileTheme.shadows.md
         }}>
           <Box sx={{
             width: 72,
@@ -218,7 +218,7 @@ export const LessonsPage = () => {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            mb: 2,
+            mb: 2
           }}>
             <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
           </Box>
@@ -241,7 +241,7 @@ export const LessonsPage = () => {
           borderRadius: `${mobileTheme.radius.xl}px`,
           p: 4,
           textAlign: "center",
-          boxShadow: mobileTheme.shadows.md,
+          boxShadow: mobileTheme.shadows.md
         }}>
           <Box sx={{
             width: 72,
@@ -251,7 +251,7 @@ export const LessonsPage = () => {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            mb: 2,
+            mb: 2
           }}>
             <Icon sx={{ fontSize: 36, color: tc.primary }}>error_outline</Icon>
           </Box>
@@ -274,7 +274,7 @@ export const LessonsPage = () => {
       bgcolor: tc.surface,
       minHeight: "100%",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     }}>
       {isClient && iframeSrc ? (
         <Box
@@ -289,7 +289,7 @@ export const LessonsPage = () => {
             flex: 1,
             minHeight: `calc(100vh - ${mobileTheme.headerHeight}px)`,
             border: 0,
-            bgcolor: tc.surface,
+            bgcolor: tc.surface
           }}
         />
       ) : (
@@ -299,7 +299,7 @@ export const LessonsPage = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          flex: 1,
+          flex: 1
         }}>
           <Box sx={{
             width: 72,
@@ -309,7 +309,7 @@ export const LessonsPage = () => {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            mb: 2,
+            mb: 2
           }}>
             <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
           </Box>

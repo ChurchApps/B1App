@@ -16,7 +16,7 @@ const STORAGE_KEY = "b1mobile.theme";
 const MobileThemeContext = createContext<MobileThemeContextValue>({
   mode: "light",
   toggle: () => {},
-  setMode: () => {},
+  setMode: () => {}
 });
 
 export const useMobileThemeMode = () => useContext(MobileThemeContext);
@@ -43,7 +43,7 @@ const lightVars = {
   "--mb-border-light": "#E5E7EB",
   "--mb-divider": "#E0E0E0",
   "--mb-icon-background": "#F6F6F8",
-  "--mb-disabled": "#BDBDBD",
+  "--mb-disabled": "#BDBDBD"
 };
 
 const darkVars = {
@@ -65,7 +65,7 @@ const darkVars = {
   "--mb-border-light": "#2D2D2D",
   "--mb-divider": "#333333",
   "--mb-icon-background": "#2D2D2D",
-  "--mb-disabled": "#555555",
+  "--mb-disabled": "#555555"
 };
 
 // Scope variables to `<html>` so MUI portals (Drawer, Modal, Menu) — which
@@ -86,7 +86,7 @@ const darkInputStyles = {
   "html[data-mobile-theme=\"dark\"] .MuiFilledInput-root": { backgroundColor: "var(--mb-surface-variant)" },
   "html[data-mobile-theme=\"dark\"] .MuiInput-underline:before": { borderBottomColor: "var(--mb-border)" },
   "html[data-mobile-theme=\"dark\"] .MuiSelect-icon": { color: "var(--mb-text-secondary)" },
-  "html[data-mobile-theme=\"dark\"] .MuiFormHelperText-root": { color: "var(--mb-text-secondary)" },
+  "html[data-mobile-theme=\"dark\"] .MuiFormHelperText-root": { color: "var(--mb-text-secondary)" }
 };
 
 const mobileThemeGlobalStyles = (
@@ -100,7 +100,7 @@ const mobileThemeGlobalStyles = (
       // the B1 app mounts `CssBaseline` inside its own layouts; the mobile
       // shell doesn't, so we zero the body margin here.
       "body": { margin: 0 },
-      ...darkInputStyles,
+      ...darkInputStyles
     }}
   />
 );

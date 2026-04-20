@@ -13,7 +13,7 @@ import {
   IconButton,
   Skeleton,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, DateHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -58,7 +58,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
       return Array.isArray(data) ? data : [];
     },
     enabled,
-    staleTime: 10 * 60 * 1000,
+    staleTime: 10 * 60 * 1000
   });
 
   const today = new Date();
@@ -136,7 +136,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
           textTransform: "none",
           fontWeight: 600,
           px: 2,
-          "&:hover": { bgcolor: tc.primary },
+          "&:hover": { bgcolor: tc.primary }
         }}
       >
         Add blockout date
@@ -191,7 +191,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
             borderRadius: `${mobileTheme.radius.md}px`,
             textTransform: "none",
             fontWeight: 600,
-            "&:hover": { bgcolor: tc.primary },
+            "&:hover": { bgcolor: tc.primary }
           }}
         >
           {saving ? "Saving..." : "Save"}
@@ -206,7 +206,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         <Typography sx={{ fontSize: 14, color: tc.disabled, fontWeight: 500 }}>
@@ -219,7 +219,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
           sx={{
             color: tc.primary,
             textTransform: "none",
-            fontWeight: 600,
+            fontWeight: 600
           }}
         >
           Add new
@@ -235,7 +235,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
             bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.lg}px`,
             boxShadow: mobileTheme.shadows.sm,
-            p: `${mobileTheme.spacing.md}px`,
+            p: `${mobileTheme.spacing.md}px`
           }}
         >
           <Box sx={{ flex: 1, minWidth: 0, mr: 1.5 }}>
@@ -256,7 +256,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
                   bgcolor: `${tc.disabled}14`,
                   borderRadius: `${mobileTheme.radius.md}px`,
                   p: 1.5,
-                  mt: 1,
+                  mt: 1
                 }}
               >
                 <Icon sx={{ color: tc.disabled, fontSize: 16, mr: 1, mt: 0.25 }}>note</Icon>
@@ -286,7 +286,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.xl}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         {isLoading && blockoutDates === null

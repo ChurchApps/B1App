@@ -11,7 +11,7 @@ import {
   IconButton,
   LinearProgress,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, DateHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ import type { EventInterface, RegistrationInterface } from "@churchapps/helpers"
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { navigateBack } from "../util";
 
 interface Props {
   eventId: string;
@@ -70,12 +71,12 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     queryFn: async () => {
       const [eventResp, countResp] = await Promise.all([
         ApiHelper.getAnonymous(`/events/public/${churchId}/${eventId}`, "ContentApi"),
-        ApiHelper.getAnonymous(`/registrations/event/${eventId}/count?churchId=${churchId}`, "ContentApi"),
+        ApiHelper.getAnonymous(`/registrations/event/${eventId}/count?churchId=${churchId}`, "ContentApi")
       ]);
       return { event: (eventResp as EventInterface) || null, activeCount: (countResp as any)?.count || 0 };
     },
     enabled: !!churchId && !!eventId,
-    retry: false,
+    retry: false
   });
 
   const event = eventData?.event ?? null;
@@ -89,10 +90,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     }
   }, [loadError, loadErrorAlerted]);
 
-  const handleBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) router.back();
-    else router.push("/mobile/dashboard");
-  };
+  const handleBack = () => navigateBack(router, "/mobile/dashboard");
 
   const isFull = useMemo(() => (event?.capacity ? activeCount >= event.capacity : false), [event, activeCount]);
 
@@ -153,7 +151,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           firstName: guestFirstName.trim(),
           lastName: guestLastName.trim(),
           email: guestEmail.trim(),
-          phone: guestPhone.trim() || undefined,
+          phone: guestPhone.trim() || undefined
         };
       }
       if (members.length > 0) {
@@ -180,7 +178,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
         color: tc.text,
         boxShadow: mobileTheme.shadows.sm,
         mb: `${mobileTheme.spacing.md}px`,
-        "&:hover": { bgcolor: tc.surface },
+        "&:hover": { bgcolor: tc.surface }
       }}
     >
       <Icon>arrow_back</Icon>
@@ -201,13 +199,18 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.md,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box sx={{
-        width: 72, height: 72, borderRadius: "36px",
+        width: 72,
+        height: 72,
+        borderRadius: "36px",
         bgcolor: `${color}1A`,
-        display: "inline-flex", alignItems: "center", justifyContent: "center", mb: 2,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        mb: 2
       }}>
         <Icon sx={{ fontSize: 36, color }}>{icon}</Icon>
       </Box>
@@ -276,12 +279,17 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           borderRadius: `${mobileTheme.radius.xl}px`,
           boxShadow: mobileTheme.shadows.md,
           p: `${mobileTheme.spacing.lg}px`,
-          textAlign: "center",
+          textAlign: "center"
         }}>
           <Box sx={{
-            width: 72, height: 72, borderRadius: "36px",
+            width: 72,
+            height: 72,
+            borderRadius: "36px",
             bgcolor: "rgba(112, 220, 135, 0.18)",
-            display: "inline-flex", alignItems: "center", justifyContent: "center", mb: 2,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mb: 2
           }}>
             <Icon sx={{ fontSize: 40, color: tc.success }}>check_circle</Icon>
           </Box>
@@ -300,16 +308,17 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
                 bgcolor: `${tc.success}22`,
                 color: tc.success,
                 fontWeight: 600,
-                textTransform: "capitalize",
+                textTransform: "capitalize"
               }}
             />
           )}
           {registration.members && registration.members.length > 0 && (
             <Box sx={{
-              mt: 2, p: 1.5,
+              mt: 2,
+              p: 1.5,
               bgcolor: tc.surfaceVariant,
               borderRadius: `${mobileTheme.radius.md}px`,
-              textAlign: "left",
+              textAlign: "left"
             }}>
               <Typography sx={{ fontSize: 12, fontWeight: 600, color: tc.text, mb: 0.5 }}>
                 Registered Members:
@@ -333,7 +342,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               fontWeight: 600,
               borderRadius: `${mobileTheme.radius.md}px`,
               py: "10px",
-              "&:hover": { bgcolor: tc.primary },
+              "&:hover": { bgcolor: tc.primary }
             }}
           >
             Done
@@ -350,7 +359,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
       borderRadius: `${mobileTheme.radius.lg}px`,
       boxShadow: mobileTheme.shadows.sm,
       p: `${mobileTheme.spacing.md}px`,
-      mb: `${mobileTheme.spacing.md}px`,
+      mb: `${mobileTheme.spacing.md}px`
     }}>
       <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text, lineHeight: 1.2, mb: 1 }}>
         {event.title}
@@ -383,7 +392,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
                 height: 6,
                 borderRadius: 3,
                 bgcolor: tc.border,
-                "& .MuiLinearProgress-bar": { bgcolor: barColor },
+                "& .MuiLinearProgress-bar": { bgcolor: barColor }
               }}
             />
           </Box>
@@ -402,7 +411,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}>
           <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 0.5 }}>
             Additional Members
@@ -451,7 +460,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               borderColor: tc.primary,
               color: tc.primary,
               borderRadius: `${mobileTheme.radius.md}px`,
-              fontWeight: 600,
+              fontWeight: 600
             }}
           >
             Add Member
@@ -460,12 +469,15 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
         {submitError && (
           <Box sx={{
-            mb: 2, p: 1.5,
+            mb: 2,
+            p: 1.5,
             borderRadius: `${mobileTheme.radius.md}px`,
             bgcolor: `${tc.error}1A`,
             color: tc.error,
             fontSize: 13,
-            display: "flex", alignItems: "center", gap: 1,
+            display: "flex",
+            alignItems: "center",
+            gap: 1
           }}>
             <Icon sx={{ fontSize: 18 }}>error_outline</Icon>
             {submitError}
@@ -484,7 +496,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               fontWeight: 600,
               py: "10px",
               flex: 0,
-              minWidth: 96,
+              minWidth: 96
             }}
           >
             Back
@@ -502,7 +514,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
               fontWeight: 700,
               borderRadius: `${mobileTheme.radius.md}px`,
               py: "10px",
-              "&:hover": { bgcolor: tc.primary },
+              "&:hover": { bgcolor: tc.primary }
             }}
           >
             {submitting ? "Registering..." : "Complete Registration"}
@@ -522,7 +534,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`,
-        mb: `${mobileTheme.spacing.md}px`,
+        mb: `${mobileTheme.spacing.md}px`
       }}>
         {isLoggedIn ? (
           <>
@@ -531,11 +543,16 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
               <Box sx={{
-                width: 40, height: 40, borderRadius: "20px",
+                width: 40,
+                height: 40,
+                borderRadius: "20px",
                 bgcolor: tc.primaryLight,
                 color: tc.primary,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontWeight: 700, fontSize: 16,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+                fontSize: 16
               }}>
                 {(personName.charAt(0) || "?").toUpperCase()}
               </Box>
@@ -591,12 +608,15 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
       {validationError && (
         <Box sx={{
-          mb: 2, p: 1.5,
+          mb: 2,
+          p: 1.5,
           borderRadius: `${mobileTheme.radius.md}px`,
           bgcolor: `${tc.warning}1A`,
           color: tc.warning,
           fontSize: 13,
-          display: "flex", alignItems: "center", gap: 1,
+          display: "flex",
+          alignItems: "center",
+          gap: 1
         }}>
           <Icon sx={{ fontSize: 18 }}>warning_amber</Icon>
           {validationError}
@@ -616,7 +636,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           borderRadius: `${mobileTheme.radius.md}px`,
           py: "12px",
           fontSize: 15,
-          "&:hover": { bgcolor: tc.primary },
+          "&:hover": { bgcolor: tc.primary }
         }}
       >
         Continue

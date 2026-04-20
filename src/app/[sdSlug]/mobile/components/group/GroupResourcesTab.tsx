@@ -11,7 +11,7 @@ import {
   LinearProgress,
   Skeleton,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
@@ -135,7 +135,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         linkType: "url",
         text: linkText.trim(),
         linkData: groupId,
-        icon: "",
+        icon: ""
       };
       await ApiHelper.post("/links", [payload], "ContentApi");
       setLinkText("");
@@ -161,7 +161,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         if (evt.total) {
           setUploadProgress(Math.round((100 * evt.loaded) / evt.total));
         }
-      },
+      }
     });
   };
 
@@ -181,7 +181,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         fileType: file.type,
         size: file.size,
         contentType: "group",
-        contentId: groupId,
+        contentId: groupId
       };
       if (presigned && presigned.key) {
         await postPresigned(presigned, file);
@@ -227,7 +227,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         <Box
@@ -239,7 +239,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            flexShrink: 0,
+            flexShrink: 0
           }}
         >
           <Icon sx={{ color: tc.primary }}>description</Icon>
@@ -253,7 +253,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             flex: 1,
             minWidth: 0,
             textDecoration: "none",
-            color: "inherit",
+            color: "inherit"
           }}
         >
           <Typography
@@ -263,7 +263,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
               color: tc.text,
               overflow: "hidden",
               textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              whiteSpace: "nowrap"
             }}
           >
             {f.fileName || "File"}
@@ -289,7 +289,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Box
@@ -301,7 +301,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          flexShrink: 0,
+          flexShrink: 0
         }}
       >
         <Icon sx={{ color: tc.primary }}>link</Icon>
@@ -320,7 +320,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             color: tc.text,
             overflow: "hidden",
             textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap"
           }}
         >
           {l.text || "Link"}
@@ -331,7 +331,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             color: tc.textSecondary,
             overflow: "hidden",
             textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap"
           }}
         >
           {l.url}
@@ -354,7 +354,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: `${mobileTheme.spacing.sm}px`,
+            mb: `${mobileTheme.spacing.sm}px`
           }}
         >
           <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Links</Typography>
@@ -369,7 +369,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                 fontWeight: 600,
                 borderColor: tc.primary,
                 color: tc.primary,
-                borderRadius: `${mobileTheme.radius.md}px`,
+                borderRadius: `${mobileTheme.radius.md}px`
               }}
             >
               {showAddLink ? "Cancel" : "Add Link"}
@@ -388,7 +388,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                 mb: 1,
                 display: "flex",
                 flexDirection: "column",
-                gap: 1,
+                gap: 1
               }}
             >
               <TextField
@@ -432,7 +432,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                     color: tc.onPrimary,
                     textTransform: "none",
                     fontWeight: 600,
-                    "&:hover": { bgcolor: tc.primary },
+                    "&:hover": { bgcolor: tc.primary }
                   }}
                 >
                   {linkSaving ? "Saving…" : "Add"}
@@ -460,7 +460,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
               bgcolor: tc.surface,
               borderRadius: `${mobileTheme.radius.lg}px`,
               p: `${mobileTheme.spacing.md}px`,
-              textAlign: "center",
+              textAlign: "center"
             }}
           >
             <Typography sx={{ fontSize: 13, color: tc.textMuted }}>No links yet.</Typography>
@@ -478,7 +478,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: `${mobileTheme.spacing.sm}px`,
+            mb: `${mobileTheme.spacing.sm}px`
           }}
         >
           <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Files</Typography>
@@ -494,7 +494,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                 fontWeight: 600,
                 borderColor: tc.primary,
                 color: tc.primary,
-                borderRadius: `${mobileTheme.radius.md}px`,
+                borderRadius: `${mobileTheme.radius.md}px`
               }}
             >
               Upload
@@ -519,7 +519,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                 height: 6,
                 borderRadius: 3,
                 bgcolor: tc.border,
-                "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 3 },
+                "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 3 }
               }}
             />
           </Box>
@@ -546,7 +546,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
               bgcolor: tc.surface,
               borderRadius: `${mobileTheme.radius.lg}px`,
               p: `${mobileTheme.spacing.md}px`,
-              textAlign: "center",
+              textAlign: "center"
             }}
           >
             <Typography sx={{ fontSize: 13, color: tc.textMuted }}>No files yet.</Typography>
@@ -563,7 +563,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
           sx={{
             bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`,
+            p: `${mobileTheme.spacing.md}px`
           }}
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: 1 }}>
@@ -581,7 +581,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
               height: 8,
               borderRadius: 4,
               bgcolor: tc.border,
-              "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 4 },
+              "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 4 }
             }}
           />
         </Box>

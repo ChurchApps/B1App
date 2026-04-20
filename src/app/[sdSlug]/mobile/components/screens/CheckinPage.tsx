@@ -14,7 +14,7 @@ import {
   DialogTitle,
   Divider,
   Icon,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, ArrayHelper, PersonHelper as ApphelperPersonHelper, UserHelper } from "@churchapps/apphelper";
 import type {
@@ -24,7 +24,7 @@ import type {
   ServiceInterface,
   ServiceTimeInterface,
   VisitInterface,
-  VisitSessionInterface,
+  VisitSessionInterface
 } from "@churchapps/helpers";
 import { CheckinHelper, PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -57,7 +57,7 @@ const SurfaceCard = ({ children, sx }: { children: React.ReactNode; sx?: object 
       boxShadow: shadows.sm,
       overflow: "hidden",
       mb: `${spacing.sm + 4}px`,
-      ...sx,
+      ...sx
     }}
   >
     {children}
@@ -68,7 +68,7 @@ const IconCircle = ({
   size = 56,
   bg = tc.iconBackground,
   children,
-  sx,
+  sx
 }: {
   size?: number;
   bg?: string;
@@ -85,7 +85,7 @@ const IconCircle = ({
       alignItems: "center",
       justifyContent: "center",
       flexShrink: 0,
-      ...sx,
+      ...sx
     }}
   >
     {children}
@@ -94,7 +94,7 @@ const IconCircle = ({
 
 const ScreenSubhead = ({
   iconName,
-  subtitle,
+  subtitle
 }: {
   iconName: string;
   subtitle: string;
@@ -107,7 +107,7 @@ const ScreenSubhead = ({
       px: `${spacing.lg}px`,
       py: `${spacing.lg}px`,
       mb: `${spacing.md}px`,
-      textAlign: "center",
+      textAlign: "center"
     }}
   >
     <IconCircle size={72} sx={{ mx: "auto", mb: `${spacing.sm + 4}px` }}>
@@ -122,7 +122,7 @@ const ScreenSubhead = ({
 const EmptyState = ({
   iconName,
   title,
-  message,
+  message
 }: {
   iconName: string;
   title: string;
@@ -134,7 +134,7 @@ const EmptyState = ({
       borderRadius: `${radius.xl}px`,
       boxShadow: shadows.sm,
       p: `${spacing.lg}px`,
-      textAlign: "center",
+      textAlign: "center"
     }}
   >
     <IconCircle size={64} sx={{ mx: "auto", mb: `${spacing.md}px` }}>
@@ -159,7 +159,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
       return Array.isArray(data) ? data : [];
     },
     staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const selectService = async (serviceId: string) => {
@@ -185,7 +185,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
           "MembershipApi"
         ).then((members: PersonInterface[]) => {
           CheckinHelper.householdMembers = members;
-        }),
+        })
       ]);
 
       const peopleIds: number[] = ArrayHelper.getUniqueValues(
@@ -279,7 +279,7 @@ const GroupsStep = ({
   member,
   time,
   onSelected,
-  onBack,
+  onBack
 }: {
   member: PersonInterface;
   time: ServiceTimeInterface;
@@ -315,7 +315,7 @@ const GroupsStep = ({
           px: `${spacing.lg}px`,
           py: `${spacing.lg}px`,
           mb: `${spacing.md}px`,
-          textAlign: "center",
+          textAlign: "center"
         }}
       >
         <IconCircle size={72} sx={{ mx: "auto", mb: `${spacing.sm + 4}px` }}>
@@ -371,7 +371,7 @@ const GroupsStep = ({
                           borderBottom:
                             idx < cat.items.length - 1
                               ? `1px solid ${tc.divider}`
-                              : "none",
+                              : "none"
                         }}
                       >
                         <CardActionArea
@@ -417,7 +417,7 @@ const GroupsStep = ({
             borderRadius: `${radius.lg}px`,
             height: 48,
             fontWeight: 600,
-            textTransform: "none",
+            textTransform: "none"
           }}
         >
           Back
@@ -434,7 +434,7 @@ const GroupsStep = ({
             borderRadius: `${radius.lg}px`,
             height: 48,
             fontWeight: 600,
-            textTransform: "none",
+            textTransform: "none"
           }}
         >
           No Group
@@ -449,7 +449,7 @@ const GroupsStep = ({
 const HouseholdStep = ({
   onShowGroups,
   onComplete,
-  onBack,
+  onBack
 }: {
   onShowGroups: (member: PersonInterface, time: ServiceTimeInterface) => void;
   onComplete: () => void;
@@ -497,7 +497,7 @@ const HouseholdStep = ({
           py: `${spacing.md}px`,
           bgcolor: tc.background,
           borderBottom: `1px solid ${tc.divider}`,
-          "&:last-child": { borderBottom: "none" },
+          "&:last-child": { borderBottom: "none" }
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", flex: 1, minWidth: 0 }}>
@@ -514,7 +514,7 @@ const HouseholdStep = ({
                 color: tc.textMuted,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                whiteSpace: "nowrap"
               }}
             >
               {selectedGroupName}
@@ -535,14 +535,14 @@ const HouseholdStep = ({
             fontSize: 12,
             ...(hasSelection
               ? {
-                  bgcolor: tc.success,
-                  color: tc.onPrimary,
-                  "&:hover": { bgcolor: tc.success, opacity: 0.9 },
-                }
+                bgcolor: tc.success,
+                color: tc.onPrimary,
+                "&:hover": { bgcolor: tc.success, opacity: 0.9 }
+              }
               : {
-                  borderColor: tc.primary,
-                  color: tc.primary,
-                }),
+                borderColor: tc.primary,
+                color: tc.primary
+              })
           }}
         >
           {hasSelection ? "Change" : "Select Group"}
@@ -572,7 +572,7 @@ const HouseholdStep = ({
                 overflow: "hidden",
                 mr: `${spacing.md}px`,
                 flexShrink: 0,
-                bgcolor: tc.iconBackground,
+                bgcolor: tc.iconBackground
               }}
             >
               <img
@@ -588,7 +588,7 @@ const HouseholdStep = ({
                   fontSize: 17,
                   fontWeight: 600,
                   color: tc.text,
-                  mb: isCheckedIn(member.id!) || !isExpanded ? 0.5 : 0,
+                  mb: isCheckedIn(member.id!) || !isExpanded ? 0.5 : 0
                 }}
               >
                 {member.name?.display}
@@ -606,7 +606,7 @@ const HouseholdStep = ({
                     color: tc.success,
                     fontSize: 11,
                     fontWeight: 600,
-                    mb: !isExpanded ? 0.5 : 0,
+                    mb: !isExpanded ? 0.5 : 0
                   }}
                 >
                   <Icon sx={{ fontSize: 14 }}>check_circle</Icon>
@@ -647,7 +647,7 @@ const HouseholdStep = ({
                               color: tc.primary,
                               border: `1px solid ${tc.primary}`,
                               fontSize: 12,
-                              fontWeight: 500,
+                              fontWeight: 500
                             }}
                           >
                             {name}
@@ -669,8 +669,7 @@ const HouseholdStep = ({
             <Divider sx={{ bgcolor: tc.divider }} />
             <Box>
               {CheckinHelper.serviceTimes?.map((st) =>
-                renderServiceTime(member, st, visitSessions)
-              )}
+                renderServiceTime(member, st, visitSessions))}
             </Box>
           </>
         )}
@@ -750,7 +749,7 @@ const HouseholdStep = ({
             borderRadius: `${radius.lg}px`,
             height: 56,
             fontWeight: 600,
-            textTransform: "none",
+            textTransform: "none"
           }}
         >
           Back
@@ -770,7 +769,7 @@ const HouseholdStep = ({
             fontSize: 16,
             textTransform: "none",
             boxShadow: shadows.md,
-            "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
+            "&:hover": { bgcolor: tc.primary, opacity: 0.92 }
           }}
         >
           Complete Check-in
@@ -793,7 +792,7 @@ const HouseholdStep = ({
             sx={{
               bgcolor: tc.primary,
               color: tc.onPrimary,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
+              "&:hover": { bgcolor: tc.primary, opacity: 0.92 }
             }}
           >
             Check In Again
@@ -822,7 +821,7 @@ const CompleteStep = ({ onDone }: { onDone: () => void }) => {
         minHeight: "60vh",
         borderRadius: `${radius.xl}px`,
         background: `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
-        p: `${spacing.xl}px`,
+        p: `${spacing.xl}px`
       }}
     >
       <Box sx={{ textAlign: "center", maxWidth: 400, width: "100%" }}>
@@ -836,7 +835,7 @@ const CompleteStep = ({ onDone }: { onDone: () => void }) => {
             alignItems: "center",
             justifyContent: "center",
             mb: `${spacing.lg}px`,
-            boxShadow: shadows.lg,
+            boxShadow: shadows.lg
           }}
         >
           <Icon sx={{ fontSize: 80, color: tc.success }}>check_circle</Icon>
@@ -847,7 +846,7 @@ const CompleteStep = ({ onDone }: { onDone: () => void }) => {
             fontWeight: 800,
             fontSize: 26,
             mb: `${spacing.sm}px`,
-            textShadow: "0 2px 4px rgba(0,0,0,0.25)",
+            textShadow: "0 2px 4px rgba(0,0,0,0.25)"
           }}
         >
           Check-in Complete
@@ -857,7 +856,7 @@ const CompleteStep = ({ onDone }: { onDone: () => void }) => {
             color: "#FFFFFF",
             opacity: 0.9,
             fontSize: 15,
-            textShadow: "0 1px 2px rgba(0,0,0,0.2)",
+            textShadow: "0 1px 2px rgba(0,0,0,0.2)"
           }}
         >
           Your attendance has been saved. Thank you!
@@ -897,7 +896,7 @@ export const CheckinPage = ({ config: _config }: Props) => {
         visit = {
           personId: groupsMember.id,
           serviceId: groupsTime.serviceId,
-          visitSessions: [],
+          visitSessions: []
         };
         CheckinHelper.pendingVisits.push(visit);
       }

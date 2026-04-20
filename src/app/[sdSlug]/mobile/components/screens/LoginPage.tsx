@@ -12,14 +12,14 @@ import {
   InputAdornment,
   Snackbar,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import type { LoginResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
-import { PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { hydrateUserSession } from "../../hooks/hydrateUserSession";
 
 const EMAIL_REGEX = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,6})+$/;
 
@@ -74,7 +74,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const [snack, setSnack] = useState<{ open: boolean; msg: string; severity: "success" | "error" | "info" }>({
     open: false,
     msg: "",
-    severity: "error",
+    severity: "error"
   });
   const [noAccountPrompt, setNoAccountPrompt] = useState<null | {
     email: string;
@@ -95,62 +95,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
   // Alpha overlay stands in for hex arithmetic, which doesn't work on CSS vars.
   const heroGradient = `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}CC 100%)`;
 
-  const hydrateFromLoginResponse = async (resp: LoginResponseInterface) => {
-    ApiHelper.setDefaultPermissions(resp.user.jwt);
-    (resp.userChurches || []).forEach((uc: any) => { if (!uc.apis) uc.apis = []; });
-    UserHelper.user = resp.user;
-    UserHelper.userChurches = resp.userChurches || [];
-
-    // Match by subdomain; fall back to the first userChurch.
-    let matched: any = null;
-    if (sdSlug) {
-      matched = UserHelper.userChurches?.find(
-        (uc) => uc.church?.subDomain?.toLowerCase() === sdSlug.toLowerCase()
-      );
-    }
-    const target = matched || UserHelper.userChurches?.[0];
-    if (target) {
-      UserHelper.currentUserChurch = target;
-      UserHelper.setupApiHelper(target);
-    }
-
-    // Best-effort person hydration.
-    let person: any = null;
-    const personId = UserHelper.currentUserChurch?.person?.id;
-    const churchId = UserHelper.currentUserChurch?.church?.id;
-    if (personId) {
-      try {
-        person = await ApiHelper.get(`/people/${personId}`, "MembershipApi");
-      } catch {
-        if (churchId) {
-          try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { /* ignore */ }
-        }
-      }
-    } else if (churchId) {
-      try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { /* ignore */ }
-    }
-    if (person) {
-      UserHelper.person = person;
-      PersonHelper.person = person;
-    }
-
-    context.setUser(UserHelper.user);
-    context.setUserChurches(UserHelper.userChurches);
-    if (UserHelper.currentUserChurch) context.setUserChurch(UserHelper.currentUserChurch);
-    if (person) context.setPerson(person);
-
-    // Persist jwt cookie so useHydrateSession picks us up after reload.
-    if (typeof document !== "undefined") {
-      const maxAge = 180 * 24 * 60 * 60; // 180 days, matches SharedLoginPage
-      document.cookie = `jwt=${resp.user.jwt}; path=/; max-age=${maxAge}; SameSite=Lax`;
-      document.cookie = `name=${encodeURIComponent(`${resp.user.firstName || ""} ${resp.user.lastName || ""}`.trim())}; path=/; max-age=${maxAge}; SameSite=Lax`;
-      document.cookie = `email=${encodeURIComponent(resp.user.email || "")}; path=/; max-age=${maxAge}; SameSite=Lax`;
-      const lastChurchId = UserHelper.currentUserChurch?.church?.id;
-      if (lastChurchId) {
-        document.cookie = `lastChurchId=${lastChurchId}; path=/; max-age=${maxAge}; SameSite=Lax`;
-      }
-    }
-  };
+  const hydrateFromLoginResponse = (resp: LoginResponseInterface) =>
+    hydrateUserSession(resp, context, { sdSlug, writeCookies: true });
 
   // On login failure, ask /users/checkEmail whether the email even exists —
   // if not, offer "Register" with preloaded first/last name.
@@ -170,7 +116,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
           firstName: resp.peopleMatches?.length === 1 ? match?.firstName : resp.peopleMatches?.length > 1 ? match?.firstName : undefined,
           lastName: resp.peopleMatches?.length === 1 ? match?.lastName : resp.peopleMatches?.length > 1 ? match?.lastName : undefined,
           churchId: resp.peopleMatches?.length === 1 ? match?.churchId : undefined,
-          churchName: resp.peopleMatches?.length === 1 ? match?.churchName : undefined,
+          churchName: resp.peopleMatches?.length === 1 ? match?.churchName : undefined
         });
       }
     } catch {
@@ -239,7 +185,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
     const jwt = urlJwt || cookieJwt;
     if (!jwt || UserHelper.user?.id) return;
     loginApiCall({ jwt });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   // --- External auth link helpers ---------------------------------------
@@ -261,8 +207,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const inputSx = {
     "& .MuiOutlinedInput-root": {
       borderRadius: `${radius.md}px`,
-      bgcolor: tc.surface,
-    },
+      bgcolor: tc.surface
+    }
   };
 
   return (
@@ -282,7 +228,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            minHeight: 180,
+            minHeight: 180
           }}
         >
           {logoLight ? (
@@ -292,7 +238,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
                 borderRadius: `${radius.lg}px`,
                 p: `${spacing.md}px`,
                 mb: `${spacing.md}px`,
-                boxShadow: shadows.sm,
+                boxShadow: shadows.sm
               }}
             >
               <Box
@@ -323,7 +269,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
             bgcolor: tc.surface,
             borderRadius: `${radius.lg}px`,
             boxShadow: shadows.md,
-            p: `${spacing.lg}px`,
+            p: `${spacing.lg}px`
           }}
         >
           {process.env.NEXT_PUBLIC_STAGE === "demo" && (
@@ -347,7 +293,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
                 <InputAdornment position="start">
                   <Icon sx={{ color: tc.textMuted }}>email</Icon>
                 </InputAdornment>
-              ),
+              )
             }}
             disabled={loading}
           />
@@ -379,7 +325,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
                     <Icon sx={{ color: tc.textMuted }}>{showPassword ? "visibility_off" : "visibility"}</Icon>
                   </IconButton>
                 </InputAdornment>
-              ),
+              )
             }}
             disabled={loading}
           />
@@ -394,7 +340,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
                 fontWeight: 500,
                 color: tc.primary,
                 textDecoration: "none",
-                "&:hover": { textDecoration: "underline" },
+                "&:hover": { textDecoration: "underline" }
               }}
             >
               Forgot password?
@@ -415,7 +361,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
               py: 1.4,
               boxShadow: shadows.md,
               "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
+              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
             {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Sign In"}
@@ -449,7 +395,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
                   color: tc.primary,
                   fontWeight: 600,
                   textDecoration: "none",
-                  "&:hover": { textDecoration: "underline" },
+                  "&:hover": { textDecoration: "underline" }
                 }}
               >
                 Register

@@ -22,7 +22,7 @@ export const mobileTheme = {
     borderLight: "var(--mb-border-light)",
     divider: "var(--mb-divider)",
     iconBackground: "var(--mb-icon-background)",
-    disabled: "var(--mb-disabled)",
+    disabled: "var(--mb-disabled)"
   },
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
   radius: { sm: 4, md: 8, lg: 12, xl: 16 },
@@ -33,15 +33,15 @@ export const mobileTheme = {
     body: { fontSize: 16, fontWeight: 400 },
     bodySmall: { fontSize: 14, fontWeight: 400 },
     caption: { fontSize: 12, fontWeight: 400 },
-    label: { fontSize: 14, fontWeight: 500 },
+    label: { fontSize: 14, fontWeight: 500 }
   },
   shadows: {
     sm: "0 1px 2px rgba(0,0,0,0.05)",
     md: "0 2px 4px rgba(0,0,0,0.1)",
-    lg: "0 4px 8px rgba(0,0,0,0.15)",
+    lg: "0 4px 8px rgba(0,0,0,0.15)"
   },
   drawerWidth: 280,
-  headerHeight: 56,
+  headerHeight: 56
 };
 
 // Page-slug registry — source of truth for the AppBar title and anything
@@ -84,7 +84,7 @@ export const SCREEN_TITLES: Record<string, string> = {
   login: "Sign In",
   install: "Install App",
   page: "",
-  websiteUrl: "",
+  websiteUrl: ""
 };
 
 // Extract the mobile page slug from a URL whether it's `/{sdSlug}/mobile/X`

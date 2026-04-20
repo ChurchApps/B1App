@@ -10,7 +10,7 @@ import {
   InputAdornment,
   Skeleton,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { getInitials } from "../util";
@@ -47,7 +47,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
             borderRadius: `${mobileTheme.radius.xl}px`,
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Box
@@ -59,7 +59,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              mb: `${mobileTheme.spacing.md}px`,
+              mb: `${mobileTheme.spacing.md}px`
             }}
           >
             <Icon sx={{ fontSize: 32, color: tc.primary }}>lock</Icon>
@@ -79,7 +79,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
               textTransform: "none",
               fontWeight: 500,
               borderRadius: `${mobileTheme.radius.md}px`,
-              "&:hover": { bgcolor: tc.primary },
+              "&:hover": { bgcolor: tc.primary }
             }}
           >
             Sign In
@@ -99,7 +99,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
     },
     enabled: loggedIn,
     staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    gcTime: 30 * 60 * 1000
   });
 
   const people = loggedIn ? (isFetching && !serverPeople ? null : (serverPeople ?? null)) : [];
@@ -184,7 +184,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
       borderRadius: "24px",
       flexShrink: 0,
       overflow: "hidden",
-      mr: "16px",
+      mr: "16px"
     } as const;
     if (photo) {
       return (
@@ -206,7 +206,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 700,
-          fontSize: 16,
+          fontSize: 16
         }}
       >
         {getInitials(p)}
@@ -241,7 +241,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
           cursor: "pointer",
           transition: "box-shadow 150ms ease, transform 150ms ease",
           "&:hover": { boxShadow: mobileTheme.shadows.md },
-          "&:active": { transform: "scale(0.995)" },
+          "&:active": { transform: "scale(0.995)" }
         }}
       >
         {renderAvatar(p)}
@@ -273,7 +273,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            flexShrink: 0,
+            flexShrink: 0
           }}
         >
           <Icon sx={{ fontSize: 20 }}>chevron_right</Icon>
@@ -288,7 +288,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
         mt: isFirst ? 0 : "24px",
         mb: "12px",
         display: "flex",
-        alignItems: "center",
+        alignItems: "center"
       }}
     >
       <Typography
@@ -296,7 +296,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
           fontSize: 18,
           fontWeight: 700,
           color: tc.primary,
-          minWidth: 32,
+          minWidth: 32
         }}
       >
         {title}
@@ -316,7 +316,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
         boxShadow: mobileTheme.shadows.sm,
         px: "16px",
         py: "12px",
-        mb: "8px",
+        mb: "8px"
       }}
     >
       <Skeleton variant="circular" width={48} height={48} sx={{ mr: "16px" }} />
@@ -337,7 +337,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
         justifyContent: "center",
         px: `${mobileTheme.spacing.lg}px`,
         py: `${mobileTheme.spacing.xl}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Icon sx={{ fontSize: 64, color: tc.textSecondary }}>people_outline</Icon>
@@ -347,7 +347,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
           fontWeight: 600,
           color: tc.text,
           mt: `${mobileTheme.spacing.md}px`,
-          mb: `${mobileTheme.spacing.xs}px`,
+          mb: `${mobileTheme.spacing.xs}px`
         }}
       >
         {searchText ? "No members found" : "Directory"}
@@ -365,7 +365,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
           bgcolor: tc.surface,
           borderBottom: `1px solid ${tc.border}`,
           px: "16px",
-          py: "16px",
+          py: "16px"
         }}
       >
         <TextField
@@ -390,8 +390,8 @@ export const CommunityPage = ({ config: _config }: Props) => {
             ) : undefined,
             sx: {
               bgcolor: tc.surface,
-              borderRadius: `${mobileTheme.radius.md}px`,
-            },
+              borderRadius: `${mobileTheme.radius.md}px`
+            }
           }}
         />
       </Box>

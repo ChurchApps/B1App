@@ -1,10 +1,11 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import type { LoginResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
+import { hydrateUserSession } from "./hydrateUserSession";
 
 type HydrationStatus = "idle" | "hydrating" | "ready" | "anonymous" | "error";
 
@@ -31,6 +32,12 @@ export function useHydrateSession(): HydrationStatus {
   const sdSlug = params?.sdSlug;
   const context = useContext(UserContext);
   const [status, setStatus] = useState<HydrationStatus>("idle");
+
+  // Stable ref so the effect can read the latest context setters without
+  // listing `context` in its dep array (which would re-run hydration on every
+  // context change and fire a redundant login request).
+  const contextRef = useRef(context);
+  useEffect(() => { contextRef.current = context; });
 
   useEffect(() => {
     let cancelled = false;
@@ -62,52 +69,9 @@ export function useHydrateSession(): HydrationStatus {
           return;
         }
 
-        // Populate UserHelper statics (used by `UserHelper.user?.firstName`
-        // inline gates in screens, MobileAppBar, MobileDrawer, etc.).
-        ApiHelper.setDefaultPermissions(resp.user.jwt);
-        (resp.userChurches || []).forEach((uc: any) => { if (!uc.apis) uc.apis = []; });
-        UserHelper.user = resp.user;
-        UserHelper.userChurches = resp.userChurches || [];
-
-        // Pick the userChurch that matches this subdomain, else the first.
-        let matched = null as any;
-        if (sdSlug) {
-          matched = UserHelper.userChurches?.find(
-            (uc) => uc.church?.subDomain?.toLowerCase() === sdSlug.toLowerCase()
-          );
-        }
-        const target = matched || UserHelper.userChurches?.[0];
-
-        if (target) {
-          UserHelper.currentUserChurch = target;
-          UserHelper.setupApiHelper(target);
-        }
-
-        // Best-effort person hydration — mirrors LoginPage.continueLoginProcess.
-        let person: any = null;
-        const personId = UserHelper.currentUserChurch?.person?.id;
-        const churchId = UserHelper.currentUserChurch?.church?.id;
-        if (personId) {
-          try {
-            person = await ApiHelper.get(`/people/${personId}`, "MembershipApi");
-          } catch {
-            if (churchId) {
-              try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { /* ignore */ }
-            }
-          }
-        } else if (churchId) {
-          try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { /* ignore */ }
-        }
-        if (person) UserHelper.person = person;
+        await hydrateUserSession(resp, contextRef.current, { sdSlug });
 
         if (cancelled) return;
-
-        // Push into React context so components subscribed to it re-render.
-        context.setUser(UserHelper.user);
-        context.setUserChurches(UserHelper.userChurches);
-        if (UserHelper.currentUserChurch) context.setUserChurch(UserHelper.currentUserChurch);
-        if (person) context.setPerson(person);
-
         setStatus("ready");
       } catch (err) {
         console.warn("Mobile session rehydration failed:", err);
@@ -117,9 +81,7 @@ export function useHydrateSession(): HydrationStatus {
 
     hydrate();
     return () => { cancelled = true; };
-    // Run once per mount; sdSlug is derived from the URL and stable across the layout's lifetime.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [sdSlug]);
 
   return status;
 }

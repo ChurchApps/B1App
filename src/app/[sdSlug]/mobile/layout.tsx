@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
 import { PwaRegister } from "./PwaRegister";
 import { MobileClientLayout } from "./MobileClientLayout";
+import { loadChurchAppearance } from "./loadChurchAppearance";
 
-export async function generateMetadata(): Promise<Metadata> {
+type LayoutParams = Promise<{ sdSlug: string }>;
+
+export async function generateMetadata({ params }: { params: LayoutParams }): Promise<Metadata> {
+  const { sdSlug } = await params;
+  const { primaryColor } = await loadChurchAppearance(sdSlug);
   return {
     manifest: "/mobile/manifest.webmanifest",
-    themeColor: "#0D47A1",
+    // Matches the church's brand color in Android's browser chrome and PWA
+    // task switcher. Falls back to the default B1 blue.
+    themeColor: primaryColor || "#0D47A1",
     viewport: {
+      // userScalable / maximumScale intentionally omitted — disabling zoom is a
+      // WCAG 1.4.4 failure for low-vision users, and the old iOS input-focus
+      // zoom bug is fixed in iOS 16+.
       width: "device-width",
       initialScale: 1,
-      maximumScale: 1,
-      userScalable: false,
-      viewportFit: "cover",
+      viewportFit: "cover"
     },
-    robots: { index: false, follow: false },
+    robots: { index: false, follow: false }
   };
 }
 

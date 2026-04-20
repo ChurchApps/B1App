@@ -38,9 +38,7 @@ interface Props {
 // member directory was once exposed as both /mobile/community and /mobile/membersSearch).
 // We pick a single canonical slug and redirect the alias to it so the URL bar stays tidy,
 // while still keeping the alias routable (no 404s) for outstanding links / bookmarks.
-const ALIAS_TO_CANONICAL: Record<string, string> = {
-  membersSearch: "community",
-};
+const ALIAS_TO_CANONICAL: Record<string, string> = { membersSearch: "community" };
 
 export function ScreenRouter({ pageSlug, config }: Props) {
   const router = useRouter();

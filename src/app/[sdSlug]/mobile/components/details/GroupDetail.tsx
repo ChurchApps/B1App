@@ -10,7 +10,7 @@ import {
   Skeleton,
   Tab,
   Tabs,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
@@ -18,7 +18,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { getInitials } from "../util";
+import { getInitials, navigateBack } from "../util";
 import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
 import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
 import { GroupResourcesTab } from "../group/GroupResourcesTab";
@@ -84,7 +84,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
       setChatInitialTab(chatTabParam === "announcements" ? "announcements" : "discussions");
       setChatOpen(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   const { data: groupData, isLoading: groupLoading } = useQuery<GroupWithExtras | null>({
@@ -93,7 +93,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
       const data = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
       return data || null;
     },
-    enabled: !!id,
+    enabled: !!id
   });
 
   const { data: membersData = null } = useQuery<GroupMember[]>({
@@ -102,7 +102,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
       const data = await ApiHelper.get(`/groupmembers?groupId=${id}`, "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: !!id,
+    enabled: !!id
   });
 
   const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
@@ -115,10 +115,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   const isMember = !!myMembership;
   const isLeader = !!myMembership?.leader;
 
-  const handleBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) router.back();
-    else router.push("/mobile/groups");
-  };
+  const handleBack = () => navigateBack(router, "/mobile/groups");
 
   const handleMemberClick = (m: GroupMember) => {
     const pid = m.personId || m.person?.id;
@@ -175,7 +172,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 14
         }}
       >
         {getInitials(m.person)}
@@ -194,7 +191,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         color: tc.text,
         boxShadow: mobileTheme.shadows.sm,
         mb: `${mobileTheme.spacing.md}px`,
-        "&:hover": { bgcolor: tc.surface },
+        "&:hover": { bgcolor: tc.surface }
       }}
     >
       <Icon>arrow_back</Icon>
@@ -211,7 +208,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
       bottom: 0,
       px: "20px",
       py: "20px",
-      background: "rgba(0,0,0,0.6)",
+      background: "rgba(0,0,0,0.6)"
     } as const;
     const chipSx = {
       display: "inline-flex",
@@ -223,7 +220,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
       fontWeight: 600,
       px: "8px",
       py: "4px",
-      borderRadius: "12px",
+      borderRadius: "12px"
     } as const;
     const leaderChipSx = { ...chipSx, bgcolor: "rgba(255,193,7,0.9)" } as const;
 
@@ -236,7 +233,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           borderRadius: "20px",
           overflow: "hidden",
           bgcolor: hasPhoto ? "transparent" : tc.primary,
-          boxShadow: mobileTheme.shadows.lg,
+          boxShadow: mobileTheme.shadows.lg
         }}
       >
         {hasPhoto ? (
@@ -259,7 +256,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
               color: "#FFFFFF",
               lineHeight: 1.2,
               mb: "12px",
-              textShadow: "0 1px 3px rgba(0,0,0,0.4)",
+              textShadow: "0 1px 3px rgba(0,0,0,0.4)"
             }}
           >
             {group?.name}
@@ -298,7 +295,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
               bgcolor: tc.surface,
               borderRadius: `${mobileTheme.radius.lg}px`,
               boxShadow: mobileTheme.shadows.sm,
-              p: `${mobileTheme.spacing.md}px`,
+              p: `${mobileTheme.spacing.md}px`
             }}
           >
             <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
@@ -315,7 +312,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                   "& p:last-child": { mb: 0 },
                   "& a": { color: tc.primary },
                   "& h1, & h2, & h3, & h4": { color: tc.text, fontWeight: 700, mt: 1, mb: 0.5 },
-                  "& ul, & ol": { pl: 3, mt: 0, mb: 1 },
+                  "& ul, & ol": { pl: 3, mt: 0, mb: 1 }
                 }}
               >
                 <MarkdownPreviewLight value={group?.about || ""} />
@@ -348,7 +345,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
@@ -388,7 +385,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
               px: "4px",
               borderRadius: `${mobileTheme.radius.md}px`,
               cursor: "pointer",
-              "&:hover": { bgcolor: tc.iconBackground },
+              "&:hover": { bgcolor: tc.iconBackground }
             }}
           >
             {renderMemberAvatar(m)}
@@ -400,7 +397,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                   color: tc.text,
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
+                  whiteSpace: "nowrap"
                 }}
               >
                 {m.person?.name?.display || "Unknown"}
@@ -429,7 +426,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
             textTransform: "none",
             fontWeight: 600,
             borderRadius: `${mobileTheme.radius.md}px`,
-            py: "10px",
+            py: "10px"
           }}
         >
           Leave Group
@@ -449,7 +446,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           fontWeight: 600,
           borderRadius: `${mobileTheme.radius.md}px`,
           py: "10px",
-          "&:hover": { bgcolor: tc.primary },
+          "&:hover": { bgcolor: tc.primary }
         }}
       >
         Join Group
@@ -480,7 +477,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -492,7 +489,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>groups</Icon>
@@ -511,7 +508,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           color: tc.primary,
           textTransform: "none",
           fontWeight: 500,
-          borderRadius: `${mobileTheme.radius.md}px`,
+          borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
         Back to Groups
@@ -519,9 +516,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     </Box>
   );
 
-  const availableTabs: { key: TabKey; label: string; icon: string }[] = [
-    { key: "about", label: "About", icon: "info" },
-  ];
+  const availableTabs: { key: TabKey; label: string; icon: string }[] = [{ key: "about", label: "About", icon: "info" }];
   if (isMember) availableTabs.push({ key: "messages", label: "Messages", icon: "forum" });
   availableTabs.push({ key: "members", label: "Members", icon: "group" });
   if (isLeader) availableTabs.push({ key: "attendance", label: "Attendance", icon: "fact_check" });
@@ -542,7 +537,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
               bgcolor: tc.surface,
               borderRadius: `${mobileTheme.radius.lg}px`,
               boxShadow: mobileTheme.shadows.sm,
-              overflow: "hidden",
+              overflow: "hidden"
             }}
           >
             <Tabs
@@ -566,9 +561,9 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                   textTransform: "none",
                   fontWeight: 500,
                   fontSize: 14,
-                  color: tc.textSecondary,
+                  color: tc.textSecondary
                 },
-                "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
+                "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
               }}
             >
               {availableTabs.map((t) => (
@@ -606,8 +601,8 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                   person: {
                     id: m.person!.id,
                     name: { display: m.person!.name?.display },
-                    photo: m.person!.photo,
-                  },
+                    photo: m.person!.photo
+                  }
                 }))}
             />
           )}

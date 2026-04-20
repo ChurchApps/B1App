@@ -8,113 +8,13 @@ import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { formatDate, formatDuration, shadePrimary } from "../util";
+import { formatDate, shadePrimary } from "../util";
+import { SermonCard } from "../SermonCard";
 
 interface Props {
   id: string;
   config: ConfigurationInterface;
 }
-
-const SermonCard = ({ sermon, onClick }: { sermon: SermonInterface; onClick: () => void }) => {
-  const tc = mobileTheme.colors;
-  const hasImage = !!(sermon.thumbnail && sermon.thumbnail.trim() !== "");
-
-  return (
-    <Box
-      role="button"
-      tabIndex={0}
-      onClick={onClick}
-      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onClick(); } }}
-      sx={{
-        position: "relative",
-        width: "100%",
-        paddingTop: "56.25%",
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        overflow: "hidden",
-        boxShadow: mobileTheme.shadows.md,
-        cursor: "pointer",
-        bgcolor: tc.primary,
-        backgroundImage: hasImage ? `url(${sermon.thumbnail})` : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        transition: "box-shadow 200ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.lg },
-      }}
-    >
-      {!hasImage && (
-        <Box sx={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: 0.9,
-        }}>
-          <Icon sx={{ fontSize: 56, color: "#FFFFFF" }}>play_circle_outline</Icon>
-        </Box>
-      )}
-
-      <Box sx={{
-        position: "absolute",
-        top: 12,
-        right: 12,
-        bgcolor: "rgba(0,0,0,0.7)",
-        borderRadius: "20px",
-        width: 36,
-        height: 36,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
-        <Icon sx={{ fontSize: 24, color: "#FFFFFF" }}>play_circle_filled</Icon>
-      </Box>
-
-      {sermon.duration ? (
-        <Box sx={{
-          position: "absolute",
-          top: 12,
-          left: 12,
-          bgcolor: "rgba(0,0,0,0.8)",
-          borderRadius: `${mobileTheme.radius.sm + 4}px`,
-          px: "8px",
-          py: "4px",
-        }}>
-          <Typography sx={{ color: "#FFFFFF", fontSize: 12, fontWeight: 600 }}>
-            {formatDuration(sermon.duration)}
-          </Typography>
-        </Box>
-      ) : null}
-
-      <Box sx={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.0) 100%)",
-        p: "16px",
-        pt: "32px",
-      }}>
-        <Typography sx={{
-          color: "#FFFFFF",
-          fontWeight: 600,
-          fontSize: 16,
-          mb: 0.5,
-          lineHeight: 1.2,
-          display: "-webkit-box",
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          textShadow: "0 1px 2px rgba(0,0,0,0.4)",
-        }}>
-          {sermon.title || "Untitled Sermon"}
-        </Typography>
-        <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 12, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
-          {formatDate(sermon.publishDate, "short")}
-        </Typography>
-      </Box>
-    </Box>
-  );
-};
 
 export const PlaylistDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
@@ -125,7 +25,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     data: playlistData,
     isLoading: playlistLoading,
     error: playlistError,
-    refetch: refetchPlaylist,
+    refetch: refetchPlaylist
   } = useQuery<PlaylistInterface | null>({
     queryKey: ["playlist", churchId, id],
     queryFn: async () => {
@@ -138,13 +38,13 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     },
     enabled: !!churchId && !!id,
     staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const {
     data: sermons = null,
     error: sermonsError,
-    refetch: refetchSermons,
+    refetch: refetchSermons
   } = useQuery<SermonInterface[]>({
     queryKey: ["playlist-sermons", churchId, id],
     queryFn: async () => {
@@ -156,7 +56,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     },
     enabled: !!churchId && !!id,
     staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const hasError = !!playlistError || !!sermonsError;
@@ -185,7 +85,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
           boxShadow: mobileTheme.shadows.md,
-          background: hasImage ? undefined : heroGradient,
+          background: hasImage ? undefined : heroGradient
         }}
       >
         {hasImage && (
@@ -205,7 +105,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
               borderRadius: "75px",
               bgcolor: "rgba(255,255,255,0.1)",
               top: -30,
-              right: -30,
+              right: -30
             }} />
             <Box sx={{
               position: "absolute",
@@ -214,7 +114,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
               borderRadius: "50px",
               bgcolor: "rgba(255,255,255,0.08)",
               bottom: -25,
-              left: -25,
+              left: -25
             }} />
             <Box sx={{
               position: "absolute",
@@ -223,7 +123,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
               borderRadius: "40px",
               bgcolor: "rgba(255,255,255,0.12)",
               top: "40%",
-              left: "30%",
+              left: "30%"
             }} />
           </>
         )}
@@ -237,7 +137,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
             justifyContent: "center",
             alignItems: "center",
             p: `${mobileTheme.spacing.md}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           {!hasImage && <Icon sx={{ fontSize: 48, color: "#FFFFFF", opacity: 0.9, mb: 1 }}>playlist_play</Icon>}
@@ -249,7 +149,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
               opacity: 0.9,
               letterSpacing: 1,
               textTransform: "uppercase",
-              mb: "6px",
+              mb: "6px"
             }}
           >
             Sermon Series
@@ -304,7 +204,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -316,7 +216,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.error }}>error_outline</Icon>
@@ -336,7 +236,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           textTransform: "none",
           fontWeight: 500,
           borderRadius: `${mobileTheme.radius.md}px`,
-          "&:hover": { bgcolor: tc.primary },
+          "&:hover": { bgcolor: tc.primary }
         }}
       >
         Retry
@@ -351,7 +251,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -363,7 +263,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>playlist_remove</Icon>
@@ -382,7 +282,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           color: tc.primary,
           textTransform: "none",
           fontWeight: 500,
-          borderRadius: `${mobileTheme.radius.md}px`,
+          borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
         Back to Sermons
@@ -397,7 +297,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Icon sx={{ fontSize: 48, color: tc.textSecondary, mb: 2 }}>video_library</Icon>

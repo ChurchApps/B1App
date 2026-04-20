@@ -26,7 +26,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
       const data = await ApiHelper.get("/registrations/person/" + personId, "ContentApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: !!personId,
+    enabled: !!personId
   });
 
   const handleCancel = async () => {
@@ -52,7 +52,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Skeleton variant="text" width="60%" height={22} />
@@ -68,7 +68,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -80,7 +80,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>event_available</Icon>
@@ -108,7 +108,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          opacity: isCancelled ? 0.65 : 1,
+          opacity: isCancelled ? 0.65 : 1
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
@@ -133,7 +133,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
               fontSize: 11,
               fontWeight: 600,
               textTransform: "capitalize",
-              whiteSpace: "nowrap",
+              whiteSpace: "nowrap"
             }}
           >
             {reg.status || "registered"}
@@ -177,10 +177,10 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
 
   const sortedRegistrations = registrations
     ? [...registrations].sort((a, b) => {
-        const aCancelled = a.status === "cancelled" ? 1 : 0;
-        const bCancelled = b.status === "cancelled" ? 1 : 0;
-        return aCancelled - bCancelled;
-      })
+      const aCancelled = a.status === "cancelled" ? 1 : 0;
+      const bCancelled = b.status === "cancelled" ? 1 : 0;
+      return aCancelled - bCancelled;
+    })
     : null;
 
   return (

@@ -65,7 +65,7 @@ export const NotificationsPage = ({ config }: Props) => {
       const data = await ApiHelper.get("/notifications/my", "MessagingApi");
       return Array.isArray(data) ? (data as NotificationItem[]) : [];
     },
-    enabled: loggedIn,
+    enabled: loggedIn
   });
 
   const notifications = React.useMemo<NotificationItem[] | null>(() => {
@@ -111,7 +111,7 @@ export const NotificationsPage = ({ config }: Props) => {
           cursor: href ? "pointer" : "default",
           transition: "box-shadow 150ms ease, transform 150ms ease",
           "&:hover": href ? { boxShadow: mobileTheme.shadows.md } : undefined,
-          "&:active": href ? { transform: "scale(0.995)" } : undefined,
+          "&:active": href ? { transform: "scale(0.995)" } : undefined
         }}
       >
         <Box
@@ -123,7 +123,7 @@ export const NotificationsPage = ({ config }: Props) => {
             bgcolor: tc.iconBackground,
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "center"
           }}
         >
           <Icon sx={{ color: tc.primary, fontSize: 24 }}>{iconName}</Icon>
@@ -139,7 +139,7 @@ export const NotificationsPage = ({ config }: Props) => {
                 display: "-webkit-box",
                 WebkitLineClamp: 3,
                 WebkitBoxOrient: "vertical",
-                overflow: "hidden",
+                overflow: "hidden"
               }}
             >
               {body}
@@ -155,7 +155,7 @@ export const NotificationsPage = ({ config }: Props) => {
                 borderColor: tc.divider,
                 color: tc.disabled,
                 height: 24,
-                "& .MuiChip-label": { fontSize: 12, px: "8px", color: tc.disabled },
+                "& .MuiChip-label": { fontSize: 12, px: "8px", color: tc.disabled }
               }}
             />
           </Box>
@@ -174,7 +174,7 @@ export const NotificationsPage = ({ config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: "12px",
         boxShadow: mobileTheme.shadows.sm,
-        p: "16px",
+        p: "16px"
       }}
     >
       <Skeleton variant="circular" width={40} height={40} />
@@ -196,7 +196,7 @@ export const NotificationsPage = ({ config }: Props) => {
         px: "24px",
         pt: `${mobileTheme.spacing.xl}px`,
         maxWidth: 300,
-        mx: "auto",
+        mx: "auto"
       }}
     >
       <Icon sx={{ fontSize: 64, color: tc.divider }}>notifications</Icon>
@@ -206,7 +206,7 @@ export const NotificationsPage = ({ config }: Props) => {
           fontWeight: 600,
           color: tc.text,
           mt: "16px",
-          mb: "8px",
+          mb: "8px"
         }}
       >
         No notifications yet
@@ -215,7 +215,7 @@ export const NotificationsPage = ({ config }: Props) => {
         sx={{
           fontSize: 14,
           color: tc.textMuted,
-          lineHeight: "20px",
+          lineHeight: "20px"
         }}
       >
         We&apos;ll notify you when something new arrives.

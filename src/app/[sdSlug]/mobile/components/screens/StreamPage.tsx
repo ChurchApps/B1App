@@ -25,7 +25,7 @@ export const StreamPage = ({ config }: Props) => {
       borderRadius: `${mobileTheme.radius.xl}px`,
       overflow: "hidden",
       boxShadow: mobileTheme.shadows.md,
-      bgcolor: "#000000",
+      bgcolor: "#000000"
     }}>
       <Box sx={{
         position: "absolute",
@@ -35,7 +35,7 @@ export const StreamPage = ({ config }: Props) => {
         alignItems: "center",
         justifyContent: "center",
         p: 3,
-        textAlign: "center",
+        textAlign: "center"
       }}>
         <Icon sx={{ fontSize: 48, color: "#FFFFFF", opacity: 0.8, mb: 1 }}>live_tv</Icon>
         <Typography sx={{ color: "#FFFFFF", fontSize: 16, fontWeight: 600, mb: 0.5 }}>

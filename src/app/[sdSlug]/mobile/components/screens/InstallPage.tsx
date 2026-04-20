@@ -116,7 +116,7 @@ export const InstallPage = ({ config }: Props) => {
     { icon: "bolt", label: "Instant access" },
     { icon: "wifi_off", label: "Works offline" },
     { icon: "notifications_active", label: "Stay in the loop" },
-    { icon: "fullscreen", label: "Full-screen, app-like" },
+    { icon: "fullscreen", label: "Full-screen, app-like" }
   ]), []);
 
   // Scope margin-reset / scroll behavior to just this splash. Avoids touching
@@ -124,7 +124,7 @@ export const InstallPage = ({ config }: Props) => {
   const globalStyles = (
     <GlobalStyles styles={{
       "html, body": { margin: 0, padding: 0, scrollBehavior: "smooth" },
-      body: { backgroundColor: primaryDark },
+      body: { backgroundColor: primaryDark }
     }} />
   );
 
@@ -135,8 +135,10 @@ export const InstallPage = ({ config }: Props) => {
         <Box sx={{
           minHeight: "100vh",
           background: `linear-gradient(140deg, ${primary} 0%, ${primaryDark} 100%)`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          p: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3
         }}>
           <Box sx={{
             bgcolor: "#ffffff",
@@ -145,12 +147,17 @@ export const InstallPage = ({ config }: Props) => {
             textAlign: "center",
             maxWidth: 420,
             width: "100%",
-            boxShadow: "0 30px 60px rgba(0,0,0,0.25)",
+            boxShadow: "0 30px 60px rgba(0,0,0,0.25)"
           }}>
             <Box sx={{
-              width: 80, height: 80, borderRadius: "40px",
+              width: 80,
+              height: 80,
+              borderRadius: "40px",
               bgcolor: "rgba(34, 197, 94, 0.15)",
-              display: "inline-flex", alignItems: "center", justifyContent: "center", mb: 2,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: 2
             }}>
               <Icon sx={{ fontSize: 44, color: "#22c55e" }}>check_circle</Icon>
             </Box>
@@ -175,58 +182,93 @@ export const InstallPage = ({ config }: Props) => {
         overflow: "hidden",
         background: `radial-gradient(ellipse 900px 700px at 15% 10%, ${accent}4d 0%, transparent 50%),
                      radial-gradient(ellipse 800px 600px at 95% 90%, ${primary}8c 0%, transparent 55%),
-                     linear-gradient(135deg, ${primaryDark} 0%, ${primary} 45%, ${primary} 100%)`,
+                     linear-gradient(135deg, ${primaryDark} 0%, ${primary} 45%, ${primary} 100%)`
       }}>
         {/* Animated orbs */}
         <Box aria-hidden sx={{
-          position: "absolute", width: 400, height: 400, top: -80, right: -80,
-          borderRadius: "50%", filter: "blur(60px)", opacity: 0.6, pointerEvents: "none",
+          position: "absolute",
+          width: 400,
+          height: 400,
+          top: -80,
+          right: -80,
+          borderRadius: "50%",
+          filter: "blur(60px)",
+          opacity: 0.6,
+          pointerEvents: "none",
           background: `radial-gradient(circle, ${accent} 0%, transparent 70%)`,
-          animation: `${float} 18s ease-in-out infinite`,
+          animation: `${float} 18s ease-in-out infinite`
         }} />
         <Box aria-hidden sx={{
-          position: "absolute", width: 500, height: 500, bottom: -150, left: -100,
-          borderRadius: "50%", filter: "blur(60px)", opacity: 0.6, pointerEvents: "none",
+          position: "absolute",
+          width: 500,
+          height: 500,
+          bottom: -150,
+          left: -100,
+          borderRadius: "50%",
+          filter: "blur(60px)",
+          opacity: 0.6,
+          pointerEvents: "none",
           background: `radial-gradient(circle, ${primary} 0%, transparent 70%)`,
           animation: `${float} 18s ease-in-out infinite`,
-          animationDelay: "-6s",
+          animationDelay: "-6s"
         }} />
         <Box aria-hidden sx={{
-          position: "absolute", width: 300, height: 300, top: "40%", left: "50%",
-          borderRadius: "50%", filter: "blur(60px)", opacity: 0.35, pointerEvents: "none",
+          position: "absolute",
+          width: 300,
+          height: 300,
+          top: "40%",
+          left: "50%",
+          borderRadius: "50%",
+          filter: "blur(60px)",
+          opacity: 0.35,
+          pointerEvents: "none",
           background: "radial-gradient(circle, #8b5cf6 0%, transparent 70%)",
           animation: `${float} 18s ease-in-out infinite`,
-          animationDelay: "-12s",
+          animationDelay: "-12s"
         }} />
 
         {/* Grid overlay */}
         <Box aria-hidden sx={{
-          position: "absolute", inset: 0, pointerEvents: "none",
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
           backgroundImage: "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
           WebkitMaskImage: "radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 70%)",
-          maskImage: "radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 70%)",
+          maskImage: "radial-gradient(ellipse at center, rgba(0,0,0,0.8) 0%, transparent 70%)"
         }} />
 
         <Box sx={{
-          position: "relative", zIndex: 2,
-          maxWidth: 1240, mx: "auto",
-          px: { xs: 2, sm: 3 }, pt: { xs: 3, sm: 4 }, pb: { xs: 6, sm: 10 },
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          position: "relative",
+          zIndex: 2,
+          maxWidth: 1240,
+          mx: "auto",
+          px: { xs: 2, sm: 3 },
+          pt: { xs: 3, sm: 4 },
+          pb: { xs: 6, sm: 10 },
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
         }}>
           {/* Top bar — church logo + name */}
           <Box sx={{
-            display: "flex", alignItems: "center", gap: 1.5,
-            color: "#f8fafc", mb: { xs: 4, sm: 7 },
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+            color: "#f8fafc",
+            mb: { xs: 4, sm: 7 }
           }}>
             <Box sx={{
-              width: 44, height: 44, borderRadius: "12px",
-              bgcolor: "#ffffff", p: "6px",
-              display: "flex", alignItems: "center", justifyContent: "center",
+              width: 44,
+              height: 44,
+              borderRadius: "12px",
+              bgcolor: "#ffffff",
+              p: "6px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
-              flexShrink: 0,
+              flexShrink: 0
             }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              { }
               <img
                 src={iconUrl}
                 alt={`${churchName} icon`}
@@ -245,19 +287,25 @@ export const InstallPage = ({ config }: Props) => {
             gridTemplateColumns: { xs: "1fr", md: "1.15fr 1fr" },
             gap: { xs: 6, md: 10 },
             alignItems: "center",
-            mb: { xs: 5, md: 7 },
+            mb: { xs: 5, md: 7 }
           }}>
             {/* Hero content */}
             <Box sx={{ color: "#f8fafc" }}>
               <Box sx={{
-                display: "inline-flex", alignItems: "center", gap: 1.25,
-                px: 1.75, py: 1, mb: 3.5,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 1.25,
+                px: 1.75,
+                py: 1,
+                mb: 3.5,
                 borderRadius: "999px",
                 bgcolor: `${accent}2e`,
                 color: accentLight,
-                fontSize: "0.75rem", fontWeight: 700,
-                letterSpacing: "0.12em", textTransform: "uppercase",
-                border: `1px solid ${accent}59`,
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                border: `1px solid ${accent}59`
               }}>
                 <Icon sx={{ fontSize: 14 }}>auto_awesome</Icon>
                 One-tap install · No app store
@@ -268,7 +316,7 @@ export const InstallPage = ({ config }: Props) => {
                 fontWeight: 800,
                 lineHeight: 1.02,
                 letterSpacing: "-0.035em",
-                mb: 3,
+                mb: 3
               }}>
                 Worship, connect,
                 <br />
@@ -276,7 +324,7 @@ export const InstallPage = ({ config }: Props) => {
                   background: `linear-gradient(120deg, ${accentLight} 0%, ${accent} 50%, #fbbf24 100%)`,
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
-                  color: "transparent",
+                  color: "transparent"
                 }}>
                   anywhere you are.
                 </Box>
@@ -285,18 +333,24 @@ export const InstallPage = ({ config }: Props) => {
               <Typography sx={{
                 fontSize: { xs: "1.05rem", md: "1.2rem" },
                 color: "rgba(248, 250, 252, 0.78)",
-                maxWidth: 520, lineHeight: 1.65, mb: 4.5,
+                maxWidth: 520,
+                lineHeight: 1.65,
+                mb: 4.5
               }}>
                 Add the {churchName} app to your home screen for fast, full-screen access to sermons, events, giving, and community &mdash; wherever the week takes you.
               </Typography>
 
               <Box sx={{
-                display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
-                gap: 1.75, maxWidth: 540,
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+                gap: 1.75,
+                maxWidth: 540
               }}>
                 {benefits.map((b) => (
                   <Box key={b.label} sx={{
-                    display: "flex", alignItems: "center", gap: 1.5,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
                     p: "14px 16px",
                     borderRadius: "14px",
                     bgcolor: "rgba(255, 255, 255, 0.06)",
@@ -306,15 +360,19 @@ export const InstallPage = ({ config }: Props) => {
                     "&:hover": {
                       bgcolor: "rgba(255, 255, 255, 0.1)",
                       transform: "translateY(-2px)",
-                      borderColor: `${accent}66`,
-                    },
+                      borderColor: `${accent}66`
+                    }
                   }}>
                     <Box sx={{
-                      width: 36, height: 36, borderRadius: "10px",
+                      width: 36,
+                      height: 36,
+                      borderRadius: "10px",
                       background: `linear-gradient(135deg, ${accent} 0%, ${accentDeep} 100%)`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       flexShrink: 0,
-                      boxShadow: `0 4px 12px ${accent}66`,
+                      boxShadow: `0 4px 12px ${accent}66`
                     }}>
                       <Icon sx={{ fontSize: 18, color: "#fff" }}>{b.icon}</Icon>
                     </Box>
@@ -344,7 +402,7 @@ export const InstallPage = ({ config }: Props) => {
             p: { xs: 3, sm: 5, md: 5.5 },
             boxShadow: "0 40px 100px rgba(0,0,0,0.3)",
             position: "relative",
-            zIndex: 3,
+            zIndex: 3
           }}>
             {/* Platform-specific content */}
             {platform === null ? (
@@ -375,12 +433,13 @@ export const InstallPage = ({ config }: Props) => {
 
           {/* Footer strip */}
           <Typography sx={{
-            textAlign: "center", mt: 4.5,
+            textAlign: "center",
+            mt: 4.5,
             color: "rgba(248, 250, 252, 0.55)",
             fontSize: "0.78rem",
-            position: "relative", zIndex: 2,
+            position: "relative",
+            zIndex: 2
           }}>
-            We&apos;re glad you&apos;re here.
           </Typography>
         </Box>
       </Box>
@@ -401,40 +460,53 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
   <Box sx={{
     position: "relative",
     display: { xs: "none", md: "flex" },
-    justifyContent: "center", alignItems: "center",
-    minHeight: 560,
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: 560
   }}>
     <Box aria-hidden sx={{
       position: "relative",
-      width: 280, height: 570,
+      width: 280,
+      height: 570,
       bgcolor: primaryDark,
       borderRadius: "40px",
       border: "10px solid #111827",
       boxShadow: `0 0 0 1.5px #1f2937, 0 30px 80px rgba(0,0,0,0.5), 0 0 60px ${accent}59`,
       overflow: "hidden",
       transform: "rotate(-4deg)",
-      animation: `${phonefloat} 6s ease-in-out infinite`,
+      animation: `${phonefloat} 6s ease-in-out infinite`
     }}>
       {/* Notch */}
       <Box sx={{
-        position: "absolute", top: 8, left: "50%",
+        position: "absolute",
+        top: 8,
+        left: "50%",
         transform: "translateX(-50%)",
-        width: 90, height: 20,
-        bgcolor: "#000", borderRadius: "0 0 14px 14px",
-        zIndex: 10,
+        width: 90,
+        height: 20,
+        bgcolor: "#000",
+        borderRadius: "0 0 14px 14px",
+        zIndex: 10
       }} />
 
       {/* Screen */}
       <Box sx={{
-        position: "absolute", inset: 0,
+        position: "absolute",
+        inset: 0,
         background: `linear-gradient(180deg, ${primary} 0%, ${primaryDark} 100%)`,
-        pt: "50px", px: "18px", pb: "18px",
-        display: "flex", flexDirection: "column",
+        pt: "50px",
+        px: "18px",
+        pb: "18px",
+        display: "flex",
+        flexDirection: "column"
       }}>
         <Box sx={{
-          display: "flex", justifyContent: "space-between",
-          fontSize: "0.7rem", color: "rgba(255,255,255,0.8)",
-          mb: 2.25, fontWeight: 600,
+          display: "flex",
+          justifyContent: "space-between",
+          fontSize: "0.7rem",
+          color: "rgba(255,255,255,0.8)",
+          mb: 2.25,
+          fontWeight: 600
         }}>
           <span>9:41</span>
           <span>●●●●● 5G</span>
@@ -442,13 +514,19 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
 
         <Box sx={{ color: "white", textAlign: "center", pt: 2, pb: 2.5 }}>
           <Box sx={{
-            width: 58, height: 58, bgcolor: "#fff",
-            borderRadius: "14px", mx: "auto", mb: 1.5,
-            display: "flex", alignItems: "center", justifyContent: "center",
+            width: 58,
+            height: 58,
+            bgcolor: "#fff",
+            borderRadius: "14px",
+            mx: "auto",
+            mb: 1.5,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
-            p: "6px",
+            p: "6px"
           }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+            { }
             <img
               src={iconUrl} alt=""
               width={46} height={46}
@@ -467,21 +545,27 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
           {[
             { icon: "play_arrow", title: "Sunday Sermon", meta: "Watch now · 42 min" },
             { icon: "event", title: "Youth Night", meta: "Wed · 6:30 PM" },
-            { icon: "volunteer_activism", title: "Give securely", meta: "One-tap donation" },
+            { icon: "volunteer_activism", title: "Give securely", meta: "One-tap donation" }
           ].map(card => (
             <Box key={card.title} sx={{
               bgcolor: "rgba(255,255,255,0.08)",
               border: "1px solid rgba(255,255,255,0.1)",
               borderRadius: "14px",
               p: 1.5,
-              display: "flex", gap: 1.25, alignItems: "center",
-              backdropFilter: "blur(10px)",
+              display: "flex",
+              gap: 1.25,
+              alignItems: "center",
+              backdropFilter: "blur(10px)"
             }}>
               <Box sx={{
-                width: 36, height: 36, borderRadius: "10px",
+                width: 36,
+                height: 36,
+                borderRadius: "10px",
                 background: `linear-gradient(135deg, ${accent}, ${accentDeep})`,
                 flexShrink: 0,
-                display: "flex", alignItems: "center", justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
               }}>
                 <Icon sx={{ fontSize: 16, color: "white" }}>{card.icon}</Icon>
               </Box>
@@ -495,15 +579,19 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
 
         <Box sx={{
           mt: "auto",
-          display: "flex", justifyContent: "space-around",
-          pt: 1.5, pb: "4px",
-          borderTop: "1px solid rgba(255,255,255,0.08)",
+          display: "flex",
+          justifyContent: "space-around",
+          pt: 1.5,
+          pb: "4px",
+          borderTop: "1px solid rgba(255,255,255,0.08)"
         }}>
           {[true, false, false, false].map((active, i) => (
             <Box key={i} sx={{
-              width: 28, height: 28, borderRadius: "8px",
+              width: 28,
+              height: 28,
+              borderRadius: "8px",
               bgcolor: active ? accent : "rgba(255,255,255,0.08)",
-              boxShadow: active ? `0 0 10px ${accent}99` : "none",
+              boxShadow: active ? `0 0 10px ${accent}99` : "none"
             }} />
           ))}
         </Box>
@@ -518,7 +606,9 @@ const panelHeader = (title: string, subtitle: string) => (
   <Box sx={{ mb: 3.5 }}>
     <Typography component="h2" sx={{
       fontSize: { xs: "1.4rem", sm: "1.6rem" },
-      fontWeight: 700, color: "#0f172a", mb: 0.75,
+      fontWeight: 700,
+      color: "#0f172a",
+      mb: 0.75
     }}>
       {title}
     </Typography>
@@ -540,16 +630,24 @@ const Step = ({ num, title, body, accent, accentDeep }: StepProps) => (
     "&:hover": {
       borderColor: accent,
       transform: "translateY(-3px)",
-      boxShadow: "0 8px 32px rgba(15, 37, 99, 0.12)",
-    },
+      boxShadow: "0 8px 32px rgba(15, 37, 99, 0.12)"
+    }
   }}>
     <Box sx={{
-      position: "absolute", top: -14, left: 20,
-      width: 32, height: 32, borderRadius: "10px",
+      position: "absolute",
+      top: -14,
+      left: 20,
+      width: 32,
+      height: 32,
+      borderRadius: "10px",
       background: `linear-gradient(135deg, ${accent}, ${accentDeep})`,
-      color: "white", fontWeight: 800, fontSize: "0.95rem",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      boxShadow: `0 4px 12px ${accent}66`,
+      color: "white",
+      fontWeight: 800,
+      fontSize: "0.95rem",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      boxShadow: `0 4px 12px ${accent}66`
     }}>
       {num}
     </Box>
@@ -564,12 +662,19 @@ const Step = ({ num, title, body, accent, accentDeep }: StepProps) => (
 
 const Kbd = ({ children }: { children: React.ReactNode }) => (
   <Box component="kbd" sx={{
-    display: "inline-flex", alignItems: "center", gap: "4px",
-    px: "8px", py: "2px", mx: "2px",
-    bgcolor: "#ffffff", border: "1px solid rgba(148, 163, 184, 0.3)",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "4px",
+    px: "8px",
+    py: "2px",
+    mx: "2px",
+    bgcolor: "#ffffff",
+    border: "1px solid rgba(148, 163, 184, 0.3)",
     borderRadius: "6px",
-    fontFamily: "inherit", fontSize: "0.78rem", fontWeight: 600,
-    color: "#1e3a8a",
+    fontFamily: "inherit",
+    fontSize: "0.78rem",
+    fontWeight: 600,
+    color: "#1e3a8a"
   }}>
     {children}
   </Box>
@@ -592,7 +697,9 @@ const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onIns
     <Box sx={{
       display: "grid",
       gridTemplateColumns: { xs: "1fr", sm: "repeat(auto-fit, minmax(240px, 1fr))" },
-      gap: 2, mb: 3.5, mt: 2,
+      gap: 2,
+      mb: 3.5,
+      mt: 2
     }}>
       <Step num={1} title="Open in Chrome" body="If you're not already, open this page in Chrome on your Android device." accent={accent} accentDeep={accentDeep} />
       <Step num={2} title="Tap the install button" body="Chrome will add the app to your home screen in one tap." accent={accent} accentDeep={accentDeep} />
@@ -606,7 +713,10 @@ const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onIns
       onClick={() => { if (canInstall && !installing) onInstall(); }}
       onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && canInstall && !installing) onInstall(); }}
       sx={{
-        display: "flex", alignItems: "center", justifyContent: "center", gap: 1.25,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 1.25,
         width: "100%",
         py: "18px",
         borderRadius: "14px",
@@ -622,8 +732,8 @@ const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onIns
         transition: "all 0.3s ease",
         "&:hover": canInstall && !installing ? {
           transform: "translateY(-2px)",
-          boxShadow: `0 16px 36px ${accent}80`,
-        } : {},
+          boxShadow: `0 16px 36px ${accent}80`
+        } : {}
       }}
     >
       <Icon sx={{ fontSize: 22 }}>{installing ? "hourglass_top" : "download"}</Icon>
@@ -651,7 +761,9 @@ const IOSInstructions = ({ accent, accentDeep }: { accent: string; accentDeep: s
     <Box sx={{
       display: "grid",
       gridTemplateColumns: { xs: "1fr", sm: "repeat(auto-fit, minmax(240px, 1fr))" },
-      gap: 2, mb: 3, mt: 2,
+      gap: 2,
+      mb: 3,
+      mt: 2
     }}>
       <Step num={1} title="Open in Safari" body={<>iPhone installs only work in Safari. If you&apos;re in Chrome, tap the share icon and choose <Kbd>Open in Safari</Kbd>.</>} accent={accent} accentDeep={accentDeep} />
       <Step num={2} title={<>Tap the <Kbd>Share</Kbd> button</>} body="Find the share icon at the bottom of Safari — the square with the upward arrow." accent={accent} accentDeep={accentDeep} />
@@ -659,10 +771,13 @@ const IOSInstructions = ({ accent, accentDeep }: { accent: string; accentDeep: s
     </Box>
 
     <Box sx={{
-      mt: 2, p: 2,
+      mt: 2,
+      p: 2,
       borderRadius: "12px",
       bgcolor: "rgba(254, 170, 36, 0.1)",
-      display: "flex", alignItems: "flex-start", gap: 1.25,
+      display: "flex",
+      alignItems: "flex-start",
+      gap: 1.25
     }}>
       <Icon sx={{ fontSize: 20, color: "#d97706", mt: "1px" }}>info</Icon>
       <Typography sx={{ fontSize: 13, color: "#0f172a", lineHeight: 1.5 }}>
@@ -683,7 +798,7 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
       gridTemplateColumns: { xs: "1fr", sm: "260px 1fr" },
       gap: { xs: 3, sm: 4.5 },
       alignItems: "center",
-      py: 0.5,
+      py: 0.5
     }}>
       <Box sx={{
         position: "relative",
@@ -692,22 +807,25 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
         borderRadius: "20px",
         border: "1px solid rgba(148, 163, 184, 0.2)",
         boxShadow: "0 8px 32px rgba(15, 37, 99, 0.12)",
-        display: "flex", flexDirection: "column", alignItems: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         mx: { xs: "auto", sm: 0 },
         "&::before": {
           content: '""',
-          position: "absolute", inset: "-2px",
+          position: "absolute",
+          inset: "-2px",
           borderRadius: "22px",
           padding: "2px",
           background: `linear-gradient(135deg, ${accent}, ${primary})`,
           WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMaskComposite: "xor",
           maskComposite: "exclude",
-          pointerEvents: "none",
-        },
+          pointerEvents: "none"
+        }
       }}>
         {qrUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
+
           <img
             src={qrUrl}
             alt="QR code linking to this install page"
@@ -718,8 +836,12 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
           <Box sx={{ width: 220, height: 220, bgcolor: "#f8fafc", borderRadius: "8px" }} />
         )}
         <Typography sx={{
-          mt: 1.75, fontSize: "0.8rem", fontWeight: 600, color: "#475569",
-          textAlign: "center", lineHeight: 1.4,
+          mt: 1.75,
+          fontSize: "0.8rem",
+          fontWeight: 600,
+          color: "#475569",
+          textAlign: "center",
+          lineHeight: 1.4
         }}>
           <Box component="span" sx={{ color: "#0f172a" }}>Scan with your phone camera</Box>
           <br />to open this page and install
@@ -728,15 +850,21 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
 
       <Box>
         <Typography sx={{
-          fontSize: "0.75rem", fontWeight: 700,
-          letterSpacing: "0.12em", textTransform: "uppercase",
-          color: accentDeep, mb: 1.5,
+          fontSize: "0.75rem",
+          fontWeight: 700,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          color: accentDeep,
+          mb: 1.5
         }}>
           You&apos;re on desktop
         </Typography>
         <Typography sx={{
-          fontSize: "1.3rem", fontWeight: 700, lineHeight: 1.2,
-          color: "#0f172a", mb: 1.75,
+          fontSize: "1.3rem",
+          fontWeight: 700,
+          lineHeight: 1.2,
+          color: "#0f172a",
+          mb: 1.75
         }}>
           Install on your phone in three steps
         </Typography>
@@ -747,18 +875,27 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
           {[
             "Open your phone's camera app",
             "Point it at the QR code — tap the notification",
-            "Follow the install instructions on your phone",
+            "Follow the install instructions on your phone"
           ].map((text, i) => (
             <Box component="li" key={i} sx={{
-              display: "flex", alignItems: "center", gap: 1.5,
-              fontSize: "0.9rem", color: "#0f172a",
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              fontSize: "0.9rem",
+              color: "#0f172a"
             }}>
               <Box sx={{
-                width: 26, height: 26, borderRadius: "8px",
+                width: 26,
+                height: 26,
+                borderRadius: "8px",
                 background: `linear-gradient(135deg, ${primary}, ${accent})`,
-                color: "white", fontWeight: 700, fontSize: "0.8rem",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0,
+                color: "white",
+                fontWeight: 700,
+                fontSize: "0.8rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0
               }}>
                 {i + 1}
               </Box>

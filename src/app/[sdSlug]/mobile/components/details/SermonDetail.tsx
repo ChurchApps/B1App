@@ -100,7 +100,7 @@ export const SermonDetail = ({ id, config }: Props) => {
       }
       return found;
     },
-    enabled: !!id,
+    enabled: !!id
   });
 
   const playlistId = (sermon as any)?.playlistId as string | undefined;
@@ -123,7 +123,7 @@ export const SermonDetail = ({ id, config }: Props) => {
     },
     enabled: !!churchId && !!playlistId,
     staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    gcTime: 30 * 60 * 1000
   });
 
   const embedUrl = useMemo(() => buildEmbedUrl(sermon), [sermon]);
@@ -183,7 +183,7 @@ export const SermonDetail = ({ id, config }: Props) => {
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center",
-            mt: 4,
+            mt: 4
           }}
         >
           <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>sentiment_dissatisfied</Icon>
@@ -222,7 +222,7 @@ export const SermonDetail = ({ id, config }: Props) => {
             sermon.thumbnail && !showPlayer ? `url(${sermon.thumbnail})` : undefined,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          cursor: !showPlayer && canPlay ? "pointer" : "default",
+          cursor: !showPlayer && canPlay ? "pointer" : "default"
         }}
         onClick={() => {
           if (!showPlayer && canPlay) setShowVideo(true);
@@ -255,7 +255,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               justifyContent: "center",
               background: sermon.thumbnail
                 ? "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 100%)"
-                : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
+                : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`
             }}
           >
             <PlayCircleFilledIcon sx={{ fontSize: 80, color: "#FFFFFF", opacity: 0.95 }} />
@@ -272,7 +272,7 @@ export const SermonDetail = ({ id, config }: Props) => {
                   color: "#FFFFFF",
                   fontSize: 12,
                   fontWeight: 600,
-                  lineHeight: 1.4,
+                  lineHeight: 1.4
                 }}
               >
                 {formatDuration(sermon.duration)}
@@ -289,7 +289,7 @@ export const SermonDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         {playlistTitle ? (
@@ -300,7 +300,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               color: tc.primary,
               textTransform: "uppercase",
               letterSpacing: "1px",
-              mb: 1,
+              mb: 1
             }}
           >
             {playlistTitle}
@@ -334,7 +334,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               fontWeight: 400,
               color: tc.text,
               lineHeight: 1.55,
-              whiteSpace: "pre-wrap",
+              whiteSpace: "pre-wrap"
             }}
           >
             {description}
@@ -348,7 +348,7 @@ export const SermonDetail = ({ id, config }: Props) => {
           display: "flex",
           flexDirection: "column",
           gap: `${mobileTheme.spacing.sm}px`,
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px` }}>
@@ -363,7 +363,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               textTransform: "none",
               fontWeight: 600,
               borderRadius: `${mobileTheme.radius.md}px`,
-              "&:hover": { borderColor: tc.primary, bgcolor: tc.primaryLight },
+              "&:hover": { borderColor: tc.primary, bgcolor: tc.primaryLight }
             }}
           >
             Share
@@ -380,7 +380,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               textTransform: "none",
               fontWeight: 600,
               borderRadius: `${mobileTheme.radius.md}px`,
-              "&:hover": { borderColor: tc.primary, bgcolor: tc.primaryLight },
+              "&:hover": { borderColor: tc.primary, bgcolor: tc.primaryLight }
             }}
           >
             Open Link
@@ -400,7 +400,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               borderRadius: `${mobileTheme.radius.lg}px`,
               py: 1.25,
               boxShadow: mobileTheme.shadows.md,
-              "&:hover": { bgcolor: tc.primary, boxShadow: mobileTheme.shadows.lg },
+              "&:hover": { bgcolor: tc.primary, boxShadow: mobileTheme.shadows.lg }
             }}
           >
             Watch Sermon

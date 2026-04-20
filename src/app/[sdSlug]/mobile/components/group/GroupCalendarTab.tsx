@@ -28,7 +28,7 @@ const describeRecurrence = (rule?: string) => {
     DAILY: interval === 1 ? "Daily" : `Every ${interval} days`,
     WEEKLY: interval === 1 ? "Weekly" : `Every ${interval} weeks`,
     MONTHLY: interval === 1 ? "Monthly" : `Every ${interval} months`,
-    YEARLY: interval === 1 ? "Yearly" : `Every ${interval} years`,
+    YEARLY: interval === 1 ? "Yearly" : `Every ${interval} years`
   };
   return map[freq] || "Repeats";
 };
@@ -192,7 +192,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: `${mobileTheme.spacing.sm}px`,
+          gap: `${mobileTheme.spacing.sm}px`
         }}
       >
         {isLeader && (
@@ -208,7 +208,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
               fontWeight: 600,
               borderRadius: `${mobileTheme.radius.md}px`,
               py: "10px",
-              "&:hover": { bgcolor: tc.success },
+              "&:hover": { bgcolor: tc.success }
             }}
           >
             Add Event
@@ -225,7 +225,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
             textTransform: "none",
             fontWeight: 600,
             borderRadius: `${mobileTheme.radius.md}px`,
-            py: "10px",
+            py: "10px"
           }}
         >
           Subscribe
@@ -244,7 +244,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                 bgcolor: selectedTags.includes(t) ? tc.primaryLight : undefined,
                 color: selectedTags.includes(t) ? tc.primary : tc.text,
                 borderColor: tc.primary,
-                fontWeight: 500,
+                fontWeight: 500
               }}
               size="small"
             />
@@ -266,7 +266,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
@@ -319,7 +319,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                   color: isSelected ? tc.onPrimary : isToday ? tc.primary : tc.text,
                   fontSize: 14,
                   fontWeight: isToday || isSelected ? 700 : 500,
-                  "&:hover": { bgcolor: isSelected ? tc.primary : tc.iconBackground },
+                  "&:hover": { bgcolor: isSelected ? tc.primary : tc.iconBackground }
                 }}
               >
                 {d.getDate()}
@@ -331,7 +331,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                       width: 4,
                       height: 4,
                       borderRadius: "2px",
-                      bgcolor: tc.primary,
+                      bgcolor: tc.primary
                     }}
                   />
                 )}
@@ -347,7 +347,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
           {new Date(selected).toLocaleDateString(undefined, {
             weekday: "long",
             month: "long",
-            day: "numeric",
+            day: "numeric"
           })}
         </Typography>
         {events === null && (
@@ -364,7 +364,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
               borderRadius: `${mobileTheme.radius.lg}px`,
               boxShadow: mobileTheme.shadows.sm,
               p: `${mobileTheme.spacing.md}px`,
-              textAlign: "center",
+              textAlign: "center"
             }}
           >
             <Typography sx={{ fontSize: 14, color: tc.textMuted }}>No events on this day.</Typography>
@@ -381,7 +381,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                   boxShadow: mobileTheme.shadows.sm,
                   p: `${mobileTheme.spacing.md}px`,
                   borderLeft: `4px solid ${tc.primary}`,
-                  position: "relative",
+                  position: "relative"
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
@@ -405,7 +405,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                               fontWeight: 600,
                               bgcolor: tc.iconBackground,
                               color: tc.textSecondary,
-                              "& .MuiChip-icon": { color: tc.textSecondary, ml: "4px" },
+                              "& .MuiChip-icon": { color: tc.textSecondary, ml: "4px" }
                             }}
                           />
                         )}
@@ -418,7 +418,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                               fontSize: 11,
                               fontWeight: 600,
                               bgcolor: tc.primaryLight,
-                              color: tc.primary,
+                              color: tc.primary
                             }}
                           />
                         )}
@@ -433,7 +433,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                               fontWeight: 600,
                               bgcolor: tc.iconBackground,
                               color: tc.text,
-                              "& .MuiChip-icon": { color: tc.primary, ml: "4px" },
+                              "& .MuiChip-icon": { color: tc.primary, ml: "4px" }
                             }}
                           />
                         )}
@@ -464,7 +464,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                       display: "-webkit-box",
                       WebkitLineClamp: 3,
                       WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
+                      overflow: "hidden"
                     }}
                   >
                     {e.description}
@@ -483,7 +483,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                         fontWeight: 600,
                         borderRadius: `${mobileTheme.radius.md}px`,
                         px: 2,
-                        "&:hover": { bgcolor: tc.success },
+                        "&:hover": { bgcolor: tc.success }
                       }}
                     >
                       Register

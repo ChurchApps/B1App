@@ -49,7 +49,7 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
         color: "#FFFFFF",
         width: { md: `calc(100% - ${drawerWidth}px)` },
         ml: { md: `${drawerWidth}px` },
-        zIndex: (theme) => theme.zIndex.drawer - 1,
+        zIndex: (theme) => theme.zIndex.drawer - 1
       }}
     >
       <Toolbar disableGutters sx={{ minHeight: `${mobileTheme.headerHeight}px !important`, px: 1 }}>
@@ -106,7 +106,7 @@ export const MobileAppBar = ({ config, primaryColor, drawerWidth, onMenuClick, o
                   bgcolor: "rgba(255,255,255,0.25)",
                   color: "#FFFFFF",
                   fontSize: 13,
-                  fontWeight: 600,
+                  fontWeight: 600
                 }}>
                   {initials}
                 </Avatar>

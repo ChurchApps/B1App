@@ -11,7 +11,7 @@ import {
   Tab,
   Tabs,
   Typography,
-  Alert,
+  Alert
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -20,18 +20,18 @@ import {
   CurrencyHelper,
   DateHelper,
   UniqueIdHelper,
-  UserHelper,
+  UserHelper
 } from "@churchapps/apphelper";
 import {
   RecurringDonations,
   PaymentMethods,
-  StripePaymentMethod as AppHelperStripePaymentMethod,
+  StripePaymentMethod as AppHelperStripePaymentMethod
 } from "@churchapps/apphelper-donations";
 import { NonAuthDonationWrapper } from "@churchapps/apphelper-website";
 import type {
   ChurchInterface,
   DonationInterface,
-  PersonInterface,
+  PersonInterface
 } from "@churchapps/helpers";
 import { StableDonationForm } from "@/components/donate/StableDonationForm";
 import UserContext from "@/context/UserContext";
@@ -76,7 +76,7 @@ function DonatePageInner({ config }: Props) {
       const data = await ApiHelper.get("/donations/my", "GivingApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: donationsEnabled,
+    enabled: donationsEnabled
   });
 
   interface PaymentData {
@@ -96,7 +96,7 @@ function DonatePageInner({ config }: Props) {
       const stripePromise = loadStripe(gateways[0].publicKey!) as Promise<Stripe>;
       const [methodsResult, personResult] = await Promise.all([
         ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi") as Promise<{ provider?: string; customerId?: string }[]>,
-        ApiHelper.get("/people/" + personId, "MembershipApi") as Promise<PersonInterface>,
+        ApiHelper.get("/people/" + personId, "MembershipApi") as Promise<PersonInterface>
       ]);
       const pms: AppHelperStripePaymentMethod[] = [];
       let customerId: string | null = null;
@@ -108,7 +108,7 @@ function DonatePageInner({ config }: Props) {
       }
       return { stripePromise, paymentMethods: pms, customerId, person: personResult || null };
     },
-    enabled: donationsEnabled,
+    enabled: donationsEnabled
   });
 
   const stripePromise = paymentData?.stripePromise ?? null;
@@ -135,7 +135,7 @@ function DonatePageInner({ config }: Props) {
         })
       );
     },
-    enabled: donationsEnabled && !!customerId,
+    enabled: donationsEnabled && !!customerId
   });
 
   const handleDataUpdate = (msg?: string) => {
@@ -187,7 +187,7 @@ function DonatePageInner({ config }: Props) {
             borderRadius: `${mobileTheme.radius.xl}px`,
             boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Box
@@ -199,7 +199,7 @@ function DonatePageInner({ config }: Props) {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              mb: `${mobileTheme.spacing.md}px`,
+              mb: `${mobileTheme.spacing.md}px`
             }}
           >
             <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>
@@ -233,7 +233,7 @@ function DonatePageInner({ config }: Props) {
             minHeight: 160,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "center"
           }}
         >
           {isAuthenticated ? (
@@ -272,7 +272,7 @@ function DonatePageInner({ config }: Props) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                mb: `${mobileTheme.spacing.md}px`,
+                mb: `${mobileTheme.spacing.md}px`
               }}
             >
               <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>
@@ -284,7 +284,7 @@ function DonatePageInner({ config }: Props) {
                   textTransform: "none",
                   color: tc.primary,
                   fontWeight: 600,
-                  minWidth: 0,
+                  minWidth: 0
                 }}
               >
                 View All
@@ -299,7 +299,7 @@ function DonatePageInner({ config }: Props) {
                 p: `${mobileTheme.spacing.md}px`,
                 display: "flex",
                 alignItems: "center",
-                gap: `${mobileTheme.spacing.md}px`,
+                gap: `${mobileTheme.spacing.md}px`
               }}
             >
               <Box
@@ -311,7 +311,7 @@ function DonatePageInner({ config }: Props) {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  flexShrink: 0,
+                  flexShrink: 0
                 }}
               >
                 <Icon sx={{ color: tc.success }}>favorite</Icon>
@@ -326,7 +326,7 @@ function DonatePageInner({ config }: Props) {
                         ((givingStats.lastGift as any).fund?.amount
                           ?? (givingStats.lastGift as any).amount
                           ?? 0) as number
-                      )
+                    )
                     : CurrencyHelper.formatCurrency(0)}
                 </Typography>
                 <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
@@ -346,7 +346,7 @@ function DonatePageInner({ config }: Props) {
                     fontWeight: 600,
                     fontSize: 13,
                     px: 2,
-                    "&:hover": { bgcolor: tc.iconBackground, opacity: 0.85 },
+                    "&:hover": { bgcolor: tc.iconBackground, opacity: 0.85 }
                   }}
                 >
                   Repeat
@@ -364,7 +364,7 @@ function DonatePageInner({ config }: Props) {
             boxShadow: mobileTheme.shadows.sm,
             border: `1px solid ${tc.borderLight}`,
             p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Icon sx={{ fontSize: 48, color: tc.primary, mb: `${mobileTheme.spacing.md}px` }}>
@@ -388,7 +388,7 @@ function DonatePageInner({ config }: Props) {
               px: 4,
               py: 1,
               borderRadius: `${mobileTheme.radius.lg}px`,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.9 },
+              "&:hover": { bgcolor: tc.primary, opacity: 0.9 }
             }}
           >
             Give Now
@@ -415,7 +415,7 @@ function DonatePageInner({ config }: Props) {
             bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.lg}px`,
             boxShadow: mobileTheme.shadows.sm,
-            p: `${mobileTheme.spacing.md}px`,
+            p: `${mobileTheme.spacing.md}px`
           }}
         >
           <NonAuthDonationWrapper
@@ -441,7 +441,7 @@ function DonatePageInner({ config }: Props) {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         <StableDonationForm
@@ -472,7 +472,7 @@ function DonatePageInner({ config }: Props) {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         <PaymentMethods
@@ -497,7 +497,7 @@ function DonatePageInner({ config }: Props) {
     ytd: "Year to Date",
     "30d": "Last 30 Days",
     "90d": "Last 90 Days",
-    all: "All Time",
+    all: "All Time"
   };
 
   const filteredDonations = useMemo(() => {
@@ -536,7 +536,7 @@ function DonatePageInner({ config }: Props) {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.xl}px`,
           boxShadow: mobileTheme.shadows.md,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         <Box
@@ -545,7 +545,7 @@ function DonatePageInner({ config }: Props) {
             alignItems: "center",
             justifyContent: "space-between",
             mb: `${mobileTheme.spacing.md}px`,
-            gap: 1,
+            gap: 1
           }}
         >
           <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>Giving</Typography>
@@ -561,7 +561,7 @@ function DonatePageInner({ config }: Props) {
                 fontWeight: 600,
                 borderRadius: "20px",
                 px: 2,
-                "&:hover": { bgcolor: tc.iconBackground, opacity: 0.9 },
+                "&:hover": { bgcolor: tc.iconBackground, opacity: 0.9 }
               }}
             >
               {periodLabels[period]}
@@ -640,7 +640,7 @@ function DonatePageInner({ config }: Props) {
                     p: `${mobileTheme.spacing.md}px`,
                     display: "flex",
                     alignItems: "center",
-                    gap: `${mobileTheme.spacing.md}px`,
+                    gap: `${mobileTheme.spacing.md}px`
                   }}
                 >
                   <Box
@@ -652,7 +652,7 @@ function DonatePageInner({ config }: Props) {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      flexShrink: 0,
+                      flexShrink: 0
                     }}
                   >
                     <Icon sx={{ color: tc.primary, fontSize: 22 }}>autorenew</Icon>
@@ -702,7 +702,7 @@ function DonatePageInner({ config }: Props) {
             bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.lg}px`,
             boxShadow: mobileTheme.shadows.sm,
-            overflow: "hidden",
+            overflow: "hidden"
           }}
         >
           {donationsLoading && (
@@ -735,7 +735,7 @@ function DonatePageInner({ config }: Props) {
                     p: `${mobileTheme.spacing.md}px`,
                     borderBottom:
                       i < filteredDonations.length - 1 ? `1px solid ${tc.divider}` : "none",
-                    opacity: isPending ? 0.85 : 1,
+                    opacity: isPending ? 0.85 : 1
                   }}
                 >
                   <Box
@@ -747,7 +747,7 @@ function DonatePageInner({ config }: Props) {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      flexShrink: 0,
+                      flexShrink: 0
                     }}
                   >
                     <Icon sx={{ color: tc.primary }}>favorite</Icon>
@@ -767,7 +767,7 @@ function DonatePageInner({ config }: Props) {
                       fontSize: 16,
                       fontWeight: 700,
                       color: isPending ? tc.warning : tc.text,
-                      flexShrink: 0,
+                      flexShrink: 0
                     }}
                   >
                     {CurrencyHelper.formatCurrency(amount)}
@@ -785,7 +785,7 @@ function DonatePageInner({ config }: Props) {
       <Box
         sx={{
           bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`,
+          borderBottom: `1px solid ${tc.border}`
         }}
       >
         <Tabs
@@ -801,10 +801,10 @@ function DonatePageInner({ config }: Props) {
               fontWeight: 500,
               fontSize: 14,
               minHeight: 52,
-              color: tc.textSecondary,
+              color: tc.textSecondary
             },
             "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
-            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
+            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 }
           }}
         >
           {isAuthenticated && <Tab value="overview" label="Overview" />}

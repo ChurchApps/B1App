@@ -18,9 +18,7 @@ const mobileMuiTheme = createTheme({
   palette: { primary: { main: "#0D47A1" }, secondary: { main: "#444444" } },
   shape: { borderRadius: 12 },
   typography: { fontFamily: '"Roboto","Helvetica","Arial",sans-serif' },
-  components: {
-    MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } },
-  },
+  components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } } }
 });
 
 /**
@@ -44,7 +42,7 @@ function MobileHydrationGate({ children }: { children: React.ReactNode }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          bgcolor: "#FFFFFF",
+          bgcolor: "#FFFFFF"
         }}
       >
         <CircularProgress size={40} />
@@ -63,7 +61,7 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
         churchId: UserHelper.currentUserChurch?.church?.id || "",
         userId: UserHelper.user?.id || "",
         originUrl: typeof window !== "undefined" ? window.location.toString() : "",
-        application: "B1Mobile",
+        application: "B1Mobile"
       }),
       () => {}
     );

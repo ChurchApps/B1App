@@ -22,7 +22,7 @@ type Selection = {
 const DEFAULT_SELECTION: Selection = {
   book: "GEN",
   chapter: "1",
-  versionId: 111, // YouVersion NIV; previous NIrV (biblia) has no direct YV equivalent we can hard-pick, NIV is the closest common default.
+  versionId: 111 // YouVersion NIV; previous NIrV (biblia) has no direct YV equivalent we can hard-pick, NIV is the closest common default.
 };
 
 const loadSelection = (): Selection => {
@@ -71,7 +71,7 @@ class BibleErrorBoundary extends React.Component<
   componentDidCatch(error: unknown) {
     // Intentionally quiet — fallback UI already communicates the failure.
     if (process.env.NODE_ENV !== "production") {
-      // eslint-disable-next-line no-console
+
       console.warn("[BiblePage] YouVersion reader crashed:", error);
     }
   }
@@ -91,7 +91,7 @@ const FallbackCard = () => {
       alignItems: "center",
       justifyContent: "center",
       flex: 1,
-      textAlign: "center",
+      textAlign: "center"
     }}>
       <Box sx={{
         width: 72,
@@ -101,7 +101,7 @@ const FallbackCard = () => {
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        mb: 2,
+        mb: 2
       }}>
         <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
       </Box>
@@ -143,7 +143,7 @@ const loadYouVersion = (): {
   BibleReader: any;
 } | null => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+
     const mod = require("@youversion/platform-react-ui");
     if (mod?.BibleSDKProvider && mod?.BibleReader) {
       return { BibleSDKProvider: mod.BibleSDKProvider, BibleReader: mod.BibleReader };
@@ -179,7 +179,7 @@ export const BiblePage = () => {
       bgcolor: tc.surface,
       minHeight: "100%",
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "column"
     }}>
       {!isClient && (
         <Box sx={{
@@ -188,7 +188,7 @@ export const BiblePage = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          flex: 1,
+          flex: 1
         }}>
           <Box sx={{
             width: 72,
@@ -198,7 +198,7 @@ export const BiblePage = () => {
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            mb: 2,
+            mb: 2
           }}>
             <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
           </Box>
@@ -217,7 +217,7 @@ export const BiblePage = () => {
             display: "flex",
             flexDirection: "column",
             minHeight: `calc(100vh - ${mobileTheme.headerHeight}px)`,
-            bgcolor: tc.surface,
+            bgcolor: tc.surface
           }}>
             <yv.BibleSDKProvider appKey={apiKey}>
               <yv.BibleReader.Root
@@ -238,7 +238,7 @@ export const BiblePage = () => {
                 <Box sx={{
                   flex: 1,
                   overflowY: "auto",
-                  p: `${mobileTheme.spacing.md}px`,
+                  p: `${mobileTheme.spacing.md}px`
                 }}>
                   <yv.BibleReader.Content />
                 </Box>

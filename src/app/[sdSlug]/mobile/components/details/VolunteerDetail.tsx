@@ -5,10 +5,15 @@ import { useRouter } from "next/navigation";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   IconButton,
   Skeleton,
-  Typography,
+  Typography
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ApiHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
@@ -17,7 +22,7 @@ import type {
   AssignmentInterface,
   PlanInterface,
   PositionInterface,
-  TimeInterface,
+  TimeInterface
 } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
@@ -42,6 +47,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
 
   const [message, setMessage] = React.useState<{ type: "success" | "error"; text: string } | null>(null);
   const [actionId, setActionId] = React.useState<string | null>(null);
+  const [pendingRemoval, setPendingRemoval] = React.useState<AssignmentInterface | null>(null);
 
   const personId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const signedIn = !!personId;
@@ -76,10 +82,10 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         plan: match.plan,
         positions: match.positions || [],
         times: match.times || [],
-        myAssignments,
+        myAssignments
       };
     },
-    enabled: !!churchId && !!id,
+    enabled: !!churchId && !!id
   });
 
   const plan = bundle?.plan ?? null;
@@ -120,9 +126,17 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     }
   };
 
-  const handleRemove = async (assignment: AssignmentInterface) => {
+  // Staged behind a confirmation Dialog rather than window.confirm — the
+  // native prompt is blocked in PWA-standalone and some WebView wrappers.
+  const requestRemove = (assignment: AssignmentInterface) => {
     if (!assignment.id) return;
-    if (!window.confirm("Are you sure you want to remove your signup?")) return;
+    setPendingRemoval(assignment);
+  };
+
+  const confirmRemove = async () => {
+    const assignment = pendingRemoval;
+    setPendingRemoval(null);
+    if (!assignment?.id) return;
     setActionId(assignment.id);
     setMessage(null);
     try {
@@ -173,7 +187,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
       warning: { bg: "rgba(254,170,36,0.15)", fg: tc.warning },
       info: { bg: "rgba(86,139,218,0.15)", fg: tc.primary },
       success: { bg: "rgba(112,220,135,0.2)", fg: tc.success },
-      error: { bg: "rgba(176,18,12,0.15)", fg: tc.error },
+      error: { bg: "rgba(176,18,12,0.15)", fg: tc.error }
     }[type];
     return (
       <Box
@@ -184,7 +198,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           bgcolor: colors.bg,
           color: colors.fg,
           borderRadius: `${mobileTheme.radius.md}px`,
-          p: `${mobileTheme.spacing.sm}px`,
+          p: `${mobileTheme.spacing.sm}px`
         }}
       >
         <Icon sx={{ color: colors.fg }}>{icon}</Icon>
@@ -210,7 +224,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          border: mine ? `1px solid ${tc.success}` : "none",
+          border: mine ? `1px solid ${tc.success}` : "none"
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
@@ -226,7 +240,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                     bgcolor: "rgba(112,220,135,0.2)",
                     color: tc.success,
                     fontSize: 11,
-                    fontWeight: 700,
+                    fontWeight: 700
                   }}
                 >
                   Signed up
@@ -242,14 +256,14 @@ export const VolunteerDetail = ({ id, config }: Props) => {
               variant="outlined"
               size="small"
               disabled={isDeadlinePassed || busy}
-              onClick={() => handleRemove(mine)}
+              onClick={() => requestRemove(mine)}
               sx={{
                 color: tc.error,
                 borderColor: tc.error,
                 textTransform: "none",
                 fontWeight: 600,
                 borderRadius: `${mobileTheme.radius.md}px`,
-                flexShrink: 0,
+                flexShrink: 0
               }}
             >
               {busy ? "Removing..." : "Remove"}
@@ -268,7 +282,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 borderRadius: `${mobileTheme.radius.md}px`,
                 flexShrink: 0,
                 "&:hover": { bgcolor: tc.primary },
-                "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" },
+                "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" }
               }}
             >
               {busy ? "Signing Up..." : isFull ? "Full" : "Sign Up"}
@@ -283,7 +297,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
               height: 6,
               borderRadius: 3,
               bgcolor: tc.border,
-              overflow: "hidden",
+              overflow: "hidden"
             }}
           >
             <Box
@@ -291,7 +305,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 height: "100%",
                 width: `${percent}%`,
                 bgcolor: isFull ? tc.error : tc.primary,
-                transition: "width 300ms ease",
+                transition: "width 300ms ease"
               }}
             />
           </Box>
@@ -310,7 +324,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Skeleton variant="text" width="60%" height={20} />
@@ -326,7 +340,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Icon sx={{ fontSize: 48, color: tc.textSecondary }}>event_busy</Icon>
@@ -375,6 +389,30 @@ export const VolunteerDetail = ({ id, config }: Props) => {
           )}
         </Box>
       )}
+
+      <Dialog
+        open={!!pendingRemoval}
+        onClose={() => setPendingRemoval(null)}
+        aria-labelledby="remove-signup-title"
+      >
+        <DialogTitle id="remove-signup-title">Remove signup?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to remove your signup for this position?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPendingRemoval(null)} sx={{ color: tc.textMuted, textTransform: "none" }}>
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmRemove}
+            sx={{ color: tc.error, textTransform: "none", fontWeight: 600 }}
+          >
+            Remove
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

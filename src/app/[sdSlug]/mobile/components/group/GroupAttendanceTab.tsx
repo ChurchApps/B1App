@@ -7,10 +7,9 @@ import {
   Checkbox,
   CircularProgress,
   Icon,
-  IconButton,
   InputAdornment,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
@@ -85,7 +84,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
       id: m.person.id,
       name: m.person.name,
       photo: m.person.photo,
-      isMember: true,
+      isMember: true
     }));
     const extras: AttendancePerson[] = additional
       .filter((p) => !members.some((m) => m.person.id === p.id))
@@ -271,7 +270,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
           alignItems: "center",
-          gap: `${mobileTheme.spacing.sm}px`,
+          gap: `${mobileTheme.spacing.sm}px`
         }}
       >
         <Icon sx={{ color: tc.primary }}>calendar_today</Icon>
@@ -329,7 +328,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
             p: `${mobileTheme.spacing.md}px`,
             display: "flex",
             flexDirection: "column",
-            gap: 1,
+            gap: 1
           }}
         >
           <Box sx={{ display: "flex", gap: 1 }}>
@@ -346,7 +345,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                   <InputAdornment position="start">
                     <Icon>search</Icon>
                   </InputAdornment>
-                ),
+                )
               }}
               sx={{ flex: 1 }}
             />
@@ -358,7 +357,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                 bgcolor: tc.primary,
                 color: tc.onPrimary,
                 textTransform: "none",
-                "&:hover": { bgcolor: tc.primary },
+                "&:hover": { bgcolor: tc.primary }
               }}
             >
               {searching ? "…" : "Search"}
@@ -378,7 +377,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                   borderRadius: `${mobileTheme.radius.md}px`,
                   cursor: already ? "default" : "pointer",
                   opacity: already ? 0.5 : 1,
-                  "&:hover": already ? undefined : { bgcolor: tc.iconBackground },
+                  "&:hover": already ? undefined : { bgcolor: tc.iconBackground }
                 }}
               >
                 <Box
@@ -392,7 +391,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 700,
-                    fontSize: 12,
+                    fontSize: 12
                   }}
                 >
                   {getInitials(r)}
@@ -428,7 +427,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
             bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.lg}px`,
             p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
+            textAlign: "center"
           }}
         >
           <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
@@ -452,7 +451,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                   borderRadius: `${mobileTheme.radius.md}px`,
                   p: `${mobileTheme.spacing.sm}px`,
                   cursor: "pointer",
-                  "&:hover": { bgcolor: tc.iconBackground },
+                  "&:hover": { bgcolor: tc.iconBackground }
                 }}
               >
                 <Box
@@ -466,7 +465,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 700,
-                    fontSize: 14,
+                    fontSize: 14
                   }}
                 >
                   {getInitials(p)}
@@ -496,7 +495,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
             borderRadius: `${mobileTheme.radius.md}px`,
             p: `${mobileTheme.spacing.sm}px`,
             textAlign: "center",
-            fontSize: 14,
+            fontSize: 14
           }}
         >
           {message.text}
@@ -515,7 +514,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           fontWeight: 600,
           borderRadius: `${mobileTheme.radius.md}px`,
           py: "10px",
-          "&:hover": { bgcolor: tc.primary },
+          "&:hover": { bgcolor: tc.primary }
         }}
       >
         {saving ? "Saving…" : "Save Attendance"}

@@ -15,9 +15,9 @@ import {
   MenuItem,
   Switch,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import { ApiHelper, EventHelper, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, EventHelper } from "@churchapps/apphelper";
 import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { RRuleEditor } from "../../../../../components/eventCalendar/RRuleEditor";
@@ -64,7 +64,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         end: toLocal(eventProp.end || new Date()),
         allDay: eventProp.allDay ?? false,
         visibility: eventProp.visibility || "public",
-        recurrenceRule: eventProp.recurrenceRule || "",
+        recurrenceRule: eventProp.recurrenceRule || ""
       };
     }
     const base = initialDateIso ? new Date(initialDateIso) : new Date();
@@ -77,7 +77,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       end: toLocal(endBase),
       allDay: false,
       visibility: "public",
-      recurrenceRule: "",
+      recurrenceRule: ""
     };
   }, [eventProp, initialDateIso]);
 
@@ -120,7 +120,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       end: localToIsoString(allDay ? `${end.slice(0, 10)}T23:59` : end) as unknown as Date,
       allDay,
       visibility,
-      recurrenceRule: recurring ? rRule : "",
+      recurrenceRule: recurring ? rRule : ""
     };
     return payload;
   };
@@ -300,7 +300,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            pb: 1,
+            pb: 1
           }}
         >
           <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
@@ -402,7 +402,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
               color: tc.onPrimary,
               textTransform: "none",
               fontWeight: 600,
-              "&:hover": { bgcolor: tc.primary },
+              "&:hover": { bgcolor: tc.primary }
             }}
           >
             {saving ? "Saving…" : isEdit ? "Save Changes" : "Save"}

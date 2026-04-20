@@ -75,11 +75,11 @@ export const MessagesPage = ({ config }: Props) => {
           personId: otherId,
           conversationId: pm.conversationId,
           personName: displayName,
-          personPhoto: photo,
+          personPhoto: photo
         };
       });
     },
-    enabled: loggedIn,
+    enabled: loggedIn
   });
 
   const renderAvatar = (c: Conversation) => {
@@ -88,7 +88,7 @@ export const MessagesPage = ({ config }: Props) => {
       height: 44,
       borderRadius: "22px",
       flexShrink: 0,
-      overflow: "hidden",
+      overflow: "hidden"
     } as const;
     if (c.personPhoto) {
       return (
@@ -110,7 +110,7 @@ export const MessagesPage = ({ config }: Props) => {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 700,
-          fontSize: 14,
+          fontSize: 14
         }}
       >
         {getInitials(c.personName)}
@@ -149,7 +149,7 @@ export const MessagesPage = ({ config }: Props) => {
         cursor: "pointer",
         transition: "box-shadow 150ms ease, transform 150ms ease",
         "&:hover": { boxShadow: mobileTheme.shadows.md },
-        "&:active": { transform: "scale(0.995)" },
+        "&:active": { transform: "scale(0.995)" }
       }}
     >
       {renderAvatar(c)}
@@ -161,7 +161,7 @@ export const MessagesPage = ({ config }: Props) => {
             color: tc.text,
             overflow: "hidden",
             textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap"
           }}
         >
           {c.personName}
@@ -182,7 +182,7 @@ export const MessagesPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
         px: `${mobileTheme.spacing.md}px`,
-        py: "12px",
+        py: "12px"
       }}
     >
       <Skeleton variant="circular" width={44} height={44} />
@@ -199,7 +199,7 @@ export const MessagesPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -211,7 +211,7 @@ export const MessagesPage = ({ config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>chat_bubble_outline</Icon>
@@ -232,7 +232,7 @@ export const MessagesPage = ({ config }: Props) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-end",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <IconButton
@@ -241,7 +241,7 @@ export const MessagesPage = ({ config }: Props) => {
           sx={{
             bgcolor: tc.iconBackground,
             color: tc.primary,
-            "&:hover": { bgcolor: tc.iconBackground },
+            "&:hover": { bgcolor: tc.iconBackground }
           }}
         >
           <Icon>edit</Icon>

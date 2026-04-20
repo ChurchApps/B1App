@@ -12,7 +12,7 @@ import {
   Tab,
   Tabs,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
@@ -53,7 +53,7 @@ export const GroupChatModal = ({
   groupName,
   isLeader = false,
   initialSubTab = "discussions",
-  onClose,
+  onClose
 }: Props) => {
   const tc = mobileTheme.colors;
   const [subTab, setSubTab] = React.useState<ChatSubTab>(initialSubTab);
@@ -106,8 +106,7 @@ export const GroupChatModal = ({
 
       const ids = new Set<string>();
       list.forEach((c) =>
-        (c.messages || []).forEach((m) => m.personId && ids.add(m.personId))
-      );
+        (c.messages || []).forEach((m) => m.personId && ids.add(m.personId)));
       const arr = Array.from(ids);
       if (arr.length > 0) {
         try {
@@ -144,8 +143,7 @@ export const GroupChatModal = ({
   const messages = React.useMemo(() => {
     const flat: Message[] = [];
     conversations.forEach((c) =>
-      (c.messages || []).forEach((m) => flat.push(m))
-    );
+      (c.messages || []).forEach((m) => flat.push(m)));
     flat.sort((a, b) => {
       const ta = a.timeSent ? new Date(a.timeSent).getTime() : 0;
       const tb = b.timeSent ? new Date(b.timeSent).getTime() : 0;
@@ -179,7 +177,7 @@ export const GroupChatModal = ({
           title: `${groupName || "Group"} ${
             currentContentType === "groupAnnouncement" ? "Announcements" : "Chat"
           }`,
-          visibility: "hidden",
+          visibility: "hidden"
         };
         const result: Conversation[] = await ApiHelper.post(
           "/conversations",
@@ -195,8 +193,8 @@ export const GroupChatModal = ({
           {
             conversationId,
             content: text,
-            personId: myPersonId,
-          },
+            personId: myPersonId
+          }
         ],
         "MessagingApi"
       );
@@ -231,7 +229,7 @@ export const GroupChatModal = ({
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>
@@ -269,7 +267,7 @@ export const GroupChatModal = ({
               display: "flex",
               flexDirection: isMine ? "row-reverse" : "row",
               alignItems: "flex-end",
-              gap: 1,
+              gap: 1
             }}
           >
             {!isMine && (
@@ -294,7 +292,7 @@ export const GroupChatModal = ({
                         fontWeight: 700,
                         display: "flex",
                         alignItems: "center",
-                        justifyContent: "center",
+                        justifyContent: "center"
                       }}
                     >
                       {(name[0] || "?").toUpperCase()}
@@ -313,7 +311,7 @@ export const GroupChatModal = ({
                 borderRadius: "18px",
                 borderBottomLeftRadius: !isMine ? "4px" : "18px",
                 borderBottomRightRadius: isMine ? "4px" : "18px",
-                boxShadow: mobileTheme.shadows.sm,
+                boxShadow: mobileTheme.shadows.sm
               }}
             >
               {showName && name && (
@@ -330,7 +328,7 @@ export const GroupChatModal = ({
                   mt: "2px",
                   opacity: 0.8,
                   color: isMine ? "rgba(255,255,255,0.85)" : tc.textSecondary,
-                  textAlign: "right",
+                  textAlign: "right"
                 }}
               >
                 {formatRelative(m.timeSent)}
@@ -357,8 +355,8 @@ export const GroupChatModal = ({
           maxHeight: "85dvh",
           overflow: "hidden",
           display: "flex",
-          flexDirection: "column",
-        },
+          flexDirection: "column"
+        }
       }}
     >
       <Box
@@ -368,7 +366,7 @@ export const GroupChatModal = ({
           justifyContent: "space-between",
           px: `${mobileTheme.spacing.md}px`,
           py: `${mobileTheme.spacing.sm}px`,
-          borderBottom: `1px solid ${tc.border}`,
+          borderBottom: `1px solid ${tc.border}`
         }}
       >
         <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
@@ -394,9 +392,9 @@ export const GroupChatModal = ({
                 textTransform: "none",
                 fontWeight: 500,
                 fontSize: 14,
-                color: tc.textSecondary,
+                color: tc.textSecondary
               },
-              "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
+              "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
             }}
           >
             <Tab value="discussions" label="Discussions" />
@@ -425,7 +423,7 @@ export const GroupChatModal = ({
             px: `${mobileTheme.spacing.md}px`,
             py: `${mobileTheme.spacing.sm}px`,
             borderTop: `1px solid ${tc.border}`,
-            bgcolor: tc.surface,
+            bgcolor: tc.surface
           }}
         >
           <TextField
@@ -456,13 +454,13 @@ export const GroupChatModal = ({
                       bgcolor: draft.trim() ? tc.primary : tc.iconBackground,
                       "&:hover": { bgcolor: draft.trim() ? tc.primary : tc.iconBackground },
                       width: 36,
-                      height: 36,
+                      height: 36
                     }}
                   >
                     <Icon sx={{ fontSize: 20 }}>send</Icon>
                   </IconButton>
                 </InputAdornment>
-              ),
+              )
             }}
           />
         </Box>

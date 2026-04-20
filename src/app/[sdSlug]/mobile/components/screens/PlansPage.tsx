@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import type {
   AssignmentInterface,
   PlanInterface,
-  PositionInterface,
+  PositionInterface
 } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -56,7 +56,7 @@ export const PlansPage = ({ config: _config }: Props) => {
     },
     enabled: loggedIn,
     staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const positionIds = useMemo(
@@ -74,7 +74,7 @@ export const PlansPage = ({ config: _config }: Props) => {
     },
     enabled: loggedIn && assignments.length > 0 && positionIds.length > 0,
     staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    gcTime: 30 * 60 * 1000
   });
 
   const planIds = useMemo(
@@ -92,7 +92,7 @@ export const PlansPage = ({ config: _config }: Props) => {
     },
     enabled: loggedIn && positions.length > 0 && planIds.length > 0,
     staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    gcTime: 30 * 60 * 1000
   });
 
   const isLoading = loggedIn && (assignmentsLoading || positionsLoading || plansLoading);
@@ -120,7 +120,7 @@ export const PlansPage = ({ config: _config }: Props) => {
         planName: plan.name || "Untitled plan",
         serviceDate,
         position: position.name || "Position",
-        status: a.status || "",
+        status: a.status || ""
       };
       if (serviceDate >= startOfToday) {
         upcomingRows.push(row);
@@ -167,7 +167,7 @@ export const PlansPage = ({ config: _config }: Props) => {
           boxShadow: mobileTheme.shadows.md,
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         {isLoading ? (
@@ -192,7 +192,7 @@ export const PlansPage = ({ config: _config }: Props) => {
                   px: 2,
                   py: 1.25,
                   display: "inline-block",
-                  minWidth: 180,
+                  minWidth: 180
                 }}
               >
                 <Typography sx={{ fontSize: 14, opacity: 0.8, mb: 0.5 }}>Next service</Typography>
@@ -220,7 +220,7 @@ export const PlansPage = ({ config: _config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Icon sx={{ fontSize: 32, color: iconColor }}>{iconName}</Icon>
@@ -272,7 +272,7 @@ export const PlansPage = ({ config: _config }: Props) => {
           cursor: "pointer",
           transition: "box-shadow 150ms ease, transform 150ms ease",
           "&:hover": { boxShadow: mobileTheme.shadows.md },
-          "&:active": { transform: "scale(0.995)" },
+          "&:active": { transform: "scale(0.995)" }
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1.5 }}>
@@ -285,7 +285,7 @@ export const PlansPage = ({ config: _config }: Props) => {
                 mb: 0.75,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                whiteSpace: "nowrap"
               }}
             >
               {row.planName}
@@ -309,7 +309,7 @@ export const PlansPage = ({ config: _config }: Props) => {
               textTransform: "uppercase",
               minWidth: 80,
               textAlign: "center",
-              whiteSpace: "nowrap",
+              whiteSpace: "nowrap"
             }}
           >
             {meta.label}
@@ -322,7 +322,7 @@ export const PlansPage = ({ config: _config }: Props) => {
             bgcolor: `${tc.primary}14`,
             px: 1.5,
             py: 1,
-            borderRadius: `${mobileTheme.radius.lg}px`,
+            borderRadius: `${mobileTheme.radius.lg}px`
           }}
         >
           <Icon sx={{ fontSize: 18, color: tc.primary, mr: 0.75 }}>assignment_ind</Icon>
@@ -341,7 +341,7 @@ export const PlansPage = ({ config: _config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1.5 }}>
@@ -361,7 +361,7 @@ export const PlansPage = ({ config: _config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       {isLoading && rows.length === 0 ? (
@@ -419,7 +419,7 @@ export const PlansPage = ({ config: _config }: Props) => {
         py: "16px",
         cursor: "pointer",
         transition: "box-shadow 150ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.md },
+        "&:hover": { boxShadow: mobileTheme.shadows.md }
       }}
     >
       <Icon sx={{ color: tc.primary, fontSize: 32 }}>volunteer_activism</Icon>
@@ -442,7 +442,7 @@ export const PlansPage = ({ config: _config }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Tabs
@@ -458,10 +458,10 @@ export const PlansPage = ({ config: _config }: Props) => {
               fontWeight: 500,
               fontSize: 14,
               minHeight: 52,
-              color: tc.textSecondary,
+              color: tc.textSecondary
             },
             "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
-            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
+            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 }
           }}
         >
           <Tab value="upcoming" label="Upcoming" />

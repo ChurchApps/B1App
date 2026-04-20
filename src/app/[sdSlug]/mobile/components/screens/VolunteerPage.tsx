@@ -32,7 +32,7 @@ export const VolunteerPage = ({ config }: Props) => {
     },
     enabled: !!churchId,
     staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const getSlots = (positions: SignupPlanData["positions"]) => {
@@ -59,7 +59,7 @@ export const VolunteerPage = ({ config }: Props) => {
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
-          p: `${mobileTheme.spacing.md}px`,
+          p: `${mobileTheme.spacing.md}px`
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
@@ -81,7 +81,7 @@ export const VolunteerPage = ({ config }: Props) => {
               color: isFull ? tc.textSecondary : tc.success,
               fontSize: 11,
               fontWeight: 600,
-              whiteSpace: "nowrap",
+              whiteSpace: "nowrap"
             }}
           >
             {isFull ? "Full" : `${remaining} open`}
@@ -97,7 +97,7 @@ export const VolunteerPage = ({ config }: Props) => {
                 height: 6,
                 borderRadius: 3,
                 bgcolor: tc.border,
-                "& .MuiLinearProgress-bar": { bgcolor: tc.primary },
+                "& .MuiLinearProgress-bar": { bgcolor: tc.primary }
               }}
             />
             <Typography sx={{ fontSize: 11, color: tc.textSecondary, mt: 0.5 }}>
@@ -122,7 +122,7 @@ export const VolunteerPage = ({ config }: Props) => {
                     fontWeight: 500,
                     bgcolor: posFull ? `${tc.textSecondary}1A` : tc.primaryLight,
                     color: posFull ? tc.textSecondary : tc.primary,
-                    "& .MuiChip-label": { px: 1 },
+                    "& .MuiChip-label": { px: 1 }
                   }}
                 />
               );
@@ -141,7 +141,7 @@ export const VolunteerPage = ({ config }: Props) => {
                 borderRadius: `${mobileTheme.radius.md}px`,
                 textTransform: "none",
                 fontWeight: 500,
-                "&:hover": { bgcolor: tc.primary },
+                "&:hover": { bgcolor: tc.primary }
               }}
             >
               View & Sign Up
@@ -159,7 +159,7 @@ export const VolunteerPage = ({ config }: Props) => {
         bgcolor: tc.surface,
         borderRadius: `${mobileTheme.radius.lg}px`,
         boxShadow: mobileTheme.shadows.sm,
-        p: `${mobileTheme.spacing.md}px`,
+        p: `${mobileTheme.spacing.md}px`
       }}
     >
       <Skeleton variant="text" width="60%" height={22} />
@@ -176,7 +176,7 @@ export const VolunteerPage = ({ config }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <Box
@@ -188,7 +188,7 @@ export const VolunteerPage = ({ config }: Props) => {
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>

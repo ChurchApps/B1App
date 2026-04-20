@@ -56,7 +56,7 @@ export const formatDate = (
   return d.toLocaleDateString(undefined, {
     month: style === "short" ? "short" : "long",
     day: "numeric",
-    year: "numeric",
+    year: "numeric"
   });
 };
 
@@ -77,6 +77,17 @@ export const formatRelative = (value?: Date | string | number | null): string =>
   if (diffDays === 1) return "yesterday";
   if (diffDays < 7) return `${diffDays}d`;
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+};
+
+// Back-nav that stays inside the app: prefer router.back() when there's real
+// history, otherwise push a predictable in-app fallback. `window.history.length`
+// is unreliable (counts pre-app entries), but it's the best signal available.
+export const navigateBack = (
+  router: { back: () => void; push: (path: string) => void },
+  fallback: string
+): void => {
+  if (typeof window !== "undefined" && window.history.length > 1) router.back();
+  else router.push(fallback);
 };
 
 // Mix a CSS color (hex, rgb, or var()) with black/white via CSS `color-mix`.

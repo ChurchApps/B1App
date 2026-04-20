@@ -7,10 +7,9 @@ import {
   Button,
   CircularProgress,
   Icon,
-  IconButton,
   InputAdornment,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
@@ -49,7 +48,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
       const people: PersonInterface[] = await ApiHelper.get(`/people/basic?ids=${ids.join(",")}`, "MembershipApi");
       return Array.isArray(people) ? people : [];
     },
-    enabled: loggedIn,
+    enabled: loggedIn
   });
 
   const handleSearch = async () => {
@@ -107,7 +106,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
           px: `${mobileTheme.spacing.md}px`,
           py: "12px",
           cursor: "pointer",
-          "&:hover": { boxShadow: mobileTheme.shadows.md },
+          "&:hover": { boxShadow: mobileTheme.shadows.md }
         }}
       >
         {photo ? (
@@ -130,7 +129,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
               justifyContent: "center",
               fontWeight: 700,
               fontSize: 14,
-              flexShrink: 0,
+              flexShrink: 0
             }}
           >
             {getInitials(p)}
@@ -154,7 +153,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.lg}px`,
           boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          mb: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
         }}
       >
         <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 1 }}>
@@ -174,7 +173,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
               <InputAdornment position="start">
                 <Icon>person</Icon>
               </InputAdornment>
-            ),
+            )
           }}
           sx={{ mb: `${mobileTheme.spacing.sm}px` }}
         />
@@ -189,7 +188,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
             textTransform: "none",
             fontWeight: 600,
             borderRadius: `${mobileTheme.radius.md}px`,
-            "&:hover": { bgcolor: tc.primary },
+            "&:hover": { bgcolor: tc.primary }
           }}
         >
           {loading ? "Searching…" : "Search"}

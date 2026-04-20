@@ -59,7 +59,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,
         borderBottom: `1px solid ${tc.border}`,
-        boxShadow: mobileTheme.shadows.sm,
+        boxShadow: mobileTheme.shadows.sm
       }}>
         {UserHelper.user && (
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2 }}>
@@ -89,7 +89,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
                   color: tc.primary,
                   fontSize: 14,
                   fontWeight: 500,
-                  lineHeight: 1,
+                  lineHeight: 1
                 }}
               >
                 <EditIcon sx={{ fontSize: 16, color: tc.primary }} />
@@ -124,7 +124,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               borderBottom: `1px solid ${tc.border}`,
               bgcolor: active ? tc.primary : "transparent",
               cursor: "pointer",
-              "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground },
+              "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground }
             }}>
               <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
               <Typography sx={{
@@ -135,7 +135,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
                 minWidth: 0,
                 whiteSpace: "nowrap",
                 overflow: "hidden",
-                textOverflow: "ellipsis",
+                textOverflow: "ellipsis"
               }}>
                 {link.text}
               </Typography>
@@ -163,7 +163,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,
         borderTop: `1px solid ${tc.border}`,
-        boxShadow: mobileTheme.shadows.sm,
+        boxShadow: mobileTheme.shadows.sm
       }}>
         <Button
           variant="outlined"
@@ -182,7 +182,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
             fontSize: 14,
             justifyContent: "flex-start",
             py: 1,
-            mb: 1,
+            mb: 1
           }}
         >
           {mode === "dark" ? "Light Mode" : "Dark Mode"}
@@ -203,7 +203,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               fontSize: 14,
               justifyContent: "flex-start",
               py: 1,
-              mb: 1,
+              mb: 1
             }}
           >
             Logout
@@ -231,7 +231,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               justifyContent: "flex-start",
               py: 1,
               mb: 1,
-              "&:hover": { bgcolor: tc.primary },
+              "&:hover": { bgcolor: tc.primary }
             }}
           >
             Sign In
