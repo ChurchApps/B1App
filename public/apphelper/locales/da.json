@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Kommentar",
+		"commentPlaceholder": "Inkluder en kommentar med dit opslag.",
+		"contentShared": "Indhold delt",
+		"group": "Gruppe",
+		"sharingToGroup": "Deler {} til B1-gruppe",
+		"validate": {
+			"addComment": "Tilføj venligst en kommentar.",
+			"loginFirst": "Log venligst ind først.",
+			"notMember": "Du er i øjeblikket ikke medlem af nogen grupper på B1.",
+			"selectGroup": "Vælg venligst en gruppe."
+		}
+	},
+	"common": {
+		"add": "Tilføj",
+		"cancel": "Annuller",
+		"close": "Luk",
+		"date": "Dato",
+		"delete": "Slet",
+		"edit": "Rediger",
+		"error": "Fejl",
+		"pleaseWait": "Vent venligst...",
+		"save": "Gem",
+		"search": "Søg",
+		"submit": "Indsend",
+		"update": "Opdater"
+	},
+	"createPerson": {
+		"addNewPerson": "Tilføj en ny person",
+		"firstName": "Fornavn",
+		"lastName": "Efternavn",
+		"email": "E-mail"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Kontonummer",
+			"added": "Bankkonto tilføjet. Bekræft din bankkonto for at foretage en donation.",
+			"company": "Firma",
+			"firstDeposit": "Første indbetaling",
+			"holderName": "Kontoindehaverens navn er påkrævet.",
+			"individual": "Privatperson",
+			"name": "Kontoindehaverens navn",
+			"needVerified": "Bankkonti skal verificeres, før der kan foretages donationer. Din konto vil modtage to små indbetalinger om cirka 1-3 arbejdsdage. Du skal indtaste disse indbetalingsbeløb for at fuldføre verificeringen af din konto ved at vælge linket til kontoverificering ved siden af din bankkonto under betalingsmetoder.",
+			"routingNumber": "Rutenummer",
+			"secondDeposit": "Anden indbetaling",
+			"twoDeposits": "Indtast de to indbetalinger, du modtog på din konto, for at fuldføre verificeringen af din bankkonto.",
+			"updated": "Bankkonto opdateret.",
+			"verified": "Bankkonto verificeret.",
+			"validate": {
+				"accountNumber": "Rutenummer og kontonummer er påkrævet.",
+				"holderName": "Kontoindehaverens navn er påkrævet."
+			}
+		},
+		"cardForm": {
+			"addNew": "Tilføj nyt kort",
+			"added": "Kort tilføjet.",
+			"expirationMonth": "Udløbsmåned:",
+			"expirationYear": "Udløbsår:",
+			"updated": "Kort opdateret."
+		},
+		"donationForm": {
+			"annually": "Årligt",
+			"biWeekly": "Hver 14. dag",
+			"cancelled": "Tilbagevendende donation annulleret.",
+			"confirmDelete": "Er du sikker på, at du vil slette denne tilbagevendende donation?",
+			"cover": "Jeg tilføjer gerne {} for at dække transaktionsgebyrerne, så du kan beholde 100% af min donation.",
+			"donate": "Doner",
+			"editRecurring": "Rediger tilbagevendende donation",
+			"fees": "Transaktionsgebyrer på {} anvendes.",
+			"frequency": "Frekvens",
+			"fund": "Fond",
+			"funds": "Fonde",
+			"make": "Foretag en donation",
+			"makeRecurring": "Foretag en tilbagevendende donation",
+			"method": "Metode",
+			"monthly": "Månedligt",
+			"notes": "Noter",
+			"preview": "Forhåndsvisning af donation",
+			"quarterly": "Kvartalsvis",
+			"recurringUpdated": "Tilbagevendende donation opdateret.",
+			"startDate": "Startdato",
+			"thankYou": "Tak for din donation!",
+			"tooLow": "Donationsbeløb skal være større end $0,50",
+			"total": "Samlet donationsbeløb",
+			"validate": {
+				"amount": "Beløb kan ikke være $0.",
+				"email": "Indtast venligst din e-mailadresse.",
+				"firstName": "Indtast venligst dit fornavn.",
+				"lastName": "Indtast venligst dit efternavn.",
+				"validEmail": "Indtast venligst en gyldig e-mailadresse."
+			},
+			"weekly": "Ugentligt"
+		},
+		"fundDonations": {
+			"addMore": "Tilføj flere",
+			"amount": "Beløb",
+			"fund": "Fond"
+		},
+		"paymentMethods": {
+			"addBank": "Tilføj bankkonto",
+			"addCard": "Tilføj kort",
+			"confirmDelete": "Er du sikker på, at du vil slette denne betalingsmetode?",
+			"deleted": "Betalingsmetode slettet.",
+			"noMethods": "Ingen betalingsmetoder. Tilføj en betalingsmetode for at foretage en donation.",
+			"verify": "Verificer konto"
+		},
+		"page": {
+			"amount": "Beløb",
+			"batch": "Batch",
+			"date": "Dato",
+			"fund": "Fond",
+			"method": "Metode",
+			"willAppear": "Donationer vises, når en donation er blevet registreret."
+		},
+		"preview": {
+			"date": "Donationsdato",
+			"donate": "Doner",
+			"every": "Tilbagevendende hver",
+			"fee": "Transaktionsgebyr",
+			"funds": "Fonde",
+			"method": "Donationsmetode",
+			"notes": "Noter",
+			"startingOn": "Begyndende den",
+			"total": "I alt",
+			"type": "Donationstype"
+		},
+		"recurring": {
+			"amount": "Beløb",
+			"every": "Hver",
+			"interval": "Interval",
+			"notFound": "Betalingsmetode ikke fundet.",
+			"paymentMethod": "Betalingsmetode",
+			"startDate": "Startdato"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Er du sikker på, at du vil slette disse formulardata?",
+		"editForm": "Rediger formular",
+		"isRequired": "er påkrævet",
+		"submit": "Indsend"
+	},
+	"gallery": {
+		"aspectRatio": "Billedformat",
+		"confirmDelete": "Er du sikker på, at du vil slette dette billede fra galleriet?",
+		"freeForm": "Fri form"
+	},
+	"iconPicker": {
+		"iconsAvailable": "ikoner tilgængelige",
+		"matchingResults": "matchende resultater",
+		"search": "Søg ikoner..."
+	},
+	"login": {
+		"createAccount": "Opret en konto",
+		"email": "E-mail",
+		"expiredLink": "Det aktuelle link er udløbet.",
+		"forgot": "Glemt adgangskode",
+		"goLogin": "Gå til login",
+		"login": "Log ind",
+		"noAcc": "Har du ikke en konto?",
+		"password": "Adgangskode",
+		"register": "Registrer",
+		"registerThankYou": "Tak for din registrering! Tjek venligst din e-mail for at bekræfte din konto.",
+		"requestLink": "Anmod om et nyt nulstillingslink",
+		"reset": "Nulstil",
+		"resetInstructions": "Indtast din e-mailadresse for at anmode om nulstilling af adgangskode.",
+		"resetPassword": "Nulstil adgangskode",
+		"resetSent": "E-mail til nulstilling af adgangskode sendt!",
+		"setPassword": "Indstil adgangskode",
+		"signIn": "Log ind",
+		"signInTitle": "Log venligst ind",
+		"verifyPassword": "Bekræft adgangskode",
+		"validate": {
+			"email": "Indtast venligst en gyldig e-mailadresse.",
+			"firstName": "Indtast venligst dit fornavn.",
+			"invalid": "Ugyldigt login. Tjek venligst din e-mail eller adgangskode.",
+			"lastName": "Indtast venligst dit efternavn.",
+			"password": "Indtast venligst en adgangskode.",
+			"passwordLength": "Adgangskoden skal være mindst 8 tegn lang.",
+			"passwordMatch": "Adgangskoderne stemmer ikke overens.",
+			"selectingChurch": "Fejl ved valg af kirke. Bekræft og prøv igen"
+		},
+		"welcomeBack": "Velkommen tilbage",
+		"welcomeName": "Velkommen tilbage, <b>{}</b>! Vent venligst, mens vi indlæser dine data."
+	},
+	"markdownEditor": {
+		"content": "Indhold",
+		"markdownEditor": "Markdown-editor",
+		"markdownGuide": "Markdown-guide"
+	},
+	"month": {
+		"april": "April",
+		"august": "August",
+		"december": "December",
+		"february": "Februar",
+		"january": "Januar",
+		"july": "Juli",
+		"june": "Juni",
+		"march": "Marts",
+		"may": "Maj",
+		"november": "November",
+		"october": "Oktober",
+		"september": "September"
+	},
+	"notes": {
+		"comment": "kommentar",
+		"comments": "kommentarer",
+		"notes": "Noter",
+		"startConversation": "Start en samtale",
+		"validate": {
+			"content": "Indtast venligst en note."
+		},
+		"viewAll": "Se alle"
+	},
+	"person": {
+		"email": "E-mail",
+		"firstName": "Fornavn",
+		"lastName": "Efternavn",
+		"name": "Navn",
+		"person": "Person",
+		"years": "år",
+		"noRec": "Har du ikke en persondatabase?"
+	},
+	"reporting": {
+		"detailed": "Detaljeret rapport",
+		"summary": "Oversigt",
+		"sampleTemplate": "Word-skabeloneksempel",
+		"downloadOptions": "Downloadmuligheder",
+		"noData": "Der er ingen data at vise.",
+		"runReport": "Kør rapport",
+		"useFilter": "Brug filteret til at køre rapporten."
+	},
+	"selectChurch": {
+		"address1": "Adresselinje 1",
+		"address2": "Adresselinje 2",
+		"another": "Vælg en anden kirke",
+		"city": "By",
+		"confirmRegister": "Er du sikker på, at du vil registrere en ny kirke?",
+		"country": "Land",
+		"name": "Kirkens navn",
+		"noMatches": "Ingen match fundet.",
+		"register": "Registrer en ny kirke",
+		"selectChurch": "Vælg en kirke",
+		"state": "Stat / Region",
+		"zip": "Postnummer",
+		"validate": {
+			"address": "Adresse må ikke være tom.",
+			"city": "By må ikke være tom.",
+			"country": "Land må ikke være tomt.",
+			"name": "Kirkens navn må ikke være tomt.",
+			"state": "Stat/Region må ikke være tom.",
+			"zip": "Postnummer må ikke være tomt."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Foto af:",
+		"providedBy": "Stockfotos leveret af"
+	},
+	"support": {
+		"documentation": "Dokumentation",
+		"discussions": "Supportforum"
+	},
+	"wrapper": {
+		"chatWith": "Chat med",
+		"deleteChurch": "Slet",
+		"editAccount": "Rediger konto",
+		"editChurchProfile": "Rediger kirkeprofil",
+		"editProfile": "Rediger profil",
+		"logout": "Log ud",
+		"messages": "Beskeder",
+		"newPrivateMessage": "Ny privat besked",
+		"notifications": "Notifikationer",
+		"privateMessage": "Privat besked",
+		"profile": "Profil",
+		"searchForPerson": "Søg efter en person",
+		"support": "Support",
+		"sureRemoveChurch": "Er du sikker på, at du vil slette denne kirke? Du vil ikke længere være medlem af {}.",
+		"switchApp": "Skift app",
+		"switchChurch": "Skift kirke"
+	}
+}

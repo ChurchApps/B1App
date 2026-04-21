@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Opmerking",
+		"commentPlaceholder": "Voeg een opmerking toe bij uw bericht.",
+		"contentShared": "Inhoud gedeeld",
+		"group": "Groep",
+		"sharingToGroup": "{} delen met B1-groep",
+		"validate": {
+			"addComment": "Voeg een opmerking toe.",
+			"loginFirst": "Log eerst in.",
+			"notMember": "U bent momenteel geen lid van een groep op B1.",
+			"selectGroup": "Selecteer een groep."
+		}
+	},
+	"common": {
+		"add": "Toevoegen",
+		"cancel": "Annuleren",
+		"close": "Sluiten",
+		"date": "Datum",
+		"delete": "Verwijderen",
+		"edit": "Bewerken",
+		"error": "Fout",
+		"pleaseWait": "Even geduld...",
+		"save": "Opslaan",
+		"search": "Zoeken",
+		"submit": "Verzenden",
+		"update": "Bijwerken"
+	},
+	"createPerson": {
+		"addNewPerson": "Nieuwe persoon toevoegen",
+		"firstName": "Voornaam",
+		"lastName": "Achternaam",
+		"email": "E-mail"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Rekeningnummer",
+			"added": "Bankrekening toegevoegd. Verifieer uw bankrekening om een donatie te doen.",
+			"company": "Bedrijf",
+			"firstDeposit": "Eerste storting",
+			"holderName": "Naam van rekeninghouder is verplicht.",
+			"individual": "Individueel",
+			"name": "Naam van rekeninghouder",
+			"needVerified": "Bankrekeningen moeten geverifieerd worden voordat u een donatie kunt doen. Uw rekening ontvangt twee kleine stortingen binnen ongeveer 1-3 werkdagen. U moet deze stortingsbedragen invoeren om uw rekening te verifiëren via de verificatielink naast uw bankrekening onder de sectie betaalmethoden.",
+			"routingNumber": "Routeringsnummer",
+			"secondDeposit": "Tweede storting",
+			"twoDeposits": "Voer de twee stortingen in die u op uw rekening heeft ontvangen om de verificatie van uw bankrekening te voltooien.",
+			"updated": "Bankrekening bijgewerkt.",
+			"verified": "Bankrekening geverifieerd.",
+			"validate": {
+				"accountNumber": "Routeringsnummer en rekeningnummer zijn verplicht.",
+				"holderName": "Naam van rekeninghouder is verplicht."
+			}
+		},
+		"cardForm": {
+			"addNew": "Nieuwe kaart toevoegen",
+			"added": "Kaart succesvol toegevoegd.",
+			"expirationMonth": "Vervalmaand:",
+			"expirationYear": "Vervaljaar:",
+			"updated": "Kaart succesvol bijgewerkt."
+		},
+		"donationForm": {
+			"annually": "Jaarlijks",
+			"biWeekly": "Tweewekelijks",
+			"cancelled": "Terugkerende donatie geannuleerd.",
+			"confirmDelete": "Weet u zeker dat u deze terugkerende donatie wilt verwijderen?",
+			"cover": "Ik voeg graag {} toe om de transactiekosten te dekken, zodat u 100% van mijn donatie behoudt.",
+			"donate": "Doneren",
+			"editRecurring": "Terugkerende donatie bewerken",
+			"fees": "Transactiekosten van {} worden toegepast.",
+			"frequency": "Frequentie",
+			"fund": "Fonds",
+			"funds": "Fondsen",
+			"make": "Een donatie doen",
+			"makeRecurring": "Een terugkerende donatie doen",
+			"method": "Methode",
+			"monthly": "Maandelijks",
+			"notes": "Notities",
+			"preview": "Donatie voorbeeld",
+			"quarterly": "Per kwartaal",
+			"recurringUpdated": "Terugkerende donatie bijgewerkt.",
+			"startDate": "Startdatum",
+			"thankYou": "Bedankt voor uw donatie!",
+			"tooLow": "Donatiebedrag moet hoger zijn dan $0,50",
+			"total": "Totaal donatiebedrag",
+			"validate": {
+				"amount": "Bedrag kan niet $0 zijn.",
+				"email": "Voer uw e-mailadres in.",
+				"firstName": "Voer uw voornaam in.",
+				"lastName": "Voer uw achternaam in.",
+				"validEmail": "Voer een geldig e-mailadres in."
+			},
+			"weekly": "Wekelijks"
+		},
+		"fundDonations": {
+			"addMore": "Meer toevoegen",
+			"amount": "Bedrag",
+			"fund": "Fonds"
+		},
+		"paymentMethods": {
+			"addBank": "Bankrekening toevoegen",
+			"addCard": "Kaart toevoegen",
+			"confirmDelete": "Weet u zeker dat u deze betaalmethode wilt verwijderen?",
+			"deleted": "Betaalmethode verwijderd.",
+			"noMethods": "Geen betaalmethoden. Voeg een betaalmethode toe om een donatie te doen.",
+			"verify": "Rekening verifiëren"
+		},
+		"page": {
+			"amount": "Bedrag",
+			"batch": "Batch",
+			"date": "Datum",
+			"fund": "Fonds",
+			"method": "Methode",
+			"willAppear": "Donaties verschijnen zodra er een donatie is ingevoerd."
+		},
+		"preview": {
+			"date": "Donatiedatum",
+			"donate": "Doneren",
+			"every": "Terugkerend elke",
+			"fee": "Transactiekosten",
+			"funds": "Fondsen",
+			"method": "Donatiemethode",
+			"notes": "Notities",
+			"startingOn": "Vanaf",
+			"total": "Totaal",
+			"type": "Donatietype"
+		},
+		"recurring": {
+			"amount": "Bedrag",
+			"every": "Elke",
+			"interval": "Interval",
+			"notFound": "Betaalmethode niet gevonden.",
+			"paymentMethod": "Betaalmethode",
+			"startDate": "Startdatum"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Weet u zeker dat u deze formuliergegevens wilt verwijderen?",
+		"editForm": "Formulier bewerken",
+		"isRequired": "is verplicht",
+		"submit": "Verzenden"
+	},
+	"gallery": {
+		"aspectRatio": "Beeldverhouding",
+		"confirmDelete": "Weet u zeker dat u deze afbeelding uit de galerij wilt verwijderen?",
+		"freeForm": "Vrije vorm"
+	},
+	"iconPicker": {
+		"iconsAvailable": "pictogrammen beschikbaar",
+		"matchingResults": "overeenkomende resultaten",
+		"search": "Pictogrammen zoeken..."
+	},
+	"login": {
+		"createAccount": "Account aanmaken",
+		"email": "E-mail",
+		"expiredLink": "De huidige link is verlopen.",
+		"forgot": "Wachtwoord vergeten",
+		"goLogin": "Ga naar inloggen",
+		"login": "Inloggen",
+		"noAcc": "Heeft u geen account?",
+		"password": "Wachtwoord",
+		"register": "Registreren",
+		"registerThankYou": "Bedankt voor uw registratie! Controleer uw e-mail om uw account te verifiëren.",
+		"requestLink": "Vraag een nieuwe resetlink aan",
+		"reset": "Resetten",
+		"resetInstructions": "Voer uw e-mailadres in om een wachtwoordreset aan te vragen.",
+		"resetPassword": "Wachtwoord resetten",
+		"resetSent": "E-mail voor wachtwoordreset verzonden!",
+		"setPassword": "Wachtwoord instellen",
+		"signIn": "Aanmelden",
+		"signInTitle": "Meld u aan",
+		"verifyPassword": "Wachtwoord bevestigen",
+		"validate": {
+			"email": "Voer een geldig e-mailadres in.",
+			"firstName": "Voer uw voornaam in.",
+			"invalid": "Ongeldige aanmelding. Controleer uw e-mail of wachtwoord.",
+			"lastName": "Voer uw achternaam in.",
+			"password": "Voer een wachtwoord in.",
+			"passwordLength": "Wachtwoord moet minimaal 8 tekens lang zijn.",
+			"passwordMatch": "Wachtwoorden komen niet overeen.",
+			"selectingChurch": "Fout bij het selecteren van de kerk. Controleer en probeer opnieuw"
+		},
+		"welcomeBack": "Welkom terug",
+		"welcomeName": "Welkom terug, <b>{}</b>! Even geduld terwijl we uw gegevens laden."
+	},
+	"markdownEditor": {
+		"content": "Inhoud",
+		"markdownEditor": "Markdown-editor",
+		"markdownGuide": "Markdown-gids"
+	},
+	"month": {
+		"april": "April",
+		"august": "Augustus",
+		"december": "December",
+		"february": "Februari",
+		"january": "Januari",
+		"july": "Juli",
+		"june": "Juni",
+		"march": "Maart",
+		"may": "Mei",
+		"november": "November",
+		"october": "Oktober",
+		"september": "September"
+	},
+	"notes": {
+		"comment": "opmerking",
+		"comments": "opmerkingen",
+		"notes": "Notities",
+		"startConversation": "Start een gesprek",
+		"validate": {
+			"content": "Voer een notitie in."
+		},
+		"viewAll": "Alles bekijken"
+	},
+	"person": {
+		"email": "E-mail",
+		"firstName": "Voornaam",
+		"lastName": "Achternaam",
+		"name": "Naam",
+		"person": "Persoon",
+		"years": "jaar",
+		"noRec": "Heeft u geen persoonsgegevens?"
+	},
+	"reporting": {
+		"detailed": "Gedetailleerd rapport",
+		"summary": "Samenvatting",
+		"sampleTemplate": "Voorbeeld Word-sjabloon",
+		"downloadOptions": "Downloadopties",
+		"noData": "Er zijn geen gegevens om weer te geven.",
+		"runReport": "Rapport uitvoeren",
+		"useFilter": "Gebruik het filter om het rapport uit te voeren."
+	},
+	"selectChurch": {
+		"address1": "Adresregel 1",
+		"address2": "Adresregel 2",
+		"another": "Kies een andere kerk",
+		"city": "Stad",
+		"confirmRegister": "Weet u zeker dat u een nieuwe kerk wilt registreren?",
+		"country": "Land",
+		"name": "Naam van de kerk",
+		"noMatches": "Geen overeenkomsten gevonden.",
+		"register": "Nieuwe kerk registreren",
+		"selectChurch": "Selecteer een kerk",
+		"state": "Provincie",
+		"zip": "Postcode",
+		"validate": {
+			"address": "Adres mag niet leeg zijn.",
+			"city": "Stad mag niet leeg zijn.",
+			"country": "Land mag niet leeg zijn.",
+			"name": "Naam van de kerk mag niet leeg zijn.",
+			"state": "Provincie mag niet leeg zijn.",
+			"zip": "Postcode mag niet leeg zijn."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Foto door:",
+		"providedBy": "Stockfoto's geleverd door"
+	},
+	"support": {
+		"documentation": "Documentatie",
+		"discussions": "Ondersteuningsforum"
+	},
+	"wrapper": {
+		"chatWith": "Chat met",
+		"deleteChurch": "Verwijderen",
+		"editAccount": "Account bewerken",
+		"editChurchProfile": "Kerkprofiel bewerken",
+		"editProfile": "Profiel bewerken",
+		"logout": "Uitloggen",
+		"messages": "Berichten",
+		"newPrivateMessage": "Nieuw privébericht",
+		"notifications": "Meldingen",
+		"privateMessage": "Privébericht",
+		"profile": "Profiel",
+		"searchForPerson": "Zoek naar een persoon",
+		"support": "Ondersteuning",
+		"sureRemoveChurch": "Weet u zeker dat u deze kerk wilt verwijderen? U bent dan geen lid meer van {}.",
+		"switchApp": "App wisselen",
+		"switchChurch": "Kerk wisselen"
+	}
+}
