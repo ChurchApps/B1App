@@ -209,6 +209,11 @@
     },
     "viewAll": "Ver todo"
   },
+  "groups": {
+    "conversations": "Conversaciones",
+    "discussions": "Debates",
+    "announcements": "Anuncios"
+  },
   "person": {
     "email": "Correo Electrónico",
     "firstName": "Nombre",
@@ -275,4 +280,3 @@
   }
 }
   
-

@@ -123,11 +123,11 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               cursor: "pointer",
               "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground }
             }}>
-              <Icon sx={{ fontSize: 24, color: active ? "#FFFFFF" : tc.primary }}>{iconName}</Icon>
+              <Icon sx={{ fontSize: 24, color: active ? tc.onPrimary : tc.primary }}>{iconName}</Icon>
               <Typography sx={{
                 fontSize: 16,
                 fontWeight: active ? 600 : 500,
-                color: active ? "#FFFFFF" : tc.text,
+                color: active ? tc.onPrimary : tc.text,
                 flex: 1,
                 minWidth: 0,
                 whiteSpace: "nowrap",

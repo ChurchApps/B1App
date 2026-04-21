@@ -208,6 +208,11 @@
     },
     "viewAll": "सभी को देखें"
   },
+  "groups": {
+    "conversations": "बातचीत",
+    "discussions": "चर्चाएँ",
+    "announcements": "घोषणाएँ"
+  },
   "person": {
     "email": "ईमेल",
     "firstName": "पहला नाम",

@@ -208,6 +208,11 @@
     },
     "viewAll": "Tingnan lahat"
   },
+  "groups": {
+    "conversations": "Mga Usapan",
+    "discussions": "Mga Talakayan",
+    "announcements": "Mga Anunsyo"
+  },
   "person": {
     "email": "Email",
     "firstName": "Pangalan",

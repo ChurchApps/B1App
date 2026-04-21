@@ -208,6 +208,11 @@
     },
     "viewAll": "모두보기"
   },
+  "groups": {
+    "conversations": "대화",
+    "discussions": "토론",
+    "announcements": "공지사항"
+  },
   "person": {
     "email": "이메일",
     "firstName": "이름",

@@ -8,7 +8,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MobileAppBar } from "./MobileAppBar";
 import { MobileDrawer } from "./MobileDrawer";
 import { mobileTheme } from "./mobileTheme";
-import { MobileThemeProvider } from "./MobileThemeProvider";
+import { MobileThemeProvider, useMobileThemeMode } from "./MobileThemeProvider";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const MobileShell = (props: Props) => (
-  <MobileThemeProvider>
+  <MobileThemeProvider config={props.config}>
     <MobileShellInner {...props} />
   </MobileThemeProvider>
 );
@@ -26,7 +26,15 @@ const MobileShellInner = ({ config, children }: Props) => {
   const [open, setOpen] = useState(false);
   const context = useContext(UserContext);
   const router = useRouter();
-  const primaryColor = config?.appearance?.primaryColor || mobileTheme.colors.primary;
+  const { mode } = useMobileThemeMode();
+  const themeMode = config?.appTheme?.[mode];
+  const isValidColor = (value?: string | null) => /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test((value || "").trim());
+  const primaryColor = isValidColor(themeMode?.primary)
+    ? themeMode!.primary
+    : (isValidColor(config?.appearance?.primaryColor) ? config!.appearance!.primaryColor! : mobileTheme.colors.primary);
+  const onPrimary = isValidColor(themeMode?.primaryContrast)
+    ? themeMode!.primaryContrast
+    : (isValidColor((config?.appearance as any)?.primaryContrast) ? (config?.appearance as any).primaryContrast : mobileTheme.colors.onPrimary);
   const drawerWidth = mobileTheme.drawerWidth;
 
   const jwt = context.userChurch?.jwt;
@@ -45,6 +53,7 @@ const MobileShellInner = ({ config, children }: Props) => {
       <MobileAppBar
         config={config}
         primaryColor={primaryColor}
+        onPrimary={onPrimary}
         drawerWidth={drawerWidth}
         onMenuClick={() => setOpen(true)}
         onAvatarClick={() => router.push("/mobile/profileEdit")}

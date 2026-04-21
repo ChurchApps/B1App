@@ -208,6 +208,11 @@
     },
     "viewAll": "Alle ansehen"
   },
+  "groups": {
+    "conversations": "Unterhaltungen",
+    "discussions": "Diskussionen",
+    "announcements": "Ankündigungen"
+  },
   "person": {
     "email": "Email",
     "firstName": "Vorname",

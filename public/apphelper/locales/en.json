@@ -212,6 +212,11 @@
 		},
 		"viewAll": "View all"
 	},
+	"groups": {
+		"conversations": "Conversations",
+		"discussions": "Discussions",
+		"announcements": "Announcements"
+	},
 	"person": {
 		"email": "Email",
 		"firstName": "First Name",

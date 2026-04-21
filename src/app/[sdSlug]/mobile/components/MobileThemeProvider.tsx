@@ -2,6 +2,8 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { GlobalStyles } from "@mui/material";
+import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 export type MobileThemeMode = "light" | "dark";
 
@@ -21,7 +23,7 @@ const MobileThemeContext = createContext<MobileThemeContextValue>({
 
 export const useMobileThemeMode = () => useContext(MobileThemeContext);
 
-const lightVars = {
+const lightDefaults = {
   "--mb-primary": "#0D47A1",
   "--mb-primary-light": "#E3F2FD",
   "--mb-secondary": "#568BDA",
@@ -43,7 +45,7 @@ const lightVars = {
   "--mb-disabled": "#BDBDBD"
 };
 
-const darkVars = {
+const darkDefaults = {
   "--mb-primary": "#4A90E2",
   "--mb-primary-light": "#1a3a5c",
   "--mb-secondary": "#6BA4E8",
@@ -79,19 +81,61 @@ const darkInputStyles = {
   "html[data-mobile-theme=\"dark\"] .MuiFormHelperText-root": { color: "var(--mb-text-secondary)" }
 };
 
-const mobileThemeGlobalStyles = (
-  <GlobalStyles
-    styles={{
-      ":root": lightVars,
-      'html[data-mobile-theme="dark"]': { ...darkVars, colorScheme: "dark" },
+const isValidColor = (value?: string | null): value is string =>
+  /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test((value || "").trim());
 
-      "body": { margin: 0 },
-      ...darkInputStyles
-    }}
-  />
-);
+const pickColor = (...values: Array<string | null | undefined>) =>
+  values.find((value) => isValidColor(value));
 
-export const MobileThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const getChurchColors = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
+  const appTheme = config?.appTheme?.[mode];
+  if (!appTheme) return null;
+
+  const hasUsableTheme = [appTheme.primary, appTheme.secondary, appTheme.background, appTheme.surface, appTheme.textColor]
+    .some((value) => isValidColor(value));
+
+  if (!hasUsableTheme) return null;
+
+  return appTheme;
+};
+
+const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
+  const defaults = mode === "dark" ? darkDefaults : lightDefaults;
+  const churchColors = getChurchColors(mode, config);
+  const appearance = config?.appearance as {
+    primaryColor?: string;
+    secondaryColor?: string;
+    primaryContrast?: string;
+  } | undefined;
+
+  const primary = pickColor(churchColors?.primary, appearance?.primaryColor, defaults["--mb-primary"]) || defaults["--mb-primary"];
+  const secondary = pickColor(churchColors?.secondary, appearance?.secondaryColor, defaults["--mb-secondary"]) || defaults["--mb-secondary"];
+  const background = pickColor(churchColors?.background, defaults["--mb-background"]) || defaults["--mb-background"];
+  const surface = pickColor(churchColors?.surface, defaults["--mb-surface"]) || defaults["--mb-surface"];
+  const text = pickColor(churchColors?.textColor, defaults["--mb-text"]) || defaults["--mb-text"];
+  const onPrimary = pickColor(churchColors?.primaryContrast, appearance?.primaryContrast, defaults["--mb-on-primary"]) || defaults["--mb-on-primary"];
+
+  return {
+    ...defaults,
+    "--mb-primary": primary,
+    "--mb-primary-light": mode === "dark" ? "#1a3a5c" : "#E3F2FD",
+    "--mb-secondary": secondary,
+    "--mb-background": background,
+    "--mb-surface": surface,
+    "--mb-surface-variant": mode === "dark" ? "#2D2D2D" : "#F6F6F8",
+    "--mb-text": text,
+    "--mb-text-secondary": mode === "dark" ? "#CCCCCC" : "#9E9E9E",
+    "--mb-text-muted": mode === "dark" ? "#888888" : "#666666",
+    "--mb-text-hint": mode === "dark" ? "#777777" : "#999999",
+    "--mb-on-primary": onPrimary,
+    "--mb-border": mode === "dark" ? "#333333" : "#F0F0F0",
+    "--mb-border-light": mode === "dark" ? "#2D2D2D" : "#E5E7EB",
+    "--mb-divider": mode === "dark" ? "#333333" : "#E0E0E0",
+    "--mb-icon-background": mode === "dark" ? "#2D2D2D" : "#F6F6F8"
+  };
+};
+
+export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?: ConfigurationInterface }> = ({ children, config }) => {
   const [mode, setModeState] = useState<MobileThemeMode>("light");
 
   useEffect(() => {
@@ -121,11 +165,39 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode }> = ({ c
   }, []);
 
   const value = useMemo<MobileThemeContextValue>(() => ({ mode, toggle, setMode }), [mode, toggle, setMode]);
+  const vars = useMemo(() => buildThemeVars(mode, config), [mode, config]);
+  const muiTheme = useMemo(() => createTheme({
+    palette: {
+      mode,
+      primary: { main: vars["--mb-primary"], contrastText: vars["--mb-on-primary"] },
+      secondary: { main: vars["--mb-secondary"] },
+      background: { default: vars["--mb-background"], paper: vars["--mb-surface"] },
+      text: { primary: vars["--mb-text"], secondary: vars["--mb-text-secondary"] }
+    },
+    shape: { borderRadius: 12 },
+    typography: { fontFamily: '"Roboto","Helvetica","Arial",sans-serif' },
+    components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } } }
+  }), [mode, vars]);
+
+  const mobileThemeGlobalStyles = (
+    <GlobalStyles
+      styles={{
+        ":root": vars,
+        'html[data-mobile-theme="dark"]': { colorScheme: "dark" },
+        'html[data-mobile-theme="light"]': { colorScheme: "light" },
+
+        "body": { margin: 0, backgroundColor: vars["--mb-background"], color: vars["--mb-text"] },
+        ...darkInputStyles
+      }}
+    />
+  );
 
   return (
     <MobileThemeContext.Provider value={value}>
-      {mobileThemeGlobalStyles}
-      {children}
+      <MuiThemeProvider theme={muiTheme}>
+        {mobileThemeGlobalStyles}
+        {children}
+      </MuiThemeProvider>
     </MobileThemeContext.Provider>
   );
 };

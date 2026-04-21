@@ -208,6 +208,11 @@
     },
     "viewAll": "Se alt"
   },
+  "groups": {
+    "conversations": "Samtaler",
+    "discussions": "Diskusjoner",
+    "announcements": "Kunngjøringer"
+  },
   "person": {
     "email": "E-post",
     "firstName": "Fornavn",

@@ -208,6 +208,11 @@
     },
     "viewAll": "查看全部"
   },
+  "groups": {
+    "conversations": "对话",
+    "discussions": "讨论",
+    "announcements": "公告"
+  },
   "person": {
     "email": "电子邮件",
     "firstName": "名",

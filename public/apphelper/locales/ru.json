@@ -208,6 +208,11 @@
     },
     "viewAll": "Посмотреть все"
   },
+  "groups": {
+    "conversations": "Беседы",
+    "discussions": "Обсуждения",
+    "announcements": "Объявления"
+  },
   "person": {
     "email": "Электронная почта",
     "firstName": "Имя",
