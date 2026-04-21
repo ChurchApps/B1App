@@ -9,6 +9,7 @@ import { MobileAppBar } from "./MobileAppBar";
 import { MobileDrawer } from "./MobileDrawer";
 import { mobileTheme } from "./mobileTheme";
 import { MobileThemeProvider } from "./MobileThemeProvider";
+import { PushPermissionPrompt } from "./PushPermissionPrompt";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 
 interface Props {
@@ -32,8 +33,8 @@ const MobileShellInner = ({ config, children }: Props) => {
   const jwt = context.userChurch?.jwt;
   const { data: rawLinks } = useChurchLinks(config?.church?.id, jwt);
   const links = useMemo(
-    () => filterVisibleLinks(rawLinks, jwt ? context.userChurch?.groups : null),
-    [rawLinks, jwt, context.userChurch?.groups]
+    () => filterVisibleLinks(rawLinks, context.userChurch),
+    [rawLinks, context.userChurch]
   );
 
   return (
@@ -91,6 +92,7 @@ const MobileShellInner = ({ config, children }: Props) => {
         <Toolbar sx={{ minHeight: `${mobileTheme.headerHeight}px !important` }} />
         {children}
       </Box>
+      <PushPermissionPrompt />
     </Box>
   );
 };

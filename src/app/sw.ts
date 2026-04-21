@@ -108,3 +108,69 @@ const serwist = new Serwist({
 });
 
 serwist.addEventListeners();
+
+interface PushPayload {
+  title?: string;
+  body?: string;
+  type?: string;
+  contentId?: string;
+}
+
+const deriveClickUrl = (payload: PushPayload): string => {
+  const id = payload.contentId;
+  const type = String(payload.type || "").toLowerCase();
+  if (id) {
+    switch (type) {
+      case "plan":
+      case "schedule": return `/mobile/plans/${id}`;
+      case "groupannouncement": return `/mobile/groups/${id}?openChat=1&chatTab=announcements`;
+      case "group": return `/mobile/groups/${id}`;
+      case "assignment": return "/mobile/plans";
+      case "privatemessage": return `/mobile/messages/${id}`;
+    }
+  }
+  return "/mobile/notifications";
+};
+
+self.addEventListener("push", (event) => {
+  let payload: PushPayload = {};
+  if (event.data) {
+    try {
+      payload = event.data.json() as PushPayload;
+    } catch {
+      payload = { body: event.data.text() };
+    }
+  }
+  const title = payload.title || "B1";
+  const body = payload.body || "";
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body,
+      icon: "/images/logo.png",
+      badge: "/images/logo.png",
+      data: payload,
+      tag: payload.type && payload.contentId ? `${payload.type}:${payload.contentId}` : undefined
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const payload = (event.notification.data || {}) as PushPayload;
+  const target = deriveClickUrl(payload);
+  event.waitUntil(
+    (async () => {
+      const clientList = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+      for (const client of clientList) {
+        if ("focus" in client) {
+          await client.focus();
+          if ("navigate" in client) {
+            try { await (client as WindowClient).navigate(target); } catch { /* cross-origin */ }
+          }
+          return;
+        }
+      }
+      await self.clients.openWindow(target);
+    })()
+  );
+});

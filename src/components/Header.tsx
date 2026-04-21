@@ -112,12 +112,12 @@ export function Header(props: Props) {
 
   const userAction = ApiHelper.isAuthenticated
     ? (
-      <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "#36547e", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
+      <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "var(--app-primary, #36547e)", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
         <Chip
           id="userMenuLink"
           label={`${UserHelper.user.firstName} ${UserHelper.user.lastName}`}
-          icon={<Icon id="userIcon" sx={{ color: "#36547e !important" }}>account_circle</Icon>}
-          sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
+          icon={<Icon id="userIcon" sx={{ color: "var(--app-primary, #36547e) !important" }}>account_circle</Icon>}
+          sx={{ borderColor: "var(--app-primary, #36547e)", color: "var(--app-primary, #36547e)", minWidth: "100%" }}
           onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.currentTarget); }}
           data-testid="user-menu-chip"
           aria-label="User menu"
@@ -152,10 +152,10 @@ export function Header(props: Props) {
       <>
         {showLogin
           ? (
-            <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "#36547e", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
+            <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "var(--app-primary, #36547e)", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
               <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config.keyName)) } clickable id="loginButton" label="Login"
                 icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
-                sx={{ borderColor: "#36547e", color: "#36547e", minWidth: "100%" }}
+                sx={{ borderColor: "var(--app-primary, #36547e)", color: "var(--app-primary, #36547e)", minWidth: "100%" }}
                 data-testid="login-chip"
                 aria-label="Login to your account"
               />
