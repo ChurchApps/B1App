@@ -2,17 +2,17 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { ApiHelper } from "@churchapps/apphelper";
-import type { LinkInterface } from "@churchapps/helpers";
+import type { LinkInterface, LoginUserChurchInterface } from "@churchapps/helpers";
 
 export function filterVisibleLinks(
   links: LinkInterface[] | null | undefined,
-  userGroups?: Array<{ tags?: string }> | null
+  userChurch: LoginUserChurchInterface | null | undefined
 ): LinkInterface[] {
   if (!Array.isArray(links)) return [];
-  if (!userGroups) {
+  if (!userChurch?.jwt) {
     return links.filter((l: any) => !l.visibility || l.visibility === "everyone");
   }
-  const tags = userGroups.flatMap((g) => g?.tags?.split(",") || []);
+  const tags = (userChurch.groups ?? []).flatMap((g) => g?.tags?.split(",") || []);
   return links.filter((l: any) => l.visibility !== "team" || tags.includes("team"));
 }
 

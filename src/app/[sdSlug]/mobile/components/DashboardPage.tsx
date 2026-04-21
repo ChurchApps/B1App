@@ -34,9 +34,9 @@ export const DashboardPage = ({ config }: Props) => {
   const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
 
   const links = useMemo<LinkInterface[]>(() => {
-    const visible = filterVisibleLinks(rawLinks, jwt ? context.userChurch?.groups : null);
+    const visible = filterVisibleLinks(rawLinks, context.userChurch);
     return visible.filter((l) => l.linkType !== "separator");
-  }, [rawLinks, jwt, context.userChurch?.groups]);
+  }, [rawLinks, context.userChurch]);
 
   const loading = isLoading && links.length === 0;
 
