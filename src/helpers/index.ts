@@ -3,6 +3,7 @@ export { ConfigHelper } from "./ConfigHelper";
 export { PersonHelper } from "./Personhelper";
 export { CheckinHelper } from "./CheckinHelper";
 export { UrlHelper } from "./UrlHelper";
+export { WebPushHelper } from "./WebPushHelper";
 export { isLinkVisible, filterVisibleLinks } from "./VisibilityHelper";
 export { PlanHelper } from "@churchapps/helpers";
 

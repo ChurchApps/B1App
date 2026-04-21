@@ -2,10 +2,11 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Chip, Icon, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { WebPushHelper } from "@/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { formatRelative } from "../util";
 
@@ -57,6 +58,34 @@ export const NotificationsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const loggedIn = !!UserHelper.user?.firstName;
+
+  type PushStatus = "unsupported" | "blocked" | "off" | "on";
+  const [pushStatus, setPushStatus] = React.useState<PushStatus | null>(null);
+  const [pushBusy, setPushBusy] = React.useState(false);
+
+  const refreshPushStatus = React.useCallback(async () => {
+    if (!WebPushHelper.isSupported()) { setPushStatus("unsupported"); return; }
+    if (typeof Notification !== "undefined" && Notification.permission === "denied") {
+      setPushStatus("blocked"); return;
+    }
+    const sub = await WebPushHelper.getExistingSubscription();
+    setPushStatus(sub ? "on" : "off");
+  }, []);
+
+  React.useEffect(() => {
+    if (loggedIn) refreshPushStatus();
+  }, [loggedIn, refreshPushStatus]);
+
+  const handleTogglePush = async () => {
+    setPushBusy(true);
+    try {
+      if (pushStatus === "on") await WebPushHelper.unsubscribe();
+      else await WebPushHelper.subscribe();
+      await refreshPushStatus();
+    } finally {
+      setPushBusy(false);
+    }
+  };
 
   const { data: serverNotifications = null } = useQuery<NotificationItem[]>({
     queryKey: ["notifications", UserHelper.user?.id],
@@ -222,9 +251,50 @@ export const NotificationsPage = ({ config }: Props) => {
     </Box>
   );
 
+  const renderPushCard = () => {
+    if (!loggedIn || pushStatus === null || pushStatus === "unsupported") return null;
+    const on = pushStatus === "on";
+    const blocked = pushStatus === "blocked";
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+          bgcolor: tc.surface,
+          borderRadius: "12px",
+          boxShadow: mobileTheme.shadows.sm,
+          p: "12px 16px"
+        }}
+      >
+        <Icon sx={{ color: on ? tc.primary : tc.disabled }}>
+          {on ? "notifications_active" : "notifications_off"}
+        </Icon>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
+            Push notifications
+          </Typography>
+          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+            {blocked
+              ? "Blocked in browser settings"
+              : on
+                ? "You'll get alerts on this device"
+                : "Turn on to get alerts on this device"}
+          </Typography>
+        </Box>
+        {!blocked && (
+          <Button size="small" variant={on ? "outlined" : "contained"} disabled={pushBusy} onClick={handleTogglePush}>
+            {on ? "Turn off" : "Turn on"}
+          </Button>
+        )}
+      </Box>
+    );
+  };
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {renderPushCard()}
         {notifications === null && [0, 1, 2, 3, 4].map(renderSkeleton)}
         {notifications !== null && notifications.length === 0 && renderEmpty()}
         {notifications !== null && notifications.length > 0 && notifications.map(renderRow)}
