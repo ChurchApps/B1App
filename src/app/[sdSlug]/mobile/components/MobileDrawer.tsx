@@ -187,7 +187,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
             fullWidth
             startIcon={<LogoutIcon sx={{ fontSize: 24, color: tc.primary }} />}
             component="a"
-            href="/logout"
+            href="/mobile/logout"
             sx={{
               color: tc.primary,
               borderColor: tc.primary,
