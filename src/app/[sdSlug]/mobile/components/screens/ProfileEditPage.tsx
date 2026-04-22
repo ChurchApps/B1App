@@ -190,7 +190,11 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const householdId = serverPerson?.householdId;
 
-  const { data: household = null } = useQuery<HouseholdMember[]>({
+  const {
+    data: household = [],
+    isLoading: householdLoading,
+    isError: householdIsError
+  } = useQuery<HouseholdMember[]>({
     queryKey: ["household", householdId],
     queryFn: async () => {
       const data = await ApiHelper.get(`/people/household/${householdId}`, "MembershipApi");
@@ -716,13 +720,24 @@ export const ProfileEditPage = ({ config }: Props) => {
         }}
       >
         {sectionHeader("Current Household", "people")}
-        {household === null && <CircularProgress sx={{ color: tc.primary }} size={24} />}
-        {household !== null && household.filter((h) => h.id !== person.id).length === 0 && (
+        {householdLoading && householdId && <CircularProgress sx={{ color: tc.primary }} size={24} />}
+        {!householdLoading && !householdId && (
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, fontStyle: "italic", textAlign: "center", py: 2 }}>
+            No household is linked to this profile.
+          </Typography>
+        )}
+        {!householdLoading && householdIsError && householdId && (
+          <Typography sx={{ fontSize: 14, color: tc.error, fontStyle: "italic", textAlign: "center", py: 2 }}>
+            Could not load household members.
+          </Typography>
+        )}
+        {!householdLoading && !householdIsError && !!householdId && household.filter((h) => h.id !== person.id).length === 0 && (
           <Typography sx={{ fontSize: 14, color: tc.textMuted, fontStyle: "italic", textAlign: "center", py: 2 }}>
             No other members in your household.
           </Typography>
         )}
-        {household !== null &&
+        {!householdLoading &&
+          !householdIsError &&
           household
             .filter((h) => h.id !== person.id)
             .map((h) => (
@@ -1013,7 +1028,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     onChange: (v: VisibilityScope) => void,
     id: string
   ) => (
-    <FormControl fullWidth sx={{ mt: 1 }}>
+    <FormControl fullWidth sx={{ mt: 1, mb: 2 }}>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
