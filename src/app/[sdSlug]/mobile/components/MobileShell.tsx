@@ -40,8 +40,8 @@ const MobileShellInner = ({ config, children }: Props) => {
   const jwt = context.userChurch?.jwt;
   const { data: rawLinks } = useChurchLinks(config?.church?.id, jwt);
   const links = useMemo(
-    () => filterVisibleLinks(rawLinks, jwt ? context.userChurch?.groups : null),
-    [rawLinks, jwt, context.userChurch?.groups]
+    () => filterVisibleLinks(rawLinks, jwt ? context.userChurch : null),
+    [rawLinks, jwt, context.userChurch]
   );
 
   return (
