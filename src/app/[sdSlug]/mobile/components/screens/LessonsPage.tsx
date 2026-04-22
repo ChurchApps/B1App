@@ -120,7 +120,7 @@ export const LessonsPage = () => {
       }
       if (type === "profile_deleted") {
 
-        window.location.href = "/logout";
+        window.location.href = "/mobile/logout";
         return;
       }
       if (type === "print" || type === "autoPrint" || data?.autoPrint === 1 || data?.autoPrint === "1") {
