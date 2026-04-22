@@ -82,7 +82,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const churchName = config?.church?.name || "";
   const logoLight = config?.appearance?.logoLight;
-  const primaryColor = config?.appearance?.primaryColor || tc.primary;
+  const primaryColor = config?.appTheme?.light?.primary || config?.appearance?.primaryColor || tc.primary;
 
   const heroGradient = `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}CC 100%)`;
 

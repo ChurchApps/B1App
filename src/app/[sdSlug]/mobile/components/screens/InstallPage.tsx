@@ -58,7 +58,7 @@ const fadeIn = keyframes`
 
 export const InstallPage = ({ config }: Props) => {
   const churchName = config?.church?.name || "our app";
-  const primary = config?.appearance?.primaryColor || "#0D47A1";
+  const primary = config?.appTheme?.light?.primary || config?.appearance?.primaryColor || "#0D47A1";
   const primaryDark = darken(primary, 0.35);
   const accent = "#f97316";
   const accentDeep = "#ea580c";

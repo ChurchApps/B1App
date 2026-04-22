@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const MobileShell = (props: Props) => (
-  <MobileThemeProvider>
+  <MobileThemeProvider appTheme={props.config?.appTheme}>
     <MobileShellInner {...props} />
   </MobileThemeProvider>
 );
@@ -27,7 +27,8 @@ const MobileShellInner = ({ config, children }: Props) => {
   const [open, setOpen] = useState(false);
   const context = useContext(UserContext);
   const router = useRouter();
-  const primaryColor = config?.appearance?.primaryColor || mobileTheme.colors.primary;
+  const primaryColor = config?.appTheme?.light?.primary || config?.appearance?.primaryColor || mobileTheme.colors.primary;
+  const primaryContrast = config?.appTheme?.light?.primaryContrast || "#FFFFFF";
   const drawerWidth = mobileTheme.drawerWidth;
 
   const jwt = context.userChurch?.jwt;
@@ -46,6 +47,7 @@ const MobileShellInner = ({ config, children }: Props) => {
       <MobileAppBar
         config={config}
         primaryColor={primaryColor}
+        primaryContrast={primaryContrast}
         drawerWidth={drawerWidth}
         onMenuClick={() => setOpen(true)}
         onAvatarClick={() => router.push("/mobile/profileEdit")}

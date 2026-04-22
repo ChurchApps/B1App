@@ -29,10 +29,17 @@ export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppear
       return { churchId: church.id, churchName: church.name };
     }
     const appearance = await appearanceRes.json();
+    let appThemePrimary: string | undefined;
+    try {
+      if (appearance?.appTheme) {
+        const themeData = typeof appearance.appTheme === "string" ? JSON.parse(appearance.appTheme) : appearance.appTheme;
+        appThemePrimary = themeData?.light?.primary;
+      }
+    } catch { /* no app theme */ }
     return {
       churchId: church.id,
       churchName: church.name,
-      primaryColor: appearance?.primaryColor,
+      primaryColor: appThemePrimary || appearance?.primaryColor,
       favicon: appearance?.favicon_400x400 || appearance?.favicon_16x16
     };
   } catch {
