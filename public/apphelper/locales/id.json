@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Komentar",
+		"commentPlaceholder": "Sertakan komentar dengan postingan Anda.",
+		"contentShared": "Konten Dibagikan",
+		"group": "Grup",
+		"sharingToGroup": "Berbagi {} ke Grup B1",
+		"validate": {
+			"addComment": "Silakan tambahkan komentar.",
+			"loginFirst": "Silakan masuk terlebih dahulu.",
+			"notMember": "Anda saat ini bukan anggota grup apa pun di B1.",
+			"selectGroup": "Silakan pilih grup."
+		}
+	},
+	"common": {
+		"add": "Tambah",
+		"cancel": "Batal",
+		"close": "Tutup",
+		"date": "Tanggal",
+		"delete": "Hapus",
+		"edit": "Sunting",
+		"error": "Kesalahan",
+		"pleaseWait": "Silakan tunggu...",
+		"save": "Simpan",
+		"search": "Cari",
+		"submit": "Kirim",
+		"update": "Perbarui"
+	},
+	"createPerson": {
+		"addNewPerson": "Tambah Orang Baru",
+		"firstName": "Nama Depan",
+		"lastName": "Nama Belakang",
+		"email": "Email"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Nomor Rekening",
+			"added": "Rekening bank ditambahkan. Verifikasi rekening bank Anda untuk melakukan donasi.",
+			"company": "Perusahaan",
+			"firstDeposit": "Setoran Pertama",
+			"holderName": "Nama pemegang rekening diperlukan.",
+			"individual": "Individu",
+			"name": "Nama Pemegang Rekening",
+			"needVerified": "Rekening bank perlu diverifikasi sebelum melakukan donasi apa pun. Akun Anda akan menerima dua setoran kecil dalam waktu sekitar 1-3 hari kerja. Anda perlu memasukkan jumlah setoran tersebut untuk menyelesaikan verifikasi akun Anda dengan memilih tautan verifikasi akun di sebelah rekening bank Anda di bagian metode pembayaran.",
+			"routingNumber": "Nomor Perutean",
+			"secondDeposit": "Setoran Kedua",
+			"twoDeposits": "Masukkan dua setoran yang Anda terima di akun Anda untuk menyelesaikan verifikasi rekening bank Anda.",
+			"updated": "Rekening bank diperbarui.",
+			"verified": "Rekening bank diverifikasi.",
+			"validate": {
+				"accountNumber": "Nomor perutean dan nomor rekening diperlukan.",
+				"holderName": "Nama pemegang rekening diperlukan."
+			}
+		},
+		"cardForm": {
+			"addNew": "Tambah Kartu Baru",
+			"added": "Kartu berhasil ditambahkan.",
+			"expirationMonth": "Bulan Kadaluarsa:",
+			"expirationYear": "Tahun Kadaluarsa:",
+			"updated": "Kartu berhasil diperbarui."
+		},
+		"donationForm": {
+			"annually": "Tahunan",
+			"biWeekly": "Dua Mingguan",
+			"cancelled": "Donasi berulang dibatalkan.",
+			"confirmDelete": "Apakah Anda yakin ingin menghapus donasi berulang ini?",
+			"cover": "Saya akan dengan murah hati menambahkan {} untuk menutup biaya transaksi sehingga Anda dapat menyimpan 100% dari donasi saya.",
+			"donate": "Donasi",
+			"editRecurring": "Edit Donasi Berulang",
+			"fees": "Biaya transaksi {} diterapkan.",
+			"frequency": "Frekuensi",
+			"fund": "Dana",
+			"funds": "Dana",
+			"make": "Buat Donasi",
+			"makeRecurring": "Buat Donasi Berulang",
+			"method": "Metode",
+			"monthly": "Bulanan",
+			"notes": "Catatan",
+			"preview": "Pratinjau Donasi",
+			"quarterly": "Triwulanan",
+			"recurringUpdated": "Donasi berulang diperbarui.",
+			"startDate": "Tanggal Mulai",
+			"thankYou": "Terima kasih atas donasi Anda!",
+			"tooLow": "Jumlah donasi harus lebih besar dari $0,50",
+			"total": "Jumlah Donasi Total",
+			"validate": {
+				"amount": "Jumlah tidak boleh $0.",
+				"email": "Silakan masukkan alamat email Anda.",
+				"firstName": "Silakan masukkan nama depan Anda.",
+				"lastName": "Silakan masukkan nama belakang Anda.",
+				"validEmail": "Silakan masukkan alamat email yang valid."
+			},
+			"weekly": "Mingguan"
+		},
+		"fundDonations": {
+			"addMore": "Tambah Lebih Banyak",
+			"amount": "Jumlah",
+			"fund": "Dana"
+		},
+		"paymentMethods": {
+			"addBank": "Tambah Rekening Bank",
+			"addCard": "Tambah Kartu",
+			"confirmDelete": "Apakah Anda yakin ingin menghapus metode pembayaran ini?",
+			"deleted": "Metode pembayaran dihapus.",
+			"noMethods": "Tidak ada metode pembayaran. Tambahkan metode pembayaran untuk melakukan donasi.",
+			"verify": "Verifikasi Akun"
+		},
+		"page": {
+			"amount": "Jumlah",
+			"batch": "Batch",
+			"date": "Tanggal",
+			"fund": "Dana",
+			"method": "Metode",
+			"willAppear": "Donasi akan muncul setelah donasi telah dimasukkan."
+		},
+		"preview": {
+			"date": "Tanggal Donasi",
+			"donate": "Donasi",
+			"every": "Berulang Setiap",
+			"fee": "Biaya Transaksi",
+			"funds": "Dana",
+			"method": "Metode Donasi",
+			"notes": "Catatan",
+			"startingOn": "Dimulai Pada",
+			"total": "Total",
+			"type": "Jenis Donasi"
+		},
+		"recurring": {
+			"amount": "Jumlah",
+			"every": "Setiap",
+			"interval": "Interval",
+			"notFound": "Metode pembayaran tidak ditemukan.",
+			"paymentMethod": "Metode Pembayaran",
+			"startDate": "Tanggal Mulai"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Apakah Anda yakin ingin menghapus data formulir ini?",
+		"editForm": "Edit Formulir",
+		"isRequired": "diperlukan",
+		"submit": "Kirim"
+	},
+	"gallery": {
+		"aspectRatio": "Rasio Aspek",
+		"confirmDelete": "Apakah Anda yakin ingin menghapus gambar ini dari galeri?",
+		"freeForm": "Bentuk Bebas"
+	},
+	"iconPicker": {
+		"iconsAvailable": "ikon tersedia",
+		"matchingResults": "hasil yang cocok",
+		"search": "Cari ikon..."
+	},
+	"login": {
+		"createAccount": "Buat Akun",
+		"email": "Email",
+		"expiredLink": "Tautan saat ini telah kadaluarsa.",
+		"forgot": "Lupa Kata Sandi",
+		"goLogin": "Pergi ke Masuk",
+		"login": "Masuk",
+		"noAcc": "Tidak punya akun?",
+		"password": "Kata Sandi",
+		"register": "Daftar",
+		"registerThankYou": "Terima kasih telah mendaftar! Silakan periksa email Anda untuk memverifikasi akun Anda.",
+		"requestLink": "Minta tautan pengaturan ulang baru",
+		"reset": "Atur Ulang",
+		"resetInstructions": "Masukkan alamat email Anda untuk meminta pengaturan ulang kata sandi.",
+		"resetPassword": "Atur Ulang Kata Sandi",
+		"resetSent": "Email pengaturan ulang kata sandi terkirim!",
+		"setPassword": "Tetapkan Kata Sandi",
+		"signIn": "Masuk",
+		"signInTitle": "Silakan Masuk",
+		"verifyPassword": "Verifikasi Kata Sandi",
+		"validate": {
+			"email": "Silakan masukkan alamat email yang valid.",
+			"firstName": "Silakan masukkan nama depan Anda.",
+			"invalid": "Masuk tidak valid. Silakan periksa email atau kata sandi Anda.",
+			"lastName": "Silakan masukkan nama belakang Anda.",
+			"password": "Silakan masukkan kata sandi.",
+			"passwordLength": "Kata sandi harus minimal 8 karakter.",
+			"passwordMatch": "Kata sandi tidak cocok.",
+			"selectingChurch": "Kesalahan dalam memilih gereja. Silakan verifikasi dan coba lagi"
+		},
+		"welcomeBack": "Selamat datang kembali",
+		"welcomeName": "Selamat datang kembali, <b>{}</b>! Silakan tunggu saat kami memuat data Anda."
+	},
+	"markdownEditor": {
+		"content": "Konten",
+		"markdownEditor": "Editor Markdown",
+		"markdownGuide": "Panduan Markdown"
+	},
+	"month": {
+		"april": "April",
+		"august": "Agustus",
+		"december": "Desember",
+		"february": "Februari",
+		"january": "Januari",
+		"july": "Juli",
+		"june": "Juni",
+		"march": "Maret",
+		"may": "Mei",
+		"november": "November",
+		"october": "Oktober",
+		"september": "September"
+	},
+	"notes": {
+		"comment": "komentar",
+		"comments": "komentar",
+		"notes": "Catatan",
+		"startConversation": "Mulai percakapan",
+		"validate": {
+			"content": "Silakan masukkan catatan."
+		},
+		"viewAll": "Lihat Semua"
+	},
+	"person": {
+		"email": "Email",
+		"firstName": "Nama Depan",
+		"lastName": "Nama Belakang",
+		"name": "Nama",
+		"person": "Orang",
+		"years": "tahun",
+		"noRec": "Tidak memiliki catatan orang?"
+	},
+	"reporting": {
+		"detailed": "Laporan Terperinci",
+		"summary": "Ringkasan",
+		"sampleTemplate": "Contoh Template Word",
+		"downloadOptions": "Opsi Unduhan",
+		"noData": "Tidak ada data untuk ditampilkan.",
+		"runReport": "Jalankan Laporan",
+		"useFilter": "Gunakan filter untuk menjalankan laporan."
+	},
+	"selectChurch": {
+		"address1": "Alamat Baris 1",
+		"address2": "Alamat Baris 2",
+		"another": "Pilih gereja lain",
+		"city": "Kota",
+		"confirmRegister": "Apakah Anda yakin ingin mendaftarkan gereja baru?",
+		"country": "Negara",
+		"name": "Nama Gereja",
+		"noMatches": "Tidak ada kecocokan yang ditemukan.",
+		"register": "Daftarkan Gereja Baru",
+		"selectChurch": "Pilih Gereja",
+		"state": "Negara Bagian / Provinsi",
+		"zip": "Kode Pos",
+		"validate": {
+			"address": "Alamat tidak boleh kosong.",
+			"city": "Kota tidak boleh kosong.",
+			"country": "Negara tidak boleh kosong.",
+			"name": "Nama gereja tidak boleh kosong.",
+			"state": "Negara Bagian/Provinsi tidak boleh kosong.",
+			"zip": "Kode pos tidak boleh kosong."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Foto oleh:",
+		"providedBy": "Foto stok disediakan oleh"
+	},
+	"support": {
+		"documentation": "Dokumentasi",
+		"discussions": "Forum Dukungan"
+	},
+	"wrapper": {
+		"chatWith": "Obrolan dengan",
+		"deleteChurch": "Hapus",
+		"editAccount": "Edit Akun",
+		"editChurchProfile": "Edit Profil Gereja",
+		"editProfile": "Edit Profil",
+		"logout": "Keluar",
+		"messages": "Pesan",
+		"newPrivateMessage": "Pesan Pribadi Baru",
+		"notifications": "Pemberitahuan",
+		"privateMessage": "Pesan Pribadi",
+		"profile": "Profil",
+		"searchForPerson": "Cari orang",
+		"support": "Dukungan",
+		"sureRemoveChurch": "Apakah Anda yakin ingin menghapus gereja ini? Anda tidak akan lagi menjadi anggota {}.",
+		"switchApp": "Ubah Aplikasi",
+		"switchChurch": "Ubah Gereja"
+	}
+}

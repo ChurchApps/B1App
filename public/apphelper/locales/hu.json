@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Hozzászólás",
+		"commentPlaceholder": "Hozzá szóláste valók a Poszt mellé.",
+		"contentShared": "Tartalom megosztva",
+		"group": "Csoport",
+		"sharingToGroup": "{} megosztása a B1 csoporttal",
+		"validate": {
+			"addComment": "Kérjük, adjon hozzá egy hozzászólást.",
+			"loginFirst": "Kérjük, először jelentkezzen be.",
+			"notMember": "Jelenleg nem vagy tag semmilyen B1-es csoportban.",
+			"selectGroup": "Kérjük, válasszon ki egy csoportot."
+		}
+	},
+	"common": {
+		"add": "Hozzáadás",
+		"cancel": "Mégsem",
+		"close": "Bezárás",
+		"date": "Dátum",
+		"delete": "Törlés",
+		"edit": "Szerkesztés",
+		"error": "Hiba",
+		"pleaseWait": "Kérjük, várjon...",
+		"save": "Mentés",
+		"search": "Keresés",
+		"submit": "Beküldés",
+		"update": "Frissítés"
+	},
+	"createPerson": {
+		"addNewPerson": "Új személy hozzáadása",
+		"firstName": "Keresztnév",
+		"lastName": "Vezetéknév",
+		"email": "E-mail"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Számlaszám",
+			"added": "Bankszámla hozzáadva. Ellenőrizze bankszámlájá egy adományozáshoz.",
+			"company": "Vállalat",
+			"firstDeposit": "Első letét",
+			"holderName": "A számlahostor név szükséges.",
+			"individual": "Egyéni",
+			"name": "Számlahostor név",
+			"needVerified": "A bankszámlákat ellenőrizni kell, mielőtt bármilyen adományt tenne. Az Ön számlája körülbelül 1-3 munkanapon belül két kis letétet fog kapni. El kell végezni a depószt összegeit ezekké, hogy befejezze a számlájá ellenőrzésé a a banki számlájá melletti verifikáció link kiválasztásásé a fizetési módszer seckió anak.",
+			"routingNumber": "Útválasztási szám",
+			"secondDeposit": "Második letét",
+			"twoDeposits": "Adja meg a két letétet, amelyet Ön kapott a számlájábol, hogy befejezze a bankszámla ellenőrzésé.",
+			"updated": "Bankszámla frissítve.",
+			"verified": "Bankszámla ellenőrizve.",
+			"validate": {
+				"accountNumber": "Az útválasztási és számlaszám kötelező.",
+				"holderName": "A számlahostor név szükséges."
+			}
+		},
+		"cardForm": {
+			"addNew": "Új kártya hozzáadása",
+			"added": "Kártya sikeresen hozzáadva.",
+			"expirationMonth": "Lejárat hónapja:",
+			"expirationYear": "Lejárat éve:",
+			"updated": "Kártya sikeresen frissítve."
+		},
+		"donationForm": {
+			"annually": "Évente",
+			"biWeekly": "Kéthetente",
+			"cancelled": "Ismétlődő adományozás törlésre.",
+			"confirmDelete": "Biztosan szeretné törölni ezt az ismétlődő adományozást?",
+			"cover": "Szívesen hozzáadok {} a tranzakciós díjak fedezésére, így az adományzás 100% -á marad.",
+			"donate": "Adományzás",
+			"editRecurring": "Ismétlődő adományzás szerkesztése",
+			"fees": "Tranzakciós díjak {} alkalmazódnak.",
+			"frequency": "Gyakorisá",
+			"fund": "Alap",
+			"funds": "Alapok",
+			"make": "Adományzás",
+			"makeRecurring": "Ismétlődő adományzás",
+			"method": "Módszer",
+			"monthly": "Havonta",
+			"notes": "Megjegyzések",
+			"preview": "Adományzás előnézete",
+			"quarterly": "Negyedévente",
+			"recurringUpdated": "Ismétlődő adományzás frissítve.",
+			"startDate": "Kezdés dátuma",
+			"thankYou": "Köszönjük az adományzást!",
+			"tooLow": "Az adományzás összegének több mint 0,50 dollárnak kell lennie",
+			"total": "Teljes adományzási összeg",
+			"validate": {
+				"amount": "Az összeg nem lehet 0 dollár.",
+				"email": "Kérjük, adja meg az e-mail címét.",
+				"firstName": "Kérjük, adja meg a keresztnevét.",
+				"lastName": "Kérjük, adja meg a vezetéknevét.",
+				"validEmail": "Kérjük, adjon meg egy érvényes e-mail címet."
+			},
+			"weekly": "Hetente"
+		},
+		"fundDonations": {
+			"addMore": "Hozzáadás még",
+			"amount": "Összeg",
+			"fund": "Alap"
+		},
+		"paymentMethods": {
+			"addBank": "Bankszámla hozzáadása",
+			"addCard": "Kártya hozzáadása",
+			"confirmDelete": "Biztosan szeretné törölni ezt a fizetési módszert?",
+			"deleted": "Fizetési módszer törlésre.",
+			"noMethods": "Nincsenek fizetési módok. Hozzáadás fizetési módszer adományzáshoz.",
+			"verify": "Számla ellenőrzése"
+		},
+		"page": {
+			"amount": "Összeg",
+			"batch": "Köteg",
+			"date": "Dátum",
+			"fund": "Alap",
+			"method": "Módszer",
+			"willAppear": "Az adományzások megjelennek, miután adományzást adtak be."
+		},
+		"preview": {
+			"date": "Adományzási dátum",
+			"donate": "Adományzás",
+			"every": "Ismétlődő minden",
+			"fee": "Tranzakciós díj",
+			"funds": "Alapok",
+			"method": "Adományzási módszer",
+			"notes": "Megjegyzések",
+			"startingOn": "Kezdete: ",
+			"total": "Összesen",
+			"type": "Adományzási típus"
+		},
+		"recurring": {
+			"amount": "Összeg",
+			"every": "Minden",
+			"interval": "Intervallum",
+			"notFound": "Fizetési módszer nem található.",
+			"paymentMethod": "Fizetési módszer",
+			"startDate": "Kezdés dátuma"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Biztosan szeretné törölni az adatokat?",
+		"editForm": "Nyomtatvány szerkesztése",
+		"isRequired": "szükséges",
+		"submit": "Beküldés"
+	},
+	"gallery": {
+		"aspectRatio": "Oldalarány",
+		"confirmDelete": "Biztosan szeretné törölni ezt a képet a katalógusból?",
+		"freeForm": "Szabad forma"
+	},
+	"iconPicker": {
+		"iconsAvailable": "ikonok rendelkezésre állnak",
+		"matchingResults": "egyeztetett eredmények",
+		"search": "Ikonok keresése..."
+	},
+	"login": {
+		"createAccount": "Fiók létrehozása",
+		"email": "E-mail",
+		"expiredLink": "A jelenlegi link lejárt.",
+		"forgot": "Elfelejtette a jelszavát",
+		"goLogin": "Ugrás bejelentkezésre",
+		"login": "Bejelentkezés",
+		"noAcc": "Nem rendelkezik fiókkal?",
+		"password": "Jelszó",
+		"register": "Regisztrálás",
+		"registerThankYou": "Köszönjük a regisztrálást! Ellenőrizze az e-mailét a fiók megerősítéséhez.",
+		"requestLink": "Új zurückszerzési link kérelmezése",
+		"reset": "Alaphelyzetbe állítás",
+		"resetInstructions": "Adja meg az e-mail címét a jelszó alaphelyzetbe állítása kéréséhez.",
+		"resetPassword": "Jelszó alaphelyzetbe állítása",
+		"resetSent": "Jelszó alaphelyzetbe állítása e-mail elküldve!",
+		"setPassword": "Jelszó beállítása",
+		"signIn": "Bejelentkezés",
+		"signInTitle": "Kérjük, jelentkezzen be",
+		"verifyPassword": "Jelszó ellenőrzése",
+		"validate": {
+			"email": "Kérjük, adjon meg egy érvényes e-mail címet.",
+			"firstName": "Kérjük, adja meg a keresztnevét.",
+			"invalid": "Érvénytelen bejelentkezés. Kérjük, ellenőrizze az e-mail címet vagy a jelszót.",
+			"lastName": "Kérjük, adja meg a vezetéknevét.",
+			"password": "Kérjük, adjon meg egy jelszót.",
+			"passwordLength": "A jelszónak legalább 8 karakter hosszúnak kell lennie.",
+			"passwordMatch": "A jelszavak nem egyeznek.",
+			"selectingChurch": "Hiba az egyház kiválasztásában. Kérjük, ellenőrizze és próbálja újra"
+		},
+		"welcomeBack": "Üdvözöljük vissza",
+		"welcomeName": "Üdvözöljük vissza, <b>{}</b>! Kérjük, várjon, amíg betöltjük az adatait."
+	},
+	"markdownEditor": {
+		"content": "Tartalom",
+		"markdownEditor": "Markdown szerkesztő",
+		"markdownGuide": "Markdown útmutató"
+	},
+	"month": {
+		"april": "Április",
+		"august": "Augusztus",
+		"december": "December",
+		"february": "Február",
+		"january": "Január",
+		"july": "Július",
+		"june": "Június",
+		"march": "Március",
+		"may": "Május",
+		"november": "November",
+		"october": "Október",
+		"september": "Szeptember"
+	},
+	"notes": {
+		"comment": "hozzászólás",
+		"comments": "hozzászólások",
+		"notes": "Megjegyzések",
+		"startConversation": "Beszélgetés kezdése",
+		"validate": {
+			"content": "Kérjük, adjon meg egy megjegyzést."
+		},
+		"viewAll": "Összes megtekintése"
+	},
+	"person": {
+		"email": "E-mail",
+		"firstName": "Keresztnév",
+		"lastName": "Vezetéknév",
+		"name": "Név",
+		"person": "Személy",
+		"years": "év",
+		"noRec": "Nem rendelkezik személyi nyilvántartással?"
+	},
+	"reporting": {
+		"detailed": "Részletes jelentés",
+		"summary": "Összefoglalás",
+		"sampleTemplate": "Minta Word sablon",
+		"downloadOptions": "Letöltési beállítások",
+		"noData": "Nincsenek megjeleníthető adatok.",
+		"runReport": "Jelentés futtatása",
+		"useFilter": "A jelentés futtatásához használja a szűrőt."
+	},
+	"selectChurch": {
+		"address1": "Cím 1.",
+		"address2": "Cím 2.",
+		"another": "Válasszon egy másik egyházat",
+		"city": "Város",
+		"confirmRegister": "Biztosan szeretné regisztrálni az új egyházat?",
+		"country": "Ország",
+		"name": "Egyház neve",
+		"noMatches": "Nincsenek találatok.",
+		"register": "Új egyház regisztrálása",
+		"selectChurch": "Egyház kiválasztása",
+		"state": "Állam / Terület",
+		"zip": "Irányítószám",
+		"validate": {
+			"address": "A cím nem lehet üres.",
+			"city": "A város nem lehet üres.",
+			"country": "Az ország nem lehet üres.",
+			"name": "Az egyház neve nem lehet üres.",
+			"state": "Az állam/terület nem lehet üres.",
+			"zip": "Az irányítószám nem lehet üres."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Foto által:",
+		"providedBy": "Készletfotók által biztosítva"
+	},
+	"support": {
+		"documentation": "Dokumentáció",
+		"discussions": "Támogatás fórum"
+	},
+	"wrapper": {
+		"chatWith": "Csevegés",
+		"deleteChurch": "Törlés",
+		"editAccount": "Fiók szerkesztése",
+		"editChurchProfile": "Egyház profiljáná szerkesztése",
+		"editProfile": "Profil szerkesztése",
+		"logout": "Kijelentkezés",
+		"messages": "Üzenetek",
+		"newPrivateMessage": "Új személyes üzenet",
+		"notifications": "Értesítések",
+		"privateMessage": "Személyes üzenet",
+		"profile": "Profil",
+		"searchForPerson": "Személy keresése",
+		"support": "Támogatás",
+		"sureRemoveChurch": "Biztosan szeretné törölni ezt az egyházat? Nem lesz tagja {}.",
+		"switchApp": "Alkalmazás váltása",
+		"switchChurch": "Egyház váltása"
+	}
+}
