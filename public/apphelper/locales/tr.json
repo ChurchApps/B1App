@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Yorum",
+		"commentPlaceholder": "Gönderinize bir yorum ekleyin.",
+		"contentShared": "İçerik Paylaşıldı",
+		"group": "Grup",
+		"sharingToGroup": "{} paylaşımı B1 Grubuna",
+		"validate": {
+			"addComment": "Lütfen bir yorum ekleyin.",
+			"loginFirst": "Lütfen önce giriş yapın.",
+			"notMember": "Şu anda B1 üzerinde herhangi bir grubun üyesi değilsiniz.",
+			"selectGroup": "Lütfen bir grup seçin."
+		}
+	},
+	"common": {
+		"add": "Ekle",
+		"cancel": "İptal Et",
+		"close": "Kapat",
+		"date": "Tarih",
+		"delete": "Sil",
+		"edit": "Düzenle",
+		"error": "Hata",
+		"pleaseWait": "Lütfen bekleyin...",
+		"save": "Kaydet",
+		"search": "Ara",
+		"submit": "Gönder",
+		"update": "Güncelle"
+	},
+	"createPerson": {
+		"addNewPerson": "Yeni Kişi Ekle",
+		"firstName": "Ad",
+		"lastName": "Soyadı",
+		"email": "Email"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Hesap Numarası",
+			"added": "Banka hesabı eklendi. Bağış yapmak için banka hesabınızı doğrulayın.",
+			"company": "Şirket",
+			"firstDeposit": "İlk Depozito",
+			"holderName": "Hesap sahibinin adı gereklidir.",
+			"individual": "Bireysel",
+			"name": "Hesap Sahibinin Adı",
+			"needVerified": "Banka hesaplarının bağış yapılmadan önce doğrulanması gerekecektir. Hesabınız yaklaşık 1-3 iş günü içinde iki küçük mevduat alacaktır. Ödeme yöntemleri bölümünün altında banka hesabınızın yanındaki hesap doğrulama bağlantısını seçerek hesap doğrulamanızı tamamlamak için bu mevduat tutarlarını girmeniz gerekecektir.",
+			"routingNumber": "Yönlendirme Numarası",
+			"secondDeposit": "İkinci Depozito",
+			"twoDeposits": "Banka hesabı doğrulamanızı tamamlamak için hesabınıza aldığınız iki mevduatı girin.",
+			"updated": "Banka hesabı güncellendi.",
+			"verified": "Banka hesabı doğrulandı.",
+			"validate": {
+				"accountNumber": "Yönlendirme numarası ve hesap numarası gereklidir.",
+				"holderName": "Hesap sahibinin adı gereklidir."
+			}
+		},
+		"cardForm": {
+			"addNew": "Yeni Kart Ekle",
+			"added": "Kart başarıyla eklendi.",
+			"expirationMonth": "Son Kullanma Ayı:",
+			"expirationYear": "Son Kullanma Yılı:",
+			"updated": "Kart başarıyla güncellendi."
+		},
+		"donationForm": {
+			"annually": "Yıllık",
+			"biWeekly": "İki haftada bir",
+			"cancelled": "Tekrarlayan bağış iptal edildi.",
+			"confirmDelete": "Bu tekrarlayan bağışı silmek istediğinizden emin misiniz?",
+			"cover": "İşlem ücretlerini karşılamak için {} ekleyerek bağışınızın %100'ünü tutmanızı sağlayacağım.",
+			"donate": "Bağış Yap",
+			"editRecurring": "Tekrarlayan Bağışı Düzenle",
+			"fees": "{} işlem ücretleri uygulanır.",
+			"frequency": "Frekans",
+			"fund": "Fon",
+			"funds": "Fonlar",
+			"make": "Bağış Yap",
+			"makeRecurring": "Tekrarlayan Bağış Yap",
+			"method": "Yöntem",
+			"monthly": "Aylık",
+			"notes": "Notlar",
+			"preview": "Bağış Önizlemesi",
+			"quarterly": "Üç Aylık",
+			"recurringUpdated": "Tekrarlayan bağış güncellendi.",
+			"startDate": "Başlangıç Tarihi",
+			"thankYou": "Bağışınız için teşekkür ederiz!",
+			"tooLow": "Bağış tutarı 0,50 USD'den fazla olmalıdır",
+			"total": "Toplam Bağış Tutarı",
+			"validate": {
+				"amount": "Tutar 0 USD olamaz.",
+				"email": "Lütfen e-posta adresinizi girin.",
+				"firstName": "Lütfen adınızı girin.",
+				"lastName": "Lütfen soyadınızı girin.",
+				"validEmail": "Lütfen geçerli bir e-posta adresi girin."
+			},
+			"weekly": "Haftalık"
+		},
+		"fundDonations": {
+			"addMore": "Daha Ekle",
+			"amount": "Tutar",
+			"fund": "Fon"
+		},
+		"paymentMethods": {
+			"addBank": "Banka Hesabı Ekle",
+			"addCard": "Kart Ekle",
+			"confirmDelete": "Bu ödeme yöntemini silmek istediğinizden emin misiniz?",
+			"deleted": "Ödeme yöntemi silindi.",
+			"noMethods": "Ödeme yöntemi yok. Bağış yapmak için bir ödeme yöntemi ekleyin.",
+			"verify": "Hesabı Doğrula"
+		},
+		"page": {
+			"amount": "Tutar",
+			"batch": "Toplu İş",
+			"date": "Tarih",
+			"fund": "Fon",
+			"method": "Yöntem",
+			"willAppear": "Bağışlar bir bağış girildiğinde görünecektir."
+		},
+		"preview": {
+			"date": "Bağış Tarihi",
+			"donate": "Bağış Yap",
+			"every": "Her",
+			"fee": "İşlem Ücreti",
+			"funds": "Fonlar",
+			"method": "Bağış Yöntemi",
+			"notes": "Notlar",
+			"startingOn": "Başlangıç",
+			"total": "Toplam",
+			"type": "Bağış Türü"
+		},
+		"recurring": {
+			"amount": "Tutar",
+			"every": "Her",
+			"interval": "Aralık",
+			"notFound": "Ödeme yöntemi bulunamadı.",
+			"paymentMethod": "Ödeme Yöntemi",
+			"startDate": "Başlangıç Tarihi"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Bu form verilerini silmek istediğinizden emin misiniz?",
+		"editForm": "Formu Düzenle",
+		"isRequired": "gereklidir",
+		"submit": "Gönder"
+	},
+	"gallery": {
+		"aspectRatio": "En Boy Oranı",
+		"confirmDelete": "Bu resmi galeriden silmek istediğinizden emin misiniz?",
+		"freeForm": "Serbest Form"
+	},
+	"iconPicker": {
+		"iconsAvailable": "simge kullanılabilir",
+		"matchingResults": "eşleşen sonuçlar",
+		"search": "Simgeleri ara..."
+	},
+	"login": {
+		"createAccount": "Hesap Oluştur",
+		"email": "Email",
+		"expiredLink": "Mevcut bağlantı süresi dolmuş.",
+		"forgot": "Şifremi Unuttum",
+		"goLogin": "Giriş Sayfasına Git",
+		"login": "Giriş Yap",
+		"noAcc": "Hesabınız yok mu?",
+		"password": "Şifre",
+		"register": "Kaydol",
+		"registerThankYou": "Kaydolduğunuz için teşekkür ederiz! Hesabınızı doğrulamak için lütfen e-postanızı kontrol edin.",
+		"requestLink": "Yeni bir sıfırlama bağlantısı iste",
+		"reset": "Sıfırla",
+		"resetInstructions": "Şifre sıfırlaması istemek için e-posta adresinizi girin.",
+		"resetPassword": "Şifreyi Sıfırla",
+		"resetSent": "Şifre sıfırlama e-postası gönderildi!",
+		"setPassword": "Şifre Belirle",
+		"signIn": "Giriş Yap",
+		"signInTitle": "Lütfen Giriş Yapın",
+		"verifyPassword": "Şifreyi Doğrula",
+		"validate": {
+			"email": "Lütfen geçerli bir e-posta adresi girin.",
+			"firstName": "Lütfen adınızı girin.",
+			"invalid": "Geçersiz giriş. Lütfen e-postanız veya şifrenizi kontrol edin.",
+			"lastName": "Lütfen soyadınızı girin.",
+			"password": "Lütfen bir şifre girin.",
+			"passwordLength": "Şifre en az 8 karakter uzunluğunda olmalıdır.",
+			"passwordMatch": "Şifreler eşleşmiyor.",
+			"selectingChurch": "Kilise seçerken hata oluştu. Lütfen doğrulayın ve tekrar deneyin"
+		},
+		"welcomeBack": "Hoş geldiniz",
+		"welcomeName": "Hoş geldiniz, <b>{}</b>! Verilerinizi yüklerken lütfen bekleyin."
+	},
+	"markdownEditor": {
+		"content": "İçerik",
+		"markdownEditor": "Markdown Editörü",
+		"markdownGuide": "Markdown Kılavuzu"
+	},
+	"month": {
+		"april": "Nisan",
+		"august": "Ağustos",
+		"december": "Aralık",
+		"february": "Şubat",
+		"january": "Ocak",
+		"july": "Temmuz",
+		"june": "Haziran",
+		"march": "Mart",
+		"may": "Mayıs",
+		"november": "Kasım",
+		"october": "Ekim",
+		"september": "Eylül"
+	},
+	"notes": {
+		"comment": "yorum",
+		"comments": "yorumlar",
+		"notes": "Notlar",
+		"startConversation": "Bir konuşma başlat",
+		"validate": {
+			"content": "Lütfen bir not girin."
+		},
+		"viewAll": "Hepsini Göster"
+	},
+	"person": {
+		"email": "Email",
+		"firstName": "Ad",
+		"lastName": "Soyadı",
+		"name": "Ad",
+		"person": "Kişi",
+		"years": "yıl",
+		"noRec": "Kişi kaydınız yok mu?"
+	},
+	"reporting": {
+		"detailed": "Ayrıntılı Rapor",
+		"summary": "Özet",
+		"sampleTemplate": "Örnek Word Şablonu",
+		"downloadOptions": "İndirme Seçenekleri",
+		"noData": "Görüntülenecek veri yok.",
+		"runReport": "Raporu Çalıştır",
+		"useFilter": "Raporu çalıştırmak için filtreyi kullanın."
+	},
+	"selectChurch": {
+		"address1": "Adres Satırı 1",
+		"address2": "Adres Satırı 2",
+		"another": "Başka bir kilise seçin",
+		"city": "Şehir",
+		"confirmRegister": "Yeni bir kiliseyi kaydetmek istediğinizden emin misiniz?",
+		"country": "Ülke",
+		"name": "Kilise Adı",
+		"noMatches": "Eşleşme bulunamadı.",
+		"register": "Yeni Kiliseyi Kaydet",
+		"selectChurch": "Kilise Seçin",
+		"state": "Eyalet / İl",
+		"zip": "Posta Kodu / Posta Kodu",
+		"validate": {
+			"address": "Adres boş olamaz.",
+			"city": "Şehir boş olamaz.",
+			"country": "Ülke boş olamaz.",
+			"name": "Kilise adı boş olamaz.",
+			"state": "Eyalet/İl boş olamaz.",
+			"zip": "Posta Kodu/Posta Kodu boş olamaz."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Fotoğraf:",
+		"providedBy": "Stok fotoğraflar tarafından sağlanmıştır"
+	},
+	"support": {
+		"documentation": "Dokümantasyon",
+		"discussions": "Destek Forumu"
+	},
+	"wrapper": {
+		"chatWith": "Sohbet",
+		"deleteChurch": "Sil",
+		"editAccount": "Hesabı Düzenle",
+		"editChurchProfile": "Kilise Profilini Düzenle",
+		"editProfile": "Profili Düzenle",
+		"logout": "Çıkış Yap",
+		"messages": "Mesajlar",
+		"newPrivateMessage": "Yeni Özel Mesaj",
+		"notifications": "Bildirimler",
+		"privateMessage": "Özel Mesaj",
+		"profile": "Profil",
+		"searchForPerson": "Kişi Ara",
+		"support": "Destek",
+		"sureRemoveChurch": "Bu kilisenin silinmesinden emin misiniz? Artık {} üyesi olmayacaksınız.",
+		"switchApp": "Uygulamayı Değiştir",
+		"switchChurch": "Kilisey Değiştir"
+	}
+}

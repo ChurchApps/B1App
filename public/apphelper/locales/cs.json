@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Komentář",
+		"commentPlaceholder": "Přidejte komentář ke svému příspěvku.",
+		"contentShared": "Obsah sdílen",
+		"group": "Skupina",
+		"sharingToGroup": "Sdílení {} do skupiny B1",
+		"validate": {
+			"addComment": "Prosím přidejte komentář.",
+			"loginFirst": "Prosím nejprve se přihlaste.",
+			"notMember": "V současné době nejste členem žádné skupiny na B1.",
+			"selectGroup": "Prosím vyberte skupinu."
+		}
+	},
+	"common": {
+		"add": "Přidat",
+		"cancel": "Zrušit",
+		"close": "Zavřít",
+		"date": "Datum",
+		"delete": "Smazat",
+		"edit": "Upravit",
+		"error": "Chyba",
+		"pleaseWait": "Prosím čekejte...",
+		"save": "Uložit",
+		"search": "Hledat",
+		"submit": "Odeslat",
+		"update": "Aktualizovat"
+	},
+	"createPerson": {
+		"addNewPerson": "Přidat novou osobu",
+		"firstName": "Jméno",
+		"lastName": "Příjmení",
+		"email": "E-mail"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Číslo účtu",
+			"added": "Bankovní účet přidán. Pro provedení daru ověřte svůj bankovní účet.",
+			"company": "Firma",
+			"firstDeposit": "První vklad",
+			"holderName": "Jméno majitele účtu je povinné.",
+			"individual": "Fyzická osoba",
+			"name": "Jméno majitele účtu",
+			"needVerified": "Bankovní účty musí být ověřeny před provedením jakýchkoli darů. Na váš účet budou připsány dva malé vklady přibližně za 1–3 pracovní dny. Pro dokončení ověření účtu budete muset zadat částky těchto vkladů kliknutím na odkaz pro ověření účtu vedle vašeho bankovního účtu v sekci platebních metod.",
+			"routingNumber": "Směrový kód",
+			"secondDeposit": "Druhý vklad",
+			"twoDeposits": "Pro dokončení ověření bankovního účtu zadejte dva vklady, které jste obdrželi na svůj účet.",
+			"updated": "Bankovní účet aktualizován.",
+			"verified": "Bankovní účet ověřen.",
+			"validate": {
+				"accountNumber": "Směrový kód a číslo účtu jsou povinné.",
+				"holderName": "Jméno majitele účtu je povinné."
+			}
+		},
+		"cardForm": {
+			"addNew": "Přidat novou kartu",
+			"added": "Karta úspěšně přidána.",
+			"expirationMonth": "Měsíc expirace:",
+			"expirationYear": "Rok expirace:",
+			"updated": "Karta úspěšně aktualizována."
+		},
+		"donationForm": {
+			"annually": "Ročně",
+			"biWeekly": "Jednou za dva týdny",
+			"cancelled": "Opakovaný dar zrušen.",
+			"confirmDelete": "Opravdu chcete smazat tento opakovaný dar?",
+			"cover": "Rád/a přidám {} na pokrytí transakčních poplatků, abyste mohli ponechat 100 % mého daru.",
+			"donate": "Darovat",
+			"editRecurring": "Upravit opakovaný dar",
+			"fees": "Jsou účtovány transakční poplatky ve výši {}.",
+			"frequency": "Frekvence",
+			"fund": "Fond",
+			"funds": "Fondy",
+			"make": "Přispět darem",
+			"makeRecurring": "Nastavit opakovaný dar",
+			"method": "Metoda",
+			"monthly": "Měsíčně",
+			"notes": "Poznámky",
+			"preview": "Náhled daru",
+			"quarterly": "Čtvrtletně",
+			"recurringUpdated": "Opakovaný dar aktualizován.",
+			"startDate": "Datum zahájení",
+			"thankYou": "Děkujeme za váš dar!",
+			"tooLow": "Částka daru musí být vyšší než $0,50",
+			"total": "Celková částka daru",
+			"validate": {
+				"amount": "Částka nemůže být $0.",
+				"email": "Prosím zadejte svou e-mailovou adresu.",
+				"firstName": "Prosím zadejte své jméno.",
+				"lastName": "Prosím zadejte své příjmení.",
+				"validEmail": "Prosím zadejte platnou e-mailovou adresu."
+			},
+			"weekly": "Týdně"
+		},
+		"fundDonations": {
+			"addMore": "Přidat další",
+			"amount": "Částka",
+			"fund": "Fond"
+		},
+		"paymentMethods": {
+			"addBank": "Přidat bankovní účet",
+			"addCard": "Přidat kartu",
+			"confirmDelete": "Opravdu chcete smazat tuto platební metodu?",
+			"deleted": "Platební metoda smazána.",
+			"noMethods": "Žádné platební metody. Pro provedení daru přidejte platební metodu.",
+			"verify": "Ověřit účet"
+		},
+		"page": {
+			"amount": "Částka",
+			"batch": "Dávka",
+			"date": "Datum",
+			"fund": "Fond",
+			"method": "Metoda",
+			"willAppear": "Dary se zobrazí po zadání daru."
+		},
+		"preview": {
+			"date": "Datum daru",
+			"donate": "Darovat",
+			"every": "Opakovaně každý",
+			"fee": "Transakční poplatek",
+			"funds": "Fondy",
+			"method": "Metoda daru",
+			"notes": "Poznámky",
+			"startingOn": "Počínaje",
+			"total": "Celkem",
+			"type": "Typ daru"
+		},
+		"recurring": {
+			"amount": "Částka",
+			"every": "Každý",
+			"interval": "Interval",
+			"notFound": "Platební metoda nenalezena.",
+			"paymentMethod": "Platební metoda",
+			"startDate": "Datum zahájení"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Opravdu chcete smazat tyto údaje formuláře?",
+		"editForm": "Upravit formulář",
+		"isRequired": "je povinné",
+		"submit": "Odeslat"
+	},
+	"gallery": {
+		"aspectRatio": "Poměr stran",
+		"confirmDelete": "Opravdu chcete smazat tento obrázek z galerie?",
+		"freeForm": "Volný formát"
+	},
+	"iconPicker": {
+		"iconsAvailable": "dostupných ikon",
+		"matchingResults": "odpovídajících výsledků",
+		"search": "Hledat ikony..."
+	},
+	"login": {
+		"createAccount": "Vytvořit účet",
+		"email": "E-mail",
+		"expiredLink": "Aktuální odkaz vypršel.",
+		"forgot": "Zapomenuté heslo",
+		"goLogin": "Přejít na přihlášení",
+		"login": "Přihlásit se",
+		"noAcc": "Nemáte účet?",
+		"password": "Heslo",
+		"register": "Registrovat",
+		"registerThankYou": "Děkujeme za registraci! Zkontrolujte prosím svůj e-mail pro ověření účtu.",
+		"requestLink": "Požádat o nový odkaz pro obnovení",
+		"reset": "Obnovit",
+		"resetInstructions": "Zadejte svou e-mailovou adresu pro obnovení hesla.",
+		"resetPassword": "Obnovit heslo",
+		"resetSent": "E-mail pro obnovení hesla odeslán!",
+		"setPassword": "Nastavit heslo",
+		"signIn": "Přihlásit se",
+		"signInTitle": "Prosím přihlaste se",
+		"verifyPassword": "Ověřit heslo",
+		"validate": {
+			"email": "Prosím zadejte platnou e-mailovou adresu.",
+			"firstName": "Prosím zadejte své jméno.",
+			"invalid": "Neplatné přihlášení. Zkontrolujte prosím svůj e-mail nebo heslo.",
+			"lastName": "Prosím zadejte své příjmení.",
+			"password": "Prosím zadejte heslo.",
+			"passwordLength": "Heslo musí mít alespoň 8 znaků.",
+			"passwordMatch": "Hesla se neshodují.",
+			"selectingChurch": "Chyba při výběru sboru. Prosím ověřte a zkuste to znovu."
+		},
+		"welcomeBack": "Vítejte zpět",
+		"welcomeName": "Vítejte zpět, <b>{}</b>! Prosím čekejte, načítáme vaše údaje."
+	},
+	"markdownEditor": {
+		"content": "Obsah",
+		"markdownEditor": "Markdown editor",
+		"markdownGuide": "Průvodce Markdownem"
+	},
+	"month": {
+		"april": "Duben",
+		"august": "Srpen",
+		"december": "Prosinec",
+		"february": "Únor",
+		"january": "Leden",
+		"july": "Červenec",
+		"june": "Červen",
+		"march": "Březen",
+		"may": "Květen",
+		"november": "Listopad",
+		"october": "Říjen",
+		"september": "Září"
+	},
+	"notes": {
+		"comment": "komentář",
+		"comments": "komentáře",
+		"notes": "Poznámky",
+		"startConversation": "Zahájit konverzaci",
+		"validate": {
+			"content": "Prosím zadejte poznámku."
+		},
+		"viewAll": "Zobrazit vše"
+	},
+	"person": {
+		"email": "E-mail",
+		"firstName": "Jméno",
+		"lastName": "Příjmení",
+		"name": "Jméno",
+		"person": "Osoba",
+		"years": "let",
+		"noRec": "Nemáte záznam osoby?"
+	},
+	"reporting": {
+		"detailed": "Podrobná zpráva",
+		"summary": "Souhrn",
+		"sampleTemplate": "Vzorová šablona pro Word",
+		"downloadOptions": "Možnosti stažení",
+		"noData": "Nejsou k dispozici žádná data.",
+		"runReport": "Spustit zprávu",
+		"useFilter": "Použijte filtr ke spuštění zprávy."
+	},
+	"selectChurch": {
+		"address1": "Adresa – řádek 1",
+		"address2": "Adresa – řádek 2",
+		"another": "Vybrat jiný sbor",
+		"city": "Město",
+		"confirmRegister": "Opravdu chcete zaregistrovat nový sbor?",
+		"country": "Země",
+		"name": "Název sboru",
+		"noMatches": "Nebyly nalezeny žádné shody.",
+		"register": "Zaregistrovat nový sbor",
+		"selectChurch": "Vybrat sbor",
+		"state": "Stát / Kraj",
+		"zip": "PSČ",
+		"validate": {
+			"address": "Adresa nemůže být prázdná.",
+			"city": "Město nemůže být prázdné.",
+			"country": "Země nemůže být prázdná.",
+			"name": "Název sboru nemůže být prázdný.",
+			"state": "Stát/Kraj nemůže být prázdný.",
+			"zip": "PSČ nemůže být prázdné."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Foto:",
+		"providedBy": "Fotobanku poskytuje"
+	},
+	"support": {
+		"documentation": "Dokumentace",
+		"discussions": "Fórum podpory"
+	},
+	"wrapper": {
+		"chatWith": "Chatovat s",
+		"deleteChurch": "Smazat",
+		"editAccount": "Upravit účet",
+		"editChurchProfile": "Upravit profil sboru",
+		"editProfile": "Upravit profil",
+		"logout": "Odhlásit se",
+		"messages": "Zprávy",
+		"newPrivateMessage": "Nová soukromá zpráva",
+		"notifications": "Oznámení",
+		"privateMessage": "Soukromá zpráva",
+		"profile": "Profil",
+		"searchForPerson": "Hledat osobu",
+		"support": "Podpora",
+		"sureRemoveChurch": "Opravdu chcete smazat tento sbor? Již nebudete členem {}.",
+		"switchApp": "Přepnout aplikaci",
+		"switchChurch": "Přepnout sbor"
+	}
+}

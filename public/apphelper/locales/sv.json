@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Kommentar",
+		"commentPlaceholder": "Inkludera en kommentar med ditt inlägg.",
+		"contentShared": "Innehåll delat",
+		"group": "Grupp",
+		"sharingToGroup": "Delar {} till B1-grupp",
+		"validate": {
+			"addComment": "Vänligen lägg till en kommentar.",
+			"loginFirst": "Vänligen logga in först.",
+			"notMember": "Du är för närvarande inte medlem i någon grupp på B1.",
+			"selectGroup": "Vänligen välj en grupp."
+		}
+	},
+	"common": {
+		"add": "Lägg till",
+		"cancel": "Avbryt",
+		"close": "Stäng",
+		"date": "Datum",
+		"delete": "Radera",
+		"edit": "Redigera",
+		"error": "Fel",
+		"pleaseWait": "Vänligen vänta...",
+		"save": "Spara",
+		"search": "Sök",
+		"submit": "Skicka",
+		"update": "Uppdatera"
+	},
+	"createPerson": {
+		"addNewPerson": "Lägg till en ny person",
+		"firstName": "Förnamn",
+		"lastName": "Efternamn",
+		"email": "E-post"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Kontonummer",
+			"added": "Bankkonto tillagt. Verifiera ditt bankkonto för att göra en donation.",
+			"company": "Företag",
+			"firstDeposit": "Första insättningen",
+			"holderName": "Kontoinnehavarens namn krävs.",
+			"individual": "Privatperson",
+			"name": "Kontoinnehavarens namn",
+			"needVerified": "Bankkonton måste verifieras innan donationer kan göras. Ditt konto kommer att ta emot två små insättningar inom cirka 1–3 arbetsdagar. Du behöver ange dessa insättningsbelopp för att slutföra verifieringen av ditt konto genom att välja länken för kontoverifiering bredvid ditt bankkonto under avsnittet betalningsmetoder.",
+			"routingNumber": "Clearingnummer",
+			"secondDeposit": "Andra insättningen",
+			"twoDeposits": "Ange de två insättningarna du mottagit på ditt konto för att slutföra verifieringen av ditt bankkonto.",
+			"updated": "Bankkonto uppdaterat.",
+			"verified": "Bankkonto verifierat.",
+			"validate": {
+				"accountNumber": "Clearing- och kontonummer krävs.",
+				"holderName": "Kontoinnehavarens namn krävs."
+			}
+		},
+		"cardForm": {
+			"addNew": "Lägg till nytt kort",
+			"added": "Kort tillagt.",
+			"expirationMonth": "Utgångsmånad:",
+			"expirationYear": "Utgångsår:",
+			"updated": "Kort uppdaterat."
+		},
+		"donationForm": {
+			"annually": "Årligen",
+			"biWeekly": "Varannan vecka",
+			"cancelled": "Återkommande donation avbruten.",
+			"confirmDelete": "Är du säker på att du vill radera denna återkommande donation?",
+			"cover": "Jag lägger gärna till {} för att täcka transaktionsavgifterna så att ni kan behålla 100 % av min donation.",
+			"donate": "Donera",
+			"editRecurring": "Redigera återkommande donation",
+			"fees": "Transaktionsavgifter på {} tillkommer.",
+			"frequency": "Frekvens",
+			"fund": "Fond",
+			"funds": "Fonder",
+			"make": "Gör en donation",
+			"makeRecurring": "Gör en återkommande donation",
+			"method": "Metod",
+			"monthly": "Månadsvis",
+			"notes": "Anteckningar",
+			"preview": "Förhandsgranska donation",
+			"quarterly": "Kvartalsvis",
+			"recurringUpdated": "Återkommande donation uppdaterad.",
+			"startDate": "Startdatum",
+			"thankYou": "Tack för din donation!",
+			"tooLow": "Donationsbeloppet måste vara större än $0,50",
+			"total": "Totalt donationsbelopp",
+			"validate": {
+				"amount": "Beloppet kan inte vara $0.",
+				"email": "Vänligen ange din e-postadress.",
+				"firstName": "Vänligen ange ditt förnamn.",
+				"lastName": "Vänligen ange ditt efternamn.",
+				"validEmail": "Vänligen ange en giltig e-postadress."
+			},
+			"weekly": "Veckovis"
+		},
+		"fundDonations": {
+			"addMore": "Lägg till fler",
+			"amount": "Belopp",
+			"fund": "Fond"
+		},
+		"paymentMethods": {
+			"addBank": "Lägg till bankkonto",
+			"addCard": "Lägg till kort",
+			"confirmDelete": "Är du säker på att du vill radera denna betalningsmetod?",
+			"deleted": "Betalningsmetod raderad.",
+			"noMethods": "Inga betalningsmetoder. Lägg till en betalningsmetod för att göra en donation.",
+			"verify": "Verifiera konto"
+		},
+		"page": {
+			"amount": "Belopp",
+			"batch": "Batch",
+			"date": "Datum",
+			"fund": "Fond",
+			"method": "Metod",
+			"willAppear": "Donationer visas när en donation har registrerats."
+		},
+		"preview": {
+			"date": "Donationsdatum",
+			"donate": "Donera",
+			"every": "Återkommande varje",
+			"fee": "Transaktionsavgift",
+			"funds": "Fonder",
+			"method": "Donationsmetod",
+			"notes": "Anteckningar",
+			"startingOn": "Börjar den",
+			"total": "Totalt",
+			"type": "Donationstyp"
+		},
+		"recurring": {
+			"amount": "Belopp",
+			"every": "Varje",
+			"interval": "Intervall",
+			"notFound": "Betalningsmetod hittades inte.",
+			"paymentMethod": "Betalningsmetod",
+			"startDate": "Startdatum"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Är du säker på att du vill radera dessa formulärdata?",
+		"editForm": "Redigera formulär",
+		"isRequired": "är obligatoriskt",
+		"submit": "Skicka"
+	},
+	"gallery": {
+		"aspectRatio": "Bildförhållande",
+		"confirmDelete": "Är du säker på att du vill radera denna bild från galleriet?",
+		"freeForm": "Fritt format"
+	},
+	"iconPicker": {
+		"iconsAvailable": "ikoner tillgängliga",
+		"matchingResults": "matchande resultat",
+		"search": "Sök ikoner..."
+	},
+	"login": {
+		"createAccount": "Skapa ett konto",
+		"email": "E-post",
+		"expiredLink": "Den aktuella länken har utgått.",
+		"forgot": "Glömt lösenord",
+		"goLogin": "Gå till inloggning",
+		"login": "Logga in",
+		"noAcc": "Har du inget konto?",
+		"password": "Lösenord",
+		"register": "Registrera",
+		"registerThankYou": "Tack för din registrering! Vänligen kontrollera din e-post för att verifiera ditt konto.",
+		"requestLink": "Begär en ny återställningslänk",
+		"reset": "Återställ",
+		"resetInstructions": "Ange din e-postadress för att begära en lösenordsåterställning.",
+		"resetPassword": "Återställ lösenord",
+		"resetSent": "E-post för lösenordsåterställning skickad!",
+		"setPassword": "Ange lösenord",
+		"signIn": "Logga in",
+		"signInTitle": "Vänligen logga in",
+		"verifyPassword": "Bekräfta lösenord",
+		"validate": {
+			"email": "Vänligen ange en giltig e-postadress.",
+			"firstName": "Vänligen ange ditt förnamn.",
+			"invalid": "Ogiltig inloggning. Vänligen kontrollera din e-post eller ditt lösenord.",
+			"lastName": "Vänligen ange ditt efternamn.",
+			"password": "Vänligen ange ett lösenord.",
+			"passwordLength": "Lösenordet måste vara minst 8 tecken långt.",
+			"passwordMatch": "Lösenorden matchar inte.",
+			"selectingChurch": "Fel vid val av församling. Vänligen kontrollera och försök igen."
+		},
+		"welcomeBack": "Välkommen tillbaka",
+		"welcomeName": "Välkommen tillbaka, <b>{}</b>! Vänligen vänta medan vi laddar dina uppgifter."
+	},
+	"markdownEditor": {
+		"content": "Innehåll",
+		"markdownEditor": "Markdown-redigerare",
+		"markdownGuide": "Markdown-guide"
+	},
+	"month": {
+		"april": "April",
+		"august": "Augusti",
+		"december": "December",
+		"february": "Februari",
+		"january": "Januari",
+		"july": "Juli",
+		"june": "Juni",
+		"march": "Mars",
+		"may": "Maj",
+		"november": "November",
+		"october": "Oktober",
+		"september": "September"
+	},
+	"notes": {
+		"comment": "kommentar",
+		"comments": "kommentarer",
+		"notes": "Anteckningar",
+		"startConversation": "Starta en konversation",
+		"validate": {
+			"content": "Vänligen ange en anteckning."
+		},
+		"viewAll": "Visa alla"
+	},
+	"person": {
+		"email": "E-post",
+		"firstName": "Förnamn",
+		"lastName": "Efternamn",
+		"name": "Namn",
+		"person": "Person",
+		"years": "år",
+		"noRec": "Har du ingen personpost?"
+	},
+	"reporting": {
+		"detailed": "Detaljerad rapport",
+		"summary": "Sammanfattning",
+		"sampleTemplate": "Exempelmall för Word",
+		"downloadOptions": "Nedladdningsalternativ",
+		"noData": "Det finns inga data att visa.",
+		"runReport": "Kör rapport",
+		"useFilter": "Använd filtret för att köra rapporten."
+	},
+	"selectChurch": {
+		"address1": "Adressrad 1",
+		"address2": "Adressrad 2",
+		"another": "Välj en annan församling",
+		"city": "Stad",
+		"confirmRegister": "Är du säker på att du vill registrera en ny församling?",
+		"country": "Land",
+		"name": "Församlingsnamn",
+		"noMatches": "Inga träffar hittades.",
+		"register": "Registrera en ny församling",
+		"selectChurch": "Välj en församling",
+		"state": "Delstat / Provins",
+		"zip": "Postnummer",
+		"validate": {
+			"address": "Adressen kan inte vara tom.",
+			"city": "Staden kan inte vara tom.",
+			"country": "Landet kan inte vara tomt.",
+			"name": "Församlingsnamnet kan inte vara tomt.",
+			"state": "Delstat/Provins kan inte vara tom.",
+			"zip": "Postnumret kan inte vara tomt."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Foto av:",
+		"providedBy": "Stockfoton tillhandahålls av"
+	},
+	"support": {
+		"documentation": "Dokumentation",
+		"discussions": "Supportforum"
+	},
+	"wrapper": {
+		"chatWith": "Chatta med",
+		"deleteChurch": "Radera",
+		"editAccount": "Redigera konto",
+		"editChurchProfile": "Redigera församlingsprofil",
+		"editProfile": "Redigera profil",
+		"logout": "Logga ut",
+		"messages": "Meddelanden",
+		"newPrivateMessage": "Nytt privat meddelande",
+		"notifications": "Aviseringar",
+		"privateMessage": "Privat meddelande",
+		"profile": "Profil",
+		"searchForPerson": "Sök efter en person",
+		"support": "Support",
+		"sureRemoveChurch": "Är du säker på att du vill radera denna församling? Du kommer inte längre vara medlem i {}.",
+		"switchApp": "Byt app",
+		"switchChurch": "Byt församling"
+	}
+}

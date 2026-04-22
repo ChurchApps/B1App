@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Komentár",
+		"commentPlaceholder": "Pridajte komentár k svojmu príspevku.",
+		"contentShared": "Obsah zdieľaný",
+		"group": "Skupina",
+		"sharingToGroup": "Zdieľanie {} do skupiny B1",
+		"validate": {
+			"addComment": "Prosím pridajte komentár.",
+			"loginFirst": "Prosím prihláste sa najprv.",
+			"notMember": "V súčasnosti nie ste členom žiadnej skupiny na B1.",
+			"selectGroup": "Prosím vyberte skupinu."
+		}
+	},
+	"common": {
+		"add": "Pridať",
+		"cancel": "Zrušiť",
+		"close": "Zatvoriť",
+		"date": "Dátum",
+		"delete": "Odstrániť",
+		"edit": "Upraviť",
+		"error": "Chyba",
+		"pleaseWait": "Prosím čakajte...",
+		"save": "Uložiť",
+		"search": "Hľadať",
+		"submit": "Odoslať",
+		"update": "Aktualizovať"
+	},
+	"createPerson": {
+		"addNewPerson": "Pridať novú osobu",
+		"firstName": "Krstné meno",
+		"lastName": "Priezvisko",
+		"email": "Email"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Číslo účtu",
+			"added": "Bankový účet pridaný. Overte si bankový účet, aby ste mohli darovať.",
+			"company": "Spoločnosť",
+			"firstDeposit": "Prvý vklad",
+			"holderName": "Je povinné meno majiteľa účtu.",
+			"individual": "Jednotlivec",
+			"name": "Meno majiteľa účtu",
+			"needVerified": "Bankové účty budú musieť byť overené predtým, ako budete môcť darovať. Váš účet dostane dva malé vklady približne 1-3 pracovné dni. Budete musieť zadať sumy týchto vkladov, aby ste dokončili overenie vášho účtu výberom odkazu na overenie účtu vedľa vášho bankového účtu v časti spôsob platby.",
+			"routingNumber": "Trasovací kód",
+			"secondDeposit": "Druhý vklad",
+			"twoDeposits": "Zadajte dva vklady, ktoré ste dostali na svoj účet, aby ste dokončili overenie bankového účtu.",
+			"updated": "Bankový účet aktualizovaný.",
+			"verified": "Bankový účet overený.",
+			"validate": {
+				"accountNumber": "Trasovací kód a číslo účtu sú povinné.",
+				"holderName": "Je povinné meno majiteľa účtu."
+			}
+		},
+		"cardForm": {
+			"addNew": "Pridať novú kartu",
+			"added": "Karta úspešne pridaná.",
+			"expirationMonth": "Mesiac expirácie:",
+			"expirationYear": "Rok expirácie:",
+			"updated": "Karta úspešne aktualizovaná."
+		},
+		"donationForm": {
+			"annually": "Ročne",
+			"biWeekly": "Biweekly",
+			"cancelled": "Pravidelný dar zrušený.",
+			"confirmDelete": "Ste si istí, že chcete odstrániť túto pravideľnú donáciu?",
+			"cover": "Štedro pridám {} na pokrytie poplatkov za transakciu, aby ste si mohli ponechať 100% svojej donácie.",
+			"donate": "Darovať",
+			"editRecurring": "Upraviť pravideľnú donáciu",
+			"fees": "Aplikujú sa poplatky za transakciu {}.",
+			"frequency": "Frekvencia",
+			"fund": "Fond",
+			"funds": "Fondy",
+			"make": "Darovať",
+			"makeRecurring": "Urobiť pravideľnú donáciu",
+			"method": "Metóda",
+			"monthly": "Mesačne",
+			"notes": "Poznámky",
+			"preview": "Náhľad donácie",
+			"quarterly": "Štvrťročne",
+			"recurringUpdated": "Pravidelná donácia aktualizovaná.",
+			"startDate": "Dátum začatia",
+			"thankYou": "Ďakujeme za vašu donáciu!",
+			"tooLow": "Suma donácie musí byť väčšia ako 0,50 USD",
+			"total": "Celková suma donácie",
+			"validate": {
+				"amount": "Suma nemôže byť 0 USD.",
+				"email": "Prosím zadajte svoju e-mailovú adresu.",
+				"firstName": "Prosím zadajte svoje krstné meno.",
+				"lastName": "Prosím zadajte svoje priezvisko.",
+				"validEmail": "Prosím zadajte platnú e-mailovú adresu."
+			},
+			"weekly": "Týždenne"
+		},
+		"fundDonations": {
+			"addMore": "Pridať viac",
+			"amount": "Suma",
+			"fund": "Fond"
+		},
+		"paymentMethods": {
+			"addBank": "Pridať bankový účet",
+			"addCard": "Pridať kartu",
+			"confirmDelete": "Ste si istí, že chcete odstrániť túto spôsob platby?",
+			"deleted": "Spôsob platby odstránený.",
+			"noMethods": "Žiadne spôsoby platby. Pridajte spôsob platby, aby ste mohli darovať.",
+			"verify": "Overiť účet"
+		},
+		"page": {
+			"amount": "Suma",
+			"batch": "Dávka",
+			"date": "Dátum",
+			"fund": "Fond",
+			"method": "Metóda",
+			"willAppear": "Donácie sa objavia po zadaní donácie."
+		},
+		"preview": {
+			"date": "Dátum donácie",
+			"donate": "Darovať",
+			"every": "Pravidelná donácia každých",
+			"fee": "Poplatek za transakciu",
+			"funds": "Fondy",
+			"method": "Spôsob donácie",
+			"notes": "Poznámky",
+			"startingOn": "Začína dňa",
+			"total": "Celkom",
+			"type": "Typ donácie"
+		},
+		"recurring": {
+			"amount": "Suma",
+			"every": "Každých",
+			"interval": "Interval",
+			"notFound": "Spôsob platby nenájdený.",
+			"paymentMethod": "Spôsob platby",
+			"startDate": "Dátum začatia"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Ste si istí, že chcete odstrániť tieto údaje formulára?",
+		"editForm": "Upraviť formulár",
+		"isRequired": "je povinný",
+		"submit": "Odoslať"
+	},
+	"gallery": {
+		"aspectRatio": "Pomer strán",
+		"confirmDelete": "Ste si istí, že chcete odstrániť tento obrázok z galérie?",
+		"freeForm": "Voľná forma"
+	},
+	"iconPicker": {
+		"iconsAvailable": "dostupných ikon",
+		"matchingResults": "zhodných výsledkov",
+		"search": "Hľadať ikony..."
+	},
+	"login": {
+		"createAccount": "Vytvorte účet",
+		"email": "Email",
+		"expiredLink": "Aktuálny odkaz vypršal.",
+		"forgot": "Zabudli ste heslo",
+		"goLogin": "Prejsť na prihlásenie",
+		"login": "Prihlásiť sa",
+		"noAcc": "Nemáte účet?",
+		"password": "Heslo",
+		"register": "Registrovať sa",
+		"registerThankYou": "Ďakujeme za registráciu! Skontrolujte si prosím e-mail a overte si svoj účet.",
+		"requestLink": "Požiadať o nový odkaz na resetovanie",
+		"reset": "Resetovať",
+		"resetInstructions": "Zadajte svoju e-mailovú adresu a požiadajte o resetovanie hesla.",
+		"resetPassword": "Resetovať heslo",
+		"resetSent": "E-mail na resetovanie hesla bol odoslaný!",
+		"setPassword": "Nastaviť heslo",
+		"signIn": "Prihlásiť sa",
+		"signInTitle": "Prosím prihláste sa",
+		"verifyPassword": "Overiť heslo",
+		"validate": {
+			"email": "Prosím zadajte platnú e-mailovú adresu.",
+			"firstName": "Prosím zadajte svoje krstné meno.",
+			"invalid": "Neplatné prihlásenie. Prosím skontrolujte svoj e-mail alebo heslo.",
+			"lastName": "Prosím zadajte svoje priezvisko.",
+			"password": "Prosím zadajte heslo.",
+			"passwordLength": "Heslo musí mať minimálne 8 znakov.",
+			"passwordMatch": "Heslá sa nezhodujú.",
+			"selectingChurch": "Chyba pri výbere cirkvi. Prosím overitee a skúste znova"
+		},
+		"welcomeBack": "Vitajte späť",
+		"welcomeName": "Vitajte späť, <b>{}</b>! Prosím čakajte, zatiaľ čo načítavame vaše dáta."
+	},
+	"markdownEditor": {
+		"content": "Obsah",
+		"markdownEditor": "Editor Markdown",
+		"markdownGuide": "Sprievodca Markdown"
+	},
+	"month": {
+		"april": "Apríl",
+		"august": "August",
+		"december": "December",
+		"february": "Február",
+		"january": "január",
+		"july": "Júl",
+		"june": "Jún",
+		"march": "Marec",
+		"may": "Máj",
+		"november": "November",
+		"october": "Október",
+		"september": "September"
+	},
+	"notes": {
+		"comment": "komentár",
+		"comments": "komentáre",
+		"notes": "Poznámky",
+		"startConversation": "Spustite rozhovor",
+		"validate": {
+			"content": "Prosím zadajte poznámku."
+		},
+		"viewAll": "Zobraziť všetky"
+	},
+	"person": {
+		"email": "Email",
+		"firstName": "Krstné meno",
+		"lastName": "Priezvisko",
+		"name": "Meno",
+		"person": "Osoba",
+		"years": "rokov",
+		"noRec": "Nemáte záznam o osobe?"
+	},
+	"reporting": {
+		"detailed": "Podrobná správa",
+		"summary": "Zhrnutie",
+		"sampleTemplate": "Príklad šablóny Word",
+		"downloadOptions": "Možnosti sťahovania",
+		"noData": "Nie sú žiadne údaje na zobrazenie.",
+		"runReport": "Spustiť správu",
+		"useFilter": "Na spustenie správy použite filter."
+	},
+	"selectChurch": {
+		"address1": "Adresa - riadok 1",
+		"address2": "Adresa - riadok 2",
+		"another": "Vyberte inú cirkev",
+		"city": "Mesto",
+		"confirmRegister": "Ste si istí, že chcete zaregistrovať novú cirkev?",
+		"country": "Krajina",
+		"name": "Názov cirkvi",
+		"noMatches": "Nenájdené žiadne zhodnosti.",
+		"register": "Zaregistrovať novú cirkev",
+		"selectChurch": "Vyberte cirkev",
+		"state": "Štát / Provincia",
+		"zip": "PSČ / Poštové smerovacie číslo",
+		"validate": {
+			"address": "Adresa nemôže byť prázdna.",
+			"city": "Mesto nemôže byť prázdne.",
+			"country": "Krajina nemôže byť prázdna.",
+			"name": "Názov cirkvi nemôže byť prázdny.",
+			"state": "Štát/Provincia nemôže byť prázdny.",
+			"zip": "PSČ/poštové smerovacie číslo nemôže byť prázdne."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Fotografia od:",
+		"providedBy": "Archívne fotografie poskytuje"
+	},
+	"support": {
+		"documentation": "Dokumentácia",
+		"discussions": "Fórum podpory"
+	},
+	"wrapper": {
+		"chatWith": "Konverzácia s",
+		"deleteChurch": "Odstrániť",
+		"editAccount": "Upraviť účet",
+		"editChurchProfile": "Upraviť profil cirkvi",
+		"editProfile": "Upraviť profil",
+		"logout": "Odhlásiť sa",
+		"messages": "Správy",
+		"newPrivateMessage": "Nová súkromná správa",
+		"notifications": "Oznámenia",
+		"privateMessage": "Súkromná správa",
+		"profile": "Profil",
+		"searchForPerson": "Hľadať osobu",
+		"support": "Podpora",
+		"sureRemoveChurch": "Ste si istí, že chcete odstrániť túto cirkev? Už nebudete členom {}.",
+		"switchApp": "Prepnúť aplikáciu",
+		"switchChurch": "Prepnúť cirkev"
+	}
+}

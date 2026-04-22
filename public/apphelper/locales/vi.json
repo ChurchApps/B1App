@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Bình luận",
+		"commentPlaceholder": "Thêm bình luận vào bài đăng của bạn.",
+		"contentShared": "Đã chia sẻ nội dung",
+		"group": "Nhóm",
+		"sharingToGroup": "Chia sẻ {} với Nhóm B1",
+		"validate": {
+			"addComment": "Vui lòng thêm một bình luận.",
+			"loginFirst": "Vui lòng đăng nhập trước.",
+			"notMember": "Bạn hiện không phải là thành viên của bất kỳ nhóm nào trên B1.",
+			"selectGroup": "Vui lòng chọn một nhóm."
+		}
+	},
+	"common": {
+		"add": "Thêm",
+		"cancel": "Hủy",
+		"close": "Đóng",
+		"date": "Ngày",
+		"delete": "Xóa",
+		"edit": "Chỉnh sửa",
+		"error": "Lỗi",
+		"pleaseWait": "Vui lòng đợi...",
+		"save": "Lưu",
+		"search": "Tìm kiếm",
+		"submit": "Gửi",
+		"update": "Cập nhật"
+	},
+	"createPerson": {
+		"addNewPerson": "Thêm người mới",
+		"firstName": "Tên",
+		"lastName": "Họ",
+		"email": "Email"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Số tài khoản",
+			"added": "Đã thêm tài khoản ngân hàng. Xác minh tài khoản ngân hàng của bạn để quyên góp.",
+			"company": "Công ty",
+			"firstDeposit": "Khoản tiền gửi đầu tiên",
+			"holderName": "Tên chủ tài khoản là bắt buộc.",
+			"individual": "Cá nhân",
+			"name": "Tên chủ tài khoản",
+			"needVerified": "Các tài khoản ngân hàng sẽ cần được xác minh trước khi quyên góp. Tài khoản của bạn sẽ nhận được hai khoản tiền gửi nhỏ trong khoảng 1-3 ngày làm việc. Bạn sẽ cần nhập số tiền của những khoản tiền gửi đó để hoàn tất xác minh tài khoản bằng cách chọn liên kết xác minh tài khoản bên cạnh tài khoản ngân hàng của bạn trong phần phương thức thanh toán.",
+			"routingNumber": "Mã định tuyến",
+			"secondDeposit": "Khoản tiền gửi thứ hai",
+			"twoDeposits": "Nhập hai khoản tiền gửi mà bạn nhận được trên tài khoản của mình để hoàn tất xác minh tài khoản ngân hàng.",
+			"updated": "Đã cập nhật tài khoản ngân hàng.",
+			"verified": "Tài khoản ngân hàng đã được xác minh.",
+			"validate": {
+				"accountNumber": "Mã định tuyến và số tài khoản là bắt buộc.",
+				"holderName": "Tên chủ tài khoản là bắt buộc."
+			}
+		},
+		"cardForm": {
+			"addNew": "Thêm thẻ mới",
+			"added": "Thẻ được thêm thành công.",
+			"expirationMonth": "Tháng hết hạn:",
+			"expirationYear": "Năm hết hạn:",
+			"updated": "Thẻ được cập nhật thành công."
+		},
+		"donationForm": {
+			"annually": "Hàng năm",
+			"biWeekly": "Mỗi hai tuần",
+			"cancelled": "Quyên góp định kỳ đã bị hủy.",
+			"confirmDelete": "Bạn có chắc chắn muốn xóa quyên góp định kỳ này không?",
+			"cover": "Tôi sẽ thêm {} một cách rộng rãi để chi trả phí giao dịch để bạn có thể giữ 100% quyên góp của bạn.",
+			"donate": "Quyên góp",
+			"editRecurring": "Chỉnh sửa quyên góp định kỳ",
+			"fees": "Áp dụng phí giao dịch {}.",
+			"frequency": "Tần suất",
+			"fund": "Quỹ",
+			"funds": "Quỹ",
+			"make": "Quyên góp",
+			"makeRecurring": "Thực hiện quyên góp định kỳ",
+			"method": "Phương pháp",
+			"monthly": "Hàng tháng",
+			"notes": "Ghi chú",
+			"preview": "Xem trước quyên góp",
+			"quarterly": "Hàng quý",
+			"recurringUpdated": "Đã cập nhật quyên góp định kỳ.",
+			"startDate": "Ngày bắt đầu",
+			"thankYou": "Cảm ơn bạn vì quyên góp!",
+			"tooLow": "Số tiền quyên góp phải lớn hơn $0,50",
+			"total": "Tổng số tiền quyên góp",
+			"validate": {
+				"amount": "Số tiền không thể là 0 đô la.",
+				"email": "Vui lòng nhập địa chỉ email của bạn.",
+				"firstName": "Vui lòng nhập tên của bạn.",
+				"lastName": "Vui lòng nhập họ của bạn.",
+				"validEmail": "Vui lòng nhập một địa chỉ email hợp lệ."
+			},
+			"weekly": "Hàng tuần"
+		},
+		"fundDonations": {
+			"addMore": "Thêm nữa",
+			"amount": "Số tiền",
+			"fund": "Quỹ"
+		},
+		"paymentMethods": {
+			"addBank": "Thêm tài khoản ngân hàng",
+			"addCard": "Thêm thẻ",
+			"confirmDelete": "Bạn có chắc chắn muốn xóa phương thức thanh toán này không?",
+			"deleted": "Đã xóa phương thức thanh toán.",
+			"noMethods": "Không có phương thức thanh toán. Thêm phương thức thanh toán để quyên góp.",
+			"verify": "Xác minh tài khoản"
+		},
+		"page": {
+			"amount": "Số tiền",
+			"batch": "Lô",
+			"date": "Ngày",
+			"fund": "Quỹ",
+			"method": "Phương pháp",
+			"willAppear": "Quyên góp sẽ xuất hiện khi quyên góp được nhập."
+		},
+		"preview": {
+			"date": "Ngày quyên góp",
+			"donate": "Quyên góp",
+			"every": "Quyên góp định kỳ mỗi",
+			"fee": "Phí giao dịch",
+			"funds": "Quỹ",
+			"method": "Phương thức quyên góp",
+			"notes": "Ghi chú",
+			"startingOn": "Bắt đầu từ",
+			"total": "Tổng",
+			"type": "Loại quyên góp"
+		},
+		"recurring": {
+			"amount": "Số tiền",
+			"every": "Mỗi",
+			"interval": "Khoảng thời gian",
+			"notFound": "Không tìm thấy phương thức thanh toán.",
+			"paymentMethod": "Phương thức thanh toán",
+			"startDate": "Ngày bắt đầu"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Bạn có chắc chắn muốn xóa dữ liệu biểu mẫu này không?",
+		"editForm": "Chỉnh sửa biểu mẫu",
+		"isRequired": "là bắt buộc",
+		"submit": "Gửi"
+	},
+	"gallery": {
+		"aspectRatio": "Tỉ lệ khung hình",
+		"confirmDelete": "Bạn có chắc chắn muốn xóa hình ảnh này khỏi thư viện không?",
+		"freeForm": "Hình thức tự do"
+	},
+	"iconPicker": {
+		"iconsAvailable": "biểu tượng có sẵn",
+		"matchingResults": "kết quả phù hợp",
+		"search": "Tìm kiếm biểu tượng..."
+	},
+	"login": {
+		"createAccount": "Tạo một tài khoản",
+		"email": "Email",
+		"expiredLink": "Liên kết hiện tại đã hết hạn.",
+		"forgot": "Quên mật khẩu",
+		"goLogin": "Đi đến đăng nhập",
+		"login": "Đăng nhập",
+		"noAcc": "Không có tài khoản?",
+		"password": "Mật khẩu",
+		"register": "Đăng ký",
+		"registerThankYou": "Cảm ơn bạn đã đăng ký! Vui lòng kiểm tra email của bạn để xác minh tài khoản của bạn.",
+		"requestLink": "Yêu cầu liên kết đặt lại mới",
+		"reset": "Đặt lại",
+		"resetInstructions": "Nhập địa chỉ email của bạn để yêu cầu đặt lại mật khẩu.",
+		"resetPassword": "Đặt lại mật khẩu",
+		"resetSent": "Đã gửi email đặt lại mật khẩu!",
+		"setPassword": "Đặt mật khẩu",
+		"signIn": "Đăng nhập",
+		"signInTitle": "Vui lòng đăng nhập",
+		"verifyPassword": "Xác minh mật khẩu",
+		"validate": {
+			"email": "Vui lòng nhập một địa chỉ email hợp lệ.",
+			"firstName": "Vui lòng nhập tên của bạn.",
+			"invalid": "Đăng nhập không hợp lệ. Vui lòng kiểm tra email hoặc mật khẩu của bạn.",
+			"lastName": "Vui lòng nhập họ của bạn.",
+			"password": "Vui lòng nhập mật khẩu.",
+			"passwordLength": "Mật khẩu phải dài ít nhất 8 ký tự.",
+			"passwordMatch": "Mật khẩu không khớp.",
+			"selectingChurch": "Lỗi khi chọn nhà thờ. Vui lòng xác minh và thử lại"
+		},
+		"welcomeBack": "Chào mừng trở lại",
+		"welcomeName": "Chào mừng trở lại, <b>{}</b>! Vui lòng đợi trong khi chúng tôi tải dữ liệu của bạn."
+	},
+	"markdownEditor": {
+		"content": "Nội dung",
+		"markdownEditor": "Trình chỉnh sửa Markdown",
+		"markdownGuide": "Hướng dẫn Markdown"
+	},
+	"month": {
+		"april": "Tháng tư",
+		"august": "Tháng 8",
+		"december": "Tháng mười hai",
+		"february": "Tháng hai",
+		"january": "Tháng một",
+		"july": "Tháng bảy",
+		"june": "Tháng sáu",
+		"march": "Tháng ba",
+		"may": "Có thể",
+		"november": "Tháng mười một",
+		"october": "Tháng mười",
+		"september": "Tháng chín"
+	},
+	"notes": {
+		"comment": "bình luận",
+		"comments": "bình luận",
+		"notes": "Ghi chú",
+		"startConversation": "Bắt đầu một cuộc trò chuyện",
+		"validate": {
+			"content": "Vui lòng nhập ghi chú."
+		},
+		"viewAll": "Xem tất cả"
+	},
+	"person": {
+		"email": "Email",
+		"firstName": "Tên",
+		"lastName": "Họ",
+		"name": "Tên",
+		"person": "Người",
+		"years": "năm",
+		"noRec": "Bạn không có hồ sơ người?"
+	},
+	"reporting": {
+		"detailed": "Báo cáo chi tiết",
+		"summary": "Tóm tắt",
+		"sampleTemplate": "Mẫu Word mẫu",
+		"downloadOptions": "Tùy chọn tải xuống",
+		"noData": "Không có dữ liệu để hiển thị.",
+		"runReport": "Chạy báo cáo",
+		"useFilter": "Sử dụng bộ lọc để chạy báo cáo."
+	},
+	"selectChurch": {
+		"address1": "Địa chỉ - dòng 1",
+		"address2": "Địa chỉ - dòng 2",
+		"another": "Chọn một nhà thờ khác",
+		"city": "Thành phố",
+		"confirmRegister": "Bạn có chắc chắn muốn đăng ký một nhà thờ mới không?",
+		"country": "Nước",
+		"name": "Tên nhà thờ",
+		"noMatches": "Không tìm thấy kết quả trùng khớp.",
+		"register": "Đăng ký một nhà thờ mới",
+		"selectChurch": "Chọn một nhà thờ",
+		"state": "Tiểu bang / Tỉnh",
+		"zip": "Mã bưu chính / Mã bưu chính",
+		"validate": {
+			"address": "Địa chỉ không được để trống.",
+			"city": "Thành phố không được để trống.",
+			"country": "Nước không được để trống.",
+			"name": "Tên nhà thờ không được để trống.",
+			"state": "Tiểu bang/Tỉnh không được để trống.",
+			"zip": "Mã bưu chính/mã bưu chính không được để trống."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Ảnh của:",
+		"providedBy": "Ảnh kho được cung cấp bởi"
+	},
+	"support": {
+		"documentation": "Tài liệu",
+		"discussions": "Diễn đàn hỗ trợ"
+	},
+	"wrapper": {
+		"chatWith": "Trò chuyện với",
+		"deleteChurch": "Xóa",
+		"editAccount": "Chỉnh sửa tài khoản",
+		"editChurchProfile": "Chỉnh sửa hồ sơ nhà thờ",
+		"editProfile": "Chỉnh sửa hồ sơ",
+		"logout": "Đăng xuất",
+		"messages": "Tin nhắn",
+		"newPrivateMessage": "Tin nhắn riêng tư mới",
+		"notifications": "Thông báo",
+		"privateMessage": "Tin nhắn riêng tư",
+		"profile": "Hồ sơ",
+		"searchForPerson": "Tìm kiếm một người",
+		"support": "Hỗ trợ",
+		"sureRemoveChurch": "Bạn có chắc chắn muốn xóa nhà thờ này không? Bạn sẽ không còn là thành viên của {}.",
+		"switchApp": "Chuyển ứng dụng",
+		"switchChurch": "Chuyển nhà thờ"
+	}
+}

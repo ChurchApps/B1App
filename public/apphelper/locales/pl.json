@@ -1,0 +1,281 @@
+{
+	"b1Share": {
+		"comment": "Komentarz",
+		"commentPlaceholder": "Dołącz komentarz do swojego wpisu.",
+		"contentShared": "Treść udostępniona",
+		"group": "Grupa",
+		"sharingToGroup": "Udostępnianie {} do Grupy B1",
+		"validate": {
+			"addComment": "Proszę dodaj komentarz.",
+			"loginFirst": "Proszę zaloguj się najpierw.",
+			"notMember": "Nie jesteś członkiem żadnych grup na B1.",
+			"selectGroup": "Proszę wybierz grupę."
+		}
+	},
+	"common": {
+		"add": "Dodaj",
+		"cancel": "Anuluj",
+		"close": "Zamknij",
+		"date": "Data",
+		"delete": "Usuń",
+		"edit": "Edytuj",
+		"error": "Błąd",
+		"pleaseWait": "Proszę czekaj...",
+		"save": "Zapisz",
+		"search": "Szukaj",
+		"submit": "Wyślij",
+		"update": "Aktualizuj"
+	},
+	"createPerson": {
+		"addNewPerson": "Dodaj nową osobę",
+		"firstName": "Imię",
+		"lastName": "Nazwisko",
+		"email": "Email"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Numer konta",
+			"added": "Konto bankowe dodane. Zweryfikuj swoje konto bankowe, aby dokonać darowizny.",
+			"company": "Firma",
+			"firstDeposit": "Pierwsza wpłata",
+			"holderName": "Wymagana jest nazwa posiadacza konta.",
+			"individual": "Osoba fizyczna",
+			"name": "Nazwa posiadacza konta",
+			"needVerified": "Konta bankowe będą musiały być zweryfikowane przed dokonaniem darowizn. Twoje konto otrzyma dwie małe wpłaty w ciągu około 1-3 dni roboczych. Będziesz musiał podać kwoty tych wpłat, aby ukończyć weryfikację konta, wybierając link weryfikacji konta obok swojego konta bankowego w sekcji metod płatności.",
+			"routingNumber": "Numer trasy",
+			"secondDeposit": "Druga wpłata",
+			"twoDeposits": "Podaj dwie wpłaty, które otrzymałeś na swoim koncie, aby ukończyć weryfikację konta bankowego.",
+			"updated": "Konto bankowe zaktualizowane.",
+			"verified": "Konto bankowe zweryfikowane.",
+			"validate": {
+				"accountNumber": "Wymagane są numer trasy i numer konta.",
+				"holderName": "Wymagana jest nazwa posiadacza konta."
+			}
+		},
+		"cardForm": {
+			"addNew": "Dodaj nową kartę",
+			"added": "Karta dodana pomyślnie.",
+			"expirationMonth": "Miesiąc wygaśnięcia:",
+			"expirationYear": "Rok wygaśnięcia:",
+			"updated": "Karta zaktualizowana pomyślnie."
+		},
+		"donationForm": {
+			"annually": "Corocznie",
+			"biWeekly": "Co dwa tygodnie",
+			"cancelled": "Darowizna cykliczna anulowana.",
+			"confirmDelete": "Czy na pewno chcesz usunąć tę darowiznę cykliczną?",
+			"cover": "Gościnnie dodam {} na pokrycie opłat transakcyjnych, aby mogłeś zatrzymać 100% mojej darowizny.",
+			"donate": "Wnieś darowiznę",
+			"editRecurring": "Edytuj darowiznę cykliczną",
+			"fees": "Opłaty transakcyjne {} są stosowane.",
+			"frequency": "Częstotliwość",
+			"fund": "Fundusz",
+			"funds": "Fundusze",
+			"make": "Wnieś darowiznę",
+			"makeRecurring": "Wnieś darowiznę cykliczną",
+			"method": "Metoda",
+			"monthly": "Miesięcznie",
+			"notes": "Notatki",
+			"preview": "Podgląd darowizny",
+			"quarterly": "Kwartalnie",
+			"recurringUpdated": "Darowizna cykliczna zaktualizowana.",
+			"startDate": "Data rozpoczęcia",
+			"thankYou": "Dziękuję za twoją darowiznę!",
+			"tooLow": "Kwota darowizny musi być większa niż 0,50 USD",
+			"total": "Całkowita kwota darowizny",
+			"validate": {
+				"amount": "Kwota nie może wynosić 0 USD.",
+				"email": "Proszę podaj swój adres email.",
+				"firstName": "Proszę podaj swoje imię.",
+				"lastName": "Proszę podaj swoje nazwisko.",
+				"validEmail": "Proszę podaj prawidłowy adres email."
+			},
+			"weekly": "Tygodniowo"
+		},
+		"fundDonations": {
+			"addMore": "Dodaj więcej",
+			"amount": "Kwota",
+			"fund": "Fundusz"
+		},
+		"paymentMethods": {
+			"addBank": "Dodaj konto bankowe",
+			"addCard": "Dodaj kartę",
+			"confirmDelete": "Czy na pewno chcesz usunąć tę metodę płatności?",
+			"deleted": "Metoda płatności usunięta.",
+			"noMethods": "Brak metod płatności. Dodaj metodę płatności, aby dokonać darowizny.",
+			"verify": "Zweryfikuj konto"
+		},
+		"page": {
+			"amount": "Kwota",
+			"batch": "Partia",
+			"date": "Data",
+			"fund": "Fundusz",
+			"method": "Metoda",
+			"willAppear": "Darowizny pojawią się po wpisaniu darowizny."
+		},
+		"preview": {
+			"date": "Data darowizny",
+			"donate": "Wnieś darowiznę",
+			"every": "Darowizna cykliczna co",
+			"fee": "Opłata transakcyjna",
+			"funds": "Fundusze",
+			"method": "Metoda darowizny",
+			"notes": "Notatki",
+			"startingOn": "Począwszy od",
+			"total": "Razem",
+			"type": "Typ darowizny"
+		},
+		"recurring": {
+			"amount": "Kwota",
+			"every": "Co",
+			"interval": "Przedział czasu",
+			"notFound": "Metoda płatności nie znaleziona.",
+			"paymentMethod": "Metoda płatności",
+			"startDate": "Data rozpoczęcia"
+		}
+	},
+	"formSubmissionEdit": {
+		"confirmDelete": "Czy na pewno chcesz usunąć te dane formularza?",
+		"editForm": "Edytuj formularz",
+		"isRequired": "jest wymagane",
+		"submit": "Wyślij"
+	},
+	"gallery": {
+		"aspectRatio": "Proporcje",
+		"confirmDelete": "Czy na pewno chcesz usunąć ten obraz z galerii?",
+		"freeForm": "Forma wolna"
+	},
+	"iconPicker": {
+		"iconsAvailable": "ikon dostępnych",
+		"matchingResults": "pasujące wyniki",
+		"search": "Szukaj ikon..."
+	},
+	"login": {
+		"createAccount": "Utwórz konto",
+		"email": "Email",
+		"expiredLink": "Bieżące łącze wygasło.",
+		"forgot": "Zapomniałeś hasła",
+		"goLogin": "Przejdź do logowania",
+		"login": "Zaloguj się",
+		"noAcc": "Nie masz konta?",
+		"password": "Hasło",
+		"register": "Zarejestruj się",
+		"registerThankYou": "Dziękuję za rejestrację! Sprawdź swój email, aby zweryfikować swoje konto.",
+		"requestLink": "Poproś o nowe łącze resetowania",
+		"reset": "Resetuj",
+		"resetInstructions": "Podaj swój adres email, aby poprosić o reset hasła.",
+		"resetPassword": "Resetuj hasło",
+		"resetSent": "Email resetowania hasła wysłany!",
+		"setPassword": "Ustaw hasło",
+		"signIn": "Zaloguj się",
+		"signInTitle": "Proszę zaloguj się",
+		"verifyPassword": "Zweryfikuj hasło",
+		"validate": {
+			"email": "Proszę podaj prawidłowy adres email.",
+			"firstName": "Proszę podaj swoje imię.",
+			"invalid": "Nieprawidłowe logowanie. Proszę sprawdź swój email lub hasło.",
+			"lastName": "Proszę podaj swoje nazwisko.",
+			"password": "Proszę podaj hasło.",
+			"passwordLength": "Hasło musi mieć co najmniej 8 znaków.",
+			"passwordMatch": "Hasła nie pasują do siebie.",
+			"selectingChurch": "Błąd przy wyborze kościoła. Proszę zweryfikuj i spróbuj ponownie"
+		},
+		"welcomeBack": "Witaj z powrotem",
+		"welcomeName": "Witaj z powrotem, <b>{}</b>! Proszę czekaj, ładujemy Twoje dane."
+	},
+	"markdownEditor": {
+		"content": "Treść",
+		"markdownEditor": "Edytor Markdown",
+		"markdownGuide": "Przewodnik Markdown"
+	},
+	"month": {
+		"april": "Kwiecień",
+		"august": "Sierpień",
+		"december": "Grudzień",
+		"february": "Luty",
+		"january": "Styczeń",
+		"july": "Lipiec",
+		"june": "Czerwiec",
+		"march": "Marzec",
+		"may": "Maj",
+		"november": "Listopad",
+		"october": "Październik",
+		"september": "Wrzesień"
+	},
+	"notes": {
+		"comment": "komentarz",
+		"comments": "komentarze",
+		"notes": "Notatki",
+		"startConversation": "Rozpocznij rozmowę",
+		"validate": {
+			"content": "Proszę podaj notatkę."
+		},
+		"viewAll": "Wyświetl wszystkie"
+	},
+	"person": {
+		"email": "Email",
+		"firstName": "Imię",
+		"lastName": "Nazwisko",
+		"name": "Nazwa",
+		"person": "Osoba",
+		"years": "lat",
+		"noRec": "Nie masz rekordu osoby?"
+	},
+	"reporting": {
+		"detailed": "Raport szczegółowy",
+		"summary": "Podsumowanie",
+		"sampleTemplate": "Przykładowy szablon Word",
+		"downloadOptions": "Opcje pobierania",
+		"noData": "Brak danych do wyświetlenia.",
+		"runReport": "Uruchom raport",
+		"useFilter": "Użyj filtru, aby uruchomić raport."
+	},
+	"selectChurch": {
+		"address1": "Linia adresu 1",
+		"address2": "Linia adresu 2",
+		"another": "Wybierz inny kościół",
+		"city": "Miasto",
+		"confirmRegister": "Czy na pewno chcesz zarejestrować nowy kościół?",
+		"country": "Kraj",
+		"name": "Nazwa kościoła",
+		"noMatches": "Nie znaleziono dopasowań.",
+		"register": "Zarejestruj nowy kościół",
+		"selectChurch": "Wybierz kościół",
+		"state": "Stan / Prowincja",
+		"zip": "Kod pocztowy / Pocztowy",
+		"validate": {
+			"address": "Adres nie może być pusty.",
+			"city": "Miasto nie może być puste.",
+			"country": "Kraj nie może być pusty.",
+			"name": "Nazwa kościoła nie może być pusta.",
+			"state": "Stan/Prowincja nie może być puste.",
+			"zip": "Kod pocztowy/pocztowy nie może być pusty."
+		}
+	},
+	"stockPhotos": {
+		"photoBy": "Zdjęcie autorstwa:",
+		"providedBy": "Zdjęcia stockowe dostarczone przez"
+	},
+	"support": {
+		"documentation": "Dokumentacja",
+		"discussions": "Forum wsparcia"
+	},
+	"wrapper": {
+		"chatWith": "Czat z",
+		"deleteChurch": "Usuń",
+		"editAccount": "Edytuj konto",
+		"editChurchProfile": "Edytuj profil kościoła",
+		"editProfile": "Edytuj profil",
+		"logout": "Wyloguj",
+		"messages": "Wiadomości",
+		"newPrivateMessage": "Nowa wiadomość prywatna",
+		"notifications": "Powiadomienia",
+		"privateMessage": "Wiadomość prywatna",
+		"profile": "Profil",
+		"searchForPerson": "Szukaj osoby",
+		"support": "Wsparcie",
+		"sureRemoveChurch": "Czy na pewno chcesz usunąć ten kościół? Nie będziesz już członkiem {}.",
+		"switchApp": "Przełącz aplikację",
+		"switchChurch": "Przełącz kościół"
+	}
+}
