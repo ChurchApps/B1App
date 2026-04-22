@@ -56,8 +56,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
     return parts[0] || "";
   }, [pathname, config?.church?.subDomain]);
 
-  const defaultReturnUrl = sdSlug ? `/${sdSlug}/mobile/dashboard` : "/mobile/dashboard";
-  const returnUrl = searchParams?.get("returnUrl") || defaultReturnUrl;
+  const returnUrl = searchParams?.get("returnUrl") || "/mobile/dashboard";
 
   const initialMode: Mode = (() => {
     const action = searchParams?.get("action");
