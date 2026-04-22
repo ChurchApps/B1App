@@ -115,7 +115,7 @@ export function Header(props: Props) {
       <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "var(--app-primary, #36547e)", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
         <Chip
           id="userMenuLink"
-          label={`${UserHelper.user.firstName} ${UserHelper.user.lastName}`}
+          label={`${context?.person?.name?.first ?? UserHelper.user.firstName} ${context?.person?.name?.last ?? UserHelper.user.lastName}`}
           icon={<Icon id="userIcon" sx={{ color: "var(--app-primary, #36547e) !important" }}>account_circle</Icon>}
           sx={{ borderColor: "var(--app-primary, #36547e)", color: "var(--app-primary, #36547e)", minWidth: "100%" }}
           onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.currentTarget); }}
