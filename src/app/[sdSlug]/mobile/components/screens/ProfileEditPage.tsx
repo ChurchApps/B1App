@@ -1028,7 +1028,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     onChange: (v: VisibilityScope) => void,
     id: string
   ) => (
-    <FormControl fullWidth sx={{ mt: 1 }}>
+    <FormControl fullWidth sx={{ mt: 1, mb: 2 }}>
       <InputLabel id={`${id}-label`}>{label}</InputLabel>
       <Select
         labelId={`${id}-label`}
