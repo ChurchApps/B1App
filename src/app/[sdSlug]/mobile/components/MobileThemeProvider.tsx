@@ -2,7 +2,8 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { GlobalStyles } from "@mui/material";
-import type { AppThemeConfig } from "@/helpers/ConfigHelper";
+import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
+import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 export type MobileThemeMode = "light" | "dark";
 
@@ -22,56 +23,48 @@ const MobileThemeContext = createContext<MobileThemeContextValue>({
 
 export const useMobileThemeMode = () => useContext(MobileThemeContext);
 
-const buildLightVars = (appTheme?: AppThemeConfig) => {
-  const c = appTheme?.light;
-  const primary = c?.primary || "#0D47A1";
-  return {
-    "--mb-primary": primary,
-    "--mb-primary-light": `color-mix(in srgb, ${primary} 15%, #FFFFFF)`,
-    "--mb-secondary": c?.secondary || "#568BDA",
-    "--mb-background": c?.background || "#F6F6F8",
-    "--mb-surface": c?.surface || "#FFFFFF",
-    "--mb-surface-variant": "#F6F6F8",
-    "--mb-text": c?.textColor || "#3c3c3c",
-    "--mb-text-secondary": "#9E9E9E",
-    "--mb-text-muted": "#666666",
-    "--mb-text-hint": "#999999",
-    "--mb-on-primary": c?.primaryContrast || "#FFFFFF",
-    "--mb-success": "#70DC87",
-    "--mb-warning": "#FEAA24",
-    "--mb-error": "#B0120C",
-    "--mb-border": "#F0F0F0",
-    "--mb-border-light": "#E5E7EB",
-    "--mb-divider": "#E0E0E0",
-    "--mb-icon-background": "#F6F6F8",
-    "--mb-disabled": "#BDBDBD"
-  };
+const lightDefaults = {
+  "--mb-primary": "#0D47A1",
+  "--mb-primary-light": "#E3F2FD",
+  "--mb-secondary": "#568BDA",
+  "--mb-background": "#F6F6F8",
+  "--mb-surface": "#FFFFFF",
+  "--mb-surface-variant": "#F6F6F8",
+  "--mb-text": "#3c3c3c",
+  "--mb-text-secondary": "#9E9E9E",
+  "--mb-text-muted": "#666666",
+  "--mb-text-hint": "#999999",
+  "--mb-on-primary": "#FFFFFF",
+  "--mb-success": "#70DC87",
+  "--mb-warning": "#FEAA24",
+  "--mb-error": "#B0120C",
+  "--mb-border": "#F0F0F0",
+  "--mb-border-light": "#E5E7EB",
+  "--mb-divider": "#E0E0E0",
+  "--mb-icon-background": "#F6F6F8",
+  "--mb-disabled": "#BDBDBD"
 };
 
-const buildDarkVars = (appTheme?: AppThemeConfig) => {
-  const c = appTheme?.dark;
-  const primary = c?.primary || "#4A90E2";
-  return {
-    "--mb-primary": primary,
-    "--mb-primary-light": `color-mix(in srgb, ${primary} 25%, #000000)`,
-    "--mb-secondary": c?.secondary || "#6BA4E8",
-    "--mb-background": c?.background || "#121212",
-    "--mb-surface": c?.surface || "#1E1E1E",
-    "--mb-surface-variant": "#2D2D2D",
-    "--mb-text": c?.textColor || "#E0E0E0",
-    "--mb-text-secondary": "#AAAAAA",
-    "--mb-text-muted": "#888888",
-    "--mb-text-hint": "#777777",
-    "--mb-on-primary": c?.primaryContrast || "#FFFFFF",
-    "--mb-success": "#70DC87",
-    "--mb-warning": "#FEAA24",
-    "--mb-error": "#E57373",
-    "--mb-border": "#333333",
-    "--mb-border-light": "#2D2D2D",
-    "--mb-divider": "#333333",
-    "--mb-icon-background": "#2D2D2D",
-    "--mb-disabled": "#555555"
-  };
+const darkDefaults = {
+  "--mb-primary": "#4A90E2",
+  "--mb-primary-light": "#1a3a5c",
+  "--mb-secondary": "#6BA4E8",
+  "--mb-background": "#121212",
+  "--mb-surface": "#1E1E1E",
+  "--mb-surface-variant": "#2D2D2D",
+  "--mb-text": "#E0E0E0",
+  "--mb-text-secondary": "#AAAAAA",
+  "--mb-text-muted": "#888888",
+  "--mb-text-hint": "#777777",
+  "--mb-on-primary": "#FFFFFF",
+  "--mb-success": "#70DC87",
+  "--mb-warning": "#FEAA24",
+  "--mb-error": "#E57373",
+  "--mb-border": "#333333",
+  "--mb-border-light": "#2D2D2D",
+  "--mb-divider": "#333333",
+  "--mb-icon-background": "#2D2D2D",
+  "--mb-disabled": "#555555"
 };
 
 const darkInputStyles = {
@@ -88,20 +81,62 @@ const darkInputStyles = {
   "html[data-mobile-theme=\"dark\"] .MuiFormHelperText-root": { color: "var(--mb-text-secondary)" }
 };
 
-export const MobileThemeProvider: React.FC<{ children: React.ReactNode; appTheme?: AppThemeConfig }> = ({ children, appTheme }) => {
+const isValidColor = (value?: string | null): value is string =>
+  /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test((value || "").trim());
+
+const pickColor = (...values: Array<string | null | undefined>) =>
+  values.find((value) => isValidColor(value));
+
+const getChurchColors = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
+  const appTheme = config?.appTheme?.[mode];
+  if (!appTheme) return null;
+
+  const hasUsableTheme = [appTheme.primary, appTheme.secondary, appTheme.background, appTheme.surface, appTheme.textColor]
+    .some((value) => isValidColor(value));
+
+  if (!hasUsableTheme) return null;
+
+  return appTheme;
+};
+
+const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
+  const defaults = mode === "dark" ? darkDefaults : lightDefaults;
+  const churchColors = getChurchColors(mode, config);
+  const appearance = config?.appearance as {
+    primaryColor?: string;
+    secondaryColor?: string;
+    primaryContrast?: string;
+  } | undefined;
+
+  const primary = pickColor(churchColors?.primary, appearance?.primaryColor, defaults["--mb-primary"]) || defaults["--mb-primary"];
+  const secondary = pickColor(churchColors?.secondary, appearance?.secondaryColor, defaults["--mb-secondary"]) || defaults["--mb-secondary"];
+  const background = pickColor(churchColors?.background, defaults["--mb-background"]) || defaults["--mb-background"];
+  const surface = pickColor(churchColors?.surface, defaults["--mb-surface"]) || defaults["--mb-surface"];
+  const text = pickColor(churchColors?.textColor, defaults["--mb-text"]) || defaults["--mb-text"];
+  const onPrimary = pickColor(churchColors?.primaryContrast, appearance?.primaryContrast, defaults["--mb-on-primary"]) || defaults["--mb-on-primary"];
+
+  return {
+    ...defaults,
+    "--mb-primary": primary,
+    "--mb-primary-light": mode === "dark" ? "#1a3a5c" : "#E3F2FD",
+    "--mb-secondary": secondary,
+    "--mb-background": background,
+    "--mb-surface": surface,
+    "--mb-surface-variant": mode === "dark" ? "#2D2D2D" : "#F6F6F8",
+    "--mb-text": text,
+    "--mb-text-secondary": mode === "dark" ? "#CCCCCC" : "#9E9E9E",
+    "--mb-text-muted": mode === "dark" ? "#888888" : "#666666",
+    "--mb-text-hint": mode === "dark" ? "#777777" : "#999999",
+    "--mb-on-primary": onPrimary,
+    "--mb-border": mode === "dark" ? "#333333" : "#F0F0F0",
+    "--mb-border-light": mode === "dark" ? "#2D2D2D" : "#E5E7EB",
+    "--mb-divider": mode === "dark" ? "#333333" : "#E0E0E0",
+    "--mb-icon-background": mode === "dark" ? "#2D2D2D" : "#F6F6F8"
+  };
+};
+
+export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?: ConfigurationInterface }> = ({ children, config }) => {
   const [mode, setModeState] = useState<MobileThemeMode>("light");
-
-  const globalStyles = useMemo(() => (
-    <GlobalStyles
-      styles={{
-        ":root": buildLightVars(appTheme),
-        'html[data-mobile-theme="dark"]': { ...buildDarkVars(appTheme), colorScheme: "dark" },
-
-        "body": { margin: 0 },
-        ...darkInputStyles
-      }}
-    />
-  ), [appTheme]);
 
   useEffect(() => {
     try {
@@ -130,11 +165,39 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode; appTheme
   }, []);
 
   const value = useMemo<MobileThemeContextValue>(() => ({ mode, toggle, setMode }), [mode, toggle, setMode]);
+  const vars = useMemo(() => buildThemeVars(mode, config), [mode, config]);
+  const muiTheme = useMemo(() => createTheme({
+    palette: {
+      mode,
+      primary: { main: vars["--mb-primary"], contrastText: vars["--mb-on-primary"] },
+      secondary: { main: vars["--mb-secondary"] },
+      background: { default: vars["--mb-background"], paper: vars["--mb-surface"] },
+      text: { primary: vars["--mb-text"], secondary: vars["--mb-text-secondary"] }
+    },
+    shape: { borderRadius: 12 },
+    typography: { fontFamily: '"Roboto","Helvetica","Arial",sans-serif' },
+    components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } } }
+  }), [mode, vars]);
+
+  const mobileThemeGlobalStyles = (
+    <GlobalStyles
+      styles={{
+        ":root": vars,
+        'html[data-mobile-theme="dark"]': { colorScheme: "dark" },
+        'html[data-mobile-theme="light"]': { colorScheme: "light" },
+
+        "body": { margin: 0, backgroundColor: vars["--mb-background"], color: vars["--mb-text"] },
+        ...darkInputStyles
+      }}
+    />
+  );
 
   return (
     <MobileThemeContext.Provider value={value}>
-      {globalStyles}
-      {children}
+      <MuiThemeProvider theme={muiTheme}>
+        {mobileThemeGlobalStyles}
+        {children}
+      </MuiThemeProvider>
     </MobileThemeContext.Provider>
   );
 };

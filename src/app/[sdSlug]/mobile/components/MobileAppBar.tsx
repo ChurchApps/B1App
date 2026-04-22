@@ -14,14 +14,14 @@ import { getInitials } from "./util";
 interface Props {
   config: ConfigurationInterface;
   primaryColor: string;
-  primaryContrast?: string;
+  onPrimary: string;
   drawerWidth: number;
   onMenuClick: () => void;
   onAvatarClick: () => void;
   onBellClick: () => void;
 }
 
-export const MobileAppBar = ({ config, primaryColor, primaryContrast = "#FFFFFF", drawerWidth, onMenuClick, onAvatarClick, onBellClick }: Props) => {
+export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onMenuClick, onAvatarClick, onBellClick }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
   const { mode } = useMobileThemeMode();
@@ -45,7 +45,7 @@ export const MobileAppBar = ({ config, primaryColor, primaryContrast = "#FFFFFF"
       elevation={2}
       sx={{
         bgcolor: primaryColor,
-        color: primaryContrast,
+        color: onPrimary,
         width: { md: `calc(100% - ${drawerWidth}px)` },
         ml: { md: `${drawerWidth}px` },
         zIndex: (theme) => theme.zIndex.drawer - 1
@@ -57,7 +57,7 @@ export const MobileAppBar = ({ config, primaryColor, primaryContrast = "#FFFFFF"
             <IconButton
               onClick={handleBack}
               aria-label="Back to dashboard"
-              sx={{ color: primaryContrast, mx: 0.25 }}
+              sx={{ color: onPrimary, mx: 0.25 }}
             >
               <ChevronLeftIcon sx={{ fontSize: 27 }} />
             </IconButton>
@@ -65,7 +65,7 @@ export const MobileAppBar = ({ config, primaryColor, primaryContrast = "#FFFFFF"
             <IconButton
               onClick={onMenuClick}
               aria-label="Open navigation menu"
-              sx={{ color: primaryContrast, mx: 0.5, display: { md: "none" } }}
+              sx={{ color: onPrimary, mx: 0.5, display: { md: "none" } }}
             >
               <MenuIcon sx={{ fontSize: 27 }} />
             </IconButton>
@@ -80,12 +80,12 @@ export const MobileAppBar = ({ config, primaryColor, primaryContrast = "#FFFFFF"
                 style={{ height: 30, width: "auto", maxWidth: "60%", objectFit: "contain" }}
               />
             ) : (
-              <Typography noWrap sx={{ fontSize: 16, fontWeight: 600, color: primaryContrast, px: 1 }}>
+              <Typography noWrap sx={{ fontSize: 16, fontWeight: 600, color: onPrimary, px: 1 }}>
                 {config?.church?.name || ""}
               </Typography>
             )
           ) : (
-            <Typography noWrap sx={{ fontSize: 18, fontWeight: 600, color: primaryContrast, px: 1 }}>
+            <Typography noWrap sx={{ fontSize: 18, fontWeight: 600, color: onPrimary, px: 1 }}>
               {title}
             </Typography>
           )}
@@ -93,7 +93,7 @@ export const MobileAppBar = ({ config, primaryColor, primaryContrast = "#FFFFFF"
         <Stack direction="row" alignItems="center" spacing={0.5} sx={{ pr: 1 }}>
           {signedIn && (
             <>
-              <IconButton onClick={onBellClick} aria-label="Notifications" sx={{ color: primaryContrast }}>
+              <IconButton onClick={onBellClick} aria-label="Notifications" sx={{ color: onPrimary }}>
                 <Badge variant="dot" color="error" invisible>
                   <NotificationsNoneIcon sx={{ fontSize: 24 }} />
                 </Badge>
@@ -103,7 +103,7 @@ export const MobileAppBar = ({ config, primaryColor, primaryContrast = "#FFFFFF"
                   width: 30,
                   height: 30,
                   bgcolor: "rgba(255,255,255,0.25)",
-                  color: primaryContrast,
+                  color: onPrimary,
                   fontSize: 13,
                   fontWeight: 600
                 }}>

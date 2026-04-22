@@ -82,9 +82,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const churchName = config?.church?.name || "";
   const logoLight = config?.appearance?.logoLight;
-  const primaryColor = config?.appTheme?.light?.primary || config?.appearance?.primaryColor || tc.primary;
-
-  const heroGradient = `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}CC 100%)`;
+  const primaryColor = config?.appearance?.primaryColor || tc.primary;
 
   const hydrateFromLoginResponse = (resp: LoginResponseInterface) =>
     hydrateUserSession(resp, context, { sdSlug, writeCookies: true });
@@ -201,7 +199,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
           sx={{
             borderRadius: `${radius.xl}px`,
             overflow: "hidden",
-            background: heroGradient,
+            backgroundColor: primaryColor,
+            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.18) 100%)",
             boxShadow: shadows.lg,
             px: `${spacing.lg}px`,
             py: `${spacing.xl}px`,
@@ -231,12 +230,12 @@ export const MobileLoginScreen = ({ config }: Props) => {
               />
             </Box>
           ) : (
-            <Icon sx={{ color: "#FFFFFF", fontSize: 48, mb: 1.5 }}>church</Icon>
+              <Icon sx={{ color: tc.surface, fontSize: 48, mb: 1.5 }}>church</Icon>
           )}
-          <Typography sx={{ fontSize: 24, fontWeight: 700, color: "#FFFFFF", mb: 0.5 }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.surface, mb: 0.5 }}>
             {churchName ? "Welcome Back" : "Welcome to B1"}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: "#FFFFFF", opacity: 0.9, px: 1 }}>
+          <Typography sx={{ fontSize: 14, color: tc.surface, opacity: 0.9, px: 1 }}>
             {churchName ? `Sign in to ${churchName}` : "Sign in to access"}
           </Typography>
         </Box>
