@@ -1,15 +1,18 @@
 "use client";
 
+import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AppBar, Avatar, Badge, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { UserHelper } from "@churchapps/apphelper";
+import { UserHelper, useNotifications } from "@churchapps/apphelper";
+import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, SCREEN_TITLES, mobileSlugFromPath } from "./mobileTheme";
 import { useMobileThemeMode } from "./MobileThemeProvider";
 import { getInitials } from "./util";
+import { NotificationBellMenu } from "./NotificationBellMenu";
 
 interface Props {
   config: ConfigurationInterface;
@@ -18,16 +21,21 @@ interface Props {
   drawerWidth: number;
   onMenuClick: () => void;
   onAvatarClick: () => void;
-  onBellClick: () => void;
 }
 
-export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onMenuClick, onAvatarClick, onBellClick }: Props) => {
+export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onMenuClick, onAvatarClick }: Props) => {
   const pathname = usePathname();
   const router = useRouter();
   const { mode } = useMobileThemeMode();
   const slug = mobileSlugFromPath(pathname);
   const isDashboard = !slug || slug === "dashboard";
   const title = SCREEN_TITLES[slug] ?? "";
+
+  const userContext = React.useContext(UserContext);
+  const { counts } = useNotifications(userContext ?? null);
+  const totalUnread = (counts?.pmCount || 0) + (counts?.notificationCount || 0);
+  const bellRef = React.useRef<HTMLButtonElement | null>(null);
+  const [bellOpen, setBellOpen] = React.useState(false);
 
   const logoLight = config?.appearance?.logoLight;
   const logoDark = (config?.appearance as any)?.logoDark;
@@ -93,11 +101,12 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
         <Stack direction="row" alignItems="center" spacing={0.5} sx={{ pr: 1 }}>
           {signedIn && (
             <>
-              <IconButton onClick={onBellClick} aria-label="Notifications" sx={{ color: onPrimary }}>
-                <Badge variant="dot" color="error" invisible>
+              <IconButton ref={bellRef} onClick={() => setBellOpen(true)} aria-label="Notifications and messages" sx={{ color: onPrimary }}>
+                <Badge badgeContent={totalUnread} color="error" overlap="circular" invisible={totalUnread === 0}>
                   <NotificationsNoneIcon sx={{ fontSize: 24 }} />
                 </Badge>
               </IconButton>
+              <NotificationBellMenu anchorEl={bellRef.current} open={bellOpen} onClose={() => setBellOpen(false)} />
               <IconButton onClick={onAvatarClick} aria-label="Profile" sx={{ p: 0.5 }}>
                 <Avatar sx={{
                   width: 30,
