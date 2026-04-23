@@ -57,7 +57,6 @@ const MobileShellInner = ({ config, children }: Props) => {
         drawerWidth={drawerWidth}
         onMenuClick={() => setOpen(true)}
         onAvatarClick={() => router.push("/mobile/profileEdit")}
-        onBellClick={() => router.push("/mobile/notifications")}
       />
 
       <Drawer

@@ -4,7 +4,7 @@ import { TestHelpers } from './helpers/test-base';
 // OCTAVIAN/OCTAVIUS are the names used for testing. If you see Octavian or Octavius entered anywhere, it is a result of these tests.
 test.describe('General Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/my/timeline');
+    await page.goto('/mobile');
     await page.waitForLoadState('domcontentloaded');
     const loginBtn = page.locator('[id="login-submit-button"]');
     await loginBtn.click();
@@ -98,7 +98,7 @@ test.describe('General Tests', () => {
       await page.waitForTimeout(500);
       const validatedPerson = page.locator('h2').getByText('Michael Davis');
       await expect(validatedPerson).toHaveCount(1);
-      await expect(page).toHaveURL(/\/my\/community\/PER\d+/);
+      await expect(page).toHaveURL(/\/mobile\/community\/PER\d+/);
     });
 
     test('should add attendance session', async ({ page }) => {

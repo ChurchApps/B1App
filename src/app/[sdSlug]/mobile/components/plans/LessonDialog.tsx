@@ -4,7 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, 
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 import { EnvironmentHelper, ExternalVenueRefInterface } from "@/helpers";
-import { useProviderContent, type ProviderContentChild } from "../hooks/useProviderContent";
+import { useProviderContent, type ProviderContentChild } from "./useProviderContent";
 import { ContentRenderer } from "./ContentRenderer";
 
 // Helper to detect media type from URL

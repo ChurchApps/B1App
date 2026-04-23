@@ -11,7 +11,7 @@ type Props = { config?: ConfigurationInterface; };
 export function DonatePage(props:Props) {
 
 
-  if (UserHelper.currentUserChurch?.person?.id) redirect("/my/donate");
+  if (UserHelper.currentUserChurch?.person?.id) redirect("/mobile/donate");
   return <>
     <Container>
       <h1>Donate</h1>

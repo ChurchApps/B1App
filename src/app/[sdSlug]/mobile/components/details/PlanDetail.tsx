@@ -28,8 +28,8 @@ import type {
 } from "@churchapps/helpers";
 import { LessonsContentProvider } from "@churchapps/helpers";
 import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
-import { PlanItem as PlanItemRow } from "@/app/[sdSlug]/(public)/my/[pageSlug]/components/PlanItem";
-import { LessonPreview } from "@/app/[sdSlug]/(public)/my/[pageSlug]/components/LessonPreview";
+import { PlanItem as PlanItemRow } from "@/app/[sdSlug]/mobile/components/plans/PlanItem";
+import { LessonPreview } from "@/app/[sdSlug]/mobile/components/plans/LessonPreview";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";

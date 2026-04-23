@@ -178,9 +178,9 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
           MenuListProps={{ "aria-labelledby": "download-button" }}
         >
           <MenuItem onClick={handleClose} dense data-testid="export-current-year-csv" aria-label="Export current year donations as CSV"><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text="Current Year (CSV)" icon="table_chart" data-testid="current-year-export-link" /></MenuItem>
-          <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label="Print current year donations"><Link href="/my/donate/print"><Button data-testid="print-current-year-button" aria-label="Print current year donations"><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label="Print current year donations"><Link href="/mobile/donate/print"><Button data-testid="print-current-year-button" aria-label="Print current year donations"><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
           <MenuItem onClick={handleClose} dense data-testid="export-last-year-csv" aria-label="Export last year donations as CSV"><ExportLink data={last_year} filename="last_year_donations" customHeaders={customHeaders} text="Last Year (CSV)" icon="table_chart" data-testid="last-year-export-link" /></MenuItem>
-          <MenuItem onClick={handleClose} dense data-testid="print-last-year" aria-label="Print last year donations"><Link href="/my/donate/print?prev=1"><Button data-testid="print-last-year-button" aria-label="Print last year donations"><Icon>print</Icon> &nbsp; LAST YEAR (PRINT)</Button></Link></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="print-last-year" aria-label="Print last year donations"><Link href="/mobile/donate/print?prev=1"><Button data-testid="print-last-year-button" aria-label="Print last year donations"><Icon>print</Icon> &nbsp; LAST YEAR (PRINT)</Button></Link></MenuItem>
         </Menu>
       </React.Fragment>
     );

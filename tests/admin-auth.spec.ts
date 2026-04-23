@@ -37,14 +37,14 @@ test.describe('Authentication', () => {
 
     await TestHelpers.login(page);
 
-    expect(page.url()).toContain('/my/');
+    expect(page.url()).toContain('/mobile');
   });
 
   test('should redirect to specific page after login with returnUrl', async ({ page }) => {
     await TestHelpers.clearBrowserState(page);
 
-    await TestHelpers.login(page, '/my/timeline');
+    await TestHelpers.login(page, '/mobile');
 
-    expect(page.url()).toContain('/my/timeline');
+    expect(page.url()).toContain('/mobile');
   });
 });

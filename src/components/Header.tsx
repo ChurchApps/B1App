@@ -90,7 +90,7 @@ export function Header(props: Props) {
     setLogoError(false);
   }, [props.config?.appearance?.logoLight, props.config?.appearance?.logoDark, transparent]);
 
-  const memberPortal = <MenuItem onClick={() => { redirect("/my"); }} dense data-testid="member-portal-menu-item" aria-label="Go to member portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>;
+  const memberPortal = <MenuItem onClick={() => { redirect("/mobile"); }} dense data-testid="member-portal-menu-item" aria-label="Go to member portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> Member Portal</MenuItem>;
   const adminPortal = (UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit)) && (
     <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/`; }} dense data-testid="admin-portal-menu-item" aria-label="Go to admin portal"><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Admin Portal</MenuItem>
   );
@@ -115,7 +115,7 @@ export function Header(props: Props) {
       <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "var(--app-primary, #36547e)", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
         <Chip
           id="userMenuLink"
-          label={`${UserHelper.user.firstName} ${UserHelper.user.lastName}`}
+          label={`${context?.person?.name?.first ?? UserHelper.user.firstName} ${context?.person?.name?.last ?? UserHelper.user.lastName}`}
           icon={<Icon id="userIcon" sx={{ color: "var(--app-primary, #36547e) !important" }}>account_circle</Icon>}
           sx={{ borderColor: "var(--app-primary, #36547e)", color: "var(--app-primary, #36547e)", minWidth: "100%" }}
           onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.currentTarget); }}
@@ -142,7 +142,7 @@ export function Header(props: Props) {
           <MenuItem onClick={() => { handleCloseAllMenus(); window.location.href = getAccountUrl(); }} dense data-testid="account-menu-item" aria-label="Edit account settings">
             <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> Edit Account
           </MenuItem>
-          <MenuItem onClick={() => { handleCloseAllMenus(); redirect(`/my/community/${PersonHelper?.person?.id}`); }} dense data-testid="church-profile-menu-item" aria-label="Edit church profile">
+          <MenuItem onClick={() => { handleCloseAllMenus(); redirect(`/mobile/community/${PersonHelper?.person?.id}`); }} dense data-testid="church-profile-menu-item" aria-label="Edit church profile">
             <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>church</Icon> Edit Church Profile
           </MenuItem>
         </Menu>
@@ -167,7 +167,7 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect("/my"); }} data-testid="member-portal-list-item" aria-label="Go to member portal">
+      <ListItemButton onClick={() => { redirect("/mobile"); }} data-testid="member-portal-list-item" aria-label="Go to member portal">
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary="Member Portal" />
       </ListItemButton>
@@ -196,7 +196,7 @@ export function Header(props: Props) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => { redirect(`/my/community/${PersonHelper?.person?.id}`); }} data-testid="church-profile-list-item" aria-label="Edit church profile">
+          <ListItemButton sx={{ pl: 4 }} onClick={() => { redirect(`/mobile/community/${PersonHelper?.person?.id}`); }} data-testid="church-profile-list-item" aria-label="Edit church profile">
             <ListItemIcon><Icon color="secondary">church</Icon></ListItemIcon>
             <ListItemText primary="Edit Church Profile" />
           </ListItemButton>
