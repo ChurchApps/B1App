@@ -482,9 +482,8 @@ function DonatePageInner({ config }: Props) {
   };
 
   const handlePrintStatement = () => {
-    const year = new Date().getFullYear();
     if (typeof window === "undefined") return;
-    window.open(`/my/donations/print?year=${year}`, "_blank", "noopener,noreferrer");
+    window.open("/mobile/donate/print", "_blank", "noopener,noreferrer");
   };
 
   const periodLabels: Record<PeriodKey, string> = {

@@ -37,7 +37,7 @@ export default async function Home({ params }: { params: Promise<PageParams> }) 
   const props = await loadSharedData(sdSlug);
 
   if (!props.pageData?.url) {
-    redirect("/my");
+    redirect("/mobile");
   } else {
     return (<>
       <Theme config={props.config} />

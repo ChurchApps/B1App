@@ -127,6 +127,12 @@ const nextConfig = {
     ];
   },
 
+  async redirects() {
+    return [
+      { source: "/my", destination: "/mobile", permanent: true }
+    ];
+  },
+
   // Rewrites for subdomain routing
   async rewrites() {
     return [

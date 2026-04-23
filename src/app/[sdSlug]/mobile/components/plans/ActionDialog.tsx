@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { EnvironmentHelper, ExternalVenueRefInterface } from "@/helpers";
-import { useProviderContent } from "../hooks/useProviderContent";
+import { useProviderContent } from "./useProviderContent";
 import { ContentRenderer } from "./ContentRenderer";
 
 interface Props {

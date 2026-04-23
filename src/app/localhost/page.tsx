@@ -13,7 +13,7 @@ export default function Localhost() {
       <br />
       <Link href="http://ironwood.localhost:3301">Ironwood</Link>
       <br />
-      <Link href="http://ironwood.localhost:3301/my">My</Link>
+      <Link href="http://ironwood.localhost:3301/mobile">Mobile</Link>
       <br />
       <Link href="http://ironwood.localhost:3301/admin">Admin</Link>
 

@@ -57,7 +57,7 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
         showLogo={showLogo}
         loginContainerCssProps={loginContainerCssProps as any}
         keyName={keyName}
-        returnUrl={searchParams.get("returnUrl") || redirectAfterLogin || "/my"}
+        returnUrl={searchParams.get("returnUrl") || redirectAfterLogin || "/mobile"}
         handleRedirect={handleRedirect}
         defaultEmail={process.env.NEXT_PUBLIC_STAGE === "demo" ? "demo@b1.church" : undefined}
         defaultPassword={process.env.NEXT_PUBLIC_STAGE === "demo" ? "password" : undefined}
