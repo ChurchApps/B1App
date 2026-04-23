@@ -6,7 +6,7 @@ import { useCookies } from "react-cookie";
 import { ApiHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 
-export default function MobileLogout() {
+export default function MobileLogout(): null {
   const router = useRouter();
   const context = useContext(UserContext);
   const [, , removeCookie] = useCookies(["jwt", "email", "name", "lastChurchId"]);
