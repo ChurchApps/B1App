@@ -440,7 +440,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           borderTop: `1px solid ${tc.border}`,
           p: "10px",
           display: "flex",
-          alignItems: "flex-end",
+          alignItems: "center",
           gap: "8px"
         }}
       >
@@ -464,7 +464,7 @@ export const MessageConversation = ({ id, config }: Props) => {
               bgcolor: tc.background,
               fontSize: 14,
               px: "12px",
-              py: "2px"
+              py: "8px"
             },
             "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
           }}
