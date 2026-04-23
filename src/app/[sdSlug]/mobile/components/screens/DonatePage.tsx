@@ -61,7 +61,7 @@ function DonatePageInner({ config }: Props) {
   const church: ChurchInterface | undefined = config?.church;
   const churchLogo = AppearanceHelper.getLogo(config?.appearance, "", "", "#FFF");
   const queryClient = useQueryClient();
-  const isAuthenticated = !!UserHelper.user?.firstName && !UniqueIdHelper.isMissing(personId);
+  const isAuthenticated = !!context?.user?.firstName && !UniqueIdHelper.isMissing(personId);
   const donationsEnabled = config?.allowDonations !== false && isAuthenticated;
 
   const [message, setMessage] = useState<string | null>(null);

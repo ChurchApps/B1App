@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface } from "@churchapps/helpers";
+import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { useEngagementSort } from "../../hooks/useEngagementSort";
@@ -19,10 +20,11 @@ const ENGAGEMENT_STORAGE_KEY = "b1app-group-view-counts";
 export const GroupsPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const loggedIn = !!UserHelper.user?.firstName;
+  const context = useContext(UserContext);
+  const loggedIn = !!context?.user?.firstName;
 
   const { data: groups = null } = useQuery<GroupInterface[]>({
-    queryKey: ["my-groups", UserHelper.user?.id],
+    queryKey: ["my-groups", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/groups/my", "MembershipApi");
       return Array.isArray(data) ? data : [];
@@ -31,7 +33,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
   });
 
   const { data: upcomingEvents = [] } = useQuery<EventInterface[]>({
-    queryKey: ["events-registerable", UserHelper.user?.id],
+    queryKey: ["events-registerable", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/events/registerable", "ContentApi");
       return Array.isArray(data) ? data : [];

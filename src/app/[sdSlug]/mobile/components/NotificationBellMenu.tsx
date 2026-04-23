@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Badge, Box, Button, Icon, IconButton, Popover, Skeleton, Tab, Tabs, Typography } from "@mui/material";
-import { ApiHelper, PersonHelper, UserHelper, useNotifications } from "@churchapps/apphelper";
+import { ApiHelper, PersonHelper, useNotifications } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
@@ -70,7 +70,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   const userContext = React.useContext(UserContext);
   const { counts, refresh } = useNotifications(userContext ?? null);
   const [tab, setTab] = React.useState<"messages" | "notifications">("messages");
-  const loggedIn = !!UserHelper.user?.firstName;
+  const loggedIn = !!userContext?.user?.firstName;
   const myPersonId = userContext?.person?.id;
 
   React.useEffect(() => {
@@ -127,7 +127,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   });
 
   const { data: notifications = null } = useQuery<NotificationItem[]>({
-    queryKey: ["notifications", UserHelper.user?.id],
+    queryKey: ["notifications", userContext?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/notifications/my", "MessagingApi");
       return Array.isArray(data) ? (data as NotificationItem[]) : [];

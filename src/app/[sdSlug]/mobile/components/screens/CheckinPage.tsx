@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Box,
@@ -16,7 +16,7 @@ import {
   Icon,
   Typography
 } from "@mui/material";
-import { ApiHelper, ArrayHelper, PersonHelper as ApphelperPersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, PersonHelper as ApphelperPersonHelper } from "@churchapps/apphelper";
 import type {
   GroupInterface,
   GroupServiceTimeInterface,
@@ -26,6 +26,7 @@ import type {
   VisitInterface,
   VisitSessionInterface
 } from "@churchapps/helpers";
+import UserContext from "@/context/UserContext";
 import { CheckinHelper, PersonHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -857,6 +858,7 @@ const CompleteStep = ({ onDone }: { onDone: () => void }) => {
 };
 
 export const CheckinPage = ({ config: _config }: Props) => {
+  const context = useContext(UserContext);
   const [step, setStep] = useState<Step>("services");
   const [groupsMember, setGroupsMember] = useState<PersonInterface | null>(null);
   const [groupsTime, setGroupsTime] = useState<ServiceTimeInterface | null>(null);
@@ -896,7 +898,7 @@ export const CheckinPage = ({ config: _config }: Props) => {
     [groupsMember, groupsTime]
   );
 
-  if (!UserHelper.user?.firstName) {
+  if (!context?.user?.firstName) {
     return (
       <Box sx={{ p: `${spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
         <EmptyState

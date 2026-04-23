@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -12,10 +12,11 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, PersonHelper } from "@churchapps/apphelper";
 import { getInitials } from "../util";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
+import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 
@@ -31,7 +32,8 @@ interface PeopleSection {
 export const CommunityPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const loggedIn = !!UserHelper.user?.firstName;
+  const context = useContext(UserContext);
+  const loggedIn = !!context?.user?.firstName;
   const [searchText, setSearchText] = React.useState("");
 
   if (!loggedIn) {

@@ -6,7 +6,7 @@ import { AppBar, Avatar, Badge, IconButton, Stack, Toolbar, Typography } from "@
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { UserHelper, useNotifications } from "@churchapps/apphelper";
+import { useNotifications } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, SCREEN_TITLES, mobileSlugFromPath } from "./mobileTheme";
@@ -40,8 +40,8 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
   const logoLight = config?.appearance?.logoLight;
   const logoDark = (config?.appearance as any)?.logoDark;
   const headerLogo = mode === "dark" ? (logoLight || logoDark) : (logoDark || logoLight);
-  const signedIn = !!UserHelper.user?.firstName;
-  const initials = getInitials({ name: { first: UserHelper.user?.firstName, last: UserHelper.user?.lastName } });
+  const signedIn = !!userContext?.user?.firstName;
+  const initials = getInitials({ name: { first: userContext?.user?.firstName, last: userContext?.user?.lastName } });
 
   const handleBack = () => {
     router.push("/mobile/dashboard");

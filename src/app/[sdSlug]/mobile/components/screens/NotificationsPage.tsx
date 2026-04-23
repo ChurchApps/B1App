@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Chip, Icon, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
+import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { WebPushHelper } from "@/helpers";
 import { mobileTheme } from "../mobileTheme";
@@ -57,7 +58,8 @@ const getIconName = (contentType?: string): string => {
 export const NotificationsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const loggedIn = !!UserHelper.user?.firstName;
+  const context = useContext(UserContext);
+  const loggedIn = !!context?.user?.firstName;
 
   type PushStatus = "unsupported" | "blocked" | "off" | "on";
   const [pushStatus, setPushStatus] = React.useState<PushStatus | null>(null);
@@ -88,7 +90,7 @@ export const NotificationsPage = ({ config }: Props) => {
   };
 
   const { data: serverNotifications = null } = useQuery<NotificationItem[]>({
-    queryKey: ["notifications", UserHelper.user?.id],
+    queryKey: ["notifications", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/notifications/my", "MessagingApi");
       return Array.isArray(data) ? (data as NotificationItem[]) : [];

@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, PersonHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -27,7 +27,7 @@ export const MessagesPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
-  const loggedIn = !!UserHelper.user?.firstName;
+  const loggedIn = !!userContext?.user?.firstName;
   const myPersonId = userContext?.person?.id;
 
   const { data: conversations = null } = useQuery<Conversation[]>({
