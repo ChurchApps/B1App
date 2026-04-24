@@ -308,7 +308,10 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                 }}
                 sx={{
                   position: "relative",
+                  width: "100%",
+                  maxWidth: 66,
                   aspectRatio: "1 / 1",
+                  justifySelf: "center",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
