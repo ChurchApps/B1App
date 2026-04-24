@@ -625,9 +625,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         onClose={() => setCreateEvent(null)}
         onSaved={() => {
           setCreateEvent(null);
-
-          setTab("about");
-          setTimeout(() => setTab("events"), 0);
+          queryClient.invalidateQueries({ queryKey: ["group-events", id] });
         }}
       />
       <CreateEventModal
@@ -637,8 +635,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         onClose={() => setEditEvent(null)}
         onSaved={() => {
           setEditEvent(null);
-          setTab("about");
-          setTimeout(() => setTab("events"), 0);
+          queryClient.invalidateQueries({ queryKey: ["group-events", id] });
         }}
       />
     </Box>
