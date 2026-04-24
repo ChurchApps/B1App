@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Tab, Tabs, Typography } from "@mui/material";
-import { ApiHelper, ArrayHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, DateHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type {
   AssignmentInterface,
   PlanInterface,
   PositionInterface
 } from "@churchapps/helpers";
+import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { BlockoutDatesSection } from "../plans/BlockoutDatesSection";
@@ -45,11 +46,12 @@ const getStatusMeta = (status: string, tc: typeof mobileTheme.colors) => {
 export const PlansPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const loggedIn = !!UserHelper.user?.firstName;
+  const context = useContext(UserContext);
+  const loggedIn = !!context?.user?.firstName;
   const [tab, setTab] = useState<TabKey>("upcoming");
 
   const { data: assignments = [], isLoading: assignmentsLoading } = useQuery<AssignmentInterface[]>({
-    queryKey: ["/assignments/my", "DoingApi", UserHelper.user?.id],
+    queryKey: ["/assignments/my", "DoingApi", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/assignments/my", "DoingApi");
       return Array.isArray(data) ? data : [];

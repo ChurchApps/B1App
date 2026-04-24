@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -14,6 +14,7 @@ import {
 import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
+import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { getInitials } from "../util";
@@ -25,14 +26,15 @@ interface Props {
 export const MessageComposePage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const loggedIn = !!UserHelper.user?.firstName;
+  const context = useContext(UserContext);
+  const loggedIn = !!context?.user?.firstName;
   const [searchText, setSearchText] = React.useState("");
   const [results, setResults] = React.useState<PersonInterface[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [lastSearched, setLastSearched] = React.useState("");
 
   const { data: previous = null } = useQuery<PersonInterface[]>({
-    queryKey: ["compose-previous", UserHelper.user?.id],
+    queryKey: ["compose-previous", context?.user?.id],
     queryFn: async () => {
       const pms: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
       if (!Array.isArray(pms) || pms.length === 0) return [];

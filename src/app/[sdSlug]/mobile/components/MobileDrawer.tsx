@@ -9,7 +9,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { UserHelper } from "@churchapps/apphelper";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
@@ -31,8 +30,8 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const personPhoto = context?.person?.photo;
   const contentRoot = (typeof window !== "undefined" ? (window as any).__envVars?.ContentRoot : undefined) || "";
   const photoUrl = personPhoto ? (personPhoto.startsWith("http") ? personPhoto : `${contentRoot}${personPhoto}`) : undefined;
-  const firstName = context?.person?.name?.first || UserHelper.user?.firstName || "";
-  const lastName = context?.person?.name?.last || UserHelper.user?.lastName || "";
+  const firstName = context?.person?.name?.first || context?.user?.firstName || "";
+  const lastName = context?.person?.name?.last || context?.user?.lastName || "";
   const initials = getInitials({ name: { first: firstName, last: lastName } });
 
   const isActive = (url: string): boolean => {
@@ -59,7 +58,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
         borderBottom: `1px solid ${tc.border}`,
         boxShadow: mobileTheme.shadows.sm
       }}>
-        {UserHelper.user && (
+        {context?.user && (
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2 }}>
             {photoUrl ? (
               <Avatar src={photoUrl} sx={{ width: 48, height: 48 }} />
@@ -181,7 +180,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
         >
           {mode === "dark" ? "Light Mode" : "Dark Mode"}
         </Button>
-        {UserHelper.user ? (
+        {context?.user ? (
           <Button
             variant="outlined"
             fullWidth
