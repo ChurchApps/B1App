@@ -27,4 +27,20 @@ test.describe("Mobile plans", () => {
     const main = page.locator("main");
     await expect(main).toContainText(/Sound Tech|Upcoming Worship Schedule/i, { timeout: 30000 });
   });
+
+  test("clicking the assignment opens the plan detail (Service Order / Teams tabs)", async ({
+    page,
+  }) => {
+    await page.goto("/mobile/plans");
+    const main = page.locator("main");
+    await expect(main).toContainText(/Sound Tech|Upcoming Worship Schedule/i, { timeout: 30000 });
+    // The card surfaces the plan name as a clickable element.
+    const card = main.getByText(/Upcoming Worship Schedule|Sound Tech/i).first();
+    await card.click();
+    await expect(page).toHaveURL(/\/mobile\/plans\/PLA\d+/, { timeout: 15000 });
+    await expect(page.getByRole("tab", { name: /Service Order/i })).toBeVisible({
+      timeout: 15000,
+    });
+    await expect(page.getByRole("tab", { name: /Teams/i })).toBeVisible();
+  });
 });

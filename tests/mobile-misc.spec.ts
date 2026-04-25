@@ -41,4 +41,14 @@ test.describe("Mobile volunteer", () => {
     const main = page.locator("main");
     await expect(main).toContainText(/Greeter|Usher/i, { timeout: 30000 });
   });
+
+  test("volunteer plan detail loads when drilling into a position", async ({ page }) => {
+    // Per b1-mobile/serving/volunteer-signup.md, tapping a plan opens its
+    // detail. /mobile/volunteer/PLA00000001 is the seeded worship plan.
+    await page.goto("/mobile/volunteer/PLA00000001");
+    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(page.locator("main")).toContainText(/Greeter|Usher|Worship/i, {
+      timeout: 30000,
+    });
+  });
 });

@@ -45,4 +45,15 @@ test.describe("Mobile community", () => {
     await expect(page).toHaveURL(/\/mobile\/community\/PER\d+/, { timeout: 15000 });
     await expect(page.locator("body")).toContainText(SEED_PEOPLE.DONALD.split(" ")[0]);
   });
+
+  test("member detail page shows household members", async ({ page }) => {
+    // Donald Clark (PER00000080) is head of HOU00000025 with spouse Carol
+    // Clark (PER00000081). CommunityDetail renders the household members
+    // section per b1-mobile/community/member-directory.md.
+    await page.goto("/mobile/community/PER00000080");
+    await expect(mobileLogoutButton(page)).toBeVisible();
+    const main = page.locator("main");
+    await expect(main).toContainText(/Donald/, { timeout: 30000 });
+    await expect(main).toContainText(/Carol/);
+  });
 });

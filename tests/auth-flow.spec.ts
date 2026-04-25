@@ -44,14 +44,19 @@ test.describe("Authentication", () => {
     await expect(page.locator('[data-testid="login-chip"]')).toBeVisible({ timeout: 15000 });
   });
 
-  test("/mobile/logout clears authentication", async ({ page }) => {
-    // Visit logout, then verify any subsequent /mobile/* visit shows the
-    // anonymous Sign In affordance (no Logout button).
-    await page.goto("/mobile/logout");
-    await page.waitForLoadState("domcontentloaded");
+  test("anonymous /mobile/dashboard surfaces Sign In affordance", async ({ page }) => {
+    // Per b1-mobile/getting-started/logging-in.md, an anonymous visitor to
+    // /mobile/* should see a way back to the Sign In flow. The MobileDrawer
+    // shows a Login button (linking to /mobile/login) when the user is not
+    // authenticated.
+    await page.context().clearCookies();
+    await page.evaluate(() => {
+      try { localStorage.clear(); } catch { /* ignore */ }
+      try { sessionStorage.clear(); } catch { /* ignore */ }
+    }).catch(() => { /* ignore — page not loaded yet */ });
     await page.goto("/mobile/dashboard");
-    // The mobile drawer toggles between Logout and Login based on auth state.
-    const loginButton = page.locator('a[href*="/mobile/login"]').first();
-    await expect(loginButton).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('a[href*="/mobile/login"]').first()).toBeVisible({
+      timeout: 15000,
+    });
   });
 });

@@ -36,4 +36,19 @@ test.describe("Public groups listing", () => {
     await expect(page.locator("body")).toContainText(/Youth Group/i, { timeout: 15000 });
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
   });
+
+  test("anonymous visitor sees contact form on group with a leader", async ({ page }) => {
+    // GRP00000004 (Adult Bible Class, slug 'adult-bible-class') has John
+    // Smith (PER00000001) seeded as leader (membership/demo.sql:301), so the
+    // UnauthenticatedView renders the GroupContact form. Fields use
+    // group-contact-* data-testids per components/groups/GroupContact.tsx.
+    await page.goto("/groups/details/adult-bible-class");
+    await expect(page.locator('[data-testid="group-contact-first-name-input"]')).toBeVisible({
+      timeout: 15000,
+    });
+    await expect(page.locator('[data-testid="group-contact-last-name-input"]')).toBeVisible();
+    await expect(page.locator('[data-testid="group-contact-email-input"]')).toBeVisible();
+    await expect(page.locator('[data-testid="group-contact-message-input"]')).toBeVisible();
+    await expect(page.locator('[data-testid="group-contact-submit-button"]')).toBeVisible();
+  });
 });

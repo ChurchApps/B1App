@@ -45,4 +45,18 @@ test.describe("Mobile donate", () => {
     // to the General Fund. The History tab lists them.
     await expect(page.locator("main")).toContainText(/General Fund/i, { timeout: 15000 });
   });
+
+  test("Overview tab shows year-to-date total and a Repeat affordance", async ({ page }) => {
+    // Per b1-mobile/giving/donation-history.md, the Overview tab summarises
+    // year-to-date giving and offers a Repeat last gift action. With three
+    // seeded donations totaling $450 in the current year, "Total this year"
+    // copy should render and a Repeat button should appear.
+    await page.goto("/mobile/donate");
+    const overviewTab = page.getByRole("tab", { name: /Overview/i });
+    await overviewTab.waitFor({ state: "visible", timeout: 15000 });
+    await overviewTab.click();
+    const main = page.locator("main");
+    await expect(main).toContainText(/Total this year/i, { timeout: 30000 });
+    await expect(main.getByRole("button", { name: /Repeat/i })).toBeVisible();
+  });
 });

@@ -34,4 +34,17 @@ test.describe("Mobile content screens", () => {
     await page.goto("/mobile/votd");
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
+
+  test("clicking a sermon playlist on /mobile/sermons drills into its sermons", async ({
+    page,
+  }) => {
+    // Per b1-mobile/content/sermons.md, sermons screen lets you drill into a
+    // playlist. SermonsPage routes to /mobile/playlist/<id> on click.
+    await page.goto("/mobile/sermons");
+    const card = page.locator("main").getByText(/Sunday Sermons 2025-2026/i).first();
+    await card.waitFor({ state: "visible", timeout: 15000 });
+    await card.click();
+    await expect(page).toHaveURL(/\/mobile\/playlist\/PLY\d+/, { timeout: 15000 });
+    await expect(page.locator("main")).toContainText(/The Power of Faith/i, { timeout: 15000 });
+  });
 });
