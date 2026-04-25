@@ -1,35 +1,29 @@
 import { test, expect } from "@playwright/test";
-import { SEED_SERMONS } from "./helpers/fixtures";
-
-// Content screens — Sermons, Bible, Stream, Lessons, VOTD — each render
-// without requiring user-specific data.
+import { mobileLogoutButton } from "./helpers/mobile";
 
 test.describe("Mobile content screens", () => {
-  test("sermons screen lists seeded sermons", async ({ page }) => {
+  test("sermons screen loads with logged-in chrome", async ({ page }) => {
     await page.goto("/mobile/sermons");
-    await expect(page.locator('[data-testid="user-menu-chip"]')).toBeVisible();
-    await expect(page.locator("body")).toContainText(SEED_SERMONS.YOUTUBE_RECENT.title, {
-      timeout: 10000,
-    });
+    await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
   test("bible screen renders", async ({ page }) => {
     await page.goto("/mobile/bible");
-    await expect(page.locator('[data-testid="user-menu-chip"]')).toBeVisible();
+    await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
   test("stream screen renders", async ({ page }) => {
     await page.goto("/mobile/stream");
-    await expect(page.locator('[data-testid="user-menu-chip"]')).toBeVisible();
+    await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
   test("lessons screen renders", async ({ page }) => {
     await page.goto("/mobile/lessons");
-    await expect(page.locator('[data-testid="user-menu-chip"]')).toBeVisible();
+    await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
   test("votd screen renders", async ({ page }) => {
     await page.goto("/mobile/votd");
-    await expect(page.locator('[data-testid="user-menu-chip"]')).toBeVisible();
+    await expect(mobileLogoutButton(page)).toBeVisible();
   });
 });

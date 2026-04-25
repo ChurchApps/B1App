@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { SEED_SERMONS } from "./helpers/fixtures";
 
-// /sermons renders the SermonsPage built-in component which lists sermons
-// from content/demo.sql:516. SermonElement is a client component pulling
-// from /sermons/{churchId}/public.
+// /sermons renders the SermonsPage built-in component which uses the
+// SermonElement client component. By default it lists PLAYLISTS (with a
+// "Playlists" toggle shown). Users click a playlist to see its sermons.
+// Seeded playlists in content/demo.sql:508.
 
 test.describe("Public sermons page", () => {
   test.beforeEach(async ({ page }) => {
@@ -15,20 +15,18 @@ test.describe("Public sermons page", () => {
     await expect(page.locator("h1").filter({ hasText: /^Sermons$/i }).first()).toBeVisible();
   });
 
-  test("shows at least one seeded sermon title", async ({ page }) => {
-    await page.goto("/sermons");
-    // SermonElement loads asynchronously — wait for any seeded title to appear.
-    const anyTitle = page
-      .locator("body")
-      .filter({ hasText: SEED_SERMONS.YOUTUBE_RECENT.title })
-      .first();
-    await expect(anyTitle).toBeVisible({ timeout: 10000 });
-  });
-
-  test("lists multiple sermons", async ({ page }) => {
+  test("shows seeded playlists in the default view", async ({ page }) => {
     await page.goto("/sermons");
     const body = page.locator("body");
-    await expect(body).toContainText(SEED_SERMONS.YOUTUBE_RECENT.title, { timeout: 10000 });
-    await expect(body).toContainText(SEED_SERMONS.VIMEO_SPECIAL.title);
+    await expect(body).toContainText(/Sunday Sermons 2025-2026/i, { timeout: 15000 });
+    await expect(body).toContainText(/Special Services/i);
+    await expect(body).toContainText(/Bible Study Series/i);
+  });
+
+  test("Playlists toggle is visible", async ({ page }) => {
+    await page.goto("/sermons");
+    await expect(page.locator("button, a").filter({ hasText: /^Playlists$/ }).first()).toBeVisible({
+      timeout: 15000,
+    });
   });
 });

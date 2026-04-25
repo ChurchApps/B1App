@@ -23,17 +23,23 @@ async function globalSetup(config: FullConfig) {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  await page.goto(baseURL + "/login");
+  await page.goto(baseURL + "/login", { timeout: 60000 });
 
   const emailInput = page.locator('input[type="email"]');
-  await emailInput.waitFor({ state: "visible", timeout: 15000 });
+  await emailInput.waitFor({ state: "visible", timeout: 30000 });
 
   await page.fill('input[type="email"]', "demo@b1.church");
   await page.fill('input[type="password"]', "password");
   await page.click('button[type="submit"]');
 
   // Login redirects to /mobile by default. Wait for navigation away from /login.
-  await page.waitForURL((url) => !url.pathname.includes("/login"), { timeout: 30000 });
+  await page.waitForURL((url) => !url.pathname.includes("/login"), { timeout: 60000 });
+
+  // Warm up high-traffic routes so parallel workers don't all hit Next.js
+  // dev's first-compile penalty simultaneously.
+  for (const path of ["/", "/sermons", "/mobile/dashboard", "/mobile/groups", "/mobile/community"]) {
+    await page.goto(baseURL + path, { timeout: 60000 }).catch(() => { /* warm-up — ignore failures */ });
+  }
 
   // Persist authenticated state for all worker contexts.
   await context.storageState({ path: STORAGE_STATE_PATH });

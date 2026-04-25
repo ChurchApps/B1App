@@ -48,15 +48,15 @@ export const SEED_SERMONS = {
 } as const;
 
 // Public navigation links — Api/tools/dbScripts/content/demo.sql:589.
+// All links use category='website' and visibility='everyone' (the only
+// visibility supported by B1Admin's NavLinkEdit form).
 export const SEED_NAV_LINKS = {
-  HOME: { url: "/", text: "Home", visibility: "everyone" },
-  ABOUT: { url: "/about", text: "About", visibility: "everyone" },
-  MINISTRIES: { url: "/ministries", text: "Ministries", visibility: "everyone" },
-  SERMONS: { url: "/sermons", text: "Sermons", visibility: "everyone" },
-  EVENTS: { url: "/events", text: "Events", visibility: "everyone" },
-  GIVE: { url: "/give", text: "Give", visibility: "everyone" },
-  MEMBERS_AREA: { url: "/members", text: "Members Area", visibility: "members" },
-  YOUTH: { url: "/youth", text: "Youth", visibility: "groups" },
+  HOME: { url: "/", text: "Home" },
+  ABOUT: { url: "/about", text: "About" },
+  MINISTRIES: { url: "/ministries", text: "Ministries" },
+  SERMONS: { url: "/sermons", text: "Sermons" },
+  EVENTS: { url: "/events", text: "Events" },
+  GIVE: { url: "/give", text: "Give" },
 } as const;
 
 export type SeedPersonName = (typeof SEED_PEOPLE)[keyof typeof SEED_PEOPLE];

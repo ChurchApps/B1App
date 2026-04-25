@@ -10,10 +10,16 @@ test.describe("Public home page", () => {
     await page.context().clearCookies();
   });
 
-  test("renders hero with church name and welcome heading", async ({ page }) => {
+  test("renders hero with welcome heading", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("h1, h2").filter({ hasText: /Welcome to/i }).first()).toBeVisible();
-    await expect(page.locator("body")).toContainText(DEMO_CHURCH.NAME);
+    await expect(
+      page.locator("h1").filter({ hasText: /Welcome to Grace Community Church/i }).first()
+    ).toBeVisible();
+  });
+
+  test("header shows church name as homepage link", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: /Go to homepage/i })).toContainText(DEMO_CHURCH.NAME);
   });
 
   test("shows seeded service times", async ({ page }) => {
@@ -31,7 +37,7 @@ test.describe("Public home page", () => {
     await expect(body).toContainText(/Small Groups/i);
   });
 
-  test("shows latest sermons section with seeded sermon titles", async ({ page }) => {
+  test("shows latest sermons section heading", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("body")).toContainText(/Latest Sermons/i);
   });
@@ -41,8 +47,8 @@ test.describe("Public home page", () => {
     await expect(page.locator("body")).toContainText(/Pastor John/i);
   });
 
-  test("shows login chip in anonymous header", async ({ page }) => {
+  test("shows login link in anonymous header", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator('[data-testid="login-chip"]')).toBeVisible();
+    await expect(page.getByRole("link", { name: /Login to your account/i })).toBeVisible();
   });
 });

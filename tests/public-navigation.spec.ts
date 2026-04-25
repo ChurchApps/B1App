@@ -1,38 +1,30 @@
 import { test, expect } from "@playwright/test";
 import { SEED_NAV_LINKS } from "./helpers/fixtures";
 
-// Navigation links are seeded in content/demo.sql:589 with visibility rules
-// (everyone / members / groups). Anonymous users see only "everyone" links.
+// Navigation links are seeded with category='website' so ConfigHelper.load
+// returns them via /links/church/{id}?category=website (content/demo.sql:589).
+// On md+ viewports they render inline in the header.
 
 test.describe("Public navigation", () => {
   test.beforeEach(async ({ page }) => {
     await page.context().clearCookies();
   });
 
-  test("anonymous user sees 'everyone' nav links", async ({ page }) => {
+  test("anonymous user sees seeded nav links in header", async ({ page }) => {
     await page.goto("/");
-    const body = page.locator("body");
-    await expect(body).toContainText(SEED_NAV_LINKS.HOME.text);
-    await expect(body).toContainText(SEED_NAV_LINKS.SERMONS.text);
-    await expect(body).toContainText(SEED_NAV_LINKS.GIVE.text);
-  });
-
-  test("anonymous user does NOT see 'members' nav link", async ({ page }) => {
-    await page.goto("/");
-    const memberLinks = page.locator(`a:has-text("${SEED_NAV_LINKS.MEMBERS_AREA.text}")`);
-    expect(await memberLinks.count()).toBe(0);
-  });
-
-  test("anonymous user does NOT see 'groups' nav link", async ({ page }) => {
-    await page.goto("/");
-    // Youth link has visibility: groups (group-restricted).
-    const youthLinks = page.locator(`a[href="${SEED_NAV_LINKS.YOUTH.url}"]`);
-    expect(await youthLinks.count()).toBe(0);
+    const navbar = page.locator("#navbar");
+    await navbar.waitFor({ state: "visible", timeout: 15000 });
+    await expect(navbar).toContainText(SEED_NAV_LINKS.HOME.text);
+    await expect(navbar).toContainText(SEED_NAV_LINKS.SERMONS.text);
+    await expect(navbar).toContainText(SEED_NAV_LINKS.GIVE.text);
   });
 
   test("clicking Sermons nav link navigates to /sermons", async ({ page }) => {
     await page.goto("/");
-    const sermonsLink = page.locator(`a[href="${SEED_NAV_LINKS.SERMONS.url}"]`).first();
+    const sermonsLink = page
+      .locator(`#navbar a[href="${SEED_NAV_LINKS.SERMONS.url}"]`)
+      .first();
+    await sermonsLink.waitFor({ state: "visible", timeout: 15000 });
     await sermonsLink.click();
     await expect(page).toHaveURL(/\/sermons/);
   });

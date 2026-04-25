@@ -1,4 +1,4 @@
-const DEFAULT_BASE_URL = "http://grace.localhost:3301";
+const DEFAULT_BASE_URL = "http://grace.localtest.me:3301";
 const API_BASE = "http://localhost:8084";
 const REQUIRED_ENVIRONMENT = "demo";
 const REQUIRED_MODULES = ["membership", "attendance", "content", "giving", "messaging", "doing"];
@@ -32,16 +32,18 @@ function checkBaseUrl() {
   } catch {
     refuse(`BASE_URL "${raw}" is not a valid URL.`);
   }
-  // Allow any *.localhost host (subdomain routing) plus bare localhost / 127.0.0.1.
+  // Allow loopback hosts plus the *.localtest.me / *.localhost subdomain shapes
+  // we use to drive B1App's host-header-based subdomain routing.
   const isLocal =
     url.hostname === "localhost" ||
     url.hostname === "127.0.0.1" ||
-    url.hostname.endsWith(".localhost");
+    url.hostname.endsWith(".localhost") ||
+    url.hostname.endsWith(".localtest.me");
   if (!isLocal) {
     refuse([
       `BASE_URL "${raw}" is not local.`,
-      "Tests only run against http://grace.localhost:3301 (or another *.localhost host).",
-      "Unset BASE_URL or point it at a localhost subdomain.",
+      "Tests only run against http://grace.localtest.me:3301 (or another loopback host).",
+      "Unset BASE_URL or point it at a local host.",
     ]);
   }
 }
@@ -93,20 +95,19 @@ async function checkDbConnections() {
 async function checkSubdomainResolves() {
   const raw = process.env.BASE_URL || DEFAULT_BASE_URL;
   const url = new URL(raw);
-  if (!url.hostname.endsWith(".localhost")) return;
+  if (url.hostname === "localhost" || url.hostname === "127.0.0.1") return;
+  // Use Node's DNS lookup directly — fetch() can fail for many reasons besides
+  // DNS, but dns.lookup is unambiguous.
+  const { lookup } = await import("node:dns/promises");
   try {
-    // We don't care about the response status — just that the host resolves.
-    await fetch(raw, { method: "HEAD" }).catch((err) => {
-      if (err && err.cause && err.cause.code === "ENOTFOUND") {
-        refuse([
-          `Host "${url.hostname}" did not resolve.`,
-          `Most platforms resolve *.localhost to 127.0.0.1 automatically; if yours doesn't,`,
-          `add this line to your hosts file: 127.0.0.1 ${url.hostname}`,
-        ]);
-      }
-    });
+    await lookup(url.hostname);
   } catch (err) {
-    if (err instanceof VerifyEnvError) throw err;
+    refuse([
+      `Host "${url.hostname}" did not resolve.`,
+      `*.localtest.me is a public DNS service that maps every subdomain to 127.0.0.1 —`,
+      `it should work on every machine without configuration. If your network blocks DNS`,
+      `lookups for it, add this line to your hosts file:  127.0.0.1 ${url.hostname}`,
+    ]);
   }
 }
 
