@@ -18,4 +18,13 @@ test.describe("Mobile plans", () => {
     await pastTab.click();
     await expect(pastTab).toHaveAttribute("aria-selected", "true");
   });
+
+  test("Upcoming tab lists demo user's seeded Sound Tech assignment", async ({ page }) => {
+    // Demo user (PER00000082) has assignment ASS00000008 for POS00000008
+    // (Sound Tech) on plan PLA00000001 (Upcoming Worship Schedule), seeded
+    // in doing/demo.sql:121.
+    await page.goto("/mobile/plans");
+    const main = page.locator("main");
+    await expect(main).toContainText(/Sound Tech|Upcoming Worship Schedule/i, { timeout: 30000 });
+  });
 });

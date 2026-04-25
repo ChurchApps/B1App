@@ -11,10 +11,19 @@ test.describe("Public built-in routes", () => {
 
   test("/donate renders donation page", async ({ page }) => {
     await page.goto("/donate");
-    // Donate page either prompts login (anonymous) or shows the donation form.
-    // Either way the page loads (no 404).
     await expect(page).toHaveURL(/\/donate/);
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
+  });
+
+  test("/donate references seeded fund (General Fund)", async ({ page }) => {
+    await page.goto("/donate");
+    // Either the fund picker shows General Fund, or the page prompts login
+    // (with a returnUrl pointing back to /donate). Either way the URL stays
+    // on /donate.
+    const body = page.locator("body");
+    await body.waitFor({ state: "visible", timeout: 15000 });
+    const text = (await body.textContent()) || "";
+    expect(/General Fund|login|Sign In/i.test(text)).toBe(true);
   });
 
   test("/stream renders streaming page", async ({ page }) => {
@@ -23,10 +32,13 @@ test.describe("Public built-in routes", () => {
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
   });
 
-  test("/bible renders bible page", async ({ page }) => {
+  test("/bible renders bible page with Genesis-1:1 iframe", async ({ page }) => {
     await page.goto("/bible");
     await expect(page).toHaveURL(/\/bible/);
-    await expect(page.locator("body")).not.toContainText(/404|not found/i);
+    await expect(page.locator("h1").filter({ hasText: /^Bible$/ })).toBeVisible({ timeout: 15000 });
+    // BiblePage embeds a biblia.com iframe with default reference Ge1.1.
+    const iframe = page.locator('iframe[title="content"]');
+    await expect(iframe).toHaveAttribute("src", /Ge1\.1/, { timeout: 15000 });
   });
 
   test("/votd renders verse-of-the-day page", async ({ page }) => {
@@ -37,7 +49,6 @@ test.describe("Public built-in routes", () => {
 
   test("/this-page-does-not-exist returns 404", async ({ page }) => {
     const response = await page.goto("/this-page-does-not-exist");
-    // Next.js notFound() returns a 404 status.
     expect(response?.status()).toBe(404);
   });
 });

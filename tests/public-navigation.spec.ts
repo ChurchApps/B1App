@@ -3,7 +3,8 @@ import { SEED_NAV_LINKS } from "./helpers/fixtures";
 
 // Navigation links are seeded with category='website' so ConfigHelper.load
 // returns them via /links/church/{id}?category=website (content/demo.sql:589).
-// On md+ viewports they render inline in the header.
+// On md+ viewports they render inline in the header; on small viewports the
+// header collapses to a hamburger menu (Header.tsx:271-281).
 
 test.describe("Public navigation", () => {
   test.beforeEach(async ({ page }) => {
@@ -35,5 +36,13 @@ test.describe("Public navigation", () => {
     await expect(loginChip).toBeVisible();
     const href = await loginChip.getAttribute("href");
     expect(href).toContain("/login");
+  });
+
+  test("mobile viewport shows hamburger menu button", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/");
+    await expect(page.locator('[data-testid="mobile-menu-button"]')).toBeVisible({
+      timeout: 15000,
+    });
   });
 });

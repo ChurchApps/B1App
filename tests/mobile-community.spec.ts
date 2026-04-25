@@ -18,22 +18,31 @@ test.describe("Mobile community", () => {
     await page.goto("/mobile/community");
     const search = page.getByRole("textbox", { name: /Search Members/i });
     await search.waitFor({ state: "visible", timeout: 15000 });
-    // Wait for the directory list to populate before filtering.
     await expect(page.locator("main")).toContainText(/Clark|Jackson|Williams|Moore/i, {
       timeout: 30000,
     });
     await search.fill("Donald");
-    // Each row renders firstName + lastName in separate elements with no
-    // space between, so combined text reads e.g. "DonaldClark". Match the
-    // first name alone to avoid the rendering quirk.
     await expect(page.locator("main")).toContainText(/Donald/, { timeout: 15000 });
-    // After filtering for Donald, other seeded surnames should NOT appear.
-    const otherNames = await page.locator("main").textContent();
-    expect(otherNames).toMatch(/Donald/);
   });
 
   test("legacy /mobile/membersSearch slug redirects to /mobile/community", async ({ page }) => {
     await page.goto("/mobile/membersSearch");
     await expect(page).toHaveURL(/\/mobile\/community/);
+  });
+
+  test("tapping a member opens their profile", async ({ page }) => {
+    await page.goto("/mobile/community");
+    const search = page.getByRole("textbox", { name: /Search Members/i });
+    await search.waitFor({ state: "visible", timeout: 15000 });
+    await expect(page.locator("main")).toContainText(/Clark|Jackson|Williams|Moore/i, {
+      timeout: 30000,
+    });
+    await search.fill("Donald");
+    const row = page.locator("main").getByText("Donald").first();
+    await row.waitFor({ state: "visible", timeout: 15000 });
+    await row.click();
+    // CommunityPage navigates to /mobile/community/{personId}
+    await expect(page).toHaveURL(/\/mobile\/community\/PER\d+/, { timeout: 15000 });
+    await expect(page.locator("body")).toContainText(SEED_PEOPLE.DONALD.split(" ")[0]);
   });
 });
