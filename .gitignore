@@ -5,6 +5,7 @@
 /public/sitemap*
 playwright-report
 test-results
+tests/.auth-state.json
 .serena
 CODE_REVIEW.md
 
