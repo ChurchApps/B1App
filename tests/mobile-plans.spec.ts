@@ -43,4 +43,27 @@ test.describe("Mobile plans", () => {
     });
     await expect(page.getByRole("tab", { name: /Teams/i })).toBeVisible();
   });
+
+  test("Upcoming tab surfaces both demo user assignments (Sound Tech + Projection Tech)", async ({
+    page,
+  }) => {
+    // ASS00000008 = Sound Tech (Accepted), ASS00000009 = Projection Tech
+    // (Unconfirmed). Both belong to PLA00000001 with serviceDate next Sunday.
+    // Per b1-mobile/serving/viewing-plans.md the Upcoming tab lists all upcoming
+    // assignments for the user.
+    await page.goto("/mobile/plans");
+    const main = page.locator("main");
+    await expect(main).toContainText(/Sound Tech/i, { timeout: 30000 });
+    await expect(main).toContainText(/Projection Tech/i);
+  });
+
+  test("Unconfirmed assignment surfaces a respond / accept affordance", async ({ page }) => {
+    // The doc describes a "needs response" hero card / per-assignment Accept
+    // / Decline action when status is Unconfirmed. ASS00000009 is seeded with
+    // status=Unconfirmed for demo user.
+    await page.goto("/mobile/plans");
+    const main = page.locator("main");
+    await expect(main).toContainText(/Projection Tech/i, { timeout: 30000 });
+    await expect(main).toContainText(/Accept|Respond|Pending Response|Unconfirmed/i);
+  });
 });
