@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Pridať novú osobu",
+		"email": "Email",
 		"firstName": "Krstné meno",
-		"lastName": "Priezvisko",
-		"email": "Email"
+		"lastName": "Priezvisko"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Druhý vklad",
 			"twoDeposits": "Zadajte dva vklady, ktoré ste dostali na svoj účet, aby ste dokončili overenie bankového účtu.",
 			"updated": "Bankový účet aktualizovaný.",
-			"verified": "Bankový účet overený.",
 			"validate": {
 				"accountNumber": "Trasovací kód a číslo účtu sú povinné.",
 				"holderName": "Je povinné meno majiteľa účtu."
-			}
+			},
+			"verified": "Bankový účet overený."
 		},
 		"cardForm": {
 			"addNew": "Pridať novú kartu",
@@ -97,14 +97,6 @@
 			"amount": "Suma",
 			"fund": "Fond"
 		},
-		"paymentMethods": {
-			"addBank": "Pridať bankový účet",
-			"addCard": "Pridať kartu",
-			"confirmDelete": "Ste si istí, že chcete odstrániť túto spôsob platby?",
-			"deleted": "Spôsob platby odstránený.",
-			"noMethods": "Žiadne spôsoby platby. Pridajte spôsob platby, aby ste mohli darovať.",
-			"verify": "Overiť účet"
-		},
 		"page": {
 			"amount": "Suma",
 			"batch": "Dávka",
@@ -112,6 +104,14 @@
 			"fund": "Fond",
 			"method": "Metóda",
 			"willAppear": "Donácie sa objavia po zadaní donácie."
+		},
+		"paymentMethods": {
+			"addBank": "Pridať bankový účet",
+			"addCard": "Pridať kartu",
+			"confirmDelete": "Ste si istí, že chcete odstrániť túto spôsob platby?",
+			"deleted": "Spôsob platby odstránený.",
+			"noMethods": "Žiadne spôsoby platby. Pridajte spôsob platby, aby ste mohli darovať.",
+			"verify": "Overiť účet"
 		},
 		"preview": {
 			"date": "Dátum donácie",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Vytvorte účet",
 		"email": "Email",
+		"enterCode": "Zadajte overovací kód",
+		"enterCodeInstructions": "Zadajte 6-miestny kód, ktorý sme vám práve poslali e-mailom.",
 		"expiredLink": "Aktuálny odkaz vypršal.",
 		"forgot": "Zabudli ste heslo",
 		"goLogin": "Prejsť na prihlásenie",
 		"login": "Prihlásiť sa",
 		"noAcc": "Nemáte účet?",
+		"noAccountFound": "Pre tento e-mail sa nenašiel žiadny účet. Pokračujte registráciou.",
 		"password": "Heslo",
 		"register": "Registrovať sa",
 		"registerThankYou": "Ďakujeme za registráciu! Skontrolujte si prosím e-mail a overte si svoj účet.",
 		"requestLink": "Požiadať o nový odkaz na resetovanie",
+		"resendCode": "Odoslať kód znova",
 		"reset": "Resetovať",
 		"resetInstructions": "Zadajte svoju e-mailovú adresu a požiadajte o resetovanie hesla.",
 		"resetPassword": "Resetovať heslo",
@@ -169,8 +173,8 @@
 		"setPassword": "Nastaviť heslo",
 		"signIn": "Prihlásiť sa",
 		"signInTitle": "Prosím prihláste sa",
-		"verifyPassword": "Overiť heslo",
 		"validate": {
+			"code": "Zadajte 6-miestny kód.",
 			"email": "Prosím zadajte platnú e-mailovú adresu.",
 			"firstName": "Prosím zadajte svoje krstné meno.",
 			"invalid": "Neplatné prihlásenie. Prosím skontrolujte svoj e-mail alebo heslo.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Heslá sa nezhodujú.",
 			"selectingChurch": "Chyba pri výbere cirkvi. Prosím overitee a skúste znova"
 		},
+		"verifyCode": "Overiť kód",
+		"verifyPassword": "Overiť heslo",
 		"welcomeBack": "Vitajte späť",
 		"welcomeName": "Vitajte späť, <b>{}</b>! Prosím čakajte, zatiaľ čo načítavame vaše dáta."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Krstné meno",
 		"lastName": "Priezvisko",
 		"name": "Meno",
+		"noRec": "Nemáte záznam o osobe?",
 		"person": "Osoba",
-		"years": "rokov",
-		"noRec": "Nemáte záznam o osobe?"
+		"years": "rokov"
 	},
 	"reporting": {
 		"detailed": "Podrobná správa",
-		"summary": "Zhrnutie",
-		"sampleTemplate": "Príklad šablóny Word",
 		"downloadOptions": "Možnosti sťahovania",
 		"noData": "Nie sú žiadne údaje na zobrazenie.",
 		"runReport": "Spustiť správu",
+		"sampleTemplate": "Príklad šablóny Word",
+		"summary": "Zhrnutie",
 		"useFilter": "Na spustenie správy použite filter."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Zaregistrovať novú cirkev",
 		"selectChurch": "Vyberte cirkev",
 		"state": "Štát / Provincia",
-		"zip": "PSČ / Poštové smerovacie číslo",
 		"validate": {
 			"address": "Adresa nemôže byť prázdna.",
 			"city": "Mesto nemôže byť prázdne.",
@@ -250,15 +255,16 @@
 			"name": "Názov cirkvi nemôže byť prázdny.",
 			"state": "Štát/Provincia nemôže byť prázdny.",
 			"zip": "PSČ/poštové smerovacie číslo nemôže byť prázdne."
-		}
+		},
+		"zip": "PSČ / Poštové smerovacie číslo"
 	},
 	"stockPhotos": {
 		"photoBy": "Fotografia od:",
 		"providedBy": "Archívne fotografie poskytuje"
 	},
 	"support": {
-		"documentation": "Dokumentácia",
-		"discussions": "Fórum podpory"
+		"discussions": "Fórum podpory",
+		"documentation": "Dokumentácia"
 	},
 	"wrapper": {
 		"chatWith": "Konverzácia s",

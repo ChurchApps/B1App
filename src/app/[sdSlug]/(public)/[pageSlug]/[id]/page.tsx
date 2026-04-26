@@ -5,7 +5,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/vendor/animations.css";
-import { Animate } from "@churchapps/apphelper-website";
+import { Animate } from "@churchapps/apphelper/website";
 import { FormPage } from "./components/FormPage";
 import { notFound } from "next/navigation";
 import { DefaultPageWrapper } from "../components/DefaultPageWrapper";

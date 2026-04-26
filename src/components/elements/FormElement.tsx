@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Loading, UserHelper, ApiHelper } from "@churchapps/apphelper";
-import { FormSubmissionEdit } from "@churchapps/apphelper-forms";
+import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { FormCardPayment } from "@/components/forms/FormCardPayment";
 

@@ -3,7 +3,7 @@
 import React from "react";
 import type { Stripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { DonationForm, StripePaymentMethod } from "@churchapps/apphelper-donations";
+import { DonationForm, StripePaymentMethod } from "@churchapps/apphelper/donations";
 import { PersonInterface, ChurchInterface } from "@churchapps/helpers";
 
 interface Props {

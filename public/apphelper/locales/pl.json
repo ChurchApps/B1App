@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Dodaj nową osobę",
+		"email": "Email",
 		"firstName": "Imię",
-		"lastName": "Nazwisko",
-		"email": "Email"
+		"lastName": "Nazwisko"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Druga wpłata",
 			"twoDeposits": "Podaj dwie wpłaty, które otrzymałeś na swoim koncie, aby ukończyć weryfikację konta bankowego.",
 			"updated": "Konto bankowe zaktualizowane.",
-			"verified": "Konto bankowe zweryfikowane.",
 			"validate": {
 				"accountNumber": "Wymagane są numer trasy i numer konta.",
 				"holderName": "Wymagana jest nazwa posiadacza konta."
-			}
+			},
+			"verified": "Konto bankowe zweryfikowane."
 		},
 		"cardForm": {
 			"addNew": "Dodaj nową kartę",
@@ -97,14 +97,6 @@
 			"amount": "Kwota",
 			"fund": "Fundusz"
 		},
-		"paymentMethods": {
-			"addBank": "Dodaj konto bankowe",
-			"addCard": "Dodaj kartę",
-			"confirmDelete": "Czy na pewno chcesz usunąć tę metodę płatności?",
-			"deleted": "Metoda płatności usunięta.",
-			"noMethods": "Brak metod płatności. Dodaj metodę płatności, aby dokonać darowizny.",
-			"verify": "Zweryfikuj konto"
-		},
 		"page": {
 			"amount": "Kwota",
 			"batch": "Partia",
@@ -112,6 +104,14 @@
 			"fund": "Fundusz",
 			"method": "Metoda",
 			"willAppear": "Darowizny pojawią się po wpisaniu darowizny."
+		},
+		"paymentMethods": {
+			"addBank": "Dodaj konto bankowe",
+			"addCard": "Dodaj kartę",
+			"confirmDelete": "Czy na pewno chcesz usunąć tę metodę płatności?",
+			"deleted": "Metoda płatności usunięta.",
+			"noMethods": "Brak metod płatności. Dodaj metodę płatności, aby dokonać darowizny.",
+			"verify": "Zweryfikuj konto"
 		},
 		"preview": {
 			"date": "Data darowizny",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Utwórz konto",
 		"email": "Email",
+		"enterCode": "Wprowadź kod weryfikacyjny",
+		"enterCodeInstructions": "Wprowadź 6-cyfrowy kod, który właśnie wysłaliśmy e-mailem.",
 		"expiredLink": "Bieżące łącze wygasło.",
 		"forgot": "Zapomniałeś hasła",
 		"goLogin": "Przejdź do logowania",
 		"login": "Zaloguj się",
 		"noAcc": "Nie masz konta?",
+		"noAccountFound": "Nie znaleziono konta z tym adresem e-mail. Zarejestruj się, aby kontynuować.",
 		"password": "Hasło",
 		"register": "Zarejestruj się",
 		"registerThankYou": "Dziękuję za rejestrację! Sprawdź swój email, aby zweryfikować swoje konto.",
 		"requestLink": "Poproś o nowe łącze resetowania",
+		"resendCode": "Wyślij kod ponownie",
 		"reset": "Resetuj",
 		"resetInstructions": "Podaj swój adres email, aby poprosić o reset hasła.",
 		"resetPassword": "Resetuj hasło",
@@ -169,8 +173,8 @@
 		"setPassword": "Ustaw hasło",
 		"signIn": "Zaloguj się",
 		"signInTitle": "Proszę zaloguj się",
-		"verifyPassword": "Zweryfikuj hasło",
 		"validate": {
+			"code": "Wprowadź 6-cyfrowy kod.",
 			"email": "Proszę podaj prawidłowy adres email.",
 			"firstName": "Proszę podaj swoje imię.",
 			"invalid": "Nieprawidłowe logowanie. Proszę sprawdź swój email lub hasło.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Hasła nie pasują do siebie.",
 			"selectingChurch": "Błąd przy wyborze kościoła. Proszę zweryfikuj i spróbuj ponownie"
 		},
+		"verifyCode": "Zweryfikuj kod",
+		"verifyPassword": "Zweryfikuj hasło",
 		"welcomeBack": "Witaj z powrotem",
 		"welcomeName": "Witaj z powrotem, <b>{}</b>! Proszę czekaj, ładujemy Twoje dane."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Imię",
 		"lastName": "Nazwisko",
 		"name": "Nazwa",
+		"noRec": "Nie masz rekordu osoby?",
 		"person": "Osoba",
-		"years": "lat",
-		"noRec": "Nie masz rekordu osoby?"
+		"years": "lat"
 	},
 	"reporting": {
 		"detailed": "Raport szczegółowy",
-		"summary": "Podsumowanie",
-		"sampleTemplate": "Przykładowy szablon Word",
 		"downloadOptions": "Opcje pobierania",
 		"noData": "Brak danych do wyświetlenia.",
 		"runReport": "Uruchom raport",
+		"sampleTemplate": "Przykładowy szablon Word",
+		"summary": "Podsumowanie",
 		"useFilter": "Użyj filtru, aby uruchomić raport."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Zarejestruj nowy kościół",
 		"selectChurch": "Wybierz kościół",
 		"state": "Stan / Prowincja",
-		"zip": "Kod pocztowy / Pocztowy",
 		"validate": {
 			"address": "Adres nie może być pusty.",
 			"city": "Miasto nie może być puste.",
@@ -250,15 +255,16 @@
 			"name": "Nazwa kościoła nie może być pusta.",
 			"state": "Stan/Prowincja nie może być puste.",
 			"zip": "Kod pocztowy/pocztowy nie może być pusty."
-		}
+		},
+		"zip": "Kod pocztowy / Pocztowy"
 	},
 	"stockPhotos": {
 		"photoBy": "Zdjęcie autorstwa:",
 		"providedBy": "Zdjęcia stockowe dostarczone przez"
 	},
 	"support": {
-		"documentation": "Dokumentacja",
-		"discussions": "Forum wsparcia"
+		"discussions": "Forum wsparcia",
+		"documentation": "Dokumentacja"
 	},
 	"wrapper": {
 		"chatWith": "Czat z",

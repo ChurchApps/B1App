@@ -1,6 +1,6 @@
 "use client";
 
-import { SermonElement } from "@churchapps/apphelper-website";
+import { SermonElement } from "@churchapps/apphelper/website";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { Container } from "@mui/material";
 

@@ -3,8 +3,8 @@
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { StableDonationForm } from "./StableDonationForm";
-import { RecurringDonations, StripePaymentMethod as AppHelperStripePaymentMethod } from "@churchapps/apphelper-donations";
-import { PaymentMethods } from "@churchapps/apphelper-donations";
+import { RecurringDonations, StripePaymentMethod as AppHelperStripePaymentMethod } from "@churchapps/apphelper/donations";
+import { PaymentMethods } from "@churchapps/apphelper/donations";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ExportLink } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";

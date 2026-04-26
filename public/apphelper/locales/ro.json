@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Adăugați o nouă persoană",
+		"email": "Email",
 		"firstName": "Prenume",
-		"lastName": "Nume de familie",
-		"email": "Email"
+		"lastName": "Nume de familie"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "A doua depunere",
 			"twoDeposits": "Introduceți cele două depuneri pe care le-ați primit în cont pentru a termina verificarea contului bancar.",
 			"updated": "Cont bancar actualizat.",
-			"verified": "Cont bancar verificat.",
 			"validate": {
 				"accountNumber": "Sunt necesare codul de rutare și numărul contului.",
 				"holderName": "Este necesar numele titularului contului."
-			}
+			},
+			"verified": "Cont bancar verificat."
 		},
 		"cardForm": {
 			"addNew": "Adăugare nouă carte",
@@ -97,14 +97,6 @@
 			"amount": "Suma",
 			"fund": "Fond"
 		},
-		"paymentMethods": {
-			"addBank": "Adăugare cont bancar",
-			"addCard": "Adăugare carte",
-			"confirmDelete": "Sunteți sigur că doriti să ștergeți această metodă de plată?",
-			"deleted": "Metodă de plată ștearsă.",
-			"noMethods": "Fără metode de plată. Adăugați o metodă de plată pentru a face o donație.",
-			"verify": "Verificare cont"
-		},
 		"page": {
 			"amount": "Suma",
 			"batch": "Lot",
@@ -112,6 +104,14 @@
 			"fund": "Fond",
 			"method": "Metodă",
 			"willAppear": "Donațiile vor apărea odată ce o donație a fost introdusă."
+		},
+		"paymentMethods": {
+			"addBank": "Adăugare cont bancar",
+			"addCard": "Adăugare carte",
+			"confirmDelete": "Sunteți sigur că doriti să ștergeți această metodă de plată?",
+			"deleted": "Metodă de plată ștearsă.",
+			"noMethods": "Fără metode de plată. Adăugați o metodă de plată pentru a face o donație.",
+			"verify": "Verificare cont"
 		},
 		"preview": {
 			"date": "Data donației",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Creați un cont",
 		"email": "Email",
+		"enterCode": "Introduceți codul de verificare",
+		"enterCodeInstructions": "Introduceți codul de 6 cifre pe care tocmai vi l-am trimis prin e-mail.",
 		"expiredLink": "Linkul curent a expirat.",
 		"forgot": "Ati uitat parola",
 		"goLogin": "Mergeți la conectare",
 		"login": "Conectare",
 		"noAcc": "Nu aveti cont?",
+		"noAccountFound": "Nu a fost găsit niciun cont cu acel e-mail. Înregistrați-vă pentru a continua.",
 		"password": "Parolă",
 		"register": "Înregistrare",
 		"registerThankYou": "Vă mulțumim pentru înregistrare! Vă rugăm verificați email-ul pentru a vă verifica contul.",
 		"requestLink": "Cereți un nou link de resetare",
+		"resendCode": "Retrimite codul",
 		"reset": "Resetare",
 		"resetInstructions": "Introduceți adresa de email pentru a cere o resetare a parolei.",
 		"resetPassword": "Resetare parolă",
@@ -169,8 +173,8 @@
 		"setPassword": "Stabilire parolă",
 		"signIn": "Conectare",
 		"signInTitle": "Vă rugăm conectați-vă",
-		"verifyPassword": "Verificare parolă",
 		"validate": {
+			"code": "Introduceți codul de 6 cifre.",
 			"email": "Vă rugăm introduceți o adresă de email validă.",
 			"firstName": "Vă rugăm introduceți prenumele.",
 			"invalid": "Conectare nevalidă. Vă rugăm verificați email-ul sau parola.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Parolele nu se potrivesc.",
 			"selectingChurch": "Eroare la selectarea bisericii. Vă rugăm verificați și încercați din nou"
 		},
+		"verifyCode": "Verifică codul",
+		"verifyPassword": "Verificare parolă",
 		"welcomeBack": "Bine ati revenit",
 		"welcomeName": "Bine ati revenit, <b>{}</b>! Vă rugăm așteptați în timp ce vă încărcăm datele."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Prenume",
 		"lastName": "Nume de familie",
 		"name": "Nume",
+		"noRec": "Nu aveti o înregistrare de persoană?",
 		"person": "Persoană",
-		"years": "ani",
-		"noRec": "Nu aveti o înregistrare de persoană?"
+		"years": "ani"
 	},
 	"reporting": {
 		"detailed": "Raport detaliat",
-		"summary": "Rezumat",
-		"sampleTemplate": "Model de document Word de exemplu",
 		"downloadOptions": "Opțiuni de descărcare",
 		"noData": "Nu sunt date de afișat.",
 		"runReport": "Executare raport",
+		"sampleTemplate": "Model de document Word de exemplu",
+		"summary": "Rezumat",
 		"useFilter": "Utilizați filtrul pentru a executa raportul."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Înregistrați o nouă biserică",
 		"selectChurch": "Selectare biserică",
 		"state": "Stat / Provincie",
-		"zip": "Cod poștal / Cod poștal",
 		"validate": {
 			"address": "Adresa nu poate fi goală.",
 			"city": "Orașul nu poate fi gol.",
@@ -250,15 +255,16 @@
 			"name": "Numele bisericii nu poate fi gol.",
 			"state": "Statul/Provincia nu poate fi gol.",
 			"zip": "Codul poștal/codul poștal nu poate fi gol."
-		}
+		},
+		"zip": "Cod poștal / Cod poștal"
 	},
 	"stockPhotos": {
 		"photoBy": "Fotografie de:",
 		"providedBy": "Fotografii de stoc furnizate de"
 	},
 	"support": {
-		"documentation": "Documentație",
-		"discussions": "Forum de asistență"
+		"discussions": "Forum de asistență",
+		"documentation": "Documentație"
 	},
 	"wrapper": {
 		"chatWith": "Chat cu",

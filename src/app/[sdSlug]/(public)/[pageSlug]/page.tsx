@@ -6,7 +6,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/vendor/animations.css";
-import { Animate } from "@churchapps/apphelper-website";
+import { Animate } from "@churchapps/apphelper/website";
 import { VotdPage } from "./components/VotdPage";
 import { BiblePage } from "./components/BiblePage";
 import { StreamPage } from "./components/StreamPage";

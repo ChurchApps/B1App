@@ -2,7 +2,7 @@
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
-import { MarkdownEditor } from "@churchapps/apphelper-markdown";
+import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 import { ErrorMessages } from "@churchapps/apphelper";
 import { EventHelper } from "@churchapps/apphelper";
 import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";

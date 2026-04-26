@@ -13,7 +13,7 @@ import {
   Typography
 } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
-import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Permissions, type GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";

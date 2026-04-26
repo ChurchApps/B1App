@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import "@/styles/vendor/animations.css";
-import { Animate } from "@churchapps/apphelper-website";
+import { Animate } from "@churchapps/apphelper/website";
 import { redirect } from "next/navigation";
 
 type PageParams = { sdSlug: string; }

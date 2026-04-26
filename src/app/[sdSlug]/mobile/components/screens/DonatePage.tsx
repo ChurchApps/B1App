@@ -26,8 +26,8 @@ import {
   RecurringDonations,
   PaymentMethods,
   StripePaymentMethod as AppHelperStripePaymentMethod
-} from "@churchapps/apphelper-donations";
-import { NonAuthDonationWrapper } from "@churchapps/apphelper-website";
+} from "@churchapps/apphelper/donations";
+import { NonAuthDonationWrapper } from "@churchapps/apphelper/website";
 import type {
   ChurchInterface,
   DonationInterface,

@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Yeni Kişi Ekle",
+		"email": "Email",
 		"firstName": "Ad",
-		"lastName": "Soyadı",
-		"email": "Email"
+		"lastName": "Soyadı"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "İkinci Depozito",
 			"twoDeposits": "Banka hesabı doğrulamanızı tamamlamak için hesabınıza aldığınız iki mevduatı girin.",
 			"updated": "Banka hesabı güncellendi.",
-			"verified": "Banka hesabı doğrulandı.",
 			"validate": {
 				"accountNumber": "Yönlendirme numarası ve hesap numarası gereklidir.",
 				"holderName": "Hesap sahibinin adı gereklidir."
-			}
+			},
+			"verified": "Banka hesabı doğrulandı."
 		},
 		"cardForm": {
 			"addNew": "Yeni Kart Ekle",
@@ -97,14 +97,6 @@
 			"amount": "Tutar",
 			"fund": "Fon"
 		},
-		"paymentMethods": {
-			"addBank": "Banka Hesabı Ekle",
-			"addCard": "Kart Ekle",
-			"confirmDelete": "Bu ödeme yöntemini silmek istediğinizden emin misiniz?",
-			"deleted": "Ödeme yöntemi silindi.",
-			"noMethods": "Ödeme yöntemi yok. Bağış yapmak için bir ödeme yöntemi ekleyin.",
-			"verify": "Hesabı Doğrula"
-		},
 		"page": {
 			"amount": "Tutar",
 			"batch": "Toplu İş",
@@ -112,6 +104,14 @@
 			"fund": "Fon",
 			"method": "Yöntem",
 			"willAppear": "Bağışlar bir bağış girildiğinde görünecektir."
+		},
+		"paymentMethods": {
+			"addBank": "Banka Hesabı Ekle",
+			"addCard": "Kart Ekle",
+			"confirmDelete": "Bu ödeme yöntemini silmek istediğinizden emin misiniz?",
+			"deleted": "Ödeme yöntemi silindi.",
+			"noMethods": "Ödeme yöntemi yok. Bağış yapmak için bir ödeme yöntemi ekleyin.",
+			"verify": "Hesabı Doğrula"
 		},
 		"preview": {
 			"date": "Bağış Tarihi",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Hesap Oluştur",
 		"email": "Email",
+		"enterCode": "Doğrulama Kodunu Girin",
+		"enterCodeInstructions": "Size az önce e-postayla gönderdiğimiz 6 haneli kodu girin.",
 		"expiredLink": "Mevcut bağlantı süresi dolmuş.",
 		"forgot": "Şifremi Unuttum",
 		"goLogin": "Giriş Sayfasına Git",
 		"login": "Giriş Yap",
 		"noAcc": "Hesabınız yok mu?",
+		"noAccountFound": "Bu e-posta ile hesap bulunamadı. Devam etmek için lütfen kayıt olun.",
 		"password": "Şifre",
 		"register": "Kaydol",
 		"registerThankYou": "Kaydolduğunuz için teşekkür ederiz! Hesabınızı doğrulamak için lütfen e-postanızı kontrol edin.",
 		"requestLink": "Yeni bir sıfırlama bağlantısı iste",
+		"resendCode": "Kodu yeniden gönder",
 		"reset": "Sıfırla",
 		"resetInstructions": "Şifre sıfırlaması istemek için e-posta adresinizi girin.",
 		"resetPassword": "Şifreyi Sıfırla",
@@ -169,8 +173,8 @@
 		"setPassword": "Şifre Belirle",
 		"signIn": "Giriş Yap",
 		"signInTitle": "Lütfen Giriş Yapın",
-		"verifyPassword": "Şifreyi Doğrula",
 		"validate": {
+			"code": "6 haneli kodu girin.",
 			"email": "Lütfen geçerli bir e-posta adresi girin.",
 			"firstName": "Lütfen adınızı girin.",
 			"invalid": "Geçersiz giriş. Lütfen e-postanız veya şifrenizi kontrol edin.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Şifreler eşleşmiyor.",
 			"selectingChurch": "Kilise seçerken hata oluştu. Lütfen doğrulayın ve tekrar deneyin"
 		},
+		"verifyCode": "Kodu Doğrula",
+		"verifyPassword": "Şifreyi Doğrula",
 		"welcomeBack": "Hoş geldiniz",
 		"welcomeName": "Hoş geldiniz, <b>{}</b>! Verilerinizi yüklerken lütfen bekleyin."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Ad",
 		"lastName": "Soyadı",
 		"name": "Ad",
+		"noRec": "Kişi kaydınız yok mu?",
 		"person": "Kişi",
-		"years": "yıl",
-		"noRec": "Kişi kaydınız yok mu?"
+		"years": "yıl"
 	},
 	"reporting": {
 		"detailed": "Ayrıntılı Rapor",
-		"summary": "Özet",
-		"sampleTemplate": "Örnek Word Şablonu",
 		"downloadOptions": "İndirme Seçenekleri",
 		"noData": "Görüntülenecek veri yok.",
 		"runReport": "Raporu Çalıştır",
+		"sampleTemplate": "Örnek Word Şablonu",
+		"summary": "Özet",
 		"useFilter": "Raporu çalıştırmak için filtreyi kullanın."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Yeni Kiliseyi Kaydet",
 		"selectChurch": "Kilise Seçin",
 		"state": "Eyalet / İl",
-		"zip": "Posta Kodu / Posta Kodu",
 		"validate": {
 			"address": "Adres boş olamaz.",
 			"city": "Şehir boş olamaz.",
@@ -250,15 +255,16 @@
 			"name": "Kilise adı boş olamaz.",
 			"state": "Eyalet/İl boş olamaz.",
 			"zip": "Posta Kodu/Posta Kodu boş olamaz."
-		}
+		},
+		"zip": "Posta Kodu / Posta Kodu"
 	},
 	"stockPhotos": {
 		"photoBy": "Fotoğraf:",
 		"providedBy": "Stok fotoğraflar tarafından sağlanmıştır"
 	},
 	"support": {
-		"documentation": "Dokümantasyon",
-		"discussions": "Destek Forumu"
+		"discussions": "Destek Forumu",
+		"documentation": "Dokümantasyon"
 	},
 	"wrapper": {
 		"chatWith": "Sohbet",

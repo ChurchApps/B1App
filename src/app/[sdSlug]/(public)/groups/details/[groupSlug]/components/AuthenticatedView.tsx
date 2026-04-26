@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Grid, Container } from "@mui/material";
 import { UserHelper } from "@churchapps/apphelper";
-import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { DisplayBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { Permissions } from "@churchapps/helpers";

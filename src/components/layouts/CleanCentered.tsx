@@ -2,7 +2,7 @@
 
 import Head from "next/head";
 import { Box, Card, CssBaseline } from "@mui/material";
-import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper";
 import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
 import Zone from "./Zone";
 import { PageInterface } from "@/helpers";

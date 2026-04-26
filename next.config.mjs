@@ -22,6 +22,8 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   reactStrictMode: true,
 
+  allowedDevOrigins: ['grace.localtest.me', '*.localtest.me'],
+
   experimental: {
     // Optimize package imports to reduce bundle size
     optimizePackageImports: [
@@ -180,9 +182,7 @@ const nextConfig = {
   // Transpile packages
   transpilePackages: [
     "mui-tel-input",
-    "@churchapps/apphelper-website",
-    "@churchapps/apphelper-markdown",
-    "@churchapps/apphelper-donations"
+    "@churchapps/apphelper"
   ],
 
   // Compiler optimizations

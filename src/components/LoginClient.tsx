@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Alert, type PaperProps } from "@mui/material";
 import { Layout } from "@/components";
-import { LoginPage } from "@churchapps/apphelper-login";
+import { LoginPage } from "@churchapps/apphelper/login";
 import UserContext from "@/context/UserContext";
 import { PersonHelper } from "@/helpers";
 import { useSearchParams } from "next/navigation";

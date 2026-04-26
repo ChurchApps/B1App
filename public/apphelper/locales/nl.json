@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Nieuwe persoon toevoegen",
+		"email": "E-mail",
 		"firstName": "Voornaam",
-		"lastName": "Achternaam",
-		"email": "E-mail"
+		"lastName": "Achternaam"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Tweede storting",
 			"twoDeposits": "Voer de twee stortingen in die u op uw rekening heeft ontvangen om de verificatie van uw bankrekening te voltooien.",
 			"updated": "Bankrekening bijgewerkt.",
-			"verified": "Bankrekening geverifieerd.",
 			"validate": {
 				"accountNumber": "Routeringsnummer en rekeningnummer zijn verplicht.",
 				"holderName": "Naam van rekeninghouder is verplicht."
-			}
+			},
+			"verified": "Bankrekening geverifieerd."
 		},
 		"cardForm": {
 			"addNew": "Nieuwe kaart toevoegen",
@@ -97,14 +97,6 @@
 			"amount": "Bedrag",
 			"fund": "Fonds"
 		},
-		"paymentMethods": {
-			"addBank": "Bankrekening toevoegen",
-			"addCard": "Kaart toevoegen",
-			"confirmDelete": "Weet u zeker dat u deze betaalmethode wilt verwijderen?",
-			"deleted": "Betaalmethode verwijderd.",
-			"noMethods": "Geen betaalmethoden. Voeg een betaalmethode toe om een donatie te doen.",
-			"verify": "Rekening verifiëren"
-		},
 		"page": {
 			"amount": "Bedrag",
 			"batch": "Batch",
@@ -112,6 +104,14 @@
 			"fund": "Fonds",
 			"method": "Methode",
 			"willAppear": "Donaties verschijnen zodra er een donatie is ingevoerd."
+		},
+		"paymentMethods": {
+			"addBank": "Bankrekening toevoegen",
+			"addCard": "Kaart toevoegen",
+			"confirmDelete": "Weet u zeker dat u deze betaalmethode wilt verwijderen?",
+			"deleted": "Betaalmethode verwijderd.",
+			"noMethods": "Geen betaalmethoden. Voeg een betaalmethode toe om een donatie te doen.",
+			"verify": "Rekening verifiëren"
 		},
 		"preview": {
 			"date": "Donatiedatum",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Account aanmaken",
 		"email": "E-mail",
+		"enterCode": "Voer verificatiecode in",
+		"enterCodeInstructions": "Voer de 6-cijferige code in die we u zojuist per e-mail hebben gestuurd.",
 		"expiredLink": "De huidige link is verlopen.",
 		"forgot": "Wachtwoord vergeten",
 		"goLogin": "Ga naar inloggen",
 		"login": "Inloggen",
 		"noAcc": "Heeft u geen account?",
+		"noAccountFound": "Er is geen account gevonden met dat e-mailadres. Registreer om door te gaan.",
 		"password": "Wachtwoord",
 		"register": "Registreren",
 		"registerThankYou": "Bedankt voor uw registratie! Controleer uw e-mail om uw account te verifiëren.",
 		"requestLink": "Vraag een nieuwe resetlink aan",
+		"resendCode": "Code opnieuw verzenden",
 		"reset": "Resetten",
 		"resetInstructions": "Voer uw e-mailadres in om een wachtwoordreset aan te vragen.",
 		"resetPassword": "Wachtwoord resetten",
@@ -169,8 +173,8 @@
 		"setPassword": "Wachtwoord instellen",
 		"signIn": "Aanmelden",
 		"signInTitle": "Meld u aan",
-		"verifyPassword": "Wachtwoord bevestigen",
 		"validate": {
+			"code": "Voer de 6-cijferige code in.",
 			"email": "Voer een geldig e-mailadres in.",
 			"firstName": "Voer uw voornaam in.",
 			"invalid": "Ongeldige aanmelding. Controleer uw e-mail of wachtwoord.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Wachtwoorden komen niet overeen.",
 			"selectingChurch": "Fout bij het selecteren van de kerk. Controleer en probeer opnieuw"
 		},
+		"verifyCode": "Code verifiëren",
+		"verifyPassword": "Wachtwoord bevestigen",
 		"welcomeBack": "Welkom terug",
 		"welcomeName": "Welkom terug, <b>{}</b>! Even geduld terwijl we uw gegevens laden."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Voornaam",
 		"lastName": "Achternaam",
 		"name": "Naam",
+		"noRec": "Heeft u geen persoonsgegevens?",
 		"person": "Persoon",
-		"years": "jaar",
-		"noRec": "Heeft u geen persoonsgegevens?"
+		"years": "jaar"
 	},
 	"reporting": {
 		"detailed": "Gedetailleerd rapport",
-		"summary": "Samenvatting",
-		"sampleTemplate": "Voorbeeld Word-sjabloon",
 		"downloadOptions": "Downloadopties",
 		"noData": "Er zijn geen gegevens om weer te geven.",
 		"runReport": "Rapport uitvoeren",
+		"sampleTemplate": "Voorbeeld Word-sjabloon",
+		"summary": "Samenvatting",
 		"useFilter": "Gebruik het filter om het rapport uit te voeren."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Nieuwe kerk registreren",
 		"selectChurch": "Selecteer een kerk",
 		"state": "Provincie",
-		"zip": "Postcode",
 		"validate": {
 			"address": "Adres mag niet leeg zijn.",
 			"city": "Stad mag niet leeg zijn.",
@@ -250,15 +255,16 @@
 			"name": "Naam van de kerk mag niet leeg zijn.",
 			"state": "Provincie mag niet leeg zijn.",
 			"zip": "Postcode mag niet leeg zijn."
-		}
+		},
+		"zip": "Postcode"
 	},
 	"stockPhotos": {
 		"photoBy": "Foto door:",
 		"providedBy": "Stockfoto's geleverd door"
 	},
 	"support": {
-		"documentation": "Documentatie",
-		"discussions": "Ondersteuningsforum"
+		"discussions": "Ondersteuningsforum",
+		"documentation": "Documentatie"
 	},
 	"wrapper": {
 		"chatWith": "Chat met",

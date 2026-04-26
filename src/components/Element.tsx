@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Element as AppHelperElement, ElementBlock } from "@churchapps/apphelper-website";
+import { Element as AppHelperElement, ElementBlock } from "@churchapps/apphelper/website";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { LiveStream } from "./video/LiveStream";

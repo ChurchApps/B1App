@@ -28,6 +28,7 @@
   },
   "createPerson": {
     "addNewPerson": "Fügen Sie eine neue Person hinzu",
+    "email": "E-Mail",
     "firstName": "Vorname",
     "lastName": "Familienname, Nachname"
   },
@@ -45,11 +46,11 @@
       "secondDeposit": "Zweite Einzahlung",
       "twoDeposits": "Geben Sie die beiden Einzahlungen ein, die Sie auf Ihrem Konto erhalten haben, um die Verifizierung Ihres Bankkontos abzuschließen.",
       "updated": "Bankkonto aktualisiert.",
-      "verified": "Bankkonto verifiziert.",
       "validate": {
         "accountNumber": "Bankleitzahl und Kontonummer sind erforderlich.",
         "holderName": "Der Name des Kontoinhabers ist erforderlich."
-      }
+      },
+      "verified": "Bankkonto verifiziert."
     },
     "cardForm": {
       "addNew": "Neue Karte hinzufügen",
@@ -96,14 +97,6 @@
       "amount": "Menge",
       "fund": "Fonds"
     },
-    "paymentMethods": {
-      "addBank": "Bankkonto hinzufügen",
-      "addCard": "Karte hinzufügen",
-      "confirmDelete": "Sind Sie sicher, dass Sie diese Zahlungsmethode löschen möchten?",
-      "deleted": "Zahlungsmethode gelöscht.",
-      "noMethods": "Keine Zahlungsmethoden.  ",
-      "verify": "Konto überprüfen"
-    },
     "page": {
       "amount": "Menge",
       "batch": "Charge",
@@ -111,6 +104,14 @@
       "fund": "Fonds",
       "method": "Methode",
       "willAppear": "Spenden werden angezeigt, sobald eine Spende eingegeben wurde."
+    },
+    "paymentMethods": {
+      "addBank": "Bankkonto hinzufügen",
+      "addCard": "Karte hinzufügen",
+      "confirmDelete": "Sind Sie sicher, dass Sie diese Zahlungsmethode löschen möchten?",
+      "deleted": "Zahlungsmethode gelöscht.",
+      "noMethods": "Keine Zahlungsmethoden.  ",
+      "verify": "Konto überprüfen"
     },
     "preview": {
       "date": "Spendedatum",
@@ -152,12 +153,19 @@
   "login": {
     "createAccount": "Ein Konto erstellen",
     "email": "Email",
+    "enterCode": "Bestätigungscode eingeben",
+    "enterCodeInstructions": "Geben Sie den 6-stelligen Code ein, den wir Ihnen gerade per E-Mail gesendet haben.",
+    "expiredLink": "Der aktuelle Link ist abgelaufen.",
     "forgot": "Passwort vergessen",
     "goLogin": "Gehen Sie zu Anmelden",
     "login": "Anmeldung",
+    "noAcc": "Sie haben noch kein Konto?",
+    "noAccountFound": "Mit dieser E-Mail wurde kein Konto gefunden. Bitte registrieren Sie sich, um fortzufahren.",
     "password": "Passwort",
     "register": "Registrieren",
     "registerThankYou": "Danke für die Registrierung! ",
+    "requestLink": "Neuen Zurücksetzungslink anfordern",
+    "resendCode": "Code erneut senden",
     "reset": "Zurücksetzen",
     "resetInstructions": "Geben Sie Ihre E-Mail-Adresse ein, um eine Passwortzurücksetzung anzufordern.",
     "resetPassword": "Passwort zurücksetzen",
@@ -165,8 +173,8 @@
     "setPassword": "Passwort festlegen",
     "signIn": "Anmelden",
     "signInTitle": "Bitte einloggen",
-    "verifyPassword": "Passwort bestätigen",
     "validate": {
+      "code": "Bitte geben Sie den 6-stelligen Code ein.",
       "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       "firstName": "Bitte geben Sie Ihren Vornamen ein.",
       "invalid": "Ungültiger Login. ",
@@ -176,6 +184,8 @@
       "passwordMatch": "Passwörter stimmen nicht überein.",
       "selectingChurch": "Fehler bei der Auswahl der Kirche. "
     },
+    "verifyCode": "Code bestätigen",
+    "verifyPassword": "Passwort bestätigen",
     "welcomeBack": "Willkommen zurück",
     "welcomeName": "Willkommen zurück, <b>{}</b>!  "
   },
@@ -213,13 +223,17 @@
     "firstName": "Vorname",
     "lastName": "Familienname, Nachname",
     "name": "Name",
+    "noRec": "Keinen Personendatensatz vorhanden?",
     "person": "Person",
     "years": "Jahre"
   },
   "reporting": {
+    "detailed": "Detaillierter Bericht",
     "downloadOptions": "Download-Optionen",
     "noData": "Es sind keine Daten zum Anzeigen vorhanden.",
     "runReport": "Bericht ausführen",
+    "sampleTemplate": "Beispiel-Word-Vorlage",
+    "summary": "Zusammenfassung",
     "useFilter": "Verwenden Sie den Filter, um den Bericht auszuführen."
   },
   "selectChurch": {
@@ -234,7 +248,6 @@
     "register": "Registrieren Sie eine neue Kirche",
     "selectChurch": "Wählen Sie eine Kirche aus",
     "state": "Staat/Provinz",
-    "zip": "Postleitzahl",
     "validate": {
       "address": "Die Adresse darf nicht leer sein.",
       "city": "Stadt darf nicht leer sein.",
@@ -242,17 +255,16 @@
       "name": "Der Name der Kirche darf nicht leer sein.",
       "state": "Bundesland/Provinz darf nicht leer sein.",
       "zip": "Postleitzahl/Postleitzahl darf nicht leer sein."
-    }
+    },
+    "zip": "Postleitzahl"
   },
   "stockPhotos": {
     "photoBy": "Foto von:",
     "providedBy": "Archivfotos bereitgestellt von"
   },
   "support": {
-    "email": "Email",
-    "knowledge base": "Wissensbasis",
-    "messenger": "Bote",
-    "phone": "Telefon"
+    "discussions": "Support-Forum",
+    "documentation": "Dokumentation"
   },
   "wrapper": {
     "chatWith": "Plaudern mit",
@@ -261,7 +273,9 @@
     "editChurchProfile": "Kirchenprofil bearbeiten",
     "editProfile": "Profil bearbeiten",
     "logout": "Ausloggen",
+    "messages": "Nachrichten",
     "newPrivateMessage": "Neue private Nachricht",
+    "notifications": "Benachrichtigungen",
     "privateMessage": "Private Nachricht",
     "profile": "Profil",
     "searchForPerson": "Suche nach einer Person",

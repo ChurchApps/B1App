@@ -8,7 +8,7 @@ import { VideoContainer } from "./VideoContainer";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
-import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper";
 import { StreamingHeader } from "./StreamingHeader";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 

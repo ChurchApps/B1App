@@ -4,7 +4,7 @@ import React from "react";
 import { Section } from "@/components/Section";
 import { SectionInterface } from "@/helpers";
 import { ArrayHelper } from "@churchapps/apphelper";
-import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { SectionBlock } from "../SectionBlock";
 

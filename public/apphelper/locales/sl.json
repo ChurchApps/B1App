@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Dodaj novo osebo",
+		"email": "Email",
 		"firstName": "Ime",
-		"lastName": "Priimek",
-		"email": "Email"
+		"lastName": "Priimek"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Druga pologu",
 			"twoDeposits": "Vnesite dve vlogi, ki ste ju prejeli na svoj račun, da dokončate preverjanje bančnega računa.",
 			"updated": "Bančni račun posodobljen.",
-			"verified": "Bančni račun preverjen.",
 			"validate": {
 				"accountNumber": "Usmerjevalna koda in številka računa sta obvezni.",
 				"holderName": "Ime imetnika računa je obvezno."
-			}
+			},
+			"verified": "Bančni račun preverjen."
 		},
 		"cardForm": {
 			"addNew": "Dodaj novo kartico",
@@ -97,14 +97,6 @@
 			"amount": "Znesek",
 			"fund": "Sklad"
 		},
-		"paymentMethods": {
-			"addBank": "Dodaj bančni račun",
-			"addCard": "Dodaj kartico",
-			"confirmDelete": "Ali ste prepričani, da želite izbrisati ta način plačila?",
-			"deleted": "Način plačila izbrisan.",
-			"noMethods": "Brez načinov plačila. Dodajte način plačila, da lahko darujete.",
-			"verify": "Preveri račun"
-		},
 		"page": {
 			"amount": "Znesek",
 			"batch": "Skupna pošiljka",
@@ -112,6 +104,14 @@
 			"fund": "Sklad",
 			"method": "Metoda",
 			"willAppear": "Donacije se bodo pojavile, ko bo donacija vpisana."
+		},
+		"paymentMethods": {
+			"addBank": "Dodaj bančni račun",
+			"addCard": "Dodaj kartico",
+			"confirmDelete": "Ali ste prepričani, da želite izbrisati ta način plačila?",
+			"deleted": "Način plačila izbrisan.",
+			"noMethods": "Brez načinov plačila. Dodajte način plačila, da lahko darujete.",
+			"verify": "Preveri račun"
 		},
 		"preview": {
 			"date": "Datum donacije",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Ustvari račun",
 		"email": "Email",
+		"enterCode": "Vnesite potrditveno kodo",
+		"enterCodeInstructions": "Vnesite 6-mestno kodo, ki smo vam jo pravkar poslali po e-pošti.",
 		"expiredLink": "Trenutna povezava je potekla.",
 		"forgot": "Ste pozabili geslo",
 		"goLogin": "Pojdi na prijavo",
 		"login": "Prijava",
 		"noAcc": "Nimate računa?",
+		"noAccountFound": "Račun s tem e-poštnim naslovom ni bil najden. Registrirajte se za nadaljevanje.",
 		"password": "Geslo",
 		"register": "Registracija",
 		"registerThankYou": "Hvala, ker ste se registrirali! Prosim preverite e-pošto, da preverite svoj račun.",
 		"requestLink": "Zahtevaj novo povezavo za ponastavitev",
+		"resendCode": "Ponovno pošlji kodo",
 		"reset": "Ponastaviti",
 		"resetInstructions": "Vnesite svoj e-naslov, da zahtevate ponastavitev gesla.",
 		"resetPassword": "Ponastaviti geslo",
@@ -169,8 +173,8 @@
 		"setPassword": "Nastavi geslo",
 		"signIn": "Prijava",
 		"signInTitle": "Prosim prijavite se",
-		"verifyPassword": "Preveri geslo",
 		"validate": {
+			"code": "Vnesite 6-mestno kodo.",
 			"email": "Prosim vnesite veljaven e-naslov.",
 			"firstName": "Prosim vnesite svoje ime.",
 			"invalid": "Neveljavna prijava. Prosim preverite svojo e-pošto ali geslo.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Gesli se ne ujemata.",
 			"selectingChurch": "Napaka pri izbiri cerkve. Prosim preverite in poskusite znova"
 		},
+		"verifyCode": "Preveri kodo",
+		"verifyPassword": "Preveri geslo",
 		"welcomeBack": "Dobrodošli nazaj",
 		"welcomeName": "Dobrodošli nazaj, <b>{}</b>! Prosim čakajte, medtem ko nalagamo vaše podatke."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Ime",
 		"lastName": "Priimek",
 		"name": "Ime",
+		"noRec": "Nimate evidence osebe?",
 		"person": "Oseba",
-		"years": "let",
-		"noRec": "Nimate evidence osebe?"
+		"years": "let"
 	},
 	"reporting": {
 		"detailed": "Podrobno poročilo",
-		"summary": "Povzetek",
-		"sampleTemplate": "Vzorec predloge Word",
 		"downloadOptions": "Možnosti prenosa",
 		"noData": "Ni podatkov za prikaz.",
 		"runReport": "Zaženi poročilo",
+		"sampleTemplate": "Vzorec predloge Word",
+		"summary": "Povzetek",
 		"useFilter": "Uporabite filter, če želite zagnati poročilo."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Registriraj novo cerkev",
 		"selectChurch": "Izberite cerkev",
 		"state": "Država / Provinca",
-		"zip": "Poštna številka / Poštni kod",
 		"validate": {
 			"address": "Naslov ne sme biti prazen.",
 			"city": "Mesto ne sme biti prazno.",
@@ -250,15 +255,16 @@
 			"name": "Ime cerkve ne sme biti prazno.",
 			"state": "Država/Provinca ne sme biti prazna.",
 			"zip": "Poštna številka/poštni kod ne smeta biti prazna."
-		}
+		},
+		"zip": "Poštna številka / Poštni kod"
 	},
 	"stockPhotos": {
 		"photoBy": "Fotografija od:",
 		"providedBy": "Arhivne fotografije zagotavlja"
 	},
 	"support": {
-		"documentation": "Dokumentacija",
-		"discussions": "Forum za podporo"
+		"discussions": "Forum za podporo",
+		"documentation": "Dokumentacija"
 	},
 	"wrapper": {
 		"chatWith": "Klepet z",
