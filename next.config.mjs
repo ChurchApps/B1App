@@ -218,10 +218,11 @@ const nextConfig = {
 };
 
 
-// In development, skip Sentry config wrapper to avoid Turbopack symlink issues on Windows
+// In development, skip Sentry config wrapper to avoid Turbopack symlink issues on Windows.
+// Also skip when no auth token is set (e.g. self-hosted deploys) to avoid sourcemap upload failures.
 let exportedConfig = withSerwist(nextConfig);
 
-if (!isDev) {
+if (!isDev && process.env.SENTRY_AUTH_TOKEN) {
   const { withSentryConfig } = await import("@sentry/nextjs");
   exportedConfig = withSentryConfig(exportedConfig, {
     // For all available options, see:
