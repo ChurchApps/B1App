@@ -27,8 +27,8 @@ export const Theme: React.FC<Props> = (props) => {
     const fonts = JSON.parse(props.config.globalStyles?.fonts);
     lines.push("--headingFont: '" + fonts.heading + "';");
     lines.push("--bodyFont: '" + fonts.body + "';");
-    if (fonts.heading !== "Roboto") googleFonts.push(fonts.heading);
-    if (fonts.body !== fonts.heading) googleFonts.push(fonts.body);
+    if (fonts.heading && fonts.heading !== "Roboto") googleFonts.push(fonts.heading);
+    if (fonts.body && fonts.body !== "Roboto" && fonts.body !== fonts.heading) googleFonts.push(fonts.body);
   }
 
   if (props.config.appTheme?.light) {
