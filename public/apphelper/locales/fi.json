@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Lisää uusi henkilö",
+		"email": "Sähköposti",
 		"firstName": "Etunimi",
-		"lastName": "Sukunimi",
-		"email": "Sähköposti"
+		"lastName": "Sukunimi"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Toinen talletuskerroin",
 			"twoDeposits": "Kirjoita kaksi talletusta, jotka olet saanut tilillesi, pankkitilisi vahvistuksen suorittamiseksi.",
 			"updated": "Pankkitili päivitetty.",
-			"verified": "Pankkitili vahvistettu.",
 			"validate": {
 				"accountNumber": "Reititys- ja tilinumero ovat pakollisia.",
 				"holderName": "Tilin omistajan nimi on pakollinen."
-			}
+			},
+			"verified": "Pankkitili vahvistettu."
 		},
 		"cardForm": {
 			"addNew": "Lisää uusi kortti",
@@ -97,14 +97,6 @@
 			"amount": "Summa",
 			"fund": "Rahasto"
 		},
-		"paymentMethods": {
-			"addBank": "Lisää pankkitili",
-			"addCard": "Lisää kortti",
-			"confirmDelete": "Haluatko varmasti poistaa tämän maksutavan?",
-			"deleted": "Maksutapa poistettu.",
-			"noMethods": "Ei maksutapoja. Lisää maksutapa lahjoituksen tekemiseksi.",
-			"verify": "Vahvista tili"
-		},
 		"page": {
 			"amount": "Summa",
 			"batch": "Erä",
@@ -112,6 +104,14 @@
 			"fund": "Rahasto",
 			"method": "Menetelmä",
 			"willAppear": "Lahjoitukset näkyvät, kun lahjoitus on syötetty."
+		},
+		"paymentMethods": {
+			"addBank": "Lisää pankkitili",
+			"addCard": "Lisää kortti",
+			"confirmDelete": "Haluatko varmasti poistaa tämän maksutavan?",
+			"deleted": "Maksutapa poistettu.",
+			"noMethods": "Ei maksutapoja. Lisää maksutapa lahjoituksen tekemiseksi.",
+			"verify": "Vahvista tili"
 		},
 		"preview": {
 			"date": "Lahjoituspäivä",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Luo tili",
 		"email": "Sähköposti",
+		"enterCode": "Syötä vahvistuskoodi",
+		"enterCodeInstructions": "Syötä 6-numeroinen koodi, jonka lähetimme juuri sähköpostiisi.",
 		"expiredLink": "Nykyinen linkki on vanhentunut.",
 		"forgot": "Unohditko salasanan",
 		"goLogin": "Siirry sisäänkirjautumiseen",
 		"login": "Kirjaudu sisään",
 		"noAcc": "Eikö sinulla ole tiliä?",
+		"noAccountFound": "Tällä sähköpostilla ei löytynyt tiliä. Jatka rekisteröitymällä.",
 		"password": "Salasana",
 		"register": "Rekisteröidy",
 		"registerThankYou": "Kiitos rekisteröitymisestä! Tarkista sähköpostisi tilin vahvistamiseksi.",
 		"requestLink": "Pyydä uutta nollaukslinkkiä",
+		"resendCode": "Lähetä koodi uudelleen",
 		"reset": "Nollaa",
 		"resetInstructions": "Kirjoita sähköpostiosoitteesi pyytääksesi salasanan nollausta.",
 		"resetPassword": "Nollaa salasana",
@@ -169,8 +173,8 @@
 		"setPassword": "Aseta salasana",
 		"signIn": "Kirjaudu",
 		"signInTitle": "Kirjaudu sisään",
-		"verifyPassword": "Vahvista salasana",
 		"validate": {
+			"code": "Syötä 6-numeroinen koodi.",
 			"email": "Syötä kelvollinen sähköpostiosoite.",
 			"firstName": "Kirjoita etunimesi.",
 			"invalid": "Virheellinen kirjautuminen. Tarkista sähköpostiosoitteesi tai salasanasi.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Salasanat eivät täsmää.",
 			"selectingChurch": "Virhe seurakunnan valinnassa. Tarkista ja yritä uudelleen"
 		},
+		"verifyCode": "Vahvista koodi",
+		"verifyPassword": "Vahvista salasana",
 		"welcomeBack": "Tervetuloa takaisin",
 		"welcomeName": "Tervetuloa takaisin, <b>{}</b>! Odota, kun lataamme tietojasi."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Etunimi",
 		"lastName": "Sukunimi",
 		"name": "Nimi",
+		"noRec": "Eikö sinulla ole henkilötietoja?",
 		"person": "Henkilö",
-		"years": "vuotta",
-		"noRec": "Eikö sinulla ole henkilötietoja?"
+		"years": "vuotta"
 	},
 	"reporting": {
 		"detailed": "Yksityiskohtainen raportti",
-		"summary": "Yhteenveto",
-		"sampleTemplate": "Esimerkki Word-mallia",
 		"downloadOptions": "Latausvalinnat",
 		"noData": "Ei tietoja näytettäväksi.",
 		"runReport": "Suorita raportti",
+		"sampleTemplate": "Esimerkki Word-mallia",
+		"summary": "Yhteenveto",
 		"useFilter": "Suorita raportti suodattimen avulla."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Rekisteröi uusi seurakunta",
 		"selectChurch": "Valitse seurakunta",
 		"state": "Osavaltio / Provinssi",
-		"zip": "Postinumero",
 		"validate": {
 			"address": "Osoite ei voi olla tyhjä.",
 			"city": "Kaupunki ei voi olla tyhjä.",
@@ -250,15 +255,16 @@
 			"name": "Seurakunnan nimi ei voi olla tyhjä.",
 			"state": "Osavaltio/Provinssi ei voi olla tyhjä.",
 			"zip": "Postinumero ei voi olla tyhjä."
-		}
+		},
+		"zip": "Postinumero"
 	},
 	"stockPhotos": {
 		"photoBy": "Kuva tekijältä:",
 		"providedBy": "Pörssikuvat toimittajalta"
 	},
 	"support": {
-		"documentation": "Dokumentaatio",
-		"discussions": "Tukifoorumi"
+		"discussions": "Tukifoorumi",
+		"documentation": "Dokumentaatio"
 	},
 	"wrapper": {
 		"chatWith": "Keskustele",

@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Új személy hozzáadása",
+		"email": "E-mail",
 		"firstName": "Keresztnév",
-		"lastName": "Vezetéknév",
-		"email": "E-mail"
+		"lastName": "Vezetéknév"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Második letét",
 			"twoDeposits": "Adja meg a két letétet, amelyet Ön kapott a számlájábol, hogy befejezze a bankszámla ellenőrzésé.",
 			"updated": "Bankszámla frissítve.",
-			"verified": "Bankszámla ellenőrizve.",
 			"validate": {
 				"accountNumber": "Az útválasztási és számlaszám kötelező.",
 				"holderName": "A számlahostor név szükséges."
-			}
+			},
+			"verified": "Bankszámla ellenőrizve."
 		},
 		"cardForm": {
 			"addNew": "Új kártya hozzáadása",
@@ -97,14 +97,6 @@
 			"amount": "Összeg",
 			"fund": "Alap"
 		},
-		"paymentMethods": {
-			"addBank": "Bankszámla hozzáadása",
-			"addCard": "Kártya hozzáadása",
-			"confirmDelete": "Biztosan szeretné törölni ezt a fizetési módszert?",
-			"deleted": "Fizetési módszer törlésre.",
-			"noMethods": "Nincsenek fizetési módok. Hozzáadás fizetési módszer adományzáshoz.",
-			"verify": "Számla ellenőrzése"
-		},
 		"page": {
 			"amount": "Összeg",
 			"batch": "Köteg",
@@ -112,6 +104,14 @@
 			"fund": "Alap",
 			"method": "Módszer",
 			"willAppear": "Az adományzások megjelennek, miután adományzást adtak be."
+		},
+		"paymentMethods": {
+			"addBank": "Bankszámla hozzáadása",
+			"addCard": "Kártya hozzáadása",
+			"confirmDelete": "Biztosan szeretné törölni ezt a fizetési módszert?",
+			"deleted": "Fizetési módszer törlésre.",
+			"noMethods": "Nincsenek fizetési módok. Hozzáadás fizetési módszer adományzáshoz.",
+			"verify": "Számla ellenőrzése"
 		},
 		"preview": {
 			"date": "Adományzási dátum",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Fiók létrehozása",
 		"email": "E-mail",
+		"enterCode": "Adja meg az ellenőrző kódot",
+		"enterCodeInstructions": "Adja meg a 6 jegyű kódot, amelyet most küldtünk e-mailben.",
 		"expiredLink": "A jelenlegi link lejárt.",
 		"forgot": "Elfelejtette a jelszavát",
 		"goLogin": "Ugrás bejelentkezésre",
 		"login": "Bejelentkezés",
 		"noAcc": "Nem rendelkezik fiókkal?",
+		"noAccountFound": "Ezzel az e-mail címmel nem található fiók. Regisztráljon a folytatáshoz.",
 		"password": "Jelszó",
 		"register": "Regisztrálás",
 		"registerThankYou": "Köszönjük a regisztrálást! Ellenőrizze az e-mailét a fiók megerősítéséhez.",
 		"requestLink": "Új zurückszerzési link kérelmezése",
+		"resendCode": "Kód újraküldése",
 		"reset": "Alaphelyzetbe állítás",
 		"resetInstructions": "Adja meg az e-mail címét a jelszó alaphelyzetbe állítása kéréséhez.",
 		"resetPassword": "Jelszó alaphelyzetbe állítása",
@@ -169,8 +173,8 @@
 		"setPassword": "Jelszó beállítása",
 		"signIn": "Bejelentkezés",
 		"signInTitle": "Kérjük, jelentkezzen be",
-		"verifyPassword": "Jelszó ellenőrzése",
 		"validate": {
+			"code": "Adja meg a 6 jegyű kódot.",
 			"email": "Kérjük, adjon meg egy érvényes e-mail címet.",
 			"firstName": "Kérjük, adja meg a keresztnevét.",
 			"invalid": "Érvénytelen bejelentkezés. Kérjük, ellenőrizze az e-mail címet vagy a jelszót.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "A jelszavak nem egyeznek.",
 			"selectingChurch": "Hiba az egyház kiválasztásában. Kérjük, ellenőrizze és próbálja újra"
 		},
+		"verifyCode": "Kód ellenőrzése",
+		"verifyPassword": "Jelszó ellenőrzése",
 		"welcomeBack": "Üdvözöljük vissza",
 		"welcomeName": "Üdvözöljük vissza, <b>{}</b>! Kérjük, várjon, amíg betöltjük az adatait."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Keresztnév",
 		"lastName": "Vezetéknév",
 		"name": "Név",
+		"noRec": "Nem rendelkezik személyi nyilvántartással?",
 		"person": "Személy",
-		"years": "év",
-		"noRec": "Nem rendelkezik személyi nyilvántartással?"
+		"years": "év"
 	},
 	"reporting": {
 		"detailed": "Részletes jelentés",
-		"summary": "Összefoglalás",
-		"sampleTemplate": "Minta Word sablon",
 		"downloadOptions": "Letöltési beállítások",
 		"noData": "Nincsenek megjeleníthető adatok.",
 		"runReport": "Jelentés futtatása",
+		"sampleTemplate": "Minta Word sablon",
+		"summary": "Összefoglalás",
 		"useFilter": "A jelentés futtatásához használja a szűrőt."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Új egyház regisztrálása",
 		"selectChurch": "Egyház kiválasztása",
 		"state": "Állam / Terület",
-		"zip": "Irányítószám",
 		"validate": {
 			"address": "A cím nem lehet üres.",
 			"city": "A város nem lehet üres.",
@@ -250,15 +255,16 @@
 			"name": "Az egyház neve nem lehet üres.",
 			"state": "Az állam/terület nem lehet üres.",
 			"zip": "Az irányítószám nem lehet üres."
-		}
+		},
+		"zip": "Irányítószám"
 	},
 	"stockPhotos": {
 		"photoBy": "Foto által:",
 		"providedBy": "Készletfotók által biztosítva"
 	},
 	"support": {
-		"documentation": "Dokumentáció",
-		"discussions": "Támogatás fórum"
+		"discussions": "Támogatás fórum",
+		"documentation": "Dokumentáció"
 	},
 	"wrapper": {
 		"chatWith": "Csevegés",

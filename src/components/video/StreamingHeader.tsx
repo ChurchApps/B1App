@@ -1,5 +1,5 @@
 import { UserHelper } from "@churchapps/apphelper";
-import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper";
 import { EnvironmentHelper, StreamConfigInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { StreamChatManager } from "@/helpers/StreamChatManager";

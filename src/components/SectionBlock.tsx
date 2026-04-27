@@ -3,7 +3,7 @@
 import React from "react";
 import { SectionInterface } from "@/helpers";
 import { Section } from "./Section";
-import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper";
 
 
 interface Props {

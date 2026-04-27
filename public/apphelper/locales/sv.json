@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Lägg till en ny person",
+		"email": "E-post",
 		"firstName": "Förnamn",
-		"lastName": "Efternamn",
-		"email": "E-post"
+		"lastName": "Efternamn"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Andra insättningen",
 			"twoDeposits": "Ange de två insättningarna du mottagit på ditt konto för att slutföra verifieringen av ditt bankkonto.",
 			"updated": "Bankkonto uppdaterat.",
-			"verified": "Bankkonto verifierat.",
 			"validate": {
 				"accountNumber": "Clearing- och kontonummer krävs.",
 				"holderName": "Kontoinnehavarens namn krävs."
-			}
+			},
+			"verified": "Bankkonto verifierat."
 		},
 		"cardForm": {
 			"addNew": "Lägg till nytt kort",
@@ -97,14 +97,6 @@
 			"amount": "Belopp",
 			"fund": "Fond"
 		},
-		"paymentMethods": {
-			"addBank": "Lägg till bankkonto",
-			"addCard": "Lägg till kort",
-			"confirmDelete": "Är du säker på att du vill radera denna betalningsmetod?",
-			"deleted": "Betalningsmetod raderad.",
-			"noMethods": "Inga betalningsmetoder. Lägg till en betalningsmetod för att göra en donation.",
-			"verify": "Verifiera konto"
-		},
 		"page": {
 			"amount": "Belopp",
 			"batch": "Batch",
@@ -112,6 +104,14 @@
 			"fund": "Fond",
 			"method": "Metod",
 			"willAppear": "Donationer visas när en donation har registrerats."
+		},
+		"paymentMethods": {
+			"addBank": "Lägg till bankkonto",
+			"addCard": "Lägg till kort",
+			"confirmDelete": "Är du säker på att du vill radera denna betalningsmetod?",
+			"deleted": "Betalningsmetod raderad.",
+			"noMethods": "Inga betalningsmetoder. Lägg till en betalningsmetod för att göra en donation.",
+			"verify": "Verifiera konto"
 		},
 		"preview": {
 			"date": "Donationsdatum",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Skapa ett konto",
 		"email": "E-post",
+		"enterCode": "Ange verifieringskod",
+		"enterCodeInstructions": "Ange den 6-siffriga koden vi precis skickade till dig via e-post.",
 		"expiredLink": "Den aktuella länken har utgått.",
 		"forgot": "Glömt lösenord",
 		"goLogin": "Gå till inloggning",
 		"login": "Logga in",
 		"noAcc": "Har du inget konto?",
+		"noAccountFound": "Inget konto hittades med den e-postadressen. Registrera dig för att fortsätta.",
 		"password": "Lösenord",
 		"register": "Registrera",
 		"registerThankYou": "Tack för din registrering! Vänligen kontrollera din e-post för att verifiera ditt konto.",
 		"requestLink": "Begär en ny återställningslänk",
+		"resendCode": "Skicka koden igen",
 		"reset": "Återställ",
 		"resetInstructions": "Ange din e-postadress för att begära en lösenordsåterställning.",
 		"resetPassword": "Återställ lösenord",
@@ -169,8 +173,8 @@
 		"setPassword": "Ange lösenord",
 		"signIn": "Logga in",
 		"signInTitle": "Vänligen logga in",
-		"verifyPassword": "Bekräfta lösenord",
 		"validate": {
+			"code": "Ange den 6-siffriga koden.",
 			"email": "Vänligen ange en giltig e-postadress.",
 			"firstName": "Vänligen ange ditt förnamn.",
 			"invalid": "Ogiltig inloggning. Vänligen kontrollera din e-post eller ditt lösenord.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Lösenorden matchar inte.",
 			"selectingChurch": "Fel vid val av församling. Vänligen kontrollera och försök igen."
 		},
+		"verifyCode": "Verifiera kod",
+		"verifyPassword": "Bekräfta lösenord",
 		"welcomeBack": "Välkommen tillbaka",
 		"welcomeName": "Välkommen tillbaka, <b>{}</b>! Vänligen vänta medan vi laddar dina uppgifter."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Förnamn",
 		"lastName": "Efternamn",
 		"name": "Namn",
+		"noRec": "Har du ingen personpost?",
 		"person": "Person",
-		"years": "år",
-		"noRec": "Har du ingen personpost?"
+		"years": "år"
 	},
 	"reporting": {
 		"detailed": "Detaljerad rapport",
-		"summary": "Sammanfattning",
-		"sampleTemplate": "Exempelmall för Word",
 		"downloadOptions": "Nedladdningsalternativ",
 		"noData": "Det finns inga data att visa.",
 		"runReport": "Kör rapport",
+		"sampleTemplate": "Exempelmall för Word",
+		"summary": "Sammanfattning",
 		"useFilter": "Använd filtret för att köra rapporten."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Registrera en ny församling",
 		"selectChurch": "Välj en församling",
 		"state": "Delstat / Provins",
-		"zip": "Postnummer",
 		"validate": {
 			"address": "Adressen kan inte vara tom.",
 			"city": "Staden kan inte vara tom.",
@@ -250,15 +255,16 @@
 			"name": "Församlingsnamnet kan inte vara tomt.",
 			"state": "Delstat/Provins kan inte vara tom.",
 			"zip": "Postnumret kan inte vara tomt."
-		}
+		},
+		"zip": "Postnummer"
 	},
 	"stockPhotos": {
 		"photoBy": "Foto av:",
 		"providedBy": "Stockfoton tillhandahålls av"
 	},
 	"support": {
-		"documentation": "Dokumentation",
-		"discussions": "Supportforum"
+		"discussions": "Supportforum",
+		"documentation": "Dokumentation"
 	},
 	"wrapper": {
 		"chatWith": "Chatta med",

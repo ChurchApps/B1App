@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Přidat novou osobu",
+		"email": "E-mail",
 		"firstName": "Jméno",
-		"lastName": "Příjmení",
-		"email": "E-mail"
+		"lastName": "Příjmení"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Druhý vklad",
 			"twoDeposits": "Pro dokončení ověření bankovního účtu zadejte dva vklady, které jste obdrželi na svůj účet.",
 			"updated": "Bankovní účet aktualizován.",
-			"verified": "Bankovní účet ověřen.",
 			"validate": {
 				"accountNumber": "Směrový kód a číslo účtu jsou povinné.",
 				"holderName": "Jméno majitele účtu je povinné."
-			}
+			},
+			"verified": "Bankovní účet ověřen."
 		},
 		"cardForm": {
 			"addNew": "Přidat novou kartu",
@@ -97,14 +97,6 @@
 			"amount": "Částka",
 			"fund": "Fond"
 		},
-		"paymentMethods": {
-			"addBank": "Přidat bankovní účet",
-			"addCard": "Přidat kartu",
-			"confirmDelete": "Opravdu chcete smazat tuto platební metodu?",
-			"deleted": "Platební metoda smazána.",
-			"noMethods": "Žádné platební metody. Pro provedení daru přidejte platební metodu.",
-			"verify": "Ověřit účet"
-		},
 		"page": {
 			"amount": "Částka",
 			"batch": "Dávka",
@@ -112,6 +104,14 @@
 			"fund": "Fond",
 			"method": "Metoda",
 			"willAppear": "Dary se zobrazí po zadání daru."
+		},
+		"paymentMethods": {
+			"addBank": "Přidat bankovní účet",
+			"addCard": "Přidat kartu",
+			"confirmDelete": "Opravdu chcete smazat tuto platební metodu?",
+			"deleted": "Platební metoda smazána.",
+			"noMethods": "Žádné platební metody. Pro provedení daru přidejte platební metodu.",
+			"verify": "Ověřit účet"
 		},
 		"preview": {
 			"date": "Datum daru",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Vytvořit účet",
 		"email": "E-mail",
+		"enterCode": "Zadejte ověřovací kód",
+		"enterCodeInstructions": "Zadejte 6místný kód, který jsme vám právě odeslali e-mailem.",
 		"expiredLink": "Aktuální odkaz vypršel.",
 		"forgot": "Zapomenuté heslo",
 		"goLogin": "Přejít na přihlášení",
 		"login": "Přihlásit se",
 		"noAcc": "Nemáte účet?",
+		"noAccountFound": "Pro tento e-mail nebyl nalezen žádný účet. Pokračujte registrací.",
 		"password": "Heslo",
 		"register": "Registrovat",
 		"registerThankYou": "Děkujeme za registraci! Zkontrolujte prosím svůj e-mail pro ověření účtu.",
 		"requestLink": "Požádat o nový odkaz pro obnovení",
+		"resendCode": "Odeslat kód znovu",
 		"reset": "Obnovit",
 		"resetInstructions": "Zadejte svou e-mailovou adresu pro obnovení hesla.",
 		"resetPassword": "Obnovit heslo",
@@ -169,8 +173,8 @@
 		"setPassword": "Nastavit heslo",
 		"signIn": "Přihlásit se",
 		"signInTitle": "Prosím přihlaste se",
-		"verifyPassword": "Ověřit heslo",
 		"validate": {
+			"code": "Zadejte prosím 6místný kód.",
 			"email": "Prosím zadejte platnou e-mailovou adresu.",
 			"firstName": "Prosím zadejte své jméno.",
 			"invalid": "Neplatné přihlášení. Zkontrolujte prosím svůj e-mail nebo heslo.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Hesla se neshodují.",
 			"selectingChurch": "Chyba při výběru sboru. Prosím ověřte a zkuste to znovu."
 		},
+		"verifyCode": "Ověřit kód",
+		"verifyPassword": "Ověřit heslo",
 		"welcomeBack": "Vítejte zpět",
 		"welcomeName": "Vítejte zpět, <b>{}</b>! Prosím čekejte, načítáme vaše údaje."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Jméno",
 		"lastName": "Příjmení",
 		"name": "Jméno",
+		"noRec": "Nemáte záznam osoby?",
 		"person": "Osoba",
-		"years": "let",
-		"noRec": "Nemáte záznam osoby?"
+		"years": "let"
 	},
 	"reporting": {
 		"detailed": "Podrobná zpráva",
-		"summary": "Souhrn",
-		"sampleTemplate": "Vzorová šablona pro Word",
 		"downloadOptions": "Možnosti stažení",
 		"noData": "Nejsou k dispozici žádná data.",
 		"runReport": "Spustit zprávu",
+		"sampleTemplate": "Vzorová šablona pro Word",
+		"summary": "Souhrn",
 		"useFilter": "Použijte filtr ke spuštění zprávy."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Zaregistrovat nový sbor",
 		"selectChurch": "Vybrat sbor",
 		"state": "Stát / Kraj",
-		"zip": "PSČ",
 		"validate": {
 			"address": "Adresa nemůže být prázdná.",
 			"city": "Město nemůže být prázdné.",
@@ -250,15 +255,16 @@
 			"name": "Název sboru nemůže být prázdný.",
 			"state": "Stát/Kraj nemůže být prázdný.",
 			"zip": "PSČ nemůže být prázdné."
-		}
+		},
+		"zip": "PSČ"
 	},
 	"stockPhotos": {
 		"photoBy": "Foto:",
 		"providedBy": "Fotobanku poskytuje"
 	},
 	"support": {
-		"documentation": "Dokumentace",
-		"discussions": "Fórum podpory"
+		"discussions": "Fórum podpory",
+		"documentation": "Dokumentace"
 	},
 	"wrapper": {
 		"chatWith": "Chatovat s",

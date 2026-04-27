@@ -13,9 +13,9 @@ import {
   Typography
 } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
-import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { GroupInterface } from "@churchapps/helpers";
+import { Permissions, type GroupInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { getInitials, navigateBack } from "../util";
@@ -113,6 +113,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   const myMembership = members?.find((m) => (m.personId || m.person?.id) === currentPersonId);
   const isMember = !!myMembership;
   const isLeader = !!myMembership?.leader;
+  const canEditResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
 
   const handleBack = () => navigateBack(router, "/mobile/groups");
 
@@ -605,7 +606,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                 }))}
             />
           )}
-          {tab === "resources" && <GroupResourcesTab groupId={id} canEdit={isLeader} />}
+          {tab === "resources" && <GroupResourcesTab groupId={id} canEdit={canEditResources} />}
         </Box>
       )}
 
@@ -624,9 +625,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         onClose={() => setCreateEvent(null)}
         onSaved={() => {
           setCreateEvent(null);
-
-          setTab("about");
-          setTimeout(() => setTab("events"), 0);
+          queryClient.invalidateQueries({ queryKey: ["group-events", id] });
         }}
       />
       <CreateEventModal
@@ -636,8 +635,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         onClose={() => setEditEvent(null)}
         onSaved={() => {
           setEditEvent(null);
-          setTab("about");
-          setTimeout(() => setTab("events"), 0);
+          queryClient.invalidateQueries({ queryKey: ["group-events", id] });
         }}
       />
     </Box>

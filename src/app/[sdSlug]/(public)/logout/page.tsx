@@ -1,5 +1,5 @@
 import { Layout } from "@/components";
-import { LogoutPage } from "@churchapps/apphelper-login";
+import { LogoutPage } from "@churchapps/apphelper/login";
 
 export default function Logout() {
   return (

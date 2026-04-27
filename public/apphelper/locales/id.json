@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Tambah Orang Baru",
+		"email": "Email",
 		"firstName": "Nama Depan",
-		"lastName": "Nama Belakang",
-		"email": "Email"
+		"lastName": "Nama Belakang"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Setoran Kedua",
 			"twoDeposits": "Masukkan dua setoran yang Anda terima di akun Anda untuk menyelesaikan verifikasi rekening bank Anda.",
 			"updated": "Rekening bank diperbarui.",
-			"verified": "Rekening bank diverifikasi.",
 			"validate": {
 				"accountNumber": "Nomor perutean dan nomor rekening diperlukan.",
 				"holderName": "Nama pemegang rekening diperlukan."
-			}
+			},
+			"verified": "Rekening bank diverifikasi."
 		},
 		"cardForm": {
 			"addNew": "Tambah Kartu Baru",
@@ -97,14 +97,6 @@
 			"amount": "Jumlah",
 			"fund": "Dana"
 		},
-		"paymentMethods": {
-			"addBank": "Tambah Rekening Bank",
-			"addCard": "Tambah Kartu",
-			"confirmDelete": "Apakah Anda yakin ingin menghapus metode pembayaran ini?",
-			"deleted": "Metode pembayaran dihapus.",
-			"noMethods": "Tidak ada metode pembayaran. Tambahkan metode pembayaran untuk melakukan donasi.",
-			"verify": "Verifikasi Akun"
-		},
 		"page": {
 			"amount": "Jumlah",
 			"batch": "Batch",
@@ -112,6 +104,14 @@
 			"fund": "Dana",
 			"method": "Metode",
 			"willAppear": "Donasi akan muncul setelah donasi telah dimasukkan."
+		},
+		"paymentMethods": {
+			"addBank": "Tambah Rekening Bank",
+			"addCard": "Tambah Kartu",
+			"confirmDelete": "Apakah Anda yakin ingin menghapus metode pembayaran ini?",
+			"deleted": "Metode pembayaran dihapus.",
+			"noMethods": "Tidak ada metode pembayaran. Tambahkan metode pembayaran untuk melakukan donasi.",
+			"verify": "Verifikasi Akun"
 		},
 		"preview": {
 			"date": "Tanggal Donasi",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Buat Akun",
 		"email": "Email",
+		"enterCode": "Masukkan Kode Verifikasi",
+		"enterCodeInstructions": "Masukkan kode 6 digit yang baru saja kami kirim melalui email.",
 		"expiredLink": "Tautan saat ini telah kadaluarsa.",
 		"forgot": "Lupa Kata Sandi",
 		"goLogin": "Pergi ke Masuk",
 		"login": "Masuk",
 		"noAcc": "Tidak punya akun?",
+		"noAccountFound": "Tidak ada akun yang ditemukan dengan email tersebut. Silakan daftar untuk melanjutkan.",
 		"password": "Kata Sandi",
 		"register": "Daftar",
 		"registerThankYou": "Terima kasih telah mendaftar! Silakan periksa email Anda untuk memverifikasi akun Anda.",
 		"requestLink": "Minta tautan pengaturan ulang baru",
+		"resendCode": "Kirim ulang kode",
 		"reset": "Atur Ulang",
 		"resetInstructions": "Masukkan alamat email Anda untuk meminta pengaturan ulang kata sandi.",
 		"resetPassword": "Atur Ulang Kata Sandi",
@@ -169,8 +173,8 @@
 		"setPassword": "Tetapkan Kata Sandi",
 		"signIn": "Masuk",
 		"signInTitle": "Silakan Masuk",
-		"verifyPassword": "Verifikasi Kata Sandi",
 		"validate": {
+			"code": "Masukkan kode 6 digit.",
 			"email": "Silakan masukkan alamat email yang valid.",
 			"firstName": "Silakan masukkan nama depan Anda.",
 			"invalid": "Masuk tidak valid. Silakan periksa email atau kata sandi Anda.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Kata sandi tidak cocok.",
 			"selectingChurch": "Kesalahan dalam memilih gereja. Silakan verifikasi dan coba lagi"
 		},
+		"verifyCode": "Verifikasi Kode",
+		"verifyPassword": "Verifikasi Kata Sandi",
 		"welcomeBack": "Selamat datang kembali",
 		"welcomeName": "Selamat datang kembali, <b>{}</b>! Silakan tunggu saat kami memuat data Anda."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Nama Depan",
 		"lastName": "Nama Belakang",
 		"name": "Nama",
+		"noRec": "Tidak memiliki catatan orang?",
 		"person": "Orang",
-		"years": "tahun",
-		"noRec": "Tidak memiliki catatan orang?"
+		"years": "tahun"
 	},
 	"reporting": {
 		"detailed": "Laporan Terperinci",
-		"summary": "Ringkasan",
-		"sampleTemplate": "Contoh Template Word",
 		"downloadOptions": "Opsi Unduhan",
 		"noData": "Tidak ada data untuk ditampilkan.",
 		"runReport": "Jalankan Laporan",
+		"sampleTemplate": "Contoh Template Word",
+		"summary": "Ringkasan",
 		"useFilter": "Gunakan filter untuk menjalankan laporan."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Daftarkan Gereja Baru",
 		"selectChurch": "Pilih Gereja",
 		"state": "Negara Bagian / Provinsi",
-		"zip": "Kode Pos",
 		"validate": {
 			"address": "Alamat tidak boleh kosong.",
 			"city": "Kota tidak boleh kosong.",
@@ -250,15 +255,16 @@
 			"name": "Nama gereja tidak boleh kosong.",
 			"state": "Negara Bagian/Provinsi tidak boleh kosong.",
 			"zip": "Kode pos tidak boleh kosong."
-		}
+		},
+		"zip": "Kode Pos"
 	},
 	"stockPhotos": {
 		"photoBy": "Foto oleh:",
 		"providedBy": "Foto stok disediakan oleh"
 	},
 	"support": {
-		"documentation": "Dokumentasi",
-		"discussions": "Forum Dukungan"
+		"discussions": "Forum Dukungan",
+		"documentation": "Dokumentasi"
 	},
 	"wrapper": {
 		"chatWith": "Obrolan dengan",

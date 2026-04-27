@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { NonAuthDonationWrapper } from "@churchapps/apphelper-website";
+import { NonAuthDonationWrapper } from "@churchapps/apphelper/website";
 
 interface Props {
   churchId: string

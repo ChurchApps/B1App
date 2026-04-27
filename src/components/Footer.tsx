@@ -1,4 +1,4 @@
-import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { Container, Grid } from "@mui/material";
 

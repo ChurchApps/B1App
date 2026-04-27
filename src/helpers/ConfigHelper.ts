@@ -1,6 +1,6 @@
 import { ApiHelper } from "@churchapps/apphelper";
 import type { ChurchInterface, LinkInterface } from "@churchapps/helpers";
-import type { AppearanceInterface } from "@churchapps/helpers/dist/AppearanceHelper";
+import type { AppearanceInterface } from "@churchapps/apphelper";
 import { GlobalStyleInterface, PageInterface } from "./interfaces";
 import { startTransition } from "react";
 import { revalidate } from "@/app/actions";

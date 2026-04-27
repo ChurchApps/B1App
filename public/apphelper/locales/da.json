@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Tilføj en ny person",
+		"email": "E-mail",
 		"firstName": "Fornavn",
-		"lastName": "Efternavn",
-		"email": "E-mail"
+		"lastName": "Efternavn"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Anden indbetaling",
 			"twoDeposits": "Indtast de to indbetalinger, du modtog på din konto, for at fuldføre verificeringen af din bankkonto.",
 			"updated": "Bankkonto opdateret.",
-			"verified": "Bankkonto verificeret.",
 			"validate": {
 				"accountNumber": "Rutenummer og kontonummer er påkrævet.",
 				"holderName": "Kontoindehaverens navn er påkrævet."
-			}
+			},
+			"verified": "Bankkonto verificeret."
 		},
 		"cardForm": {
 			"addNew": "Tilføj nyt kort",
@@ -97,14 +97,6 @@
 			"amount": "Beløb",
 			"fund": "Fond"
 		},
-		"paymentMethods": {
-			"addBank": "Tilføj bankkonto",
-			"addCard": "Tilføj kort",
-			"confirmDelete": "Er du sikker på, at du vil slette denne betalingsmetode?",
-			"deleted": "Betalingsmetode slettet.",
-			"noMethods": "Ingen betalingsmetoder. Tilføj en betalingsmetode for at foretage en donation.",
-			"verify": "Verificer konto"
-		},
 		"page": {
 			"amount": "Beløb",
 			"batch": "Batch",
@@ -112,6 +104,14 @@
 			"fund": "Fond",
 			"method": "Metode",
 			"willAppear": "Donationer vises, når en donation er blevet registreret."
+		},
+		"paymentMethods": {
+			"addBank": "Tilføj bankkonto",
+			"addCard": "Tilføj kort",
+			"confirmDelete": "Er du sikker på, at du vil slette denne betalingsmetode?",
+			"deleted": "Betalingsmetode slettet.",
+			"noMethods": "Ingen betalingsmetoder. Tilføj en betalingsmetode for at foretage en donation.",
+			"verify": "Verificer konto"
 		},
 		"preview": {
 			"date": "Donationsdato",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Opret en konto",
 		"email": "E-mail",
+		"enterCode": "Indtast bekræftelseskode",
+		"enterCodeInstructions": "Indtast den 6-cifrede kode, vi lige har sendt dig på e-mail.",
 		"expiredLink": "Det aktuelle link er udløbet.",
 		"forgot": "Glemt adgangskode",
 		"goLogin": "Gå til login",
 		"login": "Log ind",
 		"noAcc": "Har du ikke en konto?",
+		"noAccountFound": "Ingen konto blev fundet med denne e-mail. Registrer dig for at fortsætte.",
 		"password": "Adgangskode",
 		"register": "Registrer",
 		"registerThankYou": "Tak for din registrering! Tjek venligst din e-mail for at bekræfte din konto.",
 		"requestLink": "Anmod om et nyt nulstillingslink",
+		"resendCode": "Send kode igen",
 		"reset": "Nulstil",
 		"resetInstructions": "Indtast din e-mailadresse for at anmode om nulstilling af adgangskode.",
 		"resetPassword": "Nulstil adgangskode",
@@ -169,8 +173,8 @@
 		"setPassword": "Indstil adgangskode",
 		"signIn": "Log ind",
 		"signInTitle": "Log venligst ind",
-		"verifyPassword": "Bekræft adgangskode",
 		"validate": {
+			"code": "Indtast venligst den 6-cifrede kode.",
 			"email": "Indtast venligst en gyldig e-mailadresse.",
 			"firstName": "Indtast venligst dit fornavn.",
 			"invalid": "Ugyldigt login. Tjek venligst din e-mail eller adgangskode.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Adgangskoderne stemmer ikke overens.",
 			"selectingChurch": "Fejl ved valg af kirke. Bekræft og prøv igen"
 		},
+		"verifyCode": "Bekræft kode",
+		"verifyPassword": "Bekræft adgangskode",
 		"welcomeBack": "Velkommen tilbage",
 		"welcomeName": "Velkommen tilbage, <b>{}</b>! Vent venligst, mens vi indlæser dine data."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Fornavn",
 		"lastName": "Efternavn",
 		"name": "Navn",
+		"noRec": "Har du ikke en persondatabase?",
 		"person": "Person",
-		"years": "år",
-		"noRec": "Har du ikke en persondatabase?"
+		"years": "år"
 	},
 	"reporting": {
 		"detailed": "Detaljeret rapport",
-		"summary": "Oversigt",
-		"sampleTemplate": "Word-skabeloneksempel",
 		"downloadOptions": "Downloadmuligheder",
 		"noData": "Der er ingen data at vise.",
 		"runReport": "Kør rapport",
+		"sampleTemplate": "Word-skabeloneksempel",
+		"summary": "Oversigt",
 		"useFilter": "Brug filteret til at køre rapporten."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Registrer en ny kirke",
 		"selectChurch": "Vælg en kirke",
 		"state": "Stat / Region",
-		"zip": "Postnummer",
 		"validate": {
 			"address": "Adresse må ikke være tom.",
 			"city": "By må ikke være tom.",
@@ -250,15 +255,16 @@
 			"name": "Kirkens navn må ikke være tomt.",
 			"state": "Stat/Region må ikke være tom.",
 			"zip": "Postnummer må ikke være tomt."
-		}
+		},
+		"zip": "Postnummer"
 	},
 	"stockPhotos": {
 		"photoBy": "Foto af:",
 		"providedBy": "Stockfotos leveret af"
 	},
 	"support": {
-		"documentation": "Dokumentation",
-		"discussions": "Supportforum"
+		"discussions": "Supportforum",
+		"documentation": "Dokumentation"
 	},
 	"wrapper": {
 		"chatWith": "Chat med",

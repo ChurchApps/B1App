@@ -2,10 +2,12 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
+import { EventProcessor } from "../../helpers/eventProcessor";
 
 interface Props {
   groupId: string;
@@ -73,35 +75,27 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date());
   const [selected, setSelected] = React.useState<string>(isoDate(new Date()));
-  const [events, setEvents] = React.useState<EventRow[] | null>(null);
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
 
-  const loadEvents = React.useCallback(
-    async (month: Date) => {
-      if (!groupId) return;
-      setEvents(null);
-      const from = startOfMonth(month);
-      const to = endOfMonth(month);
-      try {
-        const data: EventRow[] = await ApiHelper.get(
-          `/events/group/${groupId}?from=${from.toISOString()}&to=${to.toISOString()}`,
-          "ContentApi"
-        );
-        setEvents(Array.isArray(data) ? data : []);
-      } catch {
-        setEvents([]);
-      }
+  const { data: rawEvents, isLoading } = useQuery<EventRow[]>({
+    queryKey: ["group-events", groupId],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/events/group/${groupId}`, "ContentApi");
+      return Array.isArray(data) ? data : [];
     },
-    [groupId]
-  );
+    enabled: !!groupId,
+    placeholderData: []
+  });
 
-  React.useEffect(() => {
-    loadEvents(currentMonth);
-  }, [currentMonth, loadEvents]);
+  const events = React.useMemo(() => {
+    const normalized = EventProcessor.updateTime(rawEvents || []);
+    const expanded = EventProcessor.expandEventsForMonth(normalized, currentMonth);
+    return expanded as unknown as EventRow[];
+  }, [rawEvents, currentMonth]);
 
   const allTags = React.useMemo(() => {
     const tags = new Set<string>();
-    (events || []).forEach((e) => {
+    events.forEach((e) => {
       if (e.tags) {
         e.tags
           .split(",")
@@ -114,8 +108,8 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
   }, [events]);
 
   const filteredEvents = React.useMemo(() => {
-    if (selectedTags.length === 0) return events || [];
-    return (events || []).filter((e) => {
+    if (selectedTags.length === 0) return events;
+    return events.filter((e) => {
       const tags = (e.tags || "").split(",").map((t) => t.trim());
       return selectedTags.some((st) => tags.includes(st));
     });
@@ -308,7 +302,10 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                 }}
                 sx={{
                   position: "relative",
+                  width: "100%",
+                  maxWidth: 66,
                   aspectRatio: "1 / 1",
+                  justifySelf: "center",
                   borderRadius: "50%",
                   display: "flex",
                   alignItems: "center",
@@ -348,14 +345,14 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
             day: "numeric"
           })}
         </Typography>
-        {events === null && (
+        {isLoading && (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {[0, 1].map((i) => (
               <Skeleton key={`es-${i}`} variant="rounded" height={60} sx={{ borderRadius: `${mobileTheme.radius.lg}px` }} />
             ))}
           </Box>
         )}
-        {events !== null && selectedEvents.length === 0 && (
+        {!isLoading && selectedEvents.length === 0 && (
           <Box
             sx={{
               bgcolor: tc.surface,
@@ -368,7 +365,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
             <Typography sx={{ fontSize: 14, color: tc.textMuted }}>No events on this day.</Typography>
           </Box>
         )}
-        {events !== null && selectedEvents.length > 0 && (
+        {!isLoading && selectedEvents.length > 0 && (
           <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
             {selectedEvents.map((e, i) => (
               <Box

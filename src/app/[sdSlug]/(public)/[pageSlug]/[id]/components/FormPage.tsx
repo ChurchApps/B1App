@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { PersonHelper, WrapperPageProps } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
-import { FormSubmissionEdit } from "@churchapps/apphelper-forms";
+import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
 import { DateHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { FormInterface } from "@churchapps/helpers";

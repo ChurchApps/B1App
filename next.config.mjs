@@ -22,6 +22,8 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   reactStrictMode: true,
 
+  allowedDevOrigins: ['grace.localtest.me', '*.localtest.me'],
+
   experimental: {
     // Optimize package imports to reduce bundle size
     optimizePackageImports: [
@@ -180,9 +182,7 @@ const nextConfig = {
   // Transpile packages
   transpilePackages: [
     "mui-tel-input",
-    "@churchapps/apphelper-website",
-    "@churchapps/apphelper-markdown",
-    "@churchapps/apphelper-donations"
+    "@churchapps/apphelper"
   ],
 
   // Compiler optimizations
@@ -218,10 +218,11 @@ const nextConfig = {
 };
 
 
-// In development, skip Sentry config wrapper to avoid Turbopack symlink issues on Windows
+// In development, skip Sentry config wrapper to avoid Turbopack symlink issues on Windows.
+// Also skip when no auth token is set (e.g. self-hosted deploys) to avoid sourcemap upload failures.
 let exportedConfig = withSerwist(nextConfig);
 
-if (!isDev) {
+if (!isDev && process.env.SENTRY_AUTH_TOKEN) {
   const { withSentryConfig } = await import("@sentry/nextjs");
   exportedConfig = withSentryConfig(exportedConfig, {
     // For all available options, see:

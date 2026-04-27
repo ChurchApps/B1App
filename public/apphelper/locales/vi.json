@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Thêm người mới",
+		"email": "Email",
 		"firstName": "Tên",
-		"lastName": "Họ",
-		"email": "Email"
+		"lastName": "Họ"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Khoản tiền gửi thứ hai",
 			"twoDeposits": "Nhập hai khoản tiền gửi mà bạn nhận được trên tài khoản của mình để hoàn tất xác minh tài khoản ngân hàng.",
 			"updated": "Đã cập nhật tài khoản ngân hàng.",
-			"verified": "Tài khoản ngân hàng đã được xác minh.",
 			"validate": {
 				"accountNumber": "Mã định tuyến và số tài khoản là bắt buộc.",
 				"holderName": "Tên chủ tài khoản là bắt buộc."
-			}
+			},
+			"verified": "Tài khoản ngân hàng đã được xác minh."
 		},
 		"cardForm": {
 			"addNew": "Thêm thẻ mới",
@@ -97,14 +97,6 @@
 			"amount": "Số tiền",
 			"fund": "Quỹ"
 		},
-		"paymentMethods": {
-			"addBank": "Thêm tài khoản ngân hàng",
-			"addCard": "Thêm thẻ",
-			"confirmDelete": "Bạn có chắc chắn muốn xóa phương thức thanh toán này không?",
-			"deleted": "Đã xóa phương thức thanh toán.",
-			"noMethods": "Không có phương thức thanh toán. Thêm phương thức thanh toán để quyên góp.",
-			"verify": "Xác minh tài khoản"
-		},
 		"page": {
 			"amount": "Số tiền",
 			"batch": "Lô",
@@ -112,6 +104,14 @@
 			"fund": "Quỹ",
 			"method": "Phương pháp",
 			"willAppear": "Quyên góp sẽ xuất hiện khi quyên góp được nhập."
+		},
+		"paymentMethods": {
+			"addBank": "Thêm tài khoản ngân hàng",
+			"addCard": "Thêm thẻ",
+			"confirmDelete": "Bạn có chắc chắn muốn xóa phương thức thanh toán này không?",
+			"deleted": "Đã xóa phương thức thanh toán.",
+			"noMethods": "Không có phương thức thanh toán. Thêm phương thức thanh toán để quyên góp.",
+			"verify": "Xác minh tài khoản"
 		},
 		"preview": {
 			"date": "Ngày quyên góp",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Tạo một tài khoản",
 		"email": "Email",
+		"enterCode": "Nhập mã xác minh",
+		"enterCodeInstructions": "Nhập mã 6 chữ số mà chúng tôi vừa gửi qua email.",
 		"expiredLink": "Liên kết hiện tại đã hết hạn.",
 		"forgot": "Quên mật khẩu",
 		"goLogin": "Đi đến đăng nhập",
 		"login": "Đăng nhập",
 		"noAcc": "Không có tài khoản?",
+		"noAccountFound": "Không tìm thấy tài khoản nào với email đó. Vui lòng đăng ký để tiếp tục.",
 		"password": "Mật khẩu",
 		"register": "Đăng ký",
 		"registerThankYou": "Cảm ơn bạn đã đăng ký! Vui lòng kiểm tra email của bạn để xác minh tài khoản của bạn.",
 		"requestLink": "Yêu cầu liên kết đặt lại mới",
+		"resendCode": "Gửi lại mã",
 		"reset": "Đặt lại",
 		"resetInstructions": "Nhập địa chỉ email của bạn để yêu cầu đặt lại mật khẩu.",
 		"resetPassword": "Đặt lại mật khẩu",
@@ -169,8 +173,8 @@
 		"setPassword": "Đặt mật khẩu",
 		"signIn": "Đăng nhập",
 		"signInTitle": "Vui lòng đăng nhập",
-		"verifyPassword": "Xác minh mật khẩu",
 		"validate": {
+			"code": "Vui lòng nhập mã 6 chữ số.",
 			"email": "Vui lòng nhập một địa chỉ email hợp lệ.",
 			"firstName": "Vui lòng nhập tên của bạn.",
 			"invalid": "Đăng nhập không hợp lệ. Vui lòng kiểm tra email hoặc mật khẩu của bạn.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Mật khẩu không khớp.",
 			"selectingChurch": "Lỗi khi chọn nhà thờ. Vui lòng xác minh và thử lại"
 		},
+		"verifyCode": "Xác minh mã",
+		"verifyPassword": "Xác minh mật khẩu",
 		"welcomeBack": "Chào mừng trở lại",
 		"welcomeName": "Chào mừng trở lại, <b>{}</b>! Vui lòng đợi trong khi chúng tôi tải dữ liệu của bạn."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "Tên",
 		"lastName": "Họ",
 		"name": "Tên",
+		"noRec": "Bạn không có hồ sơ người?",
 		"person": "Người",
-		"years": "năm",
-		"noRec": "Bạn không có hồ sơ người?"
+		"years": "năm"
 	},
 	"reporting": {
 		"detailed": "Báo cáo chi tiết",
-		"summary": "Tóm tắt",
-		"sampleTemplate": "Mẫu Word mẫu",
 		"downloadOptions": "Tùy chọn tải xuống",
 		"noData": "Không có dữ liệu để hiển thị.",
 		"runReport": "Chạy báo cáo",
+		"sampleTemplate": "Mẫu Word mẫu",
+		"summary": "Tóm tắt",
 		"useFilter": "Sử dụng bộ lọc để chạy báo cáo."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Đăng ký một nhà thờ mới",
 		"selectChurch": "Chọn một nhà thờ",
 		"state": "Tiểu bang / Tỉnh",
-		"zip": "Mã bưu chính / Mã bưu chính",
 		"validate": {
 			"address": "Địa chỉ không được để trống.",
 			"city": "Thành phố không được để trống.",
@@ -250,15 +255,16 @@
 			"name": "Tên nhà thờ không được để trống.",
 			"state": "Tiểu bang/Tỉnh không được để trống.",
 			"zip": "Mã bưu chính/mã bưu chính không được để trống."
-		}
+		},
+		"zip": "Mã bưu chính / Mã bưu chính"
 	},
 	"stockPhotos": {
 		"photoBy": "Ảnh của:",
 		"providedBy": "Ảnh kho được cung cấp bởi"
 	},
 	"support": {
-		"documentation": "Tài liệu",
-		"discussions": "Diễn đàn hỗ trợ"
+		"discussions": "Diễn đàn hỗ trợ",
+		"documentation": "Tài liệu"
 	},
 	"wrapper": {
 		"chatWith": "Trò chuyện với",

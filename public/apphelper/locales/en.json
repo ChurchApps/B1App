@@ -28,9 +28,9 @@
 	},
 	"createPerson": {
 		"addNewPerson": "Add a New Person",
+		"email": "Email",
 		"firstName": "First Name",
-		"lastName": "Last Name",
-		"email": "Email"
+		"lastName": "Last Name"
 	},
 	"donation": {
 		"bankForm": {
@@ -46,11 +46,11 @@
 			"secondDeposit": "Second Deposit",
 			"twoDeposits": "Enter the two deposits you received in your account to finish verifying your bank account.",
 			"updated": "Bank account updated.",
-			"verified": "Bank account verified.",
 			"validate": {
 				"accountNumber": "Routing and account number are required.",
 				"holderName": "Account holder name is required."
-			}
+			},
+			"verified": "Bank account verified."
 		},
 		"cardForm": {
 			"addNew": "Add New Card",
@@ -97,14 +97,6 @@
 			"amount": "Amount",
 			"fund": "Fund"
 		},
-		"paymentMethods": {
-			"addBank": "Add Bank Account",
-			"addCard": "Add Card",
-			"confirmDelete": "Are you sure you wish to delete this payment method?",
-			"deleted": "Payment method deleted.",
-			"noMethods": "No payment methods.  Add a payment method to make a donation.",
-			"verify": "Verify Account"
-		},
 		"page": {
 			"amount": "Amount",
 			"batch": "Batch",
@@ -112,6 +104,14 @@
 			"fund": "Fund",
 			"method": "Method",
 			"willAppear": "Donations will appear once a donation has been entered."
+		},
+		"paymentMethods": {
+			"addBank": "Add Bank Account",
+			"addCard": "Add Card",
+			"confirmDelete": "Are you sure you wish to delete this payment method?",
+			"deleted": "Payment method deleted.",
+			"noMethods": "No payment methods.  Add a payment method to make a donation.",
+			"verify": "Verify Account"
 		},
 		"preview": {
 			"date": "Donation Date",
@@ -153,15 +153,19 @@
 	"login": {
 		"createAccount": "Create an Account",
 		"email": "Email",
+		"enterCode": "Enter Verification Code",
+		"enterCodeInstructions": "Enter the 6-digit code we just emailed you.",
 		"expiredLink": "The current link is expired.",
 		"forgot": "Forgot Password",
 		"goLogin": "Go to Login",
 		"login": "Login",
 		"noAcc": "Don't have an account?",
+		"noAccountFound": "No account was found with that email. Please register to continue.",
 		"password": "Password",
 		"register": "Register",
 		"registerThankYou": "Thank you for registering! Please check your email to verify your account.",
 		"requestLink": "Request a new reset link",
+		"resendCode": "Resend code",
 		"reset": "Reset",
 		"resetInstructions": "Enter your email address to request a password reset.",
 		"resetPassword": "Reset Password",
@@ -169,8 +173,8 @@
 		"setPassword": "Set Password",
 		"signIn": "Sign In",
 		"signInTitle": "Please Sign In",
-		"verifyPassword": "Verify Password",
 		"validate": {
+			"code": "Please enter the 6-digit code.",
 			"email": "Please enter a valid email address.",
 			"firstName": "Please enter your first name.",
 			"invalid": "Invalid login. Please check your email or password.",
@@ -180,6 +184,8 @@
 			"passwordMatch": "Passwords do not match.",
 			"selectingChurch": "Error in selecting church. Please verify and try again"
 		},
+		"verifyCode": "Verify Code",
+		"verifyPassword": "Verify Password",
 		"welcomeBack": "Welcome back",
 		"welcomeName": "Welcome back, <b>{}</b>!  Please wait while we load your data."
 	},
@@ -217,17 +223,17 @@
 		"firstName": "First Name",
 		"lastName": "Last Name",
 		"name": "Name",
+		"noRec": "Don't have a person record?",
 		"person": "Person",
-		"years": "years",
-		"noRec": "Don't have a person record?"
+		"years": "years"
 	},
 	"reporting": {
 		"detailed": "Detailed Report",
-		"summary": "Summary",
-		"sampleTemplate": "Sample Word Template",
 		"downloadOptions": "Download Options",
 		"noData": "There is no data to display.",
 		"runReport": "Run Report",
+		"sampleTemplate": "Sample Word Template",
+		"summary": "Summary",
 		"useFilter": "Use the filter to run the report."
 	},
 	"selectChurch": {
@@ -242,7 +248,6 @@
 		"register": "Register a New Church",
 		"selectChurch": "Select a Church",
 		"state": "State / Province",
-		"zip": "Zip / Postal Code",
 		"validate": {
 			"address": "Address cannot be blank.",
 			"city": "City cannot be blank.",
@@ -250,15 +255,16 @@
 			"name": "Church name cannot be blank.",
 			"state": "State/Province cannot be blank.",
 			"zip": "Zip/Postal code cannot be blank."
-		}
+		},
+		"zip": "Zip / Postal Code"
 	},
 	"stockPhotos": {
 		"photoBy": "Photo by:",
 		"providedBy": "Stock photos provided by"
 	},
 	"support": {
-		"documentation": "Documentation",
-		"discussions": "Support Forum"
+		"discussions": "Support Forum",
+		"documentation": "Documentation"
 	},
 	"wrapper": {
 		"chatWith": "Chat with",
