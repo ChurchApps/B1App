@@ -22,6 +22,7 @@ import type { EventExceptionInterface, EventInterface } from "@churchapps/helper
 import { mobileTheme } from "../mobileTheme";
 import { RRuleEditor } from "../../../../../components/eventCalendar/RRuleEditor";
 import { EditRecurringModal } from "../../../../../components/eventCalendar/EditRecurringModal";
+import { MarkdownEditor } from "@churchapps/apphelper-markdown";
 
 interface Props {
   open: boolean;
@@ -331,14 +332,10 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             onChange={(e) => setTitle(e.target.value)}
             autoFocus
           />
-          <TextField
-            fullWidth
-            size="small"
-            label="Description"
+          <MarkdownEditor
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            multiline
-            minRows={2}
+            onChange={(val) => setDescription(val)}
+            style={{ maxHeight: 200, overflowY: "scroll" }}
           />
           <FormControlLabel
             control={<Switch checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />}

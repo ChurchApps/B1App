@@ -8,6 +8,7 @@ import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { EventProcessor } from "../../helpers/eventProcessor";
+import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
 
 interface Props {
   groupId: string;
@@ -450,20 +451,21 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                   )}
                 </Box>
                 {e.description && (
-                  <Typography
-                    sx={{
-                      fontSize: 13,
-                      color: tc.textMuted,
-                      mt: "6px",
-                      whiteSpace: "pre-wrap",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden"
-                    }}
-                  >
-                    {e.description}
-                  </Typography>
+                  // <Typography
+                  //   sx={{
+                  //     fontSize: 13,
+                  //     color: tc.textMuted,
+                  //     mt: "6px",
+                  //     whiteSpace: "pre-wrap",
+                  //     display: "-webkit-box",
+                  //     WebkitLineClamp: 3,
+                  //     WebkitBoxOrient: "vertical",
+                  //     overflow: "hidden"
+                  //   }}
+                  // >
+                  //   {e.description}
+                  // </Typography>
+                  <MarkdownPreviewLight value={e.description} />
                 )}
                 {e.registrationEnabled && e.id && (
                   <Box sx={{ mt: 1.25, display: "flex", justifyContent: "flex-end" }}>
