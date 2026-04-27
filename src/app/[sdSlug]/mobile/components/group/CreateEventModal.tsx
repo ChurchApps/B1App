@@ -22,7 +22,7 @@ import type { EventExceptionInterface, EventInterface } from "@churchapps/helper
 import { mobileTheme } from "../mobileTheme";
 import { RRuleEditor } from "../../../../../components/eventCalendar/RRuleEditor";
 import { EditRecurringModal } from "../../../../../components/eventCalendar/EditRecurringModal";
-import { MarkdownEditor } from "@churchapps/apphelper-markdown";
+import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 
 interface Props {
   open: boolean;

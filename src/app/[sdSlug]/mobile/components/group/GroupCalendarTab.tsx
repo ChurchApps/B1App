@@ -8,7 +8,7 @@ import { ApiHelper, UserHelper } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { EventProcessor } from "../../helpers/eventProcessor";
-import { MarkdownPreviewLight } from "@churchapps/apphelper-markdown";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 
 interface Props {
   groupId: string;
