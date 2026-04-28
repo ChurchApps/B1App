@@ -1,8 +1,13 @@
+// Most existing consumers read `mobileTheme.radius.lg` and `mobileTheme.shadows.md`
+// inside template literals (e.g. `borderRadius: \`${mobileTheme.radius.xl}px\``).
+// `radius` keeps its numeric type for backwards-compat; `radiusVar` exposes the
+// CSS-variable equivalent for new code that wants to inherit admin overrides.
 export const mobileTheme = {
   colors: {
     primary: "var(--mb-primary)",
     primaryLight: "var(--mb-primary-light)",
     secondary: "var(--mb-secondary)",
+    accent: "var(--mb-accent)",
     background: "var(--mb-background)",
     surface: "var(--mb-surface)",
     surfaceVariant: "var(--mb-surface-variant)",
@@ -22,6 +27,7 @@ export const mobileTheme = {
   },
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
   radius: { sm: 4, md: 8, lg: 12, xl: 16 },
+  radiusVar: { sm: "var(--mb-radius-sm)", md: "var(--mb-radius-md)", lg: "var(--mb-radius-lg)", xl: "var(--mb-radius-xl)" },
   typography: {
     h1: { fontSize: 24, fontWeight: 700 },
     h2: { fontSize: 20, fontWeight: 600 },
@@ -32,9 +38,9 @@ export const mobileTheme = {
     label: { fontSize: 14, fontWeight: 500 }
   },
   shadows: {
-    sm: "0 1px 2px rgba(0,0,0,0.05)",
-    md: "0 2px 4px rgba(0,0,0,0.1)",
-    lg: "0 4px 8px rgba(0,0,0,0.15)"
+    sm: "var(--mb-shadow-sm)",
+    md: "var(--mb-shadow-md)",
+    lg: "var(--mb-shadow-lg)"
   },
   drawerWidth: 280,
   headerHeight: 56

@@ -6,6 +6,7 @@ import { Box, Icon, Typography } from "@mui/material";
 import { type LinkInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { cta } from "@/helpers/copy";
 import { mobileTheme, linkTypeToImage, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
@@ -139,7 +140,7 @@ export const DashboardPage = ({ config }: Props) => {
                 fontSize: 16,
                 textShadow: "0 1px 2px rgba(0,0,0,0.3)"
               }}>
-                Tap to explore
+                {cta("heroExploreSubtext")}
               </Typography>
             </Box>
           </Box>

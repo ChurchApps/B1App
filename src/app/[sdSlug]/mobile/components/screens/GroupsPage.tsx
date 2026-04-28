@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { cta } from "@/helpers/copy";
 import { mobileTheme } from "../mobileTheme";
 import { useEngagementSort } from "../../hooks/useEngagementSort";
 
@@ -133,7 +134,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             {group.name}
           </Typography>
           <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
-            Tap to explore
+            {cta("heroExploreSubtext")}
           </Typography>
         </Box>
       </Box>
@@ -281,7 +282,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             {group.name}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-            Tap to explore
+            {cta("heroExploreSubtext")}
           </Typography>
         </Box>
       </Box>
@@ -352,7 +353,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
-        Explore Community
+        {cta("exploreCommunityCta")}
       </Button>
     </Box>
   );

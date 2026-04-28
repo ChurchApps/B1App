@@ -4,6 +4,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { GlobalStyles } from "@mui/material";
 import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { accent as deriveAccent, isValidHex as isValidHexColor, shade, tint } from "@/helpers/colorTints";
 
 export type MobileThemeMode = "light" | "dark";
 
@@ -81,8 +82,7 @@ const darkInputStyles = {
   "html[data-mobile-theme=\"dark\"] .MuiFormHelperText-root": { color: "var(--mb-text-secondary)" }
 };
 
-const isValidColor = (value?: string | null): value is string =>
-  /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test((value || "").trim());
+const isValidColor = isValidHexColor;
 
 const pickColor = (...values: Array<string | null | undefined>) =>
   values.find((value) => isValidColor(value));
@@ -115,11 +115,21 @@ const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) 
   const text = pickColor(churchColors?.textColor, defaults["--mb-text"]) || defaults["--mb-text"];
   const onPrimary = pickColor(churchColors?.primaryContrast, appearance?.primaryContrast, defaults["--mb-on-primary"]) || defaults["--mb-on-primary"];
 
+  // Derived tints — keep primary-light visually tied to the church's primary
+  // instead of always using the same Material-blue tint. Light mode mixes 85%
+  // toward white; dark mode shades 75% toward black so the tint stays subtle on
+  // dark surfaces. If `primary` isn't a valid hex (e.g. CSS var), fall back.
+  const primaryLight = isValidHexColor(primary)
+    ? (mode === "dark" ? shade(primary, 0.75) : tint(primary, 0.85))
+    : (mode === "dark" ? "#1a3a5c" : "#E3F2FD");
+  const accentColor = isValidHexColor(secondary) ? secondary : (isValidHexColor(primary) ? deriveAccent(primary) : secondary);
+
   return {
     ...defaults,
     "--mb-primary": primary,
-    "--mb-primary-light": mode === "dark" ? "#1a3a5c" : "#E3F2FD",
+    "--mb-primary-light": primaryLight,
     "--mb-secondary": secondary,
+    "--mb-accent": accentColor,
     "--mb-background": background,
     "--mb-surface": surface,
     "--mb-surface-variant": mode === "dark" ? "#2D2D2D" : "#F6F6F8",
@@ -131,7 +141,15 @@ const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) 
     "--mb-border": mode === "dark" ? "#333333" : "#F0F0F0",
     "--mb-border-light": mode === "dark" ? "#2D2D2D" : "#E5E7EB",
     "--mb-divider": mode === "dark" ? "#333333" : "#E0E0E0",
-    "--mb-icon-background": mode === "dark" ? "#2D2D2D" : "#F6F6F8"
+    "--mb-icon-background": mode === "dark" ? "#2D2D2D" : "#F6F6F8",
+    // Surface tokens — exposed so downstream components can drop hardcoded values.
+    "--mb-radius-sm": "4px",
+    "--mb-radius-md": "8px",
+    "--mb-radius-lg": "12px",
+    "--mb-radius-xl": "16px",
+    "--mb-shadow-sm": "0 1px 2px rgba(0,0,0,0.05)",
+    "--mb-shadow-md": "0 2px 4px rgba(0,0,0,0.1)",
+    "--mb-shadow-lg": "0 4px 8px rgba(0,0,0,0.15)"
   };
 };
 
