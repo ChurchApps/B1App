@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, PersonHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -232,7 +232,7 @@ export const MessagesPage = ({ config }: Props) => {
         }}
       >
         <IconButton
-          aria-label="New message"
+          aria-label={Locale.label("mobile.screens.newMessage")}
           onClick={() => router.push("/mobile/messages/new")}
           sx={{
             bgcolor: tc.iconBackground,

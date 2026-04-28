@@ -17,7 +17,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, EventHelper } from "@churchapps/apphelper";
+import { ApiHelper, EventHelper, Locale } from "@churchapps/apphelper";
 import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { RRuleEditor } from "../../../../../components/eventCalendar/RRuleEditor";
@@ -128,7 +128,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
 
   const validate = () => {
     if (!title.trim()) {
-      setError("Please enter a title.");
+      setError(Locale.label("mobile.group.enterTitle"));
       return false;
     }
     return true;
@@ -142,7 +142,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       onSaved?.();
       onClose();
     } catch (e: any) {
-      setError(e?.message || "Failed to save event.");
+      setError(e?.message || Locale.label("mobile.group.failedToSaveEvent"));
     } finally {
       setSaving(false);
     }
@@ -156,7 +156,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       onSaved?.();
       onClose();
     } catch (e: any) {
-      setError(e?.message || "Failed to save event.");
+      setError(e?.message || Locale.label("mobile.group.failedToSaveEvent"));
     } finally {
       setSaving(false);
     }
@@ -182,14 +182,14 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       setRecurrenceModalType("delete");
       return;
     }
-    if (!confirm("Are you sure you wish to delete this event?")) return;
+    if (!confirm(Locale.label("mobile.group.confirmDeleteEvent"))) return;
     setSaving(true);
     try {
       await ApiHelper.delete("/events/" + eventProp.id, "ContentApi");
       onSaved?.();
       onClose();
     } catch (e: any) {
-      setError(e?.message || "Failed to delete event.");
+      setError(e?.message || Locale.label("mobile.group.failedToDeleteEvent"));
     } finally {
       setSaving(false);
     }
@@ -232,7 +232,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       onSaved?.();
       onClose();
     } catch (e: any) {
-      setError(e?.message || "Failed to save event.");
+      setError(e?.message || Locale.label("mobile.group.failedToSaveEvent"));
     } finally {
       setSaving(false);
     }
@@ -270,7 +270,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       onSaved?.();
       onClose();
     } catch (e: any) {
-      setError(e?.message || "Failed to delete event.");
+      setError(e?.message || Locale.label("mobile.group.failedToDeleteEvent"));
     } finally {
       setSaving(false);
     }
@@ -305,20 +305,20 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           }}
         >
           <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-            {isEdit ? "Edit Event" : "New Event"}
+            {isEdit ? Locale.label("mobile.group.editEvent") : Locale.label("mobile.group.newEvent")}
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {isEdit && (
               <IconButton
                 onClick={handleDelete}
-                aria-label="Delete event"
+                aria-label={Locale.label("mobile.group.deleteEvent")}
                 disabled={saving}
                 sx={{ color: tc.error }}
               >
                 <Icon>delete</Icon>
               </IconButton>
             )}
-            <IconButton onClick={onClose} aria-label="Close" sx={{ color: tc.text }}>
+            <IconButton onClick={onClose} aria-label={Locale.label("mobile.components.close")} sx={{ color: tc.text }}>
               <Icon>close</Icon>
             </IconButton>
           </Box>
@@ -327,7 +327,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           <TextField
             fullWidth
             size="small"
-            label="Title"
+            label={Locale.label("mobile.group.title")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             autoFocus
@@ -339,12 +339,12 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           />
           <FormControlLabel
             control={<Switch checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />}
-            label="All day"
+            label={Locale.label("mobile.group.allDay")}
           />
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             <TextField
               size="small"
-              label="Start"
+              label={Locale.label("mobile.group.start")}
               type={allDay ? "date" : "datetime-local"}
               InputLabelProps={{ shrink: true }}
               value={allDay ? start.slice(0, 10) : start}
@@ -353,7 +353,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             />
             <TextField
               size="small"
-              label="End"
+              label={Locale.label("mobile.group.end")}
               type={allDay ? "date" : "datetime-local"}
               InputLabelProps={{ shrink: true }}
               value={allDay ? end.slice(0, 10) : end}
@@ -364,16 +364,16 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           <TextField
             select
             size="small"
-            label="Visibility"
+            label={Locale.label("mobile.group.visibility")}
             value={visibility}
             onChange={(e) => setVisibility(e.target.value)}
           >
-            <MenuItem value="public">Public</MenuItem>
-            <MenuItem value="private">Members only</MenuItem>
+            <MenuItem value="public">{Locale.label("mobile.group.public")}</MenuItem>
+            <MenuItem value="private">{Locale.label("mobile.group.membersOnly")}</MenuItem>
           </TextField>
           <FormControlLabel
             control={<Switch checked={recurring} onChange={(e) => handleToggleRecurring(e.target.checked)} />}
-            label="Recurring"
+            label={Locale.label("mobile.group.recurring")}
           />
           {recurring && (
             <Grid container spacing={1} sx={{ pt: 1 }}>
@@ -388,7 +388,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={onClose} sx={{ textTransform: "none", color: tc.text }}>
-            Cancel
+            {Locale.label("mobile.group.cancel")}
           </Button>
           <Button
             variant="contained"
@@ -402,7 +402,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
               "&:hover": { bgcolor: tc.primary }
             }}
           >
-            {saving ? "Saving…" : isEdit ? "Save Changes" : "Save"}
+            {saving ? Locale.label("mobile.group.saving") : isEdit ? Locale.label("mobile.group.saveChanges") : Locale.label("mobile.group.save")}
           </Button>
         </DialogActions>
       </Dialog>

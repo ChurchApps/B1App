@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, GlobalStyles, Icon, Typography } from "@mui/material";
 import { keyframes } from "@emotion/react";
+import { Locale } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props {
@@ -399,7 +400,7 @@ export const InstallPage = ({ config }: Props) => {
 
             {platform === null ? (
               <Box sx={{ minHeight: 280, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Typography sx={{ color: "#64748b", fontSize: 14 }}>Detecting your device…</Typography>
+                <Typography sx={{ color: "#64748b", fontSize: 14 }}>{Locale.label("mobile.screens.detectingDevice")}</Typography>
               </Box>
             ) : platform === "ios" ? (
               <IOSInstructions accent={accent} accentDeep={accentDeep} />
@@ -831,7 +832,7 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
           textAlign: "center",
           lineHeight: 1.4
         }}>
-          <Box component="span" sx={{ color: "#0f172a" }}>Scan with your phone camera</Box>
+          <Box component="span" sx={{ color: "#0f172a" }}>{Locale.label("mobile.screens.scanWithPhone")}</Box>
           <br />to open this page and install
         </Typography>
       </Box>

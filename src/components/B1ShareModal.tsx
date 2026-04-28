@@ -96,8 +96,8 @@ export function B1ShareModal(props: Props) {
           {getModalContent()}
         </div>
         <DialogActions sx={{ paddingX: "16px", paddingBottom: "12px" }}>
-          <Button variant="outlined" onClick={props.onClose} data-testid="share-close-button">Close</Button>
-          <Button variant="contained" onClick={handlePost} data-testid="share-post-button">Post</Button>
+          <Button variant="outlined" onClick={props.onClose} data-testid="share-close-button">{Locale.label("common.close")}</Button>
+          <Button variant="contained" onClick={handlePost} data-testid="share-post-button">{Locale.label("b1ShareModal.post")}</Button>
         </DialogActions>
       </Box>
 

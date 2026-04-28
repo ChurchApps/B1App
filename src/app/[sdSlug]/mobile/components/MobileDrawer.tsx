@@ -10,6 +10,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { type LinkInterface } from "@churchapps/helpers";
+import { Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
 import { getInitials } from "./util";
@@ -51,7 +52,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
   };
 
   return (
-    <Box role="navigation" aria-label="Main navigation" sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: tc.surface }}>
+    <Box role="navigation" aria-label={Locale.label("mobile.components.navigation")} sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: tc.surface }}>
 
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,
@@ -90,7 +91,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
                 }}
               >
                 <EditIcon sx={{ fontSize: 16, color: tc.primary }} />
-                Edit Profile
+                {Locale.label("mobile.components.editProfile")}
               </Box>
             </Box>
           </Stack>
@@ -165,7 +166,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
             ? <LightModeIcon sx={{ fontSize: 24, color: tc.primary }} />
             : <DarkModeIcon sx={{ fontSize: 24, color: tc.primary }} />}
           onClick={toggle}
-          aria-label={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          aria-label={mode === "dark" ? Locale.label("mobile.components.switchToLight") : Locale.label("mobile.components.switchToDark")}
           sx={{
             color: tc.primary,
             borderColor: tc.primary,
@@ -178,7 +179,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
             mb: 1
           }}
         >
-          {mode === "dark" ? "Light Mode" : "Dark Mode"}
+          {mode === "dark" ? Locale.label("mobile.components.lightMode") : Locale.label("mobile.components.darkMode")}
         </Button>
         {context?.user ? (
           <Button
@@ -199,7 +200,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               mb: 1
             }}
           >
-            Logout
+            {Locale.label("mobile.components.logout")}
           </Button>
         ) : (
           <Button
@@ -226,11 +227,11 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               "&:hover": { bgcolor: tc.primary }
             }}
           >
-            Sign In
+            {Locale.label("mobile.components.signIn")}
           </Button>
         )}
         <Typography sx={{ fontSize: 12, color: tc.disabled, textAlign: "center" }}>
-          B1 Mobile Web
+          {Locale.label("mobile.components.b1MobileWeb")}
         </Typography>
         <Typography sx={{ fontSize: 12, textAlign: "center", mt: 0.5 }}>
           <Box
@@ -240,7 +241,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
             rel="noopener noreferrer"
             sx={{ color: tc.primary, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
           >
-            Privacy Policy
+            {Locale.label("mobile.components.privacyPolicy")}
           </Box>
         </Typography>
       </Box>

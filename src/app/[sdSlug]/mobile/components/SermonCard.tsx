@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Box, Icon, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import type { SermonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "./mobileTheme";
 import { formatDate, formatDuration } from "./util";
@@ -103,7 +104,7 @@ export const SermonCard = ({ sermon, onClick }: Props) => {
           overflow: "hidden",
           textShadow: "0 1px 2px rgba(0,0,0,0.4)"
         }}>
-          {sermon.title || "Untitled Sermon"}
+          {sermon.title || Locale.label("mobile.components.untitledSermon")}
         </Typography>
         <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 12, textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}>
           {formatDate(sermon.publishDate, "short")}

@@ -2,6 +2,7 @@
 
 import { useContext, useEffect, useState } from "react";
 import { Alert, type PaperProps } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { Layout } from "@/components";
 import { LoginPage } from "@churchapps/apphelper/login";
 import UserContext from "@/context/UserContext";
@@ -46,8 +47,8 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
 
 
       {process.env.NEXT_PUBLIC_STAGE === "demo" && (<Alert severity="error" style={{ marginTop: 0 }}>
-        <b>Demo:</b> This is the demo environment.  All data is erased nightly.<br />
-        You can log into a test church with the credentials demo@b1.church / password .
+        <b>{Locale.label("loginClient.demoTitle")}</b> {Locale.label("loginClient.demoBody")}<br />
+        {Locale.label("loginClient.demoCredentials")}
       </Alert>)}
       <LoginPage
         auth={searchParams.get("auth")}

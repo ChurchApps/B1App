@@ -16,7 +16,7 @@ import {
   Typography
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { ApiHelper, ArrayHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, Locale } from "@churchapps/apphelper";
 import type {
   AssignmentInterface,
   PersonInterface,
@@ -187,7 +187,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     const categories = ArrayHelper.getUniqueValues(positions, "categoryName");
     categories.forEach((category: string) => {
       groups.push({
-        category: category || "Team",
+        category: category || Locale.label("mobile.details.team"),
         positions: ArrayHelper.getAll(positions, "categoryName", category)
       });
     });
@@ -251,7 +251,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const BackButton = (
     <IconButton
       onClick={() => router.push("/mobile/plans")}
-      aria-label="Back"
+      aria-label={Locale.label("mobile.components.back")}
       sx={{
         color: tc.primary,
         bgcolor: tc.surface,
@@ -287,16 +287,16 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         >
           <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>lock</Icon>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            Sign in required
+            {Locale.label("mobile.details.signInRequired")}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            Please sign in to view your plan details.
+            {Locale.label("mobile.details.signInToViewPlan")}
           </Typography>
           <Link
             href={`/login/?returnUrl=/mobile/plans/${id}`}
             style={{ color: tc.primary, fontWeight: 600, textDecoration: "none" }}
           >
-            Sign In
+            {Locale.label("mobile.details.signIn")}
           </Link>
         </Box>
       </OuterShell>
@@ -328,13 +328,13 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         >
           <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>event_busy</Icon>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            Plan not available
+            {Locale.label("mobile.details.planNotAvailable")}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            This plan may have been removed or you may not have access.
+            {Locale.label("mobile.details.planRemoved")}
           </Typography>
           <Link href="/mobile/plans" style={{ color: tc.primary, fontWeight: 600, textDecoration: "none" }}>
-            Back to Plans
+            {Locale.label("mobile.details.backToPlans")}
           </Link>
         </Box>
       </OuterShell>
@@ -413,9 +413,9 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
           }}
         >
-          <Tab value="overview" label="Overview" />
-          <Tab value="order" label="Service Order" />
-          <Tab value="team" label="Teams" />
+          <Tab value="overview" label={Locale.label("mobile.details.tabOverview")} />
+          <Tab value="order" label={Locale.label("mobile.details.tabServiceOrder")} />
+          <Tab value="team" label={Locale.label("mobile.details.tabTeams")} />
         </Tabs>
       </Box>
 
@@ -437,7 +437,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             >
               <Icon sx={{ color: tc.primary, fontSize: 24 }}>assignment_ind</Icon>
               <Typography sx={{ flex: 1, fontSize: 18, fontWeight: 700, color: tc.primary, ml: 0.5 }}>
-                My Assignments
+                {Locale.label("mobile.details.myAssignments")}
               </Typography>
               <Box
                 sx={{
@@ -468,10 +468,10 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               >
                 <Icon sx={{ fontSize: 48, color: tc.textSecondary, mb: 1 }}>assignment_late</Icon>
                 <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                  No assignments for this plan
+                  {Locale.label("mobile.details.noAssignmentsForPlan")}
                 </Typography>
                 <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: 0.5 }}>
-                  Check with your team leader if you expected one.
+                  {Locale.label("mobile.details.checkWithLeader")}
                 </Typography>
               </Box>
             ) : (
@@ -505,7 +505,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
               <Icon sx={{ color: tc.primary }}>note</Icon>
-              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Plan Notes</Typography>
+              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.details.planNotes")}</Typography>
             </Box>
             {plan.notes ? (
               <Typography sx={{ fontSize: 14, color: tc.textSecondary, lineHeight: 1.5 }}>
@@ -513,7 +513,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               </Typography>
             ) : (
               <Typography sx={{ fontSize: 13, color: tc.textSecondary, fontStyle: "italic" }}>
-                No notes available.
+                {Locale.label("mobile.details.noNotes")}
               </Typography>
             )}
           </Box>
@@ -540,7 +540,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             />
           ) : planItems.length === 0 ? (
             <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", py: 2 }}>
-              No items in the order of service.
+              {Locale.label("mobile.details.noOrderItems")}
             </Typography>
           ) : (
             <Box>
@@ -572,7 +572,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               }}
             >
               <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-                No teams assigned yet.
+                {Locale.label("mobile.details.noTeamsAssigned")}
               </Typography>
             </Box>
           ) : (
@@ -595,10 +595,10 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
 
 const statusMeta = (status?: string) => {
   switch ((status || "").toLowerCase()) {
-    case "accepted": return { label: "Accepted", color: mobileTheme.colors.success, icon: "check_circle" };
-    case "confirmed": return { label: "Confirmed", color: mobileTheme.colors.success, icon: "check_circle" };
-    case "declined": return { label: "Declined", color: mobileTheme.colors.error, icon: "cancel" };
-    default: return { label: "Pending Response", color: mobileTheme.colors.warning, icon: "schedule" };
+    case "accepted": return { label: Locale.label("mobile.details.accepted"), color: mobileTheme.colors.success, icon: "check_circle" };
+    case "confirmed": return { label: Locale.label("mobile.details.confirmed"), color: mobileTheme.colors.success, icon: "check_circle" };
+    case "declined": return { label: Locale.label("mobile.details.declined"), color: mobileTheme.colors.error, icon: "cancel" };
+    default: return { label: Locale.label("mobile.details.pendingResponse"), color: mobileTheme.colors.warning, icon: "schedule" };
   }
 };
 
@@ -639,7 +639,7 @@ const PositionDetailsCard = ({
       onUpdate();
     } catch (err: any) {
       console.error(`Error ${action}ing assignment:`, err);
-      setErrorMessage(err?.message || `Unable to ${action} assignment. Please try again.`);
+      setErrorMessage(err?.message || Locale.label("mobile.details.unableToRespond").replace("{}", action));
     } finally {
       setBusy(false);
     }
@@ -657,7 +657,7 @@ const PositionDetailsCard = ({
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <Icon sx={{ color: tc.primary }}>assignment_ind</Icon>
         <Typography sx={{ flex: 1, fontSize: 16, fontWeight: 700, color: tc.text }}>
-          {position.name || "Position"}
+          {position.name || Locale.label("mobile.details.position")}
         </Typography>
         <Box
           sx={{
@@ -681,7 +681,7 @@ const PositionDetailsCard = ({
       {sortedTimes.length > 0 && (
         <Box sx={{ mt: 1.25 }}>
           <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.textMuted, mb: 0.75 }}>
-            Service Times
+            {Locale.label("mobile.details.serviceTimes")}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
             {sortedTimes.map((time) => (
@@ -699,7 +699,7 @@ const PositionDetailsCard = ({
                 <Icon sx={{ color: tc.primary, fontSize: 18, mt: 0.25 }}>access_time</Icon>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-                    {time.displayName || "Service"}
+                    {time.displayName || Locale.label("mobile.details.service")}
                   </Typography>
                   <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
                     {formatDateTime(time.startTime)}{time.endTime ? ` - ${formatTimeShort(time.endTime)}` : ""}
@@ -721,7 +721,7 @@ const PositionDetailsCard = ({
             disabled={busy}
             sx={{ flex: 1, textTransform: "none", fontWeight: 600 }}
           >
-            Decline
+            {Locale.label("mobile.details.decline")}
           </Button>
           <Button
             variant="contained"
@@ -736,7 +736,7 @@ const PositionDetailsCard = ({
               "&:hover": { bgcolor: tc.success, filter: "brightness(0.95)" }
             }}
           >
-            Accept
+            {Locale.label("mobile.details.accept")}
           </Button>
         </Box>
       )}
@@ -772,12 +772,12 @@ const TeamGroupCard = ({
       const displayName =
         person.name?.display ||
         [person.name?.first, person.name?.last].filter(Boolean).join(" ") ||
-        "Unknown";
+        Locale.label("mobile.components.unknown");
       members.push({
         id: a.id,
         personId: person.id,
         name: displayName,
-        position: position.name || "Position",
+        position: position.name || Locale.label("mobile.details.position"),
         photo: person.photo
       });
     });
@@ -828,7 +828,7 @@ const TeamGroupCard = ({
           }}
         >
           <Typography sx={{ fontSize: 13, color: tc.textMuted, fontStyle: "italic" }}>
-            No assigned members.
+            {Locale.label("mobile.details.noAssignedMembers")}
           </Typography>
         </Box>
       ) : (

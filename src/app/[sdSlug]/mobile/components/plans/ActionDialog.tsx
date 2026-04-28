@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { EnvironmentHelper, ExternalVenueRefInterface } from "@/helpers";
 import { useProviderContent } from "./useProviderContent";
 import { ContentRenderer } from "./ContentRenderer";
@@ -84,7 +85,7 @@ export const ActionDialog: React.FC<Props> = (props) => {
         {renderContent()}
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" onClick={props.onClose}>Close</Button>
+        <Button variant="outlined" onClick={props.onClose}>{Locale.label("mobile.plans.close")}</Button>
       </DialogActions>
     </Dialog>
   );

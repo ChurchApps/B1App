@@ -1,5 +1,6 @@
 import React from "react";
 import { DisplayBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
 import type { AssignmentInterface, PersonInterface, PositionInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableBody } from "@mui/material";
@@ -24,7 +25,7 @@ export const Team: React.FC<Props> = (props) => {
         rows.push(
           <TableRow key={assignment.id}>
             <TableCell style={{ width: 70 }}>
-              <img src={PersonHelper.getPhotoUrl(person)} alt="avatar" style={{ maxWidth: "50px" }} />
+              <img src={PersonHelper.getPhotoUrl(person)} alt={Locale.label("plans.team.avatar")} style={{ maxWidth: "50px" }} />
             </TableCell>
             <TableCell>
               <Link href={"/mobile/community/" + person?.id} data-testid={`team-member-${person?.id}-link`}>{person?.name?.display}</Link>

@@ -5,7 +5,7 @@ import {
   Card, CardContent, Typography, Stack, Button, LinearProgress, Box, Alert,
   Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Chip
 } from "@mui/material";
-import { ApiHelper, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import Link from "next/link";
@@ -70,13 +70,13 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
     setMessage(null);
     try {
       await ApiHelper.post("/assignments/signup", { positionId }, "DoingApi");
-      setMessage({ type: "success", text: "You're signed up! Thank you for volunteering." });
+      setMessage({ type: "success", text: Locale.label("serving.signup.success") });
       await refreshData();
     } catch (err: any) {
-      const errMsg = err?.message || err?.toString() || "Signup failed";
-      if (errMsg.includes("full")) setMessage({ type: "error", text: "This position is now full." });
-      else if (errMsg.includes("deadline")) setMessage({ type: "error", text: "The signup deadline has passed." });
-      else if (errMsg.includes("Already")) setMessage({ type: "error", text: "You are already signed up for this position." });
+      const errMsg = err?.message || err?.toString() || Locale.label("serving.signup.failed");
+      if (errMsg.includes("full")) setMessage({ type: "error", text: Locale.label("serving.signup.positionFull") });
+      else if (errMsg.includes("deadline")) setMessage({ type: "error", text: Locale.label("serving.signup.deadlinePassed") });
+      else if (errMsg.includes("Already")) setMessage({ type: "error", text: Locale.label("serving.signup.alreadySignedUp") });
       else setMessage({ type: "error", text: errMsg });
     }
     setLoading(null);
@@ -88,11 +88,11 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
     setMessage(null);
     try {
       await ApiHelper.delete("/assignments/signup/" + assignmentId, "DoingApi");
-      setMessage({ type: "success", text: "You have been removed from this position." });
+      setMessage({ type: "success", text: Locale.label("serving.remove.success") });
       await refreshData();
     } catch (err: any) {
-      const errMsg = err?.message || err?.toString() || "Removal failed";
-      if (errMsg.includes("deadline")) setMessage({ type: "error", text: "The removal deadline has passed." });
+      const errMsg = err?.message || err?.toString() || Locale.label("serving.remove.failed");
+      if (errMsg.includes("deadline")) setMessage({ type: "error", text: Locale.label("serving.remove.deadlinePassed") });
       else setMessage({ type: "error", text: errMsg });
     }
     setLoading(null);
@@ -112,7 +112,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
   // Group positions by category
   const categories: Record<string, PositionWithCount[]> = {};
   positions.forEach(p => {
-    const cat = p.categoryName || "General";
+    const cat = p.categoryName || Locale.label("serving.generalCategory");
     if (!categories[cat]) categories[cat] = [];
     categories[cat].push(p);
   });
@@ -125,13 +125,13 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
         {times.length > 0 && (" \u00b7 " + times.map(t => t.displayName).join(", "))}
       </Typography>
       {plan.notes && <Typography variant="body2" sx={{ mb: 2 }}>{plan.notes}</Typography>}
-      {deadlinePassed && <Alert severity="warning" sx={{ mb: 2 }}>The signup deadline for this plan has passed.</Alert>}
+      {deadlinePassed && <Alert severity="warning" sx={{ mb: 2 }}>{Locale.label("serving.signup.planDeadlinePassed")}</Alert>}
 
       {message && <Alert severity={message.type} sx={{ mb: 2 }} onClose={() => setMessage(null)}>{message.text}</Alert>}
 
       {!isLoggedIn && (
         <Alert severity="info" sx={{ mb: 2 }}>
-          <Link href={`/login/?returnUrl=${encodeURIComponent(pathname)}`}>Log in</Link> to sign up for a position.
+          <Link href={`/login/?returnUrl=${encodeURIComponent(pathname)}`}>{Locale.label("serving.logIn")}</Link> {Locale.label("serving.toSignUp")}
         </Alert>
       )}
 
@@ -153,7 +153,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
                       <Box sx={{ flex: 1 }}>
                         <Stack direction="row" alignItems="center" spacing={1}>
                           <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{position.name}</Typography>
-                          {isSignedUp && <Chip label="You're signed up" color="success" size="small" />}
+                          {isSignedUp && <Chip label={Locale.label("serving.signedUpChip")} color="success" size="small" />}
                         </Stack>
                         {position.description && (
                           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>{position.description}</Typography>
@@ -169,7 +169,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
                             onClick={() => setConfirmRemoveId(myAssignment.id)}
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
-                            {loading === myAssignment.id ? "Removing..." : "Remove"}
+                            {loading === myAssignment.id ? Locale.label("serving.removing") : Locale.label("serving.removeBtn")}
                           </Button>
                         ) : (
                           <Button
@@ -179,7 +179,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
                             onClick={() => handleSignup(position.id)}
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
-                            {loading === position.id ? "Signing up..." : isFull ? "Full" : "Sign Up"}
+                            {loading === position.id ? Locale.label("serving.signingUp") : isFull ? Locale.label("serving.full") : Locale.label("serving.signUp")}
                           </Button>
                         )}
                       </Box>
@@ -192,7 +192,9 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
                         sx={{ height: 6, borderRadius: 3 }}
                       />
                       <Typography variant="caption" color="text.secondary">
-                        {remaining > 0 ? remaining + " of " + position.count + " slots remaining" : "All " + position.count + " slots filled"}
+                        {remaining > 0
+                          ? Locale.label("serving.slotsRemaining").replace("{remaining}", remaining.toString()).replace("{total}", position.count.toString())
+                          : Locale.label("serving.allSlotsFilled").replace("{}", position.count.toString())}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -204,13 +206,13 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
       ))}
 
       <Dialog open={!!confirmRemoveId} onClose={() => setConfirmRemoveId(null)}>
-        <DialogTitle>Remove yourself?</DialogTitle>
+        <DialogTitle>{Locale.label("serving.removeYourselfTitle")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to remove yourself from this position?</DialogContentText>
+          <DialogContentText>{Locale.label("serving.removeYourselfPrompt")}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmRemoveId(null)}>Cancel</Button>
-          <Button onClick={() => handleRemove(confirmRemoveId)} color="error" variant="contained">Remove</Button>
+          <Button onClick={() => setConfirmRemoveId(null)}>{Locale.label("common.cancel")}</Button>
+          <Button onClick={() => handleRemove(confirmRemoveId)} color="error" variant="contained">{Locale.label("serving.removeBtn")}</Button>
         </DialogActions>
       </Dialog>
     </>

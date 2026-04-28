@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
 import React, { useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface, SongInterface } from "@/helpers";
 import { SongDetails } from "./SongDetails";
@@ -93,14 +93,14 @@ export const SongDialog: React.FC<Props> = (props) => {
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 9 }}>
             {(products?.length > 0 || links.length > 0) && <>
-              <h3>Files</h3>
+              <h3>{Locale.label("mobile.plans.files")}</h3>
               {listProducts()}
               {listLinks()}
             </>}
 
 
             {arrangement?.lyrics && <>
-              <h3>Lyrics</h3>
+              <h3>{Locale.label("mobile.plans.lyrics")}</h3>
               <div className="chordPro" dangerouslySetInnerHTML={{ __html: ChordProHelper.formatLyrics(arrangement?.lyrics, 0) }}></div>
             </>}
 
@@ -113,7 +113,7 @@ export const SongDialog: React.FC<Props> = (props) => {
 
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" onClick={props.onClose} data-testid="song-dialog-close-button">Close</Button>
+        <Button variant="outlined" onClick={props.onClose} data-testid="song-dialog-close-button">{Locale.label("mobile.plans.close")}</Button>
       </DialogActions>
     </Dialog>
   </>);

@@ -16,7 +16,7 @@ import {
   Typography
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { ApiHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
   AssignmentInterface,
@@ -112,14 +112,14 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     setMessage(null);
     try {
       await ApiHelper.post("/assignments/signup", { positionId: pos.id }, "DoingApi");
-      setMessage({ type: "success", text: "You've been signed up!" });
+      setMessage({ type: "success", text: Locale.label("mobile.details.signedUpSuccess") });
       await load();
     } catch (err: any) {
       const msg = (err?.message || err?.toString() || "").toLowerCase();
-      let text = "Sign up failed.";
-      if (msg.includes("full")) text = "This position is full.";
-      else if (msg.includes("deadline")) text = "The signup deadline has passed.";
-      else if (msg.includes("already")) text = "You're already signed up.";
+      let text = Locale.label("mobile.details.signupFailed");
+      if (msg.includes("full")) text = Locale.label("mobile.details.positionFull");
+      else if (msg.includes("deadline")) text = Locale.label("mobile.details.deadlinePassed");
+      else if (msg.includes("already")) text = Locale.label("mobile.details.alreadySignedUp");
       setMessage({ type: "error", text });
     } finally {
       setActionId(null);
@@ -139,11 +139,11 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     setMessage(null);
     try {
       await ApiHelper.delete(`/assignments/signup/${assignment.id}`, "DoingApi");
-      setMessage({ type: "success", text: "Your signup has been removed." });
+      setMessage({ type: "success", text: Locale.label("mobile.details.signupRemoved") });
       await load();
     } catch (err: any) {
       const msg = (err?.message || err?.toString() || "").toLowerCase();
-      const text = msg.includes("deadline") ? "The deadline has passed." : "Could not remove signup.";
+      const text = msg.includes("deadline") ? Locale.label("mobile.details.deadlineHasPassed") : Locale.label("mobile.details.couldNotRemoveSignup");
       setMessage({ type: "error", text });
     } finally {
       setActionId(null);
@@ -153,7 +153,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const categories = React.useMemo(() => {
     const map: Record<string, (PositionInterface & { filledCount: number })[]> = {};
     positions.forEach((p) => {
-      const cat = p.categoryName || "General";
+      const cat = p.categoryName || Locale.label("mobile.details.general");
       if (!map[cat]) map[cat] = [];
       map[cat].push(p);
     });
@@ -241,7 +241,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                     fontWeight: 700
                   }}
                 >
-                  Signed up
+                  {Locale.label("mobile.details.signedUp")}
                 </Box>
               )}
             </Box>
@@ -264,7 +264,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 flexShrink: 0
               }}
             >
-              {busy ? "Removing..." : "Remove"}
+              {busy ? Locale.label("mobile.details.removing") : Locale.label("mobile.details.remove")}
             </Button>
           ) : (
             <Button
@@ -283,7 +283,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                 "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" }
               }}
             >
-              {busy ? "Signing Up..." : isFull ? "Full" : "Sign Up"}
+              {busy ? Locale.label("mobile.details.signingUp") : isFull ? Locale.label("mobile.details.full") : Locale.label("mobile.details.signUp")}
             </Button>
           )}
         </Box>
@@ -307,7 +307,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
             />
           </Box>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: "4px" }}>
-            {remaining > 0 ? `${remaining} of ${needed} slots remaining` : `All ${needed} slots filled`}
+            {remaining > 0 ? Locale.label("mobile.details.slotsRemaining").replace("{}", String(remaining)).replace("{}", String(needed)) : Locale.label("mobile.details.allSlotsFilled").replace("{}", String(needed))}
           </Typography>
         </Box>
       </Box>
@@ -342,7 +342,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     >
       <Icon sx={{ fontSize: 48, color: tc.textSecondary }}>event_busy</Icon>
       <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mt: 1 }}>
-        Plan not found
+        {Locale.label("mobile.details.planNotFound")}
       </Typography>
     </Box>
   );
@@ -350,7 +350,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: `${mobileTheme.spacing.sm}px` }}>
-        <IconButton aria-label="Back" onClick={() => router.back()} sx={{ color: tc.text }} size="small">
+        <IconButton aria-label={Locale.label("mobile.components.back")} onClick={() => router.back()} sx={{ color: tc.text }} size="small">
           <ArrowBackIcon />
         </IconButton>
       </Box>
@@ -366,8 +366,8 @@ export const VolunteerDetail = ({ id, config }: Props) => {
       {!loading && !notFound && plan && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
           {renderHeader()}
-          {isDeadlinePassed && renderAlert("warning", "Signup deadline has passed.", "schedule")}
-          {!signedIn && renderAlert("info", "Sign in to sign up for a position.", "info")}
+          {isDeadlinePassed && renderAlert("warning", Locale.label("mobile.details.signupDeadlinePassed"), "schedule")}
+          {!signedIn && renderAlert("info", Locale.label("mobile.details.signInToSignUp"), "info")}
           {message && renderAlert(message.type, message.text, message.type === "success" ? "check_circle" : "error")}
 
           {Object.entries(categories).map(([cat, list]) => (
@@ -381,7 +381,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
 
           {positions.length === 0 && (
             <Typography sx={{ textAlign: "center", color: tc.textMuted, py: 3 }}>
-              No positions are currently available.
+              {Locale.label("mobile.details.noPositionsAvailable")}
             </Typography>
           )}
         </Box>
@@ -392,21 +392,21 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         onClose={() => setPendingRemoval(null)}
         aria-labelledby="remove-signup-title"
       >
-        <DialogTitle id="remove-signup-title">Remove signup?</DialogTitle>
+        <DialogTitle id="remove-signup-title">{Locale.label("mobile.details.removeSignup")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to remove your signup for this position?
+            {Locale.label("mobile.details.confirmRemoveSignup")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setPendingRemoval(null)} sx={{ color: tc.textMuted, textTransform: "none" }}>
-            Cancel
+            {Locale.label("mobile.details.cancel")}
           </Button>
           <Button
             onClick={confirmRemove}
             sx={{ color: tc.error, textTransform: "none", fontWeight: 600 }}
           >
-            Remove
+            {Locale.label("mobile.details.remove")}
           </Button>
         </DialogActions>
       </Dialog>

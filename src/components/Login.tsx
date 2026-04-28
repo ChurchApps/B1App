@@ -2,6 +2,7 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import { Locale } from "@churchapps/apphelper";
 import { PaperProps } from "@mui/material";
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
 
 const LoginClient: React.ComponentType<Props> = dynamic(() => import("./LoginClient").then((mod: { LoginClient: React.ComponentType<Props> }) => ({ default: mod.LoginClient })), {
   ssr: false,
-  loading: () => <div>Loading...</div>
+  loading: () => <div>{Locale.label("common.pleaseWait")}</div>
 });
 
 export function Login(props: Props) {

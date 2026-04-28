@@ -166,7 +166,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             setAnchorEl(e.currentTarget);
           }}
           data-testid="donation-download-button"
-          aria-label="Download donation records"
+          aria-label={Locale.label("donate.downloadRecords")}
         >
           <Icon>download</Icon>
         </Button>
@@ -177,10 +177,10 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
           onClose={handleClose}
           MenuListProps={{ "aria-labelledby": "download-button" }}
         >
-          <MenuItem onClick={handleClose} dense data-testid="export-current-year-csv" aria-label="Export current year donations as CSV"><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text="Current Year (CSV)" icon="table_chart" data-testid="current-year-export-link" /></MenuItem>
-          <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label="Print current year donations"><Link href="/mobile/donate/print"><Button data-testid="print-current-year-button" aria-label="Print current year donations"><Icon>print</Icon> &nbsp; CURRENT YEAR (PRINT)</Button></Link></MenuItem>
-          <MenuItem onClick={handleClose} dense data-testid="export-last-year-csv" aria-label="Export last year donations as CSV"><ExportLink data={last_year} filename="last_year_donations" customHeaders={customHeaders} text="Last Year (CSV)" icon="table_chart" data-testid="last-year-export-link" /></MenuItem>
-          <MenuItem onClick={handleClose} dense data-testid="print-last-year" aria-label="Print last year donations"><Link href="/mobile/donate/print?prev=1"><Button data-testid="print-last-year-button" aria-label="Print last year donations"><Icon>print</Icon> &nbsp; LAST YEAR (PRINT)</Button></Link></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="export-current-year-csv" aria-label={Locale.label("donate.exportCurrentYearCsv")}><ExportLink data={current_year} filename="current_year_donations" customHeaders={customHeaders} text={Locale.label("donate.currentYearCsv")} icon="table_chart" data-testid="current-year-export-link" /></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="print-current-year" aria-label={Locale.label("donate.printCurrentYear")}><Link href="/mobile/donate/print"><Button data-testid="print-current-year-button" aria-label={Locale.label("donate.printCurrentYear")}><Icon>print</Icon> &nbsp; {Locale.label("donate.currentYearPrint")}</Button></Link></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="export-last-year-csv" aria-label={Locale.label("donate.exportLastYearCsv")}><ExportLink data={last_year} filename="last_year_donations" customHeaders={customHeaders} text={Locale.label("donate.lastYearCsv")} icon="table_chart" data-testid="last-year-export-link" /></MenuItem>
+          <MenuItem onClick={handleClose} dense data-testid="print-last-year" aria-label={Locale.label("donate.printLastYear")}><Link href="/mobile/donate/print?prev=1"><Button data-testid="print-last-year-button" aria-label={Locale.label("donate.printLastYear")}><Icon>print</Icon> &nbsp; {Locale.label("donate.lastYearPrint")}</Button></Link></MenuItem>
         </Menu>
       </React.Fragment>
     );
@@ -204,7 +204,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
           {appName !== "B1App" && <TableCell><Link href={"/donations/" + d.batchId}>{d.batchId}</Link></TableCell>}
           <TableCell>{DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}</TableCell>
           <TableCell>{d.method} - {d.methodDetails}</TableCell>
-          <TableCell>{d.fund.name}{isPending && " (Pending)"}</TableCell>
+          <TableCell>{d.fund.name}{isPending && " (" + Locale.label("donate.pending") + ")"}</TableCell>
           <TableCell sx={{ color: isPending ? "warning.main" : undefined }}>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>
         </TableRow>
       );
@@ -258,7 +258,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         church={props?.church}
         churchLogo={props?.churchLogo}
       />
-      <DisplayBox headerIcon="payments" headerText="Donations" editContent={getEditContent()} data-testid="donations-display-box">
+      <DisplayBox headerIcon="payments" headerText={Locale.label("donate.donations")} editContent={getEditContent()} data-testid="donations-display-box">
         {getTable()}
       </DisplayBox>
       <RecurringDonations customerId={customerId} paymentMethods={appHelperPaymentMethods || []} appName={appName} dataUpdate={handleDataUpdate} data-testid="recurring-donations" />

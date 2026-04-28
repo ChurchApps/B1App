@@ -59,7 +59,7 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
 
       return { paymentSuccessful: true, name: person?.name?.display || "", errors: [] as string[] };
     } catch (err) {
-      const errorMessage = "An error occurred while processing your payment.";
+      const errorMessage = Locale.label("forms.paymentError");
       return { paymentSuccessful: false, name: "", errors: [errorMessage] as string[] };
     }
   };
@@ -93,11 +93,11 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
             return { success: true, errors: [] };
           }
         } catch (apiError) {
-          return { success: false, errors: ["An error occurred while saving the card."] };
+          return { success: false, errors: [Locale.label("forms.cardSaveError")] };
         }
       }
     } catch (stripeError) {
-      return { success: false, errors: ["An error occurred while processing your payment method."] };
+      return { success: false, errors: [Locale.label("forms.paymentMethodError")] };
     }
   };
 
@@ -131,16 +131,16 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
       // Handle 3D Secure authentication if required
       if (result?.status === "requires_action" && result?.client_secret) {
         if (!stripe) {
-          return { success: false, errors: ["Payment processor not available. Please try again."] };
+          return { success: false, errors: [Locale.label("forms.paymentProcessorUnavailable")] };
         }
         const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(result.client_secret);
         if (confirmError) {
-          return { success: false, errors: [confirmError.message || "Authentication failed. Please try again."] };
+          return { success: false, errors: [confirmError.message || Locale.label("forms.authenticationFailed")] };
         }
         if (paymentIntent?.status === "succeeded") {
           return { success: true, errors: [] };
         }
-        return { success: false, errors: ["Payment authentication was not completed."] };
+        return { success: false, errors: [Locale.label("forms.authenticationIncomplete")] };
       }
 
       if (result?.status === "succeeded" || result?.status === "pending") {
@@ -151,9 +151,9 @@ export const FormCardPayment = forwardRef((props: Props, ref) => {
         return { success: false, errors: [result.raw.message] };
       }
 
-      return { success: false, errors: ["Payment was not successful."] };
+      return { success: false, errors: [Locale.label("forms.paymentNotSuccessful")] };
     } catch (err) {
-      return { success: false, errors: ["An error occurred while saving your payment."] };
+      return { success: false, errors: [Locale.label("forms.paymentSaveError")] };
     }
   };
 

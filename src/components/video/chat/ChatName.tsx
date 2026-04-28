@@ -1,6 +1,7 @@
 import React from "react";
 import type { UserInterface } from "@churchapps/helpers";
 import { Button, TextField } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 
 interface Props {
   user: UserInterface,
@@ -28,7 +29,7 @@ export const ChatName: React.FC<Props> = (props) => {
     e.preventDefault();
     const trimmedName = displayName.trim();
     if (!trimmedName) {
-      alert("Please enter a full name");
+      alert(Locale.label("video.chat.enterFullName"));
       return;
     }
     props.updateFunction(trimmedName);
@@ -37,12 +38,12 @@ export const ChatName: React.FC<Props> = (props) => {
 
   React.useEffect(() => { setEdit(props.promptName); }, [props.promptName]);
 
-  if (!edit) return (<a href="about:blank" className="nav-link" onClick={editMode} data-testid="edit-name-button">Change Name</a>);
+  if (!edit) return (<a href="about:blank" className="nav-link" onClick={editMode} data-testid="edit-name-button">{Locale.label("video.chat.changeName")}</a>);
   else {
     return (
       <>
-        <TextField size="small" fullWidth label="Name" id="nameText2" name="displayName" type="text" placeholder="John Smith" value={displayName} onChange={handleChange}
-          InputProps={{ endAdornment: <Button size="small" variant="contained" id="setNameButton" onClick={handleUpdate} data-testid="chat-name-update-button">Update</Button> }}
+        <TextField size="small" fullWidth label={Locale.label("person.name")} id="nameText2" name="displayName" type="text" placeholder={Locale.label("video.chat.namePlaceholder")} value={displayName} onChange={handleChange}
+          InputProps={{ endAdornment: <Button size="small" variant="contained" id="setNameButton" onClick={handleUpdate} data-testid="chat-name-update-button">{Locale.label("common.update")}</Button> }}
           data-testid="chat-name-input"
         />
       </>

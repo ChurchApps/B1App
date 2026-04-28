@@ -3,6 +3,7 @@
 import { ApiHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import type { GroupInterface, GroupMemberInterface, PersonInterface } from "@churchapps/helpers";
@@ -46,7 +47,7 @@ export function MembersTab(props: Props) {
     const rows: React.ReactElement[] = [];
 
     if (groupMembers.length === 0) {
-      rows.push(<TableRow key="0"><TableCell>No group members found.</TableCell></TableRow>);
+      rows.push(<TableRow key="0"><TableCell>{Locale.label("groupsPage.noGroupMembersFound")}</TableCell></TableRow>);
       return rows;
     }
 
@@ -62,7 +63,7 @@ export function MembersTab(props: Props) {
           </TableCell>
           {(props.canEditMembers ?? props.isLeader)
             && <TableCell style={{ textAlign: "right" }}>
-              <SmallButton icon="person_remove" toolTip="Remove" onClick={() => handleRemove(gm)} color="error" data-testid={`remove-member-${gm.personId}-button`} />
+              <SmallButton icon="person_remove" toolTip={Locale.label("groupsPage.remove")} onClick={() => handleRemove(gm)} color="error" data-testid={`remove-member-${gm.personId}-button`} />
             </TableCell>}
         </TableRow>
       );
@@ -99,10 +100,10 @@ export function MembersTab(props: Props) {
   const canEdit = props.canEditMembers ?? props.isLeader;
   return <>{canEdit
     ? <>
-      <h2>Members</h2>
+      <h2>{Locale.label("groupsPage.members")}</h2>
       <Grid container spacing={3}>
         <Grid size={{ md: 7 }}>
-          <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox>
+          <DisplayBox id="groupMembersBox" headerText={Locale.label("groupsPage.groupMembers")} headerIcon="group">{getTable()}</DisplayBox>
         </Grid>
         <Grid size={{ md: 5 }}>
           <PersonAdd addFunction={handleAdd} getPhotoUrl={PersonHelper.getPhotoUrl} />
@@ -110,8 +111,8 @@ export function MembersTab(props: Props) {
       </Grid>
     </>
     : <>
-      <h2>Members</h2>
-      <DisplayBox id="groupMembersBox" headerText="Group Members" headerIcon="group">{getTable()}</DisplayBox>
+      <h2>{Locale.label("groupsPage.members")}</h2>
+      <DisplayBox id="groupMembersBox" headerText={Locale.label("groupsPage.groupMembers")} headerIcon="group">{getTable()}</DisplayBox>
     </>
   }</>;
 }

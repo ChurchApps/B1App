@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { Locale } from "@churchapps/apphelper";
 import { ScreenSkeleton } from "./ScreenSkeleton";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { PlaceholderPage } from "./PlaceholderPage";
@@ -46,6 +47,6 @@ export function DetailRouter({ pageSlug, id, config }: Props) {
     case "volunteerSignup": return <VolunteerDetail id={id} config={config} />;
     case "playlist":
     case "playlistDetails": return <PlaylistDetail id={id} config={config} />;
-    default: return <PlaceholderPage title={`${pageSlug} detail`} icon="apps" description={`Detail view for '${pageSlug}' isn't available yet.`} />;
+    default: return <PlaceholderPage title={Locale.label("mobile.components.detailViewTitle").replace("{}", pageSlug)} icon="apps" description={Locale.label("mobile.components.detailViewDescription").replace("{}", pageSlug)} />;
   }
 }

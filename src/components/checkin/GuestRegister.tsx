@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Button, Icon, Box, Typography, TextField, IconButton } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { HeaderSection, HeaderIconContainer, CheckinCard, colors } from "./CheckinStyles";
 
 interface GuestMember {
@@ -45,7 +46,7 @@ export function GuestRegister({ churchId }: Props) {
     setError("");
     for (const m of members) {
       if (!m.firstName.trim() || !m.lastName.trim()) {
-        setError("First name and last name are required for each member.");
+        setError(Locale.label("checkin.guestRegister.validate.namesRequired"));
         return;
       }
     }
@@ -64,7 +65,7 @@ export function GuestRegister({ churchId }: Props) {
       await ApiHelper.postAnonymous("/people/guest-register", payload, "MembershipApi");
       setIsComplete(true);
     } catch {
-      setError("Registration failed. Please try again.");
+      setError(Locale.label("checkin.guestRegister.registrationFailed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -78,10 +79,10 @@ export function GuestRegister({ churchId }: Props) {
             <Icon sx={{ fontSize: 48, color: colors.success }}>check_circle</Icon>
           </HeaderIconContainer>
           <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
-            Registration Complete
+            {Locale.label("checkin.guestRegister.complete.title")}
           </Typography>
           <Typography variant="body1" sx={{ color: colors.textSecondary }}>
-            You&apos;re all set! A staff member will check you in shortly.
+            {Locale.label("checkin.guestRegister.complete.message")}
           </Typography>
         </HeaderSection>
       </>
@@ -95,10 +96,10 @@ export function GuestRegister({ churchId }: Props) {
           <Icon sx={{ fontSize: 48, color: colors.primary }}>person_add</Icon>
         </HeaderIconContainer>
         <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
-          Guest Registration
+          {Locale.label("checkin.guestRegister.title")}
         </Typography>
         <Typography variant="body1" sx={{ color: colors.textSecondary }}>
-          Register your family as guests
+          {Locale.label("checkin.guestRegister.subtitle")}
         </Typography>
       </HeaderSection>
 
@@ -106,7 +107,7 @@ export function GuestRegister({ churchId }: Props) {
         <CheckinCard key={index} sx={{ padding: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 1 }}>
             <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600 }}>
-              {index === 0 ? "Primary Contact" : `Family Member ${index + 1}`}
+              {index === 0 ? Locale.label("checkin.guestRegister.primaryContact") : Locale.label("checkin.guestRegister.familyMember").replace("{}", String(index + 1))}
             </Typography>
             {index > 0 && (
               <IconButton size="small" onClick={() => removeMember(index)}>
@@ -116,7 +117,7 @@ export function GuestRegister({ churchId }: Props) {
           </Box>
           <Box sx={{ display: "flex", gap: 2, marginBottom: 1 }}>
             <TextField
-              label="First Name"
+              label={Locale.label("person.firstName")}
               value={member.firstName}
               onChange={(e) => updateMember(index, "firstName", e.target.value)}
               size="small"
@@ -124,7 +125,7 @@ export function GuestRegister({ churchId }: Props) {
               fullWidth
             />
             <TextField
-              label="Last Name"
+              label={Locale.label("person.lastName")}
               value={member.lastName}
               onChange={(e) => updateMember(index, "lastName", e.target.value)}
               size="small"
@@ -135,7 +136,7 @@ export function GuestRegister({ churchId }: Props) {
           {index === 0 && (
             <Box sx={{ display: "flex", gap: 2 }}>
               <TextField
-                label="Email"
+                label={Locale.label("person.email")}
                 type="email"
                 value={member.email}
                 onChange={(e) => updateMember(index, "email", e.target.value)}
@@ -143,7 +144,7 @@ export function GuestRegister({ churchId }: Props) {
                 fullWidth
               />
               <TextField
-                label="Phone"
+                label={Locale.label("checkin.guestRegister.phone")}
                 type="tel"
                 value={member.phone}
                 onChange={(e) => updateMember(index, "phone", e.target.value)}
@@ -163,7 +164,7 @@ export function GuestRegister({ churchId }: Props) {
           disabled={members.length >= 10}
           sx={{ borderRadius: 2, color: colors.primary, borderColor: colors.primary }}
         >
-          Add Family Member
+          {Locale.label("checkin.guestRegister.addFamilyMember")}
         </Button>
       </Box>
 
@@ -188,7 +189,7 @@ export function GuestRegister({ churchId }: Props) {
           "&:hover": { backgroundColor: colors.primaryHover }
         }}
       >
-        {isSubmitting ? "Registering..." : "Register"}
+        {isSubmitting ? Locale.label("checkin.guestRegister.registering") : Locale.label("login.register")}
       </Button>
     </>
   );

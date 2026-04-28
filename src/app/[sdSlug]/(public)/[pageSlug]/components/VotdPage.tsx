@@ -1,6 +1,7 @@
 "use client";
 
 import { Container } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { useState, useEffect } from "react";
 
 export function VotdPage() {
@@ -43,7 +44,7 @@ export function VotdPage() {
   if (!isClient || day === null) {
     return (
       <Container>
-        <h1 style={{ textAlign: "center" }}>Verse of the Day</h1>
+        <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.verseOfTheDay")}</h1>
         <div className="full-frame" style={{ minHeight: "200px" }} />
       </Container>
     );
@@ -51,11 +52,11 @@ export function VotdPage() {
 
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>Verse of the Day</h1>
+      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.verseOfTheDay")}</h1>
       <img
         src={"https://votd.org/v1/" + day + "/" + shape + ".jpg"}
         className="full-frame"
-        alt="Verse of the Day"
+        alt={Locale.label("pageSlug.verseOfTheDay")}
       />
     </Container>
   );

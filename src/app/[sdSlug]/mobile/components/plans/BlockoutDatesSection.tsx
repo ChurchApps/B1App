@@ -15,7 +15,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { mobileTheme } from "../mobileTheme";
 
@@ -155,7 +155,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
   const renderForm = () => (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
       <TextField
-        label="Start date"
+        label={Locale.label("mobile.plans.startDate")}
         type="date"
         value={startDate}
         onChange={(e) => setStartDate(e.target.value)}
@@ -164,7 +164,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
         fullWidth
       />
       <TextField
-        label="End date"
+        label={Locale.label("mobile.plans.endDate")}
         type="date"
         value={endDate}
         onChange={(e) => setEndDate(e.target.value)}
@@ -268,7 +268,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
           </Box>
           <IconButton
             onClick={() => setDeleteId(b.id)}
-            aria-label="Delete blockout"
+            aria-label={Locale.label("mobile.plans.deleteBlockout")}
             sx={{ color: tc.error }}
           >
             <Icon>delete_outline</Icon>
@@ -299,7 +299,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
       </Box>
 
       <Dialog open={!!deleteId} onClose={() => !deleting && setDeleteId(null)}>
-        <DialogTitle>Delete blockout date?</DialogTitle>
+        <DialogTitle>{Locale.label("mobile.plans.deleteBlockoutTitle")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Are you sure you want to delete this blockout date? This cannot be undone.

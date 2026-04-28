@@ -19,6 +19,7 @@ import {
   AppearanceHelper,
   CurrencyHelper,
   DateHelper,
+  Locale,
   UniqueIdHelper,
   UserHelper
 } from "@churchapps/apphelper";
@@ -400,7 +401,7 @@ function DonatePageInner({ config }: Props) {
       if (!church?.id) {
         return (
           <Box sx={{ p: 3, textAlign: "center" }}>
-            <Typography sx={{ color: tc.textMuted }}>Unable to load church configuration.</Typography>
+            <Typography sx={{ color: tc.textMuted }}>{Locale.label("mobile.screens.unableToLoadChurch")}</Typography>
           </Box>
         );
       }
@@ -426,7 +427,7 @@ function DonatePageInner({ config }: Props) {
     if (isMethodsLoading) {
       return (
         <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography sx={{ color: tc.textMuted }}>Loading donation form...</Typography>
+          <Typography sx={{ color: tc.textMuted }}>{Locale.label("mobile.screens.loadingForm")}</Typography>
         </Box>
       );
     }
@@ -456,7 +457,7 @@ function DonatePageInner({ config }: Props) {
     if (isMethodsLoading) {
       return (
         <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography sx={{ color: tc.textMuted }}>Loading...</Typography>
+          <Typography sx={{ color: tc.textMuted }}>{Locale.label("mobile.screens.loading")}</Typography>
         </Box>
       );
     }
@@ -540,7 +541,7 @@ function DonatePageInner({ config }: Props) {
             gap: 1
           }}
         >
-          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>Giving</Typography>
+          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.screens.giving")}</Typography>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
             <Button
               size="small"
@@ -580,7 +581,7 @@ function DonatePageInner({ config }: Props) {
         </Box>
 
         {donationsLoading ? (
-          <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 3 }}>Loading...</Typography>
+          <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 3 }}>{Locale.label("mobile.screens.loading")}</Typography>
         ) : (
           <Box sx={{ textAlign: "center", py: 1 }}>
             <Typography sx={{ fontSize: 32, fontWeight: 800, color: tc.primary }}>
@@ -695,7 +696,7 @@ function DonatePageInner({ config }: Props) {
           }}
         >
           {donationsLoading && (
-            <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 4 }}>Loading...</Typography>
+            <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 4 }}>{Locale.label("mobile.screens.loading")}</Typography>
           )}
           {!donationsLoading && filteredDonations.length === 0 && (
             <Box sx={{ py: 5, textAlign: "center", px: 2 }}>
@@ -796,10 +797,10 @@ function DonatePageInner({ config }: Props) {
             "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 }
           }}
         >
-          {isAuthenticated && <Tab value="overview" label="Overview" />}
-          <Tab value="donate" label="Donate" />
-          {isAuthenticated && <Tab value="manage" label="Manage" />}
-          {isAuthenticated && <Tab value="history" label="History" />}
+          {isAuthenticated && <Tab value="overview" label={Locale.label("mobile.screens.tabOverview")} />}
+          <Tab value="donate" label={Locale.label("mobile.screens.tabDonate")} />
+          {isAuthenticated && <Tab value="manage" label={Locale.label("mobile.screens.tabManage")} />}
+          {isAuthenticated && <Tab value="history" label={Locale.label("mobile.screens.tabHistory")} />}
         </Tabs>
       </Box>
 

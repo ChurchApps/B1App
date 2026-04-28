@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
 import { InputBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface, UserContextInterface } from "@churchapps/helpers";
@@ -49,14 +50,14 @@ export const GroupResources: React.FC<Props> = (props) => {
   };
 
   const handleDelete = async (file: FileInterface) => {
-    if (confirm("Are you sure you wish to delete '" + file.fileName + "'?")) {
+    if (confirm(Locale.label("groups.confirmDelete").replace("{}", file.fileName))) {
       await ApiHelper.delete("/files/" + file.id, "ContentApi");
       loadData();
     }
   };
 
   const handleLinkDelete = async (link: LinkInterface) => {
-    if (confirm("Are you sure you wish to delete '" + link.text + "'?")) {
+    if (confirm(Locale.label("groups.confirmDelete").replace("{}", link.text))) {
       await ApiHelper.delete("/links/" + link.id, "ContentApi");
       loadData();
     }
@@ -73,7 +74,7 @@ export const GroupResources: React.FC<Props> = (props) => {
     const percent = usedSpace / 100000000;
     return (
       <>
-        <div>Used space: {formatSize(usedSpace)} / 100MB</div>
+        <div>{Locale.label("groups.usedSpace").replace("{}", formatSize(usedSpace))}</div>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ width: "100%", mr: 1 }}>
             <LinearProgress variant="determinate" value={percent} />
@@ -113,7 +114,7 @@ export const GroupResources: React.FC<Props> = (props) => {
               handleDelete(file);
             }}
             data-testid={`delete-file-${file.id}`}
-            aria-label={`Delete file ${file.fileName}`}
+            aria-label={Locale.label("groups.deleteFileLabel").replace("{}", file.fileName)}
           />
         )}
       </TableCell>
@@ -135,7 +136,7 @@ export const GroupResources: React.FC<Props> = (props) => {
               handleLinkDelete(link);
             }}
             data-testid={`delete-link-${link.id}`}
-            aria-label={`Delete link ${link.text}`}
+            aria-label={Locale.label("groups.deleteLinkLabel").replace("{}", link.text)}
           />
         )}
       </TableCell>
@@ -144,11 +145,11 @@ export const GroupResources: React.FC<Props> = (props) => {
 
   return (
     <>
-      <DisplayBox headerText="Files" headerIcon="description" data-testid="group-files-display-box">
+      <DisplayBox headerText={Locale.label("groups.files")} headerIcon="description" data-testid="group-files-display-box">
         {links && links.length > 0 && (
           <>
             <Divider variant="middle" textAlign="center" sx={{ marginTop: 3, marginBottom: 3 }}>
-              <Chip label="Added Links" size="small" color="primary" sx={{ width: 120 }} />
+              <Chip label={Locale.label("groups.addedLinks")} size="small" color="primary" sx={{ width: 120 }} />
             </Divider>
             <Table>
               <TableHead>
@@ -164,7 +165,7 @@ export const GroupResources: React.FC<Props> = (props) => {
         {files && files?.length > 0 && (
           <>
             <Divider variant="middle" textAlign="center" sx={{ marginTop: 3, marginBottom: 3 }}>
-              <Chip label="Uploaded Files" size="small" color="primary" sx={{ width: 120 }} />
+              <Chip label={Locale.label("groups.uploadedFiles")} size="small" color="primary" sx={{ width: 120 }} />
             </Divider>
             <Table>
               <TableHead>
@@ -190,13 +191,9 @@ export const GroupResources: React.FC<Props> = (props) => {
 
       {/* File Upload */}
       {canEditGroupResources && (
-        <InputBox headerIcon="description" headerText="Upload" saveFunction={handleSave} saveText="Upload" data-testid="group-upload-inputbox">
+        <InputBox headerIcon="description" headerText={Locale.label("groups.upload")} saveFunction={handleSave} saveText={Locale.label("groups.upload")} data-testid="group-upload-inputbox">
           {getStorage()}
-          <p>
-            100 MB of storage space is provided for free for storing PDFs and
-            other documents commonly needed. We suggest using Google Drive or
-            Dropbox to store files if additional space is needed.
-          </p>
+          <p>{Locale.label("groups.storageInfo")}</p>
           {usedSpace < 100000000 && (
             <FileUpload
               contentType="group"

@@ -4,7 +4,7 @@ import { ChatHelper } from "@/helpers/ChatHelper";
 import { Button, FormControl, InputLabel, OutlinedInput } from "@mui/material";
 import React, { KeyboardEvent } from "react";
 import { Emojis } from ".";
-import { UserHelper } from "@churchapps/apphelper";
+import { UserHelper, Locale } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { MessageInterface } from "@churchapps/helpers";
 import { ChatRoomInterface } from "../../../helpers";
@@ -50,15 +50,15 @@ export const ChatSend: React.FC<Props> = (props) => {
       <div id="sendPublic" style={(size === "medium") ? { marginLeft: 5, marginRight: 5 } : {} }>
 
         <FormControl fullWidth variant="outlined" size={size} sx={{ marginTop: "2px", marginBottom: "1px" }}>
-          <InputLabel htmlFor="searchText">{(size === "medium") ? "Send Message" : "Message"}</InputLabel>
-          <OutlinedInput id="sendChatText" name="sendChatText" type="text" label={(size === "medium") ? "Send Message" : "Message"} value={message} onChange={handleChange}
+          <InputLabel htmlFor="searchText">{(size === "medium") ? Locale.label("video.chat.sendMessage") : Locale.label("video.chat.message")}</InputLabel>
+          <OutlinedInput id="sendChatText" name="sendChatText" type="text" label={(size === "medium") ? Locale.label("video.chat.sendMessage") : Locale.label("video.chat.message")} value={message} onChange={handleChange}
             onKeyDown={handleKeyDown} autoComplete="off"
             style={(size === "small") ? { paddingRight: 4 } : {} }
             data-testid="chat-message-input"
-            aria-label="Type your message"
+            aria-label={Locale.label("video.chat.typeMessage")}
             endAdornment={<>
-              <Button variant="outlined" size="small" style={{ paddingRight: 8, paddingLeft: 8, minWidth: 0, marginRight: 5 }} onClick={toggleEmojis} data-field="sendText" className="emojiButton" data-testid="emoji-button" aria-label="Open emoji picker"><span role="img" aria-label="emoji">😀</span></Button>
-              <Button variant="contained" onClick={handleSendMessage} size="small" data-testid="send-message-button" aria-label="Send message">Send</Button>
+              <Button variant="outlined" size="small" style={{ paddingRight: 8, paddingLeft: 8, minWidth: 0, marginRight: 5 }} onClick={toggleEmojis} data-field="sendText" className="emojiButton" data-testid="emoji-button" aria-label={Locale.label("video.chat.openEmojiPicker")}><span role="img" aria-label={Locale.label("video.chat.emoji")}>😀</span></Button>
+              <Button variant="contained" onClick={handleSendMessage} size="small" data-testid="send-message-button" aria-label={Locale.label("video.chat.sendMessageAria")}>{Locale.label("video.chat.send")}</Button>
             </>}
           />
         </FormControl>

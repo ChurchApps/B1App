@@ -3,6 +3,7 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
 import { ImageEditor } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
@@ -15,7 +16,7 @@ interface Props { personId: string; person: PersonInterface; onSave?: () => void
 export const ModifyProfile: React.FC<Props> = (props) => {
   const [householdMembers, setHouseholdMembers] = useState<PersonInterface[]>(null);
   const [open, setOpen] = useState<boolean>(false);
-  const [currentField, setCurrentField] = useState<{ field: string; label: string; value: string; }>({ field: "name.first", label: "First Name", value: props.person?.name?.first || "" });
+  const [currentField, setCurrentField] = useState<{ field: string; label: string; value: string; }>({ field: "name.first", label: Locale.label("person.firstName"), value: props.person?.name?.first || "" });
   const [showPhotoEditor, setShowPhotoEditor] = useState<boolean>(false);
   const [changes, setChanges] = useState<{ field: string; label: string; value: string }[]>([]);
 
@@ -33,21 +34,21 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const categories = [
-    { key: "name.first", label: "First Name" },
-    { key: "name.middle", label: "Middle Name" },
-    { key: "name.last", label: "Last Name" },
-    { key: "photo", label: "Photo" },
-    { key: "birthDate", label: "Birth Date" },
-    { key: "contactInfo.email", label: "Email" },
-    { key: "contactInfo.address1", label: "Address Line 1" },
-    { key: "contactInfo.address2", label: "Address Line 2" },
-    { key: "contactInfo.city", label: "City" },
-    { key: "contactInfo.state", label: "State" },
-    { key: "contactInfo.zip", label: "Zip" },
-    { key: "contactInfo.homePhone", label: "Home Phone" },
-    { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
-    { key: "contactInfo.workPhone", label: "Work Phone" },
-    { key: "familyMember", label: "Add a Family Member" }
+    { key: "name.first", label: Locale.label("person.firstName") },
+    { key: "name.middle", label: Locale.label("member.directory.middleName") },
+    { key: "name.last", label: Locale.label("person.lastName") },
+    { key: "photo", label: Locale.label("member.directory.photo") },
+    { key: "birthDate", label: Locale.label("member.directory.birthDate") },
+    { key: "contactInfo.email", label: Locale.label("person.email") },
+    { key: "contactInfo.address1", label: Locale.label("selectChurch.address1") },
+    { key: "contactInfo.address2", label: Locale.label("selectChurch.address2") },
+    { key: "contactInfo.city", label: Locale.label("selectChurch.city") },
+    { key: "contactInfo.state", label: Locale.label("selectChurch.state") },
+    { key: "contactInfo.zip", label: Locale.label("selectChurch.zip") },
+    { key: "contactInfo.homePhone", label: Locale.label("member.directory.homePhone") },
+    { key: "contactInfo.mobilePhone", label: Locale.label("member.directory.mobilePhone") },
+    { key: "contactInfo.workPhone", label: Locale.label("member.directory.workPhone") },
+    { key: "familyMember", label: Locale.label("member.directory.addAFamilyMember") }
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
@@ -96,8 +97,8 @@ export const ModifyProfile: React.FC<Props> = (props) => {
                 />
               )
               : (
-                <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setShowPhotoEditor(true); }} data-testid="edit-photo-link" aria-label="Edit profile photo">
-                  <img src={currentField.value || PersonHelper.getPhotoUrl(props.person)} alt="Profile photo" data-testid="profile-photo" />
+                <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setShowPhotoEditor(true); }} data-testid="edit-photo-link" aria-label={Locale.label("member.directory.editProfilePhoto")}>
+                  <img src={currentField.value || PersonHelper.getPhotoUrl(props.person)} alt={Locale.label("member.directory.profilePhoto")} data-testid="profile-photo" />
                 </a>
               )
             }
@@ -106,10 +107,10 @@ export const ModifyProfile: React.FC<Props> = (props) => {
         break;
       case "birthDate":
         option = (
-          <TextField fullWidth label="Birthdate" name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(currentField.value)} onChange={handleChange} data-testid="birthdate-input" aria-label="Birth date" />
+          <TextField fullWidth label={Locale.label("member.directory.birthDate")} name="value" type="date" InputLabelProps={{ shrink: true }} value={DateHelper.formatHtml5Date(currentField.value)} onChange={handleChange} data-testid="birthdate-input" aria-label={Locale.label("member.directory.birthDate")} />
         );
         break;
-      default: option = (<TextField fullWidth label="Value" name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? "*Enter First Name only" : null} data-testid="field-value-input" aria-label={`${currentField.label} value`} />); break;
+      default: option = (<TextField fullWidth label={Locale.label("member.directory.value")} name="value" value={currentField.value || ""} onChange={handleChange} helperText={currentField.field === "familyMember" ? Locale.label("member.directory.enterFirstNameOnly") : null} data-testid="field-value-input" aria-label={`${currentField.label} ${Locale.label("member.directory.value")}`} />); break;
     }
     return option;
   };
@@ -125,7 +126,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
           <TableCell>{ch.label}</TableCell>
           <TableCell>{val}</TableCell>
           <TableCell>
-            <IconButton size="small" color="error" onClick={() => handleDelete(ch.field)} data-testid={`delete-change-${ch.field}-button`} aria-label={`Delete ${ch.label} change`}><DeleteIcon fontSize="inherit" /></IconButton>
+            <IconButton size="small" color="error" onClick={() => handleDelete(ch.field)} data-testid={`delete-change-${ch.field}-button`} aria-label={Locale.label("member.directory.deleteChange").replace("{}", ch.label)}><DeleteIcon fontSize="inherit" /></IconButton>
           </TableCell>
         </TableRow>
       );
@@ -140,7 +141,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
   };
 
   const handleClose = () => {
-    setCurrentField({ field: "name.first", label: "First Name", value: props.person?.name?.first || "" });
+    setCurrentField({ field: "name.first", label: Locale.label("person.firstName"), value: props.person?.name?.first || "" });
     setShowPhotoEditor(false);
     setChanges([]);
     setOpen(false);
@@ -150,7 +151,7 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     const newChanges = [...changes];
     newChanges.push(currentField);
     setChanges(newChanges);
-    setCurrentField({ field: "name.first", label: "First Name", value: props.person?.name?.first || "" });
+    setCurrentField({ field: "name.first", label: Locale.label("person.firstName"), value: props.person?.name?.first || "" });
   };
 
   const handleRequest = async () => {
@@ -179,33 +180,33 @@ export const ModifyProfile: React.FC<Props> = (props) => {
     <>
       {(PersonHelper.person.id === props.personId || householdMembers?.some((m) => m.id === props.personId))
         && (
-          <Tooltip title="Modify Profile" arrow>
-            <IconButton color="primary" size="medium" onClick={() => setOpen(true)} data-testid="modify-profile-button" aria-label="Modify profile">
+          <Tooltip title={Locale.label("member.directory.modifyProfile")} arrow>
+            <IconButton color="primary" size="medium" onClick={() => setOpen(true)} data-testid="modify-profile-button" aria-label={Locale.label("member.directory.modifyProfile")}>
               <AssignmentReturnIcon fontSize="medium" sx={{ transform: "scaleX(-1)" }} />
             </IconButton>
           </Tooltip>
         )
       }
       <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>Modify Profile</DialogTitle>
+        <DialogTitle>{Locale.label("member.directory.modifyProfile")}</DialogTitle>
         <DialogContent>
-          <Typography fontSize="13px" fontStyle="italic">You can request changes to modify{" "}<b>{props.person?.name?.first}'s profile</b>. They'll be applied once approved by the admin.</Typography>
+          <Typography fontSize="13px" fontStyle="italic">{Locale.label("member.directory.modifyProfileIntroPrefix")}{" "}<b>{Locale.label("member.directory.personsProfile").replace("{}", props.person?.name?.first || "")}</b>. {Locale.label("member.directory.modifyProfileIntroSuffix")}</Typography>
           <hr />
           <Table>
             <TableBody>{getChangesRows()}</TableBody>
           </Table>
           <FormControl fullWidth>
-            <InputLabel>Field</InputLabel>
-            <Select fullWidth label="Field" name="field" value={currentField.field} onChange={handleChange} data-testid="field-select" aria-label="Select field to modify">
+            <InputLabel>{Locale.label("member.directory.field")}</InputLabel>
+            <Select fullWidth label={Locale.label("member.directory.field")} name="field" value={currentField.field} onChange={handleChange} data-testid="field-select" aria-label={Locale.label("member.directory.selectFieldToModify")}>
               {fieldOptions()}
             </Select>
           </FormControl>
           {valueOption()}
-          <Button fullWidth variant="outlined" sx={{ paddingTop: 0, paddingBottom: 0 }} onClick={handleAdd} data-testid="add-change-button" aria-label="Add field change">+ Add</Button>
+          <Button fullWidth variant="outlined" sx={{ paddingTop: 0, paddingBottom: 0 }} onClick={handleAdd} data-testid="add-change-button" aria-label={Locale.label("member.directory.addFieldChange")}>+ {Locale.label("common.add")}</Button>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} data-testid="close-modify-profile-button" aria-label="Close modify profile dialog">Close</Button>
-          <Button variant="contained" onClick={handleRequest} disabled={changes.length === 0} data-testid="request-changes-button" aria-label="Request profile changes">Request</Button>
+          <Button onClick={handleClose} data-testid="close-modify-profile-button" aria-label={Locale.label("member.directory.closeModifyProfile")}>{Locale.label("common.close")}</Button>
+          <Button variant="contained" onClick={handleRequest} disabled={changes.length === 0} data-testid="request-changes-button" aria-label={Locale.label("member.directory.requestProfileChanges")}>{Locale.label("member.directory.request")}</Button>
         </DialogActions>
       </Dialog>
     </>

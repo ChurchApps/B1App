@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { Stack } from "@mui/material";
 import { SongDetailInterface, SongDetailLinkInterface } from "@/helpers";
 
@@ -40,7 +40,7 @@ export const SongDetailLinks = (props: Props) => {
   else {
     return <>
       <hr />
-      <h4>Links</h4>
+      <h4>{Locale.label("mobile.plans.links")}</h4>
       <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: "wrap" }}>
         {songDetailLinks?.map((sd, i) => getLink(sd, i))}
         {props.songDetail?.praiseChartsId && getLink({ service: "PraiseCharts", url: `https://www.praisecharts.com/songs/details/${props.songDetail?.praiseChartsId}?XID=churchapps` }, songDetailLinks.length + 1)}

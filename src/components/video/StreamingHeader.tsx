@@ -1,4 +1,4 @@
-import { UserHelper } from "@churchapps/apphelper";
+import { UserHelper, Locale } from "@churchapps/apphelper";
 import type { AppearanceInterface } from "@churchapps/apphelper";
 import { EnvironmentHelper, StreamConfigInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
@@ -32,8 +32,8 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   };
 
   const getLoginLink = () => {
-    if (!ApiHelper.isAuthenticated) return (<Link href="/login?returnUrl=/stream" className="nav-link" data-testid="stream-login-link">Login</Link>);
-    else return (<Link href="/logout" className="nav-link" data-testid="stream-logout-link">Logout</Link>);
+    if (!ApiHelper.isAuthenticated) return (<Link href="/login?returnUrl=/stream" className="nav-link" data-testid="stream-login-link">{Locale.label("login.login")}</Link>);
+    else return (<Link href="/logout" className="nav-link" data-testid="stream-logout-link">{Locale.label("wrapper.logout")}</Link>);
   };
 
   const getProfileLink = () => {
@@ -41,7 +41,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     else {
       const jwt = ApiHelper.getConfig("MembershipApi").jwt;
       const profileUrl = `${EnvironmentHelper.Common.B1AdminRoot}/login?jwt=${jwt}&returnUrl=/profile`;
-      return (<li className="nav-item"><a href={profileUrl} target="_blank" rel="noopener noreferrer" className="nav-link" data-testid="stream-profile-link">Profile</a></li>);
+      return (<li className="nav-item"><a href={profileUrl} target="_blank" rel="noopener noreferrer" className="nav-link" data-testid="stream-profile-link">{Locale.label("wrapper.profile")}</a></li>);
     }
   };
   const getSettingLink = () => {
@@ -49,7 +49,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
       const jwt = UserHelper.currentUserChurch?.jwt;
       const churchId = UserHelper.currentUserChurch?.church?.id;
       return (
-        <li className="nav-item"><a href={`https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/`} className="nav-link" data-testid="stream-admin-link">Admin Dashboard</a></li>
+        <li className="nav-item"><a href={`https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/`} className="nav-link" data-testid="stream-admin-link">{Locale.label("video.adminDashboard")}</a></li>
       );
     }
   };
@@ -84,7 +84,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
         try {
           const { firstName, lastName } = ChatHelper.current.user;
           const displayName = `${firstName} ${lastName}`;
-          if (displayName.trim() === "" || displayName === "Anonymous") {
+          if (displayName.trim() === "" || displayName === Locale.label("video.anonymous")) {
             if (!promptName) {
               setShowUserMenu(true);
               setPromptName(true);
@@ -101,7 +101,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
   return (
     <>
       <div id="streamingHeader">
-        <div id="logo">{imgSrc && <img src={imgSrc} alt="logo" />}</div>
+        <div id="logo">{imgSrc && <img src={imgSrc} alt={Locale.label("video.logo")} />}</div>
         <div id="liveButtons" className="d-none d-xl-flex">
           <div>
             <ul className="nav">
@@ -109,7 +109,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
             </ul>
           </div>
         </div>
-        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu} data-testid="stream-user-menu-link">{firstName ? `${firstName} ${lastName}` : "Anonymous"} <Icon>expand_more</Icon></a></div></div>
+        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu} data-testid="stream-user-menu-link">{firstName ? `${firstName} ${lastName}` : Locale.label("video.anonymous")} <Icon>expand_more</Icon></a></div></div>
       </div>
       {getUserMenu()}
     </>

@@ -1,6 +1,7 @@
 "use client";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { DateHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { Conversations } from "../notes/Conversations";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import type { EventInterface } from "@churchapps/helpers";
@@ -45,14 +46,14 @@ export function DisplayEventModal(props: Props) {
       <Dialog open={true} onClose={props.onDone} fullScreen>
         <AppBar sx={{ position: "relative" }}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label="close">
+            <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label={Locale.label("common.close")}>
               <Icon>close</Icon>
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Edit Event
+              {Locale.label("eventCalendar.editEvent")}
             </Typography>
             <Button autoFocus color="inherit" onClick={props.onEdit} data-testid="event-edit-button">
-              Edit
+              {Locale.label("common.edit")}
             </Button>
           </Toolbar>
         </AppBar>
@@ -67,10 +68,10 @@ export function DisplayEventModal(props: Props) {
               href={`/${params.sdSlug}/register/${props.event.id}`}
               sx={{ my: 2 }}
             >
-              Register for this Event
+              {Locale.label("eventCalendar.registerForEvent")}
             </Button>
           )}
-          <h2>Discussion</h2>
+          <h2>{Locale.label("eventCalendar.discussion")}</h2>
           <Conversations context={context} contentType="event" contentId={props.event.id} groupId={props.event.groupId} />
 
         </DialogContent>

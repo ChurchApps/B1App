@@ -4,6 +4,7 @@ import React from "react";
 import type { Stripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { DonationForm, StripePaymentMethod } from "@churchapps/apphelper/donations";
+import { Locale } from "@churchapps/apphelper";
 import { PersonInterface, ChurchInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -29,7 +30,7 @@ const StableDonationFormComponent: React.FC<Props> = (props) => {
   if (!props.person
       || !props.paymentMethods
       || !props.stripePromise) {
-    return <div>Loading payment options...</div>;
+    return <div>{Locale.label("donate.loadingPaymentOptions")}</div>;
   }
 
   return (

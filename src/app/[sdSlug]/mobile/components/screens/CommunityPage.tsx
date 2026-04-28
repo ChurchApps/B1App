@@ -12,7 +12,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, PersonHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { getInitials } from "../util";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
@@ -368,8 +368,8 @@ export const CommunityPage = ({ config: _config }: Props) => {
         <TextField
           fullWidth
           variant="outlined"
-          label="Search Members"
-          placeholder="Enter name"
+          label={Locale.label("mobile.screens.searchMembers")}
+          placeholder={Locale.label("mobile.screens.enterName")}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           InputProps={{
@@ -380,7 +380,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
             ),
             endAdornment: searchText ? (
               <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setSearchText("")} aria-label="Clear">
+                <IconButton size="small" onClick={() => setSearchText("")} aria-label={Locale.label("mobile.screens.clear")}>
                   <Icon sx={{ fontSize: 18 }}>close</Icon>
                 </IconButton>
               </InputAdornment>

@@ -4,6 +4,7 @@ import { CheckinHelper, PersonHelper } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { Box, CardActionArea, Icon, Typography, CircularProgress } from "@mui/material";
 import { HeaderSection, HeaderIconContainer, CheckinCard, IconCircle, EmptyStateCard, colors } from "./CheckinStyles";
 import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface, ServiceTimeInterface, PersonInterface } from "@churchapps/helpers";
@@ -82,10 +83,10 @@ export function Services({ selectedHandler }: Props) {
           <Icon sx={{ fontSize: 48, color: colors.primary }}>event</Icon>
         </HeaderIconContainer>
         <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
-          Select Service
+          {Locale.label("checkin.services.title")}
         </Typography>
         <Typography variant="body1" sx={{ color: colors.textSecondary }}>
-          Choose which service you're checking in for
+          {Locale.label("checkin.services.subtitle")}
         </Typography>
       </HeaderSection>
 
@@ -95,10 +96,10 @@ export function Services({ selectedHandler }: Props) {
           <EmptyStateCard>
             <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>event_busy</Icon>
             <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
-              No Services Available
+              {Locale.label("checkin.services.noServicesAvailable")}
             </Typography>
             <Typography variant="body2" sx={{ color: colors.textSecondary }}>
-              Please check back later or contact your church administrator
+              {Locale.label("checkin.services.checkBackLater")}
             </Typography>
           </EmptyStateCard>
         )

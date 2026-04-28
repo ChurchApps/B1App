@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Card, CardContent, Typography, Stack, Button, LinearProgress, Box, Chip } from "@mui/material";
 import { DateHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 
 interface SignupPlanData {
@@ -20,8 +21,8 @@ export function VolunteerBrowse({ signupPlans }: Props) {
   if (signupPlans.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 8 }}>
-        <Typography variant="h5" gutterBottom>Volunteer Opportunities</Typography>
-        <Typography color="text.secondary">No volunteer opportunities are available right now. Check back soon!</Typography>
+        <Typography variant="h5" gutterBottom>{Locale.label("serving.opportunities")}</Typography>
+        <Typography color="text.secondary">{Locale.label("serving.noOpportunities")}</Typography>
       </Box>
     );
   }
@@ -34,7 +35,7 @@ export function VolunteerBrowse({ signupPlans }: Props) {
 
   return (
     <>
-      <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>Volunteer Opportunities</Typography>
+      <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>{Locale.label("serving.opportunities")}</Typography>
       <Stack spacing={3}>
         {signupPlans.map(({ plan, positions, times }) => {
           const { total, filled, remaining } = getTotalSlots(positions);
@@ -52,7 +53,7 @@ export function VolunteerBrowse({ signupPlans }: Props) {
                     </Typography>
                   </Box>
                   <Chip
-                    label={remaining > 0 ? remaining + " spots open" : "Full"}
+                    label={remaining > 0 ? Locale.label("serving.spotsOpen").replace("{}", remaining.toString()) : Locale.label("serving.full")}
                     color={remaining > 0 ? "success" : "default"}
                     size="small"
                   />
@@ -60,14 +61,14 @@ export function VolunteerBrowse({ signupPlans }: Props) {
                 <Box sx={{ mt: 2, mb: 1 }}>
                   <LinearProgress variant="determinate" value={progress} sx={{ height: 8, borderRadius: 4 }} />
                   <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
-                    {filled} of {total} positions filled
+                    {Locale.label("serving.positionsFilled").replace("{filled}", filled.toString()).replace("{total}", total.toString())}
                   </Typography>
                 </Box>
                 <Stack direction="row" spacing={1} sx={{ mt: 1, flexWrap: "wrap", gap: 0.5 }}>
                   {positions.map(p => (
                     <Chip
                       key={p.id}
-                      label={p.name + " (" + (p.count - p.filledCount) + " open)"}
+                      label={p.name + " (" + Locale.label("serving.openCount").replace("{}", (p.count - p.filledCount).toString()) + ")"}
                       size="small"
                       variant="outlined"
                       color={p.filledCount < p.count ? "primary" : "default"}
@@ -78,7 +79,7 @@ export function VolunteerBrowse({ signupPlans }: Props) {
                   <Box sx={{ mt: 2, textAlign: "right" }}>
                     <Link href={`volunteer/${plan.id}`} passHref>
                       <Button variant="contained" size="small" sx={{ textTransform: "none", borderRadius: 2 }}>
-                        View &amp; Sign Up
+                        {Locale.label("serving.viewAndSignUp")}
                       </Button>
                     </Link>
                   </Box>

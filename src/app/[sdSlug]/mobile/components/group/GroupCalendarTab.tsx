@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { EventProcessor } from "../../helpers/eventProcessor";
@@ -26,14 +26,14 @@ const describeRecurrence = (rule?: string) => {
   }, {});
   const freq = parts.FREQ;
   const interval = parts.INTERVAL ? parseInt(parts.INTERVAL, 10) : 1;
-  if (!freq) return "Repeats";
+  if (!freq) return Locale.label("mobile.group.repeats");
   const map: Record<string, string> = {
-    DAILY: interval === 1 ? "Daily" : `Every ${interval} days`,
-    WEEKLY: interval === 1 ? "Weekly" : `Every ${interval} weeks`,
-    MONTHLY: interval === 1 ? "Monthly" : `Every ${interval} months`,
-    YEARLY: interval === 1 ? "Yearly" : `Every ${interval} years`
+    DAILY: interval === 1 ? Locale.label("mobile.group.daily") : Locale.label("mobile.group.everyNDays").replace("{}", String(interval)),
+    WEEKLY: interval === 1 ? Locale.label("mobile.group.weekly") : Locale.label("mobile.group.everyNWeeks").replace("{}", String(interval)),
+    MONTHLY: interval === 1 ? Locale.label("mobile.group.monthly") : Locale.label("mobile.group.everyNMonths").replace("{}", String(interval)),
+    YEARLY: interval === 1 ? Locale.label("mobile.group.yearly") : Locale.label("mobile.group.everyNYears").replace("{}", String(interval))
   };
-  return map[freq] || "Repeats";
+  return map[freq] || Locale.label("mobile.group.repeats");
 };
 
 export interface EventRow {
@@ -61,7 +61,7 @@ const formatMonth = (d: Date) =>
 
 const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: boolean) => {
   if (!start) return "";
-  if (allDay) return "All day";
+  if (allDay) return Locale.label("mobile.group.allDay");
   const s = new Date(start);
   if (isNaN(s.getTime())) return "";
   const fmt = (d: Date) => d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
@@ -206,7 +206,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
               "&:hover": { bgcolor: tc.success }
             }}
           >
-            Add Event
+            {Locale.label("mobile.group.addEvent")}
           </Button>
         )}
         <Button
@@ -223,7 +223,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
             py: "10px"
           }}
         >
-          Subscribe
+          {Locale.label("mobile.group.subscribe")}
         </Button>
       </Box>
 
@@ -246,7 +246,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
           ))}
           {selectedTags.length > 0 && (
             <Chip
-              label="Clear"
+              label={Locale.label("mobile.group.clear")}
               onDelete={() => setSelectedTags([])}
               onClick={() => setSelectedTags([])}
               size="small"
@@ -264,13 +264,13 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
-          <IconButton onClick={goPrev} aria-label="Previous month" size="small" sx={{ color: tc.primary }}>
+          <IconButton onClick={goPrev} aria-label={Locale.label("mobile.group.previousMonth")} size="small" sx={{ color: tc.primary }}>
             <Icon>chevron_left</Icon>
           </IconButton>
           <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
             {formatMonth(currentMonth)}
           </Typography>
-          <IconButton onClick={goNext} aria-label="Next month" size="small" sx={{ color: tc.primary }}>
+          <IconButton onClick={goNext} aria-label={Locale.label("mobile.group.nextMonth")} size="small" sx={{ color: tc.primary }}>
             <Icon>chevron_right</Icon>
           </IconButton>
         </Box>
@@ -363,7 +363,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
               textAlign: "center"
             }}
           >
-            <Typography sx={{ fontSize: 14, color: tc.textMuted }}>No events on this day.</Typography>
+            <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.noEventsToday")}</Typography>
           </Box>
         )}
         {!isLoading && selectedEvents.length > 0 && (
@@ -383,7 +383,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                 <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                      {e.title || "Event"}
+                      {e.title || Locale.label("mobile.group.event")}
                     </Typography>
                     <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
                       {formatTimeRange(e.start, e.end, e.allDay)}
@@ -394,7 +394,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                           <Chip
                             size="small"
                             icon={<Icon sx={{ fontSize: 14 }}>lock</Icon>}
-                            label="Private"
+                            label={Locale.label("mobile.group.private")}
                             sx={{
                               height: 22,
                               fontSize: 11,
@@ -408,7 +408,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                         {e.allDay && (
                           <Chip
                             size="small"
-                            label="All day"
+                            label={Locale.label("mobile.group.allDay")}
                             sx={{
                               height: 22,
                               fontSize: 11,
@@ -439,7 +439,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                   {isLeader && onEditEvent && (
                     <IconButton
                       size="small"
-                      aria-label="Edit event"
+                      aria-label={Locale.label("mobile.group.editEvent")}
                       onClick={(ev) => {
                         ev.stopPropagation();
                         onEditEvent(e);
@@ -483,7 +483,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                         "&:hover": { bgcolor: tc.success }
                       }}
                     >
-                      Register
+                      {Locale.label("mobile.group.register")}
                     </Button>
                   </Box>
                 )}

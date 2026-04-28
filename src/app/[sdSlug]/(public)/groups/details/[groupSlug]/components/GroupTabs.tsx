@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { PersonHelper } from "@/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { UserHelper } from "@churchapps/apphelper";
+import { UserHelper, Locale } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import { Permissions } from "@churchapps/helpers";
 
@@ -44,16 +44,16 @@ export const GroupTabs = (props: Props) => {
     const memberStatus = context.userChurch?.person?.membershipStatus?.toLowerCase();
 
 
-    tabs.push({ key: "details", label: "Group Details" });
-    tabs.push({ key: "members", label: "Members" });
+    tabs.push({ key: "details", label: Locale.label("groupsPage.groupDetails") });
+    tabs.push({ key: "members", label: Locale.label("groupsPage.members") });
     if (canEditGroup) {
-      tabs.push({ key: "attendance", label: "Attendance" });
+      tabs.push({ key: "attendance", label: Locale.label("groupsPage.attendance") });
     }
-    tabs.push({ key: "calendar", label: "Calendar" });
-    tabs.push({ key: "conversations", label: "Conversations" });
-    tabs.push({ key: "resources", label: "Resources" });
+    tabs.push({ key: "calendar", label: Locale.label("groupsPage.calendar") });
+    tabs.push({ key: "conversations", label: Locale.label("groupsPage.conversations") });
+    tabs.push({ key: "resources", label: Locale.label("groupsPage.resources") });
     if (canViewLeaderResources) {
-      tabs.push({ key: "leaderResources", label: "Resources (Leaders)" });
+      tabs.push({ key: "leaderResources", label: Locale.label("groupsPage.resourcesLeaders") });
     }
 
     return tabs;

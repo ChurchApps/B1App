@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { PersonInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell } from "@mui/material";
-import { SmallButton } from "@churchapps/apphelper";
+import { Locale, SmallButton } from "@churchapps/apphelper";
 
 
 interface Props {
@@ -40,7 +40,7 @@ export const PersonAddResults: React.FC<Props> = (props: Props) => {
         <TableCell><img src={props.getPhotoUrl(sr)} alt="avatar" style={{ width: 50, height: 40, borderRadius: 8 }} /></TableCell>
         <TableCell>{sr.name?.display}{props.includeEmail && (<><br /><i style={{ color: "#999" }}>{sr.contactInfo?.email}</i></>)}</TableCell>
         <TableCell>
-          <SmallButton color="success" icon="person" text={props.actionLabel || "Add"} onClick={() => handleAdd(sr)} data-testid={`add-person-${sr.id}-button`} />
+          <SmallButton color="success" icon="person" text={props.actionLabel || Locale.label("common.add")} onClick={() => handleAdd(sr)} data-testid={`add-person-${sr.id}-button`} />
         </TableCell>
       </TableRow>
     );

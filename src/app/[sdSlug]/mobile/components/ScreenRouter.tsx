@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { Locale } from "@churchapps/apphelper";
 import { ScreenSkeleton } from "./ScreenSkeleton";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { PlaceholderPage } from "./PlaceholderPage";
@@ -74,6 +75,6 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "websiteUrl":
     case "page": return <WebsiteUrlPage config={config} />;
     case "login": return <MobileLoginScreen config={config} />;
-    default: return <PlaceholderPage title={pageSlug} icon="apps" description={`The '${pageSlug}' screen is not yet implemented.`} />;
+    default: return <PlaceholderPage title={pageSlug} icon="apps" description={Locale.label("mobile.components.screenNotImplemented").replace("{}", pageSlug)} />;
   }
 }

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, UserContextInterface } from "@churchapps/helpers";
 import { TimelinePost } from "./TimelinePost";
 import { TimelineHelper } from "@/helpers/TimelineHelper";
@@ -28,7 +29,7 @@ export const GroupTimeline: React.FC<Props> = (props) => {
   if (posts?.length > 0) {
     return (
       <>
-        <h1>Latest Updates</h1>
+        <h1>{Locale.label("member.timeline.latestUpdates")}</h1>
         {posts.map((post) => (
           <TimelinePost condensed={true} post={post} key={post.postId} context={props.context} people={people} groups={groups} onUpdate={loadData} />
         ))}

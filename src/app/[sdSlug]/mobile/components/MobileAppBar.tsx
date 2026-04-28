@@ -6,7 +6,7 @@ import { AppBar, Avatar, Badge, IconButton, Stack, Toolbar, Typography } from "@
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { useNotifications } from "@churchapps/apphelper";
+import { Locale, useNotifications } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, SCREEN_TITLES, mobileSlugFromPath } from "./mobileTheme";
@@ -64,7 +64,7 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
           {!isDashboard ? (
             <IconButton
               onClick={handleBack}
-              aria-label="Back to dashboard"
+              aria-label={Locale.label("mobile.components.backToDashboard")}
               sx={{ color: onPrimary, mx: 0.25 }}
             >
               <ChevronLeftIcon sx={{ fontSize: 27 }} />
@@ -72,7 +72,7 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
           ) : (
             <IconButton
               onClick={onMenuClick}
-              aria-label="Open navigation menu"
+              aria-label={Locale.label("mobile.components.openMenu")}
               sx={{ color: onPrimary, mx: 0.5, display: { md: "none" } }}
             >
               <MenuIcon sx={{ fontSize: 27 }} />
@@ -101,13 +101,13 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
         <Stack direction="row" alignItems="center" spacing={0.5} sx={{ pr: 1 }}>
           {signedIn && (
             <>
-              <IconButton ref={bellRef} onClick={() => setBellOpen(true)} aria-label="Notifications and messages" sx={{ color: onPrimary }}>
+              <IconButton ref={bellRef} onClick={() => setBellOpen(true)} aria-label={Locale.label("mobile.components.notificationsAndMessages")} sx={{ color: onPrimary }}>
                 <Badge badgeContent={totalUnread} color="error" overlap="circular" invisible={totalUnread === 0}>
                   <NotificationsNoneIcon sx={{ fontSize: 24 }} />
                 </Badge>
               </IconButton>
               <NotificationBellMenu anchorEl={bellRef.current} open={bellOpen} onClose={() => setBellOpen(false)} />
-              <IconButton onClick={onAvatarClick} aria-label="Profile" sx={{ p: 0.5 }}>
+              <IconButton onClick={onAvatarClick} aria-label={Locale.label("mobile.components.profile")} sx={{ p: 0.5 }}>
                 <Avatar sx={{
                   width: 30,
                   height: 30,

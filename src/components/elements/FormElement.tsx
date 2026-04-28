@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { Loading, UserHelper, ApiHelper } from "@churchapps/apphelper";
+import { Loading, UserHelper, ApiHelper, Locale } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { FormCardPayment } from "@/components/forms/FormCardPayment";
@@ -83,14 +83,14 @@ export const FormElement = (props: Props) => {
   if (isFormSubmitted) {
     return (
       <p>
-        {form?.thankYouMessage ? form.thankYouMessage : "Your form has been successfully submitted."}
+        {form?.thankYouMessage ? form.thankYouMessage : Locale.label("elements.formSubmitted")}
         <Button
           variant="text"
           size="small"
           onClick={() => setIsFormSubmitted(false)}
           data-testid="form-fill-again-button"
         >
-          Fill Again
+          {Locale.label("elements.fillAgain")}
         </Button>
       </p>
     );

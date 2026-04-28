@@ -2,7 +2,7 @@
 
 import React, { useContext, useState } from "react";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, DateHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
@@ -192,14 +192,14 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
       </Box>
 
       <Dialog open={!!cancelId} onClose={() => setCancelId(null)}>
-        <DialogTitle>Cancel Registration?</DialogTitle>
+        <DialogTitle>{Locale.label("mobile.screens.cancelRegistration")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Are you sure you want to cancel this registration? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCancelId(null)}>Keep</Button>
+          <Button onClick={() => setCancelId(null)}>{Locale.label("mobile.screens.keep")}</Button>
           <Button
             onClick={handleCancel}
             variant="contained"

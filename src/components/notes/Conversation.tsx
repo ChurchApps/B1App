@@ -156,14 +156,14 @@ const result = (
       </div>
 
       {hasMore && !loading && (showAll || !props.noWrapper) && (
-        <Button onClick={() => loadNotes(page + 1)} data-testid="conversation-load-more-button">Load More</Button>
+        <Button onClick={() => loadNotes(page + 1)} data-testid="conversation-load-more-button">{Locale.label("notes.list.loadMore")}</Button>
       )}
 
       {!showAll && props.noWrapper && (
-        <Button onClick={() => setShowAll(true)} data-testid="conversation-show-all-button">Show All</Button>
+        <Button onClick={() => setShowAll(true)} data-testid="conversation-show-all-button">{Locale.label("notes.list.showAll")}</Button>
       )}
 
-      {loading && <Button disabled>Loading...</Button>}
+      {loading && <Button disabled>{Locale.label("notes.list.loading")}</Button>}
     </div>
   </>
 );

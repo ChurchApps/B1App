@@ -30,7 +30,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
   const getRows = () => {
     const rows: React.ReactElement[] = [];
     if (groupMembers.length === 0) {
-      rows.push(<TableRow key="0"><TableCell>{Locale.label("No group members available.")}</TableCell></TableRow>);
+      rows.push(<TableRow key="0"><TableCell>{Locale.label("groupsPage.noGroupMembersAvailable")}</TableCell></TableRow>);
       return rows;
     }
     for (let i = 0; i < groupMembers.length; i++) {
@@ -39,7 +39,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
         <TableRow key={i} className="personSideTable">
           <TableCell><img src={PersonHelper.getPhotoUrl(gm.person)} alt="avatar" /></TableCell>
           <TableCell><Link href={"/people/" + gm.personId}>{gm.person?.name?.display}</Link></TableCell>
-          <TableCell><SmallButton icon="person_add" text={Locale.label("Add")} onClick={() => addMember(gm)} color="success" data-testid={`add-member-${gm.personId}-button`} /></TableCell>
+          <TableCell><SmallButton icon="person_add" text={Locale.label("common.add")} onClick={() => addMember(gm)} color="success" data-testid={`add-member-${gm.personId}-button`} /></TableCell>
         </TableRow>
       );
     }
@@ -49,7 +49,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
   const getTableHeader = () => {
     const rows: React.ReactElement[] = [];
     if (groupMembers.length === 0) return rows;
-    rows.push(<TableRow key="0"><th></th><th>{Locale.label("Name")}</th><th></th></TableRow>);
+    rows.push(<TableRow key="0"><th></th><th>{Locale.label("person.name")}</th><th></th></TableRow>);
     return rows;
   };
 
@@ -65,7 +65,7 @@ export const MembersAdd: React.FC<Props> = (props) => {
 
   return (
     <div className="sideTableHeader">
-      <DisplayBox headerIcon="person" headerText={Locale.label("Available Group Members")} data-cy="available-group-members">
+      <DisplayBox headerIcon="person" headerText={Locale.label("groupsPage.availableGroupMembers")} data-cy="available-group-members">
         {content}
       </DisplayBox>
     </div>

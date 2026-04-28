@@ -6,6 +6,7 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/vendor/animations.css";
 import { Animate } from "@churchapps/apphelper/website";
+import { Locale } from "@churchapps/apphelper";
 import { FormPage } from "./components/FormPage";
 import { notFound } from "next/navigation";
 import { DefaultPageWrapper } from "../components/DefaultPageWrapper";
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
   const { sdSlug, pageSlug } = await params;
   const props = await loadSharedData(sdSlug, pageSlug);
 
-  const title = "Forms";
+  const title = Locale.label("pageSlug.metaForms");
   return MetaHelper.getMetaData(title + " - " + props.config.church.name, "My", undefined, props.config.appearance);
 }
 

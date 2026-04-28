@@ -9,7 +9,7 @@ import {
   Skeleton,
   Typography
 } from "@mui/material";
-import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -112,7 +112,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           <Box
             component="img"
             src={photo}
-            alt={person?.name?.display || "Member"}
+            alt={person?.name?.display || Locale.label("mobile.components.member")}
             sx={{
               width: 120,
               height: 120,
@@ -151,7 +151,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
             textShadow: "0 1px 2px rgba(0,0,0,0.3)"
           }}
         >
-          {person?.name?.display || "Unknown"}
+          {person?.name?.display || Locale.label("mobile.components.unknown")}
         </Typography>
         <Typography
           sx={{
@@ -161,7 +161,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
             textShadow: "0 1px 2px rgba(0,0,0,0.3)"
           }}
         >
-          {(person as any)?.membershipStatus || "Church Member"}
+          {(person as any)?.membershipStatus || Locale.label("mobile.details.churchMember")}
         </Typography>
       </Box>
     );
@@ -226,8 +226,8 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         <QuickAction
           key="edit"
           icon="edit"
-          label="Edit"
-          ariaLabel="Edit profile"
+          label={Locale.label("mobile.details.edit")}
+          ariaLabel={Locale.label("mobile.details.editProfile")}
           background="#4CAF50"
           onClick={() => router.push("/mobile/profileEdit")}
         />
@@ -237,8 +237,8 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
       <QuickAction
         key="msg"
         icon="message"
-        label="Message"
-        ariaLabel="Send message"
+        label={Locale.label("mobile.details.message")}
+        ariaLabel={Locale.label("mobile.details.sendMessage")}
         onClick={handleMessage}
       />
     );
@@ -247,8 +247,8 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         <QuickAction
           key="call"
           icon="phone"
-          label="Call"
-          ariaLabel="Call"
+          label={Locale.label("mobile.details.call")}
+          ariaLabel={Locale.label("mobile.details.call")}
           onClick={() => {
             window.location.href = `tel:${primaryPhone}`;
           }}
@@ -260,8 +260,8 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         <QuickAction
           key="email"
           icon="email"
-          label="Email"
-          ariaLabel="Send email"
+          label={Locale.label("mobile.details.email")}
+          ariaLabel={Locale.label("mobile.details.sendEmail")}
           onClick={() => {
             window.location.href = `mailto:${email}`;
           }}
@@ -367,7 +367,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         <ContactRow
           key="email"
           icon="email"
-          label="Email Address"
+          label={Locale.label("mobile.details.emailAddress")}
           value={email}
           onClick={() => {
             window.location.href = `mailto:${email}`;
@@ -380,7 +380,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         <ContactRow
           key="phone"
           icon="phone"
-          label={phone ? "Mobile Phone" : "Phone Number"}
+          label={phone ? Locale.label("mobile.details.mobilePhone") : Locale.label("mobile.details.phoneNumber")}
           value={primaryPhone}
           onClick={() => {
             window.location.href = `tel:${primaryPhone}`;
@@ -395,7 +395,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         <ContactRow
           key="address"
           icon="location_on"
-          label="Address"
+          label={Locale.label("mobile.details.address")}
           value={line1 || city || ""}
           subValue={line2 || undefined}
           onClick={addressLine1 ? openAddress : undefined}
@@ -406,7 +406,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
     return (
       <Box>
         <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: "16px" }}>
-          Contact Information
+          {Locale.label("mobile.details.contactInformation")}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {rows}
@@ -428,12 +428,12 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
     return (
       <Box>
         <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: "16px" }}>
-          Household Members
+          {Locale.label("mobile.details.householdMembers")}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           {others.map((h) => {
             const hphoto = getPhoto(h);
-            const display = h.name?.display || "Unknown";
+            const display = h.name?.display || Locale.label("mobile.components.unknown");
             const { firstName, lastName } = formatName(display);
             return (
               <Box
@@ -504,7 +504,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
                     )}
                   </Box>
                   <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
-                    {h.householdRole || "Household Member"}
+                    {h.householdRole || Locale.label("mobile.details.householdMember")}
                   </Typography>
                 </Box>
                 <Box
@@ -543,7 +543,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         }}
       >
         <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-          Contact info not available
+          {Locale.label("mobile.details.contactInfoNotAvailable")}
         </Typography>
       </Box>
     </Box>
@@ -593,10 +593,10 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         <Icon sx={{ fontSize: 32, color: tc.primary }}>person_off</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        Person Not Found
+        {Locale.label("mobile.details.personNotFound")}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-        This profile could not be found.
+        {Locale.label("mobile.details.personNotFoundDescription")}
       </Typography>
       <Button
         variant="outlined"
@@ -609,7 +609,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
-        Back to Community
+        {Locale.label("mobile.details.backToCommunity")}
       </Button>
     </Box>
   );

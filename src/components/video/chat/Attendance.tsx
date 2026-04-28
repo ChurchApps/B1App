@@ -6,7 +6,7 @@ import { Icon } from "@mui/material";
 import "react-contexify/dist/ReactContexify.css";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { UniqueIdHelper } from "@churchapps/apphelper";
 import type { ConversationInterface } from "@churchapps/helpers";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
@@ -29,8 +29,8 @@ export const Attendance: React.FC<Props> = (props) => {
   const getViewerCount = () => {
     let totalViewers = 0;
     if (props.attendance.viewers !== undefined) totalViewers = props.attendance.viewers.length;
-    if (totalViewers === 1) return "1 attendee";
-    else return totalViewers.toString() + " attendees";
+    if (totalViewers === 1) return Locale.label("video.chat.oneAttendee");
+    else return Locale.label("video.chat.attendees").replace("{}", totalViewers.toString());
   };
 
   const getChevron = () => {
@@ -89,16 +89,16 @@ export const Attendance: React.FC<Props> = (props) => {
       e.preventDefault();
       if (ipAddress && ipAddress !== "") {
         StreamChatManager.handleBlockAction(ipAddress, props.attendance.conversationId, ChatHelper.current.mainRoom.conversation.contentId);
-        if (type === "block") alert("User has been blocked.");
-        else alert("User has been unblocked.");
+        if (type === "block") alert(Locale.label("video.chat.userBlocked"));
+        else alert(Locale.label("video.chat.userUnblocked"));
       } else {
-        alert("Couldn't block the sender.");
+        alert(Locale.label("video.chat.couldNotBlock"));
       }
     };
 
     if (props.user.isHost) {
-      if (StreamChatManager.isIpBlocked(ipAddress)) result = <a about="href:blank" title="unblock" style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "unblock"); }}><Icon sx={{ color: "#999" }}><img src="/images/icons/unblock.svg" alt="unblock" /></Icon></a>;
-      else result = <a about="href:blank" title="block" style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "block"); }}><Icon>block</Icon></a>;
+      if (StreamChatManager.isIpBlocked(ipAddress)) result = <a about="href:blank" title={Locale.label("video.chat.unblock")} style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "unblock"); }}><Icon sx={{ color: "#999" }}><img src="/images/icons/unblock.svg" alt={Locale.label("video.chat.unblock")} /></Icon></a>;
+      else result = <a about="href:blank" title={Locale.label("video.chat.block")} style={{ cursor: "pointer" }} onClick={(e) => { handleClick(e, "block"); }}><Icon>block</Icon></a>;
     }
     return result;
   };
@@ -157,9 +157,9 @@ const getCombinedPeople = (): CombinedPerson[] => {
 const handlePMClick = async (privateRoom: ChatRoomInterface) => {
 
   if (privateRoom === null) {
-    let title = "Private chat";
+    let title = Locale.label("video.chat.privateChat");
     props.attendance.viewers.forEach(v => {
-      if (v.id === selectedConnectionId) title = "Private chat with " + v.displayName;
+      if (v.id === selectedConnectionId) title = Locale.label("video.chat.privateChatWith").replace("{}", v.displayName);
     });
     const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
     const pr = ChatHelper.getOrCreatePrivateRoom(conversation);
@@ -179,7 +179,7 @@ const handlePMClick = async (privateRoom: ChatRoomInterface) => {
 };
 
 const handleVideoChat = async () => {
-  if (window.confirm("Would you like to start a video chat?")) {
+  if (window.confirm(Locale.label("video.chat.startVideoChatConfirm"))) {
     const room = (ChatConfigHelper.current.jitsiRoom) ? ChatConfigHelper.current.jitsiRoom : UniqueIdHelper.generateAlphanumeric();
     await ApiHelper.get("/conversations/videoChat/" + selectedConnectionId + "/" + room, "MessagingApi");
     ChatConfigHelper.current.jitsiRoom = room;
@@ -206,10 +206,10 @@ const getContextMenuItems = () => {
   const privateRoom: ChatRoomInterface = getRoomForConnection(selectedConnectionId);
   const result: React.ReactElement[] = [];
 
-  if (privateRoom === null) result.push(<Item onClick={() => handlePMClick(null)}>Private Message</Item>);
-  else result.push(<Item onClick={() => handlePMClick(privateRoom)}>Join Private Conversation</Item>);
+  if (privateRoom === null) result.push(<Item onClick={() => handlePMClick(null)}>{Locale.label("video.chat.privateMessage")}</Item>);
+  else result.push(<Item onClick={() => handlePMClick(privateRoom)}>{Locale.label("video.chat.joinPrivateConversation")}</Item>);
 
-  result.push(<Item onClick={() => handleVideoChat()}>Invite to Video Chat</Item>);
+  result.push(<Item onClick={() => handleVideoChat()}>{Locale.label("video.chat.inviteToVideoChat")}</Item>);
 
   return result;
 };

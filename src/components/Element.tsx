@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Locale } from "@churchapps/apphelper";
 import { Element as AppHelperElement, ElementBlock } from "@churchapps/apphelper/website";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { ElementInterface, SectionInterface } from "@/helpers";
@@ -22,7 +23,7 @@ const StreamElement: React.FC<{ element: ElementInterface; churchSettings: any; 
   const includeInteraction = mode !== "video";
 
   let offlineContent: React.ReactElement | undefined = undefined;
-  if (props.element.answers?.offlineContent === "hide") offlineContent = (props.editMode) ? (<>Offline Video Placeholder</>) : (<></>);
+  if (props.element.answers?.offlineContent === "hide") offlineContent = (props.editMode) ? (<>{Locale.label("element.offlinePlaceholder")}</>) : (<></>);
   else if (props.element.answers?.offlineContent === "block") offlineContent = <ElementBlock key={props.element.id} element={props.element as ElementInterface} churchSettings={props.churchSettings} textColor={"#333333"} />;
 
   return <LiveStream includeHeader={false} includeInteraction={includeInteraction} keyName={props.church.subDomain || ""} appearance={props.churchSettings} offlineContent={offlineContent} />;

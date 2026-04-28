@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
 import { type LinkInterface } from "@churchapps/helpers";
+import { Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute, linkTypeToTagline } from "./mobileTheme";
@@ -174,7 +175,7 @@ export const DashboardPage = ({ config }: Props) => {
             mb: 2,
             pl: 0.5
           }}>
-            Featured
+            {Locale.label("mobile.components.featured")}
           </Typography>
           <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.md - 4}px` }}>
             {featuredTwo.map((item) => {
@@ -245,7 +246,7 @@ export const DashboardPage = ({ config }: Props) => {
             mb: 2,
             pl: 0.5
           }}>
-            Quick Actions
+            {Locale.label("mobile.components.quickActions")}
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: `${mobileTheme.spacing.md - 4}px` }}>
             {others.map((item) => (

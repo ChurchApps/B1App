@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Box, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import type { GroupInterface } from "@churchapps/helpers";
 
@@ -91,7 +92,7 @@ export default function GroupCard(props: Props) {
             </Box>
           ) : (
             <Typography component="p" sx={{ fontStyle: "italic", m: 0 }}>
-              No Description Provided.
+              {Locale.label("groups.noDescription")}
             </Typography>
           )}
         </Box>

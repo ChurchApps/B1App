@@ -4,7 +4,7 @@ import {
   Box, Button, Card, CardContent, Chip, Divider, Icon, IconButton,
   LinearProgress, Stack, TextField, Typography
 } from "@mui/material";
-import { ApiHelper, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import type { EventInterface, RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 
@@ -81,11 +81,11 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     setError("");
     if (!isLoggedIn) {
       if (!guestFirstName.trim() || !guestLastName.trim()) {
-        setError("First name and last name are required.");
+        setError(Locale.label("registration.errors.namesRequired"));
         return;
       }
       if (!guestEmail.trim()) {
-        setError("Email is required for guest registration.");
+        setError(Locale.label("registration.errors.emailRequired"));
         return;
       }
     }
@@ -96,7 +96,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     setError("");
     for (const m of members) {
       if (!m.firstName.trim() || !m.lastName.trim()) {
-        setError("First and last name are required for each additional member.");
+        setError(Locale.label("registration.errors.memberNamesRequired"));
         return;
       }
     }
@@ -127,7 +127,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       setRegistration(result);
       setStep("confirm");
     } catch {
-      setError("Registration failed. The event may be full or registration may have closed.");
+      setError(Locale.label("registration.errors.registrationFailed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -139,11 +139,11 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       <Card sx={{ borderRadius: 2 }}>
         <CardContent sx={{ textAlign: "center", py: 4 }}>
           <Icon sx={{ fontSize: 48, color: "grey.400", mb: 1 }}>event_busy</Icon>
-          <Typography variant="h6">Registration Not Open</Typography>
+          <Typography variant="h6">{Locale.label("registration.notOpen")}</Typography>
           <Typography variant="body2" color="text.secondary">
             {event.registrationOpenDate && new Date(event.registrationOpenDate) > new Date()
-              ? `Registration opens ${DateHelper.prettyDate(event.registrationOpenDate)}`
-              : "Registration for this event has closed."}
+              ? Locale.label("registration.opensOn").replace("{}", DateHelper.prettyDate(event.registrationOpenDate))
+              : Locale.label("registration.closed")}
           </Typography>
         </CardContent>
       </Card>
@@ -155,9 +155,9 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       <Card sx={{ borderRadius: 2 }}>
         <CardContent sx={{ textAlign: "center", py: 4 }}>
           <Icon sx={{ fontSize: 48, color: "error.main", mb: 1 }}>group_off</Icon>
-          <Typography variant="h6">Event Full</Typography>
+          <Typography variant="h6">{Locale.label("registration.eventFull")}</Typography>
           <Typography variant="body2" color="text.secondary">
-            This event has reached its capacity of {event.capacity}.
+            {Locale.label("registration.capacityReached").replace("{}", String(event.capacity))}
           </Typography>
         </CardContent>
       </Card>
@@ -170,18 +170,18 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       <Card sx={{ borderRadius: 2 }}>
         <CardContent sx={{ textAlign: "center", py: 4 }}>
           <Icon sx={{ fontSize: 48, color: "success.main", mb: 1 }}>check_circle</Icon>
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>Registration Confirmed!</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>{Locale.label("registration.confirmed")}</Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            You are registered for <b>{event.title}</b>
+            {Locale.label("registration.youAreRegistered")} <b>{event.title}</b>
           </Typography>
           <Divider sx={{ my: 2 }} />
           <Stack spacing={1} sx={{ textAlign: "left" }}>
-            <Typography variant="body2"><b>Event:</b> {event.title}</Typography>
-            <Typography variant="body2"><b>Date:</b> {getDisplayTime()}</Typography>
-            <Typography variant="body2"><b>Status:</b> <Chip label={registration.status} size="small" color="success" /></Typography>
+            <Typography variant="body2"><b>{Locale.label("registration.event")}:</b> {event.title}</Typography>
+            <Typography variant="body2"><b>{Locale.label("common.date")}:</b> {getDisplayTime()}</Typography>
+            <Typography variant="body2"><b>{Locale.label("registration.status")}:</b> <Chip label={registration.status} size="small" color="success" /></Typography>
             {registration.members && registration.members.length > 0 && (
               <>
-                <Typography variant="body2" sx={{ fontWeight: 600, mt: 1 }}>Registered Members:</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600, mt: 1 }}>{Locale.label("registration.registeredMembers")}:</Typography>
                 {registration.members.map((m, i) => (
                   <Typography key={i} variant="body2">- {m.firstName} {m.lastName}</Typography>
                 ))}
@@ -198,15 +198,15 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     return (
       <Card sx={{ borderRadius: 2 }}>
         <CardContent>
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>Additional Members</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>{Locale.label("registration.additionalMembers")}</Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Optionally register additional family members for this event.
+            {Locale.label("registration.additionalMembersInfo")}
           </Typography>
 
           {members.map((member, index) => (
             <Box key={index} sx={{ display: "flex", gap: 1, mb: 1, alignItems: "center" }}>
               <TextField
-                label="First Name"
+                label={Locale.label("person.firstName")}
                 value={member.firstName}
                 onChange={(e) => updateMember(index, "firstName", e.target.value)}
                 size="small"
@@ -214,7 +214,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
                 fullWidth
               />
               <TextField
-                label="Last Name"
+                label={Locale.label("person.lastName")}
                 value={member.lastName}
                 onChange={(e) => updateMember(index, "lastName", e.target.value)}
                 size="small"
@@ -235,13 +235,13 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             size="small"
             sx={{ mb: 2 }}
           >
-            Add Member
+            {Locale.label("registration.addMember")}
           </Button>
 
           {error && <Typography sx={{ color: "error.main", mb: 1 }}>{error}</Typography>}
 
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-            <Button variant="outlined" onClick={() => setStep("info")}>Back</Button>
+            <Button variant="outlined" onClick={() => setStep("info")}>{Locale.label("registration.back")}</Button>
             <Button
               variant="contained"
               onClick={handleSubmit}
@@ -249,7 +249,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
               fullWidth
               startIcon={<Icon>{isSubmitting ? "hourglass_empty" : "how_to_reg"}</Icon>}
             >
-              {isSubmitting ? "Registering..." : "Complete Registration"}
+              {isSubmitting ? Locale.label("registration.registering") : Locale.label("registration.completeRegistration")}
             </Button>
           </Stack>
         </CardContent>
@@ -276,7 +276,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
         {event.capacity && (
           <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="text.secondary">
-              {activeCount} / {event.capacity} spots filled
+              {Locale.label("registration.spotsFilled").replace("{0}", String(activeCount)).replace("{1}", String(event.capacity))}
             </Typography>
             <LinearProgress
               variant="determinate"
@@ -291,17 +291,17 @@ export function EventRegister({ churchId, eventId, event }: Props) {
 
         {isLoggedIn ? (
           <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>Registering as:</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{Locale.label("registration.registeringAs")}:</Typography>
             <Typography variant="body1" sx={{ fontWeight: 600 }}>
               {context.person?.name?.display || ""}
             </Typography>
           </Box>
         ) : (
           <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>Your Information:</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{Locale.label("registration.yourInformation")}:</Typography>
             <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
               <TextField
-                label="First Name"
+                label={Locale.label("person.firstName")}
                 value={guestFirstName}
                 onChange={(e) => setGuestFirstName(e.target.value)}
                 size="small"
@@ -309,7 +309,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
                 fullWidth
               />
               <TextField
-                label="Last Name"
+                label={Locale.label("person.lastName")}
                 value={guestLastName}
                 onChange={(e) => setGuestLastName(e.target.value)}
                 size="small"
@@ -319,7 +319,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             </Box>
             <Box sx={{ display: "flex", gap: 2 }}>
               <TextField
-                label="Email"
+                label={Locale.label("person.email")}
                 type="email"
                 value={guestEmail}
                 onChange={(e) => setGuestEmail(e.target.value)}
@@ -328,7 +328,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
                 fullWidth
               />
               <TextField
-                label="Phone"
+                label={Locale.label("registration.phone")}
                 type="tel"
                 value={guestPhone}
                 onChange={(e) => setGuestPhone(e.target.value)}
@@ -349,7 +349,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
           startIcon={<Icon>how_to_reg</Icon>}
           sx={{ mt: 1 }}
         >
-          Continue
+          {Locale.label("registration.continue")}
         </Button>
       </CardContent>
     </Card>

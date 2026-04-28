@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Box, CircularProgress, Icon, IconButton, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { navigateBack } from "../util";
@@ -214,7 +215,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
           }}
         >
           <Icon sx={{ fontSize: 32, color: tc.primary, mb: 1 }}>link_off</Icon>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text }}>No URL provided</Typography>
+          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.noUrlProvided")}</Typography>
         </Box>
       </Box>
     );
@@ -240,7 +241,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
           borderBottom: `1px solid ${tc.border}`
         }}
       >
-        <IconButton aria-label="Back" onClick={handleBack} sx={{ color: tc.text }}>
+        <IconButton aria-label={Locale.label("mobile.components.back")} onClick={handleBack} sx={{ color: tc.text }}>
           <Icon>arrow_back</Icon>
         </IconButton>
         <Typography
@@ -257,7 +258,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
           {title}
         </Typography>
         <IconButton
-          aria-label="Open in new tab"
+          aria-label={Locale.label("mobile.screens.openInNewTab")}
           onClick={() => window.open(resolvedUrl, "_blank", "noopener,noreferrer")}
           sx={{ color: tc.text }}
         >

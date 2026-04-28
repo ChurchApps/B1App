@@ -22,7 +22,7 @@ import {
   Typography
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -796,7 +796,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Typography>
         <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px`, alignItems: "flex-start" }}>
           <TextField
-            label="First Name"
+            label={Locale.label("person.firstName")}
             value={newMemberName}
             onChange={(e) => setNewMemberName(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddFamilyMember(); } }}
@@ -844,7 +844,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 >
                   <Icon sx={{ color: tc.warning, fontSize: 20 }}>person_outline</Icon>
                   <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>{name}</Typography>
-                  <IconButton size="small" onClick={() => handleRemoveFamilyMember(idx)} aria-label="Remove">
+                  <IconButton size="small" onClick={() => handleRemoveFamilyMember(idx)} aria-label={Locale.label("mobile.screens.remove")}>
                     <Icon sx={{ color: tc.error, fontSize: 20 }}>close</Icon>
                   </IconButton>
                 </Box>
@@ -875,7 +875,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         {sectionHeader("Display Name", "person")}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
-            label="First Name"
+            label={Locale.label("person.firstName")}
             value={acctFirstName}
             onChange={(e) => { setAcctFirstName(e.target.value); setAcctNameError(null); }}
             variant="outlined"
@@ -884,7 +884,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             sx={inputSx}
           />
           <TextField
-            label="Last Name"
+            label={Locale.label("person.lastName")}
             value={acctLastName}
             onChange={(e) => { setAcctLastName(e.target.value); setAcctNameError(null); }}
             variant="outlined"
@@ -930,7 +930,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
-            label="New Email"
+            label={Locale.label("mobile.screens.newEmail")}
             value={newEmail}
             onChange={(e) => { setNewEmail(e.target.value); setEmailError(null); }}
             type="email"
@@ -973,7 +973,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         {sectionHeader("Change Password", "lock")}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
-            label="New Password"
+            label={Locale.label("mobile.screens.newPassword")}
             value={newPassword}
             onChange={(e) => { setNewPassword(e.target.value); setPasswordError(null); }}
             type="password"
@@ -984,7 +984,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             sx={inputSx}
           />
           <TextField
-            label="Confirm Password"
+            label={Locale.label("mobile.screens.confirmPassword")}
             value={confirmPassword}
             onChange={(e) => { setConfirmPassword(e.target.value); setPasswordError(null); }}
             type="password"
@@ -1037,9 +1037,9 @@ export const ProfileEditPage = ({ config }: Props) => {
         onChange={(e: SelectChangeEvent<string>) => onChange(e.target.value as VisibilityScope)}
         sx={{ borderRadius: `${mobileTheme.radius.md}px` }}
       >
-        <MenuItem value="everyone">Everyone</MenuItem>
-        <MenuItem value="members">Members Only</MenuItem>
-        <MenuItem value="groups">My Groups Only</MenuItem>
+        <MenuItem value="everyone">{Locale.label("mobile.screens.everyone")}</MenuItem>
+        <MenuItem value="members">{Locale.label("mobile.screens.membersOnly")}</MenuItem>
+        <MenuItem value="groups">{Locale.label("mobile.screens.myGroupsOnly")}</MenuItem>
       </Select>
     </FormControl>
   );
@@ -1118,19 +1118,19 @@ export const ProfileEditPage = ({ config }: Props) => {
           </Typography>
         </Box>
         <Box sx={{ mb: 1 }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>Everyone</Typography>
+          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.everyone")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
             Visible to anyone who can view the directory.
           </Typography>
         </Box>
         <Box sx={{ mb: 1 }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>Members Only</Typography>
+          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.membersOnly")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
             Visible to other signed-in church members.
           </Typography>
         </Box>
         <Box>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>My Groups Only</Typography>
+          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.myGroupsOnly")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
             Visible only to members of groups you belong to.
           </Typography>
@@ -1184,9 +1184,9 @@ export const ProfileEditPage = ({ config }: Props) => {
               </Box>
             }
           />
-          <Tab value="household" label="Household" />
-          <Tab value="account" label="Account" />
-          <Tab value="visibility" label="Privacy" />
+          <Tab value="household" label={Locale.label("mobile.screens.tabHousehold")} />
+          <Tab value="account" label={Locale.label("mobile.screens.tabAccount")} />
+          <Tab value="visibility" label={Locale.label("mobile.screens.tabPrivacy")} />
         </Tabs>
       </Box>
 

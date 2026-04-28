@@ -3,6 +3,7 @@ import React from "react";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { AssignmentInterface, PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";
 
@@ -58,12 +59,12 @@ const getRows = () => {
   return rows;
 };
 
-return (<DisplayBox headerIcon="event" headerText="Upcoming Dates" data-testid="upcoming-dates-display-box">
+return (<DisplayBox headerIcon="event" headerText={Locale.label("plans.upcomingDates.title")} data-testid="upcoming-dates-display-box">
   <Table>
     <TableHead>
       <TableRow>
-        <TableCell>Event</TableCell>
-        <TableCell>Start Time</TableCell>
+        <TableCell>{Locale.label("plans.upcomingDates.event")}</TableCell>
+        <TableCell>{Locale.label("plans.upcomingDates.startTime")}</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
