@@ -86,10 +86,14 @@ export const ServiceTimeItem = styled(Box)({
   borderBottom: "1px solid #F0F0F0"
 });
 
-// Colors
+// Colors. `primary` and `secondary` resolve to the church's theme via CSS variables —
+// `--mb-*` is set inside the mobile shell, `--app-*` on public-website pages.
+// The hex literal at the end is the original B1 default and only renders if neither
+// theme has been applied (e.g. before config loads).
 export const colors = {
-  primary: "#0D47A1",
-  primaryHover: "#0B3D8F",
+  primary: "var(--mb-primary, var(--app-primary, #0D47A1))",
+  primaryHover: "var(--mb-primary, var(--app-primary, #0B3D8F))",
+  secondary: "var(--mb-secondary, var(--app-secondary, #568BDA))",
   success: "#70DC87",
   successHover: "#5FC876",
   textPrimary: "#3c3c3c",

@@ -42,7 +42,7 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
   const jwt = searchParams.get("jwt") || cookies.jwt;
 
   return (
-    <Layout withoutNavbar withoutFooter>
+    <Layout withoutNavbar>
 
 
       {process.env.NEXT_PUBLIC_STAGE === "demo" && (<Alert severity="error" style={{ marginTop: 0 }}>

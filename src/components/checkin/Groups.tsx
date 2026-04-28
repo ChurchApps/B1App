@@ -64,7 +64,7 @@ export function Groups({ selectedHandler }: Props) {
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <SmallIconCircle>
-            <Icon sx={{ fontSize: 20, color: "#568BDA" }}>group</Icon>
+            <Icon sx={{ fontSize: 20, color: colors.secondary }}>group</Icon>
           </SmallIconCircle>
           <Typography variant="body1" sx={{ flex: 1, color: colors.textPrimary, fontWeight: 500 }}>
             {g.name}

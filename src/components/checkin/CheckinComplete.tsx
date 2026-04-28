@@ -24,7 +24,7 @@ export function CheckinComplete({ onDone }: Props) {
         justifyContent: "center",
         minHeight: "60vh",
         borderRadius: 3,
-        background: `linear-gradient(135deg, ${colors.primary} 0%, #568BDA 100%)`,
+        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
         padding: 4
       }}
       data-testid="checkin-complete"

@@ -2,14 +2,12 @@
 
 import Head from "next/head";
 import { Header } from "./Header";
-import { Footer } from "./Footer";
 import { CssBaseline } from "@mui/material";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 type Props = {
   children: React.ReactNode;
   withoutNavbar?: boolean;
-  withoutFooter?: boolean;
   pageTitle?: string;
   metaDescription?: string;
   ogDescription?: string;
@@ -37,7 +35,6 @@ export function Layout(props: Props) {
         </Head>
         {!props.withoutNavbar && <Header config={props.config} overlayContent={false} />}
         <main>{props.children}</main>
-        {!props.withoutFooter && <Footer church={props.config?.church} churchSettings={props.config?.appearance} />}
       </div>
     </>
   );

@@ -20,7 +20,7 @@ export default function GroupCard(props: Props) {
           backgroundColor: "white",
           color: "black",
           boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-          border: isHovered ? "3px solid #124d7f" : "3px solid transparent",
+          border: isHovered ? "3px solid var(--app-primary)" : "3px solid transparent",
           transition: "border 0.3s ease",
           display: "flex",
           flexDirection: "column",
