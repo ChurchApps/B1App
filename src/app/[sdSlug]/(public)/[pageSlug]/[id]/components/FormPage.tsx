@@ -8,7 +8,7 @@ import { PersonHelper, WrapperPageProps } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
 import { DateHelper } from "@churchapps/apphelper";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { FormInterface } from "@churchapps/helpers";
 import { Container } from "@mui/material";
 import { FormCardPayment } from "@/components/forms/FormCardPayment";
@@ -81,13 +81,13 @@ export function FormPage(props: Props) {
 
   const getForm = () => {
     if (isLoading) return <Loading />;
-    if (early) return <h3 className="text-center">This form isn't available until {DateHelper.prettyDateTime(early)}</h3>;
-    if (late) return <h3 className="text-center">This form closed on {DateHelper.prettyDateTime(late)}</h3>;
+    if (early) return <h3 className="text-center">{Locale.label("pageSlug.formNotAvailableUntil").replace("{}", DateHelper.prettyDateTime(early))}</h3>;
+    if (late) return <h3 className="text-center">{Locale.label("pageSlug.formClosedOn").replace("{}", DateHelper.prettyDateTime(late))}</h3>;
     if (!restrictedForm || PersonHelper?.person?.id) return showForm();
     if (!PersonHelper?.person?.id) {
       return (
         <h3 className="text-center">
-          <Link href={"/login?returnUrl=/forms/" + props.formId} data-testid="form-login-link">Login</Link> to view this form.
+          <Link href={"/login?returnUrl=/forms/" + props.formId} data-testid="form-login-link">{Locale.label("login.login")}</Link> {Locale.label("pageSlug.toViewForm")}
         </h3>
       );
     }
@@ -104,7 +104,7 @@ export function FormPage(props: Props) {
         <h1>{form?.name}</h1>
         {isFormSubmitted
           ? (
-            <h3 className="text-center">Your form has been successfully submitted.</h3>
+            <h3 className="text-center">{Locale.label("pageSlug.formSubmitted")}</h3>
           )
           : (
             getForm()

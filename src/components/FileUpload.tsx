@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios, { type AxiosProgressEvent } from "axios";
 import { LinearProgress } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { FileInterface } from "@/helpers";
 
 type Props = {
@@ -101,7 +101,7 @@ export function FileUpload(props: Props) {
 
   return (
     <>
-      <label>File</label>
+      <label>{Locale.label("fileUpload.file")}</label>
       {getFileLink()}
       <input id="fileUpload" type="file" onChange={handleChange} data-testid="file-upload-input" />
     </>

@@ -13,7 +13,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
@@ -169,7 +169,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
   const renderBack = () => (
     <IconButton
-      aria-label="Back"
+      aria-label={Locale.label("mobile.components.back")}
       onClick={handleBack}
       sx={{
         width: 40,
@@ -427,21 +427,21 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
             <Box key={idx} sx={{ display: "flex", gap: 1, alignItems: "center", mb: 1.5 }}>
               <Box sx={{ flex: 1, display: "flex", gap: 1 }}>
                 <TextField
-                  label="First Name"
+                  label={Locale.label("person.firstName")}
                   value={member.firstName}
                   onChange={(e) => updateMember(idx, "firstName", e.target.value)}
                   size="small"
                   fullWidth
                 />
                 <TextField
-                  label="Last Name"
+                  label={Locale.label("person.lastName")}
                   value={member.lastName}
                   onChange={(e) => updateMember(idx, "lastName", e.target.value)}
                   size="small"
                   fullWidth
                 />
               </Box>
-              <IconButton aria-label="Remove member" onClick={() => removeMember(idx)} size="small">
+              <IconButton aria-label={Locale.label("mobile.screens.removeMember")} onClick={() => removeMember(idx)} size="small">
                 <Icon>close</Icon>
               </IconButton>
             </Box>
@@ -565,14 +565,14 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
               <Box sx={{ display: "flex", gap: 1 }}>
                 <TextField
-                  label="First Name"
+                  label={Locale.label("person.firstName")}
                   value={guestFirstName}
                   onChange={(e) => setGuestFirstName(e.target.value)}
                   size="small"
                   fullWidth
                 />
                 <TextField
-                  label="Last Name"
+                  label={Locale.label("person.lastName")}
                   value={guestLastName}
                   onChange={(e) => setGuestLastName(e.target.value)}
                   size="small"
@@ -580,7 +580,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
                 />
               </Box>
               <TextField
-                label="Email"
+                label={Locale.label("person.email")}
                 type="email"
                 autoComplete="email"
                 value={guestEmail}
@@ -589,7 +589,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
                 fullWidth
               />
               <TextField
-                label="Phone (optional)"
+                label={Locale.label("mobile.screens.phoneOptional")}
                 type="tel"
                 autoComplete="tel"
                 value={guestPhone}

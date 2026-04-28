@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "./GroupCard";
 import { EnvironmentHelper } from "@/helpers";
@@ -32,7 +33,7 @@ export const GroupList = (props: Props) => {
         {
           groups?.length > 0
             ? (groups.map((group) => (<Grid size={{ xs: 4 }}><GroupCard group={group} /></Grid>)))
-            : (<p>No groups found</p>)
+            : (<p>{Locale.label("groups.noGroups")}</p>)
         }
       </Grid>
     );

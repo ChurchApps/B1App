@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, Box, Divider, IconButton } from "@mui/material";
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
+import { Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { EnvironmentHelper, ExternalVenueRefInterface } from "@/helpers";
 import { useProviderContent, type ProviderContentChild } from "./useProviderContent";
@@ -101,7 +102,7 @@ export const LessonDialog: React.FC<Props> = (props) => {
           {selectedChild.description ? (
             <MarkdownPreviewLight value={selectedChild.description} />
           ) : (
-            <Typography color="text.secondary" sx={{ textAlign: "center" }}>No preview available for this item.</Typography>
+            <Typography color="text.secondary" sx={{ textAlign: "center" }}>{Locale.label("mobile.plans.noPreviewItem")}</Typography>
           )}
         </Box>
       );
@@ -170,7 +171,7 @@ export const LessonDialog: React.FC<Props> = (props) => {
     // No content
     return (
       <Box sx={{ p: 4, textAlign: "center", minHeight: 200, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <Typography color="text.secondary">Preview not available for this section.</Typography>
+        <Typography color="text.secondary">{Locale.label("mobile.plans.previewNotAvailableSection")}</Typography>
       </Box>
     );
   };
@@ -190,7 +191,7 @@ export const LessonDialog: React.FC<Props> = (props) => {
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={selectedChild ? () => setSelectedChild(null) : props.onClose}>
-          {selectedChild ? "Back" : "Close"}
+          {selectedChild ? Locale.label("mobile.components.back") : Locale.label("mobile.plans.close")}
         </Button>
       </DialogActions>
     </Dialog>

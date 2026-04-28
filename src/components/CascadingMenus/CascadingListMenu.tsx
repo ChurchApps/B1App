@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Box, Collapse, IconButton, List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Locale } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -23,8 +24,8 @@ const RecursiveList = ({ links, handleClose }: Props) => {
           {item?.children
             ? (
               <Box>
-                <ListItem disablePadding secondaryAction={<IconButton sx={{ color: "black !important" }} onClick={handleClick} data-testid={`expand-submenu-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={`${open ? "Collapse" : "Expand"} ${item.text} submenu`}>{open ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>}>
-                  <ListItemButton href={item.url} onClick={handleClose} sx={{ pl: 2 }} data-testid={`nav-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={`Navigate to ${item.text}`}>
+                <ListItem disablePadding secondaryAction={<IconButton sx={{ color: "black !important" }} onClick={handleClick} data-testid={`expand-submenu-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label(open ? "cascadingMenus.collapseSubmenu" : "cascadingMenus.expandSubmenu").replace("{}", item.text || "")}>{open ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>}>
+                  <ListItemButton href={item.url} onClick={handleClose} sx={{ pl: 2 }} data-testid={`nav-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", item.text || "")}>
                     <ListItemText primary={item.text} />
                   </ListItemButton>
                 </ListItem>
@@ -37,7 +38,7 @@ const RecursiveList = ({ links, handleClose }: Props) => {
             )
             : (
               <ListItem disablePadding>
-                <ListItemButton href={item.url} onClick={handleClose} sx={{ pl: 2 }} data-testid={`nav-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={`Navigate to ${item.text}`}>
+                <ListItemButton href={item.url} onClick={handleClose} sx={{ pl: 2 }} data-testid={`nav-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", item.text || "")}>
                   <ListItemText primary={item.text} />
                 </ListItemButton>
               </ListItem>
@@ -58,8 +59,8 @@ const CascadingListMenu = ({ link, handleClose }: Props) => {
       {link?.children
         ? (
           <>
-            <ListItem disablePadding secondaryAction={<IconButton sx={{ color: "black !important" }} onClick={handleClick} data-testid={`expand-main-${link.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={`${open ? "Collapse" : "Expand"} ${link.text} menu`}>{open ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>}>
-              <ListItemButton href={link.url} onClick={handleClose} data-testid={`main-nav-${link.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={`Navigate to ${link.text}`}>
+            <ListItem disablePadding secondaryAction={<IconButton sx={{ color: "black !important" }} onClick={handleClick} data-testid={`expand-main-${link.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label(open ? "cascadingMenus.collapseMenu" : "cascadingMenus.expandMenu").replace("{}", link.text || "")}>{open ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>}>
+              <ListItemButton href={link.url} onClick={handleClose} data-testid={`main-nav-${link.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", link.text || "")}>
                 <ListItemText primary={link.text} />
               </ListItemButton>
             </ListItem>
@@ -72,7 +73,7 @@ const CascadingListMenu = ({ link, handleClose }: Props) => {
         )
         : (
           <ListItem key={link.id} disablePadding>
-            <ListItemButton href={link.url} onClick={handleClose} data-testid={`main-nav-${link.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={`Navigate to ${link.text}`}>
+            <ListItemButton href={link.url} onClick={handleClose} data-testid={`main-nav-${link.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", link.text || "")}>
               <ListItemText primary={link.text} />
             </ListItemButton>
           </ListItem>

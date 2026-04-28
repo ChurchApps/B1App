@@ -1,6 +1,7 @@
 "use client";
 
 import { Container } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 // Import the new YouVersion component
 // eslint-disable-next-line unused-imports/no-unused-imports
 import { BiblePageYouVersion } from "./BiblePageYouVersion";
@@ -19,7 +20,7 @@ export function BiblePage() {
   // OLD: Biblia.com Bible (comment this out when ready to switch to YouVersion)
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>Bible</h1>
+      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.bible")}</h1>
       <iframe
         title="content"
         className="full-frame"

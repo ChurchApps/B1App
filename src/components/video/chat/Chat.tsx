@@ -4,6 +4,7 @@ import { ChatSend, Callout, Attendance } from ".";
 import { ChatRoomInterface, ChatUserInterface } from "../../../helpers";
 import { ChatReceive } from "./ChatReceive";
 import { EmbeddedChatName } from "./EmbeddedChatName";
+import { Locale } from "@churchapps/apphelper";
 
 interface Props {
     room: ChatRoomInterface,
@@ -44,7 +45,7 @@ export const Chat: React.FC<Props> = (props) => {
       {(props.enableCallout) ? <Callout room={props.room} user={props.user} /> : null}
       <ChatReceive room={props.room} user={props.user} />
       {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
-      {props.user.isBlocked ? "Your access to the chat has been restricted" : <ChatSend room={props.room} />}
+      {props.user.isBlocked ? Locale.label("video.chat.accessRestricted") : <ChatSend room={props.room} />}
     </div>
   );
 };

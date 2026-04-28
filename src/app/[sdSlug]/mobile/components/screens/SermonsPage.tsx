@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Tab, Tabs, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -227,7 +227,7 @@ const LiveStreamCard = ({ stream }: { stream: UpcomingStream }) => {
           fontWeight: 700
         }}>
           <Icon sx={{ fontSize: 20 }}>play_circle</Icon>
-          <Typography sx={{ fontSize: 14, fontWeight: 700 }}>Watch Live</Typography>
+          <Typography sx={{ fontSize: 14, fontWeight: 700 }}>{Locale.label("mobile.screens.watchLive")}</Typography>
         </Box>
       </Box>
     );
@@ -623,8 +623,8 @@ export const SermonsPage = ({ config }: Props) => {
             "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 }
           }}
         >
-          <Tab value="series" label="Series" />
-          <Tab value="recent" label="Recent" />
+          <Tab value="series" label={Locale.label("mobile.screens.tabSeries")} />
+          <Tab value="recent" label={Locale.label("mobile.screens.tabRecent")} />
         </Tabs>
       </Box>
       <Box sx={{ p: `${mobileTheme.spacing.md}px` }}>

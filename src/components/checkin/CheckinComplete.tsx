@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { Box, Icon, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { colors } from "./CheckinStyles";
 
 interface Props {
@@ -24,7 +25,7 @@ export function CheckinComplete({ onDone }: Props) {
         justifyContent: "center",
         minHeight: "60vh",
         borderRadius: 3,
-        background: `linear-gradient(135deg, ${colors.primary} 0%, #568BDA 100%)`,
+        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
         padding: 4
       }}
       data-testid="checkin-complete"
@@ -54,7 +55,7 @@ export function CheckinComplete({ onDone }: Props) {
             textShadow: "0 2px 4px rgba(0,0,0,0.3)"
           }}
         >
-          Check-in Complete
+          {Locale.label("checkin.complete.title")}
         </Typography>
         <Typography
           variant="body1"
@@ -64,7 +65,7 @@ export function CheckinComplete({ onDone }: Props) {
             textShadow: "0 1px 2px rgba(0,0,0,0.2)"
           }}
         >
-          Your attendance has been saved. Thank you!
+          {Locale.label("checkin.complete.attendanceSaved")}
         </Typography>
       </Box>
     </Box>

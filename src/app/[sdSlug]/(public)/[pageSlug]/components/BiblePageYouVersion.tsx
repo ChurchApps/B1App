@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Container, Box, Button, ButtonGroup } from "@mui/material";
-import { BibleSDKProvider, BibleReader } from "@youversion/platform-react-ui";
+import { Locale } from "@churchapps/apphelper";
+import { YouVersionProvider, BibleReader } from "@youversion/platform-react-ui";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -31,14 +32,14 @@ function ChapterNavigation({ chapter, onChapterChange }: { chapter: string; onCh
           startIcon={<ArrowBackIcon />}
           data-testid="bible-previous-chapter-button"
         >
-          Previous Chapter
+          {Locale.label("pageSlug.previousChapter")}
         </Button>
         <Button
           onClick={handleNext}
           endIcon={<ArrowForwardIcon />}
           data-testid="bible-next-chapter-button"
         >
-          Next Chapter
+          {Locale.label("pageSlug.nextChapter")}
         </Button>
       </ButtonGroup>
     </Box>
@@ -62,8 +63,8 @@ export function BiblePageYouVersion() {
 
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>Bible</h1>
-      <BibleSDKProvider appKey={apiKey}>
+      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.bible")}</h1>
+      <YouVersionProvider appKey={apiKey}>
         <div style={{ marginTop: "20px" }}>
           <BibleReader.Root
             versionId={versionId}
@@ -91,7 +92,7 @@ export function BiblePageYouVersion() {
             </Box>
           </BibleReader.Root>
         </div>
-      </BibleSDKProvider>
+      </YouVersionProvider>
     </Container>
   );
 }

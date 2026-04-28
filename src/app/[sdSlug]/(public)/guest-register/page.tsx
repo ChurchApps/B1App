@@ -3,7 +3,7 @@ import { Theme } from "@/components/Theme";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { MetaHelper } from "@/helpers/MetaHelper";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { Container, Typography } from "@mui/material";
 import { Metadata } from "next";
 
@@ -17,7 +17,7 @@ const loadSharedData = (sdSlug: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug } = await params;
   const props = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData("Guest Registration - " + props.config.church.name, "Guest Registration", undefined, props.config.appearance);
+  return MetaHelper.getMetaData(Locale.label("guestRegister.metaTitle") + " - " + props.config.church.name, Locale.label("guestRegister.metaDescription"), undefined, props.config.appearance);
 }
 
 const loadData = async (sdSlug: string) => {
@@ -40,7 +40,7 @@ export default async function GuestRegisterPage({ params }: { params: PageParams
           {enabled
             ? <GuestRegister churchId={config.church.id} />
             : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
-                Guest registration is not enabled for this church.
+              {Locale.label("guestRegister.notEnabled")}
             </Typography>
           }
         </Container>

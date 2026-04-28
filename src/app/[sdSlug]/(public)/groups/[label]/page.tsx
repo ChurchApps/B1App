@@ -5,6 +5,7 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
+import { Locale } from "@churchapps/apphelper";
 import { Container } from "@mui/material";
 import { Metadata } from "next";
 
@@ -49,7 +50,7 @@ export default async function GroupPage({ params }: { params: PageParams }) {
 
         <Container>
           <div id="mainContent">
-            <h1>{displayLabel} Groups</h1>
+            <h1>{displayLabel} {Locale.label("groupsPage.groupsHeading")}</h1>
             <GroupList churchId={config.church.id} label={searchLabel} />
           </div>
         </Container>

@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, IconButton, Icon, Typography } from "@mui/material";
-import { UserHelper } from "@churchapps/apphelper";
+import { Locale, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { WebPushHelper } from "@/helpers";
 import { mobileTheme } from "./mobileTheme";
@@ -65,16 +65,16 @@ export const PushPermissionPrompt = () => {
       <Icon sx={{ color: tc.primary, fontSize: 28 }}>notifications_active</Icon>
       <Box sx={{ flex: 1 }}>
         <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-          Stay in the loop
+          {Locale.label("mobile.components.stayInLoop")}
         </Typography>
         <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: "2px" }}>
-          Get notified about messages, plans, and group updates.
+          {Locale.label("mobile.components.stayInLoopDescription")}
         </Typography>
       </Box>
       <Button size="small" variant="contained" disabled={busy} onClick={handleEnable}>
-        Turn on
+        {Locale.label("mobile.components.turnOn")}
       </Button>
-      <IconButton size="small" onClick={handleDismiss} aria-label="Dismiss">
+      <IconButton size="small" onClick={handleDismiss} aria-label={Locale.label("mobile.components.dismiss")}>
         <Icon fontSize="small">close</Icon>
       </IconButton>
     </Box>

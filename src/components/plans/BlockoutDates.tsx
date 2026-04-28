@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { BlockoutDateInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody, IconButton, Icon } from "@mui/material";
 import { BlockoutDateEdit } from "./BlockoutDateEdit";
@@ -46,13 +47,13 @@ export const BlockoutDates: React.FC<Props> = (props) => {
 
   if (blockoutDate !== null) return (<BlockoutDateEdit blockoutDate={blockoutDate} onUpdate={loadData} />);
   else {
-    return (<DisplayBox headerIcon="block" headerText="Blockout Dates" editContent={addLink}>
-      {blockoutDates.length === 0 && <div>No blockout dates.</div>}
+    return (<DisplayBox headerIcon="block" headerText={Locale.label("plans.blockoutDates.title")} editContent={addLink}>
+      {blockoutDates.length === 0 && <div>{Locale.label("plans.blockoutDates.none")}</div>}
       {blockoutDates.length > 0 && (<Table>
         <TableHead>
           <TableRow>
-            <TableCell>Start Date</TableCell>
-            <TableCell>End Date</TableCell>
+            <TableCell>{Locale.label("plans.blockoutDate.startDate")}</TableCell>
+            <TableCell>{Locale.label("plans.blockoutDate.endDate")}</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>

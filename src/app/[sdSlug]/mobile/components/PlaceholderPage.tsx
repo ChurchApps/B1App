@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Box, Icon, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "./mobileTheme";
 
 interface Props {
@@ -37,7 +38,7 @@ export const PlaceholderPage = ({ title, icon = "construction", description }: P
           {title}
         </Typography>
         <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-          {description || "Coming soon to the mobile PWA."}
+          {description || Locale.label("mobile.comingSoon")}
         </Typography>
       </Box>
     </Box>

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
 import { Alert, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
@@ -89,15 +90,15 @@ export function GroupContact({ leaders, group, config }: Props) {
   if (leaders?.length < 1) return <></>;
   return (
     <div>
-      <h2>Contact Group Leader:</h2>
+      <h2>{Locale.label("groups.contactGroupLeader")}</h2>
       <form>
-        {leaders?.length > 1 && (<FormControl fullWidth><InputLabel>Contact</InputLabel><Select fullWidth label="Contact" name="personId" value={formData.personId || ""} onChange={handleChange} data-testid="group-contact-select">{getSelectLeaders()}</Select></FormControl>)}
-        <TextField fullWidth label="First Name" name="firstName" value={formData.firstName || ""} onChange={handleChange} aria-label="Your first name" data-testid="group-contact-first-name-input" />
-        <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName || ""} onChange={handleChange} aria-label="Your last name" data-testid="group-contact-last-name-input" />
-        <TextField fullWidth label="Email" name="email" value={formData.email || ""} onChange={handleChange} aria-label="Your email address" data-testid="group-contact-email-input" />
-        <TextField fullWidth label="Phone Number" name="phone" value={formData.phone || ""} onChange={handleChange} aria-label="Your phone number" data-testid="group-contact-phone-input" />
-        <TextField fullWidth label="Message" name="message" value={formData.message || ""} onChange={handleChange} multiline aria-label="Your message to the group leader" data-testid="group-contact-message-input" />
-        <Button onClick={handleSubmit} id="conbtn" style={{ height: "50px", fontWeight: "bold", width: "40%", marginBottom: "10px" }} aria-label="Send message to group leader" data-testid="group-contact-submit-button">Submit</Button>
+        {leaders?.length > 1 && (<FormControl fullWidth><InputLabel>{Locale.label("groups.contact")}</InputLabel><Select fullWidth label={Locale.label("groups.contact")} name="personId" value={formData.personId || ""} onChange={handleChange} data-testid="group-contact-select">{getSelectLeaders()}</Select></FormControl>)}
+        <TextField fullWidth label={Locale.label("groups.firstName")} name="firstName" value={formData.firstName || ""} onChange={handleChange} aria-label={Locale.label("groups.firstNameLabel")} data-testid="group-contact-first-name-input" />
+        <TextField fullWidth label={Locale.label("groups.lastName")} name="lastName" value={formData.lastName || ""} onChange={handleChange} aria-label={Locale.label("groups.lastNameLabel")} data-testid="group-contact-last-name-input" />
+        <TextField fullWidth label={Locale.label("groups.email")} name="email" value={formData.email || ""} onChange={handleChange} aria-label={Locale.label("groups.emailLabel")} data-testid="group-contact-email-input" />
+        <TextField fullWidth label={Locale.label("groups.phone")} name="phone" value={formData.phone || ""} onChange={handleChange} aria-label={Locale.label("groups.phoneLabel")} data-testid="group-contact-phone-input" />
+        <TextField fullWidth label={Locale.label("groups.message")} name="message" value={formData.message || ""} onChange={handleChange} multiline aria-label={Locale.label("groups.messageLabel")} data-testid="group-contact-message-input" />
+        <Button onClick={handleSubmit} id="conbtn" style={{ height: "50px", fontWeight: "bold", width: "40%", marginBottom: "10px" }} aria-label={Locale.label("groups.submitLabel")} data-testid="group-contact-submit-button">{Locale.label("groups.submit")}</Button>
       </form>
 
       {isSubmitted && (
@@ -105,7 +106,7 @@ export function GroupContact({ leaders, group, config }: Props) {
           sx={{ align: "center", fontSize: "18px", fontStyle: "italic", marginBottom: "10px" }}
           severity="success"
         >
-          Your message has been sent!&nbsp;
+          {Locale.label("groups.messageSent")}&nbsp;
         </Alert>
       )}
     </div>

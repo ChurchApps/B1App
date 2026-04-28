@@ -7,7 +7,7 @@ import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ShareIcon from "@mui/icons-material/Share";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -119,8 +119,8 @@ export const SermonDetail = ({ id, config }: Props) => {
     const shareUrl =
       externalUrl ||
       (typeof window !== "undefined" ? window.location.href : "");
-    const title = sermon.title || "Sermon";
-    const text = `Check out this sermon: "${title}" ${shareUrl}`.trim();
+    const title = sermon.title || Locale.label("mobile.screenTitles.sermonDetails");
+    const text = `${Locale.label("mobile.details.checkOutSermon").replace("{}", title)} ${shareUrl}`.trim();
 
     try {
       if (typeof navigator !== "undefined" && typeof (navigator as any).share === "function") {
@@ -134,13 +134,13 @@ export const SermonDetail = ({ id, config }: Props) => {
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(text);
-        setSnackbar("Link copied to clipboard");
+        setSnackbar(Locale.label("mobile.details.linkCopied"));
         return;
       }
     } catch {
 
     }
-    setSnackbar("Unable to share on this device");
+    setSnackbar(Locale.label("mobile.details.unableToShare"));
   }, [sermon, externalUrl]);
 
   const handleOpenExternal = useCallback(() => {
@@ -173,13 +173,13 @@ export const SermonDetail = ({ id, config }: Props) => {
         >
           <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>sentiment_dissatisfied</Icon>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            Sermon not available
+            {Locale.label("mobile.details.sermonNotAvailable")}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            This sermon may have been removed or is no longer public.
+            {Locale.label("mobile.details.sermonRemoved")}
           </Typography>
           <Link href="/mobile/sermons" style={{ color: tc.primary, fontWeight: 600, textDecoration: "none" }}>
-            Back to Sermons
+            {Locale.label("mobile.details.backToSermons")}
           </Link>
         </Box>
       </Box>
@@ -213,7 +213,7 @@ export const SermonDetail = ({ id, config }: Props) => {
           if (!showPlayer && canPlay) setShowVideo(true);
         }}
         role={!showPlayer && canPlay ? "button" : undefined}
-        aria-label={!showPlayer && canPlay ? "Play sermon" : undefined}
+        aria-label={!showPlayer && canPlay ? Locale.label("mobile.components.playSermon") : undefined}
         tabIndex={!showPlayer && canPlay ? 0 : undefined}
         onKeyDown={(e) => {
           if (!showPlayer && canPlay && (e.key === "Enter" || e.key === " ")) {
@@ -225,7 +225,7 @@ export const SermonDetail = ({ id, config }: Props) => {
         {showPlayer ? (
           <iframe
             src={embedUrl!}
-            title={sermon.title || "Sermon"}
+            title={sermon.title || Locale.label("mobile.screenTitles.sermonDetails")}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
             allow="autoplay; fullscreen; picture-in-picture"
             allowFullScreen
@@ -291,7 +291,7 @@ export const SermonDetail = ({ id, config }: Props) => {
           </Typography>
         ) : null}
         <Typography sx={{ fontSize: 22, fontWeight: 700, color: tc.text, lineHeight: 1.25, mb: 1 }}>
-          {sermon.title || "Untitled Sermon"}
+          {sermon.title || Locale.label("mobile.components.untitledSermon")}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
           {sermon.publishDate && (
@@ -348,7 +348,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               "&:hover": { borderColor: tc.primary, bgcolor: tc.primaryLight }
             }}
           >
-            Share
+            {Locale.label("mobile.details.share")}
           </Button>
           <Button
             variant="outlined"
@@ -365,7 +365,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               "&:hover": { borderColor: tc.primary, bgcolor: tc.primaryLight }
             }}
           >
-            Open Link
+            {Locale.label("mobile.details.openLink")}
           </Button>
         </Box>
 
@@ -385,7 +385,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               "&:hover": { bgcolor: tc.primary, boxShadow: mobileTheme.shadows.lg }
             }}
           >
-            Watch Sermon
+            {Locale.label("mobile.details.watchSermon")}
           </Button>
         )}
       </Box>

@@ -41,7 +41,7 @@
     "@tanstack/react-query": "^5.99.0",
     "@tanstack/react-query-persist-client": "^5.99.0",
     "@youversion/platform-react-hooks": "^0.5.1",
-    "@youversion/platform-react-ui": "^0.5.1",
+    "@youversion/platform-react-ui": "^1.23.0",
     "axios": "^1.10.0",
     "dayjs": "^1.11.19",
     "flexsearch": "0.8.205",

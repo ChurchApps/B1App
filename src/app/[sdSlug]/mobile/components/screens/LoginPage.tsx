@@ -14,7 +14,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import type { LoginResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -413,8 +413,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
         </Alert>
       )}
       <TextField
-        label="Email"
-        placeholder="you@example.com"
+        label={Locale.label("mobile.screens.emailLabel")}
+        placeholder={Locale.label("mobile.screens.emailPlaceholder")}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         type="email"
@@ -426,8 +426,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
         disabled={loading}
       />
       <TextField
-        label="Password"
-        placeholder="Your password"
+        label={Locale.label("mobile.screens.passwordLabel")}
+        placeholder={Locale.label("mobile.screens.passwordPlaceholder")}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         type={showPassword ? "text" : "password"}
@@ -483,12 +483,12 @@ export const MobileLoginScreen = ({ config }: Props) => {
         </Alert>
       )}
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: `${spacing.sm}px`, mb: `${spacing.md}px` }}>
-        <TextField label="First name" value={regFirstName} onChange={e => setRegFirstName(e.target.value)} variant="outlined" fullWidth sx={inputSx} disabled={loading} inputProps={{ autoComplete: "given-name" }} />
-        <TextField label="Last name" value={regLastName} onChange={e => setRegLastName(e.target.value)} variant="outlined" fullWidth sx={inputSx} disabled={loading} inputProps={{ autoComplete: "family-name" }} />
+        <TextField label={Locale.label("mobile.screens.firstNameRegister")} value={regFirstName} onChange={e => setRegFirstName(e.target.value)} variant="outlined" fullWidth sx={inputSx} disabled={loading} inputProps={{ autoComplete: "given-name" }} />
+        <TextField label={Locale.label("mobile.screens.lastNameRegister")} value={regLastName} onChange={e => setRegLastName(e.target.value)} variant="outlined" fullWidth sx={inputSx} disabled={loading} inputProps={{ autoComplete: "family-name" }} />
       </Box>
       <TextField
-        label="Email"
-        placeholder="you@example.com"
+        label={Locale.label("mobile.screens.emailLabel")}
+        placeholder={Locale.label("mobile.screens.emailPlaceholder")}
         value={email}
         onChange={e => setEmail(e.target.value)}
         onBlur={e => prefillRegisterFromMatch(e.target.value)}
@@ -517,8 +517,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const renderForgot = () => (
     <Box component="form" onSubmit={handleForgotSubmit}>
       <TextField
-        label="Email"
-        placeholder="you@example.com"
+        label={Locale.label("mobile.screens.emailLabel")}
+        placeholder={Locale.label("mobile.screens.emailPlaceholder")}
         value={email}
         onChange={e => setEmail(e.target.value)}
         type="email"
@@ -594,7 +594,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const renderSetPassword = () => (
     <Box component="form" onSubmit={handleSetPasswordSubmit}>
       <TextField
-        label="New password"
+        label={Locale.label("mobile.screens.newPassword")}
         value={newPassword}
         onChange={e => setNewPassword(e.target.value)}
         type={showPassword ? "text" : "password"}
@@ -615,7 +615,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
         disabled={loading}
       />
       <TextField
-        label="Confirm password"
+        label={Locale.label("mobile.screens.confirmPassword")}
         value={confirmPassword}
         onChange={e => setConfirmPassword(e.target.value)}
         type={showPassword ? "text" : "password"}

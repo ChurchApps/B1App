@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Badge, Box, Button, Icon, IconButton, Popover, Skeleton, Tab, Tabs, Typography } from "@mui/material";
-import { ApiHelper, PersonHelper, useNotifications } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, useNotifications } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
@@ -105,7 +105,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
 
       return rows.map(({ pm, otherId }) => {
         const person = peopleById[otherId];
-        const displayName = person?.name?.display || "Unknown";
+        const displayName = person?.name?.display || Locale.label("mobile.components.unknown");
         let photo = "";
         if (person) {
           try {
@@ -384,7 +384,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
           value="messages"
           label={(
             <Badge badgeContent={counts.pmCount} color="error" sx={{ "& .MuiBadge-badge": { right: -10, top: 2 } }}>
-              Messages
+              {Locale.label("mobile.components.messages")}
             </Badge>
           )}
         />
@@ -392,7 +392,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
           value="notifications"
           label={(
             <Badge badgeContent={counts.notificationCount} color="error" sx={{ "& .MuiBadge-badge": { right: -10, top: 2 } }}>
-              Notifications
+              {Locale.label("mobile.components.notifications")}
             </Badge>
           )}
         />
@@ -409,7 +409,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
           }}
         >
           <IconButton
-            aria-label="New message"
+            aria-label={Locale.label("mobile.components.newMessage")}
             size="small"
             onClick={handleNewMessage}
             sx={{
@@ -426,20 +426,20 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
         {tab === "messages" && (
           <>
             {conversations === null && [0, 1, 2].map(renderSkeletonRow)}
-            {conversations !== null && conversations.length === 0 && renderEmpty("chat_bubble_outline", "No messages yet", { label: "New message", onClick: handleNewMessage })}
+            {conversations !== null && conversations.length === 0 && renderEmpty("chat_bubble_outline", Locale.label("mobile.components.noMessages"), { label: Locale.label("mobile.components.newMessage"), onClick: handleNewMessage })}
             {conversations !== null && conversations.length > 0 && conversations.map(renderConversationRow)}
           </>
         )}
         {tab === "notifications" && (
           <>
             {notifications === null && [0, 1, 2].map(renderSkeletonRow)}
-            {notifications !== null && notifications.length === 0 && renderEmpty("notifications", "No notifications yet")}
+            {notifications !== null && notifications.length === 0 && renderEmpty("notifications", Locale.label("mobile.components.noNotifications"))}
             {notifications !== null && notifications.length > 0 && notifications.map(renderNotificationRow)}
           </>
         )}
       </Box>
-      {tab === "messages" && renderFooter("/mobile/messages", "View all messages")}
-      {tab === "notifications" && renderFooter("/mobile/notifications", "View all notifications")}
+      {tab === "messages" && renderFooter("/mobile/messages", Locale.label("mobile.components.viewAllMessages"))}
+      {tab === "notifications" && renderFooter("/mobile/notifications", Locale.label("mobile.components.viewAllNotifications"))}
     </Popover>
   );
 };

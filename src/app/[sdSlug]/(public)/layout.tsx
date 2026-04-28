@@ -5,7 +5,6 @@ import "@/styles/streaming.css";
 import "@/styles/buttons.css";
 import "@/styles/sidebar.css";
 import "@/styles/master-detail.css";
-import "@youversion/platform-react-ui/styles.css";
 import ClientLayout from "@/app/ClientLayout";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {

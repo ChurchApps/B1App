@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, CircularProgress, Icon, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
 
 const getDayOfYear = () => {
@@ -136,7 +137,7 @@ export const VotdPage = () => {
           tabIndex={0}
           onClick={handleShare}
           onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleShare(); }}
-          aria-label="Share Verse of the Day"
+          aria-label={Locale.label("mobile.screens.shareVotd")}
           sx={{
             display: "inline-flex",
             alignItems: "center",

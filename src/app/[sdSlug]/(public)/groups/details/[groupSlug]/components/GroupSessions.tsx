@@ -52,7 +52,7 @@ export const GroupSessions: React.FC<Props> = (props) => {
     const result: React.ReactElement[] = [];
     for (let i = 0; i < visitSessions.length; i++) {
       const vs = visitSessions[i];
-      const editLink = (canEdit) ? <SmallButton icon="person_remove" text="Remove" onClick={() => handleRemove(vs)} color="error" data-testid="remove-session-member-button" /> : <></>;
+      const editLink = (canEdit) ? <SmallButton icon="person_remove" text={Locale.label("groupsPage.remove")} onClick={() => handleRemove(vs)} color="error" data-testid="remove-session-member-button" /> : <></>;
       const person = ArrayHelper.getOne(people, "id", vs.visit.personId);
       if (person) {
         result.push(
@@ -84,14 +84,14 @@ export const GroupSessions: React.FC<Props> = (props) => {
         <Grid container columnSpacing={2}>
           <div>
             <FormControl style={{ width: 140, marginTop: 0 }} size="small">
-              <InputLabel id="sessions">{Locale.label("Session")}</InputLabel>
+              <InputLabel id="sessions">{Locale.label("groupsPage.session")}</InputLabel>
               <Select fullWidth labelId="sessions" label={Locale.label("groups.groupSessions.session")} value={session?.id} onChange={selectSession} data-testid="group-sessions-select">
                 {getSessionOptions()}
               </Select>
             </FormControl>
           </div>
           <div>
-            <Button variant="contained" data-cy="add-service-time" onClick={handleAdd} data-testid="add-service-time-button"><Icon>calendar_month</Icon> {Locale.label("New")}</Button>
+            <Button variant="contained" data-cy="add-service-time" onClick={handleAdd} data-testid="add-service-time-button"><Icon>calendar_month</Icon> {Locale.label("groupsPage.new")}</Button>
           </div>
         </Grid>
       );
@@ -117,18 +117,18 @@ export const GroupSessions: React.FC<Props> = (props) => {
 
   let content = <Loading />;
   if (sessions) {
-    if (sessions.length === 0) content = <div className="alert alert-warning" role="alert" data-cy="no-session-msg"><b>{Locale.label("There are no sessions.")}</b>  {Locale.label("Please add a new session to continue.")}</div>;
+    if (sessions.length === 0) content = <div className="alert alert-warning" role="alert" data-cy="no-session-msg"><b>{Locale.label("groupsPage.noSessions")}</b>  {Locale.label("groupsPage.addNewSession")}</div>;
     else {
       content = (<>
         <span className="float-right"><ExportLink data={visitSessions} spaceAfter={true} filename="visits.csv" /></span>
-        <b data-cy="session-present-msg">{Locale.label("Attendance For")} {props.group.name}</b>
+        <b data-cy="session-present-msg">{Locale.label("groupsPage.attendanceFor")} {props.group.name}</b>
         <Table id="groupMemberTable">
-          <TableHead><TableRow><th></th><th>{Locale.label("Name")}</th><th></th></TableRow></TableHead>
+          <TableHead><TableRow><th></th><th>{Locale.label("person.name")}</th><th></th></TableRow></TableHead>
           <TableBody>{getRows()}</TableBody>
         </Table>
       </>);
     }
   }
 
-  return (<DisplayBox id="groupSessionsBox" data-cy="group-session-box" headerText={Locale.label("Sessions")} headerIcon="calendar_month" editContent={getHeaderSection()}>{content}</DisplayBox>);
+  return (<DisplayBox id="groupSessionsBox" data-cy="group-session-box" headerText={Locale.label("groupsPage.sessions")} headerIcon="calendar_month" editContent={getHeaderSection()}>{content}</DisplayBox>);
 };

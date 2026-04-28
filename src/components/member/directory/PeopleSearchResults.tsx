@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { Locale } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
@@ -16,19 +17,19 @@ export const PeopleSearchResults: React.FC<Props> = (props) => {
     for (let i = 0; i < props.people.length; i++) {
       const p = props.people[i];
       result.push(<TableRow key={p.id}>
-        <TableCell><img src={PersonHelper.getPhotoUrl(p)} alt="avatar" /></TableCell>
+        <TableCell><img src={PersonHelper.getPhotoUrl(p)} alt={Locale.label("member.directory.avatar")} /></TableCell>
         <TableCell><Link href={"/mobile/community/" + p.id} data-testid={`person-result-${p.id}-link`}>{p.name?.display}</Link></TableCell>
       </TableRow>);
     }
     return result;
   };
 
-  if (props.people === undefined || props.people === null) return (<div className="alert alert-info">Use the search box above to search for a member or add a new one.</div>);
+  if (props.people === undefined || props.people === null) return (<div className="alert alert-info">{Locale.label("member.directory.searchPrompt")}</div>);
 
-  else if (props.people.length === 0) return (<p>No results found.</p>);
+  else if (props.people.length === 0) return (<p>{Locale.label("member.directory.noResults")}</p>);
   else {
     return (<Table id="peopleTable">
-      <TableHead><TableRow><TableCell></TableCell><TableCell>Name</TableCell></TableRow></TableHead>
+      <TableHead><TableRow><TableCell></TableCell><TableCell>{Locale.label("person.name")}</TableCell></TableRow></TableHead>
       <TableBody>{getRows()}</TableBody>
     </Table>);
   }

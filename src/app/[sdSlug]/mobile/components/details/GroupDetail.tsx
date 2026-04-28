@@ -12,7 +12,7 @@ import {
   Tabs,
   Typography
 } from "@mui/material";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Permissions, type GroupInterface } from "@churchapps/helpers";
@@ -157,7 +157,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         <Box
           component="img"
           src={m.person.photo}
-          alt={m.person?.name?.display || "Member"}
+          alt={m.person?.name?.display || Locale.label("mobile.components.member")}
           sx={{ ...common, objectFit: "cover" }}
         />
       );
@@ -182,7 +182,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
 
   const renderBack = () => (
     <IconButton
-      aria-label="Back"
+      aria-label={Locale.label("mobile.components.back")}
       onClick={handleBack}
       sx={{
         width: 40,
@@ -240,7 +240,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           <Box
             component="img"
             src={group!.photoUrl}
-            alt={group?.name || "Group"}
+            alt={group?.name || Locale.label("mobile.components.group")}
             sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           />
         ) : (
@@ -265,13 +265,13 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
             <Box sx={chipSx}>
               <Icon sx={{ fontSize: 14 }}>group</Icon>
               <span>
-                {memberCount} {memberCount === 1 ? "member" : "members"}
+                {memberCount} {memberCount === 1 ? Locale.label("mobile.details.memberSingular") : Locale.label("mobile.details.membersLowercase")}
               </span>
             </Box>
             {isLeader && (
               <Box sx={leaderChipSx}>
                 <Icon sx={{ fontSize: 14 }}>workspace_premium</Icon>
-                <span>Leader</span>
+                <span>{Locale.label("mobile.details.leader")}</span>
               </Box>
             )}
           </Box>
@@ -299,7 +299,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
             }}
           >
             <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-              About
+              {Locale.label("mobile.details.about")}
             </Typography>
             {hasAbout && (
               <Box
@@ -331,7 +331,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         )}
         {!hasAbout && rows.length === 0 && (
           <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", p: 2 }}>
-            No details yet.
+            {Locale.label("mobile.details.noDetailsYet")}
           </Typography>
         )}
         {renderActions()}
@@ -349,7 +349,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
       }}
     >
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-        Members ({members?.length ?? 0})
+        {Locale.label("mobile.details.members").replace("{}", String(members?.length ?? 0))}
       </Typography>
       {members === null &&
         [0, 1, 2].map((k) => (
@@ -362,7 +362,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           </Box>
         ))}
       {members !== null && members.length === 0 && (
-        <Typography sx={{ fontSize: 14, color: tc.textMuted }}>No members yet.</Typography>
+        <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.details.noMembersYet")}</Typography>
       )}
       {members !== null &&
         members.map((m) => (
@@ -400,10 +400,10 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                   whiteSpace: "nowrap"
                 }}
               >
-                {m.person?.name?.display || "Unknown"}
+                {m.person?.name?.display || Locale.label("mobile.components.unknown")}
               </Typography>
               <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-                {m.leader ? "Leader" : "Member"}
+                {m.leader ? Locale.label("mobile.details.leader") : Locale.label("mobile.details.memberLabel")}
               </Typography>
             </Box>
             <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
@@ -429,7 +429,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
             py: "10px"
           }}
         >
-          Leave Group
+          {Locale.label("mobile.details.leaveGroup")}
         </Button>
       );
     }
@@ -449,7 +449,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           "&:hover": { bgcolor: tc.primary }
         }}
       >
-        Join Group
+        {Locale.label("mobile.details.joinGroup")}
       </Button>
     );
   };
@@ -495,10 +495,10 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
         <Icon sx={{ fontSize: 32, color: tc.primary }}>groups</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        Group Not Found
+        {Locale.label("mobile.details.groupNotFound")}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-        This group could not be found or you don&apos;t have permission to view it.
+        {Locale.label("mobile.details.groupNotFoundDescription")}
       </Typography>
       <Button
         variant="outlined"
@@ -511,17 +511,17 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
-        Back to Groups
+        {Locale.label("mobile.details.backToGroups")}
       </Button>
     </Box>
   );
 
-  const availableTabs: { key: TabKey; label: string; icon: string }[] = [{ key: "about", label: "About", icon: "info" }];
-  if (isMember) availableTabs.push({ key: "messages", label: "Messages", icon: "forum" });
-  availableTabs.push({ key: "members", label: "Members", icon: "group" });
-  if (isLeader) availableTabs.push({ key: "attendance", label: "Attendance", icon: "fact_check" });
-  availableTabs.push({ key: "events", label: "Events", icon: "event" });
-  availableTabs.push({ key: "resources", label: "Resources", icon: "folder" });
+  const availableTabs: { key: TabKey; label: string; icon: string }[] = [{ key: "about", label: Locale.label("mobile.details.tabAbout"), icon: "info" }];
+  if (isMember) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
+  availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
+  if (isLeader) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
+  availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
+  availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>

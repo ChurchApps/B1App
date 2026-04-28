@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Icon, Box, CardActionArea, Typography, Divider } from "@mui/material";
 import { CheckinHelper } from "@/helpers";
+import { Locale } from "@churchapps/apphelper";
 import { HeaderSection, HeaderIconContainer, CheckinCard, IconCircle, SmallIconCircle, EmptyStateCard, colors } from "./CheckinStyles";
 import type { GroupInterface } from "@churchapps/helpers";
 
@@ -64,7 +65,7 @@ export function Groups({ selectedHandler }: Props) {
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <SmallIconCircle>
-            <Icon sx={{ fontSize: 20, color: "#568BDA" }}>group</Icon>
+            <Icon sx={{ fontSize: 20, color: colors.secondary }}>group</Icon>
           </SmallIconCircle>
           <Typography variant="body1" sx={{ flex: 1, color: colors.textPrimary, fontWeight: 500 }}>
             {g.name}
@@ -94,7 +95,7 @@ export function Groups({ selectedHandler }: Props) {
               <Icon sx={{ fontSize: 24, color: colors.primary }}>folder</Icon>
             </IconCircle>
             <Typography variant="body1" sx={{ flex: 1, color: colors.textPrimary, fontWeight: 600 }}>
-              {category.name || "General Groups"}
+              {category.name || Locale.label("checkin.groups.generalGroups")}
             </Typography>
             <Icon sx={{ color: colors.textSecondary }}>
               {isExpanded ? "expand_less" : "expand_more"}
@@ -121,10 +122,10 @@ export function Groups({ selectedHandler }: Props) {
           <Icon sx={{ fontSize: 48, color: colors.primary }}>groups</Icon>
         </HeaderIconContainer>
         <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
-          Select Group
+          {Locale.label("checkin.groups.selectGroup")}
         </Typography>
         <Typography variant="body1" sx={{ color: colors.textSecondary, marginBottom: 1 }}>
-          Choose a group for {CheckinHelper.selectedServiceTime?.name}
+          {Locale.label("checkin.groups.chooseGroupFor").replace("{}", CheckinHelper.selectedServiceTime?.name || "")}
         </Typography>
       </HeaderSection>
 
@@ -137,10 +138,10 @@ export function Groups({ selectedHandler }: Props) {
           <EmptyStateCard>
             <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>group_off</Icon>
             <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
-            No Groups Available
+              {Locale.label("checkin.groups.noGroupsAvailable")}
             </Typography>
             <Typography variant="body2" sx={{ color: colors.textSecondary }}>
-            There are no groups configured for this service
+              {Locale.label("checkin.groups.noGroupsConfigured")}
             </Typography>
           </EmptyStateCard>
         )}
@@ -164,7 +165,7 @@ export function Groups({ selectedHandler }: Props) {
             fontWeight: 600
           }}
         >
-          No Group
+          {Locale.label("checkin.groups.noGroup")}
         </Button>
       </Box>
     </>

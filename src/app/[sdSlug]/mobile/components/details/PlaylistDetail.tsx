@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Icon, Skeleton, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -88,7 +88,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           <Box
             component="img"
             src={playlist!.thumbnail!}
-            alt={playlist?.title || "Playlist"}
+            alt={playlist?.title || Locale.label("mobile.details.playlistFallback")}
             sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           />
         )}
@@ -148,10 +148,10 @@ export const PlaylistDetail = ({ id, config }: Props) => {
               mb: "6px"
             }}
           >
-            Sermon Series
+            {Locale.label("mobile.details.sermonSeries")}
           </Typography>
           <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.2 }}>
-            {playlist?.title || "Untitled Series"}
+            {playlist?.title || Locale.label("mobile.details.untitledSeries")}
           </Typography>
           {playlist?.description ? (
             <Typography
@@ -168,7 +168,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
             )}
             {sermons && sermons.length > 0 && (
               <Typography sx={{ fontSize: 12, color: "rgba(255,255,255,0.85)" }}>
-                • {sermons.length} sermon{sermons.length !== 1 ? "s" : ""}
+                • {sermons.length} {sermons.length !== 1 ? Locale.label("mobile.details.sermonPlural") : Locale.label("mobile.details.sermonSingular")}
               </Typography>
             )}
           </Box>
@@ -218,10 +218,10 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         <Icon sx={{ fontSize: 32, color: tc.error }}>error_outline</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        Unable to Load Playlist
+        {Locale.label("mobile.details.unableToLoadPlaylist")}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-        Please check your connection and try again.
+        {Locale.label("mobile.details.checkConnection")}
       </Typography>
       <Button
         variant="contained"
@@ -235,7 +235,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           "&:hover": { bgcolor: tc.primary }
         }}
       >
-        Retry
+        {Locale.label("mobile.details.retry")}
       </Button>
     </Box>
   );
@@ -265,10 +265,10 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         <Icon sx={{ fontSize: 32, color: tc.primary }}>playlist_remove</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        Playlist Not Found
+        {Locale.label("mobile.details.playlistNotFound")}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-        This playlist could not be found.
+        {Locale.label("mobile.details.playlistNotFoundDescription")}
       </Typography>
       <Button
         variant="outlined"
@@ -281,7 +281,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
-        Back to Sermons
+        {Locale.label("mobile.details.backToSermons")}
       </Button>
     </Box>
   );
@@ -298,10 +298,10 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     >
       <Icon sx={{ fontSize: 48, color: tc.textSecondary, mb: 2 }}>video_library</Icon>
       <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-        No Sermons in This Series
+        {Locale.label("mobile.details.noSermonsInSeries")}
       </Typography>
       <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-        Sermons will appear here as they are added to this series.
+        {Locale.label("mobile.details.noSermonsInSeriesDescription")}
       </Typography>
     </Box>
   );
@@ -320,10 +320,10 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
           {renderHero()}
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>Sermons</Typography>
+            <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.details.sermons")}</Typography>
             {sermons && sermons.length > 0 && (
               <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
-                {sermons.length} sermon{sermons.length !== 1 ? "s" : ""}
+                {sermons.length} {sermons.length !== 1 ? Locale.label("mobile.details.sermonPlural") : Locale.label("mobile.details.sermonSingular")}
               </Typography>
             )}
           </Box>

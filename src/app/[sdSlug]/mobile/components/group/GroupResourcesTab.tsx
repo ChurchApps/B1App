@@ -13,7 +13,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
 
 interface FileRow {
@@ -108,7 +108,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
 
   const handleDeleteLink = async (l: LinkRow) => {
     if (!l.id) return;
-    if (!window.confirm(`Delete link "${l.text || "Link"}"?`)) return;
+    if (!window.confirm(Locale.label("mobile.group.deleteLinkConfirm").replace("{}", l.text || Locale.label("mobile.group.linkFallback")))) return;
     try {
       await ApiHelper.delete(`/links/${l.id}`, "ContentApi");
       load();
@@ -120,11 +120,11 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
   const handleAddLink = async () => {
     setLinkError(null);
     if (!linkText.trim()) {
-      setLinkError("Please enter link text.");
+      setLinkError(Locale.label("mobile.group.enterLinkText"));
       return;
     }
     if (!linkUrl.trim()) {
-      setLinkError("Please enter a URL.");
+      setLinkError(Locale.label("mobile.group.enterUrl"));
       return;
     }
     setLinkSaving(true);
@@ -143,7 +143,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       setShowAddLink(false);
       load();
     } catch (e: any) {
-      setLinkError(e?.message || "Failed to add link.");
+      setLinkError(e?.message || Locale.label("mobile.group.failedAddLink"));
     } finally {
       setLinkSaving(false);
     }
@@ -195,7 +195,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       if (fileInputRef.current) fileInputRef.current.value = "";
       load();
     } catch (e: any) {
-      setUploadError(e?.message || "Upload failed.");
+      setUploadError(e?.message || Locale.label("mobile.group.uploadFailed"));
       setUploadProgress(-1);
     }
   };
@@ -266,12 +266,12 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
               whiteSpace: "nowrap"
             }}
           >
-            {f.fileName || "File"}
+            {f.fileName || Locale.label("mobile.group.fileFallback")}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>{formatSize(f.size || 0)}</Typography>
         </Box>
         {canEdit && (
-          <IconButton aria-label="Delete file" onClick={() => handleDeleteFile(f)} sx={{ color: tc.error }}>
+          <IconButton aria-label={Locale.label("mobile.group.deleteFile")} onClick={() => handleDeleteFile(f)} sx={{ color: tc.error }}>
             <Icon>delete_outline</Icon>
           </IconButton>
         )}
@@ -323,7 +323,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             whiteSpace: "nowrap"
           }}
         >
-          {l.text || "Link"}
+          {l.text || Locale.label("mobile.group.linkFallback")}
         </Typography>
         <Typography
           sx={{
@@ -338,7 +338,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         </Typography>
       </Box>
       {canEdit && (
-        <IconButton aria-label="Delete link" onClick={() => handleDeleteLink(l)} sx={{ color: tc.error }}>
+        <IconButton aria-label={Locale.label("mobile.group.deleteLink")} onClick={() => handleDeleteLink(l)} sx={{ color: tc.error }}>
           <Icon>delete_outline</Icon>
         </IconButton>
       )}
@@ -357,7 +357,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             mb: `${mobileTheme.spacing.sm}px`
           }}
         >
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Links</Typography>
+          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.group.links")}</Typography>
           {canEdit && (
             <Button
               size="small"
@@ -372,7 +372,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                 borderRadius: `${mobileTheme.radius.md}px`
               }}
             >
-              {showAddLink ? "Cancel" : "Add Link"}
+              {showAddLink ? Locale.label("mobile.group.cancel") : Locale.label("mobile.group.addLink")}
             </Button>
           )}
         </Box>
@@ -393,14 +393,14 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             >
               <TextField
                 size="small"
-                label="Link text"
+                label={Locale.label("mobile.group.linkText")}
                 value={linkText}
                 onChange={(e) => setLinkText(e.target.value)}
                 fullWidth
               />
               <TextField
                 size="small"
-                label="URL"
+                label={Locale.label("mobile.group.url")}
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 placeholder="https://…"
@@ -420,7 +420,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                   }}
                   sx={{ textTransform: "none", color: tc.text }}
                 >
-                  Cancel
+                  {Locale.label("mobile.group.cancel")}
                 </Button>
                 <Button
                   size="small"
@@ -435,7 +435,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                     "&:hover": { bgcolor: tc.primary }
                   }}
                 >
-                  {linkSaving ? "Saving…" : "Add"}
+                  {linkSaving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.add")}
                 </Button>
               </Box>
             </Box>
@@ -463,7 +463,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
               textAlign: "center"
             }}
           >
-            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>No links yet.</Typography>
+            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>{Locale.label("mobile.group.noLinks")}</Typography>
           </Box>
         )}
         {links !== null && links.length > 0 && (
@@ -480,7 +480,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             mb: `${mobileTheme.spacing.sm}px`
           }}
         >
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>Files</Typography>
+          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.group.files")}</Typography>
           {canEdit && !storageFull && (
             <Button
               size="small"
@@ -496,7 +496,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
                 borderRadius: `${mobileTheme.radius.md}px`
               }}
             >
-              Upload
+              {Locale.label("mobile.group.upload")}
             </Button>
           )}
           <input
@@ -509,7 +509,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         {uploadProgress >= 0 && (
           <Box sx={{ mb: 1 }}>
             <Typography sx={{ fontSize: 12, color: tc.textSecondary, mb: 0.5 }}>
-              Uploading {pendingFile?.name}… {uploadProgress}%
+              {Locale.label("mobile.group.uploadingProgress").replace("{}", pendingFile?.name || "").replace("{}", String(uploadProgress))}
             </Typography>
             <LinearProgress
               variant="determinate"
@@ -548,7 +548,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
               textAlign: "center"
             }}
           >
-            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>No files yet.</Typography>
+            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>{Locale.label("mobile.group.noFiles")}</Typography>
           </Box>
         )}
         {files !== null && files.length > 0 && (
@@ -566,7 +566,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: 1 }}>
             <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-              Used {formatSize(used)} / 100MB
+              {Locale.label("mobile.group.usedStorage").replace("{}", formatSize(used))}
             </Typography>
             <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
               {Math.round(percent)}%

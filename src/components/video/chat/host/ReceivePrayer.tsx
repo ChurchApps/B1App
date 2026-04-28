@@ -2,6 +2,7 @@ import { ChatStateInterface } from "@/helpers";
 import { ChatHelper } from "@/helpers/ChatHelper";
 import React from "react";
 import { Chat } from "../";
+import { Locale } from "@churchapps/apphelper";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean, switchToConversationId: string }
 
@@ -32,7 +33,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
       }
     }
     if (links.length > 0) return (<div style={{ padding: 10 }}>{links}</div>);
-    else return (<div style={{ padding: 10 }}><i>There are no pending prayer requests at this time.</i></div>);
+    else return (<div style={{ padding: 10 }}><i>{Locale.label("video.chat.noPendingPrayers")}</i></div>);
   };
 
   const selectConversation = (conversationId: string) => {

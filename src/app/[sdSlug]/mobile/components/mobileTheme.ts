@@ -1,8 +1,15 @@
+import { Locale } from "@churchapps/apphelper";
+
+// Most existing consumers read `mobileTheme.radius.lg` and `mobileTheme.shadows.md`
+// inside template literals (e.g. `borderRadius: \`${mobileTheme.radius.xl}px\``).
+// `radius` keeps its numeric type for backwards-compat; `radiusVar` exposes the
+// CSS-variable equivalent for new code that wants to inherit admin overrides.
 export const mobileTheme = {
   colors: {
     primary: "var(--mb-primary)",
     primaryLight: "var(--mb-primary-light)",
     secondary: "var(--mb-secondary)",
+    accent: "var(--mb-accent)",
     background: "var(--mb-background)",
     surface: "var(--mb-surface)",
     surfaceVariant: "var(--mb-surface-variant)",
@@ -22,6 +29,7 @@ export const mobileTheme = {
   },
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
   radius: { sm: 4, md: 8, lg: 12, xl: 16 },
+  radiusVar: { sm: "var(--mb-radius-sm)", md: "var(--mb-radius-md)", lg: "var(--mb-radius-lg)", xl: "var(--mb-radius-xl)" },
   typography: {
     h1: { fontSize: 24, fontWeight: 700 },
     h2: { fontSize: 20, fontWeight: 600 },
@@ -32,52 +40,57 @@ export const mobileTheme = {
     label: { fontSize: 14, fontWeight: 500 }
   },
   shadows: {
-    sm: "0 1px 2px rgba(0,0,0,0.05)",
-    md: "0 2px 4px rgba(0,0,0,0.1)",
-    lg: "0 4px 8px rgba(0,0,0,0.15)"
+    sm: "var(--mb-shadow-sm)",
+    md: "var(--mb-shadow-md)",
+    lg: "var(--mb-shadow-lg)"
   },
   drawerWidth: 280,
   headerHeight: 56
 };
 
-export const SCREEN_TITLES: Record<string, string> = {
-  myGroups: "My Groups",
-  groups: "My Groups",
-  groupDetails: "Group",
-  notifications: "Notifications",
-  votd: "Verse of the Day",
-  service: "Check-in",
-  checkin: "Check-in",
-  donation: "Giving",
-  donate: "Giving",
-  membersSearch: "Directory",
-  community: "Directory",
-  memberDetail: "Member Details",
-  plan: "Plans",
-  plans: "Plans",
-  planDetails: "Plan",
-  sermons: "Sermons",
-  sermonDetails: "Sermon",
-  playlist: "Playlist",
-  playlistDetails: "Playlist",
-  searchMessageUser: "Messages",
-  messages: "Messages",
-  messagesNew: "New Message",
-  composeMessage: "New Message",
-  registrations: "Registrations",
-  register: "Register",
-  volunteerBrowse: "Volunteer Opportunities",
-  volunteer: "Volunteer",
-  volunteerSignup: "Volunteer",
-  profileEdit: "Edit Profile",
-  stream: "Stream",
-  bible: "Bible",
-  lessons: "Lessons",
-  login: "Sign In",
-  install: "Install App",
-  page: "",
-  websiteUrl: ""
-};
+export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<string, string>, {
+  get(_target, prop: string) {
+    const map: Record<string, string> = {
+      myGroups: Locale.label("mobile.screenTitles.myGroups"),
+      groups: Locale.label("mobile.screenTitles.myGroups"),
+      groupDetails: Locale.label("mobile.screenTitles.groupDetails"),
+      notifications: Locale.label("mobile.screenTitles.notifications"),
+      votd: Locale.label("mobile.screenTitles.votd"),
+      service: Locale.label("mobile.screenTitles.checkin"),
+      checkin: Locale.label("mobile.screenTitles.checkin"),
+      donation: Locale.label("mobile.screenTitles.donation"),
+      donate: Locale.label("mobile.screenTitles.donation"),
+      membersSearch: Locale.label("mobile.screenTitles.directory"),
+      community: Locale.label("mobile.screenTitles.directory"),
+      memberDetail: Locale.label("mobile.screenTitles.memberDetail"),
+      plan: Locale.label("mobile.screenTitles.plans"),
+      plans: Locale.label("mobile.screenTitles.plans"),
+      planDetails: Locale.label("mobile.screenTitles.planDetails"),
+      sermons: Locale.label("mobile.screenTitles.sermons"),
+      sermonDetails: Locale.label("mobile.screenTitles.sermonDetails"),
+      playlist: Locale.label("mobile.screenTitles.playlist"),
+      playlistDetails: Locale.label("mobile.screenTitles.playlist"),
+      searchMessageUser: Locale.label("mobile.screenTitles.messages"),
+      messages: Locale.label("mobile.screenTitles.messages"),
+      messagesNew: Locale.label("mobile.screenTitles.newMessage"),
+      composeMessage: Locale.label("mobile.screenTitles.newMessage"),
+      registrations: Locale.label("mobile.screenTitles.registrations"),
+      register: Locale.label("mobile.screenTitles.register"),
+      volunteerBrowse: Locale.label("mobile.screenTitles.volunteerOpportunities"),
+      volunteer: Locale.label("mobile.screenTitles.volunteer"),
+      volunteerSignup: Locale.label("mobile.screenTitles.volunteer"),
+      profileEdit: Locale.label("mobile.screenTitles.profileEdit"),
+      stream: Locale.label("mobile.screenTitles.stream"),
+      bible: Locale.label("mobile.screenTitles.bible"),
+      lessons: Locale.label("mobile.screenTitles.lessons"),
+      login: Locale.label("mobile.screenTitles.signIn"),
+      install: Locale.label("mobile.screenTitles.installApp"),
+      page: "",
+      websiteUrl: ""
+    };
+    return map[prop];
+  }
+});
 
 export const mobileSlugFromPath = (pathname: string | null | undefined): string => {
   if (!pathname) return "";
@@ -154,5 +167,26 @@ export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => 
     case "stream": return "live_tv";
     case "url": return "public";
     default: return "apps";
+  }
+};
+
+// Short purpose-driven tagline per link type for hero cards. Returning null
+// (default / generic types) lets callers omit the subtext line entirely
+// instead of falling back to the generic "Tap to explore".
+export const linkTypeToTagline = (linkType?: string): string | null => {
+  switch ((linkType || "").toLowerCase()) {
+    case "groups": return Locale.label("mobile.taglines.groups");
+    case "directory": return Locale.label("mobile.taglines.directory");
+    case "plans": return Locale.label("mobile.taglines.plans");
+    case "checkin": return Locale.label("mobile.taglines.checkin");
+    case "lessons": return Locale.label("mobile.taglines.lessons");
+    case "donation": return Locale.label("mobile.taglines.donation");
+    case "volunteer": return Locale.label("mobile.taglines.volunteer");
+    case "bible": return Locale.label("mobile.taglines.bible");
+    case "votd": return Locale.label("mobile.taglines.votd");
+    case "sermons": return Locale.label("mobile.taglines.sermons");
+    case "stream": return Locale.label("mobile.taglines.stream");
+    case "registrations": return Locale.label("mobile.taglines.registrations");
+    default: return null;
   }
 };

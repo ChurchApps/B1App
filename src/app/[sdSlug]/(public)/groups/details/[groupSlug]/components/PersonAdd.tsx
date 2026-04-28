@@ -44,14 +44,14 @@ export const PersonAdd: React.FC<Props> = ({ addFunction, getPhotoUrl, searchCli
       });
   };
   return (
-    <DisplayBox key="displayBox" id="personAddBox" headerIcon="person" headerText={Locale.label("Add Person")} data-testid="person-add-box">
+    <DisplayBox key="displayBox" id="personAddBox" headerIcon="person" headerText={Locale.label("groupsPage.addPerson")} data-testid="person-add-box">
       <TextField fullWidth name="personAddText" label={Locale.label("person.person")} value={searchText} onChange={handleChange} onKeyDown={handleKeyDown}
-        InputProps={{ endAdornment: <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSearch} data-testid="search-person-button" aria-label="Search for person">{Locale.label("common.search")}</Button> }}
+        InputProps={{ endAdornment: <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSearch} data-testid="search-person-button" aria-label={Locale.label("groupsPage.searchForPerson")}>{Locale.label("common.search")}</Button> }}
         data-testid="search-person-input"
-        aria-label="Search for person by name"
+        aria-label={Locale.label("groupsPage.searchForPersonByName")}
       />
       {showCreatePersonOnNotFound && hasSearched && searchText && searchResults.length === 0 && (
-        <Typography sx={{ marginTop: "7px" }}>{Locale.label("person.noRec")} <a href="about:blank" onClick={(e) => { e.preventDefault(); setOpen(true); }} data-testid="create-person-link" aria-label="Create new person">{Locale.label("createPerson.addNewPerson")}</a></Typography>
+        <Typography sx={{ marginTop: "7px" }}>{Locale.label("person.noRec")} <a href="about:blank" onClick={(e) => { e.preventDefault(); setOpen(true); }} data-testid="create-person-link" aria-label={Locale.label("groupsPage.createNewPerson")}>{Locale.label("createPerson.addNewPerson")}</a></Typography>
       )}
       <PersonAddResults addFunction={addFunction} getPhotoUrl={getPhotoUrl} includeEmail={includeEmail} actionLabel={actionLabel} searchResults={searchResults} />
     </DisplayBox>

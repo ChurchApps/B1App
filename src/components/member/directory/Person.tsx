@@ -3,6 +3,7 @@ import { Icon, Typography, Table, TableHead, TableBody, TableRow, TableCell, But
 import EditIcon from "@mui/icons-material/Edit";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { PersonHelper as AppPersonHelper } from "@churchapps/apphelper";
 import type { PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { PersonHelper } from "../../../helpers";
@@ -36,13 +37,13 @@ export const Person: React.FC<Props> = (props) => {
     requestedChanges.map((t) => {
       const changes: ProfileChange[] = JSON.parse(t.data);
       result.push (
-        <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText="Profile Changes" data-testid={`profile-changes-${t.id}`}>
-          <Typography fontSize="13px" fontStyle="italic" sx={{ textIndent: "10px" }}>Requested by {t.createdByLabel}</Typography>
+        <DisplayBox key={t.id} id="changesBox" headerIcon="assignment_return" headerText={Locale.label("member.directory.profileChanges")} data-testid={`profile-changes-${t.id}`}>
+          <Typography fontSize="13px" fontStyle="italic" sx={{ textIndent: "10px" }}>{Locale.label("member.directory.requestedBy").replace("{}", t.createdByLabel || "")}</Typography>
           <Table size="small" sx={{ width: "80%", textIndent: "20px", marginTop: 2 }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: "1000 !important" }}>Field</TableCell>
-                <TableCell sx={{ fontWeight: "1000 !important" }}>Value</TableCell>
+                <TableCell sx={{ fontWeight: "1000 !important" }}>{Locale.label("member.directory.field")}</TableCell>
+                <TableCell sx={{ fontWeight: "1000 !important" }}>{Locale.label("member.directory.value")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -108,7 +109,7 @@ export const Person: React.FC<Props> = (props) => {
         <div className="contactItem" key="email">
           <Icon>mail_outline</Icon>
           <span className="contactValue">{ci.email}</span>
-          <span className="contactLabel">Email</span>
+          <span className="contactLabel">{Locale.label("person.email")}</span>
         </div>
       );
     }
@@ -117,7 +118,7 @@ export const Person: React.FC<Props> = (props) => {
         <div className="contactItem" key="mobile">
           <Icon>phone</Icon>
           <span className="contactValue">{ci.mobilePhone}</span>
-          <span className="contactLabel">Mobile</span>
+          <span className="contactLabel">{Locale.label("member.directory.mobile")}</span>
         </div>
       );
     }
@@ -126,7 +127,7 @@ export const Person: React.FC<Props> = (props) => {
         <div className="contactItem" key="home">
           <Icon>phone</Icon>
           <span className="contactValue">{ci.homePhone}</span>
-          <span className="contactLabel">Home</span>
+          <span className="contactLabel">{Locale.label("member.directory.home")}</span>
         </div>
       );
     }
@@ -135,7 +136,7 @@ export const Person: React.FC<Props> = (props) => {
         <div className="contactItem" key="work">
           <Icon>phone</Icon>
           <span className="contactValue">{ci.workPhone}</span>
-          <span className="contactLabel">Work</span>
+          <span className="contactLabel">{Locale.label("member.directory.work")}</span>
         </div>
       );
     }
@@ -145,14 +146,14 @@ export const Person: React.FC<Props> = (props) => {
         <div className="contactItem" key="address">
           <Icon>room</Icon>
           <span className="contactValue">{addr}</span>
-          <span className="contactLabel">Address</span>
+          <span className="contactLabel">{Locale.label("member.directory.address")}</span>
         </div>
       );
     }
     if (items.length === 0) return null;
     return (
       <div className="detailSection">
-        <h4>Contact Information</h4>
+        <h4>{Locale.label("member.directory.contactInformation")}</h4>
         {items}
       </div>
     );
@@ -162,7 +163,7 @@ export const Person: React.FC<Props> = (props) => {
     if (householdMembers.length === 0) return null;
     return (
       <div className="detailSection">
-        <h4>Household Members</h4>
+        <h4>{Locale.label("member.directory.householdMembers")}</h4>
         {householdMembers.map(m => (
           <a key={m.id} href="about:blank" className="hhMember" onClick={(e) => { e.preventDefault(); props.selectedHandler(m.id); }} data-testid={`household-member-${m.id}-link`}>
             <img className="hhAvatar" src={AppPersonHelper.getPhotoUrl(m)} alt="" />
@@ -183,7 +184,7 @@ export const Person: React.FC<Props> = (props) => {
           <img className="heroAvatar" src={PersonHelper.getPhotoUrl(person)} alt="" />
           <div>
             <h3>{person?.name?.display}</h3>
-            {person?.name?.last && <div className="heroSubtitle">{person.name.last} household</div>}
+            {person?.name?.last && <div className="heroSubtitle">{Locale.label("member.directory.lastNameHousehold").replace("{}", person.name.last)}</div>}
           </div>
         </div>
         <div className="detailBody">
@@ -192,8 +193,8 @@ export const Person: React.FC<Props> = (props) => {
         </div>
         <div className="detailActions">
           {isOwnProfile
-            ? <Button variant="outlined" size="small" startIcon={<EditIcon />} onClick={() => setEditMode(true)} data-testid="edit-profile-button">Edit Profile</Button>
-            : <Button variant="contained" size="small" disabled={!person} startIcon={<Icon>mail_outline</Icon>} onClick={() => { if (person) setShowPM(true); }} data-testid="person-message-button">Message</Button>
+            ? <Button variant="outlined" size="small" startIcon={<EditIcon />} onClick={() => setEditMode(true)} data-testid="edit-profile-button">{Locale.label("member.directory.editProfile")}</Button>
+            : <Button variant="contained" size="small" disabled={!person} startIcon={<Icon>mail_outline</Icon>} onClick={() => { if (person) setShowPM(true); }} data-testid="person-message-button">{Locale.label("member.directory.message")}</Button>
           }
         </div>
       </div>
@@ -204,7 +205,7 @@ export const Person: React.FC<Props> = (props) => {
 
   const getEditView = () => (
     <>
-      <DisplayBox id="peopleBox" headerIcon="person" headerText="Edit Profile" data-testid="edit-profile-display-box">
+      <DisplayBox id="peopleBox" headerIcon="person" headerText={Locale.label("member.directory.editProfile")} data-testid="edit-profile-display-box">
         <ProfileEdit personId={props.personId} person={person} onSave={handleSaveProfile} onCancel={() => setEditMode(false)} familyMembers={familyMembers} onFamilyMembersChange={setFamilyMembers} />
       </DisplayBox>
       {requestedChanges.length > 0 && showChanges()}

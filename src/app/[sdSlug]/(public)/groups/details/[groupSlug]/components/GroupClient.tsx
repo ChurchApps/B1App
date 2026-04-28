@@ -1,6 +1,6 @@
 "use client";
 
-import { UserHelper } from "@churchapps/apphelper";
+import { UserHelper, Locale } from "@churchapps/apphelper";
 import type { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
 import { UnauthenticatedView } from "./UnauthenticatedView";
 import { AuthenticatedView } from "./AuthenticatedView";
@@ -18,8 +18,8 @@ export function GroupClient(props: Props) {
   if (!props.group) {
     return (
       <div style={{ padding: "20px", textAlign: "center" }}>
-        <h1>Group Not Found</h1>
-        <p>The group you're looking for could not be found.</p>
+        <h1>{Locale.label("groupsPage.groupNotFound")}</h1>
+        <p>{Locale.label("groupsPage.groupNotFoundDescription")}</p>
       </div>
     );
   }

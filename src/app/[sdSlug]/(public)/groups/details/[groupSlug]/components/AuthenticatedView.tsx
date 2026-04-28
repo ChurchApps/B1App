@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useContext } from "react";
 import { Grid, Container } from "@mui/material";
-import { UserHelper } from "@churchapps/apphelper";
+import { UserHelper, Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { DisplayBox } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
@@ -53,16 +53,16 @@ export function AuthenticatedView(props: Props) {
       case "details":
         result = <>
           {canEditGroup && <LeaderEdit group={group} config={props.config} onChange={handleChange} updatedFunction={handleChange} />}
-          <h2>Details</h2>
+          <h2>{Locale.label("groupsPage.details")}</h2>
           <div style={{ paddingTop: "1rem", paddingBottom: "3rem" }}>
             <MarkdownPreviewLight value={group.about} />
           </div>
         </>;
         break;
-      case "calendar": result = <><h2>Calendar</h2><DisplayBox headerText="Group Calendar"><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>; break;
+      case "calendar": result = <><h2>{Locale.label("groupsPage.calendar")}</h2><DisplayBox headerText={Locale.label("groupsPage.groupCalendar")}><GroupCalendar groupId={group.id} churchId={props.config.church.id} canEdit={canEditGroup} /></DisplayBox></>; break;
       case "conversations": result = <ConversationsTab context={context} groupId={group.id} isLeader={isLeader} />; break;
-      case "resources": result = <><h2>Resources</h2><GroupResources context={context} groupId={group.id} /></>; break;
-      case "leaderResources": result = <><h2>Resources (Leaders Only)</h2><GroupLeaderResources context={context} groupId={group.id} /></>; break;
+      case "resources": result = <><h2>{Locale.label("groupsPage.resources")}</h2><GroupResources context={context} groupId={group.id} /></>; break;
+      case "leaderResources": result = <><h2>{Locale.label("groupsPage.resourcesLeadersOnly")}</h2><GroupLeaderResources context={context} groupId={group.id} /></>; break;
       case "members": result = <MembersTab isLeader={isLeader} canEditMembers={canEditMembers} group={group} />; break;
       case "attendance": result = <AttendanceTab group={group} />; break;
     }
@@ -83,7 +83,7 @@ export function AuthenticatedView(props: Props) {
             <Grid size={{ xs: 12, md: 10 }}>
               {group
                 ? (<>{getTabContent()}</>)
-                : (<p>No group data found</p>)}
+                : (<p>{Locale.label("groupsPage.noGroupData")}</p>)}
             </Grid>
           </Grid>
         </div>

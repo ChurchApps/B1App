@@ -2,6 +2,7 @@ import React from "react";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { AssignmentInterface, PlanInterface, PositionInterface } from "@churchapps/helpers";
 import { TableRow, TableCell, Table, TableHead, TableBody } from "@mui/material";
 import Link from "next/link";
@@ -52,14 +53,14 @@ const getRows = () => {
   return rows;
 };
 
-return (<DisplayBox headerIcon="assignment" headerText="Serving Times">
+return (<DisplayBox headerIcon="assignment" headerText={Locale.label("plans.servingTimes.title")}>
   <Table>
     <TableHead>
       <TableRow>
-        <TableCell>Plan</TableCell>
-        <TableCell>Service Date</TableCell>
-        <TableCell>Role</TableCell>
-        <TableCell>Status</TableCell>
+        <TableCell>{Locale.label("plans.servingTimes.plan")}</TableCell>
+        <TableCell>{Locale.label("plans.servingTimes.serviceDate")}</TableCell>
+        <TableCell>{Locale.label("plans.servingTimes.role")}</TableCell>
+        <TableCell>{Locale.label("plans.position.status")}</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>

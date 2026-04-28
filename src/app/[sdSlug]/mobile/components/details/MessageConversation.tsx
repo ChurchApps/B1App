@@ -6,7 +6,7 @@ import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } fr
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -141,7 +141,7 @@ export const MessageConversation = ({ id, config }: Props) => {
   });
 
   React.useEffect(() => {
-    if (messagesErrored) setError("Unable to load messages.");
+    if (messagesErrored) setError(Locale.label("mobile.details.unableToLoadMessages"));
   }, [messagesErrored]);
 
   React.useEffect(() => {
@@ -175,13 +175,13 @@ export const MessageConversation = ({ id, config }: Props) => {
         allowAnonymousPosts: false,
         contentType: "privateMessage",
         contentId: myPersonId,
-        title: (myDisplayName || "Private") + " Private Message",
+        title: Locale.label("mobile.details.privateMessageTitle").replace("{}", myDisplayName || Locale.label("mobile.details.private")),
         visibility: "hidden"
       }
     ];
     const convData: any[] = await ApiHelper.post("/conversations", convParams, "MessagingApi");
     const newConvId: string | undefined = convData?.[0]?.id;
-    if (!newConvId) throw new Error("Could not create conversation");
+    if (!newConvId) throw new Error(Locale.label("mobile.details.couldNotCreateConversation"));
 
     await ApiHelper.post(
       "/privateMessages",
@@ -203,7 +203,7 @@ export const MessageConversation = ({ id, config }: Props) => {
     const content = text.trim();
     if (!content || sending) return;
     if (!myPersonId) {
-      setError("You must be signed in to send messages.");
+      setError(Locale.label("mobile.details.mustBeSignedIn"));
       return;
     }
     setSending(true);
@@ -232,7 +232,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         await createConversationAndSend(content);
       }
     } catch {
-      setError("Message failed to send.");
+      setError(Locale.label("mobile.details.messageFailed"));
 
       setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
     } finally {
@@ -240,7 +240,7 @@ export const MessageConversation = ({ id, config }: Props) => {
     }
   };
 
-  const name = person?.name?.display || "Conversation";
+  const name = person?.name?.display || Locale.label("mobile.details.conversation");
 
   const getPhoto = (): string | "" => {
     if (!person) return "";
@@ -357,7 +357,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         <ChatBubbleOutlineIcon sx={{ fontSize: 28, color: tc.primary }} />
       </Box>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        Start the conversation with {name}
+        {Locale.label("mobile.details.startConversationWith").replace("{}", name)}
       </Typography>
     </Box>
   );
@@ -400,7 +400,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           {name}
         </Typography>
         <IconButton
-          aria-label="New conversation"
+          aria-label={Locale.label("mobile.details.newConversation")}
           onClick={() => router.push("/mobile/messages/new")}
           sx={{
             bgcolor: tc.iconBackground,
@@ -448,7 +448,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           multiline
           maxRows={4}
           fullWidth
-          placeholder="Type a message…"
+          placeholder={Locale.label("mobile.details.typeMessage")}
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
@@ -470,7 +470,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           }}
         />
         <IconButton
-          aria-label="Send"
+          aria-label={Locale.label("mobile.details.send")}
           onClick={handleSend}
           disabled={sending || !text.trim()}
           sx={{

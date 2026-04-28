@@ -3,6 +3,7 @@ import { Grid, TextField, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
 import { InputBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import { UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
@@ -28,9 +29,9 @@ export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
 
   const handleAdd = () => {
     const errors: string[] = [];
-    if (!text.trim()) errors.push("Please enter valid text");
-    if (!url.trim()) errors.push("Please enter link");
-    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push("Unauthorized to add links");
+    if (!text.trim()) errors.push(Locale.label("groups.validate.linkText"));
+    if (!url.trim()) errors.push(Locale.label("groups.validate.linkUrl"));
+    if (!UserHelper.checkAccess(Permissions.contentApi.content.edit)) errors.push(Locale.label("groups.validate.unauthorized"));
 
     if (errors.length > 0) {
       setErrors(errors);
@@ -47,15 +48,15 @@ export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
   };
 
   return (
-    <InputBox headerIcon="description" headerText="Add Links" saveFunction={handleAdd} saveText="Add" data-testid="group-link-add-box">
+    <InputBox headerIcon="description" headerText={Locale.label("groups.addLinks")} saveFunction={handleAdd} saveText={Locale.label("groups.add")} data-testid="group-link-add-box">
       <ErrorMessages errors={errors} data-testid="group-link-errors" />
-      <Typography sx={{ textIndent: 3, fontSize: "14px" }}>Link could be of Google Drive, Hosted Lesson PDF, etc.</Typography>
+      <Typography sx={{ textIndent: 3, fontSize: "14px" }}>{Locale.label("groups.addLinksInfo")}</Typography>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField fullWidth label="Link Text" name="text" value={text} onChange={handleChange} data-testid="group-link-text-input" aria-label="Link display text" />
+          <TextField fullWidth label={Locale.label("groups.linkText")} name="text" value={text} onChange={handleChange} data-testid="group-link-text-input" aria-label={Locale.label("groups.linkTextLabel")} />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField fullWidth label="Link Url" name="url" value={url} onChange={handleChange} data-testid="group-link-url-input" aria-label="Link URL" />
+          <TextField fullWidth label={Locale.label("groups.linkUrl")} name="url" value={url} onChange={handleChange} data-testid="group-link-url-input" aria-label={Locale.label("groups.linkUrlLabel")} />
         </Grid>
       </Grid>
     </InputBox>

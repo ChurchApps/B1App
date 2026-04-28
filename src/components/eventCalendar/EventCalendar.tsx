@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Chip, Snackbar, Stack } from "@mui/material";
 import { EventHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import type { EventInterface } from "@churchapps/helpers";
@@ -110,8 +111,8 @@ export function EventCalendar(props: Props) {
     <div>
       {props.editGroupId
         && <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ marginBottom: 2 }}>
-          <SmallButton icon="link" text="Subscribe" onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe(); }} toolTip="Copy the URL and add this to your Google Calendar (or other)" data-testid="event-subscribe-button" />
-          <SmallButton icon="event_note" text="Add Event" onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }); }} data-testid="event-add-button" />
+          <SmallButton icon="link" text={Locale.label("eventCalendar.subscribe")} onClick={(e: React.MouseEvent) => { e.preventDefault(); handleSubscribe(); }} toolTip={Locale.label("eventCalendar.subscribeTip")} data-testid="event-subscribe-button" />
+          <SmallButton icon="event_note" text={Locale.label("eventCalendar.addEvent")} onClick={() => { handleAddEvent({ start: new Date(), end: new Date() }); }} data-testid="event-add-button" />
         </Stack>
       }
       {allTags.length > 0 && (
@@ -127,14 +128,14 @@ export function EventCalendar(props: Props) {
             />
           ))}
           {selectedTags.length > 0 && (
-            <Chip label="Clear" size="small" variant="outlined" onDelete={() => setSelectedTags([])} onClick={() => setSelectedTags([])} />
+            <Chip label={Locale.label("eventCalendar.clear")} size="small" variant="outlined" onDelete={() => setSelectedTags([])} onClick={() => setSelectedTags([])} />
           )}
         </Stack>
       )}
       <Calendar localizer={localizer} events={expandedEvents} startAccessor="start" endAccessor="end" style={{ height: 500 }} onSelectEvent={handleEventClick} onSelectSlot={handleAddEvent} selectable={props.editGroupId !== null} date={date} view={view} onNavigate={onNavigate} onView={onView} />
       {editEvent && props.editGroupId && <EditEventModal event={editEvent} onDone={handleDone} />}
       {displayEvent && <DisplayEventModal event={displayEvent} onDone={handleDone} canEdit={props.editGroupId !== ""} onEdit={() => { setEditEvent(displayEvent); setDisplayEvent(null); }} />}
-      <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={2000} message={"Copied to clipboard!"} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} ContentProps={{ sx: { background: "green" } }} />
+      <Snackbar open={open} onClose={() => setOpen(false)} autoHideDuration={2000} message={Locale.label("eventCalendar.copiedToClipboard")} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} ContentProps={{ sx: { background: "green" } }} />
     </div>
   );
 }

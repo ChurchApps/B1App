@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "@/components/groups/GroupCard";
 
@@ -24,7 +25,7 @@ export default function MyGroups() {
           ))
         )
         : (
-          <p>No groups found</p>
+          <p>{Locale.label("groups.noGroups")}</p>
         )}
     </Grid>
   );

@@ -16,7 +16,7 @@ import {
   Icon,
   Typography
 } from "@mui/material";
-import { ApiHelper, ArrayHelper, PersonHelper as ApphelperPersonHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, Locale, PersonHelper as ApphelperPersonHelper } from "@churchapps/apphelper";
 import type {
   GroupInterface,
   GroupServiceTimeInterface,
@@ -770,7 +770,7 @@ const HouseholdStep = ({
       </Box>
 
       <Dialog open={showDuplicateDialog} onClose={() => setShowDuplicateDialog(false)}>
-        <DialogTitle>Already Checked In</DialogTitle>
+        <DialogTitle>{Locale.label("mobile.screens.alreadyCheckedIn")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {duplicateNames.join(", ")} already checked in for this service. Check in again to
@@ -778,7 +778,7 @@ const HouseholdStep = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowDuplicateDialog(false)}>Cancel</Button>
+          <Button onClick={() => setShowDuplicateDialog(false)}>{Locale.label("mobile.screens.cancel")}</Button>
           <Button
             onClick={doCheckin}
             variant="contained"

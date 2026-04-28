@@ -1,6 +1,6 @@
 import React from "react";
 import { PageLayout, Theme } from "@/components";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
@@ -28,8 +28,8 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
   let title = props.pageData.title;
   if (!title) {
     switch (pageSlug) {
-      case "votd": title = "Verse of the Day"; break;
-      case "bible": title = "Bible"; break;
+      case "votd": title = Locale.label("pageSlug.verseOfTheDay"); break;
+      case "bible": title = Locale.label("pageSlug.bible"); break;
     }
   }
   return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title, undefined, props.config.appearance);

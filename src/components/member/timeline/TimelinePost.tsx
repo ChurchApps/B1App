@@ -8,6 +8,7 @@ import { Conversation } from "@/components/notes/Conversation";
 import { AddNote } from "@churchapps/apphelper";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { UserHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, UserContextInterface, ConversationInterface } from "@churchapps/helpers";
@@ -34,7 +35,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
       case "group": result = getGroupDetails(); break;
       case "venue": result = getVenueDetails(); break;
       case "sermon": result = getSermonDetails(); break;
-      default: result = <>{displayTime} - <b>Message: </b> </>; break;
+      default: result = <>{displayTime} - <b>{Locale.label("member.timeline.message")}: </b> </>; break;
     }
     return result;
   };
@@ -58,8 +59,8 @@ export const TimelinePost: React.FC<Props> = (props) => {
     const associatedWith = getEntity(data?.associatedWithType, data?.associatedWithId, data?.associatedWithLabel);
 
     const result = (<>
-      {getIntroLine(<><b>Task: {data?.title}</b></>)}
-      <p>{creator} has requested this from {assignedTo} on behalf of {associatedWith}</p>
+      {getIntroLine(<><b>{Locale.label("member.timeline.task")}: {data?.title}</b></>)}
+      <p>{creator} {Locale.label("member.timeline.taskRequestedFrom")} {assignedTo} {Locale.label("member.timeline.taskOnBehalfOf")} {associatedWith}</p>
     </>);
     return result;
   };
@@ -72,7 +73,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
     const displayStart = DateHelper.prettyDateTime(start);
     const result = (<>
       {!props.condensed && group?.photoUrl && (<Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{ width: "100%" }} />)}
-      {getIntroLine(<><b>Event: {data?.title}</b> - {displayStart}</>)}
+      {getIntroLine(<><b>{Locale.label("member.timeline.event")}: {data?.title}</b> - {displayStart}</>)}
       <p>{data?.description}</p>
     </>);
     return result;
@@ -104,7 +105,7 @@ export const TimelinePost: React.FC<Props> = (props) => {
     const lines = [];
     const result = (<>
       {group?.photoUrl && (<Image src={group?.photoUrl} width="400" height="200" alt={group.name} style={{ width: "100%" }} />)}
-      {getIntroLine(<>Conversation for the {getEntity("group", group.id, group.name)} group</>)}
+      {getIntroLine(<>{Locale.label("member.timeline.conversationForGroupPrefix")} {getEntity("group", group.id, group.name)} {Locale.label("member.timeline.conversationForGroupSuffix")}</>)}
     </>);
     return result;
   };

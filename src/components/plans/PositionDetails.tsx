@@ -1,6 +1,7 @@
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper";
 import { InputBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { AssignmentInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { Alert } from "@mui/material";
 import { DateHelper } from "@churchapps/helpers";
@@ -16,9 +17,9 @@ export const PositionDetails: React.FC<Props> = (props) => {
 
   const getStatus = () => {
     switch (props.assignment.status) {
-      case "Accepted": return <Alert severity="success"><b>Status:</b> Accepted</Alert>;
-      case "Declined": return <Alert severity="error"><b>Status:</b> Declined</Alert>;
-      default: return <Alert severity="warning"><b>Status:</b> Unconfirmed</Alert>;
+      case "Accepted": return <Alert severity="success"><b>{Locale.label("plans.position.status")}:</b> {Locale.label("plans.position.accepted")}</Alert>;
+      case "Declined": return <Alert severity="error"><b>{Locale.label("plans.position.status")}:</b> {Locale.label("plans.position.declined")}</Alert>;
+      default: return <Alert severity="warning"><b>{Locale.label("plans.position.status")}:</b> {Locale.label("plans.position.unconfirmed")}</Alert>;
     }
   };
 
@@ -48,10 +49,10 @@ export const PositionDetails: React.FC<Props> = (props) => {
 
   const canRespond = props.assignment.status === "Unconfirmed" && (props.times.length === 0 || new Date() < latestTime);
 
-  return (<InputBox headerIcon="event" headerText={"Position: " + props.position.name} saveText="Accept" saveFunction={canRespond && handleAccept} deleteFunction={canRespond && handleDecline} deleteText="Decline">
+  return (<InputBox headerIcon="event" headerText={Locale.label("plans.position.headerPrefix") + ": " + props.position.name} saveText={Locale.label("plans.position.accept")} saveFunction={canRespond && handleAccept} deleteFunction={canRespond && handleDecline} deleteText={Locale.label("plans.position.decline")}>
     {getStatus()}
     <br />
-    <b>Needed Times:</b>
+    <b>{Locale.label("plans.position.neededTimes")}:</b>
     <ul>
       {getTimes()}
     </ul>

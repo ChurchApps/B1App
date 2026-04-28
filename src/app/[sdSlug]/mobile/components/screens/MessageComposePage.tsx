@@ -11,7 +11,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
@@ -164,7 +164,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
         <TextField
           fullWidth
           size="small"
-          placeholder="Search for a person to message"
+          placeholder={Locale.label("mobile.screens.searchForMessage")}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           onKeyDown={(e) => {

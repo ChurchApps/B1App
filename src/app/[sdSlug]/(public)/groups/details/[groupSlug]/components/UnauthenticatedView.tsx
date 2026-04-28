@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { Locale } from "@churchapps/apphelper";
 import type { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
 import { GroupContact } from "./GroupContact";
 import { GroupHero } from "./GroupHero";
@@ -82,7 +83,7 @@ export function UnauthenticatedView(props: Props) {
 
         <p style={{ padding: "0px 20px", fontSize: "22px", textAlign: "left" }}>{props.group.about}</p>
 
-        <Grid container style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", lineHeight: "50px" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>Leader(s): </span>
+        <Grid container style={{ padding: "0px 20px", fontSize: "18px", textAlign: "left", lineHeight: "50px" }}><span style={{ fontWeight: "bold", fontSize: "22px" }}>{Locale.label("groupsPage.leaders")} </span>
           {getLeaders()}
         </Grid>
       </div>
@@ -93,7 +94,7 @@ export function UnauthenticatedView(props: Props) {
         </Grid>
 
         <Grid size={{ md: 4, xs: 12 }} style={{ display: hidden, textAlign: "center" }} id="calEntity">
-          <h2 style={{ padding: "20px 0px", margin: "15px 0px" }}>Calendar Events:</h2>
+          <h2 style={{ padding: "20px 0px", margin: "15px 0px" }}>{Locale.label("groupsPage.calendarEvents")}</h2>
           {events}
         </Grid>
       </Grid>

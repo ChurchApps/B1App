@@ -5,6 +5,7 @@ import { DateHelper } from "@churchapps/apphelper";
 import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 import { ErrorMessages } from "@churchapps/apphelper";
 import { EventHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";
 import { AppBar, Button, Checkbox, Dialog, DialogContent, Divider, FormControlLabel, FormGroup, Grid, Icon, IconButton, TextField, Toolbar, Typography, Switch, Stack } from "@mui/material";
 import { useState } from "react";
@@ -77,7 +78,7 @@ export function EditEventModal(props: Props) {
 
   const handleDelete = () => {
     if (props.event.recurrenceRule) setRecurrenceModalType("delete");
-    else if (confirm("Are you sure you wish to delete this event?")) ApiHelper.delete("/events/" + event.id, "ContentApi").then(() => { props.onDone(); });
+    else if (confirm(Locale.label("eventCalendar.confirmDelete"))) ApiHelper.delete("/events/" + event.id, "ContentApi").then(() => { props.onDone(); });
   };
 
   const handleSave = () => {
@@ -86,7 +87,7 @@ export function EditEventModal(props: Props) {
       const errors: string[] = [];
       const ev = { ...event };
 
-      if (!ev.title || ev.title === "") errors.push("Please enter a title");
+      if (!ev.title || ev.title === "") errors.push(Locale.label("eventCalendar.titleRequired"));
 
       if (errors.length > 0) {
         setErrors(errors);
@@ -118,19 +119,19 @@ export function EditEventModal(props: Props) {
     if (event.allDay) {
       return (<>
         <Grid size={{ xs: 6 }}>
-          <TextField name="start" type="date" value={(event.start) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.start)) : ""} fullWidth label="Start Time" onChange={handleChange} size="small" data-testid="event-start-date-input" aria-label="Event start date" />
+          <TextField name="start" type="date" value={(event.start) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.start)) : ""} fullWidth label={Locale.label("eventCalendar.startTime")} onChange={handleChange} size="small" data-testid="event-start-date-input" aria-label={Locale.label("eventCalendar.eventStartDate")} />
         </Grid>
         <Grid size={{ xs: 6 }}>
-          <TextField name="end" type="date" value={(event.end) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.end)) : ""} fullWidth label="End Time" onChange={handleChange} size="small" data-testid="event-end-date-input" aria-label="Event end date" />
+          <TextField name="end" type="date" value={(event.end) ? DateHelper.formatHtml5Date(DateHelper.toDate(event.end)) : ""} fullWidth label={Locale.label("eventCalendar.endTime")} onChange={handleChange} size="small" data-testid="event-end-date-input" aria-label={Locale.label("eventCalendar.eventEndDate")} />
         </Grid>
       </>);
     } else {
       return (<>
         <Grid size={{ xs: 6 }}>
-          <TextField name="start" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.start)} fullWidth label="Start Time" onChange={handleChange} size="small" data-testid="event-start-datetime-input" aria-label="Event start date and time" />
+          <TextField name="start" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.start)} fullWidth label={Locale.label("eventCalendar.startTime")} onChange={handleChange} size="small" data-testid="event-start-datetime-input" aria-label={Locale.label("eventCalendar.eventStartDateTime")} />
         </Grid>
         <Grid size={{ xs: 6 }}>
-          <TextField name="end" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.end)} fullWidth label="End Time" onChange={handleChange} size="small" data-testid="event-end-datetime-input" aria-label="Event end date and time" />
+          <TextField name="end" type="datetime-local" value={DateHelper.formatHtml5DateTime(event.end)} fullWidth label={Locale.label("eventCalendar.endTime")} onChange={handleChange} size="small" data-testid="event-end-datetime-input" aria-label={Locale.label("eventCalendar.eventEndDateTime")} />
         </Grid>
       </>);
     }
@@ -149,17 +150,17 @@ export function EditEventModal(props: Props) {
       <Dialog open={true} onClose={props.onDone} fullScreen>
         <AppBar sx={{ position: "relative" }}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label="close" data-testid="close-event-modal-button">
+            <IconButton edge="start" color="inherit" onClick={props.onDone} aria-label={Locale.label("common.close")} data-testid="close-event-modal-button">
               <Icon>close</Icon>
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Edit Event
+              {Locale.label("eventCalendar.editEvent")}
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleDelete} data-testid="delete-event-button" aria-label="Delete event">
-              Delete
+            <Button autoFocus color="inherit" onClick={handleDelete} data-testid="delete-event-button" aria-label={Locale.label("eventCalendar.deleteEvent")}>
+              {Locale.label("common.delete")}
             </Button>
-            <Button autoFocus color="inherit" onClick={handleSave} data-testid="save-event-button" aria-label="Save event">
-              Save
+            <Button autoFocus color="inherit" onClick={handleSave} data-testid="save-event-button" aria-label={Locale.label("eventCalendar.saveEvent")}>
+              {Locale.label("common.save")}
             </Button>
           </Toolbar>
         </AppBar>
@@ -167,12 +168,12 @@ export function EditEventModal(props: Props) {
           <Grid container spacing={1}>
             <Grid size={{ xs: 6 }}>
               <FormGroup>
-                <FormControlLabel control={<Checkbox checked={event.allDay} data-testid="all-day-checkbox" />} label="All Day" name="allDay" onChange={(e, checked) => { setEvent({ ...event, allDay: checked }); }} data-testid="all-day-form-control" aria-label="Mark event as all day" />
+                <FormControlLabel control={<Checkbox checked={event.allDay} data-testid="all-day-checkbox" />} label={Locale.label("eventCalendar.allDay")} name="allDay" onChange={(e, checked) => { setEvent({ ...event, allDay: checked }); }} data-testid="all-day-form-control" aria-label={Locale.label("eventCalendar.allDayAria")} />
               </FormGroup>
             </Grid>
             <Grid size={{ xs: 6 }}>
               <FormGroup>
-                <FormControlLabel control={<Checkbox checked={event.recurrenceRule?.length > 0} data-testid="recurring-checkbox" />} label="Recurring" name="recurring" onChange={(e, checked) => { handleToggleRecurring(checked); }} data-testid="recurring-form-control" aria-label="Mark event as recurring" />
+                <FormControlLabel control={<Checkbox checked={event.recurrenceRule?.length > 0} data-testid="recurring-checkbox" />} label={Locale.label("eventCalendar.recurringLabel")} name="recurring" onChange={(e, checked) => { handleToggleRecurring(checked); }} data-testid="recurring-form-control" aria-label={Locale.label("eventCalendar.recurringAria")} />
               </FormGroup>
             </Grid>
             {getDates()}
@@ -181,7 +182,7 @@ export function EditEventModal(props: Props) {
 
             <Grid size={{ xs: 12 }}>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography>Private: </Typography>
+                <Typography>{Locale.label("eventCalendar.private")}: </Typography>
                 <Switch
                   size="small"
                   checked={event.visibility === "private"}
@@ -190,12 +191,12 @@ export function EditEventModal(props: Props) {
                     else setEvent({ ...event, visibility: "public" });
                   }}
                   data-testid="event-privacy-switch"
-                  aria-label="Toggle event privacy"
+                  aria-label={Locale.label("eventCalendar.privacyAria")}
                 />
               </Stack>
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <TextField name="title" value={event.title} fullWidth label="Title" onChange={handleChange} size="small" data-testid="event-title-input" aria-label="Event title" />
+              <TextField name="title" value={event.title} fullWidth label={Locale.label("eventCalendar.title")} onChange={handleChange} size="small" data-testid="event-title-input" aria-label={Locale.label("eventCalendar.titleAria")} />
             </Grid>
             <Grid size={{ xs: 12 }}>
               <MarkdownEditor value={event.description || ""} onChange={val => setEvent({ ...event, description: val })} style={{ maxHeight: 200, overflowY: "scroll" }} data-testid="event-description-editor" />
@@ -203,28 +204,28 @@ export function EditEventModal(props: Props) {
             <Grid size={{ xs: 12 }}>
               <Divider sx={{ my: 1 }} />
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography>Registration: </Typography>
+                <Typography>{Locale.label("eventCalendar.registration")}: </Typography>
                 <Switch
                   size="small"
                   checked={event.registrationEnabled || false}
                   onChange={(e) => { setEvent({ ...event, registrationEnabled: e.target.checked }); }}
                   data-testid="event-registration-switch"
-                  aria-label="Toggle event registration"
+                  aria-label={Locale.label("eventCalendar.registrationAria")}
                 />
               </Stack>
             </Grid>
             {event.registrationEnabled && (<>
               <Grid size={{ xs: 6 }}>
-                <TextField name="capacity" type="number" value={event.capacity || ""} fullWidth label="Capacity (optional)" onChange={handleChange} size="small" data-testid="event-capacity-input" aria-label="Registration capacity" />
+                <TextField name="capacity" type="number" value={event.capacity || ""} fullWidth label={Locale.label("eventCalendar.capacity")} onChange={handleChange} size="small" data-testid="event-capacity-input" aria-label={Locale.label("eventCalendar.capacityAria")} />
               </Grid>
               <Grid size={{ xs: 6 }}>
-                <TextField name="tags" value={event.tags || ""} fullWidth label="Tags (comma-separated)" onChange={handleChange} size="small" data-testid="event-tags-input" aria-label="Event tags" />
+                <TextField name="tags" value={event.tags || ""} fullWidth label={Locale.label("eventCalendar.tags")} onChange={handleChange} size="small" data-testid="event-tags-input" aria-label={Locale.label("eventCalendar.tagsAria")} />
               </Grid>
               <Grid size={{ xs: 6 }}>
-                <TextField name="registrationOpenDate" type="datetime-local" value={event.registrationOpenDate ? DateHelper.formatHtml5DateTime(event.registrationOpenDate) : ""} fullWidth label="Registration Opens" onChange={handleChange} size="small" InputLabelProps={{ shrink: true }} data-testid="event-reg-open-input" aria-label="Registration open date" />
+                <TextField name="registrationOpenDate" type="datetime-local" value={event.registrationOpenDate ? DateHelper.formatHtml5DateTime(event.registrationOpenDate) : ""} fullWidth label={Locale.label("eventCalendar.registrationOpens")} onChange={handleChange} size="small" InputLabelProps={{ shrink: true }} data-testid="event-reg-open-input" aria-label={Locale.label("eventCalendar.registrationOpensAria")} />
               </Grid>
               <Grid size={{ xs: 6 }}>
-                <TextField name="registrationCloseDate" type="datetime-local" value={event.registrationCloseDate ? DateHelper.formatHtml5DateTime(event.registrationCloseDate) : ""} fullWidth label="Registration Closes" onChange={handleChange} size="small" InputLabelProps={{ shrink: true }} data-testid="event-reg-close-input" aria-label="Registration close date" />
+                <TextField name="registrationCloseDate" type="datetime-local" value={event.registrationCloseDate ? DateHelper.formatHtml5DateTime(event.registrationCloseDate) : ""} fullWidth label={Locale.label("eventCalendar.registrationCloses")} onChange={handleChange} size="small" InputLabelProps={{ shrink: true }} data-testid="event-reg-close-input" aria-label={Locale.label("eventCalendar.registrationClosesAria")} />
               </Grid>
             </>)}
           </Grid>

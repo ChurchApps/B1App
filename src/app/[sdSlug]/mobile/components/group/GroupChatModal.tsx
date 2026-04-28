@@ -14,7 +14,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 
@@ -172,9 +172,9 @@ export const GroupChatModal = ({
           allowAnonymousPosts: false,
           contentType: currentContentType,
           contentId: groupId,
-          title: `${groupName || "Group"} ${
-            currentContentType === "groupAnnouncement" ? "Announcements" : "Chat"
-          }`,
+          title: Locale.label("mobile.group.groupChatTitle")
+            .replace("{}", groupName || Locale.label("mobile.components.group"))
+            .replace("{}", currentContentType === "groupAnnouncement" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.chat")),
           visibility: "hidden"
         };
         const result: Conversation[] = await ApiHelper.post(
@@ -210,7 +210,7 @@ export const GroupChatModal = ({
     const d = typeof t === "string" ? new Date(t) : t;
     if (isNaN(d.getTime())) return "";
     const diff = Math.floor((Date.now() - d.getTime()) / 60000);
-    if (diff < 1) return "now";
+    if (diff < 1) return Locale.label("mobile.now");
     if (diff < 60) return `${diff}m`;
     if (diff < 1440) return `${Math.floor(diff / 60)}h`;
     return `${Math.floor(diff / 1440)}d`;
@@ -235,14 +235,14 @@ export const GroupChatModal = ({
         </Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        {subTab === "announcements" ? "No announcements yet" : "Start the conversation"}
+        {subTab === "announcements" ? Locale.label("mobile.group.noAnnouncementsYet") : Locale.label("mobile.group.startTheConversation")}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
         {subTab === "announcements"
           ? isLeader
-            ? "Post an announcement below."
-            : "Leaders can post announcements here."
-          : "Be the first to share something with the group."}
+            ? Locale.label("mobile.group.postAnnouncementBelow")
+            : Locale.label("mobile.group.leadersCanPost")
+          : Locale.label("mobile.group.beFirstToShare")}
       </Typography>
     </Box>
   );
@@ -368,9 +368,9 @@ export const GroupChatModal = ({
         }}
       >
         <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-          {groupName || "Group Chat"}
+          {groupName || Locale.label("mobile.group.groupChat")}
         </Typography>
-        <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label="Close">
+        <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label={Locale.label("mobile.components.close")}>
           <Icon>close</Icon>
         </IconButton>
       </Box>
@@ -395,8 +395,8 @@ export const GroupChatModal = ({
               "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
             }}
           >
-            <Tab value="discussions" label="Discussions" />
-            <Tab value="announcements" label="Announcements" />
+            <Tab value="discussions" label={Locale.label("mobile.group.discussions")} />
+            <Tab value="announcements" label={Locale.label("mobile.group.announcements")} />
           </Tabs>
         </Box>
       )}
@@ -428,7 +428,7 @@ export const GroupChatModal = ({
             fullWidth
             size="small"
             placeholder={
-              subTab === "announcements" ? "Post an announcement…" : "Send a message…"
+              subTab === "announcements" ? Locale.label("mobile.group.postAnnouncement") : Locale.label("mobile.group.sendAMessage")
             }
             value={draft}
             onChange={(e) => setDraft(e.target.value)}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { SectionInterface, StreamingServiceExtendedInterface } from "@/helpers";
-import { AppearanceHelper } from "@churchapps/apphelper";
+import { AppearanceHelper, Locale } from "@churchapps/apphelper";
 import { useMountedState } from "@churchapps/apphelper";
 import { StyleHelper } from "@churchapps/apphelper/website";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -70,7 +70,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
         if (cs?.sermon?.videoType === "vimeo") videoUrl += "#t=0m0s";
       }
     }
-    return (<iframe id="videoFrame" src={videoUrl} frameBorder={0} allow="autoplay; fullscreen" allowFullScreen title="Sermon Video"></iframe>);
+    return (<iframe id="videoFrame" src={videoUrl} frameBorder={0} allow="autoplay; fullscreen" allowFullScreen title={Locale.label("video.sermonVideo")}></iframe>);
   };
 
   const getCountdown = (cs: StreamingServiceExtendedInterface) => {
@@ -83,7 +83,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
       backgroundPosition: "center",
       ...(logoUrl ? { backgroundImage: `url(${logoUrl})` } : {})
     };
-    return <div id="noVideoContent" style={style}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>{cs?.sermon?.title ?? "Next Service Time"}</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>;
+    return <div id="noVideoContent" style={style}><h3 style={{ fontSize: 24, position: "absolute", bottom: 40, left: 20 }}>{cs?.sermon?.title ?? Locale.label("video.nextServiceTime")}</h3><p style={{ fontSize: 28, position: "absolute", bottom: 0, left: 20 }}>{displayTime}</p></div>;
   };
 
   const getLogo = () => {
@@ -130,7 +130,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
     switch (contentType) {
       case "logo": return <div id="noVideoContent" style={logoStyle} />;
-      case "ended": return <div id="noVideoContent"><h3>The current service has ended.</h3></div>;
+      case "ended": return <div id="noVideoContent"><h3>{Locale.label("video.serviceEnded")}</h3></div>;
       case "countdown": return getCountdown(props.currentService);
       case "video": return getVideo(props.currentService);
       default: return <div id="noVideoContent" style={logoStyle} />;

@@ -2,7 +2,7 @@ import { Theme } from "@/components";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { MetaHelper } from "@/helpers/MetaHelper";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { Container } from "@mui/material";
 import { Metadata } from "next";
 import { VolunteerBrowse } from "@/components/serving/VolunteerBrowse";
@@ -19,7 +19,7 @@ const loadSharedData = async (sdSlug: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug } = await params;
   const { config } = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData("Volunteer Opportunities - " + config.church.name, "Browse open volunteer positions", undefined, config.appearance);
+  return MetaHelper.getMetaData(Locale.label("volunteer.metaTitle") + " - " + config.church.name, Locale.label("volunteer.metaDescription"), undefined, config.appearance);
 }
 
 export default async function VolunteerPage({ params }: { params: PageParams }) {

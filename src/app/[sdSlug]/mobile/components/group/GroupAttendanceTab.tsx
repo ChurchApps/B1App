@@ -11,7 +11,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
 import { getInitials } from "../util";
 
@@ -250,10 +250,10 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
       }
 
       setOriginalAttendance({ ...attendance });
-      setMessage({ type: "success", text: "Attendance saved." });
+      setMessage({ type: "success", text: Locale.label("mobile.group.attendanceSaved") });
       setTimeout(() => setMessage(null), 3000);
     } catch {
-      setMessage({ type: "error", text: "Failed to save attendance." });
+      setMessage({ type: "error", text: Locale.label("mobile.group.failedAttendanceSave") });
     } finally {
       setSaving(false);
     }
@@ -286,7 +286,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
 
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Typography sx={{ fontSize: 14, fontWeight: 500, color: tc.textMuted }}>
-          {presentCount} of {allPeople.length} present
+          {Locale.label("mobile.group.presentOf").replace("{}", String(presentCount)).replace("{}", String(allPeople.length))}
         </Typography>
         <Box sx={{ display: "flex", gap: 0.5 }}>
           <Button
@@ -295,7 +295,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
             disabled={loading || saving}
             sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
           >
-            All
+            {Locale.label("mobile.group.selectAll")}
           </Button>
           <Button
             size="small"
@@ -303,7 +303,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
             disabled={loading || saving}
             sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
           >
-            None
+            {Locale.label("mobile.group.selectNone")}
           </Button>
           <Button
             size="small"
@@ -312,7 +312,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
             disabled={loading || saving}
             sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
           >
-            Add
+            {Locale.label("mobile.group.add")}
           </Button>
         </Box>
       </Box>
@@ -332,7 +332,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           <Box sx={{ display: "flex", gap: 1 }}>
             <TextField
               size="small"
-              placeholder="Search for a person"
+              placeholder={Locale.label("mobile.group.searchForPerson")}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyDown={(e) => {
@@ -358,7 +358,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                 "&:hover": { bgcolor: tc.primary }
               }}
             >
-              {searching ? "…" : "Search"}
+              {searching ? "…" : Locale.label("mobile.group.search")}
             </Button>
           </Box>
           {searchResults.map((r) => {
@@ -395,10 +395,10 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                   {getInitials(r)}
                 </Box>
                 <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>
-                  {r.name?.display || "Unknown"}
+                  {r.name?.display || Locale.label("mobile.components.unknown")}
                 </Typography>
                 {already ? (
-                  <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>Added</Typography>
+                  <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>{Locale.label("mobile.group.added")}</Typography>
                 ) : (
                   <Icon sx={{ color: tc.primary }}>add_circle</Icon>
                 )}
@@ -407,7 +407,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           })}
           {searchText && !searching && searchResults.length === 0 && (
             <Typography sx={{ textAlign: "center", color: tc.textMuted, fontSize: 13 }}>
-              No results found.
+              {Locale.label("mobile.group.noResults")}
             </Typography>
           )}
         </Box>
@@ -428,7 +428,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           }}
         >
           <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-            No members yet. Use Add to include guests.
+            {Locale.label("mobile.group.noMembersGuests")}
           </Typography>
         </Box>
       )}
@@ -469,11 +469,11 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                 </Box>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography sx={{ fontSize: 15, fontWeight: 500, color: tc.text }}>
-                    {p.name?.display || "Unknown"}
+                    {p.name?.display || Locale.label("mobile.components.unknown")}
                   </Typography>
                   <Typography sx={{ fontSize: 12, color: present ? tc.success : tc.textHint }}>
-                    {present ? "Present" : "Absent"}
-                    {!p.isMember && " (Guest)"}
+                    {present ? Locale.label("mobile.group.present") : Locale.label("mobile.group.absent")}
+                    {!p.isMember && " " + Locale.label("mobile.group.guest")}
                   </Typography>
                 </Box>
                 <Checkbox checked={present} sx={{ color: tc.primary, "&.Mui-checked": { color: tc.primary } }} />
@@ -512,7 +512,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           "&:hover": { bgcolor: tc.primary }
         }}
       >
-        {saving ? "Saving…" : "Save Attendance"}
+        {saving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.saveAttendance")}
       </Button>
     </Box>
   );

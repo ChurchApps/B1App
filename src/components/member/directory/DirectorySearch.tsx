@@ -2,6 +2,7 @@ import { Button, TextField, Icon, Box, Stack, Chip, Divider, SelectChangeEvent, 
 import React from "react";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DisplayBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface } from "@churchapps/helpers";
 import { PeopleSearchResults } from "./PeopleSearchResults";
 
@@ -36,10 +37,10 @@ export const DirectorySearch: React.FC<Props> = (props) => {
 
   const EndAdornment = () => (
     <Stack direction="row" alignItems="center">
-      <Chip label="People" color="primary" size="small" icon={<Icon>person</Icon>} variant={searchCategory === "people" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("people")} sx={{ marginRight: "6px" }} data-testid="search-people-chip" aria-label="Search by people" />
-      <Chip label="Group" color="primary" size="small" icon={<Icon>groups</Icon>} variant={searchCategory === "group" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("group")} data-testid="search-group-chip" aria-label="Search by group" />
+      <Chip label={Locale.label("member.directory.people")} color="primary" size="small" icon={<Icon>person</Icon>} variant={searchCategory === "people" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("people")} sx={{ marginRight: "6px" }} data-testid="search-people-chip" aria-label={Locale.label("member.directory.searchByPeople")} />
+      <Chip label={Locale.label("member.directory.group")} color="primary" size="small" icon={<Icon>groups</Icon>} variant={searchCategory === "group" ? "filled" : "outlined"} clickable onClick={() => setSearchCategory("group")} data-testid="search-group-chip" aria-label={Locale.label("member.directory.searchByGroup")} />
       <Divider orientation="vertical" sx={{ height: 38, margin: 0.5, marginRight: 1, marginLeft: 1, borderRightWidth: 2 }} />
-      <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSubmit} data-testid="directory-search-button" aria-label="Search directory">Search</Button>
+      <Button variant="contained" id="searchButton" data-cy="search-button" onClick={handleSubmit} data-testid="directory-search-button" aria-label={Locale.label("member.directory.searchDirectory")}>{Locale.label("common.search")}</Button>
     </Stack>
   );
 
@@ -47,38 +48,38 @@ export const DirectorySearch: React.FC<Props> = (props) => {
 
   return (
     <>
-      <h1><Box sx={{ display: "flex", alignItems: "center" }}><Icon sx={{ marginRight: "5px" }}>person</Icon>Member Directory</Box></h1>
-      <DisplayBox id="peopleBox" headerIcon="person" headerText="Search" data-testid="directory-search-box">
+      <h1><Box sx={{ display: "flex", alignItems: "center" }}><Icon sx={{ marginRight: "5px" }}>person</Icon>{Locale.label("member.directory.memberDirectory")}</Box></h1>
+      <DisplayBox id="peopleBox" headerIcon="person" headerText={Locale.label("common.search")} data-testid="directory-search-box">
         {searchCategory === "people"
           ? (
             <TextField
               fullWidth
-              label="Name"
+              label={Locale.label("person.name")}
               id="searchText"
               data-cy="search-input"
               name="searchText"
               type="text"
-              placeholder="Name"
+              placeholder={Locale.label("person.name")}
               value={searchText}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               InputProps={{ endAdornment: <EndAdornment /> }}
               data-testid="directory-name-search-input"
-              aria-label="Search by name"
+              aria-label={Locale.label("member.directory.searchByName")}
             />
           )
           : (
             <FormControl fullWidth>
-              <InputLabel>Groups</InputLabel>
+              <InputLabel>{Locale.label("member.directory.groups")}</InputLabel>
               <Select
                 fullWidth
-                label="Groups"
+                label={Locale.label("member.directory.groups")}
                 name="searchGroupId"
                 value={searchGroupId}
                 onChange={handleChange}
                 endAdornment={<EndAdornment />}
                 data-testid="directory-group-select"
-                aria-label="Select group to search"
+                aria-label={Locale.label("member.directory.selectGroupToSearch")}
               >
                 {groups?.map((g: GroupInterface) => (<MenuItem key={g.id} value={g.id} data-testid={`group-option-${g.id}`} aria-label={g.name}>{g.name}</MenuItem>))}
               </Select>

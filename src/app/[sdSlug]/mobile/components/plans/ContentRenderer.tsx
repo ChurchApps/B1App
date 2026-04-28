@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 
 interface ContentRendererProps {
@@ -62,7 +63,7 @@ export const ContentRenderer: React.FC<ContentRendererProps> = ({
           {description ? (
             <MarkdownPreviewLight value={description} />
           ) : (
-            <Typography color="text.secondary" sx={{ textAlign: "center" }}>No content to display.</Typography>
+            <Typography color="text.secondary" sx={{ textAlign: "center" }}>{Locale.label("mobile.plans.noContent")}</Typography>
           )}
         </Box>
       );
@@ -70,7 +71,7 @@ export const ContentRenderer: React.FC<ContentRendererProps> = ({
 
     return (
       <Box sx={{ p: 4, textAlign: "center" }}>
-        <Typography color="text.secondary">Preview not available for this content.</Typography>
+        <Typography color="text.secondary">{Locale.label("mobile.plans.previewNotAvailable")}</Typography>
       </Box>
     );
   }
@@ -108,7 +109,7 @@ export const ContentRenderer: React.FC<ContentRendererProps> = ({
           {description ? (
             <MarkdownPreviewLight value={description} />
           ) : (
-            <Typography color="text.secondary" sx={{ textAlign: "center" }}>No text content to display.</Typography>
+            <Typography color="text.secondary" sx={{ textAlign: "center" }}>{Locale.label("mobile.plans.noTextContent")}</Typography>
           )}
         </Box>
       );

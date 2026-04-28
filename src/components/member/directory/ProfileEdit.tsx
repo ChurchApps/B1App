@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ApiHelper, DateHelper, ImageEditor, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, ImageEditor, Locale, UserHelper } from "@churchapps/apphelper";
 import type { GroupInterface, PersonInterface, TaskInterface } from "@churchapps/helpers";
 import { Button, Grid, TextField, Box, Typography, Alert } from "@mui/material";
 import { PersonHelper } from "../../../helpers";
@@ -19,21 +19,21 @@ interface ProfileChange {
   value: string;
 }
 
-const fieldDefinitions = [
-  { key: "name.first", label: "First Name" },
-  { key: "name.middle", label: "Middle Name" },
-  { key: "name.last", label: "Last Name" },
-  { key: "photo", label: "Photo" },
-  { key: "birthDate", label: "Birth Date" },
-  { key: "contactInfo.email", label: "Email" },
-  { key: "contactInfo.address1", label: "Address Line 1" },
-  { key: "contactInfo.address2", label: "Address Line 2" },
-  { key: "contactInfo.city", label: "City" },
-  { key: "contactInfo.state", label: "State" },
-  { key: "contactInfo.zip", label: "Zip" },
-  { key: "contactInfo.homePhone", label: "Home Phone" },
-  { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
-  { key: "contactInfo.workPhone", label: "Work Phone" }
+const getFieldDefinitions = () => [
+  { key: "name.first", label: Locale.label("person.firstName") },
+  { key: "name.middle", label: Locale.label("member.directory.middleName") },
+  { key: "name.last", label: Locale.label("person.lastName") },
+  { key: "photo", label: Locale.label("member.directory.photo") },
+  { key: "birthDate", label: Locale.label("member.directory.birthDate") },
+  { key: "contactInfo.email", label: Locale.label("person.email") },
+  { key: "contactInfo.address1", label: Locale.label("selectChurch.address1") },
+  { key: "contactInfo.address2", label: Locale.label("selectChurch.address2") },
+  { key: "contactInfo.city", label: Locale.label("selectChurch.city") },
+  { key: "contactInfo.state", label: Locale.label("selectChurch.state") },
+  { key: "contactInfo.zip", label: Locale.label("selectChurch.zip") },
+  { key: "contactInfo.homePhone", label: Locale.label("member.directory.homePhone") },
+  { key: "contactInfo.mobilePhone", label: Locale.label("member.directory.mobilePhone") },
+  { key: "contactInfo.workPhone", label: Locale.label("member.directory.workPhone") }
 ];
 
 export const ProfileEdit: React.FC<Props> = (props) => {
@@ -108,6 +108,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
   const buildChanges = (): ProfileChange[] => {
     const changes: ProfileChange[] = [];
 
+    const fieldDefinitions = getFieldDefinitions();
     modifiedFields.forEach((key) => {
       const fieldDef = fieldDefinitions.find((f) => f.key === key);
       if (fieldDef && person) {
@@ -122,7 +123,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
     familyMembers.forEach((name) => {
       changes.push({
         field: "familyMember",
-        label: "Add Family Member",
+        label: Locale.label("member.directory.addFamilyMember"),
         value: name
       });
     });
@@ -172,11 +173,12 @@ export const ProfileEdit: React.FC<Props> = (props) => {
 
   const getModifiedFieldLabels = (): string[] => {
     const labels: string[] = [];
+    const fieldDefinitions = getFieldDefinitions();
     modifiedFields.forEach((key) => {
       const fieldDef = fieldDefinitions.find((f) => f.key === key);
       if (fieldDef) labels.push(fieldDef.label);
     });
-    familyMembers.forEach(() => labels.push("New Family Member"));
+    familyMembers.forEach(() => labels.push(Locale.label("member.directory.newFamilyMember")));
     return labels;
   };
 
@@ -188,7 +190,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
     <Box>
       {submitted && (
         <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSubmitted(false)}>
-          Your changes have been submitted for approval.
+          {Locale.label("member.directory.changesSubmitted")}
         </Alert>
       )}
 
@@ -214,11 +216,11 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             >
               <img
                 src={person.photo?.startsWith("data:") ? person.photo : PersonHelper.getPhotoUrl(props.person)}
-                alt="Profile"
+                alt={Locale.label("member.directory.profile")}
                 style={{ maxWidth: "100%", borderRadius: 8 }}
               />
               <Typography variant="caption" color="textSecondary">
-                Click to change photo
+                {Locale.label("member.directory.clickToChangePhoto")}
               </Typography>
             </Box>
           </Box>
@@ -230,7 +232,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             <Grid size={{ xs: 12, md: 4 }}>
               <TextField
                 fullWidth
-                label="First Name"
+                label={Locale.label("person.firstName")}
                 value={getFieldValue(person, "name.first")}
                 onChange={(e) => handleChange("name.first", e.target.value)}
                 data-testid="profile-first-name-input"
@@ -239,7 +241,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             <Grid size={{ xs: 12, md: 4 }}>
               <TextField
                 fullWidth
-                label="Middle Name"
+                label={Locale.label("member.directory.middleName")}
                 value={getFieldValue(person, "name.middle")}
                 onChange={(e) => handleChange("name.middle", e.target.value)}
                 data-testid="profile-middle-name-input"
@@ -248,7 +250,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             <Grid size={{ xs: 12, md: 4 }}>
               <TextField
                 fullWidth
-                label="Last Name"
+                label={Locale.label("person.lastName")}
                 value={getFieldValue(person, "name.last")}
                 onChange={(e) => handleChange("name.last", e.target.value)}
                 data-testid="profile-last-name-input"
@@ -260,13 +262,13 @@ export const ProfileEdit: React.FC<Props> = (props) => {
 
       {/* Contact Section */}
       <Typography variant="subtitle2" sx={{ mt: 3, mb: 1, fontWeight: 600, borderBottom: "1px solid #ddd", pb: 1 }}>
-        Contact
+        {Locale.label("member.directory.contact")}
       </Typography>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
-            label="Email"
+            label={Locale.label("person.email")}
             type="email"
             value={getFieldValue(person, "contactInfo.email")}
             onChange={(e) => handleChange("contactInfo.email", e.target.value)}
@@ -276,7 +278,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             fullWidth
-            label="Birth Date"
+            label={Locale.label("member.directory.birthDate")}
             type="date"
             InputLabelProps={{ shrink: true }}
             value={getFieldValue(person, "birthDate")}
@@ -291,11 +293,11 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         {/* Address */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, borderBottom: "1px solid #ddd", pb: 1 }}>
-            Address
+            {Locale.label("member.directory.address")}
           </Typography>
           <TextField
             fullWidth
-            label="Address Line 1"
+            label={Locale.label("selectChurch.address1")}
             value={getFieldValue(person, "contactInfo.address1")}
             onChange={(e) => handleChange("contactInfo.address1", e.target.value)}
             sx={{ mb: 2 }}
@@ -303,7 +305,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
           />
           <TextField
             fullWidth
-            label="Address Line 2"
+            label={Locale.label("selectChurch.address2")}
             value={getFieldValue(person, "contactInfo.address2")}
             onChange={(e) => handleChange("contactInfo.address2", e.target.value)}
             sx={{ mb: 2 }}
@@ -313,7 +315,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             <Grid size={{ xs: 6 }}>
               <TextField
                 fullWidth
-                label="City"
+                label={Locale.label("selectChurch.city")}
                 value={getFieldValue(person, "contactInfo.city")}
                 onChange={(e) => handleChange("contactInfo.city", e.target.value)}
                 data-testid="profile-city-input"
@@ -322,7 +324,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             <Grid size={{ xs: 3 }}>
               <TextField
                 fullWidth
-                label="State"
+                label={Locale.label("selectChurch.state")}
                 value={getFieldValue(person, "contactInfo.state")}
                 onChange={(e) => handleChange("contactInfo.state", e.target.value)}
                 data-testid="profile-state-input"
@@ -331,7 +333,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             <Grid size={{ xs: 3 }}>
               <TextField
                 fullWidth
-                label="Zip"
+                label={Locale.label("selectChurch.zip")}
                 value={getFieldValue(person, "contactInfo.zip")}
                 onChange={(e) => handleChange("contactInfo.zip", e.target.value)}
                 data-testid="profile-zip-input"
@@ -343,11 +345,11 @@ export const ProfileEdit: React.FC<Props> = (props) => {
         {/* Phone */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600, borderBottom: "1px solid #ddd", pb: 1 }}>
-            Phone
+            {Locale.label("member.directory.phone")}
           </Typography>
           <TextField
             fullWidth
-            label="Mobile Phone"
+            label={Locale.label("member.directory.mobilePhone")}
             value={getFieldValue(person, "contactInfo.mobilePhone")}
             onChange={(e) => handleChange("contactInfo.mobilePhone", e.target.value)}
             sx={{ mb: 2 }}
@@ -355,7 +357,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
           />
           <TextField
             fullWidth
-            label="Home Phone"
+            label={Locale.label("member.directory.homePhone")}
             value={getFieldValue(person, "contactInfo.homePhone")}
             onChange={(e) => handleChange("contactInfo.homePhone", e.target.value)}
             sx={{ mb: 2 }}
@@ -363,7 +365,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
           />
           <TextField
             fullWidth
-            label="Work Phone"
+            label={Locale.label("member.directory.workPhone")}
             value={getFieldValue(person, "contactInfo.workPhone")}
             onChange={(e) => handleChange("contactInfo.workPhone", e.target.value)}
             data-testid="profile-work-phone-input"
@@ -375,13 +377,13 @@ export const ProfileEdit: React.FC<Props> = (props) => {
       <Box sx={{ mt: 3, p: 2, backgroundColor: hasChanges ? "#fff3cd" : "#f5f5f5", borderRadius: 1, border: hasChanges ? "1px solid #ffc107" : "1px solid #ddd" }}>
         {hasChanges && (
           <Typography variant="body2" sx={{ mb: 1 }}>
-            <strong>Modified:</strong> {getModifiedFieldLabels().join(", ")}
+            <strong>{Locale.label("member.directory.modified")}:</strong> {getModifiedFieldLabels().join(", ")}
           </Typography>
         )}
         <Box sx={{ display: "flex", gap: 1 }}>
           {props.onCancel && (
             <Button variant="outlined" onClick={props.onCancel} data-testid="profile-cancel-button">
-              Cancel
+              {Locale.label("common.cancel")}
             </Button>
           )}
           <Button
@@ -391,7 +393,7 @@ export const ProfileEdit: React.FC<Props> = (props) => {
             disabled={submitting || !hasChanges}
             data-testid="profile-submit-button"
           >
-            {submitting ? "Submitting..." : "Submit for Approval"}
+            {submitting ? Locale.label("member.directory.submitting") : Locale.label("member.directory.submitForApproval")}
           </Button>
         </Box>
       </Box>

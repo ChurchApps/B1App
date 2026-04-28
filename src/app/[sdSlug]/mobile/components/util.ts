@@ -1,3 +1,5 @@
+import { Locale } from "@churchapps/apphelper";
+
 interface NamedLike {
   name?: {
     first?: string;
@@ -65,10 +67,10 @@ export const formatRelative = (value?: Date | string | number | null): string =>
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
   if (diffDays === 0) {
-    if (diffHours <= 0) return "now";
+    if (diffHours <= 0) return Locale.label("mobile.now");
     return `${diffHours}h`;
   }
-  if (diffDays === 1) return "yesterday";
+  if (diffDays === 1) return Locale.label("mobile.yesterday");
   if (diffDays < 7) return `${diffDays}d`;
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
 };

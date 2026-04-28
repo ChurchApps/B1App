@@ -4,6 +4,7 @@ import { Button, ButtonGroup, FormControl, Grid, InputLabel, MenuItem, Select, S
 import { RRule, Weekday, rrulestr } from "rrule";
 import { EventHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 
 interface Props {
   start: Date;
@@ -58,7 +59,7 @@ export function RRuleEditor(props: Props) {
 
   const getDayButton = (value:Weekday, label:string) => {
     const selected = rRuleOptions.byweekday?.includes(value.weekday);
-    return <Button key={value.toString()} variant={selected ? "contained" : "outlined"} onClick={() => { handleWeekDayClick(value); }} data-testid={`weekday-${label.toLowerCase()}-button`} aria-label={`Toggle ${value.toString()} for weekly recurrence`}>{label}</Button>;
+    return <Button key={value.toString()} variant={selected ? "contained" : "outlined"} onClick={() => { handleWeekDayClick(value); }} data-testid={`weekday-${label.toLowerCase()}-button`} aria-label={Locale.label("eventCalendar.recurring.toggleWeekday").replace("{}", value.toString())}>{label}</Button>;
   };
 
   const handleMonthOptionChange = (mode:string, monthDay:number, nthWeekday:number, weekday:number) => {
@@ -94,16 +95,30 @@ export function RRuleEditor(props: Props) {
         </>);
         break;
       case RRule.MONTHLY.toString():
-        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const ordinals = ["first", "second", "third", "fourth", "last"];
+        const daysOfWeek = [
+          Locale.label("eventCalendar.recurring.day.sunday"),
+          Locale.label("eventCalendar.recurring.day.monday"),
+          Locale.label("eventCalendar.recurring.day.tuesday"),
+          Locale.label("eventCalendar.recurring.day.wednesday"),
+          Locale.label("eventCalendar.recurring.day.thursday"),
+          Locale.label("eventCalendar.recurring.day.friday"),
+          Locale.label("eventCalendar.recurring.day.saturday")
+        ];
+        const ordinals = [
+          Locale.label("eventCalendar.recurring.ordinal.first"),
+          Locale.label("eventCalendar.recurring.ordinal.second"),
+          Locale.label("eventCalendar.recurring.ordinal.third"),
+          Locale.label("eventCalendar.recurring.ordinal.fourth"),
+          Locale.label("eventCalendar.recurring.ordinal.last")
+        ];
         const dayOfMonth = props.start.getDate() || 1;
         const dayOfWeek = props.start.getDay() || 0;
         const ordinal = Math.floor((dayOfMonth - 1) / 7);
         result = (<>
-          <InputLabel>On</InputLabel>
-          <Select name="on" value={(rRuleOptions.bymonthday?.length > 0) ? "monthDay" : "nthWeekday"} onChange={(e) => { handleMonthOptionChange(e.target.value, dayOfMonth, ordinal, dayOfWeek); }} label="On" data-testid="monthly-option-select" aria-label="Select monthly recurrence option">
-            <MenuItem value="monthDay">Monthly on day {dayOfMonth}</MenuItem>
-            <MenuItem value="nthWeekday">Monthly on the {ordinals[ordinal]} {daysOfWeek[dayOfWeek]}</MenuItem>
+          <InputLabel>{Locale.label("eventCalendar.recurring.on")}</InputLabel>
+          <Select name="on" value={(rRuleOptions.bymonthday?.length > 0) ? "monthDay" : "nthWeekday"} onChange={(e) => { handleMonthOptionChange(e.target.value, dayOfMonth, ordinal, dayOfWeek); }} label={Locale.label("eventCalendar.recurring.on")} data-testid="monthly-option-select" aria-label={Locale.label("eventCalendar.recurring.monthlyOptionAria")}>
+            <MenuItem value="monthDay">{Locale.label("eventCalendar.recurring.monthlyOnDay").replace("{}", dayOfMonth.toString())}</MenuItem>
+            <MenuItem value="nthWeekday">{Locale.label("eventCalendar.recurring.monthlyOnNth").replace("{ordinal}", ordinals[ordinal]).replace("{day}", daysOfWeek[dayOfWeek])}</MenuItem>
           </Select>
         </>);
         break;
@@ -136,10 +151,10 @@ export function RRuleEditor(props: Props) {
     let result:React.ReactElement = <></>;
     switch (ends) {
       case "until":
-        result = (<TextField name="until" type="date" value={DateHelper.formatHtml5Date(rRuleOptions.until)} fullWidth label="End Date" onChange={handleEndFollowupChange} size="small" data-testid="recurrence-end-date-input" aria-label="Recurrence end date" />);
+        result = (<TextField name="until" type="date" value={DateHelper.formatHtml5Date(rRuleOptions.until)} fullWidth label={Locale.label("eventCalendar.recurring.endDate")} onChange={handleEndFollowupChange} size="small" data-testid="recurrence-end-date-input" aria-label={Locale.label("eventCalendar.recurring.endDateAria")} />);
         break;
       case "count":
-        result = (<TextField name="count" type="number" value={rRuleOptions.count} fullWidth label="Occurances" onChange={handleEndFollowupChange} size="small" data-testid="recurrence-count-input" aria-label="Number of recurrence occurrances" />);
+        result = (<TextField name="count" type="number" value={rRuleOptions.count} fullWidth label={Locale.label("eventCalendar.recurring.occurrences")} onChange={handleEndFollowupChange} size="small" data-testid="recurrence-count-input" aria-label={Locale.label("eventCalendar.recurring.occurrencesAria")} />);
         break;
     }
     return result;
@@ -153,15 +168,15 @@ export function RRuleEditor(props: Props) {
   return (
     <>
       <Grid size={{ xs: 2 }}>
-        <TextField name="interval" type="number" value={rRuleOptions.interval} fullWidth label="Interval" onChange={handleChange} size="small" data-testid="recurrence-interval-input" aria-label="Recurrence interval" />
+        <TextField name="interval" type="number" value={rRuleOptions.interval} fullWidth label={Locale.label("eventCalendar.recurring.interval")} onChange={handleChange} size="small" data-testid="recurrence-interval-input" aria-label={Locale.label("eventCalendar.recurring.intervalAria")} />
       </Grid>
       <Grid size={{ xs: 5 }}>
         <FormControl fullWidth size="small">
-          <InputLabel>Frequency</InputLabel>
-          <Select name="freq" value={rRuleOptions.freq.toString()} onChange={handleChange} label="Frequency" data-testid="recurrence-frequency-select" aria-label="Select recurrence frequency">
-            <MenuItem value={RRule.DAILY.toString()}>Day</MenuItem>
-            <MenuItem value={RRule.WEEKLY.toString()}>Week</MenuItem>
-            <MenuItem value={RRule.MONTHLY.toString()}>Month</MenuItem>
+          <InputLabel>{Locale.label("eventCalendar.recurring.frequency")}</InputLabel>
+          <Select name="freq" value={rRuleOptions.freq.toString()} onChange={handleChange} label={Locale.label("eventCalendar.recurring.frequency")} data-testid="recurrence-frequency-select" aria-label={Locale.label("eventCalendar.recurring.frequencyAria")}>
+            <MenuItem value={RRule.DAILY.toString()}>{Locale.label("eventCalendar.recurring.freqDay")}</MenuItem>
+            <MenuItem value={RRule.WEEKLY.toString()}>{Locale.label("eventCalendar.recurring.freqWeek")}</MenuItem>
+            <MenuItem value={RRule.MONTHLY.toString()}>{Locale.label("eventCalendar.recurring.freqMonth")}</MenuItem>
           </Select>
         </FormControl>
       </Grid>
@@ -172,11 +187,11 @@ export function RRuleEditor(props: Props) {
       </Grid>
       <Grid size={{ xs: 3 }}>
         <FormControl fullWidth size="small">
-          <InputLabel>Ends</InputLabel>
-          <Select name="ends" value={ends} onChange={handleEndsChange} label="Frequency" data-testid="recurrence-ends-select" aria-label="Select when recurrence ends">
-            <MenuItem value="never">Never</MenuItem>
-            <MenuItem value="until">On</MenuItem>
-            <MenuItem value="count">After</MenuItem>
+          <InputLabel>{Locale.label("eventCalendar.recurring.ends")}</InputLabel>
+          <Select name="ends" value={ends} onChange={handleEndsChange} label={Locale.label("eventCalendar.recurring.frequency")} data-testid="recurrence-ends-select" aria-label={Locale.label("eventCalendar.recurring.endsAria")}>
+            <MenuItem value="never">{Locale.label("eventCalendar.recurring.never")}</MenuItem>
+            <MenuItem value="until">{Locale.label("eventCalendar.recurring.endsOn")}</MenuItem>
+            <MenuItem value="count">{Locale.label("eventCalendar.recurring.endsAfter")}</MenuItem>
           </Select>
         </FormControl>
       </Grid>

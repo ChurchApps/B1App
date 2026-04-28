@@ -4,6 +4,7 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import CloseIcon from "@mui/icons-material/Close";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 import { ChatUserInterface } from "@/helpers";
+import { Locale } from "@churchapps/apphelper";
 
 interface Props { user: ChatUserInterface }
 
@@ -17,7 +18,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
     e.preventDefault();
     const trimmedName = displayName.trim();
     if (!trimmedName) {
-      alert("Please enter a full name");
+      alert(Locale.label("video.chat.enterFullName"));
       return;
     }
     StreamChatManager.handleNameUpdate(trimmedName);
@@ -29,9 +30,9 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
       <TextField
         size="small"
         fullWidth
-        label="Name"
+        label={Locale.label("person.name")}
         name="displayName"
-        placeholder="John Smith"
+        placeholder={Locale.label("video.chat.namePlaceholder")}
         value={displayName}
         onChange={(e) => setDisplayName(e.target.value)}
         data-testid="embedded-chat-name-input"
@@ -39,7 +40,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
         InputProps={{
           endAdornment: (
             <>
-              <Button size="small" variant="contained" onClick={handleUpdate} data-testid="chat-name-update-button">update</Button>
+              <Button size="small" variant="contained" onClick={handleUpdate} data-testid="chat-name-update-button">{Locale.label("common.update")}</Button>
               <IconButton color="error" size="small" onClick={() => { setEdit(false); setDisplayName(""); }}><CloseIcon fontSize="small" /></IconButton>
             </>
           )
@@ -52,14 +53,14 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
         {currentUserName.trim() === "" || currentUserName === "Anonymous "
           ? (
             <Button fullWidth size="small" startIcon={<DriveFileRenameOutlineIcon fontSize="small" />} onClick={() => setEdit(true)} sx={{ borderRadius: 0, height: "25px" }} data-testid="edit-name-button">
-            Change Name
+              {Locale.label("video.chat.changeName")}
             </Button>
           )
           : (
             <Paper elevation={0} sx={{ padding: "1px 10px" }}>
               <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography fontSize={14} color={"#1976d2"}>{currentUserName}</Typography>
-                <Tooltip title="Update Name" arrow placement="left">
+                <Tooltip title={Locale.label("video.chat.updateName")} arrow placement="left">
                   <IconButton size="small" color="primary" onClick={() => { setEdit(true); setDisplayName(currentUserName); }}>
                     <DriveFileRenameOutlineIcon sx={{ fontSize: 18 }} />
                   </IconButton>

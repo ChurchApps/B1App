@@ -3,7 +3,7 @@
 import React, { useContext, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Tab, Tabs, Typography } from "@mui/material";
-import { ApiHelper, ArrayHelper, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type {
   AssignmentInterface,
@@ -197,7 +197,7 @@ export const PlansPage = ({ config: _config }: Props) => {
                   minWidth: 180
                 }}
               >
-                <Typography sx={{ fontSize: 14, opacity: 0.8, mb: 0.5 }}>Next service</Typography>
+                <Typography sx={{ fontSize: 14, opacity: 0.8, mb: 0.5 }}>{Locale.label("mobile.screens.nextService")}</Typography>
                 <Typography sx={{ fontSize: 16, fontWeight: 600 }}>
                   {DateHelper.prettyDate(stats.nextRow.serviceDate)}
                 </Typography>
@@ -466,8 +466,8 @@ export const PlansPage = ({ config: _config }: Props) => {
             "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 }
           }}
         >
-          <Tab value="upcoming" label="Upcoming" />
-          <Tab value="past" label="Past" />
+          <Tab value="upcoming" label={Locale.label("mobile.screens.tabUpcoming")} />
+          <Tab value="past" label={Locale.label("mobile.screens.tabPast")} />
         </Tabs>
       </Box>
 

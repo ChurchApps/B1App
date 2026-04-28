@@ -2,6 +2,7 @@
 
 import { LiveStream } from "@/components/video/LiveStream";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { Locale } from "@churchapps/apphelper";
 import { Container } from "@mui/material";
 
 
@@ -15,7 +16,7 @@ export function StreamPage(props: Props) {
 
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>Live Stream</h1>
+      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.liveStream")}</h1>
       <LiveStream includeHeader={false} includeInteraction={true} keyName={props.config?.church?.subDomain} appearance={props.config?.appearance} offlineContent={null} />
     </Container>
   );

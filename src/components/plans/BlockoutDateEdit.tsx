@@ -3,6 +3,7 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { DateHelper } from "@churchapps/apphelper";
 import { ErrorMessages } from "@churchapps/apphelper";
 import { InputBox } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import type { BlockoutDateInterface } from "@churchapps/helpers";
 import { TextField } from "@mui/material";
 
@@ -17,9 +18,9 @@ export const BlockoutDateEdit: React.FC<Props> = (props) => {
 
   const validate = () => {
     const result: string[] = [];
-    if (!blockoutDate.startDate) result.push("Start date is required.");
-    if (!blockoutDate.endDate) result.push("End date is required.");
-    if (blockoutDate.startDate && blockoutDate.endDate && blockoutDate.startDate > blockoutDate.endDate) result.push("Start date must be before end date.");
+    if (!blockoutDate.startDate) result.push(Locale.label("plans.blockoutDate.startRequired"));
+    if (!blockoutDate.endDate) result.push(Locale.label("plans.blockoutDate.endRequired"));
+    if (blockoutDate.startDate && blockoutDate.endDate && blockoutDate.startDate > blockoutDate.endDate) result.push(Locale.label("plans.blockoutDate.startBeforeEnd"));
     setErrors(result);
     return result.length === 0;
   };
@@ -47,9 +48,9 @@ export const BlockoutDateEdit: React.FC<Props> = (props) => {
     setBlockoutDate(bd);
   };
 
-  return (<InputBox headerIcon="block" headerText="Blockout Dates" saveFunction={handleSave} cancelFunction={props.onUpdate} deleteFunction={blockoutDate.id && handleDelete}>
-    <TextField fullWidth label="Start Date" name="startDate" type="date" data-cy="start-date" data-testid="blockout-start-date-input" value={DateHelper.formatHtml5Date(blockoutDate.startDate)} onChange={handleChange} />
-    <TextField fullWidth label="End Date" name="endDate" type="date" data-cy="end-date" data-testid="blockout-end-date-input" value={DateHelper.formatHtml5Date(blockoutDate.endDate)} onChange={handleChange} />
+  return (<InputBox headerIcon="block" headerText={Locale.label("plans.blockoutDates.title")} saveFunction={handleSave} cancelFunction={props.onUpdate} deleteFunction={blockoutDate.id && handleDelete}>
+    <TextField fullWidth label={Locale.label("plans.blockoutDate.startDate")} name="startDate" type="date" data-cy="start-date" data-testid="blockout-start-date-input" value={DateHelper.formatHtml5Date(blockoutDate.startDate)} onChange={handleChange} />
+    <TextField fullWidth label={Locale.label("plans.blockoutDate.endDate")} name="endDate" type="date" data-cy="end-date" data-testid="blockout-end-date-input" value={DateHelper.formatHtml5Date(blockoutDate.endDate)} onChange={handleChange} />
     <ErrorMessages errors={errors} />
   </InputBox>);
 };

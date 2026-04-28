@@ -3,7 +3,7 @@ import { Theme } from "@/components/Theme";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { MetaHelper } from "@/helpers/MetaHelper";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { EventInterface } from "@churchapps/helpers";
 import { Container, Typography } from "@mui/material";
 import { Metadata } from "next";
@@ -20,8 +20,8 @@ const loadSharedData = async (sdSlug: string, eventId: string) => {
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug, eventId } = await params;
   const props = await loadSharedData(sdSlug, eventId);
-  const title = props.event?.title ? "Register - " + props.event.title : "Event Registration";
-  return MetaHelper.getMetaData(title, "Event Registration", undefined, props.config.appearance);
+  const title = props.event?.title ? Locale.label("register.metaRegister") + " - " + props.event.title : Locale.label("register.metaEventRegistration");
+  return MetaHelper.getMetaData(title, Locale.label("register.metaEventRegistration"), undefined, props.config.appearance);
 }
 
 export default async function RegisterPage({ params }: { params: PageParams }) {
@@ -37,7 +37,7 @@ export default async function RegisterPage({ params }: { params: PageParams }) {
           {event?.registrationEnabled
             ? <EventRegister churchId={config.church.id} eventId={eventId} event={event} />
             : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
-                Registration is not available for this event.
+              {Locale.label("register.notAvailable")}
             </Typography>
           }
         </Container>

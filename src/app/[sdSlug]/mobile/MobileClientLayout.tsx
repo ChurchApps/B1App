@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { Box, CircularProgress } from "@mui/material";
-import { ErrorHelper, UserHelper } from "@churchapps/apphelper";
+import { ErrorHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import type { ErrorAppDataInterface } from "@churchapps/helpers";
 import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
 import { EnvironmentHelper } from "@/helpers";
@@ -30,7 +30,7 @@ function MobileHydrationGate({ children }: { children: React.ReactNode }) {
       <Box
         role="status"
         aria-live="polite"
-        aria-label="Loading"
+        aria-label={Locale.label("mobile.loading")}
         sx={{
           minHeight: "100vh",
           display: "flex",

@@ -6,6 +6,7 @@ import { Groups } from "./Groups";
 import { ArrayHelper } from "@churchapps/apphelper";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Loading } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { PersonHelper } from "@churchapps/apphelper";
 import { HeaderSection, HeaderIconContainer, CheckinCard, SmallIconCircle, ServiceTimeItem, EmptyStateCard, colors } from "./CheckinStyles";
 import type { VisitInterface, GroupInterface, PersonInterface, ServiceTimeInterface, VisitSessionInterface } from "@churchapps/helpers";
@@ -29,7 +30,7 @@ export function Household({ completeHandler = () => { } }: Props) {
 
   const handleGroupSelected = (group: GroupInterface) => {
     const groupId = group ? group.id : "";
-    const groupName = group ? group.name : "None";
+    const groupName = group ? group.name : Locale.label("checkin.household.none");
 
     let visit: VisitInterface = CheckinHelper.getVisitByPersonId(CheckinHelper.pendingVisits, selectedMember.id);
     if (visit === null) {
@@ -48,13 +49,13 @@ export function Household({ completeHandler = () => { } }: Props) {
 
   const getServiceTime = (st: ServiceTimeInterface, visitSessions: VisitSessionInterface[]) => {
     const stSessions = ArrayHelper.getAll(visitSessions, "session.serviceTimeId", st.id);
-    let selectedGroupName = "No group selected";
+    let selectedGroupName = Locale.label("checkin.household.noGroupSelected");
     let hasSelection = false;
     if (stSessions.length > 0) {
       const groupId = stSessions[0].session?.groupId || "";
       const validGroups = (st.groups || []).filter((g) => g != null);
       const group: GroupInterface = ArrayHelper.getOne(validGroups, "id", groupId);
-      selectedGroupName = group?.name || "None";
+      selectedGroupName = group?.name || Locale.label("checkin.household.none");
       hasSelection = true;
     }
 
@@ -85,7 +86,7 @@ export function Household({ completeHandler = () => { } }: Props) {
             "&:hover": { backgroundColor: hasSelection ? colors.successHover : "rgba(0,0,0,0.04)" }
           }}
         >
-          {hasSelection ? "Change" : "Select Group"}
+          {hasSelection ? Locale.label("checkin.household.change") : Locale.label("checkin.groups.selectGroup")}
         </Button>
       </ServiceTimeItem>
     );
@@ -118,7 +119,7 @@ export function Household({ completeHandler = () => { } }: Props) {
       if (visit?.visitSessions?.length === 0) {
         return (
           <Typography variant="body2" sx={{ color: colors.textSecondary, fontStyle: "italic" }}>
-            Tap to select groups
+            {Locale.label("checkin.household.tapToSelect")}
           </Typography>
         );
       } else {
@@ -130,7 +131,7 @@ export function Household({ completeHandler = () => { } }: Props) {
             vs.session?.serviceTimeId || ""
           );
           const group: GroupInterface = ArrayHelper.getOne(st?.groups || [], "id", vs.session?.groupId || "");
-          const name = group?.name || "none";
+          const name = group?.name || Locale.label("checkin.household.noneLower");
           groups.push(
             <Chip
               key={vs.id?.toString()}
@@ -178,7 +179,7 @@ export function Household({ completeHandler = () => { } }: Props) {
             >
               <img
                 src={PersonHelper.getPhotoUrl(member)}
-                alt={`${member.name?.display || "Member"} avatar`}
+                alt={Locale.label("checkin.household.memberAvatar").replace("{}", member.name?.display || Locale.label("checkin.household.member"))}
                 data-testid={`member-photo-${member.id}`}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
@@ -190,7 +191,7 @@ export function Household({ completeHandler = () => { } }: Props) {
               {isCheckedIn(member.id) && (
                 <Chip
                   icon={<Icon sx={{ fontSize: "16px !important" }}>check_circle</Icon>}
-                  label="Already checked in"
+                  label={Locale.label("checkin.household.alreadyCheckedIn")}
                   size="small"
                   sx={{
                     backgroundColor: `${colors.success}1A`,
@@ -220,7 +221,7 @@ export function Household({ completeHandler = () => { } }: Props) {
         const existingVisit = CheckinHelper.getVisitByPersonId(CheckinHelper.existingVisits, pv.personId || "");
         if (existingVisit && existingVisit.id) {
           const person = CheckinHelper.householdMembers.find(m => m.id === pv.personId);
-          if (person) alreadyCheckedInNames.push(person.name?.display || "Unknown");
+          if (person) alreadyCheckedInNames.push(person.name?.display || Locale.label("checkin.household.unknown"));
         }
       }
     });
@@ -263,10 +264,10 @@ export function Household({ completeHandler = () => { } }: Props) {
           <Icon sx={{ fontSize: 48, color: colors.primary }}>people</Icon>
         </HeaderIconContainer>
         <Typography variant="h4" sx={{ color: colors.textPrimary, fontWeight: 700, marginBottom: 1 }}>
-          Household Members
+          {Locale.label("checkin.household.title")}
         </Typography>
         <Typography variant="body1" sx={{ color: colors.textSecondary }}>
-          Select groups for each family member
+          {Locale.label("checkin.household.subtitle")}
         </Typography>
       </HeaderSection>
 
@@ -276,10 +277,10 @@ export function Household({ completeHandler = () => { } }: Props) {
           <EmptyStateCard>
             <Icon sx={{ fontSize: 64, color: colors.textSecondary }}>person_off</Icon>
             <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginTop: 2, marginBottom: 1 }}>
-              No Household Members Found
+              {Locale.label("checkin.household.noMembersFound")}
             </Typography>
             <Typography variant="body2" sx={{ color: colors.textSecondary }}>
-              Please ensure you are logged in and have household members registered.
+              {Locale.label("checkin.household.loginPrompt")}
             </Typography>
           </EmptyStateCard>
         )
@@ -306,21 +307,21 @@ export function Household({ completeHandler = () => { } }: Props) {
             "&:hover": { backgroundColor: colors.primaryHover }
           }}
         >
-          Complete Check-in
+          {Locale.label("checkin.household.completeCheckin")}
         </Button>
       </Box>
 
       <Dialog open={showDuplicateDialog} onClose={() => setShowDuplicateDialog(false)}>
-        <DialogTitle>Already Checked In</DialogTitle>
+        <DialogTitle>{Locale.label("checkin.household.alreadyCheckedInTitle")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {duplicateNames.join(", ")} already checked in for this service. Check in again to update their groups.
+            {Locale.label("checkin.household.duplicateMessage").replace("{}", duplicateNames.join(", "))}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowDuplicateDialog(false)}>Cancel</Button>
+          <Button onClick={() => setShowDuplicateDialog(false)}>{Locale.label("common.cancel")}</Button>
           <Button onClick={doCheckin} variant="contained" sx={{ backgroundColor: colors.primary, "&:hover": { backgroundColor: colors.primaryHover } }}>
-            Check In Again
+            {Locale.label("checkin.household.checkInAgain")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -4,9 +4,10 @@ import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
 import { type LinkInterface } from "@churchapps/helpers";
+import { Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { mobileTheme, linkTypeToImage, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
+import { mobileTheme, linkTypeToIcon, linkTypeToRoute, linkTypeToTagline } from "./mobileTheme";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
 
@@ -18,10 +19,12 @@ const ENGAGEMENT_STORAGE_KEY = "b1app-link-view-counts";
 
 const generateLinkId = (item: LinkInterface): string => item.id || `${item.linkType}_${item.text}`;
 
-const resolvePhoto = (item: LinkInterface): string => {
+// Returns the admin-uploaded photo for this link, or null. Falling back to a
+// stock B1 dashboard image makes every B1 install look identical at a distance,
+// so unphotographed cards now render a themed gradient + icon instead.
+const resolvePhoto = (item: LinkInterface): string | null => {
   const photo = (item as unknown as { photo?: string }).photo;
-  if (photo) return photo;
-  return linkTypeToImage(item.linkType, item.text);
+  return photo || null;
 };
 
 export const DashboardPage = ({ config }: Props) => {
@@ -95,56 +98,73 @@ export const DashboardPage = ({ config }: Props) => {
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pt: 2, pb: 3 }}>
 
-      {hero && (
-        <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
-          <Box
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(hero)}
-            onKeyDown={(e) => handleKey(e, hero)}
-            sx={{
-              position: "relative",
-              height: 200,
-              borderRadius: `${mobileTheme.radius.xl}px`,
-              overflow: "hidden",
-              boxShadow: cardShadow,
-              cursor: "pointer",
-              bgcolor: tc.primary,
-              backgroundImage: `url(${resolvePhoto(hero)})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center"
-            }}
-          >
-            <Box sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              bgcolor: "rgba(0,0,0,0.5)",
-              p: "20px"
-            }}>
-              <Typography sx={{
-                color: "#FFFFFF",
-                fontWeight: 700,
-                fontSize: 32,
-                lineHeight: 1.1,
-                mb: 0.5,
-                textShadow: "0 1px 2px rgba(0,0,0,0.3)"
+      {hero && (() => {
+        const heroPhoto = resolvePhoto(hero);
+        const heroIcon = linkTypeToIcon(hero.linkType, hero.icon);
+        const heroTagline = linkTypeToTagline(hero.linkType);
+        return (
+          <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
+            <Box
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate(hero)}
+              onKeyDown={(e) => handleKey(e, hero)}
+              sx={{
+                position: "relative",
+                height: 200,
+                borderRadius: `${mobileTheme.radius.xl}px`,
+                overflow: "hidden",
+                boxShadow: cardShadow,
+                cursor: "pointer",
+                background: heroPhoto
+                  ? `url(${heroPhoto}) center / cover`
+                  : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`
+              }}
+            >
+              {!heroPhoto && (
+                <Box sx={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  <Icon sx={{ fontSize: 96, color: "rgba(255,255,255,0.25)" }}>{heroIcon}</Icon>
+                </Box>
+              )}
+              <Box sx={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                bgcolor: heroPhoto ? "rgba(0,0,0,0.5)" : "rgba(0,0,0,0.25)",
+                p: "20px"
               }}>
-                {hero.text}
-              </Typography>
-              <Typography sx={{
-                color: "#FFFFFF",
-                opacity: 0.9,
-                fontSize: 16,
-                textShadow: "0 1px 2px rgba(0,0,0,0.3)"
-              }}>
-                Tap to explore
-              </Typography>
+                <Typography sx={{
+                  color: "#FFFFFF",
+                  fontWeight: 700,
+                  fontSize: 32,
+                  lineHeight: 1.1,
+                  mb: 0.5,
+                  textShadow: "0 1px 2px rgba(0,0,0,0.3)"
+                }}>
+                  {hero.text}
+                </Typography>
+                {heroTagline && (
+                  <Typography sx={{
+                    color: "#FFFFFF",
+                    opacity: 0.9,
+                    fontSize: 16,
+                    textShadow: "0 1px 2px rgba(0,0,0,0.3)"
+                  }}>
+                    {heroTagline}
+                  </Typography>
+                )}
+              </Box>
             </Box>
           </Box>
-        </Box>
-      )}
+        );
+      })()}
 
       {featuredTwo.length > 0 && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
@@ -155,50 +175,64 @@ export const DashboardPage = ({ config }: Props) => {
             mb: 2,
             pl: 0.5
           }}>
-            Featured
+            {Locale.label("mobile.components.featured")}
           </Typography>
           <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.md - 4}px` }}>
-            {featuredTwo.map((item) => (
-              <Box
-                key={generateLinkId(item)}
-                role="button"
-                tabIndex={0}
-                onClick={() => navigate(item)}
-                onKeyDown={(e) => handleKey(e, item)}
-                sx={{
-                  flex: 1,
-                  position: "relative",
-                  height: 120,
-                  borderRadius: `${mobileTheme.radius.lg}px`,
-                  overflow: "hidden",
-                  boxShadow: featuredShadow,
-                  cursor: "pointer",
-                  bgcolor: tc.primary,
-                  backgroundImage: `url(${resolvePhoto(item)})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center"
-                }}
-              >
-                <Box sx={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  bgcolor: "rgba(0,0,0,0.6)",
-                  p: "12px"
-                }}>
-                  <Typography sx={{
-                    color: "#FFFFFF",
-                    fontWeight: 600,
-                    fontSize: 16,
-                    textAlign: "center",
-                    textShadow: "0 1px 2px rgba(0,0,0,0.3)"
+            {featuredTwo.map((item) => {
+              const photo = resolvePhoto(item);
+              const itemIcon = linkTypeToIcon(item.linkType, item.icon);
+              return (
+                <Box
+                  key={generateLinkId(item)}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => navigate(item)}
+                  onKeyDown={(e) => handleKey(e, item)}
+                  sx={{
+                    flex: 1,
+                    position: "relative",
+                    height: 120,
+                    borderRadius: `${mobileTheme.radius.lg}px`,
+                    overflow: "hidden",
+                    boxShadow: featuredShadow,
+                    cursor: "pointer",
+                    background: photo
+                      ? `url(${photo}) center / cover`
+                      : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`
+                  }}
+                >
+                  {!photo && (
+                    <Box sx={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}>
+                      <Icon sx={{ fontSize: 56, color: "rgba(255,255,255,0.3)" }}>{itemIcon}</Icon>
+                    </Box>
+                  )}
+                  <Box sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    bgcolor: photo ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0.25)",
+                    p: "12px"
                   }}>
-                    {item.text}
-                  </Typography>
+                    <Typography sx={{
+                      color: "#FFFFFF",
+                      fontWeight: 600,
+                      fontSize: 16,
+                      textAlign: "center",
+                      textShadow: "0 1px 2px rgba(0,0,0,0.3)"
+                    }}>
+                      {item.text}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              );
+            })}
           </Box>
         </Box>
       )}
@@ -212,7 +246,7 @@ export const DashboardPage = ({ config }: Props) => {
             mb: 2,
             pl: 0.5
           }}>
-            Quick Actions
+            {Locale.label("mobile.components.quickActions")}
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: `${mobileTheme.spacing.md - 4}px` }}>
             {others.map((item) => (
