@@ -102,13 +102,27 @@ const getChurchColors = (mode: MobileThemeMode, config?: ConfigurationInterface)
 const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
   const defaults = mode === "dark" ? darkDefaults : lightDefaults;
   const churchColors = getChurchColors(mode, config);
+  // For dark mode, also peek at the light theme so we can lighten the church's
+  // light-mode primary instead of falling back to a generic Material blue when
+  // they haven't authored a separate dark palette.
+  const lightChurchColors = mode === "dark" ? getChurchColors("light", config) : null;
   const appearance = config?.appearance as {
     primaryColor?: string;
     secondaryColor?: string;
     primaryContrast?: string;
   } | undefined;
 
-  const primary = pickColor(churchColors?.primary, appearance?.primaryColor, defaults["--mb-primary"]) || defaults["--mb-primary"];
+  // Resolve primary with dark-mode lightening fallback.
+  let primary: string;
+  if (isValidHexColor(churchColors?.primary)) {
+    primary = churchColors!.primary as string;
+  } else if (mode === "dark") {
+    const lightPrimary = pickColor(lightChurchColors?.primary, appearance?.primaryColor);
+    primary = isValidHexColor(lightPrimary) ? tint(lightPrimary, 0.3) : defaults["--mb-primary"];
+  } else {
+    primary = pickColor(churchColors?.primary, appearance?.primaryColor, defaults["--mb-primary"]) || defaults["--mb-primary"];
+  }
+
   const secondary = pickColor(churchColors?.secondary, appearance?.secondaryColor, defaults["--mb-secondary"]) || defaults["--mb-secondary"];
   const background = pickColor(churchColors?.background, defaults["--mb-background"]) || defaults["--mb-background"];
   const surface = pickColor(churchColors?.surface, defaults["--mb-surface"]) || defaults["--mb-surface"];
@@ -157,10 +171,25 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?:
   const [mode, setModeState] = useState<MobileThemeMode>("light");
 
   useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored === "light" || stored === "dark") setModeState(stored);
-    } catch { }
+    if (typeof window === "undefined") return;
+    let stored: string | null = null;
+    try { stored = window.localStorage.getItem(STORAGE_KEY); } catch { }
+    if (stored === "light" || stored === "dark") {
+      setModeState(stored);
+      return;
+    }
+    // No explicit user choice → follow OS preference, and keep following
+    // it as long as the user doesn't toggle (toggle writes to localStorage).
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    setModeState(mq.matches ? "dark" : "light");
+    const handler = (e: MediaQueryListEvent) => {
+      try {
+        if (window.localStorage.getItem(STORAGE_KEY)) return;
+      } catch { }
+      setModeState(e.matches ? "dark" : "light");
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
   useEffect(() => {

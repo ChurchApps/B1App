@@ -162,3 +162,24 @@ export const linkTypeToIcon = (linkType?: string, itemIcon?: string): string => 
     default: return "apps";
   }
 };
+
+// Short purpose-driven tagline per link type for hero cards. Returning null
+// (default / generic types) lets callers omit the subtext line entirely
+// instead of falling back to the generic "Tap to explore".
+export const linkTypeToTagline = (linkType?: string): string | null => {
+  switch ((linkType || "").toLowerCase()) {
+    case "groups": return "Find your people";
+    case "directory": return "Browse the directory";
+    case "plans": return "View your serving plans";
+    case "checkin": return "Check in for service";
+    case "lessons": return "This week's lessons";
+    case "donation": return "Support the ministry";
+    case "volunteer": return "Sign up to serve";
+    case "bible": return "Read scripture";
+    case "votd": return "Today's verse";
+    case "sermons": return "Watch & listen";
+    case "stream": return "Live service";
+    case "registrations": return "Upcoming events";
+    default: return null;
+  }
+};

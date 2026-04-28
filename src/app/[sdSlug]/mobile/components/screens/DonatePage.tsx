@@ -36,7 +36,6 @@ import type {
 import { StableDonationForm } from "@/components/donate/StableDonationForm";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { cta } from "@/helpers/copy";
 import { mobileTheme } from "../mobileTheme";
 
 interface Props {
@@ -251,7 +250,7 @@ function DonatePageInner({ config }: Props) {
           ) : (
             <>
               <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
-                {cta("giveHeroPrompt")}
+                Make a Difference Today
               </Typography>
               <Typography sx={{ fontSize: 20, fontWeight: 700, mb: 1 }}>
                 Support {church?.name || "our church"}
@@ -347,7 +346,7 @@ function DonatePageInner({ config }: Props) {
                     "&:hover": { bgcolor: tc.iconBackground, opacity: 0.85 }
                   }}
                 >
-                  {cta("giveRepeat")}
+                  Repeat
                 </Button>
               )}
             </Box>
@@ -368,10 +367,10 @@ function DonatePageInner({ config }: Props) {
             volunteer_activism
           </Icon>
           <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 1 }}>
-            {cta("giveHeroPrompt")}
+            Make a Difference Today
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.lg}px`, px: 2 }}>
-            {cta("giveHeroBody")}
+            Your generosity helps us continue our mission and support our community.
           </Typography>
           <Button
             variant="contained"
@@ -388,7 +387,7 @@ function DonatePageInner({ config }: Props) {
               "&:hover": { bgcolor: tc.primary, opacity: 0.9 }
             }}
           >
-            {cta("giveCta")}
+            Give Now
           </Button>
         </Box>
       </Box>

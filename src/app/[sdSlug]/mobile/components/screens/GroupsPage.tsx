@@ -8,7 +8,6 @@ import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { cta } from "@/helpers/copy";
 import { mobileTheme } from "../mobileTheme";
 import { useEngagementSort } from "../../hooks/useEngagementSort";
 
@@ -80,8 +79,16 @@ export const GroupsPage = ({ config: _config }: Props) => {
     router.push(`/mobile/groups/${group.id}`);
   };
 
+  const groupSubtext = (group: GroupInterface): string | null => {
+    const time = group.meetingTime?.trim();
+    const loc = group.meetingLocation?.trim();
+    if (time && loc) return `${time} · ${loc}`;
+    return time || loc || null;
+  };
+
   const renderHero = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
+    const fallbackBg = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
       <Box
         key={`hero-${group.id}`}
@@ -102,7 +109,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           overflow: "hidden",
           boxShadow: mobileTheme.shadows.md,
           cursor: "pointer",
-          bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
+          background: hasPhoto ? "transparent" : fallbackBg,
           transition: "box-shadow 150ms ease, transform 150ms ease",
           "&:hover": { boxShadow: mobileTheme.shadows.lg },
           "&:active": { transform: "scale(0.995)" }
@@ -117,7 +124,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           />
         ) : (
           <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon sx={{ fontSize: 72, color: tc.primary, opacity: 0.5 }}>groups</Icon>
+            <Icon sx={{ fontSize: 72, color: "rgba(255,255,255,0.7)" }}>groups</Icon>
           </Box>
         )}
         <Box
@@ -134,7 +141,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             {group.name}
           </Typography>
           <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
-            {cta("heroExploreSubtext")}
+            {groupSubtext(group) || "Tap to explore"}
           </Typography>
         </Box>
       </Box>
@@ -143,6 +150,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
 
   const renderFeatured = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
+    const fallbackBg = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
       <Box
         key={`featured-${group.id}`}
@@ -162,7 +170,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           overflow: "hidden",
           boxShadow: mobileTheme.shadows.sm,
           cursor: "pointer",
-          bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
+          background: hasPhoto ? "transparent" : fallbackBg,
           transition: "box-shadow 150ms ease, transform 150ms ease",
           "&:hover": { boxShadow: mobileTheme.shadows.md },
           "&:active": { transform: "scale(0.995)" }
@@ -177,7 +185,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           />
         ) : (
           <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon sx={{ fontSize: 40, color: tc.primary, opacity: 0.5 }}>groups</Icon>
+            <Icon sx={{ fontSize: 40, color: "rgba(255,255,255,0.7)" }}>groups</Icon>
           </Box>
         )}
         <Box
@@ -282,7 +290,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             {group.name}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-            {cta("heroExploreSubtext")}
+            {groupSubtext(group) || "Tap to explore"}
           </Typography>
         </Box>
       </Box>
@@ -353,7 +361,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           borderRadius: `${mobileTheme.radius.md}px`
         }}
       >
-        {cta("exploreCommunityCta")}
+        Explore Community
       </Button>
     </Box>
   );
