@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Icon, Typography } from "@mui/material";
 import { mobileTheme } from "../mobileTheme";
-import "@youversion/platform-react-ui/styles.css";
 
 const STORAGE_KEY = "b1.mobile.bible.selection";
 
@@ -45,6 +44,11 @@ const saveSelection = (sel: Selection) => {
   } catch {
 
   }
+};
+
+type YouVersionModule = {
+  YouVersionProvider: React.ComponentType<any>;
+  BibleReader: any;
 };
 
 class BibleErrorBoundary extends React.Component<
@@ -123,37 +127,46 @@ const FallbackCard = () => {
   );
 };
 
-const loadYouVersion = (): {
-  BibleSDKProvider: React.ComponentType<any>;
-  BibleReader: any;
-} | null => {
-  try {
-
-    const mod = require("@youversion/platform-react-ui");
-    if (mod?.BibleSDKProvider && mod?.BibleReader) {
-      return { BibleSDKProvider: mod.BibleSDKProvider, BibleReader: mod.BibleReader };
-    }
-    return null;
-  } catch {
-    return null;
-  }
-};
-
 export const BiblePage = () => {
   const tc = mobileTheme.colors;
   const [isClient, setIsClient] = useState(false);
   const [selection, setSelection] = useState<Selection>(DEFAULT_SELECTION);
+  const [yv, setYv] = useState<YouVersionModule | null>(null);
 
   useEffect(() => {
-    setSelection(loadSelection());
-    setIsClient(true);
+    let cancelled = false;
+
+    const initialize = async () => {
+      setSelection(loadSelection());
+      setIsClient(true);
+
+      try {
+        const mod = await import("@youversion/platform-react-ui");
+        if (!mod?.YouVersionProvider || !mod?.BibleReader) {
+          throw new Error(`Missing exports from @youversion/platform-react-ui: ${Object.keys(mod || {}).join(", ")}`);
+        }
+
+        if (!cancelled) {
+          setYv({ YouVersionProvider: mod.YouVersionProvider, BibleReader: mod.BibleReader });
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setYv(null);
+        }
+        console.error("[BiblePage] Failed to load @youversion/platform-react-ui:", error);
+      }
+    };
+
+    initialize();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
     if (isClient) saveSelection(selection);
   }, [isClient, selection]);
-
-  const yv = isClient ? loadYouVersion() : null;
 
   const apiKey =
     process.env.NEXT_PUBLIC_YOUVERSION_API_KEY ||
@@ -204,7 +217,7 @@ export const BiblePage = () => {
             minHeight: `calc(100vh - ${mobileTheme.headerHeight}px)`,
             bgcolor: tc.surface
           }}>
-            <yv.BibleSDKProvider appKey={apiKey}>
+            <yv.YouVersionProvider appKey={apiKey}>
               <yv.BibleReader.Root
                 versionId={selection.versionId}
                 onVersionChange={(v: number) =>
@@ -228,7 +241,7 @@ export const BiblePage = () => {
                   <yv.BibleReader.Content />
                 </Box>
               </yv.BibleReader.Root>
-            </yv.BibleSDKProvider>
+            </yv.YouVersionProvider>
           </Box>
         </BibleErrorBoundary>
       )}
