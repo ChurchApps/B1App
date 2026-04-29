@@ -137,7 +137,22 @@ const nextConfig = {
 
   // Rewrites for subdomain routing
   async rewrites() {
+    const railwaySlug = process.env.DEFAULT_CHURCH_SLUG || "church";
+    const railwayRules = [
+      {
+        source: "/",
+        has: [{ type: "host", value: ".*\\.up\\.railway\\.app" }],
+        destination: `/${railwaySlug}`
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: ".*\\.up\\.railway\\.app" }],
+        destination: `/${railwaySlug}/:path*`
+      }
+    ];
+
     return [
+      ...railwayRules,
       {
         source: "/",
         has: [{ type: "header", key: "x-site", value: "(?<subdomain>.*?)\\..*" }],
