@@ -17,7 +17,7 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
   const { data: plans = [], isLoading } = useQuery<PlanInterface[]>({
     queryKey: ["group-plans", groupId],
     queryFn: async () => {
-      const data = await ApiHelper.get(`/plans/group/${groupId}`, "DoingApi");
+      const data = await ApiHelper.get(`/groups/${groupId}/plans`, "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
     enabled: !!groupId,

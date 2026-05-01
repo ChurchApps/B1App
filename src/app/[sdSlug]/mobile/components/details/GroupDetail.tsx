@@ -108,7 +108,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   const { data: groupPlans = [] } = useQuery<PlanInterface[]>({
     queryKey: ["group-plans", id],
     queryFn: async () => {
-      const data = await ApiHelper.get(`/plans/group/${id}`, "DoingApi");
+      const data = await ApiHelper.get(`/groups/${id}/plans`, "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
     enabled: !!id,

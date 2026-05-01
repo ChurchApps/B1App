@@ -39,7 +39,7 @@ export function AuthenticatedView(props: Props) {
 
   useEffect(() => {
     if (!group?.id) return;
-    ApiHelper.get(`/plans/group/${group.id}`, "DoingApi")
+    ApiHelper.get(`/groups/${group.id}/plans`, "MembershipApi")
       .then((data: PlanInterface[]) => setPlans(Array.isArray(data) ? data : []))
       .catch(() => setPlans([]));
   }, [group?.id]);
