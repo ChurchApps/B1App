@@ -18,7 +18,7 @@ export function PlansTab(props: Props) {
   useEffect(() => {
     if (!props.groupId) return;
     setIsLoading(true);
-    ApiHelper.get(`/plans/group/${props.groupId}`, "DoingApi")
+    ApiHelper.get(`/groups/${props.groupId}/plans`, "MembershipApi")
       .then((data: PlanInterface[]) => setPlans(Array.isArray(data) ? data : []))
       .finally(() => setIsLoading(false));
   }, [props.groupId]);
