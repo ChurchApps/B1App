@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useContext } from "react";
 import { Grid, Container } from "@mui/material";
-import { UserHelper, Locale } from "@churchapps/apphelper";
+import { ApiHelper, UserHelper, Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { DisplayBox } from "@churchapps/apphelper";
-import type { GroupInterface } from "@churchapps/helpers";
+import type { GroupInterface, PlanInterface } from "@churchapps/helpers";
 import { Permissions } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { GroupCalendar } from "@/components/eventCalendar/GroupCalendar";
@@ -19,6 +19,7 @@ import React from "react";
 import { MembersTab } from "./MembersTab";
 import { AttendanceTab } from "./AttendanceTab";
 import { ConversationsTab } from "./ConversationsTab";
+import { PlansTab } from "./PlansTab";
 
 interface Props {
   config: ConfigurationInterface;
@@ -29,11 +30,19 @@ interface Props {
 export function AuthenticatedView(props: Props) {
   const [tab, setTab] = useState("details");
   const [group, setGroup] = useState(props.group);
+  const [plans, setPlans] = useState<PlanInterface[] | null>(null);
   const context = useContext(UserContext);
 
   useEffect(() => {
     setGroup(props.group);
   }, [props.group]);
+
+  useEffect(() => {
+    if (!group?.id) return;
+    ApiHelper.get(`/plans/group/${group.id}`, "DoingApi")
+      .then((data: PlanInterface[]) => setPlans(Array.isArray(data) ? data : []))
+      .catch(() => setPlans([]));
+  }, [group?.id]);
 
   let isLeader = false;
   UserHelper.currentUserChurch.groups?.forEach((g) => {
@@ -65,6 +74,7 @@ export function AuthenticatedView(props: Props) {
       case "leaderResources": result = <><h2>{Locale.label("groupsPage.resourcesLeadersOnly")}</h2><GroupLeaderResources context={context} groupId={group.id} /></>; break;
       case "members": result = <MembersTab isLeader={isLeader} canEditMembers={canEditMembers} group={group} />; break;
       case "attendance": result = <AttendanceTab group={group} />; break;
+      case "plans": result = <PlansTab groupId={group.id} sdSlug={props.config.church.subDomain || ""} />; break;
     }
     return result;
   };
@@ -77,7 +87,7 @@ export function AuthenticatedView(props: Props) {
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, md: 2 }}>
               <div className="sideNav">
-                <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val); }} group={group} />
+                <GroupTabs config={props.config} onTabChange={(val: string) => { setTab(val); }} group={group} hasPlans={plans !== null && plans.length > 0} />
               </div>
             </Grid>
             <Grid size={{ xs: 12, md: 10 }}>

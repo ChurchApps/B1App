@@ -18,6 +18,7 @@ interface Props {
   config: ConfigurationInterface;
   onTabChange: (tab: string) => void;
   group: GroupInterface;
+  hasPlans?: boolean;
 }
 
 export const GroupTabs = (props: Props) => {
@@ -52,6 +53,9 @@ export const GroupTabs = (props: Props) => {
     tabs.push({ key: "calendar", label: Locale.label("groupsPage.calendar") });
     tabs.push({ key: "conversations", label: Locale.label("groupsPage.conversations") });
     tabs.push({ key: "resources", label: Locale.label("groupsPage.resources") });
+    if (props.hasPlans) {
+      tabs.push({ key: "plans", label: Locale.label("groupsPage.plans") });
+    }
     if (canViewLeaderResources) {
       tabs.push({ key: "leaderResources", label: Locale.label("groupsPage.resourcesLeaders") });
     }

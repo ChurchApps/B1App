@@ -15,7 +15,7 @@ import {
 import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Permissions, type GroupInterface } from "@churchapps/helpers";
+import { Permissions, type GroupInterface, type PlanInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { getInitials, navigateBack } from "../util";
@@ -24,6 +24,7 @@ import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
 import { GroupResourcesTab } from "../group/GroupResourcesTab";
 import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
+import { GroupPlansTab } from "../group/GroupPlansTab";
 
 interface Props {
   id: string;
@@ -50,7 +51,7 @@ interface GroupWithExtras extends GroupInterface {
   meetingLocation?: string;
 }
 
-type TabKey = "about" | "messages" | "members" | "attendance" | "events" | "resources";
+type TabKey = "about" | "messages" | "members" | "attendance" | "events" | "resources" | "plans";
 
 export const GroupDetail = ({ id, config: _config }: Props) => {
   const tc = mobileTheme.colors;
@@ -68,7 +69,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     if (!searchParams) return;
     const activeTabParam = searchParams.get("activeTab");
     if (activeTabParam) {
-      const allowed: TabKey[] = ["about", "messages", "members", "attendance", "events", "resources"];
+      const allowed: TabKey[] = ["about", "messages", "members", "attendance", "events", "resources", "plans"];
       if ((allowed as string[]).includes(activeTabParam)) {
         if (activeTabParam === "messages") {
           setChatOpen(true);
@@ -103,6 +104,17 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     },
     enabled: !!id
   });
+
+  const { data: groupPlans = [] } = useQuery<PlanInterface[]>({
+    queryKey: ["group-plans", id],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/plans/group/${id}`, "DoingApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!id,
+    placeholderData: []
+  });
+  const hasPlans = (groupPlans?.length || 0) > 0;
 
   const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
   const members = membersData;
@@ -522,6 +534,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   if (isLeader) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
   availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
+  if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -607,6 +620,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
             />
           )}
           {tab === "resources" && <GroupResourcesTab groupId={id} canEdit={canEditResources} />}
+          {tab === "plans" && <GroupPlansTab groupId={id} />}
         </Box>
       )}
 
