@@ -10,6 +10,7 @@ export interface ProviderContentChild {
   seconds?: number;
   downloadUrl?: string;
   thumbnailUrl?: string;
+  mediaType?: "video" | "image";
 }
 
 export interface ProviderContent {
@@ -33,7 +34,7 @@ export interface UseProviderContentParams {
   fallbackUrl?: string;
 }
 
-// Helper to detect media type from URL
+// Fallback media-type detection for URLs whose source didn't supply an explicit type.
 function detectMediaType(url: string): "video" | "image" | "iframe" {
   const lowerUrl = url.toLowerCase();
   const videoExtensions = [".mp4", ".webm", ".ogg", ".m3u8", ".mov", ".avi"];
@@ -119,7 +120,7 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
           if (downloadUrl && !isSection) {
             setContent({
               url: downloadUrl,
-              mediaType: detectMediaType(downloadUrl),
+              mediaType: item.mediaType ?? detectMediaType(downloadUrl),
               description: item.content,
               label: item.label
             });
@@ -127,11 +128,13 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
             const children: ProviderContentChild[] = item.children.map(child => {
               let childDownloadUrl = child.downloadUrl;
               let childThumbnail = child.thumbnail;
+              let childMediaType = child.mediaType;
               if (!childDownloadUrl && child.children && child.children.length > 0) {
                 const grandchildWithUrl = child.children.find(gc => gc.downloadUrl);
                 if (grandchildWithUrl) {
                   childDownloadUrl = grandchildWithUrl.downloadUrl;
                   childThumbnail = childThumbnail || grandchildWithUrl.thumbnail;
+                  childMediaType = childMediaType ?? grandchildWithUrl.mediaType;
                 }
               }
               return {
@@ -140,7 +143,8 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
                 description: child.content,
                 seconds: child.seconds,
                 downloadUrl: childDownloadUrl,
-                thumbnailUrl: childThumbnail
+                thumbnailUrl: childThumbnail,
+                mediaType: childMediaType
               };
             });
             setContent({ description: item.content, label: item.label, children });

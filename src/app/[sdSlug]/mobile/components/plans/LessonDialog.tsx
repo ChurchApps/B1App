@@ -8,7 +8,7 @@ import { EnvironmentHelper, ExternalVenueRefInterface } from "@/helpers";
 import { useProviderContent, type ProviderContentChild } from "./useProviderContent";
 import { ContentRenderer } from "./ContentRenderer";
 
-// Helper to detect media type from URL
+// Fallback media-type detection for URLs whose source didn't supply an explicit type.
 function detectMediaType(url: string): "video" | "image" | "iframe" {
   const lowerUrl = url.toLowerCase();
   const videoExtensions = [".mp4", ".webm", ".ogg", ".m3u8", ".mov", ".avi"];
@@ -90,7 +90,7 @@ export const LessonDialog: React.FC<Props> = (props) => {
         return (
           <ContentRenderer
             url={childUrl}
-            mediaType={detectMediaType(childUrl)}
+            mediaType={selectedChild.mediaType ?? detectMediaType(childUrl)}
             title={selectedChild.label}
             description={selectedChild.description}
             iframeHeight={iframeHeight}

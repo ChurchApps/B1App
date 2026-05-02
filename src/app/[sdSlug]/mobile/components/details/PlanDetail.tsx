@@ -28,8 +28,11 @@ import type {
 } from "@churchapps/helpers";
 import { LessonsContentProvider } from "@churchapps/helpers";
 import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { PlanItem as PlanItemRow } from "@/app/[sdSlug]/mobile/components/plans/PlanItem";
 import { LessonPreview } from "@/app/[sdSlug]/mobile/components/plans/LessonPreview";
+import { ExpandedLessonView } from "@/app/[sdSlug]/mobile/components/plans/ExpandedLessonView";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
@@ -125,6 +128,11 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
 
   type TabKey = "overview" | "order" | "team";
   const [tab, setTab] = useState<TabKey>("overview");
+  const [orderView, setOrderView] = useState<"summary" | "teach">("summary");
+
+  interface LessonPreviewResult extends VenuePlanItemsResponseInterface {
+    instructions?: Instructions | null;
+  }
   const isLoggedIn = !!userContext?.userChurch?.jwt;
   const myPersonId = userContext?.person?.id || userContext?.userChurch?.person?.id;
 
@@ -208,7 +216,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   }, [plan?.providerId]);
   const hasAssociatedContent = !!provider || hasAssociatedLesson;
 
-  const { data: lessonPreview } = useQuery<VenuePlanItemsResponseInterface>({
+  const { data: lessonPreview } = useQuery<LessonPreviewResult>({
     queryKey: ["plan-preview", id, plan?.providerId, plan?.providerPlanId, plan?.contentType, plan?.contentId],
     queryFn: async () => {
       if (provider && plan?.providerPlanId) {
@@ -228,17 +236,22 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         if (instructions) {
           const items: PlanItemInterface[] = instructions.items.map((item, index) =>
             instructionToPlanItem(item, plan.providerId, plan.providerPlanId, [index]));
-          return { items, venueName: plan.providerPlanName || instructions.name || "" };
+          return {
+            items,
+            venueName: plan.providerPlanName || instructions.name || "",
+            instructions
+          };
         }
       }
       if (plan && hasAssociatedLesson) {
         try {
-          return await lessonsProvider.fetchVenuePlanItems(plan);
+          const legacy = await lessonsProvider.fetchVenuePlanItems(plan);
+          return { ...legacy, instructions: null };
         } catch {
-          return { items: [] };
+          return { items: [], instructions: null };
         }
       }
-      return { items: [] };
+      return { items: [], instructions: null };
     },
     enabled: isLoggedIn && !!plan && hasAssociatedContent && planItems.length === 0
   });
@@ -530,14 +543,41 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
           }}
         >
           {planItems.length === 0 && showPreviewMode && lessonPreview?.items ? (
-            <LessonPreview
-              lessonItems={lessonPreview.items}
-              venueName={lessonPreview.venueName || ""}
-              externalRef={externalRef}
-              associatedProviderId={plan.providerId}
-              associatedVenueId={plan.providerPlanId}
-              ministryId={plan.ministryId}
-            />
+            <>
+              {lessonPreview.instructions && (
+                <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1.5 }}>
+                  <ToggleButtonGroup
+                    value={orderView}
+                    exclusive
+                    size="small"
+                    onChange={(_e, v) => { if (v) setOrderView(v); }}
+                    aria-label={Locale.label("mobile.details.viewMode")}
+                  >
+                    <ToggleButton value="summary" sx={{ textTransform: "none", fontWeight: 600 }}>
+                      {Locale.label("mobile.details.viewSummary")}
+                    </ToggleButton>
+                    <ToggleButton value="teach" sx={{ textTransform: "none", fontWeight: 600 }}>
+                      {Locale.label("mobile.details.viewTeach")}
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Box>
+              )}
+              {orderView === "teach" && lessonPreview.instructions ? (
+                <ExpandedLessonView
+                  instructions={lessonPreview.instructions}
+                  lessonName={lessonPreview.venueName || ""}
+                />
+              ) : (
+                <LessonPreview
+                  lessonItems={lessonPreview.items}
+                  venueName={lessonPreview.venueName || ""}
+                  externalRef={externalRef}
+                  associatedProviderId={plan.providerId}
+                  associatedVenueId={plan.providerPlanId}
+                  ministryId={plan.ministryId}
+                />
+              )}
+            </>
           ) : planItems.length === 0 ? (
             <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", py: 2 }}>
               {Locale.label("mobile.details.noOrderItems")}
