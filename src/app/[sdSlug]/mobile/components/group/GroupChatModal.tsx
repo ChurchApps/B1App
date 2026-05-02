@@ -216,6 +216,63 @@ export const GroupChatModal = ({
     return `${Math.floor(diff / 1440)}d`;
   };
 
+  const renderMessageContent = (content: string) => {
+    const imageRegex = /https?:\/\/\S+\.(jpg|jpeg|png|gif|webp|svg)(\?\S*)?/gi;
+    const urlRegex = /https?:\/\/\S+/gi;
+
+    const imageMatches = content.match(imageRegex);
+    const urlMatches = content.match(urlRegex);
+
+    const textWithoutUrls = content.replace(urlRegex, "").trim();
+
+    return (
+      <>
+        {textWithoutUrls && (
+          <Typography sx={{ fontSize: 15, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
+            {textWithoutUrls}
+          </Typography>
+        )}
+        {imageMatches?.map((url, i) => (
+          <Box
+            key={i}
+            component="img"
+            src={url}
+            alt="image"
+            sx={{ maxWidth: "100%", borderRadius: 2, mt: 0.5 }}
+          />
+        ))}
+        {urlMatches
+          ?.filter((url) => !imageRegex.test(url))
+          .map((url, i) => (
+            <Box
+              key={i}
+              component="a"
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                mt: 0.5,
+                px: 1.5,
+                py: 1,
+                bgcolor: "rgba(255,255,255,0.15)",
+                borderRadius: "10px",
+                textDecoration: "none",
+                color: "inherit"
+              }}
+            >
+              <Icon sx={{ fontSize: 18 }}>attach_file</Icon>
+              <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
+                Open file
+              </Typography>
+            </Box>
+          ))}
+      </>
+    );
+  };
+
   const renderEmpty = () => (
     <Box sx={{ textAlign: "center", p: `${mobileTheme.spacing.lg}px`, mt: 2 }}>
       <Box
@@ -317,9 +374,10 @@ export const GroupChatModal = ({
                   {name}
                 </Typography>
               )}
-              <Typography sx={{ fontSize: 15, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
+              {/* <Typography sx={{ fontSize: 15, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
                 {m.content}
-              </Typography>
+              </Typography> */}
+              {renderMessageContent(m.content || "")}
               <Typography
                 sx={{
                   fontSize: 11,
