@@ -291,9 +291,21 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName }
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        backgroundColor: "#ffffff",
+        color: "#212121",
+        borderRadius: "12px",
+        p: { xs: 1.5, sm: 2.5 },
+        colorScheme: "light",
+        "& .MuiTypography-root": { color: "inherit" },
+        "& .MuiCard-root": { backgroundColor: "#ffffff", color: "#212121" },
+        "& .MuiCardContent-root": { color: "#212121" },
+        "& a": { color: "#1d6fb8" }
+      }}
+    >
       {lessonName && (
-        <Typography sx={{ fontSize: 14, color: "text.secondary", mb: 2 }}>
+        <Typography sx={{ fontSize: 14, color: "#5f6368", mb: 2 }}>
           Lesson: {lessonName}
         </Typography>
       )}

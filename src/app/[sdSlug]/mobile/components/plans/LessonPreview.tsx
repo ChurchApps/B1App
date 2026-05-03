@@ -4,6 +4,7 @@ import { Box, Typography, Icon, Stack, Link } from "@mui/material";
 import { PlanItemInterface, ExternalVenueRefInterface, PlanHelper } from "@/helpers";
 import { ActionDialog } from "./ActionDialog";
 import { LessonDialog } from "./LessonDialog";
+import { mobileTheme } from "../mobileTheme";
 
 interface Props {
   lessonItems: PlanItemInterface[];
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const LessonPreview: React.FC<Props> = (props) => {
+  const tc = mobileTheme.colors;
   const [actionItem, setActionItem] = useState<PlanItemInterface | null>(null);
   const [sectionItem, setSectionItem] = useState<PlanItemInterface | null>(null);
 
@@ -57,15 +59,15 @@ export const LessonPreview: React.FC<Props> = (props) => {
               alignItems: "center",
               justifyContent: "space-between",
               p: 1,
-              backgroundColor: "grey.100",
+              backgroundColor: `${tc.primary}14`,
               borderRadius: 1
             }}
           >
-            <Typography sx={{ fontWeight: 600 }}>{item.label}</Typography>
+            <Typography sx={{ fontWeight: 700, color: tc.primary }}>{item.label}</Typography>
             {sectionDuration > 0 && (
               <Stack direction="row" alignItems="center" spacing={0.5}>
-                <Icon sx={{ fontSize: 16, color: "grey.500" }}>schedule</Icon>
-                <Typography variant="body2" sx={{ color: "grey.600" }}>
+                <Icon sx={{ fontSize: 16, color: tc.primary }}>schedule</Icon>
+                <Typography variant="body2" sx={{ color: tc.primary }}>
                   {PlanHelper.formatTime(sectionDuration)}
                 </Typography>
               </Stack>
@@ -89,7 +91,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
           p: 1,
           pl: isChild ? 3 : 1,
           borderBottom: "1px solid",
-          borderColor: "grey.200"
+          borderColor: tc.border
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
@@ -107,15 +109,15 @@ export const LessonPreview: React.FC<Props> = (props) => {
                 href="#"
                 onClick={(e) => isClickableAction(item) ? handleActionClick(e, item) : handleSectionClick(e, item)}
                 variant="body2"
-                sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                sx={{ color: tc.primary, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
               >
                 {item.label}
               </Link>
             ) : (
-              <Typography variant="body2">{item.label}</Typography>
+              <Typography variant="body2" sx={{ color: tc.text }}>{item.label}</Typography>
             )}
             {item.description && (
-              <Typography variant="caption" sx={{ color: "grey.600", fontStyle: "italic", display: "block" }}>
+              <Typography variant="caption" sx={{ color: tc.textMuted, fontStyle: "italic", display: "block" }}>
                 {item.description}
               </Typography>
             )}
@@ -123,8 +125,8 @@ export const LessonPreview: React.FC<Props> = (props) => {
         </Box>
         {item.seconds > 0 && (
           <Stack direction="row" alignItems="center" spacing={0.5}>
-            <Icon sx={{ fontSize: 16, color: "grey.500" }}>schedule</Icon>
-            <Typography variant="body2" sx={{ color: "grey.600" }}>
+            <Icon sx={{ fontSize: 16, color: tc.textSecondary }}>schedule</Icon>
+            <Typography variant="body2" sx={{ color: tc.textSecondary }}>
               {PlanHelper.formatTime(item.seconds)}
             </Typography>
           </Stack>
@@ -137,7 +139,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
     <>
       <Box sx={{ position: "relative" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          <Typography variant="body2" sx={{ color: tc.textMuted }}>
             Lesson: {props.venueName}
           </Typography>
         </Box>
