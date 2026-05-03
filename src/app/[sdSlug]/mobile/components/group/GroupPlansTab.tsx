@@ -114,11 +114,11 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, alignItems: "center", mb: `${mobileTheme.spacing.sm}px` }}>
         {planTypeIds.length > 1 && (
           <FormControl size="small" sx={{ minWidth: 180 }}>
-            <InputLabel id="group-plan-type-select-label">{Locale.label("groupsPage.planType") || "Plan Type"}</InputLabel>
+            <InputLabel id="group-plan-type-select-label">{Locale.label("groupsPage.planType")}</InputLabel>
             <Select
               labelId="group-plan-type-select-label"
               value={selectedPlanTypeId}
-              label={Locale.label("groupsPage.planType") || "Plan Type"}
+              label={Locale.label("groupsPage.planType")}
               onChange={(e) => setSelectedPlanTypeId(String(e.target.value))}
             >
               {planTypeIds.map((id) => (
@@ -133,16 +133,16 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
           value={view}
           onChange={(_, v) => { if (v) setView(v); }}
         >
-          <ToggleButton value="upcoming">{Locale.label("groupsPage.upcoming") || "Upcoming"}</ToggleButton>
-          <ToggleButton value="past">{Locale.label("groupsPage.past") || "Past"}</ToggleButton>
+          <ToggleButton value="upcoming">{Locale.label("groupsPage.upcoming")}</ToggleButton>
+          <ToggleButton value="past">{Locale.label("groupsPage.past")}</ToggleButton>
         </ToggleButtonGroup>
       </Box>
       {visiblePlans.length === 0 ? (
         <Box sx={{ p: `${mobileTheme.spacing.lg}px`, textAlign: "center", color: tc.textSecondary }}>
           <Typography variant="body2">
             {view === "upcoming"
-              ? (Locale.label("groupsPage.noUpcomingPlans") || "No upcoming plans.")
-              : (Locale.label("groupsPage.noPastPlans") || "No past plans.")}
+              ? Locale.label("groupsPage.noUpcomingPlans")
+              : Locale.label("groupsPage.noPastPlans")}
           </Typography>
         </Box>
       ) : (
