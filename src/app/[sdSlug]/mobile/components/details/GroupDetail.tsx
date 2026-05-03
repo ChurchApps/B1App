@@ -563,18 +563,23 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                 }
                 setTab(v);
               }}
-              variant="fullWidth"
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
               textColor="primary"
               indicatorColor="primary"
               sx={{
                 minHeight: 52,
                 "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
+                "& .MuiTabs-scrollButtons.Mui-disabled": { opacity: 0.3 },
                 "& .MuiTab-root": {
                   minHeight: 52,
                   textTransform: "none",
                   fontWeight: 500,
                   fontSize: 14,
-                  color: tc.textSecondary
+                  color: tc.textSecondary,
+                  minWidth: "auto",
+                  px: 2
                 },
                 "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
               }}
