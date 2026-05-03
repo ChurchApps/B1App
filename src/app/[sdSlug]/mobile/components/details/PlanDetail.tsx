@@ -3,19 +3,16 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Avatar,
   Box,
   Button,
   CircularProgress,
   Icon,
-  IconButton,
   Tab,
   Tabs,
   Typography
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ApiHelper, ArrayHelper, Locale } from "@churchapps/apphelper";
 import type {
   AssignmentInterface,
@@ -28,8 +25,6 @@ import type {
 } from "@churchapps/helpers";
 import { LessonsContentProvider } from "@churchapps/helpers";
 import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { PlanItem as PlanItemRow } from "@/app/[sdSlug]/mobile/components/plans/PlanItem";
 import { LessonPreview } from "@/app/[sdSlug]/mobile/components/plans/LessonPreview";
 import { ExpandedLessonView } from "@/app/[sdSlug]/mobile/components/plans/ExpandedLessonView";
@@ -122,12 +117,11 @@ function instructionToPlanItem(item: InstructionItem, providerId?: string, provi
 
 export const PlanDetail = ({ id, config: _config }: Props) => {
   const tc = mobileTheme.colors;
-  const router = useRouter();
   const userContext = useContext(UserContext);
   const queryClient = useQueryClient();
 
   type TabKey = "overview" | "order" | "team";
-  const [tab, setTab] = useState<TabKey>("overview");
+  const [tab, setTab] = useState<TabKey>("order");
   const [orderView, setOrderView] = useState<"summary" | "teach">("summary");
 
   interface LessonPreviewResult extends VenuePlanItemsResponseInterface {
@@ -261,26 +255,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     queryClient.invalidateQueries({ queryKey });
   };
 
-  const BackButton = (
-    <IconButton
-      onClick={() => router.push("/mobile/plans")}
-      aria-label={Locale.label("mobile.components.back")}
-      sx={{
-        color: tc.primary,
-        bgcolor: tc.surface,
-        width: 40,
-        height: 40,
-        boxShadow: mobileTheme.shadows.sm,
-        "&:hover": { bgcolor: tc.surfaceVariant }
-      }}
-    >
-      <ArrowBackIcon sx={{ fontSize: 24 }} />
-    </IconButton>
-  );
-
   const OuterShell = ({ children }: { children: React.ReactNode }) => (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>{BackButton}</Box>
       {children}
     </Box>
   );
@@ -395,7 +371,6 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box sx={{ mb: `${mobileTheme.spacing.md}px` }}>{BackButton}</Box>
       {headerCard}
 
       <Box
@@ -426,8 +401,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
           }}
         >
-          <Tab value="overview" label={Locale.label("mobile.details.tabOverview")} />
           <Tab value="order" label={Locale.label("mobile.details.tabServiceOrder")} />
+          <Tab value="overview" label={Locale.label("mobile.details.tabOverview")} />
           <Tab value="team" label={Locale.label("mobile.details.tabTeams")} />
         </Tabs>
       </Box>
@@ -546,37 +521,25 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             <>
               {lessonPreview.instructions && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1.5 }}>
-                  <ToggleButtonGroup
-                    value={orderView}
-                    exclusive
+                  <Button
+                    variant="contained"
                     size="small"
-                    onChange={(_e, v) => { if (v) setOrderView(v); }}
-                    aria-label={Locale.label("mobile.details.viewMode")}
+                    startIcon={<Icon>school</Icon>}
+                    onClick={() => setOrderView("teach")}
+                    sx={{ textTransform: "none", fontWeight: 600 }}
                   >
-                    <ToggleButton value="summary" sx={{ textTransform: "none", fontWeight: 600 }}>
-                      {Locale.label("mobile.details.viewSummary")}
-                    </ToggleButton>
-                    <ToggleButton value="teach" sx={{ textTransform: "none", fontWeight: 600 }}>
-                      {Locale.label("mobile.details.viewTeach")}
-                    </ToggleButton>
-                  </ToggleButtonGroup>
+                    {Locale.label("mobile.details.viewTeach")}
+                  </Button>
                 </Box>
               )}
-              {orderView === "teach" && lessonPreview.instructions ? (
-                <ExpandedLessonView
-                  instructions={lessonPreview.instructions}
-                  lessonName={lessonPreview.venueName || ""}
-                />
-              ) : (
-                <LessonPreview
-                  lessonItems={lessonPreview.items}
-                  venueName={lessonPreview.venueName || ""}
-                  externalRef={externalRef}
-                  associatedProviderId={plan.providerId}
-                  associatedVenueId={plan.providerPlanId}
-                  ministryId={plan.ministryId}
-                />
-              )}
+              <LessonPreview
+                lessonItems={lessonPreview.items}
+                venueName={lessonPreview.venueName || ""}
+                externalRef={externalRef}
+                associatedProviderId={plan.providerId}
+                associatedVenueId={plan.providerPlanId}
+                ministryId={plan.ministryId}
+              />
             </>
           ) : planItems.length === 0 ? (
             <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", py: 2 }}>
@@ -627,6 +590,15 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             ))
           )}
         </Box>
+      )}
+
+      {lessonPreview?.instructions && (
+        <ExpandedLessonView
+          open={orderView === "teach"}
+          onClose={() => setOrderView("summary")}
+          instructions={lessonPreview.instructions}
+          lessonName={lessonPreview.venueName || ""}
+        />
       )}
 
     </Box>

@@ -1,18 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
+  AppBar,
   Box,
   Button,
-  Card,
-  CardContent,
-  CardHeader,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Icon,
-  Typography
+  IconButton,
+  Tab,
+  Tabs,
+  Toolbar,
+  Typography,
+  useMediaQuery
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { useTheme } from "@mui/material/styles";
 import type { InstructionItem, Instructions } from "@churchapps/content-providers";
 import { Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
@@ -22,6 +27,8 @@ import { ContentRenderer } from "./ContentRenderer";
 interface Props {
   instructions: Instructions;
   lessonName?: string;
+  open: boolean;
+  onClose: () => void;
 }
 
 interface MediaState {
@@ -48,8 +55,64 @@ const findDownloadable = (item: InstructionItem): { url?: string; mediaType?: "v
   return {};
 };
 
-export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName }) => {
+const sectionDomId = (item: InstructionItem, fallbackKey: string) => `teach-section-${item.id || fallbackKey}`;
+
+export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, open, onClose }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [media, setMedia] = useState<MediaState | null>(null);
+  const [activeSection, setActiveSection] = useState<string>("");
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const sectionList = useMemo(() => {
+    const result: { item: InstructionItem; domId: string }[] = [];
+    const walk = (items: InstructionItem[], path: string) => {
+      items.forEach((item, idx) => {
+        const itemType = item.itemType || "";
+        const fallbackKey = `${path}-${idx}`;
+        if (SECTION_TYPES.has(itemType)) {
+          result.push({ item, domId: sectionDomId(item, fallbackKey) });
+        } else if (item.children?.length) {
+          walk(item.children, fallbackKey);
+        }
+      });
+    };
+    walk(instructions.items, "root");
+    return result;
+  }, [instructions.items]);
+
+  useEffect(() => {
+    if (!open) return;
+    if (sectionList.length > 0) {
+      setActiveSection(sectionList[0].domId);
+    } else {
+      setActiveSection("");
+    }
+  }, [open, sectionList]);
+
+  const handleTabChange = (_: any, value: string) => {
+    setActiveSection(value);
+    const container = scrollContainerRef.current;
+    const target = document.getElementById(value);
+    if (container && target) {
+      const offset = target.offsetTop - 8;
+      container.scrollTo({ top: offset, behavior: "smooth" });
+    }
+  };
+
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container || sectionList.length === 0) return;
+    const scrollPos = container.scrollTop + 24;
+    let current = sectionList[0].domId;
+    for (const { domId } of sectionList) {
+      const el = document.getElementById(domId);
+      if (!el) continue;
+      if (el.offsetTop <= scrollPos) current = domId;
+      else break;
+    }
+    if (current !== activeSection) setActiveSection(current);
+  };
 
   const openMedia = (item: InstructionItem) => {
     const { url, mediaType } = findDownloadable(item);
@@ -225,54 +288,26 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName }
     );
   };
 
-  const renderSectionCard = (item: InstructionItem, key: string) => {
-    const sectionDuration = item.children?.reduce((acc, c) => acc + (c.seconds || 0), 0) || 0;
-    return (
-      <Card key={key} sx={{ mb: 2.5, border: "1px solid #e0e0e0", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-        <CardHeader
-          sx={{
-            backgroundColor: "#eff8fd",
-            py: 1,
-            "& .MuiCardHeader-title": {
-              fontWeight: 700,
-              fontSize: 20,
-              color: "#1d6fb8"
-            },
-            "& .MuiCardHeader-action": { alignSelf: "center", mt: 0, mr: 0 }
-          }}
-          title={item.label}
-          action={
-            sectionDuration > 0 ? (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "#1d6fb8", fontSize: 13 }}>
-                <Icon sx={{ fontSize: 16 }}>schedule</Icon>
-                <span>{PlanHelper.formatTime(sectionDuration)}</span>
-              </Box>
-            ) : undefined
-          }
-        />
-        <CardContent>
-          {item.children?.map((child, idx) => renderAction(child, `${key}-${child.id || idx}`))}
-        </CardContent>
-      </Card>
-    );
-  };
+  const renderSection = (item: InstructionItem, key: string, domId: string) => (
+    <Box key={key} id={domId} sx={{ scrollMarginTop: 8, mb: 3 }}>
+      {item.children?.map((child, idx) => renderAction(child, `${key}-${child.id || idx}`))}
+    </Box>
+  );
 
-  const renderTopLevel = (item: InstructionItem, key: string): React.ReactNode => {
+  const renderTopLevel = (item: InstructionItem, key: string, sectionMap: Map<InstructionItem, string>): React.ReactNode => {
     const itemType = item.itemType || "";
+
+    if (SECTION_TYPES.has(itemType)) {
+      const domId = sectionMap.get(item) || sectionDomId(item, key);
+      return renderSection(item, key, domId);
+    }
 
     if (itemType === "header") {
       return (
-        <Box key={key} sx={{ mb: 3 }}>
-          <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#28235d", mb: 1.5, mt: 2 }}>
-            {item.label}
-          </Typography>
-          {item.children?.map((child, idx) => renderTopLevel(child, `${key}-${child.id || idx}`))}
+        <Box key={key}>
+          {item.children?.map((child, idx) => renderTopLevel(child, `${key}-${child.id || idx}`, sectionMap))}
         </Box>
       );
-    }
-
-    if (SECTION_TYPES.has(itemType)) {
-      return renderSectionCard(item, key);
     }
 
     if (ACTION_TYPES.has(itemType) || FILE_TYPES.has(itemType)) {
@@ -282,7 +317,7 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName }
     if (item.children?.length) {
       return (
         <Box key={key}>
-          {item.children.map((child, idx) => renderTopLevel(child, `${key}-${child.id || idx}`))}
+          {item.children.map((child, idx) => renderTopLevel(child, `${key}-${child.id || idx}`, sectionMap))}
         </Box>
       );
     }
@@ -290,26 +325,90 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName }
     return renderAction(item, key);
   };
 
+  const sectionDomMap = useMemo(() => {
+    const map = new Map<InstructionItem, string>();
+    sectionList.forEach(({ item, domId }) => map.set(item, domId));
+    return map;
+  }, [sectionList]);
+
   return (
-    <Box
+    <Dialog
+      fullScreen
+      open={open}
+      onClose={onClose}
       sx={{
-        backgroundColor: "#ffffff",
-        color: "#212121",
-        borderRadius: "12px",
-        p: { xs: 1.5, sm: 2.5 },
-        colorScheme: "light",
-        "& .MuiTypography-root": { color: "inherit" },
-        "& .MuiCard-root": { backgroundColor: "#ffffff", color: "#212121" },
-        "& .MuiCardContent-root": { color: "#212121" },
-        "& a": { color: "#1d6fb8" }
+        "& .MuiDialog-paper": {
+          backgroundColor: "#ffffff",
+          color: "#212121",
+          margin: 0,
+          maxWidth: "100vw",
+          width: "100vw",
+          colorScheme: "light"
+        }
       }}
     >
-      {lessonName && (
-        <Typography sx={{ fontSize: 14, color: "#5f6368", mb: 2 }}>
-          Lesson: {lessonName}
-        </Typography>
-      )}
-      {instructions.items.map((item, idx) => renderTopLevel(item, `top-${item.id || idx}`))}
+      <AppBar
+        position="sticky"
+        elevation={0}
+        sx={{
+          backgroundColor: "#28235d",
+          zIndex: (t) => t.zIndex.drawer + 1
+        }}
+      >
+        <Toolbar variant="dense" sx={{ minHeight: isMobile ? 48 : 56, px: { xs: 1, sm: 2 } }}>
+          <Typography sx={{ flex: 1, color: "#fff", fontWeight: 600, fontSize: isMobile ? 14 : 16 }} noWrap>
+            {lessonName || ""}
+          </Typography>
+          <IconButton edge="end" onClick={onClose} aria-label={Locale.label("mobile.plans.close")} sx={{ color: "#fff" }}>
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+        {sectionList.length > 0 && (
+          <Tabs
+            value={activeSection || sectionList[0].domId}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            sx={{
+              minHeight: isMobile ? 36 : 42,
+              backgroundColor: "#28235d",
+              "& .MuiTab-root": {
+                minHeight: isMobile ? 36 : 42,
+                textTransform: "none",
+                fontSize: isMobile ? "0.8125rem" : "0.875rem",
+                color: "#fff",
+                opacity: 0.85,
+                px: isMobile ? 1.5 : 2,
+                "&.Mui-selected": { backgroundColor: "#fff", color: "#1c75bc", opacity: 1, fontWeight: 700 }
+              },
+              "& .MuiTabs-indicator": { display: "none" },
+              "& .MuiTabs-scrollButtons": { color: "#fff", "&.Mui-disabled": { opacity: 0.3 } }
+            }}
+          >
+            {sectionList.map(({ item, domId }, idx) => (
+              <Tab key={domId} value={domId} label={item.label || `Section ${idx + 1}`} />
+            ))}
+          </Tabs>
+        )}
+      </AppBar>
+
+      <Box
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        sx={{
+          flex: 1,
+          overflowY: "auto",
+          backgroundColor: "#ffffff",
+          color: "#212121",
+          px: { xs: 1, sm: 2 },
+          py: { xs: 1.5, sm: 2 },
+          "& .MuiTypography-root": { color: "inherit" },
+          "& a": { color: "#1d6fb8" }
+        }}
+      >
+        {instructions.items.map((item, idx) => renderTopLevel(item, `top-${item.id || idx}`, sectionDomMap))}
+      </Box>
 
       {media && (
         <Dialog open onClose={() => setMedia(null)} fullWidth maxWidth="lg">
@@ -329,6 +428,6 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName }
           </DialogActions>
         </Dialog>
       )}
-    </Box>
+    </Dialog>
   );
 };

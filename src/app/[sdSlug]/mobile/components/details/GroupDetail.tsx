@@ -60,6 +60,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   const queryClient = useQueryClient();
   const [joining, setJoining] = React.useState(false);
   const [tab, setTab] = React.useState<TabKey>("about");
+  const [tabUserSet, setTabUserSet] = React.useState(false);
   const [chatOpen, setChatOpen] = React.useState(false);
   const [chatInitialTab, setChatInitialTab] = React.useState<ChatSubTab>("discussions");
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
@@ -75,6 +76,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           setChatOpen(true);
         } else {
           setTab(activeTabParam as TabKey);
+          setTabUserSet(true);
         }
       }
     }
@@ -115,6 +117,12 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     placeholderData: []
   });
   const hasPlans = (groupPlans?.length || 0) > 0;
+
+  React.useEffect(() => {
+    if (!tabUserSet && hasPlans && tab === "about") {
+      setTab("plans");
+    }
+  }, [hasPlans, tabUserSet, tab]);
 
   const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
   const members = membersData;
@@ -528,13 +536,14 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
     </Box>
   );
 
-  const availableTabs: { key: TabKey; label: string; icon: string }[] = [{ key: "about", label: Locale.label("mobile.details.tabAbout"), icon: "info" }];
+  const availableTabs: { key: TabKey; label: string; icon: string }[] = [];
+  if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
+  availableTabs.push({ key: "about", label: Locale.label("mobile.details.tabAbout"), icon: "info" });
   if (isMember) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
   availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
   if (isLeader) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
   availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
-  if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -561,6 +570,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                   setChatOpen(true);
                   return;
                 }
+                setTabUserSet(true);
                 setTab(v);
               }}
               variant="scrollable"
