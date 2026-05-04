@@ -14,7 +14,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 
@@ -138,6 +138,27 @@ export const GroupChatModal = ({
   React.useEffect(() => {
     if (open) loadAnnouncementsPreflight();
   }, [open, loadAnnouncementsPreflight]);
+
+  // Real-time: join the conversation room (after first load) and refresh on inbound events.
+  React.useEffect(() => {
+    if (!open) return;
+    const churchId = UserHelper.currentUserChurch?.church?.id;
+    const personId = UserHelper.person?.id;
+    const conversationId = conversations[0]?.id;
+    if (!conversationId || !churchId) return;
+
+    SubscriptionManager.joinRoom(conversationId, churchId, personId).catch(() => { /* ignore */ });
+
+    const handlerId = `GroupChatModal-${conversationId}`;
+    SocketHelper.addHandler("message", handlerId + "-msg", () => { loadConversations(); });
+    SocketHelper.addHandler("deleteMessage", handlerId + "-del", () => { loadConversations(); });
+
+    return () => {
+      SocketHelper.removeHandler(handlerId + "-msg");
+      SocketHelper.removeHandler(handlerId + "-del");
+      SubscriptionManager.leaveRoom(conversationId, churchId).catch(() => { /* ignore */ });
+    };
+  }, [open, conversations[0]?.id, loadConversations]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const messages = React.useMemo(() => {
     const flat: Message[] = [];

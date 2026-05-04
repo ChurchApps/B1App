@@ -3,8 +3,8 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
-import { useQuery } from "@tanstack/react-query";
+import { ApiHelper, Locale, PersonHelper, SocketHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
@@ -29,6 +29,20 @@ export const MessagesPage = ({ config }: Props) => {
   const userContext = React.useContext(UserContext);
   const loggedIn = !!userContext?.user?.firstName;
   const myPersonId = userContext?.person?.id;
+  const queryClient = useQueryClient();
+
+  // Real-time: when a privateMessage / privateRoomAdded socket event arrives, invalidate the list.
+  React.useEffect(() => {
+    if (!loggedIn) return;
+    const id = "MessagesPage-list";
+    const onEvent = () => queryClient.invalidateQueries({ queryKey: ["conversations", myPersonId] });
+    SocketHelper.addHandler("privateMessage", id + "-pm", onEvent);
+    SocketHelper.addHandler("privateRoomAdded", id + "-room", onEvent);
+    return () => {
+      SocketHelper.removeHandler(id + "-pm");
+      SocketHelper.removeHandler(id + "-room");
+    };
+  }, [loggedIn, myPersonId, queryClient]);
 
   const { data: conversations = null } = useQuery<Conversation[]>({
     queryKey: ["conversations", myPersonId],
