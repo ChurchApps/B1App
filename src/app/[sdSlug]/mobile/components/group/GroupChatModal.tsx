@@ -15,6 +15,7 @@ import {
   Typography
 } from "@mui/material";
 import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
+import { SubscriptionToggle, SUBSCRIPTION_MESSAGE_TYPE } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 
@@ -26,6 +27,7 @@ interface Message {
   id?: string;
   personId?: string;
   content?: string;
+  messageType?: string;
   timeSent?: string | Date;
   timeUpdated?: string | Date;
 }
@@ -160,7 +162,7 @@ export const GroupChatModal = ({
     };
   }, [open, conversations[0]?.id, loadConversations]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const messages = React.useMemo(() => {
+  const allMessages = React.useMemo(() => {
     const flat: Message[] = [];
     conversations.forEach((c) =>
       (c.messages || []).forEach((m) => flat.push(m)));
@@ -171,6 +173,15 @@ export const GroupChatModal = ({
     });
     return flat;
   }, [conversations]);
+
+  // Hide subscription marker rows from the rendered thread — they're an internal
+  // signal for NotificationHelper, not user-facing chat.
+  const messages = React.useMemo(
+    () => allMessages.filter((m) => m.messageType !== SUBSCRIPTION_MESSAGE_TYPE),
+    [allMessages]
+  );
+
+  const conversationId = conversations[0]?.id;
 
   React.useEffect(() => {
     if (!scrollRef.current) return;
@@ -449,9 +460,16 @@ export const GroupChatModal = ({
         <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
           {groupName || Locale.label("mobile.group.groupChat")}
         </Typography>
-        <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label={Locale.label("mobile.components.close")}>
-          <Icon>close</Icon>
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+          <SubscriptionToggle
+            conversationId={conversationId}
+            messages={allMessages as any}
+            personId={myPersonId}
+          />
+          <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label={Locale.label("mobile.components.close")}>
+            <Icon>close</Icon>
+          </IconButton>
+        </Box>
       </Box>
       {showAnnouncementsTab && (
         <Box sx={{ borderBottom: `1px solid ${tc.border}` }}>
