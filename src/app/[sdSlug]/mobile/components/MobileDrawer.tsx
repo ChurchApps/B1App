@@ -11,6 +11,9 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { type LinkInterface } from "@churchapps/helpers";
 import { Locale } from "@churchapps/apphelper";
+import { UserHelper } from "@churchapps/apphelper";
+import { Permissions } from "@churchapps/helpers";
+import { EnvironmentHelper } from "@/helpers";
 import UserContext from "@/context/UserContext";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
 import { getInitials } from "./util";
@@ -34,6 +37,16 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const firstName = context?.person?.name?.first || context?.user?.firstName || "";
   const lastName = context?.person?.name?.last || context?.user?.lastName || "";
   const initials = getInitials({ name: { first: firstName, last: lastName } });
+  const canAccessAdmin = UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit);
+
+  const adminUrl = React.useMemo(() => {
+    if (!canAccessAdmin || !context?.userChurch?.jwt || !context?.userChurch?.church?.id) return "";
+    const url = new URL("/login", EnvironmentHelper.Common.B1AdminRoot);
+    url.searchParams.set("jwt", context.userChurch.jwt);
+    url.searchParams.set("churchId", context.userChurch.church.id);
+    url.searchParams.set("returnUrl", "/");
+    return url.toString();
+  }, [canAccessAdmin, context?.userChurch?.jwt, context?.userChurch?.church?.id]);
 
   const isActive = (url: string): boolean => {
     if (!pathname || url.startsWith("http")) return false;
@@ -99,6 +112,40 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
       </Box>
 
       <Box sx={{ flex: 1, overflowY: "auto" }}>
+        {canAccessAdmin && (
+          <Box
+            component="a"
+            href={adminUrl}
+            onClick={onNavigate}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              minHeight: 48,
+              px: `${mobileTheme.spacing.md}px`,
+              py: `${mobileTheme.spacing.sm + 4}px`,
+              borderBottom: `1px solid ${tc.border}`,
+              color: "inherit",
+              textDecoration: "none",
+              cursor: "pointer",
+              "&:hover": { bgcolor: tc.iconBackground }
+            }}
+          >
+            <Icon sx={{ fontSize: 24, color: tc.primary }}>settings</Icon>
+            <Typography sx={{
+              fontSize: 16,
+              fontWeight: 500,
+              color: tc.text,
+              flex: 1,
+              minWidth: 0,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis"
+            }}>
+              {Locale.label("header.adminPortal")}
+            </Typography>
+          </Box>
+        )}
         {links.map((link, idx) => {
           if (link.linkType === "separator") {
             return <Divider key={`sep-${idx}`} sx={{ my: 1 }} />;
