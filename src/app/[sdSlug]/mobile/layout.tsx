@@ -21,7 +21,7 @@ export async function generateViewport({ params }: { params: LayoutParams }): Pr
 export default function MobileLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <link rel="manifest" href="/mobile/manifest.webmanifest" />
+      <link rel="manifest" href="/manifest.webmanifest" />
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
       <MobileClientLayout>

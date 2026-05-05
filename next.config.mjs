@@ -8,7 +8,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const withSerwist = withSerwistInit({
   swSrc: 'src/app/sw.ts',
   swDest: 'public/sw.js',
-  scope: '/mobile',
+  scope: '/',
   register: false,
   reloadOnOnline: false,
   cacheOnNavigation: true,
@@ -116,7 +116,6 @@ const nextConfig = {
     return config;
   },
 
-  // Headers: allow root-scoped SW to control /mobile.
   async headers() {
     return [
       {

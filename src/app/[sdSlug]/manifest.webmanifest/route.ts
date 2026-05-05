@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { loadChurchAppearance } from "../loadChurchAppearance";
+import { loadChurchAppearance } from "../mobile/loadChurchAppearance";
 
 type Params = Promise<{ sdSlug: string }>;
 
@@ -16,7 +16,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     name: safeName,
     short_name: shortName,
     description: `${safeName} mobile app`,
-    start_url: "dashboard?source=pwa",
+    start_url: "mobile/dashboard?source=pwa",
     scope: "./",
     display: "standalone",
     orientation: "portrait",
@@ -24,21 +24,21 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     theme_color: themeColor,
     categories: ["lifestyle", "social"],
     icons: [
-      { src: "icon/192", sizes: "192x192", type: "image/png", purpose: "any" },
-      { src: "icon/512", sizes: "512x512", type: "image/png", purpose: "any" },
-      { src: "icon/192", sizes: "192x192", type: "image/png", purpose: "maskable" },
-      { src: "icon/512", sizes: "512x512", type: "image/png", purpose: "maskable" }
+      { src: "mobile/icon/192", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "mobile/icon/512", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "mobile/icon/192", sizes: "192x192", type: "image/png", purpose: "maskable" },
+      { src: "mobile/icon/512", sizes: "512x512", type: "image/png", purpose: "maskable" }
     ],
     screenshots: [
       {
-        src: "screenshot/wide",
+        src: "mobile/screenshot/wide",
         sizes: "1280x720",
         type: "image/png",
         form_factor: "wide",
         label: `${safeName} dashboard`
       },
       {
-        src: "screenshot/narrow",
+        src: "mobile/screenshot/narrow",
         sizes: "720x1280",
         type: "image/png",
         form_factor: "narrow",
