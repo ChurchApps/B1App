@@ -212,6 +212,7 @@
 		"comment": "comment",
 		"comments": "comments",
 		"notes": "Notes",
+		"openFile": "Open file",
 		"startConversation": "Start a conversation",
 		"validate": {
 			"content": "Please enter a note."

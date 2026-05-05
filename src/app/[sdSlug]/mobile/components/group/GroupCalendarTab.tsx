@@ -154,8 +154,11 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
   };
 
   const handleAddEvent = () => {
-
-    const base = selected ? new Date(selected) : new Date();
+    // `selected` is a "YYYY-MM-DD" string. `new Date("YYYY-MM-DD")` parses as
+    // UTC midnight, which after setHours(14) can land on the previous local
+    // day in negative-offset zones. Append a local-time component so the
+    // string is parsed in the local zone.
+    const base = selected ? new Date(`${selected}T00:00:00`) : new Date();
     if (!selected) base.setDate(base.getDate() + 1);
     base.setHours(14, 0, 0, 0);
     onAddEvent(base.toISOString());
