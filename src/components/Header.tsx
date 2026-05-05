@@ -247,9 +247,12 @@ export function Header(props: Props) {
   let appBarClass = "";
   if (transparent) {
     appBarClass = "transparent " + getLinkClass();
-    //appBarClass = (getFirstSectionTextColor()==="dark")
-    //?  "transparent light"
-    //:  "transparent";
+    const firstSection = ArrayHelper.getAll(props.sections, "zone", "main")[0];
+    if (firstSection) {
+      const textColor = StyleHelper.getTextColor(firstSection.textColor, props.config?.globalStyles, props.config?.appearance);
+      // Mirrors the logo-by-textColor logic: when the section's text is dark, its background is light, so the icon must be dark too.
+      if (AppearanceHelper.getLogoByTextColor("light", "dark", textColor) === "light") appBarClass += " light";
+    }
   }
 
   const logo = getLogo();
