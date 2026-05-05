@@ -65,7 +65,12 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         end: toLocal(eventProp.end || new Date()),
         allDay: eventProp.allDay ?? false,
         visibility: eventProp.visibility || "public",
-        recurrenceRule: eventProp.recurrenceRule || ""
+        recurrenceRule: eventProp.recurrenceRule || "",
+        registrationEnabled: eventProp.registrationEnabled ?? false,
+        capacity: eventProp.capacity != null ? String(eventProp.capacity) : "",
+        registrationOpenDate: eventProp.registrationOpenDate ? toLocal(eventProp.registrationOpenDate) : "",
+        registrationCloseDate: eventProp.registrationCloseDate ? toLocal(eventProp.registrationCloseDate) : "",
+        tags: eventProp.tags || ""
       };
     }
     const base = initialDateIso ? new Date(initialDateIso) : new Date();
@@ -78,7 +83,12 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       end: toLocal(endBase),
       allDay: false,
       visibility: "public",
-      recurrenceRule: ""
+      recurrenceRule: "",
+      registrationEnabled: false,
+      capacity: "",
+      registrationOpenDate: "",
+      registrationCloseDate: "",
+      tags: ""
     };
   }, [eventProp, initialDateIso]);
 
@@ -90,6 +100,11 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   const [visibility, setVisibility] = React.useState("public");
   const [recurring, setRecurring] = React.useState(false);
   const [rRule, setRRule] = React.useState("");
+  const [registrationEnabled, setRegistrationEnabled] = React.useState(false);
+  const [capacity, setCapacity] = React.useState("");
+  const [registrationOpenDate, setRegistrationOpenDate] = React.useState("");
+  const [registrationCloseDate, setRegistrationCloseDate] = React.useState("");
+  const [tags, setTags] = React.useState("");
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [recurrenceModalType, setRecurrenceModalType] = React.useState<"save" | "delete" | "">("");
@@ -108,10 +123,16 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       const hasRule = (d.recurrenceRule?.length ?? 0) > 0;
       setRecurring(hasRule);
       setRRule(d.recurrenceRule || "");
+      setRegistrationEnabled(d.registrationEnabled);
+      setCapacity(d.capacity);
+      setRegistrationOpenDate(d.registrationOpenDate);
+      setRegistrationCloseDate(d.registrationCloseDate);
+      setTags(d.tags);
     }
   }, [open, computeDefaults]);
 
   const buildPayload = (): EventInterface => {
+    const parsedCapacity = capacity.trim() ? parseInt(capacity, 10) : undefined;
     const payload: EventInterface = {
       ...(eventProp || {}),
       groupId: eventProp?.groupId || groupId,
@@ -121,7 +142,12 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       end: localToIsoString(allDay ? `${end.slice(0, 10)}T23:59` : end) as unknown as Date,
       allDay,
       visibility,
-      recurrenceRule: recurring ? rRule : ""
+      recurrenceRule: recurring ? rRule : "",
+      registrationEnabled,
+      capacity: registrationEnabled ? (Number.isNaN(parsedCapacity as number) ? undefined : parsedCapacity) : undefined,
+      registrationOpenDate: registrationEnabled && registrationOpenDate ? (localToIsoString(registrationOpenDate) as unknown as Date) : undefined,
+      registrationCloseDate: registrationEnabled && registrationCloseDate ? (localToIsoString(registrationCloseDate) as unknown as Date) : undefined,
+      tags: registrationEnabled ? (tags.trim() || undefined) : undefined
     };
     return payload;
   };
@@ -383,6 +409,51 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
                 onChange={(next: string) => setRRule(next)}
               />
             </Grid>
+          )}
+          <FormControlLabel
+            control={<Switch checked={registrationEnabled} onChange={(e) => setRegistrationEnabled(e.target.checked)} />}
+            label={Locale.label("mobile.group.registration")}
+          />
+          {registrationEnabled && (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                <TextField
+                  size="small"
+                  type="number"
+                  label={Locale.label("mobile.group.capacity")}
+                  value={capacity}
+                  onChange={(e) => setCapacity(e.target.value)}
+                  sx={{ flex: 1, minWidth: 160 }}
+                />
+                <TextField
+                  size="small"
+                  label={Locale.label("mobile.group.tags")}
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  sx={{ flex: 1, minWidth: 160 }}
+                />
+              </Box>
+              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                <TextField
+                  size="small"
+                  type="datetime-local"
+                  label={Locale.label("mobile.group.registrationOpens")}
+                  InputLabelProps={{ shrink: true }}
+                  value={registrationOpenDate}
+                  onChange={(e) => setRegistrationOpenDate(e.target.value)}
+                  sx={{ flex: 1, minWidth: 160 }}
+                />
+                <TextField
+                  size="small"
+                  type="datetime-local"
+                  label={Locale.label("mobile.group.registrationCloses")}
+                  InputLabelProps={{ shrink: true }}
+                  value={registrationCloseDate}
+                  onChange={(e) => setRegistrationCloseDate(e.target.value)}
+                  sx={{ flex: 1, minWidth: 160 }}
+                />
+              </Box>
+            </Box>
           )}
           {error && <Typography sx={{ color: tc.error, fontSize: 13 }}>{error}</Typography>}
         </DialogContent>

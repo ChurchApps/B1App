@@ -13,7 +13,7 @@ export default function GroupCard(props: Props) {
   const hasDescription = !!(group.about && group.about !== "");
 
   return (
-    <Link href={"/groups/details/" + group.slug} data-testid={`group-card-${group.slug}-link`}>
+    <Link href={"/mobile/groups/" + group.slug} data-testid={`group-card-${group.slug}-link`}>
       <Box
         sx={{
           borderRadius: "var(--app-radius-xl, 16px)",

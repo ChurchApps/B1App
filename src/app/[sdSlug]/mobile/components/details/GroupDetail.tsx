@@ -25,6 +25,9 @@ import { GroupResourcesTab } from "../group/GroupResourcesTab";
 import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
+import { AnonymousGroupView } from "../group/AnonymousGroupView";
+import { GroupContact } from "@/components/groups/GroupContact";
+import type { GroupMemberInterface } from "@churchapps/helpers";
 
 interface Props {
   id: string;
@@ -53,11 +56,28 @@ interface GroupWithExtras extends GroupInterface {
 
 type TabKey = "about" | "messages" | "members" | "attendance" | "events" | "resources" | "plans";
 
-export const GroupDetail = ({ id, config: _config }: Props) => {
+const looksLikeId = (value: string) => /^[A-Za-z0-9_]+$/.test(value) && !value.includes("-");
+
+export const GroupDetail = ({ id, config }: Props) => {
+  const isAuthenticated = !!UserHelper.user?.id;
+
+  if (!isAuthenticated) {
+    return <AnonymousGroupView idOrSlug={id} config={config} />;
+  }
+
+  return <AuthenticatedGroupDetail idOrSlug={id} config={config} />;
+};
+
+const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; config: ConfigurationInterface }) => {
+  // `id` here is the URL param — could be a real group id or a slug. We use it
+  // for cache keys and the initial fetch, then derive the resolved `groupId`
+  // from the loaded group for all downstream API calls and child components.
+  const id = idOrSlug;
   const tc = mobileTheme.colors;
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const churchId = config.church.id;
   const [joining, setJoining] = React.useState(false);
   const [tab, setTab] = React.useState<TabKey>("about");
   const [tabUserSet, setTabUserSet] = React.useState(false);
@@ -92,29 +112,51 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   const { data: groupData, isLoading: groupLoading } = useQuery<GroupWithExtras | null>({
     queryKey: ["group-detail", id],
     queryFn: async () => {
-      const data = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
-      return data || null;
+      if (looksLikeId(id)) {
+        const data = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
+        if (data) return data;
+      }
+      // Slug, or id-shaped value that didn't resolve — fall back to public lookup
+      const url = looksLikeId(id)
+        ? `/groups/public/${churchId}/${id}`
+        : `/groups/public/${churchId}/slug/${id}`;
+      const publicData = await ApiHelper.get(url, "MembershipApi");
+      return publicData || null;
     },
-    enabled: !!id
+    enabled: !!id && !!churchId
   });
 
+  const groupId = groupData?.id;
+
   const { data: membersData = null } = useQuery<GroupMember[]>({
-    queryKey: ["group-members", id],
+    queryKey: ["group-members", groupId],
     queryFn: async () => {
-      const data = await ApiHelper.get(`/groupmembers?groupId=${id}`, "MembershipApi");
+      const data = await ApiHelper.get(`/groupmembers?groupId=${groupId}`, "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: !!id
+    enabled: !!groupId
   });
 
   const { data: groupPlans = [] } = useQuery<PlanInterface[]>({
-    queryKey: ["group-plans", id],
+    queryKey: ["group-plans", groupId],
     queryFn: async () => {
-      const data = await ApiHelper.get(`/groups/${id}/plans`, "MembershipApi");
+      const data = await ApiHelper.get(`/groups/${groupId}/plans`, "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: !!id,
+    enabled: !!groupId,
     placeholderData: []
+  });
+
+  const { data: publicLeaders = [] } = useQuery<GroupMemberInterface[]>({
+    queryKey: ["group-leaders-public", churchId, groupId],
+    queryFn: async () => {
+      const data = await ApiHelper.getAnonymous(
+        `/groupMembers/public/leaders/${churchId}/${groupId}`,
+        "MembershipApi"
+      );
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!groupId && !!churchId
   });
   const hasPlans = (groupPlans?.length || 0) > 0;
 
@@ -127,7 +169,7 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
   const members = membersData;
 
-  const refreshMembers = () => queryClient.invalidateQueries({ queryKey: ["group-members", id] });
+  const refreshMembers = () => queryClient.invalidateQueries({ queryKey: ["group-members", groupId] });
 
   const currentPersonId = UserHelper.person?.id;
   const myMembership = members?.find((m) => (m.personId || m.person?.id) === currentPersonId);
@@ -156,12 +198,12 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
   };
 
   const handleJoin = async () => {
-    if (!currentPersonId) return;
+    if (!currentPersonId || !groupId) return;
     setJoining(true);
     try {
       await ApiHelper.post(
         "/groupmembers",
-        [{ groupId: id, personId: currentPersonId }],
+        [{ groupId, personId: currentPersonId }],
         "MembershipApi"
       );
       refreshMembers();
@@ -355,6 +397,18 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
           </Typography>
         )}
         {renderActions()}
+        {!isMember && !isLeader && publicLeaders.length > 0 && group && (
+          <Box
+            sx={{
+              bgcolor: tc.surface,
+              borderRadius: `${mobileTheme.radius.lg}px`,
+              boxShadow: mobileTheme.shadows.sm,
+              p: `${mobileTheme.spacing.md}px`
+            }}
+          >
+            <GroupContact group={group} leaders={publicLeaders} config={config} />
+          </Box>
+        )}
       </Box>
     );
   };
@@ -611,17 +665,17 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
 
           {tab === "about" && renderAbout()}
           {tab === "members" && renderMembersTab()}
-          {tab === "events" && (
+          {tab === "events" && groupId && (
             <GroupCalendarTab
-              groupId={id}
+              groupId={groupId}
               isLeader={isLeader}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
               onEditEvent={(ev) => setEditEvent(ev)}
             />
           )}
-          {tab === "attendance" && members !== null && (
+          {tab === "attendance" && groupId && members !== null && (
             <GroupAttendanceTab
-              groupId={id}
+              groupId={groupId}
               members={(members || [])
                 .filter((m) => m.person?.id)
                 .map((m) => ({
@@ -634,39 +688,45 @@ export const GroupDetail = ({ id, config: _config }: Props) => {
                 }))}
             />
           )}
-          {tab === "resources" && <GroupResourcesTab groupId={id} canEdit={canEditResources} />}
-          {tab === "plans" && <GroupPlansTab groupId={id} />}
+          {tab === "resources" && groupId && <GroupResourcesTab groupId={groupId} canEdit={canEditResources} />}
+          {tab === "plans" && groupId && <GroupPlansTab groupId={groupId} />}
         </Box>
       )}
 
-      <GroupChatModal
-        open={chatOpen}
-        groupId={id}
-        groupName={group?.name}
-        isLeader={isLeader}
-        initialSubTab={chatInitialTab}
-        onClose={() => setChatOpen(false)}
-      />
-      <CreateEventModal
-        open={!!createEvent}
-        groupId={id}
-        initialDateIso={createEvent || undefined}
-        onClose={() => setCreateEvent(null)}
-        onSaved={() => {
-          setCreateEvent(null);
-          queryClient.invalidateQueries({ queryKey: ["group-events", id] });
-        }}
-      />
-      <CreateEventModal
-        open={!!editEvent}
-        groupId={id}
-        event={editEvent as any}
-        onClose={() => setEditEvent(null)}
-        onSaved={() => {
-          setEditEvent(null);
-          queryClient.invalidateQueries({ queryKey: ["group-events", id] });
-        }}
-      />
+      {groupId && (
+        <GroupChatModal
+          open={chatOpen}
+          groupId={groupId}
+          groupName={group?.name}
+          isLeader={isLeader}
+          initialSubTab={chatInitialTab}
+          onClose={() => setChatOpen(false)}
+        />
+      )}
+      {groupId && (
+        <CreateEventModal
+          open={!!createEvent}
+          groupId={groupId}
+          initialDateIso={createEvent || undefined}
+          onClose={() => setCreateEvent(null)}
+          onSaved={() => {
+            setCreateEvent(null);
+            queryClient.invalidateQueries({ queryKey: ["group-events", groupId] });
+          }}
+        />
+      )}
+      {groupId && (
+        <CreateEventModal
+          open={!!editEvent}
+          groupId={groupId}
+          event={editEvent as any}
+          onClose={() => setEditEvent(null)}
+          onSaved={() => {
+            setEditEvent(null);
+            queryClient.invalidateQueries({ queryKey: ["group-events", groupId] });
+          }}
+        />
+      )}
     </Box>
   );
 };

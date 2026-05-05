@@ -74,7 +74,7 @@ export class PageHelper {
 
 
     groups.forEach((g: GroupInterface) => {
-      groupPage.children.push({ title: g.name, url: `/groups/details/${g.slug}`, custom: false });
+      groupPage.children.push({ title: g.name, url: `/mobile/groups/${g.slug}`, custom: false });
     });
     templatePages.push(groupPage);
     return templatePages;
