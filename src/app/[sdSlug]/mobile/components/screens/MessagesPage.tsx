@@ -17,6 +17,7 @@ interface Props {
 
 interface Conversation {
   id: string;
+  pmId: string;
   personId: string;
   conversationId?: string;
   personName: string;
@@ -83,6 +84,7 @@ export const MessagesPage = ({ config }: Props) => {
         }
         return {
           id: pm.conversationId || pm.id,
+          pmId: pm.id,
           personId: otherId,
           conversationId: pm.conversationId,
           personName: displayName,
@@ -92,6 +94,19 @@ export const MessagesPage = ({ config }: Props) => {
     },
     enabled: loggedIn
   });
+
+  const handleDelete = async (c: Conversation, e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    if (!c.pmId) return;
+    if (typeof window !== "undefined" && !window.confirm("Delete this conversation?")) return;
+    queryClient.setQueryData<Conversation[]>(["conversations", myPersonId], (prev) => (prev || []).filter((x) => x.pmId !== c.pmId));
+    try {
+      await ApiHelper.delete(`/privateMessages/${c.pmId}`, "MessagingApi");
+    } catch (err) {
+      console.error("Failed to delete conversation", err);
+      queryClient.invalidateQueries({ queryKey: ["conversations", myPersonId] });
+    }
+  };
 
   const renderAvatar = (c: Conversation) => {
     const common = {
@@ -177,6 +192,15 @@ export const MessagesPage = ({ config }: Props) => {
           {c.personName}
         </Typography>
       </Box>
+      <IconButton
+        aria-label="Delete conversation"
+        data-testid={`conversation-delete-${c.pmId}`}
+        size="small"
+        onClick={(e) => handleDelete(c, e)}
+        sx={{ color: tc.disabled, flexShrink: 0 }}
+      >
+        <Icon sx={{ fontSize: 20 }}>delete_outline</Icon>
+      </IconButton>
       <Icon sx={{ color: tc.textSecondary, flexShrink: 0 }}>chevron_right</Icon>
     </Box>
   );

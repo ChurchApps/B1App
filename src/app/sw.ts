@@ -114,21 +114,46 @@ interface PushPayload {
   body?: string;
   type?: string;
   contentId?: string;
+  // Optional navigation hints from the API:
+  //  - personId: for privateMessage, the OTHER party in the chat (not the notify recipient).
+  //  - conversationId: lets the chat page skip its own conversation lookup.
+  //  - innerType/innerId: when type === "notification", the wrapped content's real type/id.
+  personId?: string;
+  conversationId?: string;
+  innerType?: string;
+  innerId?: string;
 }
 
-const deriveClickUrl = (payload: PushPayload): string => {
-  const id = payload.contentId;
-  const type = String(payload.type || "").toLowerCase();
-  if (id) {
-    switch (type) {
-      case "plan":
-      case "schedule": return `/mobile/plans/${id}`;
-      case "groupannouncement": return `/mobile/groups/${id}?openChat=1&chatTab=announcements`;
-      case "group": return `/mobile/groups/${id}`;
-      case "assignment": return "/mobile/plans";
-      case "privatemessage": return `/mobile/messages/${id}`;
+const buildUrlForType = (type: string, id: string | undefined, payload: PushPayload): string | null => {
+  switch (type) {
+    case "plan":
+    case "schedule": return id ? `/mobile/plans/${id}` : null;
+    case "groupannouncement": return id ? `/mobile/groups/${id}?openChat=1&chatTab=announcements` : null;
+    case "group": return id ? `/mobile/groups/${id}` : null;
+    case "assignment": return "/mobile/plans";
+    case "privatemessage": {
+      // Route's [id] is the other person's personId; conversationId is honored as a query param.
+      const personId = payload.personId || id;
+      if (!personId) return null;
+      const convId = payload.conversationId || (payload.personId ? id : undefined);
+      return convId ? `/mobile/messages/${personId}?conversationId=${convId}` : `/mobile/messages/${personId}`;
     }
   }
+  return null;
+};
+
+const deriveClickUrl = (payload: PushPayload): string => {
+  const type = String(payload.type || "").toLowerCase();
+
+  // Generic notification wrapper: forward to the real inner content if provided.
+  if (type === "notification" && payload.innerType) {
+    const innerUrl = buildUrlForType(String(payload.innerType).toLowerCase(), payload.innerId, payload);
+    if (innerUrl) return innerUrl;
+  }
+
+  const direct = buildUrlForType(type, payload.contentId, payload);
+  if (direct) return direct;
+
   return "/mobile/notifications";
 };
 

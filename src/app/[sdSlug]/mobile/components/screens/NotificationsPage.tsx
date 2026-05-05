@@ -2,9 +2,9 @@
 
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Chip, Icon, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { WebPushHelper } from "@/helpers";
@@ -13,6 +13,7 @@ import { formatRelative } from "../util";
 
 interface NotificationItem {
   id?: string;
+  churchId?: string;
   title?: string;
   message?: string;
   timeSent?: string | Date;
@@ -59,6 +60,7 @@ export const NotificationsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const context = useContext(UserContext);
+  const queryClient = useQueryClient();
   const loggedIn = !!context?.user?.firstName;
 
   type PushStatus = "unsupported" | "blocked" | "off" | "on";
@@ -111,6 +113,33 @@ export const NotificationsPage = ({ config }: Props) => {
       window.location.href = href;
     } else {
       router.push(href);
+    }
+  };
+
+  const queryKey = React.useMemo(() => ["notifications", context?.user?.id], [context?.user?.id]);
+
+  const handleDelete = async (n: NotificationItem, e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    if (!n.id) return;
+    const churchId = n.churchId || context?.userChurch?.church?.id;
+    queryClient.setQueryData<NotificationItem[]>(queryKey, (prev) => (prev || []).filter((x) => x.id !== n.id));
+    try {
+      await ApiHelper.delete(`/notifications/${churchId}/${n.id}`, "MessagingApi");
+    } catch (err) {
+      console.error("Failed to delete notification", err);
+      queryClient.invalidateQueries({ queryKey });
+    }
+  };
+
+  const handleClearAll = async () => {
+    if (!notifications || notifications.length === 0) return;
+    if (typeof window !== "undefined" && !window.confirm("Clear all notifications?")) return;
+    queryClient.setQueryData<NotificationItem[]>(queryKey, []);
+    try {
+      await ApiHelper.delete("/notifications/my", "MessagingApi");
+    } catch (err) {
+      console.error("Failed to clear notifications", err);
+      queryClient.invalidateQueries({ queryKey });
     }
   };
 
@@ -190,6 +219,15 @@ export const NotificationsPage = ({ config }: Props) => {
             />
           </Box>
         </Box>
+        <IconButton
+          aria-label="Delete notification"
+          data-testid={`notification-delete-${n.id || idx}`}
+          size="small"
+          onClick={(e) => handleDelete(n, e)}
+          sx={{ alignSelf: "flex-start", color: tc.disabled }}
+        >
+          <Icon sx={{ fontSize: 20 }}>delete_outline</Icon>
+        </IconButton>
       </Box>
     );
   };
@@ -297,6 +335,19 @@ export const NotificationsPage = ({ config }: Props) => {
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {renderPushCard()}
+        {notifications && notifications.length > 0 && (
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              data-testid="notifications-clear-all"
+              size="small"
+              startIcon={<Icon>clear_all</Icon>}
+              onClick={handleClearAll}
+              sx={{ color: tc.primary, textTransform: "none" }}
+            >
+              Clear All
+            </Button>
+          </Box>
+        )}
         {notifications === null && [0, 1, 2, 3, 4].map(renderSkeleton)}
         {notifications !== null && notifications.length === 0 && renderEmpty()}
         {notifications !== null && notifications.length > 0 && notifications.map(renderRow)}
