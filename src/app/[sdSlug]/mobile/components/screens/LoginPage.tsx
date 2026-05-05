@@ -57,6 +57,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
   }, [pathname, config?.church?.subDomain]);
 
   const returnUrl = searchParams?.get("returnUrl") || "/mobile/dashboard";
+  const churchId = searchParams?.get("churchId") || undefined;
 
   const initialMode: Mode = (() => {
     const action = searchParams?.get("action");
@@ -118,7 +119,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
   }, [resendCooldown]);
 
   const hydrateFromLoginResponse = (resp: LoginResponseInterface) =>
-    hydrateUserSession(resp, context, { sdSlug, writeCookies: true });
+    hydrateUserSession(resp, context, { sdSlug, churchId, writeCookies: true });
 
   const prefillRegisterFromMatch = async (emailToCheck: string) => {
     if (!emailToCheck || !EMAIL_REGEX.test(emailToCheck)) return;

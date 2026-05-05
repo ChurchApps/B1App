@@ -18,6 +18,37 @@ function readCookie(name: string): string | undefined {
   return match?.[1] ? decodeURIComponent(match[1]) : undefined;
 }
 
+function readQueryParam(name: string): string | undefined {
+  if (typeof window === "undefined") return undefined;
+  return new URLSearchParams(window.location.search).get(name) || undefined;
+}
+
+function clearAuthParamsFromUrl() {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+  const hadJwt = url.searchParams.has("jwt");
+  const hadAuth = url.searchParams.has("auth");
+  if (!hadJwt && !hadAuth) return;
+  url.searchParams.delete("jwt");
+  url.searchParams.delete("auth");
+  const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+  window.history.replaceState(window.history.state, "", nextUrl);
+}
+
+function getLoginPayload(): { jwt: string } | { authGuid: string } | null {
+  const authGuid = readQueryParam("auth");
+  if (authGuid) return { authGuid };
+
+  const jwt = readQueryParam("jwt") || readCookie("jwt");
+  if (jwt) return { jwt };
+
+  return null;
+}
+
+function getChurchId(): string | undefined {
+  return readQueryParam("churchId");
+}
+
 export function useHydrateSession(): HydrationStatus {
   const params = useParams<{ sdSlug?: string }>();
   const sdSlug = params?.sdSlug;
@@ -31,14 +62,17 @@ export function useHydrateSession(): HydrationStatus {
     let cancelled = false;
 
     const hydrate = async () => {
+      const loginPayload = getLoginPayload();
+      const churchId = getChurchId();
 
-      if (UserHelper.user?.id && UserHelper.currentUserChurch) {
+      // An explicit auth handoff in the URL should win over any existing
+      // in-memory session so account switching works reliably.
+      if (!loginPayload && UserHelper.user?.id && UserHelper.currentUserChurch) {
         if (!cancelled) setStatus("ready");
         return;
       }
 
-      const jwt = readCookie("jwt");
-      if (!jwt) {
+      if (!loginPayload) {
         if (!cancelled) setStatus("anonymous");
         return;
       }
@@ -48,7 +82,7 @@ export function useHydrateSession(): HydrationStatus {
       try {
         const resp: LoginResponseInterface = await ApiHelper.postAnonymous(
           "/users/login",
-          { jwt },
+          loginPayload,
           "MembershipApi"
         );
 
@@ -57,12 +91,12 @@ export function useHydrateSession(): HydrationStatus {
           return;
         }
 
-        await hydrateUserSession(resp, contextRef.current, { sdSlug });
+        await hydrateUserSession(resp, contextRef.current, { sdSlug, churchId, writeCookies: true });
 
         if (cancelled) return;
+        clearAuthParamsFromUrl();
         setStatus("ready");
-      } catch (err) {
-        console.warn("Mobile session rehydration failed:", err);
+      } catch {
         if (!cancelled) setStatus("anonymous");
       }
     };

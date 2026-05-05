@@ -12,9 +12,8 @@ export interface SessionContext {
 }
 
 export interface HydrateOptions {
-
   sdSlug?: string;
-
+  churchId?: string;
   writeCookies?: boolean;
 }
 
@@ -23,7 +22,7 @@ export async function hydrateUserSession(
   context: SessionContext,
   options: HydrateOptions = {}
 ): Promise<any | null> {
-  const { sdSlug, writeCookies = false } = options;
+  const { sdSlug, churchId, writeCookies = false } = options;
 
   ApiHelper.setDefaultPermissions(resp.user.jwt);
   (resp.userChurches || []).forEach((uc: any) => { if (!uc.apis) uc.apis = []; });
@@ -31,11 +30,33 @@ export async function hydrateUserSession(
   UserHelper.userChurches = resp.userChurches || [];
 
   let matched: any = null;
-  if (sdSlug) {
+  if (churchId) {
+    matched = UserHelper.userChurches?.find((uc) => uc.church?.id === churchId);
+  }
+  if (!matched && sdSlug) {
     matched = UserHelper.userChurches?.find(
       (uc) => uc.church?.subDomain?.toLowerCase() === sdSlug.toLowerCase()
     );
   }
+
+  if (!matched && (churchId || sdSlug)) {
+    try {
+      const selectedChurch = await ApiHelper.post(
+        "/churches/select",
+        churchId ? { churchId } : { subDomain: sdSlug },
+        "MembershipApi"
+      );
+      if (selectedChurch) {
+        if (!selectedChurch.apis) selectedChurch.apis = [];
+        const existingIndex = UserHelper.userChurches.findIndex((uc: any) => uc.church?.id === selectedChurch.church?.id);
+        if (existingIndex >= 0) UserHelper.userChurches[existingIndex] = selectedChurch;
+        else UserHelper.userChurches.push(selectedChurch);
+        matched = selectedChurch;
+      }
+    } catch {
+    }
+  }
+
   const target = matched || UserHelper.userChurches?.[0];
   if (target) {
     UserHelper.currentUserChurch = target;
@@ -44,17 +65,23 @@ export async function hydrateUserSession(
 
   let person: any = null;
   const personId = UserHelper.currentUserChurch?.person?.id;
-  const churchId = UserHelper.currentUserChurch?.church?.id;
+  const currentChurchId = UserHelper.currentUserChurch?.church?.id;
   if (personId) {
     try {
       person = await ApiHelper.get(`/people/${personId}`, "MembershipApi");
     } catch {
-      if (churchId) {
-        try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { }
+      if (currentChurchId) {
+        try {
+          person = await ApiHelper.get(`/people/claim/${currentChurchId}`, "MembershipApi");
+        } catch {
+        }
       }
     }
-  } else if (churchId) {
-    try { person = await ApiHelper.get(`/people/claim/${churchId}`, "MembershipApi"); } catch { }
+  } else if (currentChurchId) {
+    try {
+      person = await ApiHelper.get(`/people/claim/${currentChurchId}`, "MembershipApi");
+    } catch {
+    }
   }
   if (person) {
     UserHelper.person = person;
