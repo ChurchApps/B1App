@@ -2,11 +2,8 @@
 import React from "react";
 
 import { Icon, Box } from "@mui/material";
-import { useMountedState } from "@churchapps/apphelper";
 import { StreamingTabInterface, EnvironmentHelper, StreamConfigInterface, ChatStateInterface } from "@/helpers";
-import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
-import { HostChat, ReceivePrayer } from "./chat/host";
-import { RequestPrayer } from "./chat/RequestPrayer";
+import { HostChat } from "./chat/host";
 import { Chat } from "./chat/Chat";
 
 interface Props {
@@ -17,7 +14,6 @@ interface Props {
 
 export const InteractionContainer: React.FC<Props> = (props) => {
   const [selectedTab, setSelectedTab] = React.useState(0);
-  const isMounted = useMountedState();
 
   const selectTab = (index: number) => { setSelectedTab(index); };
 
@@ -73,41 +69,27 @@ export const InteractionContainer: React.FC<Props> = (props) => {
         </a>);
 
         switch (t.type) {
-          case "chat": if (props.chatState !== null && props.chatState?.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={true} embedded={props.embedded} />); break;
-          case "hostchat": if (props.chatState !== null && props.chatState?.hostRoom !== null) result.push(<HostChat key={i} chatState={props.chatState} visible={visible} />); break;
-          case "prayer":
-            if (props.chatState !== null) {
-              if (props.chatState?.user.isHost) result.push(<ReceivePrayer key={i} chatState={props.chatState} visible={visible} switchToConversationId={props.config.switchToConversationId} />);
-              else result.push(<RequestPrayer key={i} chatState={props.chatState} visible={visible} />);
+          case "chat":
+            if (props.chatState?.mainConversation) {
+              result.push(<Chat key={i} conversation={props.chatState.mainConversation} user={props.chatState.user} visible={visible} enableAttendance={true} embedded={props.embedded} />);
             }
             break;
-          case "page": result.push(getPage(t, i, visible)); break;
-          default: result.push(getIframe(t, i, visible)); break;
+          case "hostchat":
+            if (props.chatState?.hostConversation) {
+              result.push(<HostChat key={i} conversation={props.chatState.hostConversation} user={props.chatState.user} visible={visible} />);
+            }
+            break;
+          case "page":
+            result.push(getPage(t, i, visible));
+            break;
+          default:
+            result.push(getIframe(t, i, visible));
+            break;
         }
       }
     }
     return result;
   };
-
-  React.useEffect(() => {
-    if (props.config.switchToConversationId !== "" && props.config.switchToConversationId !== undefined) {
-      if (props.config.tabs != null) {
-        ChatConfigHelper.addMissingPrivateTab();
-        let prayerTabIndex = -1;
-        for (let i = 0; i < props.config.tabs.length; i++) {
-          const t = props.config.tabs[i];
-          if (t.type === "prayer" && selectedTab !== i) prayerTabIndex = i;
-        }
-
-        if (isMounted()) {
-          setSelectedTab(prayerTabIndex);
-        }
-        props.config.switchToConversationId = "";
-
-      }
-
-    }
-  }, [props.config.switchToConversationId, props.config.tabs, selectedTab, isMounted]);
 
   return (
     <div id="interactionContainer">

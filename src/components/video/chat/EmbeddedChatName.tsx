@@ -11,7 +11,8 @@ interface Props { user: ChatUserInterface }
 export const EmbeddedChatName: React.FC<Props> = (props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState("");
-  const { firstName, lastName } = props.user;
+  const [user, setUser] = useState(props.user);
+  const { firstName, lastName } = user;
   const currentUserName = `${firstName} ${lastName}`;
 
   const handleUpdate = (e: React.MouseEvent) => {
@@ -21,7 +22,7 @@ export const EmbeddedChatName: React.FC<Props> = (props) => {
       alert(Locale.label("video.chat.enterFullName"));
       return;
     }
-    StreamChatManager.handleNameUpdate(trimmedName);
+    setUser(StreamChatManager.updateName(trimmedName));
     setEdit(false);
   };
 

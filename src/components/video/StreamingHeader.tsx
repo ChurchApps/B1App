@@ -23,12 +23,13 @@ interface Props {
 export const StreamingHeader: React.FC<Props> = (props) => {
   const [showUserMenu, setShowUserMenu] = React.useState(false);
   const [promptName, setPromptName] = React.useState(false);
+  const [chatUser, setChatUser] = React.useState(() => ChatHelper.current.user);
 
   const toggleUserMenu = (e: React.MouseEvent) => { e.preventDefault(); setShowUserMenu(!showUserMenu); };
 
   const updateName = (displayName: string) => {
     setShowUserMenu(false);
-    StreamChatManager.handleNameUpdate(displayName);
+    setChatUser(StreamChatManager.updateName(displayName));
   };
 
   const getLoginLink = () => {
@@ -82,7 +83,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     if (!props.appearance) {
       const id = setTimeout(() => {
         try {
-          const { firstName, lastName } = ChatHelper.current.user;
+          const { firstName, lastName } = chatUser;
           const displayName = `${firstName} ${lastName}`;
           if (displayName.trim() === "" || displayName === Locale.label("video.anonymous")) {
             if (!promptName) {
@@ -94,9 +95,9 @@ export const StreamingHeader: React.FC<Props> = (props) => {
       }, 30000);
       return () => clearTimeout(id);
     }
-  }, [props.appearance, promptName]);
+  }, [props.appearance, promptName, chatUser]);
 
-  const { firstName, lastName } = ChatHelper.current.user;
+  const { firstName, lastName } = chatUser;
 
   return (
     <>
