@@ -14,7 +14,8 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
+import { SubscriptionToggle, SUBSCRIPTION_MESSAGE_TYPE } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
 
@@ -26,6 +27,7 @@ interface Message {
   id?: string;
   personId?: string;
   content?: string;
+  messageType?: string;
   timeSent?: string | Date;
   timeUpdated?: string | Date;
 }
@@ -139,7 +141,28 @@ export const GroupChatModal = ({
     if (open) loadAnnouncementsPreflight();
   }, [open, loadAnnouncementsPreflight]);
 
-  const messages = React.useMemo(() => {
+  // Real-time: join the conversation room (after first load) and refresh on inbound events.
+  React.useEffect(() => {
+    if (!open) return;
+    const churchId = UserHelper.currentUserChurch?.church?.id;
+    const personId = UserHelper.person?.id;
+    const conversationId = conversations[0]?.id;
+    if (!conversationId || !churchId) return;
+
+    SubscriptionManager.joinRoom(conversationId, churchId, personId).catch(() => { /* ignore */ });
+
+    const handlerId = `GroupChatModal-${conversationId}`;
+    SocketHelper.addHandler("message", handlerId + "-msg", () => { loadConversations(); });
+    SocketHelper.addHandler("deleteMessage", handlerId + "-del", () => { loadConversations(); });
+
+    return () => {
+      SocketHelper.removeHandler(handlerId + "-msg");
+      SocketHelper.removeHandler(handlerId + "-del");
+      SubscriptionManager.leaveRoom(conversationId, churchId).catch(() => { /* ignore */ });
+    };
+  }, [open, conversations[0]?.id, loadConversations]);
+
+  const allMessages = React.useMemo(() => {
     const flat: Message[] = [];
     conversations.forEach((c) =>
       (c.messages || []).forEach((m) => flat.push(m)));
@@ -150,6 +173,15 @@ export const GroupChatModal = ({
     });
     return flat;
   }, [conversations]);
+
+  // Hide subscription marker rows from the rendered thread — they're an internal
+  // signal for NotificationHelper, not user-facing chat.
+  const messages = React.useMemo(
+    () => allMessages.filter((m) => m.messageType !== SUBSCRIPTION_MESSAGE_TYPE),
+    [allMessages]
+  );
+
+  const conversationId = conversations[0]?.id;
 
   React.useEffect(() => {
     if (!scrollRef.current) return;
@@ -428,9 +460,16 @@ export const GroupChatModal = ({
         <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
           {groupName || Locale.label("mobile.group.groupChat")}
         </Typography>
-        <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label={Locale.label("mobile.components.close")}>
-          <Icon>close</Icon>
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+          <SubscriptionToggle
+            conversationId={conversationId}
+            messages={allMessages as any}
+            personId={myPersonId}
+          />
+          <IconButton onClick={onClose} sx={{ color: tc.text }} aria-label={Locale.label("mobile.components.close")}>
+            <Icon>close</Icon>
+          </IconButton>
+        </Box>
       </Box>
       {showAnnouncementsTab && (
         <Box sx={{ borderBottom: `1px solid ${tc.border}` }}>

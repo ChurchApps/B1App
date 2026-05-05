@@ -34,7 +34,6 @@ test.describe("Mobile profile edit", () => {
     await privacyTab.waitFor({ state: "visible", timeout: 15000 });
     await privacyTab.click();
     await expect(privacyTab).toHaveAttribute("aria-selected", "true");
-    // VisibilityPreferences renders Address / Phone / Email visibility selects.
     const main = page.locator("main");
     await expect(main).toContainText(/Visibility Preferences/i, { timeout: 15000 });
     await expect(main).toContainText(/Address Visibility/i);

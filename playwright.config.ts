@@ -52,7 +52,13 @@ export default defineConfig({
       // Force NEXT_PUBLIC_STAGE=dev so EnvironmentHelper reads the
       // localhost API URLs from .env instead of pinning to prod URLs.
       command: 'npm run dev',
-      env: { NEXT_PUBLIC_STAGE: 'dev' },
+      env: {
+        NEXT_PUBLIC_STAGE: 'dev',
+        // Localhost WebSocket for the consolidated subscription stack. Without this,
+        // CommonEnvironmentHelper.initDev falls back to wss://socket.staging.churchapps.org
+        // and every NotificationService.initialize fails repeatedly.
+        NEXT_PUBLIC_MESSAGING_API_SOCKET: 'ws://localhost:8087',
+      },
       url: 'http://localhost:3301',
       reuseExistingServer: true,
       timeout: 120 * 1000,

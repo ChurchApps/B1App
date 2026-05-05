@@ -29,8 +29,7 @@ export const PushPermissionPrompt = () => {
 
   const handleEnable = async () => {
     setBusy(true);
-    try { await WebPushHelper.subscribe(); }
-    finally {
+    try { await WebPushHelper.subscribe(); } finally {
       setBusy(false);
       setVisible(false);
     }

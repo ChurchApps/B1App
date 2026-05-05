@@ -2,7 +2,6 @@
 import type { AppearanceInterface } from "@churchapps/apphelper";
 import type { SermonInterface } from "@churchapps/helpers";
 import { EnvironmentHelper, StreamConfigInterface } from ".";
-import { ChatHelper } from "./ChatHelper";
 import { StreamingServiceHelper } from "./StreamingServiceHelper";
 
 export interface ColorsInterface { primary: string, contrast: string, header: string }
@@ -10,7 +9,7 @@ export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
 export interface TabInterface { text: string, url: string, icon: string, type: string, data: string, updated?: boolean }
 export interface ServiceInterface { videoUrl: string, serviceTime: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string, id?: string, sermon?: SermonInterface }
-export interface ConfigurationInterface { keyName?: string, churchId?: string, appearance: AppearanceInterface, buttons?: ButtonInterface[], tabs?: TabInterface[], services?: ServiceInterface[], switchToConversationId: string, jitsiRoom: string }
+export interface ConfigurationInterface { keyName?: string, churchId?: string, appearance: AppearanceInterface, buttons?: ButtonInterface[], tabs?: TabInterface[], services?: ServiceInterface[] }
 
 export class ChatConfigHelper {
   static current: StreamConfigInterface;
@@ -31,23 +30,9 @@ export class ChatConfigHelper {
   }
 
   static setTabUpdated(tabType: string) {
-    for (let i = 0; i < ChatConfigHelper.current.tabs.length; i++) {
-      const t = ChatConfigHelper.current.tabs[i];
+    if (!ChatConfigHelper.current?.tabs) return;
+    for (const t of ChatConfigHelper.current.tabs) {
       if (t.type === tabType) t.updated = true;
     }
   }
-
-  static addMissingPrivateTab() {
-    let prayerTabIndex = -1;
-    for (let i = 0; i < ChatConfigHelper.current.tabs.length; i++) {
-      const t = ChatConfigHelper.current.tabs[i];
-      if (t.type === "prayer") prayerTabIndex = i;
-    }
-    if (prayerTabIndex === -1) {
-      ChatConfigHelper.current.tabs.push({ type: "prayer", icon: "mail_outline", text: "Private Messages", url: "", data: "" });
-      ChatHelper.onChange();
-    }
-  }
-
 }
-

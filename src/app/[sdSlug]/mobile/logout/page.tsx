@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { ApiHelper } from "@churchapps/apphelper";

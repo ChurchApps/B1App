@@ -6,8 +6,8 @@ import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } fr
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
-import { useQuery } from "@tanstack/react-query";
+import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
@@ -93,6 +93,47 @@ export const MessageConversation = ({ id, config }: Props) => {
   React.useEffect(() => {
     if (existingConvId && !conversationId) setConversationId(existingConvId);
   }, [existingConvId, conversationId]);
+
+  // Realtime — split into two effects:
+  //   1) ALWAYS subscribed to alerts-room events (privateMessage / privateRoomAdded) so a brand
+  //      new conversation is discovered without reload. We re-fetch the existing-conversation
+  //      lookup; once it resolves to an id, the messages query fires.
+  //   2) Conditionally joins the conversation room once we know its id, then invalidates the
+  //      messages query on inbound message/delete events for that room.
+  const queryClient = useQueryClient();
+
+  React.useEffect(() => {
+    const handlerId = "MessageConversation-alerts";
+    const refreshExisting = () => {
+      queryClient.invalidateQueries({ queryKey: ["private-message-conv", myPersonId, id] });
+      if (conversationId) {
+        queryClient.invalidateQueries({ queryKey: ["mobile-message-conversation", conversationId] });
+      }
+    };
+    SocketHelper.addHandler("privateMessage", handlerId + "-pm", refreshExisting);
+    SocketHelper.addHandler("privateRoomAdded", handlerId + "-room", refreshExisting);
+    return () => {
+      SocketHelper.removeHandler(handlerId + "-pm");
+      SocketHelper.removeHandler(handlerId + "-room");
+    };
+  }, [queryClient, myPersonId, id, conversationId]);
+
+  React.useEffect(() => {
+    if (!conversationId) return;
+    const churchId = UserHelper.currentUserChurch?.church?.id;
+    if (churchId) SubscriptionManager.joinRoom(conversationId, churchId, myPersonId).catch(() => { /* ignore */ });
+
+    const handlerId = `MessageConversation-${conversationId}`;
+    const onEvent = () => queryClient.invalidateQueries({ queryKey: ["mobile-message-conversation", conversationId] });
+    SocketHelper.addHandler("message", handlerId + "-msg", onEvent);
+    SocketHelper.addHandler("deleteMessage", handlerId + "-del", onEvent);
+
+    return () => {
+      SocketHelper.removeHandler(handlerId + "-msg");
+      SocketHelper.removeHandler(handlerId + "-del");
+      if (churchId) SubscriptionManager.leaveRoom(conversationId, churchId).catch(() => { /* ignore */ });
+    };
+  }, [conversationId, myPersonId, queryClient]);
 
   const {
     data: serverMessages,

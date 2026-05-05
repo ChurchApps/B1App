@@ -35,41 +35,43 @@ export const LiveStream: React.FC<Props> = (props) => {
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;
+    setConfig(result);
     if (props.includeInteraction) {
-      await ChatHelper.initChat();
+      await StreamChatManager.initStream();
       setChatReady(true);
     }
-    setConfig(result);
   };
 
-  const checkJoinRooms = () => {
-    // Only join rooms after chat is fully initialized
-    if (props.includeInteraction && currentService && config && chatReady) {
-      // Prevent duplicate joins for the same service
-      if (joinedServiceIdRef.current === currentService.id) return;
-      joinedServiceIdRef.current = currentService.id;
+  const checkJoinRooms = async () => {
+    if (!(props.includeInteraction && currentService && config && chatReady)) return;
+    if (joinedServiceIdRef.current === currentService.id) return;
+    joinedServiceIdRef.current = currentService.id;
 
-      StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId, currentService, setChatState);
-      StreamChatManager.checkHost(config, currentService.id, chatState, setChatState);
-    }
+    await StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId, currentService);
+    await StreamChatManager.checkHost(config, currentService.id);
+    setChatState({ ...ChatHelper.current });
   };
 
   useEffect(() => {
     setIsClient(true);
     if (props.includeInteraction) {
-      // Initialize chatState with current value so UI has something to render
-      setChatState({ ...ChatHelper.current });
-      ChatHelper.onChange = () => {
-        setChatState({ ...ChatHelper.current });
-        setConfig({ ...ChatConfigHelper.current });
-      };
       StreamChatManager.initUser();
+      setChatState({ ...ChatHelper.current });
     }
     StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs); });
     loadData(props.keyName);
+    return () => {
+      const main = ChatHelper.current.mainConversation;
+      const host = ChatHelper.current.hostConversation;
+      if (main) StreamChatManager.leaveRoom(main);
+      if (host) StreamChatManager.leaveRoom(host);
+      ChatHelper.current.mainConversation = null;
+      ChatHelper.current.hostConversation = null;
+      joinedServiceIdRef.current = null;
+    };
   }, []);
 
-  React.useEffect(checkJoinRooms, [currentService, chatReady, config]);
+  React.useEffect(() => { checkJoinRooms(); }, [currentService, chatReady, config]);
 
   let result = (<div id="liveContainer">
     {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}

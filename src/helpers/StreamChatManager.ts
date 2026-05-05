@@ -1,84 +1,80 @@
 import Cookies from "js-cookie";
 import { ChatHelper } from "./ChatHelper";
-import { ChatStateInterface, StreamConfigInterface, StreamingServiceExtendedInterface } from "./interfaces";
-import { SocketHelper } from "@churchapps/apphelper";
-import { ApiHelper } from "@churchapps/apphelper";
-import { UserHelper } from "@churchapps/apphelper";
+import { ChatUserInterface, StreamConfigInterface, StreamingServiceExtendedInterface } from "./interfaces";
+import { ApiHelper, ConversationStore, PresenceStore, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { ConversationInterface } from "@churchapps/helpers";
-import type { BlockedIpInterface } from "@churchapps/helpers";
 
 export class StreamChatManager {
 
-  public static async handleBlockAction(ipAddress: string, conversationId: string, serviceId: string) {
-    const data: BlockedIpInterface = { conversationId, ipAddress, serviceId };
-    await ApiHelper.post("/blockedIps", [data], "MessagingApi");
+  // Boot the unified delivery primitives directly. NotificationService.initialize
+  // requires authenticated person/church context, which anonymous viewers lack.
+  static async initStream(): Promise<void> {
+    await SocketHelper.init();
+    ConversationStore.ensureHandlers();
+    PresenceStore.ensureHandlers();
+    SubscriptionManager.setupRejoin();
   }
 
-  public static isIpBlocked(ipAddress: string) {
-    if (ChatHelper.current.mainRoom.blockedIps.indexOf(ipAddress) > -1) return true;
-    else return false;
+  static async joinMainRoom(churchId: string, currentService: StreamingServiceExtendedInterface): Promise<ConversationInterface | null> {
+    if (!currentService) return null;
+    const conversation: ConversationInterface = await ApiHelper.getAnonymous(`/conversations/current/${churchId}/streamingLive/${currentService.id}`, "MessagingApi");
+    conversation.title = "Chat";
+    ChatHelper.current.mainConversation = conversation;
+    await StreamChatManager.joinRoom(conversation);
+    return conversation;
   }
 
-  public static async joinMainRoom(churchId: string, currentService: StreamingServiceExtendedInterface, setChatState:(state:ChatStateInterface) => void) {
-    if (currentService) {
-      const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/current/" + churchId + "/streamingLive/" + currentService.id, "MessagingApi");
-      ChatHelper.current.mainRoom = ChatHelper.createRoom(conversation);
-      ChatHelper.current.mainRoom.conversation.title = "Chat";
-      setChatState(ChatHelper.current);
-      ChatHelper.joinRoom(conversation.id, conversation.churchId);
-      ChatHelper.current.mainRoom.joined = true;
+  static async checkHost(d: StreamConfigInterface, currentServiceId: string): Promise<ConversationInterface | null> {
+    if (!ChatHelper.current.user.isHost) return null;
+    const hostChatDetails = await ApiHelper.get(`/streamingServices/${currentServiceId}/hostChat`, "ContentApi");
+    if (!hostChatDetails?.room) return null;
+    if (!d.tabs?.some(t => t.type === "hostchat")) {
+      d.tabs?.push({ type: "hostchat", text: "Host Chat", icon: "group", data: "", url: "" });
     }
+    const conversation: ConversationInterface = await ApiHelper.get(`/conversations/current/${d.churchId}/streamingLiveHost/${encodeURIComponent(hostChatDetails.room)}`, "MessagingApi");
+    conversation.title = "Host Chat";
+    ChatHelper.current.hostConversation = conversation;
+    await StreamChatManager.joinRoom(conversation);
+    return conversation;
   }
 
-  public static handleNameUpdate(displayName: string) {
-    const data = { socketId: SocketHelper.socketId, name: displayName };
-    ApiHelper.postAnonymous("/connections/setName", data, "MessagingApi");
-    ChatHelper.current.user.firstName = displayName;
-    ChatHelper.current.user.lastName = "";
+  static async joinRoom(conversation: ConversationInterface): Promise<void> {
+    if (!conversation?.id || !conversation.churchId) return;
+    const { firstName, lastName } = ChatHelper.current.user;
+    const displayName = `${firstName}${lastName ? " " + lastName : ""}`;
+    await Promise.all([
+      SubscriptionManager.joinRoom(conversation.id, conversation.churchId, undefined, displayName),
+      ConversationStore.loadByConversationId(conversation.id, conversation.churchId)
+    ]);
+  }
+
+  static async leaveRoom(conversation: ConversationInterface): Promise<void> {
+    if (!conversation?.id || !conversation.churchId) return;
+    await SubscriptionManager.leaveRoom(conversation.id, conversation.churchId);
+    ConversationStore.forget(conversation.id);
+    PresenceStore.forget(conversation.id);
+  }
+
+  static updateName(displayName: string): ChatUserInterface {
+    if (SocketHelper.socketId) {
+      ApiHelper.postAnonymous("/connections/setName", { socketId: SocketHelper.socketId, name: displayName }, "MessagingApi");
+    }
     Cookies.set("displayName", displayName);
-    ChatHelper.onChange();
+    const [firstName, ...rest] = displayName.split(" ");
+    ChatHelper.current.user = { ...ChatHelper.current.user, firstName, lastName: rest.join(" ") };
+    return ChatHelper.current.user;
   }
 
-
-  public static async checkHost(d: StreamConfigInterface, currentServiceId:string, chatState: ChatStateInterface, setChatState:(state: ChatStateInterface) => void) {
-    if (chatState?.user?.isHost) {
-      const hostChatDetails = await ApiHelper.get("/streamingServices/" + currentServiceId + "/hostChat", "ContentApi");
-      if (hostChatDetails.room) {
-        d.tabs.push({ type: "hostchat", text: "Host Chat", icon: "group", data: "", url: "" });
-        const hostConversation: ConversationInterface = await ApiHelper.get("/conversations/current/" + d.churchId + "/streamingLiveHost/" + encodeURIComponent(hostChatDetails.room), "MessagingApi");
-        ChatHelper.current.hostRoom = ChatHelper.createRoom(hostConversation);
-        ChatHelper.current.hostRoom.conversation.title = "Host Chat";
-        setChatState(ChatHelper.current);
-        setTimeout(() => {
-          ChatHelper.joinRoom(hostConversation.id, hostConversation.churchId);
-          ChatHelper.current.hostRoom.joined = true;
-        }, 500);
-      }
-    }
-  }
-
-  public static initUser () {
-    const chatUser = ChatHelper.getUser();
-    if (ApiHelper.isAuthenticated) {
+  static initUser(): ChatUserInterface {
+    const user = ChatHelper.getUser();
+    if (ApiHelper.isAuthenticated && UserHelper.user) {
       const { firstName, lastName } = UserHelper.user;
-      chatUser.firstName = firstName || "Anonymous";
-      chatUser.lastName = lastName || "";
-      chatUser.isHost = UserHelper.checkAccess(Permissions.contentApi.chat.host);
-      ChatHelper.current.user = chatUser;
-      ChatHelper.onChange();
+      user.firstName = firstName || user.firstName;
+      user.lastName = lastName || "";
+      user.isHost = UserHelper.checkAccess(Permissions.contentApi.chat.host);
+      ChatHelper.current.user = user;
     }
+    return user;
   }
-
-  public static async getIpAddress(): Promise<string> {
-    try {
-      const response = await fetch("https://api.ipify.org/?format=json");
-      const data = await response.json();
-      return data.ip;
-    } catch (error) {
-      return "";
-    }
-  }
-
 }
-

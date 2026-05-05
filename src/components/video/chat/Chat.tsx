@@ -1,22 +1,21 @@
-import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
+"use client";
 import React from "react";
-import { ChatSend, Callout, Attendance } from ".";
-import { ChatRoomInterface, ChatUserInterface } from "../../../helpers";
+import { Attendance, ChatSend } from ".";
+import { ChatUserInterface } from "../../../helpers";
 import { ChatReceive } from "./ChatReceive";
 import { EmbeddedChatName } from "./EmbeddedChatName";
-import { Locale } from "@churchapps/apphelper";
+import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
+import type { ConversationInterface } from "@churchapps/helpers";
 
 interface Props {
-    room: ChatRoomInterface,
+    conversation: ConversationInterface,
     user: ChatUserInterface,
     visible: boolean,
-    enableCallout?: boolean,
     enableAttendance?: boolean,
     embedded?: boolean,
 }
 
 export const Chat: React.FC<Props> = (props) => {
-
   const [chatEnabled, setChatEnabled] = React.useState(false);
 
   const updateChatEnabled = React.useCallback(() => {
@@ -26,10 +25,7 @@ export const Chat: React.FC<Props> = (props) => {
       const currentTime = new Date();
       result = currentTime >= (cs.localChatStart || new Date()) && currentTime <= (cs.localChatEnd || new Date());
     }
-    setChatEnabled(prev => {
-      if (result !== prev) return result;
-      return prev;
-    });
+    setChatEnabled(prev => (result !== prev ? result : prev));
   }, []);
 
   React.useEffect(() => {
@@ -37,16 +33,14 @@ export const Chat: React.FC<Props> = (props) => {
     return () => clearInterval(id);
   }, [updateChatEnabled]);
 
-  const className = (chatEnabled) ? "chatContainer" : "chatContainer chatDisabled";
+  const className = chatEnabled ? "chatContainer" : "chatContainer chatDisabled";
 
   return (
-    <div className={className} style={(props.visible) ? {} : { display: "none" }}>
-      {(props.enableAttendance) ? <Attendance user={props.user} attendance={props.room.attendance} /> : null}
-      {(props.enableCallout) ? <Callout room={props.room} user={props.user} /> : null}
-      <ChatReceive room={props.room} user={props.user} />
+    <div className={className} style={props.visible ? {} : { display: "none" }}>
+      {props.enableAttendance ? <Attendance conversationId={props.conversation.id} /> : null}
+      <ChatReceive conversationId={props.conversation.id} user={props.user} />
       {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
-      {props.user.isBlocked ? Locale.label("video.chat.accessRestricted") : <ChatSend room={props.room} />}
+      <ChatSend conversation={props.conversation} />
     </div>
   );
 };
-
