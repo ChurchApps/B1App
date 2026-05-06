@@ -23,7 +23,7 @@
     "postinstall": "copyfiles -a -f node_modules/@churchapps/apphelper/dist/public/locales/** public/apphelper/locales && copyfiles -a -f node_modules/@churchapps/apphelper/dist/markdown/components/htmlEditor/editor.css public/apphelper/css && copyfiles -a -f node_modules/react-cropper/node_modules/cropperjs/dist/cropper.css public/css && copyfiles -a -f node_modules/@churchapps/apphelper/dist/website/styles/animations.css node_modules/@churchapps/apphelper/dist/website/styles/pages.css src/styles/vendor && copyfiles -a -f node_modules/@churchapps/apphelper/dist/markdown/components/markdownEditor/editor.css public/apphelper/css/markdown && copyfiles -a -u 8 \"node_modules/@churchapps/apphelper/dist/markdown/components/markdownEditor/images/**/*\" public/apphelper/css/markdown/images"
   },
   "dependencies": {
-    "@churchapps/apphelper": "0.7.11",
+    "@churchapps/apphelper": "0.7.12",
     "@churchapps/content-providers": "0.1.13",
     "@churchapps/helpers": "1.3.0",
     "@emotion/react": "^11.14.0",
