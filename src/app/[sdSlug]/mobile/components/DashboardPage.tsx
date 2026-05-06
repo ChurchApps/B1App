@@ -10,6 +10,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute, linkTypeToTagline } from "./mobileTheme";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
+import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 
 interface Props {
   config: ConfigurationInterface;
@@ -86,6 +87,10 @@ export const DashboardPage = ({ config }: Props) => {
         </Box>
       </Box>
     );
+  }
+
+  if (filtered.length === 0) {
+    return <EmptyDashboardPlaceholder config={config} />;
   }
 
   const handleKey = (e: React.KeyboardEvent, link: LinkInterface) => {

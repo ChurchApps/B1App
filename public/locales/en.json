@@ -398,6 +398,12 @@
     "comingSoon": "Coming soon to the mobile PWA.",
     "now": "now",
     "yesterday": "yesterday",
+    "empty": {
+      "dashboardTitleFallback": "Your church",
+      "dashboardMemberBody": "We're just getting set up. Check back soon for sermons, groups, and more.",
+      "dashboardAdminBody": "Looks like there are no tabs configured yet. Open the admin to set up your members' home screen.",
+      "dashboardAdminCta": "Open admin"
+    },
     "screenTitles": {
       "myGroups": "My Groups",
       "groupDetails": "Group",
