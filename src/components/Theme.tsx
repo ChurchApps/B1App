@@ -78,9 +78,34 @@ export const Theme: React.FC<Props> = (props) => {
 
   pushKV(lines, "--app-type-scale", String(paletteExtras.typeScale || 1));
 
+  // Transparent overrides are scoped (not :root) so unset fields don't clobber
+  // the auto-derive linksWhite/linksDark/linksAccent cascade.
+  const navRules: string[] = [];
+  if (props.config.globalStyles?.navStyles) {
+    try {
+      const navStyles = JSON.parse(props.config.globalStyles.navStyles);
+      const solid = navStyles?.solid;
+      if (solid) {
+        pushKV(lines, "--nav-bg-color", solid.backgroundColor);
+        pushKV(lines, "--nav-link-color", solid.linkColor);
+        pushKV(lines, "--nav-link-hover-color", solid.linkHoverColor);
+        pushKV(lines, "--nav-active-color", solid.activeColor);
+        if (solid.linkColor) navRules.push(`#navbar:not(.transparent) a { color: ${solid.linkColor}; }`);
+        if (solid.linkHoverColor) navRules.push(`#navbar:not(.transparent) a:hover { color: ${solid.linkHoverColor}; }`);
+        if (solid.activeColor) navRules.push(`#navbar:not(.transparent) .active { border-bottom-color: ${solid.activeColor}; }`);
+      }
+      const transparent = navStyles?.transparent;
+      if (transparent) {
+        if (transparent.linkColor) navRules.push(`#navbar.transparent a, #navbar.transparent .nav-link { color: ${transparent.linkColor}; }`);
+        if (transparent.linkHoverColor) navRules.push(`#navbar.transparent a:hover, #navbar.transparent .nav-link:hover { color: ${transparent.linkHoverColor}; }`);
+        if (transparent.activeColor) navRules.push(`#navbar.transparent .active { border-bottom-color: ${transparent.activeColor}; }`);
+      }
+    } catch { /* malformed JSON */ }
+  }
+
   if (props.config.globalStyles?.customCss) lines.push(props.config.globalStyles?.customCss);
 
-  const css = ":root { " + lines.join("\n") + " }";
+  const css = ":root { " + lines.join("\n") + " } " + navRules.join("\n");
 
   // Generate Google Fonts URL for dynamic loading
   let googleFontsUrl = "";

@@ -122,6 +122,7 @@ export interface GlobalStyleInterface {
   churchId?: string,
   fonts?: string,
   palette?: string,
+  navStyles?: string,
   customCss?: string,
   customJS?: string
 }

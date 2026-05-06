@@ -45,4 +45,54 @@ test.describe("Public navigation", () => {
       timeout: 15000,
     });
   });
+
+  test("navbar solid-state background falls back to white when navStyles is unset", async ({ page }) => {
+    // /sermons isn't an overlay page, so navbar renders solid immediately.
+    await page.goto("/sermons");
+    const navbar = page.locator("#navbar");
+    await navbar.waitFor({ state: "visible", timeout: 15000 });
+    await expect(navbar).not.toHaveClass(/transparent/);
+    await expect(navbar).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  });
+
+  test("navStyles override applies to live nav rendering", async ({ page, request }) => {
+    const API_BASE = "http://localhost:8084";
+    const loginRes = await request.post(`${API_BASE}/membership/users/login`, {
+      data: { email: "demo@b1.church", password: "password" },
+    });
+    const loginBody = await loginRes.json();
+    const grace = loginBody.userChurches.find((uc: any) => uc.church.id === "CHU00000001");
+    const contentJwt = grace.apis.find((a: any) => a.keyName === "ContentApi").jwt;
+    const authHeaders = { Authorization: `Bearer ${contentJwt}` };
+
+    const existing = await request.get(`${API_BASE}/content/globalStyles`, { headers: authHeaders });
+    const original = (await existing.json()) as any;
+
+    const override = {
+      ...original,
+      navStyles: JSON.stringify({
+        solid: { backgroundColor: "#123456", linkColor: "#abcdef", linkHoverColor: "#abcdef", activeColor: "#abcdef" },
+        transparent: { linkColor: null, linkHoverColor: null, activeColor: null },
+      }),
+    };
+
+    try {
+      const saveRes = await request.post(`${API_BASE}/content/globalStyles`, {
+        data: [override],
+        headers: { ...authHeaders, "Content-Type": "application/json" },
+      });
+      expect(saveRes.ok()).toBeTruthy();
+
+      await page.goto("/sermons");
+      const navbar = page.locator("#navbar");
+      await navbar.waitFor({ state: "visible", timeout: 15000 });
+      await expect(navbar).toHaveCSS("background-color", "rgb(18, 52, 86)");
+    } finally {
+      const restored = { ...original, navStyles: original.navStyles ?? null };
+      await request.post(`${API_BASE}/content/globalStyles`, {
+        data: [restored],
+        headers: { ...authHeaders, "Content-Type": "application/json" },
+      });
+    }
+  });
 });
