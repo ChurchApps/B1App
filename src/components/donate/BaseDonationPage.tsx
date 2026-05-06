@@ -205,7 +205,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
           <TableCell>{DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}</TableCell>
           <TableCell>{d.method} - {d.methodDetails}</TableCell>
           <TableCell>{d.fund.name}{isPending && " (" + Locale.label("donate.pending") + ")"}</TableCell>
-          <TableCell sx={{ color: isPending ? "warning.main" : undefined }}>{CurrencyHelper.formatCurrency(d.fund.amount)}</TableCell>
+          <TableCell sx={{ color: isPending ? "warning.main" : undefined }}>{CurrencyHelper.formatCurrencyWithLocale(d.fund.amount, d.currency || "usd")}</TableCell>
         </TableRow>
       );
     }

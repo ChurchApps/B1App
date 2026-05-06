@@ -48,7 +48,7 @@ type PeriodKey = "ytd" | "30d" | "90d" | "all";
 
 interface SubscriptionRow {
   id: string;
-  plan?: { amount?: number; interval?: string; interval_count?: number };
+  plan?: { amount?: number; interval?: string; interval_count?: number; currency?: string };
   billing_cycle_anchor?: number;
   default_payment_method?: string;
   default_source?: string;
@@ -85,14 +85,15 @@ function DonatePageInner({ config }: Props) {
     paymentMethods: AppHelperStripePaymentMethod[];
     customerId: string | null;
     person: PersonInterface | null;
+    currency: string;
   }
 
   const { data: paymentData, isLoading: isMethodsLoading } = useQuery<PaymentData>({
     queryKey: ["donate-payment-data", personId],
     queryFn: async () => {
-      const gateways: { publicKey?: string }[] = await ApiHelper.get("/gateways", "GivingApi");
+      const gateways: { publicKey?: string; currency?: string }[] = await ApiHelper.get("/gateways", "GivingApi");
       if (!gateways?.length || !gateways[0]?.publicKey) {
-        return { stripePromise: null, paymentMethods: [], customerId: null, person: null };
+        return { stripePromise: null, paymentMethods: [], customerId: null, person: null, currency: "usd" };
       }
       const stripePromise = loadStripe(gateways[0].publicKey!) as Promise<Stripe>;
       const [methodsResult, personResult] = await Promise.all([
@@ -107,7 +108,7 @@ function DonatePageInner({ config }: Props) {
           if (pm.customerId && !customerId) customerId = pm.customerId;
         }
       }
-      return { stripePromise, paymentMethods: pms, customerId, person: personResult || null };
+      return { stripePromise, paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd" };
     },
     enabled: donationsEnabled
   });
@@ -116,6 +117,7 @@ function DonatePageInner({ config }: Props) {
   const paymentMethods = paymentData?.paymentMethods ?? null;
   const customerId = paymentData?.customerId ?? null;
   const person = paymentData?.person ?? null;
+  const pageCurrency = paymentData?.currency ?? "usd";
 
   const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
     queryKey: ["donate-subscriptions", customerId],
@@ -241,7 +243,7 @@ function DonatePageInner({ config }: Props) {
                 Your Giving Impact
               </Typography>
               <Typography sx={{ fontSize: 36, fontWeight: 800, mb: 1 }}>
-                {CurrencyHelper.formatCurrency(givingStats.ytd || 0)}
+                {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)}
               </Typography>
               <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
                 Total this year • {givingStats.totalGifts}{" "}
@@ -320,12 +322,13 @@ function DonatePageInner({ config }: Props) {
                 </Typography>
                 <Typography sx={{ fontSize: 15, fontWeight: 700, color: tc.primary }}>
                   {givingStats.lastGift
-                    ? CurrencyHelper.formatCurrency(
+                    ? CurrencyHelper.formatCurrencyWithLocale(
                         ((givingStats.lastGift as any).fund?.amount
                           ?? (givingStats.lastGift as any).amount
-                          ?? 0) as number
+                          ?? 0) as number,
+                        givingStats.lastGift.currency || pageCurrency
                     )
-                    : CurrencyHelper.formatCurrency(0)}
+                    : CurrencyHelper.formatCurrencyWithLocale(0, pageCurrency)}
                 </Typography>
                 <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
                   {givingStats.lastGift
@@ -585,7 +588,7 @@ function DonatePageInner({ config }: Props) {
         ) : (
           <Box sx={{ textAlign: "center", py: 1 }}>
             <Typography sx={{ fontSize: 32, fontWeight: 800, color: tc.primary }}>
-              {CurrencyHelper.formatCurrency(filteredTotal)}
+              {CurrencyHelper.formatCurrencyWithLocale(filteredTotal, pageCurrency)}
             </Typography>
             <Typography sx={{ fontSize: 14, color: tc.textMuted, fontWeight: 500 }}>
               {periodLabels[period]}
@@ -618,6 +621,7 @@ function DonatePageInner({ config }: Props) {
                 (sub.plan?.interval_count || 1) > 1 ? "s" : ""
               }`;
               const total = (sub.plan?.amount || 0) / 100;
+              const subCurrency = sub.plan?.currency || pageCurrency;
               const startDate = sub.billing_cycle_anchor
                 ? DateHelper.prettyDate(new Date(sub.billing_cycle_anchor * 1000))
                 : "";
@@ -651,11 +655,11 @@ function DonatePageInner({ config }: Props) {
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     {sub.funds?.map((f) => (
                       <Typography key={f.id} sx={{ fontSize: 14, fontWeight: 500, color: tc.text }}>
-                        {f.name} — {CurrencyHelper.formatCurrency(f.amount)}
+                        {f.name} — {CurrencyHelper.formatCurrencyWithLocale(f.amount, subCurrency)}
                       </Typography>
                     ))}
                     <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.primary }}>
-                      Total: {CurrencyHelper.formatCurrency(total)}
+                      Total: {CurrencyHelper.formatCurrencyWithLocale(total, subCurrency)}
                     </Typography>
                     <Typography sx={{ fontSize: 13, color: tc.text }}>Every {interval}</Typography>
                     <Typography sx={{ fontSize: 13, color: tc.text }}>
@@ -760,7 +764,7 @@ function DonatePageInner({ config }: Props) {
                       flexShrink: 0
                     }}
                   >
-                    {CurrencyHelper.formatCurrency(amount)}
+                    {CurrencyHelper.formatCurrencyWithLocale(amount, (d as any).currency || pageCurrency)}
                   </Typography>
                 </Box>
               );

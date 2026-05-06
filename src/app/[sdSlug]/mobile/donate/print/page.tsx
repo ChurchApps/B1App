@@ -38,11 +38,15 @@ export default function PrintPage({ params }: { params: Params }) {
   const [funds, setFunds] = useState<FundInterface[]>([]);
   const [fundDonations, setFundDonations] = useState<FundDonationInterface[]>([]);
   const [donations, setDonations] = useState<DonationInterface[]>([]);
+  const [currency, setCurrency] = useState<string>("usd");
 
 
   const loadData = () => {
     ApiHelper.get("/funds", "GivingApi").then((f: FundInterface[]) => { setFunds(f); });
     ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: FundDonationInterface[]) => { setFundDonations(fd); });
+    ApiHelper.get("/gateways", "GivingApi").then((gws: { currency?: string }[]) => {
+      if (Array.isArray(gws) && gws[0]?.currency) setCurrency(gws[0].currency);
+    });
     ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
       const result: DonationInterface[] = [];
       d.forEach((don: DonationInterface) => {
@@ -76,7 +80,7 @@ export default function PrintPage({ params }: { params: Params }) {
         result += d.amount;
       }
     });
-    return CurrencyHelper.formatCurrency(result);
+    return CurrencyHelper.formatCurrencyWithLocale(result, currency);
   };
 
   const getFundArray = () => {
@@ -102,7 +106,7 @@ export default function PrintPage({ params }: { params: Params }) {
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.prettyDate(donation?.donationDate).toString()}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>{donation?.method}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>{fund?.name}</td>
-          <td style={{ borderBottom: "2px solid var(--print-accent)", borderLeft: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrency(fd.amount)}</td>
+          <td style={{ borderBottom: "2px solid var(--print-accent)", borderLeft: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "20%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrencyWithLocale(fd.amount, donation?.currency || currency)}</td>
         </tr>);
       }
     });
@@ -125,7 +129,7 @@ export default function PrintPage({ params }: { params: Params }) {
     result.forEach((tv) => {
       tableValues.push(<tr style={{ height: "24px" }}>
         <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "70%", paddingLeft: "5px" }}>{tv.fund}</td>
-        <td style={{ borderBottom: "2px solid var(--print-accent)", borderLeft: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "30%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrency(tv.total)}</td>
+        <td style={{ borderBottom: "2px solid var(--print-accent)", borderLeft: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "30%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrencyWithLocale(tv.total, currency)}</td>
       </tr>);
     });
     return tableValues;
