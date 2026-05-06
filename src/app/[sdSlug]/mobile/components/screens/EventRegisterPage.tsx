@@ -31,6 +31,16 @@ interface GuestMember {
   lastName: string;
 }
 
+type StatusCardProps = {
+  icon: string;
+  title: string;
+  body: string;
+  color: string;
+  tc: typeof mobileTheme.colors;
+}
+
+type ShellProps = { children: React.ReactNode; backButton: React.ReactNode; backgroundColor: string }
+
 type Step = "info" | "members" | "confirm";
 
 const formatEventTime = (event: EventInterface) => {
@@ -44,13 +54,47 @@ const formatEventTime = (event: EventInterface) => {
   return `${DateHelper.prettyDateTime(start)} - ${DateHelper.prettyTime(end)}`;
 };
 
+const Shell = ({ children, backButton, backgroundColor }: ShellProps) => (
+  <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: backgroundColor, minHeight: "100%" }}>
+    {backButton}
+    {children}
+  </Box>
+);
+
+const StatusCard = ({ icon, title, body, color, tc }: StatusCardProps) => (
+  <Box
+    sx={{
+      bgcolor: tc.surface,
+      borderRadius: `${mobileTheme.radius.xl}px`,
+      boxShadow: mobileTheme.shadows.md,
+      p: `${mobileTheme.spacing.lg}px`,
+      textAlign: "center"
+    }}
+  >
+    <Box sx={{
+      width: 72,
+      height: 72,
+      borderRadius: "36px",
+      bgcolor: `${color}1A`,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      mb: 2
+    }}>
+      <Icon sx={{ fontSize: 36, color }}>{icon}</Icon>
+    </Box>
+    <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 1 }}>{title}</Typography>
+    <Typography sx={{ fontSize: 14, color: tc.textMuted, lineHeight: 1.5 }}>{body}</Typography>
+  </Box>
+);
+
 export const EventRegisterPage = ({ eventId, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = useContext(UserContext);
   const churchId = config?.church?.id || "";
   const personId = userContext?.userChurch?.person?.id;
-  const personName = userContext?.userChurch?.person?.name?.display
+  const personName = userContext?.userChurch?.person?.name?.display || userContext?.person?.name?.display
     || [userContext?.userChurch?.person?.name?.first, userContext?.userChurch?.person?.name?.last].filter(Boolean).join(" ")
     || "";
   const isLoggedIn = !!personId;
@@ -185,43 +229,9 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     </IconButton>
   );
 
-  const Shell = ({ children }: { children: React.ReactNode }) => (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderBack()}
-      {children}
-    </Box>
-  );
-
-  const StatusCard = ({ icon, title, body, color = tc.primary }: { icon: string; title: string; body: string; color?: string }) => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.md,
-        p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center"
-      }}
-    >
-      <Box sx={{
-        width: 72,
-        height: 72,
-        borderRadius: "36px",
-        bgcolor: `${color}1A`,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        mb: 2
-      }}>
-        <Icon sx={{ fontSize: 36, color }}>{icon}</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 1 }}>{title}</Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted, lineHeight: 1.5 }}>{body}</Typography>
-    </Box>
-  );
-
   if (loading) {
     return (
-      <Shell>
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 240 }}>
           <CircularProgress sx={{ color: tc.primary }} />
         </Box>
@@ -231,16 +241,16 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
   if (loadError || !event) {
     return (
-      <Shell>
-        <StatusCard icon="event_busy" title="Event not found" body="This event may have been removed or is no longer available." color={tc.error} />
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
+        <StatusCard icon="event_busy" title="Event not found" body="This event may have been removed or is no longer available." color={tc.error} tc={tc} />
       </Shell>
     );
   }
 
   if (!event.registrationEnabled) {
     return (
-      <Shell>
-        <StatusCard icon="block" title="Registration unavailable" body="Registration is not available for this event." color={tc.warning} />
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
+        <StatusCard icon="block" title="Registration unavailable" body="Registration is not available for this event." color={tc.warning} tc={tc} />
       </Shell>
     );
   }
@@ -251,20 +261,21 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
       ? `Registration opens ${DateHelper.prettyDate(new Date(event.registrationOpenDate!))}.`
       : "Registration for this event has closed.";
     return (
-      <Shell>
-        <StatusCard icon="event_busy" title="Registration not open" body={dateLabel} color={tc.warning} />
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
+        <StatusCard icon="event_busy" title="Registration not open" body={dateLabel} color={tc.warning} tc={tc} />
       </Shell>
     );
   }
 
   if (isFull) {
     return (
-      <Shell>
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
         <StatusCard
           icon="group_off"
           title="Event is full"
           body={`This event has reached its capacity of ${event.capacity}.`}
           color={tc.error}
+          tc={tc}
         />
       </Shell>
     );
@@ -272,7 +283,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
   if (step === "confirm" && registration) {
     return (
-      <Shell>
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
         <Box sx={{
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.xl}px`,
@@ -401,7 +412,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
 
   if (step === "members") {
     return (
-      <Shell>
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
         {eventCard}
         <Box sx={{
           bgcolor: tc.surface,
@@ -522,7 +533,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   }
 
   return (
-    <Shell>
+    <Shell backButton={renderBack()} backgroundColor={tc.background}>
       {eventCard}
 
       <Box sx={{
