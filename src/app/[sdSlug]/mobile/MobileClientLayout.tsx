@@ -48,8 +48,10 @@ function MobileHydrationGate({ children }: { children: React.ReactNode }) {
 }
 
 export function MobileClientLayout({ children }: { children: React.ReactNode }) {
+  const [localeReady, setLocaleReady] = React.useState(false);
+
   useEffect(() => {
-    EnvironmentHelper.initLocale();
+    EnvironmentHelper.initLocale().then(() => setLocaleReady(true));
     ErrorHelper.init(
       (): ErrorAppDataInterface => ({
         churchId: UserHelper.currentUserChurch?.church?.id || "",
@@ -76,7 +78,9 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
         <UserProvider>
           <MobileQueryProvider>
             <MobileGoogleAnalytics />
-            <MobileHydrationGate>{children}</MobileHydrationGate>
+            <MobileHydrationGate>
+              <React.Fragment key={localeReady ? "locale-ready" : "locale-loading"}>{children}</React.Fragment>
+            </MobileHydrationGate>
           </MobileQueryProvider>
         </UserProvider>
       </ThemeProvider>

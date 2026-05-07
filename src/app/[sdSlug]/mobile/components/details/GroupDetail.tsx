@@ -27,7 +27,8 @@ import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
 import { GroupContact } from "@/components/groups/GroupContact";
-import type { GroupMemberInterface } from "@churchapps/helpers";
+import { RequestToJoinDialog } from "./RequestToJoinDialog";
+import type { GroupJoinRequestInterface, GroupMemberInterface } from "@churchapps/helpers";
 
 interface Props {
   id: string;
@@ -79,6 +80,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const queryClient = useQueryClient();
   const churchId = config.church.id;
   const [joining, setJoining] = React.useState(false);
+  const [requestDialogOpen, setRequestDialogOpen] = React.useState(false);
   const [tab, setTab] = React.useState<TabKey>("about");
   const [tabUserSet, setTabUserSet] = React.useState(false);
   const [chatOpen, setChatOpen] = React.useState(false);
@@ -147,6 +149,15 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     placeholderData: []
   });
 
+  const { data: myJoinRequests = [], refetch: refetchMyRequests } = useQuery<GroupJoinRequestInterface[]>({
+    queryKey: ["my-join-requests"],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/groupjoinrequests/my", "MembershipApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!UserHelper.user?.id
+  });
+
   const { data: publicLeaders = [] } = useQuery<GroupMemberInterface[]>({
     queryKey: ["group-leaders-public", churchId, groupId],
     queryFn: async () => {
@@ -201,16 +212,27 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     if (!currentPersonId || !groupId) return;
     setJoining(true);
     try {
-      await ApiHelper.post(
-        "/groupmembers",
-        [{ groupId, personId: currentPersonId }],
+      const result: any = await ApiHelper.post(
+        "/groupmembers/self",
+        { groupId },
         "MembershipApi"
       );
-      refreshMembers();
+      if (result?.redirect === "request") {
+        setRequestDialogOpen(true);
+      } else {
+        refreshMembers();
+      }
     } finally {
       setJoining(false);
     }
   };
+
+  const handleRequest = () => setRequestDialogOpen(true);
+
+  const myPendingForGroup = React.useMemo(
+    () => myJoinRequests.find((r) => r.groupId === groupId && r.status === "pending"),
+    [myJoinRequests, groupId]
+  );
 
   const renderMemberAvatar = (m: GroupMember) => {
     const common = { width: 40, height: 40, borderRadius: "20px", flexShrink: 0, overflow: "hidden" } as const;
@@ -507,12 +529,38 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
         </Button>
       );
     }
+    const policy = group?.joinPolicy ?? "open";
+    if (policy === "closed") return null;
+    if (policy === "request") {
+      const alreadyRequested = !!myPendingForGroup;
+      return (
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={joining || alreadyRequested}
+          onClick={handleRequest}
+          data-testid="request-to-join-button"
+          sx={{
+            bgcolor: tc.primary,
+            color: tc.onPrimary,
+            textTransform: "none",
+            fontWeight: 600,
+            borderRadius: `${mobileTheme.radius.md}px`,
+            py: "10px",
+            "&:hover": { bgcolor: tc.primary }
+          }}
+        >
+          {alreadyRequested ? "Request Pending" : "Request to Join"}
+        </Button>
+      );
+    }
     return (
       <Button
         variant="contained"
         fullWidth
         disabled={joining}
         onClick={handleJoin}
+        data-testid="join-group-button"
         sx={{
           bgcolor: tc.primary,
           color: tc.onPrimary,
@@ -724,6 +772,18 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           onSaved={() => {
             setEditEvent(null);
             queryClient.invalidateQueries({ queryKey: ["group-events", groupId] });
+          }}
+        />
+      )}
+      {groupId && (
+        <RequestToJoinDialog
+          open={requestDialogOpen}
+          groupId={groupId}
+          groupName={group?.name}
+          onClose={() => setRequestDialogOpen(false)}
+          onSubmitted={() => {
+            setRequestDialogOpen(false);
+            refetchMyRequests();
           }}
         />
       )}

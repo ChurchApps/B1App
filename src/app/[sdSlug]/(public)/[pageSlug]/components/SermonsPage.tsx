@@ -2,12 +2,12 @@
 
 import { SermonElement } from "@churchapps/apphelper/website";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { Locale } from "@churchapps/apphelper";
 import { Container } from "@mui/material";
 
 
 type Props = {
   config?: ConfigurationInterface;
+  title: string;
 };
 
 export function SermonsPage(props:Props) {
@@ -16,7 +16,7 @@ export function SermonsPage(props:Props) {
 
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.sermons")}</h1>
+      <h1 style={{ textAlign: "center" }}>{props.title}</h1>
       <SermonElement key={"sermons"} churchId={props.config?.church?.id} appearance={props.config?.appearance} />
     </Container>
   );

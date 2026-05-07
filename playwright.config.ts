@@ -18,8 +18,10 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: 0,
   // Next.js dev compiles routes on first hit; too many parallel workers
-  // overwhelm it on first run. Keep concurrency modest.
-  workers: process.env.CI ? 2 : 4,
+  // overwhelm it on first run. Match CI's worker count locally — at 4
+  // workers the dev server intermittently returns "This page couldn't load"
+  // for /mobile redirect under cold-compile load.
+  workers: 2,
   reporter: 'list',
   timeout: 90 * 1000,
   expect: { timeout: 10 * 1000 },

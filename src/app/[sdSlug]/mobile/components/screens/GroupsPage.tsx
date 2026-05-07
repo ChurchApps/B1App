@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
-import type { EventInterface, GroupInterface } from "@churchapps/helpers";
+import type { EventInterface, GroupInterface, GroupJoinRequestInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -31,6 +31,20 @@ export const GroupsPage = ({ config: _config }: Props) => {
     },
     enabled: loggedIn
   });
+
+  const { data: pendingRequests = [], refetch: refetchPending } = useQuery<GroupJoinRequestInterface[]>({
+    queryKey: ["my-pending-requests", context?.user?.id],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/groupjoinrequests/my", "MembershipApi");
+      return Array.isArray(data) ? data.filter((r: GroupJoinRequestInterface) => r.status === "pending") : [];
+    },
+    enabled: loggedIn
+  });
+
+  const handleCancelRequest = async (id: string) => {
+    await ApiHelper.delete(`/groupjoinrequests/${id}`, "MembershipApi");
+    refetchPending();
+  };
 
   const { data: upcomingEvents = [] } = useQuery<EventInterface[]>({
     queryKey: ["events-registerable", context?.user?.id],
@@ -369,8 +383,54 @@ export const GroupsPage = ({ config: _config }: Props) => {
   const { hero, featured, regular } = sortedGroups;
   const hasAnyGroups = effectiveGroups !== null && effectiveGroups.length > 0;
 
+  const renderPendingRequests = () => {
+    if (!pendingRequests.length) return null;
+    return (
+      <Box data-testid="my-pending-requests" sx={{ mb: `${mobileTheme.spacing.md}px` }}>
+        <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
+          Pending Requests
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+          {pendingRequests.map((req) => (
+            <Box
+              key={req.id}
+              data-testid={`my-pending-${req.id}`}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                p: `${mobileTheme.spacing.sm}px ${mobileTheme.spacing.md}px`,
+                bgcolor: tc.surface,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                boxShadow: mobileTheme.shadows.sm
+              }}>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
+                  {(req as any).groupName || req.group?.name || "Group"}
+                </Typography>
+                {req.requestDate && (
+                  <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
+                    Requested {new Date(req.requestDate).toLocaleDateString()}
+                  </Typography>
+                )}
+              </Box>
+              <Button
+                size="small"
+                onClick={() => handleCancelRequest(req.id)}
+                data-testid={`cancel-request-${req.id}`}
+                sx={{ textTransform: "none" }}>
+                Cancel
+              </Button>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+    );
+  };
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+      {renderPendingRequests()}
       {effectiveGroups === null && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
           {[0, 1, 2].map(renderSkeleton)}

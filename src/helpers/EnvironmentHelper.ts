@@ -7,11 +7,16 @@ export class EnvironmentHelper {
   public static LessonsApi = "";
   public static LessonsUrl = "";
   static hasInit = false;
+  static hasLocaleInit = false;
+  static localeInitPromise: Promise<void> | null = null;
 
   static initServerSide = async () => {
-    if (!this.hasInit) {
-      this.init();
-      await this.initLocale();
+    this.init();
+    if (!this.hasLocaleInit) {
+      if (!this.localeInitPromise) {
+        this.localeInitPromise = this.initLocale().then(() => { this.hasLocaleInit = true; });
+      }
+      await this.localeInitPromise;
     }
   };
 
@@ -44,6 +49,9 @@ export class EnvironmentHelper {
     let baseUrl = "https://ironwood.staging.b1.church";
     if (typeof window !== "undefined") {
       baseUrl = window.location.origin;
+    } else if (process.env.NEXT_PUBLIC_STAGE === "dev" || process.env.NEXT_STAGE === "dev") {
+      const port = process.env.PORT || "3301";
+      baseUrl = `http://localhost:${port}`;
     }
     await Locale.init([baseUrl + `/locales/{{lng}}.json?v=1`, baseUrl + `/apphelper/locales/{{lng}}.json`]);
   };

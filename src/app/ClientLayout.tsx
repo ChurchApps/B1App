@@ -72,7 +72,7 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
       <ThemeProvider theme={mdTheme}>
         <UserProvider>
           <ErrorMessages errors={errors} />
-          <>{children}</>
+          <React.Fragment key={localeInit ? "locale-ready" : "locale-loading"}>{children}</React.Fragment>
         </UserProvider>
       </ThemeProvider>
     </CookieProviderWrapper>
