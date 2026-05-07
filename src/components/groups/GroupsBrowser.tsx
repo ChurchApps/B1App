@@ -5,7 +5,6 @@ import { Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typogr
 import { ApiHelper, Loading } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "./GroupCard";
-import { EnvironmentHelper } from "@/helpers";
 
 interface Props {
   churchId: string;
@@ -20,10 +19,9 @@ export const GroupsBrowser = (props: Props) => {
   const [groups, setGroups] = useState<GroupInterface[] | undefined>(undefined);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("");
-  EnvironmentHelper.init();
 
   useEffect(() => {
-    EnvironmentHelper.init();
+    if (!props.churchId) return;
     ApiHelper.getAnonymous(`/groups/public/${props.churchId}/list`, "MembershipApi").then((data: any) => {
       setGroups(Array.isArray(data) ? data : []);
     });
