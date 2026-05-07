@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Icon, Typography } from "@mui/material";
 import { mobileTheme } from "../mobileTheme";
+import { useMobileThemeMode } from "../MobileThemeProvider";
 
 const STORAGE_KEY = "b1.mobile.bible.selection";
 
@@ -132,6 +133,7 @@ export const BiblePage = () => {
   const [isClient, setIsClient] = useState(false);
   const [selection, setSelection] = useState<Selection>(DEFAULT_SELECTION);
   const [yv, setYv] = useState<YouVersionModule | null>(null);
+  const { mode } = useMobileThemeMode();
 
   useEffect(() => {
     let cancelled = false;
@@ -217,7 +219,7 @@ export const BiblePage = () => {
             minHeight: `calc(100vh - ${mobileTheme.headerHeight}px)`,
             bgcolor: tc.surface
           }}>
-            <yv.YouVersionProvider appKey={apiKey}>
+            <yv.YouVersionProvider appKey={apiKey} theme={mode}>
               <yv.BibleReader.Root
                 versionId={selection.versionId}
                 onVersionChange={(v: number) =>
