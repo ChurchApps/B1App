@@ -56,4 +56,14 @@ test.describe("Public groups browser", () => {
     await search.fill("zzzzzzzznoMatchAtAll");
     await expect(page.locator('[data-testid="groups-browser-empty"]')).toBeVisible({ timeout: 5000 });
   });
+
+  // Demo seed includes a /ministries CMS page with the "groups" website
+  // element on it. This verifies the element renders real groups (not a
+  // placeholder) when embedded in an admin-built page.
+  test("/ministries CMS page renders the groups element with real groups", async ({ page }) => {
+    await page.goto("/ministries");
+    await expect(page.locator('[data-testid="groups-browser"]')).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("heading", { name: /Find a Group/i })).toBeVisible();
+    await expect(page.locator("body")).toContainText(/Sunday Morning Service|Adult Bible Class/i);
+  });
 });
