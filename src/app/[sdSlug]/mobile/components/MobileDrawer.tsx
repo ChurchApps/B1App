@@ -10,8 +10,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { type LinkInterface } from "@churchapps/helpers";
-import { Locale } from "@churchapps/apphelper";
-import { UserHelper } from "@churchapps/apphelper";
+import { Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers";
 import UserContext from "@/context/UserContext";
@@ -31,13 +30,7 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const tc = mobileTheme.colors;
   const { mode, toggle } = useMobileThemeMode();
 
-  const personPhoto = context?.person?.photo;
-  const contentRoot = (typeof window !== "undefined" ? (window as any).__envVars?.ContentRoot : undefined) || "";
-  const photoUrl = personPhoto
-    ? (personPhoto.startsWith("http") || personPhoto.startsWith("data:")
-      ? personPhoto
-      : `${contentRoot}${personPhoto}`)
-    : undefined;
+  const photoUrl = context?.person?.photo ? PersonHelper.getPhotoUrl(context.person) : undefined;
   const firstName = context?.person?.name?.first || context?.user?.firstName || "";
   const lastName = context?.person?.name?.last || context?.user?.lastName || "";
   const initials = getInitials({ name: { first: firstName, last: lastName } });

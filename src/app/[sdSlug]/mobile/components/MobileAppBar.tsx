@@ -6,7 +6,7 @@ import { AppBar, Avatar, Badge, IconButton, Stack, Toolbar, Typography } from "@
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { Locale, useNotifications } from "@churchapps/apphelper";
+import { Locale, PersonHelper, useNotifications } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, SCREEN_TITLES, mobileSlugFromPath } from "./mobileTheme";
@@ -42,13 +42,7 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
   const headerLogo = mode === "dark" ? (logoLight || logoDark) : (logoDark || logoLight);
   const signedIn = !!userContext?.user?.firstName;
   const initials = getInitials({ name: { first: userContext?.user?.firstName, last: userContext?.user?.lastName } });
-  const personPhoto = userContext?.person?.photo;
-  const contentRoot = (typeof window !== "undefined" ? (window as any).__envVars?.ContentRoot : undefined) || "";
-  const photoUrl = personPhoto
-    ? (personPhoto.startsWith("http") || personPhoto.startsWith("data:")
-      ? personPhoto
-      : `${contentRoot}${personPhoto}`)
-    : undefined;
+  const photoUrl = userContext?.person?.photo ? PersonHelper.getPhotoUrl(userContext.person) : undefined;
 
   const handleBack = () => {
     router.push("/mobile/dashboard");

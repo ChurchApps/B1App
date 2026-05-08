@@ -22,7 +22,7 @@ import {
   Typography
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
-import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PersonInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -612,7 +612,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         }}
       >
         <Avatar
-          src={person.photo || undefined}
+          src={person.photo ? PersonHelper.getPhotoUrl(person) : undefined}
           sx={{ width: 72, height: 72, bgcolor: tc.primaryLight, color: tc.primary, fontSize: 28, fontWeight: 700 }}
         >
           {displayInitial}
@@ -780,7 +780,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 }}
               >
                 <Avatar
-                  src={h.photo || undefined}
+                  src={h.photo ? PersonHelper.getPhotoUrl(h) : undefined}
                   sx={{ width: 48, height: 48, bgcolor: tc.primaryLight, color: tc.primary, fontSize: 16, fontWeight: 700 }}
                 >
                   {(h.name?.first?.charAt(0) || "?").toUpperCase()}
