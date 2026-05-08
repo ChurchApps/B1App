@@ -42,6 +42,13 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
   const headerLogo = mode === "dark" ? (logoLight || logoDark) : (logoDark || logoLight);
   const signedIn = !!userContext?.user?.firstName;
   const initials = getInitials({ name: { first: userContext?.user?.firstName, last: userContext?.user?.lastName } });
+  const personPhoto = userContext?.person?.photo;
+  const contentRoot = (typeof window !== "undefined" ? (window as any).__envVars?.ContentRoot : undefined) || "";
+  const photoUrl = personPhoto
+    ? (personPhoto.startsWith("http") || personPhoto.startsWith("data:")
+      ? personPhoto
+      : `${contentRoot}${personPhoto}`)
+    : undefined;
 
   const handleBack = () => {
     router.push("/mobile/dashboard");
@@ -108,14 +115,17 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
               </IconButton>
               <NotificationBellMenu anchorEl={bellRef.current} open={bellOpen} onClose={() => setBellOpen(false)} />
               <IconButton onClick={onAvatarClick} aria-label={Locale.label("mobile.components.profile")} sx={{ p: 0.5 }}>
-                <Avatar sx={{
-                  width: 30,
-                  height: 30,
-                  bgcolor: "rgba(255,255,255,0.25)",
-                  color: onPrimary,
-                  fontSize: 13,
-                  fontWeight: 600
-                }}>
+                <Avatar
+                  src={photoUrl}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    bgcolor: "rgba(255,255,255,0.25)",
+                    color: onPrimary,
+                    fontSize: 13,
+                    fontWeight: 600
+                  }}
+                >
                   {initials}
                 </Avatar>
               </IconButton>
