@@ -2,10 +2,13 @@
 
 import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Box, CircularProgress, IconButton, Snackbar, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Snackbar, TextField, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
@@ -39,6 +42,9 @@ export const MessageConversation = ({ id, config }: Props) => {
   const [sending, setSending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [snack, setSnack] = React.useState<string | null>(null);
+  const [editingId, setEditingId] = React.useState<string | null>(null);
+  const [menuAnchor, setMenuAnchor] = React.useState<{ el: HTMLElement; message: MessageInterface } | null>(null);
+  const [confirmDelete, setConfirmDelete] = React.useState<MessageInterface | null>(null);
 
   const listRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -250,6 +256,27 @@ export const MessageConversation = ({ id, config }: Props) => {
     setSending(true);
     setError(null);
 
+    if (editingId) {
+      const idToEdit = editingId;
+      setText("");
+      setEditingId(null);
+      try {
+        await ApiHelper.post(
+          "/messages",
+          [{ id: idToEdit, conversationId, content, displayName: myDisplayName }],
+          "MessagingApi"
+        );
+        await loadMessages();
+      } catch {
+        setError(Locale.label("mobile.details.messageFailed"));
+        setEditingId(idToEdit);
+        setText(content);
+      } finally {
+        setSending(false);
+      }
+      return;
+    }
+
     const optimistic: MessageInterface = {
       id: "temp-" + Date.now(),
       conversationId: conversationId || "",
@@ -278,6 +305,38 @@ export const MessageConversation = ({ id, config }: Props) => {
       setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleStartEdit = (m: MessageInterface) => {
+    setEditingId(m.id || null);
+    setText(m.content || "");
+    setMenuAnchor(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setText("");
+  };
+
+  const handleRequestDelete = (m: MessageInterface) => {
+    setConfirmDelete(m);
+    setMenuAnchor(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    const m = confirmDelete;
+    setConfirmDelete(null);
+    if (!m?.id) return;
+    try {
+      await ApiHelper.delete("/messages/" + m.id, "MessagingApi");
+      if (editingId === m.id) {
+        setEditingId(null);
+        setText("");
+      }
+      await loadMessages();
+    } catch {
+      setError(Locale.label("mobile.details.deleteFailed"));
     }
   };
 
@@ -325,16 +384,30 @@ export const MessageConversation = ({ id, config }: Props) => {
   const renderBubble = (m: MessageInterface, index: number) => {
     const mine = m.personId === myPersonId;
     const bubbleName = m.displayName || m.person?.name?.display || "";
+    const isPersisted = !!m.id && !m.id.startsWith("temp-");
+    const showActions = mine && isPersisted;
 
     return (
       <Box
         key={m.id || index}
         sx={{
           display: "flex",
+          alignItems: "center",
           justifyContent: mine ? "flex-end" : "flex-start",
+          gap: "2px",
           mb: "6px"
         }}
       >
+        {showActions && (
+          <IconButton
+            size="small"
+            aria-label={Locale.label("mobile.details.messageActions")}
+            onClick={(e) => setMenuAnchor({ el: e.currentTarget, message: m })}
+            sx={{ color: tc.textMuted, p: "4px" }}
+          >
+            <MoreVertIcon sx={{ fontSize: 18 }} />
+          </IconButton>
+        )}
         <Box
           sx={{
             maxWidth: "75%",
@@ -473,6 +546,34 @@ export const MessageConversation = ({ id, config }: Props) => {
         {messages !== null && messages.length > 0 && messages.map(renderBubble)}
       </Box>
 
+      {editingId && (
+        <Box
+          sx={{
+            position: "sticky",
+            bottom: 60,
+            bgcolor: tc.iconBackground,
+            borderTop: `1px solid ${tc.border}`,
+            px: `${mobileTheme.spacing.md}px`,
+            py: "6px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px"
+          }}
+        >
+          <Typography sx={{ fontSize: 12, color: tc.primary, fontWeight: 600 }}>
+            {Locale.label("mobile.details.editingMessage")}
+          </Typography>
+          <Button
+            size="small"
+            onClick={handleCancelEdit}
+            sx={{ color: tc.primary, textTransform: "none", fontSize: 12, minWidth: 0 }}
+          >
+            {Locale.label("mobile.details.cancel")}
+          </Button>
+        </Box>
+      )}
+
       <Box
         sx={{
           position: "sticky",
@@ -530,6 +631,40 @@ export const MessageConversation = ({ id, config }: Props) => {
           )}
         </IconButton>
       </Box>
+
+      <Menu
+        anchorEl={menuAnchor?.el || null}
+        open={!!menuAnchor}
+        onClose={() => setMenuAnchor(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MenuItem onClick={() => menuAnchor && handleStartEdit(menuAnchor.message)}>
+          <EditIcon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }} />
+          {Locale.label("mobile.details.edit")}
+        </MenuItem>
+        <MenuItem onClick={() => menuAnchor && handleRequestDelete(menuAnchor.message)}>
+          <DeleteOutlineIcon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }} />
+          {Locale.label("mobile.details.delete")}
+        </MenuItem>
+      </Menu>
+
+      <Dialog open={!!confirmDelete} onClose={() => setConfirmDelete(null)}>
+        <DialogTitle>{Locale.label("mobile.details.confirmDeleteTitle")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {Locale.label("mobile.details.confirmDeleteMessage")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDelete(null)}>
+            {Locale.label("mobile.details.cancel")}
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            {Locale.label("mobile.details.delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Snackbar
         open={!!error}

@@ -6,7 +6,6 @@ import {
   NetworkFirst,
   NetworkOnly,
   StaleWhileRevalidate,
-  CacheFirst,
   ExpirationPlugin,
   CacheableResponsePlugin
 } from "serwist";
@@ -71,10 +70,11 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
       ]
     })
   },
-  // Church-hosted images: cache-first, 30 days.
+  // Church-hosted images: stale-while-revalidate so updated photos / images
+  // propagate on the next render instead of being pinned for 30 days.
   {
     matcher: ({ url, request }) => request.destination === "image" && isChurchImage({ url }),
-    handler: new CacheFirst({
+    handler: new StaleWhileRevalidate({
       cacheName: "church-images",
       plugins: [
         new CacheableResponsePlugin({ statuses: [0, 200] }),

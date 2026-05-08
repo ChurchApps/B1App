@@ -71,7 +71,12 @@ export const MessagesPage = ({ config }: Props) => {
         }
       }
 
-      return rows.map(({ pm, otherId }) => {
+      const seen = new Set<string>();
+      const result: Conversation[] = [];
+      rows.forEach(({ pm, otherId }) => {
+        const id = pm.conversationId || pm.id;
+        if (seen.has(id)) return;
+        seen.add(id);
         const person = peopleById[otherId];
         const displayName = person?.name?.display || "Unknown";
         let photo = "";
@@ -82,15 +87,16 @@ export const MessagesPage = ({ config }: Props) => {
             photo = (person as any).photo || "";
           }
         }
-        return {
-          id: pm.conversationId || pm.id,
+        result.push({
+          id,
           pmId: pm.id,
           personId: otherId,
           conversationId: pm.conversationId,
           personName: displayName,
           personPhoto: photo
-        };
+        });
       });
+      return result;
     },
     enabled: loggedIn
   });

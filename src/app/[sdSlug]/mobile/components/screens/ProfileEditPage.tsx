@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Alert,
@@ -23,9 +23,10 @@ import {
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PersonInterface, VisibilityPreferenceInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 
 interface Props {
@@ -146,6 +147,8 @@ const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 export const ProfileEditPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const userContext = useContext(UserContext);
+  const queryClient = useQueryClient();
   const personId = UserHelper.currentUserChurch?.person?.id;
 
   const [tab, setTab] = useState<TabKey>("profile");
@@ -334,6 +337,20 @@ export const ProfileEditPage = ({ config }: Props) => {
       }
 
       await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
+
+      // The directoryUpdate handler uploads the photo to FileStorage at submit
+      // time (before approval), so the canonical image URL already serves the
+      // new bytes. Refresh the local person record so the drawer/avatar pick
+      // up the new photo without requiring a full sign-out.
+      if (id) {
+        try {
+          const fresh = await ApiHelper.get("/people/" + id, "MembershipApi");
+          if (fresh) userContext?.setPerson(fresh);
+          queryClient.invalidateQueries({ queryKey: ["person", id] });
+        } catch {
+          // Non-fatal: the submit already succeeded.
+        }
+      }
 
       setInitial(JSON.parse(JSON.stringify(person)));
       setModifiedFields(new Set());

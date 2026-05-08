@@ -33,7 +33,11 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
 
   const personPhoto = context?.person?.photo;
   const contentRoot = (typeof window !== "undefined" ? (window as any).__envVars?.ContentRoot : undefined) || "";
-  const photoUrl = personPhoto ? (personPhoto.startsWith("http") ? personPhoto : `${contentRoot}${personPhoto}`) : undefined;
+  const photoUrl = personPhoto
+    ? (personPhoto.startsWith("http") || personPhoto.startsWith("data:")
+      ? personPhoto
+      : `${contentRoot}${personPhoto}`)
+    : undefined;
   const firstName = context?.person?.name?.first || context?.user?.firstName || "";
   const lastName = context?.person?.name?.last || context?.user?.lastName || "";
   const initials = getInitials({ name: { first: firstName, last: lastName } });

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { NonAuthDonationWrapper } from "@churchapps/apphelper/website";
 import { UserHelper, Locale } from "@churchapps/apphelper";
@@ -10,6 +11,10 @@ type Props = { config?: ConfigurationInterface; };
 
 export function DonatePage(props:Props) {
 
+  // Stripe Elements + reCAPTCHA inside NonAuthDonationWrapper read browser-only
+  // state during render, mismatching the SSR snapshot. Defer until mount.
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => { setMounted(true); }, []);
 
   if (UserHelper.currentUserChurch?.person?.id) redirect("/mobile/donate");
   return <>
@@ -17,7 +22,7 @@ export function DonatePage(props:Props) {
       <h1>{Locale.label("pageSlug.donate")}</h1>
       <Grid container spacing={3}>
         <Grid size={{ md: 8, xs: 12 }}>
-          <NonAuthDonationWrapper churchId={props.config.church.id} showHeader={false} />
+          {mounted && <NonAuthDonationWrapper churchId={props.config.church.id} showHeader={false} />}
         </Grid>
         <Grid size={{ md: 4, xs: 12 }}>
           <Typography component="h3" sx={{ textAlign: "center", fontSize: "30px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>{Locale.label("pageSlug.manageDonations")}</Typography>

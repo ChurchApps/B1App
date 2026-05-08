@@ -13,6 +13,10 @@ const withSerwist = withSerwistInit({
   reloadOnOnline: false,
   cacheOnNavigation: true,
   disable: isDev,
+  // Material Symbols variable woff2 files are >2MB; skip them from the precache
+  // manifest so Serwist doesn't warn about exceeding the default cache budget.
+  // They're still served normally at runtime by Next.js.
+  exclude: [/material-symbols-.*\.woff2$/, /vendor-.*\.js$/],
 });
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +43,15 @@ const nextConfig = {
 
   // Module federation for code splitting
   webpack: (config, { dev, isServer }) => {
+    // OpenTelemetry (transitively pulled in by Sentry on the server) uses
+    // dynamic require() expressions that webpack cannot statically resolve.
+    // The runtime is fine; suppress the noisy "Critical dependency" warning.
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      { module: /@opentelemetry[\\/]instrumentation/, message: /Critical dependency: the request of a dependency is an expression/ },
+      { module: /@prisma[\\/]instrumentation/, message: /Critical dependency: the request of a dependency is an expression/ }
+    ];
+
     // Only apply when not using Turbopack
     if (!process.env.TURBOPACK) {
       // Optimize chunking strategy
@@ -182,10 +195,10 @@ const nextConfig = {
 
   // Image optimization
   images: {
-    domains: [
-      "content.staging.churchapps.org",
-      "content.churchapps.org",
-      "content.lessons.church"
+    remotePatterns: [
+      { protocol: "https", hostname: "content.staging.churchapps.org" },
+      { protocol: "https", hostname: "content.churchapps.org" },
+      { protocol: "https", hostname: "content.lessons.church" }
     ],
     // Add image optimization settings
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],

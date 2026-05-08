@@ -103,7 +103,12 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
         }
       }
 
-      return rows.map(({ pm, otherId }) => {
+      const seen = new Set<string>();
+      const result: Conversation[] = [];
+      rows.forEach(({ pm, otherId }) => {
+        const id = pm.conversationId || pm.id;
+        if (seen.has(id)) return;
+        seen.add(id);
         const person = peopleById[otherId];
         const displayName = person?.name?.display || Locale.label("mobile.components.unknown");
         let photo = "";
@@ -114,14 +119,15 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
             photo = (person as any).photo || "";
           }
         }
-        return {
-          id: pm.conversationId || pm.id,
+        result.push({
+          id,
           personId: otherId,
           conversationId: pm.conversationId,
           personName: displayName,
           personPhoto: photo
-        };
+        });
       });
+      return result;
     },
     enabled: loggedIn && open
   });

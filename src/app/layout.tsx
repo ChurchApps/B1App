@@ -9,12 +9,13 @@ const roboto = Roboto({
 
 export const metadata = {
   title: "ChurchApps",
-  description: "Open Source Software for Churches",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5
-  }
+  description: "Open Source Software for Churches"
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
