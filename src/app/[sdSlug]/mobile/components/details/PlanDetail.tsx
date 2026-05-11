@@ -222,7 +222,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
           try {
             instructions = await ApiHelper.post(
               "/providerProxy/getInstructions",
-              { providerId: plan.providerId, path: plan.providerPlanId },
+              { ministryId: plan.ministryId, providerId: plan.providerId, path: plan.providerPlanId },
               "DoingApi"
             );
           } catch { }
