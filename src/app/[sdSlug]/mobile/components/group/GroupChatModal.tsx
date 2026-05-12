@@ -3,12 +3,18 @@
 import React from "react";
 import {
   Box,
+  Button,
   CircularProgress,
   Dialog,
+  DialogActions,
   DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   IconButton,
   InputAdornment,
+  Menu,
+  MenuItem,
   Tab,
   Tabs,
   TextField,
@@ -65,6 +71,9 @@ export const GroupChatModal = ({
   const [sending, setSending] = React.useState(false);
   const [people, setPeople] = React.useState<Record<string, PersonInterface>>({});
   const [hasAnnouncements, setHasAnnouncements] = React.useState(false);
+  const [editingId, setEditingId] = React.useState<string | null>(null);
+  const [menuAnchor, setMenuAnchor] = React.useState<{ el: HTMLElement; message: Message } | null>(null);
+  const [confirmDelete, setConfirmDelete] = React.useState<Message | null>(null);
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
 
   const currentContentType: ContentType = subTab === "announcements" ? "groupAnnouncement" : "group";
@@ -197,6 +206,25 @@ export const GroupChatModal = ({
     setSending(true);
     try {
 
+      if (editingId) {
+        await ApiHelper.post(
+          `/messages`,
+          [
+            {
+              id: editingId,
+              conversationId: conversations[0]?.id,
+              content: text,
+              personId: myPersonId
+            }
+          ],
+          "MessagingApi"
+        );
+        setDraft("");
+        setEditingId(null);
+        await loadConversations();
+        return;
+      }
+
       let conversationId = conversations[0]?.id;
       if (!conversationId) {
         const convPayload = {
@@ -234,6 +262,38 @@ export const GroupChatModal = ({
 
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleStartEdit = (m: Message) => {
+    setEditingId(m.id || null);
+    setDraft(m.content || "");
+    setMenuAnchor(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setDraft("");
+  };
+
+  const handleRequestDelete = (m: Message) => {
+    setConfirmDelete(m);
+    setMenuAnchor(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    const m = confirmDelete;
+    setConfirmDelete(null);
+    if (!m?.id) return;
+    try {
+      await ApiHelper.delete("/messages/" + m.id, "MessagingApi");
+      if (editingId === m.id) {
+        setEditingId(null);
+        setDraft("");
+      }
+      await loadConversations();
+    } catch {
+
     }
   };
 
@@ -347,6 +407,7 @@ export const GroupChatModal = ({
         const showName = !isMine && (!prev || prev.personId !== m.personId);
         const showAvatar = !isMine && (!next || next.personId !== m.personId);
         const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
+        const showActions = isMine && !!m.id;
         return (
           <Box
             key={m.id || `m-${i}`}
@@ -357,6 +418,16 @@ export const GroupChatModal = ({
               gap: 1
             }}
           >
+            {showActions && (
+              <IconButton
+                size="small"
+                aria-label={Locale.label("mobile.group.messageActions")}
+                onClick={(e) => setMenuAnchor({ el: e.currentTarget, message: m })}
+                sx={{ color: tc.textMuted, p: "4px" }}
+              >
+                <Icon sx={{ fontSize: 18 }}>more_vert</Icon>
+              </IconButton>
+            )}
             {!isMine && (
               <Box sx={{ width: 32, flexShrink: 0 }}>
                 {showAvatar ? (
@@ -509,6 +580,31 @@ export const GroupChatModal = ({
         {!loading && messages.length === 0 && renderEmpty()}
         {!loading && messages.length > 0 && renderMessages()}
       </DialogContent>
+      {editingId && (
+        <Box
+          sx={{
+            bgcolor: tc.iconBackground,
+            borderTop: `1px solid ${tc.border}`,
+            px: `${mobileTheme.spacing.md}px`,
+            py: "6px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px"
+          }}
+        >
+          <Typography sx={{ fontSize: 12, color: tc.primary, fontWeight: 600 }}>
+            {Locale.label("mobile.group.editingMessage")}
+          </Typography>
+          <Button
+            size="small"
+            onClick={handleCancelEdit}
+            sx={{ color: tc.primary, textTransform: "none", fontSize: 12, minWidth: 0 }}
+          >
+            {Locale.label("mobile.group.cancel")}
+          </Button>
+        </Box>
+      )}
       {canPost ? (
         <Box
           sx={{
@@ -566,6 +662,38 @@ export const GroupChatModal = ({
           </Typography>
         </Box>
       )}
+      <Menu
+        anchorEl={menuAnchor?.el || null}
+        open={!!menuAnchor}
+        onClose={() => setMenuAnchor(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <MenuItem onClick={() => menuAnchor && handleStartEdit(menuAnchor.message)}>
+          <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>edit</Icon>
+          {Locale.label("mobile.group.edit")}
+        </MenuItem>
+        <MenuItem onClick={() => menuAnchor && handleRequestDelete(menuAnchor.message)}>
+          <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>delete_outline</Icon>
+          {Locale.label("mobile.group.delete")}
+        </MenuItem>
+      </Menu>
+      <Dialog open={!!confirmDelete} onClose={() => setConfirmDelete(null)}>
+        <DialogTitle>{Locale.label("mobile.group.confirmDeleteTitle")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {Locale.label("mobile.group.confirmDeleteMessage")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDelete(null)}>
+            {Locale.label("mobile.group.cancel")}
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            {Locale.label("mobile.group.delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Dialog>
   );
 };

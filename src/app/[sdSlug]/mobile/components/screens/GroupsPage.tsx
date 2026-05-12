@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
+import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface, GroupJoinRequestInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
@@ -306,6 +307,24 @@ export const GroupsPage = ({ config: _config }: Props) => {
           <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
             {groupSubtext(group) || "Tap to explore"}
           </Typography>
+          {group.about && (
+            <Box
+              sx={{
+                mt: "4px",
+                fontSize: 12,
+                color: tc.textMuted,
+                lineHeight: 1.4,
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                "& p": { m: 0 }
+              }}
+            >
+              <MarkdownPreviewLight value={group.about} />
+            </Box>
+          )}
         </Box>
       </Box>
     );

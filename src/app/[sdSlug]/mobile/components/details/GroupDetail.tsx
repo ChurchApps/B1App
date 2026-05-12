@@ -82,7 +82,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const [joining, setJoining] = React.useState(false);
   const [requestDialogOpen, setRequestDialogOpen] = React.useState(false);
   const [tab, setTab] = React.useState<TabKey>("about");
-  const [tabUserSet, setTabUserSet] = React.useState(false);
   const [chatOpen, setChatOpen] = React.useState(false);
   const [chatInitialTab, setChatInitialTab] = React.useState<ChatSubTab>("discussions");
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
@@ -98,7 +97,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           setChatOpen(true);
         } else {
           setTab(activeTabParam as TabKey);
-          setTabUserSet(true);
         }
       }
     }
@@ -170,12 +168,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     enabled: !!groupId && !!churchId
   });
   const hasPlans = (groupPlans?.length || 0) > 0;
-
-  React.useEffect(() => {
-    if (!tabUserSet && hasPlans && tab === "about") {
-      setTab("plans");
-    }
-  }, [hasPlans, tabUserSet, tab]);
 
   const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
   const members = membersData;
@@ -672,7 +664,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
                   setChatOpen(true);
                   return;
                 }
-                setTabUserSet(true);
                 setTab(v);
               }}
               variant="scrollable"
