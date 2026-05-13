@@ -361,7 +361,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     if (group?.meetingDay) rows.push({ icon: "event", label: group.meetingDay });
     if (group?.meetingTime) rows.push({ icon: "schedule", label: group.meetingTime });
     if (group?.meetingLocation) rows.push({ icon: "place", label: group.meetingLocation });
-    const hasAbout = !!group?.about;
 
     return (
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
@@ -630,14 +629,22 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     </Box>
   );
 
+  const hasAbout = !!group?.about;
   const availableTabs: { key: TabKey; label: string; icon: string }[] = [];
+  if (hasAbout) availableTabs.push({ key: "about", label: Locale.label("mobile.details.tabAbout"), icon: "info" });
   if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
-  availableTabs.push({ key: "about", label: Locale.label("mobile.details.tabAbout"), icon: "info" });
   if (isMember) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
   availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
   if (isLeader) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
   availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
+
+  React.useEffect(() => {
+    if (!group) return;
+    if (!availableTabs.some((t) => t.key === tab)) {
+      setTab(availableTabs[0].key);
+    }
+  }, [group, hasAbout, hasPlans, isMember, isLeader, tab]);
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>

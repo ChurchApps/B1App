@@ -26,9 +26,11 @@ export class ChatHelper {
       .replace(/'/g, "&#039;");
 
     const exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
+    const imageExp = /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i;
     const escapedText = escapeHtml(text);
     return escapedText.replace(exp, (match) => {
       const safeUrl = encodeURI(decodeURI(match));
+      if (imageExp.test(match)) return `<a href='${safeUrl}' target='_blank' rel='noopener noreferrer'><img src='${safeUrl}' alt='' style='max-width:100%;border-radius:8px;display:block;margin-top:4px;' /></a>`;
       return `<a href='${safeUrl}' target='_blank' rel='noopener noreferrer'>${match}</a>`;
     });
   }

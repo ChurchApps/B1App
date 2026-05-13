@@ -12,6 +12,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
+import { ChatHelper } from "@/helpers/ChatHelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
@@ -437,7 +438,7 @@ export const MessageConversation = ({ id, config }: Props) => {
               {bubbleName}
             </Typography>
           )}
-          {m.content}
+          <span dangerouslySetInnerHTML={{ __html: ChatHelper.insertLinks(m.content || "") }} />
         </Box>
       </Box>
     );
