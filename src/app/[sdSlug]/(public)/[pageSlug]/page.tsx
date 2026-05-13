@@ -52,7 +52,7 @@ export default async function Home({ params }: { params: PageParams }) {
     if (!pageData?.url) {
       switch (pageSlug) {
         case "votd": result = wrapDefaultPage(<VotdPage />); break;
-        case "bible": result = wrapDefaultPage(<BiblePage title={Locale.label("pageSlug.bible")} />); break;
+        case "bible": result = wrapDefaultPage(<BiblePage />); break;
         case "donate": result = wrapDefaultPage(<DonatePage config={config} />); break;
         case "stream": result = wrapDefaultPage(<StreamPage config={config} />); break;
         case "sermons": result = wrapDefaultPage(<SermonsPage config={config} title={Locale.label("pageSlug.sermons")} />); break;
