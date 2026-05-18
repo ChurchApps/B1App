@@ -341,8 +341,8 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
           backgroundColor: "#ffffff",
           color: "#212121",
           margin: 0,
-          maxWidth: "100vw",
-          width: "100vw",
+          maxWidth: "100%",
+          width: "100%",
           colorScheme: "light"
         }
       }}

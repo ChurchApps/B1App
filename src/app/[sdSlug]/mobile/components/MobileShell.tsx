@@ -47,7 +47,7 @@ const MobileShellInner = ({ config, children }: Props) => {
   return (
     <Box
       className="mobileAppRoot"
-      sx={{ display: "flex", minHeight: "100vh", bgcolor: mobileTheme.colors.background }}
+      sx={{ display: "flex", minHeight: "100vh", maxWidth: "100%", overflowX: "hidden", bgcolor: mobileTheme.colors.background }}
       style={{ ["--mobile-primary" as string]: primaryColor } as React.CSSProperties}
     >
       <MobileAppBar
