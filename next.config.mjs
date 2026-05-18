@@ -26,7 +26,7 @@ const __dirname = path.dirname(__filename);
 const nextConfig = {
   reactStrictMode: true,
 
-  allowedDevOrigins: ['grace.localtest.me', '*.localtest.me'],
+  allowedDevOrigins: ['grace.localtest.me', '*.localtest.me', 'localhost', '*.localhost'],
 
   experimental: {
     // Optimize package imports to reduce bundle size
@@ -143,7 +143,11 @@ const nextConfig = {
 
   async redirects() {
     return [
-      { source: "/my", destination: "/mobile", permanent: true }
+      { source: "/my", destination: "/mobile", permanent: true },
+      // HTTP-level redirect for the mobile root. Doing this in a server
+      // component via redirect() trips a "Rendered more hooks" crash in the
+      // Next.js App Router client (16.2.x), causing a reload loop.
+      { source: "/mobile", destination: "/mobile/dashboard", permanent: false }
     ];
   },
 
