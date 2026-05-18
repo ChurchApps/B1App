@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, GlobalStyles } from "@mui/material";
 import { ErrorHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import type { ErrorAppDataInterface } from "@churchapps/helpers";
 import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
@@ -75,6 +75,10 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
   return (
     <CookieProviderWrapper>
       <ThemeProvider theme={mobileMuiTheme}>
+        <GlobalStyles styles={{
+          "html, body": { overflowX: "hidden", maxWidth: "100%" },
+          img: { maxWidth: "100%" }
+        }} />
         <UserProvider>
           <MobileQueryProvider>
             <MobileGoogleAnalytics />
