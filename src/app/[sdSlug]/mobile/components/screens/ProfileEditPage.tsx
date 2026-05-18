@@ -142,7 +142,7 @@ const resizePhotoToDataUrl = async (file: File): Promise<string> => new Promise(
   reader.readAsDataURL(file);
 });
 
-const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const ProfileEditPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;

@@ -32,13 +32,11 @@ test.describe("Public built-in routes", () => {
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
   });
 
-  test("/bible renders bible page with Genesis-1:1 iframe", async ({ page }) => {
+  test("/bible renders YouVersion bible reader", async ({ page }) => {
     await page.goto("/bible");
     await expect(page).toHaveURL(/\/bible/);
-    await expect(page.locator("h1").filter({ hasText: /^Bible$/ })).toBeVisible({ timeout: 15000 });
-    // BiblePage embeds a biblia.com iframe with default reference Ge1.1.
-    const iframe = page.locator('iframe[title="content"]');
-    await expect(iframe).toHaveAttribute("src", /Ge1\.1/, { timeout: 15000 });
+    await expect(page.getByTestId("bible-previous-chapter-button")).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("bible-next-chapter-button")).toBeVisible();
   });
 
   test("/votd renders verse-of-the-day page", async ({ page }) => {
