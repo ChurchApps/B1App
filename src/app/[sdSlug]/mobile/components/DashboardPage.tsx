@@ -55,9 +55,12 @@ export const DashboardPage = ({ config }: Props) => {
     incrementViewCount(generateLinkId(link));
     const route = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
     if (!route) return;
-    if (route.startsWith("http")) {
-
-      window.open(route, "_blank", "noopener,noreferrer");
+    // Custom "url" links always open externally (new window) so iOS standalone
+    // PWAs give the user a close button. Relative paths are resolved against the
+    // origin first; otherwise they'd navigate in-place out of the mobile shell.
+    if (link.linkType === "url" || route.startsWith("http")) {
+      const target = route.startsWith("http") ? route : new URL(route, window.location.origin).toString();
+      window.open(target, "_blank", "noopener,noreferrer");
     } else {
       router.push(route);
     }
