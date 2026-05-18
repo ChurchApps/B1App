@@ -8,8 +8,10 @@ export interface ChurchAppearance {
 }
 
 export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppearance> {
+  if (!sdSlug) return {};
   EnvironmentHelper.init();
-  const base = EnvironmentHelper.Common.MembershipApi;
+  // Strip a trailing slash so the join doesn't produce //churches/lookup/ (404).
+  const base = EnvironmentHelper.Common.MembershipApi?.replace(/\/+$/, "");
   if (!base) return {};
 
   try {

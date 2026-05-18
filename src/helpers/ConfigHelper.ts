@@ -22,6 +22,8 @@ export class ConfigHelper {
   }
 
   static async load(keyName: string, navCategory:string = "b1Tab") {
+    // Without a subdomain the lookup hits //churches/lookup/ and 404s (Sentry B1-APP-95/94).
+    if (!keyName) throw new Error("ConfigHelper.load called without a church subdomain");
     const cacheKey = "sd_" + keyName;
     const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi", [cacheKey]);
     const appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi", [cacheKey]);
