@@ -17,7 +17,11 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     short_name: shortName,
     description: `${safeName} mobile app`,
     start_url: "mobile/dashboard?source=pwa",
-    scope: "./",
+    // Scope is intentionally limited to the mobile shell. Any link that points
+    // outside /{sdSlug}/mobile/ then falls outside the installed PWA's scope,
+    // so iOS/Android open it in the in-app browser overlay (with a close
+    // button) instead of navigating in-place with no way back.
+    scope: "mobile/",
     display: "standalone",
     orientation: "portrait",
     background_color: "#F6F6F8",
