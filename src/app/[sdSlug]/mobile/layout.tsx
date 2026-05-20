@@ -5,7 +5,13 @@ import { loadChurchAppearance } from "./loadChurchAppearance";
 
 type LayoutParams = Promise<{ sdSlug: string }>;
 
-export const metadata: Metadata = { robots: { index: false, follow: false } };
+export async function generateMetadata({ params }: { params: LayoutParams }): Promise<Metadata> {
+  const { sdSlug } = await params;
+  return {
+    robots: { index: false, follow: false },
+    manifest: `/manifest.webmanifest?church=${encodeURIComponent(sdSlug)}`
+  };
+}
 
 export async function generateViewport({ params }: { params: LayoutParams }): Promise<Viewport> {
   const { sdSlug } = await params;
@@ -18,10 +24,10 @@ export async function generateViewport({ params }: { params: LayoutParams }): Pr
   };
 }
 
-export default function MobileLayout({ children }: { children: React.ReactNode }) {
+export default async function MobileLayout({ children, params }: { children: React.ReactNode; params: LayoutParams }) {
+  await params;
   return (
     <>
-      <link rel="manifest" href="/manifest.webmanifest" />
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
       <MobileClientLayout>

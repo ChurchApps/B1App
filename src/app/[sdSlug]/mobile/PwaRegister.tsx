@@ -4,10 +4,32 @@ import { useEffect } from "react";
 export function PwaRegister(): null {
   useEffect(() => {
     if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
-    if (process.env.NODE_ENV !== "production") return;
-    navigator.serviceWorker
-      .register("/sw.js", { scope: "/", updateViaCache: "none" })
-      .catch(() => {});
+    const allowDevPwa = process.env.NEXT_PUBLIC_ENABLE_PWA_DEV === "true";
+    const isDev = process.env.NODE_ENV !== "production";
+    if (isDev && !allowDevPwa) return;
+
+    let cancelled = false;
+    const serviceWorkerPath = isDev ? "/dev-sw.js" : "/sw.js";
+    const register = async () => {
+      try {
+        const existing = await navigator.serviceWorker.getRegistration("/");
+        if (existing) {
+          const existingScript = existing.active?.scriptURL || existing.waiting?.scriptURL || existing.installing?.scriptURL || "";
+          if (!existingScript.endsWith(serviceWorkerPath)) {
+            await existing.unregister();
+          } else {
+            return;
+          }
+        }
+
+        const registration = await navigator.serviceWorker.register(serviceWorkerPath, { scope: "/", updateViaCache: "none" });
+      } catch (error) {
+        if (!cancelled) console.error("[pwa] service worker registration failed:", error);
+      }
+    };
+
+    register();
+    return () => { cancelled = true; };
   }, []);
   return null;
 }
