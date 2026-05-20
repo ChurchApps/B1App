@@ -7,6 +7,9 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MobileAppBar } from "./MobileAppBar";
 import { MobileDrawer } from "./MobileDrawer";
+import { ChatNotificationBridge } from "./ChatNotificationBridge";
+import { PushPermissionPrompt } from "./PushPermissionPrompt";
+import { WebPushEnrollmentSync } from "./WebPushEnrollmentSync";
 import { mobileTheme } from "./mobileTheme";
 import { MobileThemeProvider, useMobileThemeMode } from "./MobileThemeProvider";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
@@ -47,7 +50,16 @@ const MobileShellInner = ({ config, children }: Props) => {
   return (
     <Box
       className="mobileAppRoot"
-      sx={{ display: "flex", minHeight: "100vh", maxWidth: "100%", overflowX: "hidden", bgcolor: mobileTheme.colors.background }}
+      sx={{
+        display: "flex",
+        height: "100vh",
+        maxWidth: "100%",
+        overflow: "hidden",
+        bgcolor: mobileTheme.colors.background,
+        "@supports (height: 100dvh)": {
+          height: "100dvh"
+        }
+      }}
       style={{ ["--mobile-primary" as string]: primaryColor } as React.CSSProperties}
     >
       <MobileAppBar
@@ -91,13 +103,20 @@ const MobileShellInner = ({ config, children }: Props) => {
       </Drawer>
 
       <Box component="main" sx={{
+        display: "flex",
+        flexDirection: "column",
         flexGrow: 1,
         minWidth: 0,
+        minHeight: 0,
+        overflow: "hidden",
         width: { md: `calc(100% - ${drawerWidth}px)` },
         bgcolor: mobileTheme.colors.background
       }}>
         <Toolbar sx={{ minHeight: `${mobileTheme.headerHeight}px !important` }} />
+        <ChatNotificationBridge personId={context.person?.id} churchId={context.userChurch?.church?.id} />
+        <WebPushEnrollmentSync />
         {children}
+        <PushPermissionPrompt />
       </Box>
     </Box>
   );
