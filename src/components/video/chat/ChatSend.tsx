@@ -25,7 +25,14 @@ export const ChatSend: React.FC<Props> = (props) => {
 
   const sendMessage = () => {
     const { firstName, lastName } = ChatHelper.current.user;
-    const msg: MessageInterface = { churchId: ChatConfigHelper.current.churchId, content: message.trim(), conversationId: props.conversation.id, displayName: `${firstName} ${lastName}`, messageType: "message" };
+    const msg: MessageInterface = {
+      churchId: ChatConfigHelper.current.churchId,
+      content: message.trim(),
+      conversationId: props.conversation.id,
+      displayName: `${firstName} ${lastName}`,
+      personId: UserHelper.currentUserChurch?.person?.id || undefined,
+      messageType: "message"
+    };
     if (UserHelper.user) ApiHelper.post("/messages/send", [msg], "MessagingApi");
     else ApiHelper.postAnonymous("/messages/send", [msg], "MessagingApi");
     setMessage("");
@@ -66,4 +73,3 @@ export const ChatSend: React.FC<Props> = (props) => {
     </div>
   );
 };
-
