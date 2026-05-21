@@ -58,6 +58,7 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
         color: onPrimary,
         width: { md: `calc(100% - ${drawerWidth}px)` },
         ml: { md: `${drawerWidth}px` },
+        pt: "env(safe-area-inset-top)",
         zIndex: (theme) => theme.zIndex.drawer - 1
       }}
     >

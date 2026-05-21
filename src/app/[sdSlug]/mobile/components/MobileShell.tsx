@@ -99,7 +99,7 @@ const MobileShellInner = ({ config, children }: Props) => {
         width: { md: `calc(100% - ${drawerWidth}px)` },
         bgcolor: mobileTheme.colors.background
       }}>
-        <Toolbar sx={{ minHeight: `${mobileTheme.headerHeight}px !important` }} />
+        <Toolbar sx={{ minHeight: `calc(${mobileTheme.headerHeight}px + env(safe-area-inset-top)) !important` }} />
         {children}
       </Box>
     </Box>
