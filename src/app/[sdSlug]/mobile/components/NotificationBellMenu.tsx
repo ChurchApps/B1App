@@ -3,13 +3,12 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Badge, Box, Button, Icon, IconButton, Popover, Skeleton, Tab, Tabs, Typography } from "@mui/material";
-import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, useNotifications } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
 import { getInitials, formatRelative } from "./util";
-import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
 
 interface Props {
   anchorEl: HTMLElement | null;
@@ -69,7 +68,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
-  const { counts, refresh } = useRealtimeNotifications(userContext ?? null);
+  const { counts, refresh } = useNotifications(userContext ?? null);
   const [tab, setTab] = React.useState<"messages" | "notifications">("messages");
   const loggedIn = !!userContext?.user?.firstName;
   const myPersonId = userContext?.person?.id;
