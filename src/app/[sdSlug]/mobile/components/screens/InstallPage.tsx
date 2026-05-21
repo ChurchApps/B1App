@@ -73,6 +73,7 @@ export const InstallPage = ({ config }: Props) => {
   const [installing, setInstalling] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [qrUrl, setQrUrl] = useState<string>("");
+  const [debugInfo, setDebugInfo] = useState<Record<string, string>>({});
 
   useEffect(() => {
     InstallPromptHelper.start();
@@ -92,14 +93,62 @@ export const InstallPage = ({ config }: Props) => {
     const target = window.location.href;
     setQrUrl(`https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=${encodeURIComponent(target)}`);
 
-    return InstallPromptHelper.subscribe((state) => {
+    const unsubscribe = InstallPromptHelper.subscribe((state) => {
       setInstalled(state.installed);
       setCanInstall(!!state.deferred && !state.installed);
       if (state.installed) {
         setStatusMessage("Installed! Look for the icon on your home screen.");
       }
+      setDebugInfo((prev) => ({ ...prev, bipDeferred: state.deferred ? "yes" : "no", standalone: state.installed ? "yes" : "no" }));
     });
-  }, []);
+
+    const collectDebug = async () => {
+      const info: Record<string, string> = {
+        ua: (navigator.userAgent || "").slice(0, 80),
+        href: window.location.href,
+        secure: window.isSecureContext ? "yes" : "no",
+        cookies: navigator.cookieEnabled ? "yes" : "no",
+        swSupport: "serviceWorker" in navigator ? "yes" : "no",
+        manifestLink: document.querySelector('link[rel="manifest"]')?.getAttribute("href") || "(none)"
+      };
+      try {
+        const regs = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistrations() : [];
+        info.swRegCount = String(regs.length);
+        info.swScripts = regs.map((r) => {
+          const sw = r.active || r.waiting || r.installing;
+          return `${r.scope}→${sw?.scriptURL || "?"}|${sw?.state || "?"}`;
+        }).join(" || ") || "(none)";
+      } catch (e) {
+        info.swError = (e as Error).message || "err";
+      }
+      try {
+        const res = await fetch("/manifest.webmanifest?church=" + encodeURIComponent(config?.church?.subDomain || ""), { cache: "no-store" });
+        info.manifestStatus = String(res.status);
+        const j = await res.json();
+        info.manifestScope = j.scope || "(none)";
+        info.manifestStart = j.start_url || "(none)";
+        info.manifestIcons = String((j.icons || []).length);
+      } catch (e) {
+        info.manifestFetchError = (e as Error).message || "err";
+      }
+      try {
+        const r192 = await fetch("/mobile/icon/192", { method: "HEAD", cache: "no-store" });
+        info.icon192 = `${r192.status} ${r192.headers.get("content-type") || ""}`;
+      } catch (e) {
+        info.icon192 = "err " + ((e as Error).message || "");
+      }
+      try {
+        const rStart = await fetch("/mobile/dashboard?source=pwa", { method: "HEAD", cache: "no-store", redirect: "manual" });
+        info.startUrl = `${rStart.status}`;
+      } catch (e) {
+        info.startUrl = "err " + ((e as Error).message || "");
+      }
+      setDebugInfo((prev) => ({ ...prev, ...info }));
+    };
+    collectDebug();
+
+    return unsubscribe;
+  }, [config]);
 
   useEffect(() => {
     const refresh = () => {
@@ -436,6 +485,7 @@ export const InstallPage = ({ config }: Props) => {
                   installing={installing}
                   onInstall={handleInstall}
                   statusMessage={statusMessage}
+                  debugInfo={debugInfo}
                 />
             ) : (
               <DesktopInstructions
@@ -700,9 +750,10 @@ interface AndroidProps {
   installing: boolean;
   onInstall: () => void;
   statusMessage: string | null;
+  debugInfo: Record<string, string>;
 }
 
-const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onInstall, statusMessage }: AndroidProps) => (
+const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onInstall, statusMessage, debugInfo }: AndroidProps) => (
   <Box sx={{ animation: `${fadeIn} 0.4s ease-out` }}>
     {panelHeader("Install on Android", "Chrome will add the app to your home screen in one tap.")}
 
@@ -763,6 +814,20 @@ const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onIns
         {statusMessage}
       </Typography>
     )}
+
+    <Box component="details" sx={{ mt: 2.5, p: 1.5, borderRadius: "10px", bgcolor: "#f1f5f9", border: "1px solid #e2e8f0", fontSize: 12 }}>
+      <Box component="summary" sx={{ cursor: "pointer", fontWeight: 600, color: "#475569", fontSize: 12 }}>
+        Install diagnostics
+      </Box>
+      <Box component="dl" sx={{ m: 0, mt: 1, display: "grid", gridTemplateColumns: "auto 1fr", gap: "4px 10px", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 11, color: "#0f172a", wordBreak: "break-all" }}>
+        {Object.entries(debugInfo).map(([k, v]) => (
+          <React.Fragment key={k}>
+            <Box component="dt" sx={{ fontWeight: 700, color: "#475569" }}>{k}</Box>
+            <Box component="dd" sx={{ m: 0 }}>{v}</Box>
+          </React.Fragment>
+        ))}
+      </Box>
+    </Box>
   </Box>
 );
 
