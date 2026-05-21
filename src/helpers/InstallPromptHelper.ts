@@ -10,6 +10,11 @@ export interface InstallPromptState {
   installed: boolean;
 }
 
+interface EarlyInstallPromptState {
+  deferredPrompt?: BeforeInstallPromptEvent | null;
+  installed?: boolean;
+}
+
 type Listener = (state: InstallPromptState) => void;
 
 const listeners = new Set<Listener>();
@@ -17,6 +22,11 @@ const listeners = new Set<Listener>();
 let started = false;
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
 let installed = false;
+
+const getEarlyState = (): EarlyInstallPromptState | null => {
+  if (typeof window === "undefined") return null;
+  return ((window as Window & { __b1InstallPromptState?: EarlyInstallPromptState }).__b1InstallPromptState) || null;
+};
 
 const emit = () => {
   const state = InstallPromptHelper.getState();
@@ -31,14 +41,23 @@ const detectStandalone = (): boolean => {
 };
 
 const refreshInstalledState = () => {
+  const earlyState = getEarlyState();
   installed = detectStandalone();
+  if (earlyState?.deferredPrompt && !installed) deferredPrompt = earlyState.deferredPrompt;
+  if (typeof earlyState?.installed === "boolean") installed = installed || earlyState.installed;
   if (!installed) return;
   deferredPrompt = null;
+  if (earlyState) earlyState.deferredPrompt = null;
 };
 
 const handleBeforeInstallPrompt = (event: Event) => {
   event.preventDefault();
   deferredPrompt = event as BeforeInstallPromptEvent;
+  const earlyState = getEarlyState();
+  if (earlyState) {
+    earlyState.deferredPrompt = deferredPrompt;
+    earlyState.installed = false;
+  }
   refreshInstalledState();
   emit();
 };
@@ -46,6 +65,11 @@ const handleBeforeInstallPrompt = (event: Event) => {
 const handleAppInstalled = () => {
   installed = true;
   deferredPrompt = null;
+  const earlyState = getEarlyState();
+  if (earlyState) {
+    earlyState.installed = true;
+    earlyState.deferredPrompt = null;
+  }
   emit();
 };
 
