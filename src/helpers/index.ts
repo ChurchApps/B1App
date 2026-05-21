@@ -4,6 +4,8 @@ export { PersonHelper } from "./Personhelper";
 export { CheckinHelper } from "./CheckinHelper";
 export { UrlHelper } from "./UrlHelper";
 export { WebPushHelper } from "./WebPushHelper";
+export { InstallPromptHelper } from "./InstallPromptHelper";
+export { formatNotificationError, getSocketDiagnostics } from "./NotificationRuntimeHelper";
 export { isLinkVisible, filterVisibleLinks } from "./VisibilityHelper";
 export { PlanHelper } from "@churchapps/helpers";
 

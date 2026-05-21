@@ -6,38 +6,49 @@ import { Locale, UserHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { WebPushHelper } from "@/helpers";
 import { mobileTheme } from "./mobileTheme";
+import { useNotificationDiagnostics } from "../hooks/useNotificationDiagnostics";
 
 export const PushPermissionPrompt = () => {
   const context = useContext(UserContext);
   const [visible, setVisible] = useState(false);
   const [busy, setBusy] = useState(false);
+  const loggedIn = !!UserHelper.user?.id && !!context.userChurch?.jwt;
+  const { diagnostics, refresh } = useNotificationDiagnostics(loggedIn);
 
   useEffect(() => {
     let cancelled = false;
-    const check = async () => {
-      if (!UserHelper.user?.id || !context.userChurch?.jwt) return;
-      if (!WebPushHelper.isSupported()) return;
-      if (!WebPushHelper.isStandalone()) return;
-      if (!WebPushHelper.canPromptNow()) return;
-      const existing = await WebPushHelper.getExistingSubscription();
-      if (existing) return;
-      if (!cancelled) setVisible(true);
+    const check = () => {
+      if (!loggedIn) return setVisible(false);
+      const shouldShow = diagnostics.permission === "default"
+        && diagnostics.canPromptNow
+        && !(WebPushHelper.requiresInstallForPush?.() || false)
+        && !diagnostics.hasSubscription;
+      if (!cancelled) setVisible(shouldShow);
     };
-    const t = setTimeout(check, 4000);
+    const t = setTimeout(check, 2500);
     return () => { cancelled = true; clearTimeout(t); };
-  }, [context.userChurch?.jwt]);
+  }, [diagnostics.canPromptNow, diagnostics.hasSubscription, diagnostics.permission, loggedIn]);
 
   const handleEnable = async () => {
     setBusy(true);
-    try { await WebPushHelper.subscribe(); } finally {
-      setBusy(false);
+    try {
+      const subscription = await WebPushHelper.subscribe();
+      if (!subscription && WebPushHelper.getPermissionState() === "granted") {
+        throw new Error("Permission granted, but push registration did not complete.");
+      }
       setVisible(false);
+    } catch (error) {
+      console.error("[webpush] prompt enable failed:", error);
+    } finally {
+      setBusy(false);
+      await refresh("permission-prompt-enable");
     }
   };
 
   const handleDismiss = () => {
     WebPushHelper.markPrompted();
     setVisible(false);
+    void refresh("permission-prompt-dismiss");
   };
 
   if (!visible) return null;

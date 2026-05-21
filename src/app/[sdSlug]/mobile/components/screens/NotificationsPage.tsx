@@ -10,6 +10,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { WebPushHelper } from "@/helpers";
 import { mobileTheme } from "../mobileTheme";
 import { formatRelative } from "../util";
+import { useNotificationDiagnostics } from "../../hooks/useNotificationDiagnostics";
 
 interface NotificationItem {
   id?: string;
@@ -62,30 +63,27 @@ export const NotificationsPage = ({ config }: Props) => {
   const context = useContext(UserContext);
   const queryClient = useQueryClient();
   const loggedIn = !!context?.user?.firstName;
-
-  type PushStatus = "unsupported" | "blocked" | "off" | "on";
-  const [pushStatus, setPushStatus] = React.useState<PushStatus | null>(null);
   const [pushBusy, setPushBusy] = React.useState(false);
-
-  const refreshPushStatus = React.useCallback(async () => {
-    if (!WebPushHelper.isSupported()) { setPushStatus("unsupported"); return; }
-    if (typeof Notification !== "undefined" && Notification.permission === "denied") {
-      setPushStatus("blocked"); return;
-    }
-    const sub = await WebPushHelper.getExistingSubscription();
-    setPushStatus(sub ? "on" : "off");
-  }, []);
-
-  React.useEffect(() => {
-    if (loggedIn) refreshPushStatus();
-  }, [loggedIn, refreshPushStatus]);
+  const { diagnostics, refresh: refreshPushStatus } = useNotificationDiagnostics(loggedIn);
 
   const handleTogglePush = async () => {
+    if (WebPushHelper.requiresInstallForPush()) {
+      router.push("/mobile/install");
+      return;
+    }
+
     setPushBusy(true);
     try {
-      if (pushStatus === "on") await WebPushHelper.unsubscribe();
-      else await WebPushHelper.subscribe();
+      if (diagnostics.hasSubscription) await WebPushHelper.unsubscribe();
+      else {
+        const subscription = await WebPushHelper.subscribe();
+        if (!subscription && WebPushHelper.getPermissionState() === "granted") {
+          throw new Error("Permission granted, but device registration did not complete.");
+        }
+      }
       await refreshPushStatus();
+    } catch (error) {
+      console.error("[webpush] notifications toggle failed:", error);
     } finally {
       setPushBusy(false);
     }
@@ -292,9 +290,11 @@ export const NotificationsPage = ({ config }: Props) => {
   );
 
   const renderPushCard = () => {
-    if (!loggedIn || pushStatus === null || pushStatus === "unsupported") return null;
-    const on = pushStatus === "on";
-    const blocked = pushStatus === "blocked";
+    if (!loggedIn || diagnostics.permission === "unsupported") return null;
+    const on = diagnostics.hasSubscription && (!diagnostics.serverRegistrationEnabled || diagnostics.hasConfirmedServerEnrollment);
+    const blocked = diagnostics.permission === "denied";
+    const pendingRegistration = diagnostics.permission === "granted" && (!diagnostics.hasSubscription || (diagnostics.serverRegistrationEnabled && !diagnostics.hasConfirmedServerEnrollment));
+    const installRequired = WebPushHelper.requiresInstallForPush();
     return (
       <Box
         sx={{
@@ -317,6 +317,10 @@ export const NotificationsPage = ({ config }: Props) => {
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
             {blocked
               ? "Blocked in browser settings"
+              : installRequired
+                ? (diagnostics.statusReason || "Install this app to finish notification setup on this device")
+              : pendingRegistration
+                ? (diagnostics.statusReason || "Permission is granted, but this device still needs registration")
               : on
                 ? "You'll get alerts on this device"
                 : "Turn on to get alerts on this device"}
@@ -324,7 +328,7 @@ export const NotificationsPage = ({ config }: Props) => {
         </Box>
         {!blocked && (
           <Button size="small" variant={on ? "outlined" : "contained"} disabled={pushBusy} onClick={handleTogglePush}>
-            {on ? "Turn off" : "Turn on"}
+            {on ? "Turn off" : installRequired ? "Install App" : pendingRegistration ? "Retry" : "Turn on"}
           </Button>
         )}
       </Box>

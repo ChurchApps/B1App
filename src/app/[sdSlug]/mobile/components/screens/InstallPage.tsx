@@ -5,17 +5,13 @@ import { Box, GlobalStyles, Icon, Typography } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import { Locale } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { InstallPromptHelper } from "@/helpers";
 
 interface Props {
   config: ConfigurationInterface;
 }
 
 type Platform = "ios" | "android" | "desktop";
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
 
 const detectPlatform = (): Platform => {
   if (typeof navigator === "undefined") return "desktop";
@@ -73,12 +69,13 @@ export const InstallPage = ({ config }: Props) => {
 
   const [platform, setPlatform] = useState<Platform | null>(null);
   const [installed, setInstalled] = useState(false);
-  const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
+  const [canInstall, setCanInstall] = useState(false);
   const [installing, setInstalling] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [qrUrl, setQrUrl] = useState<string>("");
 
   useEffect(() => {
+    InstallPromptHelper.start();
     const p = detectPlatform();
     setPlatform(p);
 
@@ -95,30 +92,41 @@ export const InstallPage = ({ config }: Props) => {
     const target = window.location.href;
     setQrUrl(`https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=${encodeURIComponent(target)}`);
 
-    const onPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferred(e as BeforeInstallPromptEvent);
+    return InstallPromptHelper.subscribe((state) => {
+      setInstalled(state.installed);
+      setCanInstall(!!state.deferred && !state.installed);
+      if (state.installed) {
+        setStatusMessage("Installed! Look for the icon on your home screen.");
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const refresh = () => {
+      const nextPlatform = detectPlatform();
+      setPlatform(nextPlatform);
+      setInstalled(detectStandalone(nextPlatform));
     };
-    const onInstalled = () => {
-      setInstalled(true);
-      setStatusMessage("Installed! Look for the icon on your home screen.");
-    };
-    window.addEventListener("beforeinstallprompt", onPrompt);
-    window.addEventListener("appinstalled", onInstalled);
+    window.addEventListener("focus", refresh);
+    window.addEventListener("pageshow", refresh);
     return () => {
-      window.removeEventListener("beforeinstallprompt", onPrompt);
-      window.removeEventListener("appinstalled", onInstalled);
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("pageshow", refresh);
     };
   }, []);
 
   const handleInstall = async () => {
-    if (!deferred) return;
+    const { deferred } = InstallPromptHelper.getState();
+    if (!deferred) {
+      setStatusMessage("Install is not available yet. If you're on Android, open this page in Chrome and wait a moment.");
+      return;
+    }
     try {
       setInstalling(true);
       await deferred.prompt();
       const choice = await deferred.userChoice;
       setStatusMessage(choice.outcome === "accepted" ? "Installing..." : "Install canceled. You can try again any time.");
-      setDeferred(null);
+      InstallPromptHelper.clearDeferredPrompt();
     } catch {
       setStatusMessage("Something went wrong. Please try again.");
     } finally {
@@ -420,15 +428,15 @@ export const InstallPage = ({ config }: Props) => {
             ) : platform === "ios" ? (
               <IOSInstructions accent={accent} accentDeep={accentDeep} />
             ) : platform === "android" ? (
-              <AndroidInstructions
-                primary={primary}
-                accent={accent}
-                accentDeep={accentDeep}
-                canInstall={!!deferred}
-                installing={installing}
-                onInstall={handleInstall}
-                statusMessage={statusMessage}
-              />
+                <AndroidInstructions
+                  primary={primary}
+                  accent={accent}
+                  accentDeep={accentDeep}
+                  canInstall={canInstall}
+                  installing={installing}
+                  onInstall={handleInstall}
+                  statusMessage={statusMessage}
+                />
             ) : (
               <DesktopInstructions
                 primary={primary}
