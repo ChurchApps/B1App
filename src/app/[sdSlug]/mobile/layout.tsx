@@ -18,10 +18,23 @@ export async function generateViewport({ params }: { params: LayoutParams }): Pr
   };
 }
 
-export default function MobileLayout({ children }: { children: React.ReactNode }) {
+export default async function MobileLayout({ children, params }: { children: React.ReactNode; params: LayoutParams }) {
+  const { sdSlug } = await params;
+  const { churchName } = await loadChurchAppearance(sdSlug);
+  const appTitle = (churchName && churchName.trim()) || sdSlug || "Church";
+  const iconUrl = `/${sdSlug}/mobile/icon/192`;
+  const iconUrl512 = `/${sdSlug}/mobile/icon/512`;
+
   return (
     <>
-      <link rel="manifest" href="/manifest.webmanifest" />
+      <link rel="manifest" href={`/${sdSlug}/manifest.webmanifest`} />
+      <link rel="apple-touch-icon" href={iconUrl} />
+      <link rel="apple-touch-icon" sizes="192x192" href={iconUrl} />
+      <link rel="apple-touch-icon" sizes="512x512" href={iconUrl512} />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="apple-mobile-web-app-title" content={appTitle} />
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
       <MobileClientLayout>
