@@ -25,11 +25,16 @@ const detectPlatform = (): Platform => {
   return "desktop";
 };
 
-const detectStandalone = (): boolean => {
+const detectStandalone = (platform: Platform): boolean => {
   if (typeof window === "undefined") return false;
-  if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
-  if ((window.navigator as any).standalone === true) return true;
-  return false;
+  if (platform === "ios") {
+    // On iOS, navigator.standalone is the only trustworthy signal — it's set
+    // by iOS only when launched from the home screen. display-mode:standalone
+    // gives false positives in in-app browsers (Facebook, Instagram, LinkedIn,
+    // Gmail, etc.) whose chrome-less WKWebViews match it.
+    return (window.navigator as any).standalone === true;
+  }
+  return !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
 };
 
 const darken = (hex: string, amount: number): string => {
@@ -74,8 +79,9 @@ export const InstallPage = ({ config }: Props) => {
   const [qrUrl, setQrUrl] = useState<string>("");
 
   useEffect(() => {
-    setPlatform(detectPlatform());
-    setInstalled(detectStandalone());
+    const p = detectPlatform();
+    setPlatform(p);
+    setInstalled(detectStandalone(p));
 
     const target = window.location.href;
     setQrUrl(`https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=${encodeURIComponent(target)}`);
