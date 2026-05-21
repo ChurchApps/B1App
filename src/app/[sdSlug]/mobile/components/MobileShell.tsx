@@ -7,6 +7,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MobileAppBar } from "./MobileAppBar";
 import { MobileDrawer } from "./MobileDrawer";
+import { WebPushEnrollmentSync } from "./WebPushEnrollmentSync";
 import { mobileTheme } from "./mobileTheme";
 import { MobileThemeProvider, useMobileThemeMode } from "./MobileThemeProvider";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
@@ -50,6 +51,8 @@ const MobileShellInner = ({ config, children }: Props) => {
       sx={{ display: "flex", minHeight: "100vh", maxWidth: "100%", overflowX: "hidden", bgcolor: mobileTheme.colors.background }}
       style={{ ["--mobile-primary" as string]: primaryColor } as React.CSSProperties}
     >
+      <WebPushEnrollmentSync />
+
       <MobileAppBar
         config={config}
         primaryColor={primaryColor}
