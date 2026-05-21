@@ -46,6 +46,7 @@ export const MessageConversation = ({ id, config }: Props) => {
   const [editingId, setEditingId] = React.useState<string | null>(null);
   const [menuAnchor, setMenuAnchor] = React.useState<{ el: HTMLElement; message: MessageInterface } | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<MessageInterface | null>(null);
+  const [viewportHeight, setViewportHeight] = React.useState<number | null>(null);
 
   const listRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -93,6 +94,33 @@ export const MessageConversation = ({ id, config }: Props) => {
     if (listRef.current) {
       listRef.current.scrollTop = listRef.current.scrollHeight;
     }
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let frame = 0;
+    const updateViewportHeight = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const nextHeight = window.visualViewport?.height || window.innerHeight || 0;
+        setViewportHeight((prev) => (prev !== nextHeight ? nextHeight : prev));
+      });
+    };
+
+    updateViewportHeight();
+    window.addEventListener("resize", updateViewportHeight);
+    window.addEventListener("orientationchange", updateViewportHeight);
+    window.visualViewport?.addEventListener("resize", updateViewportHeight);
+    window.visualViewport?.addEventListener("scroll", updateViewportHeight);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("resize", updateViewportHeight);
+      window.removeEventListener("orientationchange", updateViewportHeight);
+      window.visualViewport?.removeEventListener("resize", updateViewportHeight);
+      window.visualViewport?.removeEventListener("scroll", updateViewportHeight);
+    };
   }, []);
 
   const peopleCache = React.useRef<Map<string, PersonInterface>>(new Map());
@@ -477,13 +505,19 @@ export const MessageConversation = ({ id, config }: Props) => {
     </Box>
   );
 
+  const shellHeight = viewportHeight
+    ? `${Math.max(viewportHeight - mobileTheme.headerHeight, 0)}px`
+    : `calc(100dvh - ${mobileTheme.headerHeight}px)`;
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100%",
-        minHeight: "100%",
+        height: shellHeight,
+        minHeight: shellHeight,
+        maxHeight: shellHeight,
+        overflow: "hidden",
         bgcolor: tc.background
       }}
     >
@@ -532,6 +566,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         ref={listRef}
         sx={{
           flex: 1,
+          minHeight: 0,
           overflowY: "auto",
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
@@ -550,8 +585,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       {editingId && (
         <Box
           sx={{
-            position: "sticky",
-            bottom: 60,
+            flexShrink: 0,
             bgcolor: tc.iconBackground,
             borderTop: `1px solid ${tc.border}`,
             px: `${mobileTheme.spacing.md}px`,
@@ -577,11 +611,12 @@ export const MessageConversation = ({ id, config }: Props) => {
 
       <Box
         sx={{
-          position: "sticky",
-          bottom: 0,
+          flexShrink: 0,
           bgcolor: tc.surface,
           borderTop: `1px solid ${tc.border}`,
-          p: "10px",
+          px: "10px",
+          pt: "10px",
+          pb: "calc(10px + env(safe-area-inset-bottom))",
           display: "flex",
           alignItems: "center",
           gap: "8px"

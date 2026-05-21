@@ -8,6 +8,7 @@ import { Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute, linkTypeToTagline } from "./mobileTheme";
+import { NotificationPermissionBanner } from "./NotificationPermissionBanner";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
@@ -105,6 +106,7 @@ export const DashboardPage = ({ config }: Props) => {
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pt: 2, pb: 3 }}>
+      <NotificationPermissionBanner enabled={!!jwt} />
 
       {hero && (() => {
         const heroPhoto = resolvePhoto(hero);
