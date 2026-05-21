@@ -5,7 +5,7 @@ import { ApiHelper, UserHelper, WebPushHelper as SharedWebPushHelper } from "@ch
 SharedWebPushHelper.configure({ scope: "/mobile", appName: "B1AppPwa" });
 
 const getServiceWorkerPath = () => process.env.NODE_ENV !== "production" ? "/dev-sw.js" : "/sw.js";
-const isWebPushServerEnabled = () => process.env.NEXT_PUBLIC_ENABLE_WEBPUSH_SERVER === "true";
+const isWebPushServerEnabled = () => process.env.NEXT_PUBLIC_ENABLE_WEBPUSH_SERVER !== "false";
 const SERVER_ENROLLMENT_KEY = "b1-webpush-server-enrollment";
 
 export type WebPushPermissionState = "unsupported" | "default" | "denied" | "granted";
