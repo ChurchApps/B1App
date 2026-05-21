@@ -103,8 +103,9 @@ export const InstallPage = ({ config }: Props) => {
 
   useEffect(() => {
     const refresh = () => {
-      setPlatform(detectPlatform());
-      setInstalled(detectStandalone());
+      const nextPlatform = detectPlatform();
+      setPlatform(nextPlatform);
+      setInstalled(detectStandalone(nextPlatform));
     };
     window.addEventListener("focus", refresh);
     window.addEventListener("pageshow", refresh);

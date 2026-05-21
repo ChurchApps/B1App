@@ -27,7 +27,7 @@ export default async function MobileLayout({ children, params }: { children: Rea
 
   return (
     <>
-      <link rel="manifest" href={`/${sdSlug}/manifest.webmanifest`} />
+      <link rel="manifest" href={`/manifest.webmanifest?church=${encodeURIComponent(sdSlug)}`} />
       <link rel="apple-touch-icon" href={iconUrl} />
       <link rel="apple-touch-icon" sizes="192x192" href={iconUrl} />
       <link rel="apple-touch-icon" sizes="512x512" href={iconUrl512} />
