@@ -30,8 +30,6 @@ interface PrivateMessageRow {
   toPersonId?: string;
 }
 
-const CHAT_SEND_ENDPOINT = "/messages/send";
-
 export const MessageConversation = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
@@ -53,7 +51,6 @@ export const MessageConversation = ({ id, config }: Props) => {
 
   const myPersonId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const myDisplayName = userContext?.person?.name?.display || UserHelper.currentUserChurch?.person?.name?.display || "";
-  const currentChurchId = userContext?.userChurch?.church?.id || UserHelper.currentUserChurch?.church?.id || "";
 
   const { data: personData } = useQuery<PersonInterface | null>({
     queryKey: ["community-person", id],
@@ -97,15 +94,6 @@ export const MessageConversation = ({ id, config }: Props) => {
       listRef.current.scrollTop = listRef.current.scrollHeight;
     }
   }, []);
-
-  const buildSendMessagePayload = React.useCallback((targetConversationId: string, content: string): MessageInterface => ({
-    churchId: currentChurchId,
-    conversationId: targetConversationId,
-    content,
-    displayName: myDisplayName,
-    personId: myPersonId,
-    messageType: "message"
-  } as MessageInterface), [currentChurchId, myDisplayName, myPersonId]);
 
   const peopleCache = React.useRef<Map<string, PersonInterface>>(new Map());
 
@@ -252,8 +240,8 @@ export const MessageConversation = ({ id, config }: Props) => {
     setConversationId(newConvId);
 
     await ApiHelper.post(
-      CHAT_SEND_ENDPOINT,
-      [buildSendMessagePayload(newConvId, content)],
+      "/messages",
+      [{ conversationId: newConvId, content, displayName: myDisplayName }],
       "MessagingApi"
     );
     await loadMessages();
@@ -304,21 +292,15 @@ export const MessageConversation = ({ id, config }: Props) => {
     try {
       if (conversationId) {
         await ApiHelper.post(
-          CHAT_SEND_ENDPOINT,
-          [buildSendMessagePayload(conversationId, content)],
+          "/messages",
+          [{ conversationId, content, displayName: myDisplayName }],
           "MessagingApi"
         );
         await loadMessages();
       } else {
         await createConversationAndSend(content);
       }
-    } catch (sendError) {
-      console.error("[chat-push] private chat send failed:", {
-        senderPersonId: myPersonId,
-        recipientPersonId: id,
-        conversationId: conversationId || null,
-        error: sendError
-      });
+    } catch {
       setError(Locale.label("mobile.details.messageFailed"));
 
       setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
@@ -500,10 +482,8 @@ export const MessageConversation = ({ id, config }: Props) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        flex: 1,
         height: "100%",
-        minHeight: 0,
-        overflow: "hidden",
+        minHeight: "100%",
         bgcolor: tc.background
       }}
     >
@@ -552,7 +532,6 @@ export const MessageConversation = ({ id, config }: Props) => {
         ref={listRef}
         sx={{
           flex: 1,
-          minHeight: 0,
           overflowY: "auto",
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
@@ -568,103 +547,90 @@ export const MessageConversation = ({ id, config }: Props) => {
         {messages !== null && messages.length > 0 && messages.map(renderBubble)}
       </Box>
 
+      {editingId && (
+        <Box
+          sx={{
+            position: "sticky",
+            bottom: 60,
+            bgcolor: tc.iconBackground,
+            borderTop: `1px solid ${tc.border}`,
+            px: `${mobileTheme.spacing.md}px`,
+            py: "6px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px"
+          }}
+        >
+          <Typography sx={{ fontSize: 12, color: tc.primary, fontWeight: 600 }}>
+            {Locale.label("mobile.details.editingMessage")}
+          </Typography>
+          <Button
+            size="small"
+            onClick={handleCancelEdit}
+            sx={{ color: tc.primary, textTransform: "none", fontSize: 12, minWidth: 0 }}
+          >
+            {Locale.label("mobile.details.cancel")}
+          </Button>
+        </Box>
+      )}
+
       <Box
         sx={{
           position: "sticky",
           bottom: 0,
-          zIndex: 2,
-          flexShrink: 0,
           bgcolor: tc.surface,
-          boxShadow: "0 -2px 10px rgba(0,0,0,0.04)"
+          borderTop: `1px solid ${tc.border}`,
+          p: "10px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px"
         }}
       >
-        {editingId && (
-          <Box
-            sx={{
-              bgcolor: tc.iconBackground,
-              borderTop: `1px solid ${tc.border}`,
-              px: `${mobileTheme.spacing.md}px`,
-              py: "6px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: "8px"
-            }}
-          >
-            <Typography sx={{ fontSize: 12, color: tc.primary, fontWeight: 600 }}>
-              {Locale.label("mobile.details.editingMessage")}
-            </Typography>
-            <Button
-              size="small"
-              onClick={handleCancelEdit}
-              sx={{ color: tc.primary, textTransform: "none", fontSize: 12, minWidth: 0 }}
-            >
-              {Locale.label("mobile.details.cancel")}
-            </Button>
-          </Box>
-        )}
-
-        <Box
+        <TextField
+          multiline
+          maxRows={4}
+          fullWidth
+          placeholder={Locale.label("mobile.details.typeMessage")}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          size="small"
           sx={{
-            borderTop: `1px solid ${tc.border}`,
-            px: "10px",
-            pt: "10px",
-            pb: "10px",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            bgcolor: tc.surface,
-            flexShrink: 0,
-          "@media (display-mode: standalone), (display-mode: fullscreen)": {
-            pb: "calc(10px + env(safe-area-inset-bottom))"
-          }
-        }}
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "22px",
+              bgcolor: tc.background,
+              fontSize: 14,
+              px: "12px",
+              py: "8px"
+            },
+            "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
+          }}
+        />
+        <IconButton
+          aria-label={Locale.label("mobile.details.send")}
+          onClick={handleSend}
+          disabled={sending || !text.trim()}
+          sx={{
+            bgcolor: tc.primary,
+            color: tc.onPrimary,
+            "&:hover": { bgcolor: tc.primary },
+            "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
+            width: 40,
+            height: 40
+          }}
         >
-          <TextField
-            multiline
-            maxRows={4}
-            fullWidth
-            placeholder={Locale.label("mobile.details.typeMessage")}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            size="small"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "22px",
-                bgcolor: tc.background,
-                fontSize: 14,
-                px: "12px",
-                py: "8px"
-              },
-              "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
-            }}
-          />
-          <IconButton
-            aria-label={Locale.label("mobile.details.send")}
-            onClick={handleSend}
-            disabled={sending || !text.trim()}
-            sx={{
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              "&:hover": { bgcolor: tc.primary },
-              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
-              width: 40,
-              height: 40
-            }}
-          >
-            {sending ? (
-              <CircularProgress size={18} sx={{ color: tc.onPrimary }} />
-            ) : (
-              <SendIcon sx={{ fontSize: 20 }} />
-            )}
-          </IconButton>
-        </Box>
+          {sending ? (
+            <CircularProgress size={18} sx={{ color: tc.onPrimary }} />
+          ) : (
+            <SendIcon sx={{ fontSize: 20 }} />
+          )}
+        </IconButton>
       </Box>
 
       <Menu

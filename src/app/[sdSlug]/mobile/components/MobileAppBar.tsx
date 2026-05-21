@@ -6,14 +6,13 @@ import { AppBar, Avatar, Badge, IconButton, Stack, Toolbar, Typography } from "@
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import { Locale, PersonHelper } from "@churchapps/apphelper";
+import { Locale, PersonHelper, useNotifications } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, SCREEN_TITLES, mobileSlugFromPath } from "./mobileTheme";
 import { useMobileThemeMode } from "./MobileThemeProvider";
 import { getInitials } from "./util";
 import { NotificationBellMenu } from "./NotificationBellMenu";
-import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
 
 interface Props {
   config: ConfigurationInterface;
@@ -33,7 +32,7 @@ export const MobileAppBar = ({ config, primaryColor, onPrimary, drawerWidth, onM
   const title = SCREEN_TITLES[slug] ?? "";
 
   const userContext = React.useContext(UserContext);
-  const { counts } = useRealtimeNotifications(userContext ?? null);
+  const { counts } = useNotifications(userContext ?? null);
   const totalUnread = (counts?.pmCount || 0) + (counts?.notificationCount || 0);
   const bellRef = React.useRef<HTMLButtonElement | null>(null);
   const [bellOpen, setBellOpen] = React.useState(false);
