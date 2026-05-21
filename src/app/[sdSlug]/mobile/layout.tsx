@@ -37,6 +37,11 @@ export default async function MobileLayout({ children, params }: { children: Rea
       <meta name="apple-mobile-web-app-title" content={appTitle} />
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){if(typeof window==="undefined")return;var state=window.__b1InstallPromptState=window.__b1InstallPromptState||{deferredPrompt:null,installed:false};var detect=function(){try{return !!((window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||(window.navigator&&window.navigator.standalone===true));}catch(_e){return false;}};state.installed=detect();window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();state.deferredPrompt=e;state.installed=false;});window.addEventListener("appinstalled",function(){state.installed=true;state.deferredPrompt=null;});window.addEventListener("pageshow",function(){state.installed=detect();if(state.installed)state.deferredPrompt=null;});})();`
+        }}
+      />
       <MobileClientLayout>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <PwaRegister />
