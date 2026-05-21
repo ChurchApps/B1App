@@ -30,8 +30,8 @@ export default async function MobileLayout({
   const { churchName } = await loadChurchAppearance(sdSlug);
 
   const appTitle = (churchName && churchName.trim()) || sdSlug || "Church";
-  const iconUrl = `/${sdSlug}/mobile/icon/192`;
-  const iconUrl512 = `/${sdSlug}/mobile/icon/512`;
+  const iconUrl = "/mobile/icon/192";
+  const iconUrl512 = "/mobile/icon/512";
 
   return (
     <>

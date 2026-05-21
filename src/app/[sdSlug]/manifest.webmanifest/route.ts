@@ -5,7 +5,7 @@ type Params = Promise<{ sdSlug: string }>;
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   const { sdSlug } = await params;
-  const manifest = await buildManifest(sdSlug, `/${sdSlug}`);
+  const manifest = await buildManifest(sdSlug);
 
   return NextResponse.json(manifest, {
     headers: {

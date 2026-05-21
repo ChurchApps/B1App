@@ -60,13 +60,12 @@ const fadeIn = keyframes`
 
 export const InstallPage = ({ config }: Props) => {
   const churchName = config?.church?.name || "our app";
-  const sdSlug = config?.church?.subDomain || "localhost";
   const primary = config?.appTheme?.light?.primary || config?.appearance?.primaryColor || "#0D47A1";
   const primaryDark = darken(primary, 0.35);
   const accent = "#f97316";
   const accentDeep = "#ea580c";
   const accentLight = "#fdba74";
-  const iconUrl = `/${sdSlug}/mobile/icon/192`;
+  const iconUrl = "/mobile/icon/192";
 
   const [platform, setPlatform] = useState<Platform | null>(null);
   const [installed, setInstalled] = useState(false);

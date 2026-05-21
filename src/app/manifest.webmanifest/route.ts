@@ -19,7 +19,7 @@ const resolveChurchSlug = (req: Request): string => {
 
 export async function GET(req: Request) {
   const sdSlug = resolveChurchSlug(req);
-  const manifest = await buildManifest(sdSlug, `/${sdSlug}`);
+  const manifest = await buildManifest(sdSlug);
 
   return NextResponse.json(manifest, {
     headers: {
