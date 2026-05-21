@@ -1,8 +1,10 @@
 "use client";
 import { useEffect } from "react";
+import { InstallPromptHelper } from "@/helpers";
 
 export function PwaRegister(): null {
   useEffect(() => {
+    InstallPromptHelper.start();
     if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
     const allowDevPwa = process.env.NEXT_PUBLIC_ENABLE_PWA_DEV === "true";
     const isDev = process.env.NODE_ENV !== "production";
@@ -18,11 +20,12 @@ export function PwaRegister(): null {
           if (!existingScript.endsWith(serviceWorkerPath)) {
             await existing.unregister();
           } else {
+            await existing.update().catch((): void => {});
             return;
           }
         }
 
-        const registration = await navigator.serviceWorker.register(serviceWorkerPath, { scope: "/", updateViaCache: "none" });
+        await navigator.serviceWorker.register(serviceWorkerPath, { scope: "/", updateViaCache: "none" });
       } catch (error) {
         if (!cancelled) console.error("[pwa] service worker registration failed:", error);
       }

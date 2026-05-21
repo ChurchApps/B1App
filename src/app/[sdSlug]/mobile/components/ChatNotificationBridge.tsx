@@ -67,8 +67,6 @@ export const ChatNotificationBridge = ({ personId, churchId }: Props): null => {
     const handlerId = `ChatNotificationBridge-${personId}`;
     const handlePrivateMessage = async (payload: PrivateMessageEvent) => {
       try {
-        if (typeof document === "undefined") return;
-        if (document.visibilityState === "visible") return;
         if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
 
         const notifyPersonId = payload.notifyPersonId;
@@ -91,6 +89,12 @@ export const ChatNotificationBridge = ({ personId, churchId }: Props): null => {
             : activeOtherPersonId;
 
         if ((activeConversationId && activeConversationId === conversationId) || (activeOtherPersonId && activeOtherPersonId === otherPersonId)) {
+          console.info("[chat] skipping notification because the target conversation is already open", {
+            conversationId,
+            activeConversationId,
+            activeOtherPersonId,
+            otherPersonId
+          });
           return;
         }
 
@@ -98,12 +102,18 @@ export const ChatNotificationBridge = ({ personId, churchId }: Props): null => {
         // be the single source of OS notifications to avoid duplicate alerts from
         // both the socket bridge and the service worker.
         if (WebPushHelper.isServerRegistrationEnabled()) {
-          const existingSubscription = await WebPushHelper.getExistingSubscription();
-          if (existingSubscription) return;
+          const hasConfirmedEnrollment = await WebPushHelper.hasConfirmedServerEnrollment();
+          if (hasConfirmedEnrollment) return;
         }
 
         const registration = await WebPushHelper.getRegistration();
         if (!registration) return;
+
+        console.info("[chat] showing private message notification", {
+          conversationId,
+          otherPersonId,
+          pageVisible: typeof document !== "undefined" ? document.visibilityState : "unknown"
+        });
 
         await registration.showNotification(message?.displayName || "New message", {
           body: message?.content || "You received a new private message.",
