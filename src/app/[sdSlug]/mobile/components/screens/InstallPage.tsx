@@ -81,7 +81,16 @@ export const InstallPage = ({ config }: Props) => {
   useEffect(() => {
     const p = detectPlatform();
     setPlatform(p);
-    setInstalled(detectStandalone(p));
+
+    // If the install page is opened inside the installed PWA (iOS sometimes
+    // launches the app to whatever URL was captured when "Add to Home Screen"
+    // was tapped, ignoring manifest start_url), bounce to the dashboard so
+    // users land on the real app instead of an install confirmation screen.
+    if (detectStandalone(p)) {
+      const dashboardUrl = window.location.pathname.replace(/\/mobile\/install\/?$/, "/mobile/dashboard");
+      window.location.replace(dashboardUrl);
+      return;
+    }
 
     const target = window.location.href;
     setQrUrl(`https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=${encodeURIComponent(target)}`);
