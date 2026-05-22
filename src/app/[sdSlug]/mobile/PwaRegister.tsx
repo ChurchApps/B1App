@@ -20,19 +20,42 @@ export function PwaRegister(): null {
           if (!existingScript.endsWith(serviceWorkerPath)) {
             await existing.unregister();
           } else {
+            if (existing.waiting) {
+              try {
+                existing.waiting.postMessage({ type: "B1_SKIP_WAITING" });
+              } catch {
+                // Ignore postMessage failures; update() still runs below.
+              }
+            }
             await existing.update().catch((): void => {});
             return;
           }
         }
 
-        await navigator.serviceWorker.register(serviceWorkerPath, { scope: "/", updateViaCache: "none" });
+        const registration = await navigator.serviceWorker.register(serviceWorkerPath, { scope: "/", updateViaCache: "none" });
+        if (registration.waiting) {
+          try {
+            registration.waiting.postMessage({ type: "B1_SKIP_WAITING" });
+          } catch {
+            // Ignore postMessage failures; the worker will still activate on the next navigation.
+          }
+        }
       } catch (error) {
         if (!cancelled) console.error("[pwa] service worker registration failed:", error);
       }
     };
 
+    const handleControllerChange = () => {
+      if (cancelled) return;
+      console.info("[pwa] service worker controller changed");
+    };
+
+    navigator.serviceWorker.addEventListener("controllerchange", handleControllerChange);
     register();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      navigator.serviceWorker.removeEventListener("controllerchange", handleControllerChange);
+    };
   }, []);
   return null;
 }
