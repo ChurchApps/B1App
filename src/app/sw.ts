@@ -17,6 +17,41 @@ declare global {
 }
 
 declare const self: ServiceWorkerGlobalScope;
+const WEB_PUSH_SW_VERSION = "2026-05-22-webpush-frontend-1";
+const WEB_PUSH_DIAGNOSTICS_CACHE = "b1-webpush-diagnostics";
+const WEB_PUSH_DIAGNOSTICS_URL = "/__b1_webpush_diagnostics__";
+const MAX_WEB_PUSH_DIAGNOSTICS = 50;
+
+type DiagnosticLevel = "info" | "warn" | "error";
+
+const postDiagnostic = async (level: DiagnosticLevel, event: string, details?: Record<string, unknown>) => {
+  const entry = {
+    time: new Date().toISOString(),
+    source: "service-worker" as const,
+    level,
+    event,
+    details: {
+      version: WEB_PUSH_SW_VERSION,
+      ...(details || {})
+    }
+  };
+
+  try {
+    const cache = await self.caches.open(WEB_PUSH_DIAGNOSTICS_CACHE);
+    const request = new Request(WEB_PUSH_DIAGNOSTICS_URL);
+    const existing = await cache.match(request);
+    const entries = existing ? await existing.json() as typeof entry[] : [];
+    const next = [...entries, entry].slice(-MAX_WEB_PUSH_DIAGNOSTICS);
+    await cache.put(request, new Response(JSON.stringify(next), {
+      headers: { "Content-Type": "application/json" }
+    }));
+  } catch {
+    // Diagnostics persistence is best-effort only.
+  }
+
+  const clients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+  clients.forEach((client) => client.postMessage({ type: "B1_WEBPUSH_DIAGNOSTIC", entry }));
+};
 
 const isApi = ({ url }: { url: URL }) =>
   /\/(MembershipApi|ContentApi|GivingApi|AttendanceApi|DoingApi|MessagingApi|ReportingApi)\//.test(url.href) ||
@@ -109,11 +144,24 @@ const serwist = new Serwist({
 
 serwist.addEventListeners();
 
+self.addEventListener("install", (event) => {
+  event.waitUntil(postDiagnostic("info", "service-worker-installed", { scope: self.registration.scope }));
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(postDiagnostic("info", "service-worker-activated", { scope: self.registration.scope }));
+});
+
 interface PushPayload {
   title?: string;
   body?: string;
   type?: string;
   contentId?: string;
+  sentAt?: string;
+  channel?: string;
+  schemaVersion?: number;
+  url?: string;
+  link?: string;
   // Optional navigation hints from the API:
   //  - personId: for privateMessage, the OTHER party in the chat (not the notify recipient).
   //  - conversationId: lets the chat page skip its own conversation lookup.
@@ -123,6 +171,27 @@ interface PushPayload {
   innerType?: string;
   innerId?: string;
 }
+
+const safeParsePushData = (event: PushEvent): PushPayload => {
+  if (!event.data) return {};
+
+  try {
+    return event.data.json() as PushPayload;
+  } catch (jsonError) {
+    try {
+      const rawText = event.data.text();
+      const parsed = JSON.parse(rawText) as PushPayload;
+      void postDiagnostic("warn", "push-json-fallback-parse", { rawLength: rawText.length, error: String(jsonError) });
+      return parsed;
+    } catch (textError) {
+      void postDiagnostic("error", "push-parse-failed", {
+        jsonError: String(jsonError),
+        textError: String(textError)
+      });
+      return { body: event.data.text() };
+    }
+  }
+};
 
 const buildUrlForType = (type: string, id: string | undefined, payload: PushPayload): string | null => {
   switch (type) {
@@ -143,6 +212,9 @@ const buildUrlForType = (type: string, id: string | undefined, payload: PushPayl
 };
 
 const deriveClickUrl = (payload: PushPayload): string => {
+  const directUrl = payload.url || payload.link;
+  if (typeof directUrl === "string" && directUrl.trim()) return directUrl;
+
   const type = String(payload.type || "").toLowerCase();
 
   // Generic notification wrapper: forward to the real inner content if provided.
@@ -158,44 +230,97 @@ const deriveClickUrl = (payload: PushPayload): string => {
 };
 
 self.addEventListener("push", (event) => {
-  let payload: PushPayload = {};
-  if (event.data) {
-    try {
-      payload = event.data.json() as PushPayload;
-    } catch {
-      payload = { body: event.data.text() };
-    }
-  }
+  const payload = safeParsePushData(event);
   const title = payload.title || "B1";
   const body = payload.body || "";
   event.waitUntil(
-    self.registration.showNotification(title, {
-      body,
-      icon: "/images/logo.png",
-      badge: "/images/logo.png",
-      data: payload,
-      tag: payload.type && payload.contentId ? `${payload.type}:${payload.contentId}` : undefined
-    })
+    (async () => {
+      await postDiagnostic("info", "push-received", {
+        hasTitle: !!payload.title,
+        hasBody: !!payload.body,
+        type: payload.type || "",
+        contentId: payload.contentId || "",
+        channel: payload.channel || "",
+        schemaVersion: payload.schemaVersion || 0
+      });
+
+      try {
+        await self.registration.showNotification(title, {
+          body,
+          icon: "/images/logo-icon.png",
+          badge: "/images/logo-icon.png",
+          data: {
+            ...payload,
+            url: deriveClickUrl(payload),
+            raw: payload
+          },
+          tag: payload.type && payload.contentId ? `${payload.type}:${payload.contentId}` : undefined
+        });
+
+        await postDiagnostic("info", "notification-shown", {
+          title,
+          type: payload.type || "",
+          contentId: payload.contentId || ""
+        });
+      } catch (error) {
+        await postDiagnostic("error", "notification-show-failed", { message: String(error) });
+        throw error;
+      }
+    })()
   );
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const payload = (event.notification.data || {}) as PushPayload;
-  const target = deriveClickUrl(payload);
+  const payload = (event.notification.data || {}) as PushPayload & { raw?: PushPayload };
+  const target = typeof payload.url === "string" && payload.url
+    ? payload.url
+    : deriveClickUrl(payload.raw || payload);
   event.waitUntil(
     (async () => {
+      await postDiagnostic("info", "notification-clicked", {
+        target,
+        type: payload.type || payload.raw?.type || "",
+        contentId: payload.contentId || payload.raw?.contentId || ""
+      });
       const clientList = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
       for (const client of clientList) {
         if ("focus" in client) {
           await client.focus();
           if ("navigate" in client) {
-            try { await (client as WindowClient).navigate(target); } catch { /* cross-origin */ }
+            try {
+              await (client as WindowClient).navigate(target);
+              await postDiagnostic("info", "notification-click-navigated-existing-client", { target });
+            } catch {
+              await postDiagnostic("warn", "notification-click-navigate-existing-client-failed", { target });
+            }
           }
           return;
         }
       }
       await self.clients.openWindow(target);
+      await postDiagnostic("info", "notification-click-opened-new-window", { target });
     })()
   );
+});
+
+self.addEventListener("message", (event) => {
+  const data = event.data as { type?: string } | undefined;
+  if (!data?.type) return;
+
+  if (data.type === "B1_SKIP_WAITING") {
+    self.skipWaiting();
+    return;
+  }
+
+  if (data.type === "B1_WEBPUSH_DIAGNOSTICS_PING" && event.ports?.[0]) {
+    event.ports[0].postMessage({
+      version: WEB_PUSH_SW_VERSION,
+      scope: self.registration.scope
+    });
+  }
+});
+
+self.addEventListener("pushsubscriptionchange", (event) => {
+  event.waitUntil(postDiagnostic("warn", "push-subscription-changed"));
 });
