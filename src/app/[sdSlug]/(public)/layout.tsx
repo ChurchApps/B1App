@@ -45,6 +45,7 @@ export default async function MobileLayout({
       <meta name="apple-mobile-web-app-title" content={appTitle} />
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       <PwaRegister />
       <ClientLayout>{children}</ClientLayout>
     </>
