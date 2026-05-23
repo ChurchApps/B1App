@@ -418,7 +418,7 @@ export const WebPushHelper = {
     if (!userId || !churchId) return null;
 
     const registration = await ensureServiceWorkerReady();
-    if (!registration) return null;
+    if (!registration?.active) return null;
 
     try {
       log("starting subscribe flow", {
