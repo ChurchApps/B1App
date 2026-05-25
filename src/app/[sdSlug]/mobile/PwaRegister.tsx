@@ -11,7 +11,7 @@ export function PwaRegister(): null {
     if (isDev && !allowDevPwa) return;
 
     let cancelled = false;
-    const serviceWorkerPath = isDev ? "/dev-sw.js" : "/sw.js";
+    const serviceWorkerPath = "/sw.js";
     const register = async () => {
       try {
         const existing = await navigator.serviceWorker.getRegistration("/");
