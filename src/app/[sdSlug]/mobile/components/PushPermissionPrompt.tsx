@@ -41,14 +41,14 @@ export const PushPermissionPrompt = () => {
       console.error("[webpush] prompt enable failed:", error);
     } finally {
       setBusy(false);
-      await refresh("permission-prompt-enable");
+      await refresh();
     }
   };
 
   const handleDismiss = () => {
     WebPushHelper.markPrompted();
     setVisible(false);
-    void refresh("permission-prompt-dismiss");
+    void refresh();
   };
 
   if (!visible) return null;

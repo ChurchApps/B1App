@@ -16,16 +16,12 @@ export const WebPushEnrollmentSync = (): null => {
       if (!userId || !churchId || !jwt) return;
       const permission = WebPushHelper.getPermissionState();
       if (!WebPushHelper.isSupported()) return;
-      if (permission !== "granted") {
-        await WebPushHelper.logDiagnostics("enrollment-skip-not-granted");
-        return;
-      }
+      if (permission !== "granted") return;
 
       const enrollmentKey = `${userId}:${churchId}:${permission}:${WebPushHelper.isServerRegistrationEnabled() ? "server" : "local"}`;
       if (lastEnrollmentKeyRef.current === enrollmentKey) return;
 
       try {
-        await WebPushHelper.logDiagnostics("enrollment-start");
         const existing = await WebPushHelper.getExistingSubscription();
         if (existing && WebPushHelper.isServerRegistrationEnabled()) {
           await WebPushHelper.refreshEnrollment();
@@ -33,7 +29,6 @@ export const WebPushEnrollmentSync = (): null => {
           await WebPushHelper.subscribe();
         }
         lastEnrollmentKeyRef.current = enrollmentKey;
-        await WebPushHelper.logDiagnostics("enrollment-complete");
       } catch (error) {
         console.error("[webpush] background enrollment sync failed:", error);
       }
