@@ -4,20 +4,10 @@ import { ApiHelper, UserHelper, WebPushHelper as SharedWebPushHelper } from "@ch
 // uses the B1App PWA scope and appName.
 SharedWebPushHelper.configure({ scope: "/mobile", appName: "B1AppPwa" });
 
-const getServiceWorkerPath = () => process.env.NODE_ENV !== "production" ? "/dev-sw.js" : "/sw.js";
+const getServiceWorkerPath = () => "/sw.js";
 const isWebPushServerEnabled = () => process.env.NEXT_PUBLIC_ENABLE_WEBPUSH_SERVER !== "false";
 const WEB_PUSH_SW_VERSION = "2026-05-22-webpush-frontend-1";
 const SERVER_ENROLLMENT_KEY = "b1-webpush-server-enrollment";
-const SW_DIAGNOSTICS_KEY = "b1-webpush-sw-diagnostics";
-const MAX_SW_DIAGNOSTICS = 50;
-
-interface WindowWithWebPushDebug extends Window {
-  __diag?: {
-    webpush?: () => Promise<WebPushDebugSnapshot>;
-    webpushResubscribe?: () => Promise<PushSubscription | null>;
-  };
-  __b1WebPushDiagnosticsBound?: boolean;
-}
 
 export type WebPushPermissionState = "unsupported" | "default" | "denied" | "granted";
 
@@ -32,44 +22,6 @@ export interface WebPushDiagnostics {
   hasConfirmedServerEnrollment: boolean;
   statusReason: string | null;
 }
-
-export interface ServiceWorkerDiagnosticEntry {
-  time: string;
-  source: "client" | "service-worker";
-  level: "info" | "warn" | "error";
-  event: string;
-  details?: Record<string, unknown>;
-}
-
-export interface WebPushDebugSnapshot {
-  diagnostics: WebPushDiagnostics;
-  permission: NotificationPermission | "unsupported";
-  publicKey: string | null;
-  publicKeyFingerprint: string | null;
-  registration: {
-    scope: string | null;
-    activeScriptURL: string | null;
-    waitingScriptURL: string | null;
-    installingScriptURL: string | null;
-    activeState: string | null;
-  };
-  worker: {
-    version: string | null;
-    controlled: boolean;
-    lastDiagnostics: ServiceWorkerDiagnosticEntry[];
-  };
-  subscription: {
-    endpoint: string | null;
-    endpointHost: string | null;
-    json: PushSubscriptionJSON | null;
-  };
-  enrollment: StoredServerEnrollment | null;
-}
-
-const log = (message: string, details?: unknown) => {
-  if (details === undefined) console.info(`[webpush] ${message}`);
-  else console.info(`[webpush] ${message}`, details);
-};
 
 interface StoredServerEnrollment {
   endpoint: string;
@@ -101,82 +53,6 @@ const fingerprint = (value: string) => {
   let hash = 5381;
   for (let i = 0; i < value.length; i += 1) hash = ((hash << 5) + hash) ^ value.charCodeAt(i);
   return (hash >>> 0).toString(16).padStart(8, "0");
-};
-
-const summarizeEndpointHost = (endpoint?: string | null) => {
-  if (!endpoint) return null;
-  try {
-    return new URL(endpoint).host;
-  } catch {
-    return null;
-  }
-};
-
-const readServiceWorkerDiagnostics = (): ServiceWorkerDiagnosticEntry[] => {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(SW_DIAGNOSTICS_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed as ServiceWorkerDiagnosticEntry[] : [];
-  } catch {
-    return [];
-  }
-};
-
-const writeServiceWorkerDiagnostic = (entry: ServiceWorkerDiagnosticEntry) => {
-  if (typeof window === "undefined") return;
-  const next = [...readServiceWorkerDiagnostics(), entry].slice(-MAX_SW_DIAGNOSTICS);
-  try {
-    localStorage.setItem(SW_DIAGNOSTICS_KEY, JSON.stringify(next));
-  } catch {
-    // Ignore storage issues; diagnostics are best-effort.
-  }
-};
-
-const bindDiagnosticsBridge = () => {
-  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
-  const debugWindow = window as WindowWithWebPushDebug;
-  if (debugWindow.__b1WebPushDiagnosticsBound) return;
-  debugWindow.__b1WebPushDiagnosticsBound = true;
-
-  navigator.serviceWorker.addEventListener("message", (event: MessageEvent) => {
-    const data = event.data as { type?: string; entry?: ServiceWorkerDiagnosticEntry } | undefined;
-    if (data?.type !== "B1_WEBPUSH_DIAGNOSTIC" || !data.entry) return;
-    writeServiceWorkerDiagnostic(data.entry);
-  });
-
-  debugWindow.__diag = debugWindow.__diag || {};
-  debugWindow.__diag.webpush = async () => WebPushHelper.getDebugSnapshot();
-  debugWindow.__diag.webpushResubscribe = async () => WebPushHelper.forceResubscribe("manual-debug");
-};
-
-const pingActiveWorker = async (): Promise<{ version: string | null; scope: string | null }> => {
-  if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
-    return { version: null, scope: null };
-  }
-
-  const readyRegistration = await navigator.serviceWorker.ready.catch((): ServiceWorkerRegistration | null => null);
-  const target = navigator.serviceWorker.controller || readyRegistration?.active;
-  if (!target) return { version: null, scope: null };
-
-  return new Promise((resolve) => {
-    const channel = new MessageChannel();
-    const timeout = window.setTimeout(() => resolve({ version: null, scope: null }), 1500);
-    channel.port1.onmessage = (event) => {
-      window.clearTimeout(timeout);
-      resolve({
-        version: event.data?.version || null,
-        scope: event.data?.scope || null
-      });
-    };
-    try {
-      target.postMessage({ type: "B1_WEBPUSH_DIAGNOSTICS_PING" }, [channel.port2]);
-    } catch {
-      window.clearTimeout(timeout);
-      resolve({ version: null, scope: null });
-    }
-  });
 };
 
 const getCurrentEnrollmentContext = () => ({
@@ -245,12 +121,10 @@ const requiresInstallForPush = () => SharedWebPushHelper.isSupported() && isIos(
 
 const ensureServiceWorkerReady = async (): Promise<ServiceWorkerRegistration | null> => {
   if (typeof window === "undefined" || !("serviceWorker" in navigator)) return null;
-  bindDiagnosticsBridge();
 
   let registration = await navigator.serviceWorker.getRegistration();
   if (!registration) {
     try {
-      log("no service worker registration found; registering", { scope: "/", script: getServiceWorkerPath() });
       registration = await navigator.serviceWorker.register(getServiceWorkerPath(), {
         scope: "/",
         updateViaCache: "none"
@@ -295,11 +169,6 @@ const getPublicKeyConfig = async (): Promise<PublicKeyConfig | null> => {
       fingerprint: fingerprint(publicKey as string)
     };
     cachedPublicKeyLoadedAt = Date.now();
-    log("loaded public VAPID key from backend", {
-      enabled: !!config?.enabled,
-      publicKey: cachedPublicKeyConfig.publicKey,
-      publicKeyFingerprint: cachedPublicKeyConfig.fingerprint
-    });
     return cachedPublicKeyConfig;
   } catch (error) {
     console.error("[webpush] failed to load public key config:", error);
@@ -336,12 +205,6 @@ const refreshSubscriptionIfNeeded = async (
   const reason = shouldRefreshSubscription(registration, publicKeyConfig.fingerprint, existing);
   if (!reason) return existing;
 
-  log("refreshing stale browser subscription", {
-    reason,
-    endpointHost: summarizeEndpointHost(existing.endpoint),
-    serviceWorkerVersion: WEB_PUSH_SW_VERSION
-  });
-
   try {
     await existing.unsubscribe();
   } catch (error) {
@@ -371,11 +234,6 @@ const ensurePushSubscription = async (registration: ServiceWorkerRegistration): 
     await registration.pushManager.getSubscription()
   );
   if (existing) return existing;
-
-  log("subscribing with public VAPID key", {
-    publicKey: publicKeyConfig.publicKey,
-    publicKeyFingerprint: publicKeyConfig.fingerprint
-  });
 
   return registration.pushManager.subscribe({
     userVisibleOnly: true,
@@ -421,10 +279,6 @@ export const WebPushHelper = {
     if (!registration?.active) return null;
 
     try {
-      log("starting subscribe flow", {
-        permission: getPermissionState(),
-        serverRegistrationEnabled: isWebPushServerEnabled()
-      });
       const subscription = await ensurePushSubscription(registration);
       if (!subscription) {
         if (getPermissionState() === "granted") {
@@ -440,12 +294,6 @@ export const WebPushHelper = {
       storeServerEnrollmentMetadata(subscription.endpoint, {
         publicKeyFingerprint: publicKeyConfig?.fingerprint || null,
         serviceWorkerScriptUrl: registration.active?.scriptURL || registration.waiting?.scriptURL || registration.installing?.scriptURL || null,
-        serviceWorkerVersion: WEB_PUSH_SW_VERSION
-      });
-      log("server registration completed", {
-        endpoint: subscription.endpoint,
-        endpointHost: summarizeEndpointHost(subscription.endpoint),
-        publicKeyFingerprint: publicKeyConfig?.fingerprint || null,
         serviceWorkerVersion: WEB_PUSH_SW_VERSION
       });
       return subscription;
@@ -476,7 +324,6 @@ export const WebPushHelper = {
     if (!subscription) return;
     try {
       const publicKeyConfig = await getPublicKeyConfig();
-      log("refreshing server enrollment", { endpoint: subscription.endpoint });
       await postSubscription(subscription);
       storeServerEnrollmentMetadata(subscription.endpoint, {
         publicKeyFingerprint: publicKeyConfig?.fingerprint || null,
@@ -529,64 +376,7 @@ export const WebPushHelper = {
       statusReason
     };
   },
-  forceResubscribe: async (reason = "manual") => {
-    const registration = await ensureServiceWorkerReady();
-    if (!registration) return null;
-    const existing = await registration.pushManager.getSubscription();
-    if (existing) {
-      log("forcing browser resubscribe", { reason, endpointHost: summarizeEndpointHost(existing.endpoint) });
-      try {
-        await existing.unsubscribe();
-      } catch (error) {
-        console.error("[webpush] force unsubscribe failed:", error);
-      }
-      await notifyServerOfUnsubscribe(existing.endpoint);
-      storeServerEnrollmentMetadata(null);
-    }
-    return WebPushHelper.subscribe();
-  },
-  getDebugSnapshot: async (): Promise<WebPushDebugSnapshot> => {
-    const diagnostics = await WebPushHelper.getDiagnostics();
-    const registration = await ensureServiceWorkerReady();
-    const subscription = await WebPushHelper.getExistingSubscription();
-    const publicKeyConfig = await getPublicKeyConfig();
-    const workerInfo = await pingActiveWorker();
-    return {
-      diagnostics,
-      permission: typeof Notification === "undefined" ? "unsupported" : Notification.permission,
-      publicKey: publicKeyConfig?.publicKey || null,
-      publicKeyFingerprint: publicKeyConfig?.fingerprint || null,
-      registration: {
-        scope: registration?.scope || null,
-        activeScriptURL: registration?.active?.scriptURL || null,
-        waitingScriptURL: registration?.waiting?.scriptURL || null,
-        installingScriptURL: registration?.installing?.scriptURL || null,
-        activeState: registration?.active?.state || null
-      },
-      worker: {
-        version: workerInfo.version || WEB_PUSH_SW_VERSION,
-        controlled: !!navigator.serviceWorker.controller,
-        lastDiagnostics: readServiceWorkerDiagnostics()
-      },
-      subscription: {
-        endpoint: subscription?.endpoint || null,
-        endpointHost: summarizeEndpointHost(subscription?.endpoint),
-        json: subscription?.toJSON() || null
-      },
-      enrollment: getStoredServerEnrollment()
-    };
-  },
   requiresInstallForPush,
-  logDiagnostics: async (context: string) => {
-    try {
-      const diagnostics = await WebPushHelper.getDiagnostics();
-      log(`diagnostics (${context})`, diagnostics);
-      return diagnostics;
-    } catch (error) {
-      console.error(`[webpush] diagnostics failed (${context}):`, error);
-      throw error;
-    }
-  },
   unsubscribe: async () => {
     const registration = await ensureServiceWorkerReady();
     const subscription = await registration?.pushManager.getSubscription();
@@ -601,5 +391,3 @@ export const WebPushHelper = {
     await notifyServerOfUnsubscribe(endpoint);
   }
 };
-
-bindDiagnosticsBridge();

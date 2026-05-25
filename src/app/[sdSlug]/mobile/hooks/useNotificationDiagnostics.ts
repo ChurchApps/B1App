@@ -19,7 +19,7 @@ export const useNotificationDiagnostics = (enabled: boolean) => {
   const [diagnostics, setDiagnostics] = useState<WebPushDiagnostics>(EMPTY_DIAGNOSTICS);
   const [loading, setLoading] = useState<boolean>(enabled);
 
-  const refresh = useCallback(async (context = "refresh") => {
+  const refresh = useCallback(async () => {
     if (!enabled) {
       setDiagnostics(EMPTY_DIAGNOSTICS);
       setLoading(false);
@@ -28,7 +28,7 @@ export const useNotificationDiagnostics = (enabled: boolean) => {
 
     setLoading(true);
     try {
-      const next = await WebPushHelper.logDiagnostics(context);
+      const next = await WebPushHelper.getDiagnostics();
       setDiagnostics(next);
       return next;
     } finally {
@@ -43,12 +43,12 @@ export const useNotificationDiagnostics = (enabled: boolean) => {
       return;
     }
 
-    refresh("mount");
+    refresh();
 
-    const handleFocus = () => { void refresh("focus"); };
-    const handlePageShow = () => { void refresh("pageshow"); };
+    const handleFocus = () => { void refresh(); };
+    const handlePageShow = () => { void refresh(); };
     const handleVisibility = () => {
-      if (document.visibilityState === "visible") refresh("visibilitychange");
+      if (document.visibilityState === "visible") refresh();
     };
 
     window.addEventListener("focus", handleFocus);

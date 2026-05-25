@@ -33,19 +33,21 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
       console.error("[webpush] dashboard enable failed:", error);
     } finally {
       setBusy(false);
-      await refresh("dashboard-enable");
+      await refresh();
     }
   };
 
   if (!enabled || loading || diagnostics.permission === "unsupported") return null;
 
+  const installRequired = WebPushHelper.requiresInstallForPush();
   let tone = {
-    background: "rgba(245, 158, 11, 0.12)",
-    border: "rgba(245, 158, 11, 0.35)",
-    icon: "#d97706"
+    background: "rgba(13, 71, 161, 0.08)",
+    border: "rgba(13, 71, 161, 0.22)",
+    icon: tc.primary
   };
+  let iconName = "notifications_active";
   let title = "";
-  let body = diagnostics.statusReason || "";
+  let body = "";
   let primaryLabel = "";
   let primaryAction: (() => void | Promise<void>) | null = null;
 
@@ -55,17 +57,33 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
       border: "rgba(239, 68, 68, 0.28)",
       icon: "#dc2626"
     };
-    title = "Notifications are blocked";
-    primaryLabel = "Open Notifications";
+    iconName = "notifications_off";
+    title = "Enable notifications in your browser";
+    body = "Notifications are currently blocked. Open your browser or device site settings, allow notifications for this app, then return here.";
+    primaryLabel = "View Notification Settings";
     primaryAction = () => router.push("/mobile/notifications");
+  } else if (diagnostics.permission !== "granted" && installRequired) {
+    title = "Install app to enable notifications";
+    body = "On iPhone, notifications work after the app is added to your Home Screen. Install the app, then return and allow notifications.";
+    primaryLabel = "Install App";
+    primaryAction = () => router.push("/mobile/install");
   } else if (diagnostics.permission !== "granted") {
     title = "Turn on notifications";
-    primaryLabel = WebPushHelper.requiresInstallForPush() ? "Install App" : busy ? "Enabling..." : "Enable Notifications";
+    body = "Get alerts for new messages, group updates, and reminders. Tap Enable Notifications, then choose Allow when asked.";
+    primaryLabel = busy ? "Enabling..." : "Enable Notifications";
     primaryAction = busy ? null : handleEnable;
   } else if (!diagnostics.hasSubscription || (diagnostics.serverRegistrationEnabled && !diagnostics.hasConfirmedServerEnrollment)) {
-    title = diagnostics.isStandalone ? "Finish device registration" : "Install to finish notifications";
-    primaryLabel = WebPushHelper.requiresInstallForPush() ? "Install App" : busy ? "Retrying..." : "Retry Registration";
-    primaryAction = busy ? null : handleEnable;
+    if (installRequired) {
+      title = "Install app to finish notifications";
+      body = "This device has permission, but iPhone push notifications need the installed app experience to complete setup.";
+      primaryLabel = "Install App";
+      primaryAction = () => router.push("/mobile/install");
+    } else {
+      title = "Finish notification setup";
+      body = "Notifications are allowed, but this device still needs to register for alerts. Try again now.";
+      primaryLabel = busy ? "Retrying..." : "Retry Registration";
+      primaryAction = busy ? null : handleEnable;
+    }
   } else {
     return null;
   }
@@ -84,7 +102,7 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
         alignItems: "flex-start"
       }}
     >
-      <Icon sx={{ color: tone.icon, fontSize: 22, mt: "2px" }}>notifications_active</Icon>
+      <Icon sx={{ color: tone.icon, fontSize: 22, mt: "2px" }}>{iconName}</Icon>
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Typography sx={{ fontSize: 14, fontWeight: 700, color: tc.text, mb: 0.5 }}>
           {title}
@@ -98,9 +116,6 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
               {primaryLabel}
             </Button>
           )}
-          <Button size="small" variant="text" onClick={() => router.push("/mobile/install")}>
-            Install Help
-          </Button>
         </Box>
       </Box>
     </Box>

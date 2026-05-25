@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -60,15 +60,11 @@ const getIconName = (contentType?: string): string => {
 export const NotificationsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
-  const searchParams = useSearchParams();
   const context = useContext(UserContext);
   const queryClient = useQueryClient();
   const loggedIn = !!context?.user?.firstName;
   const [pushBusy, setPushBusy] = React.useState(false);
-  const [debugBusy, setDebugBusy] = React.useState(false);
-  const [debugSnapshot, setDebugSnapshot] = React.useState<Awaited<ReturnType<typeof WebPushHelper.getDebugSnapshot>> | null>(null);
   const { diagnostics, refresh: refreshPushStatus } = useNotificationDiagnostics(loggedIn);
-  const showDebug = searchParams?.get("debugPush") === "1";
 
   const handleTogglePush = async () => {
     if (WebPushHelper.requiresInstallForPush()) {
@@ -92,23 +88,6 @@ export const NotificationsPage = ({ config }: Props) => {
       setPushBusy(false);
     }
   };
-
-  const loadDebugSnapshot = async (forceResubscribe = false) => {
-    setDebugBusy(true);
-    try {
-      if (forceResubscribe) await WebPushHelper.forceResubscribe("notifications-debug");
-      const snapshot = await WebPushHelper.getDebugSnapshot();
-      setDebugSnapshot(snapshot);
-      await refreshPushStatus("notifications-debug");
-    } finally {
-      setDebugBusy(false);
-    }
-  };
-
-  React.useEffect(() => {
-    if (!showDebug || !loggedIn) return;
-    void loadDebugSnapshot(false);
-  }, [showDebug, loggedIn]);
 
   const { data: serverNotifications = null } = useQuery<NotificationItem[]>({
     queryKey: ["notifications", context?.user?.id],
@@ -356,64 +335,10 @@ export const NotificationsPage = ({ config }: Props) => {
     );
   };
 
-  const renderDebugCard = () => {
-    if (!showDebug || !loggedIn) return null;
-    return (
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          borderRadius: "12px",
-          boxShadow: mobileTheme.shadows.sm,
-          p: "16px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px"
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
-          <Box>
-            <Typography sx={{ fontSize: 14, fontWeight: 700, color: tc.text }}>
-              Web push diagnostics
-            </Typography>
-            <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-              Includes current subscription, worker, VAPID key fingerprint, and recent worker events.
-            </Typography>
-          </Box>
-          <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <Button size="small" variant="outlined" disabled={debugBusy} onClick={() => { void loadDebugSnapshot(false); }}>
-              Refresh
-            </Button>
-            <Button size="small" variant="contained" disabled={debugBusy} onClick={() => { void loadDebugSnapshot(true); }}>
-              Force Resubscribe
-            </Button>
-          </Box>
-        </Box>
-        <Box
-          component="pre"
-          sx={{
-            m: 0,
-            p: "12px",
-            borderRadius: "10px",
-            bgcolor: tc.iconBackground,
-            color: tc.text,
-            fontSize: 11,
-            lineHeight: 1.5,
-            overflowX: "auto",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word"
-          }}
-        >
-          {JSON.stringify(debugSnapshot || { loading: debugBusy }, null, 2)}
-        </Box>
-      </Box>
-    );
-  };
-
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {renderPushCard()}
-        {renderDebugCard()}
         {notifications && notifications.length > 0 && (
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
