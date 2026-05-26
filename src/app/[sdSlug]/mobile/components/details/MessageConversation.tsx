@@ -421,6 +421,8 @@ export const MessageConversation = ({ id, config }: Props) => {
         key={m.id || index}
         sx={{
           display: "flex",
+          width: "100%",
+          minWidth: 0,
           alignItems: "center",
           justifyContent: mine ? "flex-end" : "flex-start",
           gap: "2px",
@@ -440,6 +442,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         <Box
           sx={{
             maxWidth: "75%",
+            minWidth: 0,
             px: "12px",
             py: "8px",
             bgcolor: mine ? tc.primary : tc.surfaceVariant,
@@ -447,8 +450,10 @@ export const MessageConversation = ({ id, config }: Props) => {
             borderRadius: `${mobileTheme.radius.lg}px`,
             boxShadow: mobileTheme.shadows.sm,
             wordBreak: "break-word",
+            overflowWrap: "anywhere",
             fontSize: 14,
-            lineHeight: 1.35
+            lineHeight: 1.35,
+            "& a": { wordBreak: "break-all", overflowWrap: "anywhere" }
           }}
         >
           {bubbleName && (
@@ -514,6 +519,8 @@ export const MessageConversation = ({ id, config }: Props) => {
       sx={{
         display: "flex",
         flexDirection: "column",
+        width: "100%",
+        maxWidth: "100%",
         height: shellHeight,
         minHeight: shellHeight,
         maxHeight: shellHeight,
@@ -567,7 +574,9 @@ export const MessageConversation = ({ id, config }: Props) => {
         sx={{
           flex: 1,
           minHeight: 0,
+          minWidth: 0,
           overflowY: "auto",
+          overflowX: "hidden",
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
           flexDirection: "column"
@@ -612,6 +621,8 @@ export const MessageConversation = ({ id, config }: Props) => {
       <Box
         sx={{
           flexShrink: 0,
+          width: "100%",
+          minWidth: 0,
           bgcolor: tc.surface,
           borderTop: `1px solid ${tc.border}`,
           px: "10px",
@@ -625,7 +636,6 @@ export const MessageConversation = ({ id, config }: Props) => {
         <TextField
           multiline
           maxRows={4}
-          fullWidth
           placeholder={Locale.label("mobile.details.typeMessage")}
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -637,6 +647,8 @@ export const MessageConversation = ({ id, config }: Props) => {
           }}
           size="small"
           sx={{
+            flex: 1,
+            minWidth: 0,
             "& .MuiOutlinedInput-root": {
               borderRadius: "22px",
               bgcolor: tc.background,
@@ -652,6 +664,7 @@ export const MessageConversation = ({ id, config }: Props) => {
           onClick={handleSend}
           disabled={sending || !text.trim()}
           sx={{
+            flexShrink: 0,
             bgcolor: tc.primary,
             color: tc.onPrimary,
             "&:hover": { bgcolor: tc.primary },
