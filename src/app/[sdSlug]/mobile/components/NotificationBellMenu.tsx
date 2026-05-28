@@ -19,6 +19,7 @@ interface Props {
 
 interface Conversation {
   id: string;
+  pmId?: string;
   personId: string;
   conversationId?: string;
   personName: string;
@@ -107,7 +108,10 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
       const seen = new Set<string>();
       const result: Conversation[] = [];
       rows.forEach(({ pm, otherId }) => {
-        const id = pm.conversationId || pm.id;
+        const pmId = pm.pmId || pm.privateMessageId || pm.privateMessage?.id || pm.id;
+        const conversationId = pm.conversationId || pm.conversation?.id || (pm.pmId ? pm.id : undefined);
+        const id = conversationId || pmId;
+        if (!id || !otherId) return;
         if (seen.has(id)) return;
         seen.add(id);
         const person = peopleById[otherId];
@@ -122,8 +126,9 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
         }
         result.push({
           id,
+          pmId,
           personId: otherId,
-          conversationId: pm.conversationId,
+          conversationId,
           personName: displayName,
           personPhoto: photo
         });

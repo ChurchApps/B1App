@@ -74,7 +74,10 @@ export const MessagesPage = ({ config }: Props) => {
       const seen = new Set<string>();
       const result: Conversation[] = [];
       rows.forEach(({ pm, otherId }) => {
-        const id = pm.conversationId || pm.id;
+        const pmId = pm.pmId || pm.privateMessageId || pm.privateMessage?.id || pm.id;
+        const conversationId = pm.conversationId || pm.conversation?.id || (pm.pmId ? pm.id : undefined);
+        const id = conversationId || pmId;
+        if (!id || !otherId) return;
         if (seen.has(id)) return;
         seen.add(id);
         const person = peopleById[otherId];
@@ -89,9 +92,9 @@ export const MessagesPage = ({ config }: Props) => {
         }
         result.push({
           id,
-          pmId: pm.id,
+          pmId,
           personId: otherId,
-          conversationId: pm.conversationId,
+          conversationId,
           personName: displayName,
           personPhoto: photo
         });
@@ -162,7 +165,7 @@ export const MessagesPage = ({ config }: Props) => {
       onClick={() => handleClick(c)}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
+      onKeyDown={(e: React.KeyboardEvent) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           handleClick(c);
