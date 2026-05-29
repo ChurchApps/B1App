@@ -134,10 +134,7 @@ interface PushPayload {
   schemaVersion?: number;
   url?: string;
   link?: string;
-  // Optional navigation hints from the API:
-  //  - personId: for privateMessage, the OTHER party in the chat (not the notify recipient).
-  //  - conversationId: lets the chat page skip its own conversation lookup.
-  //  - innerType/innerId: when type === "notification", the wrapped content's real type/id.
+  badgeCount?: number;
   personId?: string;
   conversationId?: string;
   innerType?: string;
@@ -215,6 +212,14 @@ self.addEventListener("push", (event) => {
           },
           tag: payload.type && payload.contentId ? `${payload.type}:${payload.contentId}` : undefined
         });
+
+        if (typeof payload.badgeCount === "number" && "setAppBadge" in navigator) {
+          try {
+            await (navigator as any).setAppBadge(payload.badgeCount);
+          } catch (badgeError) {
+            console.error("[webpush] failed to set app badge:", badgeError);
+          }
+        }
       } catch (error) {
         console.error("[webpush] failed to show notification:", error);
         throw error;
