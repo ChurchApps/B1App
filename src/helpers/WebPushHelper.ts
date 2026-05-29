@@ -6,7 +6,7 @@ SharedWebPushHelper.configure({ scope: "/mobile", appName: "B1AppPwa" });
 
 const getServiceWorkerPath = () => "/sw.js";
 const isWebPushServerEnabled = () => process.env.NEXT_PUBLIC_ENABLE_WEBPUSH_SERVER !== "false";
-const WEB_PUSH_SW_VERSION = "2026-05-22-webpush-frontend-1";
+const WEB_PUSH_SW_VERSION = "2026-05-29-webpush-appbadge-1";
 const SERVER_ENROLLMENT_KEY = "b1-webpush-server-enrollment";
 
 export type WebPushPermissionState = "unsupported" | "default" | "denied" | "granted";
