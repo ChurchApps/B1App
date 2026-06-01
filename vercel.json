@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install --force",
-  "buildCommand": "npm run build",
+  "installCommand": "yarn install --immutable",
+  "buildCommand": "yarn build",
   "outputDirectory": ".next"
 }
