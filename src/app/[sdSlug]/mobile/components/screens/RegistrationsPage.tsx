@@ -26,7 +26,9 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
       const data = await ApiHelper.get("/registrations/person/" + personId, "ContentApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: !!personId
+    enabled: !!personId,
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: true
   });
 
   const handleCancel = async () => {

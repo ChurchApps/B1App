@@ -439,6 +439,53 @@ const EmptyState = ({ type }: { type: "sermons" | "playlists" }) => {
   );
 };
 
+const ErrorState = ({ onGoBack }: { onGoBack: () => void }) => {
+  const tc = mobileTheme.colors;
+  return (
+    <Box sx={{
+      bgcolor: tc.surface,
+      borderRadius: `${mobileTheme.radius.xl}px`,
+      p: 4,
+      textAlign: "center",
+      boxShadow: mobileTheme.shadows.md,
+      mt: 2
+    }}>
+      <Box sx={{
+        width: 72,
+        height: 72,
+        borderRadius: "36px",
+        bgcolor: tc.iconBackground,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        mb: 2
+      }}>
+        <Icon sx={{ fontSize: 36, color: tc.textSecondary }}>sentiment_dissatisfied</Icon>
+      </Box>
+      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
+        {Locale.label("mobile.screens.sermonsLoadError")}
+      </Typography>
+      <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
+        {Locale.label("mobile.screens.sermonsLoadErrorBody")}
+      </Typography>
+      <Box
+        component="button"
+        onClick={onGoBack}
+        sx={{
+          border: "none",
+          cursor: "pointer",
+          background: "none",
+          color: tc.primary,
+          fontWeight: 600,
+          fontSize: 14
+        }}
+      >
+        {Locale.label("mobile.screens.sermonsGoBack")}
+      </Box>
+    </Box>
+  );
+};
+
 export const SermonsPage = ({ config }: Props) => {
   const router = useRouter();
   const tc = mobileTheme.colors;
@@ -453,7 +500,7 @@ export const SermonsPage = ({ config }: Props) => {
     return () => clearInterval(interval);
   }, []);
 
-  const { data: sermons = [], isLoading: sermonsLoading } = useQuery<SermonInterface[]>({
+  const { data: sermons = [], isLoading: sermonsLoading, isError: sermonsError } = useQuery<SermonInterface[]>({
     queryKey: ["sermons", churchId],
     queryFn: async () => {
       const result = await ApiHelper.getAnonymous(`/sermons/public/${churchId}`, "ContentApi");
@@ -468,7 +515,7 @@ export const SermonsPage = ({ config }: Props) => {
     gcTime: 15 * 60 * 1000
   });
 
-  const { data: playlists = [], isLoading: playlistsLoading } = useQuery<PlaylistInterface[]>({
+  const { data: playlists = [], isLoading: playlistsLoading, isError: playlistsError } = useQuery<PlaylistInterface[]>({
     queryKey: ["playlists", churchId],
     queryFn: async () => {
       const result = await ApiHelper.getAnonymous(`/playlists/public/${churchId}`, "ContentApi");
@@ -558,6 +605,7 @@ export const SermonsPage = ({ config }: Props) => {
 
   const renderSeriesTab = () => {
     if (playlistsLoading || sermonsLoading) return renderSkeletons();
+    if (playlistsError || sermonsError) return <ErrorState onGoBack={() => router.back()} />;
     return (
       <>
         {upcomingStream ? (
@@ -581,6 +629,7 @@ export const SermonsPage = ({ config }: Props) => {
 
   const renderRecentTab = () => {
     if (sermonsLoading) return renderSkeletons();
+    if (sermonsError) return <ErrorState onGoBack={() => router.back()} />;
     return (
       <>
         {upcomingStream ? <LiveStreamCard stream={upcomingStream} /> : null}

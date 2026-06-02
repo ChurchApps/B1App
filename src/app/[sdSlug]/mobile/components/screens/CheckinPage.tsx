@@ -121,11 +121,13 @@ const ScreenSubhead = ({
 const EmptyState = ({
   iconName,
   title,
-  message
+  message,
+  action
 }: {
   iconName: string;
   title: string;
   message: string;
+  action?: React.ReactNode;
 }) => (
   <Box
     sx={{
@@ -143,6 +145,7 @@ const EmptyState = ({
       {title}
     </Typography>
     <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{message}</Typography>
+    {action ? <Box sx={{ mt: `${spacing.md}px` }}>{action}</Box> : null}
   </Box>
 );
 
@@ -162,6 +165,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   const selectService = async (serviceId: string) => {
     setSelectingId(serviceId);
     try {
+      const householdId = PersonHelper.person?.householdId;
       await Promise.all([
         ApiHelper.get("/servicetimes?serviceId=" + serviceId, "AttendanceApi").then(
           (times: ServiceTimeInterface[]) => {
@@ -177,12 +181,17 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
         ApiHelper.get("/groups", "MembershipApi").then((groups: GroupInterface[]) => {
           CheckinHelper.groups = groups;
         }),
-        ApiHelper.get(
-          "/people/household/" + PersonHelper.person.householdId,
-          "MembershipApi"
-        ).then((members: PersonInterface[]) => {
-          CheckinHelper.householdMembers = members;
-        })
+        // Fall back to the current person alone when no household is linked, so the
+        // request doesn't become "/people/household/null" and 404 the screen.
+        householdId
+          ? ApiHelper.get("/people/household/" + householdId, "MembershipApi").then(
+            (members: PersonInterface[]) => {
+              CheckinHelper.householdMembers = members;
+            }
+          )
+          : Promise.resolve().then(() => {
+            CheckinHelper.householdMembers = PersonHelper.person ? [PersonHelper.person] : [];
+          })
       ]);
 
       const peopleIds: number[] = ArrayHelper.getUniqueValues(
@@ -905,6 +914,22 @@ export const CheckinPage = ({ config: _config }: Props) => {
           iconName="how_to_reg"
           title={Locale.label("mobile.screens.signInToCheckIn")}
           message={Locale.label("mobile.screens.signInToCheckInMessage")}
+          action={
+            <Button
+              variant="contained"
+              href="/mobile/login"
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                borderRadius: `${radius.md}px`,
+                textTransform: "none",
+                fontWeight: 600,
+                "&:hover": { bgcolor: tc.primary }
+              }}
+            >
+              {Locale.label("mobile.screens.signInToCheckInCta")}
+            </Button>
+          }
         />
       </Box>
     );

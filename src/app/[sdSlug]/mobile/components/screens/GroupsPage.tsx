@@ -30,7 +30,9 @@ export const GroupsPage = ({ config: _config }: Props) => {
       const data = await ApiHelper.get("/groups/my", "MembershipApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: loggedIn
+    enabled: loggedIn,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const { data: pendingRequests = [], refetch: refetchPending } = useQuery<GroupJoinRequestInterface[]>({
@@ -39,7 +41,9 @@ export const GroupsPage = ({ config: _config }: Props) => {
       const data = await ApiHelper.get("/groupjoinrequests/my", "MembershipApi");
       return Array.isArray(data) ? data.filter((r: GroupJoinRequestInterface) => r.status === "pending") : [];
     },
-    enabled: loggedIn
+    enabled: loggedIn,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const handleCancelRequest = async (id: string) => {
@@ -53,7 +57,9 @@ export const GroupsPage = ({ config: _config }: Props) => {
       const data = await ApiHelper.get("/events/registerable", "ContentApi");
       return Array.isArray(data) ? data : [];
     },
-    enabled: loggedIn
+    enabled: loggedIn,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   const effectiveGroups = loggedIn ? groups : [];
