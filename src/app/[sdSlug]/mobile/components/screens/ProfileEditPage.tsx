@@ -276,7 +276,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         return next;
       });
     } catch (err: any) {
-      setPhotoError(err?.message || "Could not process image.");
+      setPhotoError(err?.message || Locale.label("mobile.screens.couldNotProcessImage"));
     }
   };
 
@@ -300,7 +300,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const handleSave = async () => {
     if (!person || !initial) return;
     if (profileChanges.length === 0) {
-      setSnack({ open: true, msg: "No changes to submit.", severity: "info" });
+      setSnack({ open: true, msg: Locale.label("mobile.screens.noChangesToSubmit"), severity: "info" });
       return;
     }
     setSaving(true);
@@ -355,14 +355,14 @@ export const ProfileEditPage = ({ config }: Props) => {
       setInitial(JSON.parse(JSON.stringify(person)));
       setModifiedFields(new Set());
       setPendingFamilyMembers([]);
-      setSnack({ open: true, msg: "Your changes have been submitted for approval.", severity: "success" });
+      setSnack({ open: true, msg: Locale.label("mobile.screens.changesSubmittedForApproval"), severity: "success" });
 
       setTimeout(() => {
         try { router.back(); } catch { }
       }, 900);
     } catch (err: any) {
       console.error("Profile save error", err);
-      setSnack({ open: true, msg: err?.message || "Unable to submit changes.", severity: "error" });
+      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.unableToSubmitChanges"), severity: "error" });
     } finally {
       setSaving(false);
     }
@@ -413,9 +413,9 @@ export const ProfileEditPage = ({ config }: Props) => {
         UserHelper.user.firstName = acctFirstName.trim();
         UserHelper.user.lastName = acctLastName.trim();
       }
-      setSnack({ open: true, msg: "Display name updated.", severity: "success" });
+      setSnack({ open: true, msg: Locale.label("mobile.screens.displayNameUpdated"), severity: "success" });
     } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || "Could not update display name.", severity: "error" });
+      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotUpdateDisplayName"), severity: "error" });
     } finally {
       setSavingAcctName(false);
     }
@@ -435,9 +435,9 @@ export const ProfileEditPage = ({ config }: Props) => {
         try { UserHelper.currentUserChurch.jwt = resp.jwt; } catch { }
       }
       setNewEmail("");
-      setSnack({ open: true, msg: "Email updated.", severity: "success" });
+      setSnack({ open: true, msg: Locale.label("mobile.screens.emailUpdated"), severity: "success" });
     } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || "Could not update email.", severity: "error" });
+      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotUpdateEmail"), severity: "error" });
     } finally {
       setSavingEmail(false);
     }
@@ -458,9 +458,9 @@ export const ProfileEditPage = ({ config }: Props) => {
       await ApiHelper.post("/users/updatePassword", { newPassword }, "MembershipApi");
       setNewPassword("");
       setConfirmPassword("");
-      setSnack({ open: true, msg: "Password updated.", severity: "success" });
+      setSnack({ open: true, msg: Locale.label("mobile.screens.passwordUpdated"), severity: "success" });
     } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || "Could not update password.", severity: "error" });
+      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotUpdatePassword"), severity: "error" });
     } finally {
       setSavingPassword(false);
     }
@@ -500,9 +500,9 @@ export const ProfileEditPage = ({ config }: Props) => {
         setInitialOptedOut(optedOutLocal);
         setPerson((p) => (p ? { ...p, optedOut: optedOutLocal } : p));
       }
-      setSnack({ open: true, msg: "Visibility preferences saved.", severity: "success" });
+      setSnack({ open: true, msg: Locale.label("mobile.screens.visibilityPreferencesSaved"), severity: "success" });
     } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || "Could not save visibility preferences.", severity: "error" });
+      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.couldNotSaveVisibility"), severity: "error" });
     } finally {
       setSavingPrivacy(false);
     }
@@ -1115,7 +1115,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
-            {savingPrivacy ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
+            {savingPrivacy ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("mobile.screens.save")}
           </Button>
         )}
       </Box>

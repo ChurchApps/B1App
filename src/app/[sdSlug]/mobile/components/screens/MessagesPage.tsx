@@ -202,7 +202,7 @@ export const MessagesPage = ({ config }: Props) => {
         </Typography>
       </Box>
       <IconButton
-        aria-label="Delete conversation"
+        aria-label={Locale.label("mobile.screens.deleteConversation")}
         data-testid={`conversation-delete-${c.pmId}`}
         size="small"
         onClick={(e) => handleDelete(c, e)}

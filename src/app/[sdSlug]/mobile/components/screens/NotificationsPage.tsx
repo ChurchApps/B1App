@@ -3,7 +3,7 @@
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -218,7 +218,7 @@ export const NotificationsPage = ({ config }: Props) => {
           </Box>
         </Box>
         <IconButton
-          aria-label="Delete notification"
+          aria-label={Locale.label("mobile.screens.deleteNotification")}
           data-testid={`notification-delete-${n.id || idx}`}
           size="small"
           onClick={(e) => handleDelete(n, e)}
