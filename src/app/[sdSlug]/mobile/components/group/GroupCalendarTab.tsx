@@ -12,7 +12,7 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 
 interface Props {
   groupId: string;
-  isLeader: boolean;
+  canManage: boolean;
   onAddEvent: (dateIso: string) => void;
   onEditEvent?: (event: EventRow) => void;
 }
@@ -71,7 +71,7 @@ const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: bo
   return `${fmt(s)} – ${fmt(e)}`;
 };
 
-export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }: Props) => {
+export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date());
@@ -193,7 +193,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
           gap: `${mobileTheme.spacing.sm}px`
         }}
       >
-        {isLeader && (
+        {canManage && (
           <Button
             variant="contained"
             fullWidth
@@ -439,7 +439,7 @@ export const GroupCalendarTab = ({ groupId, isLeader, onAddEvent, onEditEvent }:
                       </Box>
                     )}
                   </Box>
-                  {isLeader && onEditEvent && (
+                  {canManage && onEditEvent && (
                     <IconButton
                       size="small"
                       aria-label={Locale.label("mobile.group.editEvent")}

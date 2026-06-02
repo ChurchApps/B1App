@@ -308,7 +308,9 @@ export const PlaylistDetail = ({ id, config }: Props) => {
 
   const handleSermonClick = (sermon: SermonInterface) => {
     if (!sermon.id) return;
-    router.push(`/mobile/sermons/${sermon.id}`);
+    const params = new URLSearchParams({ playlistId: id });
+    if (playlistData?.title) params.set("playlistTitle", playlistData.title);
+    router.push(`/mobile/sermons/${sermon.id}?${params.toString()}`);
   };
 
   return (

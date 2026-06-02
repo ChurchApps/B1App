@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Box, Button, CircularProgress, Icon, Snackbar, Typography } from "@mui/material";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -89,7 +90,11 @@ export const SermonDetail = ({ id, config }: Props) => {
     enabled: !!id
   });
 
-  const playlistId = (sermon as any)?.playlistId as string | undefined;
+  const searchParams = useSearchParams();
+  const paramPlaylistId = searchParams?.get("playlistId") || undefined;
+  const paramPlaylistTitle = searchParams?.get("playlistTitle") || undefined;
+
+  const playlistId = ((sermon as any)?.playlistId as string | undefined) || paramPlaylistId;
 
   const { data: playlistTitle } = useQuery<string | null>({
     queryKey: ["sermon-playlist-title", churchId, playlistId],
@@ -107,6 +112,7 @@ export const SermonDetail = ({ id, config }: Props) => {
       return null;
     },
     enabled: !!churchId && !!playlistId,
+    placeholderData: paramPlaylistTitle,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000
   });

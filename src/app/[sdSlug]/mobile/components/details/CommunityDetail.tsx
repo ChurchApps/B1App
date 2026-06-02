@@ -49,7 +49,9 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
       const hh = await ApiHelper.get(`/people/household/${householdId}`, "MembershipApi");
       return Array.isArray(hh) ? hh : [];
     },
-    enabled: !!householdId
+    enabled: !!householdId,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000
   });
 
   const person: PersonWithPrivacy | null | undefined = personLoading ? undefined : (personData ?? null);

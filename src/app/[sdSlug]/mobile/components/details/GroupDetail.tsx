@@ -181,6 +181,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const isMember = members !== null ? !!myMembership : !!seedGroup;
   const isLeader = members !== null ? !!myMembership?.leader : !!seedGroup?.leader;
   const canEditResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
+  const canManageGroup = canEditResources;
 
   const handleBack = () => navigateBack(router, "/mobile/groups");
 
@@ -637,7 +638,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
   if (isMember) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
   availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
-  if (isLeader) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
+  if (canManageGroup) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
   availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
 
@@ -716,7 +717,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           {tab === "events" && groupId && (
             <GroupCalendarTab
               groupId={groupId}
-              isLeader={isLeader}
+              canManage={canManageGroup}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
               onEditEvent={(ev) => setEditEvent(ev)}
             />
