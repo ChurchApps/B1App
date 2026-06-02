@@ -12,7 +12,7 @@ import {
   Tabs,
   Typography
 } from "@mui/material";
-import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Permissions, type GroupInterface, type PlanInterface } from "@churchapps/helpers";
@@ -232,7 +232,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       return (
         <Box
           component="img"
-          src={m.person.photo}
+          src={PersonHelper.getPhotoUrl(m.person as any)}
           alt={m.person?.name?.display || Locale.label("mobile.components.member")}
           sx={{ ...common, objectFit: "cover" }}
         />
