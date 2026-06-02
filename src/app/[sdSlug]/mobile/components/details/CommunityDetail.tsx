@@ -255,6 +255,19 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         />
       );
     }
+    if (phone) {
+      actions.push(
+        <QuickAction
+          key="text"
+          icon="sms"
+          label={Locale.label("mobile.details.text")}
+          ariaLabel={Locale.label("mobile.details.sendText")}
+          onClick={() => {
+            window.location.href = `sms:${phone}`;
+          }}
+        />
+      );
+    }
     if (email) {
       actions.push(
         <QuickAction
