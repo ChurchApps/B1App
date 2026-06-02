@@ -2,13 +2,15 @@
 
 import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Snackbar, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem, Popover, Snackbar, TextField, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
+import { Emojis } from "@/components/video/chat";
 import { ApiHelper, Locale, PersonHelper, SocketHelper, SubscriptionManager, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type MessageInterface, type PersonInterface } from "@churchapps/helpers";
@@ -46,9 +48,11 @@ export const MessageConversation = ({ id, config }: Props) => {
   const [editingId, setEditingId] = React.useState<string | null>(null);
   const [menuAnchor, setMenuAnchor] = React.useState<{ el: HTMLElement; message: MessageInterface } | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<MessageInterface | null>(null);
+  const [emojiAnchor, setEmojiAnchor] = React.useState<HTMLElement | null>(null);
   const [viewportHeight, setViewportHeight] = React.useState<number | null>(null);
 
   const listRef = React.useRef<HTMLDivElement | null>(null);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
 
   const myPersonId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const myDisplayName = userContext?.person?.name?.display || UserHelper.currentUserChurch?.person?.name?.display || "";
@@ -335,6 +339,13 @@ export const MessageConversation = ({ id, config }: Props) => {
     } finally {
       setSending(false);
     }
+  };
+
+  const handleInsertEmoji = (emoji: string) => {
+    setText((prev) => prev + emoji);
+    setEmojiAnchor(null);
+    // Return focus to the composer so the user can keep typing.
+    requestAnimationFrame(() => inputRef.current?.focus());
   };
 
   const handleStartEdit = (m: MessageInterface) => {
@@ -633,7 +644,15 @@ export const MessageConversation = ({ id, config }: Props) => {
           gap: "8px"
         }}
       >
+        <IconButton
+          aria-label={Locale.label("mobile.details.openEmojiPicker")}
+          onClick={(e) => setEmojiAnchor(e.currentTarget)}
+          sx={{ flexShrink: 0, color: tc.textMuted, width: 36, height: 36 }}
+        >
+          <EmojiEmotionsOutlinedIcon sx={{ fontSize: 22 }} />
+        </IconButton>
         <TextField
+          inputRef={inputRef}
           multiline
           maxRows={4}
           placeholder={Locale.label("mobile.details.typeMessage")}
@@ -680,6 +699,35 @@ export const MessageConversation = ({ id, config }: Props) => {
           )}
         </IconButton>
       </Box>
+
+      <Popover
+        anchorEl={emojiAnchor}
+        open={!!emojiAnchor}
+        onClose={() => setEmojiAnchor(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "left" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: 280,
+              maxWidth: "90vw",
+              maxHeight: 240,
+              p: `${mobileTheme.spacing.sm}px`,
+              "& a": {
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 22,
+                lineHeight: 1,
+                textDecoration: "none",
+                cursor: "pointer"
+              }
+            }
+          }
+        }}
+      >
+        <Emojis selectedFunction={handleInsertEmoji} />
+      </Popover>
 
       <Menu
         anchorEl={menuAnchor?.el || null}

@@ -527,6 +527,7 @@
       "newConversation": "New conversation",
       "send": "Send",
       "typeMessage": "Type a message…",
+      "openEmojiPicker": "Open emoji picker",
       "startConversationWith": "Start the conversation with {}",
       "unableToLoadMessages": "Unable to load messages.",
       "messageFailed": "Message failed to send.",
