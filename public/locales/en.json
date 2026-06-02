@@ -491,6 +491,8 @@
       "message": "Message",
       "sendMessage": "Send message",
       "call": "Call",
+      "text": "Text",
+      "sendText": "Send text message",
       "email": "Email",
       "sendEmail": "Send email",
       "emailAddress": "Email Address",
