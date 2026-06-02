@@ -176,8 +176,10 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   const currentPersonId = UserHelper.person?.id;
   const myMembership = members?.find((m) => (m.personId || m.person?.id) === currentPersonId);
-  const isMember = !!myMembership;
-  const isLeader = !!myMembership?.leader;
+
+  const seedGroup = groupId ? UserHelper.currentUserChurch?.groups?.find((g) => g.id === groupId) : undefined;
+  const isMember = members !== null ? !!myMembership : !!seedGroup;
+  const isLeader = members !== null ? !!myMembership?.leader : !!seedGroup?.leader;
   const canEditResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
 
   const handleBack = () => navigateBack(router, "/mobile/groups");
