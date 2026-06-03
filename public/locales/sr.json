@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Проповед није доступна",
       "sermonPlural": "проповеди",
       "sermonRemoved": "Ова проповед је можда уклоњена или више није јавна.",
+      "sermonLoadError": "Није могуће учитати проповед",
+      "sermonLoadErrorBody": "Дошло је до грешке при учитавању. Проверите везу и покушајте поново.",
       "sermonSeries": "Серија проповеди",
       "sermonSingular": "проповед",
       "sermons": "Проповеди",

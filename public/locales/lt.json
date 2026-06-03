@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Pamokslas nepasiekiamas",
       "sermonPlural": "pamokslai",
       "sermonRemoved": "Šis pamokslas galėjo būti pašalintas arba nebėra viešas.",
+      "sermonLoadError": "Nepavyko įkelti pamokslo",
+      "sermonLoadErrorBody": "Įkeliant įvyko klaida. Patikrinkite ryšį ir bandykite dar kartą.",
       "sermonSeries": "Pamokslų serija",
       "sermonSingular": "pamokslas",
       "sermons": "Pamokslai",

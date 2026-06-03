@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Prædiken ikke tilgængelig",
       "sermonPlural": "prædikener",
       "sermonRemoved": "Denne prædiken er muligvis blevet fjernet eller er ikke længere offentlig.",
+      "sermonLoadError": "Prædikenen kunne ikke indlæses",
+      "sermonLoadErrorBody": "Noget gik galt under indlæsningen. Kontrollér din forbindelse, og prøv igen.",
       "sermonSeries": "Prædikenserie",
       "sermonSingular": "prædiken",
       "sermons": "Prædikener",

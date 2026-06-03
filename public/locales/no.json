@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Preken ikke tilgjengelig",
       "sermonPlural": "prekener",
       "sermonRemoved": "Denne prekenen kan ha blitt fjernet eller er ikke lenger offentlig.",
+      "sermonLoadError": "Kunne ikke laste prekenen",
+      "sermonLoadErrorBody": "Noe gikk galt under innlasting. Sjekk tilkoblingen din og prøv igjen.",
       "sermonSeries": "Prekenserie",
       "sermonSingular": "preken",
       "sermons": "Prekener",

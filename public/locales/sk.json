@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Kázeň nie je dostupná",
       "sermonPlural": "kázne",
       "sermonRemoved": "Táto kázeň mohla byť odstránená alebo už nie je verejná.",
+      "sermonLoadError": "Kázeň sa nepodarilo načítať",
+      "sermonLoadErrorBody": "Pri načítavaní sa vyskytla chyba. Skontrolujte pripojenie a skúste to znova.",
       "sermonSeries": "Séria kázní",
       "sermonSingular": "kázeň",
       "sermons": "Kázne",

@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Hindi available ang sermon",
       "sermonPlural": "mga sermon",
       "sermonRemoved": "Maaaring naalis na o hindi na pampubliko ang sermon na ito.",
+      "sermonLoadError": "Hindi ma-load ang sermon",
+      "sermonLoadErrorBody": "May naganap na error habang naglo-load. Pakisuri ang iyong koneksyon at subukang muli.",
       "sermonSeries": "Sermon Series",
       "sermonSingular": "sermon",
       "sermons": "Mga Sermon",

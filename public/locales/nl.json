@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Preek niet beschikbaar",
       "sermonPlural": "preken",
       "sermonRemoved": "Deze preek is mogelijk verwijderd of niet langer openbaar.",
+      "sermonLoadError": "Kan de preek niet laden",
+      "sermonLoadErrorBody": "Er is iets misgegaan tijdens het laden. Controleer je verbinding en probeer het opnieuw.",
       "sermonSeries": "Prekenserie",
       "sermonSingular": "preek",
       "sermons": "Preken",

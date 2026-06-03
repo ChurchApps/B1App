@@ -560,6 +560,8 @@
       "playlistFallback": "Playlist",
       "sermonNotAvailable": "Sermon not available",
       "sermonRemoved": "This sermon may have been removed or is no longer public.",
+      "sermonLoadError": "Unable to load sermon",
+      "sermonLoadErrorBody": "Something went wrong while loading. Please check your connection and try again.",
       "share": "Share",
       "openLink": "Open Link",
       "watchSermon": "Watch Sermon",

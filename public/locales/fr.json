@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Sermon non disponible",
       "sermonPlural": "sermons",
       "sermonRemoved": "Ce sermon a peut-être été supprimé ou n'est plus public.",
+      "sermonLoadError": "Impossible de charger le sermon",
+      "sermonLoadErrorBody": "Une erreur s'est produite lors du chargement. Veuillez vérifier votre connexion et réessayer.",
       "sermonSeries": "Série de sermons",
       "sermonSingular": "sermon",
       "sermons": "Sermons",

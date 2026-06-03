@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Vaaz mevcut değil",
       "sermonPlural": "vaazlar",
       "sermonRemoved": "Bu vaaz kaldırılmış veya artık herkese açık olmayabilir.",
+      "sermonLoadError": "Vaaz yüklenemedi",
+      "sermonLoadErrorBody": "Yükleme sırasında bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
       "sermonSeries": "Vaaz Serisi",
       "sermonSingular": "vaaz",
       "sermons": "Vaazlar",

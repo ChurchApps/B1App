@@ -67,7 +67,7 @@ export const SermonDetail = ({ id, config }: Props) => {
   const [showVideo, setShowVideo] = useState(false);
   const [snackbar, setSnackbar] = useState<string | null>(null);
 
-  const { data: sermon = null, isLoading: loading } = useQuery<SermonInterface | null>({
+  const { data: sermon = null, isLoading: loading, isError } = useQuery<SermonInterface | null>({
     queryKey: ["sermon", churchId, id],
     queryFn: async () => {
       let found: SermonInterface | null = null;
@@ -164,7 +164,9 @@ export const SermonDetail = ({ id, config }: Props) => {
     );
   }
 
-  if (!sermon) {
+  if (isError || !sermon) {
+    const titleKey = isError ? "mobile.details.sermonLoadError" : "mobile.details.sermonNotAvailable";
+    const bodyKey = isError ? "mobile.details.sermonLoadErrorBody" : "mobile.details.sermonRemoved";
     return (
       <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
         <Box
@@ -179,10 +181,10 @@ export const SermonDetail = ({ id, config }: Props) => {
         >
           <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>sentiment_dissatisfied</Icon>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            {Locale.label("mobile.details.sermonNotAvailable")}
+            {Locale.label(titleKey)}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            {Locale.label("mobile.details.sermonRemoved")}
+            {Locale.label(bodyKey)}
           </Typography>
           <Link href="/mobile/sermons" style={{ color: tc.primary, fontWeight: 600, textDecoration: "none" }}>
             {Locale.label("mobile.details.backToSermons")}

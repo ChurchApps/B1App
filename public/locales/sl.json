@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Pridiga ni na voljo",
       "sermonPlural": "pridige",
       "sermonRemoved": "Ta pridiga je bila morda odstranjena ali ni več javna.",
+      "sermonLoadError": "Pridige ni mogoče naložiti",
+      "sermonLoadErrorBody": "Pri nalaganju je prišlo do napake. Preverite povezavo in poskusite znova.",
       "sermonSeries": "Serija pridig",
       "sermonSingular": "pridiga",
       "sermons": "Pridige",

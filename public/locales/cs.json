@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Kázání není k dispozici",
       "sermonPlural": "kázání",
       "sermonRemoved": "Toto kázání mohlo být odstraněno nebo již není veřejné.",
+      "sermonLoadError": "Kázání se nepodařilo načíst",
+      "sermonLoadErrorBody": "Při načítání došlo k chybě. Zkontrolujte připojení a zkuste to znovu.",
       "sermonSeries": "Série kázání",
       "sermonSingular": "kázání",
       "sermons": "Kázání",

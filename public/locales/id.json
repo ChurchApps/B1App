@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Khotbah tidak tersedia",
       "sermonPlural": "khotbah",
       "sermonRemoved": "Khotbah ini mungkin telah dihapus atau tidak lagi bersifat publik.",
+      "sermonLoadError": "Tidak dapat memuat khotbah",
+      "sermonLoadErrorBody": "Terjadi kesalahan saat memuat. Periksa koneksi Anda dan coba lagi.",
       "sermonSeries": "Seri Khotbah",
       "sermonSingular": "khotbah",
       "sermons": "Khotbah",

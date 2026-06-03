@@ -527,6 +527,8 @@
       "sermonNotAvailable": "उपदेश उपलब्ध नहीं है",
       "sermonPlural": "उपदेश",
       "sermonRemoved": "हो सकता है कि यह उपदेश हटा दिया गया हो या अब सार्वजनिक न हो।",
+      "sermonLoadError": "उपदेश लोड नहीं हो सका",
+      "sermonLoadErrorBody": "लोड करते समय कुछ गलत हो गया। कृपया अपना कनेक्शन जाँचें और पुनः प्रयास करें।",
       "sermonSeries": "उपदेश श्रृंखला",
       "sermonSingular": "उपदेश",
       "sermons": "उपदेश",

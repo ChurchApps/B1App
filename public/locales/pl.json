@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Kazanie niedostępne",
       "sermonPlural": "kazania",
       "sermonRemoved": "To kazanie mogło zostać usunięte lub nie jest już publiczne.",
+      "sermonLoadError": "Nie udało się załadować kazania",
+      "sermonLoadErrorBody": "Coś poszło nie tak podczas ładowania. Sprawdź połączenie i spróbuj ponownie.",
       "sermonSeries": "Seria kazań",
       "sermonSingular": "kazanie",
       "sermons": "Kazania",

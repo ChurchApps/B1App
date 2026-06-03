@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Predigt nicht verfügbar",
       "sermonPlural": "Predigten",
       "sermonRemoved": "Diese Predigt wurde möglicherweise entfernt oder ist nicht mehr öffentlich.",
+      "sermonLoadError": "Predigt konnte nicht geladen werden",
+      "sermonLoadErrorBody": "Beim Laden ist ein Fehler aufgetreten. Bitte überprüfe deine Verbindung und versuche es erneut.",
       "sermonSeries": "Predigtreihe",
       "sermonSingular": "Predigt",
       "sermons": "Predigten",

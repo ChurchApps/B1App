@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Predikan inte tillgänglig",
       "sermonPlural": "predikningar",
       "sermonRemoved": "Denna predikan kan ha tagits bort eller är inte längre offentlig.",
+      "sermonLoadError": "Det gick inte att ladda predikan",
+      "sermonLoadErrorBody": "Något gick fel vid inläsningen. Kontrollera din anslutning och försök igen.",
       "sermonSeries": "Predikoserie",
       "sermonSingular": "predikan",
       "sermons": "Predikningar",

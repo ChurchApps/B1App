@@ -527,6 +527,8 @@
       "sermonNotAvailable": "A prédikáció nem érhető el",
       "sermonPlural": "prédikációk",
       "sermonRemoved": "Lehet, hogy ez a prédikáció el lett távolítva, vagy már nem nyilvános.",
+      "sermonLoadError": "A prédikációt nem sikerült betölteni",
+      "sermonLoadErrorBody": "Hiba történt a betöltés során. Ellenőrizd a kapcsolatot, és próbáld újra.",
       "sermonSeries": "Prédikációsorozat",
       "sermonSingular": "prédikáció",
       "sermons": "Prédikációk",

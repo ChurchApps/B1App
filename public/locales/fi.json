@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Saarna ei ole saatavilla",
       "sermonPlural": "saarnaa",
       "sermonRemoved": "Tämä saarna on saatettu poistaa tai se ei ole enää julkinen.",
+      "sermonLoadError": "Saarnaa ei voitu ladata",
+      "sermonLoadErrorBody": "Lataamisessa tapahtui virhe. Tarkista yhteytesi ja yritä uudelleen.",
       "sermonSeries": "Saarnasarja",
       "sermonSingular": "saarna",
       "sermons": "Saarnat",

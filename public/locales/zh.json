@@ -527,6 +527,8 @@
       "sermonNotAvailable": "讲道不可用",
       "sermonPlural": "讲道",
       "sermonRemoved": "此讲道可能已被移除或不再公开。",
+      "sermonLoadError": "无法加载讲道",
+      "sermonLoadErrorBody": "加载时出现问题。请检查您的网络连接，然后重试。",
       "sermonSeries": "讲道系列",
       "sermonSingular": "讲道",
       "sermons": "讲道",

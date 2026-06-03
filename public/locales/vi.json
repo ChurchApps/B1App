@@ -527,6 +527,8 @@
       "sermonNotAvailable": "Bài giảng không khả dụng",
       "sermonPlural": "bài giảng",
       "sermonRemoved": "Bài giảng này có thể đã bị xóa hoặc không còn công khai.",
+      "sermonLoadError": "Không thể tải bài giảng",
+      "sermonLoadErrorBody": "Đã xảy ra lỗi khi tải. Vui lòng kiểm tra kết nối và thử lại.",
       "sermonSeries": "Loạt bài giảng",
       "sermonSingular": "bài giảng",
       "sermons": "Bài giảng",

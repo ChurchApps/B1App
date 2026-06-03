@@ -527,6 +527,8 @@
       "sermonNotAvailable": "العظة غير متاحة",
       "sermonPlural": "عظات",
       "sermonRemoved": "ربما تم حذف هذه العظة أو لم تعد علنية.",
+      "sermonLoadError": "تعذّر تحميل العظة",
+      "sermonLoadErrorBody": "حدث خطأ ما أثناء التحميل. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
       "sermonSeries": "سلسلة عظات",
       "sermonSingular": "عظة",
       "sermons": "العظات",
