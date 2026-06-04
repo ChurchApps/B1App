@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { ApiHelper, ArrayHelper, Locale, PersonHelper as ApphelperPersonHelper } from "@churchapps/apphelper";
 import type {
+  CampusInterface,
   GroupInterface,
   GroupServiceTimeInterface,
   PersonInterface,
@@ -162,6 +163,17 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
     gcTime: 15 * 60 * 1000
   });
 
+  // Campuses are mastered in the membership module; resolve the campus name by id.
+  const { data: campuses = [] } = useQuery<CampusInterface[]>({
+    queryKey: ["/campuses", "MembershipApi"],
+    queryFn: async () => {
+      const data = await ApiHelper.get("/campuses", "MembershipApi");
+      return Array.isArray(data) ? data : [];
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
+  });
+
   const selectService = async (serviceId: string) => {
     setSelectingId(serviceId);
     try {
@@ -242,7 +254,9 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
           message={Locale.label("mobile.screens.noServicesMessage")}
         />
       ) : (
-        services.map((service) => (
+        services.map((service) => {
+          const campusName = campuses.find((c) => c.id === service.campusId)?.name;
+          return (
           <SurfaceCard key={service.id}>
             <CardActionArea
               onClick={() => selectService(service.id!)}
@@ -259,9 +273,9 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
                   >
                     {service.name}
                   </Typography>
-                  {service.campus?.name && (
+                  {campusName && (
                     <Typography sx={{ fontSize: 14, color: tc.primary, fontWeight: 500 }}>
-                      {service.campus.name}
+                      {campusName}
                     </Typography>
                   )}
                 </Box>
@@ -273,7 +287,8 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
               </Box>
             </CardActionArea>
           </SurfaceCard>
-        ))
+          );
+        })
       )}
     </>
   );

@@ -7,7 +7,7 @@ import { ArrayHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
 import { Box, CardActionArea, Icon, Typography, CircularProgress } from "@mui/material";
 import { HeaderSection, HeaderIconContainer, CheckinCard, IconCircle, EmptyStateCard, colors } from "./CheckinStyles";
-import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface, ServiceTimeInterface, PersonInterface } from "@churchapps/helpers";
+import type { ServiceInterface, GroupServiceTimeInterface, GroupInterface, ServiceTimeInterface, PersonInterface, CampusInterface } from "@churchapps/helpers";
 
 interface Props {
   selectedHandler: () => void;
@@ -16,10 +16,13 @@ interface Props {
 export function Services({ selectedHandler }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [services, setServices] = useState<ServiceInterface[]>([]);
+  // Campuses are mastered in the membership module; resolve the campus name by id.
+  const [campuses, setCampuses] = useState<CampusInterface[]>([]);
   const [selectingServiceId, setSelectingServiceId] = useState<string>("");
 
   const loadData = () => {
     setIsLoading(true);
+    ApiHelper.get("/campuses", "MembershipApi").then((data: CampusInterface[]) => setCampuses(data));
     ApiHelper.get("/services", "AttendanceApi").then((data: ServiceInterface[]) => {
       setServices(data);
       setIsLoading(false);
@@ -104,7 +107,9 @@ export function Services({ selectedHandler }: Props) {
           </EmptyStateCard>
         )
         : (
-          services.map((service) => (
+          services.map((service) => {
+            const campusName = campuses.find((c) => c.id === service.campusId)?.name;
+            return (
             <CheckinCard key={service.id}>
               <CardActionArea
                 onClick={() => selectService(service.id)}
@@ -119,9 +124,9 @@ export function Services({ selectedHandler }: Props) {
                     <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginBottom: 0.5 }}>
                       {service.name}
                     </Typography>
-                    {service.campus?.name && (
+                    {campusName && (
                       <Typography variant="body2" sx={{ color: colors.primary, fontWeight: 500 }}>
-                        {service.campus.name}
+                        {campusName}
                       </Typography>
                     )}
                   </Box>
@@ -135,7 +140,8 @@ export function Services({ selectedHandler }: Props) {
                 </Box>
               </CardActionArea>
             </CheckinCard>
-          ))
+            );
+          })
         )}
     </>
   );
