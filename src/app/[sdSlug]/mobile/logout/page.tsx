@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { ApiHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
+import { clearAppBadge } from "@/helpers";
 
 export default function MobileLogout(): null {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function MobileLogout(): null {
   const [, , removeCookie] = useCookies(["jwt", "email", "name", "lastChurchId"]);
 
   useEffect(() => {
+    void clearAppBadge();
     removeCookie("jwt", { path: "/" });
     removeCookie("email", { path: "/" });
     removeCookie("name", { path: "/" });

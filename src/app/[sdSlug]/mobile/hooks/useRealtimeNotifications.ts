@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ApiHelper, NotificationService, SocketHelper } from "@churchapps/apphelper";
 import type { UserContextInterface } from "@churchapps/helpers";
-import { getSocketDiagnostics, formatNotificationError, AppBadgeHelper } from "@/helpers";
+import { getSocketDiagnostics, formatNotificationError, setAppBadge } from "@/helpers";
 
 interface Counts {
   notificationCount: number;
@@ -53,7 +53,7 @@ export const useRealtimeNotifications = (context: UserContextInterface | null | 
   // Keep the home-screen app icon badge (Badging API) in sync with the live unread total.
   // No-op on platforms without badge support; reconciles the count set by the SW push handler.
   useEffect(() => {
-    AppBadgeHelper.setAppBadge((counts?.notificationCount || 0) + (counts?.pmCount || 0));
+    void setAppBadge((counts?.notificationCount || 0) + (counts?.pmCount || 0));
   }, [counts]);
 
   useEffect(() => {

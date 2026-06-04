@@ -4,7 +4,7 @@ export { PersonHelper } from "./Personhelper";
 export { CheckinHelper } from "./CheckinHelper";
 export { UrlHelper } from "./UrlHelper";
 export { WebPushHelper } from "./WebPushHelper";
-export { AppBadgeHelper } from "./AppBadgeHelper";
+export { AppBadgeHelper, setAppBadge, clearAppBadge } from "./AppBadgeHelper";
 export { InstallPromptHelper } from "./InstallPromptHelper";
 export { formatNotificationError, getSocketDiagnostics } from "./NotificationRuntimeHelper";
 export { isLinkVisible, filterVisibleLinks } from "./VisibilityHelper";
