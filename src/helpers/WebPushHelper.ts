@@ -1,4 +1,5 @@
-import { ApiHelper, UserHelper, WebPushHelper as SharedWebPushHelper } from "@churchapps/apphelper";
+import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { WebPushHelperBase as SharedWebPushHelper } from "./WebPushHelperBase";
 
 // Configure once at module load so any caller of WebPushHelper.subscribe / .getRegistration
 // uses the B1App PWA scope and appName.
