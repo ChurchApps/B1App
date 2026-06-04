@@ -636,11 +636,16 @@ const PositionDetailsCard = ({
   const meta = statusMeta(assignment.status);
 
   const sortedTimes = [...times].sort((a: any, b: any) => (a?.startTime > b?.startTime ? 1 : -1));
-  let latestEnd = new Date();
+  
+  let latestBoundary: Date | null = null;
   sortedTimes.forEach((t: any) => {
-    if (t?.endTime && new Date(t.endTime) > latestEnd) latestEnd = new Date(t.endTime);
+    const raw = t?.endTime || t?.startTime;
+    if (!raw) return;
+    const boundary = new Date(raw);
+    if (isNaN(boundary.getTime())) return;
+    if (!latestBoundary || boundary > latestBoundary) latestBoundary = boundary;
   });
-  const canRespond = assignment.status === "Unconfirmed" && (sortedTimes.length === 0 || new Date() < latestEnd);
+  const canRespond = assignment.status === "Unconfirmed" && (!latestBoundary || new Date() < latestBoundary);
 
   const handleRespond = async (action: "accept" | "decline") => {
     if (!assignment.id || busy) return;

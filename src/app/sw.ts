@@ -194,6 +194,26 @@ const deriveClickUrl = (payload: PushPayload): string => {
   return "/mobile/notifications";
 };
 
+type BadgingWorkerNavigator = WorkerNavigator & {
+  setAppBadge?: (contents?: number) => Promise<void>;
+  clearAppBadge?: () => Promise<void>;
+};
+
+const updateAppBadge = async (count: number) => {
+  const normalized = Number.isFinite(count) ? Math.max(0, Math.trunc(count)) : 0;
+  const nav = navigator as BadgingWorkerNavigator;
+
+  try {
+    if (normalized > 0) {
+      if ("setAppBadge" in navigator && typeof nav.setAppBadge === "function") await nav.setAppBadge(normalized);
+    } else if ("clearAppBadge" in navigator && typeof nav.clearAppBadge === "function") {
+      await nav.clearAppBadge();
+    }
+  } catch {
+    // Badging is best-effort.
+  }
+};
+
 self.addEventListener("push", (event) => {
   const payload = safeParsePushData(event);
   const title = payload.title || "B1";
@@ -213,13 +233,7 @@ self.addEventListener("push", (event) => {
           tag: payload.type && payload.contentId ? `${payload.type}:${payload.contentId}` : undefined
         });
 
-        if (typeof payload.badgeCount === "number" && "setAppBadge" in navigator) {
-          try {
-            await (navigator as any).setAppBadge(payload.badgeCount);
-          } catch (badgeError) {
-            console.error("[webpush] failed to set app badge:", badgeError);
-          }
-        }
+        if (typeof payload.badgeCount === "number") await updateAppBadge(payload.badgeCount);
       } catch (error) {
         console.error("[webpush] failed to show notification:", error);
         throw error;
