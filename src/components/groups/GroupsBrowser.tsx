@@ -17,13 +17,18 @@ interface Props {
 
 export const GroupsBrowser = (props: Props) => {
   const [groups, setGroups] = useState<GroupInterface[] | undefined>(undefined);
+  const [campuses, setCampuses] = useState<{ id?: string; name?: string }[]>([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<string>("");
+  const [campus, setCampus] = useState<string>("");
 
   useEffect(() => {
     if (!props.churchId) return;
     ApiHelper.getAnonymous(`/groups/public/${props.churchId}/list`, "MembershipApi").then((data: any) => {
       setGroups(Array.isArray(data) ? data : []);
+    });
+    ApiHelper.getAnonymous(`/campuses/public/${props.churchId}`, "MembershipApi").then((data: any) => {
+      setCampuses(Array.isArray(data) ? data : []);
     });
   }, [props.churchId]);
 
@@ -40,13 +45,16 @@ export const GroupsBrowser = (props: Props) => {
         if (!labels.includes(presetLabel)) return false;
       }
       if (userCategory && (g.categoryName || "").toLowerCase() !== userCategory) return false;
+      // Campus filter: when a campus is selected, only groups assigned to it
+      // show. Unassigned groups (no campusId) appear only when no campus is set.
+      if (campus && g.campusId !== campus) return false;
       if (lowerSearch) {
         const haystack = `${g.name || ""} ${g.about || ""} ${g.categoryName || ""}`.toLowerCase();
         if (!haystack.includes(lowerSearch)) return false;
       }
       return true;
     });
-  }, [groups, search, category, props.category, props.label]);
+  }, [groups, search, category, campus, props.category, props.label]);
 
   const categories = useMemo(() => {
     if (!groups) return [];
@@ -57,6 +65,9 @@ export const GroupsBrowser = (props: Props) => {
 
   const showSearch = props.showSearch !== false;
   const showCategory = props.showCategory !== false && !props.category && categories.length > 1;
+  const showCampus = campuses.length > 1;
+  const filterCount = (showCategory ? 1 : 0) + (showCampus ? 1 : 0);
+  const searchMd = 12 - filterCount * 4;
 
   return (
     <Box data-testid="groups-browser">
@@ -65,10 +76,10 @@ export const GroupsBrowser = (props: Props) => {
           {props.title}
         </Typography>
       )}
-      {(showSearch || showCategory) && (
+      {(showSearch || showCategory || showCampus) && (
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {showSearch && (
-            <Grid size={{ xs: 12, md: showCategory ? 8 : 12 }}>
+            <Grid size={{ xs: 12, md: searchMd }}>
               <TextField
                 fullWidth
                 placeholder="Search groups by name or description"
@@ -91,6 +102,23 @@ export const GroupsBrowser = (props: Props) => {
                   <MenuItem value="">All categories</MenuItem>
                   {categories.map((c) => (
                     <MenuItem key={c} value={c}>{c}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
+          {showCampus && (
+            <Grid size={{ xs: 12, md: 4 }}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Campus</InputLabel>
+                <Select
+                  label="Campus"
+                  value={campus}
+                  onChange={(e) => setCampus(e.target.value)}
+                  inputProps={{ "data-testid": "groups-browser-campus" }}>
+                  <MenuItem value="">All campuses</MenuItem>
+                  {campuses.map((c) => (
+                    <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
