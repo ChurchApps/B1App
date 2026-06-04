@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Chip, Icon, LinearProgress, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, DateHelper } from "@churchapps/apphelper";
+import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface SignupPlanData {
-  plan: PlanInterface;
+  plan: PlanInterface & { signupDeadlineHours?: number; showVolunteerNames?: boolean };
   positions: (PositionInterface & { filledCount: number })[];
   times: TimeInterface[];
 }
@@ -84,7 +84,7 @@ export const VolunteerPage = ({ config }: Props) => {
               whiteSpace: "nowrap"
             }}
           >
-            {isFull ? "Full" : `${remaining} open`}
+            {isFull ? Locale.label("mobile.screens.volunteerFull") : Locale.label("mobile.screens.volunteerOpen").replace("{}", String(remaining))}
           </Box>
         </Box>
 
@@ -101,7 +101,7 @@ export const VolunteerPage = ({ config }: Props) => {
               }}
             />
             <Typography sx={{ fontSize: 11, color: tc.textSecondary, mt: 0.5 }}>
-              {filled} of {total} positions filled
+              {Locale.label("mobile.screens.volunteerPositionsFilled").replace("{}", String(filled)).replace("{}", String(total))}
             </Typography>
           </Box>
         )}
@@ -114,7 +114,7 @@ export const VolunteerPage = ({ config }: Props) => {
               return (
                 <Chip
                   key={p.id || p.name}
-                  label={`${p.name} (${posOpen} open)`}
+                  label={Locale.label("mobile.screens.volunteerPositionOpen").replace("{}", p.name || "").replace("{}", String(posOpen))}
                   size="small"
                   sx={{
                     height: 22,
@@ -144,7 +144,7 @@ export const VolunteerPage = ({ config }: Props) => {
                 "&:hover": { bgcolor: tc.primary }
               }}
             >
-              View & Sign Up
+              {Locale.label("mobile.screens.volunteerViewSignUp")}
             </Button>
           </Box>
         )}
@@ -194,10 +194,10 @@ export const VolunteerPage = ({ config }: Props) => {
         <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-        Browse Opportunities
+        {Locale.label("mobile.screens.volunteerBrowseTitle")}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        There are no volunteer opportunities available right now. Check back soon!
+        {Locale.label("mobile.screens.volunteerBrowseBody")}
       </Typography>
     </Box>
   );

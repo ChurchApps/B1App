@@ -12,7 +12,7 @@ import {
   Tabs,
   Typography
 } from "@mui/material";
-import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Permissions, type GroupInterface, type PlanInterface } from "@churchapps/helpers";
@@ -176,9 +176,12 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   const currentPersonId = UserHelper.person?.id;
   const myMembership = members?.find((m) => (m.personId || m.person?.id) === currentPersonId);
-  const isMember = !!myMembership;
-  const isLeader = !!myMembership?.leader;
+
+  const seedGroup = groupId ? UserHelper.currentUserChurch?.groups?.find((g) => g.id === groupId) : undefined;
+  const isMember = members !== null ? !!myMembership : !!seedGroup;
+  const isLeader = members !== null ? !!myMembership?.leader : !!seedGroup?.leader;
   const canEditResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
+  const canManageGroup = canEditResources;
 
   const handleBack = () => navigateBack(router, "/mobile/groups");
 
@@ -232,7 +235,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       return (
         <Box
           component="img"
-          src={m.person.photo}
+          src={PersonHelper.getPhotoUrl(m.person as any)}
           alt={m.person?.name?.display || Locale.label("mobile.components.member")}
           sx={{ ...common, objectFit: "cover" }}
         />
@@ -635,7 +638,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
   if (isMember) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
   availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
-  if (isLeader) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
+  if (canManageGroup) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
   availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
 
@@ -714,7 +717,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           {tab === "events" && groupId && (
             <GroupCalendarTab
               groupId={groupId}
-              isLeader={isLeader}
+              canManage={canManageGroup}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
               onEditEvent={(ev) => setEditEvent(ev)}
             />

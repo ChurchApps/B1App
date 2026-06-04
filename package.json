@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "yarn@4.15.0",
   "engines": {
     "node": ">=22.0.0"
   },
   "scripts": {
+    "preinstall": "node -e \"if(!(process.env.npm_config_user_agent||'').startsWith('yarn')){console.error('\\n[B1App] This project uses Yarn (Berry). Run \\'yarn install\\' instead of npm/pnpm.\\n');process.exit(1)}\"",
     "dev": "next dev -p 3301",
     "dev:turbo": "next dev --turbo -p 3301",
     "prebuild": "node -e \"const fs=require('fs'); fs.copyFileSync('src/instrumentation.prod.ts', 'src/instrumentation.ts'); fs.copyFileSync('src/instrumentation-client.prod.ts', 'src/instrumentation-client.ts');\"",
@@ -67,6 +69,20 @@
   },
   "overrides": {
     "react-is": "18.3.1"
+  },
+  "resolutions": {
+    "react-is": "18.3.1"
+  },
+  "dependenciesMeta": {
+    "@sentry/cli": {
+      "built": true
+    },
+    "sharp": {
+      "built": true
+    },
+    "unrs-resolver": {
+      "built": true
+    }
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",

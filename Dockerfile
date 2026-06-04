@@ -1,8 +1,9 @@
 FROM node:20-slim
 WORKDIR /app
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
+RUN corepack enable
+COPY package.json yarn.lock .yarnrc.yml ./
+RUN yarn install --immutable
 COPY . .
-RUN npm run build
+RUN yarn build
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["yarn", "start"]

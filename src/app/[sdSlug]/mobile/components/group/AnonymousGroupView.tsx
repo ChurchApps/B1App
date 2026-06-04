@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, Locale } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
@@ -204,7 +204,7 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
         </Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: `${mobileTheme.spacing.md}px` }}>
           {leaders.map((l) => {
-            const photo = l.person?.photo;
+            const photo = l.person ? (() => { try { return PersonHelper.getPhotoUrl(l.person as any); } catch { return ""; } })() : "";
             return (
               <Box
                 key={l.id}

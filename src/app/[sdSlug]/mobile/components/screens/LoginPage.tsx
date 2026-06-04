@@ -460,7 +460,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
         <Typography sx={{ fontSize: 12, color: tc.textMuted, lineHeight: 1.5 }}>
           By signing in, you agree to our{" "}
           <Box component="a" href="https://churchapps.org/privacy" target="_blank" rel="noopener noreferrer" sx={{ color: tc.primary, fontWeight: 500, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}>
-            Privacy Policy
+            {Locale.label("mobile.components.privacyPolicy")}
           </Box>
           .
         </Typography>

@@ -242,7 +242,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   if (loadError || !event) {
     return (
       <Shell backButton={renderBack()} backgroundColor={tc.background}>
-        <StatusCard icon="event_busy" title="Event not found" body="This event may have been removed or is no longer available." color={tc.error} tc={tc} />
+        <StatusCard icon="event_busy" title={Locale.label("mobile.screens.eventNotFound")} body={Locale.label("mobile.screens.eventNotFoundBody")} color={tc.error} tc={tc} />
       </Shell>
     );
   }
@@ -250,7 +250,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   if (!event.registrationEnabled) {
     return (
       <Shell backButton={renderBack()} backgroundColor={tc.background}>
-        <StatusCard icon="block" title="Registration unavailable" body="Registration is not available for this event." color={tc.warning} tc={tc} />
+        <StatusCard icon="block" title={Locale.label("mobile.screens.registrationUnavailable")} body={Locale.label("mobile.screens.registrationUnavailableBody")} color={tc.warning} tc={tc} />
       </Shell>
     );
   }
@@ -258,11 +258,11 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   if (!isOpen) {
     const opensLater = event.registrationOpenDate && new Date(event.registrationOpenDate) > new Date();
     const dateLabel = opensLater
-      ? `Registration opens ${DateHelper.prettyDate(new Date(event.registrationOpenDate!))}.`
-      : "Registration for this event has closed.";
+      ? Locale.label("mobile.screens.registrationOpensOn").replace("{}", DateHelper.prettyDate(new Date(event.registrationOpenDate!)))
+      : Locale.label("mobile.screens.registrationHasClosed");
     return (
       <Shell backButton={renderBack()} backgroundColor={tc.background}>
-        <StatusCard icon="event_busy" title="Registration not open" body={dateLabel} color={tc.warning} tc={tc} />
+        <StatusCard icon="event_busy" title={Locale.label("mobile.screens.registrationNotOpen")} body={dateLabel} color={tc.warning} tc={tc} />
       </Shell>
     );
   }
@@ -272,8 +272,8 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
       <Shell backButton={renderBack()} backgroundColor={tc.background}>
         <StatusCard
           icon="group_off"
-          title="Event is full"
-          body={`This event has reached its capacity of ${event.capacity}.`}
+          title={Locale.label("mobile.screens.eventIsFull")}
+          body={Locale.label("mobile.screens.eventIsFullBody").replace("{}", String(event.capacity))}
           color={tc.error}
           tc={tc}
         />

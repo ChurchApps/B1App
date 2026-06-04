@@ -121,11 +121,13 @@ const ScreenSubhead = ({
 const EmptyState = ({
   iconName,
   title,
-  message
+  message,
+  action
 }: {
   iconName: string;
   title: string;
   message: string;
+  action?: React.ReactNode;
 }) => (
   <Box
     sx={{
@@ -143,6 +145,7 @@ const EmptyState = ({
       {title}
     </Typography>
     <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{message}</Typography>
+    {action ? <Box sx={{ mt: `${spacing.md}px` }}>{action}</Box> : null}
   </Box>
 );
 
@@ -162,6 +165,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   const selectService = async (serviceId: string) => {
     setSelectingId(serviceId);
     try {
+      const householdId = PersonHelper.person?.householdId;
       await Promise.all([
         ApiHelper.get("/servicetimes?serviceId=" + serviceId, "AttendanceApi").then(
           (times: ServiceTimeInterface[]) => {
@@ -177,12 +181,17 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
         ApiHelper.get("/groups", "MembershipApi").then((groups: GroupInterface[]) => {
           CheckinHelper.groups = groups;
         }),
-        ApiHelper.get(
-          "/people/household/" + PersonHelper.person.householdId,
-          "MembershipApi"
-        ).then((members: PersonInterface[]) => {
-          CheckinHelper.householdMembers = members;
-        })
+        // Fall back to the current person alone when no household is linked, so the
+        // request doesn't become "/people/household/null" and 404 the screen.
+        householdId
+          ? ApiHelper.get("/people/household/" + householdId, "MembershipApi").then(
+            (members: PersonInterface[]) => {
+              CheckinHelper.householdMembers = members;
+            }
+          )
+          : Promise.resolve().then(() => {
+            CheckinHelper.householdMembers = PersonHelper.person ? [PersonHelper.person] : [];
+          })
       ]);
 
       const peopleIds: number[] = ArrayHelper.getUniqueValues(
@@ -220,7 +229,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
 
   return (
     <>
-      <ScreenSubhead iconName="event" subtitle="Choose which service you're checking in for" />
+      <ScreenSubhead iconName="event" subtitle={Locale.label("mobile.screens.chooseServiceSubtitle")} />
 
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
@@ -229,8 +238,8 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
       ) : services.length === 0 ? (
         <EmptyState
           iconName="event_busy"
-          title="No Services Available"
-          message="Please check back later or contact your church administrator."
+          title={Locale.label("mobile.screens.noServicesAvailable")}
+          message={Locale.label("mobile.screens.noServicesMessage")}
         />
       ) : (
         services.map((service) => (
@@ -329,8 +338,8 @@ const GroupsStep = ({
       {tree.length === 0 ? (
         <EmptyState
           iconName="group_off"
-          title="No Groups Available"
-          message="There are no groups configured for this service."
+          title={Locale.label("mobile.screens.noGroupsAvailable")}
+          message={Locale.label("mobile.screens.noGroupsMessage")}
         />
       ) : (
         tree.map((cat) => {
@@ -719,13 +728,13 @@ const HouseholdStep = ({
 
   return (
     <>
-      <ScreenSubhead iconName="people" subtitle="Select groups for each family member" />
+      <ScreenSubhead iconName="people" subtitle={Locale.label("mobile.screens.selectGroupsSubtitle")} />
 
       {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0 ? (
         <EmptyState
           iconName="person_off"
-          title="No Household Members Found"
-          message="Please ensure you are signed in and have household members registered."
+          title={Locale.label("mobile.screens.noHouseholdMembers")}
+          message={Locale.label("mobile.screens.noHouseholdMessage")}
         />
       ) : (
         CheckinHelper.householdMembers.map((m) => renderMember(m))
@@ -903,8 +912,24 @@ export const CheckinPage = ({ config: _config }: Props) => {
       <Box sx={{ p: `${spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
         <EmptyState
           iconName="how_to_reg"
-          title="Please sign in to check in"
-          message="Log in to check in to a service."
+          title={Locale.label("mobile.screens.signInToCheckIn")}
+          message={Locale.label("mobile.screens.signInToCheckInMessage")}
+          action={
+            <Button
+              variant="contained"
+              href="/mobile/login"
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                borderRadius: `${radius.md}px`,
+                textTransform: "none",
+                fontWeight: 600,
+                "&:hover": { bgcolor: tc.primary }
+              }}
+            >
+              {Locale.label("mobile.screens.signInToCheckInCta")}
+            </Button>
+          }
         />
       </Box>
     );

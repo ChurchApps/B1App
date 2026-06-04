@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 
 interface Props {
   open: boolean;
@@ -25,7 +25,7 @@ export const RequestToJoinDialog: React.FC<Props> = ({ open, groupId, groupName,
       setMessage("");
       onSubmitted();
     } catch (e: any) {
-      setError(e?.message || "Failed to submit request");
+      setError(e?.message || Locale.label("mobile.group.failedToSubmitRequest"));
     } finally {
       setSubmitting(false);
     }
@@ -33,10 +33,10 @@ export const RequestToJoinDialog: React.FC<Props> = ({ open, groupId, groupName,
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" data-testid="request-to-join-dialog">
-      <DialogTitle>Request to Join{groupName ? `: ${groupName}` : ""}</DialogTitle>
+      <DialogTitle>{groupName ? Locale.label("mobile.group.requestToJoinNamed").replace("{}", groupName) : Locale.label("mobile.group.requestToJoin")}</DialogTitle>
       <DialogContent>
         <Typography variant="body2" sx={{ mb: 2, color: "text.secondary" }}>
-          Optionally include a short note for the group leader.
+          {Locale.label("mobile.group.requestNote")}
         </Typography>
         <TextField
           autoFocus
@@ -44,7 +44,7 @@ export const RequestToJoinDialog: React.FC<Props> = ({ open, groupId, groupName,
           multiline
           minRows={3}
           maxRows={6}
-          label="Message (optional)"
+          label={Locale.label("mobile.group.messageOptional")}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           slotProps={{ htmlInput: { maxLength: 1000 } }}
@@ -58,10 +58,10 @@ export const RequestToJoinDialog: React.FC<Props> = ({ open, groupId, groupName,
       </DialogContent>
       <DialogActions>
         <Button onClick={() => { setMessage(""); setError(null); onClose(); }} disabled={submitting}>
-          Cancel
+          {Locale.label("mobile.group.cancel")}
         </Button>
         <Button onClick={handleSubmit} variant="contained" disabled={submitting} data-testid="request-submit">
-          Send Request
+          {Locale.label("mobile.group.sendRequest")}
         </Button>
       </DialogActions>
     </Dialog>
