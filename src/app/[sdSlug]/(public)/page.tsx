@@ -2,6 +2,7 @@ import { PageInterface } from "@/helpers/interfaces";
 import { ConfigHelper } from "@/helpers/ConfigHelper";
 import { Theme } from "@/components/Theme";
 import { PageLayout } from "@/components/PageLayout";
+import { ChurchJsonLd } from "@/components/seo/ChurchJsonLd";
 import { Metadata } from "next";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
@@ -41,6 +42,7 @@ export default async function Home({ params }: { params: Promise<PageParams> }) 
   } else {
     return (<>
       <Theme config={props.config} />
+      <ChurchJsonLd config={props.config} />
       <PageLayout config={props.config} pageData={props.pageData} />
       <Animate />
     </>);

@@ -11,15 +11,9 @@ import { loadChurchAppearance } from "../mobile/loadChurchAppearance";
 
 type LayoutParams = Promise<{ sdSlug: string }>;
 
-export const metadata = { robots: { index: false, follow: false } };
+export const viewport = { themeColor: "#ffffff" };
 
-export async function generateViewport({ params }: { params: LayoutParams }) {
-  const { sdSlug } = await params;
-
-  return { themeColor: "#ffffff" };
-}
-
-export default async function MobileLayout({
+export default async function PublicLayout({
   children,
   params
 }: {
