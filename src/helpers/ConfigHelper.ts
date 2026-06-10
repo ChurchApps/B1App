@@ -24,13 +24,15 @@ export class ConfigHelper {
   static async load(keyName: string, navCategory:string = "b1Tab") {
     // Without a subdomain the lookup hits //churches/lookup/ and 404s (Sentry B1-APP-95/94).
     if (!keyName) throw new Error("ConfigHelper.load called without a church subdomain");
-    const cacheKey = "sd_" + keyName;
-    const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi", [cacheKey]);
-    const appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi", [cacheKey]);
-    const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=" + navCategory, "ContentApi", [cacheKey]);
-    const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi", [cacheKey]);
-    const gatewayConfigured = await ApiHelper.getAnonymous("/gateways/configured/" + church.id, "GivingApi", [cacheKey]);
-    const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi", [cacheKey]);
+    // NOTE: ApiHelper.getAnonymous never supported a cache-tags argument; the old third
+    // argument was silently ignored, so the revalidate(sdKey) tag invalidation in clearCache
+    // has never been wired to these fetches.
+    const church: ChurchInterface = await ApiHelper.getAnonymous("/churches/lookup/?subDomain=" + keyName, "MembershipApi");
+    const appearance = await ApiHelper.getAnonymous("/settings/public/" + church.id, "MembershipApi");
+    const tabs: LinkInterface[] = await ApiHelper.getAnonymous("/links/church/" + church.id + "?category=" + navCategory, "ContentApi");
+    const homePage: PageInterface = await ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi");
+    const gatewayConfigured = await ApiHelper.getAnonymous("/gateways/configured/" + church.id, "GivingApi");
+    const globalStyles: GlobalStyleInterface = await ApiHelper.getAnonymous("/globalStyles/church/" + church.id, "ContentApi");
     let appTheme: AppThemeConfig | undefined;
     try {
       if (appearance?.appTheme) {
