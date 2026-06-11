@@ -274,3 +274,42 @@ export interface ExternalVenueRefInterface {
   lessonId: string;
   venueId: string;
 }
+
+// Mirrors @churchapps/helpers — switch to the package exports once >1.7.1 is published.
+export interface CampaignInterface {
+  id?: string;
+  churchId?: string;
+  fundId?: string;
+  name?: string;
+  description?: string;
+  goalAmount?: number;
+  startDate?: string;
+  endDate?: string;
+  showPublic?: boolean;
+  allowSelfPledge?: boolean;
+}
+
+export interface PledgeInterface {
+  id?: string;
+  churchId?: string;
+  campaignId?: string;
+  personId?: string;
+  amount?: number;
+}
+
+export type PledgeStatus = "notStarted" | "inProgress" | "fulfilled" | "beyondPledged" | "nonPledged";
+
+export interface CampaignProgressInterface {
+  campaign?: CampaignInterface;
+  totalPledged?: number;
+  totalGiven?: number;
+  pledgeCount?: number;
+  donorCount?: number;
+}
+
+export interface MyPledgeInterface {
+  pledge?: PledgeInterface;
+  campaign?: CampaignInterface;
+  givenAmount?: number;
+  status?: PledgeStatus;
+}
