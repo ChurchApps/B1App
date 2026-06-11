@@ -9,7 +9,7 @@ import { Locale } from "@churchapps/apphelper";
 import { SmallButton } from "@churchapps/apphelper";
 import type { LinkInterface, UserContextInterface } from "@churchapps/helpers";
 import { FileInterface } from "@/helpers";
-import { FileUpload } from "../FileUpload";
+import { FileUpload } from "@churchapps/apphelper";
 import { GroupLinkAdd } from "./GroupLinkAdd";
 
 interface Props {

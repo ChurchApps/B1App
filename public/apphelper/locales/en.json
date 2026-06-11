@@ -134,6 +134,9 @@
 			"startDate": "Start Date"
 		}
 	},
+	"fileUpload": {
+		"file": "File"
+	},
 	"formSubmissionEdit": {
 		"confirmDelete": "Are you sure you wish to delete this form data?",
 		"editForm": "Edit Form",

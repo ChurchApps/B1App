@@ -7,6 +7,7 @@ import { ArrayHelper } from "@churchapps/apphelper";
 import type { AppearanceInterface } from "@churchapps/apphelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { SectionBlock } from "../SectionBlock";
+import { SectionErrorBoundary } from "../SectionErrorBoundary";
 
 type Props = {
   church: ChurchInterface,
@@ -22,11 +23,10 @@ export default function Zone(props: Props) {
 
   sections.forEach((section, index) => {
     const key = `${section.id || index}-${props.zone}`;
-    if (section.targetBlockId) {
-      result.push(<SectionBlock key={key} section={section} churchSettings={props.churchSettings} />);
-    } else {
-      result.push(<Section key={key} section={section} first={first} church={props.church} churchSettings={props.churchSettings} />);
-    }
+    const content = section.targetBlockId
+      ? <SectionBlock section={section} churchSettings={props.churchSettings} />
+      : <Section section={section} first={first} church={props.church} churchSettings={props.churchSettings} />;
+    result.push(<SectionErrorBoundary key={key}>{content}</SectionErrorBoundary>);
     first = false;
   });
 

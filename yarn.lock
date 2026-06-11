@@ -187,11 +187,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@churchapps/apphelper@npm:^0.8.1":
-  version: 0.8.1
-  resolution: "@churchapps/apphelper@npm:0.8.1"
+"@churchapps/apphelper@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "@churchapps/apphelper@npm:0.10.0"
   dependencies:
-    "@churchapps/helpers": "npm:1.5.0"
     "@emotion/cache": "npm:^11.14.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
@@ -237,6 +236,7 @@ __metadata:
     rrule: "npm:^2.8.1"
     slug: "npm:^11.0.0"
   peerDependencies:
+    "@churchapps/helpers": ^1.5.5
     "@stripe/react-stripe-js": ^3.10.0
     "@stripe/stripe-js": ^7.9.0
     react: ^18.0.0 || ^19.0.0
@@ -250,20 +250,20 @@ __metadata:
       optional: true
     react-google-recaptcha:
       optional: true
-  checksum: 10c0/80380d4e1ca1011149ed7c2256a71ee41b1cf1508149d7f2d0dbf6f29ca8462d731d2cd88ef8a8fd1257706a445639b273f65b38feca1acd9fd46241e09c50c0
+  checksum: 10c0/c3f6781dac3dee7e76d68c937712f3cf4cdfbab435c340a2d17f1a34248e6de906c4f72cd2077e4384f2ce2ca0bf12dd4a40b273771722ce5e311b9b59218622
   languageName: node
   linkType: hard
 
-"@churchapps/content-providers@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@churchapps/content-providers@npm:0.3.0"
-  checksum: 10c0/6ac1e992929e5b8a657e9231ab34839d962603ebfc86dda166e8971624fdabe0e0afd011f9a1f447c8df2f9dc35ff82a6aeaa7daf35c2224c28ce5c37fca224e
+"@churchapps/content-providers@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@churchapps/content-providers@npm:0.3.1"
+  checksum: 10c0/9fe16677d57fd443efb92d5c28eba9d6ddd4d31c0ea0349e4cb45e046be1369d7470592dc8e2b49444e16d87f7b57b94a696ead0e3ac47012fdfb6b0295a3128
   languageName: node
   linkType: hard
 
-"@churchapps/helpers@npm:1.5.0, @churchapps/helpers@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@churchapps/helpers@npm:1.5.0"
+"@churchapps/helpers@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@churchapps/helpers@npm:1.7.0"
   dependencies:
     dayjs: "npm:^1.11.20"
   peerDependencies:
@@ -271,7 +271,7 @@ __metadata:
   peerDependenciesMeta:
     rrule:
       optional: true
-  checksum: 10c0/4d6975dbe7c2bd4bdc244c61f11be1322051ef2d5ffb9e84870c473e0448561b8d786c927ce6946ac3c527ac482c2c2b32e62cad7ed7890e816d6a01b23ac8c0
+  checksum: 10c0/50bc29ee35b436147d2a88d19e15b99ab0ec26ae51a2100f18e0d50d9f3a2a9ac38cacfdc06832c76d9c761f809589cd5b84efeda3762d7533adbe9f4ebb98db
   languageName: node
   linkType: hard
 
@@ -4160,9 +4160,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "b1-app@workspace:."
   dependencies:
-    "@churchapps/apphelper": "npm:^0.8.1"
-    "@churchapps/content-providers": "npm:^0.3.0"
-    "@churchapps/helpers": "npm:^1.5.0"
+    "@churchapps/apphelper": "npm:^0.10.0"
+    "@churchapps/content-providers": "npm:^0.3.1"
+    "@churchapps/helpers": "npm:^1.7.0"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@mui/icons-material": "npm:^7.3.11"

@@ -107,28 +107,13 @@ export const Theme: React.FC<Props> = (props) => {
 
   const css = ":root { " + lines.join("\n") + " } " + navRules.join("\n");
 
-  // Generate Google Fonts URL for dynamic loading
+  // Rendered as a hoisted <link> below so fonts ship in the initial HTML (no FOUT/CLS).
   let googleFontsUrl = "";
   if (googleFonts.length > 0) {
     const fontList:string[] = [];
-    googleFonts.forEach(f => fontList.push(f.replace(" ", "+") + ":wght@400"));
+    googleFonts.forEach(f => fontList.push(f.replace(/ /g, "+") + ":wght@400;700"));
     googleFontsUrl = "https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap";
   }
-
-  // Use useEffect to dynamically load fonts in the browser
-  React.useEffect(() => {
-    if (googleFontsUrl) {
-      // Check if font link already exists
-      const existingLink = document.querySelector(`link[href="${googleFontsUrl}"]`);
-      if (!existingLink) {
-        const link = document.createElement("link");
-        link.href = googleFontsUrl;
-        link.rel = "stylesheet";
-        link.type = "text/css";
-        document.head.appendChild(link);
-      }
-    }
-  }, [googleFontsUrl]);
 
   // Execute customJS scripts properly — dangerouslySetInnerHTML doesn't execute <script> tags
   const customJsRef = React.useRef<HTMLDivElement>(null);
@@ -150,6 +135,11 @@ export const Theme: React.FC<Props> = (props) => {
     <style jsx>
       {css}
     </style>
+    {googleFontsUrl && <>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link rel="stylesheet" href={googleFontsUrl} precedence="default" />
+    </>}
     <div ref={customJsRef} />
   </>);
 };

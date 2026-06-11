@@ -103,17 +103,7 @@ export interface ChatPayloadInterface extends SocketPayloadInterface { churchId:
 export interface ChatStateInterface { mainConversation: ConversationInterface | null, hostConversation: ConversationInterface | null, user: ChatUserInterface }
 export interface ChatUserInterface { firstName: string, lastName: string, isHost: boolean }
 
-export interface FileInterface {
-  id?: string;
-  contentType?: string;
-  contentId?: string;
-  fileName?: string;
-  contentPath?: string;
-  fileType?: string;
-  size?: number;
-  dateModified?: Date;
-  fileContents?: string;
-}
+export type { FileInterface } from "@churchapps/helpers";
 
 
 

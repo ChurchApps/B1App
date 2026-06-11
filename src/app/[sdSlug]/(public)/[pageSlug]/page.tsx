@@ -1,5 +1,6 @@
-import React from "react";
+import React, { cache } from "react";
 import { PageLayout, Theme } from "@/components";
+import { ChurchJsonLd } from "@/components/seo/ChurchJsonLd";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -17,10 +18,11 @@ import { DonatePage } from "./components/DonatePage";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; }>
 
-const loadSharedData = (sdSlug:string, pageSlug:string) => {
+// cache() shares one load between generateMetadata and the page render.
+const loadSharedData = cache((sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug, pageSlug);
-};
+});
 
 export async function generateMetadata({ params }: {params:PageParams}): Promise<Metadata> {
   const { sdSlug, pageSlug } = await params;
@@ -69,6 +71,7 @@ export default async function Home({ params }: { params: PageParams }) {
   return (
     <>
       <Theme config={config} />
+      <ChurchJsonLd config={config} />
       {getPageContent()}
       <Animate />
     </>

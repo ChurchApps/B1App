@@ -11,7 +11,7 @@ import { Permissions } from "@churchapps/helpers";
 import { FileInterface } from "@/helpers";
 import { Box, LinearProgress, Typography, TableRow, TableCell, Table, TableHead, TableBody, Divider, Chip } from "@mui/material";
 import Link from "next/link";
-import { FileUpload } from "../FileUpload";
+import { FileUpload } from "@churchapps/apphelper";
 import { GroupLinkAdd } from "./GroupLinkAdd";
 
 interface Props {

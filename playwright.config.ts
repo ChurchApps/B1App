@@ -60,6 +60,9 @@ export default defineConfig({
         // CommonEnvironmentHelper.initDev falls back to wss://socket.staging.churchapps.org
         // and every NotificationService.initialize fails repeatedly.
         NEXT_PUBLIC_MESSAGING_API_SOCKET: 'ws://localhost:8087',
+        // useRealtimeNotifications gates ALL socket connections on this flag; without it
+        // the app runs API-only and the realtime-*.spec.ts cross-user tests can never pass.
+        NEXT_PUBLIC_ENABLE_NOTIFICATION_SOCKET: 'true',
       },
       url: 'http://localhost:3301',
       reuseExistingServer: true,

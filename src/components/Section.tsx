@@ -48,11 +48,19 @@ export const Section: React.FC<Props> = props => {
     return result;
   };
 
+  const getVisibilityClasses = () => {
+    let result = "";
+    if (props.section.styles?.desktop?.display === "none") result += " hiddenOnDesktop";
+    if (props.section.styles?.mobile?.display === "none") result += " hiddenOnMobile";
+    return result;
+  };
+
   const getVideoClassName = () => {
     let result = "sectionVideo";
     if (props.section.textColor === "light") result += " sectionDark";
     if (props.first) result += " sectionFirst";
     if (props.onEdit) result += " sectionWrapper";
+    result += getVisibilityClasses();
     return result;
   };
 
@@ -63,6 +71,7 @@ export const Section: React.FC<Props> = props => {
     if (props.section.textColor === "light") result += " sectionDark";
     if (props.first) result += " sectionFirst";
     if (props.onEdit) result += " sectionWrapper";
+    result += getVisibilityClasses();
 
     let hc = props.section.headingColor;
     if (hc) {
