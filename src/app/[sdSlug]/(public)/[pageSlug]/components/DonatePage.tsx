@@ -6,6 +6,7 @@ import { NonAuthDonationWrapper } from "@churchapps/apphelper/website";
 import { UserHelper, Locale } from "@churchapps/apphelper";
 import { Button, Container, Grid, Icon, Link, Typography } from "@mui/material";
 import { redirect } from "next/navigation";
+import { CampaignProgress } from "@/components/donate/CampaignProgress";
 
 type Props = { config?: ConfigurationInterface; };
 
@@ -20,6 +21,7 @@ export function DonatePage(props:Props) {
   return <>
     <Container>
       <h1>{Locale.label("pageSlug.donate")}</h1>
+      {mounted && <CampaignProgress churchId={props.config.church.id} />}
       <Grid container spacing={3}>
         <Grid size={{ md: 8, xs: 12 }}>
           {mounted && <NonAuthDonationWrapper churchId={props.config.church.id} showHeader={false} />}

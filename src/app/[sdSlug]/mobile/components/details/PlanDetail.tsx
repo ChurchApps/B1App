@@ -636,7 +636,7 @@ const PositionDetailsCard = ({
   const meta = statusMeta(assignment.status);
 
   const sortedTimes = [...times].sort((a: any, b: any) => (a?.startTime > b?.startTime ? 1 : -1));
-  
+
   let latestBoundary: Date | null = null;
   sortedTimes.forEach((t: any) => {
     const raw = t?.endTime || t?.startTime;
