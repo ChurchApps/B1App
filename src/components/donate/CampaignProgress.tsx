@@ -15,8 +15,7 @@ const statusLabels: Record<string, string> = {
   notStarted: "Not started",
   inProgress: "In progress",
   fulfilled: "Fulfilled",
-  beyondPledged: "Beyond pledged",
-  nonPledged: ""
+  beyondPledged: "Beyond pledged"
 };
 
 export const CampaignProgress: React.FC<Props> = ({ churchId, isAuthenticated = false, currency = "usd" }) => {

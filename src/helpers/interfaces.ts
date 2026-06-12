@@ -278,14 +278,11 @@ export interface ExternalVenueRefInterface {
 // Mirrors @churchapps/helpers — switch to the package exports once >1.7.1 is published.
 export interface CampaignInterface {
   id?: string;
-  churchId?: string;
-  fundId?: string;
   name?: string;
   description?: string;
   goalAmount?: number;
   startDate?: string;
   endDate?: string;
-  showPublic?: boolean;
   allowSelfPledge?: boolean;
 }
 
@@ -303,13 +300,10 @@ export interface CampaignProgressInterface {
   campaign?: CampaignInterface;
   totalPledged?: number;
   totalGiven?: number;
-  pledgeCount?: number;
-  donorCount?: number;
 }
 
 export interface MyPledgeInterface {
   pledge?: PledgeInterface;
-  campaign?: CampaignInterface;
   givenAmount?: number;
   status?: PledgeStatus;
 }
