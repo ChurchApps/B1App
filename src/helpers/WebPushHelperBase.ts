@@ -79,15 +79,13 @@ export const WebPushHelperBase = {
 
   async getRegistration(): Promise<ServiceWorkerRegistration | null> {
     if (!isSupported()) return null;
-    try { return (await navigator.serviceWorker.getRegistration(scope)) || null; }
-    catch { return null; }
+    try { return (await navigator.serviceWorker.getRegistration(scope)) || null; } catch { return null; }
   },
 
   async getExistingSubscription(): Promise<PushSubscription | null> {
     const reg = await WebPushHelperBase.getRegistration();
     if (!reg) return null;
-    try { return await reg.pushManager.getSubscription(); }
-    catch { return null; }
+    try { return await reg.pushManager.getSubscription(); } catch { return null; }
   },
 
   /**
@@ -140,8 +138,7 @@ export const WebPushHelperBase = {
     if (!sub) return;
     const endpoint = sub.endpoint;
     try { await sub.unsubscribe(); } catch { /* ignore */ }
-    try { await ApiHelper.post("/webpush/unsubscribe", { endpoint }, "MessagingApi"); }
-    catch { /* ignore */ }
+    try { await ApiHelper.post("/webpush/unsubscribe", { endpoint }, "MessagingApi"); } catch { /* ignore */ }
   },
 
   async postSubscription(sub: PushSubscription) {
@@ -155,7 +152,6 @@ export const WebPushHelperBase = {
       appName,
       deviceInfo: typeof navigator !== "undefined" ? navigator.userAgent : undefined
     };
-    try { await ApiHelper.post("/webpush/subscribe", body, "MessagingApi"); }
-    catch { /* ignore */ }
+    try { await ApiHelper.post("/webpush/subscribe", body, "MessagingApi"); } catch { /* ignore */ }
   }
 };

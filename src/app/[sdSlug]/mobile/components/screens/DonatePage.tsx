@@ -35,6 +35,7 @@ import type {
   PersonInterface
 } from "@churchapps/helpers";
 import { StableDonationForm } from "@/components/donate/StableDonationForm";
+import { CampaignProgress } from "@/components/donate/CampaignProgress";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -264,6 +265,12 @@ function DonatePageInner({ config }: Props) {
             </>
           )}
         </Box>
+
+        {church?.id && (
+          <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>
+            <CampaignProgress churchId={church.id} isAuthenticated={isAuthenticated} currency={pageCurrency} />
+          </Box>
+        )}
 
         {isAuthenticated && (
           <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>

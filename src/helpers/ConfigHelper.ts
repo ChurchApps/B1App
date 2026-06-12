@@ -33,7 +33,7 @@ export class ConfigHelper {
     });
   }
 
-  
+
   static load = cache(async (keyName: string, navCategory: string = "b1Tab"): Promise<ConfigurationInterface> => {
     // Without a subdomain the lookup hits //churches/lookup/ and 404s (Sentry B1-APP-95/94).
     if (!keyName) throw new Error("ConfigHelper.load called without a church subdomain");
