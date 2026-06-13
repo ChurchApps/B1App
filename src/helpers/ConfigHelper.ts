@@ -13,7 +13,8 @@ export interface AppThemeModeColors { background: string, surface: string, prima
 export interface AppThemeConfig { light: AppThemeModeColors, dark: AppThemeModeColors }
 export interface ConfigurationInterface { keyName?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface, appTheme?: AppThemeConfig }
 
-const CONFIG_REVALIDATE_SECONDS = 300;
+// Prod caches config for 5 min; dev/test fetch fresh so content/style edits show immediately.
+const CONFIG_REVALIDATE_SECONDS = process.env.NODE_ENV === "production" ? 300 : 0;
 
 
 const fetchCached = async <T>(path: string, apiName: string, tag: string): Promise<T> => {
