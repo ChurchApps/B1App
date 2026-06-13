@@ -61,7 +61,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const open = Boolean(anchorEl);
   const isMounted = useMountedState();
-  const hasKF = paymentGateways.some(g => DonationHelper.isProvider(g.provider, "kingdomfunding" as "stripe" | "paypal"));
+  const hasKF = paymentGateways.some(g => DonationHelper.isProvider(g.provider, "kingdomfunding"));
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -80,7 +80,6 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         if (!isMounted()) return;
         if (data.length) {
           setPaymentGateways(data);
-          // Only load Stripe if a Stripe gateway exists
           const stripeGateway = DonationHelper.findGatewayByProvider(data, "stripe");
           if (stripeGateway?.publicKey) {
             setStripe(loadStripe(stripeGateway.publicKey));
@@ -97,7 +96,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
               const appHelperMethods: AppHelperStripePaymentMethod[] = [];
 
               for (const pm of results) {
-                if (pm.provider === "stripe" || pm.provider === "kingdomfunding") {
+                if (DonationHelper.isProvider(pm.provider, "stripe") || DonationHelper.isProvider(pm.provider, "kingdomfunding")) {
                   // Create AppHelper version for donation components
                   const appHelperPM = new AppHelperStripePaymentMethod(pm);
                   appHelperMethods.push(appHelperPM);
