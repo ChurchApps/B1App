@@ -28,7 +28,8 @@ import {
   PaymentMethods,
   StripePaymentMethod as AppHelperStripePaymentMethod,
   MultiGatewayDonationForm,
-  DonationHelper
+  DonationHelper,
+  getPaymentProvider
 } from "@churchapps/apphelper/donations";
 import type { PaymentGateway } from "@churchapps/apphelper/donations";
 import { NonAuthDonationWrapper } from "@churchapps/apphelper/website";
@@ -37,7 +38,6 @@ import type {
   DonationInterface,
   PersonInterface
 } from "@churchapps/helpers";
-import { StableDonationForm } from "@/components/donate/StableDonationForm";
 import { CampaignProgress } from "@/components/donate/CampaignProgress";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -110,7 +110,7 @@ function DonatePageInner({ config }: Props) {
       let customerId: string | null = null;
       if (Array.isArray(methodsResult)) {
         for (const pm of methodsResult) {
-          if (DonationHelper.isProvider(pm.provider, "stripe") || DonationHelper.isProvider(pm.provider, "kingdomfunding")) pms.push(new AppHelperStripePaymentMethod(pm));
+          if (getPaymentProvider(pm.provider).capabilities.savedCard) pms.push(new AppHelperStripePaymentMethod(pm));
           if (pm.customerId && !customerId) customerId = pm.customerId;
         }
       }
@@ -125,7 +125,6 @@ function DonatePageInner({ config }: Props) {
   const person = paymentData?.person ?? null;
   const pageCurrency = paymentData?.currency ?? "usd";
   const paymentGateways = paymentData?.paymentGateways ?? [];
-  const hasKF = paymentGateways.some((g) => DonationHelper.isProvider(g.provider, "kingdomfunding"));
 
   const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
     queryKey: ["donate-subscriptions", customerId],
@@ -457,28 +456,16 @@ function DonatePageInner({ config }: Props) {
           p: `${mobileTheme.spacing.md}px`
         }}
       >
-        {hasKF ? (
-          <MultiGatewayDonationForm
-            person={person!}
-            customerId={customerId!}
-            paymentMethods={paymentMethods || []}
-            paymentGateways={paymentGateways}
-            stripePromise={stripePromise ?? undefined}
-            donationSuccess={handleDataUpdate}
-            church={church!}
-            churchLogo={churchLogo}
-          />
-        ) : (
-          <StableDonationForm
-            person={person!}
-            customerId={customerId!}
-            paymentMethods={paymentMethods!}
-            stripePromise={stripePromise!}
-            donationSuccess={handleDataUpdate}
-            church={church!}
-            churchLogo={churchLogo}
-          />
-        )}
+        <MultiGatewayDonationForm
+          person={person!}
+          customerId={customerId!}
+          paymentMethods={paymentMethods || []}
+          paymentGateways={paymentGateways}
+          stripePromise={stripePromise ?? undefined}
+          donationSuccess={handleDataUpdate}
+          church={church!}
+          churchLogo={churchLogo}
+        />
       </Box>
     );
   };
