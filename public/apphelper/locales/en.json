@@ -132,6 +132,30 @@
 			"notFound": "Payment method not found.",
 			"paymentMethod": "Payment Method",
 			"startDate": "Start Date"
+		},
+		"kingdomFunding": {
+			"providerName": "Kingdom Funding",
+			"loadingPaymentForm": "Loading payment form...",
+			"paymentFormNotAvailable": "Payment form not available",
+			"paymentFormNotInitialized": "Payment form not initialized",
+			"failedToInitPaymentForm": "Failed to initialize payment form",
+			"failedToLoadPaymentForm": "Failed to load payment form",
+			"failedToTokenizeCard": "Failed to tokenize card",
+			"missingTokenizationKey": "Missing tokenization key",
+			"failedToProcessCard": "Failed to process card. Please check your card details and try again.",
+			"unexpectedError": "An unexpected error occurred. Please try again.",
+			"errorProcessingDonation": "Error processing donation",
+			"enterBankDetails": "Enter your bank account details",
+			"enterCardDetails": "Enter card details",
+			"gatewayConfigMissing": "Payment form not available. Gateway configuration missing.",
+			"paymentProvider": "Payment Provider",
+			"memo": "Memo (optional)",
+			"validate": {
+				"routingNumber": "Please enter a valid routing number",
+				"accountNumber": "Please enter a valid account number",
+				"captchaRequired": "Please complete the reCAPTCHA verification",
+				"captchaFailed": "reCAPTCHA verification failed. Please try again."
+			}
 		}
 	},
 	"fileUpload": {

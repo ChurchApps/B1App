@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Komentar",
+    "commentPlaceholder": "Tulis komentar...",
+    "contentShared": "Konten Dibagikan",
+    "group": "Grup",
+    "sharingToGroup": "Berbagi ke Grup",
+    "validate": {
+      "addComment": "Tambahkan Komentar",
+      "loginFirst": "Masuk Terlebih Dahulu",
+      "notMember": "Bukan Anggota",
+      "selectGroup": "Pilih Grup"
+    }
+  },
   "b1ShareModal": {
     "post": "Posting"
   },
@@ -65,6 +78,16 @@
       "title": "Pilih Ibadah"
     }
   },
+  "common": {
+    "cancel": "Batal",
+    "close": "Tutup",
+    "date": "Tanggal",
+    "edit": "Edit",
+    "pleaseWait": "Harap Tunggu",
+    "save": "Simpan",
+    "search": "Cari",
+    "update": "Perbarui"
+  },
   "donate": {
     "authLanding": "Ini dengan Auth",
     "currentYearCsv": "Tahun Berjalan (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Tertunda",
     "printCurrentYear": "Cetak persembahan tahun berjalan",
     "printLastYear": "Cetak persembahan tahun lalu"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Email",
+        "firstName": "Nama Depan",
+        "lastName": "Nama Belakang",
+        "validEmail": "Email Valid"
+      }
+    },
+    "page": {
+      "amount": "Jumlah",
+      "batch": "Batch",
+      "date": "Tanggal",
+      "fund": "Dana",
+      "method": "Metode",
+      "willAppear": "Akan Muncul"
+    }
   },
   "donationLanding": {
     "myDonation": "Persembahan Saya"
@@ -300,11 +341,18 @@
     "userMenu": "Menu pengguna"
   },
   "iconPicker": {
+    "iconsAvailable": "Ikon Tersedia",
+    "matchingResults": "Hasil yang Cocok",
+    "search": "Cari",
     "searchAriaLabel": "cari ikon",
     "selectIcon": "Pilih ikon {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Masuk",
+    "register": "Daftar"
   },
   "loginClient": {
     "demoBody": "Ini adalah lingkungan demo. Semua data dihapus setiap malam.",
@@ -524,11 +572,12 @@
       "send": "Kirim",
       "sendEmail": "Kirim email",
       "sendMessage": "Kirim pesan",
+      "sendText": "Kirim pesan teks",
+      "sermonLoadError": "Tidak dapat memuat khotbah",
+      "sermonLoadErrorBody": "Terjadi kesalahan saat memuat. Periksa koneksi Anda dan coba lagi.",
       "sermonNotAvailable": "Khotbah tidak tersedia",
       "sermonPlural": "khotbah",
       "sermonRemoved": "Khotbah ini mungkin telah dihapus atau tidak lagi bersifat publik.",
-      "sermonLoadError": "Tidak dapat memuat khotbah",
-      "sermonLoadErrorBody": "Terjadi kesalahan saat memuat. Periksa koneksi Anda dan coba lagi.",
       "sermonSeries": "Seri Khotbah",
       "sermonSingular": "khotbah",
       "sermons": "Khotbah",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Susunan Ibadah",
       "tabTeams": "Tim",
       "team": "Tim",
+      "text": "Teks",
       "typeMessage": "Ketik pesan…",
       "unableToLoadMessages": "Tidak dapat memuat pesan.",
       "unableToLoadPlaylist": "Tidak Dapat Memuat Playlist",
@@ -733,16 +783,6 @@
       "votd": "Ayat Hari Ini"
     },
     "screens": {
-      "volunteerFull": "Penuh",
-      "volunteerOpen": "{} tersedia",
-      "volunteerPositionsFilled": "{} dari {} posisi terisi",
-      "volunteerPositionOpen": "{} ({} tersedia)",
-      "volunteerViewSignUp": "Lihat & Daftar",
-      "volunteerBrowseTitle": "Jelajahi Peluang",
-      "volunteerBrowseBody": "Tidak ada peluang sukarelawan yang tersedia saat ini. Periksa kembali nanti!",
-      "sermonsLoadError": "Tidak dapat memuat khotbah",
-      "sermonsLoadErrorBody": "Terjadi kesalahan saat memuat. Silakan coba lagi.",
-      "sermonsGoBack": "Kembali",
       "addToHomeScreen": "Tambahkan ke Layar Utama",
       "addToHomeScreenBody": "Gulir ke bawah, ketuk Tambahkan ke Layar Utama, lalu Tambah. Selesai!",
       "alreadyCheckedIn": "Sudah Check-in",
@@ -815,10 +855,13 @@
       "searchForMessage": "Cari orang untuk dikirimi pesan",
       "searchMembers": "Cari Anggota",
       "selectGroupsSubtitle": "Pilih grup untuk setiap anggota keluarga",
+      "sermonsGoBack": "Kembali",
+      "sermonsLoadError": "Tidak dapat memuat khotbah",
+      "sermonsLoadErrorBody": "Terjadi kesalahan saat memuat. Silakan coba lagi.",
       "shareVotd": "Bagikan Ayat Hari Ini",
       "signInToCheckIn": "Silakan masuk untuk check-in",
-      "signInToCheckInMessage": "Masuk untuk check-in ke ibadah.",
       "signInToCheckInCta": "Masuk",
+      "signInToCheckInMessage": "Masuk untuk check-in ke ibadah.",
       "tabAccount": "Akun",
       "tabDonate": "Beri Persembahan",
       "tabHistory": "Riwayat",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Tidak dapat memuat konfigurasi gereja.",
       "unableToSubmitChanges": "Tidak dapat mengirim perubahan.",
       "visibilityPreferencesSaved": "Preferensi visibilitas disimpan.",
+      "volunteerBrowseBody": "Tidak ada peluang sukarelawan yang tersedia saat ini. Periksa kembali nanti!",
+      "volunteerBrowseTitle": "Jelajahi Peluang",
+      "volunteerFull": "Penuh",
+      "volunteerOpen": "{} tersedia",
+      "volunteerPositionOpen": "{} ({} tersedia)",
+      "volunteerPositionsFilled": "{} dari {} posisi terisi",
+      "volunteerViewSignUp": "Lihat & Daftar",
       "watchLive": "Tonton Langsung"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "kemarin"
   },
   "notes": {
+    "comment": "Komentar",
+    "comments": "Komentar",
     "list": {
       "loadMore": "Muat Lebih Banyak",
       "loading": "Memuat...",
       "showAll": "Tampilkan Semua",
       "typeMessage": "Ketik pesan...",
       "userAlt": "pengguna"
-    }
+    },
+    "startConversation": "Mulai Percakapan",
+    "validate": {
+      "content": "Konten"
+    },
+    "viewAll": "Lihat Semua"
   },
   "pageSlug": {
     "achInstructions": "Petunjuk untuk Pembayaran ACH",
@@ -878,6 +935,12 @@
     "sermons": "Khotbah",
     "toViewForm": "untuk melihat formulir ini.",
     "verseOfTheDay": "Ayat Hari Ini"
+  },
+  "person": {
+    "email": "Email",
+    "firstName": "Nama Depan",
+    "lastName": "Nama Belakang",
+    "name": "Nama"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Peluang Sukarelawan",
     "noPositions": "Tidak ada posisi sukarelawan yang tersedia untuk rencana ini saat ini.",
     "volunteer": "Sukarelawan"
+  },
+  "wrapper": {
+    "editAccount": "Edit Akun",
+    "editChurchProfile": "Edit Profil Gereja",
+    "editProfile": "Edit Profil",
+    "logout": "Keluar",
+    "profile": "Profil"
   }
 }

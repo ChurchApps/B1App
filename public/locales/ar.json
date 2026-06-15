@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "تعليق",
+    "commentPlaceholder": "أضف تعليقًا",
+    "contentShared": "تمت مشاركة المحتوى",
+    "group": "المجموعة",
+    "sharingToGroup": "المشاركة مع المجموعة",
+    "validate": {
+      "addComment": "أضف تعليقًا",
+      "loginFirst": "يرجى تسجيل الدخول أولًا",
+      "notMember": "لست عضوًا",
+      "selectGroup": "اختر مجموعة"
+    }
+  },
   "b1ShareModal": {
     "post": "نشر"
   },
@@ -65,6 +78,16 @@
       "title": "اختر الخدمة"
     }
   },
+  "common": {
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "date": "التاريخ",
+    "edit": "تعديل",
+    "pleaseWait": "يرجى الانتظار",
+    "save": "حفظ",
+    "search": "بحث",
+    "update": "تحديث"
+  },
   "donate": {
     "authLanding": "هذا مع المصادقة",
     "currentYearCsv": "السنة الحالية (CSV)",
@@ -79,6 +102,24 @@
     "pending": "قيد الانتظار",
     "printCurrentYear": "طباعة تبرعات السنة الحالية",
     "printLastYear": "طباعة تبرعات السنة الماضية"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "البريد الإلكتروني",
+        "firstName": "الاسم الأول",
+        "lastName": "اسم العائلة",
+        "validEmail": "بريد إلكتروني صحيح"
+      }
+    },
+    "page": {
+      "amount": "المبلغ",
+      "batch": "الدفعة",
+      "date": "التاريخ",
+      "fund": "الصندوق",
+      "method": "طريقة الدفع",
+      "willAppear": "سيظهر"
+    }
   },
   "donationLanding": {
     "myDonation": "تبرعي"
@@ -300,11 +341,18 @@
     "userMenu": "قائمة المستخدم"
   },
   "iconPicker": {
+    "iconsAvailable": "الأيقونات المتاحة",
+    "matchingResults": "النتائج المطابقة",
+    "search": "بحث",
     "searchAriaLabel": "البحث في الأيقونات",
     "selectIcon": "اختر أيقونة {}"
   },
   "loadingPage": {
     "logoAlt": "الشعار"
+  },
+  "login": {
+    "login": "تسجيل الدخول",
+    "register": "تسجيل"
   },
   "loginClient": {
     "demoBody": "هذه بيئة تجريبية. يتم مسح جميع البيانات ليلاً.",
@@ -524,11 +572,12 @@
       "send": "إرسال",
       "sendEmail": "إرسال بريد إلكتروني",
       "sendMessage": "إرسال رسالة",
+      "sendText": "إرسال رسالة نصية",
+      "sermonLoadError": "تعذّر تحميل العظة",
+      "sermonLoadErrorBody": "حدث خطأ ما أثناء التحميل. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
       "sermonNotAvailable": "العظة غير متاحة",
       "sermonPlural": "عظات",
       "sermonRemoved": "ربما تم حذف هذه العظة أو لم تعد علنية.",
-      "sermonLoadError": "تعذّر تحميل العظة",
-      "sermonLoadErrorBody": "حدث خطأ ما أثناء التحميل. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
       "sermonSeries": "سلسلة عظات",
       "sermonSingular": "عظة",
       "sermons": "العظات",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "ترتيب الخدمة",
       "tabTeams": "الفرق",
       "team": "الفريق",
+      "text": "نص",
       "typeMessage": "اكتب رسالة…",
       "unableToLoadMessages": "تعذّر تحميل الرسائل.",
       "unableToLoadPlaylist": "تعذّر تحميل قائمة التشغيل",
@@ -733,16 +783,6 @@
       "votd": "آية اليوم"
     },
     "screens": {
-      "volunteerFull": "ممتلئ",
-      "volunteerOpen": "{} متاح",
-      "volunteerPositionsFilled": "تم شغل {} من {} منصب",
-      "volunteerPositionOpen": "{} ({} متاح)",
-      "volunteerViewSignUp": "عرض والتسجيل",
-      "volunteerBrowseTitle": "تصفح الفرص",
-      "volunteerBrowseBody": "لا توجد فرص تطوعية متاحة حالياً. تحقق مرة أخرى قريباً!",
-      "sermonsLoadError": "تعذّر تحميل العظات",
-      "sermonsLoadErrorBody": "حدث خطأ ما أثناء التحميل. يرجى المحاولة مرة أخرى.",
-      "sermonsGoBack": "رجوع",
       "addToHomeScreen": "إضافة إلى الشاشة الرئيسية",
       "addToHomeScreenBody": "مرّر للأسفل، انقر على إضافة إلى الشاشة الرئيسية، ثم إضافة. تم!",
       "alreadyCheckedIn": "تم تسجيل الحضور بالفعل",
@@ -815,10 +855,13 @@
       "searchForMessage": "ابحث عن شخص لمراسلته",
       "searchMembers": "البحث عن الأعضاء",
       "selectGroupsSubtitle": "اختر المجموعات لكل فرد من أفراد الأسرة",
+      "sermonsGoBack": "رجوع",
+      "sermonsLoadError": "تعذّر تحميل العظات",
+      "sermonsLoadErrorBody": "حدث خطأ ما أثناء التحميل. يرجى المحاولة مرة أخرى.",
       "shareVotd": "شارك آية اليوم",
       "signInToCheckIn": "يرجى تسجيل الدخول لتسجيل الحضور",
-      "signInToCheckInMessage": "سجّل الدخول لتسجيل الحضور في إحدى الخدمات.",
       "signInToCheckInCta": "تسجيل الدخول",
+      "signInToCheckInMessage": "سجّل الدخول لتسجيل الحضور في إحدى الخدمات.",
       "tabAccount": "الحساب",
       "tabDonate": "تبرع",
       "tabHistory": "السجل",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "تعذّر تحميل إعدادات الكنيسة.",
       "unableToSubmitChanges": "تعذّر إرسال التغييرات.",
       "visibilityPreferencesSaved": "تم حفظ تفضيلات الظهور.",
+      "volunteerBrowseBody": "لا توجد فرص تطوعية متاحة حالياً. تحقق مرة أخرى قريباً!",
+      "volunteerBrowseTitle": "تصفح الفرص",
+      "volunteerFull": "ممتلئ",
+      "volunteerOpen": "{} متاح",
+      "volunteerPositionOpen": "{} ({} متاح)",
+      "volunteerPositionsFilled": "تم شغل {} من {} منصب",
+      "volunteerViewSignUp": "عرض والتسجيل",
       "watchLive": "شاهد البث المباشر"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "أمس"
   },
   "notes": {
+    "comment": "تعليق",
+    "comments": "التعليقات",
     "list": {
       "loadMore": "تحميل المزيد",
       "loading": "جارٍ التحميل...",
       "showAll": "عرض الكل",
       "typeMessage": "اكتب رسالة...",
       "userAlt": "المستخدم"
-    }
+    },
+    "startConversation": "ابدأ محادثة",
+    "validate": {
+      "content": "المحتوى"
+    },
+    "viewAll": "عرض الكل"
   },
   "pageSlug": {
     "achInstructions": "تعليمات الدفع عبر ACH",
@@ -878,6 +935,12 @@
     "sermons": "العظات",
     "toViewForm": "لعرض هذا النموذج.",
     "verseOfTheDay": "آية اليوم"
+  },
+  "person": {
+    "email": "البريد الإلكتروني",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "name": "الاسم"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "فرص التطوع",
     "noPositions": "لا توجد مناصب تطوع متاحة حاليًا لهذه الخطة.",
     "volunteer": "متطوع"
+  },
+  "wrapper": {
+    "editAccount": "تعديل الحساب",
+    "editChurchProfile": "تعديل ملف الكنيسة",
+    "editProfile": "تعديل الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "profile": "الملف الشخصي"
   }
 }

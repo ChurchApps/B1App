@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Коментар",
+    "commentPlaceholder": "Заповнювач коментаря",
+    "contentShared": "Вміст опубліковано",
+    "group": "Група",
+    "sharingToGroup": "Публікація в групу",
+    "validate": {
+      "addComment": "Додати коментар",
+      "loginFirst": "Спочатку увійдіть",
+      "notMember": "Не учасник",
+      "selectGroup": "Оберіть групу"
+    }
+  },
   "b1ShareModal": {
     "post": "Опублікувати"
   },
@@ -65,6 +78,16 @@
       "title": "Оберіть служіння"
     }
   },
+  "common": {
+    "cancel": "Скасувати",
+    "close": "Закрити",
+    "date": "Дата",
+    "edit": "Редагувати",
+    "pleaseWait": "Будь ласка, зачекайте",
+    "save": "Зберегти",
+    "search": "Пошук",
+    "update": "Оновити"
+  },
   "donate": {
     "authLanding": "Це з авторизацією",
     "currentYearCsv": "Поточний рік (CSV)",
@@ -79,6 +102,24 @@
     "pending": "В очікуванні",
     "printCurrentYear": "Роздрукувати пожертви за поточний рік",
     "printLastYear": "Роздрукувати пожертви за минулий рік"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Електронна пошта",
+        "firstName": "Ім'я",
+        "lastName": "Прізвище",
+        "validEmail": "Дійсна електронна пошта"
+      }
+    },
+    "page": {
+      "amount": "Сума",
+      "batch": "Пакет",
+      "date": "Дата",
+      "fund": "Фонд",
+      "method": "Спосіб",
+      "willAppear": "Відображатиметься"
+    }
   },
   "donationLanding": {
     "myDonation": "Моя пожертва"
@@ -300,11 +341,18 @@
     "userMenu": "Меню користувача"
   },
   "iconPicker": {
+    "iconsAvailable": "Доступні іконки",
+    "matchingResults": "Відповідні результати",
+    "search": "Пошук",
     "searchAriaLabel": "пошук іконок",
     "selectIcon": "Обрати іконку {}"
   },
   "loadingPage": {
     "logoAlt": "логотип"
+  },
+  "login": {
+    "login": "Увійти",
+    "register": "Зареєструватися"
   },
   "loginClient": {
     "demoBody": "Це демонстраційне середовище. Усі дані видаляються щоночі.",
@@ -524,11 +572,12 @@
       "send": "Надіслати",
       "sendEmail": "Надіслати електронний лист",
       "sendMessage": "Надіслати повідомлення",
+      "sendText": "Надіслати текстове повідомлення",
+      "sermonLoadError": "Не вдалося завантажити проповідь",
+      "sermonLoadErrorBody": "Під час завантаження сталася помилка. Перевірте з’єднання та повторіть спробу.",
       "sermonNotAvailable": "Проповідь недоступна",
       "sermonPlural": "проповіді",
       "sermonRemoved": "Цю проповідь могли видалити, або вона більше не публічна.",
-      "sermonLoadError": "Не вдалося завантажити проповідь",
-      "sermonLoadErrorBody": "Під час завантаження сталася помилка. Перевірте з’єднання та повторіть спробу.",
       "sermonSeries": "Серія проповідей",
       "sermonSingular": "проповідь",
       "sermons": "Проповіді",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Порядок служіння",
       "tabTeams": "Команди",
       "team": "Команда",
+      "text": "Текст",
       "typeMessage": "Введіть повідомлення…",
       "unableToLoadMessages": "Не вдалося завантажити повідомлення.",
       "unableToLoadPlaylist": "Не вдалося завантажити плейлист",
@@ -733,16 +783,6 @@
       "votd": "Вірш дня"
     },
     "screens": {
-      "volunteerFull": "Заповнено",
-      "volunteerOpen": "{} вільно",
-      "volunteerPositionsFilled": "Заповнено {} з {} позицій",
-      "volunteerPositionOpen": "{} ({} вільно)",
-      "volunteerViewSignUp": "Переглянути та зареєструватися",
-      "volunteerBrowseTitle": "Перегляд можливостей",
-      "volunteerBrowseBody": "Наразі немає доступних можливостей для волонтерства. Завітайте пізніше!",
-      "sermonsLoadError": "Не вдалося завантажити проповіді",
-      "sermonsLoadErrorBody": "Під час завантаження сталася помилка. Спробуйте ще раз.",
-      "sermonsGoBack": "Назад",
       "addToHomeScreen": "Додати на головний екран",
       "addToHomeScreenBody": "Прокрутіть вниз, натисніть «Додати на головний екран», потім «Додати». Готово!",
       "alreadyCheckedIn": "Вже зареєстрований",
@@ -815,10 +855,13 @@
       "searchForMessage": "Шукати особу для повідомлення",
       "searchMembers": "Пошук учасників",
       "selectGroupsSubtitle": "Виберіть групи для кожного члена родини",
+      "sermonsGoBack": "Назад",
+      "sermonsLoadError": "Не вдалося завантажити проповіді",
+      "sermonsLoadErrorBody": "Під час завантаження сталася помилка. Спробуйте ще раз.",
       "shareVotd": "Поділитися віршем дня",
       "signInToCheckIn": "Увійдіть, щоб зареєструватися",
-      "signInToCheckInMessage": "Увійдіть, щоб зареєструватися на служіння.",
       "signInToCheckInCta": "Увійти",
+      "signInToCheckInMessage": "Увійдіть, щоб зареєструватися на служіння.",
       "tabAccount": "Обліковий запис",
       "tabDonate": "Пожертвувати",
       "tabHistory": "Історія",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Не вдалося завантажити конфігурацію церкви.",
       "unableToSubmitChanges": "Не вдалося надіслати зміни.",
       "visibilityPreferencesSaved": "Налаштування видимості збережено.",
+      "volunteerBrowseBody": "Наразі немає доступних можливостей для волонтерства. Завітайте пізніше!",
+      "volunteerBrowseTitle": "Перегляд можливостей",
+      "volunteerFull": "Заповнено",
+      "volunteerOpen": "{} вільно",
+      "volunteerPositionOpen": "{} ({} вільно)",
+      "volunteerPositionsFilled": "Заповнено {} з {} позицій",
+      "volunteerViewSignUp": "Переглянути та зареєструватися",
       "watchLive": "Дивитися наживо"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "вчора"
   },
   "notes": {
+    "comment": "Коментар",
+    "comments": "Коментарі",
     "list": {
       "loadMore": "Завантажити ще",
       "loading": "Завантаження...",
       "showAll": "Показати все",
       "typeMessage": "Введіть повідомлення...",
       "userAlt": "користувач"
-    }
+    },
+    "startConversation": "Розпочати розмову",
+    "validate": {
+      "content": "Вміст"
+    },
+    "viewAll": "Переглянути все"
   },
   "pageSlug": {
     "achInstructions": "Інструкції для оплати ACH",
@@ -878,6 +935,12 @@
     "sermons": "Проповіді",
     "toViewForm": "щоб переглянути цю форму.",
     "verseOfTheDay": "Вірш дня"
+  },
+  "person": {
+    "email": "Електронна пошта",
+    "firstName": "Ім'я",
+    "lastName": "Прізвище",
+    "name": "Ім'я"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Можливості волонтерства",
     "noPositions": "Зараз немає доступних волонтерських позицій для цього плану.",
     "volunteer": "Волонтер"
+  },
+  "wrapper": {
+    "editAccount": "Редагувати обліковий запис",
+    "editChurchProfile": "Редагувати профіль церкви",
+    "editProfile": "Редагувати профіль",
+    "logout": "Вийти",
+    "profile": "Профіль"
   }
 }

@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Commento",
+    "commentPlaceholder": "Segnaposto commento",
+    "contentShared": "Contenuto condiviso",
+    "group": "Gruppo",
+    "sharingToGroup": "Condivisione al gruppo",
+    "validate": {
+      "addComment": "Aggiungi commento",
+      "loginFirst": "Accedi prima",
+      "notMember": "Non membro",
+      "selectGroup": "Seleziona gruppo"
+    }
+  },
   "b1ShareModal": {
     "post": "Pubblica"
   },
@@ -65,6 +78,16 @@
       "title": "Seleziona Servizio"
     }
   },
+  "common": {
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "date": "Data",
+    "edit": "Modifica",
+    "pleaseWait": "Attendere prego",
+    "save": "Salva",
+    "search": "Cerca",
+    "update": "Aggiorna"
+  },
   "donate": {
     "authLanding": "Questo è con autenticazione",
     "currentYearCsv": "Anno Corrente (CSV)",
@@ -79,6 +102,24 @@
     "pending": "In Attesa",
     "printCurrentYear": "Stampa le donazioni dell'anno corrente",
     "printLastYear": "Stampa le donazioni dell'anno scorso"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Email",
+        "firstName": "Nome",
+        "lastName": "Cognome",
+        "validEmail": "Email valida"
+      }
+    },
+    "page": {
+      "amount": "Importo",
+      "batch": "Lotto",
+      "date": "Data",
+      "fund": "Fondo",
+      "method": "Metodo",
+      "willAppear": "Apparirà"
+    }
   },
   "donationLanding": {
     "myDonation": "La Mia Donazione"
@@ -300,11 +341,18 @@
     "userMenu": "Menu utente"
   },
   "iconPicker": {
+    "iconsAvailable": "Icone disponibili",
+    "matchingResults": "Risultati corrispondenti",
+    "search": "Cerca",
     "searchAriaLabel": "cerca icone",
     "selectIcon": "Seleziona icona {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Accedi",
+    "register": "Registrati"
   },
   "loginClient": {
     "demoBody": "Questo è l'ambiente demo. Tutti i dati vengono cancellati ogni notte.",
@@ -524,11 +572,12 @@
       "send": "Invia",
       "sendEmail": "Invia email",
       "sendMessage": "Invia messaggio",
+      "sendText": "Invia messaggio di testo",
+      "sermonLoadError": "Impossibile caricare il sermone",
+      "sermonLoadErrorBody": "Si è verificato un errore durante il caricamento. Controlla la connessione e riprova.",
       "sermonNotAvailable": "Sermone non disponibile",
       "sermonPlural": "sermoni",
       "sermonRemoved": "Questo sermone potrebbe essere stato rimosso o non è più pubblico.",
-      "sermonLoadError": "Impossibile caricare il sermone",
-      "sermonLoadErrorBody": "Si è verificato un errore durante il caricamento. Controlla la connessione e riprova.",
       "sermonSeries": "Serie di Sermoni",
       "sermonSingular": "sermone",
       "sermons": "Sermoni",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Ordine del Servizio",
       "tabTeams": "Squadre",
       "team": "Squadra",
+      "text": "Testo",
       "typeMessage": "Scrivi un messaggio…",
       "unableToLoadMessages": "Impossibile caricare i messaggi.",
       "unableToLoadPlaylist": "Impossibile Caricare la Playlist",
@@ -733,16 +783,6 @@
       "votd": "Versetto del Giorno"
     },
     "screens": {
-      "volunteerFull": "Al completo",
-      "volunteerOpen": "{} disponibili",
-      "volunteerPositionsFilled": "{} di {} posizioni occupate",
-      "volunteerPositionOpen": "{} ({} disponibili)",
-      "volunteerViewSignUp": "Visualizza e iscriviti",
-      "volunteerBrowseTitle": "Esplora le opportunità",
-      "volunteerBrowseBody": "Al momento non ci sono opportunità di volontariato disponibili. Ricontrolla presto!",
-      "sermonsLoadError": "Impossibile caricare i sermoni",
-      "sermonsLoadErrorBody": "Si è verificato un errore durante il caricamento. Riprova.",
-      "sermonsGoBack": "Indietro",
       "addToHomeScreen": "Aggiungi alla Schermata Home",
       "addToHomeScreenBody": "Scorri verso il basso, tocca Aggiungi alla Schermata Home, poi Aggiungi. Fatto!",
       "alreadyCheckedIn": "Check-in Già Effettuato",
@@ -815,10 +855,13 @@
       "searchForMessage": "Cerca una persona a cui inviare un messaggio",
       "searchMembers": "Cerca Membri",
       "selectGroupsSubtitle": "Seleziona i gruppi per ogni membro della famiglia",
+      "sermonsGoBack": "Indietro",
+      "sermonsLoadError": "Impossibile caricare i sermoni",
+      "sermonsLoadErrorBody": "Si è verificato un errore durante il caricamento. Riprova.",
       "shareVotd": "Condividi il Versetto del Giorno",
       "signInToCheckIn": "Accedi per effettuare il check-in",
-      "signInToCheckInMessage": "Accedi per effettuare il check-in a un servizio.",
       "signInToCheckInCta": "Accedi",
+      "signInToCheckInMessage": "Accedi per effettuare il check-in a un servizio.",
       "tabAccount": "Account",
       "tabDonate": "Dona",
       "tabHistory": "Cronologia",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Impossibile caricare la configurazione della chiesa.",
       "unableToSubmitChanges": "Impossibile inviare le modifiche.",
       "visibilityPreferencesSaved": "Preferenze di visibilità salvate.",
+      "volunteerBrowseBody": "Al momento non ci sono opportunità di volontariato disponibili. Ricontrolla presto!",
+      "volunteerBrowseTitle": "Esplora le opportunità",
+      "volunteerFull": "Al completo",
+      "volunteerOpen": "{} disponibili",
+      "volunteerPositionOpen": "{} ({} disponibili)",
+      "volunteerPositionsFilled": "{} di {} posizioni occupate",
+      "volunteerViewSignUp": "Visualizza e iscriviti",
       "watchLive": "Guarda in Diretta"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "ieri"
   },
   "notes": {
+    "comment": "Commento",
+    "comments": "Commenti",
     "list": {
       "loadMore": "Carica Altro",
       "loading": "Caricamento...",
       "showAll": "Mostra Tutto",
       "typeMessage": "Scrivi un messaggio...",
       "userAlt": "utente"
-    }
+    },
+    "startConversation": "Inizia conversazione",
+    "validate": {
+      "content": "Contenuto"
+    },
+    "viewAll": "Visualizza tutto"
   },
   "pageSlug": {
     "achInstructions": "Istruzioni per il Pagamento ACH",
@@ -878,6 +935,12 @@
     "sermons": "Sermoni",
     "toViewForm": "per visualizzare questo modulo.",
     "verseOfTheDay": "Versetto del Giorno"
+  },
+  "person": {
+    "email": "Email",
+    "firstName": "Nome",
+    "lastName": "Cognome",
+    "name": "Nome"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Opportunità di Volontariato",
     "noPositions": "Nessuna posizione di volontariato è attualmente disponibile per questo piano.",
     "volunteer": "Volontario"
+  },
+  "wrapper": {
+    "editAccount": "Modifica account",
+    "editChurchProfile": "Modifica profilo chiesa",
+    "editProfile": "Modifica profilo",
+    "logout": "Esci",
+    "profile": "Profilo"
   }
 }

@@ -26,15 +26,18 @@ import {
 import {
   RecurringDonations,
   PaymentMethods,
-  StripePaymentMethod as AppHelperStripePaymentMethod
+  StripePaymentMethod as AppHelperStripePaymentMethod,
+  MultiGatewayDonationForm,
+  DonationHelper,
+  getPaymentProvider
 } from "@churchapps/apphelper/donations";
+import type { PaymentGateway } from "@churchapps/apphelper/donations";
 import { NonAuthDonationWrapper } from "@churchapps/apphelper/website";
 import type {
   ChurchInterface,
   DonationInterface,
   PersonInterface
 } from "@churchapps/helpers";
-import { StableDonationForm } from "@/components/donate/StableDonationForm";
 import { CampaignProgress } from "@/components/donate/CampaignProgress";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -87,16 +90,18 @@ function DonatePageInner({ config }: Props) {
     customerId: string | null;
     person: PersonInterface | null;
     currency: string;
+    paymentGateways: PaymentGateway[];
   }
 
   const { data: paymentData, isLoading: isMethodsLoading } = useQuery<PaymentData>({
     queryKey: ["donate-payment-data", personId],
     queryFn: async () => {
-      const gateways: { publicKey?: string; currency?: string }[] = await ApiHelper.get("/gateways", "GivingApi");
-      if (!gateways?.length || !gateways[0]?.publicKey) {
-        return { stripePromise: null, paymentMethods: [], customerId: null, person: null, currency: "usd" };
+      const gateways: PaymentGateway[] = await ApiHelper.get("/gateways", "GivingApi");
+      if (!gateways?.length) {
+        return { stripePromise: null, paymentMethods: [], customerId: null, person: null, currency: "usd", paymentGateways: [] };
       }
-      const stripePromise = loadStripe(gateways[0].publicKey!) as Promise<Stripe>;
+      const stripeGateway = DonationHelper.findGatewayByProvider(gateways, "stripe");
+      const stripePromise = stripeGateway?.publicKey ? (loadStripe(stripeGateway.publicKey) as Promise<Stripe>) : null;
       const [methodsResult, personResult] = await Promise.all([
         ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi") as Promise<{ provider?: string; customerId?: string }[]>,
         ApiHelper.get("/people/" + personId, "MembershipApi") as Promise<PersonInterface>
@@ -105,11 +110,11 @@ function DonatePageInner({ config }: Props) {
       let customerId: string | null = null;
       if (Array.isArray(methodsResult)) {
         for (const pm of methodsResult) {
-          if (pm.provider === "stripe") pms.push(new AppHelperStripePaymentMethod(pm));
+          if (getPaymentProvider(pm.provider).capabilities.savedCard) pms.push(new AppHelperStripePaymentMethod(pm));
           if (pm.customerId && !customerId) customerId = pm.customerId;
         }
       }
-      return { stripePromise, paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd" };
+      return { stripePromise, paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd", paymentGateways: gateways };
     },
     enabled: donationsEnabled
   });
@@ -119,6 +124,7 @@ function DonatePageInner({ config }: Props) {
   const customerId = paymentData?.customerId ?? null;
   const person = paymentData?.person ?? null;
   const pageCurrency = paymentData?.currency ?? "usd";
+  const paymentGateways = paymentData?.paymentGateways ?? [];
 
   const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
     queryKey: ["donate-subscriptions", customerId],
@@ -450,11 +456,12 @@ function DonatePageInner({ config }: Props) {
           p: `${mobileTheme.spacing.md}px`
         }}
       >
-        <StableDonationForm
+        <MultiGatewayDonationForm
           person={person!}
           customerId={customerId!}
-          paymentMethods={paymentMethods!}
-          stripePromise={stripePromise!}
+          paymentMethods={paymentMethods || []}
+          paymentGateways={paymentGateways}
+          stripePromise={stripePromise ?? undefined}
           donationSuccess={handleDataUpdate}
           church={church!}
           churchLogo={churchLogo}

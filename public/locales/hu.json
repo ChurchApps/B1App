@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Megjegyzés",
+    "commentPlaceholder": "Megjegyzés helykitöltője",
+    "contentShared": "Tartalom megosztva",
+    "group": "Csoport",
+    "sharingToGroup": "Megosztás csoporttal",
+    "validate": {
+      "addComment": "Megjegyzés hozzáadása",
+      "loginFirst": "Először jelentkezzen be",
+      "notMember": "Nem tag",
+      "selectGroup": "Válasszon csoportot"
+    }
+  },
   "b1ShareModal": {
     "post": "Közzététel"
   },
@@ -65,6 +78,16 @@
       "title": "Alkalom kiválasztása"
     }
   },
+  "common": {
+    "cancel": "Mégse",
+    "close": "Bezárás",
+    "date": "Dátum",
+    "edit": "Szerkesztés",
+    "pleaseWait": "Kérjük, várjon",
+    "save": "Mentés",
+    "search": "Keresés",
+    "update": "Frissítés"
+  },
   "donate": {
     "authLanding": "Ez hitelesítéssel működik",
     "currentYearCsv": "Idei év (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Függőben",
     "printCurrentYear": "Idei évi adományok nyomtatása",
     "printLastYear": "Tavalyi évi adományok nyomtatása"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-mail",
+        "firstName": "Keresztnév",
+        "lastName": "Vezetéknév",
+        "validEmail": "Érvényes e-mail"
+      }
+    },
+    "page": {
+      "amount": "Összeg",
+      "batch": "Köteg",
+      "date": "Dátum",
+      "fund": "Alap",
+      "method": "Fizetési mód",
+      "willAppear": "Megjelenési forma"
+    }
   },
   "donationLanding": {
     "myDonation": "Saját adományom"
@@ -300,11 +341,18 @@
     "userMenu": "Felhasználói menü"
   },
   "iconPicker": {
+    "iconsAvailable": "Elérhető ikonok",
+    "matchingResults": "Egyező találatok",
+    "search": "Keresés",
     "searchAriaLabel": "ikonok keresése",
     "selectIcon": "{} ikon kiválasztása"
   },
   "loadingPage": {
     "logoAlt": "logó"
+  },
+  "login": {
+    "login": "Bejelentkezés",
+    "register": "Regisztráció"
   },
   "loginClient": {
     "demoBody": "Ez a demó környezet. Minden adat éjszakánként törlődik.",
@@ -524,11 +572,12 @@
       "send": "Küldés",
       "sendEmail": "E-mail küldése",
       "sendMessage": "Üzenet küldése",
+      "sendText": "SMS küldése",
+      "sermonLoadError": "A prédikációt nem sikerült betölteni",
+      "sermonLoadErrorBody": "Hiba történt a betöltés során. Ellenőrizd a kapcsolatot, és próbáld újra.",
       "sermonNotAvailable": "A prédikáció nem érhető el",
       "sermonPlural": "prédikációk",
       "sermonRemoved": "Lehet, hogy ez a prédikáció el lett távolítva, vagy már nem nyilvános.",
-      "sermonLoadError": "A prédikációt nem sikerült betölteni",
-      "sermonLoadErrorBody": "Hiba történt a betöltés során. Ellenőrizd a kapcsolatot, és próbáld újra.",
       "sermonSeries": "Prédikációsorozat",
       "sermonSingular": "prédikáció",
       "sermons": "Prédikációk",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Alkalom rendje",
       "tabTeams": "Csapatok",
       "team": "Csapat",
+      "text": "Szöveg",
       "typeMessage": "Írj egy üzenetet…",
       "unableToLoadMessages": "Az üzenetek nem tölthetők be.",
       "unableToLoadPlaylist": "A lejátszási lista nem tölthető be",
@@ -733,16 +783,6 @@
       "votd": "Nap igéje"
     },
     "screens": {
-      "volunteerFull": "Betelt",
-      "volunteerOpen": "{} szabad hely",
-      "volunteerPositionsFilled": "{} / {} pozíció betöltve",
-      "volunteerPositionOpen": "{} ({} szabad hely)",
-      "volunteerViewSignUp": "Megtekintés és jelentkezés",
-      "volunteerBrowseTitle": "Lehetőségek böngészése",
-      "volunteerBrowseBody": "Jelenleg nincs elérhető önkéntes lehetőség. Nézzen vissza hamarosan!",
-      "sermonsLoadError": "A prédikációk nem tölthetők be",
-      "sermonsLoadErrorBody": "Hiba történt a betöltés során. Kérjük, próbálja újra.",
-      "sermonsGoBack": "Vissza",
       "addToHomeScreen": "Hozzáadás a kezdőképernyőhöz",
       "addToHomeScreenBody": "Görgess le, koppints a Hozzáadás a kezdőképernyőhöz, majd a Hozzáadás gombra. Kész!",
       "alreadyCheckedIn": "Már bejelentkezett",
@@ -815,10 +855,13 @@
       "searchForMessage": "Keress egy személyt üzenetküldéshez",
       "searchMembers": "Tagok keresése",
       "selectGroupsSubtitle": "Válasszon csoportokat minden családtag számára",
+      "sermonsGoBack": "Vissza",
+      "sermonsLoadError": "A prédikációk nem tölthetők be",
+      "sermonsLoadErrorBody": "Hiba történt a betöltés során. Kérjük, próbálja újra.",
       "shareVotd": "Nap igéjének megosztása",
       "signInToCheckIn": "A bejelentkezéshez jelentkezzen be",
-      "signInToCheckInMessage": "Jelentkezzen be az istentiszteletre való bejelentkezéshez.",
       "signInToCheckInCta": "Bejelentkezés",
+      "signInToCheckInMessage": "Jelentkezzen be az istentiszteletre való bejelentkezéshez.",
       "tabAccount": "Fiók",
       "tabDonate": "Adományozás",
       "tabHistory": "Előzmények",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "A gyülekezet konfigurációja nem tölthető be.",
       "unableToSubmitChanges": "A módosításokat nem sikerült elküldeni.",
       "visibilityPreferencesSaved": "A láthatósági beállítások mentve.",
+      "volunteerBrowseBody": "Jelenleg nincs elérhető önkéntes lehetőség. Nézzen vissza hamarosan!",
+      "volunteerBrowseTitle": "Lehetőségek böngészése",
+      "volunteerFull": "Betelt",
+      "volunteerOpen": "{} szabad hely",
+      "volunteerPositionOpen": "{} ({} szabad hely)",
+      "volunteerPositionsFilled": "{} / {} pozíció betöltve",
+      "volunteerViewSignUp": "Megtekintés és jelentkezés",
       "watchLive": "Élő megtekintés"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "tegnap"
   },
   "notes": {
+    "comment": "Megjegyzés",
+    "comments": "Megjegyzések",
     "list": {
       "loadMore": "Több betöltése",
       "loading": "Betöltés...",
       "showAll": "Összes megjelenítése",
       "typeMessage": "Írj egy üzenetet...",
       "userAlt": "felhasználó"
-    }
+    },
+    "startConversation": "Beszélgetés indítása",
+    "validate": {
+      "content": "Tartalom"
+    },
+    "viewAll": "Összes megtekintése"
   },
   "pageSlug": {
     "achInstructions": "ACH fizetési útmutató",
@@ -878,6 +935,12 @@
     "sermons": "Prédikációk",
     "toViewForm": "az űrlap megtekintéséhez.",
     "verseOfTheDay": "Nap igéje"
+  },
+  "person": {
+    "email": "E-mail",
+    "firstName": "Keresztnév",
+    "lastName": "Vezetéknév",
+    "name": "Név"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Önkéntes lehetőségek",
     "noPositions": "Jelenleg nincsenek elérhető önkéntes pozíciók ehhez a tervhez.",
     "volunteer": "Önkéntes"
+  },
+  "wrapper": {
+    "editAccount": "Fiók szerkesztése",
+    "editChurchProfile": "Gyülekezeti profil szerkesztése",
+    "editProfile": "Profil szerkesztése",
+    "logout": "Kijelentkezés",
+    "profile": "Profil"
   }
 }

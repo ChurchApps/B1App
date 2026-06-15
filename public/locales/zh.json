@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "评论",
+    "commentPlaceholder": "请输入评论",
+    "contentShared": "内容已分享",
+    "group": "团体",
+    "sharingToGroup": "正在分享到团体",
+    "validate": {
+      "addComment": "请添加评论",
+      "loginFirst": "请先登录",
+      "notMember": "非成员",
+      "selectGroup": "请选择团体"
+    }
+  },
   "b1ShareModal": {
     "post": "发布"
   },
@@ -65,6 +78,16 @@
       "title": "选择聚会"
     }
   },
+  "common": {
+    "cancel": "取消",
+    "close": "关闭",
+    "date": "日期",
+    "edit": "编辑",
+    "pleaseWait": "请稍候",
+    "save": "保存",
+    "search": "搜索",
+    "update": "更新"
+  },
   "donate": {
     "authLanding": "这是已认证页面",
     "currentYearCsv": "本年度（CSV）",
@@ -79,6 +102,24 @@
     "pending": "待处理",
     "printCurrentYear": "打印本年度奉献",
     "printLastYear": "打印上年度奉献"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "电子邮件",
+        "firstName": "名",
+        "lastName": "姓",
+        "validEmail": "有效的电子邮件"
+      }
+    },
+    "page": {
+      "amount": "金额",
+      "batch": "批次",
+      "date": "日期",
+      "fund": "基金",
+      "method": "方式",
+      "willAppear": "将显示"
+    }
   },
   "donationLanding": {
     "myDonation": "我的奉献"
@@ -300,11 +341,18 @@
     "userMenu": "用户菜单"
   },
   "iconPicker": {
+    "iconsAvailable": "可用图标",
+    "matchingResults": "匹配结果",
+    "search": "搜索",
     "searchAriaLabel": "搜索图标",
     "selectIcon": "选择 {} 图标"
   },
   "loadingPage": {
     "logoAlt": "标志"
+  },
+  "login": {
+    "login": "登录",
+    "register": "注册"
   },
   "loginClient": {
     "demoBody": "这是演示环境。所有数据每晚都会清除。",
@@ -524,11 +572,12 @@
       "send": "发送",
       "sendEmail": "发送邮件",
       "sendMessage": "发送消息",
+      "sendText": "发送短信",
+      "sermonLoadError": "无法加载讲道",
+      "sermonLoadErrorBody": "加载时出现问题。请检查您的网络连接，然后重试。",
       "sermonNotAvailable": "讲道不可用",
       "sermonPlural": "讲道",
       "sermonRemoved": "此讲道可能已被移除或不再公开。",
-      "sermonLoadError": "无法加载讲道",
-      "sermonLoadErrorBody": "加载时出现问题。请检查您的网络连接，然后重试。",
       "sermonSeries": "讲道系列",
       "sermonSingular": "讲道",
       "sermons": "讲道",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "聚会程序",
       "tabTeams": "团队",
       "team": "团队",
+      "text": "短信",
       "typeMessage": "输入消息…",
       "unableToLoadMessages": "无法加载消息。",
       "unableToLoadPlaylist": "无法加载播放列表",
@@ -733,16 +783,6 @@
       "votd": "每日金句"
     },
     "screens": {
-      "volunteerFull": "已满",
-      "volunteerOpen": "{} 个空缺",
-      "volunteerPositionsFilled": "已填补 {} 个职位（共 {} 个）",
-      "volunteerPositionOpen": "{}（{} 个空缺）",
-      "volunteerViewSignUp": "查看并报名",
-      "volunteerBrowseTitle": "浏览机会",
-      "volunteerBrowseBody": "目前没有可用的志愿者机会。请稍后再来查看！",
-      "sermonsLoadError": "无法加载讲道",
-      "sermonsLoadErrorBody": "加载时出现问题。请重试。",
-      "sermonsGoBack": "返回",
       "addToHomeScreen": "添加到主屏幕",
       "addToHomeScreenBody": "向下滚动，点击“添加到主屏幕”，然后点击“添加”。完成！",
       "alreadyCheckedIn": "已签到",
@@ -815,10 +855,13 @@
       "searchForMessage": "搜索要发消息的人",
       "searchMembers": "搜索成员",
       "selectGroupsSubtitle": "为每位家庭成员选择小组",
+      "sermonsGoBack": "返回",
+      "sermonsLoadError": "无法加载讲道",
+      "sermonsLoadErrorBody": "加载时出现问题。请重试。",
       "shareVotd": "分享每日金句",
       "signInToCheckIn": "请登录以进行签到",
-      "signInToCheckInMessage": "登录后即可签到聚会。",
       "signInToCheckInCta": "登录",
+      "signInToCheckInMessage": "登录后即可签到聚会。",
       "tabAccount": "账户",
       "tabDonate": "奉献",
       "tabHistory": "历史",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "无法加载教会配置。",
       "unableToSubmitChanges": "无法提交更改。",
       "visibilityPreferencesSaved": "可见性偏好设置已保存。",
+      "volunteerBrowseBody": "目前没有可用的志愿者机会。请稍后再来查看！",
+      "volunteerBrowseTitle": "浏览机会",
+      "volunteerFull": "已满",
+      "volunteerOpen": "{} 个空缺",
+      "volunteerPositionOpen": "{}（{} 个空缺）",
+      "volunteerPositionsFilled": "已填补 {} 个职位（共 {} 个）",
+      "volunteerViewSignUp": "查看并报名",
       "watchLive": "观看直播"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "昨天"
   },
   "notes": {
+    "comment": "评论",
+    "comments": "评论",
     "list": {
       "loadMore": "加载更多",
       "loading": "加载中...",
       "showAll": "显示全部",
       "typeMessage": "输入消息...",
       "userAlt": "用户"
-    }
+    },
+    "startConversation": "开始对话",
+    "validate": {
+      "content": "内容"
+    },
+    "viewAll": "查看全部"
   },
   "pageSlug": {
     "achInstructions": "ACH 付款说明",
@@ -878,6 +935,12 @@
     "sermons": "讲道",
     "toViewForm": "以查看此表单。",
     "verseOfTheDay": "每日金句"
+  },
+  "person": {
+    "email": "电子邮件",
+    "firstName": "名",
+    "lastName": "姓",
+    "name": "姓名"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "义工机会",
     "noPositions": "此计划目前没有可用的义工岗位。",
     "volunteer": "义工"
+  },
+  "wrapper": {
+    "editAccount": "编辑账户",
+    "editChurchProfile": "编辑教会资料",
+    "editProfile": "编辑个人资料",
+    "logout": "退出登录",
+    "profile": "个人资料"
   }
 }

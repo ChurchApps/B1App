@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Komento",
+    "commentPlaceholder": "Placeholder ng Komento",
+    "contentShared": "Naibahagi ang Nilalaman",
+    "group": "Grupo",
+    "sharingToGroup": "Ibinabahagi sa Grupo",
+    "validate": {
+      "addComment": "Magdagdag ng Komento",
+      "loginFirst": "Mag-login Muna",
+      "notMember": "Hindi Miyembro",
+      "selectGroup": "Pumili ng Grupo"
+    }
+  },
   "b1ShareModal": {
     "post": "I-post"
   },
@@ -65,6 +78,16 @@
       "title": "Pumili ng Serbisyo"
     }
   },
+  "common": {
+    "cancel": "Kanselahin",
+    "close": "Isara",
+    "date": "Petsa",
+    "edit": "I-edit",
+    "pleaseWait": "Mangyaring Maghintay",
+    "save": "I-save",
+    "search": "Maghanap",
+    "update": "I-update"
+  },
   "donate": {
     "authLanding": "Ito ay may Auth",
     "currentYearCsv": "Kasalukuyang Taon (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Nakabinbin",
     "printCurrentYear": "I-print ang mga donasyon ng kasalukuyang taon",
     "printLastYear": "I-print ang mga donasyon ng nakaraang taon"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Email",
+        "firstName": "Pangalan",
+        "lastName": "Apelyido",
+        "validEmail": "Wastong Email"
+      }
+    },
+    "page": {
+      "amount": "Halaga",
+      "batch": "Batch",
+      "date": "Petsa",
+      "fund": "Pondo",
+      "method": "Paraan",
+      "willAppear": "Lilitaw"
+    }
   },
   "donationLanding": {
     "myDonation": "Aking Donasyon"
@@ -300,11 +341,18 @@
     "userMenu": "User menu"
   },
   "iconPicker": {
+    "iconsAvailable": "Mga Available na Icon",
+    "matchingResults": "Mga Katugmang Resulta",
+    "search": "Maghanap",
     "searchAriaLabel": "maghanap ng mga icon",
     "selectIcon": "Pumili ng {} icon"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Mag-login",
+    "register": "Mag-rehistro"
   },
   "loginClient": {
     "demoBody": "Ito ang demo environment. Lahat ng data ay binubura tuwing gabi.",
@@ -524,11 +572,12 @@
       "send": "Ipadala",
       "sendEmail": "Magpadala ng email",
       "sendMessage": "Magpadala ng mensahe",
+      "sendText": "Magpadala ng text message",
+      "sermonLoadError": "Hindi ma-load ang sermon",
+      "sermonLoadErrorBody": "May naganap na error habang naglo-load. Pakisuri ang iyong koneksyon at subukang muli.",
       "sermonNotAvailable": "Hindi available ang sermon",
       "sermonPlural": "mga sermon",
       "sermonRemoved": "Maaaring naalis na o hindi na pampubliko ang sermon na ito.",
-      "sermonLoadError": "Hindi ma-load ang sermon",
-      "sermonLoadErrorBody": "May naganap na error habang naglo-load. Pakisuri ang iyong koneksyon at subukang muli.",
       "sermonSeries": "Sermon Series",
       "sermonSingular": "sermon",
       "sermons": "Mga Sermon",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Service Order",
       "tabTeams": "Mga Team",
       "team": "Team",
+      "text": "Text",
       "typeMessage": "Mag-type ng mensahe…",
       "unableToLoadMessages": "Hindi ma-load ang mga mensahe.",
       "unableToLoadPlaylist": "Hindi Ma-load ang Playlist",
@@ -733,16 +783,6 @@
       "votd": "Talata ng Araw"
     },
     "screens": {
-      "volunteerFull": "Puno na",
-      "volunteerOpen": "{} bukas",
-      "volunteerPositionsFilled": "{} sa {} na posisyon ang napuno",
-      "volunteerPositionOpen": "{} ({} bukas)",
-      "volunteerViewSignUp": "Tingnan at Mag-sign Up",
-      "volunteerBrowseTitle": "Mag-browse ng mga Oportunidad",
-      "volunteerBrowseBody": "Walang available na oportunidad sa pagboboluntaryo sa ngayon. Bumalik sa lalong madaling panahon!",
-      "sermonsLoadError": "Hindi ma-load ang mga sermon",
-      "sermonsLoadErrorBody": "May nangyaring mali habang naglo-load. Pakisubukang muli.",
-      "sermonsGoBack": "Bumalik",
       "addToHomeScreen": "Idagdag sa Home Screen",
       "addToHomeScreenBody": "Mag-scroll pababa, i-tap ang Add to Home Screen, pagkatapos ay Add. Tapos na!",
       "alreadyCheckedIn": "Naka-check In Na",
@@ -815,10 +855,13 @@
       "searchForMessage": "Maghanap ng tao na pagpapadalhan ng mensahe",
       "searchMembers": "Maghanap ng Miyembro",
       "selectGroupsSubtitle": "Pumili ng mga grupo para sa bawat miyembro ng pamilya",
+      "sermonsGoBack": "Bumalik",
+      "sermonsLoadError": "Hindi ma-load ang mga sermon",
+      "sermonsLoadErrorBody": "May nangyaring mali habang naglo-load. Pakisubukang muli.",
       "shareVotd": "Ibahagi ang Talata ng Araw",
       "signInToCheckIn": "Mag-sign in upang mag-check in",
-      "signInToCheckInMessage": "Mag-log in upang mag-check in sa isang serbisyo.",
       "signInToCheckInCta": "Mag-sign In",
+      "signInToCheckInMessage": "Mag-log in upang mag-check in sa isang serbisyo.",
       "tabAccount": "Account",
       "tabDonate": "Mag-donate",
       "tabHistory": "Kasaysayan",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Hindi ma-load ang church configuration.",
       "unableToSubmitChanges": "Hindi maisumite ang mga pagbabago.",
       "visibilityPreferencesSaved": "Na-save ang mga kagustuhan sa visibility.",
+      "volunteerBrowseBody": "Walang available na oportunidad sa pagboboluntaryo sa ngayon. Bumalik sa lalong madaling panahon!",
+      "volunteerBrowseTitle": "Mag-browse ng mga Oportunidad",
+      "volunteerFull": "Puno na",
+      "volunteerOpen": "{} bukas",
+      "volunteerPositionOpen": "{} ({} bukas)",
+      "volunteerPositionsFilled": "{} sa {} na posisyon ang napuno",
+      "volunteerViewSignUp": "Tingnan at Mag-sign Up",
       "watchLive": "Manood ng Live"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "kahapon"
   },
   "notes": {
+    "comment": "Komento",
+    "comments": "Mga Komento",
     "list": {
       "loadMore": "Mag-load ng Higit Pa",
       "loading": "Naglo-load...",
       "showAll": "Ipakita Lahat",
       "typeMessage": "Mag-type ng mensahe...",
       "userAlt": "user"
-    }
+    },
+    "startConversation": "Magsimula ng Usapan",
+    "validate": {
+      "content": "Nilalaman"
+    },
+    "viewAll": "Tingnan Lahat"
   },
   "pageSlug": {
     "achInstructions": "Mga Tagubilin para sa ACH Payment",
@@ -878,6 +935,12 @@
     "sermons": "Mga Sermon",
     "toViewForm": "upang makita ang form na ito.",
     "verseOfTheDay": "Talata ng Araw"
+  },
+  "person": {
+    "email": "Email",
+    "firstName": "Pangalan",
+    "lastName": "Apelyido",
+    "name": "Pangalan"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Mga Volunteer Opportunity",
     "noPositions": "Walang available na volunteer position sa kasalukuyan para sa plan na ito.",
     "volunteer": "Volunteer"
+  },
+  "wrapper": {
+    "editAccount": "I-edit ang Account",
+    "editChurchProfile": "I-edit ang Profile ng Simbahan",
+    "editProfile": "I-edit ang Profile",
+    "logout": "Mag-logout",
+    "profile": "Profile"
   }
 }

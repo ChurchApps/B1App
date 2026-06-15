@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Komentarz",
+    "commentPlaceholder": "Wpisz komentarz",
+    "contentShared": "Treść udostępniona",
+    "group": "Grupa",
+    "sharingToGroup": "Udostępnianie do grupy",
+    "validate": {
+      "addComment": "Dodaj komentarz",
+      "loginFirst": "Najpierw się zaloguj",
+      "notMember": "Nie jesteś członkiem",
+      "selectGroup": "Wybierz grupę"
+    }
+  },
   "b1ShareModal": {
     "post": "Opublikuj"
   },
@@ -65,6 +78,16 @@
       "title": "Wybierz nabożeństwo"
     }
   },
+  "common": {
+    "cancel": "Anuluj",
+    "close": "Zamknij",
+    "date": "Data",
+    "edit": "Edytuj",
+    "pleaseWait": "Proszę czekać",
+    "save": "Zapisz",
+    "search": "Szukaj",
+    "update": "Aktualizuj"
+  },
   "donate": {
     "authLanding": "To jest z uwierzytelnianiem",
     "currentYearCsv": "Bieżący rok (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Oczekujące",
     "printCurrentYear": "Drukuj darowizny z bieżącego roku",
     "printLastYear": "Drukuj darowizny z ubiegłego roku"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-mail",
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "validEmail": "Prawidłowy e-mail"
+      }
+    },
+    "page": {
+      "amount": "Kwota",
+      "batch": "Partia",
+      "date": "Data",
+      "fund": "Fundusz",
+      "method": "Metoda",
+      "willAppear": "Pojawi się"
+    }
   },
   "donationLanding": {
     "myDonation": "Moja darowizna"
@@ -300,11 +341,18 @@
     "userMenu": "Menu użytkownika"
   },
   "iconPicker": {
+    "iconsAvailable": "Dostępne ikony",
+    "matchingResults": "Pasujące wyniki",
+    "search": "Szukaj",
     "searchAriaLabel": "wyszukaj ikony",
     "selectIcon": "Wybierz ikonę {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się"
   },
   "loginClient": {
     "demoBody": "To jest środowisko demonstracyjne. Wszystkie dane są codziennie usuwane.",
@@ -524,11 +572,12 @@
       "send": "Wyślij",
       "sendEmail": "Wyślij e-mail",
       "sendMessage": "Wyślij wiadomość",
+      "sendText": "Wyślij wiadomość SMS",
+      "sermonLoadError": "Nie udało się załadować kazania",
+      "sermonLoadErrorBody": "Coś poszło nie tak podczas ładowania. Sprawdź połączenie i spróbuj ponownie.",
       "sermonNotAvailable": "Kazanie niedostępne",
       "sermonPlural": "kazania",
       "sermonRemoved": "To kazanie mogło zostać usunięte lub nie jest już publiczne.",
-      "sermonLoadError": "Nie udało się załadować kazania",
-      "sermonLoadErrorBody": "Coś poszło nie tak podczas ładowania. Sprawdź połączenie i spróbuj ponownie.",
       "sermonSeries": "Seria kazań",
       "sermonSingular": "kazanie",
       "sermons": "Kazania",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Porządek nabożeństwa",
       "tabTeams": "Zespoły",
       "team": "Zespół",
+      "text": "SMS",
       "typeMessage": "Wpisz wiadomość…",
       "unableToLoadMessages": "Nie można załadować wiadomości.",
       "unableToLoadPlaylist": "Nie można załadować playlisty",
@@ -733,16 +783,6 @@
       "votd": "Werset dnia"
     },
     "screens": {
-      "volunteerFull": "Pełne",
-      "volunteerOpen": "{} wolnych",
-      "volunteerPositionsFilled": "{} z {} miejsc obsadzonych",
-      "volunteerPositionOpen": "{} ({} wolnych)",
-      "volunteerViewSignUp": "Zobacz i zapisz się",
-      "volunteerBrowseTitle": "Przeglądaj możliwości",
-      "volunteerBrowseBody": "Obecnie nie ma dostępnych możliwości wolontariatu. Sprawdź ponownie wkrótce!",
-      "sermonsLoadError": "Nie można załadować kazań",
-      "sermonsLoadErrorBody": "Coś poszło nie tak podczas ładowania. Spróbuj ponownie.",
-      "sermonsGoBack": "Wstecz",
       "addToHomeScreen": "Dodaj do ekranu głównego",
       "addToHomeScreenBody": "Przewiń w dół, dotknij Dodaj do ekranu głównego, a następnie Dodaj. Gotowe!",
       "alreadyCheckedIn": "Już zarejestrowany",
@@ -815,10 +855,13 @@
       "searchForMessage": "Wyszukaj osobę do wysłania wiadomości",
       "searchMembers": "Szukaj członków",
       "selectGroupsSubtitle": "Wybierz grupy dla każdego członka rodziny",
+      "sermonsGoBack": "Wstecz",
+      "sermonsLoadError": "Nie można załadować kazań",
+      "sermonsLoadErrorBody": "Coś poszło nie tak podczas ładowania. Spróbuj ponownie.",
       "shareVotd": "Udostępnij werset dnia",
       "signInToCheckIn": "Zaloguj się, aby się zameldować",
-      "signInToCheckInMessage": "Zaloguj się, aby zameldować się na nabożeństwo.",
       "signInToCheckInCta": "Zaloguj się",
+      "signInToCheckInMessage": "Zaloguj się, aby zameldować się na nabożeństwo.",
       "tabAccount": "Konto",
       "tabDonate": "Ofiaruj",
       "tabHistory": "Historia",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Nie można załadować konfiguracji kościoła.",
       "unableToSubmitChanges": "Nie można przesłać zmian.",
       "visibilityPreferencesSaved": "Ustawienia widoczności zapisane.",
+      "volunteerBrowseBody": "Obecnie nie ma dostępnych możliwości wolontariatu. Sprawdź ponownie wkrótce!",
+      "volunteerBrowseTitle": "Przeglądaj możliwości",
+      "volunteerFull": "Pełne",
+      "volunteerOpen": "{} wolnych",
+      "volunteerPositionOpen": "{} ({} wolnych)",
+      "volunteerPositionsFilled": "{} z {} miejsc obsadzonych",
+      "volunteerViewSignUp": "Zobacz i zapisz się",
       "watchLive": "Oglądaj na żywo"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "wczoraj"
   },
   "notes": {
+    "comment": "Komentarz",
+    "comments": "Komentarze",
     "list": {
       "loadMore": "Załaduj więcej",
       "loading": "Ładowanie...",
       "showAll": "Pokaż wszystkie",
       "typeMessage": "Wpisz wiadomość...",
       "userAlt": "użytkownik"
-    }
+    },
+    "startConversation": "Rozpocznij rozmowę",
+    "validate": {
+      "content": "Treść"
+    },
+    "viewAll": "Zobacz wszystkie"
   },
   "pageSlug": {
     "achInstructions": "Instrukcje dotyczące płatności ACH",
@@ -878,6 +935,12 @@
     "sermons": "Kazania",
     "toViewForm": "aby wyświetlić ten formularz.",
     "verseOfTheDay": "Werset dnia"
+  },
+  "person": {
+    "email": "E-mail",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "name": "Imię i nazwisko"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Możliwości wolontariatu",
     "noPositions": "Obecnie nie ma dostępnych stanowisk wolontariackich dla tego planu.",
     "volunteer": "Wolontariusz"
+  },
+  "wrapper": {
+    "editAccount": "Edytuj konto",
+    "editChurchProfile": "Edytuj profil kościoła",
+    "editProfile": "Edytuj profil",
+    "logout": "Wyloguj się",
+    "profile": "Profil"
   }
 }

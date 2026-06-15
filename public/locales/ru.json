@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Комментарий",
+    "commentPlaceholder": "Введите комментарий",
+    "contentShared": "Контент опубликован",
+    "group": "Группа",
+    "sharingToGroup": "Публикация в группе",
+    "validate": {
+      "addComment": "Добавьте комментарий",
+      "loginFirst": "Сначала войдите в систему",
+      "notMember": "Не является участником",
+      "selectGroup": "Выберите группу"
+    }
+  },
   "b1ShareModal": {
     "post": "Опубликовать"
   },
@@ -65,6 +78,16 @@
       "title": "Выберите служение"
     }
   },
+  "common": {
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "date": "Дата",
+    "edit": "Редактировать",
+    "pleaseWait": "Пожалуйста, подождите",
+    "save": "Сохранить",
+    "search": "Поиск",
+    "update": "Обновить"
+  },
   "donate": {
     "authLanding": "Это с авторизацией",
     "currentYearCsv": "Текущий год (CSV)",
@@ -79,6 +102,24 @@
     "pending": "В ожидании",
     "printCurrentYear": "Печать пожертвований за текущий год",
     "printLastYear": "Печать пожертвований за прошлый год"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Электронная почта",
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "validEmail": "Введите корректный адрес электронной почты"
+      }
+    },
+    "page": {
+      "amount": "Сумма",
+      "batch": "Пакет",
+      "date": "Дата",
+      "fund": "Фонд",
+      "method": "Способ",
+      "willAppear": "Будет отображаться"
+    }
   },
   "donationLanding": {
     "myDonation": "Моё пожертвование"
@@ -300,11 +341,18 @@
     "userMenu": "Меню пользователя"
   },
   "iconPicker": {
+    "iconsAvailable": "Доступные иконки",
+    "matchingResults": "Результаты поиска",
+    "search": "Поиск",
     "searchAriaLabel": "поиск иконок",
     "selectIcon": "Выбрать иконку {}"
   },
   "loadingPage": {
     "logoAlt": "логотип"
+  },
+  "login": {
+    "login": "Войти",
+    "register": "Зарегистрироваться"
   },
   "loginClient": {
     "demoBody": "Это демонстрационная среда. Все данные стираются каждую ночь.",
@@ -524,11 +572,12 @@
       "send": "Отправить",
       "sendEmail": "Отправить email",
       "sendMessage": "Отправить сообщение",
+      "sendText": "Отправить текстовое сообщение",
+      "sermonLoadError": "Не удалось загрузить проповедь",
+      "sermonLoadErrorBody": "При загрузке произошла ошибка. Проверьте подключение и попробуйте снова.",
       "sermonNotAvailable": "Проповедь недоступна",
       "sermonPlural": "проповедей",
       "sermonRemoved": "Эта проповедь могла быть удалена или больше не является публичной.",
-      "sermonLoadError": "Не удалось загрузить проповедь",
-      "sermonLoadErrorBody": "При загрузке произошла ошибка. Проверьте подключение и попробуйте снова.",
       "sermonSeries": "Серия проповедей",
       "sermonSingular": "проповедь",
       "sermons": "Проповеди",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Порядок служения",
       "tabTeams": "Команды",
       "team": "Команда",
+      "text": "Текст",
       "typeMessage": "Введите сообщение…",
       "unableToLoadMessages": "Не удалось загрузить сообщения.",
       "unableToLoadPlaylist": "Не удалось загрузить плейлист",
@@ -733,16 +783,6 @@
       "votd": "Стих дня"
     },
     "screens": {
-      "volunteerFull": "Заполнено",
-      "volunteerOpen": "{} свободно",
-      "volunteerPositionsFilled": "Заполнено {} из {} мест",
-      "volunteerPositionOpen": "{} ({} свободно)",
-      "volunteerViewSignUp": "Просмотреть и записаться",
-      "volunteerBrowseTitle": "Посмотреть возможности",
-      "volunteerBrowseBody": "Сейчас нет доступных возможностей для волонтёрства. Загляните позже!",
-      "sermonsLoadError": "Не удалось загрузить проповеди",
-      "sermonsLoadErrorBody": "Что-то пошло не так при загрузке. Пожалуйста, попробуйте снова.",
-      "sermonsGoBack": "Назад",
       "addToHomeScreen": "Добавить на главный экран",
       "addToHomeScreenBody": "Прокрутите вниз, нажмите «Добавить на главный экран», затем «Добавить». Готово!",
       "alreadyCheckedIn": "Уже зарегистрирован",
@@ -815,10 +855,13 @@
       "searchForMessage": "Найдите человека, которому хотите написать",
       "searchMembers": "Поиск участников",
       "selectGroupsSubtitle": "Выберите группы для каждого члена семьи",
+      "sermonsGoBack": "Назад",
+      "sermonsLoadError": "Не удалось загрузить проповеди",
+      "sermonsLoadErrorBody": "Что-то пошло не так при загрузке. Пожалуйста, попробуйте снова.",
       "shareVotd": "Поделиться стихом дня",
       "signInToCheckIn": "Войдите, чтобы зарегистрироваться",
-      "signInToCheckInMessage": "Войдите, чтобы зарегистрироваться на служение.",
       "signInToCheckInCta": "Войти",
+      "signInToCheckInMessage": "Войдите, чтобы зарегистрироваться на служение.",
       "tabAccount": "Аккаунт",
       "tabDonate": "Пожертвовать",
       "tabHistory": "История",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Не удалось загрузить конфигурацию церкви.",
       "unableToSubmitChanges": "Не удалось отправить изменения.",
       "visibilityPreferencesSaved": "Настройки видимости сохранены.",
+      "volunteerBrowseBody": "Сейчас нет доступных возможностей для волонтёрства. Загляните позже!",
+      "volunteerBrowseTitle": "Посмотреть возможности",
+      "volunteerFull": "Заполнено",
+      "volunteerOpen": "{} свободно",
+      "volunteerPositionOpen": "{} ({} свободно)",
+      "volunteerPositionsFilled": "Заполнено {} из {} мест",
+      "volunteerViewSignUp": "Просмотреть и записаться",
       "watchLive": "Смотреть в прямом эфире"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "вчера"
   },
   "notes": {
+    "comment": "Комментарий",
+    "comments": "Комментарии",
     "list": {
       "loadMore": "Загрузить ещё",
       "loading": "Загрузка...",
       "showAll": "Показать все",
       "typeMessage": "Введите сообщение...",
       "userAlt": "пользователь"
-    }
+    },
+    "startConversation": "Начать беседу",
+    "validate": {
+      "content": "Содержимое"
+    },
+    "viewAll": "Посмотреть все"
   },
   "pageSlug": {
     "achInstructions": "Инструкции для платежа ACH",
@@ -878,6 +935,12 @@
     "sermons": "Проповеди",
     "toViewForm": "чтобы просмотреть эту форму.",
     "verseOfTheDay": "Стих дня"
+  },
+  "person": {
+    "email": "Электронная почта",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "name": "Имя"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Возможности для волонтёров",
     "noPositions": "Сейчас нет доступных позиций волонтёров для этого плана.",
     "volunteer": "Волонтёр"
+  },
+  "wrapper": {
+    "editAccount": "Редактировать аккаунт",
+    "editChurchProfile": "Редактировать профиль церкви",
+    "editProfile": "Редактировать профиль",
+    "logout": "Выйти",
+    "profile": "Профиль"
   }
 }

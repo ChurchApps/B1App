@@ -2,8 +2,8 @@
 
 import React from "react";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { StableDonationForm } from "./StableDonationForm";
-import { RecurringDonations, StripePaymentMethod as AppHelperStripePaymentMethod } from "@churchapps/apphelper/donations";
+import { RecurringDonations, StripePaymentMethod as AppHelperStripePaymentMethod, MultiGatewayDonationForm, DonationHelper, getPaymentProvider } from "@churchapps/apphelper/donations";
+import type { PaymentGateway } from "@churchapps/apphelper/donations";
 import { PaymentMethods } from "@churchapps/apphelper/donations";
 import { DisplayBox } from "@churchapps/apphelper";
 import { ExportLink } from "@churchapps/apphelper";
@@ -13,7 +13,7 @@ import { DateHelper } from "@churchapps/apphelper";
 import { UniqueIdHelper } from "@churchapps/apphelper";
 import { CurrencyHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
-import { DonationInterface, PersonInterface, StripePaymentMethod, ChurchInterface } from "@churchapps/helpers";
+import { DonationInterface, PersonInterface, ChurchInterface } from "@churchapps/helpers";
 import { Table, TableBody, TableRow, TableCell, TableHead, Alert, Button, Icon, Menu, MenuItem } from "@mui/material";
 
 import Link from "next/link";
@@ -21,36 +21,11 @@ import { useMountedState } from "@churchapps/apphelper";
 
 interface Props { personId: string, appName?: string, church?: ChurchInterface, churchLogo?: string }
 
-/**
- * Converts an AppHelper StripePaymentMethod to a Helpers StripePaymentMethod.
- * These are two distinct classes from different packages with slightly different structures.
- * AppHelper version includes additional fields (provider, email, gatewayId) that the Helpers version lacks.
- */
-const convertToHelpersPaymentMethod = (appHelperPM: AppHelperStripePaymentMethod): StripePaymentMethod => new StripePaymentMethod({
-  id: appHelperPM.id,
-  type: appHelperPM.type,
-  card: appHelperPM.name && appHelperPM.type === "card"
-    ? {
-      brand: appHelperPM.name,
-      last4: appHelperPM.last4,
-      exp_month: appHelperPM.exp_month,
-      exp_year: appHelperPM.exp_year
-    }
-    : undefined,
-  bank_name: appHelperPM.type === "bank" ? appHelperPM.name : undefined,
-  last4: appHelperPM.last4,
-  exp_month: appHelperPM.exp_month,
-  exp_year: appHelperPM.exp_year,
-  status: appHelperPM.status,
-  account_holder_name: appHelperPM.account_holder_name,
-  account_holder_type: appHelperPM.account_holder_type
-});
-
 export const BaseDonationPage: React.FC<Props> = (props) => {
   const [donations, setDonations] = React.useState<DonationInterface[]>([]);
   const [stripePromise, setStripe] = React.useState<Promise<Stripe>>(null);
-  const [paymentMethods, setPaymentMethods] = React.useState<StripePaymentMethod[]>(null);
   const [appHelperPaymentMethods, setAppHelperPaymentMethods] = React.useState<AppHelperStripePaymentMethod[]>(null);
+  const [paymentGateways, setPaymentGateways] = React.useState<PaymentGateway[]>([]);
   const [customerId, setCustomerId] = React.useState(null);
   const [person, setPerson] = React.useState<PersonInterface>(null);
   const [message, setMessage] = React.useState<string>(null);
@@ -73,40 +48,31 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
           setDonations(data);
         }
       });
-      ApiHelper.get("/gateways", "GivingApi").then((data: { publicKey?: string }[]) => {
-        if (data.length && data[0]?.publicKey) {
-          if (isMounted()) {
-            setStripe(loadStripe(data[0].publicKey));
+      ApiHelper.get("/gateways", "GivingApi").then((data: PaymentGateway[]) => {
+        if (!isMounted()) return;
+        if (data.length) {
+          setPaymentGateways(data);
+          const stripeGateway = DonationHelper.findGatewayByProvider(data, "stripe");
+          if (stripeGateway?.publicKey) {
+            setStripe(loadStripe(stripeGateway.publicKey));
           }
           ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then((results: { provider?: string; customerId?: string }[]) => {
             if (!isMounted()) {
               return;
             }
             if (!Array.isArray(results) || results.length === 0) {
-              setPaymentMethods([]);
               setAppHelperPaymentMethods([]);
             } else {
-              const methods: StripePaymentMethod[] = [];
               const appHelperMethods: AppHelperStripePaymentMethod[] = [];
-
               for (const pm of results) {
-                if (pm.provider === "stripe") {
-                  // Create AppHelper version for donation components
-                  const appHelperPM = new AppHelperStripePaymentMethod(pm);
-                  appHelperMethods.push(appHelperPM);
-
-                  // Convert to Helpers version for backward compatibility
-                  const helpersPM = convertToHelpersPaymentMethod(appHelperPM);
-                  methods.push(helpersPM);
+                if (getPaymentProvider(pm.provider).capabilities.savedCard) {
+                  appHelperMethods.push(new AppHelperStripePaymentMethod(pm));
                 }
-
                 // Extract customer ID from first payment method if we don't have one
                 if (pm.customerId && !customerId) {
                   setCustomerId(pm.customerId);
                 }
               }
-
-              setPaymentMethods(methods);
               setAppHelperPaymentMethods(appHelperMethods);
             }
             setIsLoading(false);
@@ -117,13 +83,11 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             }
           });
         } else {
-          setPaymentMethods([]);
           setAppHelperPaymentMethods([]);
           setIsLoading(false);
         }
       });
     } else {
-      setPaymentMethods([]);
       setAppHelperPaymentMethods([]);
       setDonations([]);
       setIsLoading(false);
@@ -249,10 +213,11 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
   return (
     <>
       {message && <Alert severity="success">{message}</Alert>}
-      <StableDonationForm
+      <MultiGatewayDonationForm
         person={person}
         customerId={customerId}
-        paymentMethods={appHelperPaymentMethods}
+        paymentMethods={appHelperPaymentMethods || []}
+        paymentGateways={paymentGateways}
         stripePromise={stripePromise}
         donationSuccess={handleDataUpdate}
         church={props?.church}

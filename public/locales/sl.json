@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Komentar",
+    "commentPlaceholder": "Placeholder komentarja",
+    "contentShared": "Vsebina deljena",
+    "group": "Skupina",
+    "sharingToGroup": "Delitev v skupino",
+    "validate": {
+      "addComment": "Dodaj komentar",
+      "loginFirst": "Najprej se prijavite",
+      "notMember": "Ni član",
+      "selectGroup": "Izberi skupino"
+    }
+  },
   "b1ShareModal": {
     "post": "Objavi"
   },
@@ -65,6 +78,16 @@
       "title": "Izberi bogoslužje"
     }
   },
+  "common": {
+    "cancel": "Prekliči",
+    "close": "Zapri",
+    "date": "Datum",
+    "edit": "Uredi",
+    "pleaseWait": "Počakajte",
+    "save": "Shrani",
+    "search": "Iskanje",
+    "update": "Posodobi"
+  },
   "donate": {
     "authLanding": "To je s preverjanjem pristnosti",
     "currentYearCsv": "Tekoče leto (CSV)",
@@ -79,6 +102,24 @@
     "pending": "V obdelavi",
     "printCurrentYear": "Natisni darove tekočega leta",
     "printLastYear": "Natisni darove preteklega leta"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-pošta",
+        "firstName": "Ime",
+        "lastName": "Priimek",
+        "validEmail": "Veljavna e-pošta"
+      }
+    },
+    "page": {
+      "amount": "Znesek",
+      "batch": "Serija",
+      "date": "Datum",
+      "fund": "Sklad",
+      "method": "Način",
+      "willAppear": "Bo prikazano"
+    }
   },
   "donationLanding": {
     "myDonation": "Moj dar"
@@ -300,11 +341,18 @@
     "userMenu": "Uporabniški meni"
   },
   "iconPicker": {
+    "iconsAvailable": "Razpoložljive ikone",
+    "matchingResults": "Ujemajoči se rezultati",
+    "search": "Iskanje",
     "searchAriaLabel": "iskanje ikon",
     "selectIcon": "Izberi ikono {}"
   },
   "loadingPage": {
     "logoAlt": "logotip"
+  },
+  "login": {
+    "login": "Prijava",
+    "register": "Registracija"
   },
   "loginClient": {
     "demoBody": "To je demo okolje. Vsi podatki se ponoči izbrišejo.",
@@ -524,11 +572,12 @@
       "send": "Pošlji",
       "sendEmail": "Pošlji e-pošto",
       "sendMessage": "Pošlji sporočilo",
+      "sendText": "Pošlji SMS sporočilo",
+      "sermonLoadError": "Pridige ni mogoče naložiti",
+      "sermonLoadErrorBody": "Pri nalaganju je prišlo do napake. Preverite povezavo in poskusite znova.",
       "sermonNotAvailable": "Pridiga ni na voljo",
       "sermonPlural": "pridige",
       "sermonRemoved": "Ta pridiga je bila morda odstranjena ali ni več javna.",
-      "sermonLoadError": "Pridige ni mogoče naložiti",
-      "sermonLoadErrorBody": "Pri nalaganju je prišlo do napake. Preverite povezavo in poskusite znova.",
       "sermonSeries": "Serija pridig",
       "sermonSingular": "pridiga",
       "sermons": "Pridige",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Vrstni red bogoslužja",
       "tabTeams": "Ekipe",
       "team": "Ekipa",
+      "text": "SMS",
       "typeMessage": "Vnesite sporočilo…",
       "unableToLoadMessages": "Sporočil ni mogoče naložiti.",
       "unableToLoadPlaylist": "Seznama predvajanja ni mogoče naložiti",
@@ -733,16 +783,6 @@
       "votd": "Verz dneva"
     },
     "screens": {
-      "volunteerFull": "Polno",
-      "volunteerOpen": "{} prostih",
-      "volunteerPositionsFilled": "Zasedenih {} od {} mest",
-      "volunteerPositionOpen": "{} ({} prostih)",
-      "volunteerViewSignUp": "Oglej si in se prijavi",
-      "volunteerBrowseTitle": "Prebrskaj priložnosti",
-      "volunteerBrowseBody": "Trenutno ni na voljo nobenih prostovoljskih priložnosti. Oglasite se kmalu!",
-      "sermonsLoadError": "Pridig ni mogoče naložiti",
-      "sermonsLoadErrorBody": "Med nalaganjem je šlo nekaj narobe. Poskusite znova.",
-      "sermonsGoBack": "Nazaj",
       "addToHomeScreen": "Dodaj na začetni zaslon",
       "addToHomeScreenBody": "Pomaknite se navzdol, tapnite Dodaj na začetni zaslon, nato Dodaj. Končano!",
       "alreadyCheckedIn": "Že prijavljen",
@@ -815,10 +855,13 @@
       "searchForMessage": "Iskanje osebe za sporočilo",
       "searchMembers": "Iskanje članov",
       "selectGroupsSubtitle": "Izberite skupine za vsakega družinskega člana",
+      "sermonsGoBack": "Nazaj",
+      "sermonsLoadError": "Pridig ni mogoče naložiti",
+      "sermonsLoadErrorBody": "Med nalaganjem je šlo nekaj narobe. Poskusite znova.",
       "shareVotd": "Deli verz dneva",
       "signInToCheckIn": "Za prijavo se prosimo vpišite",
-      "signInToCheckInMessage": "Vpišite se za prijavo na bogoslužje.",
       "signInToCheckInCta": "Prijava",
+      "signInToCheckInMessage": "Vpišite se za prijavo na bogoslužje.",
       "tabAccount": "Račun",
       "tabDonate": "Daruj",
       "tabHistory": "Zgodovina",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Konfiguracije cerkve ni mogoče naložiti.",
       "unableToSubmitChanges": "Sprememb ni mogoče poslati.",
       "visibilityPreferencesSaved": "Nastavitve vidnosti so shranjene.",
+      "volunteerBrowseBody": "Trenutno ni na voljo nobenih prostovoljskih priložnosti. Oglasite se kmalu!",
+      "volunteerBrowseTitle": "Prebrskaj priložnosti",
+      "volunteerFull": "Polno",
+      "volunteerOpen": "{} prostih",
+      "volunteerPositionOpen": "{} ({} prostih)",
+      "volunteerPositionsFilled": "Zasedenih {} od {} mest",
+      "volunteerViewSignUp": "Oglej si in se prijavi",
       "watchLive": "Glej v živo"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "včeraj"
   },
   "notes": {
+    "comment": "Komentar",
+    "comments": "Komentarji",
     "list": {
       "loadMore": "Naloži več",
       "loading": "Nalaganje...",
       "showAll": "Prikaži vse",
       "typeMessage": "Vnesite sporočilo...",
       "userAlt": "uporabnik"
-    }
+    },
+    "startConversation": "Začni pogovor",
+    "validate": {
+      "content": "Vsebina"
+    },
+    "viewAll": "Prikaži vse"
   },
   "pageSlug": {
     "achInstructions": "Navodila za plačilo ACH",
@@ -878,6 +935,12 @@
     "sermons": "Pridige",
     "toViewForm": "za ogled tega obrazca.",
     "verseOfTheDay": "Verz dneva"
+  },
+  "person": {
+    "email": "E-pošta",
+    "firstName": "Ime",
+    "lastName": "Priimek",
+    "name": "Ime"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Priložnosti za prostovoljstvo",
     "noPositions": "Za ta načrt trenutno ni razpoložljivih mest za prostovoljstvo.",
     "volunteer": "Prostovoljec"
+  },
+  "wrapper": {
+    "editAccount": "Uredi račun",
+    "editChurchProfile": "Uredi profil cerkve",
+    "editProfile": "Uredi profil",
+    "logout": "Odjava",
+    "profile": "Profil"
   }
 }

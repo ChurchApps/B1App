@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Kommentar",
+    "commentPlaceholder": "Legg til en kommentar",
+    "contentShared": "Innhold delt",
+    "group": "Gruppe",
+    "sharingToGroup": "Deler til gruppe",
+    "validate": {
+      "addComment": "Legg til kommentar",
+      "loginFirst": "Logg inn først",
+      "notMember": "Ikke medlem",
+      "selectGroup": "Velg gruppe"
+    }
+  },
   "b1ShareModal": {
     "post": "Publiser"
   },
@@ -65,6 +78,16 @@
       "title": "Velg gudstjeneste"
     }
   },
+  "common": {
+    "cancel": "Avbryt",
+    "close": "Lukk",
+    "date": "Dato",
+    "edit": "Rediger",
+    "pleaseWait": "Vennligst vent",
+    "save": "Lagre",
+    "search": "Søk",
+    "update": "Oppdater"
+  },
   "donate": {
     "authLanding": "Dette er med autentisering",
     "currentYearCsv": "Inneværende år (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Avventer",
     "printCurrentYear": "Skriv ut gaver for inneværende år",
     "printLastYear": "Skriv ut gaver for fjoråret"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-post",
+        "firstName": "Fornavn",
+        "lastName": "Etternavn",
+        "validEmail": "Gyldig e-post"
+      }
+    },
+    "page": {
+      "amount": "Beløp",
+      "batch": "Batch",
+      "date": "Dato",
+      "fund": "Fond",
+      "method": "Metode",
+      "willAppear": "Vil vises"
+    }
   },
   "donationLanding": {
     "myDonation": "Min gave"
@@ -300,11 +341,18 @@
     "userMenu": "Brukermeny"
   },
   "iconPicker": {
+    "iconsAvailable": "Tilgjengelige ikoner",
+    "matchingResults": "Samsvarende resultater",
+    "search": "Søk",
     "searchAriaLabel": "søk etter ikoner",
     "selectIcon": "Velg ikon for {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Logg inn",
+    "register": "Registrer"
   },
   "loginClient": {
     "demoBody": "Dette er demomiljøet. Alle data slettes hver natt.",
@@ -524,11 +572,12 @@
       "send": "Send",
       "sendEmail": "Send e-post",
       "sendMessage": "Send melding",
+      "sendText": "Send tekstmelding",
+      "sermonLoadError": "Kunne ikke laste prekenen",
+      "sermonLoadErrorBody": "Noe gikk galt under innlasting. Sjekk tilkoblingen din og prøv igjen.",
       "sermonNotAvailable": "Preken ikke tilgjengelig",
       "sermonPlural": "prekener",
       "sermonRemoved": "Denne prekenen kan ha blitt fjernet eller er ikke lenger offentlig.",
-      "sermonLoadError": "Kunne ikke laste prekenen",
-      "sermonLoadErrorBody": "Noe gikk galt under innlasting. Sjekk tilkoblingen din og prøv igjen.",
       "sermonSeries": "Prekenserie",
       "sermonSingular": "preken",
       "sermons": "Prekener",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Gudstjenesteorden",
       "tabTeams": "Team",
       "team": "Team",
+      "text": "Tekst",
       "typeMessage": "Skriv en melding…",
       "unableToLoadMessages": "Kunne ikke laste meldinger.",
       "unableToLoadPlaylist": "Kan ikke laste spilleliste",
@@ -733,16 +783,6 @@
       "votd": "Dagens vers"
     },
     "screens": {
-      "volunteerFull": "Fullt",
-      "volunteerOpen": "{} ledige",
-      "volunteerPositionsFilled": "{} av {} plasser fylt",
-      "volunteerPositionOpen": "{} ({} ledige)",
-      "volunteerViewSignUp": "Vis og meld deg på",
-      "volunteerBrowseTitle": "Se muligheter",
-      "volunteerBrowseBody": "Det er ingen frivillighetsmuligheter tilgjengelig akkurat nå. Kom tilbake snart!",
-      "sermonsLoadError": "Kan ikke laste prekener",
-      "sermonsLoadErrorBody": "Noe gikk galt under lasting. Vennligst prøv igjen.",
-      "sermonsGoBack": "Tilbake",
       "addToHomeScreen": "Legg til på hjem-skjerm",
       "addToHomeScreenBody": "Bla nedover, trykk Legg til på hjem-skjerm, og deretter Legg til. Ferdig!",
       "alreadyCheckedIn": "Allerede sjekket inn",
@@ -815,10 +855,13 @@
       "searchForMessage": "Søk etter en person å sende melding til",
       "searchMembers": "Søk medlemmer",
       "selectGroupsSubtitle": "Velg grupper for hvert familiemedlem",
+      "sermonsGoBack": "Tilbake",
+      "sermonsLoadError": "Kan ikke laste prekener",
+      "sermonsLoadErrorBody": "Noe gikk galt under lasting. Vennligst prøv igjen.",
       "shareVotd": "Del dagens vers",
       "signInToCheckIn": "Logg inn for å sjekke inn",
-      "signInToCheckInMessage": "Logg inn for å sjekke inn til en gudstjeneste.",
       "signInToCheckInCta": "Logg inn",
+      "signInToCheckInMessage": "Logg inn for å sjekke inn til en gudstjeneste.",
       "tabAccount": "Konto",
       "tabDonate": "Gi",
       "tabHistory": "Historikk",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Kan ikke laste menighetskonfigurasjon.",
       "unableToSubmitChanges": "Kunne ikke sende inn endringer.",
       "visibilityPreferencesSaved": "Synlighetsinnstillinger lagret.",
+      "volunteerBrowseBody": "Det er ingen frivillighetsmuligheter tilgjengelig akkurat nå. Kom tilbake snart!",
+      "volunteerBrowseTitle": "Se muligheter",
+      "volunteerFull": "Fullt",
+      "volunteerOpen": "{} ledige",
+      "volunteerPositionOpen": "{} ({} ledige)",
+      "volunteerPositionsFilled": "{} av {} plasser fylt",
+      "volunteerViewSignUp": "Vis og meld deg på",
       "watchLive": "Se direkte"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "i går"
   },
   "notes": {
+    "comment": "Kommentar",
+    "comments": "Kommentarer",
     "list": {
       "loadMore": "Last inn mer",
       "loading": "Laster...",
       "showAll": "Vis alle",
       "typeMessage": "Skriv en melding...",
       "userAlt": "bruker"
-    }
+    },
+    "startConversation": "Start samtale",
+    "validate": {
+      "content": "Innhold"
+    },
+    "viewAll": "Vis alle"
   },
   "pageSlug": {
     "achInstructions": "Instruksjoner for ACH-betaling",
@@ -878,6 +935,12 @@
     "sermons": "Prekener",
     "toViewForm": "for å se dette skjemaet.",
     "verseOfTheDay": "Dagens vers"
+  },
+  "person": {
+    "email": "E-post",
+    "firstName": "Fornavn",
+    "lastName": "Etternavn",
+    "name": "Navn"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Frivillighetsmuligheter",
     "noPositions": "Ingen frivillighetsposisjoner er tilgjengelige for denne planen nå.",
     "volunteer": "Frivillig"
+  },
+  "wrapper": {
+    "editAccount": "Rediger konto",
+    "editChurchProfile": "Rediger menighets profil",
+    "editProfile": "Rediger profil",
+    "logout": "Logg ut",
+    "profile": "Profil"
   }
 }
