@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Kommentti",
+    "commentPlaceholder": "Kirjoita kommentti",
+    "contentShared": "Sisältö jaettu",
+    "group": "Ryhmä",
+    "sharingToGroup": "Jaetaan ryhmälle",
+    "validate": {
+      "addComment": "Lisää kommentti",
+      "loginFirst": "Kirjaudu ensin sisään",
+      "notMember": "Ei jäsen",
+      "selectGroup": "Valitse ryhmä"
+    }
+  },
   "b1ShareModal": {
     "post": "Julkaise"
   },
@@ -65,6 +78,16 @@
       "title": "Valitse palvelus"
     }
   },
+  "common": {
+    "cancel": "Peruuta",
+    "close": "Sulje",
+    "date": "Päivämäärä",
+    "edit": "Muokkaa",
+    "pleaseWait": "Odota hetki",
+    "save": "Tallenna",
+    "search": "Hae",
+    "update": "Päivitä"
+  },
   "donate": {
     "authLanding": "Tämä on kirjautumisen kanssa",
     "currentYearCsv": "Kuluva vuosi (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Odottaa",
     "printCurrentYear": "Tulosta kuluvan vuoden lahjoitukset",
     "printLastYear": "Tulosta viime vuoden lahjoitukset"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Sähköposti",
+        "firstName": "Etunimi",
+        "lastName": "Sukunimi",
+        "validEmail": "Kelvollinen sähköpostiosoite"
+      }
+    },
+    "page": {
+      "amount": "Summa",
+      "batch": "Erä",
+      "date": "Päivämäärä",
+      "fund": "Rahasto",
+      "method": "Maksutapa",
+      "willAppear": "Näkyy tiliotteella"
+    }
   },
   "donationLanding": {
     "myDonation": "Oma lahjoitukseni"
@@ -300,11 +341,18 @@
     "userMenu": "Käyttäjävalikko"
   },
   "iconPicker": {
+    "iconsAvailable": "Saatavilla olevat kuvakkeet",
+    "matchingResults": "Hakutulokset",
+    "search": "Hae",
     "searchAriaLabel": "etsi kuvakkeita",
     "selectIcon": "Valitse kuvake {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Kirjaudu sisään",
+    "register": "Rekisteröidy"
   },
   "loginClient": {
     "demoBody": "Tämä on demoympäristö. Kaikki tiedot poistetaan öisin.",
@@ -524,11 +572,12 @@
       "send": "Lähetä",
       "sendEmail": "Lähetä sähköpostia",
       "sendMessage": "Lähetä viesti",
+      "sendText": "Lähetä tekstiviesti",
+      "sermonLoadError": "Saarnaa ei voitu ladata",
+      "sermonLoadErrorBody": "Lataamisessa tapahtui virhe. Tarkista yhteytesi ja yritä uudelleen.",
       "sermonNotAvailable": "Saarna ei ole saatavilla",
       "sermonPlural": "saarnaa",
       "sermonRemoved": "Tämä saarna on saatettu poistaa tai se ei ole enää julkinen.",
-      "sermonLoadError": "Saarnaa ei voitu ladata",
-      "sermonLoadErrorBody": "Lataamisessa tapahtui virhe. Tarkista yhteytesi ja yritä uudelleen.",
       "sermonSeries": "Saarnasarja",
       "sermonSingular": "saarna",
       "sermons": "Saarnat",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Palveluksen järjestys",
       "tabTeams": "Tiimit",
       "team": "Tiimi",
+      "text": "Teksti",
       "typeMessage": "Kirjoita viesti…",
       "unableToLoadMessages": "Viestejä ei voitu ladata.",
       "unableToLoadPlaylist": "Soittolistaa ei voitu ladata",
@@ -733,16 +783,6 @@
       "votd": "Päivän raamatunjae"
     },
     "screens": {
-      "volunteerFull": "Täynnä",
-      "volunteerOpen": "{} vapaana",
-      "volunteerPositionsFilled": "{} / {} paikkaa täytetty",
-      "volunteerPositionOpen": "{} ({} vapaana)",
-      "volunteerViewSignUp": "Näytä ja ilmoittaudu",
-      "volunteerBrowseTitle": "Selaa mahdollisuuksia",
-      "volunteerBrowseBody": "Tällä hetkellä ei ole vapaaehtoismahdollisuuksia saatavilla. Tarkista pian uudelleen!",
-      "sermonsLoadError": "Saarnoja ei voi ladata",
-      "sermonsLoadErrorBody": "Latauksen aikana tapahtui virhe. Yritä uudelleen.",
-      "sermonsGoBack": "Takaisin",
       "addToHomeScreen": "Lisää aloitusnäyttöön",
       "addToHomeScreenBody": "Vieritä alas, napauta Lisää aloitusnäyttöön ja sitten Lisää. Valmis!",
       "alreadyCheckedIn": "Jo sisäänkirjautunut",
@@ -815,10 +855,13 @@
       "searchForMessage": "Etsi henkilöä viestin lähettämiseksi",
       "searchMembers": "Etsi jäseniä",
       "selectGroupsSubtitle": "Valitse ryhmät jokaiselle perheenjäsenelle",
+      "sermonsGoBack": "Takaisin",
+      "sermonsLoadError": "Saarnoja ei voi ladata",
+      "sermonsLoadErrorBody": "Latauksen aikana tapahtui virhe. Yritä uudelleen.",
       "shareVotd": "Jaa päivän raamatunjae",
       "signInToCheckIn": "Kirjaudu sisään kirjautuaksesi paikalle",
-      "signInToCheckInMessage": "Kirjaudu sisään kirjautuaksesi jumalanpalvelukseen.",
       "signInToCheckInCta": "Kirjaudu sisään",
+      "signInToCheckInMessage": "Kirjaudu sisään kirjautuaksesi jumalanpalvelukseen.",
       "tabAccount": "Tili",
       "tabDonate": "Lahjoita",
       "tabHistory": "Historia",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Seurakunnan asetuksia ei voitu ladata.",
       "unableToSubmitChanges": "Muutoksia ei voitu lähettää.",
       "visibilityPreferencesSaved": "Näkyvyysasetukset tallennettu.",
+      "volunteerBrowseBody": "Tällä hetkellä ei ole vapaaehtoismahdollisuuksia saatavilla. Tarkista pian uudelleen!",
+      "volunteerBrowseTitle": "Selaa mahdollisuuksia",
+      "volunteerFull": "Täynnä",
+      "volunteerOpen": "{} vapaana",
+      "volunteerPositionOpen": "{} ({} vapaana)",
+      "volunteerPositionsFilled": "{} / {} paikkaa täytetty",
+      "volunteerViewSignUp": "Näytä ja ilmoittaudu",
       "watchLive": "Katso suorana"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "eilen"
   },
   "notes": {
+    "comment": "Kommentti",
+    "comments": "Kommentit",
     "list": {
       "loadMore": "Lataa lisää",
       "loading": "Ladataan...",
       "showAll": "Näytä kaikki",
       "typeMessage": "Kirjoita viesti...",
       "userAlt": "käyttäjä"
-    }
+    },
+    "startConversation": "Aloita keskustelu",
+    "validate": {
+      "content": "Sisältö"
+    },
+    "viewAll": "Näytä kaikki"
   },
   "pageSlug": {
     "achInstructions": "Ohjeet ACH-maksua varten",
@@ -878,6 +935,12 @@
     "sermons": "Saarnat",
     "toViewForm": "nähdäksesi tämän lomakkeen.",
     "verseOfTheDay": "Päivän raamatunjae"
+  },
+  "person": {
+    "email": "Sähköposti",
+    "firstName": "Etunimi",
+    "lastName": "Sukunimi",
+    "name": "Nimi"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Vapaaehtoismahdollisuudet",
     "noPositions": "Tähän suunnitelmaan ei ole tällä hetkellä saatavilla vapaaehtoistehtäviä.",
     "volunteer": "Vapaaehtoinen"
+  },
+  "wrapper": {
+    "editAccount": "Muokkaa tiliä",
+    "editChurchProfile": "Muokkaa seurakunnan profiilia",
+    "editProfile": "Muokkaa profiilia",
+    "logout": "Kirjaudu ulos",
+    "profile": "Profiili"
   }
 }

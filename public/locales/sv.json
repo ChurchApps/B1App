@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Kommentar",
+    "commentPlaceholder": "Kommentarsplatshållare",
+    "contentShared": "Innehåll delat",
+    "group": "Grupp",
+    "sharingToGroup": "Delar med grupp",
+    "validate": {
+      "addComment": "Lägg till kommentar",
+      "loginFirst": "Logga in först",
+      "notMember": "Inte medlem",
+      "selectGroup": "Välj grupp"
+    }
+  },
   "b1ShareModal": {
     "post": "Publicera"
   },
@@ -65,6 +78,16 @@
       "title": "Välj gudstjänst"
     }
   },
+  "common": {
+    "cancel": "Avbryt",
+    "close": "Stäng",
+    "date": "Datum",
+    "edit": "Redigera",
+    "pleaseWait": "Vänta",
+    "save": "Spara",
+    "search": "Sök",
+    "update": "Uppdatera"
+  },
   "donate": {
     "authLanding": "Detta är med autentisering",
     "currentYearCsv": "Innevarande år (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Väntande",
     "printCurrentYear": "Skriv ut innevarande års gåvor",
     "printLastYear": "Skriv ut förra årets gåvor"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-post",
+        "firstName": "Förnamn",
+        "lastName": "Efternamn",
+        "validEmail": "Giltig e-post"
+      }
+    },
+    "page": {
+      "amount": "Belopp",
+      "batch": "Batch",
+      "date": "Datum",
+      "fund": "Fond",
+      "method": "Metod",
+      "willAppear": "Visas här"
+    }
   },
   "donationLanding": {
     "myDonation": "Min gåva"
@@ -300,11 +341,18 @@
     "userMenu": "Användarmeny"
   },
   "iconPicker": {
+    "iconsAvailable": "Tillgängliga ikoner",
+    "matchingResults": "Matchande resultat",
+    "search": "Sök",
     "searchAriaLabel": "sök ikoner",
     "selectIcon": "Välj {} ikon"
   },
   "loadingPage": {
     "logoAlt": "logotyp"
+  },
+  "login": {
+    "login": "Logga in",
+    "register": "Registrera"
   },
   "loginClient": {
     "demoBody": "Detta är demomiljön. All data raderas varje natt.",
@@ -524,11 +572,12 @@
       "send": "Skicka",
       "sendEmail": "Skicka e-post",
       "sendMessage": "Skicka meddelande",
+      "sendText": "Skicka textmeddelande",
+      "sermonLoadError": "Det gick inte att ladda predikan",
+      "sermonLoadErrorBody": "Något gick fel vid inläsningen. Kontrollera din anslutning och försök igen.",
       "sermonNotAvailable": "Predikan inte tillgänglig",
       "sermonPlural": "predikningar",
       "sermonRemoved": "Denna predikan kan ha tagits bort eller är inte längre offentlig.",
-      "sermonLoadError": "Det gick inte att ladda predikan",
-      "sermonLoadErrorBody": "Något gick fel vid inläsningen. Kontrollera din anslutning och försök igen.",
       "sermonSeries": "Predikoserie",
       "sermonSingular": "predikan",
       "sermons": "Predikningar",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Gudstjänstordning",
       "tabTeams": "Team",
       "team": "Team",
+      "text": "Text",
       "typeMessage": "Skriv ett meddelande…",
       "unableToLoadMessages": "Kan inte ladda meddelanden.",
       "unableToLoadPlaylist": "Kan inte ladda spellistan",
@@ -733,16 +783,6 @@
       "votd": "Dagens vers"
     },
     "screens": {
-      "volunteerFull": "Fullt",
-      "volunteerOpen": "{} lediga",
-      "volunteerPositionsFilled": "{} av {} platser fyllda",
-      "volunteerPositionOpen": "{} ({} lediga)",
-      "volunteerViewSignUp": "Visa och anmäl dig",
-      "volunteerBrowseTitle": "Bläddra bland möjligheter",
-      "volunteerBrowseBody": "Det finns inga volontärmöjligheter tillgängliga just nu. Kom tillbaka snart!",
-      "sermonsLoadError": "Det gick inte att läsa in predikningar",
-      "sermonsLoadErrorBody": "Något gick fel vid inläsningen. Försök igen.",
-      "sermonsGoBack": "Tillbaka",
       "addToHomeScreen": "Lägg till på hemskärmen",
       "addToHomeScreenBody": "Skrolla ner, tryck på Lägg till på hemskärmen och sedan Lägg till. Klart!",
       "alreadyCheckedIn": "Redan incheckad",
@@ -815,10 +855,13 @@
       "searchForMessage": "Sök efter en person att meddela",
       "searchMembers": "Sök medlemmar",
       "selectGroupsSubtitle": "Välj grupper för varje familjemedlem",
+      "sermonsGoBack": "Tillbaka",
+      "sermonsLoadError": "Det gick inte att läsa in predikningar",
+      "sermonsLoadErrorBody": "Något gick fel vid inläsningen. Försök igen.",
       "shareVotd": "Dela dagens vers",
       "signInToCheckIn": "Logga in för att checka in",
-      "signInToCheckInMessage": "Logga in för att checka in till en gudstjänst.",
       "signInToCheckInCta": "Logga in",
+      "signInToCheckInMessage": "Logga in för att checka in till en gudstjänst.",
       "tabAccount": "Konto",
       "tabDonate": "Ge",
       "tabHistory": "Historik",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Det gick inte att ladda församlingskonfigurationen.",
       "unableToSubmitChanges": "Det gick inte att skicka ändringarna.",
       "visibilityPreferencesSaved": "Synlighetsinställningarna har sparats.",
+      "volunteerBrowseBody": "Det finns inga volontärmöjligheter tillgängliga just nu. Kom tillbaka snart!",
+      "volunteerBrowseTitle": "Bläddra bland möjligheter",
+      "volunteerFull": "Fullt",
+      "volunteerOpen": "{} lediga",
+      "volunteerPositionOpen": "{} ({} lediga)",
+      "volunteerPositionsFilled": "{} av {} platser fyllda",
+      "volunteerViewSignUp": "Visa och anmäl dig",
       "watchLive": "Titta live"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "igår"
   },
   "notes": {
+    "comment": "Kommentar",
+    "comments": "Kommentarer",
     "list": {
       "loadMore": "Ladda mer",
       "loading": "Laddar...",
       "showAll": "Visa alla",
       "typeMessage": "Skriv ett meddelande...",
       "userAlt": "användare"
-    }
+    },
+    "startConversation": "Starta konversation",
+    "validate": {
+      "content": "Innehåll"
+    },
+    "viewAll": "Visa alla"
   },
   "pageSlug": {
     "achInstructions": "Instruktioner för ACH-betalning",
@@ -878,6 +935,12 @@
     "sermons": "Predikningar",
     "toViewForm": "för att visa detta formulär.",
     "verseOfTheDay": "Dagens vers"
+  },
+  "person": {
+    "email": "E-post",
+    "firstName": "Förnamn",
+    "lastName": "Efternamn",
+    "name": "Namn"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Volontärmöjligheter",
     "noPositions": "Inga volontärpositioner är för närvarande tillgängliga för denna plan.",
     "volunteer": "Volontär"
+  },
+  "wrapper": {
+    "editAccount": "Redigera konto",
+    "editChurchProfile": "Redigera församlingsprofil",
+    "editProfile": "Redigera profil",
+    "logout": "Logga ut",
+    "profile": "Profil"
   }
 }

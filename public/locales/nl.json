@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Opmerking",
+    "commentPlaceholder": "Voeg een opmerking toe...",
+    "contentShared": "Inhoud gedeeld",
+    "group": "Groep",
+    "sharingToGroup": "Delen met groep",
+    "validate": {
+      "addComment": "Voeg een opmerking toe",
+      "loginFirst": "Meld u eerst aan",
+      "notMember": "Geen lid",
+      "selectGroup": "Selecteer een groep"
+    }
+  },
   "b1ShareModal": {
     "post": "Plaatsen"
   },
@@ -65,6 +78,16 @@
       "title": "Selecteer dienst"
     }
   },
+  "common": {
+    "cancel": "Annuleren",
+    "close": "Sluiten",
+    "date": "Datum",
+    "edit": "Bewerken",
+    "pleaseWait": "Een moment geduld",
+    "save": "Opslaan",
+    "search": "Zoeken",
+    "update": "Bijwerken"
+  },
   "donate": {
     "authLanding": "Dit is met authenticatie",
     "currentYearCsv": "Huidig jaar (CSV)",
@@ -79,6 +102,24 @@
     "pending": "In behandeling",
     "printCurrentYear": "Giften van het huidige jaar afdrukken",
     "printLastYear": "Giften van vorig jaar afdrukken"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-mailadres",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "validEmail": "Geldig e-mailadres"
+      }
+    },
+    "page": {
+      "amount": "Bedrag",
+      "batch": "Batch",
+      "date": "Datum",
+      "fund": "Fonds",
+      "method": "Betaalmethode",
+      "willAppear": "Verschijnt als"
+    }
   },
   "donationLanding": {
     "myDonation": "Mijn gift"
@@ -300,11 +341,18 @@
     "userMenu": "Gebruikersmenu"
   },
   "iconPicker": {
+    "iconsAvailable": "Beschikbare pictogrammen",
+    "matchingResults": "Overeenkomende resultaten",
+    "search": "Zoeken",
     "searchAriaLabel": "pictogrammen zoeken",
     "selectIcon": "Selecteer pictogram {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Aanmelden",
+    "register": "Registreren"
   },
   "loginClient": {
     "demoBody": "Dit is de demo-omgeving. Alle gegevens worden 's nachts gewist.",
@@ -524,11 +572,12 @@
       "send": "Verzenden",
       "sendEmail": "E-mail verzenden",
       "sendMessage": "Bericht verzenden",
+      "sendText": "Stuur een sms-bericht",
+      "sermonLoadError": "Kan de preek niet laden",
+      "sermonLoadErrorBody": "Er is iets misgegaan tijdens het laden. Controleer je verbinding en probeer het opnieuw.",
       "sermonNotAvailable": "Preek niet beschikbaar",
       "sermonPlural": "preken",
       "sermonRemoved": "Deze preek is mogelijk verwijderd of niet langer openbaar.",
-      "sermonLoadError": "Kan de preek niet laden",
-      "sermonLoadErrorBody": "Er is iets misgegaan tijdens het laden. Controleer je verbinding en probeer het opnieuw.",
       "sermonSeries": "Prekenserie",
       "sermonSingular": "preek",
       "sermons": "Preken",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Orde van dienst",
       "tabTeams": "Teams",
       "team": "Team",
+      "text": "Sms",
       "typeMessage": "Typ een bericht…",
       "unableToLoadMessages": "Kan berichten niet laden.",
       "unableToLoadPlaylist": "Kan afspeellijst niet laden",
@@ -733,16 +783,6 @@
       "votd": "Vers van de dag"
     },
     "screens": {
-      "volunteerFull": "Vol",
-      "volunteerOpen": "{} beschikbaar",
-      "volunteerPositionsFilled": "{} van {} plaatsen ingevuld",
-      "volunteerPositionOpen": "{} ({} beschikbaar)",
-      "volunteerViewSignUp": "Bekijken en aanmelden",
-      "volunteerBrowseTitle": "Bekijk mogelijkheden",
-      "volunteerBrowseBody": "Er zijn momenteel geen vrijwilligersmogelijkheden beschikbaar. Kom binnenkort terug!",
-      "sermonsLoadError": "Kan preken niet laden",
-      "sermonsLoadErrorBody": "Er is iets misgegaan tijdens het laden. Probeer het opnieuw.",
-      "sermonsGoBack": "Terug",
       "addToHomeScreen": "Toevoegen aan beginscherm",
       "addToHomeScreenBody": "Scrol naar beneden, tik op Toevoegen aan beginscherm en vervolgens op Voeg toe. Klaar!",
       "alreadyCheckedIn": "Al ingecheckt",
@@ -815,10 +855,13 @@
       "searchForMessage": "Zoek een persoon om een bericht te sturen",
       "searchMembers": "Leden zoeken",
       "selectGroupsSubtitle": "Selecteer groepen voor elk gezinslid",
+      "sermonsGoBack": "Terug",
+      "sermonsLoadError": "Kan preken niet laden",
+      "sermonsLoadErrorBody": "Er is iets misgegaan tijdens het laden. Probeer het opnieuw.",
       "shareVotd": "Deel het vers van de dag",
       "signInToCheckIn": "Log in om in te checken",
-      "signInToCheckInMessage": "Log in om in te checken voor een dienst.",
       "signInToCheckInCta": "Inloggen",
+      "signInToCheckInMessage": "Log in om in te checken voor een dienst.",
       "tabAccount": "Account",
       "tabDonate": "Geven",
       "tabHistory": "Geschiedenis",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Kan kerkconfiguratie niet laden.",
       "unableToSubmitChanges": "Kan wijzigingen niet indienen.",
       "visibilityPreferencesSaved": "Zichtbaarheidsvoorkeuren opgeslagen.",
+      "volunteerBrowseBody": "Er zijn momenteel geen vrijwilligersmogelijkheden beschikbaar. Kom binnenkort terug!",
+      "volunteerBrowseTitle": "Bekijk mogelijkheden",
+      "volunteerFull": "Vol",
+      "volunteerOpen": "{} beschikbaar",
+      "volunteerPositionOpen": "{} ({} beschikbaar)",
+      "volunteerPositionsFilled": "{} van {} plaatsen ingevuld",
+      "volunteerViewSignUp": "Bekijken en aanmelden",
       "watchLive": "Live bekijken"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "gisteren"
   },
   "notes": {
+    "comment": "Opmerking",
+    "comments": "Opmerkingen",
     "list": {
       "loadMore": "Meer laden",
       "loading": "Laden...",
       "showAll": "Alles tonen",
       "typeMessage": "Typ een bericht...",
       "userAlt": "gebruiker"
-    }
+    },
+    "startConversation": "Gesprek starten",
+    "validate": {
+      "content": "Inhoud"
+    },
+    "viewAll": "Alles bekijken"
   },
   "pageSlug": {
     "achInstructions": "Instructies voor ACH-betaling",
@@ -878,6 +935,12 @@
     "sermons": "Preken",
     "toViewForm": "om dit formulier te bekijken.",
     "verseOfTheDay": "Vers van de dag"
+  },
+  "person": {
+    "email": "E-mailadres",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "name": "Naam"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Vrijwilligersmogelijkheden",
     "noPositions": "Er zijn momenteel geen vrijwilligersposities beschikbaar voor dit plan.",
     "volunteer": "Vrijwilliger"
+  },
+  "wrapper": {
+    "editAccount": "Account bewerken",
+    "editChurchProfile": "Kerkprofiel bewerken",
+    "editProfile": "Profiel bewerken",
+    "logout": "Afmelden",
+    "profile": "Profiel"
   }
 }

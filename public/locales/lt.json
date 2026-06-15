@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Komentaras",
+    "commentPlaceholder": "Komentaro vietos žymė",
+    "contentShared": "Turinys pasidalintas",
+    "group": "Grupė",
+    "sharingToGroup": "Dalijamasi su grupe",
+    "validate": {
+      "addComment": "Pridėti komentarą",
+      "loginFirst": "Pirmiausia prisijunkite",
+      "notMember": "Ne narys",
+      "selectGroup": "Pasirinkti grupę"
+    }
+  },
   "b1ShareModal": {
     "post": "Skelbti"
   },
@@ -65,6 +78,16 @@
       "title": "Pasirinkti pamaldas"
     }
   },
+  "common": {
+    "cancel": "Atšaukti",
+    "close": "Uždaryti",
+    "date": "Data",
+    "edit": "Redaguoti",
+    "pleaseWait": "Palaukite",
+    "save": "Išsaugoti",
+    "search": "Ieškoti",
+    "update": "Atnaujinti"
+  },
   "donate": {
     "authLanding": "Tai prisijungta versija",
     "currentYearCsv": "Einamieji metai (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Laukiama",
     "printCurrentYear": "Spausdinti einamųjų metų aukas",
     "printLastYear": "Spausdinti praėjusių metų aukas"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "El. paštas",
+        "firstName": "Vardas",
+        "lastName": "Pavardė",
+        "validEmail": "Tinkamas el. paštas"
+      }
+    },
+    "page": {
+      "amount": "Suma",
+      "batch": "Paketas",
+      "date": "Data",
+      "fund": "Fondas",
+      "method": "Būdas",
+      "willAppear": "Bus matoma"
+    }
   },
   "donationLanding": {
     "myDonation": "Mano auka"
@@ -300,11 +341,18 @@
     "userMenu": "Vartotojo meniu"
   },
   "iconPicker": {
+    "iconsAvailable": "Galimos piktogramos",
+    "matchingResults": "Atitikimo rezultatai",
+    "search": "Ieškoti",
     "searchAriaLabel": "ieškoti piktogramų",
     "selectIcon": "Pasirinkti {} piktogramą"
   },
   "loadingPage": {
     "logoAlt": "logotipas"
+  },
+  "login": {
+    "login": "Prisijungti",
+    "register": "Registruotis"
   },
   "loginClient": {
     "demoBody": "Tai demonstracinė aplinka. Visi duomenys ištrinami kiekvieną naktį.",
@@ -524,11 +572,12 @@
       "send": "Siųsti",
       "sendEmail": "Siųsti el. laišką",
       "sendMessage": "Siųsti žinutę",
+      "sendText": "Siųsti tekstinę žinutę",
+      "sermonLoadError": "Nepavyko įkelti pamokslo",
+      "sermonLoadErrorBody": "Įkeliant įvyko klaida. Patikrinkite ryšį ir bandykite dar kartą.",
       "sermonNotAvailable": "Pamokslas nepasiekiamas",
       "sermonPlural": "pamokslai",
       "sermonRemoved": "Šis pamokslas galėjo būti pašalintas arba nebėra viešas.",
-      "sermonLoadError": "Nepavyko įkelti pamokslo",
-      "sermonLoadErrorBody": "Įkeliant įvyko klaida. Patikrinkite ryšį ir bandykite dar kartą.",
       "sermonSeries": "Pamokslų serija",
       "sermonSingular": "pamokslas",
       "sermons": "Pamokslai",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Pamaldų eiga",
       "tabTeams": "Komandos",
       "team": "Komanda",
+      "text": "Tekstas",
       "typeMessage": "Rašykite žinutę…",
       "unableToLoadMessages": "Nepavyko įkelti žinučių.",
       "unableToLoadPlaylist": "Nepavyko įkelti grojaraščio",
@@ -733,16 +783,6 @@
       "votd": "Dienos eilutė"
     },
     "screens": {
-      "volunteerFull": "Užpildyta",
-      "volunteerOpen": "{} laisva",
-      "volunteerPositionsFilled": "Užpildyta {} iš {} vietų",
-      "volunteerPositionOpen": "{} ({} laisva)",
-      "volunteerViewSignUp": "Peržiūrėti ir užsiregistruoti",
-      "volunteerBrowseTitle": "Naršyti galimybes",
-      "volunteerBrowseBody": "Šiuo metu nėra savanorystės galimybių. Užsukite vėliau!",
-      "sermonsLoadError": "Nepavyko įkelti pamokslų",
-      "sermonsLoadErrorBody": "Įkeliant įvyko klaida. Bandykite dar kartą.",
-      "sermonsGoBack": "Atgal",
       "addToHomeScreen": "Pridėti į pradžios ekraną",
       "addToHomeScreenBody": "Slinkite žemyn, bakstelėkite Pridėti į pradžios ekraną, tada Pridėti. Atlikta!",
       "alreadyCheckedIn": "Jau užregistruotas",
@@ -815,10 +855,13 @@
       "searchForMessage": "Ieškoti asmens, kuriam siųsti žinutę",
       "searchMembers": "Ieškoti narių",
       "selectGroupsSubtitle": "Pasirinkite grupes kiekvienam šeimos nariui",
+      "sermonsGoBack": "Atgal",
+      "sermonsLoadError": "Nepavyko įkelti pamokslų",
+      "sermonsLoadErrorBody": "Įkeliant įvyko klaida. Bandykite dar kartą.",
       "shareVotd": "Dalintis dienos eilute",
       "signInToCheckIn": "Norėdami užsiregistruoti, prisijunkite",
-      "signInToCheckInMessage": "Prisijunkite, kad užsiregistruotumėte į pamaldas.",
       "signInToCheckInCta": "Prisijungti",
+      "signInToCheckInMessage": "Prisijunkite, kad užsiregistruotumėte į pamaldas.",
       "tabAccount": "Paskyra",
       "tabDonate": "Aukoti",
       "tabHistory": "Istorija",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Nepavyko įkelti bažnyčios konfigūracijos.",
       "unableToSubmitChanges": "Nepavyko pateikti pakeitimų.",
       "visibilityPreferencesSaved": "Matomumo nuostatos išsaugotos.",
+      "volunteerBrowseBody": "Šiuo metu nėra savanorystės galimybių. Užsukite vėliau!",
+      "volunteerBrowseTitle": "Naršyti galimybes",
+      "volunteerFull": "Užpildyta",
+      "volunteerOpen": "{} laisva",
+      "volunteerPositionOpen": "{} ({} laisva)",
+      "volunteerPositionsFilled": "Užpildyta {} iš {} vietų",
+      "volunteerViewSignUp": "Peržiūrėti ir užsiregistruoti",
       "watchLive": "Žiūrėti tiesiogiai"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "vakar"
   },
   "notes": {
+    "comment": "Komentaras",
+    "comments": "Komentarai",
     "list": {
       "loadMore": "Įkelti daugiau",
       "loading": "Įkeliama...",
       "showAll": "Rodyti visus",
       "typeMessage": "Rašykite žinutę...",
       "userAlt": "vartotojas"
-    }
+    },
+    "startConversation": "Pradėti pokalbį",
+    "validate": {
+      "content": "Turinys"
+    },
+    "viewAll": "Žiūrėti viską"
   },
   "pageSlug": {
     "achInstructions": "ACH mokėjimo instrukcijos",
@@ -878,6 +935,12 @@
     "sermons": "Pamokslai",
     "toViewForm": "kad peržiūrėtumėte šią formą.",
     "verseOfTheDay": "Dienos eilutė"
+  },
+  "person": {
+    "email": "El. paštas",
+    "firstName": "Vardas",
+    "lastName": "Pavardė",
+    "name": "Vardas"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Savanorystės galimybės",
     "noPositions": "Šiuo metu šiame plane savanorių pareigų nėra.",
     "volunteer": "Savanoris"
+  },
+  "wrapper": {
+    "editAccount": "Redaguoti paskyrą",
+    "editChurchProfile": "Redaguoti bažnyčios profilį",
+    "editProfile": "Redaguoti profilį",
+    "logout": "Atsijungti",
+    "profile": "Profilis"
   }
 }

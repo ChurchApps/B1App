@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Bình luận",
+    "commentPlaceholder": "Thêm bình luận",
+    "contentShared": "Nội dung đã chia sẻ",
+    "group": "Nhóm",
+    "sharingToGroup": "Đang chia sẻ đến nhóm",
+    "validate": {
+      "addComment": "Thêm bình luận",
+      "loginFirst": "Đăng nhập trước",
+      "notMember": "Không phải thành viên",
+      "selectGroup": "Chọn nhóm"
+    }
+  },
   "b1ShareModal": {
     "post": "Đăng"
   },
@@ -65,6 +78,16 @@
       "title": "Chọn buổi nhóm"
     }
   },
+  "common": {
+    "cancel": "Hủy",
+    "close": "Đóng",
+    "date": "Ngày",
+    "edit": "Chỉnh sửa",
+    "pleaseWait": "Vui lòng chờ",
+    "save": "Lưu",
+    "search": "Tìm kiếm",
+    "update": "Cập nhật"
+  },
   "donate": {
     "authLanding": "Đây là trang có xác thực",
     "currentYearCsv": "Năm hiện tại (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Đang chờ xử lý",
     "printCurrentYear": "In dâng hiến năm hiện tại",
     "printLastYear": "In dâng hiến năm trước"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Email",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "validEmail": "Email hợp lệ"
+      }
+    },
+    "page": {
+      "amount": "Số tiền",
+      "batch": "Lô",
+      "date": "Ngày",
+      "fund": "Quỹ",
+      "method": "Phương thức",
+      "willAppear": "Sẽ xuất hiện"
+    }
   },
   "donationLanding": {
     "myDonation": "Dâng hiến của tôi"
@@ -300,11 +341,18 @@
     "userMenu": "Menu người dùng"
   },
   "iconPicker": {
+    "iconsAvailable": "Biểu tượng có sẵn",
+    "matchingResults": "Kết quả khớp",
+    "search": "Tìm kiếm",
     "searchAriaLabel": "tìm kiếm biểu tượng",
     "selectIcon": "Chọn biểu tượng {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Đăng nhập",
+    "register": "Đăng ký"
   },
   "loginClient": {
     "demoBody": "Đây là môi trường dùng thử. Tất cả dữ liệu sẽ bị xóa hàng đêm.",
@@ -524,11 +572,12 @@
       "send": "Gửi",
       "sendEmail": "Gửi email",
       "sendMessage": "Gửi tin nhắn",
+      "sendText": "Gửi tin nhắn văn bản",
+      "sermonLoadError": "Không thể tải bài giảng",
+      "sermonLoadErrorBody": "Đã xảy ra lỗi khi tải. Vui lòng kiểm tra kết nối và thử lại.",
       "sermonNotAvailable": "Bài giảng không khả dụng",
       "sermonPlural": "bài giảng",
       "sermonRemoved": "Bài giảng này có thể đã bị xóa hoặc không còn công khai.",
-      "sermonLoadError": "Không thể tải bài giảng",
-      "sermonLoadErrorBody": "Đã xảy ra lỗi khi tải. Vui lòng kiểm tra kết nối và thử lại.",
       "sermonSeries": "Loạt bài giảng",
       "sermonSingular": "bài giảng",
       "sermons": "Bài giảng",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Thứ tự buổi nhóm",
       "tabTeams": "Các đội",
       "team": "Đội",
+      "text": "Văn bản",
       "typeMessage": "Nhập tin nhắn…",
       "unableToLoadMessages": "Không thể tải tin nhắn.",
       "unableToLoadPlaylist": "Không thể tải danh sách phát",
@@ -733,16 +783,6 @@
       "votd": "Câu Kinh Thánh trong ngày"
     },
     "screens": {
-      "volunteerFull": "Đã đầy",
-      "volunteerOpen": "{} chỗ trống",
-      "volunteerPositionsFilled": "Đã điền {} trên {} vị trí",
-      "volunteerPositionOpen": "{} ({} chỗ trống)",
-      "volunteerViewSignUp": "Xem và Đăng ký",
-      "volunteerBrowseTitle": "Duyệt cơ hội",
-      "volunteerBrowseBody": "Hiện không có cơ hội tình nguyện nào. Vui lòng quay lại sau!",
-      "sermonsLoadError": "Không thể tải bài giảng",
-      "sermonsLoadErrorBody": "Đã xảy ra lỗi khi tải. Vui lòng thử lại.",
-      "sermonsGoBack": "Quay lại",
       "addToHomeScreen": "Thêm vào màn hình chính",
       "addToHomeScreenBody": "Cuộn xuống, nhấn Thêm vào màn hình chính, rồi nhấn Thêm. Xong!",
       "alreadyCheckedIn": "Đã điểm danh",
@@ -815,10 +855,13 @@
       "searchForMessage": "Tìm kiếm người để gửi tin nhắn",
       "searchMembers": "Tìm kiếm thành viên",
       "selectGroupsSubtitle": "Chọn nhóm cho từng thành viên gia đình",
+      "sermonsGoBack": "Quay lại",
+      "sermonsLoadError": "Không thể tải bài giảng",
+      "sermonsLoadErrorBody": "Đã xảy ra lỗi khi tải. Vui lòng thử lại.",
       "shareVotd": "Chia sẻ Câu Kinh Thánh trong ngày",
       "signInToCheckIn": "Vui lòng đăng nhập để điểm danh",
-      "signInToCheckInMessage": "Đăng nhập để điểm danh cho một buổi lễ.",
       "signInToCheckInCta": "Đăng nhập",
+      "signInToCheckInMessage": "Đăng nhập để điểm danh cho một buổi lễ.",
       "tabAccount": "Tài khoản",
       "tabDonate": "Dâng hiến",
       "tabHistory": "Lịch sử",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Không thể tải cấu hình hội thánh.",
       "unableToSubmitChanges": "Không thể gửi thay đổi.",
       "visibilityPreferencesSaved": "Đã lưu tùy chọn hiển thị.",
+      "volunteerBrowseBody": "Hiện không có cơ hội tình nguyện nào. Vui lòng quay lại sau!",
+      "volunteerBrowseTitle": "Duyệt cơ hội",
+      "volunteerFull": "Đã đầy",
+      "volunteerOpen": "{} chỗ trống",
+      "volunteerPositionOpen": "{} ({} chỗ trống)",
+      "volunteerPositionsFilled": "Đã điền {} trên {} vị trí",
+      "volunteerViewSignUp": "Xem và Đăng ký",
       "watchLive": "Xem trực tiếp"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "hôm qua"
   },
   "notes": {
+    "comment": "Bình luận",
+    "comments": "Bình luận",
     "list": {
       "loadMore": "Tải thêm",
       "loading": "Đang tải...",
       "showAll": "Hiển thị tất cả",
       "typeMessage": "Nhập tin nhắn...",
       "userAlt": "người dùng"
-    }
+    },
+    "startConversation": "Bắt đầu cuộc trò chuyện",
+    "validate": {
+      "content": "Nội dung"
+    },
+    "viewAll": "Xem tất cả"
   },
   "pageSlug": {
     "achInstructions": "Hướng dẫn thanh toán ACH",
@@ -878,6 +935,12 @@
     "sermons": "Bài giảng",
     "toViewForm": "để xem biểu mẫu này.",
     "verseOfTheDay": "Câu Kinh Thánh trong ngày"
+  },
+  "person": {
+    "email": "Email",
+    "firstName": "Tên",
+    "lastName": "Họ",
+    "name": "Họ và tên"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Cơ hội phục vụ",
     "noPositions": "Hiện không có vị trí phục vụ nào cho kế hoạch này.",
     "volunteer": "Phục vụ"
+  },
+  "wrapper": {
+    "editAccount": "Chỉnh sửa tài khoản",
+    "editChurchProfile": "Chỉnh sửa hồ sơ hội thánh",
+    "editProfile": "Chỉnh sửa hồ sơ",
+    "logout": "Đăng xuất",
+    "profile": "Hồ sơ"
   }
 }

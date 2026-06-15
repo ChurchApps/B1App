@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Yorum",
+    "commentPlaceholder": "Yorum Yaz",
+    "contentShared": "İçerik Paylaşıldı",
+    "group": "Grup",
+    "sharingToGroup": "Gruba Paylaşılıyor",
+    "validate": {
+      "addComment": "Yorum Ekle",
+      "loginFirst": "Önce Giriş Yapın",
+      "notMember": "Üye Değil",
+      "selectGroup": "Grup Seçin"
+    }
+  },
   "b1ShareModal": {
     "post": "Paylaş"
   },
@@ -65,6 +78,16 @@
       "title": "Hizmet Seçin"
     }
   },
+  "common": {
+    "cancel": "İptal",
+    "close": "Kapat",
+    "date": "Tarih",
+    "edit": "Düzenle",
+    "pleaseWait": "Lütfen Bekleyin",
+    "save": "Kaydet",
+    "search": "Ara",
+    "update": "Güncelle"
+  },
   "donate": {
     "authLanding": "Bu, kimlik doğrulamalı sayfadır",
     "currentYearCsv": "Bu Yıl (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Beklemede",
     "printCurrentYear": "Bu yılki bağışları yazdır",
     "printLastYear": "Geçen yılki bağışları yazdır"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-posta",
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "validEmail": "Geçerli E-posta"
+      }
+    },
+    "page": {
+      "amount": "Tutar",
+      "batch": "Toplu",
+      "date": "Tarih",
+      "fund": "Fon",
+      "method": "Yöntem",
+      "willAppear": "Görünecek"
+    }
   },
   "donationLanding": {
     "myDonation": "Bağışım"
@@ -300,11 +341,18 @@
     "userMenu": "Kullanıcı menüsü"
   },
   "iconPicker": {
+    "iconsAvailable": "Mevcut Simgeler",
+    "matchingResults": "Eşleşen Sonuçlar",
+    "search": "Ara",
     "searchAriaLabel": "simge ara",
     "selectIcon": "{} simgesini seç"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol"
   },
   "loginClient": {
     "demoBody": "Burası demo ortamıdır. Tüm veriler her gece silinir.",
@@ -524,11 +572,12 @@
       "send": "Gönder",
       "sendEmail": "E-posta gönder",
       "sendMessage": "Mesaj gönder",
+      "sendText": "Kısa mesaj gönder",
+      "sermonLoadError": "Vaaz yüklenemedi",
+      "sermonLoadErrorBody": "Yükleme sırasında bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
       "sermonNotAvailable": "Vaaz mevcut değil",
       "sermonPlural": "vaazlar",
       "sermonRemoved": "Bu vaaz kaldırılmış veya artık herkese açık olmayabilir.",
-      "sermonLoadError": "Vaaz yüklenemedi",
-      "sermonLoadErrorBody": "Yükleme sırasında bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyin.",
       "sermonSeries": "Vaaz Serisi",
       "sermonSingular": "vaaz",
       "sermons": "Vaazlar",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Hizmet Sırası",
       "tabTeams": "Takımlar",
       "team": "Takım",
+      "text": "Mesaj",
       "typeMessage": "Bir mesaj yazın…",
       "unableToLoadMessages": "Mesajlar yüklenemedi.",
       "unableToLoadPlaylist": "Oynatma Listesi Yüklenemedi",
@@ -733,16 +783,6 @@
       "votd": "Günün Ayeti"
     },
     "screens": {
-      "volunteerFull": "Dolu",
-      "volunteerOpen": "{} açık",
-      "volunteerPositionsFilled": "{} pozisyondan {} tanesi dolduruldu",
-      "volunteerPositionOpen": "{} ({} açık)",
-      "volunteerViewSignUp": "Görüntüle ve Kaydol",
-      "volunteerBrowseTitle": "Fırsatlara Göz Atın",
-      "volunteerBrowseBody": "Şu anda mevcut gönüllü fırsatı yok. Yakında tekrar kontrol edin!",
-      "sermonsLoadError": "Vaazlar yüklenemedi",
-      "sermonsLoadErrorBody": "Yüklenirken bir şeyler ters gitti. Lütfen tekrar deneyin.",
-      "sermonsGoBack": "Geri",
       "addToHomeScreen": "Ana Ekrana Ekle",
       "addToHomeScreenBody": "Aşağı kaydırın, Ana Ekrana Ekle'ye dokunun, sonra Ekle'ye basın. Bitti!",
       "alreadyCheckedIn": "Zaten Giriş Yapıldı",
@@ -815,10 +855,13 @@
       "searchForMessage": "Mesaj göndermek için kişi arayın",
       "searchMembers": "Üye Ara",
       "selectGroupsSubtitle": "Her aile üyesi için grup seçin",
+      "sermonsGoBack": "Geri",
+      "sermonsLoadError": "Vaazlar yüklenemedi",
+      "sermonsLoadErrorBody": "Yüklenirken bir şeyler ters gitti. Lütfen tekrar deneyin.",
       "shareVotd": "Günün Ayetini Paylaş",
       "signInToCheckIn": "Giriş yapmak için lütfen oturum açın",
-      "signInToCheckInMessage": "İbadete giriş yapmak için oturum açın.",
       "signInToCheckInCta": "Giriş Yap",
+      "signInToCheckInMessage": "İbadete giriş yapmak için oturum açın.",
       "tabAccount": "Hesap",
       "tabDonate": "Bağış Yap",
       "tabHistory": "Geçmiş",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Kilise yapılandırması yüklenemedi.",
       "unableToSubmitChanges": "Değişiklikler gönderilemedi.",
       "visibilityPreferencesSaved": "Görünürlük tercihleri kaydedildi.",
+      "volunteerBrowseBody": "Şu anda mevcut gönüllü fırsatı yok. Yakında tekrar kontrol edin!",
+      "volunteerBrowseTitle": "Fırsatlara Göz Atın",
+      "volunteerFull": "Dolu",
+      "volunteerOpen": "{} açık",
+      "volunteerPositionOpen": "{} ({} açık)",
+      "volunteerPositionsFilled": "{} pozisyondan {} tanesi dolduruldu",
+      "volunteerViewSignUp": "Görüntüle ve Kaydol",
       "watchLive": "Canlı İzle"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "dün"
   },
   "notes": {
+    "comment": "Yorum",
+    "comments": "Yorumlar",
     "list": {
       "loadMore": "Daha Fazla Yükle",
       "loading": "Yükleniyor...",
       "showAll": "Tümünü Göster",
       "typeMessage": "Bir mesaj yazın...",
       "userAlt": "kullanıcı"
-    }
+    },
+    "startConversation": "Konuşma Başlat",
+    "validate": {
+      "content": "İçerik"
+    },
+    "viewAll": "Tümünü Gör"
   },
   "pageSlug": {
     "achInstructions": "ACH Ödeme Talimatları",
@@ -878,6 +935,12 @@
     "sermons": "Vaazlar",
     "toViewForm": "bu formu görüntülemek için.",
     "verseOfTheDay": "Günün Ayeti"
+  },
+  "person": {
+    "email": "E-posta",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "name": "Ad Soyad"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Gönüllülük Fırsatları",
     "noPositions": "Bu plan için şu anda mevcut gönüllü pozisyonu yok.",
     "volunteer": "Gönüllü"
+  },
+  "wrapper": {
+    "editAccount": "Hesabı Düzenle",
+    "editChurchProfile": "Kilise Profilini Düzenle",
+    "editProfile": "Profili Düzenle",
+    "logout": "Çıkış Yap",
+    "profile": "Profil"
   }
 }

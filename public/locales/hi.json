@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "टिप्पणी",
+    "commentPlaceholder": "टिप्पणी लिखें",
+    "contentShared": "सामग्री साझा की गई",
+    "group": "समूह",
+    "sharingToGroup": "समूह में साझा कर रहे हैं",
+    "validate": {
+      "addComment": "टिप्पणी जोड़ें",
+      "loginFirst": "पहले लॉगिन करें",
+      "notMember": "सदस्य नहीं",
+      "selectGroup": "समूह चुनें"
+    }
+  },
   "b1ShareModal": {
     "post": "पोस्ट करें"
   },
@@ -65,6 +78,16 @@
       "title": "सेवा चुनें"
     }
   },
+  "common": {
+    "cancel": "रद्द करें",
+    "close": "बंद करें",
+    "date": "तारीख",
+    "edit": "संपादित करें",
+    "pleaseWait": "कृपया प्रतीक्षा करें",
+    "save": "सहेजें",
+    "search": "खोजें",
+    "update": "अपडेट करें"
+  },
   "donate": {
     "authLanding": "यह प्रमाणीकरण के साथ है",
     "currentYearCsv": "वर्तमान वर्ष (CSV)",
@@ -79,6 +102,24 @@
     "pending": "लंबित",
     "printCurrentYear": "वर्तमान वर्ष के दान प्रिंट करें",
     "printLastYear": "पिछले वर्ष के दान प्रिंट करें"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "ईमेल",
+        "firstName": "प्रथम नाम",
+        "lastName": "उपनाम",
+        "validEmail": "मान्य ईमेल"
+      }
+    },
+    "page": {
+      "amount": "राशि",
+      "batch": "बैच",
+      "date": "तारीख",
+      "fund": "फंड",
+      "method": "तरीका",
+      "willAppear": "दिखाई देगा"
+    }
   },
   "donationLanding": {
     "myDonation": "मेरा दान"
@@ -300,11 +341,18 @@
     "userMenu": "उपयोगकर्ता मेनू"
   },
   "iconPicker": {
+    "iconsAvailable": "उपलब्ध आइकन",
+    "matchingResults": "मिलान परिणाम",
+    "search": "खोजें",
     "searchAriaLabel": "आइकन खोजें",
     "selectIcon": "{} आइकन चुनें"
   },
   "loadingPage": {
     "logoAlt": "लोगो"
+  },
+  "login": {
+    "login": "लॉगिन",
+    "register": "पंजीकरण करें"
   },
   "loginClient": {
     "demoBody": "यह डेमो वातावरण है। सभी डेटा रात में मिटा दिया जाता है।",
@@ -524,11 +572,12 @@
       "send": "भेजें",
       "sendEmail": "ईमेल भेजें",
       "sendMessage": "संदेश भेजें",
+      "sendText": "टेक्स्ट संदेश भेजें",
+      "sermonLoadError": "उपदेश लोड नहीं हो सका",
+      "sermonLoadErrorBody": "लोड करते समय कुछ गलत हो गया। कृपया अपना कनेक्शन जाँचें और पुनः प्रयास करें।",
       "sermonNotAvailable": "उपदेश उपलब्ध नहीं है",
       "sermonPlural": "उपदेश",
       "sermonRemoved": "हो सकता है कि यह उपदेश हटा दिया गया हो या अब सार्वजनिक न हो।",
-      "sermonLoadError": "उपदेश लोड नहीं हो सका",
-      "sermonLoadErrorBody": "लोड करते समय कुछ गलत हो गया। कृपया अपना कनेक्शन जाँचें और पुनः प्रयास करें।",
       "sermonSeries": "उपदेश श्रृंखला",
       "sermonSingular": "उपदेश",
       "sermons": "उपदेश",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "सेवा क्रम",
       "tabTeams": "टीमें",
       "team": "टीम",
+      "text": "टेक्स्ट",
       "typeMessage": "संदेश लिखें…",
       "unableToLoadMessages": "संदेश लोड करने में असमर्थ।",
       "unableToLoadPlaylist": "प्लेलिस्ट लोड करने में असमर्थ",
@@ -733,16 +783,6 @@
       "votd": "आज का वचन"
     },
     "screens": {
-      "volunteerFull": "भरा हुआ",
-      "volunteerOpen": "{} रिक्त",
-      "volunteerPositionsFilled": "{} में से {} पद भरे गए",
-      "volunteerPositionOpen": "{} ({} रिक्त)",
-      "volunteerViewSignUp": "देखें और साइन अप करें",
-      "volunteerBrowseTitle": "अवसर ब्राउज़ करें",
-      "volunteerBrowseBody": "अभी कोई स्वयंसेवक अवसर उपलब्ध नहीं है। जल्द ही फिर से देखें!",
-      "sermonsLoadError": "उपदेश लोड करने में असमर्थ",
-      "sermonsLoadErrorBody": "लोड करते समय कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
-      "sermonsGoBack": "वापस जाएं",
       "addToHomeScreen": "होम स्क्रीन में जोड़ें",
       "addToHomeScreenBody": "नीचे स्क्रॉल करें, होम स्क्रीन में जोड़ें पर टैप करें, फिर जोड़ें। हो गया!",
       "alreadyCheckedIn": "पहले से चेक-इन है",
@@ -815,10 +855,13 @@
       "searchForMessage": "संदेश भेजने के लिए व्यक्ति खोजें",
       "searchMembers": "सदस्य खोजें",
       "selectGroupsSubtitle": "प्रत्येक परिवार सदस्य के लिए समूह चुनें",
+      "sermonsGoBack": "वापस जाएं",
+      "sermonsLoadError": "उपदेश लोड करने में असमर्थ",
+      "sermonsLoadErrorBody": "लोड करते समय कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
       "shareVotd": "आज का वचन साझा करें",
       "signInToCheckIn": "चेक इन करने के लिए कृपया साइन इन करें",
-      "signInToCheckInMessage": "किसी सेवा में चेक इन करने के लिए लॉग इन करें।",
       "signInToCheckInCta": "साइन इन",
+      "signInToCheckInMessage": "किसी सेवा में चेक इन करने के लिए लॉग इन करें।",
       "tabAccount": "खाता",
       "tabDonate": "दान करें",
       "tabHistory": "इतिहास",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "चर्च कॉन्फ़िगरेशन लोड करने में असमर्थ।",
       "unableToSubmitChanges": "बदलाव सबमिट करने में असमर्थ।",
       "visibilityPreferencesSaved": "दृश्यता प्राथमिकताएं सहेजी गईं।",
+      "volunteerBrowseBody": "अभी कोई स्वयंसेवक अवसर उपलब्ध नहीं है। जल्द ही फिर से देखें!",
+      "volunteerBrowseTitle": "अवसर ब्राउज़ करें",
+      "volunteerFull": "भरा हुआ",
+      "volunteerOpen": "{} रिक्त",
+      "volunteerPositionOpen": "{} ({} रिक्त)",
+      "volunteerPositionsFilled": "{} में से {} पद भरे गए",
+      "volunteerViewSignUp": "देखें और साइन अप करें",
       "watchLive": "लाइव देखें"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "कल"
   },
   "notes": {
+    "comment": "टिप्पणी",
+    "comments": "टिप्पणियां",
     "list": {
       "loadMore": "और लोड करें",
       "loading": "लोड हो रहा है...",
       "showAll": "सभी दिखाएं",
       "typeMessage": "संदेश लिखें...",
       "userAlt": "उपयोगकर्ता"
-    }
+    },
+    "startConversation": "बातचीत शुरू करें",
+    "validate": {
+      "content": "सामग्री"
+    },
+    "viewAll": "सभी देखें"
   },
   "pageSlug": {
     "achInstructions": "ACH भुगतान के लिए निर्देश",
@@ -878,6 +935,12 @@
     "sermons": "उपदेश",
     "toViewForm": "इस फ़ॉर्म को देखने के लिए।",
     "verseOfTheDay": "आज का वचन"
+  },
+  "person": {
+    "email": "ईमेल",
+    "firstName": "प्रथम नाम",
+    "lastName": "उपनाम",
+    "name": "नाम"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "स्वयंसेवा अवसर",
     "noPositions": "इस योजना के लिए वर्तमान में कोई स्वयंसेवक पद उपलब्ध नहीं हैं।",
     "volunteer": "स्वयंसेवक"
+  },
+  "wrapper": {
+    "editAccount": "खाता संपादित करें",
+    "editChurchProfile": "चर्च प्रोफ़ाइल संपादित करें",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
+    "logout": "लॉगआउट",
+    "profile": "प्रोफ़ाइल"
   }
 }

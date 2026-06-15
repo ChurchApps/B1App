@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "コメント",
+    "commentPlaceholder": "コメントを入力してください",
+    "contentShared": "コンテンツが共有されました",
+    "group": "グループ",
+    "sharingToGroup": "グループに共有中",
+    "validate": {
+      "addComment": "コメントを追加してください",
+      "loginFirst": "先にログインしてください",
+      "notMember": "メンバーではありません",
+      "selectGroup": "グループを選択してください"
+    }
+  },
   "b1ShareModal": {
     "post": "投稿"
   },
@@ -65,6 +78,16 @@
       "title": "礼拝を選択"
     }
   },
+  "common": {
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "date": "日付",
+    "edit": "編集",
+    "pleaseWait": "お待ちください",
+    "save": "保存",
+    "search": "検索",
+    "update": "更新"
+  },
   "donate": {
     "authLanding": "認証付きです",
     "currentYearCsv": "今年(CSV)",
@@ -79,6 +102,24 @@
     "pending": "保留中",
     "printCurrentYear": "今年の献金を印刷",
     "printLastYear": "昨年の献金を印刷"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "メール",
+        "firstName": "名",
+        "lastName": "姓",
+        "validEmail": "有効なメールアドレス"
+      }
+    },
+    "page": {
+      "amount": "金額",
+      "batch": "バッチ",
+      "date": "日付",
+      "fund": "献金基金",
+      "method": "方法",
+      "willAppear": "明細に表示されます"
+    }
   },
   "donationLanding": {
     "myDonation": "マイ献金"
@@ -300,11 +341,18 @@
     "userMenu": "ユーザーメニュー"
   },
   "iconPicker": {
+    "iconsAvailable": "利用可能なアイコン",
+    "matchingResults": "一致する結果",
+    "search": "検索",
     "searchAriaLabel": "アイコンを検索",
     "selectIcon": "{}アイコンを選択"
   },
   "loadingPage": {
     "logoAlt": "ロゴ"
+  },
+  "login": {
+    "login": "ログイン",
+    "register": "登録"
   },
   "loginClient": {
     "demoBody": "これはデモ環境です。すべてのデータは毎晩消去されます。",
@@ -524,11 +572,12 @@
       "send": "送信",
       "sendEmail": "メールを送信",
       "sendMessage": "メッセージを送信",
+      "sendText": "テキストメッセージを送る",
+      "sermonLoadError": "説教を読み込めませんでした",
+      "sermonLoadErrorBody": "読み込み中に問題が発生しました。接続を確認して、もう一度お試しください。",
       "sermonNotAvailable": "説教は利用できません",
       "sermonPlural": "説教",
       "sermonRemoved": "この説教は削除されたか、公開されていない可能性があります。",
-      "sermonLoadError": "説教を読み込めませんでした",
-      "sermonLoadErrorBody": "読み込み中に問題が発生しました。接続を確認して、もう一度お試しください。",
       "sermonSeries": "説教シリーズ",
       "sermonSingular": "説教",
       "sermons": "説教",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "礼拝順序",
       "tabTeams": "チーム",
       "team": "チーム",
+      "text": "テキスト",
       "typeMessage": "メッセージを入力…",
       "unableToLoadMessages": "メッセージを読み込めませんでした。",
       "unableToLoadPlaylist": "プレイリストを読み込めません",
@@ -733,16 +783,6 @@
       "votd": "今日の聖句"
     },
     "screens": {
-      "volunteerFull": "満員",
-      "volunteerOpen": "残り{}名",
-      "volunteerPositionsFilled": "{}件中{}件の枠が埋まりました",
-      "volunteerPositionOpen": "{}（残り{}名）",
-      "volunteerViewSignUp": "詳細を見て申し込む",
-      "volunteerBrowseTitle": "募集を見る",
-      "volunteerBrowseBody": "現在、募集中のボランティアはありません。またご確認ください！",
-      "sermonsLoadError": "説教を読み込めません",
-      "sermonsLoadErrorBody": "読み込み中に問題が発生しました。もう一度お試しください。",
-      "sermonsGoBack": "戻る",
       "addToHomeScreen": "ホーム画面に追加",
       "addToHomeScreenBody": "下にスクロールして「ホーム画面に追加」をタップし、「追加」を押してください。完了です!",
       "alreadyCheckedIn": "すでにチェックイン済み",
@@ -815,10 +855,13 @@
       "searchForMessage": "メッセージを送る人を検索",
       "searchMembers": "メンバーを検索",
       "selectGroupsSubtitle": "家族の各メンバーのグループを選択してください",
+      "sermonsGoBack": "戻る",
+      "sermonsLoadError": "説教を読み込めません",
+      "sermonsLoadErrorBody": "読み込み中に問題が発生しました。もう一度お試しください。",
       "shareVotd": "今日の聖句を共有",
       "signInToCheckIn": "チェックインするにはサインインしてください",
-      "signInToCheckInMessage": "礼拝にチェックインするにはログインしてください。",
       "signInToCheckInCta": "サインイン",
+      "signInToCheckInMessage": "礼拝にチェックインするにはログインしてください。",
       "tabAccount": "アカウント",
       "tabDonate": "献金",
       "tabHistory": "履歴",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "教会の設定を読み込めませんでした。",
       "unableToSubmitChanges": "変更を送信できませんでした。",
       "visibilityPreferencesSaved": "公開設定を保存しました。",
+      "volunteerBrowseBody": "現在、募集中のボランティアはありません。またご確認ください！",
+      "volunteerBrowseTitle": "募集を見る",
+      "volunteerFull": "満員",
+      "volunteerOpen": "残り{}名",
+      "volunteerPositionOpen": "{}（残り{}名）",
+      "volunteerPositionsFilled": "{}件中{}件の枠が埋まりました",
+      "volunteerViewSignUp": "詳細を見て申し込む",
       "watchLive": "ライブ視聴"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "昨日"
   },
   "notes": {
+    "comment": "コメント",
+    "comments": "コメント一覧",
     "list": {
       "loadMore": "さらに読み込む",
       "loading": "読み込み中...",
       "showAll": "すべて表示",
       "typeMessage": "メッセージを入力...",
       "userAlt": "ユーザー"
-    }
+    },
+    "startConversation": "会話を始める",
+    "validate": {
+      "content": "内容"
+    },
+    "viewAll": "すべて表示"
   },
   "pageSlug": {
     "achInstructions": "ACH支払いの手順",
@@ -878,6 +935,12 @@
     "sermons": "説教",
     "toViewForm": "このフォームを表示するために。",
     "verseOfTheDay": "今日の聖句"
+  },
+  "person": {
+    "email": "メール",
+    "firstName": "名",
+    "lastName": "姓",
+    "name": "名前"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "ボランティアの機会",
     "noPositions": "この予定では現在利用可能なボランティアポジションはありません。",
     "volunteer": "ボランティア"
+  },
+  "wrapper": {
+    "editAccount": "アカウントを編集",
+    "editChurchProfile": "教会プロフィールを編集",
+    "editProfile": "プロフィールを編集",
+    "logout": "ログアウト",
+    "profile": "プロフィール"
   }
 }

@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Kommentar",
+    "commentPlaceholder": "Skriv en kommentar...",
+    "contentShared": "Indhold delt",
+    "group": "Gruppe",
+    "sharingToGroup": "Deler til gruppe",
+    "validate": {
+      "addComment": "Tilføj en kommentar",
+      "loginFirst": "Log ind først",
+      "notMember": "Ikke medlem",
+      "selectGroup": "Vælg en gruppe"
+    }
+  },
   "b1ShareModal": {
     "post": "Opslag"
   },
@@ -65,6 +78,16 @@
       "title": "Vælg gudstjeneste"
     }
   },
+  "common": {
+    "cancel": "Annuller",
+    "close": "Luk",
+    "date": "Dato",
+    "edit": "Rediger",
+    "pleaseWait": "Vent venligst",
+    "save": "Gem",
+    "search": "Søg",
+    "update": "Opdater"
+  },
   "donate": {
     "authLanding": "Dette er med godkendelse",
     "currentYearCsv": "Indeværende år (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Afventer",
     "printCurrentYear": "Udskriv indeværende års donationer",
     "printLastYear": "Udskriv sidste års donationer"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-mail",
+        "firstName": "Fornavn",
+        "lastName": "Efternavn",
+        "validEmail": "Gyldig e-mail"
+      }
+    },
+    "page": {
+      "amount": "Beløb",
+      "batch": "Batch",
+      "date": "Dato",
+      "fund": "Fond",
+      "method": "Metode",
+      "willAppear": "Vil fremgå"
+    }
   },
   "donationLanding": {
     "myDonation": "Min donation"
@@ -300,11 +341,18 @@
     "userMenu": "Brugermenu"
   },
   "iconPicker": {
+    "iconsAvailable": "Tilgængelige ikoner",
+    "matchingResults": "Matchende resultater",
+    "search": "Søg",
     "searchAriaLabel": "søg ikoner",
     "selectIcon": "Vælg {} ikon"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Log ind",
+    "register": "Opret konto"
   },
   "loginClient": {
     "demoBody": "Dette er demo-miljøet. Alle data slettes hver nat.",
@@ -524,11 +572,12 @@
       "send": "Send",
       "sendEmail": "Send e-mail",
       "sendMessage": "Send besked",
+      "sendText": "Send sms",
+      "sermonLoadError": "Prædikenen kunne ikke indlæses",
+      "sermonLoadErrorBody": "Noget gik galt under indlæsningen. Kontrollér din forbindelse, og prøv igen.",
       "sermonNotAvailable": "Prædiken ikke tilgængelig",
       "sermonPlural": "prædikener",
       "sermonRemoved": "Denne prædiken er muligvis blevet fjernet eller er ikke længere offentlig.",
-      "sermonLoadError": "Prædikenen kunne ikke indlæses",
-      "sermonLoadErrorBody": "Noget gik galt under indlæsningen. Kontrollér din forbindelse, og prøv igen.",
       "sermonSeries": "Prædikenserie",
       "sermonSingular": "prædiken",
       "sermons": "Prædikener",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Gudstjenesteorden",
       "tabTeams": "Teams",
       "team": "Team",
+      "text": "Tekst",
       "typeMessage": "Skriv en besked…",
       "unableToLoadMessages": "Kunne ikke indlæse beskeder.",
       "unableToLoadPlaylist": "Kunne ikke indlæse afspilningsliste",
@@ -733,16 +783,6 @@
       "votd": "Dagens vers"
     },
     "screens": {
-      "volunteerFull": "Fyldt",
-      "volunteerOpen": "{} ledige",
-      "volunteerPositionsFilled": "{} af {} pladser besat",
-      "volunteerPositionOpen": "{} ({} ledige)",
-      "volunteerViewSignUp": "Se og tilmeld",
-      "volunteerBrowseTitle": "Gennemse muligheder",
-      "volunteerBrowseBody": "Der er ingen frivilligmuligheder tilgængelige lige nu. Kom snart tilbage!",
-      "sermonsLoadError": "Kan ikke indlæse prædikener",
-      "sermonsLoadErrorBody": "Noget gik galt under indlæsningen. Prøv venligst igen.",
-      "sermonsGoBack": "Tilbage",
       "addToHomeScreen": "Føj til hjemmeskærm",
       "addToHomeScreenBody": "Rul ned, tryk på Føj til hjemmeskærm, og derefter Tilføj. Færdig!",
       "alreadyCheckedIn": "Allerede checket ind",
@@ -815,10 +855,13 @@
       "searchForMessage": "Søg efter en person at sende besked til",
       "searchMembers": "Søg medlemmer",
       "selectGroupsSubtitle": "Vælg grupper for hvert familiemedlem",
+      "sermonsGoBack": "Tilbage",
+      "sermonsLoadError": "Kan ikke indlæse prædikener",
+      "sermonsLoadErrorBody": "Noget gik galt under indlæsningen. Prøv venligst igen.",
       "shareVotd": "Del dagens vers",
       "signInToCheckIn": "Log ind for at tjekke ind",
-      "signInToCheckInMessage": "Log ind for at tjekke ind til en gudstjeneste.",
       "signInToCheckInCta": "Log ind",
+      "signInToCheckInMessage": "Log ind for at tjekke ind til en gudstjeneste.",
       "tabAccount": "Konto",
       "tabDonate": "Doner",
       "tabHistory": "Historik",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Kunne ikke indlæse kirkekonfiguration.",
       "unableToSubmitChanges": "Ændringerne kunne ikke sendes.",
       "visibilityPreferencesSaved": "Synlighedsindstillinger gemt.",
+      "volunteerBrowseBody": "Der er ingen frivilligmuligheder tilgængelige lige nu. Kom snart tilbage!",
+      "volunteerBrowseTitle": "Gennemse muligheder",
+      "volunteerFull": "Fyldt",
+      "volunteerOpen": "{} ledige",
+      "volunteerPositionOpen": "{} ({} ledige)",
+      "volunteerPositionsFilled": "{} af {} pladser besat",
+      "volunteerViewSignUp": "Se og tilmeld",
       "watchLive": "Se live"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "i går"
   },
   "notes": {
+    "comment": "Kommentar",
+    "comments": "Kommentarer",
     "list": {
       "loadMore": "Indlæs flere",
       "loading": "Indlæser...",
       "showAll": "Vis alle",
       "typeMessage": "Skriv en besked...",
       "userAlt": "bruger"
-    }
+    },
+    "startConversation": "Start samtale",
+    "validate": {
+      "content": "Indhold"
+    },
+    "viewAll": "Se alle"
   },
   "pageSlug": {
     "achInstructions": "Instruktioner til ACH-betaling",
@@ -878,6 +935,12 @@
     "sermons": "Prædikener",
     "toViewForm": "for at se denne formular.",
     "verseOfTheDay": "Dagens vers"
+  },
+  "person": {
+    "email": "E-mail",
+    "firstName": "Fornavn",
+    "lastName": "Efternavn",
+    "name": "Navn"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Frivilligmuligheder",
     "noPositions": "Ingen frivilligpositioner er i øjeblikket tilgængelige for denne plan.",
     "volunteer": "Frivillig"
+  },
+  "wrapper": {
+    "editAccount": "Rediger konto",
+    "editChurchProfile": "Rediger kirkeprofil",
+    "editProfile": "Rediger profil",
+    "logout": "Log ud",
+    "profile": "Profil"
   }
 }

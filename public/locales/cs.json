@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Komentář",
+    "commentPlaceholder": "Zástupný text komentáře",
+    "contentShared": "Obsah sdílen",
+    "group": "Skupina",
+    "sharingToGroup": "Sdílení do skupiny",
+    "validate": {
+      "addComment": "Přidat komentář",
+      "loginFirst": "Nejprve se přihlaste",
+      "notMember": "Nejste členem",
+      "selectGroup": "Vybrat skupinu"
+    }
+  },
   "b1ShareModal": {
     "post": "Příspěvek"
   },
@@ -65,6 +78,16 @@
       "title": "Vybrat bohoslužbu"
     }
   },
+  "common": {
+    "cancel": "Zrušit",
+    "close": "Zavřít",
+    "date": "Datum",
+    "edit": "Upravit",
+    "pleaseWait": "Prosím čekejte",
+    "save": "Uložit",
+    "search": "Hledat",
+    "update": "Aktualizovat"
+  },
   "donate": {
     "authLanding": "Toto je s ověřením",
     "currentYearCsv": "Aktuální rok (CSV)",
@@ -79,6 +102,24 @@
     "pending": "Čeká na vyřízení",
     "printCurrentYear": "Tisk darů za aktuální rok",
     "printLastYear": "Tisk darů za minulý rok"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "E-mail",
+        "firstName": "Křestní jméno",
+        "lastName": "Příjmení",
+        "validEmail": "Platný e-mail"
+      }
+    },
+    "page": {
+      "amount": "Částka",
+      "batch": "Dávka",
+      "date": "Datum",
+      "fund": "Fond",
+      "method": "Metoda",
+      "willAppear": "Zobrazí se"
+    }
   },
   "donationLanding": {
     "myDonation": "Můj dar"
@@ -300,11 +341,18 @@
     "userMenu": "Uživatelská nabídka"
   },
   "iconPicker": {
+    "iconsAvailable": "Dostupné ikony",
+    "matchingResults": "Odpovídající výsledky",
+    "search": "Hledat",
     "searchAriaLabel": "hledat ikony",
     "selectIcon": "Vybrat ikonu {}"
   },
   "loadingPage": {
     "logoAlt": "logo"
+  },
+  "login": {
+    "login": "Přihlásit se",
+    "register": "Registrovat"
   },
   "loginClient": {
     "demoBody": "Toto je demo prostředí. Všechna data jsou každou noc vymazána.",
@@ -524,11 +572,12 @@
       "send": "Odeslat",
       "sendEmail": "Odeslat e-mail",
       "sendMessage": "Odeslat zprávu",
+      "sendText": "Odeslat textovou zprávu",
+      "sermonLoadError": "Kázání se nepodařilo načíst",
+      "sermonLoadErrorBody": "Při načítání došlo k chybě. Zkontrolujte připojení a zkuste to znovu.",
       "sermonNotAvailable": "Kázání není k dispozici",
       "sermonPlural": "kázání",
       "sermonRemoved": "Toto kázání mohlo být odstraněno nebo již není veřejné.",
-      "sermonLoadError": "Kázání se nepodařilo načíst",
-      "sermonLoadErrorBody": "Při načítání došlo k chybě. Zkontrolujte připojení a zkuste to znovu.",
       "sermonSeries": "Série kázání",
       "sermonSingular": "kázání",
       "sermons": "Kázání",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Pořad bohoslužby",
       "tabTeams": "Týmy",
       "team": "Tým",
+      "text": "Text",
       "typeMessage": "Napište zprávu…",
       "unableToLoadMessages": "Nelze načíst zprávy.",
       "unableToLoadPlaylist": "Nelze načíst playlist",
@@ -733,16 +783,6 @@
       "votd": "Verš dne"
     },
     "screens": {
-      "volunteerFull": "Obsazeno",
-      "volunteerOpen": "{} volných",
-      "volunteerPositionsFilled": "Obsazeno {} z {} pozic",
-      "volunteerPositionOpen": "{} ({} volných)",
-      "volunteerViewSignUp": "Zobrazit a přihlásit se",
-      "volunteerBrowseTitle": "Procházet příležitosti",
-      "volunteerBrowseBody": "Momentálně nejsou k dispozici žádné dobrovolnické příležitosti. Zkuste to brzy znovu!",
-      "sermonsLoadError": "Nelze načíst kázání",
-      "sermonsLoadErrorBody": "Při načítání došlo k chybě. Zkuste to prosím znovu.",
-      "sermonsGoBack": "Zpět",
       "addToHomeScreen": "Přidat na plochu",
       "addToHomeScreenBody": "Posuňte dolů, klepněte na Přidat na plochu, poté Přidat. Hotovo!",
       "alreadyCheckedIn": "Již přihlášen",
@@ -815,10 +855,13 @@
       "searchForMessage": "Hledat osobu, které chcete poslat zprávu",
       "searchMembers": "Hledat členy",
       "selectGroupsSubtitle": "Vyberte skupiny pro každého člena rodiny",
+      "sermonsGoBack": "Zpět",
+      "sermonsLoadError": "Nelze načíst kázání",
+      "sermonsLoadErrorBody": "Při načítání došlo k chybě. Zkuste to prosím znovu.",
       "shareVotd": "Sdílet verš dne",
       "signInToCheckIn": "Pro přihlášení se prosím přihlaste",
-      "signInToCheckInMessage": "Přihlaste se, abyste se mohli přihlásit na bohoslužbu.",
       "signInToCheckInCta": "Přihlásit se",
+      "signInToCheckInMessage": "Přihlaste se, abyste se mohli přihlásit na bohoslužbu.",
       "tabAccount": "Účet",
       "tabDonate": "Darovat",
       "tabHistory": "Historie",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Nelze načíst konfiguraci sboru.",
       "unableToSubmitChanges": "Změny nelze odeslat.",
       "visibilityPreferencesSaved": "Nastavení viditelnosti uloženo.",
+      "volunteerBrowseBody": "Momentálně nejsou k dispozici žádné dobrovolnické příležitosti. Zkuste to brzy znovu!",
+      "volunteerBrowseTitle": "Procházet příležitosti",
+      "volunteerFull": "Obsazeno",
+      "volunteerOpen": "{} volných",
+      "volunteerPositionOpen": "{} ({} volných)",
+      "volunteerPositionsFilled": "Obsazeno {} z {} pozic",
+      "volunteerViewSignUp": "Zobrazit a přihlásit se",
       "watchLive": "Sledovat živě"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "včera"
   },
   "notes": {
+    "comment": "Komentář",
+    "comments": "Komentáře",
     "list": {
       "loadMore": "Načíst další",
       "loading": "Načítání...",
       "showAll": "Zobrazit vše",
       "typeMessage": "Napište zprávu...",
       "userAlt": "uživatel"
-    }
+    },
+    "startConversation": "Zahájit konverzaci",
+    "validate": {
+      "content": "Obsah"
+    },
+    "viewAll": "Zobrazit vše"
   },
   "pageSlug": {
     "achInstructions": "Pokyny pro platbu ACH",
@@ -878,6 +935,12 @@
     "sermons": "Kázání",
     "toViewForm": "pro zobrazení tohoto formuláře.",
     "verseOfTheDay": "Verš dne"
+  },
+  "person": {
+    "email": "E-mail",
+    "firstName": "Křestní jméno",
+    "lastName": "Příjmení",
+    "name": "Jméno"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Příležitosti pro dobrovolníky",
     "noPositions": "Pro tento plán momentálně nejsou k dispozici žádné pozice pro dobrovolníky.",
     "volunteer": "Dobrovolník"
+  },
+  "wrapper": {
+    "editAccount": "Upravit účet",
+    "editChurchProfile": "Upravit profil sboru",
+    "editProfile": "Upravit profil",
+    "logout": "Odhlásit se",
+    "profile": "Profil"
   }
 }

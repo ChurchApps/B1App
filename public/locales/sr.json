@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "Коментар",
+    "commentPlaceholder": "Унесите коментар",
+    "contentShared": "Садржај је подељен",
+    "group": "Група",
+    "sharingToGroup": "Дељење у групу",
+    "validate": {
+      "addComment": "Додај коментар",
+      "loginFirst": "Прво се пријавите",
+      "notMember": "Нисте члан",
+      "selectGroup": "Изаберите групу"
+    }
+  },
   "b1ShareModal": {
     "post": "Објави"
   },
@@ -65,6 +78,16 @@
       "title": "Изаберите службу"
     }
   },
+  "common": {
+    "cancel": "Откажи",
+    "close": "Затвори",
+    "date": "Датум",
+    "edit": "Измени",
+    "pleaseWait": "Молимо сачекајте",
+    "save": "Сачувај",
+    "search": "Тражи",
+    "update": "Ажурирај"
+  },
   "donate": {
     "authLanding": "Ово је са аутентификацијом",
     "currentYearCsv": "Текућа година (CSV)",
@@ -79,6 +102,24 @@
     "pending": "На чекању",
     "printCurrentYear": "Штампај прилоге за текућу годину",
     "printLastYear": "Штампај прилоге за прошлу годину"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "Имејл",
+        "firstName": "Име",
+        "lastName": "Презиме",
+        "validEmail": "Исправан имејл"
+      }
+    },
+    "page": {
+      "amount": "Износ",
+      "batch": "Серија",
+      "date": "Датум",
+      "fund": "Фонд",
+      "method": "Начин",
+      "willAppear": "Биће приказано"
+    }
   },
   "donationLanding": {
     "myDonation": "Мој прилог"
@@ -300,11 +341,18 @@
     "userMenu": "Кориснички мени"
   },
   "iconPicker": {
+    "iconsAvailable": "Доступне иконе",
+    "matchingResults": "Резултати претраге",
+    "search": "Тражи",
     "searchAriaLabel": "тражи иконе",
     "selectIcon": "Изабери {} икону"
   },
   "loadingPage": {
     "logoAlt": "лого"
+  },
+  "login": {
+    "login": "Пријава",
+    "register": "Региструј се"
   },
   "loginClient": {
     "demoBody": "Ово је демо окружење. Сви подаци се бришу сваке ноћи.",
@@ -524,11 +572,12 @@
       "send": "Пошаљи",
       "sendEmail": "Пошаљи имејл",
       "sendMessage": "Пошаљи поруку",
+      "sendText": "Пошаљи текстуалну поруку",
+      "sermonLoadError": "Није могуће учитати проповед",
+      "sermonLoadErrorBody": "Дошло је до грешке при учитавању. Проверите везу и покушајте поново.",
       "sermonNotAvailable": "Проповед није доступна",
       "sermonPlural": "проповеди",
       "sermonRemoved": "Ова проповед је можда уклоњена или више није јавна.",
-      "sermonLoadError": "Није могуће учитати проповед",
-      "sermonLoadErrorBody": "Дошло је до грешке при учитавању. Проверите везу и покушајте поново.",
       "sermonSeries": "Серија проповеди",
       "sermonSingular": "проповед",
       "sermons": "Проповеди",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "Редослед службе",
       "tabTeams": "Тимови",
       "team": "Тим",
+      "text": "Текст",
       "typeMessage": "Откуцајте поруку…",
       "unableToLoadMessages": "Учитавање порука није успело.",
       "unableToLoadPlaylist": "Учитавање плејлисте није успело",
@@ -733,16 +783,6 @@
       "votd": "Стих дана"
     },
     "screens": {
-      "volunteerFull": "Попуњено",
-      "volunteerOpen": "{} слободно",
-      "volunteerPositionsFilled": "Попуњено {} од {} позиција",
-      "volunteerPositionOpen": "{} ({} слободно)",
-      "volunteerViewSignUp": "Погледај и пријави се",
-      "volunteerBrowseTitle": "Прегледајте прилике",
-      "volunteerBrowseBody": "Тренутно нема доступних волонтерских прилика. Проверите поново ускоро!",
-      "sermonsLoadError": "Није могуће учитати проповеди",
-      "sermonsLoadErrorBody": "Нешто је пошло наопако приликом учитавања. Покушајте поново.",
-      "sermonsGoBack": "Назад",
       "addToHomeScreen": "Додај на почетни екран",
       "addToHomeScreenBody": "Скролујте надоле, додирните Додај на почетни екран, затим Додај. Готово!",
       "alreadyCheckedIn": "Већ пријављен",
@@ -815,10 +855,13 @@
       "searchForMessage": "Тражи особу за слање поруке",
       "searchMembers": "Претражи чланове",
       "selectGroupsSubtitle": "Izaberite grupe za svakog člana porodice",
+      "sermonsGoBack": "Назад",
+      "sermonsLoadError": "Није могуће учитати проповеди",
+      "sermonsLoadErrorBody": "Нешто је пошло наопако приликом учитавања. Покушајте поново.",
       "shareVotd": "Подели стих дана",
       "signInToCheckIn": "Prijavite se da biste se čekirali",
-      "signInToCheckInMessage": "Prijavite se da biste se čekirali na bogosluženje.",
       "signInToCheckInCta": "Пријава",
+      "signInToCheckInMessage": "Prijavite se da biste se čekirali na bogosluženje.",
       "tabAccount": "Налог",
       "tabDonate": "Приложи",
       "tabHistory": "Историја",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "Учитавање конфигурације цркве није успело.",
       "unableToSubmitChanges": "Slanje izmena nije uspelo.",
       "visibilityPreferencesSaved": "Podešavanja vidljivosti su sačuvana.",
+      "volunteerBrowseBody": "Тренутно нема доступних волонтерских прилика. Проверите поново ускоро!",
+      "volunteerBrowseTitle": "Прегледајте прилике",
+      "volunteerFull": "Попуњено",
+      "volunteerOpen": "{} слободно",
+      "volunteerPositionOpen": "{} ({} слободно)",
+      "volunteerPositionsFilled": "Попуњено {} од {} позиција",
+      "volunteerViewSignUp": "Погледај и пријави се",
       "watchLive": "Гледај уживо"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "јуче"
   },
   "notes": {
+    "comment": "Коментар",
+    "comments": "Коментари",
     "list": {
       "loadMore": "Учитај још",
       "loading": "Учитавање...",
       "showAll": "Прикажи све",
       "typeMessage": "Откуцајте поруку...",
       "userAlt": "корисник"
-    }
+    },
+    "startConversation": "Започни разговор",
+    "validate": {
+      "content": "Садржај"
+    },
+    "viewAll": "Прикажи све"
   },
   "pageSlug": {
     "achInstructions": "Упутства за ACH плаћање",
@@ -878,6 +935,12 @@
     "sermons": "Проповеди",
     "toViewForm": "да видите овај формулар.",
     "verseOfTheDay": "Стих дана"
+  },
+  "person": {
+    "email": "Имејл",
+    "firstName": "Име",
+    "lastName": "Презиме",
+    "name": "Назив"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "Прилике за волонтирање",
     "noPositions": "Тренутно нема доступних волонтерских позиција за овај план.",
     "volunteer": "Волонтер"
+  },
+  "wrapper": {
+    "editAccount": "Измени налог",
+    "editChurchProfile": "Измени профил цркве",
+    "editProfile": "Измени профил",
+    "logout": "Одјава",
+    "profile": "Профил"
   }
 }

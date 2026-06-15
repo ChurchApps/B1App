@@ -1,4 +1,17 @@
 {
+  "b1Share": {
+    "comment": "댓글",
+    "commentPlaceholder": "댓글을 입력하세요",
+    "contentShared": "콘텐츠 공유됨",
+    "group": "그룹",
+    "sharingToGroup": "그룹에 공유 중",
+    "validate": {
+      "addComment": "댓글을 추가하세요",
+      "loginFirst": "먼저 로그인하세요",
+      "notMember": "구성원이 아닙니다",
+      "selectGroup": "그룹을 선택하세요"
+    }
+  },
   "b1ShareModal": {
     "post": "게시"
   },
@@ -65,6 +78,16 @@
       "title": "예배 선택"
     }
   },
+  "common": {
+    "cancel": "취소",
+    "close": "닫기",
+    "date": "날짜",
+    "edit": "편집",
+    "pleaseWait": "잠시 기다려 주세요",
+    "save": "저장",
+    "search": "검색",
+    "update": "업데이트"
+  },
   "donate": {
     "authLanding": "인증된 페이지입니다",
     "currentYearCsv": "올해 (CSV)",
@@ -79,6 +102,24 @@
     "pending": "대기 중",
     "printCurrentYear": "올해 헌금 인쇄",
     "printLastYear": "작년 헌금 인쇄"
+  },
+  "donation": {
+    "donationForm": {
+      "validate": {
+        "email": "이메일",
+        "firstName": "이름",
+        "lastName": "성",
+        "validEmail": "유효한 이메일"
+      }
+    },
+    "page": {
+      "amount": "금액",
+      "batch": "배치",
+      "date": "날짜",
+      "fund": "기금",
+      "method": "방법",
+      "willAppear": "표시될 예정"
+    }
   },
   "donationLanding": {
     "myDonation": "내 헌금"
@@ -300,11 +341,18 @@
     "userMenu": "사용자 메뉴"
   },
   "iconPicker": {
+    "iconsAvailable": "사용 가능한 아이콘",
+    "matchingResults": "일치하는 결과",
+    "search": "검색",
     "searchAriaLabel": "아이콘 검색",
     "selectIcon": "{} 아이콘 선택"
   },
   "loadingPage": {
     "logoAlt": "로고"
+  },
+  "login": {
+    "login": "로그인",
+    "register": "회원가입"
   },
   "loginClient": {
     "demoBody": "이것은 데모 환경입니다. 모든 데이터는 매일 밤 삭제됩니다.",
@@ -524,11 +572,12 @@
       "send": "보내기",
       "sendEmail": "이메일 보내기",
       "sendMessage": "메시지 보내기",
+      "sendText": "문자 메시지 보내기",
+      "sermonLoadError": "설교를 불러올 수 없습니다",
+      "sermonLoadErrorBody": "불러오는 중 문제가 발생했습니다. 연결 상태를 확인한 후 다시 시도해 주세요.",
       "sermonNotAvailable": "설교를 사용할 수 없습니다",
       "sermonPlural": "설교",
       "sermonRemoved": "이 설교는 삭제되었거나 더 이상 공개되지 않을 수 있습니다.",
-      "sermonLoadError": "설교를 불러올 수 없습니다",
-      "sermonLoadErrorBody": "불러오는 중 문제가 발생했습니다. 연결 상태를 확인한 후 다시 시도해 주세요.",
       "sermonSeries": "설교 시리즈",
       "sermonSingular": "설교",
       "sermons": "설교",
@@ -557,6 +606,7 @@
       "tabServiceOrder": "예배 순서",
       "tabTeams": "팀",
       "team": "팀",
+      "text": "문자",
       "typeMessage": "메시지 입력…",
       "unableToLoadMessages": "메시지를 불러올 수 없습니다.",
       "unableToLoadPlaylist": "재생목록을 불러올 수 없습니다",
@@ -733,16 +783,6 @@
       "votd": "오늘의 말씀"
     },
     "screens": {
-      "volunteerFull": "마감",
-      "volunteerOpen": "{}자리 남음",
-      "volunteerPositionsFilled": "{}자리 중 {}자리 충원됨",
-      "volunteerPositionOpen": "{} ({}자리 남음)",
-      "volunteerViewSignUp": "보기 및 신청",
-      "volunteerBrowseTitle": "봉사 기회 둘러보기",
-      "volunteerBrowseBody": "현재 이용 가능한 봉사 기회가 없습니다. 나중에 다시 확인해 주세요!",
-      "sermonsLoadError": "설교를 불러올 수 없습니다",
-      "sermonsLoadErrorBody": "불러오는 중 문제가 발생했습니다. 다시 시도해 주세요.",
-      "sermonsGoBack": "뒤로",
       "addToHomeScreen": "홈 화면에 추가",
       "addToHomeScreenBody": "아래로 스크롤하여 홈 화면에 추가를 탭한 다음 추가를 누르세요. 완료!",
       "alreadyCheckedIn": "이미 체크인됨",
@@ -815,10 +855,13 @@
       "searchForMessage": "메시지를 보낼 사람 검색",
       "searchMembers": "구성원 검색",
       "selectGroupsSubtitle": "각 가족 구성원의 그룹을 선택하세요",
+      "sermonsGoBack": "뒤로",
+      "sermonsLoadError": "설교를 불러올 수 없습니다",
+      "sermonsLoadErrorBody": "불러오는 중 문제가 발생했습니다. 다시 시도해 주세요.",
       "shareVotd": "오늘의 말씀 공유",
       "signInToCheckIn": "체크인하려면 로그인하세요",
-      "signInToCheckInMessage": "예배에 체크인하려면 로그인하세요.",
       "signInToCheckInCta": "로그인",
+      "signInToCheckInMessage": "예배에 체크인하려면 로그인하세요.",
       "tabAccount": "계정",
       "tabDonate": "헌금하기",
       "tabHistory": "기록",
@@ -835,6 +878,13 @@
       "unableToLoadChurch": "교회 구성을 불러올 수 없습니다.",
       "unableToSubmitChanges": "변경 사항을 제출할 수 없습니다.",
       "visibilityPreferencesSaved": "공개 설정이 저장되었습니다.",
+      "volunteerBrowseBody": "현재 이용 가능한 봉사 기회가 없습니다. 나중에 다시 확인해 주세요!",
+      "volunteerBrowseTitle": "봉사 기회 둘러보기",
+      "volunteerFull": "마감",
+      "volunteerOpen": "{}자리 남음",
+      "volunteerPositionOpen": "{} ({}자리 남음)",
+      "volunteerPositionsFilled": "{}자리 중 {}자리 충원됨",
+      "volunteerViewSignUp": "보기 및 신청",
       "watchLive": "실시간 시청"
     },
     "taglines": {
@@ -854,13 +904,20 @@
     "yesterday": "어제"
   },
   "notes": {
+    "comment": "댓글",
+    "comments": "댓글",
     "list": {
       "loadMore": "더 보기",
       "loading": "로딩 중...",
       "showAll": "모두 보기",
       "typeMessage": "메시지 입력...",
       "userAlt": "사용자"
-    }
+    },
+    "startConversation": "대화 시작",
+    "validate": {
+      "content": "내용"
+    },
+    "viewAll": "전체 보기"
   },
   "pageSlug": {
     "achInstructions": "ACH 결제 안내",
@@ -878,6 +935,12 @@
     "sermons": "설교",
     "toViewForm": "이 양식을 보려면",
     "verseOfTheDay": "오늘의 말씀"
+  },
+  "person": {
+    "email": "이메일",
+    "firstName": "이름",
+    "lastName": "성",
+    "name": "이름"
   },
   "plans": {
     "blockoutDate": {
@@ -1030,5 +1093,12 @@
     "metaTitle": "봉사 기회",
     "noPositions": "이 계획에 대해 현재 사용 가능한 봉사 직책이 없습니다.",
     "volunteer": "봉사자"
+  },
+  "wrapper": {
+    "editAccount": "계정 편집",
+    "editChurchProfile": "교회 프로필 편집",
+    "editProfile": "프로필 편집",
+    "logout": "로그아웃",
+    "profile": "프로필"
   }
 }
