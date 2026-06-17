@@ -2,11 +2,12 @@
 
 import React from "react";
 import { Locale } from "@churchapps/apphelper";
-import { Element as AppHelperElement, ElementBlock, registerElementRenderer } from "@churchapps/apphelper/website";
+import { Element as AppHelperElement, ElementBlock, registerElementRenderer, setImageOptimizer } from "@churchapps/apphelper/website";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { ElementInterface, SectionInterface } from "@/helpers";
 import { LiveStream } from "./video/LiveStream";
 import { FormElement } from "./elements/FormElement";
+import { b1ImageOptimizer } from "@/helpers/imageOptimizer";
 
 interface Props {
   element: ElementInterface;
@@ -37,5 +38,8 @@ registerElementRenderer("stream", (p) => p.church
 registerElementRenderer("form", (p) => p.church
   ? <FormElement element={p.element as ElementInterface} church={p.church} />
   : null);
+
+// Route apphelper content images through the Next.js image optimizer (srcset/WebP/AVIF).
+setImageOptimizer(b1ImageOptimizer);
 
 export const Element: React.FC<Props> = (props) => <AppHelperElement {...props} />;

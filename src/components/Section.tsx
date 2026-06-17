@@ -10,6 +10,7 @@ import { ApiHelper } from "@churchapps/apphelper";
 import type { AppearanceInterface } from "@churchapps/apphelper";
 import type { ChurchInterface } from "@churchapps/helpers";
 import { StyleHelper } from "@churchapps/apphelper/website";
+import { b1ImageOptimizer } from "@/helpers/imageOptimizer";
 
 interface Props {
   first?: boolean,
@@ -38,7 +39,8 @@ export const Section: React.FC<Props> = props => {
     let result: CSSProperties = {};
     const bg = props.section.background;
     if (bg && bg.indexOf("/") > -1) {
-      result = { backgroundImage: "url('" + bg + "')" };
+      result = { backgroundImage: b1ImageOptimizer.background(bg) };
+      if (props.section.answers?.focalPoint) result.backgroundPosition = String(props.section.answers.focalPoint);
     } else if (bg) {
       result = { background: bg };
     }
@@ -135,7 +137,7 @@ export const Section: React.FC<Props> = props => {
   if (sectionBg && sectionBg.indexOf("youtube:") > -1) {
     const youtubeId = sectionBg.split(":")[1];
     result = (<>{getSectionAnchor()}<YoutubeBackground isDragging={isDragging} id={getId()} videoId={youtubeId} overlay="rgba(0,0,0,.4)" contentClassName={getVideoClassName()}>{contents}</YoutubeBackground></>);
-  } else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
+  } else result = (<>{getSectionAnchor()}<Box component="div" sx={{ ":before": { opacity: (props.section.answers?.backgroundOpacity) ? props.section.answers.backgroundOpacity + " !important" : "", background: props.section.answers?.overlayColor ? props.section.answers.overlayColor + " !important" : "" } }} style={getStyle()} className={getClassName()} id={getId()}>{contents}</Box></>);
 
   if (props.onEdit) {
     return (

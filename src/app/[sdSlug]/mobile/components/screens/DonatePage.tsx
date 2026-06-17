@@ -492,7 +492,7 @@ function DonatePageInner({ config }: Props) {
           customerId={customerId!}
           paymentMethods={paymentMethods || []}
           appName="B1App"
-          stripePromise={stripePromise!}
+          stripePromise={stripePromise ?? undefined}
           dataUpdate={handleDataUpdate}
         />
       </Box>
