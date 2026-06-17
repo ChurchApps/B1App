@@ -109,19 +109,22 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   }, []);
 
+  const isValidGroup = (data: any): data is GroupWithExtras =>
+    !!data && typeof data === "object" && !!data.id;
+
   const { data: groupData, isLoading: groupLoading } = useQuery<GroupWithExtras | null>({
     queryKey: ["group-detail", id],
     queryFn: async () => {
       if (looksLikeId(id)) {
         const data = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
-        if (data) return data;
+        if (isValidGroup(data)) return data;
       }
       // Slug, or id-shaped value that didn't resolve — fall back to public lookup
       const url = looksLikeId(id)
         ? `/groups/public/${churchId}/${id}`
         : `/groups/public/${churchId}/slug/${id}`;
       const publicData = await ApiHelper.get(url, "MembershipApi");
-      return publicData || null;
+      return isValidGroup(publicData) ? publicData : null;
     },
     enabled: !!id && !!churchId
   });
@@ -170,6 +173,13 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const hasPlans = (groupPlans?.length || 0) > 0;
 
   const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
+
+  React.useEffect(() => {
+    if (group === null) {
+      router.replace("/mobile/groups");
+    }
+  }, [group, router]);
+
   const members = membersData;
 
   const refreshMembers = () => queryClient.invalidateQueries({ queryKey: ["group-members", groupId] });
