@@ -343,7 +343,7 @@ export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }
 
       <Box>
         <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-          {new Date(selected).toLocaleDateString(undefined, {
+          {new Date(selected + "T00:00:00").toLocaleDateString(undefined, {
             weekday: "long",
             month: "long",
             day: "numeric"
