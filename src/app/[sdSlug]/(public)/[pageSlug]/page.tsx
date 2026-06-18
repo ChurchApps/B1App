@@ -32,6 +32,9 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
     switch (pageSlug) {
       case "votd": title = Locale.label("pageSlug.verseOfTheDay"); break;
       case "bible": title = Locale.label("pageSlug.bible"); break;
+      case "sermons": title = Locale.label("pageSlug.sermons"); break;
+      case "donate": title = Locale.label("pageSlug.donate"); break;
+      case "stream": title = Locale.label("pageSlug.liveStream"); break;
     }
   }
   return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title, undefined, props.config.appearance);

@@ -304,7 +304,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
 
   const handleToggleRecurring = (checked: boolean) => {
     setRecurring(checked);
-    if (checked && !rRule) setRRule("FREQ=DAILY;INTERVAL=1");
+    if (checked && !rRule) setRRule("FREQ=WEEKLY;INTERVAL=1");
     if (!checked) setRRule("");
   };
 
