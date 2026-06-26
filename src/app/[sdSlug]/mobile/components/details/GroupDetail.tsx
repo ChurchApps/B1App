@@ -57,8 +57,6 @@ interface GroupWithExtras extends GroupInterface {
 
 type TabKey = "about" | "messages" | "members" | "attendance" | "events" | "resources" | "plans";
 
-const looksLikeId = (value: string) => /^[A-Za-z0-9_]+$/.test(value) && !value.includes("-");
-
 export const GroupDetail = ({ id, config }: Props) => {
   const isAuthenticated = !!UserHelper.user?.id;
 
@@ -115,16 +113,22 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const { data: groupData, isLoading: groupLoading } = useQuery<GroupWithExtras | null>({
     queryKey: ["group-detail", id],
     queryFn: async () => {
-      if (looksLikeId(id)) {
-        const data = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
-        if (isValidGroup(data)) return data;
-      }
-      // Slug, or id-shaped value that didn't resolve — fall back to public lookup
-      const url = looksLikeId(id)
-        ? `/groups/public/${churchId}/${id}`
-        : `/groups/public/${churchId}/slug/${id}`;
-      const publicData = await ApiHelper.get(url, "MembershipApi");
-      return isValidGroup(publicData) ? publicData : null;
+      // `id` may be a real group id (shortIds can contain '-' or '_') or a slug, so
+      // we can't tell them apart by shape — try id forms first, then the slug lookup.
+      const authData = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
+      if (isValidGroup(authData)) return authData;
+      const tryPublic = async (url: string) => {
+        try {
+          const d = await ApiHelper.get(url, "MembershipApi");
+          return isValidGroup(d) ? d : null;
+        } catch {
+          return null;
+        }
+      };
+      return (
+        (await tryPublic(`/groups/public/${churchId}/${id}`)) ||
+        (await tryPublic(`/groups/public/${churchId}/slug/${id}`))
+      );
     },
     enabled: !!id && !!churchId
   });

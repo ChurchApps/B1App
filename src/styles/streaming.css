@@ -116,17 +116,14 @@
   display: flex;
 }
 
-.chatContainer,
-#prayerContainer,
-#receivePrayerContainer {
+.chatContainer {
   display: flex;
   flex-direction: column;
   background-color: #fff;
   flex: 1;
 }
 
-#chatReceive,
-#prayerReceive {
+#chatReceive {
   height: 10vh;
   flex: auto;
   padding: 10px;
@@ -151,12 +148,6 @@
   padding-right: 5px;
   padding-top: 5px;
   background-color: #ffffd0;
-}
-
-#prayerContainer {
-  padding-left: 25%;
-  padding-right: 25%;
-  padding-top: 100px;
 }
 
 #nameBar {
@@ -204,13 +195,11 @@
   float: none !important;
 }
 
-#chatSend,
-prayerSend {
+#chatSend {
   flex: 0 0 0px;
 }
 
-#chatName,
-#prayerName {
+#chatName {
   flex: 0 0 0px;
   border-top: 1px solid #005288;
   padding: 10px;

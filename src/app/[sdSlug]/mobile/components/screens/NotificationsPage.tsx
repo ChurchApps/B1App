@@ -9,7 +9,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { WebPushHelper } from "@/helpers";
 import { mobileTheme } from "../mobileTheme";
-import { formatRelative } from "../util";
+import { formatRelative, deriveNotificationUrl, getNotificationIcon } from "../util";
 import { useNotificationDiagnostics } from "../../hooks/useNotificationDiagnostics";
 
 interface NotificationItem {
@@ -27,35 +27,6 @@ interface NotificationItem {
 interface Props {
   config?: ConfigurationInterface;
 }
-
-const deriveLinkUrl = (n: NotificationItem): string | undefined => {
-  if (!n.contentId) return undefined;
-  const type = String(n.contentType || "").toLowerCase();
-  const id = n.contentId;
-  switch (type) {
-    case "plan":
-    case "schedule": return `/mobile/plans/${id}`;
-    case "groupannouncement": return `/mobile/groups/${id}?openChat=1&chatTab=announcements`;
-    case "group": return `/mobile/groups/${id}`;
-    case "assignment": return "/mobile/plans";
-    default: return undefined;
-  }
-};
-
-const getIconName = (contentType?: string): string => {
-  switch (String(contentType || "").toLowerCase()) {
-    case "plan":
-    case "schedule": return "calendar_today";
-    case "message":
-    case "privatemessage":
-    case "senttext": return "message";
-    case "group":
-    case "groupannouncement": return "group";
-    case "assignment": return "assignment";
-    case "donation": return "payment";
-    default: return "notifications";
-  }
-};
 
 export const NotificationsPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
@@ -105,7 +76,7 @@ export const NotificationsPage = ({ config }: Props) => {
   }, [loggedIn, serverNotifications]);
 
   const handleClick = (n: NotificationItem) => {
-    const href = deriveLinkUrl(n);
+    const href = deriveNotificationUrl(n);
     if (!href) return;
     if (href.startsWith("http")) {
       window.location.href = href;
@@ -142,9 +113,9 @@ export const NotificationsPage = ({ config }: Props) => {
   };
 
   const renderRow = (n: NotificationItem, idx: number) => {
-    const href = deriveLinkUrl(n);
+    const href = deriveNotificationUrl(n);
     const body = n.message || "";
-    const iconName = getIconName(n.contentType);
+    const iconName = getNotificationIcon(n.contentType);
     return (
       <Box
         key={n.id || `n-${idx}`}

@@ -17,8 +17,6 @@ interface Props {
   config: ConfigurationInterface;
 }
 
-const looksLikeId = (value: string) => /^[A-Za-z0-9_]+$/.test(value) && !value.includes("-");
-
 export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
@@ -27,11 +25,20 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
   const { data: group, isLoading: groupLoading } = useQuery<GroupInterface | null>({
     queryKey: ["group-public", churchId, idOrSlug],
     queryFn: async () => {
-      const url = looksLikeId(idOrSlug)
-        ? `/groups/public/${churchId}/${idOrSlug}`
-        : `/groups/public/${churchId}/slug/${idOrSlug}`;
-      const data = await ApiHelper.getAnonymous(url, "MembershipApi");
-      return data || null;
+      // `idOrSlug` may be a real group id (shortIds can contain '-' or '_') or a slug,
+      // so we can't tell them apart by shape — try the id lookup first, then the slug.
+      const tryPublic = async (url: string) => {
+        try {
+          const d = await ApiHelper.getAnonymous(url, "MembershipApi");
+          return d || null;
+        } catch {
+          return null;
+        }
+      };
+      return (
+        (await tryPublic(`/groups/public/${churchId}/${idOrSlug}`)) ||
+        (await tryPublic(`/groups/public/${churchId}/slug/${idOrSlug}`))
+      );
     },
     enabled: !!idOrSlug && !!churchId
   });

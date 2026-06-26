@@ -87,3 +87,32 @@ export const shadePrimary = (cssColor: string, percent: number): string => {
   const mixer = percent < 0 ? "black" : "white";
   return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;
 };
+
+export const deriveNotificationUrl = (n: { contentType?: string; contentId?: string }): string | undefined => {
+  if (!n.contentId) return undefined;
+  const type = String(n.contentType || "").toLowerCase();
+  const id = n.contentId;
+  switch (type) {
+    case "plan":
+    case "schedule": return `/mobile/plans/${id}`;
+    case "groupannouncement": return `/mobile/groups/${id}?openChat=1&chatTab=announcements`;
+    case "group": return `/mobile/groups/${id}`;
+    case "assignment": return `/mobile/plans/${id}`;
+    default: return undefined;
+  }
+};
+
+export const getNotificationIcon = (contentType?: string): string => {
+  switch (String(contentType || "").toLowerCase()) {
+    case "plan":
+    case "schedule": return "calendar_today";
+    case "message":
+    case "privatemessage":
+    case "senttext": return "message";
+    case "group":
+    case "groupannouncement": return "group";
+    case "assignment": return "assignment";
+    case "donation": return "payment";
+    default: return "notifications";
+  }
+};

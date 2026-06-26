@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, type SelectChangeEvent } from "@mui/material";
 import React, { useEffect } from "react";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
@@ -25,6 +25,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   const [songDetail, setSongDetail] = React.useState<SongDetailInterface>(null);
   const [products, setProducts] = React.useState<PraiseChartsProduct[]>([]);
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
+  const [keyOffset, setKeyOffset] = React.useState(0);
 
   const loadData = async () => {
     const ak = await ApiHelper.get("/arrangementKeys/" + props.arrangementKeyId, "ContentApi");
@@ -85,6 +86,28 @@ export const SongDialog: React.FC<Props> = (props) => {
     }
   }, [arrangementKey, songDetail]);
 
+  const getKeyOptions = (originalIndex: number) =>
+    ChordProHelper.noteNames.map((note, index) => (
+      <MenuItem key={note} value={(index - originalIndex).toString()}>{note}</MenuItem>
+    ));
+
+  const handleKeyChange = (e: SelectChangeEvent) => { setKeyOffset(parseInt(e.target.value)); };
+
+  const getKeySelect = () => {
+    const originalKey = songDetail?.keySignature;
+    if (!originalKey) return null;
+    const originalIndex = ChordProHelper.noteMap[originalKey];
+    if (originalIndex === undefined) return null;
+    return (
+      <FormControl size="small" sx={{ minWidth: 120, mb: 1 }}>
+        <InputLabel id="keySignature">{Locale.label("mobile.plans.keySignature")}</InputLabel>
+        <Select name="keySignature" labelId="keySignature" label={Locale.label("mobile.plans.keySignature")} value={keyOffset.toString()} onChange={handleKeyChange}>
+          {getKeyOptions(originalIndex)}
+        </Select>
+      </FormControl>
+    );
+  };
+
 
   return (<>
     <Dialog open={true} onClose={props.onClose} fullWidth maxWidth="xl">
@@ -101,7 +124,8 @@ export const SongDialog: React.FC<Props> = (props) => {
 
             {arrangement?.lyrics && <>
               <h3>{Locale.label("mobile.plans.lyrics")}</h3>
-              <div className="chordPro" dangerouslySetInnerHTML={{ __html: ChordProHelper.formatLyrics(arrangement?.lyrics, 0) }}></div>
+              {getKeySelect()}
+              <div className="chordPro" dangerouslySetInnerHTML={{ __html: ChordProHelper.formatLyrics(arrangement?.lyrics, keyOffset) }}></div>
             </>}
 
 
