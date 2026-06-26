@@ -34,9 +34,13 @@ export const CommunityPage = ({ config: _config }: Props) => {
   const router = useRouter();
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
+  // Directory is a "members" feature (matches VisibilityHelper's "members" rule) —
+  // a logged-in visitor would otherwise see an empty list with no explanation.
+  const membershipStatus = (context?.userChurch?.person as any)?.membershipStatus?.toLowerCase();
+  const canViewDirectory = loggedIn && (membershipStatus === "member" || membershipStatus === "staff");
   const [searchText, setSearchText] = React.useState("");
 
-  if (!loggedIn) {
+  if (!canViewDirectory) {
 
     const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
     const loginHref = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
@@ -66,25 +70,29 @@ export const CommunityPage = ({ config: _config }: Props) => {
             <Icon sx={{ fontSize: 32, color: tc.primary }}>lock</Icon>
           </Box>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-            Sign In Required
+            {loggedIn ? "Members Only" : "Sign In Required"}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-            The member directory is available to signed-in members of your church.
+            {loggedIn
+              ? "The member directory is available to members of your church."
+              : "The member directory is available to signed-in members of your church."}
           </Typography>
-          <Button
-            variant="contained"
-            onClick={() => { window.location.href = loginHref; }}
-            sx={{
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              textTransform: "none",
-              fontWeight: 500,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              "&:hover": { bgcolor: tc.primary }
-            }}
-          >
-            Sign In
-          </Button>
+          {!loggedIn && (
+            <Button
+              variant="contained"
+              onClick={() => { window.location.href = loginHref; }}
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                textTransform: "none",
+                fontWeight: 500,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                "&:hover": { bgcolor: tc.primary }
+              }}
+            >
+              Sign In
+            </Button>
+          )}
         </Box>
       </Box>
     );
