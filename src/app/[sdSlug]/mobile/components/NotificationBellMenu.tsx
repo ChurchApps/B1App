@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
-import { getInitials, formatRelative } from "./util";
+import { getInitials, formatRelative, deriveNotificationUrl, getNotificationIcon } from "./util";
 import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
 
 interface Props {
@@ -36,35 +36,6 @@ interface NotificationItem {
   contentType?: string;
   contentId?: string;
 }
-
-const deriveNotificationHref = (n: NotificationItem): string | undefined => {
-  if (!n.contentId) return undefined;
-  const type = String(n.contentType || "").toLowerCase();
-  const id = n.contentId;
-  switch (type) {
-    case "plan":
-    case "schedule": return `/mobile/plans/${id}`;
-    case "groupannouncement": return `/mobile/groups/${id}?openChat=1&chatTab=announcements`;
-    case "group": return `/mobile/groups/${id}`;
-    case "assignment": return "/mobile/plans";
-    default: return undefined;
-  }
-};
-
-const getNotificationIcon = (contentType?: string): string => {
-  switch (String(contentType || "").toLowerCase()) {
-    case "plan":
-    case "schedule": return "calendar_today";
-    case "message":
-    case "privatemessage":
-    case "senttext": return "message";
-    case "group":
-    case "groupannouncement": return "group";
-    case "assignment": return "assignment";
-    case "donation": return "payment";
-    default: return "notifications";
-  }
-};
 
 export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   const tc = mobileTheme.colors;
@@ -154,7 +125,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   };
 
   const handleNotificationClick = (n: NotificationItem) => {
-    const href = deriveNotificationHref(n);
+    const href = deriveNotificationUrl(n);
     if (!href) return;
     onClose();
     router.push(href);
@@ -237,7 +208,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   );
 
   const renderNotificationRow = (n: NotificationItem, idx: number) => {
-    const href = deriveNotificationHref(n);
+    const href = deriveNotificationUrl(n);
     const iconName = getNotificationIcon(n.contentType);
     return (
       <Box
