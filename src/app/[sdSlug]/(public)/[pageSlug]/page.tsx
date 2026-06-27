@@ -37,7 +37,8 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
       case "stream": title = Locale.label("pageSlug.liveStream"); break;
     }
   }
-  return MetaHelper.getMetaData(title + " - " + props.config.church.name, props.pageData.title, undefined, props.config.appearance);
+  const pageTitle = title || props.config.church.name;
+  return MetaHelper.getMetaData(pageTitle + " - " + props.config.church.name, pageTitle, undefined, props.config.appearance);
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
