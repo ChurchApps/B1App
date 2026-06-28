@@ -48,11 +48,12 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
     matcher: isAuthApi,
     handler: new NetworkOnly()
   },
-  // Config-shape API responses: stale-while-revalidate, 1 day.
+  // Config-shape API responses: network-first so admin changes propagate immediately, fall back to cache offline.
   {
     matcher: isConfigApi,
-    handler: new StaleWhileRevalidate({
+    handler: new NetworkFirst({
       cacheName: "api-config",
+      networkTimeoutSeconds: 3,
       plugins: [
         new CacheableResponsePlugin({ statuses: [0, 200] }),
         new ExpirationPlugin({ maxEntries: 60, maxAgeSeconds: 24 * 60 * 60 })
