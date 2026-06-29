@@ -182,8 +182,8 @@ export const MobileLoginScreen = ({ config }: Props) => {
       const data: LoginResponseInterface = await ApiHelper.postAnonymous("/users/login", payload, "MembershipApi");
       if (data?.user != null) {
         await hydrateFromLoginResponse(data);
-        if (returnUrl.startsWith("http")) window.location.href = returnUrl;
-        else router.push(returnUrl);
+        const safeUrl = returnUrl.startsWith("/") && !returnUrl.startsWith("//") ? returnUrl : "/mobile/dashboard";
+        router.push(safeUrl);
         return true;
       }
       if ("password" in payload) await handleLoginFailure();
