@@ -85,7 +85,6 @@ function DonatePageInner({ config }: Props) {
   });
 
   interface PaymentData {
-    stripePromise: Promise<Stripe> | null;
     paymentMethods: AppHelperStripePaymentMethod[];
     customerId: string | null;
     person: PersonInterface | null;
@@ -98,10 +97,8 @@ function DonatePageInner({ config }: Props) {
     queryFn: async () => {
       const gateways: PaymentGateway[] = await ApiHelper.get("/gateways", "GivingApi");
       if (!gateways?.length) {
-        return { stripePromise: null, paymentMethods: [], customerId: null, person: null, currency: "usd", paymentGateways: [] };
+        return { paymentMethods: [], customerId: null, person: null, currency: "usd", paymentGateways: [] };
       }
-      const stripeGateway = DonationHelper.findGatewayByProvider(gateways, "stripe");
-      const stripePromise = stripeGateway?.publicKey ? (loadStripe(stripeGateway.publicKey) as Promise<Stripe>) : null;
       const [methodsResult, personResult] = await Promise.all([
         ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi") as Promise<{ provider?: string; customerId?: string }[]>,
         ApiHelper.get("/people/" + personId, "MembershipApi") as Promise<PersonInterface>
@@ -114,17 +111,27 @@ function DonatePageInner({ config }: Props) {
           if (pm.customerId && !customerId) customerId = pm.customerId;
         }
       }
-      return { stripePromise, paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd", paymentGateways: gateways };
+      return { paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd", paymentGateways: gateways };
     },
-    enabled: donationsEnabled
+    enabled: donationsEnabled,
+    // Payment methods are financial state — always refetch on mount so a deleted
+    // or detached card is never served stale from the persisted cache.
+    staleTime: 0
   });
 
-  const stripePromise = paymentData?.stripePromise ?? null;
   const paymentMethods = paymentData?.paymentMethods ?? null;
   const customerId = paymentData?.customerId ?? null;
   const person = paymentData?.person ?? null;
   const pageCurrency = paymentData?.currency ?? "usd";
   const paymentGateways = paymentData?.paymentGateways ?? [];
+
+  // Derive the Stripe instance from the (serializable) gateway list. Keeping the
+  // Promise out of the react-query cache lets the IndexedDB persister serialize
+  // the cache — a Promise throws "could not be cloned" and breaks persistence.
+  const stripePromise = useMemo<Promise<Stripe> | null>(() => {
+    const pk = DonationHelper.findGatewayByProvider(paymentGateways, "stripe")?.publicKey;
+    return pk ? (loadStripe(pk) as Promise<Stripe>) : null;
+  }, [paymentGateways]);
 
   const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
     queryKey: ["donate-subscriptions", customerId],
