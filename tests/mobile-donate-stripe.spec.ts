@@ -231,4 +231,42 @@ test.describe.serial("Stripe donation error handling", () => {
     await expect(page.locator('button[aria-label="donate-button"]')).toHaveCount(0, { timeout: 10000 });
     await expect(page.locator('button[aria-label="save-button"]')).toBeEnabled({ timeout: 10000 });
   });
+
+  test("a fixed error does not re-appear when re-previewing", async ({ page }) => {
+    await deleteAllCards(page); // clean slate -> inline card entry
+    await page.getByRole("tab", { name: /^Donate$/i }).click();
+    await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 15000 });
+    await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });
+    await page.locator('input[name="amount"]').first().fill("5");
+
+    // Enter a card but OMIT the postal code -> Stripe reports an incomplete card.
+    const frame = page.frameLocator(STRIPE_CARD_FRAME);
+    await frame.locator('[name="cardnumber"]').waitFor({ state: "visible", timeout: 20000 });
+    await frame.locator('[name="cardnumber"]').fill(CARD_OK);
+    await frame.locator('[name="exp-date"]').fill("1234");
+    await frame.locator('[name="cvc"]').fill("123");
+
+    await page.locator('button[aria-label="save-button"]').click(); // Preview
+    await page.locator('button[aria-label="donate-button"]').click(); // Donate -> error toast
+    const toast = page.getByText(/postal code is incomplete/i);
+    await expect(toast).toBeVisible({ timeout: 20000 });
+
+    // Let the error Snackbar auto-hide (autoHideDuration 6s).
+    await expect(toast).toBeHidden({ timeout: 12000 });
+
+    // Fix the card and re-open the preview. The stale error toast must NOT pop up
+    // again just because re-previewing re-rendered the form. Check the raw DOM
+    // (offset-based visibility) since the open modal makes Playwright treat the
+    // toast as aria-hidden.
+    await frame.locator('[name="postal"]').fill("42424");
+    await page.locator('button[aria-label="save-button"]').click(); // Preview again
+    await page.waitForTimeout(900);
+    const staleToastShown = await page.evaluate(() => {
+      const isShown = (el: Element) => !!((el as HTMLElement).offsetWidth || (el as HTMLElement).offsetHeight || el.getClientRects().length);
+      return Array.from(document.querySelectorAll('[role="alert"]')).some(
+        (el) => /your postal code is incomplete/i.test(el.textContent || "") && isShown(el)
+      );
+    });
+    expect(staleToastShown, "stale error toast re-appeared after re-preview").toBe(false);
+  });
 });
