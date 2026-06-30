@@ -18,6 +18,7 @@ interface Props {
 }
 
 const ENGAGEMENT_STORAGE_KEY = "b1app-link-view-counts";
+export const HOME_TABS_COUNT = 7;
 
 const generateLinkId = (item: LinkInterface): string => item.id || `${item.linkType}_${item.text}`;
 
@@ -35,6 +36,28 @@ export const DashboardPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const churchId = config?.church?.id;
   const jwt = context.userChurch?.jwt;
+
+  const [greetingWord, setGreetingWord] = React.useState("");
+  const [displayName, setDisplayName] = React.useState("");
+
+  React.useEffect(() => {
+    const first = context?.person?.name?.first || context?.user?.firstName || "";
+    const last = context?.person?.name?.last || context?.user?.lastName || "";
+    const name = `${first} ${last}`.trim();
+
+    setDisplayName(name);
+
+    if (name) {
+      const hour = new Date().getHours();
+      let greet = "Welcome";
+      if (hour < 12) greet = "Good morning";
+      else if (hour < 17) greet = "Good afternoon";
+      else greet = "Good evening";
+      setGreetingWord(greet);
+    } else {
+      setGreetingWord("");
+    }
+  }, [context?.person, context?.user]);
 
   const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
 
@@ -70,7 +93,8 @@ export const DashboardPage = ({ config }: Props) => {
   const featured = filtered.slice(0, 3);
   const hero = featured[0];
   const featuredTwo = featured.slice(1, 3);
-  const others = filtered.slice(3);
+  const showMoreCard = filtered.length > HOME_TABS_COUNT;
+  const others = showMoreCard ? filtered.slice(3, HOME_TABS_COUNT) : filtered.slice(3);
 
   const cardShadow = mobileTheme.shadows.lg;
   const featuredShadow = mobileTheme.shadows.md;
@@ -107,6 +131,17 @@ export const DashboardPage = ({ config }: Props) => {
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pt: 2, pb: 3 }}>
       <NotificationPermissionBanner enabled={!!jwt} />
+
+      {greetingWord && displayName && (
+        <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 2 }}>
+          <Typography sx={{ fontSize: 14, fontWeight: 500, color: tc.text, opacity: 0.7, textTransform: "capitalize" }}>
+            {greetingWord},
+          </Typography>
+          <Typography sx={{ fontSize: 26, fontWeight: 800, color: tc.primary, mt: 0.2, lineHeight: 1.2 }}>
+            {displayName} !
+          </Typography>
+        </Box>
+      )}
 
       {hero && (() => {
         const heroPhoto = resolvePhoto(hero);
@@ -247,7 +282,7 @@ export const DashboardPage = ({ config }: Props) => {
         </Box>
       )}
 
-      {others.length > 0 && (
+      {(others.length > 0 || showMoreCard) && (
         <Box sx={{ px: `${mobileTheme.spacing.md}px`, mb: 3 }}>
           <Typography sx={{
             fontSize: 22,
@@ -307,6 +342,55 @@ export const DashboardPage = ({ config }: Props) => {
                 </Typography>
               </Box>
             ))}
+
+            {showMoreCard && (
+              <Box
+                role="button"
+                tabIndex={0}
+                onClick={() => router.push("/mobile/more")}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    router.push("/mobile/more");
+                  }
+                }}
+                sx={{
+                  width: { xs: "calc(25% - 9px)", sm: "calc(20% - 10px)", md: "calc(16.666% - 10px)" },
+                  minWidth: 70,
+                  alignItems: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  p: "12px",
+                  bgcolor: tc.surface,
+                  borderRadius: `${mobileTheme.radius.lg}px`,
+                  boxShadow: quickShadow,
+                  cursor: "pointer",
+                  "&:hover": { boxShadow: featuredShadow }
+                }}
+              >
+                <Box sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: "24px",
+                  bgcolor: tc.iconBackground,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mb: 1
+                }}>
+                  <Icon sx={{ fontSize: 24, color: tc.primary }}>more_horiz</Icon>
+                </Box>
+                <Typography sx={{
+                  color: tc.text,
+                  textAlign: "center",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  lineHeight: 1.2
+                }}>
+                  More
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       )}
