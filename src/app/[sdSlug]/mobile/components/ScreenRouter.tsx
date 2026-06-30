@@ -29,6 +29,7 @@ const ProfileEditPage = dynamic(() => import("./screens/ProfileEditPage").then(m
 const WebsiteUrlPage = dynamic(() => import("./screens/WebsiteUrlPage").then(m => ({ default: m.WebsiteUrlPage })), { loading });
 const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").then(m => ({ default: m.MessageComposePage })), { loading });
 const MobileLoginScreen = dynamic(() => import("./screens/LoginPage").then(m => ({ default: m.MobileLoginScreen })), { loading });
+const MoreCardsPage = dynamic(() => import("./screens/MoreCardsPage").then(m => ({ default: m.MoreCardsPage })), { loading });
 
 interface Props {
   pageSlug: string;
@@ -49,6 +50,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
 
   switch (effectiveSlug) {
     case "dashboard": return <DashboardPage config={config} />;
+    case "more": return <MoreCardsPage config={config} />;
     case "sermons": return <SermonsPage config={config} />;
     case "groups":
     case "myGroups": return <GroupsPage config={config} />;
