@@ -172,13 +172,13 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
 test.describe("Stripe guest (unauthenticated) donation", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
-  // KNOWN-BROKEN (pre-existing): the guest card flow calls /users/loadOrCreate,
-  // /paymentmethods/addcard and /donate/charge, all of which now require auth
-  // (actionWrapper) after the security authz hardening. A true guest has no JWT
-  // -> 401. There is no anonymous card add/charge endpoint (only ACH has -anon).
-  // Re-enabling guest card giving is a backend design decision (anon endpoints +
-  // server-side captcha/rate-limit safeguards), so this is parked as fixme.
-  // Also requires the dev server with NEXT_PUBLIC_BYPASS_RECAPTCHA=true.
+  // Backend now allows anonymous card add: PaymentMethodController /addcard no longer
+  // requires au.personId to match (2026-06-30 fix — the authz hardening had broken all
+  // guest card giving with a 401). The guest flow is wired end to end now:
+  // /users/loadOrCreate, /people/loadOrCreate, /paymentmethods/addcard and /donate/charge
+  // all tolerate an empty au. Still parked as fixme because it needs the dev server with
+  // NEXT_PUBLIC_BYPASS_RECAPTCHA=true and live Stripe test keys; un-fixme to verify against
+  // that env.
   test.fixme("a guest can donate with the test card", async ({ page }) => {
     const diag = captureDiagnostics(page);
     await page.goto("/mobile/donate");
