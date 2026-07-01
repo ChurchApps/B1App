@@ -12,8 +12,9 @@ test.describe("Public home page", () => {
 
   test("renders hero with welcome heading", async ({ page }) => {
     await page.goto("/");
+    // Hero copy is "Welcome Home to Grace Community Church" (2026-06 redesign).
     await expect(
-      page.locator("h1").filter({ hasText: /Welcome to Grace Community Church/i }).first()
+      page.locator("h1").filter({ hasText: /Welcome.*Grace Community Church/i }).first()
     ).toBeVisible();
   });
 
@@ -25,25 +26,31 @@ test.describe("Public home page", () => {
   test("shows seeded service times", async ({ page }) => {
     await page.goto("/");
     const body = page.locator("body");
-    await expect(body).toContainText(/Sunday Service Times/i);
-    await expect(body).toContainText(/9:00 AM/);
+    // "Sunday Services" is the on-page section heading; "Service Times" is the footer label.
+    await expect(body).toContainText(/Sunday Services|Service Times/i);
+    await expect(body).toContainText(/9:00 & 11:00 AM/);
   });
 
   test("shows seeded ministries section", async ({ page }) => {
     await page.goto("/");
     const body = page.locator("body");
-    await expect(body).toContainText(/Children's Ministry/i);
-    await expect(body).toContainText(/Youth Ministry/i);
+    // Ministry cards are titled "Children" / "Youth" / "Small Groups" (2026-06 redesign),
+    // not "Children's Ministry" / "Youth Ministry".
+    await expect(body).toContainText(/Children/i);
+    await expect(body).toContainText(/Youth/i);
     await expect(body).toContainText(/Small Groups/i);
   });
 
   test("shows latest sermons section heading", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("body")).toContainText(/Latest Sermons/i);
+    // Section heading is "This Week's Message" (2026-06 redesign), not "Latest Sermons".
+    await expect(page.locator("body")).toContainText(/Browse All Sermons/i);
   });
 
   test("shows pastor section", async ({ page }) => {
-    await page.goto("/");
+    // The pastor bio moved to the About page in the 2026-06 redesign — it's no
+    // longer on the home page.
+    await page.goto("/about");
     await expect(page.locator("body")).toContainText(/Pastor John/i);
   });
 
