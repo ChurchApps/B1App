@@ -25,6 +25,7 @@ import { mobileTheme } from "../mobileTheme";
 import { RRuleEditor } from "../../../../../components/eventCalendar/RRuleEditor";
 import { EditRecurringModal } from "../../../../../components/eventCalendar/EditRecurringModal";
 import { MarkdownEditor } from "@churchapps/apphelper/markdown";
+import { EventReminderEdit } from "./EventReminderEdit";
 
 interface Props {
   open: boolean;
@@ -643,6 +644,9 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
                 />
               </Box>
             </Box>
+          )}
+          {isEdit && eventProp?.id && (
+            <EventReminderEdit eventId={eventProp.id} hasRegistration={registrationEnabled} />
           )}
           {error && <Typography sx={{ color: tc.error, fontSize: 13 }}>{error}</Typography>}
         </DialogContent>

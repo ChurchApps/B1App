@@ -3,12 +3,12 @@ import { mobileLogoutButton } from "./helpers/mobile";
 
 // Notification Preference Center — src/app/[sdSlug]/mobile/components/screens/
 // NotificationPrefsPage.tsx at /mobile/notificationPrefs. The category taxonomy
-// (tiers / locked flags / allowed channels) is the single source of truth in
-// Api/src/modules/messaging/helpers/NotificationCategoryHelper.ts:
-//   - tier 0 (locked): "Account & Security", "Giving Receipts & Statements",
-//     "Check-In Safety Alerts" — checkboxes rendered DISABLED with a lock icon.
-//   - tier 1 "Church Announcements" defaults email ON, so it can be toggled OFF
-//     and the override round-trips through GET /messaging/notificationpreferences/my.
+// (tiers / allowed channels) is the single source of truth in
+// Api/src/modules/messaging/helpers/NotificationCategoryHelper.ts. As of the
+// 2026-07-01 "Cleaned up notification categories" pass, every category is tier 1
+// (opt-out, not locked) — there is currently no tier-0/locked category.
+//   - "Church Announcements" defaults email ON, so it can be toggled OFF and the
+//     override round-trips through GET /messaging/notificationpreferences/my.
 // Columns render in order Push / Email / In-App (SMS hidden), so the email
 // checkbox is the 2nd input in a category row.
 
@@ -52,22 +52,21 @@ test.describe("Mobile notification preferences", () => {
     await expect(main.getByRole("columnheader", { name: "Push" })).toBeVisible();
     await expect(main.getByRole("columnheader", { name: "Email" })).toBeVisible();
     await expect(main.getByRole("columnheader", { name: "In-App" })).toBeVisible();
-    await expect(main.getByText("Account & Security", { exact: true })).toBeVisible();
+    await expect(main.getByText("Tasks & Follow-Ups", { exact: true })).toBeVisible();
     await expect(main.getByRole("button", { name: "Save Preferences" })).toBeVisible();
   });
 
-  test("tier-0 (locked) category row has disabled channel toggles", async ({ page }) => {
+  test("no category rows are locked (current taxonomy is all tier-1)", async ({ page }) => {
     const main = await gotoPrefs(page);
-    // "Account & Security" is tier 0 (locked); its push/email/in_app checkboxes
-    // are rendered but disabled, and the row shows a lock icon (LockIcon ->
-    // svg[data-testid="LockIcon"]).
-    const row = categoryRow(main, "Account & Security");
-    await expect(row.locator('svg[data-testid="LockIcon"]')).toBeVisible();
+    // Every category is currently tier 1 (opt-out) — no row should show a lock
+    // icon, and every channel checkbox should be interactive.
+    await expect(main.locator('svg[data-testid="LockIcon"]')).toHaveCount(0);
+    const row = categoryRow(main, "Tasks & Follow-Ups");
     const boxes = row.locator('input[type="checkbox"]');
     const count = await boxes.count();
     expect(count).toBeGreaterThan(0);
     for (let i = 0; i < count; i++) {
-      await expect(boxes.nth(i)).toBeDisabled();
+      await expect(boxes.nth(i)).toBeEnabled();
     }
   });
 
