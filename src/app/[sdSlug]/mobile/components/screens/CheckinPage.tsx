@@ -257,36 +257,36 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
         services.map((service) => {
           const campusName = campuses.find((c) => c.id === service.campusId)?.name;
           return (
-          <SurfaceCard key={service.id}>
-            <CardActionArea
-              onClick={() => selectService(service.id!)}
-              data-testid={`select-service-${service.id}-button`}
-              sx={{ p: `${spacing.md}px`, minHeight: 72 }}
-            >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <IconCircle sx={{ mr: `${spacing.md}px` }}>
-                  <Icon sx={{ fontSize: 28, color: tc.primary }}>church</Icon>
-                </IconCircle>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography
-                    sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.25 }}
-                  >
-                    {service.name}
-                  </Typography>
-                  {campusName && (
-                    <Typography sx={{ fontSize: 14, color: tc.primary, fontWeight: 500 }}>
-                      {campusName}
+            <SurfaceCard key={service.id}>
+              <CardActionArea
+                onClick={() => selectService(service.id!)}
+                data-testid={`select-service-${service.id}-button`}
+                sx={{ p: `${spacing.md}px`, minHeight: 72 }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <IconCircle sx={{ mr: `${spacing.md}px` }}>
+                    <Icon sx={{ fontSize: 28, color: tc.primary }}>church</Icon>
+                  </IconCircle>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography
+                      sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.25 }}
+                    >
+                      {service.name}
                     </Typography>
+                    {campusName && (
+                      <Typography sx={{ fontSize: 14, color: tc.primary, fontWeight: 500 }}>
+                        {campusName}
+                      </Typography>
+                    )}
+                  </Box>
+                  {selectingId === service.id ? (
+                    <CircularProgress size={22} sx={{ color: tc.primary }} />
+                  ) : (
+                    <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
                   )}
                 </Box>
-                {selectingId === service.id ? (
-                  <CircularProgress size={22} sx={{ color: tc.primary }} />
-                ) : (
-                  <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
-                )}
-              </Box>
-            </CardActionArea>
-          </SurfaceCard>
+              </CardActionArea>
+            </SurfaceCard>
           );
         })
       )}

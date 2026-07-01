@@ -25,6 +25,7 @@ const PlansPage = dynamic(() => import("./screens/PlansPage").then(m => ({ defau
 const RegistrationsPage = dynamic(() => import("./screens/RegistrationsPage").then(m => ({ default: m.RegistrationsPage })), { loading });
 const VolunteerPage = dynamic(() => import("./screens/VolunteerPage").then(m => ({ default: m.VolunteerPage })), { loading });
 const NotificationsPage = dynamic(() => import("./screens/NotificationsPage").then(m => ({ default: m.NotificationsPage })), { loading });
+const NotificationPrefsPage = dynamic(() => import("./screens/NotificationPrefsPage").then(m => ({ default: m.NotificationPrefsPage })), { loading });
 const ProfileEditPage = dynamic(() => import("./screens/ProfileEditPage").then(m => ({ default: m.ProfileEditPage })), { loading });
 const WebsiteUrlPage = dynamic(() => import("./screens/WebsiteUrlPage").then(m => ({ default: m.WebsiteUrlPage })), { loading });
 const MessageComposePage = dynamic(() => import("./screens/MessageComposePage").then(m => ({ default: m.MessageComposePage })), { loading });
@@ -64,6 +65,7 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "votd": return <VotdPage />;
     case "bible": return <BiblePage />;
     case "notifications": return <NotificationsPage config={config} />;
+    case "notificationPrefs": return <NotificationPrefsPage />;
     case "registrations": return <RegistrationsPage config={config} />;
     case "volunteer":
     case "volunteerBrowse": return <VolunteerPage config={config} />;
