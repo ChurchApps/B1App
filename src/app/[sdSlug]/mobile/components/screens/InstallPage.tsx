@@ -430,14 +430,14 @@ export const InstallPage = ({ config }: Props) => {
             ) : platform === "ios" ? (
               <IOSInstructions accent={accent} accentDeep={accentDeep} />
             ) : platform === "android" ? (
-                <AndroidInstructions
-                  accent={accent}
-                  accentDeep={accentDeep}
-                  canInstall={canInstall}
-                  installing={installing}
-                  onInstall={handleInstall}
-                  statusMessage={statusMessage}
-                />
+              <AndroidInstructions
+                accent={accent}
+                accentDeep={accentDeep}
+                canInstall={canInstall}
+                installing={installing}
+                onInstall={handleInstall}
+                statusMessage={statusMessage}
+              />
             ) : (
               <DesktopInstructions
                 primary={primary}

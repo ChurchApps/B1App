@@ -79,6 +79,7 @@ export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<stri
       volunteerBrowse: Locale.label("mobile.screenTitles.volunteerOpportunities"),
       volunteer: Locale.label("mobile.screenTitles.volunteer"),
       volunteerSignup: Locale.label("mobile.screenTitles.volunteer"),
+      notificationPrefs: "Notification Preferences",
       profileEdit: Locale.label("mobile.screenTitles.profileEdit"),
       stream: Locale.label("mobile.screenTitles.stream"),
       bible: Locale.label("mobile.screenTitles.bible"),
