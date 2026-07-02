@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "返回",
+    "continue": "继续",
+    "stepProgress": "{current} / {total}",
     "confirmDelete": "您确定要删除此表单数据吗？",
     "editForm": "编辑表格",
     "isRequired": "是必须的",

@@ -38,7 +38,7 @@ export function HeaderFooter(props: Props) {
           {getDescription()}
         </Head>
         <Header config={props.config} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} />
-        <main>
+        <main id="main-content">
           <div className="page">
             <Zone church={props.config?.church} sections={props.pageData.sections} zone="main" churchSettings={props.config?.appearance} />
           </div>

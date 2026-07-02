@@ -25,7 +25,7 @@ export async function DefaultPageWrapper(props: Props) {
     <CssBaseline />
     <div>
       <Header config={props.config} overlayContent={props.overlayContent} sections={[]} linkColor={props.linkColor} />
-      <main>
+      <main id="main-content">
         <div className="page">
           {!props.overlayContent && <div style={{ paddingTop: 90 }}></div>}
 

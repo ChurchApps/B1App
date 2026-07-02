@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Indietro",
+    "continue": "Continua",
+    "stepProgress": "{current} di {total}",
     "confirmDelete": "Sei sicuro di voler eliminare i dati di questo modulo?",
     "editForm": "Modifica modulo",
     "isRequired": "è obbligatorio",

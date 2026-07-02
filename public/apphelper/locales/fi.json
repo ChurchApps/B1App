@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Takaisin",
+    "continue": "Jatka",
+    "stepProgress": "{current} / {total}",
     "confirmDelete": "Haluatko varmasti poistaa nämä lomakkeen tiedot?",
     "editForm": "Muokkaa lomaketta",
     "isRequired": "vaaditaan",

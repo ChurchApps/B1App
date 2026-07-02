@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Înapoi",
+    "continue": "Continuă",
+    "stepProgress": "{current} din {total}",
     "confirmDelete": "Sunteți sigur că doriti să ștergeți aceste date de formular?",
     "editForm": "Editare formular",
     "isRequired": "este necesar",

@@ -213,6 +213,9 @@
 		"file": "File"
 	},
 	"formSubmissionEdit": {
+		"back": "Back",
+		"continue": "Continue",
+		"stepProgress": "{current} of {total}",
 		"confirmDelete": "Are you sure you wish to delete this form data?",
 		"editForm": "Edit Form",
 		"isRequired": "is required",

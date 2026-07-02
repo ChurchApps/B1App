@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Tillbaka",
+    "continue": "Fortsätt",
+    "stepProgress": "{current} av {total}",
     "confirmDelete": "Är du säker på att du vill radera dessa formulärdata?",
     "editForm": "Redigera formulär",
     "isRequired": "är obligatoriskt",

@@ -28,6 +28,7 @@ interface FormInterface {
   archived: boolean;
   action?: string;
   thankYouMessage?: string;
+  displayMode?: "standard" | "conversational";
 }
 
 export const FormElement = (props: Props) => {
@@ -106,6 +107,7 @@ export const FormElement = (props: Props) => {
         contentId={formId}
         formSubmissionId=""
         personId={UserHelper?.person?.id}
+        displayMode={form?.displayMode}
         updatedFunction={handleUpdate}
         showHeader={false}
         noBackground={true}

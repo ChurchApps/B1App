@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Voltar",
+    "continue": "Continuar",
+    "stepProgress": "{current} de {total}",
     "confirmDelete": "Tem certeza de que deseja excluir os dados deste formulário?",
     "editForm": "Editar formulário",
     "isRequired": "é necessário",

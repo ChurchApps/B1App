@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "वापस",
+    "continue": "जारी रखें",
+    "stepProgress": "{total} में से {current}",
     "confirmDelete": "क्या आप वाकई इस फ़ॉर्म डेटा को हटाना चाहते हैं?",
     "editForm": "प्रपत्र संपादित करें",
     "isRequired": "आवश्यक है",

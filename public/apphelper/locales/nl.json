@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Terug",
+    "continue": "Doorgaan",
+    "stepProgress": "{current} van {total}",
     "confirmDelete": "Weet u zeker dat u deze formuliergegevens wilt verwijderen?",
     "editForm": "Formulier bewerken",
     "isRequired": "is verplicht",

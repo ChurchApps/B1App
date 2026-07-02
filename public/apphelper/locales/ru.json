@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Назад",
+    "continue": "Продолжить",
+    "stepProgress": "{current} из {total}",
     "confirmDelete": "Вы уверены, что хотите удалить данные этой формы?",
     "editForm": "Редактировать форму",
     "isRequired": "требуется",

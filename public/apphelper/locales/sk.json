@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Späť",
+    "continue": "Pokračovať",
+    "stepProgress": "{current} z {total}",
     "confirmDelete": "Ste si istí, že chcete odstrániť tieto údaje formulára?",
     "editForm": "Upraviť formulár",
     "isRequired": "je povinný",

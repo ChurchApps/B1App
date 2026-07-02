@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "戻る",
+    "continue": "続ける",
+    "stepProgress": "{total} 中 {current}",
     "confirmDelete": "このフォームデータを削除してもよろしいですか?",
     "editForm": "フォームを編集",
     "isRequired": "必須",

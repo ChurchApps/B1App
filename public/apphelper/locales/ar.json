@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "رجوع",
+    "continue": "متابعة",
+    "stepProgress": "{current} من {total}",
     "confirmDelete": "هل أنت متأكد من رغبتك في حذف بيانات النموذج هذه؟",
     "editForm": "تعديل النموذج",
     "isRequired": "مطلوب",

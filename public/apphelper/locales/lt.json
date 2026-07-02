@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Atgal",
+    "continue": "Tęsti",
+    "stepProgress": "{current} iš {total}",
     "confirmDelete": "Ar tikrai norite ištrinti šiuos formos duomenis?",
     "editForm": "Redaguoti formą",
     "isRequired": "reikalinga",

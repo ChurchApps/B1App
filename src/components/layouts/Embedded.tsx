@@ -45,7 +45,7 @@ export function Embedded(props: Props) {
           {getDescription()}
         </Head>
 
-        <main>
+        <main id="main-content">
           <div className="page">
             <Zone church={props.church} sections={props.pageData.sections} zone="main" churchSettings={props.churchSettings} />
           </div>

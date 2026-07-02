@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Vissza",
+    "continue": "Tovább",
+    "stepProgress": "{current} / {total}",
     "confirmDelete": "Biztosan szeretné törölni az adatokat?",
     "editForm": "Nyomtatvány szerkesztése",
     "isRequired": "szükséges",

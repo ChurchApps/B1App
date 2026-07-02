@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Назад",
+    "continue": "Продовжити",
+    "stepProgress": "{current} з {total}",
     "confirmDelete": "Ви впевнені, що хочете видалити ці дані форми?",
     "editForm": "Редагувати форму",
     "isRequired": "обов'язково",

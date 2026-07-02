@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "뒤로",
+    "continue": "계속",
+    "stepProgress": "{total} 중 {current}",
     "confirmDelete": "이 양식 데이터를 삭제하시겠습니까?",
     "editForm": "양식 편집",
     "isRequired": "필수",

@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Quay lại",
+    "continue": "Tiếp tục",
+    "stepProgress": "{current} / {total}",
     "confirmDelete": "Bạn có chắc chắn muốn xóa dữ liệu biểu mẫu này không?",
     "editForm": "Chỉnh sửa biểu mẫu",
     "isRequired": "là bắt buộc",

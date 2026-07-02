@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Tilbage",
+    "continue": "Fortsæt",
+    "stepProgress": "{current} af {total}",
     "confirmDelete": "Er du sikker på, at du vil slette disse formulardata?",
     "editForm": "Rediger formular",
     "isRequired": "er påkrævet",

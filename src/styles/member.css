@@ -456,3 +456,18 @@ body {
   padding: 12px 16px;
   margin-top: 16px;
 }
+
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 2000;
+  padding: 10px 16px;
+  background: var(--app-primary, #36547e);
+  color: #fff;
+  border-radius: 0 0 6px 0;
+  text-decoration: none;
+}
+.skipLink:focus {
+  left: 0;
+}

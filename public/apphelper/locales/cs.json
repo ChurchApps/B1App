@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Zpět",
+    "continue": "Pokračovat",
+    "stepProgress": "{current} z {total}",
     "confirmDelete": "Opravdu chcete smazat tyto údaje formuláře?",
     "editForm": "Upravit formulář",
     "isRequired": "je povinné",

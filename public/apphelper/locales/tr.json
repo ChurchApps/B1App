@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Geri",
+    "continue": "Devam",
+    "stepProgress": "{current} / {total}",
     "confirmDelete": "Bu form verilerini silmek istediğinizden emin misiniz?",
     "editForm": "Formu Düzenle",
     "isRequired": "gereklidir",

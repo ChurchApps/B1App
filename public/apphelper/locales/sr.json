@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Назад",
+    "continue": "Настави",
+    "stepProgress": "{current} од {total}",
     "confirmDelete": "Да ли сте сигурни да желите избрисати ове податке обрасца?",
     "editForm": "Уреди образац",
     "isRequired": "је обавезно",

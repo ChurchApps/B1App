@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Kembali",
+    "continue": "Lanjutkan",
+    "stepProgress": "{current} dari {total}",
     "confirmDelete": "Apakah Anda yakin ingin menghapus data formulir ini?",
     "editForm": "Edit Formulir",
     "isRequired": "diperlukan",

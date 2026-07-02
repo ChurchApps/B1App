@@ -184,6 +184,9 @@
     }
   },
   "formSubmissionEdit": {
+    "back": "Bumalik",
+    "continue": "Magpatuloy",
+    "stepProgress": "{current} ng {total}",
     "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang data ng form na ito?",
     "editForm": "I-edit ang Form",
     "isRequired": "ay kinakailangan",

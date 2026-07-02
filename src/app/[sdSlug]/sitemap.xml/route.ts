@@ -3,6 +3,8 @@ import { ApiHelper } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers";
 
 interface SitemapPage { url?: string; title?: string; }
+interface SitemapPost { slug?: string; }
+interface SitemapSermon { id?: string; publishDate?: string; }
 
 const escapeXml = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 
@@ -29,6 +31,25 @@ export async function GET(request: NextRequest, context: { params: Promise<{ sdS
       if (pagesResponse.ok) {
         const pages: SitemapPage[] = await pagesResponse.json();
         pages.forEach((p) => { if (p.url?.startsWith("/")) urls.add(p.url); });
+      }
+      const postsResponse = await fetch(contentApi + "/posts/public/" + church.id + "?pageSize=50", { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
+      if (postsResponse.ok) {
+        const posts: SitemapPost[] = await postsResponse.json();
+        if (Array.isArray(posts) && posts.length > 0) {
+          urls.add("/blog");
+          posts.forEach((p) => { if (p.slug) urls.add("/blog/" + p.slug); });
+        }
+      }
+      const sermonsResponse = await fetch(contentApi + "/sermons/public/" + church.id, { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
+      if (sermonsResponse.ok) {
+        const sermons: SitemapSermon[] = await sermonsResponse.json();
+        if (Array.isArray(sermons)) {
+          sermons
+            .filter((s) => s.id)
+            .sort((a, b) => new Date(b.publishDate || 0).getTime() - new Date(a.publishDate || 0).getTime())
+            .slice(0, 50)
+            .forEach((s) => urls.add("/sermons/" + s.id));
+        }
       }
     }
   } catch { /* fall back to home page only */ }

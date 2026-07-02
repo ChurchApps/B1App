@@ -268,7 +268,7 @@ export function Header(props: Props) {
                 ? (<img src={logo} alt={props.config?.church.name} id="headerLogo" data-testid="header-logo" onError={() => setLogoError(true)} />)
                 : (<Box component="span" id="headerLogo" data-testid="header-church-name" sx={{ fontSize: "1.5rem", fontWeight: 600, display: "inline-block", lineHeight: 1 }}>{props.config?.church.name}</Box>)}
             </Link>
-            <Box sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap" }}>
+            <Box component="nav" aria-label={Locale.label("header.mainNav")} sx={{ display: { xs: "none", md: "flex" }, alignItems: "center", whiteSpace: "nowrap" }}>
               {getLinks()}
               {userAction}
             </Box>

@@ -72,6 +72,7 @@ export function FormPage(props: Props) {
       contentId={props.formId}
       formSubmissionId=""
       personId={PersonHelper?.person?.id}
+      displayMode={(form as any)?.displayMode}
       updatedFunction={handleUpdate}
       cancelFunction={() => redirect("/")}
       stripePromise={stripePromise}
