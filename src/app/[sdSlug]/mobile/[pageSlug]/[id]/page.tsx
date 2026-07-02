@@ -4,7 +4,6 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 
-import { MobilePageWrapper } from "../../components/MobilePageWrapper";
 import { PlaceholderPage } from "../../components/PlaceholderPage";
 import { DetailRouter } from "../../components/DetailRouter";
 
@@ -29,16 +28,8 @@ export default async function MobileDetailPage({ params }: { params: PageParams 
   const { config } = await loadData(sdSlug);
 
   if (!id || id === "undefined" || id.trim() === "") {
-    return (
-      <MobilePageWrapper sdSlug={sdSlug} config={config}>
-        <PlaceholderPage title={Locale.label("mobile.invalidLink")} icon="error_outline" description={Locale.label("mobile.invalidLinkDescription")} />
-      </MobilePageWrapper>
-    );
+    return <PlaceholderPage title={Locale.label("mobile.invalidLink")} icon="error_outline" description={Locale.label("mobile.invalidLinkDescription")} />;
   }
 
-  return (
-    <MobilePageWrapper sdSlug={sdSlug} config={config}>
-      <DetailRouter pageSlug={pageSlug} id={id} config={config} />
-    </MobilePageWrapper>
-  );
+  return <DetailRouter pageSlug={pageSlug} id={id} config={config} />;
 }

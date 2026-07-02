@@ -6,6 +6,14 @@ import { test, expect, type Page } from "@playwright/test";
 // and /paymentmethods/* for real. Authenticated (demo@b1.church) member flow —
 // the guest flow is reCAPTCHA-gated and not exercisable headless.
 
+// All describe blocks below share one real mutable resource: demo@b1.church's Stripe
+// test-mode customer/cards. With the project's fullyParallel config, two independent
+// describe.serial blocks (e.g. "member donations" and "donation error handling") can be
+// scheduled onto different workers and run at the same time — one block's deleteAllCards()
+// can then wipe the very card the other block just asserted on. Force the whole file to run
+// as a single serial sequence so these blocks never interleave.
+test.describe.configure({ mode: "serial" });
+
 const CARD_OK = "4242424242424242";
 const CARD_OK2 = "5555555555554444"; // mastercard — distinct fingerprint from CARD_OK
 const CARD_DECLINE = "4000000000000002"; // generic_decline at charge time

@@ -1,3 +1,4 @@
+import "material-icons/iconfont/filled.css";
 import "react-activity/dist/Dots.css";
 import "@/styles/vendor/pages.css";
 import "@/styles/member.css";
@@ -39,7 +40,6 @@ export default async function PublicLayout({
       <meta name="apple-mobile-web-app-title" content={appTitle} />
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       <PwaRegister />
       <ClientLayout>{children}</ClientLayout>
     </>

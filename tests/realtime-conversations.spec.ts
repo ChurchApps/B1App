@@ -1,4 +1,5 @@
 import { test, expect, type BrowserContext, type Page } from "@playwright/test";
+import { waitForRoomJoin } from "./helpers/realtime";
 
 /**
  * Cross-user realtime test for group discussions.
@@ -56,17 +57,22 @@ test.describe("Realtime — cross-user group conversations", () => {
 
     await Promise.all([
       loginAs(demoPage, "demo@b1.church", "password"),
-      loginAs(testerPage, "tester@b1.church", "password"),
+      loginAs(testerPage, "tester@b1.church", "password")
     ]);
+
+    // Set up the room-join waiters before navigating — openGroupMessages triggers the
+    // navigation whose bootstrap eventually fires SubscriptionManager.joinRoom.
+    const demoJoined = waitForRoomJoin(demoPage);
+    const testerJoined = waitForRoomJoin(testerPage);
 
     await Promise.all([
       openGroupMessages(demoPage),
-      openGroupMessages(testerPage),
+      openGroupMessages(testerPage)
     ]);
 
-    // Allow both tabs to open their socket and join the conversation room.
-    await demoPage.waitForTimeout(1500);
-    await testerPage.waitForTimeout(1500);
+    // Wait for each tab's own POST /connections (the conversation room join) to land
+    // server-side before either tab posts — see tests/helpers/realtime.ts.
+    await Promise.all([demoJoined, testerJoined]);
   });
 
   test.afterAll(async () => {

@@ -17,7 +17,7 @@ export interface ConfigurationInterface { keyName?: string, navLinks?: LinkInter
 const CONFIG_REVALIDATE_SECONDS = process.env.NODE_ENV === "production" ? 300 : 0;
 
 
-const fetchCached = async <T>(path: string, apiName: string, tag: string): Promise<T> => {
+export const fetchCached = async <T>(path: string, apiName: string, tag: string): Promise<T> => {
   const apiConfig = ApiHelper.getConfig(apiName);
   if (!apiConfig) throw new Error("Unconfigured API: " + apiName);
   const url = apiConfig.url + path;
@@ -42,7 +42,7 @@ export class ConfigHelper {
     const [appearance, tabs, homePage, gatewayConfigured, globalStyles] = await Promise.all([
       fetchCached<AppearanceInterface>("/settings/public/" + church.id, "MembershipApi", keyName),
       fetchCached<LinkInterface[]>("/links/church/" + church.id + "?category=" + navCategory, "ContentApi", keyName),
-      ApiHelper.getAnonymous("/pages/" + church.id + "/tree?url=/", "ContentApi") as Promise<PageInterface>,
+      fetchCached<PageInterface>("/pages/" + church.id + "/tree?url=/", "ContentApi", keyName),
       fetchCached<{ configured?: boolean }>("/gateways/configured/" + church.id, "GivingApi", keyName),
       fetchCached<GlobalStyleInterface>("/globalStyles/church/" + church.id, "ContentApi", keyName)
     ]);

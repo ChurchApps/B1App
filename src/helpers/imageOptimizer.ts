@@ -14,9 +14,9 @@ export const b1ImageOptimizer = {
     return { src: props.src, srcSet: props.srcSet, sizes: props.sizes };
   },
 
-  background: (url: string) => {
-    if (!optimizable(url)) return `url('${url}')`;
-    const { props } = getImageProps({ alt: "", src: url, width: 1920, height: 1280 });
-    return `url('${props.src}')`;
+  background: (url: string) => `url('${b1ImageOptimizer.backgroundSrc(url)}')`,
+  backgroundSrc: (url: string) => {
+    if (!optimizable(url)) return url;
+    return getImageProps({ alt: "", src: url, width: 1920, height: 1280 }).props.src;
   }
 };

@@ -1,9 +1,9 @@
 import React, { cache } from "react";
 import { PageLayout, Theme } from "@/components";
 import { ChurchJsonLd } from "@/components/seo/ChurchJsonLd";
-import { ApiHelper, Locale } from "@churchapps/apphelper";
+import { Locale } from "@churchapps/apphelper";
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
-import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/vendor/animations.css";
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  const pageData: PageInterface = await ApiHelper.getAnonymous("/pages/" + config.church.id + "/tree?url=" + pageSlug, "ContentApi");
+  const pageData: PageInterface = await fetchCached<PageInterface>("/pages/" + config.church.id + "/tree?url=" + pageSlug, "ContentApi", sdSlug);
   return { pageData, config };
 };
 

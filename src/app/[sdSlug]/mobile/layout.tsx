@@ -1,6 +1,9 @@
+import "material-icons/iconfont/filled.css";
 import type { Metadata, Viewport } from "next";
+import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { PwaRegister } from "./PwaRegister";
 import { MobileClientLayout } from "./MobileClientLayout";
+import { MobileKeepAlive } from "./components/MobileKeepAlive";
 import { loadChurchAppearance } from "./loadChurchAppearance";
 
 type LayoutParams = Promise<{ sdSlug: string }>;
@@ -20,6 +23,8 @@ export async function generateViewport({ params }: { params: LayoutParams }): Pr
 
 export default async function MobileLayout({ children, params }: { children: React.ReactNode; params: LayoutParams }) {
   const { sdSlug } = await params;
+  await EnvironmentHelper.initServerSide();
+  const config = await ConfigHelper.load(sdSlug, "website");
   const { churchName } = await loadChurchAppearance(sdSlug);
   const appTitle = (churchName && churchName.trim()) || sdSlug || "Church";
   const iconUrl = "/mobile/icon/192";
@@ -41,9 +46,8 @@ export default async function MobileLayout({ children, params }: { children: Rea
         dangerouslySetInnerHTML={{ __html: `(function(){if(typeof window==="undefined")return;var state=window.__b1InstallPromptState=window.__b1InstallPromptState||{deferredPrompt:null,installed:false};var detect=function(){try{return !!((window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||(window.navigator&&window.navigator.standalone===true));}catch(_e){return false;}};state.installed=detect();window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();state.deferredPrompt=e;state.installed=false;});window.addEventListener("appinstalled",function(){state.installed=true;state.deferredPrompt=null;});window.addEventListener("pageshow",function(){state.installed=detect();if(state.installed)state.deferredPrompt=null;});})();` }}
       />
       <MobileClientLayout>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <PwaRegister />
-        {children}
+        <MobileKeepAlive sdSlug={sdSlug} config={config}>{children}</MobileKeepAlive>
       </MobileClientLayout>
     </>
   );

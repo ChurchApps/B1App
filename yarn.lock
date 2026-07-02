@@ -177,7 +177,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.29.7":
+"@babel/types@npm:^7.26.0, @babel/types@npm:^7.29.7":
   version: 7.29.7
   resolution: "@babel/types@npm:7.29.7"
   dependencies:
@@ -4189,6 +4189,7 @@ __metadata:
     "@youversion/platform-react-hooks": "npm:^0.5.8"
     "@youversion/platform-react-ui": "npm:^1.25.0"
     axios: "npm:^1.16.0"
+    babel-plugin-react-compiler: "npm:^1.0.0"
     copyfiles: "npm:^2.4.1"
     dayjs: "npm:^1.11.20"
     eslint: "npm:^9.39.4"
@@ -4199,6 +4200,7 @@ __metadata:
     flexsearch: "npm:0.8.212"
     idb-keyval: "npm:^6.2.2"
     js-cookie: "npm:^3.0.5"
+    material-icons: "npm:^1.13.14"
     material-ui-popup-state: "npm:^5.3.6"
     next: "npm:^16.2.6"
     react: "npm:^19.2.6"
@@ -4235,6 +4237,15 @@ __metadata:
     cosmiconfig: "npm:^7.0.0"
     resolve: "npm:^1.19.0"
   checksum: 10c0/c6dfb15de96f67871d95bd2e8c58b0c81edc08b9b087dc16755e7157f357dc1090a8dc60ebab955e92587a9101f02eba07e730adc253a1e4cf593ca3ebd3839c
+  languageName: node
+  linkType: hard
+
+"babel-plugin-react-compiler@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "babel-plugin-react-compiler@npm:1.0.0"
+  dependencies:
+    "@babel/types": "npm:^7.26.0"
+  checksum: 10c0/9406267ada8d7dbdfe8906b40ecadb816a5f4cee2922bee23f7729293b369624ee135b5a9b0f263851c263c9787522ac5d97016c9a2b82d1668300e42b18aff8
   languageName: node
   linkType: hard
 
@@ -6472,6 +6483,13 @@ __metadata:
   bin:
     marked: bin/marked.js
   checksum: 10c0/f54dcbb39d3acdcd0356f7629b42811eec56db5f6daef7404e582cdf800f5b598b681f9f8a187e7f51262e37c607f5e0cd9880e56b5c8160a49c3f7828e9e459
+  languageName: node
+  linkType: hard
+
+"material-icons@npm:^1.13.14":
+  version: 1.13.14
+  resolution: "material-icons@npm:1.13.14"
+  checksum: 10c0/4c0f9a8ff02545ce7747c621b5ffa1738212628189c9419f4cd2e75f7f8cf9e98ed5f946724a2d7e169cfebc439875df0ba9f79ba94a574e16cbb0c5ce26e55a
   languageName: node
   linkType: hard
 

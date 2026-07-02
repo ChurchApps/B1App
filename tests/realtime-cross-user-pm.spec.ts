@@ -1,4 +1,5 @@
 import { test, expect, type BrowserContext, type Page } from "@playwright/test";
+import { waitForAlertsJoin } from "./helpers/realtime";
 
 /**
  * End-to-end cross-user realtime test for the consolidated PM stack.
@@ -66,7 +67,7 @@ test.describe("Realtime — cross-user private messages", () => {
 
     await Promise.all([
       loginAs(demoPage, "demo@b1.church", "password"),
-      loginAs(testerPage, "tester@b1.church", "password"),
+      loginAs(testerPage, "tester@b1.church", "password")
     ]);
   });
 
@@ -76,13 +77,20 @@ test.describe("Realtime — cross-user private messages", () => {
   });
 
   test("demo -> tester message appears live without reload", async () => {
+    // Set up the alerts-join waiters before navigating — openThreadTo hard-navigates
+    // (page.goto), which reloads the app and re-bootstraps the socket, so any earlier
+    // (login-time) alerts registration is torn down. A brand-new thread between these
+    // two users has no per-conversation room for either side to join yet, so delivery
+    // of the first message depends entirely on each tab's "alerts" room registration —
+    // see tests/helpers/realtime.ts.
+    const demoAlertsJoined = waitForAlertsJoin(demoPage);
+    const testerAlertsJoined = waitForAlertsJoin(testerPage);
+
     // Both users open the thread between them.
     await openThreadTo(demoPage, TESTER_PERSON_ID);
     await openThreadTo(testerPage, DEMO_PERSON_ID);
 
-    // Give each tab a moment to open its socket and join the conversation room.
-    await demoPage.waitForTimeout(1500);
-    await testerPage.waitForTimeout(1500);
+    await Promise.all([demoAlertsJoined, testerAlertsJoined]);
 
     const stamp = `from-demo-${Date.now()}`;
     await send(demoPage, stamp);

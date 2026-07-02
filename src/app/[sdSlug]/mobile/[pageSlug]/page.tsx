@@ -4,8 +4,8 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 
-import { MobilePageWrapper } from "../components/MobilePageWrapper";
 import { ScreenRouter } from "../components/ScreenRouter";
+import { canonicalTab } from "../components/mobileTabs";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string }>;
 
@@ -23,13 +23,12 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
 }
 
 export default async function MobilePage({ params }: { params: PageParams }) {
-  await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug } = await params;
+  // Kept-alive tabs are rendered by the layout's MobileKeepAlive; the route
+  // itself renders nothing so tab switches skip this server work entirely.
+  if (canonicalTab(pageSlug)) return null;
+  await EnvironmentHelper.initServerSide();
   const { config } = await loadData(sdSlug);
 
-  return (
-    <MobilePageWrapper sdSlug={sdSlug} config={config}>
-      <ScreenRouter pageSlug={pageSlug} config={config} />
-    </MobilePageWrapper>
-  );
+  return <ScreenRouter pageSlug={pageSlug} config={config} />;
 }
