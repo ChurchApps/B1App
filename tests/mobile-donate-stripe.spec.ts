@@ -67,6 +67,15 @@ async function openManageTab(page: Page) {
   await page.getByRole("heading", { name: "Payment Methods" }).waitFor({ state: "visible", timeout: 20000 });
 }
 
+// RecurringDonations only renders once the page-level subscriptions query is non-empty
+// (DonatePage.tsx renderHistory), so this must run after a recurring donation exists.
+async function openHistoryTab(page: Page) {
+  await page.goto("/mobile/donate");
+  const tab = page.getByRole("tab", { name: /History/i });
+  await tab.waitFor({ state: "visible", timeout: 20000 });
+  await tab.click();
+}
+
 // Fund-amount + payment-method entry, adaptive: inline Stripe entry when no saved
 // card exists, otherwise the saved-method select (default selection is fine).
 async function fillDonationDetails(page: Page, amount: string, card: string) {
@@ -159,6 +168,41 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
     await expect(page.getByText(/Recurring donation created|Thank you for your donation/i)).toBeVisible({ timeout: 45000 }).catch(() => { ok = false; });
     if (!ok) console.log("DIAG:\n" + diag.join("\n"));
     expect(ok, "No success Alert after recurring donation").toBe(true);
+  });
+
+  test("pause and resume the recurring donation, then cancel it (RecurringDonations)", async ({ page }) => {
+    const diag = captureDiagnostics(page);
+    page.on("dialog", (d) => d.accept()); // window.confirm on pause + cancel
+
+    await openHistoryTab(page);
+    const recurringBox = page.locator('[data-testid="recurring-donations"]');
+    await expect(recurringBox).toBeVisible({ timeout: 20000 });
+    const pauseBtn = recurringBox.locator('button[aria-label="pause-subscription"]').first();
+    await expect(pauseBtn).toBeVisible({ timeout: 20000 });
+
+    const pausePost = page.waitForResponse((r) => /\/subscriptions\/.+\/pause/.test(r.url()) && r.request().method() === "POST", { timeout: 15000 });
+    await pauseBtn.click();
+    const pauseResp = await pausePost;
+    if (!pauseResp.ok()) console.log("DIAG:\n" + diag.join("\n"));
+    expect(pauseResp.ok(), "pause response ok").toBe(true);
+
+    await expect(recurringBox.getByText("Paused", { exact: true })).toBeVisible({ timeout: 15000 });
+    const resumeBtn = recurringBox.locator('button[aria-label="resume-subscription"]').first();
+    await expect(resumeBtn).toBeVisible({ timeout: 10000 });
+
+    const resumePost = page.waitForResponse((r) => /\/subscriptions\/.+\/resume/.test(r.url()) && r.request().method() === "POST", { timeout: 15000 });
+    await resumeBtn.click();
+    const resumeResp = await resumePost;
+    expect(resumeResp.ok(), "resume response ok").toBe(true);
+
+    await expect(recurringBox.getByText("Paused", { exact: true })).toHaveCount(0, { timeout: 15000 });
+    await expect(recurringBox.locator('button[aria-label="pause-subscription"]').first()).toBeVisible({ timeout: 15000 });
+
+    // Cleanup: cancel so this recurring donation doesn't linger for the next run.
+    const cancelDelete = page.waitForResponse((r) => /\/subscriptions\//.test(r.url()) && r.request().method() === "DELETE", { timeout: 15000 });
+    await recurringBox.locator('button[aria-label="cancel-subscription"]').first().click();
+    const cancelResp = await cancelDelete;
+    expect(cancelResp.ok(), "cancel response ok").toBe(true);
   });
 
   test("delete a card via Manage tab", async ({ page }) => {

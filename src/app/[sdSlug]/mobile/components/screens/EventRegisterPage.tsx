@@ -14,8 +14,9 @@ import {
   Typography
 } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
+import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
 import { useQuery } from "@tanstack/react-query";
-import type { EventInterface, RegistrationInterface } from "@churchapps/helpers";
+import type { EventInterface, FormSubmissionInterface, RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
@@ -41,7 +42,7 @@ type StatusCardProps = {
 
 type ShellProps = { children: React.ReactNode; backButton: React.ReactNode; backgroundColor: string }
 
-type Step = "info" | "members" | "confirm";
+type Step = "info" | "members" | "questions" | "confirm";
 
 const formatEventTime = (event: EventInterface) => {
   if (!event.start) return "";
@@ -109,6 +110,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [registration, setRegistration] = useState<RegistrationInterface | null>(null);
+  const [unRestrictedFormId, setUnRestrictedFormId] = useState("");
 
   const { data: eventData, isLoading: loading, isError: loadError } = useQuery<{ event: EventInterface | null; activeCount: number }>({
     queryKey: ["event-register", churchId, eventId],
@@ -177,14 +179,19 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     setStep("members");
   };
 
-  const handleSubmit = async () => {
-    setSubmitError(null);
+  const validateMembers = (): boolean => {
     for (const m of members) {
       if (!m.firstName.trim() || !m.lastName.trim()) {
         setSubmitError("First and last name are required for each additional member.");
-        return;
+        return false;
       }
     }
+    return true;
+  };
+
+  const handleSubmit = async (formSubmissionId?: string) => {
+    setSubmitError(null);
+    if (!validateMembers()) return;
     setSubmitting(true);
     try {
       const payload: any = { churchId, eventId };
@@ -201,6 +208,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
       if (members.length > 0) {
         payload.members = members.map((m) => ({ firstName: m.firstName.trim(), lastName: m.lastName.trim() }));
       }
+      if (formSubmissionId) payload.formSubmissionId = formSubmissionId;
       const result: RegistrationInterface = await ApiHelper.postAnonymous("/registrations/register", payload, "ContentApi");
       setRegistration(result);
       setStep("confirm");
@@ -209,6 +217,34 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleMembersContinue = async () => {
+    setSubmitError(null);
+    if (!validateMembers()) return;
+
+    if (!event.formId) {
+      await handleSubmit();
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const formData: any = await ApiHelper.get("/forms/standalone/" + event.formId + "?churchId=" + churchId, "MembershipApi");
+      if (formData?.restricted) {
+        await handleSubmit();
+      } else {
+        setUnRestrictedFormId(event.formId);
+        setSubmitting(false);
+        setStep("questions");
+      }
+    } catch {
+      await handleSubmit();
+    }
+  };
+
+  const handleFormSaved = (fs?: FormSubmissionInterface) => {
+    handleSubmit(fs?.id);
   };
 
   const renderBack = () => (
@@ -511,7 +547,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           </Button>
           <Button
             variant="contained"
-            onClick={handleSubmit}
+            onClick={handleMembersContinue}
             disabled={submitting}
             startIcon={submitting ? <CircularProgress size={16} sx={{ color: "#FFFFFF" }} /> : <Icon>check</Icon>}
             sx={{
@@ -527,6 +563,54 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
           >
             {submitting ? "Registering..." : "Complete Registration"}
           </Button>
+        </Box>
+      </Shell>
+    );
+  }
+
+  if (step === "questions") {
+    return (
+      <Shell backButton={renderBack()} backgroundColor={tc.background}>
+        {eventCard}
+        <Box sx={{
+          bgcolor: tc.surface,
+          borderRadius: `${mobileTheme.radius.lg}px`,
+          boxShadow: mobileTheme.shadows.sm,
+          p: `${mobileTheme.spacing.md}px`,
+          mb: `${mobileTheme.spacing.md}px`
+        }}>
+          <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 1.5 }}>
+            {Locale.label("registration.questions")}
+          </Typography>
+          {submitError && (
+            <Box sx={{
+              mb: 2,
+              p: 1.5,
+              borderRadius: `${mobileTheme.radius.md}px`,
+              bgcolor: `${tc.error}1A`,
+              color: tc.error,
+              fontSize: 13,
+              display: "flex",
+              alignItems: "center",
+              gap: 1
+            }}>
+              <Icon sx={{ fontSize: 18 }}>error_outline</Icon>
+              {submitError}
+            </Box>
+          )}
+          <FormSubmissionEdit
+            churchId={churchId}
+            addFormId=""
+            unRestrictedFormId={unRestrictedFormId}
+            contentType="event"
+            contentId={eventId}
+            formSubmissionId=""
+            personId={personId}
+            updatedFunction={handleFormSaved}
+            cancelFunction={() => setStep("members")}
+            showHeader={false}
+            noBackground={true}
+          />
         </Box>
       </Shell>
     );

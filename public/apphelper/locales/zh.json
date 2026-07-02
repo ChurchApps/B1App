@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "数量",
+      "confirmPause": "您确定要暂停此定期捐赠吗？",
       "every": "每一个",
       "interval": "间隔",
       "notFound": "未找到付款方式。",
+      "pauseFailed": "暂停定期捐赠失败。请重试。",
+      "pauseTooltip": "暂停定期捐赠",
+      "paused": "已暂停",
+      "pausedMessage": "定期捐赠已暂停。",
       "paymentMethod": "付款方式",
+      "resumeFailed": "恢复定期捐赠失败。请重试。",
+      "resumeTooltip": "恢复定期捐赠",
+      "resumedMessage": "定期捐赠已恢复。",
       "startDate": "开始日期"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "周五",
+        "monday": "周一",
+        "saturday": "周六",
+        "sunday": "周日",
+        "thursday": "周四",
+        "tuesday": "周二",
+        "wednesday": "周三"
+      },
+      "endDate": "结束日期",
+      "endDateAria": "重复结束日期",
+      "ends": "结束",
+      "endsAfter": "之后",
+      "endsAria": "选择重复结束方式",
+      "endsOn": "于",
+      "freqDay": "天",
+      "freqMonth": "月",
+      "freqWeek": "周",
+      "frequency": "频率",
+      "frequencyAria": "选择重复频率",
+      "interval": "间隔",
+      "intervalAria": "重复间隔",
+      "monthlyOnDay": "每月第 {} 天",
+      "monthlyOnNth": "每月第 {ordinal} 个 {day}",
+      "monthlyOptionAria": "选择每月重复选项",
+      "never": "从不",
+      "occurrences": "次数",
+      "occurrencesAria": "重复次数",
+      "on": "于",
+      "ordinal": {
+        "first": "第一",
+        "fourth": "第四",
+        "last": "最后",
+        "second": "第二",
+        "third": "第三"
+      },
+      "toggleWeekday": "切换 {} 用于每周重复"
     }
   },
   "formSubmissionEdit": {

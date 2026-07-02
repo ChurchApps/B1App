@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "Beløp",
+      "confirmPause": "Er du sikker på at du vil sette denne gjentakende donasjonen på pause?",
       "every": "Hver",
       "interval": "Intervall",
       "notFound": "Finner ikke betalingsmetoden.",
+      "pauseFailed": "Kunne ikke sette gjentakende donasjon på pause. Vennligst prøv igjen.",
+      "pauseTooltip": "Sett gjentakende donasjon på pause",
+      "paused": "Satt på pause",
+      "pausedMessage": "Gjentakende donasjon satt på pause.",
       "paymentMethod": "Betalingsmetode",
+      "resumeFailed": "Kunne ikke gjenoppta gjentakende donasjon. Vennligst prøv igjen.",
+      "resumeTooltip": "Gjenoppta gjentakende donasjon",
+      "resumedMessage": "Gjentakende donasjon gjenopptatt.",
       "startDate": "Startdato"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Fredag",
+        "monday": "Mandag",
+        "saturday": "Lørdag",
+        "sunday": "Søndag",
+        "thursday": "Torsdag",
+        "tuesday": "Tirsdag",
+        "wednesday": "Onsdag"
+      },
+      "endDate": "Sluttdato",
+      "endDateAria": "Sluttdato for gjentakelse",
+      "ends": "Slutter",
+      "endsAfter": "Etter",
+      "endsAria": "Velg når gjentakelsen slutter",
+      "endsOn": "På",
+      "freqDay": "Dag",
+      "freqMonth": "Måned",
+      "freqWeek": "Uke",
+      "frequency": "Frekvens",
+      "frequencyAria": "Velg gjentakelsesfrekvens",
+      "interval": "Intervall",
+      "intervalAria": "Gjentakelsesintervall",
+      "monthlyOnDay": "Månedlig den {}.",
+      "monthlyOnNth": "Månedlig på {ordinal} {day}",
+      "monthlyOptionAria": "Velg månedlig gjentakelsesalternativ",
+      "never": "Aldri",
+      "occurrences": "Forekomster",
+      "occurrencesAria": "Antall gjentakelser",
+      "on": "På",
+      "ordinal": {
+        "first": "første",
+        "fourth": "fjerde",
+        "last": "siste",
+        "second": "andre",
+        "third": "tredje"
+      },
+      "toggleWeekday": "Veksle {} for ukentlig gjentakelse"
     }
   },
   "formSubmissionEdit": {

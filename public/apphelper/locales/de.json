@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "Menge",
+      "confirmPause": "Sind Sie sicher, dass Sie diese wiederkehrende Spende pausieren möchten?",
       "every": "Jeden",
       "interval": "Intervall",
       "notFound": "Zahlungsmethode nicht gefunden.",
+      "pauseFailed": "Wiederkehrende Spende konnte nicht pausiert werden. Bitte versuchen Sie es erneut.",
+      "pauseTooltip": "Wiederkehrende Spende pausieren",
+      "paused": "Pausiert",
+      "pausedMessage": "Wiederkehrende Spende pausiert.",
       "paymentMethod": "Bezahlverfahren",
+      "resumeFailed": "Wiederkehrende Spende konnte nicht fortgesetzt werden. Bitte versuchen Sie es erneut.",
+      "resumeTooltip": "Wiederkehrende Spende fortsetzen",
+      "resumedMessage": "Wiederkehrende Spende fortgesetzt.",
       "startDate": "Startdatum"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Freitag",
+        "monday": "Montag",
+        "saturday": "Samstag",
+        "sunday": "Sonntag",
+        "thursday": "Donnerstag",
+        "tuesday": "Dienstag",
+        "wednesday": "Mittwoch"
+      },
+      "endDate": "Enddatum",
+      "endDateAria": "Enddatum der Wiederholung",
+      "ends": "Endet",
+      "endsAfter": "Nach",
+      "endsAria": "Auswählen, wann die Wiederholung endet",
+      "endsOn": "Am",
+      "freqDay": "Tag",
+      "freqMonth": "Monat",
+      "freqWeek": "Woche",
+      "frequency": "Häufigkeit",
+      "frequencyAria": "Wiederholungshäufigkeit auswählen",
+      "interval": "Intervall",
+      "intervalAria": "Wiederholungsintervall",
+      "monthlyOnDay": "Monatlich am Tag {}",
+      "monthlyOnNth": "Monatlich am {ordinal} {day}",
+      "monthlyOptionAria": "Monatliche Wiederholungsoption auswählen",
+      "never": "Nie",
+      "occurrences": "Wiederholungen",
+      "occurrencesAria": "Anzahl der Wiederholungen",
+      "on": "Am",
+      "ordinal": {
+        "first": "ersten",
+        "fourth": "vierten",
+        "last": "letzten",
+        "second": "zweiten",
+        "third": "dritten"
+      },
+      "toggleWeekday": "{} für wöchentliche Wiederholung umschalten"
     }
   },
   "formSubmissionEdit": {

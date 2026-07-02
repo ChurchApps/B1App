@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "मात्रा",
+      "confirmPause": "क्या आप वाकई इस आवर्ती दान को रोकना चाहते हैं?",
       "every": "प्रत्येक",
       "interval": "मध्यान्तर",
       "notFound": "भुगतान विधि नहीं मिली.",
+      "pauseFailed": "आवर्ती दान रोकने में विफल। कृपया पुनः प्रयास करें।",
+      "pauseTooltip": "आवर्ती दान रोकें",
+      "paused": "रोका गया",
+      "pausedMessage": "आवर्ती दान रोक दिया गया।",
       "paymentMethod": "भुगतान विधि",
+      "resumeFailed": "आवर्ती दान फिर से शुरू करने में विफल। कृपया पुनः प्रयास करें।",
+      "resumeTooltip": "आवर्ती दान फिर से शुरू करें",
+      "resumedMessage": "आवर्ती दान फिर से शुरू किया गया।",
       "startDate": "आरंभ करने की तिथि"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "शुक्रवार",
+        "monday": "सोमवार",
+        "saturday": "शनिवार",
+        "sunday": "रविवार",
+        "thursday": "गुरुवार",
+        "tuesday": "मंगलवार",
+        "wednesday": "बुधवार"
+      },
+      "endDate": "समाप्ति तिथि",
+      "endDateAria": "पुनरावृत्ति समाप्ति तिथि",
+      "ends": "समाप्त होता है",
+      "endsAfter": "के बाद",
+      "endsAria": "चुनें कि पुनरावृत्ति कब समाप्त होगी",
+      "endsOn": "तिथि पर",
+      "freqDay": "दिन",
+      "freqMonth": "महीना",
+      "freqWeek": "सप्ताह",
+      "frequency": "आवृत्ति",
+      "frequencyAria": "पुनरावृत्ति आवृत्ति चुनें",
+      "interval": "अंतराल",
+      "intervalAria": "पुनरावृत्ति अंतराल",
+      "monthlyOnDay": "मासिक रूप से दिन {} को",
+      "monthlyOnNth": "मासिक रूप से {ordinal} {day} को",
+      "monthlyOptionAria": "मासिक पुनरावृत्ति विकल्प चुनें",
+      "never": "कभी नहीं",
+      "occurrences": "घटनाएँ",
+      "occurrencesAria": "पुनरावृत्ति घटनाओं की संख्या",
+      "on": "पर",
+      "ordinal": {
+        "first": "पहला",
+        "fourth": "चौथा",
+        "last": "अंतिम",
+        "second": "दूसरा",
+        "third": "तीसरा"
+      },
+      "toggleWeekday": "साप्ताहिक पुनरावृत्ति के लिए {} टॉगल करें"
     }
   },
   "formSubmissionEdit": {

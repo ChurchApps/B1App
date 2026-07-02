@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "Montant",
+      "confirmPause": "Êtes-vous sûr de vouloir mettre en pause ce don récurrent ?",
       "every": "Chaque",
       "interval": "Intervalle",
       "notFound": "Mode de paiement introuvable.",
+      "pauseFailed": "Échec de la mise en pause du don récurrent. Veuillez réessayer.",
+      "pauseTooltip": "Mettre en pause le don récurrent",
+      "paused": "En pause",
+      "pausedMessage": "Don récurrent mis en pause.",
       "paymentMethod": "Mode de paiement",
+      "resumeFailed": "Échec de la reprise du don récurrent. Veuillez réessayer.",
+      "resumeTooltip": "Reprendre le don récurrent",
+      "resumedMessage": "Don récurrent repris.",
       "startDate": "Date de début"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Vendredi",
+        "monday": "Lundi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche",
+        "thursday": "Jeudi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi"
+      },
+      "endDate": "Date de fin",
+      "endDateAria": "Date de fin de récurrence",
+      "ends": "Se termine",
+      "endsAfter": "Après",
+      "endsAria": "Sélectionner quand la récurrence se termine",
+      "endsOn": "Le",
+      "freqDay": "Jour",
+      "freqMonth": "Mois",
+      "freqWeek": "Semaine",
+      "frequency": "Fréquence",
+      "frequencyAria": "Sélectionner la fréquence de récurrence",
+      "interval": "Intervalle",
+      "intervalAria": "Intervalle de récurrence",
+      "monthlyOnDay": "Mensuel le jour {}",
+      "monthlyOnNth": "Mensuel le {ordinal} {day}",
+      "monthlyOptionAria": "Sélectionner l'option de récurrence mensuelle",
+      "never": "Jamais",
+      "occurrences": "Occurrences",
+      "occurrencesAria": "Nombre d'occurrences de récurrence",
+      "on": "Le",
+      "ordinal": {
+        "first": "premier",
+        "fourth": "quatrième",
+        "last": "dernier",
+        "second": "deuxième",
+        "third": "troisième"
+      },
+      "toggleWeekday": "Activer/désactiver {} pour la récurrence hebdomadaire"
     }
   },
   "formSubmissionEdit": {

@@ -5,7 +5,8 @@ import {
   LinearProgress, Stack, TextField, Typography
 } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
-import type { EventInterface, RegistrationInterface } from "@churchapps/helpers";
+import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
+import type { EventInterface, FormSubmissionInterface, RegistrationInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 
 interface GuestMember {
@@ -23,7 +24,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   const context = useContext(UserContext);
   const isLoggedIn = !!context?.person;
 
-  const [step, setStep] = useState<"info" | "members" | "confirm">("info");
+  const [step, setStep] = useState<"info" | "members" | "questions" | "confirm">("info");
   const [guestFirstName, setGuestFirstName] = useState("");
   const [guestLastName, setGuestLastName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
@@ -33,6 +34,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   const [error, setError] = useState("");
   const [activeCount, setActiveCount] = useState(0);
   const [registration, setRegistration] = useState<RegistrationInterface | null>(null);
+  const [unRestrictedFormId, setUnRestrictedFormId] = useState("");
 
   useEffect(() => {
     ApiHelper.getAnonymous("/registrations/event/" + eventId + "/count?churchId=" + churchId, "ContentApi")
@@ -92,14 +94,19 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     setStep("members");
   };
 
-  const handleSubmit = async () => {
-    setError("");
+  const validateMembers = (): boolean => {
     for (const m of members) {
       if (!m.firstName.trim() || !m.lastName.trim()) {
         setError(Locale.label("registration.errors.memberNamesRequired"));
-        return;
+        return false;
       }
     }
+    return true;
+  };
+
+  const handleSubmit = async (formSubmissionId?: string) => {
+    setError("");
+    if (!validateMembers()) return;
 
     setIsSubmitting(true);
     try {
@@ -123,6 +130,8 @@ export function EventRegister({ churchId, eventId, event }: Props) {
         }));
       }
 
+      if (formSubmissionId) payload.formSubmissionId = formSubmissionId;
+
       const result = await ApiHelper.postAnonymous("/registrations/register", payload, "ContentApi");
       setRegistration(result);
       setStep("confirm");
@@ -131,6 +140,34 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleMembersContinue = async () => {
+    setError("");
+    if (!validateMembers()) return;
+
+    if (!event.formId) {
+      await handleSubmit();
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const formData: any = await ApiHelper.get("/forms/standalone/" + event.formId + "?churchId=" + churchId, "MembershipApi");
+      if (formData?.restricted) {
+        await handleSubmit();
+      } else {
+        setUnRestrictedFormId(event.formId);
+        setIsSubmitting(false);
+        setStep("questions");
+      }
+    } catch {
+      await handleSubmit();
+    }
+  };
+
+  const handleFormSaved = (fs?: FormSubmissionInterface) => {
+    handleSubmit(fs?.id);
   };
 
   // Status messages for closed/full
@@ -244,7 +281,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             <Button variant="outlined" onClick={() => setStep("info")}>{Locale.label("registration.back")}</Button>
             <Button
               variant="contained"
-              onClick={handleSubmit}
+              onClick={handleMembersContinue}
               disabled={isSubmitting}
               fullWidth
               startIcon={<Icon>{isSubmitting ? "hourglass_empty" : "how_to_reg"}</Icon>}
@@ -252,6 +289,31 @@ export function EventRegister({ churchId, eventId, event }: Props) {
               {isSubmitting ? Locale.label("registration.registering") : Locale.label("registration.completeRegistration")}
             </Button>
           </Stack>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Questions step
+  if (step === "questions") {
+    return (
+      <Card sx={{ borderRadius: 2 }}>
+        <CardContent>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>{Locale.label("registration.questions")}</Typography>
+          {error && <Typography sx={{ color: "error.main", mb: 1 }}>{error}</Typography>}
+          <FormSubmissionEdit
+            churchId={churchId}
+            addFormId=""
+            unRestrictedFormId={unRestrictedFormId}
+            contentType="event"
+            contentId={eventId}
+            formSubmissionId=""
+            personId={context?.person?.id}
+            updatedFunction={handleFormSaved}
+            cancelFunction={() => setStep("members")}
+            showHeader={false}
+            noBackground={true}
+          />
         </CardContent>
       </Card>
     );

@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "양",
+      "confirmPause": "이 정기 기부를 일시정지하시겠습니까?",
       "every": "모든",
       "interval": "간격",
       "notFound": "결제 수단을 찾을 수 없습니다.",
+      "pauseFailed": "정기 기부 일시정지에 실패했습니다. 다시 시도해 주세요.",
+      "pauseTooltip": "정기 기부 일시정지",
+      "paused": "일시정지됨",
+      "pausedMessage": "정기 기부가 일시정지되었습니다.",
       "paymentMethod": "결제 방법",
+      "resumeFailed": "정기 기부 재개에 실패했습니다. 다시 시도해 주세요.",
+      "resumeTooltip": "정기 기부 재개",
+      "resumedMessage": "정기 기부가 재개되었습니다.",
       "startDate": "시작일"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "금요일",
+        "monday": "월요일",
+        "saturday": "토요일",
+        "sunday": "일요일",
+        "thursday": "목요일",
+        "tuesday": "화요일",
+        "wednesday": "수요일"
+      },
+      "endDate": "종료일",
+      "endDateAria": "반복 종료일",
+      "ends": "종료",
+      "endsAfter": "횟수 이후",
+      "endsAria": "반복 종료 시점 선택",
+      "endsOn": "특정 날짜",
+      "freqDay": "일",
+      "freqMonth": "월",
+      "freqWeek": "주",
+      "frequency": "빈도",
+      "frequencyAria": "반복 빈도 선택",
+      "interval": "간격",
+      "intervalAria": "반복 간격",
+      "monthlyOnDay": "매월 {}일",
+      "monthlyOnNth": "매월 {ordinal} {day}",
+      "monthlyOptionAria": "월별 반복 옵션 선택",
+      "never": "안 함",
+      "occurrences": "횟수",
+      "occurrencesAria": "반복 횟수",
+      "on": "요일",
+      "ordinal": {
+        "first": "첫 번째",
+        "fourth": "네 번째",
+        "last": "마지막",
+        "second": "두 번째",
+        "third": "세 번째"
+      },
+      "toggleWeekday": "주간 반복을 위한 {} 토글"
     }
   },
   "formSubmissionEdit": {

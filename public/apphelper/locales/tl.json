@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "Halaga",
+      "confirmPause": "Sigurado ka bang gusto mong i-pause itong umuulit na donasyon?",
       "every": "Bawat",
       "interval": "Pagitan",
       "notFound": "Hindi nakita ang paraan ng pagbabayad.",
+      "pauseFailed": "Nabigo ang pag-pause ng umuulit na donasyon. Subukan muli.",
+      "pauseTooltip": "I-pause ang umuulit na donasyon",
+      "paused": "Naka-pause",
+      "pausedMessage": "Na-pause ang umuulit na donasyon.",
       "paymentMethod": "Paraan ng Pagbayad",
+      "resumeFailed": "Nabigo ang pagpapatuloy ng umuulit na donasyon. Subukan muli.",
+      "resumeTooltip": "Ipagpatuloy ang umuulit na donasyon",
+      "resumedMessage": "Naipagpatuloy ang umuulit na donasyon.",
       "startDate": "Petsa ng Pagsisimula"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Biyernes",
+        "monday": "Lunes",
+        "saturday": "Sabado",
+        "sunday": "Linggo",
+        "thursday": "Huwebes",
+        "tuesday": "Martes",
+        "wednesday": "Miyerkules"
+      },
+      "endDate": "Petsa ng Pagtatapos",
+      "endDateAria": "Petsa ng pagtatapos ng recurrence",
+      "ends": "Nagtatapos",
+      "endsAfter": "Pagkatapos",
+      "endsAria": "Pumili kung kailan magtatapos ang recurrence",
+      "endsOn": "Sa",
+      "freqDay": "Araw",
+      "freqMonth": "Buwan",
+      "freqWeek": "Linggo",
+      "frequency": "Dalas",
+      "frequencyAria": "Pumili ng dalas ng recurrence",
+      "interval": "Interval",
+      "intervalAria": "Recurrence interval",
+      "monthlyOnDay": "Buwanan sa araw na {}",
+      "monthlyOnNth": "Buwanan tuwing {ordinal} {day}",
+      "monthlyOptionAria": "Pumili ng monthly recurrence option",
+      "never": "Hindi Kailanman",
+      "occurrences": "Mga Pagkakataon",
+      "occurrencesAria": "Bilang ng mga pagkakataon ng recurrence",
+      "on": "Sa",
+      "ordinal": {
+        "first": "una",
+        "fourth": "ikaapat",
+        "last": "huli",
+        "second": "ikalawa",
+        "third": "ikatlo"
+      },
+      "toggleWeekday": "I-toggle ang {} para sa lingguhang recurrence"
     }
   },
   "formSubmissionEdit": {

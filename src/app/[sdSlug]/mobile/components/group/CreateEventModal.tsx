@@ -22,7 +22,7 @@ import {
 import { ApiHelper, EventHelper, Locale } from "@churchapps/apphelper";
 import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
-import { RRuleEditor } from "../../../../../components/eventCalendar/RRuleEditor";
+import { RRuleEditor } from "@churchapps/apphelper/website";
 import { EditRecurringModal } from "../../../../../components/eventCalendar/EditRecurringModal";
 import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 import { EventReminderEdit } from "./EventReminderEdit";

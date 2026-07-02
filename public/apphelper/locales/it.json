@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "Quantità",
+      "confirmPause": "Sei sicuro di voler mettere in pausa questa donazione ricorrente?",
       "every": "Ogni",
       "interval": "Intervallo",
       "notFound": "Metodo di pagamento non trovato.",
+      "pauseFailed": "Impossibile mettere in pausa la donazione ricorrente. Riprova.",
+      "pauseTooltip": "Metti in pausa la donazione ricorrente",
+      "paused": "In pausa",
+      "pausedMessage": "Donazione ricorrente messa in pausa.",
       "paymentMethod": "Metodo di pagamento",
+      "resumeFailed": "Impossibile riprendere la donazione ricorrente. Riprova.",
+      "resumeTooltip": "Riprendi la donazione ricorrente",
+      "resumedMessage": "Donazione ricorrente ripresa.",
       "startDate": "Data d'inizio"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Venerdì",
+        "monday": "Lunedì",
+        "saturday": "Sabato",
+        "sunday": "Domenica",
+        "thursday": "Giovedì",
+        "tuesday": "Martedì",
+        "wednesday": "Mercoledì"
+      },
+      "endDate": "Data di Fine",
+      "endDateAria": "Data di fine ricorrenza",
+      "ends": "Termina",
+      "endsAfter": "Dopo",
+      "endsAria": "Seleziona quando termina la ricorrenza",
+      "endsOn": "Il",
+      "freqDay": "Giorno",
+      "freqMonth": "Mese",
+      "freqWeek": "Settimana",
+      "frequency": "Frequenza",
+      "frequencyAria": "Seleziona la frequenza di ricorrenza",
+      "interval": "Intervallo",
+      "intervalAria": "Intervallo di ricorrenza",
+      "monthlyOnDay": "Mensile il giorno {}",
+      "monthlyOnNth": "Mensile il {ordinal} {day}",
+      "monthlyOptionAria": "Seleziona l'opzione di ricorrenza mensile",
+      "never": "Mai",
+      "occurrences": "Occorrenze",
+      "occurrencesAria": "Numero di occorrenze della ricorrenza",
+      "on": "Il",
+      "ordinal": {
+        "first": "primo",
+        "fourth": "quarto",
+        "last": "ultimo",
+        "second": "secondo",
+        "third": "terzo"
+      },
+      "toggleWeekday": "Attiva/disattiva {} per ricorrenza settimanale"
     }
   },
   "formSubmissionEdit": {

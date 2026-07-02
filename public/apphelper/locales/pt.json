@@ -127,11 +127,60 @@
     },
     "recurring": {
       "amount": "Quantia",
+      "confirmPause": "Tem certeza de que deseja pausar esta doação recorrente?",
       "every": "Todo",
       "interval": "Intervalo",
       "notFound": "Forma de pagamento não encontrada.",
+      "pauseFailed": "Falha ao pausar a doação recorrente. Por favor, tente novamente.",
+      "pauseTooltip": "Pausar doação recorrente",
+      "paused": "Pausada",
+      "pausedMessage": "Doação recorrente pausada.",
       "paymentMethod": "Forma de pagamento",
+      "resumeFailed": "Falha ao retomar a doação recorrente. Por favor, tente novamente.",
+      "resumeTooltip": "Retomar doação recorrente",
+      "resumedMessage": "Doação recorrente retomada.",
       "startDate": "Data de início"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Sexta-feira",
+        "monday": "Segunda-feira",
+        "saturday": "Sábado",
+        "sunday": "Domingo",
+        "thursday": "Quinta-feira",
+        "tuesday": "Terça-feira",
+        "wednesday": "Quarta-feira"
+      },
+      "endDate": "Data de Término",
+      "endDateAria": "Data de término da recorrência",
+      "ends": "Termina",
+      "endsAfter": "Após",
+      "endsAria": "Selecione quando a recorrência termina",
+      "endsOn": "Em",
+      "freqDay": "Dia",
+      "freqMonth": "Mês",
+      "freqWeek": "Semana",
+      "frequency": "Frequência",
+      "frequencyAria": "Selecione a frequência de recorrência",
+      "interval": "Intervalo",
+      "intervalAria": "Intervalo de recorrência",
+      "monthlyOnDay": "Mensalmente no dia {}",
+      "monthlyOnNth": "Mensalmente na {ordinal} {day}",
+      "monthlyOptionAria": "Selecione a opção de recorrência mensal",
+      "never": "Nunca",
+      "occurrences": "Ocorrências",
+      "occurrencesAria": "Número de ocorrências da recorrência",
+      "on": "Em",
+      "ordinal": {
+        "first": "primeira",
+        "fourth": "quarta",
+        "last": "última",
+        "second": "segunda",
+        "third": "terceira"
+      },
+      "toggleWeekday": "Alternar {} para recorrência semanal"
     }
   },
   "formSubmissionEdit": {
