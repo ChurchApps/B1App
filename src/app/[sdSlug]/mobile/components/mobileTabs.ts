@@ -1,6 +1,4 @@
-// Slug aliases whose canonical target is a kept-alive tab (mirrors the
-// ScreenRouter switch). membersSearch is intentionally absent: it must reach
-// ScreenRouter to run its redirect, so it stays a per-navigation render.
+// membersSearch absent: must reach ScreenRouter to run its redirect per-navigation.
 const TAB_ALIASES: Record<string, string> = {
   myGroups: "groups",
   donation: "donate",
@@ -10,13 +8,11 @@ const TAB_ALIASES: Record<string, string> = {
   searchMessageUser: "messages"
 };
 
-// Tabs whose transient UI state is worth keeping mounted across switches.
-// Excluded on purpose: stream/lessons (background media), page/websiteUrl
-// (query-string dependent), membersSearch (redirect), login, profileEdit,
-// notifications/compose, details, and unknown slugs.
+// Tabs keeping transient state. Excluded: media (stream/lessons), query-dependent (page/websiteUrl), auth/edit, redirects (membersSearch), details, unknowns.
 const KEEP_ALIVE_TABS = new Set([
   "dashboard",
   "more",
+  "me",
   "sermons",
   "groups",
   "community",

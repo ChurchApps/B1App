@@ -1,9 +1,6 @@
 "use client";
 
-// Relocated from @churchapps/apphelper (removed in 0.8.0, where B1App is its only
-// consumer). The note/store primitives it builds on (Note, AddNote,
-// SubscriptionToggle, ConversationStore, SubscriptionManager, Loading) remain in
-// apphelper and are imported from its barrel.
+// Relocated from apphelper 0.8.0; primitives (Note, AddNote, SubscriptionToggle, ConversationStore, SubscriptionManager, Loading) remain in apphelper.
 
 import React from "react";
 import { Box, Paper } from "@mui/material";

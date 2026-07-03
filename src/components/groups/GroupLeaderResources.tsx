@@ -169,14 +169,12 @@ export const GroupLeaderResources: React.FC<Props> = (props) => {
         )}
       </DisplayBox>
 
-      {/* Link Add */}
       <GroupLinkAdd
         saveCallback={() => { loadData(); }}
         groupId={props.groupId}
         forGroupLeader
       />
 
-      {/* File Upload */}
       <InputBox headerIcon="description" headerText={Locale.label("groups.upload")} saveFunction={handleSave} saveText={Locale.label("groups.upload")} data-testid="group-leader-upload-inputbox">
         {getStorage()}
         <p>{Locale.label("groups.storageInfo")}</p>

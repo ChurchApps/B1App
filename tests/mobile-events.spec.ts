@@ -4,17 +4,11 @@ import { mobileLogoutButton } from "./helpers/mobile";
 const API_BASE = "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 
-// Per b1-mobile/events/registering.md, the registration flow is a 3-step wizard
-// (Info → Members → Confirm) loaded at /mobile/register/<eventId>. Seed events
-// EVT00000015 (VBS) and EVT00000016 (Missions Conference) are seeded with
-// registrationEnabled=1 and capacities (content/demo.sql).
-
 test.describe("Mobile event registration", () => {
   test("VBS event renders Info step with title and capacity", async ({ page }) => {
     await page.goto("/mobile/register/EVT00000015");
     await expect(mobileLogoutButton(page)).toBeVisible();
     await expect(page.locator("main")).toContainText(/Vacation Bible School/i, { timeout: 15000 });
-    // Capacity is 50 per seed; the Info step shows "X / 50 spots filled".
     await expect(page.locator("main")).toContainText(/\/ 50 spots filled/);
   });
 
@@ -24,19 +18,17 @@ test.describe("Mobile event registration", () => {
   });
 
   test("Missions Conference shows the not-yet-open state", async ({ page }) => {
-    // Seeded with registrationOpenDate = today + 7 days, so registration
-    // should not be open yet. Per EventRegisterPage.tsx:248-253 the page
-    // shows "Registration opens <date>".
     await page.goto("/mobile/register/EVT00000016");
     await expect(page.locator("main")).toContainText(/Registration opens/i, { timeout: 15000 });
   });
 
   test("clicking Continue advances from Info to Members step", async ({ page }) => {
     await page.goto("/mobile/register/EVT00000015");
+    await page.getByTestId("primary-type").click();
+    await page.getByRole("option", { name: /Chaperone/i }).click();
     const continueBtn = page.locator("main").getByRole("button", { name: /Continue/i }).first();
     await continueBtn.waitFor({ state: "visible", timeout: 15000 });
     await continueBtn.click();
-    // Step 2 shows family-member selection / add controls.
     await expect(page.locator("main")).toContainText(/Add family member|Family Members|Members/i, { timeout: 15000 });
   });
 
@@ -47,13 +39,7 @@ test.describe("Mobile event registration", () => {
   });
 });
 
-// EventRegisterPage.tsx got the same questions step as the web wizard
-// (src/components/registration/EventRegister.tsx): when event.formId is set and the linked
-// form is unrestricted, the Members step's "Complete Registration" advances to a questions
-// step (apphelper's FormSubmissionEdit) before submitting. A disposable event is created via
-// direct API calls (mirrors B1Admin/tests/registrations.spec.ts) instead of adding formId to
-// the seeded VBS event, so the tests above (which assert on VBS/Missions Conference as seeded)
-// are unaffected.
+// Event with linked form created via API to avoid affecting seeded VBS/Missions Conference tests.
 test.describe.serial("Mobile event registration — linked form (questions step)", () => {
   let staffJwt: string;
   let eventId: string;

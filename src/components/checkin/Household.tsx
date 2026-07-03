@@ -258,7 +258,6 @@ export function Household({ completeHandler = () => { } }: Props) {
 
   return (
     <>
-      {/* Header Section */}
       <HeaderSection>
         <HeaderIconContainer>
           <Icon sx={{ fontSize: 48, color: colors.primary }}>people</Icon>
@@ -271,7 +270,6 @@ export function Household({ completeHandler = () => { } }: Props) {
         </Typography>
       </HeaderSection>
 
-      {/* Members List */}
       {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0
         ? (
           <EmptyStateCard>
@@ -288,7 +286,6 @@ export function Household({ completeHandler = () => { } }: Props) {
           CheckinHelper.householdMembers.map((member) => getMember(member))
         )}
 
-      {/* Bottom Action */}
       <Box sx={{ marginTop: 3 }}>
         <Button
           fullWidth

@@ -1,6 +1,5 @@
 import type { Page } from "@playwright/test";
 
-// Public site routes (rendered under [sdSlug]/(public)/* — resolved from subdomain).
 export type PublicRoute =
   | "home"
   | "login"
@@ -10,8 +9,7 @@ export type PublicRoute =
   | "bible"
   | "votd";
 
-// Mobile screens — slug must match ScreenRouter switch-case keys at
-// src/app/[sdSlug]/mobile/components/ScreenRouter.tsx:49.
+// Must match ScreenRouter switch-case keys (src/app/[sdSlug]/mobile/components/ScreenRouter.tsx:49).
 export type MobileScreen =
   | "dashboard"
   | "checkin"
@@ -38,7 +36,7 @@ const PUBLIC_ROUTES: Record<PublicRoute, string> = {
   stream: "/stream",
   donate: "/donate",
   bible: "/bible",
-  votd: "/votd",
+  votd: "/votd"
 };
 
 export async function gotoPublic(page: Page, route: PublicRoute) {

@@ -1,10 +1,6 @@
 import { test, expect, type BrowserContext, type Page } from "@playwright/test";
 import { waitForRoomJoin } from "./helpers/realtime";
 
-// E2E for the live stream chat against the unified delivery framework.
-// Relies on STR00000002 (always-on test service) seeded in
-// Api/tools/dbScripts/content/demo.sql.
-
 const STREAM_URL = "/stream";
 
 async function openAnonymous(page: Page) {
@@ -16,15 +12,10 @@ async function openAnonymous(page: Page) {
 async function openAnonymousContext(browser: import("@playwright/test").Browser): Promise<{ context: BrowserContext; page: Page }> {
   const context = await browser.newContext({ storageState: undefined });
   const page = await context.newPage();
-  // Set up the room-join waiter before navigating — LiveStream's checkJoinRooms fires
-  // StreamChatManager.joinMainRoom (POST /connections) from a useEffect that the chat
-  // container's visibility does not wait on, so #chatSend rendering is not proof the
-  // join landed server-side yet.
+  // Set up room-join waiter before nav; chat container visibility does not guarantee server-side join.
   const joined = waitForRoomJoin(page);
   await page.goto(STREAM_URL);
   await page.waitForLoadState("domcontentloaded");
-  // Wait for the chat container to mount (proves the WebSocket bootstrap +
-  // joinMainRoom + ConversationStore subscription completed).
   await page.locator("#chatSend").waitFor({ state: "visible", timeout: 30000 });
   await joined;
   return { context, page };
@@ -49,7 +40,6 @@ test.describe("Live stream chat — unified delivery migration smoke", () => {
     await expect(page).toHaveURL(/\/stream/);
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
 
-    // Allow the chat bootstrap (SocketHelper.init + ensureHandlers) to run.
     await page.waitForTimeout(2000);
 
     const fatal = errors.filter((m) =>
@@ -100,8 +90,6 @@ test.describe("Live stream chat — cross-user realtime", () => {
   let viewerB: { context: BrowserContext; page: Page };
 
   test.beforeAll(async ({ browser }) => {
-    // openAnonymousContext already waits for each viewer's own room-join POST
-    // /connections to land server-side before returning — see tests/helpers/realtime.ts.
     viewerA = await openAnonymousContext(browser);
     viewerB = await openAnonymousContext(browser);
   });
@@ -118,8 +106,7 @@ test.describe("Live stream chat — cross-user realtime", () => {
     await expect(viewerB.page.locator("#chatReceive")).toContainText(stamp, { timeout: 15000 });
     await expect(viewerA.page.locator("#chatReceive")).toContainText(stamp, { timeout: 15000 });
 
-    // Guard against the ChatHelper-vs-ConversationStore double-apply regression:
-    // the same message must land exactly once in each viewer's DOM.
+    // Regression: ChatHelper-vs-ConversationStore double-apply.
     const occurrencesA = await viewerA.page.locator("#chatReceive .message", { hasText: stamp }).count();
     const occurrencesB = await viewerB.page.locator("#chatReceive .message", { hasText: stamp }).count();
     expect(occurrencesA, "viewer A should see exactly one copy of their own message").toBe(1);
@@ -135,10 +122,6 @@ test.describe("Live stream chat — cross-user realtime", () => {
   });
 
   test("attendance reflects both viewers", async () => {
-    // Both viewers' attendance widgets read from the same PresenceStore snapshot,
-    // which gets refreshed every time the server's ConnectionController emits an
-    // attendance broadcast on a new join. Click the count to expand the list and
-    // confirm at least 2 distinct anonymous names appear.
     const countLinkA = viewerA.page.locator("#attendanceCount");
     await expect(countLinkA).toBeVisible({ timeout: 15000 });
     await expect(countLinkA, "attendance label should report at least 2 viewers across both contexts").toContainText(/[2-9]\d* attendees/, { timeout: 15000 });

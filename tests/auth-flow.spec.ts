@@ -55,8 +55,6 @@ test.describe("Authentication", () => {
       try { sessionStorage.clear(); } catch { /* ignore */ }
     }).catch(() => { /* ignore — page not loaded yet */ });
     await page.goto("/mobile/dashboard");
-    await expect(page.locator('a[href*="/mobile/login"]').first()).toBeVisible({
-      timeout: 15000,
-    });
+    await expect(page.locator('a[href*="/mobile/login"]').first()).toBeVisible({ timeout: 15000 });
   });
 });

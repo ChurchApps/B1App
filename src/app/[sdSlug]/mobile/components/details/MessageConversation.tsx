@@ -133,12 +133,7 @@ export const MessageConversation = ({ id, config }: Props) => {
     if (existingConvId && !conversationId) setConversationId(existingConvId);
   }, [existingConvId, conversationId]);
 
-  // Realtime — split into two effects:
-  //   1) ALWAYS subscribed to alerts-room events (privateMessage / privateRoomAdded) so a brand
-  //      new conversation is discovered without reload. We re-fetch the existing-conversation
-  //      lookup; once it resolves to an id, the messages query fires.
-  //   2) Conditionally joins the conversation room once we know its id, then invalidates the
-  //      messages query on inbound message/delete events for that room.
+  // Realtime split: always listen for alerts-room events; conditionally join conversation room once known.
   const queryClient = useQueryClient();
 
   React.useEffect(() => {

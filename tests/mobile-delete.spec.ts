@@ -1,15 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-/**
- * Issue #837 — verifies notification + private-message delete UI on B1App mobile.
- *
- * The MessagingApi DELETE responses are intercepted with page.route so the demo
- * DB is not mutated. The tests assert:
- *   - delete buttons render for each row
- *   - clicking a delete button removes the row optimistically
- *   - the correct DELETE request is dispatched to MessagingApi
- *   - "Clear All" hits DELETE /notifications/my and empties the list
- */
+// Issue #837 — delete UI for notifications and private messages; MessagingApi DELETE responses are intercepted so demo DB is not mutated.
 
 const fakeNotifications = [
   {
@@ -141,10 +132,8 @@ test.describe("Issue #837 — mobile delete UI", () => {
     await mockNotificationsApi(page, fakeNotifications);
 
     await page.goto("/mobile/notifications");
-    // Wait for at least one notification to render.
     await expect(page.locator('[data-testid^="notification-delete-"]').first()).toBeVisible({ timeout: 30000 });
 
-    // Two notifications => two delete buttons.
     await expect(page.locator('[data-testid^="notification-delete-"]')).toHaveCount(2);
     await expect(page.locator('[data-testid="notifications-clear-all"]')).toBeVisible();
   });

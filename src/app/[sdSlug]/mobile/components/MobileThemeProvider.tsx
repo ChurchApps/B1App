@@ -95,16 +95,13 @@ const getChurchColors = (mode: MobileThemeMode, config?: ConfigurationInterface)
     .some((value) => isValidColor(value));
 
   if (!hasUsableTheme) return null;
-
   return appTheme;
 };
 
 const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
   const defaults = mode === "dark" ? darkDefaults : lightDefaults;
   const churchColors = getChurchColors(mode, config);
-  // For dark mode, also peek at the light theme so we can lighten the church's
-  // light-mode primary instead of falling back to a generic Material blue when
-  // they haven't authored a separate dark palette.
+  // In dark mode, derive primary from light theme to avoid generic fallback.
   const lightChurchColors = mode === "dark" ? getChurchColors("light", config) : null;
   const appearance = config?.appearance as {
     primaryColor?: string;
@@ -129,10 +126,7 @@ const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) 
   const text = pickColor(churchColors?.textColor, defaults["--mb-text"]) || defaults["--mb-text"];
   const onPrimary = pickColor(churchColors?.primaryContrast, appearance?.primaryContrast, defaults["--mb-on-primary"]) || defaults["--mb-on-primary"];
 
-  // Derived tints — keep primary-light visually tied to the church's primary
-  // instead of always using the same Material-blue tint. Light mode mixes 85%
-  // toward white; dark mode shades 75% toward black so the tint stays subtle on
-  // dark surfaces. If `primary` isn't a valid hex (e.g. CSS var), fall back.
+  // Tint primary-light to match primary; darken in dark mode to stay subtle.
   const primaryLight = isValidHexColor(primary)
     ? (mode === "dark" ? shade(primary, 0.75) : tint(primary, 0.85))
     : (mode === "dark" ? "#1a3a5c" : "#E3F2FD");
@@ -178,8 +172,7 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?:
       setModeState(stored);
       return;
     }
-    // No explicit user choice → follow OS preference, and keep following
-    // it as long as the user doesn't toggle (toggle writes to localStorage).
+    // Follow OS preference until user toggles (which writes to localStorage).
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     setModeState(mq.matches ? "dark" : "light");
     const handler = (e: MediaQueryListEvent) => {

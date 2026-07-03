@@ -2,9 +2,7 @@ import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { DEMO_CHURCH } from "./helpers/fixtures";
 
-// /mobile is the entry point — redirects to /mobile/dashboard.
-// Per b1-mobile/dashboard/index.md the dashboard has a hero card, featured
-// section, Quick Actions grid, plus an app bar with bell icon.
+// /mobile entry point: hero card, featured section, Quick Actions, app bar with notifications
 
 test.describe("Mobile shell", () => {
   test("/mobile redirects to /mobile/dashboard", async ({ page }) => {
@@ -31,9 +29,7 @@ test.describe("Mobile shell", () => {
 
   test("app bar exposes notifications bell and profile avatar", async ({ page }) => {
     await page.goto("/mobile/dashboard");
-    await expect(page.getByRole("button", { name: /Notifications/i })).toBeVisible({
-      timeout: 15000,
-    });
+    await expect(page.getByRole("button", { name: /Notifications/i })).toBeVisible({ timeout: 15000 });
     await expect(page.getByRole("button", { name: /^Profile$/i })).toBeVisible();
   });
 

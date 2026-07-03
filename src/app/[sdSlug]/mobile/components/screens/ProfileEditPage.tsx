@@ -338,10 +338,7 @@ export const ProfileEditPage = ({ config }: Props) => {
 
       await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
 
-      // The directoryUpdate handler uploads the photo to FileStorage at submit
-      // time (before approval), so the canonical image URL already serves the
-      // new bytes. Refresh the local person record so the drawer/avatar pick
-      // up the new photo without requiring a full sign-out.
+      // Photo uploads on submit, so refresh to show new image without sign-out.
       if (id) {
         try {
           const fresh = await ApiHelper.get("/people/" + id, "MembershipApi");

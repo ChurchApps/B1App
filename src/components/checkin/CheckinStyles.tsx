@@ -2,7 +2,6 @@
 import { styled } from "@mui/material/styles";
 import { Box, Card as MuiCard } from "@mui/material";
 
-// Common icon container for headers
 export const HeaderIconContainer = styled(Box)({
   width: 80,
   height: 80,
@@ -14,7 +13,6 @@ export const HeaderIconContainer = styled(Box)({
   margin: "0 auto 16px"
 });
 
-// Header section wrapper
 export const HeaderSection = styled(Box)({
   backgroundColor: "#FFFFFF",
   padding: 24,
@@ -24,7 +22,6 @@ export const HeaderSection = styled(Box)({
   boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
 });
 
-// Standard card for checkin items
 export const CheckinCard = styled(MuiCard)({
   borderRadius: 12,
   marginBottom: 12,
@@ -32,7 +29,6 @@ export const CheckinCard = styled(MuiCard)({
   overflow: "hidden"
 });
 
-// Small circular icon container (for list items)
 export const IconCircle = styled(Box)(({ size = 56 }: { size?: number }) => ({
   width: size,
   height: size,
@@ -44,7 +40,6 @@ export const IconCircle = styled(Box)(({ size = 56 }: { size?: number }) => ({
   flexShrink: 0
 }));
 
-// Small white icon container (for nested items)
 export const SmallIconCircle = styled(Box)({
   width: 32,
   height: 32,
@@ -56,7 +51,6 @@ export const SmallIconCircle = styled(Box)({
   marginRight: 12
 });
 
-// Success icon container (green background)
 export const SuccessIconContainer = styled(Box)({
   width: 80,
   height: 80,
@@ -68,7 +62,6 @@ export const SuccessIconContainer = styled(Box)({
   margin: "0 auto 24px"
 });
 
-// Empty state card
 export const EmptyStateCard = styled(MuiCard)({
   borderRadius: 12,
   padding: 32,
@@ -76,7 +69,6 @@ export const EmptyStateCard = styled(MuiCard)({
   boxShadow: "0 1px 3px rgba(0,0,0,0.08)"
 });
 
-// Service time item container (for household member expanded view)
 export const ServiceTimeItem = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -86,10 +78,7 @@ export const ServiceTimeItem = styled(Box)({
   borderBottom: "1px solid #F0F0F0"
 });
 
-// Colors. `primary` and `secondary` resolve to the church's theme via CSS variables —
-// `--mb-*` is set inside the mobile shell, `--app-*` on public-website pages.
-// The hex literal at the end is the original B1 default and only renders if neither
-// theme has been applied (e.g. before config loads).
+// Variables cascade from mobile (--mb-*) to web (--app-*) to B1 defaults.
 export const colors = {
   primary: "var(--mb-primary, var(--app-primary, #0D47A1))",
   primaryHover: "var(--mb-primary, var(--app-primary, #0B3D8F))",

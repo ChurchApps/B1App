@@ -1,13 +1,6 @@
 import type { Page } from "@playwright/test";
 
-/**
- * Fast login that races against existing storage state. With a cached
- * .auth-state.json the user-menu-chip renders quickly; without it the login
- * form's email input renders. Whichever appears first decides the path.
- *
- * Unlike B1Admin, the church is determined by subdomain (grace.localhost),
- * so no church-selection dialog appears.
- */
+/** Race cached auth state vs login form; church determined by subdomain (no dialog). */
 export async function login(page: Page) {
   await page.goto("/");
 
@@ -16,7 +9,7 @@ export async function login(page: Page) {
 
   const winner = await Promise.race([
     userMenu.waitFor({ state: "visible", timeout: 15000 }).then(() => "authenticated" as const).catch(() => null),
-    emailInput.waitFor({ state: "visible", timeout: 15000 }).then(() => "login" as const).catch(() => null),
+    emailInput.waitFor({ state: "visible", timeout: 15000 }).then(() => "login" as const).catch(() => null)
   ]);
 
   if (winner === "authenticated") return;

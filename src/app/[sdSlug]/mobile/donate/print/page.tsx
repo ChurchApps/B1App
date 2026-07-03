@@ -150,7 +150,6 @@ export default function PrintPage({ params }: { params: Params }) {
         <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "80%" }}></div>
 
         <div style={{ display: "flex" }}>
-          {/* Donor */}
           <div style={{ width: "50%" }}>
             <h1>{context.person?.name?.display}</h1>
             <p>{context.person?.contactInfo?.address1}</p>
@@ -158,7 +157,6 @@ export default function PrintPage({ params }: { params: Params }) {
             <p>{context.person?.contactInfo?.mobilePhone}</p>
             <p>{context.person?.contactInfo?.email}</p>
           </div>
-          {/* Church */}
           <div style={{ width: "50%" }}>
             <h1>{context.userChurch?.church?.name}</h1>
             <p>{context.userChurch?.church?.address1}</p>
@@ -177,7 +175,6 @@ export default function PrintPage({ params }: { params: Params }) {
             </div>
             <div style={{ width: "50%" }}>
               <h2>Funds:</h2>
-              {/* Table Start */}
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead style={{ height: "24px" }}>
                   <tr>
@@ -189,14 +186,12 @@ export default function PrintPage({ params }: { params: Params }) {
                   {tableFundTotal()}
                 </tbody>
               </table>
-              {/* Table End */}
             </div>
           </div>
         </div>
 
         <div>
           <h1>Contribution Details:</h1>
-          {/* Table Start */}
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead style={{ height: "28px" }}>
               <tr>
@@ -216,7 +211,6 @@ export default function PrintPage({ params }: { params: Params }) {
               </tr>
             </tbody>
           </table>
-          {/* Table End */}
         </div>
 
       </div>

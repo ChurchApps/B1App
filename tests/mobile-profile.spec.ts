@@ -1,9 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
-// ProfileEditPage has 4 tabs (per ProfileEditPage.tsx:35):
-// Profile / Household / Account / Privacy ("visibility" tab key).
-
 test.describe("Mobile profile edit", () => {
   test("profile screen renders with all four tabs", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
@@ -47,22 +44,17 @@ test.describe("Mobile profile edit", () => {
     await accountTab.waitFor({ state: "visible", timeout: 15000 });
     await accountTab.click();
     await expect(accountTab).toHaveAttribute("aria-selected", "true");
-    // Demo user email should appear somewhere on the Account tab.
     await expect(page.locator("body")).toContainText(/demo@b1\.church/i, { timeout: 15000 });
   });
 
   test("Profile tab pre-fills First Name with demo user's name", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
-    // The default tab is Profile; field key is name.first → label "First Name".
     const firstNameInput = page.getByRole("textbox", { name: /First Name/i }).first();
     await expect(firstNameInput).toBeVisible({ timeout: 15000 });
     await expect(firstNameInput).toHaveValue("Demo");
   });
 
   test("Household tab lists family members from seed", async ({ page }) => {
-    // Demo user's household HOU00000026 contains Jane User (spouse), Alex
-    // User (child), and Emma User (child). Per b1-mobile/profile/household.md
-    // the Household tab lists family members.
     await page.goto("/mobile/profileEdit");
     const householdTab = page.getByRole("tab", { name: /^Household$/i });
     await householdTab.waitFor({ state: "visible", timeout: 15000 });

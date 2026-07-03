@@ -2,9 +2,10 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
-import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Box, Button, Chip, Dialog, DialogContent, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import type { PersonInterface } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { EventProcessor } from "../../helpers/eventProcessor";
@@ -13,9 +14,27 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 interface Props {
   groupId: string;
   canManage: boolean;
+  isMember?: boolean;
   onAddEvent: (dateIso: string) => void;
   onEditEvent?: (event: EventRow) => void;
 }
+
+type RsvpResponse = "yes" | "no" | "maybe";
+
+interface RsvpBatchEntry {
+  eventId: string;
+  occurrenceStart: string;
+  yes: number;
+  no: number;
+  maybe: number;
+  mine: RsvpResponse | null;
+}
+
+// Local-time key for RSVP matching regardless of server datetime format.
+const occKey = (d: Date) => {
+  if (isNaN(d.getTime())) return "";
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
 
 const describeRecurrence = (rule?: string) => {
   if (!rule) return "";
@@ -48,6 +67,7 @@ export interface EventRow {
   recurrenceRule?: string;
   tags?: string;
   registrationEnabled?: boolean;
+  rsvpDisabled?: boolean;
 }
 
 const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
@@ -71,12 +91,14 @@ const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: bo
   return `${fmt(s)} – ${fmt(e)}`;
 };
 
-export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }: Props) => {
+export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onEditEvent }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date());
   const [selected, setSelected] = React.useState<string>(isoDate(new Date()));
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
+  const [rosterFor, setRosterFor] = React.useState<{ eventId: string; occurrenceStart: string; title: string } | null>(null);
 
   const { data: rawEvents, isLoading } = useQuery<EventRow[]>({
     queryKey: ["group-events", groupId],
@@ -87,6 +109,47 @@ export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }
     enabled: !!groupId,
     placeholderData: []
   });
+
+  const rsvpWindow = React.useMemo(() => ({
+    from: startOfMonth(currentMonth).toISOString(),
+    to: endOfMonth(currentMonth).toISOString()
+  }), [currentMonth]);
+
+  const { data: rsvpBatch = [] } = useQuery<RsvpBatchEntry[]>({
+    queryKey: ["group-rsvps", groupId, rsvpWindow.from, rsvpWindow.to],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/events/rsvps/group/${groupId}?from=${encodeURIComponent(rsvpWindow.from)}&to=${encodeURIComponent(rsvpWindow.to)}`, "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!groupId && !!isMember,
+    placeholderData: []
+  });
+
+  const rsvpByOccurrence = React.useMemo(() => {
+    const map: Record<string, RsvpBatchEntry> = {};
+    rsvpBatch.forEach((r) => {
+      const key = `${r.eventId}|${occKey(new Date(r.occurrenceStart))}`;
+      map[key] = r;
+    });
+    return map;
+  }, [rsvpBatch]);
+
+  const refreshRsvps = () => queryClient.invalidateQueries({ queryKey: ["group-rsvps", groupId] });
+
+  const setRsvp = async (event: EventRow, occurrenceStart: Date, response: RsvpResponse | null) => {
+    if (!event.id) return;
+    const iso = occurrenceStart.toISOString();
+    try {
+      if (response === null) {
+        await ApiHelper.delete(`/events/${event.id}/rsvp?occurrenceStart=${encodeURIComponent(iso)}`, "ContentApi");
+      } else {
+        await ApiHelper.post(`/events/${event.id}/rsvp`, { occurrenceStart: iso, response }, "ContentApi");
+      }
+      refreshRsvps();
+    } catch {
+      /* ignore — control reflects server on next refetch */
+    }
+  };
 
   const events = React.useMemo(() => {
     const normalized = EventProcessor.updateTime(rawEvents || []);
@@ -154,10 +217,7 @@ export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }
   };
 
   const handleAddEvent = () => {
-    // `selected` is a "YYYY-MM-DD" string. `new Date("YYYY-MM-DD")` parses as
-    // UTC midnight, which after setHours(14) can land on the previous local
-    // day in negative-offset zones. Append a local-time component so the
-    // string is parsed in the local zone.
+    // Append T00:00:00 to parse as local time, not UTC (timezone gotcha).
     const base = selected ? new Date(`${selected}T00:00:00`) : new Date();
     if (!selected) base.setDate(base.getDate() + 1);
     base.setHours(14, 0, 0, 0);
@@ -182,6 +242,67 @@ export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }
         window.open(httpsUrl, "_blank", "noopener,noreferrer");
       }
     }
+  };
+
+  const renderRsvp = (e: EventRow) => {
+    if (!e.groupId || e.rsvpDisabled || !e.id) return null;
+    const occ = e.start ? new Date(e.start) : null;
+    if (!occ || isNaN(occ.getTime())) return null;
+    const entry = rsvpByOccurrence[`${e.id}|${occKey(occ)}`];
+    const mine = entry?.mine ?? null;
+    const options: { value: RsvpResponse; label: string; color: string }[] = [
+      { value: "yes", label: Locale.label("mobile.group.rsvpGoing"), color: tc.success },
+      { value: "maybe", label: Locale.label("mobile.group.rsvpMaybe"), color: tc.warning },
+      { value: "no", label: Locale.label("mobile.group.rsvpNotGoing"), color: tc.error }
+    ];
+    return (
+      <Box sx={{ mt: 1.25, borderTop: `1px solid ${tc.border}`, pt: 1.25 }} data-testid={`rsvp-${e.id}`}>
+        {isMember && (
+          <>
+            <Typography sx={{ fontSize: 12, color: tc.textSecondary, mb: 0.75 }}>{Locale.label("mobile.group.rsvpQuestion")}</Typography>
+            <Box sx={{ display: "flex", gap: 0.75 }}>
+              {options.map((opt) => {
+                const active = mine === opt.value;
+                const count = entry ? entry[opt.value] : 0;
+                return (
+                  <Button
+                    key={opt.value}
+                    size="small"
+                    variant={active ? "contained" : "outlined"}
+                    onClick={() => setRsvp(e, occ, active ? null : opt.value)}
+                    data-testid={`rsvp-${e.id}-${opt.value}`}
+                    sx={{
+                      flex: 1,
+                      textTransform: "none",
+                      fontWeight: 600,
+                      fontSize: 12,
+                      borderRadius: `${mobileTheme.radius.md}px`,
+                      bgcolor: active ? opt.color : "transparent",
+                      color: active ? "#fff" : opt.color,
+                      borderColor: opt.color,
+                      "&:hover": { bgcolor: active ? opt.color : `${opt.color}1A`, borderColor: opt.color }
+                    }}
+                  >
+                    {opt.label}{count > 0 ? ` ${count}` : ""}
+                  </Button>
+                );
+              })}
+            </Box>
+          </>
+        )}
+        {canManage && (
+          <Button
+            size="small"
+            onClick={() => setRosterFor({ eventId: e.id!, occurrenceStart: occ.toISOString(), title: e.title || Locale.label("mobile.group.event") })}
+            startIcon={<Icon sx={{ fontSize: 16 }}>groups</Icon>}
+            data-testid={`rsvp-roster-${e.id}`}
+            sx={{ mt: 0.75, textTransform: "none", fontSize: 12, color: tc.primary }}
+          >
+            {Locale.label("mobile.group.rsvpViewResponses")}
+          </Button>
+        )}
+      </Box>
+    );
   };
 
   return (
@@ -297,6 +418,7 @@ export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }
                 key={key}
                 role="button"
                 tabIndex={0}
+                data-testid={`day-${key}`}
                 onClick={() => setSelected(key)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" || e.key === " ") {
@@ -490,12 +612,93 @@ export const GroupCalendarTab = ({ groupId, canManage, onAddEvent, onEditEvent }
                     </Button>
                   </Box>
                 )}
+                {renderRsvp(e)}
               </Box>
             ))}
           </Box>
         )}
       </Box>
+      <RsvpRosterDialog
+        target={rosterFor}
+        onClose={() => setRosterFor(null)}
+      />
     </Box>
+  );
+};
+
+interface RosterTarget { eventId: string; occurrenceStart: string; title: string }
+
+const RsvpRosterDialog = ({ target, onClose }: { target: RosterTarget | null; onClose: () => void }) => {
+  const tc = mobileTheme.colors;
+  const { data: roster = [], isLoading } = useQuery<{ personId: string; response: RsvpResponse }[]>({
+    queryKey: ["rsvp-roster", target?.eventId, target?.occurrenceStart],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/events/${target!.eventId}/rsvps?occurrenceStart=${encodeURIComponent(target!.occurrenceStart)}`, "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!target
+  });
+
+  const [people, setPeople] = React.useState<Record<string, PersonInterface>>({});
+  React.useEffect(() => {
+    const ids = Array.from(new Set(roster.map((r) => r.personId).filter(Boolean)));
+    if (ids.length === 0) return;
+    ApiHelper.get(`/people/basic?ids=${ids.join(",")}`, "MembershipApi")
+      .then((p: PersonInterface[]) => {
+        if (!Array.isArray(p)) return;
+        const map: Record<string, PersonInterface> = {};
+        p.forEach((x) => { if (x.id) map[x.id] = x; });
+        setPeople(map);
+      })
+      .catch(() => { /* names fall back to Unknown */ });
+  }, [roster]);
+
+  const groups: { key: RsvpResponse; label: string; color: string }[] = [
+    { key: "yes", label: Locale.label("mobile.group.rsvpGoing"), color: tc.success },
+    { key: "maybe", label: Locale.label("mobile.group.rsvpMaybe"), color: tc.warning },
+    { key: "no", label: Locale.label("mobile.group.rsvpNotGoing"), color: tc.error }
+  ];
+
+  return (
+    <Dialog open={!!target} onClose={onClose} fullWidth maxWidth="xs" PaperProps={{ sx: { borderRadius: `${mobileTheme.radius.xl}px` } }}>
+      <DialogTitle sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
+        {Locale.label("mobile.group.rsvpResponses")}
+      </DialogTitle>
+      <DialogContent>
+        {isLoading && <Skeleton variant="rounded" height={80} />}
+        {!isLoading && roster.length === 0 && (
+          <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.rsvpNoResponses")}</Typography>
+        )}
+        {!isLoading && groups.map((g) => {
+          const rows = roster.filter((r) => r.response === g.key);
+          if (rows.length === 0) return null;
+          return (
+            <Box key={g.key} sx={{ mb: 2 }}>
+              <Typography sx={{ fontSize: 13, fontWeight: 700, color: g.color, mb: 0.5 }}>
+                {g.label} · {rows.length}
+              </Typography>
+              {rows.map((r) => {
+                const p = people[r.personId];
+                const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
+                const name = p?.name?.display || Locale.label("mobile.components.unknown");
+                return (
+                  <Box key={r.personId} sx={{ display: "flex", alignItems: "center", gap: 1, py: "4px" }}>
+                    {photo ? (
+                      <Box component="img" src={photo} alt={name} sx={{ width: 32, height: 32, borderRadius: "16px", objectFit: "cover" }} />
+                    ) : (
+                      <Box sx={{ width: 32, height: 32, borderRadius: "16px", bgcolor: tc.primaryLight, color: tc.primary, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {(name[0] || "?").toUpperCase()}
+                      </Box>
+                    )}
+                    <Typography sx={{ fontSize: 14, color: tc.text }}>{name}</Typography>
+                  </Box>
+                );
+              })}
+            </Box>
+          );
+        })}
+      </DialogContent>
+    </Dialog>
   );
 };
 

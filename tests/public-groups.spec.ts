@@ -1,15 +1,7 @@
 import { test, expect } from "@playwright/test";
 
-// /groups/[label] lists groups whose label/tag matches.
-//
-// /mobile/groups/[idOrSlug] is the canonical group page for both anonymous
-// visitors (AnonymousGroupView with hero, about, leaders, upcoming events,
-// contact form) and authenticated users (full tabbed view). The deprecated
-// /groups/details/[slug] page was removed; the route accepts either the
-// group id (e.g. GRP00000004) or the slug (e.g. adult-bible-class).
-//
-// Group slugs are seeded in membership/demo.sql:259 — e.g. 'youth-group'
-// for GRP00000013, 'adult-bible-class' for GRP00000004.
+// /groups/[label] lists groups by tag. /mobile/groups/[idOrSlug] accepts id or slug.
+// Group slugs seeded in membership/demo.sql:259 (e.g. youth-group, adult-bible-class)
 
 test.describe("Public groups listing", () => {
   test.beforeEach(async ({ page }) => {
@@ -44,22 +36,16 @@ test.describe("Public groups listing", () => {
   });
 
   test("anonymous group page loads via id", async ({ page }) => {
-    // Same group as above (GRP00000013) but accessed by id; slug-or-id
-    // resolution in AnonymousGroupView should hit the public-by-id endpoint.
+    // GRP00000013 via id instead of slug (tests AnonymousGroupView slug-or-id resolution).
     await page.goto("/mobile/groups/GRP00000013");
     await expect(page.locator("body")).toContainText(/Youth Group/i, { timeout: 15000 });
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
   });
 
   test("anonymous visitor sees contact form on group with a leader", async ({ page }) => {
-    // GRP00000004 (Adult Bible Class, slug 'adult-bible-class') has John
-    // Smith (PER00000001) seeded as leader (membership/demo.sql:301), so
-    // AnonymousGroupView renders the GroupContact form. Fields use
-    // group-contact-* data-testids per components/groups/GroupContact.tsx.
+    // GRP00000004 (adult-bible-class) has leader seeded, renders GroupContact form.
     await page.goto("/mobile/groups/adult-bible-class");
-    await expect(page.locator('[data-testid="group-contact-first-name-input"]')).toBeVisible({
-      timeout: 15000,
-    });
+    await expect(page.locator('[data-testid="group-contact-first-name-input"]')).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="group-contact-last-name-input"]')).toBeVisible();
     await expect(page.locator('[data-testid="group-contact-email-input"]')).toBeVisible();
     await expect(page.locator('[data-testid="group-contact-message-input"]')).toBeVisible();
@@ -67,8 +53,7 @@ test.describe("Public groups listing", () => {
   });
 
   test("anonymous view does not show authed tabs", async ({ page }) => {
-    // AnonymousGroupView is a flat layout, not the tabbed AuthenticatedGroupDetail.
-    // Members/Events/Resources tabs should NOT be present for logged-out visitors.
+    // Flat layout (no Members/Events/Resources tabs) for logged-out visitors.
     await page.goto("/mobile/groups/adult-bible-class");
     await expect(page.locator("body")).toContainText(/Adult Bible Class/i, { timeout: 15000 });
     await expect(page.getByRole("tab", { name: /Members/i })).toHaveCount(0);

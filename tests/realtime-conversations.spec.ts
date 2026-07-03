@@ -1,17 +1,9 @@
 import { test, expect, type BrowserContext, type Page } from "@playwright/test";
 import { waitForRoomJoin } from "./helpers/realtime";
 
-/**
- * Cross-user realtime test for group discussions.
- *
- * Demo (PER00000082) and Tester (PER00000083, Jane User) are both seeded into
- * GRP00000004 (Adult Bible Class). Each opens the group's Messages tab in a
- * separate browser context. Demo posts; Tester's open tab should reflect the
- * message via the SubscriptionManager + ConversationStore broadcast path
- * without reloading. Tester replies; Demo sees the reply the same way.
- */
+/** Tests realtime group conversations via SubscriptionManager + ConversationStore broadcast. */
 
-const GROUP_ID = "GRP00000004"; // Adult Bible Class — both demo and tester are members
+const GROUP_ID = "GRP00000004";
 
 async function loginAs(page: Page, email: string, password: string) {
   await page.goto("/login", { timeout: 60000 });
@@ -28,8 +20,6 @@ async function openGroupMessages(page: Page) {
   const messagesTab = page.getByRole("tab", { name: /Messages/i });
   await messagesTab.waitFor({ state: "visible", timeout: 30000 });
   await messagesTab.click();
-  // The composer placeholder confirms GroupChatModal mounted and (in our patched
-  // version) joined the conversation room via SubscriptionManager.
   const composer = page.getByPlaceholder(/Send a message|message|Post/i).first();
   await composer.waitFor({ state: "visible", timeout: 15000 });
   return composer;
@@ -60,8 +50,6 @@ test.describe("Realtime — cross-user group conversations", () => {
       loginAs(testerPage, "tester@b1.church", "password")
     ]);
 
-    // Set up the room-join waiters before navigating — openGroupMessages triggers the
-    // navigation whose bootstrap eventually fires SubscriptionManager.joinRoom.
     const demoJoined = waitForRoomJoin(demoPage);
     const testerJoined = waitForRoomJoin(testerPage);
 
@@ -70,8 +58,6 @@ test.describe("Realtime — cross-user group conversations", () => {
       openGroupMessages(testerPage)
     ]);
 
-    // Wait for each tab's own POST /connections (the conversation room join) to land
-    // server-side before either tab posts — see tests/helpers/realtime.ts.
     await Promise.all([demoJoined, testerJoined]);
   });
 

@@ -98,9 +98,6 @@ export const ChatNotificationBridge = ({ personId, churchId }: Props): null => {
           return;
         }
 
-        // When the device is enrolled for server-side web push, let the push path
-        // be the single source of OS notifications to avoid duplicate alerts from
-        // both the socket bridge and the service worker.
         if (WebPushHelper.isServerRegistrationEnabled()) {
           const hasConfirmedEnrollment = await WebPushHelper.hasConfirmedServerEnrollment();
           if (hasConfirmedEnrollment) return;

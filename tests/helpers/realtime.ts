@@ -1,11 +1,6 @@
 import type { Page } from "@playwright/test";
 
-// Real readiness signals for SubscriptionManager's POST /connections calls, replacing
-// blind waitForTimeout sleeps. SocketHelper.init() (apphelper) has a ~3s floor before a
-// room join fires, so a fixed short sleep intermittently lets the sender post before the
-// receiving tab's connection row exists server-side — DeliveryHelper.sendConversationMessages
-// (Api) then finds no connection for that conversationId and the message is permanently
-// missed (no replay). Waiting on the actual network response removes the race.
+// Use network response waits instead of fixed sleeps to avoid race where sender posts before receiver joins.
 
 interface ConnectionBody {
   conversationId: string;
@@ -35,19 +30,12 @@ async function waitForConnectionPost(page: Page, predicate: (body: ConnectionBod
   }, { timeout });
 }
 
-// GroupChatModal / StreamChatManager join the specific conversation's own room once they
-// resolve its id — that join is what gates real-time delivery for pre-existing rooms
-// (group discussions, the always-on stream) since direct delivery requires an exact
-// conversationId match (Api ConnectionRepo.loadForConversation).
+// Wait for room join (gates real-time delivery; exact conversationId match required).
 export function waitForRoomJoin(page: Page, timeout = 30000): Promise<void> {
   return waitForConnectionPost(page, (body) => body.conversationId !== "alerts", timeout);
 }
 
-// Every logged-in tab registers an "alerts" room connection as soon as SocketHelper knows
-// the person/church. Private-message delivery to a conversation neither side has joined
-// yet (e.g. the very first message in a brand-new thread) relies entirely on this channel —
-// Api NotificationHelper.attemptDeliveryWithEscalation reads recipients via
-// ConnectionRepo.loadForNotification, which hardcodes conversationId="alerts".
+// Wait for "alerts" room join (required for initial private messages via ConnectionRepo.loadForNotification).
 export function waitForAlertsJoin(page: Page, timeout = 30000): Promise<void> {
   return waitForConnectionPost(page, (body) => body.conversationId === "alerts", timeout);
 }

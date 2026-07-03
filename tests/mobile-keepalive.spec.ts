@@ -1,10 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
-// The mobile layout keeps visited tab screens mounted with React's <Activity>,
-// so transient UI state (form inputs, scroll) survives tab switches. Hidden
-// Activity subtrees stay in the DOM (display:none), so assert with getByRole /
-// visible locators, which ignore them.
+// Activity keeps components mounted with display:none; use getByRole/visible locators.
 
 test.describe("Mobile keep-alive", () => {
   test("community search input keeps its value across a tab switch", async ({ page }) => {
@@ -24,9 +21,7 @@ test.describe("Mobile keep-alive", () => {
     await expect(page).toHaveURL(/\/mobile\/community/, { timeout: 15000 });
 
     // getByRole targets the visible instance; a remount would have reset this.
-    await expect(page.getByRole("textbox", { name: /Search Members/i })).toHaveValue("Donald", {
-      timeout: 15000,
-    });
+    await expect(page.getByRole("textbox", { name: /Search Members/i })).toHaveValue("Donald", { timeout: 15000 });
   });
 
   test("sermons scroll position is restored after a tab switch", async ({ page }) => {

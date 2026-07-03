@@ -1,11 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { SEED_NAV_LINKS } from "./helpers/fixtures";
 
-// Navigation links are seeded with category='website' so ConfigHelper.load
-// returns them via /links/church/{id}?category=website (content/demo.sql:589).
-// On md+ viewports they render inline in the header; on small viewports the
-// header collapses to a hamburger menu (Header.tsx:271-281).
-
 test.describe("Public navigation", () => {
   test.beforeEach(async ({ page }) => {
     await page.context().clearCookies();
@@ -41,13 +36,10 @@ test.describe("Public navigation", () => {
   test("mobile viewport shows hamburger menu button", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/");
-    await expect(page.locator('[data-testid="mobile-menu-button"]')).toBeVisible({
-      timeout: 15000,
-    });
+    await expect(page.locator('[data-testid="mobile-menu-button"]')).toBeVisible({ timeout: 15000 });
   });
 
   test("navbar solid-state background falls back to white when navStyles is unset", async ({ page }) => {
-    // /sermons isn't an overlay page, so navbar renders solid immediately.
     await page.goto("/sermons");
     const navbar = page.locator("#navbar");
     await navbar.waitFor({ state: "visible", timeout: 15000 });
@@ -57,9 +49,7 @@ test.describe("Public navigation", () => {
 
   test("navStyles override applies to live nav rendering", async ({ page, request }) => {
     const API_BASE = "http://localhost:8084";
-    const loginRes = await request.post(`${API_BASE}/membership/users/login`, {
-      data: { email: "demo@b1.church", password: "password" },
-    });
+    const loginRes = await request.post(`${API_BASE}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
     const loginBody = await loginRes.json();
     const grace = loginBody.userChurches.find((uc: any) => uc.church.id === "CHU00000001");
     const contentJwt = grace.apis.find((a: any) => a.keyName === "ContentApi").jwt;
@@ -72,14 +62,14 @@ test.describe("Public navigation", () => {
       ...original,
       navStyles: JSON.stringify({
         solid: { backgroundColor: "#123456", linkColor: "#abcdef", linkHoverColor: "#abcdef", activeColor: "#abcdef" },
-        transparent: { linkColor: null, linkHoverColor: null, activeColor: null },
-      }),
+        transparent: { linkColor: null, linkHoverColor: null, activeColor: null }
+      })
     };
 
     try {
       const saveRes = await request.post(`${API_BASE}/content/globalStyles`, {
         data: [override],
-        headers: { ...authHeaders, "Content-Type": "application/json" },
+        headers: { ...authHeaders, "Content-Type": "application/json" }
       });
       expect(saveRes.ok()).toBeTruthy();
 
@@ -91,7 +81,7 @@ test.describe("Public navigation", () => {
       const restored = { ...original, navStyles: original.navStyles ?? null };
       await request.post(`${API_BASE}/content/globalStyles`, {
         data: [restored],
-        headers: { ...authHeaders, "Content-Type": "application/json" },
+        headers: { ...authHeaders, "Content-Type": "application/json" }
       });
     }
   });

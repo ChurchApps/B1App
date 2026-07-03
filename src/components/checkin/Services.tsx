@@ -80,7 +80,6 @@ export function Services({ selectedHandler }: Props) {
 
   return (
     <>
-      {/* Header Section */}
       <HeaderSection>
         <HeaderIconContainer>
           <Icon sx={{ fontSize: 48, color: colors.primary }}>event</Icon>
@@ -93,7 +92,6 @@ export function Services({ selectedHandler }: Props) {
         </Typography>
       </HeaderSection>
 
-      {/* Services List */}
       {services.length === 0
         ? (
           <EmptyStateCard>

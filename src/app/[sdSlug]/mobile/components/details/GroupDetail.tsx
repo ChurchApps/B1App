@@ -68,9 +68,7 @@ export const GroupDetail = ({ id, config }: Props) => {
 };
 
 const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; config: ConfigurationInterface }) => {
-  // `id` here is the URL param — could be a real group id or a slug. We use it
-  // for cache keys and the initial fetch, then derive the resolved `groupId`
-  // from the loaded group for all downstream API calls and child components.
+  // id is URL param (slug or real group id); derive resolved groupId from loaded group.
   const id = idOrSlug;
   const tc = mobileTheme.colors;
   const router = useRouter();
@@ -732,6 +730,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
             <GroupCalendarTab
               groupId={groupId}
               canManage={canManageGroup}
+              isMember={isMember}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
               onEditEvent={(ev) => setEditEvent(ev)}
             />

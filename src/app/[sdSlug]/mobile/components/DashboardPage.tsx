@@ -22,9 +22,6 @@ export const HOME_TABS_COUNT = 7;
 
 const generateLinkId = (item: LinkInterface): string => item.id || `${item.linkType}_${item.text}`;
 
-// Returns the admin-uploaded photo for this link, or null. Falling back to a
-// stock B1 dashboard image makes every B1 install look identical at a distance,
-// so unphotographed cards now render a themed gradient + icon instead.
 const resolvePhoto = (item: LinkInterface): string | null => {
   const photo = (item as unknown as { photo?: string }).photo;
   return photo || null;
@@ -79,9 +76,6 @@ export const DashboardPage = ({ config }: Props) => {
     incrementViewCount(generateLinkId(link));
     const route = linkTypeToRoute(link.linkType, link.linkData, link.text, link.url);
     if (!route) return;
-    // Custom "url" links always open externally (new window) so iOS standalone
-    // PWAs give the user a close button. Relative paths are resolved against the
-    // origin first; otherwise they'd navigate in-place out of the mobile shell.
     if (link.linkType === "url" || route.startsWith("http")) {
       const target = route.startsWith("http") ? route : new URL(route, window.location.origin).toString();
       window.open(target, "_blank", "noopener,noreferrer");

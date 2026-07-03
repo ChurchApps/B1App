@@ -109,6 +109,27 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
       </Box>
 
       <Box sx={{ flex: 1, overflowY: "auto" }}>
+        {context?.user && (
+          <Link href="/mobile/me" style={{ textDecoration: "none", color: "inherit" }} onClick={onNavigate}>
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              minHeight: 48,
+              px: `${mobileTheme.spacing.md}px`,
+              py: `${mobileTheme.spacing.sm + 4}px`,
+              borderBottom: `1px solid ${tc.border}`,
+              bgcolor: isActive("/mobile/me") ? tc.primary : "transparent",
+              cursor: "pointer",
+              "&:hover": { bgcolor: isActive("/mobile/me") ? tc.primary : tc.iconBackground }
+            }}>
+              <Icon sx={{ fontSize: 24, color: isActive("/mobile/me") ? tc.onPrimary : tc.primary }}>person</Icon>
+              <Typography sx={{ fontSize: 16, fontWeight: 500, color: isActive("/mobile/me") ? tc.onPrimary : tc.text, flex: 1 }}>
+                {Locale.label("mobile.me.title")}
+              </Typography>
+            </Box>
+          </Link>
+        )}
         {canAccessAdmin && (
           <Box
             component="a"

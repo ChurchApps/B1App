@@ -1,7 +1,3 @@
-// Lightweight color helpers used by Theme.tsx and MobileThemeProvider.tsx
-// to derive primary-light / primary-dark / accent from a single church primary,
-// so churches that only set one color still get a coherent theme.
-
 const HEX_RE = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
 export const isValidHex = (value?: string | null): value is string =>
@@ -34,12 +30,9 @@ const mix = (base: string, mixColor: string, ratio: number): string => {
   return rgbToHex(r, g, b);
 };
 
-// Tint = blend toward white. Shade = blend toward black.
 export const tint = (hex: string, ratio: number): string => mix(hex, "#FFFFFF", ratio);
 export const shade = (hex: string, ratio: number): string => mix(hex, "#000000", ratio);
 
-// Rotate hue 30° around the wheel for a complementary-ish accent.
-// Falls back to the input if it's not a valid hex.
 export const accent = (hex: string): string => {
   if (!isValidHex(hex)) return hex;
   const [r, g, b] = hexToRgb(hex).map((v) => v / 255) as [number, number, number];
@@ -57,7 +50,6 @@ export const accent = (hex: string): string => {
     if (h < 0) h += 360;
   }
   const newH = (h + 30) % 360;
-  // back to RGB
   const c = (1 - Math.abs(2 * l - 1)) * s;
   const x = c * (1 - Math.abs(((newH / 60) % 2) - 1));
   const m = l - c / 2;

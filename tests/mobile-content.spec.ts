@@ -10,9 +10,7 @@ test.describe("Mobile content screens", () => {
 
   test("sermons screen lists seeded playlist titles", async ({ page }) => {
     await page.goto("/mobile/sermons");
-    await expect(page.locator("body")).toContainText(SEED_PLAYLISTS.SUNDAY_SERMONS.title, {
-      timeout: 15000,
-    });
+    await expect(page.locator("body")).toContainText(SEED_PLAYLISTS.SUNDAY_SERMONS.title, { timeout: 15000 });
   });
 
   test("bible screen renders", async ({ page }) => {
@@ -35,9 +33,7 @@ test.describe("Mobile content screens", () => {
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
-  test("clicking a sermon playlist on /mobile/sermons drills into its sermons", async ({
-    page,
-  }) => {
+  test("clicking a sermon playlist on /mobile/sermons drills into its sermons", async ({ page }) => {
     // Per b1-mobile/content/sermons.md, sermons screen lets you drill into a
     // playlist. SermonsPage routes to /mobile/playlist/<id> on click.
     await page.goto("/mobile/sermons");

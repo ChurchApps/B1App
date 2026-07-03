@@ -23,6 +23,9 @@ const DonatePage = dynamic(() => import("./screens/DonatePage").then(m => ({ def
 const CheckinPage = dynamic(() => import("./screens/CheckinPage").then(m => ({ default: m.CheckinPage })), { loading });
 const PlansPage = dynamic(() => import("./screens/PlansPage").then(m => ({ default: m.PlansPage })), { loading });
 const RegistrationsPage = dynamic(() => import("./screens/RegistrationsPage").then(m => ({ default: m.RegistrationsPage })), { loading });
+const MePage = dynamic(() => import("./screens/MePage").then(m => ({ default: m.MePage })), { loading });
+const RequestEventPage = dynamic(() => import("./screens/RequestEventPage").then(m => ({ default: m.RequestEventPage })), { loading });
+const MyRequestsPage = dynamic(() => import("./screens/MyRequestsPage").then(m => ({ default: m.MyRequestsPage })), { loading });
 const VolunteerPage = dynamic(() => import("./screens/VolunteerPage").then(m => ({ default: m.VolunteerPage })), { loading });
 const NotificationsPage = dynamic(() => import("./screens/NotificationsPage").then(m => ({ default: m.NotificationsPage })), { loading });
 const NotificationPrefsPage = dynamic(() => import("./screens/NotificationPrefsPage").then(m => ({ default: m.NotificationPrefsPage })), { loading });
@@ -67,6 +70,9 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "notifications": return <NotificationsPage config={config} />;
     case "notificationPrefs": return <NotificationPrefsPage />;
     case "registrations": return <RegistrationsPage config={config} />;
+    case "me": return <MePage config={config} />;
+    case "requestEvent": return <RequestEventPage config={config} />;
+    case "myRequests": return <MyRequestsPage config={config} />;
     case "volunteer":
     case "volunteerBrowse": return <VolunteerPage config={config} />;
     case "messages":

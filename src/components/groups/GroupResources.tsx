@@ -181,7 +181,6 @@ export const GroupResources: React.FC<Props> = (props) => {
         )}
       </DisplayBox>
 
-      {/* Link Add */}
       {canEditGroupResources && (
         <GroupLinkAdd
           saveCallback={() => { loadData(); }}
@@ -189,7 +188,6 @@ export const GroupResources: React.FC<Props> = (props) => {
         />
       )}
 
-      {/* File Upload */}
       {canEditGroupResources && (
         <InputBox headerIcon="description" headerText={Locale.label("groups.upload")} saveFunction={handleSave} saveText={Locale.label("groups.upload")} data-testid="group-upload-inputbox">
           {getStorage()}

@@ -1,19 +1,5 @@
 import { test, expect, request } from "@playwright/test";
 
-// Web registration wizard (src/components/registration/EventRegister.tsx), reached at
-// /register/<eventId> ((public)/register/[eventId]/page.tsx). No existing spec covers this
-// route (only /mobile/register/<eventId> is covered, in mobile-events.spec.ts), so this file
-// is new rather than an extension.
-//
-// Two disposable events are created via direct API calls (mirrors
-// B1Admin/tests/registrations.spec.ts) instead of reusing the seeded VBS/Missions Conference
-// events, so this spec never disturbs their registration counts or mobile-events.spec.ts's
-// assumptions about them.
-//
-// UserContext is only hydrated by the mobile tree (mobile/hooks/hydrateUserSession.ts) —
-// nothing populates it on (public) routes, so EventRegister always renders the guest-info
-// branch here regardless of storage state. Both cases therefore register as a guest.
-
 const API_BASE = "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 const GROUP_ID = "GRP00000030"; // VBS group — already used by EVT00000015, known-good churchId scope.
@@ -30,10 +16,7 @@ function futureWindow(daysOut: number) {
   return { start, end };
 }
 
-// Typing into the SSR'd inputs before React hydrates silently loses the value: the DOM
-// shows the text (so even a toHaveValue check passes) but no onChange is attached yet, and
-// hydration re-renders the controlled input from empty state. The count fetch fires from a
-// useEffect — strictly post-hydration — so gate on it before touching the form.
+// Gate on count fetch (post-hydration) to avoid losing input values during hydration.
 async function gotoWizard(page: import("@playwright/test").Page, eventId: string) {
   const countResp = page.waitForResponse((r) => r.url().includes(`/registrations/event/${eventId}/count`), { timeout: 30000 });
   await page.goto(`/register/${eventId}`);

@@ -1,18 +1,18 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import {
-  Box, Button, Card, CardContent, Chip, Divider, Icon, IconButton,
-  LinearProgress, Stack, TextField, Typography
+  Alert, Box, Button, Card, CardContent, Chip, Divider, Icon, IconButton,
+  LinearProgress, MenuItem, Select, Stack, TextField, Typography
 } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
-import type { EventInterface, FormSubmissionInterface, RegistrationInterface } from "@churchapps/helpers";
+import type { EventInterface, FormSubmissionInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
+import { formatMoney, useEventRegistration, type RegType } from "./useEventRegistration";
 
-interface GuestMember {
-  firstName: string;
-  lastName: string;
-}
+// Stripe/donations pull browser-only modules; keep them out of the server render.
+const RegistrationPaymentForm = dynamic(() => import("./RegistrationPaymentForm").then((m) => m.RegistrationPaymentForm), { ssr: false });
 
 interface Props {
   churchId: string;
@@ -23,18 +23,20 @@ interface Props {
 export function EventRegister({ churchId, eventId, event }: Props) {
   const context = useContext(UserContext);
   const isLoggedIn = !!context?.person;
-
-  const [step, setStep] = useState<"info" | "members" | "questions" | "confirm">("info");
-  const [guestFirstName, setGuestFirstName] = useState("");
-  const [guestLastName, setGuestLastName] = useState("");
-  const [guestEmail, setGuestEmail] = useState("");
-  const [guestPhone, setGuestPhone] = useState("");
-  const [members, setMembers] = useState<GuestMember[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
   const [activeCount, setActiveCount] = useState(0);
-  const [registration, setRegistration] = useState<RegistrationInterface | null>(null);
-  const [unRestrictedFormId, setUnRestrictedFormId] = useState("");
+
+  const reg = useEventRegistration({
+    churchId,
+    eventId,
+    event,
+    isLoggedIn,
+    person: {
+      id: context?.person?.id,
+      email: context?.person?.contactInfo?.email,
+      firstName: context?.person?.name?.first,
+      lastName: context?.person?.name?.last
+    }
+  });
 
   useEffect(() => {
     ApiHelper.getAnonymous("/registrations/event/" + eventId + "/count?churchId=" + churchId, "ContentApi")
@@ -42,6 +44,8 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   }, [eventId, churchId]);
 
   const isFull = event.capacity ? activeCount >= event.capacity : false;
+  useEffect(() => { reg.setAtCapacity(isFull); }, [isFull, reg]);
+
   const isOpen = checkDates();
 
   function checkDates(): boolean {
@@ -63,114 +67,14 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     return `${start} - ${endTime}`;
   };
 
-  const addMember = () => {
-    if (members.length >= 10) return;
-    const lastName = isLoggedIn ? (context.person?.name?.last || "") : guestLastName;
-    setMembers([...members, { firstName: "", lastName }]);
+  const typeLabel = (t: RegType) => {
+    const price = t.price != null && t.price > 0 ? ` (${formatMoney(t.price)})` : "";
+    const soldOut = t.remainingCapacity != null && t.remainingCapacity <= 0 ? ` - ${Locale.label("registration.soldOut")}` : "";
+    return `${t.name}${price}${soldOut}`;
   };
 
-  const removeMember = (index: number) => {
-    setMembers(members.filter((_, i) => i !== index));
-  };
+  const typeDisabled = (t: RegType) => t.remainingCapacity != null && t.remainingCapacity <= 0;
 
-  const updateMember = (index: number, field: keyof GuestMember, value: string) => {
-    const updated = [...members];
-    updated[index] = { ...updated[index], [field]: value };
-    setMembers(updated);
-  };
-
-  const handleContinue = () => {
-    setError("");
-    if (!isLoggedIn) {
-      if (!guestFirstName.trim() || !guestLastName.trim()) {
-        setError(Locale.label("registration.errors.namesRequired"));
-        return;
-      }
-      if (!guestEmail.trim()) {
-        setError(Locale.label("registration.errors.emailRequired"));
-        return;
-      }
-    }
-    setStep("members");
-  };
-
-  const validateMembers = (): boolean => {
-    for (const m of members) {
-      if (!m.firstName.trim() || !m.lastName.trim()) {
-        setError(Locale.label("registration.errors.memberNamesRequired"));
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const handleSubmit = async (formSubmissionId?: string) => {
-    setError("");
-    if (!validateMembers()) return;
-
-    setIsSubmitting(true);
-    try {
-      const payload: any = { churchId, eventId };
-
-      if (isLoggedIn) {
-        payload.personId = context.person.id;
-      } else {
-        payload.guestInfo = {
-          firstName: guestFirstName.trim(),
-          lastName: guestLastName.trim(),
-          email: guestEmail.trim(),
-          phone: guestPhone.trim() || undefined
-        };
-      }
-
-      if (members.length > 0) {
-        payload.members = members.map((m) => ({
-          firstName: m.firstName.trim(),
-          lastName: m.lastName.trim()
-        }));
-      }
-
-      if (formSubmissionId) payload.formSubmissionId = formSubmissionId;
-
-      const result = await ApiHelper.postAnonymous("/registrations/register", payload, "ContentApi");
-      setRegistration(result);
-      setStep("confirm");
-    } catch {
-      setError(Locale.label("registration.errors.registrationFailed"));
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleMembersContinue = async () => {
-    setError("");
-    if (!validateMembers()) return;
-
-    if (!event.formId) {
-      await handleSubmit();
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const formData: any = await ApiHelper.get("/forms/standalone/" + event.formId + "?churchId=" + churchId, "MembershipApi");
-      if (formData?.restricted) {
-        await handleSubmit();
-      } else {
-        setUnRestrictedFormId(event.formId);
-        setIsSubmitting(false);
-        setStep("questions");
-      }
-    } catch {
-      await handleSubmit();
-    }
-  };
-
-  const handleFormSaved = (fs?: FormSubmissionInterface) => {
-    handleSubmit(fs?.id);
-  };
-
-  // Status messages for closed/full
   if (!isOpen) {
     return (
       <Card sx={{ borderRadius: 2 }}>
@@ -187,7 +91,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     );
   }
 
-  if (isFull) {
+  if (isFull && !event.waitlistEnabled) {
     return (
       <Card sx={{ borderRadius: 2 }}>
         <CardContent sx={{ textAlign: "center", py: 4 }}>
@@ -202,24 +106,30 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   }
 
   // Confirmation step
-  if (step === "confirm" && registration) {
+  if (reg.step === "confirm" && reg.registration) {
+    const waitlisted = reg.registration.status === "waitlisted";
     return (
       <Card sx={{ borderRadius: 2 }}>
         <CardContent sx={{ textAlign: "center", py: 4 }}>
-          <Icon sx={{ fontSize: 48, color: "success.main", mb: 1 }}>check_circle</Icon>
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>{Locale.label("registration.confirmed")}</Typography>
+          <Icon sx={{ fontSize: 48, color: waitlisted ? "warning.main" : "success.main", mb: 1 }}>{waitlisted ? "hourglass_top" : "check_circle"}</Icon>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
+            {waitlisted ? Locale.label("registration.waitlist.confirmedTitle") : Locale.label("registration.confirmed")}
+          </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            {Locale.label("registration.youAreRegistered")} <b>{event.title}</b>
+            {waitlisted ? Locale.label("registration.waitlist.confirmedBody") : Locale.label("registration.youAreRegistered")} <b>{event.title}</b>
           </Typography>
           <Divider sx={{ my: 2 }} />
           <Stack spacing={1} sx={{ textAlign: "left" }}>
             <Typography variant="body2"><b>{Locale.label("registration.event")}:</b> {event.title}</Typography>
             <Typography variant="body2"><b>{Locale.label("common.date")}:</b> {getDisplayTime()}</Typography>
-            <Typography variant="body2"><b>{Locale.label("registration.status")}:</b> <Chip label={registration.status} size="small" color="success" /></Typography>
-            {registration.members && registration.members.length > 0 && (
+            <Typography variant="body2"><b>{Locale.label("registration.status")}:</b> <Chip label={reg.registration.status} size="small" color={waitlisted ? "warning" : "success"} /></Typography>
+            {reg.registration.totalAmount > 0 && (
+              <Typography variant="body2"><b>{Locale.label("registration.payment.total")}:</b> {formatMoney(reg.registration.amountPaid || 0)} / {formatMoney(reg.registration.totalAmount)}</Typography>
+            )}
+            {reg.registration.members && reg.registration.members.length > 0 && (
               <>
                 <Typography variant="body2" sx={{ fontWeight: 600, mt: 1 }}>{Locale.label("registration.registeredMembers")}:</Typography>
-                {registration.members.map((m, i) => (
+                {reg.registration.members.map((m: any, i: number) => (
                   <Typography key={i} variant="body2">- {m.firstName} {m.lastName}</Typography>
                 ))}
               </>
@@ -230,8 +140,76 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     );
   }
 
+  // Payment step
+  if (reg.step === "payment") {
+    return (
+      <Card sx={{ borderRadius: 2 }}>
+        <CardContent>
+          <RegistrationPaymentForm
+            churchId={churchId}
+            personId={isLoggedIn ? context?.person?.id : undefined}
+            personEmail={isLoggedIn ? context?.person?.contactInfo?.email : reg.guestEmail}
+            personName={`${reg.primaryFirstName} ${reg.primaryLastName}`.trim()}
+            amount={reg.total}
+            currency={(event as EventInterface & { currency?: string }).currency}
+            summaryLines={reg.summaryLines}
+            subtotal={reg.subtotal}
+            discountAmount={reg.discountAmount}
+            couponCode={reg.couponCode}
+            setCouponCode={reg.setCouponCode}
+            appliedCoupon={reg.appliedCoupon}
+            couponError={reg.couponError}
+            applyCoupon={reg.applyCoupon}
+            removeCoupon={reg.removeCoupon}
+            onPay={(p) => reg.submit(p)}
+            onFinalized={(result) => reg.finishConfirm(result)}
+            onBack={() => reg.setStep(reg.hasSelections ? "selections" : "members")}
+          />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Selections step
+  if (reg.step === "selections") {
+    return (
+      <Card sx={{ borderRadius: 2 }}>
+        <CardContent>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>{Locale.label("registration.selections.title")}</Typography>
+          <Stack spacing={2}>
+            {reg.selections.map((s) => {
+              const soldOut = s.remainingCapacity != null && s.remainingCapacity <= 0;
+              const qty = reg.selectionQty[s.id] || 0;
+              const max = s.maxQuantity ?? 99;
+              return (
+                <Box key={s.id} sx={{ p: 2, border: "1px solid", borderColor: "divider", borderRadius: 1, opacity: soldOut ? 0.6 : 1 }}>
+                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{s.name}</Typography>
+                    <Typography variant="subtitle1">{s.price != null && s.price > 0 ? formatMoney(s.price) : Locale.label("registration.free")}</Typography>
+                  </Box>
+                  {s.description && <Typography variant="body2" color="text.secondary">{s.description}</Typography>}
+                  {s.remainingCapacity != null && <Typography variant="caption" color="text.secondary">{Locale.label("registration.remaining").replace("{}", String(s.remainingCapacity))}</Typography>}
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
+                    <IconButton size="small" data-testid={`sel-dec-${s.id}`} disabled={soldOut || qty <= 0} onClick={() => reg.setQuantity(s.id, qty - 1)}><Icon>remove</Icon></IconButton>
+                    <Typography data-testid={`sel-qty-${s.id}`}>{qty}</Typography>
+                    <IconButton size="small" data-testid={`sel-add-${s.id}`} disabled={soldOut || qty >= max} onClick={() => reg.setQuantity(s.id, qty + 1)}><Icon>add</Icon></IconButton>
+                  </Box>
+                </Box>
+              );
+            })}
+          </Stack>
+          {reg.error && <Alert severity="error" sx={{ mt: 2 }}>{reg.error}</Alert>}
+          <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+            <Button variant="outlined" onClick={() => reg.setStep("members")}>{Locale.label("registration.back")}</Button>
+            <Button variant="contained" fullWidth onClick={reg.continueFromSelections} disabled={reg.isSubmitting}>{Locale.label("registration.continue")}</Button>
+          </Stack>
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Members step
-  if (step === "members") {
+  if (reg.step === "members") {
     return (
       <Card sx={{ borderRadius: 2 }}>
         <CardContent>
@@ -240,25 +218,40 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             {Locale.label("registration.additionalMembersInfo")}
           </Typography>
 
-          {members.map((member, index) => (
-            <Box key={index} sx={{ display: "flex", gap: 1, mb: 1, alignItems: "center" }}>
+          {reg.members.map((member, index) => (
+            <Box key={index} sx={{ display: "flex", gap: 1, mb: 1, alignItems: "center", flexWrap: "wrap" }}>
               <TextField
                 label={Locale.label("person.firstName")}
                 value={member.firstName}
-                onChange={(e) => updateMember(index, "firstName", e.target.value)}
+                onChange={(e) => reg.updateMember(index, "firstName", e.target.value)}
                 size="small"
                 required
-                fullWidth
+                sx={{ flex: 1, minWidth: 120 }}
               />
               <TextField
                 label={Locale.label("person.lastName")}
                 value={member.lastName}
-                onChange={(e) => updateMember(index, "lastName", e.target.value)}
+                onChange={(e) => reg.updateMember(index, "lastName", e.target.value)}
                 size="small"
                 required
-                fullWidth
+                sx={{ flex: 1, minWidth: 120 }}
               />
-              <IconButton size="small" onClick={() => removeMember(index)}>
+              {reg.hasTypes && (
+                <Select
+                  size="small"
+                  displayEmpty
+                  value={member.registrationTypeId || ""}
+                  onChange={(e) => reg.updateMember(index, "registrationTypeId", e.target.value)}
+                  data-testid={`member-type-${index}`}
+                  sx={{ minWidth: 160 }}
+                >
+                  <MenuItem value="" disabled>{Locale.label("registration.selectType")}</MenuItem>
+                  {reg.types.map((t) => (
+                    <MenuItem key={t.id} value={t.id} disabled={typeDisabled(t)}>{typeLabel(t)}</MenuItem>
+                  ))}
+                </Select>
+              )}
+              <IconButton size="small" onClick={() => reg.removeMember(index)}>
                 <Icon>close</Icon>
               </IconButton>
             </Box>
@@ -266,27 +259,29 @@ export function EventRegister({ churchId, eventId, event }: Props) {
 
           <Button
             variant="outlined"
-            onClick={addMember}
+            onClick={reg.addMember}
             startIcon={<Icon>person_add</Icon>}
-            disabled={members.length >= 10}
+            disabled={reg.members.length >= 10}
             size="small"
             sx={{ mb: 2 }}
           >
             {Locale.label("registration.addMember")}
           </Button>
 
-          {error && <Typography sx={{ color: "error.main", mb: 1 }}>{error}</Typography>}
+          {reg.error && <Alert severity="error" sx={{ mb: 1 }}>{reg.error}</Alert>}
 
           <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-            <Button variant="outlined" onClick={() => setStep("info")}>{Locale.label("registration.back")}</Button>
+            <Button variant="outlined" onClick={() => reg.setStep("info")}>{Locale.label("registration.back")}</Button>
             <Button
               variant="contained"
-              onClick={handleMembersContinue}
-              disabled={isSubmitting}
+              onClick={reg.continueFromMembers}
+              disabled={reg.isSubmitting}
               fullWidth
-              startIcon={<Icon>{isSubmitting ? "hourglass_empty" : "how_to_reg"}</Icon>}
+              startIcon={<Icon>{reg.isSubmitting ? "hourglass_empty" : "how_to_reg"}</Icon>}
             >
-              {isSubmitting ? Locale.label("registration.registering") : Locale.label("registration.completeRegistration")}
+              {reg.isSubmitting ? Locale.label("registration.registering")
+                : (reg.hasSelections || reg.needsPayment) ? Locale.label("registration.continue")
+                  : Locale.label("registration.completeRegistration")}
             </Button>
           </Stack>
         </CardContent>
@@ -295,22 +290,22 @@ export function EventRegister({ churchId, eventId, event }: Props) {
   }
 
   // Questions step
-  if (step === "questions") {
+  if (reg.step === "questions") {
     return (
       <Card sx={{ borderRadius: 2 }}>
         <CardContent>
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>{Locale.label("registration.questions")}</Typography>
-          {error && <Typography sx={{ color: "error.main", mb: 1 }}>{error}</Typography>}
+          {reg.error && <Alert severity="error" sx={{ mb: 1 }}>{reg.error}</Alert>}
           <FormSubmissionEdit
             churchId={churchId}
             addFormId=""
-            unRestrictedFormId={unRestrictedFormId}
+            unRestrictedFormId={reg.unRestrictedFormId}
             contentType="event"
             contentId={eventId}
             formSubmissionId=""
             personId={context?.person?.id}
-            updatedFunction={handleFormSaved}
-            cancelFunction={() => setStep("members")}
+            updatedFunction={(fs?: FormSubmissionInterface) => reg.handleFormSaved(fs)}
+            cancelFunction={() => reg.setStep(reg.hasSelections ? "selections" : "members")}
             showHeader={false}
             noBackground={true}
           />
@@ -333,6 +328,12 @@ export function EventRegister({ churchId, eventId, event }: Props) {
 
         {event.description && (
           <Typography variant="body2" sx={{ mb: 2 }}>{event.description}</Typography>
+        )}
+
+        {isFull && event.waitlistEnabled && (
+          <Alert severity="warning" sx={{ mb: 2 }} icon={<Icon>hourglass_top</Icon>}>
+            {Locale.label("registration.waitlist.eventFullJoin")}
+          </Alert>
         )}
 
         {event.capacity && (
@@ -362,55 +363,38 @@ export function EventRegister({ churchId, eventId, event }: Props) {
           <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{Locale.label("registration.yourInformation")}:</Typography>
             <Box sx={{ display: "flex", gap: 2, mb: 1 }}>
-              <TextField
-                label={Locale.label("person.firstName")}
-                value={guestFirstName}
-                onChange={(e) => setGuestFirstName(e.target.value)}
-                size="small"
-                required
-                fullWidth
-              />
-              <TextField
-                label={Locale.label("person.lastName")}
-                value={guestLastName}
-                onChange={(e) => setGuestLastName(e.target.value)}
-                size="small"
-                required
-                fullWidth
-              />
+              <TextField label={Locale.label("person.firstName")} value={reg.guestFirstName} onChange={(e) => reg.setGuestFirstName(e.target.value)} size="small" required fullWidth />
+              <TextField label={Locale.label("person.lastName")} value={reg.guestLastName} onChange={(e) => reg.setGuestLastName(e.target.value)} size="small" required fullWidth />
             </Box>
             <Box sx={{ display: "flex", gap: 2 }}>
-              <TextField
-                label={Locale.label("person.email")}
-                type="email"
-                value={guestEmail}
-                onChange={(e) => setGuestEmail(e.target.value)}
-                size="small"
-                required
-                fullWidth
-              />
-              <TextField
-                label={Locale.label("registration.phone")}
-                type="tel"
-                value={guestPhone}
-                onChange={(e) => setGuestPhone(e.target.value)}
-                size="small"
-                fullWidth
-              />
+              <TextField label={Locale.label("person.email")} type="email" value={reg.guestEmail} onChange={(e) => reg.setGuestEmail(e.target.value)} size="small" required fullWidth />
+              <TextField label={Locale.label("registration.phone")} type="tel" value={reg.guestPhone} onChange={(e) => reg.setGuestPhone(e.target.value)} size="small" fullWidth />
             </Box>
           </Box>
         )}
 
-        {error && <Typography sx={{ color: "error.main", mb: 1 }}>{error}</Typography>}
+        {reg.hasTypes && (
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{Locale.label("registration.yourType")}:</Typography>
+            <Select
+              fullWidth
+              size="small"
+              displayEmpty
+              value={reg.primaryTypeId}
+              onChange={(e) => reg.setPrimaryTypeId(e.target.value)}
+              data-testid="primary-type"
+            >
+              <MenuItem value="" disabled>{Locale.label("registration.selectType")}</MenuItem>
+              {reg.types.map((t) => (
+                <MenuItem key={t.id} value={t.id} disabled={typeDisabled(t)}>{typeLabel(t)}</MenuItem>
+              ))}
+            </Select>
+          </Box>
+        )}
 
-        <Button
-          variant="contained"
-          onClick={handleContinue}
-          fullWidth
-          size="large"
-          startIcon={<Icon>how_to_reg</Icon>}
-          sx={{ mt: 1 }}
-        >
+        {reg.error && <Alert severity="error" sx={{ mb: 1 }}>{reg.error}</Alert>}
+
+        <Button variant="contained" onClick={reg.continueFromInfo} fullWidth size="large" startIcon={<Icon>how_to_reg</Icon>} sx={{ mt: 1 }}>
           {Locale.label("registration.continue")}
         </Button>
       </CardContent>

@@ -1,8 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-// Built-in public routes handled in [pageSlug]/page.tsx (votd / bible / donate /
-// stream / sermons). These render dedicated component wrappers regardless of
-// whether a custom page exists for the slug.
+// Built-in routes (votd, bible, donate, stream, sermons) render wrappers regardless of custom pages
 
 test.describe("Public built-in routes", () => {
   test.beforeEach(async ({ page }) => {
@@ -17,9 +15,7 @@ test.describe("Public built-in routes", () => {
 
   test("/donate references seeded fund (General Fund)", async ({ page }) => {
     await page.goto("/donate");
-    // Either the fund picker shows General Fund, or the page prompts login
-    // (with a returnUrl pointing back to /donate). Either way the URL stays
-    // on /donate.
+    // Fund picker or login prompt, but URL stays on /donate.
     const body = page.locator("body");
     await body.waitFor({ state: "visible", timeout: 15000 });
     const text = (await body.textContent()) || "";

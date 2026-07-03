@@ -24,10 +24,7 @@ const detectPlatform = (): Platform => {
 const detectStandalone = (platform: Platform): boolean => {
   if (typeof window === "undefined") return false;
   if (platform === "ios") {
-    // On iOS, navigator.standalone is the only trustworthy signal — it's set
-    // by iOS only when launched from the home screen. display-mode:standalone
-    // gives false positives in in-app browsers (Facebook, Instagram, LinkedIn,
-    // Gmail, etc.) whose chrome-less WKWebViews match it.
+    // Navigator.standalone is the only trustworthy signal; display-mode:standalone has false positives in in-app browsers.
     return (window.navigator as any).standalone === true;
   }
   return !!(window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
@@ -79,10 +76,7 @@ export const InstallPage = ({ config }: Props) => {
     const p = detectPlatform();
     setPlatform(p);
 
-    // If the install page is opened inside the installed PWA (iOS sometimes
-    // launches the app to whatever URL was captured when "Add to Home Screen"
-    // was tapped, ignoring manifest start_url), bounce to the dashboard so
-    // users land on the real app instead of an install confirmation screen.
+    // iOS may launch to stale URLs; redirect installed PWA users to dashboard.
     if (detectStandalone(p)) {
       const dashboardUrl = window.location.pathname.replace(/\/mobile\/install\/?$/, "/mobile/dashboard");
       window.location.replace(dashboardUrl);

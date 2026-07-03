@@ -4,7 +4,6 @@ import React from "react";
 import {
   Box,
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,7 +12,6 @@ import {
   Grid,
   Icon,
   IconButton,
-  ListItemText,
   MenuItem,
   Switch,
   TextField,
@@ -26,6 +24,7 @@ import { RRuleEditor } from "@churchapps/apphelper/website";
 import { EditRecurringModal } from "../../../../../components/eventCalendar/EditRecurringModal";
 import { MarkdownEditor } from "@churchapps/apphelper/markdown";
 import { EventReminderEdit } from "./EventReminderEdit";
+import { BookingPicker, diffBookings, emptyBookingSelection, type BookingSelection } from "./BookingPicker";
 
 interface Props {
   open: boolean;
@@ -108,31 +107,12 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   const [registrationOpenDate, setRegistrationOpenDate] = React.useState("");
   const [registrationCloseDate, setRegistrationCloseDate] = React.useState("");
   const [tags, setTags] = React.useState("");
+  const [allowRsvps, setAllowRsvps] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [recurrenceModalType, setRecurrenceModalType] = React.useState<"save" | "delete" | "">("");
-  const [rooms, setRooms] = React.useState<{ id?: string; name?: string; capacity?: number }[]>([]);
-  const [resources, setResources] = React.useState<{ id?: string; name?: string }[]>([]);
-  const [roomIds, setRoomIds] = React.useState<string[]>([]);
-  const [resourceIds, setResourceIds] = React.useState<string[]>([]);
-  const [conflicts, setConflicts] = React.useState<{ message?: string }[]>([]);
+  const [booking, setBooking] = React.useState<BookingSelection>(emptyBookingSelection());
   const [notice, setNotice] = React.useState<string | null>(null);
-  const [setupMinutes, setSetupMinutes] = React.useState("");
-  const [teardownMinutes, setTeardownMinutes] = React.useState("");
-  const [customWindow, setCustomWindow] = React.useState(false);
-  const [windowStart, setWindowStart] = React.useState("");
-  const [windowEnd, setWindowEnd] = React.useState("");
-
-  const hasBookings = roomIds.length > 0 || resourceIds.length > 0;
-  const toInt = (v: string) => (v.trim() ? parseInt(v, 10) || 0 : 0);
-
-  const toggleCustomWindow = (on: boolean) => {
-    setCustomWindow(on);
-    if (on) {
-      setWindowStart((w) => w || start);
-      setWindowEnd((w) => w || end);
-    }
-  };
 
   React.useEffect(() => {
     if (open) {
@@ -153,69 +133,31 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       setRegistrationOpenDate(d.registrationOpenDate);
       setRegistrationCloseDate(d.registrationCloseDate);
       setTags(d.tags);
+      setAllowRsvps(!((eventProp as any)?.rsvpDisabled ?? false));
     }
-  }, [open, computeDefaults]);
+  }, [open, computeDefaults, eventProp]);
 
   React.useEffect(() => {
     if (!open) return;
     setNotice(null);
-    setSetupMinutes("");
-    setTeardownMinutes("");
-    setCustomWindow(false);
-    setWindowStart("");
-    setWindowEnd("");
-    ApiHelper.get("/rooms", "ContentApi").then((r) => setRooms(r || [])).catch(() => setRooms([]));
-    ApiHelper.get("/resources", "ContentApi").then((r) => setResources(r || [])).catch(() => setResources([]));
     if (eventProp?.id) {
       ApiHelper.get("/eventBookings/event/" + eventProp.id, "ContentApi").then((bk: any[]) => {
-        setRoomIds((bk || []).filter((b) => b.roomId).map((b) => b.roomId));
-        setResourceIds((bk || []).filter((b) => b.resourceId).map((b) => b.resourceId));
-      }).catch(() => {});
+        setBooking({
+          ...emptyBookingSelection(),
+          roomIds: (bk || []).filter((b) => b.roomId).map((b) => b.roomId),
+          resourceIds: (bk || []).filter((b) => b.resourceId).map((b) => b.resourceId)
+        });
+      }).catch(() => setBooking(emptyBookingSelection()));
     } else {
-      setRoomIds([]);
-      setResourceIds([]);
+      setBooking(emptyBookingSelection());
     }
   }, [open, eventProp]);
-
-  React.useEffect(() => {
-    if (!open || !start || !end || (roomIds.length === 0 && resourceIds.length === 0)) {
-      setConflicts([]);
-      return;
-    }
-    const t = setTimeout(() => {
-      ApiHelper.post("/events/conflicts", {
-        eventId: eventProp?.id,
-        start: new Date(start),
-        end: new Date(end),
-        recurrenceRule: recurring ? rRule : undefined,
-        setupMinutes: toInt(setupMinutes),
-        teardownMinutes: toInt(teardownMinutes),
-        startTime: customWindow && windowStart ? new Date(windowStart) : undefined,
-        endTime: customWindow && windowEnd ? new Date(windowEnd) : undefined,
-        roomIds,
-        resources: resourceIds.map((id) => ({ resourceId: id, quantity: 1 }))
-      }, "ContentApi").then((c) => setConflicts(c || [])).catch(() => setConflicts([]));
-    }, 400);
-    return () => clearTimeout(t);
-  }, [
-    open, start, end, recurring, rRule, roomIds, resourceIds, eventProp, setupMinutes, teardownMinutes, customWindow, windowStart, windowEnd
-  ]);
 
   // Diff selected rooms/resources against existing bookings: POST new, DELETE removed.
   const syncBookings = async (eventId: string): Promise<any[]> => {
     if (!eventId) return [];
     const existing: any[] = eventProp?.id ? await ApiHelper.get("/eventBookings/event/" + eventId, "ContentApi").catch((): any[] => []) : [];
-    const existingRoomIds = existing.filter((b) => b.roomId).map((b) => b.roomId);
-    const existingResourceIds = existing.filter((b) => b.resourceId).map((b) => b.resourceId);
-    // ponytail: window applies to newly added bookings; changing only the window of an already-booked room won't re-save.
-    const win = customWindow && windowStart && windowEnd
-      ? { startTime: new Date(windowStart), endTime: new Date(windowEnd) }
-      : { setupMinutes: toInt(setupMinutes) || undefined, teardownMinutes: toInt(teardownMinutes) || undefined };
-    const toAdd = [
-      ...roomIds.filter((id) => !existingRoomIds.includes(id)).map((roomId) => ({ eventId, roomId, ...win })),
-      ...resourceIds.filter((id) => !existingResourceIds.includes(id)).map((resourceId) => ({ eventId, resourceId, quantity: 1, ...win }))
-    ];
-    const toRemove = existing.filter((b) => (b.roomId && !roomIds.includes(b.roomId)) || (b.resourceId && !resourceIds.includes(b.resourceId)));
+    const { toAdd, toRemove } = diffBookings(eventId, booking, existing);
     let saved: any[] = [];
     if (toAdd.length) saved = await ApiHelper.post("/eventBookings", toAdd, "ContentApi");
     for (const b of toRemove) await ApiHelper.delete("/eventBookings/" + b.id, "ContentApi");
@@ -247,6 +189,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       registrationCloseDate: registrationEnabled && registrationCloseDate ? (localToIsoString(registrationCloseDate) as unknown as Date) : undefined,
       tags: registrationEnabled ? (tags.trim() || undefined) : undefined
     };
+    // Explicit boolean (both directions) to sidestep the Kysely-drops-undefined trap.
+    (payload as any).rsvpDisabled = !allowRsvps;
     return payload;
   };
 
@@ -497,96 +441,20 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             <MenuItem value="public">{Locale.label("mobile.group.public")}</MenuItem>
             <MenuItem value="private">{Locale.label("mobile.group.membersOnly")}</MenuItem>
           </TextField>
-          {rooms.length > 0 && (
-            <TextField
-              select
-              size="small"
-              label={Locale.label("mobile.group.rooms")}
-              value={roomIds}
-              onChange={(e) => setRoomIds(e.target.value as unknown as string[])}
-              SelectProps={{ multiple: true, renderValue: (selected: any) => rooms.filter((r) => selected.includes(r.id)).map((r) => r.name).join(", ") }}
-            >
-              {rooms.map((r) => (
-                <MenuItem key={r.id} value={r.id}>
-                  <Checkbox checked={roomIds.includes(r.id!)} size="small" />
-                  <ListItemText primary={r.name} secondary={r.capacity ? `${r.capacity}` : undefined} />
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
-          {resources.length > 0 && (
-            <TextField
-              select
-              size="small"
-              label={Locale.label("mobile.group.resources")}
-              value={resourceIds}
-              onChange={(e) => setResourceIds(e.target.value as unknown as string[])}
-              SelectProps={{ multiple: true, renderValue: (selected: any) => resources.filter((r) => selected.includes(r.id)).map((r) => r.name).join(", ") }}
-            >
-              {resources.map((r) => (
-                <MenuItem key={r.id} value={r.id}>
-                  <Checkbox checked={resourceIds.includes(r.id!)} size="small" />
-                  <ListItemText primary={r.name} />
-                </MenuItem>
-              ))}
-            </TextField>
-          )}
-          {hasBookings && (
-            <>
-              {!customWindow && (
-                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                  <TextField
-                    size="small"
-                    type="number"
-                    label={Locale.label("mobile.group.setupMinutes")}
-                    value={setupMinutes}
-                    onChange={(e) => setSetupMinutes(e.target.value)}
-                    inputProps={{ min: 0 }}
-                    sx={{ flex: 1, minWidth: 160 }}
-                  />
-                  <TextField
-                    size="small"
-                    type="number"
-                    label={Locale.label("mobile.group.teardownMinutes")}
-                    value={teardownMinutes}
-                    onChange={(e) => setTeardownMinutes(e.target.value)}
-                    inputProps={{ min: 0 }}
-                    sx={{ flex: 1, minWidth: 160 }}
-                  />
-                </Box>
-              )}
-              <FormControlLabel
-                control={<Switch checked={customWindow} onChange={(e) => toggleCustomWindow(e.target.checked)} />}
-                label={Locale.label("mobile.group.customWindow")}
-              />
-              {customWindow && (
-                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                  <TextField
-                    size="small"
-                    type="datetime-local"
-                    label={Locale.label("mobile.group.reserveFrom")}
-                    InputLabelProps={{ shrink: true }}
-                    value={windowStart}
-                    onChange={(e) => setWindowStart(e.target.value)}
-                    sx={{ flex: 1, minWidth: 160 }}
-                  />
-                  <TextField
-                    size="small"
-                    type="datetime-local"
-                    label={Locale.label("mobile.group.reserveUntil")}
-                    InputLabelProps={{ shrink: true }}
-                    value={windowEnd}
-                    onChange={(e) => setWindowEnd(e.target.value)}
-                    sx={{ flex: 1, minWidth: 160 }}
-                  />
-                </Box>
-              )}
-            </>
-          )}
-          {conflicts.length > 0 && (
-            <Typography sx={{ color: tc.error, fontSize: 13 }}>{Locale.label("mobile.group.bookingConflictWarning")}</Typography>
-          )}
+          <BookingPicker
+            value={booking}
+            onChange={setBooking}
+            start={start}
+            end={end}
+            recurring={recurring}
+            rRule={rRule}
+            eventId={eventProp?.id}
+          />
           {notice && <Typography sx={{ color: tc.primary, fontSize: 13 }}>{notice}</Typography>}
+          <FormControlLabel
+            control={<Switch checked={allowRsvps} onChange={(e) => setAllowRsvps(e.target.checked)} />}
+            label={Locale.label("mobile.group.allowRsvps")}
+          />
           <FormControlLabel
             control={<Switch checked={recurring} onChange={(e) => handleToggleRecurring(e.target.checked)} />}
             label={Locale.label("mobile.group.recurring")}

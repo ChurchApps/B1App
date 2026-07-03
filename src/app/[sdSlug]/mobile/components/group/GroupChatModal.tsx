@@ -29,6 +29,12 @@ export type ChatSubTab = "discussions" | "announcements";
 
 type ContentType = "group" | "groupAnnouncement";
 
+interface MessageReaction {
+  emoji: string;
+  count: number;
+  mine: boolean;
+}
+
 interface Message {
   id?: string;
   personId?: string;
@@ -36,7 +42,10 @@ interface Message {
   messageType?: string;
   timeSent?: string | Date;
   timeUpdated?: string | Date;
+  reactions?: MessageReaction[];
 }
+
+const REACTION_EMOJIS = ["👍", "❤️", "😂", "🎉", "🙏", "😮"];
 
 interface Conversation {
   id?: string;
@@ -73,8 +82,30 @@ export const GroupChatModal = ({
   const [hasAnnouncements, setHasAnnouncements] = React.useState(false);
   const [editingId, setEditingId] = React.useState<string | null>(null);
   const [menuAnchor, setMenuAnchor] = React.useState<{ el: HTMLElement; message: Message } | null>(null);
+  const [reactAnchor, setReactAnchor] = React.useState<{ el: HTMLElement; message: Message } | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<Message | null>(null);
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
+
+  // isMine flips only the caller's own highlight; inbound echoes don't change status.
+  const applyReaction = React.useCallback((messageId: string, emoji: string, added: boolean, isMine: boolean) => {
+    setConversations((prev) => prev.map((c) => ({
+      ...c,
+      messages: (c.messages || []).map((m) => {
+        if (m.id !== messageId) return m;
+        const reactions = [...(m.reactions || [])];
+        const i = reactions.findIndex((r) => r.emoji === emoji);
+        if (added) {
+          if (i >= 0) reactions[i] = { ...reactions[i], count: reactions[i].count + 1, mine: isMine ? true : reactions[i].mine };
+          else reactions.push({ emoji, count: 1, mine: isMine });
+        } else if (i >= 0) {
+          const nc = reactions[i].count - 1;
+          if (nc <= 0) reactions.splice(i, 1);
+          else reactions[i] = { ...reactions[i], count: nc, mine: isMine ? false : reactions[i].mine };
+        }
+        return { ...m, reactions };
+      })
+    })));
+  }, []);
 
   const currentContentType: ContentType = subTab === "announcements" ? "groupAnnouncement" : "group";
   const canPost = subTab === "announcements" ? isLeader : true;
@@ -163,13 +194,19 @@ export const GroupChatModal = ({
     const handlerId = `GroupChatModal-${conversationId}`;
     SocketHelper.addHandler("message", handlerId + "-msg", () => { loadConversations(); });
     SocketHelper.addHandler("deleteMessage", handlerId + "-del", () => { loadConversations(); });
+    // Own reactions are applied optimistically from the POST response; ignore the self-echo.
+    SocketHelper.addHandler("reaction", "GroupChatModal-Reaction", (data: any) => {
+      if (!data?.messageId || data.personId === UserHelper.person?.id) return;
+      applyReaction(data.messageId, data.emoji, !!data.added, false);
+    });
 
     return () => {
       SocketHelper.removeHandler(handlerId + "-msg");
       SocketHelper.removeHandler(handlerId + "-del");
+      SocketHelper.removeHandler("GroupChatModal-Reaction");
       SubscriptionManager.leaveRoom(conversationId, churchId).catch(() => { /* ignore */ });
     };
-  }, [open, conversations[0]?.id, loadConversations]);
+  }, [open, conversations[0]?.id, loadConversations, applyReaction]);
 
   const allMessages = React.useMemo(() => {
     const flat: Message[] = [];
@@ -183,8 +220,7 @@ export const GroupChatModal = ({
     return flat;
   }, [conversations]);
 
-  // Hide subscription marker rows from the rendered thread — they're an internal
-  // signal for NotificationHelper, not user-facing chat.
+  // Subscription marker rows are internal signals for NotificationHelper, not user-facing.
   const messages = React.useMemo(
     () => allMessages.filter((m) => m.messageType !== SUBSCRIPTION_MESSAGE_TYPE),
     [allMessages]
@@ -294,6 +330,17 @@ export const GroupChatModal = ({
       await loadConversations();
     } catch {
 
+    }
+  };
+
+  const handleToggleReaction = async (m: Message, emoji: string) => {
+    setReactAnchor(null);
+    if (!m.id) return;
+    try {
+      const res: any = await ApiHelper.post(`/messages/${m.id}/reactions`, { emoji }, "MessagingApi");
+      applyReaction(m.id, emoji, !!res?.added, true);
+    } catch {
+      /* ignore */
     }
   };
 
@@ -481,17 +528,59 @@ export const GroupChatModal = ({
                 {m.content}
               </Typography> */}
               {renderMessageContent(m.content || "")}
-              <Typography
-                sx={{
-                  fontSize: 11,
-                  mt: "2px",
-                  opacity: 0.8,
-                  color: isMine ? "rgba(255,255,255,0.85)" : tc.textSecondary,
-                  textAlign: "right"
-                }}
-              >
-                {formatRelative(m.timeSent)}
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, mt: "2px" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
+                  {(m.reactions || []).filter((r) => r.count > 0).map((r) => (
+                    <Box
+                      key={r.emoji}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => handleToggleReaction(m, r.emoji)}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleToggleReaction(m, r.emoji); } }}
+                      data-testid={`reaction-chip-${r.emoji}`}
+                      sx={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "2px",
+                        px: "6px",
+                        height: 20,
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        bgcolor: r.mine ? tc.primaryLight : (isMine ? "rgba(255,255,255,0.2)" : tc.iconBackground),
+                        color: r.mine ? tc.primary : (isMine ? "#fff" : tc.text),
+                        border: r.mine ? `1px solid ${tc.primary}` : "1px solid transparent"
+                      }}
+                    >
+                      <span>{r.emoji}</span>
+                      <span>{r.count}</span>
+                    </Box>
+                  ))}
+                  {m.id && (
+                    <IconButton
+                      size="small"
+                      aria-label={Locale.label("mobile.group.addReaction")}
+                      onClick={(e) => setReactAnchor({ el: e.currentTarget, message: m })}
+                      data-testid={`react-add-${m.id}`}
+                      sx={{ p: "2px", color: isMine ? "rgba(255,255,255,0.85)" : tc.textMuted }}
+                    >
+                      <Icon sx={{ fontSize: 16 }}>add_reaction</Icon>
+                    </IconButton>
+                  )}
+                </Box>
+                <Typography
+                  sx={{
+                    fontSize: 11,
+                    opacity: 0.8,
+                    color: isMine ? "rgba(255,255,255,0.85)" : tc.textSecondary,
+                    textAlign: "right",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  {formatRelative(m.timeSent)}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         );
@@ -677,6 +766,25 @@ export const GroupChatModal = ({
           <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>delete_outline</Icon>
           {Locale.label("mobile.group.delete")}
         </MenuItem>
+      </Menu>
+      <Menu
+        anchorEl={reactAnchor?.el || null}
+        open={!!reactAnchor}
+        onClose={() => setReactAnchor(null)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+        MenuListProps={{ sx: { display: "flex", flexDirection: "row", py: 0.5, px: 0.5 } }}
+      >
+        {REACTION_EMOJIS.map((emoji) => (
+          <MenuItem
+            key={emoji}
+            onClick={() => reactAnchor && handleToggleReaction(reactAnchor.message, emoji)}
+            data-testid={`react-emoji-${emoji}`}
+            sx={{ minWidth: 0, px: 1, fontSize: 22, borderRadius: "8px" }}
+          >
+            {emoji}
+          </MenuItem>
+        ))}
       </Menu>
       <Dialog open={!!confirmDelete} onClose={() => setConfirmDelete(null)}>
         <DialogTitle>{Locale.label("mobile.group.confirmDeleteTitle")}</DialogTitle>

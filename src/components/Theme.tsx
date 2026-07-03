@@ -6,10 +6,6 @@ import React from "react";
 
 interface Props { config?:ConfigurationInterface }
 
-// Defaults that all components can rely on. Admins override by adding keys to the
-// existing `globalStyles.palette` JSON blob — no DB schema change required.
-// `palette` may include: radius {sm,md,lg,xl}, shadow {sm,md,lg}, typeScale,
-// primaryLight, primaryDark, accent, voice.
 const RADIUS_DEFAULTS = { sm: "4px", md: "8px", lg: "12px", xl: "16px" };
 const SHADOW_DEFAULTS = {
   sm: "0 1px 2px rgba(0,0,0,0.05)",
@@ -54,8 +50,6 @@ export const Theme: React.FC<Props> = (props) => {
     pushKV(lines, "--app-surface", at.surface);
     pushKV(lines, "--app-text", at.textColor);
 
-    // Derived tints — only emit when the church didn't set them explicitly.
-    // Any of these can be overridden via palette JSON.
     if (isValidHex(at.primary)) {
       pushKV(lines, "--app-primary-light", paletteExtras.primaryLight || tint(at.primary, 0.85));
       pushKV(lines, "--app-primary-dark", paletteExtras.primaryDark || shade(at.primary, 0.2));
@@ -63,8 +57,6 @@ export const Theme: React.FC<Props> = (props) => {
     }
   }
 
-  // Radius / shadow / type-scale tokens. Defaults render unchanged sites; admins
-  // dial the whole site by setting palette.radius.* / palette.shadow.* / palette.typeScale.
   const radius = { ...RADIUS_DEFAULTS, ...(paletteExtras.radius || {}) };
   pushKV(lines, "--app-radius-sm", radius.sm);
   pushKV(lines, "--app-radius-md", radius.md);
@@ -78,8 +70,7 @@ export const Theme: React.FC<Props> = (props) => {
 
   pushKV(lines, "--app-type-scale", String(paletteExtras.typeScale || 1));
 
-  // Transparent overrides are scoped (not :root) so unset fields don't clobber
-  // the auto-derive linksWhite/linksDark/linksAccent cascade.
+  // Scoped nav rules avoid clobbering auto-derived link color cascade.
   const navRules: string[] = [];
   if (props.config.globalStyles?.navStyles) {
     try {

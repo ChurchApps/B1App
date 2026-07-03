@@ -114,8 +114,7 @@ function DonatePageInner({ config }: Props) {
       return { paymentMethods: pms, customerId, person: personResult || null, currency: gateways[0].currency || "usd", paymentGateways: gateways };
     },
     enabled: donationsEnabled,
-    // Payment methods are financial state — always refetch on mount so a deleted
-    // or detached card is never served stale from the persisted cache.
+    // Always refetch on mount — never serve stale financial state.
     staleTime: 0
   });
 

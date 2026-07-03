@@ -56,8 +56,7 @@ export class ConfigHelper {
       }
     } catch { /* no app theme configured */ }
 
-    // Check if gateway is properly configured with a valid privateKey
-    // This prevents showing the donate tab when no payment gateway is set up
+    // Prevents showing donate tab without a configured gateway.
     const allowDonations = gatewayConfigured?.configured === true;
 
     const result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles, homePage, appTheme };
