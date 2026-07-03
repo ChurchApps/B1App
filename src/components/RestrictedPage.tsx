@@ -14,11 +14,12 @@ import { useHydrateSession } from "@/app/[sdSlug]/mobile/hooks/useHydrateSession
 interface Props {
   config: ConfigurationInterface;
   pageUrl: string;
+  siteId?: string;
 }
 
 type State = "loading" | "gate" | "content" | "denied";
 
-export function RestrictedPage({ config, pageUrl }: Props) {
+export function RestrictedPage({ config, pageUrl, siteId = "" }: Props) {
   const status = useHydrateSession();
   const pathname = usePathname();
   const [state, setState] = useState<State>("loading");
@@ -28,7 +29,7 @@ export function RestrictedPage({ config, pageUrl }: Props) {
     if (status === "anonymous" || status === "error") { setState("gate"); return; }
     if (status !== "ready") { setState("loading"); return; }
     let cancelled = false;
-    ApiHelper.get("/pages/" + config.church.id + "/tree?url=" + pageUrl, "ContentApi")
+    ApiHelper.get("/pages/" + config.church.id + "/tree?url=" + pageUrl + (siteId ? "&siteId=" + siteId : ""), "ContentApi")
       .then((data: any) => {
         if (cancelled) return;
         if (!data || data.restricted) { setState("denied"); return; }
@@ -37,7 +38,7 @@ export function RestrictedPage({ config, pageUrl }: Props) {
       })
       .catch(() => { if (!cancelled) setState("denied"); });
     return () => { cancelled = true; };
-  }, [status, config.church.id, pageUrl]);
+  }, [status, config.church.id, pageUrl, siteId]);
 
   if (state === "content" && pageData?.sections) {
     StyleHelper.getAllStyles(pageData.sections);

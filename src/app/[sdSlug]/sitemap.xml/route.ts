@@ -26,18 +26,21 @@ export async function GET(request: NextRequest, context: { params: Promise<{ sdS
     const churchResponse = await fetch(membershipApi + "/churches/lookup/?subDomain=" + sdSlug, { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
     const church = churchResponse.ok ? await churchResponse.json() : null;
     if (church?.id) {
+      const siteId = church?.siteId || "";
       // Endpoint added alongside this route; older API deploys 404 and we fall back to the home page.
-      const pagesResponse = await fetch(contentApi + "/pages/public/" + church.id, { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
+      const pagesResponse = await fetch(contentApi + "/pages/public/" + church.id + (siteId ? "?siteId=" + siteId : ""), { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
       if (pagesResponse.ok) {
         const pages: SitemapPage[] = await pagesResponse.json();
         pages.forEach((p) => { if (p.url?.startsWith("/")) urls.add(p.url); });
       }
-      const postsResponse = await fetch(contentApi + "/posts/public/" + church.id + "?pageSize=50", { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
-      if (postsResponse.ok) {
-        const posts: SitemapPost[] = await postsResponse.json();
-        if (Array.isArray(posts) && posts.length > 0) {
-          urls.add("/blog");
-          posts.forEach((p) => { if (p.slug) urls.add("/blog/" + p.slug); });
+      if (!siteId) {
+        const postsResponse = await fetch(contentApi + "/posts/public/" + church.id + "?pageSize=50", { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);
+        if (postsResponse.ok) {
+          const posts: SitemapPost[] = await postsResponse.json();
+          if (Array.isArray(posts) && posts.length > 0) {
+            urls.add("/blog");
+            posts.forEach((p) => { if (p.slug) urls.add("/blog/" + p.slug); });
+          }
         }
       }
       const sermonsResponse = await fetch(contentApi + "/sermons/public/" + church.id, { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit);

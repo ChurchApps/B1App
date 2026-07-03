@@ -29,7 +29,7 @@ const loadData = async (sdSlug: string, postSlug: string) => {
   let pageData: PageInterface = { sections: [] };
   if (post?.id) {
     try {
-      pageData = await fetchCached<PageInterface>("/pages/" + config.church.id + "/tree?url=/blog/" + postSlug, "ContentApi", sdSlug);
+      pageData = await fetchCached<PageInterface>("/pages/" + config.church.id + "/tree?url=/blog/" + postSlug + (config.siteId ? "&siteId=" + config.siteId : ""), "ContentApi", sdSlug);
     } catch { pageData = { sections: [] }; }
   }
   return { config, post, pageData };

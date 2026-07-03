@@ -232,6 +232,8 @@
 		"search": "Search icons..."
 	},
 	"login": {
+		"continueGoogle": "Continue with Google",
+		"continueMicrosoft": "Continue with Microsoft",
 		"createAccount": "Create an Account",
 		"email": "Email",
 		"enterCode": "Enter Verification Code",
@@ -242,6 +244,7 @@
 		"login": "Login",
 		"noAcc": "Don't have an account?",
 		"noAccountFound": "No account was found with that email. Please register to continue.",
+		"or": "or",
 		"password": "Password",
 		"register": "Register",
 		"registerThankYou": "Thank you for registering! Please check your email to verify your account.",
@@ -254,6 +257,7 @@
 		"setPassword": "Set Password",
 		"signIn": "Sign In",
 		"signInTitle": "Please Sign In",
+		"ssoError": "Sign-in with that provider failed. Please try again.",
 		"validate": {
 			"code": "Please enter the 6-digit code.",
 			"email": "Please enter a valid email address.",

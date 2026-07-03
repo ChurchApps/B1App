@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  const pageData: PageInterface = await fetchCached<PageInterface>("/pages/" + config.church.id + "/tree?url=" + pageSlug, "ContentApi", sdSlug);
+  const pageData: PageInterface = await fetchCached<PageInterface>("/pages/" + config.church.id + "/tree?url=" + pageSlug + (config.siteId ? "&siteId=" + config.siteId : ""), "ContentApi", sdSlug);
   return { pageData, config };
 };
 
@@ -70,7 +70,7 @@ export default async function Home({ params }: { params: PageParams }) {
       <>
         <Theme config={config} />
         <DefaultPageWrapper config={config}>
-          <RestrictedPage config={config} pageUrl={pageSlug} />
+          <RestrictedPage config={config} pageUrl={pageSlug} siteId={config.siteId} />
         </DefaultPageWrapper>
       </>
     );

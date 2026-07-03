@@ -19,7 +19,7 @@ type Props = {
 export async function DefaultPageWrapper(props: Props) {
   const a = 0;
 
-  const footerSections = await ApiHelper.getAnonymous("/blocks/public/footer/" + props.config.church.id, "ContentApi");
+  const footerSections = await ApiHelper.getAnonymous("/blocks/public/footer/" + props.config.church.id + (props.config.siteId ? "?siteId=" + props.config.siteId : ""), "ContentApi");
 
   return (<>
     <CssBaseline />
