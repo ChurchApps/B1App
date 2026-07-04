@@ -62,10 +62,10 @@ export interface PageInterface {
 export interface PostInterface {
   id?: string;
   churchId?: string;
-  pageId?: string;
   title?: string;
   slug?: string;
   excerpt?: string;
+  content?: string;
   authorId?: string;
   photoUrl?: string;
   publishDate?: string;
