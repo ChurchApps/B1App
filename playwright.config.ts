@@ -49,8 +49,7 @@ export default defineConfig({
       env: {
         NEXT_PUBLIC_STAGE: "dev",
         // Localhost socket for consolidated subscription stack and cross-user realtime tests
-        NEXT_PUBLIC_MESSAGING_API_SOCKET: "ws://localhost:8087",
-        NEXT_PUBLIC_ENABLE_NOTIFICATION_SOCKET: "true"
+        NEXT_PUBLIC_MESSAGING_API_SOCKET: "ws://localhost:8087"
       },
       url: "http://localhost:3301",
       reuseExistingServer: true,

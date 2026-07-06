@@ -63,15 +63,6 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
     );
   }, []);
 
-  useEffect(() => {
-    const onVisible = () => {
-      if (document.visibilityState !== "visible") return;
-
-    };
-    document.addEventListener("visibilitychange", onVisible);
-    return () => document.removeEventListener("visibilitychange", onVisible);
-  }, []);
-
   return (
     <CookieProviderWrapper>
       <ThemeProvider theme={mobileMuiTheme}>
@@ -83,7 +74,11 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
           <MobileQueryProvider>
             <MobileGoogleAnalytics />
             <MobileHydrationGate>
-              <React.Fragment key={localeReady ? "locale-ready" : "locale-loading"}>{children}</React.Fragment>
+              {localeReady ? children : (
+                <Box role="status" aria-live="polite" sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "#FFFFFF" }}>
+                  <CircularProgress size={40} />
+                </Box>
+              )}
             </MobileHydrationGate>
           </MobileQueryProvider>
         </UserProvider>

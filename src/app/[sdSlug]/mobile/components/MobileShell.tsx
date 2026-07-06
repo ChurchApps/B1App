@@ -8,6 +8,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { MobileAppBar } from "./MobileAppBar";
 import { MobileDrawer } from "./MobileDrawer";
 import { WebPushEnrollmentSync } from "./WebPushEnrollmentSync";
+import { ChatNotificationBridge } from "./ChatNotificationBridge";
 import { mobileTheme } from "./mobileTheme";
 import { MobileThemeProvider, useMobileThemeMode } from "./MobileThemeProvider";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
@@ -52,6 +53,7 @@ const MobileShellInner = ({ config, children }: Props) => {
       style={{ ["--mobile-primary" as string]: primaryColor } as React.CSSProperties}
     >
       <WebPushEnrollmentSync />
+      {jwt && <ChatNotificationBridge personId={context.person?.id} churchId={context.userChurch?.church?.id} />}
 
       <MobileAppBar
         config={config}

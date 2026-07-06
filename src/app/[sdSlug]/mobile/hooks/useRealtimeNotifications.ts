@@ -33,7 +33,6 @@ export const useRealtimeNotifications = (context: UserContextInterface | null | 
   const churchId = context?.userChurch?.church?.id;
   const hasJwt = !!context?.userChurch?.jwt;
   const socketInfo = getSocketDiagnostics();
-  const allowRealtime = process.env.NEXT_PUBLIC_ENABLE_NOTIFICATION_SOCKET === "true";
 
   const loadCountsFallback = useCallback(async () => {
     const response = await ApiHelper.get("/notifications/unreadCount", "MessagingApi");
@@ -74,31 +73,6 @@ export const useRealtimeNotifications = (context: UserContextInterface | null | 
     const initialize = async () => {
       setIsLoading(true);
       setError(null);
-
-      if (!allowRealtime) {
-        try {
-          await loadCountsFallback();
-          if (cancelled) return;
-          setDiagnostics({
-            mode: "local-only",
-            message: "Realtime notification socket is disabled in this app build. Using API-only unread counts.",
-            socketState: "DISABLED"
-          });
-        } catch (fallbackError) {
-          if (cancelled) return;
-          const details = formatNotificationError(fallbackError);
-          setError(details.message);
-          setDiagnostics({
-            mode: "error",
-            message: details.summary,
-            socketState: "DISABLED"
-          });
-          console.error("[notifications] Failed to load counts while realtime socket is disabled:", details);
-        } finally {
-          if (!cancelled) setIsLoading(false);
-        }
-        return;
-      }
 
       if (!socketInfo.valid || !socketInfo.compatible) {
         try {
@@ -166,7 +140,7 @@ export const useRealtimeNotifications = (context: UserContextInterface | null | 
     initialize();
     return () => { cancelled = true; };
   }, [
-    allowRealtime, churchId, hasJwt, loadCountsFallback, notificationService, personId, socketInfo.compatible, socketInfo.reason, socketInfo.valid
+    churchId, hasJwt, loadCountsFallback, notificationService, personId, socketInfo.compatible, socketInfo.reason, socketInfo.valid
   ]);
 
   const refresh = useCallback(async () => {

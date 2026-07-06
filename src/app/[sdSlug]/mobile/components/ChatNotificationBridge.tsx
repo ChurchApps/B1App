@@ -114,8 +114,8 @@ export const ChatNotificationBridge = ({ personId, churchId }: Props): null => {
 
         await registration.showNotification(message?.displayName || "New message", {
           body: message?.content || "You received a new private message.",
-          icon: "/images/logo.png",
-          badge: "/images/logo.png",
+          icon: "/images/logo-icon.png",
+          badge: "/images/logo-icon.png",
           tag: `privatemessage:${conversationId}`,
           data: {
             type: "privatemessage",

@@ -195,6 +195,22 @@ const deriveClickUrl = (payload: PushPayload): string => {
   return "/mobile/notifications";
 };
 
+// True when an open client is already showing the notification's deep-link target.
+// For conversation deep-links (conversationId query param) both the path and the
+// conversation must match; otherwise a matching pathname is sufficient.
+const clientMatchesTarget = (clientUrl: string, target: string): boolean => {
+  try {
+    const current = new URL(clientUrl);
+    const wanted = new URL(target, self.location.origin);
+    if (current.pathname !== wanted.pathname) return false;
+    const wantedConversation = wanted.searchParams.get("conversationId");
+    if (wantedConversation) return current.searchParams.get("conversationId") === wantedConversation;
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 type BadgingWorkerNavigator = WorkerNavigator & {
   setAppBadge?: (contents?: number) => Promise<void>;
   clearAppBadge?: () => Promise<void>;
@@ -219,22 +235,33 @@ self.addEventListener("push", (event) => {
   const payload = safeParsePushData(event);
   const title = payload.title || "B1";
   const body = payload.body || "";
+  const target = deriveClickUrl(payload);
   event.waitUntil(
     (async () => {
+      // Badge always reflects the server count, even when the visible notification is suppressed.
+      if (typeof payload.badgeCount === "number") await updateAppBadge(payload.badgeCount);
+
       try {
+        // The server sends push even when a realtime socket delivery already succeeded, so the
+        // SW is the dedup point: suppress the banner when a focused client is already on the target.
+        const windowClients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+        const alreadyViewing = windowClients.some((client) => {
+          const wc = client as WindowClient;
+          return (wc.focused || wc.visibilityState === "visible") && clientMatchesTarget(client.url, target);
+        });
+        if (alreadyViewing) return;
+
         await self.registration.showNotification(title, {
           body,
           icon: "/images/logo-icon.png",
           badge: "/images/logo-icon.png",
           data: {
             ...payload,
-            url: deriveClickUrl(payload),
+            url: target,
             raw: payload
           },
           tag: payload.type && payload.contentId ? `${payload.type}:${payload.contentId}` : undefined
         });
-
-        if (typeof payload.badgeCount === "number") await updateAppBadge(payload.badgeCount);
       } catch (error) {
         console.error("[webpush] failed to show notification:", error);
         throw error;
@@ -252,19 +279,32 @@ self.addEventListener("notificationclick", (event) => {
   event.waitUntil(
     (async () => {
       const clientList = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-      for (const client of clientList) {
-        if ("focus" in client) {
-          await client.focus();
-          if ("navigate" in client) {
-            try {
-              await (client as WindowClient).navigate(target);
-            } catch {
-              // If navigating an existing client fails, focus it and stop there.
-            }
-          }
-          return;
-        }
+
+      // Prefer a client already on the target: just focus it, no navigation.
+      const exact = clientList.find((client) => clientMatchesTarget(client.url, target)) as WindowClient | undefined;
+      if (exact) {
+        await exact.focus();
+        return;
       }
+
+      // Otherwise reuse an existing mobile client and navigate it to the target.
+      const mobileClient = clientList.find((client) => {
+        try {
+          return new URL(client.url).pathname.startsWith("/mobile");
+        } catch {
+          return false;
+        }
+      }) as WindowClient | undefined;
+      if (mobileClient) {
+        await mobileClient.focus();
+        try {
+          await mobileClient.navigate(target);
+        } catch {
+          // If navigating an existing client fails, focus it and stop there.
+        }
+        return;
+      }
+
       await self.clients.openWindow(target);
     })()
   );
