@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Loading, UserHelper, ApiHelper, Locale } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
 import type { ChurchInterface } from "@churchapps/helpers";
-import { FormCardPayment } from "@/components/forms/FormCardPayment";
 
 interface ElementInterface {
   id?: string;
@@ -38,7 +36,6 @@ export const FormElement = (props: Props) => {
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
   const formId = props.element.answers?.formId;
   const [form, setForm] = useState<FormInterface | undefined>(undefined);
-  const [stripePromise, setStripePromise] = useState<Promise<Stripe> | null>(null);
 
   useEffect(() => {
     if (formId && props.church) {
@@ -48,23 +45,8 @@ export const FormElement = (props: Props) => {
 
   const loadData = async () => {
     setIsLoading(true);
-    type GatewayResponse = { gateways?: { provider?: string; publicKey?: string; enabled?: boolean }[] };
-
     try {
-      const [gatewayResponse, formData] = await Promise.all([
-        ApiHelper.get(`/donate/gateways/${props.church.id}`, "GivingApi").catch((): GatewayResponse => ({ gateways: [] })) as Promise<GatewayResponse>,
-        ApiHelper.get("/forms/standalone/" + formId + "?churchId=" + props.church.id, "MembershipApi") as Promise<FormInterface>
-      ]);
-
-      // Process gateway response for Stripe
-      const gateways = Array.isArray(gatewayResponse?.gateways) ? gatewayResponse.gateways : [];
-      const enabledGateways = gateways.filter((g) => g && g.enabled !== false);
-      const stripeGateway = enabledGateways.find((g) => g.provider?.toLowerCase() === "stripe");
-      if (stripeGateway?.publicKey) {
-        setStripePromise(loadStripe(stripeGateway.publicKey));
-      }
-
-      // Process form data
+      const formData = await ApiHelper.get("/forms/standalone/" + formId + "?churchId=" + props.church.id, "MembershipApi") as FormInterface;
       if (formData.restricted) setAddFormId(formId);
       else setUnRestrictedFormId(formId);
       setForm(formData);
@@ -111,8 +93,6 @@ export const FormElement = (props: Props) => {
         updatedFunction={handleUpdate}
         showHeader={false}
         noBackground={true}
-        stripePromise={stripePromise}
-        FormCardPaymentComponent={FormCardPayment}
       />
     </>
   );

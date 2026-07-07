@@ -1,7 +1,6 @@
 "use client";
 
 import React, { Suspense, useContext, useEffect, useMemo, useState } from "react";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
 import {
   Box,
   Button,
@@ -26,9 +25,8 @@ import {
 import {
   RecurringDonations,
   PaymentMethods,
-  StripePaymentMethod as AppHelperStripePaymentMethod,
+  SavedPaymentMethod,
   MultiGatewayDonationForm,
-  DonationHelper,
   getPaymentProvider
 } from "@churchapps/apphelper/donations";
 import type { PaymentGateway } from "@churchapps/apphelper/donations";
@@ -85,7 +83,7 @@ function DonatePageInner({ config }: Props) {
   });
 
   interface PaymentData {
-    paymentMethods: AppHelperStripePaymentMethod[];
+    paymentMethods: SavedPaymentMethod[];
     customerId: string | null;
     person: PersonInterface | null;
     currency: string;
@@ -103,11 +101,11 @@ function DonatePageInner({ config }: Props) {
         ApiHelper.get("/paymentmethods/personid/" + personId, "GivingApi") as Promise<{ provider?: string; customerId?: string }[]>,
         ApiHelper.get("/people/" + personId, "MembershipApi") as Promise<PersonInterface>
       ]);
-      const pms: AppHelperStripePaymentMethod[] = [];
+      const pms: SavedPaymentMethod[] = [];
       let customerId: string | null = null;
       if (Array.isArray(methodsResult)) {
         for (const pm of methodsResult) {
-          if (getPaymentProvider(pm.provider).capabilities.savedCard) pms.push(new AppHelperStripePaymentMethod(pm));
+          if (getPaymentProvider(pm.provider).capabilities.savedCard) pms.push(new SavedPaymentMethod(pm));
           if (pm.customerId && !customerId) customerId = pm.customerId;
         }
       }
@@ -123,14 +121,6 @@ function DonatePageInner({ config }: Props) {
   const person = paymentData?.person ?? null;
   const pageCurrency = paymentData?.currency ?? "usd";
   const paymentGateways = paymentData?.paymentGateways ?? [];
-
-  // Derive the Stripe instance from the (serializable) gateway list. Keeping the
-  // Promise out of the react-query cache lets the IndexedDB persister serialize
-  // the cache — a Promise throws "could not be cloned" and breaks persistence.
-  const stripePromise = useMemo<Promise<Stripe> | null>(() => {
-    const pk = DonationHelper.findGatewayByProvider(paymentGateways, "stripe")?.publicKey;
-    return pk ? (loadStripe(pk) as Promise<Stripe>) : null;
-  }, [paymentGateways]);
 
   const { data: subscriptions = [] } = useQuery<SubscriptionRow[]>({
     queryKey: ["donate-subscriptions", customerId],
@@ -467,7 +457,6 @@ function DonatePageInner({ config }: Props) {
           customerId={customerId!}
           paymentMethods={paymentMethods || []}
           paymentGateways={paymentGateways}
-          stripePromise={stripePromise ?? undefined}
           donationSuccess={handleDataUpdate}
           church={church!}
           churchLogo={churchLogo}
@@ -498,7 +487,6 @@ function DonatePageInner({ config }: Props) {
           customerId={customerId!}
           paymentMethods={paymentMethods || []}
           appName="B1App"
-          stripePromise={stripePromise ?? undefined}
           dataUpdate={handleDataUpdate}
         />
       </Box>

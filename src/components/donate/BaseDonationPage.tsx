@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { RecurringDonations, StripePaymentMethod as AppHelperStripePaymentMethod, MultiGatewayDonationForm, DonationHelper, getPaymentProvider } from "@churchapps/apphelper/donations";
+import { RecurringDonations, SavedPaymentMethod, MultiGatewayDonationForm, getPaymentProvider } from "@churchapps/apphelper/donations";
 import type { PaymentGateway } from "@churchapps/apphelper/donations";
 import { PaymentMethods } from "@churchapps/apphelper/donations";
 import { DisplayBox } from "@churchapps/apphelper";
@@ -23,8 +22,7 @@ interface Props { personId: string, appName?: string, church?: ChurchInterface, 
 
 export const BaseDonationPage: React.FC<Props> = (props) => {
   const [donations, setDonations] = React.useState<DonationInterface[]>([]);
-  const [stripePromise, setStripe] = React.useState<Promise<Stripe>>(null);
-  const [appHelperPaymentMethods, setAppHelperPaymentMethods] = React.useState<AppHelperStripePaymentMethod[]>(null);
+  const [appHelperPaymentMethods, setAppHelperPaymentMethods] = React.useState<SavedPaymentMethod[]>(null);
   const [paymentGateways, setPaymentGateways] = React.useState<PaymentGateway[]>([]);
   const [customerId, setCustomerId] = React.useState(null);
   const [person, setPerson] = React.useState<PersonInterface>(null);
@@ -52,10 +50,6 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         if (!isMounted()) return;
         if (data.length) {
           setPaymentGateways(data);
-          const stripeGateway = DonationHelper.findGatewayByProvider(data, "stripe");
-          if (stripeGateway?.publicKey) {
-            setStripe(loadStripe(stripeGateway.publicKey));
-          }
           ApiHelper.get("/paymentmethods/personid/" + props.personId, "GivingApi").then((results: { provider?: string; customerId?: string }[]) => {
             if (!isMounted()) {
               return;
@@ -63,10 +57,10 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
             if (!Array.isArray(results) || results.length === 0) {
               setAppHelperPaymentMethods([]);
             } else {
-              const appHelperMethods: AppHelperStripePaymentMethod[] = [];
+              const appHelperMethods: SavedPaymentMethod[] = [];
               for (const pm of results) {
                 if (getPaymentProvider(pm.provider).capabilities.savedCard) {
-                  appHelperMethods.push(new AppHelperStripePaymentMethod(pm));
+                  appHelperMethods.push(new SavedPaymentMethod(pm));
                 }
                 // Extract customer ID from first payment method if we don't have one
                 if (pm.customerId && !customerId) {
@@ -218,7 +212,6 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         customerId={customerId}
         paymentMethods={appHelperPaymentMethods || []}
         paymentGateways={paymentGateways}
-        stripePromise={stripePromise}
         donationSuccess={handleDataUpdate}
         church={props?.church}
         churchLogo={props?.churchLogo}
@@ -227,7 +220,7 @@ export const BaseDonationPage: React.FC<Props> = (props) => {
         {getTable()}
       </DisplayBox>
       <RecurringDonations customerId={customerId} paymentMethods={appHelperPaymentMethods || []} appName={appName} dataUpdate={handleDataUpdate} data-testid="recurring-donations" />
-      <PaymentMethods person={person} customerId={customerId} paymentMethods={appHelperPaymentMethods || []} appName={appName} stripePromise={stripePromise} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
+      <PaymentMethods person={person} customerId={customerId} paymentMethods={appHelperPaymentMethods || []} appName={appName} dataUpdate={handleDataUpdate} data-testid="payment-methods" />
     </>
   );
 };

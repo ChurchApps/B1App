@@ -1,9 +1,8 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Box, Button, CircularProgress, Divider, Icon, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
-import { loadStripe } from "@stripe/stripe-js";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { getPaymentProvider, useStripeInstance } from "@churchapps/apphelper/donations";
+import { getPaymentProvider } from "@churchapps/apphelper/donations";
 import type { MemberEntryHandle, PaymentGateway } from "@churchapps/apphelper/donations";
 import { formatMoney, type RegistrationPayment } from "./useEventRegistration";
 
@@ -38,7 +37,7 @@ interface Props {
   hideCoupon?: boolean;
 }
 
-// Runs inside provider context so Stripe instance is available for 3DS finalize.
+// Runs inside the provider's wrapper so its SDK context is available for finalize (e.g. 3DS).
 const PaymentEntry: React.FC<{
   provider: any;
   gateway: PaymentGateway;
@@ -52,7 +51,6 @@ const PaymentEntry: React.FC<{
   onPay: (payment: RegistrationPayment) => Promise<any>;
   onFinalized: (result: any) => void;
 }> = ({ provider, gateway, churchId, personId, personEmail, personName, amount, currency, savedMethods, onPay, onFinalized }) => {
-  const stripe = useStripeInstance();
   const entryRef = useRef<MemberEntryHandle>(null);
   const hasSaved = savedMethods.length > 0;
   const [selectedMethod, setSelectedMethod] = useState<string>(hasSaved ? savedMethods[0].id : "new");
@@ -98,9 +96,9 @@ const PaymentEntry: React.FC<{
         setError(result.error);
         return;
       }
-      // 3DS finalize (Stripe). Test cards 4242 never require this.
+      // Provider finalize (e.g. 3DS). Test cards 4242 never require this.
       if (result?.payment && result?.status === "pending" && provider.finalizeResult) {
-        const fin = await provider.finalizeResult(result.payment, { stripe });
+        const fin = await provider.finalizeResult(result.payment);
         if (fin?.requiresAction && !fin?.success) {
           setError(fin.error || Locale.label("registration.payment.authFailed"));
           return;
@@ -192,10 +190,6 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
   }, [churchId, personId]);
 
   const provider = useMemo(() => (gateway ? getPaymentProvider((gateway as any).provider) : null), [gateway]);
-  const stripePromise = useMemo(
-    () => (gateway && (gateway as any).publicKey ? loadStripe((gateway as any).publicKey) : null),
-    [gateway]
-  );
 
   const summary = (
     <Box sx={{ mb: 2 }}>
@@ -257,7 +251,7 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
       {!loading && loadError && <Alert severity="error">{loadError}</Alert>}
       {!loading && !loadError && gateway && provider && (
         provider.MemberWrapper ? (
-          <provider.MemberWrapper stripePromise={stripePromise}>
+          <provider.MemberWrapper gateway={gateway}>
             <PaymentEntry
               provider={provider}
               gateway={gateway}
