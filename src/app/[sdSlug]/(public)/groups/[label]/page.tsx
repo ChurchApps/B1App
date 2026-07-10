@@ -51,7 +51,7 @@ export default async function GroupPage({ params }: { params: PageParams }) {
         <Container>
           <div id="mainContent">
             <h1>{displayLabel} {Locale.label("groupsPage.groupsHeading")}</h1>
-            <GroupList churchId={config.church.id} label={searchLabel} />
+            <GroupList churchId={config.church.id || ""} label={searchLabel} />
           </div>
         </Container>
       </DefaultPageWrapper>

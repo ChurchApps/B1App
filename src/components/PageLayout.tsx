@@ -24,7 +24,7 @@ type Props = {
 export function PageLayout(props: Props) {
 
 
-  StyleHelper.getAllStyles(props.pageData.sections);
+  StyleHelper.getAllStyles(props.pageData.sections || []);
 
   let result = <></>;
   if (props.pageData) {
@@ -35,7 +35,7 @@ export function PageLayout(props: Props) {
       default: result = <HeaderFooter config={props.config} pageData={props.pageData} />; break;
     }
   }
-  const css = StyleHelper.getCss(props.pageData.sections);
+  const css = StyleHelper.getCss(props.pageData.sections || []);
   const firstBg = props.pageData.sections?.[0]?.background;
   const isImageBg = firstBg && firstBg.indexOf("/") > -1 && firstBg.indexOf("youtube:") === -1;
   return <>

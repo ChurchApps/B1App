@@ -37,13 +37,13 @@ export const LessonPreview: React.FC<Props> = (props) => {
   const isClickableAction = (item: PlanItemInterface) => {
     const actionTypes = ["lessonAction", "providerPresentation", "action"];
     const fileTypes = ["lessonAddOn", "providerFile", "addon", "file"];
-    return (actionTypes.includes(item.itemType) || fileTypes.includes(item.itemType))
+    return (actionTypes.includes(item.itemType || "") || fileTypes.includes(item.itemType || ""))
       && (item.relatedId || (item.providerId && item.providerPath && item.providerContentPath));
   };
 
   const isClickableSection = (item: PlanItemInterface) => {
     const sectionTypes = ["lessonSection", "providerSection", "section", "item"];
-    return sectionTypes.includes(item.itemType)
+    return sectionTypes.includes(item.itemType || "")
       && (item.relatedId || (item.providerId && item.providerPath && item.providerContentPath));
   };
 
@@ -123,11 +123,11 @@ export const LessonPreview: React.FC<Props> = (props) => {
             )}
           </Box>
         </Box>
-        {item.seconds > 0 && (
+        {(item.seconds || 0) > 0 && (
           <Stack direction="row" alignItems="center" spacing={0.5}>
             <Icon sx={{ fontSize: 16, color: tc.textSecondary }}>schedule</Icon>
             <Typography variant="body2" sx={{ color: tc.textSecondary }}>
-              {PlanHelper.formatTime(item.seconds)}
+              {PlanHelper.formatTime(item.seconds || 0)}
             </Typography>
           </Stack>
         )}
@@ -149,7 +149,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
       </Box>
       {actionItem && (
         <ActionDialog
-          actionId={actionItem.relatedId || actionItem.providerContentPath || actionItem.id}
+          actionId={actionItem.relatedId || actionItem.providerContentPath || actionItem.id || ""}
           contentName={actionItem.label}
           externalRef={props.externalRef}
           onClose={() => setActionItem(null)}
@@ -162,7 +162,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
       )}
       {sectionItem && (
         <LessonDialog
-          sectionId={sectionItem.relatedId || sectionItem.providerContentPath || sectionItem.id}
+          sectionId={sectionItem.relatedId || sectionItem.providerContentPath || sectionItem.id || ""}
           sectionName={sectionItem.label}
           externalRef={props.externalRef}
           onClose={() => setSectionItem(null)}

@@ -19,12 +19,12 @@ export interface HydrateOptions {
 
 export async function hydrateUserSession(
   resp: LoginResponseInterface,
-  context: SessionContext,
+  context: SessionContext | undefined,
   options: HydrateOptions = {}
 ): Promise<any | null> {
   const { sdSlug, churchId, writeCookies = false } = options;
 
-  ApiHelper.setDefaultPermissions(resp.user.jwt);
+  ApiHelper.setDefaultPermissions(resp.user.jwt!);
   (resp.userChurches || []).forEach((uc: any) => { if (!uc.apis) uc.apis = []; });
   UserHelper.user = resp.user;
   UserHelper.userChurches = resp.userChurches || [];
@@ -88,10 +88,10 @@ export async function hydrateUserSession(
     if (writeCookies) PersonHelper.person = person;
   }
 
-  context.setUser(UserHelper.user);
-  context.setUserChurches(UserHelper.userChurches);
-  if (UserHelper.currentUserChurch) context.setUserChurch(UserHelper.currentUserChurch);
-  if (person) context.setPerson(person);
+  context?.setUser(UserHelper.user);
+  context?.setUserChurches(UserHelper.userChurches);
+  if (UserHelper.currentUserChurch) context?.setUserChurch(UserHelper.currentUserChurch);
+  if (person) context?.setPerson(person);
 
   if (writeCookies && typeof document !== "undefined") {
     const maxAge = 180 * 24 * 60 * 60;

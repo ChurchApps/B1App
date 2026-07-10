@@ -19,10 +19,10 @@ interface Props {
 }
 
 export const SongDialog: React.FC<Props> = (props) => {
-  const [arrangementKey, setArrangementKey] = React.useState<ArrangementKeyInterface>(null);
-  const [arrangement, setArrangement] = React.useState<ArrangementInterface>(null);
-  const [song, setSong] = React.useState<SongInterface>(null);
-  const [songDetail, setSongDetail] = React.useState<SongDetailInterface>(null);
+  const [arrangementKey, setArrangementKey] = React.useState<ArrangementKeyInterface | null>(null);
+  const [arrangement, setArrangement] = React.useState<ArrangementInterface | null>(null);
+  const [song, setSong] = React.useState<SongInterface | null>(null);
+  const [songDetail, setSongDetail] = React.useState<SongDetailInterface | null>(null);
   const [products, setProducts] = React.useState<PraiseChartsProduct[]>([]);
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
   const [keyOffset, setKeyOffset] = React.useState(0);
@@ -68,7 +68,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   const loadPraiseCharts = async () => {
     if (arrangementKey && songDetail?.praiseChartsId) {
       const data = await ApiHelper.get("/praiseCharts/arrangement/raw/" + songDetail.praiseChartsId + "?keys=" + arrangementKey.keySignature, "ContentApi");
-      const products = data[arrangementKey.keySignature];
+      const products = data[arrangementKey.keySignature || ""];
       if (products) setProducts(products);
       else setProducts([]);
     }
@@ -131,7 +131,7 @@ export const SongDialog: React.FC<Props> = (props) => {
 
           </Grid>
           <Grid size={{ xs: 12, md: 3 }}>
-            <SongDetails songDetail={songDetail} reload={() => { }} />
+            <SongDetails songDetail={songDetail as SongDetailInterface} reload={() => { }} />
           </Grid>
         </Grid>
 

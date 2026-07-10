@@ -21,11 +21,11 @@ interface Props {
 
 export const GroupResources: React.FC<Props> = (props) => {
   const [pendingFileSave, setPendingFileSave] = useState(false);
-  const [files, setFiles] = useState<FileInterface[]>(null);
-  const [links, setLinks] = useState<LinkInterface[]>(null);
+  const [files, setFiles] = useState<FileInterface[] | null>(null);
+  const [links, setLinks] = useState<LinkInterface[] | null>(null);
 
   let usedSpace = 0;
-  files?.forEach((f) => (usedSpace += f.size));
+  files?.forEach((f) => (usedSpace += f.size || 0));
 
   const handleFileSaved = (file: FileInterface) => {
     setPendingFileSave(false);
@@ -50,14 +50,14 @@ export const GroupResources: React.FC<Props> = (props) => {
   };
 
   const handleDelete = async (file: FileInterface) => {
-    if (confirm(Locale.label("groups.confirmDelete").replace("{}", file.fileName))) {
+    if (confirm(Locale.label("groups.confirmDelete").replace("{}", file.fileName || ""))) {
       await ApiHelper.delete("/files/" + file.id, "ContentApi");
       loadData();
     }
   };
 
   const handleLinkDelete = async (link: LinkInterface) => {
-    if (confirm(Locale.label("groups.confirmDelete").replace("{}", link.text))) {
+    if (confirm(Locale.label("groups.confirmDelete").replace("{}", link.text || ""))) {
       await ApiHelper.delete("/links/" + link.id, "ContentApi");
       loadData();
     }
@@ -101,11 +101,11 @@ export const GroupResources: React.FC<Props> = (props) => {
   const fileRows = files?.map((file) => (
     <TableRow key={file.id}>
       <TableCell>
-        <Link href={file.contentPath} target="_blank" rel="noopener noreferrer" data-testid={`resource-file-${file.id}-link`}>
+        <Link href={file.contentPath || ""} target="_blank" rel="noopener noreferrer" data-testid={`resource-file-${file.id}-link`}>
           {file.fileName}
         </Link>
       </TableCell>
-      <TableCell>{formatSize(file.size)}</TableCell>
+      <TableCell>{formatSize(file.size || 0)}</TableCell>
       <TableCell align="right">
         {canEditGroupResources && (
           <SmallButton
@@ -114,7 +114,7 @@ export const GroupResources: React.FC<Props> = (props) => {
               handleDelete(file);
             }}
             data-testid={`delete-file-${file.id}`}
-            aria-label={Locale.label("groups.deleteFileLabel").replace("{}", file.fileName)}
+            aria-label={Locale.label("groups.deleteFileLabel").replace("{}", file.fileName || "")}
           />
         )}
       </TableCell>
@@ -124,7 +124,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   const linkRows = links?.map((link) => (
     <TableRow key={link.id}>
       <TableCell>
-        <Link href={link.url} target="_blank" rel="noopener noreferrer" data-testid={`resource-link-${link.id}-link`}>
+        <Link href={link.url || ""} target="_blank" rel="noopener noreferrer" data-testid={`resource-link-${link.id}-link`}>
           {link.text}
         </Link>
       </TableCell>
@@ -136,7 +136,7 @@ export const GroupResources: React.FC<Props> = (props) => {
               handleLinkDelete(link);
             }}
             data-testid={`delete-link-${link.id}`}
-            aria-label={Locale.label("groups.deleteLinkLabel").replace("{}", link.text)}
+            aria-label={Locale.label("groups.deleteLinkLabel").replace("{}", link.text || "")}
           />
         )}
       </TableCell>

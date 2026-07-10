@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const GroupList = (props: Props) => {
-  const [groups, setGroups] = useState<GroupInterface[]>(null);
+  const [groups, setGroups] = useState<GroupInterface[] | null>(null);
   EnvironmentHelper.init();
 
   useEffect(() => {

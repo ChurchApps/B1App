@@ -441,7 +441,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
               </Box>
               <Button
                 size="small"
-                onClick={() => handleCancelRequest(req.id)}
+                onClick={() => handleCancelRequest(req.id || "")}
                 data-testid={`cancel-request-${req.id}`}
                 sx={{ textTransform: "none" }}>
                 Cancel

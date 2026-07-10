@@ -645,7 +645,7 @@ const PositionDetailsCard = ({
     if (isNaN(boundary.getTime())) return;
     if (!latestBoundary || boundary > latestBoundary) latestBoundary = boundary;
   });
-  const canRespond = assignment.status === "Unconfirmed" && (!latestBoundary || new Date() < latestBoundary);
+  const canRespond = assignment.status === "Unconfirmed" && (!latestBoundary || new Date() < (latestBoundary as Date));
 
   const handleRespond = async (action: "accept" | "decline") => {
     if (!assignment.id || busy) return;

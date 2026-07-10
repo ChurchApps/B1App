@@ -9,6 +9,7 @@ import { ChatConfigHelper } from "@/helpers/ChatConfigHelper";
 import { UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import type { AppearanceInterface } from "@churchapps/apphelper";
+import type { UserInterface } from "@churchapps/helpers";
 import { StreamingHeader } from "./StreamingHeader";
 import { StreamChatManager } from "@/helpers/StreamChatManager";
 
@@ -22,8 +23,8 @@ interface Props {
 
 export const LiveStream: React.FC<Props> = (props) => {
 
-  const [config, setConfig] = React.useState<StreamConfigInterface>(null);
-  const [chatState, setChatState] = React.useState<ChatStateInterface>(null);
+  const [config, setConfig] = React.useState<StreamConfigInterface | null>(null);
+  const [chatState, setChatState] = React.useState<ChatStateInterface | null>(null);
   const [currentService, setCurrentService] = React.useState<StreamingServiceExtendedInterface | null>(null);
   const [overlayContent, setOverlayContent] = React.useState(false);
   const [isClient, setIsClient] = React.useState(false);
@@ -45,10 +46,10 @@ export const LiveStream: React.FC<Props> = (props) => {
   const checkJoinRooms = async () => {
     if (!(props.includeInteraction && currentService && config && chatReady)) return;
     if (joinedServiceIdRef.current === currentService.id) return;
-    joinedServiceIdRef.current = currentService.id;
+    joinedServiceIdRef.current = currentService.id || null;
 
-    await StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId, currentService);
-    await StreamChatManager.checkHost(config, currentService.id);
+    await StreamChatManager.joinMainRoom(ChatConfigHelper.current.churchId || "", currentService);
+    await StreamChatManager.checkHost(config, currentService.id || "");
     setChatState({ ...ChatHelper.current });
   };
 
@@ -74,16 +75,16 @@ export const LiveStream: React.FC<Props> = (props) => {
   React.useEffect(() => { checkJoinRooms(); }, [currentService, chatReady, config]);
 
   let result = (<div id="liveContainer">
-    {(props.includeHeader) && <StreamingHeader user={chatState?.user} config={config} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}
+    {(props.includeHeader) && <StreamingHeader user={(chatState?.user ?? {}) as UserInterface} config={config || undefined} appearance={props.appearance} isHost={UserHelper.checkAccess(Permissions.contentApi.chat.host)} />}
     <div id="liveBody">
       <VideoContainer overlayContent={overlayContent} currentService={currentService} embedded={!props.includeHeader} />
-      {(props.includeInteraction && config) && <InteractionContainer chatState={chatState} config={config} embedded={!props.includeHeader} />}
+      {(props.includeInteraction && config) && <InteractionContainer chatState={chatState as ChatStateInterface} config={config} embedded={!props.includeHeader} />}
     </div>
   </div>);
 
   if (props.offlineContent && isClient) {
     let showAlt = !currentService;
-    if (!showAlt && currentService.localCountdownTime) {
+    if (!showAlt && currentService && currentService.localCountdownTime) {
       const seconds = (currentService.localCountdownTime.getTime() - new Date().getTime()) / 1000;
       if (seconds > 3600) showAlt = true;
     }

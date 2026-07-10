@@ -8,10 +8,10 @@ interface Props {
 }
 
 export const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = React.useState<UserInterface>(null);
-  const [person, setPerson] = React.useState<PersonInterface>(null);
-  const [userChurch, setUserChurch] = React.useState<LoginUserChurchInterface>(null);
-  const [userChurches, setUserChurches] = React.useState<LoginUserChurchInterface[]>(null);
+  const [user, setUser] = React.useState<UserInterface | null>(null);
+  const [person, setPerson] = React.useState<PersonInterface | null>(null);
+  const [userChurch, setUserChurch] = React.useState<LoginUserChurchInterface | null>(null);
+  const [userChurches, setUserChurches] = React.useState<LoginUserChurchInterface[] | null>(null);
 
   return <UserContext.Provider value={{
     user,
@@ -22,7 +22,7 @@ export const UserProvider = ({ children }: Props) => {
     setUserChurches,
     person,
     setPerson
-  }}>{children} </UserContext.Provider>;
+  } as UserContextInterface}>{children} </UserContext.Provider>;
 };
 
 export default UserContext;

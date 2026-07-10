@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<PageParams>
 const loadData = async (sdSlug: string) => {
   const config = await ConfigHelper.load(sdSlug, "website");
   // Use the homePage already loaded in ConfigHelper instead of fetching it again
-  const pageData: PageInterface = config.homePage || { url: null } as PageInterface;
+  const pageData: PageInterface = config.homePage || { url: undefined } as PageInterface;
   return { pageData, config };
 };
 

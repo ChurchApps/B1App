@@ -24,7 +24,7 @@ import UserContext from "@/context/UserContext";
 
 
 type Props = {
-  config: ConfigurationInterface;
+  config?: ConfigurationInterface;
   overlayContent: boolean;
   sections?: SectionInterface[];
   editMode?: boolean;
@@ -93,12 +93,12 @@ export function Header(props: Props) {
 
   const memberPortal = <MenuItem onClick={() => { redirect("/mobile"); }} dense data-testid="member-portal-menu-item" aria-label={Locale.label("header.goMemberPortal")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> {Locale.label("header.memberPortal")}</MenuItem>;
   const adminPortal = (UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit)) && (
-    <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/`; }} dense data-testid="admin-portal-menu-item" aria-label={Locale.label("header.goAdminPortal")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> {Locale.label("header.adminPortal")}</MenuItem>
+    <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context?.userChurch?.jwt}&churchId=${context?.userChurch?.church?.id}&returnUrl=/`; }} dense data-testid="admin-portal-menu-item" aria-label={Locale.label("header.goAdminPortal")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> {Locale.label("header.adminPortal")}</MenuItem>
   );
 
   const getAccountUrl = () => {
-    const jwt = context.userChurch?.jwt;
-    const churchId = context.userChurch?.church?.id;
+    const jwt = context?.userChurch?.jwt;
+    const churchId = context?.userChurch?.church?.id;
     return `https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/profile`;
   };
 
@@ -154,7 +154,7 @@ export function Header(props: Props) {
         {showLogin
           ? (
             <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "var(--app-primary, #36547e)", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
-              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config.keyName)) } clickable id="loginButton" label={Locale.label("login.login")}
+              <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config?.keyName)) } clickable id="loginButton" label={Locale.label("login.login")}
                 icon={<Icon id="loginIcon" sx={{ fontSize: "17px !important" }}>login</Icon>}
                 sx={{ borderColor: "var(--app-primary, #36547e)", color: "var(--app-primary, #36547e)", minWidth: "100%" }}
                 data-testid="login-chip"
@@ -175,7 +175,7 @@ export function Header(props: Props) {
     </ListItem>
     {UserHelper.checkAccess(Permissions.contentApi.content.edit) && (<>
       <ListItem disablePadding>
-        <ListItemButton onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context.userChurch.jwt}&churchId=${context.userChurch.church.id}&returnUrl=/`; }} data-testid="admin-portal-list-item" aria-label={Locale.label("header.goAdminPortal")}>
+        <ListItemButton onClick={() => { window.location.href = `https://admin.b1.church/login?jwt=${context?.userChurch?.jwt}&churchId=${context?.userChurch?.church?.id}&returnUrl=/`; }} data-testid="admin-portal-list-item" aria-label={Locale.label("header.goAdminPortal")}>
           <ListItemIcon><Icon color="secondary">settings</Icon></ListItemIcon>
           <ListItemText primary={Locale.label("header.adminPortal")} />
         </ListItemButton>
@@ -207,7 +207,7 @@ export function Header(props: Props) {
   </>);
 
   const getLinkClass = () => {
-    const sections = ArrayHelper.getAll(props.sections, "zone", "main");
+    const sections = ArrayHelper.getAll(props.sections || [], "zone", "main");
     let result = "";
 
     let lc = props.linkColor || (sections.length > 0 ? sections[0].linkColor : null);
@@ -221,8 +221,8 @@ export function Header(props: Props) {
 
   const getLogo = () => {
     if (transparent) {
-      const textColor = StyleHelper.getTextColor(props.sections[0]?.textColor, props.config?.globalStyles, props.config?.appearance);
-      const logo = AppearanceHelper.getLogoByTextColor(props.config?.appearance?.logoLight || null, props.config?.appearance?.logoDark || null, textColor);
+      const textColor = StyleHelper.getTextColor(props.sections?.[0]?.textColor || "", props.config?.globalStyles, props.config?.appearance);
+      const logo = AppearanceHelper.getLogoByTextColor(props.config?.appearance?.logoLight || "", props.config?.appearance?.logoDark || "", textColor);
       return logo !== "" ? logo : null;
     } else return props.config?.appearance?.logoLight || null;
   };
@@ -247,7 +247,7 @@ export function Header(props: Props) {
   let appBarClass = "";
   if (transparent) {
     appBarClass = "transparent " + getLinkClass();
-    const firstSection = ArrayHelper.getAll(props.sections, "zone", "main")[0];
+    const firstSection = ArrayHelper.getAll(props.sections || [], "zone", "main")[0];
     if (firstSection) {
       const textColor = StyleHelper.getTextColor(firstSection.textColor, props.config?.globalStyles, props.config?.appearance);
       // Mirrors the logo-by-textColor logic: when the section's text is dark, its background is light, so the icon must be dark too.

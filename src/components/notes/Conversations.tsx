@@ -91,7 +91,7 @@ export function Conversations(props: Props) {
       if (churchId) await SubscriptionManager.joinRoom(created.id, churchId, personId);
       setConversation({ ...created, messages: [] });
     }
-    return created?.id;
+    return created?.id ?? "";
   };
 
   if (!hydrated) return <Loading />;
@@ -100,7 +100,7 @@ export function Conversations(props: Props) {
   const messages = filterVisibleMessages(allMessages);
 
   const getNotes = () => messages.map((m) => (
-    <Note key={m.id} message={m} context={props.context} showEditNote={(id: string) => setEditMessageId(id)} />
+    <Note key={m.id} message={m} context={props.context} showEditNote={(id?: string) => setEditMessageId(id ?? null)} />
   ));
 
   const result = (

@@ -21,8 +21,8 @@ interface Props {
 
 export function Conversation(props: Props) {
   const canPost = props.canPost !== false;
-  const [conversations, setConversations] = React.useState<ConversationInterface>(null);
-  const [editMessageId, setEditMessageId] = React.useState(null);
+  const [conversations, setConversations] = React.useState<ConversationInterface | null>(null);
+  const [editMessageId, setEditMessageId] = React.useState<string | null>(null);
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
   const [hasMore, setHasMore] = React.useState(true);
@@ -105,8 +105,8 @@ const getNotes = () => {
         message={message}
         isEditing={isEditing}
         hideEdit={!canEdit}
-        showEditNote={(id: string) => {
-          setEditMessageId(id);
+        showEditNote={(id?: string) => {
+          setEditMessageId(id ?? null);
           if (!props.noWrapper) {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }
@@ -125,7 +125,7 @@ const result = (
             ? "1 " + Locale.label("notes.comment")
             : conversations.postCount + " " + Locale.label("notes.comments")}
         </div>
-        {conversations.postCount > conversations.messages.length && (
+        {(conversations.postCount ?? 0) > (conversations.messages?.length ?? 0) && (
           <a
             href="#"
             onClick={e => {
@@ -147,8 +147,8 @@ const result = (
           conversationId={props?.conversation?.id}
           onUpdate={() => loadNotes(1)}
           onCancel={() => setEditMessageId(null)}
-          createConversation={async () => props?.conversation?.id}
-          messageId={editMessageId}
+          createConversation={async () => props?.conversation?.id || ""}
+          messageId={editMessageId ?? undefined}
         />
       )}
       <div className="messages-wrapper">

@@ -16,7 +16,7 @@ interface Props {
 }
 
 export function Groups({ selectedHandler }: Props) {
-  const [selectedCategory, setSelectedCategory] = useState<GroupCategoryInterface>(null);
+  const [selectedCategory, setSelectedCategory] = useState<GroupCategoryInterface | null>(null);
   const [groupTree, setGroupTree] = useState<GroupCategoryInterface[]>([]);
 
   const buildTree = () => {

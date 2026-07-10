@@ -12,7 +12,7 @@ export function login(data: Payload): Promise<LoginResponseInterface> {
 
       resolve(response);
     } catch (err) {
-      reject(err.toString());
+      reject(String(err));
     }
   });
 }

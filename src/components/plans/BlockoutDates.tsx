@@ -12,7 +12,7 @@ interface Props {
 
 export const BlockoutDates: React.FC<Props> = (props) => {
   const [blockoutDates, setBlockoutDates] = React.useState<BlockoutDateInterface[]>([]);
-  const [blockoutDate, setBlockoutDate] = React.useState<BlockoutDateInterface>(null);
+  const [blockoutDate, setBlockoutDate] = React.useState<BlockoutDateInterface | null>(null);
 
   const loadData = () => {
     ApiHelper.get("/blockoutDates/my", "DoingApi").then((data: BlockoutDateInterface[]) => setBlockoutDates(data));

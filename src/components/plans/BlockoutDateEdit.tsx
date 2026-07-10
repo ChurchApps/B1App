@@ -45,10 +45,10 @@ export const BlockoutDateEdit: React.FC<Props> = (props) => {
   };
 
   return (
-    <InputBox headerIcon="block" headerText={Locale.label("plans.blockoutDates.title")} saveFunction={handleSubmit(onValid)} cancelFunction={props.onUpdate} deleteFunction={props.blockoutDate.id && handleDelete}>
+    <InputBox headerIcon="block" headerText={Locale.label("plans.blockoutDates.title")} saveFunction={handleSubmit(onValid)} cancelFunction={props.onUpdate} deleteFunction={props.blockoutDate.id ? handleDelete : undefined}>
       {summaryErrors.length > 0 && <Alert severity="error" sx={{ mb: 2 }}>{summaryErrors.map((msg) => <div key={msg}>{msg}</div>)}</Alert>}
-      <TextField fullWidth label={Locale.label("plans.blockoutDate.startDate")} name="startDate" type="date" data-cy="start-date" data-testid="blockout-start-date-input" error={!!e.startDate} helperText={e.startDate?.message} InputLabelProps={{ shrink: true }} {...register("startDate", { required: Locale.label("plans.blockoutDate.startRequired"), validate: (val, all) => !all.endDate || !val || val <= all.endDate || Locale.label("plans.blockoutDate.startBeforeEnd") })} />
-      <TextField fullWidth label={Locale.label("plans.blockoutDate.endDate")} name="endDate" type="date" data-cy="end-date" data-testid="blockout-end-date-input" error={!!e.endDate} helperText={e.endDate?.message} InputLabelProps={{ shrink: true }} {...register("endDate", { required: Locale.label("plans.blockoutDate.endRequired") })} />
+      <TextField fullWidth label={Locale.label("plans.blockoutDate.startDate")} type="date" data-cy="start-date" data-testid="blockout-start-date-input" error={!!e.startDate} helperText={e.startDate?.message} InputLabelProps={{ shrink: true }} {...register("startDate", { required: Locale.label("plans.blockoutDate.startRequired"), validate: (val, all) => !all.endDate || !val || val <= all.endDate || Locale.label("plans.blockoutDate.startBeforeEnd") })} />
+      <TextField fullWidth label={Locale.label("plans.blockoutDate.endDate")} type="date" data-cy="end-date" data-testid="blockout-end-date-input" error={!!e.endDate} helperText={e.endDate?.message} InputLabelProps={{ shrink: true }} {...register("endDate", { required: Locale.label("plans.blockoutDate.endRequired") })} />
     </InputBox>
   );
 };

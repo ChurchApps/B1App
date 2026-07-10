@@ -14,10 +14,10 @@ type Props = {
 
 export function Footer(props: Props) {
 
-  if (props.footerSections?.length > 0) {
-    return <footer><Zone church={props.config?.church} sections={props.footerSections} zone="siteFooter" churchSettings={props.config?.appearance} /></footer>;
+  if ((props.footerSections?.length ?? 0) > 0) {
+    return <footer><Zone church={props.config?.church!} sections={props.footerSections!} zone="siteFooter" churchSettings={props.config?.appearance!} /></footer>;
   } else {
-    const logoUrl = AppearanceHelper.getLogoDark(props.config?.appearance, "/images/logo.png");
+    const logoUrl = AppearanceHelper.getLogoDark(props.config?.appearance!, "/images/logo.png");
     const photo = logoUrl ? <img src={logoUrl} className="img-fluid" id={"el-footer-logo"} alt={props.config?.church.name} style={{ maxWidth: "200px" }} /> : null;
 
     return (

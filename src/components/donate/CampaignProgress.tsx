@@ -21,7 +21,7 @@ const statusLabels: Record<string, string> = {
 export const CampaignProgress: React.FC<Props> = ({ churchId, isAuthenticated = false, currency = "usd" }) => {
   const [campaigns, setCampaigns] = React.useState<CampaignProgressInterface[]>([]);
   const [myPledges, setMyPledges] = React.useState<MyPledgeInterface[]>([]);
-  const [pledgeCampaignId, setPledgeCampaignId] = React.useState<string>(null);
+  const [pledgeCampaignId, setPledgeCampaignId] = React.useState<string | null>(null);
   const [pledgeAmount, setPledgeAmount] = React.useState("");
   const [saving, setSaving] = React.useState(false);
 
@@ -79,7 +79,7 @@ export const CampaignProgress: React.FC<Props> = ({ churchId, isAuthenticated = 
                 <Typography sx={{ fontSize: 12, color: "text.secondary" }}>{dateRange}</Typography>
               </Box>
               {isAuthenticated && c.allowSelfPledge && (
-                <Button size="small" variant="outlined" onClick={() => openPledgeDialog(c.id)} data-testid={`pledge-button-${c.id}`}>
+                <Button size="small" variant="outlined" onClick={() => openPledgeDialog(c.id || "")} data-testid={`pledge-button-${c.id}`}>
                   {myPledge ? "Update Pledge" : "Make a Pledge"}
                 </Button>
               )}
@@ -100,7 +100,7 @@ export const CampaignProgress: React.FC<Props> = ({ churchId, isAuthenticated = 
               <Typography sx={{ fontSize: 13, fontWeight: 600, mt: 0.5 }} data-testid={`my-pledge-${c.id}`}>
                 You pledged {CurrencyHelper.formatCurrencyWithLocale(myPledge.pledge?.amount || 0, currency)}
                 {" • "}{CurrencyHelper.formatCurrencyWithLocale(myPledge.givenAmount || 0, currency)} given
-                {statusLabels[myPledge.status] ? " • " + statusLabels[myPledge.status] : ""}
+                {statusLabels[myPledge.status || ""] ? " • " + statusLabels[myPledge.status || ""] : ""}
               </Typography>
             )}
           </Box>

@@ -18,13 +18,14 @@ type Props = {
 
 export async function DefaultPageWrapper(props: Props) {
   const a = 0;
+  const config = props.config as ConfigurationInterface;
 
-  const footerSections = await ApiHelper.getAnonymous("/blocks/public/footer/" + props.config.church.id + (props.config.siteId ? "?siteId=" + props.config.siteId : ""), "ContentApi");
+  const footerSections = await ApiHelper.getAnonymous("/blocks/public/footer/" + config.church.id + (config.siteId ? "?siteId=" + config.siteId : ""), "ContentApi");
 
   return (<>
     <CssBaseline />
     <div>
-      <Header config={props.config} overlayContent={props.overlayContent} sections={[]} linkColor={props.linkColor} />
+      <Header config={config} overlayContent={!!props.overlayContent} sections={[]} linkColor={props.linkColor} />
       <main id="main-content">
         <div className="page">
           {!props.overlayContent && <div style={{ paddingTop: 90 }}></div>}
@@ -34,7 +35,7 @@ export async function DefaultPageWrapper(props: Props) {
           {!props.overlayContent && <div style={{ paddingBottom: 90 }}></div>}
         </div>
       </main>
-      <Footer config={props.config} footerSections={footerSections} />
+      <Footer config={config} footerSections={footerSections} />
     </div>
   </>);
 

@@ -19,14 +19,14 @@ export class PageHelper {
 
     const groupPage = result.find((p) => p.url === "/groups");
     customPages.forEach((p: PageInterface) => {
-      const page: PageLink = { pageId: p.id, title: p.title, url: p.url, custom: true };
-      if (p.url.indexOf("/groups") === -1) {
+      const page: PageLink = { pageId: p.id, title: p.title || "", url: p.url || "", custom: true };
+      if ((p.url || "").indexOf("/groups") === -1) {
         const existing = result.find((r) => r.url === p.url);
-        if (existing) { existing.title = p.title; existing.custom = true; existing.pageId = p.id; } else result.push(page);
+        if (existing) { existing.title = p.title || ""; existing.custom = true; existing.pageId = p.id; } else result.push(page);
       } else {
         if (groupPage && groupPage.children) {
           const existing = groupPage.children.find((r) => r.url === p.url);
-          if (existing) { existing.title = p.title; existing.custom = true; existing.pageId = p.id; } else groupPage.children.push(page);
+          if (existing) { existing.title = p.title || ""; existing.custom = true; existing.pageId = p.id; } else groupPage.children.push(page);
         }
       }
     });
@@ -43,7 +43,7 @@ export class PageHelper {
       result.push(p);
       if (p.children) {
         result = result.concat(PageHelper.flatten(p.children));
-        p.children = null;
+        p.children = undefined;
       }
     });
     return result;
@@ -69,12 +69,12 @@ export class PageHelper {
     });
 
     labels.forEach((l: string) => {
-      groupPage.children.push({ title: l, url: `/groups/${l.toLowerCase().replace(" ", "-")}`, custom: false });
+      groupPage.children!.push({ title: l, url: `/groups/${l.toLowerCase().replace(" ", "-")}`, custom: false });
     });
 
 
     groups.forEach((g: GroupInterface) => {
-      groupPage.children.push({ title: g.name, url: `/mobile/groups/${g.slug}`, custom: false });
+      groupPage.children!.push({ title: g.name || "", url: `/mobile/groups/${g.slug}`, custom: false });
     });
     templatePages.push(groupPage);
     return templatePages;

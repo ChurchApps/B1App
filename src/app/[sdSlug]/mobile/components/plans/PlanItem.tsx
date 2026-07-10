@@ -15,9 +15,9 @@ interface Props {
 }
 
 export const PlanItem = (props: Props) => {
-  const [dialogKeyId, setDialogKeyId] = React.useState<string>(null);
-  const [lessonSectionId, setLessonSectionId] = React.useState<string>(null);
-  const [actionId, setActionId] = React.useState<string>(null);
+  const [dialogKeyId, setDialogKeyId] = React.useState<string | null>(null);
+  const [lessonSectionId, setLessonSectionId] = React.useState<string | null>(null);
+  const [actionId, setActionId] = React.useState<string | null>(null);
 
   const pi = props.planItem;
   const hasProviderFields = pi.providerId && pi.providerPath && pi.providerContentPath;
@@ -65,7 +65,7 @@ export const PlanItem = (props: Props) => {
       <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
         <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
         <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {PlanHelper.formatTime(pi.seconds)}
+          {PlanHelper.formatTime(pi.seconds || 0)}
         </span>
       </span>
       <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
@@ -92,13 +92,13 @@ export const PlanItem = (props: Props) => {
         return getHeaderRow();
       case "song":
       case "arrangementKey":
-        return getItemRow(pi.relatedId ? () => setDialogKeyId(pi.relatedId) : undefined);
+        return getItemRow(pi.relatedId ? () => setDialogKeyId(pi.relatedId || null) : undefined);
       // Action types (new provider + legacy)
       case "providerPresentation":
       case "lessonAction":
       case "action":
         return getItemRow(
-          (pi.relatedId || hasProviderFields) ? () => setActionId(pi.relatedId || pi.providerContentPath || pi.id) : undefined
+          (pi.relatedId || hasProviderFields) ? () => setActionId(pi.relatedId || pi.providerContentPath || pi.id || null) : undefined
         );
       // File/add-on types (new provider + legacy)
       case "providerFile":
@@ -106,18 +106,18 @@ export const PlanItem = (props: Props) => {
       case "addon":
       case "file":
         return getItemRow(
-          (pi.relatedId || hasProviderFields) ? () => setActionId(pi.relatedId || pi.providerContentPath || pi.id) : undefined
+          (pi.relatedId || hasProviderFields) ? () => setActionId(pi.relatedId || pi.providerContentPath || pi.id || null) : undefined
         );
       // Section types (new provider + legacy)
       case "providerSection":
       case "lessonSection":
       case "section":
         return getItemRow(
-          (pi.relatedId || hasProviderFields) ? () => setLessonSectionId(pi.relatedId || pi.providerContentPath || pi.id) : undefined
+          (pi.relatedId || hasProviderFields) ? () => setLessonSectionId(pi.relatedId || pi.providerContentPath || pi.id || null) : undefined
         );
       case "item":
       default:
-        return getItemRow(pi.relatedId ? () => setLessonSectionId(pi.relatedId) : undefined);
+        return getItemRow(pi.relatedId ? () => setLessonSectionId(pi.relatedId || null) : undefined);
     }
   };
 

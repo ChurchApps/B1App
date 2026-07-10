@@ -37,7 +37,7 @@ export default async function GroupsBrowsePage({ params }: { params: PageParams 
       <DefaultPageWrapper config={config}>
         <Container sx={{ py: 4 }}>
           <div id="mainContent">
-            <GroupsBrowser churchId={config.church.id} title="Find a Group" />
+            <GroupsBrowser churchId={config.church.id || ""} title="Find a Group" />
           </div>
         </Container>
       </DefaultPageWrapper>

@@ -25,9 +25,9 @@ export const PositionDetails: React.FC<Props> = (props) => {
 
   const getTimes = () => {
     const rows:React.ReactElement[] = [];
-    const times = props.times.sort((a, b) => a.startTime > b.startTime ? 1 : -1);
+    const times = props.times.sort((a, b) => (a.startTime ?? "") > (b.startTime ?? "") ? 1 : -1);
     props.times.forEach((time) => {
-      rows.push(<li key={time.id}><b>{time.displayName}:</b> {DateHelper.prettyDateTime(new Date(time.startTime))} - {DateHelper.prettyTime(new Date(time.endTime))}</li>);
+      rows.push(<li key={time.id}><b>{time.displayName}:</b> {DateHelper.prettyDateTime(new Date(time.startTime || ""))} - {DateHelper.prettyTime(new Date(time.endTime || ""))}</li>);
     });
     return rows;
   };
@@ -44,12 +44,12 @@ export const PositionDetails: React.FC<Props> = (props) => {
 
   let latestTime = new Date();
   props.times.forEach((time) => {
-    if (new Date(time.endTime) > latestTime) latestTime = new Date(time.endTime);
+    if (new Date(time.endTime || "") > latestTime) latestTime = new Date(time.endTime || "");
   });
 
   const canRespond = props.assignment.status === "Unconfirmed" && (props.times.length === 0 || new Date() < latestTime);
 
-  return (<InputBox headerIcon="event" headerText={Locale.label("plans.position.headerPrefix") + ": " + props.position.name} saveText={Locale.label("plans.position.accept")} saveFunction={canRespond && handleAccept} deleteFunction={canRespond && handleDecline} deleteText={Locale.label("plans.position.decline")}>
+  return (<InputBox headerIcon="event" headerText={Locale.label("plans.position.headerPrefix") + ": " + props.position.name} saveText={Locale.label("plans.position.accept")} saveFunction={canRespond ? handleAccept : undefined} deleteFunction={canRespond ? handleDecline : undefined} deleteText={Locale.label("plans.position.decline")}>
     {getStatus()}
     <br />
     <b>{Locale.label("plans.position.neededTimes")}:</b>

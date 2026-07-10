@@ -44,8 +44,8 @@ export const LessonsPage = () => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const loadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const jwt = context.userChurch?.jwt;
-  const churchId = context.userChurch?.church?.id;
+  const jwt = context?.userChurch?.jwt;
+  const churchId = context?.userChurch?.church?.id;
 
   const { data: rawLinks } = useChurchLinks(churchId, jwt);
   const linkTitle = useMemo(() => {
@@ -75,7 +75,7 @@ export const LessonsPage = () => {
         "MembershipApi"
       );
       if (resp?.user) {
-        ApiHelper.setDefaultPermissions(resp.user.jwt);
+        ApiHelper.setDefaultPermissions(resp.user.jwt || "");
         UserHelper.user = resp.user;
         UserHelper.userChurches = resp.userChurches || [];
         const current = (resp.userChurches || []).find(
@@ -84,9 +84,9 @@ export const LessonsPage = () => {
         if (current) {
           UserHelper.currentUserChurch = current;
           UserHelper.setupApiHelper(current);
-          context.setUser(resp.user);
-          context.setUserChurches(resp.userChurches || []);
-          context.setUserChurch(current);
+          context?.setUser(resp.user);
+          context?.setUserChurches(resp.userChurches || []);
+          context?.setUserChurch(current);
         }
       }
     } catch (err) {

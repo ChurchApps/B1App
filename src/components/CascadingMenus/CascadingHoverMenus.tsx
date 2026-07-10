@@ -85,10 +85,10 @@ const CascadingMenu = ({ popupState, ...props }: CascadingMenuProps) => {
 
 const RecursiveMenus = ({ links }: MenuInterface) => (
   <div>
-    {links.map((item: LinkInterface) => (
-      <Link key={item.id} href={item.url} data-testid={`nav-link-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", item.text || "")}>
+    {links?.map((item: LinkInterface) => (
+      <Link key={item.id} href={item.url || ""} data-testid={`nav-link-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", item.text || "")}>
         {item?.children
-          ? (<CascadingSubmenu title={item.text} popupId={item.text} data-testid={`submenu-${item.text?.toLowerCase().replace(/\s+/g, "-")}`}>
+          ? (<CascadingSubmenu title={item.text || ""} popupId={item.text || ""} data-testid={`submenu-${item.text?.toLowerCase().replace(/\s+/g, "-")}`}>
             {item?.children && <RecursiveMenus links={item.children} />}
           </CascadingSubmenu>)
           : (<CascadingMenuItem data-testid={`menu-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`}>{item.text}</CascadingMenuItem>)
@@ -100,6 +100,7 @@ const RecursiveMenus = ({ links }: MenuInterface) => (
 
 const CascadingHoverMenus = ({ link }: MenuInterface) => {
   const popupState = usePopupState({ popupId: "demoMenu", variant: "popover" });
+  if (!link) return null;
   return (
     <div>
       <Link key={link.id} href={link.url || ""} style={{ paddingLeft: 15, paddingRight: 15, paddingBottom: 8, fontSize: 14 }} {...bindHover(popupState)} {...bindFocus(popupState)} data-testid={`main-nav-${link.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", link.text || "")}>

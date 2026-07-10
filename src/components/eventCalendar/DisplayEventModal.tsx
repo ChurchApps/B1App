@@ -24,15 +24,17 @@ export function DisplayEventModal(props: Props) {
 
   const getDisplayTime = () => {
     let result = "";
+    const eventStart = props.event.start || new Date();
+    const eventEnd = props.event.end || new Date();
     if (props.event.allDay) {
-      const prettyStartDate = DateHelper.prettyDate(props.event.start);
-      const prettyEndDate = DateHelper.prettyDate(props.event.end);
+      const prettyStartDate = DateHelper.prettyDate(eventStart);
+      const prettyEndDate = DateHelper.prettyDate(eventEnd);
       if (prettyStartDate === prettyEndDate) result = prettyStartDate;
       else result = `${prettyStartDate} - ${prettyEndDate}`;
     } else {
-      const prettyStart = DateHelper.prettyDateTime(props.event.start);
-      const prettyEnd = DateHelper.prettyDateTime(props.event.end);
-      const prettyEndTime = DateHelper.prettyTime(props.event.end);
+      const prettyStart = DateHelper.prettyDateTime(eventStart);
+      const prettyEnd = DateHelper.prettyDateTime(eventEnd);
+      const prettyEndTime = DateHelper.prettyTime(eventEnd);
       const startDate = DateHelper.prettyDate(new Date(prettyStart));
       const endDate = DateHelper.prettyDate(new Date(prettyEnd));
       if (startDate === endDate) result = `${prettyStart} - ${prettyEndTime}`;
@@ -72,7 +74,7 @@ export function DisplayEventModal(props: Props) {
             </Button>
           )}
           <h2>{Locale.label("eventCalendar.discussion")}</h2>
-          <Conversations context={context} contentType="event" contentId={props.event.id} groupId={props.event.groupId} />
+          <Conversations context={context!} contentType="event" contentId={props.event.id || ""} groupId={props.event.groupId} />
 
         </DialogContent>
       </Dialog>

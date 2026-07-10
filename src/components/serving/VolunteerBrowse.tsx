@@ -48,7 +48,7 @@ export function VolunteerBrowse({ signupPlans }: Props) {
                   <Box>
                     <Typography variant="h6" sx={{ fontWeight: 600 }}>{plan.name}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {DateHelper.prettyDate(new Date(plan.serviceDate))}
+                      {DateHelper.prettyDate(new Date(plan.serviceDate || ""))}
                       {times.length > 0 && (" \u00b7 " + times.map(t => t.displayName).join(", "))}
                     </Typography>
                   </Box>
@@ -68,10 +68,10 @@ export function VolunteerBrowse({ signupPlans }: Props) {
                   {positions.map(p => (
                     <Chip
                       key={p.id}
-                      label={p.name + " (" + Locale.label("serving.openCount").replace("{}", (p.count - p.filledCount).toString()) + ")"}
+                      label={p.name + " (" + Locale.label("serving.openCount").replace("{}", ((p.count || 0) - p.filledCount).toString()) + ")"}
                       size="small"
                       variant="outlined"
-                      color={p.filledCount < p.count ? "primary" : "default"}
+                      color={p.filledCount < (p.count || 0) ? "primary" : "default"}
                     />
                   ))}
                 </Stack>

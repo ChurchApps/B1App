@@ -35,7 +35,7 @@ export function NewConversation({ context, conversation, ...props }: Props) {
 
   const validate = () => {
     const result = [];
-    if (!message.content.trim()) result.push(Locale.label("notes.validate.content"));
+    if (!message.content?.trim()) result.push(Locale.label("notes.validate.content"));
     setErrors(result);
     return result.length === 0;
   };
@@ -50,7 +50,7 @@ export function NewConversation({ context, conversation, ...props }: Props) {
 
       // If conversation exists, use the existing one
       if (hasConversations) {
-        cId = conversation[0].id;
+        cId = conversation[0].id || "";
       } else {
         const conv: ConversationInterface = {
           contentType: props.contentType,

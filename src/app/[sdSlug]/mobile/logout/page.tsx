@@ -20,10 +20,10 @@ export default function MobileLogout(): null {
     removeCookie("lastChurchId", { path: "/" });
 
     ApiHelper.clearPermissions();
-    context?.setUser(null);
-    context?.setPerson(null);
-    context?.setUserChurches(null);
-    context?.setUserChurch(null);
+    context?.setUser(null!);
+    context?.setPerson(null!);
+    context?.setUserChurches(null!);
+    context?.setUserChurch(null!);
 
     const t = setTimeout(() => router.replace("/mobile"), 300);
     return () => clearTimeout(t);

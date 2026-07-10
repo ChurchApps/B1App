@@ -19,11 +19,11 @@ export function FormPage(props: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [restrictedForm, setRestrictedForm] = useState<boolean>(true);
-  const [early, setEarly] = useState<Date>(null);
-  const [late, setLate] = useState<Date>(null);
+  const [early, setEarly] = useState<Date | null>(null);
+  const [late, setLate] = useState<Date | null>(null);
   const [addFormId, setAddFormId] = useState<string>("");
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
-  const [form, setForm] = useState<FormInterface>(null);
+  const [form, setForm] = useState<FormInterface | null>(null);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -35,7 +35,7 @@ export function FormPage(props: Props) {
 
     if (start && start.setHours(0, 0, 0, 0) > now) setEarly(start);
     if (end && end.setHours(0, 0, 0, 0) < now) setLate(end);
-    setRestrictedForm(data.restricted);
+    setRestrictedForm(!!data.restricted);
     if (data.restricted) setAddFormId(props.formId);
     else setUnRestrictedFormId(props.formId);
     setIsLoading(false);

@@ -18,8 +18,8 @@ interface Props {
 export function Household({ completeHandler = () => { } }: Props) {
   const [showGroups, setShowGroups] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [pendingVisits, setPendingVisits] = useState<VisitInterface[]>(null);
-  const [selectedMember, setSelectedMember] = useState<PersonInterface>(null);
+  const [pendingVisits, setPendingVisits] = useState<VisitInterface[] | null>(null);
+  const [selectedMember, setSelectedMember] = useState<PersonInterface | null>(null);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState<boolean>(false);
   const [duplicateNames, setDuplicateNames] = useState<string[]>([]);
 
@@ -29,20 +29,20 @@ export function Household({ completeHandler = () => { } }: Props) {
   };
 
   const handleGroupSelected = (group: GroupInterface) => {
-    const groupId = group ? group.id : "";
-    const groupName = group ? group.name : Locale.label("checkin.household.none");
+    const groupId = group ? group.id || "" : "";
+    const groupName = group ? group.name || "" : Locale.label("checkin.household.none");
 
-    let visit: VisitInterface = CheckinHelper.getVisitByPersonId(CheckinHelper.pendingVisits, selectedMember.id);
+    let visit: VisitInterface | null = CheckinHelper.getVisitByPersonId(CheckinHelper.pendingVisits, selectedMember?.id || "");
     if (visit === null) {
       visit = {
-        personId: selectedMember.id,
+        personId: selectedMember?.id,
         serviceId: CheckinHelper.selectedServiceTime.serviceId,
         visitSessions: []
       };
       CheckinHelper.pendingVisits.push(visit);
     }
     const vs = visit?.visitSessions || [];
-    CheckinHelper.setGroup(vs, CheckinHelper.selectedServiceTime.id, groupId, groupName);
+    CheckinHelper.setGroup(vs, CheckinHelper.selectedServiceTime.id || "", groupId, groupName);
     setPendingVisits(CheckinHelper.pendingVisits);
     setShowGroups(false);
   };
@@ -98,7 +98,7 @@ export function Household({ completeHandler = () => { } }: Props) {
   };
 
   const getMemberServiceTimes = () => {
-    const visit = ArrayHelper.getOne(pendingVisits, "personId", selectedMember.id);
+    const visit = ArrayHelper.getOne(pendingVisits || [], "personId", selectedMember?.id || "");
     const visitSessions = visit?.visitSessions || [];
     const result: React.ReactElement[] = [];
     CheckinHelper.serviceTimes.forEach((st) => {
@@ -115,7 +115,7 @@ export function Household({ completeHandler = () => { } }: Props) {
   const getCondensedGroupList = (person: PersonInterface) => {
     if (selectedMember === person) return null;
     else {
-      const visit = CheckinHelper.getVisitByPersonId(pendingVisits, person.id || "");
+      const visit = CheckinHelper.getVisitByPersonId(pendingVisits || [], person.id || "");
       if (visit?.visitSessions?.length === 0) {
         return (
           <Typography variant="body2" sx={{ color: colors.textSecondary, fontStyle: "italic" }}>
@@ -185,10 +185,10 @@ export function Household({ completeHandler = () => { } }: Props) {
               />
             </Box>
             <Box sx={{ flex: 1 }}>
-              <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginBottom: isCheckedIn(member.id) ? 0.5 : 1 }}>
+              <Typography variant="h6" sx={{ color: colors.textPrimary, fontWeight: 600, marginBottom: isCheckedIn(member.id || "") ? 0.5 : 1 }}>
                 {member.name?.display}
               </Typography>
-              {isCheckedIn(member.id) && (
+              {isCheckedIn(member.id || "") && (
                 <Chip
                   icon={<Icon sx={{ fontSize: "16px !important" }}>check_circle</Icon>}
                   label={Locale.label("checkin.household.alreadyCheckedIn")}

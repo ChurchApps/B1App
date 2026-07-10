@@ -22,7 +22,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
   const [loadedTime, setLoadedTime] = React.useState(0);
   const [isClient, setIsClient] = React.useState(false);
   const isMounted = useMountedState();
-  const [config, setConfig] = React.useState<ConfigurationInterface>(null);
+  const [config, setConfig] = React.useState<ConfigurationInterface | null>(null);
   const [transparent, setTransparent] = useState(props.overlayContent);
   const params = useParams<PageParams>();
 
@@ -89,8 +89,8 @@ export const VideoContainer: React.FC<Props> = (props) => {
   const getLogo = () => {
     let logo: string | null = null;
     if (transparent) {
-      const textColor = StyleHelper.getTextColor(props.sections[0]?.textColor, config?.globalStyles, config?.appearance);
-      logo = AppearanceHelper.getLogoByTextColor(config?.appearance?.logoLight || null, config?.appearance?.logoDark || null, textColor);
+      const textColor = StyleHelper.getTextColor(props.sections?.[0]?.textColor || "", config?.globalStyles, config?.appearance);
+      logo = AppearanceHelper.getLogoByTextColor(config?.appearance?.logoLight || "", config?.appearance?.logoDark || "", textColor);
     } else {
       logo = config?.appearance?.logoDark || null;
     }
@@ -131,8 +131,8 @@ export const VideoContainer: React.FC<Props> = (props) => {
     switch (contentType) {
       case "logo": return <div id="noVideoContent" style={logoStyle} />;
       case "ended": return <div id="noVideoContent"><h3>{Locale.label("video.serviceEnded")}</h3></div>;
-      case "countdown": return getCountdown(props.currentService);
-      case "video": return getVideo(props.currentService);
+      case "countdown": return getCountdown(props.currentService!);
+      case "video": return getVideo(props.currentService!);
       default: return <div id="noVideoContent" style={logoStyle} />;
     }
   };

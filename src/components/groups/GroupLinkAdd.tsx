@@ -33,7 +33,7 @@ export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
     const link: LinkInterface = { category: category, url: values.url, linkType: "url", text: values.text, linkData: props.groupId, icon: "" };
     ApiHelper.post("/links", [link], "ContentApi").then(() => {
       reset({ text: "", url: "" });
-      props.saveCallback();
+      props.saveCallback?.();
     });
   };
 
@@ -43,10 +43,10 @@ export function GroupLinkAdd({ forGroupLeader = false, ...props }: Props) {
       <Typography sx={{ textIndent: 3, fontSize: "14px" }}>{Locale.label("groups.addLinksInfo")}</Typography>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField fullWidth label={Locale.label("groups.linkText")} name="text" data-testid="group-link-text-input" aria-label={Locale.label("groups.linkTextLabel")} error={!!e.text} helperText={e.text?.message} {...register("text", { required: Locale.label("groups.validate.linkText") })} />
+          <TextField fullWidth label={Locale.label("groups.linkText")} data-testid="group-link-text-input" aria-label={Locale.label("groups.linkTextLabel")} error={!!e.text} helperText={e.text?.message} {...register("text", { required: Locale.label("groups.validate.linkText") })} />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <TextField fullWidth label={Locale.label("groups.linkUrl")} name="url" data-testid="group-link-url-input" aria-label={Locale.label("groups.linkUrlLabel")} error={!!e.url} helperText={e.url?.message} {...register("url", { required: Locale.label("groups.validate.linkUrl") })} />
+          <TextField fullWidth label={Locale.label("groups.linkUrl")} data-testid="group-link-url-input" aria-label={Locale.label("groups.linkUrlLabel")} error={!!e.url} helperText={e.url?.message} {...register("url", { required: Locale.label("groups.validate.linkUrl") })} />
         </Grid>
       </Grid>
     </InputBox>

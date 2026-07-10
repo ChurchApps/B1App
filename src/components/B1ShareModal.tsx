@@ -17,7 +17,7 @@ type Props = {
 
 export function B1ShareModal(props: Props) {
   const [groupId, setGroupId] = useState("");
-  const [groups, setGroups] = useState<GroupInterface[]>(null);
+  const [groups, setGroups] = useState<GroupInterface[] | null>(null);
   const [comment, setComment] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
 

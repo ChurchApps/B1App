@@ -60,7 +60,7 @@ export class EventProcessor {
           let dates: Date[] = [];
 
           if (rule.includes("BYSETPOS=") && rule.includes("BYDAY=")) {
-            const eventDate = new Date(event.start);
+            const eventDate = new Date(event.start!);
             if (eventDate.getMonth() === targetMonth && eventDate.getFullYear() === targetYear) {
               dates = [eventDate];
             } else if (eventDate < startRange) {
@@ -80,7 +80,7 @@ export class EventProcessor {
           }
 
           const limitedDates = dates.slice(0, 31);
-          const eventDuration = new Date(event.end).getTime() - new Date(event.start).getTime();
+          const eventDuration = new Date(event.end!).getTime() - new Date(event.start!).getTime();
           limitedDates.forEach((date: Date) => {
             expandedEvents.push({
               ...event,
@@ -91,8 +91,8 @@ export class EventProcessor {
         } else {
           expandedEvents.push({
             ...event,
-            start: new Date(event.start),
-            end: new Date(event.end)
+            start: new Date(event.start!),
+            end: new Date(event.end!)
           });
         }
       } catch {

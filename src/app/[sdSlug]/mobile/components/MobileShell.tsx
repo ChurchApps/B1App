@@ -39,11 +39,11 @@ const MobileShellInner = ({ config, children }: Props) => {
     : (isValidColor((config?.appearance as any)?.primaryContrast) ? (config?.appearance as any).primaryContrast : mobileTheme.colors.onPrimary);
   const drawerWidth = mobileTheme.drawerWidth;
 
-  const jwt = context.userChurch?.jwt;
+  const jwt = context?.userChurch?.jwt;
   const { data: rawLinks } = useChurchLinks(config?.church?.id, jwt);
   const links = useMemo(
-    () => filterVisibleLinks(rawLinks, jwt ? context.userChurch : null),
-    [rawLinks, jwt, context.userChurch]
+    () => filterVisibleLinks(rawLinks, jwt ? context?.userChurch : null),
+    [rawLinks, jwt, context?.userChurch]
   );
 
   return (
@@ -53,7 +53,7 @@ const MobileShellInner = ({ config, children }: Props) => {
       style={{ ["--mobile-primary" as string]: primaryColor } as React.CSSProperties}
     >
       <WebPushEnrollmentSync />
-      {jwt && <ChatNotificationBridge personId={context.person?.id} churchId={context.userChurch?.church?.id} />}
+      {jwt && <ChatNotificationBridge personId={context?.person?.id} churchId={context?.userChurch?.church?.id} />}
 
       <MobileAppBar
         config={config}

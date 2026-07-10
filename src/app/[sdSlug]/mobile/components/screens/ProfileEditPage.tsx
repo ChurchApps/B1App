@@ -586,7 +586,7 @@ export const ProfileEditPage = ({ config }: Props) => {
         variant="outlined"
         size="medium"
         fullWidth
-        sx={{ ...inputSx, ...modifiedOutlineSx(key) }}
+        sx={{ ...inputSx, ...modifiedOutlineSx(key) } as any}
         InputLabelProps={opts?.type === "date" ? { shrink: true } : undefined}
       />
       {modifiedDot(key)}

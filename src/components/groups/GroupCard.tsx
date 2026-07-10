@@ -88,7 +88,7 @@ export default function GroupCard(props: Props) {
                 textOverflow: "ellipsis"
               }}
             >
-              <MarkdownPreviewLight value={group.about} />
+              <MarkdownPreviewLight value={group.about || ""} />
             </Box>
           ) : (
             <Typography component="p" sx={{ fontStyle: "italic", m: 0 }}>

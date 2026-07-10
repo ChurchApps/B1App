@@ -59,11 +59,11 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     if (!event.start) return "";
     if (event.allDay) {
       const start = DateHelper.prettyDate(event.start);
-      const end = DateHelper.prettyDate(event.end);
+      const end = DateHelper.prettyDate(event.end as Date);
       return start === end ? start : `${start} - ${end}`;
     }
     const start = DateHelper.prettyDateTime(event.start);
-    const endTime = DateHelper.prettyTime(event.end);
+    const endTime = DateHelper.prettyTime(event.end as Date);
     return `${start} - ${endTime}`;
   };
 

@@ -17,7 +17,7 @@ export const SectionBlock: React.FC<Props> = props => {
 
   const getSections = () => {
     const result: React.ReactElement[] = [];
-    props.section.sections.forEach(section => {
+    props.section.sections?.forEach(section => {
       result.push(<Section key={section.id} section={section} churchSettings={props.churchSettings} />);
     });
     return result;

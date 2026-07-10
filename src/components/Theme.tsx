@@ -4,7 +4,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { accent as deriveAccent, isValidHex, shade, tint } from "@/helpers/colorTints";
 import React from "react";
 
-interface Props { config?:ConfigurationInterface }
+interface Props { config:ConfigurationInterface }
 
 const RADIUS_DEFAULTS = { sm: "4px", md: "8px", lg: "12px", xl: "16px" };
 const SHADOW_DEFAULTS = {
@@ -116,7 +116,7 @@ export const Theme: React.FC<Props> = (props) => {
     const scripts = container.querySelectorAll("script");
     scripts.forEach((orig) => {
       const script = document.createElement("script");
-      orig.getAttributeNames().forEach((name) => { script.setAttribute(name, orig.getAttribute(name)); });
+      orig.getAttributeNames().forEach((name) => { script.setAttribute(name, orig.getAttribute(name) || ""); });
       if (orig.textContent) script.textContent = orig.textContent;
       orig.replaceWith(script);
     });

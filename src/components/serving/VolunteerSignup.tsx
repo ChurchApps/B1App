@@ -36,8 +36,8 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
   const [myAssignments, setMyAssignments] = useState<any[]>([]);
   const [assignmentsLoaded, setAssignmentsLoaded] = useState(false);
 
-  const isLoggedIn = !!context.userChurch?.jwt;
-  const personId = context.person?.id;
+  const isLoggedIn = !!context?.userChurch?.jwt;
+  const personId = context?.person?.id;
   const { plan, positions, times } = planData;
 
   // Load user's assignments for this plan
@@ -121,7 +121,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
     <>
       <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>{plan.name}</Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
-        {DateHelper.prettyDate(new Date(plan.serviceDate))}
+        {DateHelper.prettyDate(new Date(plan.serviceDate || ""))}
         {times.length > 0 && (" \u00b7 " + times.map(t => t.displayName).join(", "))}
       </Typography>
       {plan.notes && <Typography variant="body2" sx={{ mb: 2 }}>{plan.notes}</Typography>}
@@ -142,8 +142,8 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
             {catPositions.map(position => {
               const remaining = (position.count || 0) - position.filledCount;
               const isFull = remaining <= 0;
-              const progress = position.count > 0 ? (position.filledCount / position.count) * 100 : 0;
-              const myAssignment = getMyAssignment(position.id);
+              const progress = (position.count || 0) > 0 ? (position.filledCount / (position.count || 0)) * 100 : 0;
+              const myAssignment = getMyAssignment(position.id || "");
               const isSignedUp = !!myAssignment;
 
               return (
@@ -176,7 +176,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
                             variant="contained"
                             size="small"
                             disabled={isFull || deadlinePassed || !isLoggedIn || loading === position.id}
-                            onClick={() => handleSignup(position.id)}
+                            onClick={() => handleSignup(position.id || "")}
                             sx={{ textTransform: "none", borderRadius: 2 }}
                           >
                             {loading === position.id ? Locale.label("serving.signingUp") : isFull ? Locale.label("serving.full") : Locale.label("serving.signUp")}
@@ -193,8 +193,8 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
                       />
                       <Typography variant="caption" color="text.secondary">
                         {remaining > 0
-                          ? Locale.label("serving.slotsRemaining").replace("{remaining}", remaining.toString()).replace("{total}", position.count.toString())
-                          : Locale.label("serving.allSlotsFilled").replace("{}", position.count.toString())}
+                          ? Locale.label("serving.slotsRemaining").replace("{remaining}", remaining.toString()).replace("{total}", (position.count || 0).toString())
+                          : Locale.label("serving.allSlotsFilled").replace("{}", (position.count || 0).toString())}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -212,7 +212,7 @@ export function VolunteerSignup({ planData: initialData, churchId }: Props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmRemoveId(null)}>{Locale.label("common.cancel")}</Button>
-          <Button onClick={() => handleRemove(confirmRemoveId)} color="error" variant="contained">{Locale.label("serving.removeBtn")}</Button>
+          <Button onClick={() => handleRemove(confirmRemoveId || "")} color="error" variant="contained">{Locale.label("serving.removeBtn")}</Button>
         </DialogActions>
       </Dialog>
     </>

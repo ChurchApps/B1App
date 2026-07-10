@@ -16,7 +16,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 if (typeof window !== "undefined") EnvironmentHelper.init();
 
 function ClientLayout({ children }: { children: React.ReactNode }) {
-  const [errors, setErrors] = React.useState([]);
+  const [errors, setErrors] = React.useState<string[]>([]);
   const [localeInit, setLocaleInit] = React.useState(false);
   const location = (typeof (window) === "undefined") ? null : window.location;
 
@@ -31,7 +31,7 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     const result: ErrorAppDataInterface = {
       churchId: UserHelper.currentUserChurch?.church?.id || "",
       userId: UserHelper.user?.id || "",
-      originUrl: location?.toString(),
+      originUrl: location?.toString() || "",
       application: "B1"
     };
     return result;

@@ -111,7 +111,7 @@ export class TemplateHelper {
     }
     const block = b[0];
     //need blockId to add the footer to the pages
-    this.targetBlockId = block.id;
+    this.targetBlockId = block.id || "";
     const s: SectionInterface[] = await ApiHelper.post("/sections", [{ ...this.footer.section, blockId: block.id }], "ContentApi");
     if (!s || s.length === 0) {
       throw new Error("Failed to create footer section");
@@ -125,11 +125,11 @@ export class TemplateHelper {
     await ApiHelper.post(
       "/elements",
       [
-        { ...this.footer.logoElement, blockId: block.id, parentId: row.elements[0].id, sectionId: section.id },
+        { ...this.footer.logoElement, blockId: block.id, parentId: row.elements![0].id, sectionId: section.id },
         {
           ...this.footer.addressElement,
           blockId: block.id,
-          parentId: row.elements[1].id,
+          parentId: row.elements![1].id,
           sectionId: section.id,
           answersJSON:
             `{\"text\":\"#### **${currentChurch.name}**\\n\\n${currentChurch?.address1}${ currentChurch?.address2 ? `\\n\\n${currentChurch.address2}` : "" }\\n\\n${currentChurch?.city}, ${currentChurch?.state} ${currentChurch?.zip}\\n\\n${currentChurch?.country}\\n\\n\",
@@ -143,7 +143,7 @@ export class TemplateHelper {
         {
           ...this.footer.serviceTimesElement,
           blockId: block.id,
-          parentId: row.elements[2].id,
+          parentId: row.elements![2].id,
           sectionId: section.id,
           answersJSON: `{\"text\":\"#### **Services**${ serviceTimes.length > 0 ? `${serviceTimes.join("")}` : "\\n\\nNo Services available" }\\n\\n\",\"textAlignment\":\"center\"}`,
           answers: { textAlignment: "center", text: `#### **Services**${ serviceTimes.length > 0 ? `${serviceTimes.join("")}` : "\\n\\nNo Services available" }` }

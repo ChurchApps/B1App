@@ -32,7 +32,7 @@ export const DashboardPage = ({ config }: Props) => {
   const router = useRouter();
   const tc = mobileTheme.colors;
   const churchId = config?.church?.id;
-  const jwt = context.userChurch?.jwt;
+  const jwt = context?.userChurch?.jwt;
 
   const [greetingWord, setGreetingWord] = React.useState("");
   const [displayName, setDisplayName] = React.useState("");
@@ -59,9 +59,9 @@ export const DashboardPage = ({ config }: Props) => {
   const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
 
   const links = useMemo<LinkInterface[]>(() => {
-    const visible = filterVisibleLinks(rawLinks, context.userChurch);
+    const visible = filterVisibleLinks(rawLinks, context?.userChurch);
     return visible.filter((l) => l.linkType !== "separator");
-  }, [rawLinks, context.userChurch]);
+  }, [rawLinks, context?.userChurch]);
 
   const loading = isLoading && links.length === 0;
 

@@ -17,7 +17,7 @@ export function SermonsPage(props:Props) {
   return (
     <Container>
       <h1 style={{ textAlign: "center" }}>{props.title}</h1>
-      <SermonElement key={"sermons"} churchId={props.config?.church?.id} appearance={props.config?.appearance} />
+      <SermonElement key={"sermons"} churchId={props.config?.church?.id || ""} appearance={props.config?.appearance} />
     </Container>
   );
 }

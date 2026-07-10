@@ -9,8 +9,8 @@ interface Props { conversation: ConversationInterface, user: ChatUserInterface, 
 
 export const HostChat: React.FC<Props> = (props) => (
   <div className="chatContainer" style={props.visible ? {} : { display: "none" }}>
-    <Attendance conversationId={props.conversation.id} />
-    <ChatReceive conversationId={props.conversation.id} user={props.user} />
+    <Attendance conversationId={props.conversation.id || ""} />
+    <ChatReceive conversationId={props.conversation.id || ""} user={props.user} />
     <ChatSend conversation={props.conversation} />
   </div>
 );

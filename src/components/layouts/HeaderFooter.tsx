@@ -27,7 +27,7 @@ export function HeaderFooter(props: Props) {
     }
   };
 
-  const footerSections = ArrayHelper.getAll(props.pageData.sections, "zone", "siteFooter");
+  const footerSections = ArrayHelper.getAll(props.pageData.sections || [], "zone", "siteFooter");
 
   return (
     <>
@@ -37,10 +37,10 @@ export function HeaderFooter(props: Props) {
           <title>{props.pageTitle || props.config?.church?.name}</title>
           {getDescription()}
         </Head>
-        <Header config={props.config} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} />
+        <Header config={props.config!} overlayContent={props.pageData?.url === "/"} sections={props.pageData.sections} />
         <main id="main-content">
           <div className="page">
-            <Zone church={props.config?.church} sections={props.pageData.sections} zone="main" churchSettings={props.config?.appearance} />
+            <Zone church={props.config?.church!} sections={props.pageData.sections!} zone="main" churchSettings={props.config?.appearance!} />
           </div>
         </main>
         <Footer config={props.config} footerSections={footerSections} />

@@ -8,7 +8,7 @@ export class StreamingServiceHelper {
   static timer: NodeJS.Timeout;
 
   static checkService() {
-    let cs;
+    let cs: StreamingServiceExtendedInterface | null = null;
     if (ChatConfigHelper.current !== undefined) {
       cs = StreamingServiceHelper.determineCurrentService(ChatConfigHelper.current.services);
     }
@@ -32,7 +32,7 @@ export class StreamingServiceHelper {
         s.localStartTime = new Date(s.localCountdownTime.getTime());
         s.localStartTime.setSeconds(s.localStartTime.getSeconds() - this.getSeconds(s.earlyStart));
         s.localEndTime = new Date(s.localStartTime.getTime());
-        s.localEndTime.setSeconds(s.localEndTime.getSeconds() + s.sermon?.duration || 5400);
+        s.localEndTime.setSeconds(s.localEndTime.getSeconds() + (s.sermon?.duration || 5400));
         s.localChatStart = new Date(s.localStartTime.getTime());
         s.localChatStart.setSeconds(s.localChatStart.getSeconds() - this.getSeconds(s.chatBefore));
         s.localChatEnd = new Date(s.localEndTime.getTime());
@@ -49,7 +49,7 @@ export class StreamingServiceHelper {
     } catch (ex) { return 0; }
   }
 
-  static determineCurrentService(services: StreamingServiceExtendedInterface[]) {
+  static determineCurrentService(services: StreamingServiceExtendedInterface[] | undefined) {
     let result = null;
     if (services !== undefined) {
       const currentTime = new Date();

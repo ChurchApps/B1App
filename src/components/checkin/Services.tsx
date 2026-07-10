@@ -110,7 +110,7 @@ export function Services({ selectedHandler }: Props) {
             return (
               <CheckinCard key={service.id}>
                 <CardActionArea
-                  onClick={() => selectService(service.id)}
+                  onClick={() => selectService(service.id || "")}
                   data-testid={`select-service-${service.id}-button`}
                   sx={{ padding: 2, minHeight: 72 }}
                 >

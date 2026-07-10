@@ -6,9 +6,10 @@ interface Props { config?: StreamConfigInterface }
 
 export const StreamingNavItems: React.FC<Props> = (props) => {
   const items = [];
+  const buttons = props.config?.buttons || [];
 
-  for (let i = 0; i < props.config?.buttons?.length; i++) {
-    const b = props.config?.buttons[i];
+  for (let i = 0; i < buttons.length; i++) {
+    const b = buttons[i];
     if (b.url === "/settings") {
       items.push(<li key={i} className="nav-item"><Link className="nav-link" to={b.url} data-testid={`stream-nav-${b.text?.toLowerCase().replace(/\s+/g, "-")}-link`}>{b.text}</Link></li>);
     } else {

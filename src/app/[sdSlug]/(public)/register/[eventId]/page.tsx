@@ -35,7 +35,7 @@ export default async function RegisterPage({ params }: { params: PageParams }) {
       <DefaultPageWrapper config={config}>
         <Container maxWidth="sm" sx={{ paddingTop: 4, paddingBottom: 4 }}>
           {event?.registrationEnabled
-            ? <EventRegister churchId={config.church.id} eventId={eventId} event={event} />
+            ? <EventRegister churchId={config.church.id || ""} eventId={eventId} event={event} />
             : <Typography variant="h6" sx={{ textAlign: "center", color: "text.secondary", paddingTop: 8 }}>
               {Locale.label("register.notAvailable")}
             </Typography>

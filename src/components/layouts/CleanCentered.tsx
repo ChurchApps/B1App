@@ -41,7 +41,7 @@ export function CleanCentered(props: Props) {
             <Card>
               <main id="main-content">
                 <div className="page">
-                  <Zone church={props.church} sections={props.pageData.sections} zone="main" churchSettings={props.churchSettings} />
+                  <Zone church={props.church!} sections={props.pageData.sections!} zone="main" churchSettings={props.churchSettings!} />
                 </div>
               </main>
             </Card>

@@ -132,7 +132,7 @@ const ensureServiceWorkerReady = async (): Promise<ServiceWorkerRegistration | n
       });
     } catch (error) {
       console.error("[webpush] service worker registration failed:", error);
-      registration = null;
+      registration = undefined;
     }
   }
 

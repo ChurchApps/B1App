@@ -37,8 +37,8 @@ export const Chat: React.FC<Props> = (props) => {
 
   return (
     <div className={className} style={props.visible ? {} : { display: "none" }}>
-      {props.enableAttendance ? <Attendance conversationId={props.conversation.id} /> : null}
-      <ChatReceive conversationId={props.conversation.id} user={props.user} />
+      {props.enableAttendance ? <Attendance conversationId={props.conversation.id || ""} /> : null}
+      <ChatReceive conversationId={props.conversation.id || ""} user={props.user} />
       {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
       <ChatSend conversation={props.conversation} />
     </div>

@@ -21,10 +21,10 @@ export function DonatePage(props:Props) {
   return <>
     <Container>
       <h1>{Locale.label("pageSlug.donate")}</h1>
-      {mounted && <CampaignProgress churchId={props.config.church.id} />}
+      {mounted && <CampaignProgress churchId={props.config?.church?.id || ""} />}
       <Grid container spacing={3}>
         <Grid size={{ md: 8, xs: 12 }}>
-          {mounted && <NonAuthDonationWrapper churchId={props.config.church.id} showHeader={false} />}
+          {mounted && <NonAuthDonationWrapper churchId={props.config?.church?.id || ""} showHeader={false} />}
         </Grid>
         <Grid size={{ md: 4, xs: 12 }}>
           <Typography component="h3" sx={{ textAlign: "center", fontSize: "30px", fontWeight: 500, lineHeight: 1.2, margin: "0 0 8px 0" }}>{Locale.label("pageSlug.manageDonations")}</Typography>

@@ -17,7 +17,7 @@ interface Props {
   section: SectionInterface,
   church?: ChurchInterface;
   churchSettings: AppearanceInterface;
-  onEdit?: (section: SectionInterface, element: ElementInterface) => void;
+  onEdit?: (section: SectionInterface | null, element: ElementInterface | null) => void;
   onMove?: () => void;
 }
 
@@ -37,7 +37,7 @@ export const Section: React.FC<Props> = props => {
   const getElements = () => {
     const result: React.ReactElement[] = [];
     props.section?.elements?.forEach(e => {
-      const textColor = StyleHelper.getTextColor(props.section?.textColor, {}, props.churchSettings);
+      const textColor = StyleHelper.getTextColor(props.section?.textColor || "", {}, props.churchSettings);
       result.push(<Element key={e.id} element={e} onEdit={props.onEdit} onMove={props.onMove} church={props.church} churchSettings={props.churchSettings} textColor={textColor} />);
     });
     return result;
@@ -110,13 +110,13 @@ export const Section: React.FC<Props> = props => {
       const element: ElementInterface = data.data;
       element.sort = sort;
       element.sectionId = props.section.id;
-      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove(); });
+      ApiHelper.post("/elements", [element], "ContentApi").then(() => { props.onMove?.(); });
     } else {
       const element: ElementInterface = { sectionId: props.section.id, elementType: data.elementType, sort, blockId: props.section.blockId };
       if (data.blockId) element.answersJSON = JSON.stringify({ targetBlockId: data.blockId });
       else if (data.elementType === "row") element.answersJSON = JSON.stringify({ columns: "6,6" });
       else if (data.elementType === "box") element.answersJSON = JSON.stringify({ background: "var(--light)", text: "var(--dark)" });
-      props.onEdit(null, element);
+      props.onEdit?.(null, element);
     }
   };
 
@@ -151,7 +151,7 @@ export const Section: React.FC<Props> = props => {
 
   if (props.onEdit) {
     return (
-      <DraggableWrapper dndType="section" elementType="section" data={props.section} onDoubleClick={() => props.onEdit(props.section, null)}>
+      <DraggableWrapper dndType="section" elementType="section" data={props.section} onDoubleClick={() => props.onEdit?.(props.section, null)}>
         {result}
       </DraggableWrapper>
     );

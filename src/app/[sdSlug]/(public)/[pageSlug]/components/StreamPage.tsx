@@ -17,7 +17,7 @@ export function StreamPage(props: Props) {
   return (
     <Container>
       <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.liveStream")}</h1>
-      <LiveStream includeHeader={false} includeInteraction={true} keyName={props.config?.church?.subDomain} appearance={props.config?.appearance} offlineContent={null} />
+      <LiveStream includeHeader={false} includeInteraction={true} keyName={props.config?.church?.subDomain || ""} appearance={props.config!.appearance} />
     </Container>
   );
 }

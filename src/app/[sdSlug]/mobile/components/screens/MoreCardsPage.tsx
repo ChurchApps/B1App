@@ -19,14 +19,14 @@ export const MoreCardsPage = ({ config }: Props) => {
   const router = useRouter();
   const tc = mobileTheme.colors;
   const churchId = config?.church?.id;
-  const jwt = context.userChurch?.jwt;
+  const jwt = context?.userChurch?.jwt;
 
   const { data: rawLinks, isLoading } = useChurchLinks(churchId, jwt);
 
   const links = useMemo<LinkInterface[]>(() => {
-    const visible = filterVisibleLinks(rawLinks, context.userChurch);
+    const visible = filterVisibleLinks(rawLinks, context?.userChurch);
     return visible.filter((l) => l.linkType !== "separator");
-  }, [rawLinks, context.userChurch]);
+  }, [rawLinks, context?.userChurch]);
 
   const remainingLinks = useMemo(() => {
     if (links.length <= HOME_TABS_COUNT) return [];

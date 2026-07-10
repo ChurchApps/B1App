@@ -36,7 +36,7 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
   }, []);
 
   const handleRedirect = (url: string) => {
-    PersonHelper.person = context.person;
+    PersonHelper.person = context!.person;
     redirect(url);
   };
 
@@ -51,8 +51,8 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
         {Locale.label("loginClient.demoCredentials")}
       </Alert>)}
       <LoginPage
-        auth={searchParams.get("auth")}
-        context={context}
+        auth={searchParams.get("auth") || ""}
+        context={context!}
         jwt={jwt}
         appName="B1"
         showLogo={showLogo}

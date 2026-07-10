@@ -221,7 +221,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
     setError(null);
     try {
       await ApiHelper.post("/events", [buildPayload()], "ContentApi");
-      const bookings = await syncBookings(eventProp!.id);
+      const bookings = await syncBookings(eventProp!.id!);
       finishBookings(bookings);
     } catch (e: any) {
       setError(e?.message || Locale.label("mobile.group.failedToSaveEvent"));

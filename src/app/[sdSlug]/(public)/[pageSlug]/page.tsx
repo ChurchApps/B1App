@@ -60,7 +60,7 @@ export default async function Home({ params }: { params: PageParams }) {
   const { pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
   if (!pageData?.url && !VIRTUAL_PAGE_SLUGS.includes(pageSlug)) {
-    const to = await resolveRedirect(config.church.id, sdSlug, "/" + pageSlug);
+    const to = await resolveRedirect(config.church.id || "", sdSlug, "/" + pageSlug);
     if (to) permanentRedirect(to);
     return notFound();
   }
