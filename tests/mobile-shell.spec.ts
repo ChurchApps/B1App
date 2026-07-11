@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { DEMO_CHURCH } from "./helpers/fixtures";
 
-// /mobile entry point: hero card, featured section, Quick Actions, app bar with notifications
+// /mobile entry point: greeting header, verse of the day, hero card, Explore grid, notifications
 
 test.describe("Mobile shell", () => {
   test("/mobile redirects to /mobile/dashboard", async ({ page }) => {
@@ -33,14 +33,14 @@ test.describe("Mobile shell", () => {
     await expect(page.getByRole("button", { name: /^Profile$/i })).toBeVisible();
   });
 
-  test("dashboard renders Quick Actions section", async ({ page }) => {
+  test("dashboard renders Explore section", async ({ page }) => {
     await page.goto("/mobile/dashboard");
-    await expect(page.locator("body")).toContainText(/Quick Actions/i, { timeout: 15000 });
+    await expect(page.locator("body")).toContainText(/Explore/i, { timeout: 15000 });
   });
 
-  test("dashboard renders Featured section", async ({ page }) => {
+  test("dashboard renders the Verse of the Day card", async ({ page }) => {
     await page.goto("/mobile/dashboard");
-    await expect(page.locator("body")).toContainText(/Featured/i, { timeout: 15000 });
+    await expect(page.locator("body")).toContainText(/Verse of the Day/i, { timeout: 15000 });
   });
 
   test("permanent drawer lists primary navigation items", async ({ page }) => {

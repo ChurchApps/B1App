@@ -103,12 +103,11 @@ export const MessageComposePage = ({ config: _config }: Props) => {
           alignItems: "center",
           gap: `${mobileTheme.spacing.md}px`,
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           px: `${mobileTheme.spacing.md}px`,
           py: "12px",
-          cursor: "pointer",
-          "&:hover": { boxShadow: mobileTheme.shadows.md }
+          cursor: "pointer"
         }}
       >
         {photo ? (
@@ -152,8 +151,8 @@ export const MessageComposePage = ({ config: _config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mb: `${mobileTheme.spacing.md}px`
         }}

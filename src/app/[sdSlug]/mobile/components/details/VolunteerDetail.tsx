@@ -220,9 +220,8 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         sx={{
           bgcolor: tc.surface,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
-          border: mine ? `1px solid ${tc.success}` : "none"
+          border: mine ? `1px solid ${tc.success}` : `1px solid ${tc.border}`
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
@@ -237,7 +236,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
                     borderRadius: "999px",
                     bgcolor: "rgba(112,220,135,0.2)",
                     color: tc.success,
-                    fontSize: 11,
+                    fontSize: 10.5,
                     fontWeight: 700
                   }}
                 >
@@ -319,8 +318,8 @@ export const VolunteerDetail = ({ id, config }: Props) => {
       key={`sk-${i}`}
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`
       }}
     >
@@ -334,8 +333,8 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}

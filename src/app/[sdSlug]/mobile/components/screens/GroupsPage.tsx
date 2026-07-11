@@ -18,6 +18,13 @@ interface Props {
 
 const ENGAGEMENT_STORAGE_KEY = "b1app-group-view-counts";
 
+const eyebrowSx = {
+  fontSize: 11.5,
+  fontWeight: 700,
+  letterSpacing: "0.12em",
+  textTransform: "uppercase" as const
+};
+
 export const GroupsPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
@@ -109,7 +116,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
 
   const renderHero = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
-    const fallbackBg = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
       <Box
         key={`hero-${group.id}`}
@@ -128,26 +134,12 @@ export const GroupsPage = ({ config: _config }: Props) => {
           height: 200,
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
-          boxShadow: mobileTheme.shadows.md,
           cursor: "pointer",
-          background: hasPhoto ? "transparent" : fallbackBg,
-          transition: "box-shadow 150ms ease, transform 150ms ease",
-          "&:hover": { boxShadow: mobileTheme.shadows.lg },
+          background: hasPhoto ? `url(${group.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
+          transition: "transform 150ms ease",
           "&:active": { transform: "scale(0.995)" }
         }}
       >
-        {hasPhoto ? (
-          <Box
-            component="img"
-            src={group.photoUrl}
-            alt={group.name || "Group"}
-            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon sx={{ fontSize: 72, color: "rgba(255,255,255,0.7)" }}>groups</Icon>
-          </Box>
-        )}
         <Box
           sx={{
             position: "absolute",
@@ -155,13 +147,13 @@ export const GroupsPage = ({ config: _config }: Props) => {
             right: 0,
             bottom: 0,
             p: `${mobileTheme.spacing.md}px`,
-            background: "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%)"
+            background: "linear-gradient(transparent, rgba(7,14,27,0.78))"
           }}
         >
-          <Typography sx={{ color: "#FFFFFF", fontSize: 24, fontWeight: 700, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+          <Typography sx={{ color: "#FFFFFF", fontSize: 24, fontWeight: 700 }}>
             {group.name}
           </Typography>
-          <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14, textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+          <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14 }}>
             {groupSubtext(group) || "Tap to explore"}
           </Typography>
         </Box>
@@ -171,7 +163,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
 
   const renderFeatured = (group: GroupInterface) => {
     const hasPhoto = !!group.photoUrl;
-    const fallbackBg = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
       <Box
         key={`featured-${group.id}`}
@@ -189,35 +180,24 @@ export const GroupsPage = ({ config: _config }: Props) => {
           height: 120,
           borderRadius: `${mobileTheme.radius.lg}px`,
           overflow: "hidden",
-          boxShadow: mobileTheme.shadows.sm,
           cursor: "pointer",
-          background: hasPhoto ? "transparent" : fallbackBg,
-          transition: "box-shadow 150ms ease, transform 150ms ease",
-          "&:hover": { boxShadow: mobileTheme.shadows.md },
+          background: hasPhoto ? `url(${group.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
+          transition: "transform 150ms ease",
           "&:active": { transform: "scale(0.995)" }
         }}
       >
-        {hasPhoto ? (
-          <Box
-            component="img"
-            src={group.photoUrl}
-            alt={group.name || "Group"}
-            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon sx={{ fontSize: 40, color: "rgba(255,255,255,0.7)" }}>groups</Icon>
-          </Box>
-        )}
         <Box
           sx={{
             position: "absolute",
-            inset: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             display: "flex",
-            alignItems: "flex-end",
             justifyContent: "center",
-            p: "12px",
-            background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0) 100%)"
+            px: "12px",
+            pt: 4,
+            pb: "12px",
+            background: "linear-gradient(transparent, rgba(7,14,27,0.78))"
           }}
         >
           <Typography
@@ -226,7 +206,6 @@ export const GroupsPage = ({ config: _config }: Props) => {
               fontSize: 14,
               fontWeight: 600,
               textAlign: "center",
-              textShadow: "0 1px 2px rgba(0,0,0,0.3)",
               overflow: "hidden",
               textOverflow: "ellipsis",
               display: "-webkit-box",
@@ -260,24 +239,23 @@ export const GroupsPage = ({ config: _config }: Props) => {
           alignItems: "center",
           gap: `${mobileTheme.spacing.md}px`,
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: "12px",
           cursor: "pointer",
-          transition: "box-shadow 150ms ease, transform 150ms ease",
+          transition: "transform 150ms ease",
           overflow: "hidden",
-          "&:hover": { boxShadow: mobileTheme.shadows.md },
           "&:active": { transform: "scale(0.995)" }
         }}
       >
         <Box
           sx={{
-            width: 60,
-            height: 60,
-            borderRadius: `${mobileTheme.radius.md}px`,
+            width: 44,
+            height: 44,
+            borderRadius: "11px",
             overflow: "hidden",
             flexShrink: 0,
-            bgcolor: hasPhoto ? "transparent" : tc.primaryLight,
+            bgcolor: hasPhoto ? "transparent" : tc.iconBackground,
             display: "flex",
             alignItems: "center",
             justifyContent: "center"
@@ -291,7 +269,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
               sx={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
-            <Icon sx={{ fontSize: 28, color: tc.primary, opacity: 0.6 }}>groups</Icon>
+            <Icon sx={{ fontSize: 22, color: tc.primary }}>groups</Icon>
           )}
         </Box>
         <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -344,13 +322,13 @@ export const GroupsPage = ({ config: _config }: Props) => {
         alignItems: "center",
         gap: `${mobileTheme.spacing.md}px`,
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         px: `${mobileTheme.spacing.md}px`,
         py: "12px"
       }}
     >
-      <Skeleton variant="rounded" width={48} height={48} sx={{ borderRadius: `${mobileTheme.radius.md}px` }} />
+      <Skeleton variant="rounded" width={44} height={44} sx={{ borderRadius: "11px" }} />
       <Box sx={{ flex: 1 }}>
         <Skeleton variant="text" width="60%" height={20} />
         <Skeleton variant="text" width="40%" height={14} />
@@ -363,8 +341,8 @@ export const GroupsPage = ({ config: _config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -373,7 +351,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "11px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",
@@ -412,7 +390,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
     if (!pendingRequests.length) return null;
     return (
       <Box data-testid="my-pending-requests" sx={{ mb: `${mobileTheme.spacing.md}px` }}>
-        <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
+        <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
           Pending Requests
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
@@ -426,8 +404,8 @@ export const GroupsPage = ({ config: _config }: Props) => {
                 justifyContent: "space-between",
                 p: `${mobileTheme.spacing.sm}px ${mobileTheme.spacing.md}px`,
                 bgcolor: tc.surface,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                boxShadow: mobileTheme.shadows.sm
+                border: `1px solid ${tc.border}`,
+                borderRadius: `${mobileTheme.radius.md}px`
               }}>
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
@@ -471,7 +449,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
 
           {featured.length > 0 && (
             <Box>
-              <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
+              <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
                 Featured
               </Typography>
               <Box
@@ -488,7 +466,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
 
           {regular.length > 0 && (
             <Box>
-              <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
+              <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
                 Other Groups
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
@@ -501,7 +479,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
 
       {upcomingEvents.length > 0 && (
         <Box sx={{ mt: `${mobileTheme.spacing.lg}px` }}>
-          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.md}px` }}>
+          <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.md}px` }}>
             Upcoming Events
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
@@ -510,8 +488,8 @@ export const GroupsPage = ({ config: _config }: Props) => {
                 key={event.id}
                 sx={{
                   bgcolor: tc.surface,
+                  border: `1px solid ${tc.border}`,
                   borderRadius: `${mobileTheme.radius.lg}px`,
-                  boxShadow: mobileTheme.shadows.sm,
                   p: `${mobileTheme.spacing.md}px`,
                   display: "flex",
                   flexDirection: "column",

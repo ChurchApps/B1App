@@ -2,7 +2,13 @@
 
 # B1 Church
 
-> **B1 Church** is a mobile app and website that helps congregations stay connected by integrating various church services and external resources into one customizable platform. It offers features such as online giving, self-check-in for attendance, live streaming of services, and an interactive member directory. Visit [B1.church](https://b1.church/) to learn more.
+[![License](https://img.shields.io/github/license/ChurchApps/B1App?style=flat-square)](https://github.com/ChurchApps/B1App/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/ChurchApps/B1App?style=flat-square&color=yellow)](https://github.com/ChurchApps/B1App/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/ChurchApps/B1App?style=flat-square)](https://github.com/ChurchApps/B1App/commits)
+[![Sponsor](https://img.shields.io/badge/Sponsor-ea4aaa?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/ChurchApps)
+[![Slack](https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=slack&logoColor=white)](https://join.slack.com/t/livechurchsolutions/shared_invite/zt-i88etpo5-ZZhYsQwQLVclW12DKtVflg)
+
+> **B1 Church** is a free, open-source mobile app and website that helps congregations stay connected by integrating various church services and external resources into one customizable platform. It offers features such as online giving, self-check-in for attendance, live streaming of services, and an interactive member directory. Visit [B1.church](https://b1.church/) to learn more.
 
 ## Preview
 <div style="display: flex;gap: 10px;">

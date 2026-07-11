@@ -154,8 +154,8 @@ export const NotificationPrefsPage = () => {
 
   const cardSx = {
     bgcolor: tc.surface,
+    border: `1px solid ${tc.border}`,
     borderRadius: `${mobileTheme.radius.lg}px`,
-    boxShadow: mobileTheme.shadows.sm,
     p: `${mobileTheme.spacing.md}px`,
     mb: `${mobileTheme.spacing.md}px`
   };

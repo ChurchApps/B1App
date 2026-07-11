@@ -16,9 +16,9 @@ if (typeof window !== "undefined") EnvironmentHelper.init();
 
 const mobileMuiTheme = createTheme({
   palette: { primary: { main: "#0D47A1" }, secondary: { main: "#444444" } },
-  shape: { borderRadius: 12 },
-  typography: { fontFamily: '"Roboto","Helvetica","Arial",sans-serif' },
-  components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } } }
+  shape: { borderRadius: 14 },
+  typography: { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' },
+  components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 999, fontWeight: 600, boxShadow: "none" } } } }
 });
 
 function MobileHydrationGate({ children }: { children: React.ReactNode }) {

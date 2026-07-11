@@ -118,13 +118,15 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               minHeight: 48,
               px: `${mobileTheme.spacing.md}px`,
               py: `${mobileTheme.spacing.sm + 4}px`,
-              borderBottom: `1px solid ${tc.border}`,
-              bgcolor: isActive("/mobile/me") ? tc.primary : "transparent",
+              mx: "8px",
+              mb: "2px",
+              borderRadius: `${mobileTheme.radius.md}px`,
+              bgcolor: isActive("/mobile/me") ? tc.primaryLight : "transparent",
               cursor: "pointer",
-              "&:hover": { bgcolor: isActive("/mobile/me") ? tc.primary : tc.iconBackground }
+              "&:hover": { bgcolor: isActive("/mobile/me") ? tc.primaryLight : tc.iconBackground }
             }}>
-              <Icon sx={{ fontSize: 24, color: isActive("/mobile/me") ? tc.onPrimary : tc.primary }}>person</Icon>
-              <Typography sx={{ fontSize: 16, fontWeight: 500, color: isActive("/mobile/me") ? tc.onPrimary : tc.text, flex: 1 }}>
+              <Icon sx={{ fontSize: 24, color: tc.primary }}>person</Icon>
+              <Typography sx={{ fontSize: 16, fontWeight: 500, color: isActive("/mobile/me") ? tc.primary : tc.text, flex: 1 }}>
                 {Locale.label("mobile.me.title")}
               </Typography>
             </Box>
@@ -142,7 +144,9 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               minHeight: 48,
               px: `${mobileTheme.spacing.md}px`,
               py: `${mobileTheme.spacing.sm + 4}px`,
-              borderBottom: `1px solid ${tc.border}`,
+              mx: "8px",
+              mb: "2px",
+              borderRadius: `${mobileTheme.radius.md}px`,
               color: "inherit",
               textDecoration: "none",
               cursor: "pointer",
@@ -183,16 +187,18 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
               minHeight: 48,
               px: `${mobileTheme.spacing.md}px`,
               py: `${mobileTheme.spacing.sm + 4}px`,
-              borderBottom: `1px solid ${tc.border}`,
-              bgcolor: active ? tc.primary : "transparent",
+              mx: "8px",
+              mb: "2px",
+              borderRadius: `${mobileTheme.radius.md}px`,
+              bgcolor: active ? tc.primaryLight : "transparent",
               cursor: "pointer",
-              "&:hover": { bgcolor: active ? tc.primary : tc.iconBackground }
+              "&:hover": { bgcolor: active ? tc.primaryLight : tc.iconBackground }
             }}>
-              <Icon sx={{ fontSize: 24, color: active ? tc.onPrimary : tc.primary }}>{iconName}</Icon>
+              <Icon sx={{ fontSize: 24, color: tc.primary }}>{iconName}</Icon>
               <Typography sx={{
                 fontSize: 16,
                 fontWeight: active ? 600 : 500,
-                color: active ? tc.onPrimary : tc.text,
+                color: active ? tc.primary : tc.text,
                 flex: 1,
                 minWidth: 0,
                 whiteSpace: "nowrap",

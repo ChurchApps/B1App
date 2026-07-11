@@ -1,20 +1,19 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Box, CircularProgress, Icon, Typography } from "@mui/material";
+import { Box, Icon, Typography } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
+import { loadDailyVerse, type DailyVerse } from "../../helpers/dailyVerses";
 
 const getDayOfYear = () => {
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now.getTime() - start.getTime();
-  const oneDay = 1000 * 60 * 60 * 24;
-  return Math.floor(diff / oneDay);
+  return Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 };
 
 const getShape = () => {
-  if (typeof window === "undefined") return "16x9";
+  if (typeof window === "undefined") return "9x16";
   const ratio = window.innerWidth / window.innerHeight;
   const diff1x1 = Math.abs(ratio - 1);
   const diff16x9 = Math.abs(ratio - 1.777);
@@ -26,15 +25,14 @@ const getShape = () => {
 
 export const VotdPage = () => {
   const tc = mobileTheme.colors;
-  const [isClient, setIsClient] = useState(false);
-  const [shape, setShape] = useState("9x16");
+  const [verse, setVerse] = useState<DailyVerse | null>(null);
   const [day, setDay] = useState<number | null>(null);
+  const [shape, setShape] = useState("9x16");
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [shareMessage, setShareMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    setIsClient(true);
     setDay(getDayOfYear());
     const onResize = () => setShape(getShape());
     onResize();
@@ -42,15 +40,20 @@ export const VotdPage = () => {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const imageUrl = useMemo(() => {
-    if (day === null) return "";
-    return `https://votd.org/v1/${day}/${shape}.jpg`;
-  }, [day, shape]);
+  useEffect(() => {
+    let cancelled = false;
+    loadDailyVerse().then((v) => { if (!cancelled) setVerse(v); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const imageUrl = useMemo(() => (day === null ? "" : `https://votd.org/v1/${day}/${shape}.jpg`), [day, shape]);
+  const showImage = !!imageUrl && !imageError;
 
   const handleShare = async () => {
+    const shareText = verse ? `"${verse.text}" — ${verse.reference}` : "Verse of the Day";
     const shareData = {
       title: "Verse of the Day",
-      text: "Check out today's Verse of the Day",
+      text: shareText,
       url: imageUrl || window.location.href
     };
     try {
@@ -63,8 +66,8 @@ export const VotdPage = () => {
     }
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {
-        await navigator.clipboard.writeText(shareData.url);
-        setShareMessage("Link copied to clipboard");
+        await navigator.clipboard.writeText(`${shareText}\n${shareData.url}`);
+        setShareMessage("Copied to clipboard");
         setTimeout(() => setShareMessage(null), 2500);
       }
     } catch {
@@ -78,45 +81,58 @@ export const VotdPage = () => {
       <Box sx={{
         position: "relative",
         flex: 1,
-        minHeight: 240,
+        minHeight: "calc(100vh - 140px)",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        textAlign: "center",
+        px: `${mobileTheme.spacing.lg}px`,
+        background: mobileTheme.verseGradient,
+        overflow: "hidden"
       }}>
-        {isClient && imageUrl && !imageError ? (
+        {/* Typeset verse doubles as the loading state and the offline/error fallback. */}
+        {verse && (!showImage || !imageLoaded) && (
           <>
-            {!imageLoaded && (
-              <CircularProgress
-                size={32}
-                sx={{ position: "absolute", top: "50%", left: "50%", mt: "-16px", ml: "-16px", color: tc.text }}
-              />
-            )}
-            { }
-            <img
-              src={imageUrl}
-              alt="Verse of the Day"
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-              style={{
-
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "fill"
-              }}
-            />
+            <Typography sx={{
+              fontFamily: mobileTheme.fonts.serif,
+              fontStyle: "italic",
+              fontSize: 26,
+              lineHeight: 1.5,
+              color: "#FFFFFF",
+              maxWidth: 320,
+              mb: "14px"
+            }}>
+              {verse.text}
+            </Typography>
+            <Typography sx={{
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.75)"
+            }}>
+              {verse.reference}
+            </Typography>
           </>
-        ) : imageError ? (
-          <Box sx={{ p: 3, textAlign: "center" }}>
-            <Typography sx={{ color: tc.text, fontSize: 16, fontWeight: 600, mb: 1 }}>
-              Unable to load today&apos;s verse
-            </Typography>
-            <Typography sx={{ color: tc.textMuted, fontSize: 14 }}>
-              Please check your connection and try again.
-            </Typography>
-          </Box>
-        ) : null}
+        )}
+        {showImage && (
+          <img
+            src={imageUrl}
+            alt={verse ? `${verse.reference} — Verse of the Day` : "Verse of the Day"}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => setImageError(true)}
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              opacity: imageLoaded ? 1 : 0,
+              transition: "opacity 300ms ease"
+            }}
+          />
+        )}
       </Box>
 
       <Box sx={{
@@ -144,7 +160,7 @@ export const VotdPage = () => {
             gap: 1,
             px: "14px",
             py: "8px",
-            borderRadius: `${mobileTheme.radius.lg}px`,
+            borderRadius: "999px",
             bgcolor: tc.primary,
             color: tc.onPrimary,
             cursor: "pointer",

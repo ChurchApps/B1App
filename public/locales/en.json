@@ -291,12 +291,15 @@
       "detailViewTitle": "{} detail",
       "dismiss": "Dismiss",
       "editProfile": "Edit Profile",
+      "explore": "Explore",
       "featured": "Featured",
       "group": "Group",
+      "home": "Home",
       "lightMode": "Light Mode",
       "logout": "Logout",
       "member": "Member",
       "messages": "Messages",
+      "more": "More",
       "navigation": "Main navigation",
       "newMessage": "New message",
       "noMessages": "No messages yet",
@@ -317,8 +320,14 @@
       "turnOn": "Turn on",
       "unknown": "Unknown",
       "untitledSermon": "Untitled Sermon",
+      "verseOfTheDay": "Verse of the Day",
       "viewAllMessages": "View all messages",
       "viewAllNotifications": "View all notifications"
+    },
+    "dashboard": {
+      "goodAfternoon": "Good afternoon",
+      "goodEvening": "Good evening",
+      "goodMorning": "Good morning"
     },
     "details": {
       "about": "About",

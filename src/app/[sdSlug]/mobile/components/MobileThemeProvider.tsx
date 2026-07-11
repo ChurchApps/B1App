@@ -28,44 +28,44 @@ const lightDefaults = {
   "--mb-primary": "#0D47A1",
   "--mb-primary-light": "#E3F2FD",
   "--mb-secondary": "#568BDA",
-  "--mb-background": "#F6F6F8",
+  "--mb-background": "#F0F4F9",
   "--mb-surface": "#FFFFFF",
-  "--mb-surface-variant": "#F6F6F8",
-  "--mb-text": "#3c3c3c",
-  "--mb-text-secondary": "#9E9E9E",
-  "--mb-text-muted": "#666666",
-  "--mb-text-hint": "#999999",
+  "--mb-surface-variant": "#F0F4F9",
+  "--mb-text": "#101E38",
+  "--mb-text-secondary": "#5F6C82",
+  "--mb-text-muted": "#5F6C82",
+  "--mb-text-hint": "#93A0B4",
   "--mb-on-primary": "#FFFFFF",
-  "--mb-success": "#70DC87",
-  "--mb-warning": "#FEAA24",
+  "--mb-success": "#2E9E52",
+  "--mb-warning": "#B97E14",
   "--mb-error": "#B0120C",
-  "--mb-border": "#F0F0F0",
-  "--mb-border-light": "#E5E7EB",
-  "--mb-divider": "#E0E0E0",
-  "--mb-icon-background": "#F6F6F8",
-  "--mb-disabled": "#BDBDBD"
+  "--mb-border": "#E2E9F4",
+  "--mb-border-light": "#EAEFF7",
+  "--mb-divider": "#E2E9F4",
+  "--mb-icon-background": "#E6EDF7",
+  "--mb-disabled": "#A9B4C6"
 };
 
 const darkDefaults = {
-  "--mb-primary": "#4A90E2",
-  "--mb-primary-light": "#1a3a5c",
+  "--mb-primary": "#6FA0E8",
+  "--mb-primary-light": "#12294D",
   "--mb-secondary": "#6BA4E8",
-  "--mb-background": "#121212",
-  "--mb-surface": "#1E1E1E",
-  "--mb-surface-variant": "#2D2D2D",
-  "--mb-text": "#E0E0E0",
-  "--mb-text-secondary": "#AAAAAA",
-  "--mb-text-muted": "#888888",
-  "--mb-text-hint": "#777777",
+  "--mb-background": "#070E1B",
+  "--mb-surface": "#0E1930",
+  "--mb-surface-variant": "#15223E",
+  "--mb-text": "#E7ECF5",
+  "--mb-text-secondary": "#A2AFC6",
+  "--mb-text-muted": "#8D9BB4",
+  "--mb-text-hint": "#6E7C96",
   "--mb-on-primary": "#FFFFFF",
-  "--mb-success": "#70DC87",
-  "--mb-warning": "#FEAA24",
+  "--mb-success": "#6FCB8B",
+  "--mb-warning": "#E4A94E",
   "--mb-error": "#E57373",
-  "--mb-border": "#333333",
-  "--mb-border-light": "#2D2D2D",
-  "--mb-divider": "#333333",
-  "--mb-icon-background": "#2D2D2D",
-  "--mb-disabled": "#555555"
+  "--mb-border": "#1D2C4C",
+  "--mb-border-light": "#16233F",
+  "--mb-divider": "#1D2C4C",
+  "--mb-icon-background": "#15223E",
+  "--mb-disabled": "#4C5A74"
 };
 
 const darkInputStyles = {
@@ -121,16 +121,28 @@ const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) 
   }
 
   const secondary = pickColor(churchColors?.secondary, appearance?.secondaryColor, defaults["--mb-secondary"]) || defaults["--mb-secondary"];
-  const background = pickColor(churchColors?.background, defaults["--mb-background"]) || defaults["--mb-background"];
-  const surface = pickColor(churchColors?.surface, defaults["--mb-surface"]) || defaults["--mb-surface"];
-  const text = pickColor(churchColors?.textColor, defaults["--mb-text"]) || defaults["--mb-text"];
+
+  // Brand hue for derived surfaces/washes — always the light-mode primary, not the lightened dark variant.
+  const brandBase = pickColor(lightChurchColors?.primary, mode === "light" ? churchColors?.primary : undefined, appearance?.primaryColor, "#0D47A1") || "#0D47A1";
+
+  const derivedBackground = mode === "dark" ? shade(brandBase, 0.90) : tint(brandBase, 0.94);
+  const derivedSurface = mode === "dark" ? shade(brandBase, 0.80) : "#FFFFFF";
+  const derivedText = mode === "dark" ? defaults["--mb-text"] : shade(brandBase, 0.72);
+
+  const background = pickColor(churchColors?.background, derivedBackground) || derivedBackground;
+  const surface = pickColor(churchColors?.surface, derivedSurface) || derivedSurface;
+  const text = pickColor(churchColors?.textColor, derivedText) || derivedText;
   const onPrimary = pickColor(churchColors?.primaryContrast, appearance?.primaryContrast, defaults["--mb-on-primary"]) || defaults["--mb-on-primary"];
 
-  // Tint primary-light to match primary; darken in dark mode to stay subtle.
   const primaryLight = isValidHexColor(primary)
-    ? (mode === "dark" ? shade(primary, 0.75) : tint(primary, 0.85))
-    : (mode === "dark" ? "#1a3a5c" : "#E3F2FD");
+    ? (mode === "dark" ? shade(primary, 0.75) : tint(primary, 0.87))
+    : defaults["--mb-primary-light"];
   const accentColor = isValidHexColor(secondary) ? secondary : (isValidHexColor(primary) ? deriveAccent(primary) : secondary);
+
+  // Color-wash stops for photo-less media cards: brand hue drifting warm across the gradient.
+  const wash1 = shade(brandBase, 0.45);
+  const wash2 = shade(deriveAccent(brandBase), 0.40);
+  const wash3 = shade(deriveAccent(deriveAccent(brandBase)), 0.30);
 
   return {
     ...defaults,
@@ -140,24 +152,27 @@ const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) 
     "--mb-accent": accentColor,
     "--mb-background": background,
     "--mb-surface": surface,
-    "--mb-surface-variant": mode === "dark" ? "#2D2D2D" : "#F6F6F8",
+    "--mb-surface-variant": mode === "dark" ? shade(brandBase, 0.72) : tint(brandBase, 0.90),
     "--mb-text": text,
-    "--mb-text-secondary": mode === "dark" ? "#CCCCCC" : "#9E9E9E",
-    "--mb-text-muted": mode === "dark" ? "#888888" : "#666666",
-    "--mb-text-hint": mode === "dark" ? "#777777" : "#999999",
     "--mb-on-primary": onPrimary,
-    "--mb-border": mode === "dark" ? "#333333" : "#F0F0F0",
-    "--mb-border-light": mode === "dark" ? "#2D2D2D" : "#E5E7EB",
-    "--mb-divider": mode === "dark" ? "#333333" : "#E0E0E0",
-    "--mb-icon-background": mode === "dark" ? "#2D2D2D" : "#F6F6F8",
+    "--mb-border": mode === "dark" ? shade(brandBase, 0.62) : tint(brandBase, 0.88),
+    "--mb-border-light": mode === "dark" ? shade(brandBase, 0.70) : tint(brandBase, 0.91),
+    "--mb-divider": mode === "dark" ? shade(brandBase, 0.62) : tint(brandBase, 0.88),
+    "--mb-icon-background": mode === "dark" ? shade(brandBase, 0.72) : tint(brandBase, 0.90),
+    "--mb-wash-1": wash1,
+    "--mb-wash-2": wash2,
+    "--mb-wash-3": wash3,
+    "--mb-verse-1": shade(brandBase, 0.10),
+    "--mb-verse-2": shade(brandBase, 0.55),
+    "--mb-font-sans": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     // Surface tokens — exposed so downstream components can drop hardcoded values.
-    "--mb-radius-sm": "4px",
-    "--mb-radius-md": "8px",
-    "--mb-radius-lg": "12px",
-    "--mb-radius-xl": "16px",
-    "--mb-shadow-sm": "0 1px 2px rgba(0,0,0,0.05)",
-    "--mb-shadow-md": "0 2px 4px rgba(0,0,0,0.1)",
-    "--mb-shadow-lg": "0 4px 8px rgba(0,0,0,0.15)"
+    "--mb-radius-sm": "6px",
+    "--mb-radius-md": "10px",
+    "--mb-radius-lg": "16px",
+    "--mb-radius-xl": "22px",
+    "--mb-shadow-sm": "0 1px 2px rgba(16,30,56,0.04)",
+    "--mb-shadow-md": "0 4px 14px rgba(16,30,56,0.08)",
+    "--mb-shadow-lg": "0 10px 30px rgba(16,30,56,0.14)"
   };
 };
 
@@ -214,9 +229,9 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?:
       background: { default: vars["--mb-background"], paper: vars["--mb-surface"] },
       text: { primary: vars["--mb-text"], secondary: vars["--mb-text-secondary"] }
     },
-    shape: { borderRadius: 12 },
-    typography: { fontFamily: '"Roboto","Helvetica","Arial",sans-serif' },
-    components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 10 } } } }
+    shape: { borderRadius: 14 },
+    typography: { fontFamily: vars["--mb-font-sans"] },
+    components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 999, fontWeight: 600, boxShadow: "none" } } } }
   }), [mode, vars]);
 
   const mobileThemeGlobalStyles = (

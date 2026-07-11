@@ -104,15 +104,15 @@ export const MyRequestsPage = ({ config: _config }: Props) => {
   );
 
   const renderSkeleton = (i: number) => (
-    <Box key={`sk-${i}`} sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.lg}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.md}px` }}>
+    <Box key={`sk-${i}`} sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }}>
       <Skeleton variant="text" width="60%" height={22} />
       <Skeleton variant="text" width="40%" height={14} />
     </Box>
   );
 
   const renderEmpty = () => (
-    <Box sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.xl}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
-      <Box sx={{ width: 64, height: 64, borderRadius: "32px", bgcolor: tc.iconBackground, display: "inline-flex", alignItems: "center", justifyContent: "center", mb: `${mobileTheme.spacing.md}px` }}>
+    <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.xl}px`, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
+      <Box sx={{ width: 64, height: 64, borderRadius: "11px", bgcolor: tc.iconBackground, display: "inline-flex", alignItems: "center", justifyContent: "center", mb: `${mobileTheme.spacing.md}px` }}>
         <Icon sx={{ fontSize: 32, color: tc.primary }}>event_note</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>{Locale.label("mobile.requests.emptyTitle")}</Typography>
@@ -121,7 +121,7 @@ export const MyRequestsPage = ({ config: _config }: Props) => {
   );
 
   const renderCard = (req: RequestRow) => (
-    <Box key={req.id} sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.lg}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.md}px` }} data-testid={`request-card-${req.id}`}>
+    <Box key={req.id} sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }} data-testid={`request-card-${req.id}`}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.25 }}>{req.title || Locale.label("mobile.group.event")}</Typography>
@@ -132,7 +132,7 @@ export const MyRequestsPage = ({ config: _config }: Props) => {
             </Typography>
           )}
         </Box>
-        <Box sx={{ px: 1, py: 0.25, borderRadius: "999px", bgcolor: `${statusColor(req.approvalStatus)}1A`, color: statusColor(req.approvalStatus), fontSize: 11, fontWeight: 600, whiteSpace: "nowrap" }} data-testid={`request-status-${req.id}`}>
+        <Box sx={{ px: 1, py: 0.25, borderRadius: "999px", bgcolor: `${statusColor(req.approvalStatus)}1A`, color: statusColor(req.approvalStatus), fontSize: 10.5, fontWeight: 700, whiteSpace: "nowrap" }} data-testid={`request-status-${req.id}`}>
           {statusLabel(req.approvalStatus)}
         </Box>
       </Box>

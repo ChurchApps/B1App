@@ -381,7 +381,7 @@ export const InstallPage = ({ config }: Props) => {
                       width: 36,
                       height: 36,
                       borderRadius: "10px",
-                      background: `linear-gradient(135deg, ${accent} 0%, ${accentDeep} 100%)`,
+                      bgcolor: accent,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -626,7 +626,7 @@ const panelHeader = (title: string, subtitle: string) => (
 );
 
 interface StepProps { num: number; title: React.ReactNode; body: React.ReactNode; accent: string; accentDeep: string; }
-const Step = ({ num, title, body, accent, accentDeep }: StepProps) => (
+const Step = ({ num, title, body, accent }: StepProps) => (
   <Box sx={{
     position: "relative",
     p: "20px",
@@ -647,7 +647,7 @@ const Step = ({ num, title, body, accent, accentDeep }: StepProps) => (
       width: 32,
       height: 32,
       borderRadius: "10px",
-      background: `linear-gradient(135deg, ${accent}, ${accentDeep})`,
+      bgcolor: accent,
       color: "white",
       fontWeight: 800,
       fontSize: "0.95rem",
@@ -895,7 +895,7 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
                 width: 26,
                 height: 26,
                 borderRadius: "8px",
-                background: `linear-gradient(135deg, ${primary}, ${accent})`,
+                bgcolor: accent,
                 color: "white",
                 fontWeight: 700,
                 fontSize: "0.8rem",

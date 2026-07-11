@@ -363,7 +363,9 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                 bgcolor: selectedTags.includes(t) ? tc.primaryLight : undefined,
                 color: selectedTags.includes(t) ? tc.primary : tc.text,
                 borderColor: tc.primary,
-                fontWeight: 500
+                fontSize: 10.5,
+                fontWeight: 700,
+                borderRadius: "999px"
               }}
               size="small"
             />
@@ -373,6 +375,7 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
               label={Locale.label("mobile.group.clear")}
               onDelete={() => setSelectedTags([])}
               onClick={() => setSelectedTags([])}
+              sx={{ fontSize: 10.5, fontWeight: 700, borderRadius: "999px" }}
               size="small"
             />
           )}
@@ -382,8 +385,8 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -482,8 +485,8 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
           <Box
             sx={{
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
               p: `${mobileTheme.spacing.md}px`,
               textAlign: "center"
             }}
@@ -498,8 +501,8 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                 key={e.id || `ev-${i}`}
                 sx={{
                   bgcolor: tc.surface,
+                  border: `1px solid ${tc.border}`,
                   borderRadius: `${mobileTheme.radius.lg}px`,
-                  boxShadow: mobileTheme.shadows.sm,
                   p: `${mobileTheme.spacing.md}px`,
                   borderLeft: `4px solid ${tc.primary}`,
                   position: "relative"
@@ -522,8 +525,9 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                             label={Locale.label("mobile.group.private")}
                             sx={{
                               height: 22,
-                              fontSize: 11,
-                              fontWeight: 600,
+                              fontSize: 10.5,
+                              fontWeight: 700,
+                              borderRadius: "999px",
                               bgcolor: tc.iconBackground,
                               color: tc.textSecondary,
                               "& .MuiChip-icon": { color: tc.textSecondary, ml: "4px" }
@@ -536,8 +540,9 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                             label={Locale.label("mobile.group.allDay")}
                             sx={{
                               height: 22,
-                              fontSize: 11,
-                              fontWeight: 600,
+                              fontSize: 10.5,
+                              fontWeight: 700,
+                              borderRadius: "999px",
                               bgcolor: tc.primaryLight,
                               color: tc.primary
                             }}
@@ -550,8 +555,9 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                             label={describeRecurrence(e.recurrenceRule)}
                             sx={{
                               height: 22,
-                              fontSize: 11,
-                              fontWeight: 600,
+                              fontSize: 10.5,
+                              fontWeight: 700,
+                              borderRadius: "999px",
                               bgcolor: tc.iconBackground,
                               color: tc.text,
                               "& .MuiChip-icon": { color: tc.primary, ml: "4px" }

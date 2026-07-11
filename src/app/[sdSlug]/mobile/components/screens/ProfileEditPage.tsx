@@ -599,8 +599,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
           alignItems: "center",
@@ -651,8 +651,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mt: `${mobileTheme.spacing.md}px`
         }}
@@ -668,8 +668,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mt: `${mobileTheme.spacing.md}px`
         }}
@@ -684,8 +684,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mt: `${mobileTheme.spacing.md}px`
         }}
@@ -705,8 +705,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mt: `${mobileTheme.spacing.md}px`
         }}
@@ -728,8 +728,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -798,8 +798,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mt: `${mobileTheme.spacing.md}px`
         }}
@@ -881,8 +881,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -932,8 +932,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mt: `${mobileTheme.spacing.md}px`
         }}
@@ -978,8 +978,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mt: `${mobileTheme.spacing.md}px`
         }}
@@ -1063,8 +1063,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -1162,8 +1162,8 @@ export const ProfileEditPage = ({ config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           overflow: "hidden",
           mb: `${mobileTheme.spacing.md}px`
         }}

@@ -75,34 +75,14 @@ const FeaturedSermonHero = ({ sermon, onClick }: { sermon: SermonInterface; onCl
         mb: `${mobileTheme.spacing.lg}px`,
         borderRadius: `${mobileTheme.radius.xl}px`,
         overflow: "hidden",
-        boxShadow: mobileTheme.shadows.lg,
         cursor: "pointer",
-        backgroundImage: hasImage
-          ? `url(${sermon.thumbnail})`
-          : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        transition: "box-shadow 200ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.lg }
+        background: hasImage ? `url(${sermon.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
       }}
     >
-      {!hasImage && (
-        <Box sx={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: 0.9
-        }}>
-          <Icon sx={{ fontSize: 72, color: "#FFFFFF" }}>video_library</Icon>
-        </Box>
-      )}
-
       <Box sx={{
         position: "absolute",
         inset: 0,
-        bgcolor: "rgba(0,0,0,0.5)",
+        background: "linear-gradient(transparent, rgba(7,14,27,0.78))",
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "space-between",
@@ -165,7 +145,6 @@ const FeaturedSermonHero = ({ sermon, onClick }: { sermon: SermonInterface; onCl
 };
 
 const LiveStreamCard = ({ stream }: { stream: UpcomingStream }) => {
-  const tc = mobileTheme.colors;
   const router = useRouter();
   const now = new Date();
   const diffMs = stream.startDate.getTime() - now.getTime();
@@ -235,11 +214,10 @@ const LiveStreamCard = ({ stream }: { stream: UpcomingStream }) => {
 
   return (
     <Box sx={{
-      background: `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
+      background: mobileTheme.verseGradient,
       borderRadius: `${mobileTheme.radius.xl}px`,
       p: `${mobileTheme.spacing.lg}px`,
       mb: `${mobileTheme.spacing.lg}px`,
-      boxShadow: mobileTheme.shadows.lg,
       textAlign: "center"
     }}>
       <Typography sx={{
@@ -255,20 +233,20 @@ const LiveStreamCard = ({ stream }: { stream: UpcomingStream }) => {
       <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: 3, mb: 2 }}>
         {days > 0 && (
           <Box sx={{ textAlign: "center" }}>
-            <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1 }}>{days}</Typography>
+            <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{days}</Typography>
             <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 11, fontWeight: 600, textTransform: "uppercase" }}>
               {days === 1 ? "Day" : "Days"}
             </Typography>
           </Box>
         )}
         <Box sx={{ textAlign: "center" }}>
-          <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1 }}>{hours}</Typography>
+          <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{hours}</Typography>
           <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 11, fontWeight: 600, textTransform: "uppercase" }}>
             {hours === 1 ? "Hour" : "Hours"}
           </Typography>
         </Box>
         <Box sx={{ textAlign: "center" }}>
-          <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1 }}>{minutes}</Typography>
+          <Typography sx={{ color: "#FFFFFF", fontWeight: 800, fontSize: 36, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>{minutes}</Typography>
           <Typography sx={{ color: "#FFFFFF", opacity: 0.85, fontSize: 11, fontWeight: 600, textTransform: "uppercase" }}>
             {minutes === 1 ? "Minute" : "Minutes"}
           </Typography>
@@ -290,7 +268,6 @@ const LiveStreamCard = ({ stream }: { stream: UpcomingStream }) => {
 };
 
 const PlaylistCard = ({ playlist, onClick }: { playlist: PlaylistInterface; onClick: () => void }) => {
-  const tc = mobileTheme.colors;
   const hasImage = !!(playlist.thumbnail && playlist.thumbnail.trim() !== "");
 
   return (
@@ -306,36 +283,16 @@ const PlaylistCard = ({ playlist, onClick }: { playlist: PlaylistInterface; onCl
         mb: `${mobileTheme.spacing.md - 4}px`,
         borderRadius: `${mobileTheme.radius.xl}px`,
         overflow: "hidden",
-        boxShadow: mobileTheme.shadows.md,
         cursor: "pointer",
-        backgroundImage: hasImage
-          ? `url(${playlist.thumbnail})`
-          : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        transition: "box-shadow 200ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.lg }
+        background: hasImage ? `url(${playlist.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
       }}
     >
-      {!hasImage && (
-        <Box sx={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: 0.9
-        }}>
-          <Icon sx={{ fontSize: 56, color: "#FFFFFF" }}>playlist_play</Icon>
-        </Box>
-      )}
-
       <Box sx={{
         position: "absolute",
         bottom: 0,
         left: 0,
         right: 0,
-        background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.0) 100%)",
+        background: "linear-gradient(transparent, rgba(7,14,27,0.78))",
         p: "16px",
         pt: "32px",
         display: "flex",
@@ -395,8 +352,7 @@ const SkeletonCard = () => {
       mb: `${mobileTheme.spacing.md - 4}px`,
       borderRadius: `${mobileTheme.radius.xl}px`,
       overflow: "hidden",
-      bgcolor: tc.surfaceVariant,
-      boxShadow: mobileTheme.shadows.sm
+      bgcolor: tc.surfaceVariant
     }} />
   );
 };
@@ -407,16 +363,16 @@ const EmptyState = ({ type }: { type: "sermons" | "playlists" }) => {
   return (
     <Box sx={{
       bgcolor: tc.surface,
+      border: `1px solid ${tc.border}`,
       borderRadius: `${mobileTheme.radius.xl}px`,
       p: 4,
       textAlign: "center",
-      boxShadow: mobileTheme.shadows.md,
       mt: 2
     }}>
       <Box sx={{
         width: 72,
         height: 72,
-        borderRadius: "36px",
+        borderRadius: "11px",
         bgcolor: tc.iconBackground,
         display: "inline-flex",
         alignItems: "center",
@@ -444,16 +400,16 @@ const ErrorState = ({ onGoBack }: { onGoBack: () => void }) => {
   return (
     <Box sx={{
       bgcolor: tc.surface,
+      border: `1px solid ${tc.border}`,
       borderRadius: `${mobileTheme.radius.xl}px`,
       p: 4,
       textAlign: "center",
-      boxShadow: mobileTheme.shadows.md,
       mt: 2
     }}>
       <Box sx={{
         width: 72,
         height: 72,
-        borderRadius: "36px",
+        borderRadius: "11px",
         bgcolor: tc.iconBackground,
         display: "inline-flex",
         alignItems: "center",
@@ -614,7 +570,7 @@ export const SermonsPage = ({ config }: Props) => {
           <FeaturedSermonHero sermon={featuredSermon} onClick={() => handleSermonClick(featuredSermon)} />
         ) : null}
 
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 2 }}>
+        <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, mb: 2 }}>
           Sermon Series
         </Typography>
 
@@ -634,7 +590,7 @@ export const SermonsPage = ({ config }: Props) => {
       <>
         {upcomingStream ? <LiveStreamCard stream={upcomingStream} /> : null}
 
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 2 }}>
+        <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, mb: 2 }}>
           Recent Sermons
         </Typography>
 

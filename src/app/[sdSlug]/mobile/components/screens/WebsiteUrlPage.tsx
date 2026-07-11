@@ -144,8 +144,8 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center"
           }}
@@ -154,7 +154,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             sx={{
               width: 64,
               height: 64,
-              borderRadius: "32px",
+              borderRadius: "18px",
               bgcolor: tc.iconBackground,
               display: "inline-flex",
               alignItems: "center",
@@ -208,8 +208,8 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center"
           }}
@@ -311,8 +311,8 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             <Box
               sx={{
                 bgcolor: tc.surface,
+                border: `1px solid ${tc.border}`,
                 borderRadius: `${mobileTheme.radius.xl}px`,
-                boxShadow: mobileTheme.shadows.sm,
                 p: `${mobileTheme.spacing.lg}px`,
                 textAlign: "center",
                 maxWidth: 320,

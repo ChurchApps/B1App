@@ -57,8 +57,8 @@ export const VolunteerPage = ({ config }: Props) => {
         key={item.plan.id}
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -79,8 +79,8 @@ export const VolunteerPage = ({ config }: Props) => {
               borderRadius: "999px",
               bgcolor: isFull ? `${tc.textSecondary}1A` : `${tc.success}1A`,
               color: isFull ? tc.textSecondary : tc.success,
-              fontSize: 11,
-              fontWeight: 600,
+              fontSize: 10.5,
+              fontWeight: 700,
               whiteSpace: "nowrap"
             }}
           >
@@ -118,8 +118,9 @@ export const VolunteerPage = ({ config }: Props) => {
                   size="small"
                   sx={{
                     height: 22,
-                    fontSize: 11,
-                    fontWeight: 500,
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    borderRadius: "999px",
                     bgcolor: posFull ? `${tc.textSecondary}1A` : tc.primaryLight,
                     color: posFull ? tc.textSecondary : tc.primary,
                     "& .MuiChip-label": { px: 1 }
@@ -157,8 +158,8 @@ export const VolunteerPage = ({ config }: Props) => {
       key={`sk-${i}`}
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`
       }}
     >
@@ -173,8 +174,8 @@ export const VolunteerPage = ({ config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -183,7 +184,7 @@ export const VolunteerPage = ({ config }: Props) => {
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "11px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",

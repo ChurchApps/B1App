@@ -418,7 +418,7 @@ export const GroupChatModal = ({
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "11px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",
@@ -515,8 +515,7 @@ export const GroupChatModal = ({
                 py: 1,
                 borderRadius: "18px",
                 borderBottomLeftRadius: !isMine ? "4px" : "18px",
-                borderBottomRightRadius: isMine ? "4px" : "18px",
-                boxShadow: mobileTheme.shadows.sm
+                borderBottomRightRadius: isMine ? "4px" : "18px"
               }}
             >
               {showName && name && (
@@ -544,10 +543,10 @@ export const GroupChatModal = ({
                         gap: "2px",
                         px: "6px",
                         height: 20,
-                        borderRadius: "10px",
+                        borderRadius: "999px",
                         cursor: "pointer",
-                        fontSize: 12,
-                        fontWeight: 600,
+                        fontSize: 10.5,
+                        fontWeight: 700,
                         bgcolor: r.mine ? tc.primaryLight : (isMine ? "rgba(255,255,255,0.2)" : tc.iconBackground),
                         color: r.mine ? tc.primary : (isMine ? "#fff" : tc.text),
                         border: r.mine ? `1px solid ${tc.primary}` : "1px solid transparent"

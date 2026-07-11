@@ -53,8 +53,8 @@ const SurfaceCard = ({ children, sx }: { children: React.ReactNode; sx?: object 
   <Box
     sx={{
       bgcolor: tc.surface,
+      border: `1px solid ${tc.border}`,
       borderRadius: `${radius.lg}px`,
-      boxShadow: shadows.sm,
       overflow: "hidden",
       mb: `${spacing.sm + 4}px`,
       ...sx
@@ -79,7 +79,7 @@ const IconCircle = ({
     sx={{
       width: size,
       height: size,
-      borderRadius: "50%",
+      borderRadius: "11px",
       bgcolor: bg,
       display: "flex",
       alignItems: "center",
@@ -102,8 +102,8 @@ const ScreenSubhead = ({
   <Box
     sx={{
       bgcolor: tc.surface,
+      border: `1px solid ${tc.border}`,
       borderRadius: `${radius.xl}px`,
-      boxShadow: shadows.sm,
       px: `${spacing.lg}px`,
       py: `${spacing.lg}px`,
       mb: `${spacing.md}px`,
@@ -133,8 +133,8 @@ const EmptyState = ({
   <Box
     sx={{
       bgcolor: tc.surface,
+      border: `1px solid ${tc.border}`,
       borderRadius: `${radius.xl}px`,
-      boxShadow: shadows.sm,
       p: `${spacing.lg}px`,
       textAlign: "center"
     }}
@@ -329,8 +329,8 @@ const GroupsStep = ({
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${radius.xl}px`,
-          boxShadow: shadows.sm,
           px: `${spacing.lg}px`,
           py: `${spacing.lg}px`,
           mb: `${spacing.md}px`,
@@ -621,8 +621,8 @@ const HouseholdStep = ({
                     borderRadius: "999px",
                     bgcolor: `${tc.success}1A`,
                     color: tc.success,
-                    fontSize: 11,
-                    fontWeight: 600,
+                    fontSize: 10.5,
+                    fontWeight: 700,
                     mb: !isExpanded ? 0.5 : 0
                   }}
                 >
@@ -663,8 +663,8 @@ const HouseholdStep = ({
                               bgcolor: `${tc.primary}1A`,
                               color: tc.primary,
                               border: `1px solid ${tc.primary}`,
-                              fontSize: 12,
-                              fontWeight: 500
+                              fontSize: 10.5,
+                              fontWeight: 700
                             }}
                           >
                             {name}
@@ -835,7 +835,7 @@ const CompleteStep = ({ onDone }: { onDone: () => void }) => {
         justifyContent: "center",
         minHeight: "60vh",
         borderRadius: `${radius.xl}px`,
-        background: `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
+        background: mobileTheme.colorWash,
         p: `${spacing.xl}px`
       }}
     >

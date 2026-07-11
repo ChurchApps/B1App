@@ -58,7 +58,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
   };
 
   const renderSkeleton = (i: number) => (
-    <Box key={`sk-${i}`} sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.lg}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.md}px` }}>
+    <Box key={`sk-${i}`} sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }}>
       <Skeleton variant="text" width="60%" height={22} />
       <Skeleton variant="text" width="40%" height={14} />
       <Skeleton variant="rounded" width={100} height={32} sx={{ mt: 1 }} />
@@ -66,8 +66,8 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
   );
 
   const renderEmpty = () => (
-    <Box sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.xl}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
-      <Box sx={{ width: 64, height: 64, borderRadius: "32px", bgcolor: tc.iconBackground, display: "inline-flex", alignItems: "center", justifyContent: "center", mb: `${mobileTheme.spacing.md}px` }}>
+    <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.xl}px`, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
+      <Box sx={{ width: 64, height: 64, borderRadius: "11px", bgcolor: tc.iconBackground, display: "inline-flex", alignItems: "center", justifyContent: "center", mb: `${mobileTheme.spacing.md}px` }}>
         <Icon sx={{ fontSize: 32, color: tc.primary }}>event_available</Icon>
       </Box>
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>{Locale.label("registration.mine.emptyTitle")}</Typography>
@@ -86,7 +86,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
     const hasBalance = !isCancelled && reg.status !== "waitlisted" && balance > 0;
 
     return (
-      <Box key={reg.id} sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.lg}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.md}px`, opacity: isCancelled ? 0.65 : 1 }}>
+      <Box key={reg.id} sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px`, opacity: isCancelled ? 0.65 : 1 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.25 }}>{eventTitle}</Typography>
@@ -97,7 +97,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
               </Typography>
             )}
           </Box>
-          <Box sx={{ px: 1, py: 0.25, borderRadius: "999px", bgcolor: `${statusColor}1A`, color: statusColor, fontSize: 11, fontWeight: 600, textTransform: "capitalize", whiteSpace: "nowrap" }}>
+          <Box sx={{ px: 1, py: 0.25, borderRadius: "999px", bgcolor: `${statusColor}1A`, color: statusColor, fontSize: 10.5, fontWeight: 700, textTransform: "capitalize", whiteSpace: "nowrap" }}>
             {reg.status || "registered"}
           </Box>
         </Box>

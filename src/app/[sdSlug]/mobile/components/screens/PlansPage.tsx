@@ -14,7 +14,6 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { BlockoutDatesSection } from "../plans/BlockoutDatesSection";
-import { shadePrimary } from "../util";
 
 interface Props {
   config: ConfigurationInterface;
@@ -153,20 +152,17 @@ export const PlansPage = ({ config: _config }: Props) => {
   }, [upcomingAssignments, upcomingRows]);
 
   const renderHero = () => {
-    const gradientFrom = shadePrimary(tc.primary, -12);
-    const gradientTo = shadePrimary(tc.primary, 18);
     return (
       <Box
         sx={{
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
           mb: `${mobileTheme.spacing.lg}px`,
-          background: `linear-gradient(135deg, ${gradientFrom} 0%, ${gradientTo} 100%)`,
+          background: mobileTheme.verseGradient,
           p: `${mobileTheme.spacing.lg}px`,
           minHeight: 180,
           color: "#FFFFFF",
           textAlign: "center",
-          boxShadow: mobileTheme.shadows.md,
           display: "flex",
           alignItems: "center",
           justifyContent: "center"
@@ -219,8 +215,8 @@ export const PlansPage = ({ config: _config }: Props) => {
       sx={{
         flex: 1,
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`,
         textAlign: "center"
       }}
@@ -233,7 +229,7 @@ export const PlansPage = ({ config: _config }: Props) => {
         </>
       ) : (
         <>
-          <Typography sx={{ fontSize: 24, fontWeight: 800, color: tc.text, mt: 1, mb: 0.5 }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 800, color: tc.text, mt: 1, mb: 0.5, fontVariantNumeric: "tabular-nums" }}>
             {value}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, fontWeight: 500 }}>
@@ -268,12 +264,11 @@ export const PlansPage = ({ config: _config }: Props) => {
         }}
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.xl}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           cursor: "pointer",
-          transition: "box-shadow 150ms ease, transform 150ms ease",
-          "&:hover": { boxShadow: mobileTheme.shadows.md },
+          transition: "transform 150ms ease",
           "&:active": { transform: "scale(0.995)" }
         }}
       >
@@ -341,8 +336,8 @@ export const PlansPage = ({ config: _config }: Props) => {
       key={`sk-${key}`}
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`
       }}
     >
@@ -361,8 +356,8 @@ export const PlansPage = ({ config: _config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`
       }}
     >
@@ -415,13 +410,11 @@ export const PlansPage = ({ config: _config }: Props) => {
         alignItems: "center",
         gap: `${mobileTheme.spacing.md}px`,
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         px: `${mobileTheme.spacing.md}px`,
         py: "16px",
-        cursor: "pointer",
-        transition: "box-shadow 150ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.md }
+        cursor: "pointer"
       }}
     >
       <Icon sx={{ color: tc.primary, fontSize: 32 }}>volunteer_activism</Icon>
@@ -442,8 +435,8 @@ export const PlansPage = ({ config: _config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           mb: `${mobileTheme.spacing.md}px`
         }}
       >

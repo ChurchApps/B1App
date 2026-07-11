@@ -107,22 +107,9 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
           height: 220,
           borderRadius: "20px",
           overflow: "hidden",
-          bgcolor: hasPhoto ? "transparent" : tc.primary,
-          boxShadow: mobileTheme.shadows.lg
+          background: hasPhoto ? `url(${group!.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
         }}
       >
-        {hasPhoto ? (
-          <Box
-            component="img"
-            src={group!.photoUrl}
-            alt={group?.name || Locale.label("mobile.components.group")}
-            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon sx={{ fontSize: 48, color: "#FFFFFF" }}>groups</Icon>
-          </Box>
-        )}
         <Box
           sx={{
             position: "absolute",
@@ -131,7 +118,7 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
             bottom: 0,
             px: "20px",
             py: "20px",
-            background: "rgba(0,0,0,0.6)"
+            background: "linear-gradient(transparent, rgba(7,14,27,0.78))"
           }}
         >
           <Typography
@@ -139,8 +126,7 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
               fontSize: 26,
               fontWeight: 800,
               color: "#FFFFFF",
-              lineHeight: 1.2,
-              textShadow: "0 1px 3px rgba(0,0,0,0.4)"
+              lineHeight: 1.2
             }}
           >
             {group?.name}
@@ -156,8 +142,8 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -201,8 +187,8 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -265,8 +251,8 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -334,8 +320,8 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -348,8 +334,8 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}

@@ -110,7 +110,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   const churchName = config?.church?.name || "";
   const logoLight = config?.appearance?.logoLight;
-  const primaryColor = config?.appearance?.primaryColor || tc.primary;
 
   useEffect(() => {
     if (resendCooldown <= 0) return;
@@ -635,42 +634,33 @@ export const MobileLoginScreen = ({ config }: Props) => {
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", pb: `${spacing.xl}px` }}>
-      <Box sx={{ px: `${spacing.md}px`, pt: `${spacing.lg}px`, pb: `${spacing.md}px` }}>
-        <Box
-          sx={{
-            borderRadius: `${radius.xl}px`,
-            overflow: "hidden",
-            backgroundColor: primaryColor,
-            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0.18) 100%)",
-            boxShadow: shadows.lg,
-            px: `${spacing.lg}px`,
-            py: `${spacing.xl}px`,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            minHeight: 180
-          }}
-        >
-          {logoLight ? (
-            <Box sx={{ bgcolor: tc.surface, borderRadius: `${radius.lg}px`, p: `${spacing.md}px`, mb: `${spacing.md}px`, boxShadow: shadows.sm }}>
-              <Box component="img" src={logoLight} alt={churchName || "Church logo"} sx={{ width: 160, height: 80, objectFit: "contain", display: "block" }} />
-            </Box>
-          ) : (
-            <Icon sx={{ color: tc.surface, fontSize: 48, mb: 1.5 }}>church</Icon>
-          )}
-          <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.surface, mb: 0.5 }}>
+      <Box sx={{ px: `${spacing.md}px`, pt: `${spacing.xl}px`, pb: `${spacing.lg}px`, textAlign: "center" }}>
+        {logoLight ? (
+          <Box component="img" src={logoLight} alt={churchName || "Church logo"} sx={{ height: 56, maxWidth: "60%", objectFit: "contain", mb: 2, mx: "auto", display: "block" }} />
+        ) : (
+          <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontSize: 28, fontWeight: 600, color: tc.text, mb: churchName ? "6px" : 0.5 }}>
             {heroTitle()}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.surface, opacity: 0.9, px: 1 }}>
-            {heroSubtitle()}
+        )}
+        {churchName && (
+          <Typography sx={{
+            fontSize: 11.5,
+            fontWeight: 700,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            color: tc.textSecondary,
+            mb: 1
+          }}>
+            {churchName}
           </Typography>
-        </Box>
+        )}
+        <Typography sx={{ fontSize: 14, color: tc.textSecondary, px: 1 }}>
+          {heroSubtitle()}
+        </Typography>
       </Box>
 
       <Box sx={{ px: `${spacing.md}px` }}>
-        <Box sx={{ bgcolor: tc.surface, borderRadius: `${radius.lg}px`, boxShadow: shadows.md, p: `${spacing.lg}px` }}>
+        <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${radius.lg}px`, p: `${spacing.lg}px` }}>
           {mode === "login" && renderLogin()}
           {mode === "register" && renderRegister()}
           {mode === "forgot" && renderForgot()}
