@@ -290,12 +290,15 @@
       "detailViewTitle": "Detaljer for {}",
       "dismiss": "Avvis",
       "editProfile": "Rediger profil",
+      "explore": "Utforsk",
       "featured": "Utvalgt",
       "group": "Gruppe",
+      "home": "Hjem",
       "lightMode": "Lys modus",
       "logout": "Logg ut",
       "member": "Medlem",
       "messages": "Meldinger",
+      "more": "Mer",
       "navigation": "Hovednavigasjon",
       "newMessage": "Ny melding",
       "noMessages": "Ingen meldinger ennå",
@@ -316,8 +319,16 @@
       "turnOn": "Slå på",
       "unknown": "Ukjent",
       "untitledSermon": "Preken uten tittel",
+      "verseOfTheDay": "Vers av dagen",
       "viewAllMessages": "Vis alle meldinger",
       "viewAllNotifications": "Vis alle varsler"
+    },
+    "dashboard": {
+      "goodAfternoon": "God ettermiddag",
+      "goodEvening": "God kveld",
+      "goodMorning": "God morgen",
+      "signInPrompt": "Logg inn for å se gruppene, gavene og mer.",
+      "welcome": "Velkommen"
     },
     "details": {
       "about": "Om",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Forespurt ID mangler eller er ugyldig.",
     "loading": "Laster",
     "mobileApp": "Mobil",
+    "more": {
+      "allOnDashboard": "Alt er på dashbordet ditt"
+    },
     "now": "nå",
     "plans": {
       "album": "Album",

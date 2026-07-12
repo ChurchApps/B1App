@@ -78,48 +78,11 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           paddingTop: "56.25%",
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
-          background: hasImage ? undefined : mobileTheme.colorWash
+          background: hasImage
+            ? `url(${playlist!.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}`
+            : mobileTheme.colorWash
         }}
       >
-        {hasImage && (
-          <Box
-            component="img"
-            src={playlist!.thumbnail!}
-            alt={playlist?.title || Locale.label("mobile.details.playlistFallback")}
-            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        )}
-        {!hasImage && (
-          <>
-            <Box sx={{
-              position: "absolute",
-              width: 150,
-              height: 150,
-              borderRadius: "75px",
-              bgcolor: "rgba(255,255,255,0.1)",
-              top: -30,
-              right: -30
-            }} />
-            <Box sx={{
-              position: "absolute",
-              width: 100,
-              height: 100,
-              borderRadius: "50px",
-              bgcolor: "rgba(255,255,255,0.08)",
-              bottom: -25,
-              left: -25
-            }} />
-            <Box sx={{
-              position: "absolute",
-              width: 80,
-              height: 80,
-              borderRadius: "40px",
-              bgcolor: "rgba(255,255,255,0.12)",
-              top: "40%",
-              left: "30%"
-            }} />
-          </>
-        )}
         <Box
           sx={{
             position: "absolute",

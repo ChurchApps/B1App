@@ -290,12 +290,15 @@
       "detailViewTitle": "Podrobnosti {}",
       "dismiss": "Zavřít",
       "editProfile": "Upravit profil",
+      "explore": "Prozkoumat",
       "featured": "Doporučené",
       "group": "Skupina",
+      "home": "Domů",
       "lightMode": "Světlý režim",
       "logout": "Odhlásit se",
       "member": "Člen",
       "messages": "Zprávy",
+      "more": "Více",
       "navigation": "Hlavní navigace",
       "newMessage": "Nová zpráva",
       "noMessages": "Zatím žádné zprávy",
@@ -316,8 +319,16 @@
       "turnOn": "Zapnout",
       "unknown": "Neznámý",
       "untitledSermon": "Kázání bez názvu",
+      "verseOfTheDay": "Verš dne",
       "viewAllMessages": "Zobrazit všechny zprávy",
       "viewAllNotifications": "Zobrazit všechna oznámení"
+    },
+    "dashboard": {
+      "goodAfternoon": "Dobré odpoledne",
+      "goodEvening": "Dobrý večer",
+      "goodMorning": "Dobré ráno",
+      "signInPrompt": "Přihlaste se, abyste viděli své skupiny, dávky a další.",
+      "welcome": "Vítejte"
     },
     "details": {
       "about": "O skupině",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Požadované ID chybí nebo je neplatné.",
     "loading": "Načítání",
     "mobileApp": "Mobil",
+    "more": {
+      "allOnDashboard": "Vše je na vašem panelu"
+    },
     "now": "nyní",
     "plans": {
       "album": "Album",

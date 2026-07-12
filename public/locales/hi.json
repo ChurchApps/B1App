@@ -290,12 +290,15 @@
       "detailViewTitle": "{} विवरण",
       "dismiss": "खारिज करें",
       "editProfile": "प्रोफ़ाइल संपादित करें",
+      "explore": "अन्वेषण करें",
       "featured": "विशेष",
       "group": "समूह",
+      "home": "होम",
       "lightMode": "लाइट मोड",
       "logout": "लॉगआउट",
       "member": "सदस्य",
       "messages": "संदेश",
+      "more": "अधिक",
       "navigation": "मुख्य नेविगेशन",
       "newMessage": "नया संदेश",
       "noMessages": "अभी तक कोई संदेश नहीं",
@@ -316,8 +319,16 @@
       "turnOn": "चालू करें",
       "unknown": "अज्ञात",
       "untitledSermon": "बिना शीर्षक उपदेश",
+      "verseOfTheDay": "आज का पद",
       "viewAllMessages": "सभी संदेश देखें",
       "viewAllNotifications": "सभी सूचनाएँ देखें"
+    },
+    "dashboard": {
+      "goodAfternoon": "शुभ दोपहर",
+      "goodEvening": "शुभ संध्या",
+      "goodMorning": "सुप्रभात",
+      "signInPrompt": "अपने समूह, दान और अधिक देखने के लिए साइन इन करें।",
+      "welcome": "स्वागत है"
     },
     "details": {
       "about": "के बारे में",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "अनुरोधित ID अनुपस्थित या अमान्य है।",
     "loading": "लोड हो रहा है",
     "mobileApp": "मोबाइल",
+    "more": {
+      "allOnDashboard": "सब कुछ आपके डैशबोर्ड पर है"
+    },
     "now": "अभी",
     "plans": {
       "album": "एल्बम",

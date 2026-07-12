@@ -20,8 +20,9 @@ export const MobileTabBar = ({ links, onMore }: Props) => {
   const slug = mobileSlugFromPath(pathname);
   const tc = mobileTheme.colors;
 
+  // votd is excluded because the dashboard verse card is its entry point.
   const tabLinks = links
-    .filter((l) => l.linkType !== "separator" && l.linkType !== "url" && l.linkType !== "page")
+    .filter((l) => l.linkType !== "separator" && l.linkType !== "url" && l.linkType !== "page" && l.linkType !== "votd")
     .map((l) => ({ link: l, route: linkTypeToRoute(l.linkType, l.linkData, l.text, l.url) }))
     .filter((t): t is { link: LinkInterface; route: string } => !!t.route && !t.route.startsWith("http"))
     .slice(0, MAX_LINK_TABS);

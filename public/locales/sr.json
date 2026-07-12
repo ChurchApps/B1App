@@ -290,12 +290,15 @@
       "detailViewTitle": "Детаљи о {}",
       "dismiss": "Одбаци",
       "editProfile": "Измени профил",
+      "explore": "Истраживати",
       "featured": "Истакнуто",
       "group": "Група",
+      "home": "Дом",
       "lightMode": "Светли режим",
       "logout": "Одјава",
       "member": "Члан",
       "messages": "Поруке",
+      "more": "Више",
       "navigation": "Главна навигација",
       "newMessage": "Нова порука",
       "noMessages": "Још нема порука",
@@ -316,8 +319,16 @@
       "turnOn": "Укључи",
       "unknown": "Непознато",
       "untitledSermon": "Безимена проповед",
+      "verseOfTheDay": "Стих дана",
       "viewAllMessages": "Погледај све поруке",
       "viewAllNotifications": "Погледај сва обавештења"
+    },
+    "dashboard": {
+      "goodAfternoon": "Добра послехдн",
+      "goodEvening": "Добра вечер",
+      "goodMorning": "Добро јутро",
+      "signInPrompt": "Пријавите се да видите своје групе, дарове и még.",
+      "welcome": "Добродошли"
     },
     "details": {
       "about": "О групи",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Тражени ID недостаје или је неисправан.",
     "loading": "Учитавање",
     "mobileApp": "Мобилни",
+    "more": {
+      "allOnDashboard": "Све је на вашој таблули"
+    },
     "now": "сада",
     "plans": {
       "album": "Албум",

@@ -9,7 +9,7 @@ import { Locale, PersonHelper } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, SCREEN_TITLES, mobileSlugFromPath } from "./mobileTheme";
-import { getInitials } from "./util";
+import { getInitials, navigateBack } from "./util";
 import { NotificationBellMenu } from "./NotificationBellMenu";
 import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
 
@@ -84,7 +84,7 @@ export const MobileAppBar = ({ drawerWidth, onAvatarClick }: Props) => {
   if (isDashboard) return null;
 
   const handleBack = () => {
-    router.push("/mobile/dashboard");
+    navigateBack(router, "/mobile/dashboard");
   };
 
   return (

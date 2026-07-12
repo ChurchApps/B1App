@@ -75,6 +75,7 @@ export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<stri
       membersSearch: Locale.label("mobile.screenTitles.directory"),
       community: Locale.label("mobile.screenTitles.directory"),
       memberDetail: Locale.label("mobile.screenTitles.memberDetail"),
+      more: Locale.label("mobile.components.more"),
       plan: Locale.label("mobile.screenTitles.plans"),
       plans: Locale.label("mobile.screenTitles.plans"),
       planDetails: Locale.label("mobile.screenTitles.planDetails"),
@@ -111,21 +112,6 @@ export const mobileSlugFromPath = (pathname: string | null | undefined): string 
   const idx = parts.indexOf("mobile");
   if (idx === -1) return "";
   return parts[idx + 1] || "dashboard";
-};
-
-export const linkTypeToImage = (linkType?: string, text?: string): string => {
-  if (text && text.toLowerCase() === "chums") return "/mobile/images/dash_chums.png";
-  switch ((linkType || "").toLowerCase()) {
-    case "groups": return "/mobile/images/dash_worship.png";
-    case "bible": return "/mobile/images/dash_bible.png";
-    case "votd": return "/mobile/images/dash_votd.png";
-    case "lessons": return "/mobile/images/dash_lessons.png";
-    case "checkin": return "/mobile/images/dash_checkin.png";
-    case "donation": return "/mobile/images/dash_donation.png";
-    case "directory": return "/mobile/images/dash_directory.png";
-    case "plans": return "/mobile/images/dash_votd.png";
-    default: return "/mobile/images/dash_url.png";
-  }
 };
 
 export const linkTypeToRoute = (

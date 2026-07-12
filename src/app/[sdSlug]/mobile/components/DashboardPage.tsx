@@ -14,6 +14,7 @@ import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
 import { useEngagementSort } from "../hooks/useEngagementSort";
 import { EmptyDashboardPlaceholder } from "./EmptyDashboardPlaceholder";
 import { loadDailyVerse, type DailyVerse } from "../helpers/dailyVerses";
+import { dashboardBaseLinks, hasVotdLink as checkVotdLink, FEATURED_COUNT, splitExplore } from "../helpers/dashboardLinks";
 import { useMobileThemeMode } from "./MobileThemeProvider";
 
 interface Props {
@@ -21,7 +22,6 @@ interface Props {
 }
 
 const ENGAGEMENT_STORAGE_KEY = "b1app-link-view-counts";
-export const HOME_TABS_COUNT = 7;
 
 const generateLinkId = (item: LinkInterface): string => item.id || `${item.linkType}_${item.text}`;
 
@@ -129,15 +129,15 @@ const VerseCard = ({ verse, onClick }: { verse: DailyVerse; onClick: () => void 
       pb: "16px",
       mb: 2,
       cursor: "pointer",
-      "&::before": {
-        content: '"“"',
+      "&::after": {
+        content: '""',
         position: "absolute",
-        top: -34,
-        right: 2,
-        fontFamily: mobileTheme.fonts.serif,
-        fontSize: 150,
-        lineHeight: 1,
-        color: "rgba(255,255,255,0.12)"
+        bottom: -70,
+        left: -40,
+        width: 180,
+        height: 180,
+        borderRadius: "50%",
+        border: "26px solid rgba(255,255,255,0.05)"
       }
     }}
   >
@@ -197,7 +197,7 @@ export const DashboardPage = ({ config }: Props) => {
   }, [rawLinks, context?.userChurch]);
 
   // The verse card is the church's VOTD feature on the dashboard — hidden when the church removed the link.
-  const hasVotdLink = useMemo(() => links.some((l) => l.linkType === "votd"), [links]);
+  const hasVotdLink = useMemo(() => checkVotdLink(links), [links]);
 
   React.useEffect(() => {
     if (!hasVotdLink) {
@@ -211,9 +211,14 @@ export const DashboardPage = ({ config }: Props) => {
 
   const loading = isLoading && links.length === 0;
 
+  // Hero + featured stay in the church's configured order (stable spatial memory);
+  // only the Explore grid adapts to engagement.
+  const base = useMemo(() => dashboardBaseLinks(links), [links]);
+  const rest = useMemo(() => base.slice(FEATURED_COUNT), [base]);
+
   const getLinkId = useCallback((link: LinkInterface) => generateLinkId(link), []);
-  const { sorted: filtered, increment: incrementViewCount } = useEngagementSort(
-    links,
+  const { sorted: sortedRest, increment: incrementViewCount } = useEngagementSort(
+    rest,
     ENGAGEMENT_STORAGE_KEY,
     getLinkId
   );
@@ -237,13 +242,10 @@ export const DashboardPage = ({ config }: Props) => {
     }
   };
 
-  // The verse card is the VOTD entry point, so the votd link doesn't also get a media card.
-  const displayLinks = hasVotdLink ? filtered.filter((l) => l.linkType !== "votd") : filtered;
-  const featured = displayLinks.slice(0, 3);
+  const featured = base.slice(0, FEATURED_COUNT);
   const hero = featured[0];
-  const featuredTwo = featured.slice(1, 3);
-  const showMoreCard = displayLinks.length > HOME_TABS_COUNT;
-  const others = showMoreCard ? displayLinks.slice(3, HOME_TABS_COUNT) : displayLinks.slice(3);
+  const featuredTwo = featured.slice(1, FEATURED_COUNT);
+  const { explore: others, showMore: showMoreCard } = splitExplore(sortedRest);
 
   const logoLight = config?.appearance?.logoLight;
   const logoDark = (config?.appearance as any)?.logoDark;
@@ -263,9 +265,11 @@ export const DashboardPage = ({ config }: Props) => {
     );
   }
 
-  if (filtered.length === 0) {
+  if (links.length === 0) {
     return <EmptyDashboardPlaceholder config={config} />;
   }
+
+  const signedIn = !!(context?.user);
 
   return (
     <Box sx={{ minHeight: "100%", px: `${mobileTheme.spacing.md}px`, pt: 1.5, pb: 3 }}>
@@ -282,16 +286,47 @@ export const DashboardPage = ({ config }: Props) => {
         <MobileHeaderActions onAvatarClick={() => router.push("/mobile/profileEdit")} />
       </Box>
 
-      {firstName && greetingWord && (
-        <Box sx={{ mb: 2 }}>
+      {signedIn && firstName ? (
+        <Box sx={{ mb: 2, minHeight: 56 }}>
           {dateLine && <Typography sx={{ ...eyebrowSx, mb: "2px" }}>{dateLine}</Typography>}
           <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontSize: 30, fontWeight: 600, color: tc.text, lineHeight: 1.1 }}>
-            {greetingWord}, {firstName}
+            {greetingWord ? `${greetingWord}, ${firstName}` : " "}
           </Typography>
         </Box>
-      )}
+      ) : !signedIn ? (
+        <Box sx={{ mb: 2, display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 2 }}>
+          <Box sx={{ minWidth: 0 }}>
+            {dateLine && <Typography sx={{ ...eyebrowSx, mb: "2px" }}>{dateLine}</Typography>}
+            <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontSize: 30, fontWeight: 600, color: tc.text, lineHeight: 1.1 }}>
+              {Locale.label("mobile.dashboard.welcome")}
+            </Typography>
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, mt: "4px" }}>
+              {Locale.label("mobile.dashboard.signInPrompt")}
+            </Typography>
+          </Box>
+          <Box
+            component="a"
+            href="/mobile/login?returnUrl=%2Fmobile%2Fdashboard"
+            sx={{
+              flex: "none",
+              px: "18px",
+              py: "9px",
+              borderRadius: "999px",
+              bgcolor: tc.primary,
+              color: tc.onPrimary,
+              fontSize: 14,
+              fontWeight: 600,
+              textDecoration: "none"
+            }}
+          >
+            {Locale.label("mobile.components.signIn")}
+          </Box>
+        </Box>
+      ) : null}
 
-      {verse && <VerseCard verse={verse} onClick={() => router.push("/mobile/votd")} />}
+      {hasVotdLink && (verse
+        ? <VerseCard verse={verse} onClick={() => router.push("/mobile/votd")} />
+        : <Box sx={{ height: 132, borderRadius: `${mobileTheme.radius.xl}px`, bgcolor: tc.surfaceVariant, mb: 2 }} />)}
 
       {hero && (
         <Box sx={{ mb: featuredTwo.length > 0 ? "12px" : 3 }}>

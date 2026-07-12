@@ -290,12 +290,15 @@
       "detailViewTitle": "Podrobnosti {}",
       "dismiss": "Opusti",
       "editProfile": "Uredi profil",
+      "explore": "Raziskuj",
       "featured": "Izpostavljeno",
       "group": "Skupina",
+      "home": "Domov",
       "lightMode": "Svetli način",
       "logout": "Odjava",
       "member": "Član",
       "messages": "Sporočila",
+      "more": "Več",
       "navigation": "Glavna navigacija",
       "newMessage": "Novo sporočilo",
       "noMessages": "Še ni sporočil",
@@ -316,8 +319,16 @@
       "turnOn": "Vklopi",
       "unknown": "Neznano",
       "untitledSermon": "Pridiga brez naslova",
+      "verseOfTheDay": "Versikl dneva",
       "viewAllMessages": "Oglej si vsa sporočila",
       "viewAllNotifications": "Oglej si vsa obvestila"
+    },
+    "dashboard": {
+      "goodAfternoon": "Dober dan",
+      "goodEvening": "Dober večer",
+      "goodMorning": "Dobro jutro",
+      "signInPrompt": "Prijavite se, da vidite svoje skupine, darila in drugo.",
+      "welcome": "Dobrodošli"
     },
     "details": {
       "about": "O skupini",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Zahtevani ID manjka ali je neveljaven.",
     "loading": "Nalaganje",
     "mobileApp": "Mobilna",
+    "more": {
+      "allOnDashboard": "Vse je na nadzorni plošči"
+    },
     "now": "zdaj",
     "plans": {
       "album": "Album",

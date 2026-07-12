@@ -290,12 +290,15 @@
       "detailViewTitle": "Detail {}",
       "dismiss": "Tutup",
       "editProfile": "Edit Profil",
+      "explore": "Jelajahi",
       "featured": "Unggulan",
       "group": "Grup",
+      "home": "Beranda",
       "lightMode": "Mode Terang",
       "logout": "Keluar",
       "member": "Anggota",
       "messages": "Pesan",
+      "more": "Lainnya",
       "navigation": "Navigasi utama",
       "newMessage": "Pesan baru",
       "noMessages": "Belum ada pesan",
@@ -316,8 +319,16 @@
       "turnOn": "Aktifkan",
       "unknown": "Tidak Diketahui",
       "untitledSermon": "Khotbah Tanpa Judul",
+      "verseOfTheDay": "Ayat Hari Ini",
       "viewAllMessages": "Lihat semua pesan",
       "viewAllNotifications": "Lihat semua notifikasi"
+    },
+    "dashboard": {
+      "goodAfternoon": "Selamat sore",
+      "goodEvening": "Selamat malam",
+      "goodMorning": "Selamat pagi",
+      "signInPrompt": "Masuk untuk melihat grup, pemberian, dan lainnya.",
+      "welcome": "Selamat datang"
     },
     "details": {
       "about": "Tentang",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "ID yang diminta hilang atau tidak valid.",
     "loading": "Memuat",
     "mobileApp": "Mobile",
+    "more": {
+      "allOnDashboard": "Semuanya ada di dasbor Anda"
+    },
     "now": "sekarang",
     "plans": {
       "album": "Album",

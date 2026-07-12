@@ -290,12 +290,15 @@
       "detailViewTitle": "{} informacija",
       "dismiss": "Atmesti",
       "editProfile": "Redaguoti profilį",
+      "explore": "Tyrinėti",
       "featured": "Rekomenduojama",
       "group": "Grupė",
+      "home": "Pradžia",
       "lightMode": "Šviesus režimas",
       "logout": "Atsijungti",
       "member": "Narys",
       "messages": "Žinutės",
+      "more": "Daugiau",
       "navigation": "Pagrindinė navigacija",
       "newMessage": "Nauja žinutė",
       "noMessages": "Žinučių dar nėra",
@@ -316,8 +319,16 @@
       "turnOn": "Įjungti",
       "unknown": "Nežinoma",
       "untitledSermon": "Be pavadinimo pamokslas",
+      "verseOfTheDay": "Šio dne eilutė",
       "viewAllMessages": "Peržiūrėti visas žinutes",
       "viewAllNotifications": "Peržiūrėti visus pranešimus"
+    },
+    "dashboard": {
+      "goodAfternoon": "Gera diena",
+      "goodEvening": "Geras vakaras",
+      "goodMorning": "Gras rytas",
+      "signInPrompt": "Prisijunkite, kad pamatytumėte savo grupes, dovanas ir dar daugiau.",
+      "welcome": "Sveiki atvykę"
     },
     "details": {
       "about": "Apie",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Prašomo ID nėra arba jis netinkamas.",
     "loading": "Įkeliama",
     "mobileApp": "Mobilus",
+    "more": {
+      "allOnDashboard": "Viskas yra jūsų prietaisų skaičiuje"
+    },
     "now": "dabar",
     "plans": {
       "album": "Albumas",

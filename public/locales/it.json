@@ -290,12 +290,15 @@
       "detailViewTitle": "Dettaglio {}",
       "dismiss": "Ignora",
       "editProfile": "Modifica Profilo",
+      "explore": "Esplora",
       "featured": "In Evidenza",
       "group": "Gruppo",
+      "home": "Home",
       "lightMode": "Modalità Chiara",
       "logout": "Esci",
       "member": "Membro",
       "messages": "Messaggi",
+      "more": "Altro",
       "navigation": "Navigazione principale",
       "newMessage": "Nuovo messaggio",
       "noMessages": "Nessun messaggio ancora",
@@ -316,8 +319,16 @@
       "turnOn": "Attiva",
       "unknown": "Sconosciuto",
       "untitledSermon": "Sermone Senza Titolo",
+      "verseOfTheDay": "Versetto del giorno",
       "viewAllMessages": "Visualizza tutti i messaggi",
       "viewAllNotifications": "Visualizza tutte le notifiche"
+    },
+    "dashboard": {
+      "goodAfternoon": "Buongiorno",
+      "goodEvening": "Buonasera",
+      "goodMorning": "Buongiorno",
+      "signInPrompt": "Accedi per vedere i tuoi gruppi, donazioni e altro.",
+      "welcome": "Benvenuto"
     },
     "details": {
       "about": "Informazioni",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "L'ID richiesto è mancante o non valido.",
     "loading": "Caricamento",
     "mobileApp": "Mobile",
+    "more": {
+      "allOnDashboard": "Tutto è nel tuo dashboard"
+    },
     "now": "ora",
     "plans": {
       "album": "Album",

@@ -290,12 +290,15 @@
       "detailViewTitle": "Chi tiết {}",
       "dismiss": "Bỏ qua",
       "editProfile": "Chỉnh sửa hồ sơ",
+      "explore": "Khám phá",
       "featured": "Nổi bật",
       "group": "Nhóm",
+      "home": "Trang chủ",
       "lightMode": "Chế độ sáng",
       "logout": "Đăng xuất",
       "member": "Thành viên",
       "messages": "Tin nhắn",
+      "more": "Thêm",
       "navigation": "Điều hướng chính",
       "newMessage": "Tin nhắn mới",
       "noMessages": "Chưa có tin nhắn nào",
@@ -316,8 +319,16 @@
       "turnOn": "Bật",
       "unknown": "Không rõ",
       "untitledSermon": "Bài giảng không có tiêu đề",
+      "verseOfTheDay": "Câu Kinh Thánh Hôm Nay",
       "viewAllMessages": "Xem tất cả tin nhắn",
       "viewAllNotifications": "Xem tất cả thông báo"
+    },
+    "dashboard": {
+      "goodAfternoon": "Chào buổi chiều",
+      "goodEvening": "Chào buổi tối",
+      "goodMorning": "Chào buổi sáng",
+      "signInPrompt": "Đăng nhập để xem các nhóm, quyên góp và hơn thế nữa.",
+      "welcome": "Chào mừng"
     },
     "details": {
       "about": "Giới thiệu",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "ID được yêu cầu bị thiếu hoặc không hợp lệ.",
     "loading": "Đang tải",
     "mobileApp": "Di động",
+    "more": {
+      "allOnDashboard": "Mọi thứ đều có trong bảng điều khiển của bạn"
+    },
     "now": "vừa xong",
     "plans": {
       "album": "Album",

@@ -104,7 +104,9 @@ const MobileShellInner = ({ config, children }: Props) => {
         {isDashboard
           ? <Box sx={{ height: "env(safe-area-inset-top)" }} />
           : <Toolbar sx={{ minHeight: `calc(${mobileTheme.headerHeight}px + env(safe-area-inset-top)) !important` }} />}
-        {children}
+        <Box sx={{ maxWidth: 760, mx: "auto", width: "100%" }}>
+          {children}
+        </Box>
       </Box>
 
       <MobileTabBar links={links} onMore={() => setOpen(true)} />

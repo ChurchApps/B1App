@@ -290,12 +290,15 @@
       "detailViewTitle": "Szczegóły {}",
       "dismiss": "Odrzuć",
       "editProfile": "Edytuj profil",
+      "explore": "Odkryj",
       "featured": "Wyróżnione",
       "group": "Grupa",
+      "home": "Strona główna",
       "lightMode": "Tryb jasny",
       "logout": "Wyloguj",
       "member": "Członek",
       "messages": "Wiadomości",
+      "more": "Więcej",
       "navigation": "Nawigacja główna",
       "newMessage": "Nowa wiadomość",
       "noMessages": "Brak wiadomości",
@@ -316,8 +319,16 @@
       "turnOn": "Włącz",
       "unknown": "Nieznany",
       "untitledSermon": "Kazanie bez tytułu",
+      "verseOfTheDay": "Werset dnia",
       "viewAllMessages": "Zobacz wszystkie wiadomości",
       "viewAllNotifications": "Zobacz wszystkie powiadomienia"
+    },
+    "dashboard": {
+      "goodAfternoon": "Dzień dobry",
+      "goodEvening": "Dobry wieczór",
+      "goodMorning": "Dzień dobry",
+      "signInPrompt": "Zaloguj się, aby zobaczyć swoje grupy, darowizny i więcej.",
+      "welcome": "Witamy"
     },
     "details": {
       "about": "O grupie",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Żądany identyfikator jest brakujący lub nieprawidłowy.",
     "loading": "Ładowanie",
     "mobileApp": "Mobilna",
+    "more": {
+      "allOnDashboard": "Wszystko jest na twoim pulpicie"
+    },
     "now": "teraz",
     "plans": {
       "album": "Album",

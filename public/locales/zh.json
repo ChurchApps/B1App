@@ -290,12 +290,15 @@
       "detailViewTitle": "{} 详情",
       "dismiss": "忽略",
       "editProfile": "编辑个人资料",
+      "explore": "探索",
       "featured": "精选",
       "group": "小组",
+      "home": "家",
       "lightMode": "浅色模式",
       "logout": "退出登录",
       "member": "成员",
       "messages": "消息",
+      "more": "更多",
       "navigation": "主导航",
       "newMessage": "新消息",
       "noMessages": "暂无消息",
@@ -316,8 +319,16 @@
       "turnOn": "开启",
       "unknown": "未知",
       "untitledSermon": "未命名讲道",
+      "verseOfTheDay": "今日经文",
       "viewAllMessages": "查看所有消息",
       "viewAllNotifications": "查看所有通知"
+    },
+    "dashboard": {
+      "goodAfternoon": "下午好",
+      "goodEvening": "晚上好",
+      "goodMorning": "早上好",
+      "signInPrompt": "登录以查看您的小组、捐款等。",
+      "welcome": "欢迎"
     },
     "details": {
       "about": "关于",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "请求的 ID 缺失或无效。",
     "loading": "加载中",
     "mobileApp": "移动端",
+    "more": {
+      "allOnDashboard": "一切都在您的仪表板上"
+    },
     "now": "刚刚",
     "plans": {
       "album": "专辑",

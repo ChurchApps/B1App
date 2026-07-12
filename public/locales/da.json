@@ -290,12 +290,15 @@
       "detailViewTitle": "{} detalje",
       "dismiss": "Afvis",
       "editProfile": "Rediger profil",
+      "explore": "Udforskning",
       "featured": "Fremhævet",
       "group": "Gruppe",
+      "home": "Hjem",
       "lightMode": "Lys tilstand",
       "logout": "Log ud",
       "member": "Medlem",
       "messages": "Beskeder",
+      "more": "Mere",
       "navigation": "Hovednavigation",
       "newMessage": "Ny besked",
       "noMessages": "Ingen beskeder endnu",
@@ -316,8 +319,16 @@
       "turnOn": "Slå til",
       "unknown": "Ukendt",
       "untitledSermon": "Prædiken uden titel",
+      "verseOfTheDay": "Vers af dagen",
       "viewAllMessages": "Se alle beskeder",
       "viewAllNotifications": "Se alle notifikationer"
+    },
+    "dashboard": {
+      "goodAfternoon": "Godmiddag",
+      "goodEvening": "Godaften",
+      "goodMorning": "Godmorgen",
+      "signInPrompt": "Log ind for at se dine grupper, gaver og mere.",
+      "welcome": "Velkommen"
     },
     "details": {
       "about": "Om",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Det anmodede ID mangler eller er ugyldigt.",
     "loading": "Indlæser",
     "mobileApp": "Mobil",
+    "more": {
+      "allOnDashboard": "Alt er på dit dashboard"
+    },
     "now": "nu",
     "plans": {
       "album": "Album",

@@ -290,12 +290,15 @@
       "detailViewTitle": "{} detayı",
       "dismiss": "Kapat",
       "editProfile": "Profili Düzenle",
+      "explore": "Keşfet",
       "featured": "Öne Çıkanlar",
       "group": "Grup",
+      "home": "Anasayfa",
       "lightMode": "Açık Mod",
       "logout": "Çıkış Yap",
       "member": "Üye",
       "messages": "Mesajlar",
+      "more": "Daha fazla",
       "navigation": "Ana gezinme",
       "newMessage": "Yeni mesaj",
       "noMessages": "Henüz mesaj yok",
@@ -316,8 +319,16 @@
       "turnOn": "Aç",
       "unknown": "Bilinmiyor",
       "untitledSermon": "Başlıksız Vaaz",
+      "verseOfTheDay": "Günün Ayeti",
       "viewAllMessages": "Tüm mesajları görüntüle",
       "viewAllNotifications": "Tüm bildirimleri görüntüle"
+    },
+    "dashboard": {
+      "goodAfternoon": "İyi öğleler",
+      "goodEvening": "İyi akşamlar",
+      "goodMorning": "Günaydın",
+      "signInPrompt": "Gruplarınızı, bağışlarınızı ve daha fazlasını görmek için oturum açın.",
+      "welcome": "Hoş geldiniz"
     },
     "details": {
       "about": "Hakkında",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "İstenen kimlik eksik veya geçersiz.",
     "loading": "Yükleniyor",
     "mobileApp": "Mobil",
+    "more": {
+      "allOnDashboard": "Her şey panonuzda"
+    },
     "now": "şimdi",
     "plans": {
       "album": "Albüm",

@@ -290,12 +290,15 @@
       "detailViewTitle": "Деталі {}",
       "dismiss": "Відхилити",
       "editProfile": "Редагувати профіль",
+      "explore": "Дослідити",
       "featured": "Рекомендоване",
       "group": "Група",
+      "home": "Дім",
       "lightMode": "Світлий режим",
       "logout": "Вийти",
       "member": "Учасник",
       "messages": "Повідомлення",
+      "more": "Більше",
       "navigation": "Головна навігація",
       "newMessage": "Нове повідомлення",
       "noMessages": "Поки що немає повідомлень",
@@ -316,8 +319,16 @@
       "turnOn": "Увімкнути",
       "unknown": "Невідомо",
       "untitledSermon": "Проповідь без назви",
+      "verseOfTheDay": "Вірш дня",
       "viewAllMessages": "Переглянути всі повідомлення",
       "viewAllNotifications": "Переглянути всі сповіщення"
+    },
+    "dashboard": {
+      "goodAfternoon": "Добрий день",
+      "goodEvening": "Добрий вечір",
+      "goodMorning": "Доброго ранку",
+      "signInPrompt": "Увійдіть, щоб побачити свої групи, пожертвування та інше.",
+      "welcome": "Вітаємо"
     },
     "details": {
       "about": "Про",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Запитуваний ID відсутній або недійсний.",
     "loading": "Завантаження",
     "mobileApp": "Мобільний",
+    "more": {
+      "allOnDashboard": "Все на вашій панелі"
+    },
     "now": "зараз",
     "plans": {
       "album": "Альбом",

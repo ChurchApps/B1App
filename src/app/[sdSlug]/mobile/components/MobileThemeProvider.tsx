@@ -242,6 +242,7 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?:
         'html[data-mobile-theme="light"]': { colorScheme: "light" },
 
         "body": { margin: 0, backgroundColor: vars["--mb-background"], color: vars["--mb-text"] },
+        "@media (prefers-reduced-motion: reduce)": { "*, *::before, *::after": { transitionDuration: "0.01ms !important", animationDuration: "0.01ms !important" } },
         ...darkInputStyles
       }}
     />

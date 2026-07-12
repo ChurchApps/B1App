@@ -327,7 +327,12 @@
     "dashboard": {
       "goodAfternoon": "Good afternoon",
       "goodEvening": "Good evening",
-      "goodMorning": "Good morning"
+      "goodMorning": "Good morning",
+      "signInPrompt": "Sign in to see your groups, giving, and more.",
+      "welcome": "Welcome"
+    },
+    "more": {
+      "allOnDashboard": "Everything is on your dashboard"
     },
     "details": {
       "about": "About",

@@ -290,12 +290,15 @@
       "detailViewTitle": "Détails de {}",
       "dismiss": "Ignorer",
       "editProfile": "Modifier le profil",
+      "explore": "Explorer",
       "featured": "À la une",
       "group": "Groupe",
+      "home": "Accueil",
       "lightMode": "Mode clair",
       "logout": "Déconnexion",
       "member": "Membre",
       "messages": "Messages",
+      "more": "Plus",
       "navigation": "Navigation principale",
       "newMessage": "Nouveau message",
       "noMessages": "Aucun message pour le moment",
@@ -316,8 +319,16 @@
       "turnOn": "Activer",
       "unknown": "Inconnu",
       "untitledSermon": "Sermon sans titre",
+      "verseOfTheDay": "Verset du jour",
       "viewAllMessages": "Voir tous les messages",
       "viewAllNotifications": "Voir toutes les notifications"
+    },
+    "dashboard": {
+      "goodAfternoon": "Bon après-midi",
+      "goodEvening": "Bonsoir",
+      "goodMorning": "Bonjour",
+      "signInPrompt": "Connectez-vous pour voir vos groupes, vos dons et bien plus.",
+      "welcome": "Bienvenue"
     },
     "details": {
       "about": "À propos",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "L'identifiant demandé est manquant ou invalide.",
     "loading": "Chargement",
     "mobileApp": "Mobile",
+    "more": {
+      "allOnDashboard": "Tout est sur votre tableau de bord"
+    },
     "now": "maintenant",
     "plans": {
       "album": "Album",

@@ -290,12 +290,15 @@
       "detailViewTitle": "Детали {}",
       "dismiss": "Отклонить",
       "editProfile": "Редактировать профиль",
+      "explore": "Исследовать",
       "featured": "Избранное",
       "group": "Группа",
+      "home": "Дом",
       "lightMode": "Светлая тема",
       "logout": "Выйти",
       "member": "Участник",
       "messages": "Сообщения",
+      "more": "Больше",
       "navigation": "Главная навигация",
       "newMessage": "Новое сообщение",
       "noMessages": "Сообщений пока нет",
@@ -316,8 +319,16 @@
       "turnOn": "Включить",
       "unknown": "Неизвестно",
       "untitledSermon": "Проповедь без названия",
+      "verseOfTheDay": "Стих дня",
       "viewAllMessages": "Просмотреть все сообщения",
       "viewAllNotifications": "Просмотреть все уведомления"
+    },
+    "dashboard": {
+      "goodAfternoon": "Добрый день",
+      "goodEvening": "Добрый вечер",
+      "goodMorning": "Доброе утро",
+      "signInPrompt": "Войдите, чтобы увидеть свои группы, пожертвования и многое другое.",
+      "welcome": "Добро пожаловать"
     },
     "details": {
       "about": "О группе",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Запрошенный ID отсутствует или недействителен.",
     "loading": "Загрузка",
     "mobileApp": "Мобильное",
+    "more": {
+      "allOnDashboard": "Все на вашей панели"
+    },
     "now": "сейчас",
     "plans": {
       "album": "Альбом",

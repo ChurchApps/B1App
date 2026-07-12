@@ -7,8 +7,6 @@ import {
   Button,
   FormControlLabel,
   Grid,
-  Icon,
-  IconButton,
   Switch,
   TextField,
   Typography
@@ -18,7 +16,6 @@ import { RRuleEditor } from "@churchapps/apphelper/website";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { BookingPicker, emptyBookingSelection, type BookingSelection } from "../group/BookingPicker";
-import { navigateBack } from "../util";
 
 interface Props {
   config: ConfigurationInterface;
@@ -111,20 +108,9 @@ export const RequestEventPage = ({ config: _config }: Props) => {
     return "";
   };
 
-  const renderBack = () => (
-    <IconButton
-      aria-label={Locale.label("mobile.components.back")}
-      onClick={() => navigateBack(router, "/mobile/me")}
-      sx={{ width: 40, height: 40, bgcolor: tc.surface, color: tc.text, boxShadow: mobileTheme.shadows.sm, mb: `${mobileTheme.spacing.md}px`, "&:hover": { bgcolor: tc.surface } }}
-    >
-      <Icon>arrow_back</Icon>
-    </IconButton>
-  );
-
   if (outcome) {
     return (
       <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        {renderBack()}
         <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }} data-testid="request-outcome">
           <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 0.5 }}>{Locale.label("mobile.requests.outcomeTitle")}</Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>{Locale.label("mobile.requests.outcomeBody")}</Typography>
@@ -158,7 +144,6 @@ export const RequestEventPage = ({ config: _config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderBack()}
       <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px`, display: "flex", flexDirection: "column", gap: 2 }}>
         <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.requests.title")}</Typography>
         <TextField

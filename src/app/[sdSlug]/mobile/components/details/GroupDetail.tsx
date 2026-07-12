@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Icon,
-  IconButton,
   Skeleton,
   Tab,
   Tabs,
@@ -18,7 +17,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Permissions, type GroupInterface, type PlanInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { getInitials, navigateBack } from "../util";
+import { getInitials } from "../util";
 import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
 import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
 import { GroupResourcesTab } from "../group/GroupResourcesTab";
@@ -195,8 +194,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const canEditResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
   const canManageGroup = canEditResources;
 
-  const handleBack = () => navigateBack(router, "/mobile/groups");
-
   const handleMemberClick = (m: GroupMember) => {
     const pid = m.personId || m.person?.id;
     if (pid) router.push(`/mobile/community/${pid}`);
@@ -270,24 +267,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       </Box>
     );
   };
-
-  const renderBack = () => (
-    <IconButton
-      aria-label={Locale.label("mobile.components.back")}
-      onClick={handleBack}
-      sx={{
-        width: 40,
-        height: 40,
-        bgcolor: tc.surface,
-        color: tc.text,
-        boxShadow: mobileTheme.shadows.sm,
-        mb: `${mobileTheme.spacing.md}px`,
-        "&:hover": { bgcolor: tc.surface }
-      }}
-    >
-      <Icon>arrow_back</Icon>
-    </IconButton>
-  );
 
   const renderHero = () => {
     const memberCount = members?.length ?? 0;
@@ -649,7 +628,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderBack()}
       {group === undefined && renderSkeleton()}
       {group === null && renderNotFound()}
       {group && (

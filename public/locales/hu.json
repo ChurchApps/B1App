@@ -290,12 +290,15 @@
       "detailViewTitle": "{} részletei",
       "dismiss": "Elvetés",
       "editProfile": "Profil szerkesztése",
+      "explore": "Felfedezheti",
       "featured": "Kiemelt",
       "group": "Csoport",
+      "home": "Otthon",
       "lightMode": "Világos mód",
       "logout": "Kijelentkezés",
       "member": "Tag",
       "messages": "Üzenetek",
+      "more": "Több",
       "navigation": "Fő navigáció",
       "newMessage": "Új üzenet",
       "noMessages": "Még nincsenek üzenetek",
@@ -316,8 +319,16 @@
       "turnOn": "Bekapcsolás",
       "unknown": "Ismeretlen",
       "untitledSermon": "Cím nélküli prédikáció",
+      "verseOfTheDay": "A nap verse",
       "viewAllMessages": "Összes üzenet megtekintése",
       "viewAllNotifications": "Összes értesítés megtekintése"
+    },
+    "dashboard": {
+      "goodAfternoon": "Jó délutánt",
+      "goodEvening": "Jó estét",
+      "goodMorning": "Jó reggelt",
+      "signInPrompt": "Jelentkezzen be a csoportok, adományok és egyebek megtekintéséhez.",
+      "welcome": "Üdvözöljük"
     },
     "details": {
       "about": "Névjegy",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "A kért azonosító hiányzik vagy érvénytelen.",
     "loading": "Betöltés",
     "mobileApp": "Mobil",
+    "more": {
+      "allOnDashboard": "Minden a műszerfalon van"
+    },
     "now": "most",
     "plans": {
       "album": "Album",

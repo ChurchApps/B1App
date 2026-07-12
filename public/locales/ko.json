@@ -290,12 +290,15 @@
       "detailViewTitle": "{} 상세 정보",
       "dismiss": "닫기",
       "editProfile": "프로필 편집",
+      "explore": "탐색",
       "featured": "추천",
       "group": "그룹",
+      "home": "홈",
       "lightMode": "라이트 모드",
       "logout": "로그아웃",
       "member": "회원",
       "messages": "메시지",
+      "more": "더",
       "navigation": "주 탐색",
       "newMessage": "새 메시지",
       "noMessages": "아직 메시지가 없습니다",
@@ -316,8 +319,16 @@
       "turnOn": "켜기",
       "unknown": "알 수 없음",
       "untitledSermon": "제목 없는 설교",
+      "verseOfTheDay": "오늘의 말씀",
       "viewAllMessages": "모든 메시지 보기",
       "viewAllNotifications": "모든 알림 보기"
+    },
+    "dashboard": {
+      "goodAfternoon": "안녕하세요",
+      "goodEvening": "안녕하세요",
+      "goodMorning": "좋은 아침",
+      "signInPrompt": "로그인하여 그룹, 기부 등을 확인하세요.",
+      "welcome": "환영합니다"
     },
     "details": {
       "about": "소개",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "요청하신 ID가 없거나 유효하지 않습니다.",
     "loading": "로딩 중",
     "mobileApp": "모바일",
+    "more": {
+      "allOnDashboard": "모든 것이 대시보드에 있습니다"
+    },
     "now": "지금",
     "plans": {
       "album": "앨범",

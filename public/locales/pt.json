@@ -290,12 +290,15 @@
       "detailViewTitle": "Detalhes de {}",
       "dismiss": "Dispensar",
       "editProfile": "Editar Perfil",
+      "explore": "Explorar",
       "featured": "Em Destaque",
       "group": "Grupo",
+      "home": "Início",
       "lightMode": "Modo Claro",
       "logout": "Sair",
       "member": "Membro",
       "messages": "Mensagens",
+      "more": "Mais",
       "navigation": "Navegação principal",
       "newMessage": "Nova mensagem",
       "noMessages": "Nenhuma mensagem ainda",
@@ -316,8 +319,16 @@
       "turnOn": "Ativar",
       "unknown": "Desconhecido",
       "untitledSermon": "Sermão Sem Título",
+      "verseOfTheDay": "Versículo do dia",
       "viewAllMessages": "Ver todas as mensagens",
       "viewAllNotifications": "Ver todas as notificações"
+    },
+    "dashboard": {
+      "goodAfternoon": "Boa tarde",
+      "goodEvening": "Boa noite",
+      "goodMorning": "Bom dia",
+      "signInPrompt": "Entre para ver seus grupos, doações e muito mais.",
+      "welcome": "Bem-vindo"
     },
     "details": {
       "about": "Sobre",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "O ID solicitado está ausente ou é inválido.",
     "loading": "Carregando",
     "mobileApp": "Móvel",
+    "more": {
+      "allOnDashboard": "Tudo está no seu painel"
+    },
     "now": "agora",
     "plans": {
       "album": "Álbum",

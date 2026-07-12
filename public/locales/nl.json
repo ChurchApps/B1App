@@ -290,12 +290,15 @@
       "detailViewTitle": "Detail van {}",
       "dismiss": "Negeren",
       "editProfile": "Profiel bewerken",
+      "explore": "Verkennen",
       "featured": "Uitgelicht",
       "group": "Groep",
+      "home": "Thuis",
       "lightMode": "Lichte modus",
       "logout": "Uitloggen",
       "member": "Lid",
       "messages": "Berichten",
+      "more": "Meer",
       "navigation": "Hoofdnavigatie",
       "newMessage": "Nieuw bericht",
       "noMessages": "Nog geen berichten",
@@ -316,8 +319,16 @@
       "turnOn": "Inschakelen",
       "unknown": "Onbekend",
       "untitledSermon": "Preek zonder titel",
+      "verseOfTheDay": "Vers van de dag",
       "viewAllMessages": "Alle berichten bekijken",
       "viewAllNotifications": "Alle meldingen bekijken"
+    },
+    "dashboard": {
+      "goodAfternoon": "Goedemiddag",
+      "goodEvening": "Goedenavond",
+      "goodMorning": "Goedemorgen",
+      "signInPrompt": "Meld u aan om uw groepen, gaven en meer te zien.",
+      "welcome": "Welkom"
     },
     "details": {
       "about": "Over",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "De gevraagde ID ontbreekt of is ongeldig.",
     "loading": "Laden",
     "mobileApp": "Mobiel",
+    "more": {
+      "allOnDashboard": "Alles is op uw dashboard"
+    },
     "now": "nu",
     "plans": {
       "album": "Album",

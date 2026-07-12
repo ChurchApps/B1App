@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Box, Icon, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import type { SermonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "./mobileTheme";
@@ -34,27 +34,12 @@ export const SermonCard = ({ sermon, onClick }: Props) => {
         transition: "transform 120ms ease"
       }}
     >
-      <Box sx={{
-        position: "absolute",
-        top: 12,
-        right: 12,
-        bgcolor: "rgba(0,0,0,0.7)",
-        borderRadius: "20px",
-        width: 36,
-        height: 36,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }}>
-        <Icon sx={{ fontSize: 24, color: "#FFFFFF" }}>play_circle_filled</Icon>
-      </Box>
-
       {sermon.duration ? (
         <Box sx={{
           position: "absolute",
           top: 12,
-          left: 12,
-          bgcolor: "rgba(0,0,0,0.8)",
+          right: 12,
+          bgcolor: "rgba(0,0,0,0.6)",
           borderRadius: "999px",
           px: "10px",
           py: "5px"

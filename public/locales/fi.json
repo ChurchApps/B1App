@@ -290,12 +290,15 @@
       "detailViewTitle": "{} tiedot",
       "dismiss": "Hylkää",
       "editProfile": "Muokkaa profiilia",
+      "explore": "Tutustu",
       "featured": "Esillä",
       "group": "Ryhmä",
+      "home": "Koti",
       "lightMode": "Vaalea tila",
       "logout": "Kirjaudu ulos",
       "member": "Jäsen",
       "messages": "Viestit",
+      "more": "Lisää",
       "navigation": "Päänavigointi",
       "newMessage": "Uusi viesti",
       "noMessages": "Ei vielä viestejä",
@@ -316,8 +319,16 @@
       "turnOn": "Ota käyttöön",
       "unknown": "Tuntematon",
       "untitledSermon": "Nimetön saarna",
+      "verseOfTheDay": "Päivän jae",
       "viewAllMessages": "Näytä kaikki viestit",
       "viewAllNotifications": "Näytä kaikki ilmoitukset"
+    },
+    "dashboard": {
+      "goodAfternoon": "Hyvää iltapäivää",
+      "goodEvening": "Hyvää iltaa",
+      "goodMorning": "Hyvää huomenta",
+      "signInPrompt": "Kirjaudu sisään nähdäksesi ryhmäsi, lahjoituksesi ja paljon muuta.",
+      "welcome": "Tervetuloa"
     },
     "details": {
       "about": "Tietoja",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Pyydetty tunnus puuttuu tai on virheellinen.",
     "loading": "Ladataan",
     "mobileApp": "Mobiili",
+    "more": {
+      "allOnDashboard": "Kaikki on kojelaudallasi"
+    },
     "now": "nyt",
     "plans": {
       "album": "Albumi",

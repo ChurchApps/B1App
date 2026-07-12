@@ -290,12 +290,15 @@
       "detailViewTitle": "تفاصيل {}",
       "dismiss": "تجاهل",
       "editProfile": "تعديل الملف الشخصي",
+      "explore": "استكشف",
       "featured": "المميّزة",
       "group": "مجموعة",
+      "home": "الصفحة الرئيسية",
       "lightMode": "الوضع الفاتح",
       "logout": "تسجيل الخروج",
       "member": "عضو",
       "messages": "الرسائل",
+      "more": "المزيد",
       "navigation": "التنقل الرئيسي",
       "newMessage": "رسالة جديدة",
       "noMessages": "لا توجد رسائل بعد",
@@ -316,8 +319,16 @@
       "turnOn": "تشغيل",
       "unknown": "غير معروف",
       "untitledSermon": "عظة بدون عنوان",
+      "verseOfTheDay": "آية اليوم",
       "viewAllMessages": "عرض جميع الرسائل",
       "viewAllNotifications": "عرض جميع الإشعارات"
+    },
+    "dashboard": {
+      "goodAfternoon": "مساء الخير",
+      "goodEvening": "تمساء الخير",
+      "goodMorning": "صباح الخير",
+      "signInPrompt": "سجل الدخول لرؤية مجموعاتك والعطاءات والمزيد.",
+      "welcome": "أهلا وسهلا"
     },
     "details": {
       "about": "عن",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "المعرف المطلوب مفقود أو غير صالح.",
     "loading": "جارٍ التحميل",
     "mobileApp": "الجوال",
+    "more": {
+      "allOnDashboard": "كل شيء في لوحة التحكم الخاصة بك"
+    },
     "now": "الآن",
     "plans": {
       "album": "الألبوم",

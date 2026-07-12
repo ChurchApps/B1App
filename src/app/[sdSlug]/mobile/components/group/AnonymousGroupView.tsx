@@ -2,14 +2,13 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { navigateBack } from "../util";
 import { GroupContact } from "@/components/groups/GroupContact";
 
 interface Props {
@@ -76,26 +75,6 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
       .sort((a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime())
       .slice(0, 3);
   }, [events]);
-
-  const handleBack = () => navigateBack(router, "/mobile/groups");
-
-  const renderBack = () => (
-    <IconButton
-      aria-label={Locale.label("mobile.components.back")}
-      onClick={handleBack}
-      sx={{
-        width: 40,
-        height: 40,
-        bgcolor: tc.surface,
-        color: tc.text,
-        boxShadow: mobileTheme.shadows.sm,
-        mb: `${mobileTheme.spacing.md}px`,
-        "&:hover": { bgcolor: tc.surface }
-      }}
-    >
-      <Icon>arrow_back</Icon>
-    </IconButton>
-  );
 
   const renderHero = () => {
     const hasPhoto = !!group?.photoUrl;
@@ -372,7 +351,6 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderBack()}
       {groupLoading && renderSkeleton()}
       {!groupLoading && !group && renderNotFound()}
       {group && (

@@ -290,12 +290,15 @@
       "detailViewTitle": "{} 詳細",
       "dismiss": "閉じる",
       "editProfile": "プロフィールを編集",
+      "explore": "探索",
       "featured": "注目",
       "group": "グループ",
+      "home": "ホーム",
       "lightMode": "ライトモード",
       "logout": "ログアウト",
       "member": "メンバー",
       "messages": "メッセージ",
+      "more": "もっと",
       "navigation": "メインナビゲーション",
       "newMessage": "新しいメッセージ",
       "noMessages": "まだメッセージはありません",
@@ -316,8 +319,16 @@
       "turnOn": "オンにする",
       "unknown": "不明",
       "untitledSermon": "無題の説教",
+      "verseOfTheDay": "本日の聖句",
       "viewAllMessages": "すべてのメッセージを表示",
       "viewAllNotifications": "すべての通知を表示"
+    },
+    "dashboard": {
+      "goodAfternoon": "こんにちは",
+      "goodEvening": "こんばんは",
+      "goodMorning": "おはよう",
+      "signInPrompt": "グループ、寄付などを表示するにはサインインしてください。",
+      "welcome": "ようこそ"
     },
     "details": {
       "about": "概要",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "リクエストされたIDが見つからないか無効です。",
     "loading": "読み込み中",
     "mobileApp": "モバイル",
+    "more": {
+      "allOnDashboard": "すべてがダッシュボードにあります"
+    },
     "now": "現在",
     "plans": {
       "album": "アルバム",

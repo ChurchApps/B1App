@@ -290,12 +290,15 @@
       "detailViewTitle": "Detalye ng {}",
       "dismiss": "I-dismiss",
       "editProfile": "I-edit ang Profile",
+      "explore": "Tuklasin",
       "featured": "Itinatampok",
       "group": "Grupo",
+      "home": "Tahanan",
       "lightMode": "Light Mode",
       "logout": "Mag-logout",
       "member": "Miyembro",
       "messages": "Mga Mensahe",
+      "more": "Marami",
       "navigation": "Pangunahing navigation",
       "newMessage": "Bagong mensahe",
       "noMessages": "Wala pang mensahe",
@@ -316,8 +319,16 @@
       "turnOn": "I-on",
       "unknown": "Hindi alam",
       "untitledSermon": "Walang Pamagat na Sermon",
+      "verseOfTheDay": "Araw ng Bersikulo",
       "viewAllMessages": "Tingnan lahat ng mensahe",
       "viewAllNotifications": "Tingnan lahat ng notification"
+    },
+    "dashboard": {
+      "goodAfternoon": "Magandang hapon",
+      "goodEvening": "Magandang gabi",
+      "goodMorning": "Magandang umaga",
+      "signInPrompt": "Mag-sign in upang makita ang iyong mga grupo, pagbibigay, at higit pa.",
+      "welcome": "Maligayang pagdating"
     },
     "details": {
       "about": "Tungkol Sa",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Nawawala o hindi wasto ang hiniling na ID.",
     "loading": "Naglo-load",
     "mobileApp": "Mobile",
+    "more": {
+      "allOnDashboard": "Lahat ay nasa iyong dashboard"
+    },
     "now": "ngayon",
     "plans": {
       "album": "Album",

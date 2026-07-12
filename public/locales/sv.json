@@ -290,12 +290,15 @@
       "detailViewTitle": "{} detalj",
       "dismiss": "Avvisa",
       "editProfile": "Redigera profil",
+      "explore": "Utforska",
       "featured": "Utvalt",
       "group": "Grupp",
+      "home": "Hem",
       "lightMode": "Ljust läge",
       "logout": "Logga ut",
       "member": "Medlem",
       "messages": "Meddelanden",
+      "more": "Mer",
       "navigation": "Huvudnavigering",
       "newMessage": "Nytt meddelande",
       "noMessages": "Inga meddelanden ännu",
@@ -316,8 +319,16 @@
       "turnOn": "Slå på",
       "unknown": "Okänd",
       "untitledSermon": "Predikan utan titel",
+      "verseOfTheDay": "Dagens vers",
       "viewAllMessages": "Visa alla meddelanden",
       "viewAllNotifications": "Visa alla aviseringar"
+    },
+    "dashboard": {
+      "goodAfternoon": "Gott eftermiddag",
+      "goodEvening": "Gott kväll",
+      "goodMorning": "God morgon",
+      "signInPrompt": "Logga in för att se dina grupper, gåvor och mer.",
+      "welcome": "Välkommen"
     },
     "details": {
       "about": "Om",
@@ -577,6 +588,9 @@
     "invalidLinkDescription": "Det begärda ID:t saknas eller är ogiltigt.",
     "loading": "Laddar",
     "mobileApp": "Mobil",
+    "more": {
+      "allOnDashboard": "Allt är på din instrumentpanel"
+    },
     "now": "nu",
     "plans": {
       "album": "Album",
