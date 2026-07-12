@@ -108,7 +108,9 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
                     sx={{
                       bgcolor: on ? tc.primary : tc.iconBackground,
                       color: on ? tc.onPrimary : tc.text,
-                      fontWeight: 500,
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                      borderRadius: "999px",
                       "&:hover": { bgcolor: on ? tc.primary : tc.iconBackground }
                     }}
                     size="small"

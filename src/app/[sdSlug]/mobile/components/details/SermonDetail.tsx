@@ -172,8 +172,8 @@ export const SermonDetail = ({ id, config }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center",
             mt: 4
@@ -209,7 +209,6 @@ export const SermonDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
           bgcolor: tc.primary,
-          boxShadow: mobileTheme.shadows.md,
           mb: `${mobileTheme.spacing.md}px`,
           backgroundImage:
             sermon.thumbnail && !showPlayer ? `url(${sermon.thumbnail})` : undefined,
@@ -248,7 +247,7 @@ export const SermonDetail = ({ id, config }: Props) => {
               justifyContent: "center",
               background: sermon.thumbnail
                 ? "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 100%)"
-                : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`
+                : mobileTheme.colorWash
             }}
           >
             <PlayCircleFilledIcon sx={{ fontSize: 80, color: "#FFFFFF", opacity: 0.95 }} />
@@ -278,8 +277,8 @@ export const SermonDetail = ({ id, config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           mb: `${mobileTheme.spacing.md}px`
         }}

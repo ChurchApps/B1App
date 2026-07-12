@@ -48,10 +48,10 @@ export const EmptyDashboardPlaceholder = ({ config }: Props) => {
     }}>
       <Box sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
         p: 4,
         textAlign: "center",
-        boxShadow: mobileTheme.shadows.md,
         maxWidth: 440,
         width: "100%"
       }}>
@@ -66,7 +66,7 @@ export const EmptyDashboardPlaceholder = ({ config }: Props) => {
           <Box sx={{
             width: 72,
             height: 72,
-            borderRadius: "36px",
+            borderRadius: "20px",
             bgcolor: tc.iconBackground,
             display: "inline-flex",
             alignItems: "center",

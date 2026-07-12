@@ -3,6 +3,7 @@
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import {
+  Avatar,
   Box,
   Button,
   Icon,
@@ -49,8 +50,8 @@ export const CommunityPage = ({ config: _config }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center"
           }}
@@ -59,7 +60,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
             sx={{
               width: 64,
               height: 64,
-              borderRadius: "32px",
+              borderRadius: "19px",
               bgcolor: tc.iconBackground,
               display: "inline-flex",
               alignItems: "center",
@@ -181,43 +182,24 @@ export const CommunityPage = ({ config: _config }: Props) => {
     router.push(`/mobile/community/${p.id}`);
   };
 
-  const renderAvatar = (p: PersonInterface) => {
-    const photo = getPhoto(p);
-    const common = {
-      width: 48,
-      height: 48,
-      borderRadius: "24px",
-      flexShrink: 0,
-      overflow: "hidden",
-      mr: "16px"
-    } as const;
-    if (photo) {
-      return (
-        <Box
-          component="img"
-          src={photo}
-          alt={p.name?.display || "Member"}
-          sx={{ ...common, objectFit: "cover" }}
-        />
-      );
-    }
-    return (
-      <Box
-        sx={{
-          ...common,
-          bgcolor: tc.primaryLight,
-          color: tc.primary,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 700,
-          fontSize: 16
-        }}
-      >
-        {getInitials(p)}
-      </Box>
-    );
-  };
+  const renderAvatar = (p: PersonInterface) => (
+    <Avatar
+      src={getPhoto(p) || undefined}
+      alt={p.name?.display || "Member"}
+      sx={{
+        width: 48,
+        height: 48,
+        flexShrink: 0,
+        mr: "16px",
+        bgcolor: tc.primaryLight,
+        color: tc.primary,
+        fontWeight: 700,
+        fontSize: 16
+      }}
+    >
+      {getInitials(p)}
+    </Avatar>
+  );
 
   const renderCard = (p: PersonInterface) => {
     const first = p.name?.first || "";
@@ -239,13 +221,12 @@ export const CommunityPage = ({ config: _config }: Props) => {
           display: "flex",
           alignItems: "center",
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: "12px",
-          boxShadow: mobileTheme.shadows.sm,
           px: "16px",
           py: "12px",
           cursor: "pointer",
-          transition: "box-shadow 150ms ease, transform 150ms ease",
-          "&:hover": { boxShadow: mobileTheme.shadows.md },
+          transition: "transform 150ms ease",
           "&:active": { transform: "scale(0.995)" }
         }}
       >
@@ -272,7 +253,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
           sx={{
             width: 36,
             height: 36,
-            borderRadius: "18px",
+            borderRadius: "11px",
             bgcolor: tc.iconBackground,
             color: tc.textSecondary,
             display: "flex",
@@ -317,8 +298,8 @@ export const CommunityPage = ({ config: _config }: Props) => {
         display: "flex",
         alignItems: "center",
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: "12px",
-        boxShadow: mobileTheme.shadows.sm,
         px: "16px",
         py: "12px",
         mb: "8px"

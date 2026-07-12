@@ -21,7 +21,6 @@ export const StreamPage = ({ config }: Props) => {
       paddingTop: "56.25%",
       borderRadius: `${mobileTheme.radius.xl}px`,
       overflow: "hidden",
-      boxShadow: mobileTheme.shadows.md,
       bgcolor: "#000000"
     }}>
       <Box sx={{

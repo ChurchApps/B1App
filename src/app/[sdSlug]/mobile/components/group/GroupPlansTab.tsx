@@ -156,8 +156,8 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
               alignItems: "center",
               gap: `${mobileTheme.spacing.md}px`,
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
               p: `${mobileTheme.spacing.md}px`,
               textDecoration: "none",
               color: "inherit"

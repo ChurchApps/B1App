@@ -189,8 +189,8 @@ function DonatePageInner({ config }: Props) {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center"
           }}
@@ -199,7 +199,7 @@ function DonatePageInner({ config }: Props) {
             sx={{
               width: 64,
               height: 64,
-              borderRadius: "32px",
+              borderRadius: "11px",
               bgcolor: tc.iconBackground,
               display: "inline-flex",
               alignItems: "center",
@@ -221,16 +221,14 @@ function DonatePageInner({ config }: Props) {
   }
 
   const renderOverview = () => {
-    const gradient = `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`;
     return (
       <Box>
 
         <Box
           sx={{
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.md,
             p: `${mobileTheme.spacing.lg}px`,
-            background: gradient,
+            background: mobileTheme.verseGradient,
             color: tc.onPrimary,
             textAlign: "center",
             mb: `${mobileTheme.spacing.lg}px`,
@@ -245,7 +243,7 @@ function DonatePageInner({ config }: Props) {
               <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
                 Your Giving Impact
               </Typography>
-              <Typography sx={{ fontSize: 36, fontWeight: 800, mb: 1 }}>
+              <Typography sx={{ fontSize: 36, fontWeight: 800, mb: 1, fontVariantNumeric: "tabular-nums" }}>
                 {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)}
               </Typography>
               <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
@@ -284,7 +282,7 @@ function DonatePageInner({ config }: Props) {
                 mb: `${mobileTheme.spacing.md}px`
               }}
             >
-              <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>
+              <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary }}>
                 Recent Activity
               </Typography>
               <Button
@@ -303,8 +301,8 @@ function DonatePageInner({ config }: Props) {
             <Box
               sx={{
                 bgcolor: tc.surface,
+                border: `1px solid ${tc.border}`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
-                boxShadow: mobileTheme.shadows.sm,
                 p: `${mobileTheme.spacing.md}px`,
                 display: "flex",
                 alignItems: "center",
@@ -315,7 +313,7 @@ function DonatePageInner({ config }: Props) {
                 sx={{
                   width: 48,
                   height: 48,
-                  borderRadius: "24px",
+                  borderRadius: "11px",
                   bgcolor: tc.iconBackground,
                   display: "flex",
                   alignItems: "center",
@@ -370,8 +368,7 @@ function DonatePageInner({ config }: Props) {
           sx={{
             bgcolor: tc.surface,
             borderRadius: `${mobileTheme.radius.xl}px`,
-            boxShadow: mobileTheme.shadows.sm,
-            border: `1px solid ${tc.borderLight}`,
+            border: `1px solid ${tc.border}`,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center"
           }}
@@ -421,8 +418,8 @@ function DonatePageInner({ config }: Props) {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.md}px`
           }}
         >
@@ -447,8 +444,8 @@ function DonatePageInner({ config }: Props) {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -477,8 +474,8 @@ function DonatePageInner({ config }: Props) {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -538,8 +535,8 @@ function DonatePageInner({ config }: Props) {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.xl}px`,
-          boxShadow: mobileTheme.shadows.md,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -552,7 +549,7 @@ function DonatePageInner({ config }: Props) {
             gap: 1
           }}
         >
-          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.screens.giving")}</Typography>
+          <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary }}>{Locale.label("mobile.screens.giving")}</Typography>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
             <Button
               size="small"
@@ -595,7 +592,7 @@ function DonatePageInner({ config }: Props) {
           <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 3 }}>{Locale.label("mobile.screens.loading")}</Typography>
         ) : (
           <Box sx={{ textAlign: "center", py: 1 }}>
-            <Typography sx={{ fontSize: 32, fontWeight: 800, color: tc.primary }}>
+            <Typography sx={{ fontSize: 32, fontWeight: 800, color: tc.primary, fontVariantNumeric: "tabular-nums" }}>
               {CurrencyHelper.formatCurrencyWithLocale(filteredTotal, pageCurrency)}
             </Typography>
             <Typography sx={{ fontSize: 14, color: tc.textMuted, fontWeight: 500 }}>
@@ -638,8 +635,8 @@ function DonatePageInner({ config }: Props) {
                   key={sub.id}
                   sx={{
                     bgcolor: tc.surface,
+                    border: `1px solid ${tc.border}`,
                     borderRadius: `${mobileTheme.radius.lg}px`,
-                    boxShadow: mobileTheme.shadows.sm,
                     p: `${mobileTheme.spacing.md}px`,
                     display: "flex",
                     alignItems: "center",
@@ -650,7 +647,7 @@ function DonatePageInner({ config }: Props) {
                     sx={{
                       width: 40,
                       height: 40,
-                      borderRadius: "20px",
+                      borderRadius: "11px",
                       bgcolor: tc.iconBackground,
                       display: "flex",
                       alignItems: "center",
@@ -702,8 +699,8 @@ function DonatePageInner({ config }: Props) {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
             overflow: "hidden"
           }}
         >
@@ -744,7 +741,7 @@ function DonatePageInner({ config }: Props) {
                     sx={{
                       width: 48,
                       height: 48,
-                      borderRadius: "24px",
+                      borderRadius: "11px",
                       bgcolor: tc.iconBackground,
                       display: "flex",
                       alignItems: "center",
@@ -769,7 +766,8 @@ function DonatePageInner({ config }: Props) {
                       fontSize: 16,
                       fontWeight: 700,
                       color: isPending ? tc.warning : tc.text,
-                      flexShrink: 0
+                      flexShrink: 0,
+                      fontVariantNumeric: "tabular-nums"
                     }}
                   >
                     {CurrencyHelper.formatCurrencyWithLocale(amount, (d as any).currency || pageCurrency)}

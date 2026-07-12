@@ -225,8 +225,8 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
           alignItems: "center",
           gap: `${mobileTheme.spacing.sm}px`,
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >
@@ -234,7 +234,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
           sx={{
             width: 40,
             height: 40,
-            borderRadius: "20px",
+            borderRadius: "11px",
             bgcolor: tc.iconBackground,
             display: "flex",
             alignItems: "center",
@@ -287,8 +287,8 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         alignItems: "center",
         gap: `${mobileTheme.spacing.sm}px`,
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`
       }}
     >
@@ -296,7 +296,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         sx={{
           width: 40,
           height: 40,
-          borderRadius: "20px",
+          borderRadius: "11px",
           bgcolor: tc.iconBackground,
           display: "flex",
           alignItems: "center",
@@ -382,8 +382,8 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             <Box
               sx={{
                 bgcolor: tc.surface,
+                border: `1px solid ${tc.border}`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
-                boxShadow: mobileTheme.shadows.sm,
                 p: `${mobileTheme.spacing.md}px`,
                 mb: 1,
                 display: "flex",
@@ -458,6 +458,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
           <Box
             sx={{
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
               p: `${mobileTheme.spacing.md}px`,
               textAlign: "center"
@@ -543,6 +544,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
           <Box
             sx={{
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
               p: `${mobileTheme.spacing.md}px`,
               textAlign: "center"
@@ -560,6 +562,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
             p: `${mobileTheme.spacing.md}px`
           }}

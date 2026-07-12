@@ -133,12 +133,11 @@ export const NotificationsPage = ({ config }: Props) => {
           alignItems: "flex-start",
           gap: "12px",
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: "12px",
-          boxShadow: mobileTheme.shadows.sm,
           p: "16px",
           cursor: href ? "pointer" : "default",
-          transition: "box-shadow 150ms ease, transform 150ms ease",
-          "&:hover": href ? { boxShadow: mobileTheme.shadows.md } : undefined,
+          transition: "transform 150ms ease",
           "&:active": href ? { transform: "scale(0.995)" } : undefined
         }}
       >
@@ -147,7 +146,7 @@ export const NotificationsPage = ({ config }: Props) => {
             width: 40,
             height: 40,
             flexShrink: 0,
-            borderRadius: "20px",
+            borderRadius: "12px",
             bgcolor: tc.iconBackground,
             display: "flex",
             alignItems: "center",
@@ -183,7 +182,8 @@ export const NotificationsPage = ({ config }: Props) => {
                 borderColor: tc.divider,
                 color: tc.disabled,
                 height: 24,
-                "& .MuiChip-label": { fontSize: 12, px: "8px", color: tc.disabled }
+                borderRadius: "999px",
+                "& .MuiChip-label": { fontSize: 10.5, fontWeight: 700, px: "8px", color: tc.disabled }
               }}
             />
           </Box>
@@ -209,8 +209,8 @@ export const NotificationsPage = ({ config }: Props) => {
         alignItems: "flex-start",
         gap: "12px",
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: "12px",
-        boxShadow: mobileTheme.shadows.sm,
         p: "16px"
       }}
     >
@@ -271,11 +271,10 @@ export const NotificationsPage = ({ config }: Props) => {
         alignItems: "center",
         gap: "12px",
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: "12px",
-        boxShadow: mobileTheme.shadows.sm,
         p: "12px 16px",
-        cursor: "pointer",
-        "&:hover": { boxShadow: mobileTheme.shadows.md }
+        cursor: "pointer"
       }}
     >
       <Icon sx={{ color: tc.primary }}>tune</Icon>
@@ -297,8 +296,8 @@ export const NotificationsPage = ({ config }: Props) => {
           alignItems: "center",
           gap: "12px",
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: "12px",
-          boxShadow: mobileTheme.shadows.sm,
           p: "12px 16px"
         }}
       >

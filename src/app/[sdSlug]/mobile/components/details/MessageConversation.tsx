@@ -501,7 +501,7 @@ export const MessageConversation = ({ id, config }: Props) => {
         sx={{
           width: 56,
           height: 56,
-          borderRadius: "28px",
+          borderRadius: "17px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",

@@ -265,8 +265,8 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           display: "flex",
           alignItems: "center",
@@ -321,8 +321,8 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.md}px`,
             display: "flex",
             flexDirection: "column",
@@ -422,6 +422,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center"
@@ -445,6 +446,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
                   alignItems: "center",
                   gap: `${mobileTheme.spacing.md}px`,
                   bgcolor: tc.surface,
+                  border: `1px solid ${tc.border}`,
                   borderRadius: `${mobileTheme.radius.md}px`,
                   p: `${mobileTheme.spacing.sm}px`,
                   cursor: "pointer",

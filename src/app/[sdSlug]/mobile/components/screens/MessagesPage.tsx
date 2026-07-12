@@ -176,13 +176,12 @@ export const MessagesPage = ({ config }: Props) => {
         alignItems: "center",
         gap: `${mobileTheme.spacing.md}px`,
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         px: `${mobileTheme.spacing.md}px`,
         py: "12px",
         cursor: "pointer",
-        transition: "box-shadow 150ms ease, transform 150ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.md },
+        transition: "transform 150ms ease",
         "&:active": { transform: "scale(0.995)" }
       }}
     >
@@ -222,8 +221,8 @@ export const MessagesPage = ({ config }: Props) => {
         alignItems: "center",
         gap: `${mobileTheme.spacing.md}px`,
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         px: `${mobileTheme.spacing.md}px`,
         py: "12px"
       }}
@@ -239,8 +238,8 @@ export const MessagesPage = ({ config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -249,7 +248,7 @@ export const MessagesPage = ({ config }: Props) => {
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "19px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",

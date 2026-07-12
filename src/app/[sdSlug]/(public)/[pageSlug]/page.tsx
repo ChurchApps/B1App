@@ -5,7 +5,7 @@ import { EventJsonLd } from "@/components/seo/EventJsonLd";
 import { SermonVideoJsonLd } from "@/components/seo/SermonVideoJsonLd";
 import { Locale } from "@churchapps/apphelper";
 import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
-import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
+import { ConfigurationInterface, fetchCachedOrNull } from "@/helpers/ConfigHelper";
 import { MetaHelper } from "@/helpers/MetaHelper";
 import { Metadata } from "next";
 import "@/styles/vendor/animations.css";
@@ -50,8 +50,8 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
 
 const loadData = async (sdSlug:string, pageSlug:string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
-  const pageData: PageInterface = await fetchCached<PageInterface>("/pages/" + config.church.id + "/tree?url=" + pageSlug + (config.siteId ? "&siteId=" + config.siteId : ""), "ContentApi", sdSlug);
-  return { pageData, config };
+  const pageData = await fetchCachedOrNull<PageInterface>("/pages/" + config.church.id + "/tree?url=" + pageSlug + (config.siteId ? "&siteId=" + config.siteId : ""), "ContentApi", sdSlug);
+  return { pageData: pageData || ({} as PageInterface), config };
 };
 
 export default async function Home({ params }: { params: PageParams }) {

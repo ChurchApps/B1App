@@ -61,7 +61,7 @@ const Shell = ({ children, backButton, backgroundColor }: ShellProps) => (
 );
 
 const StatusCard = ({ icon, title, body, color, tc }: StatusCardProps) => (
-  <Box sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.xl}px`, boxShadow: mobileTheme.shadows.md, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
+  <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.xl}px`, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
     <Box sx={{ width: 72, height: 72, borderRadius: "36px", bgcolor: `${color}1A`, display: "inline-flex", alignItems: "center", justifyContent: "center", mb: 2 }}>
       <Icon sx={{ fontSize: 36, color }}>{icon}</Icon>
     </Box>
@@ -144,7 +144,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
   );
 
   const surfaceCard = (children: React.ReactNode) => (
-    <Box sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.lg}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.md}px`, mb: `${mobileTheme.spacing.md}px` }}>
+    <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px`, mb: `${mobileTheme.spacing.md}px` }}>
       {children}
     </Box>
   );
@@ -206,7 +206,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     const waitlisted = reg.registration.status === "waitlisted";
     return (
       <Shell backButton={renderBack()} backgroundColor={tc.background}>
-        <Box sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.xl}px`, boxShadow: mobileTheme.shadows.md, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
+        <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.xl}px`, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
           <Box sx={{ width: 72, height: 72, borderRadius: "36px", bgcolor: waitlisted ? `${tc.warning}22` : "rgba(112, 220, 135, 0.18)", display: "inline-flex", alignItems: "center", justifyContent: "center", mb: 2 }}>
             <Icon sx={{ fontSize: 40, color: waitlisted ? tc.warning : tc.success }}>{waitlisted ? "hourglass_top" : "check_circle"}</Icon>
           </Box>
@@ -217,7 +217,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
             {waitlisted ? Locale.label("registration.waitlist.confirmedBody") : Locale.label("registration.youAreRegistered")} <b>{event.title}</b>
           </Typography>
           {reg.registration.status && (
-            <Chip label={reg.registration.status} size="small" sx={{ mb: 1, bgcolor: waitlisted ? `${tc.warning}22` : `${tc.success}22`, color: waitlisted ? tc.warning : tc.success, fontWeight: 600, textTransform: "capitalize" }} />
+            <Chip label={reg.registration.status} size="small" sx={{ mb: 1, bgcolor: waitlisted ? `${tc.warning}22` : `${tc.success}22`, color: waitlisted ? tc.warning : tc.success, fontSize: 10.5, fontWeight: 700, borderRadius: "999px", textTransform: "capitalize" }} />
           )}
           {reg.registration.totalAmount > 0 && (
             <Typography sx={{ fontSize: 13, color: tc.textSecondary, mb: 1 }}>

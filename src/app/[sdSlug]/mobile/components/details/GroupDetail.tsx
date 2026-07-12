@@ -299,7 +299,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       bottom: 0,
       px: "20px",
       py: "20px",
-      background: "rgba(0,0,0,0.6)"
+      background: "linear-gradient(transparent, rgba(7,14,27,0.78))"
     } as const;
     const chipSx = {
       display: "inline-flex",
@@ -307,11 +307,11 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       gap: "4px",
       bgcolor: "rgba(255,255,255,0.9)",
       color: "#000",
-      fontSize: 12,
-      fontWeight: 600,
+      fontSize: 10.5,
+      fontWeight: 700,
       px: "8px",
       py: "4px",
-      borderRadius: "12px"
+      borderRadius: "999px"
     } as const;
     const leaderChipSx = { ...chipSx, bgcolor: "rgba(255,193,7,0.9)" } as const;
 
@@ -323,22 +323,9 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           height: 220,
           borderRadius: "20px",
           overflow: "hidden",
-          bgcolor: hasPhoto ? "transparent" : tc.primary,
-          boxShadow: mobileTheme.shadows.lg
+          background: hasPhoto ? `url(${group!.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
         }}
       >
-        {hasPhoto ? (
-          <Box
-            component="img"
-            src={group!.photoUrl}
-            alt={group?.name || Locale.label("mobile.components.group")}
-            sx={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon sx={{ fontSize: 48, color: "#FFFFFF" }}>groups</Icon>
-          </Box>
-        )}
         <Box sx={overlaySx}>
           <Typography
             sx={{
@@ -346,8 +333,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
               fontWeight: 800,
               color: "#FFFFFF",
               lineHeight: 1.2,
-              mb: "12px",
-              textShadow: "0 1px 3px rgba(0,0,0,0.4)"
+              mb: "12px"
             }}
           >
             {group?.name}
@@ -383,8 +369,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           <Box
             sx={{
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
               p: `${mobileTheme.spacing.md}px`
             }}
           >
@@ -429,8 +415,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           <Box
             sx={{
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
               p: `${mobileTheme.spacing.md}px`
             }}
           >
@@ -445,8 +431,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`
       }}
     >
@@ -602,8 +588,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -612,7 +598,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "11px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",
@@ -673,8 +659,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           <Box
             sx={{
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
               overflow: "hidden"
             }}
           >

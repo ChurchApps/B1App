@@ -82,16 +82,15 @@ export const MoreCardsPage = ({ config }: Props) => {
                 flexDirection: "column",
                 p: "12px",
                 bgcolor: tc.surface,
+                border: `1px solid ${tc.border}`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
-                boxShadow: mobileTheme.shadows.sm,
-                cursor: "pointer",
-                "&:hover": { boxShadow: mobileTheme.shadows.md }
+                cursor: "pointer"
               }}
             >
               <Box sx={{
                 width: 48,
                 height: 48,
-                borderRadius: "24px",
+                borderRadius: "14px",
                 bgcolor: tc.iconBackground,
                 display: "flex",
                 alignItems: "center",

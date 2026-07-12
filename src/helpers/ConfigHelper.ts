@@ -26,6 +26,17 @@ export const fetchCached = async <T>(path: string, apiName: string, tag: string)
   return response.json();
 };
 
+// Same as fetchCached but treats a true 404 as "not found" instead of throwing (Sentry B1-APP-AK/AM/AN/AP/AQ/AR).
+export const fetchCachedOrNull = async <T>(path: string, apiName: string, tag: string): Promise<T | null> => {
+  const apiConfig = ApiHelper.getConfig(apiName);
+  if (!apiConfig) throw new Error("Unconfigured API: " + apiName);
+  const url = apiConfig.url + path;
+  const response = await fetch(url, { next: { revalidate: CONFIG_REVALIDATE_SECONDS, tags: [tag] } } as RequestInit);
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(response.status + " " + response.statusText + " for " + url);
+  return response.json();
+};
+
 export class ConfigHelper {
 
   static clearCache(sdKey: string) {
@@ -42,10 +53,10 @@ export class ConfigHelper {
     const siteId = (church as any).siteId || "";
     const [appearance, tabs, homePage, gatewayConfigured, globalStyles] = await Promise.all([
       fetchCached<AppearanceInterface>("/settings/public/" + church.id, "MembershipApi", keyName),
-      fetchCached<LinkInterface[]>("/links/church/" + church.id + "?category=" + navCategory + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
-      fetchCached<PageInterface>("/pages/" + church.id + "/tree?url=/" + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
-      fetchCached<{ configured?: boolean }>("/gateways/configured/" + church.id, "GivingApi", keyName),
-      fetchCached<GlobalStyleInterface>("/globalStyles/church/" + church.id + (siteId ? "?siteId=" + siteId : ""), "ContentApi", keyName)
+      fetchCachedOrNull<LinkInterface[]>("/links/church/" + church.id + "?category=" + navCategory + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
+      fetchCachedOrNull<PageInterface>("/pages/" + church.id + "/tree?url=/" + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
+      fetchCachedOrNull<{ configured?: boolean }>("/gateways/configured/" + church.id, "GivingApi", keyName),
+      fetchCachedOrNull<GlobalStyleInterface>("/globalStyles/church/" + church.id + (siteId ? "?siteId=" + siteId : ""), "ContentApi", keyName)
     ]);
     let appTheme: AppThemeConfig | undefined;
     try {
@@ -59,7 +70,7 @@ export class ConfigHelper {
     // Prevents showing donate tab without a configured gateway.
     const allowDonations = gatewayConfigured?.configured === true;
 
-    const result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs, allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles, homePage, appTheme };
+    const result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs || [], allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles: globalStyles || {}, homePage: homePage || undefined, appTheme };
     result.keyName = keyName;
     result.siteId = siteId;
     return result;

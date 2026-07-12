@@ -184,9 +184,9 @@ export const MePage = ({ config: _config }: Props) => {
         onClick={() => router.push(item.href)}
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); router.push(item.href); } }}
         data-testid={`me-item-${item.kind}`}
-        sx={{ display: "flex", alignItems: "center", gap: "12px", bgcolor: tc.surface, borderRadius: "12px", boxShadow: mobileTheme.shadows.sm, p: "14px", cursor: "pointer", "&:hover": { boxShadow: mobileTheme.shadows.md } }}
+        sx={{ display: "flex", alignItems: "center", gap: "12px", bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: "12px", p: "14px", cursor: "pointer" }}
       >
-        <Box sx={{ width: 40, height: 40, flexShrink: 0, borderRadius: "20px", bgcolor: tc.iconBackground, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Box sx={{ width: 40, height: 40, flexShrink: 0, borderRadius: "12px", bgcolor: tc.iconBackground, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Icon sx={{ color: tc.primary }}>{meta.icon}</Icon>
         </Box>
         <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -195,7 +195,7 @@ export const MePage = ({ config: _config }: Props) => {
             {DateHelper.prettyDateTime(item.date)}{item.subtitle ? ` · ${item.subtitle}` : ""}
           </Typography>
         </Box>
-        <Chip size="small" label={Locale.label(meta.label)} sx={{ bgcolor: tc.primaryLight, color: tc.primary, fontWeight: 600, fontSize: 11 }} />
+        <Chip size="small" label={Locale.label(meta.label)} sx={{ bgcolor: tc.primaryLight, color: tc.primary, fontWeight: 700, fontSize: 10.5, borderRadius: "999px" }} />
       </Box>
     );
   };
@@ -206,7 +206,7 @@ export const MePage = ({ config: _config }: Props) => {
       tabIndex={0}
       onClick={() => router.push(href)}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); router.push(href); } }}
-      sx={{ display: "flex", alignItems: "center", gap: "12px", bgcolor: tc.surface, borderRadius: "12px", boxShadow: mobileTheme.shadows.sm, p: "12px 16px", cursor: "pointer", "&:hover": { boxShadow: mobileTheme.shadows.md } }}
+      sx={{ display: "flex", alignItems: "center", gap: "12px", bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: "12px", p: "12px 16px", cursor: "pointer" }}
     >
       <Icon sx={{ color: tc.primary }}>{icon}</Icon>
       <Typography sx={{ flex: 1, fontSize: 14, fontWeight: 600, color: tc.text }}>{label}</Typography>
@@ -215,7 +215,7 @@ export const MePage = ({ config: _config }: Props) => {
   );
 
   const sectionHeader = (label: string) => (
-    <Typography sx={{ fontSize: 14, fontWeight: 700, color: tc.textSecondary, textTransform: "uppercase", letterSpacing: 0.4, mt: 1 }}>{label}</Typography>
+    <Typography sx={{ fontSize: 11.5, fontWeight: 700, color: tc.textSecondary, textTransform: "uppercase", letterSpacing: "0.12em", mt: 1 }}>{label}</Typography>
   );
 
   return (
@@ -232,7 +232,7 @@ export const MePage = ({ config: _config }: Props) => {
         {sectionHeader(Locale.label("mobile.me.upcoming"))}
         {stillLoading && [0, 1, 2].map((i) => <Skeleton key={i} variant="rounded" height={64} sx={{ borderRadius: "12px" }} />)}
         {!stillLoading && upcoming.length === 0 && (
-          <Box sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.xl}px`, boxShadow: mobileTheme.shadows.sm, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
+          <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.xl}px`, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
             <Icon sx={{ fontSize: 48, color: tc.disabled }}>event_available</Icon>
             <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mt: 1 }}>{Locale.label("mobile.me.nothingUpcoming")}</Typography>
             <Typography sx={{ fontSize: 14, color: tc.textMuted, mt: 0.5 }}>{Locale.label("mobile.me.nothingUpcomingBody")}</Typography>
@@ -251,9 +251,9 @@ export const MePage = ({ config: _config }: Props) => {
                   role={href ? "button" : undefined}
                   tabIndex={href ? 0 : undefined}
                   onClick={() => { if (href) router.push(href); }}
-                  sx={{ display: "flex", alignItems: "flex-start", gap: "12px", bgcolor: tc.surface, borderRadius: "12px", boxShadow: mobileTheme.shadows.sm, p: "14px", cursor: href ? "pointer" : "default" }}
+                  sx={{ display: "flex", alignItems: "flex-start", gap: "12px", bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: "12px", p: "14px", cursor: href ? "pointer" : "default" }}
                 >
-                  <Box sx={{ width: 36, height: 36, flexShrink: 0, borderRadius: "18px", bgcolor: tc.iconBackground, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Box sx={{ width: 36, height: 36, flexShrink: 0, borderRadius: "11px", bgcolor: tc.iconBackground, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <Icon sx={{ color: tc.primary, fontSize: 20 }}>{getNotificationIcon(n.contentType)}</Icon>
                   </Box>
                   <Box sx={{ flex: 1, minWidth: 0 }}>

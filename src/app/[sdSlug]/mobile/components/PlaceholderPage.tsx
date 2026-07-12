@@ -17,15 +17,15 @@ export const PlaceholderPage = ({ title, icon = "construction", description }: P
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, minHeight: "100%", bgcolor: tc.background }}>
       <Box sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
         p: 4,
-        textAlign: "center",
-        boxShadow: mobileTheme.shadows.md
+        textAlign: "center"
       }}>
         <Box sx={{
           width: 72,
           height: 72,
-          borderRadius: "36px",
+          borderRadius: "20px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",

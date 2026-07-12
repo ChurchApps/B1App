@@ -101,8 +101,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
           position: "relative",
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
-          boxShadow: mobileTheme.shadows.md,
-          background: `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
+          background: mobileTheme.colorWash,
           p: `${mobileTheme.spacing.lg}px`,
           display: "flex",
           flexDirection: "column",
@@ -206,7 +205,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         sx={{
           width: 56,
           height: 56,
-          borderRadius: "28px",
+          borderRadius: "17px",
           bgcolor: background || tc.primary,
           color: "#FFFFFF",
           display: "flex",
@@ -329,19 +328,18 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         display: "flex",
         alignItems: "center",
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: "16px",
-        boxShadow: mobileTheme.shadows.sm,
         px: "16px",
         py: "16px",
-        cursor: onClick ? "pointer" : "default",
-        "&:hover": onClick ? { boxShadow: mobileTheme.shadows.md } : undefined
+        cursor: onClick ? "pointer" : "default"
       }}
     >
       <Box
         sx={{
           width: 48,
           height: 48,
-          borderRadius: "24px",
+          borderRadius: "14px",
           bgcolor: tc.background,
           display: "flex",
           alignItems: "center",
@@ -420,7 +418,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
     if (rows.length === 0) return null;
     return (
       <Box>
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: "16px" }}>
+        <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, mb: "16px" }}>
           {Locale.label("mobile.details.contactInformation")}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -442,7 +440,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
     };
     return (
       <Box>
-        <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: "16px" }}>
+        <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, mb: "16px" }}>
           {Locale.label("mobile.details.householdMembers")}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -466,12 +464,11 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
                   display: "flex",
                   alignItems: "center",
                   bgcolor: tc.surface,
+                  border: `1px solid ${tc.border}`,
                   borderRadius: "12px",
-                  boxShadow: mobileTheme.shadows.sm,
                   px: "16px",
                   py: "12px",
-                  cursor: "pointer",
-                  "&:hover": { boxShadow: mobileTheme.shadows.md }
+                  cursor: "pointer"
                 }}
               >
                 {hphoto ? (
@@ -526,7 +523,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
                   sx={{
                     width: 36,
                     height: 36,
-                    borderRadius: "18px",
+                    borderRadius: "11px",
                     bgcolor: tc.iconBackground,
                     color: tc.textSecondary,
                     display: "flex",
@@ -551,8 +548,8 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`,
           textAlign: "center"
         }}
@@ -587,8 +584,8 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -597,7 +594,7 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "19px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",

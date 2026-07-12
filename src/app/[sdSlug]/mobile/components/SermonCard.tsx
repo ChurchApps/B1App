@@ -13,7 +13,6 @@ interface Props {
 }
 
 export const SermonCard = ({ sermon, onClick }: Props) => {
-  const tc = mobileTheme.colors;
   const hasImage = !!(sermon.thumbnail && sermon.thumbnail.trim() !== "");
 
   return (
@@ -29,29 +28,12 @@ export const SermonCard = ({ sermon, onClick }: Props) => {
         mb: `${mobileTheme.spacing.md - 4}px`,
         borderRadius: `${mobileTheme.radius.xl}px`,
         overflow: "hidden",
-        boxShadow: mobileTheme.shadows.md,
         cursor: "pointer",
-        bgcolor: tc.primary,
-        backgroundImage: hasImage ? `url(${sermon.thumbnail})` : `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        transition: "box-shadow 200ms ease",
-        "&:hover": { boxShadow: mobileTheme.shadows.lg }
+        background: hasImage ? `url(${sermon.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
+        "&:active": { transform: "scale(0.985)" },
+        transition: "transform 120ms ease"
       }}
     >
-      {!hasImage && (
-        <Box sx={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: 0.9
-        }}>
-          <Icon sx={{ fontSize: 56, color: "#FFFFFF" }}>play_circle_outline</Icon>
-        </Box>
-      )}
-
       <Box sx={{
         position: "absolute",
         top: 12,
@@ -73,11 +55,11 @@ export const SermonCard = ({ sermon, onClick }: Props) => {
           top: 12,
           left: 12,
           bgcolor: "rgba(0,0,0,0.8)",
-          borderRadius: `${mobileTheme.radius.sm + 4}px`,
-          px: "8px",
-          py: "4px"
+          borderRadius: "999px",
+          px: "10px",
+          py: "5px"
         }}>
-          <Typography sx={{ color: "#FFFFFF", fontSize: 12, fontWeight: 600 }}>
+          <Typography sx={{ color: "#FFFFFF", fontSize: 10.5, fontWeight: 700 }}>
             {formatDuration(sermon.duration)}
           </Typography>
         </Box>
@@ -88,7 +70,7 @@ export const SermonCard = ({ sermon, onClick }: Props) => {
         bottom: 0,
         left: 0,
         right: 0,
-        background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.0) 100%)",
+        background: "linear-gradient(transparent, rgba(7,14,27,0.78))",
         p: "16px",
         pt: "32px"
       }}>

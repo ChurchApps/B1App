@@ -22,10 +22,24 @@ export const mobileTheme = {
     borderLight: "var(--mb-border-light)",
     divider: "var(--mb-divider)",
     iconBackground: "var(--mb-icon-background)",
-    disabled: "var(--mb-disabled)"
+    disabled: "var(--mb-disabled)",
+    wash1: "var(--mb-wash-1)",
+    wash2: "var(--mb-wash-2)",
+    wash3: "var(--mb-wash-3)",
+    verse1: "var(--mb-verse-1)",
+    verse2: "var(--mb-verse-2)"
   },
+  // serif resolves --font-mobile-serif (set by next/font on the mobile layout wrapper) at the consuming
+  // element — routing it through a :root token breaks because :root sits outside that wrapper.
+  fonts: {
+    serif: 'var(--font-mobile-serif, "Iowan Old Style"), "Iowan Old Style", "Palatino Linotype", Georgia, serif',
+    sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+  },
+  // Standard media-card fallback when no photo exists: brand hue drifting warm, never a ghosted icon.
+  colorWash: "linear-gradient(115deg, var(--mb-wash-1) 0%, var(--mb-wash-2) 55%, var(--mb-wash-3) 100%)",
+  verseGradient: "linear-gradient(150deg, var(--mb-verse-1) 0%, var(--mb-verse-2) 100%)",
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
-  radius: { sm: 4, md: 8, lg: 12, xl: 16 },
+  radius: { sm: 6, md: 10, lg: 16, xl: 22 },
   radiusVar: { sm: "var(--mb-radius-sm)", md: "var(--mb-radius-md)", lg: "var(--mb-radius-lg)", xl: "var(--mb-radius-xl)" },
   typography: {
     h1: { fontSize: 24, fontWeight: 700 },
@@ -42,7 +56,8 @@ export const mobileTheme = {
     lg: "var(--mb-shadow-lg)"
   },
   drawerWidth: 280,
-  headerHeight: 56
+  headerHeight: 56,
+  tabBarHeight: 64
 };
 
 export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<string, string>, {

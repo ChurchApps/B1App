@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { formatDate, shadePrimary } from "../util";
+import { formatDate } from "../util";
 import { SermonCard } from "../SermonCard";
 
 interface Props {
@@ -68,8 +68,6 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     if (sermonsError) refetchSermons();
   };
 
-  const heroGradient = `linear-gradient(135deg, ${shadePrimary(tc.primary, -12)} 0%, ${shadePrimary(tc.primary, 18)} 55%, ${shadePrimary(tc.primary, 28)} 100%)`;
-
   const renderHero = () => {
     const hasImage = !!playlist?.thumbnail && playlist.thumbnail.trim() !== "";
     return (
@@ -80,8 +78,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           paddingTop: "56.25%",
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
-          boxShadow: mobileTheme.shadows.md,
-          background: hasImage ? undefined : heroGradient
+          background: hasImage ? undefined : mobileTheme.colorWash
         }}
       >
         {hasImage && (
@@ -127,7 +124,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           sx={{
             position: "absolute",
             inset: 0,
-            bgcolor: "rgba(0,0,0,0.5)",
+            background: "linear-gradient(transparent, rgba(7,14,27,0.78))",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -136,7 +133,6 @@ export const PlaylistDetail = ({ id, config }: Props) => {
             textAlign: "center"
           }}
         >
-          {!hasImage && <Icon sx={{ fontSize: 48, color: "#FFFFFF", opacity: 0.9, mb: 1 }}>playlist_play</Icon>}
           <Typography
             sx={{
               fontSize: 11,
@@ -197,8 +193,8 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -207,7 +203,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "11px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",
@@ -244,8 +240,8 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -254,7 +250,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         sx={{
           width: 64,
           height: 64,
-          borderRadius: "32px",
+          borderRadius: "11px",
           bgcolor: tc.iconBackground,
           display: "inline-flex",
           alignItems: "center",
@@ -290,8 +286,8 @@ export const PlaylistDetail = ({ id, config }: Props) => {
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.lg}px`,
         textAlign: "center"
       }}
@@ -322,7 +318,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
           {renderHero()}
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.details.sermons")}</Typography>
+            <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary }}>{Locale.label("mobile.details.sermons")}</Typography>
             {sermons && sermons.length > 0 && (
               <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
                 {sermons.length} {sermons.length !== 1 ? Locale.label("mobile.details.sermonPlural") : Locale.label("mobile.details.sermonSingular")}

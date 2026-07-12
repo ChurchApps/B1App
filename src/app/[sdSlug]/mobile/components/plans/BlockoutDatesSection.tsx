@@ -233,8 +233,8 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
             display: "flex",
             alignItems: "center",
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.md}px`
           }}
         >
@@ -284,8 +284,8 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.xl}px`,
-          boxShadow: mobileTheme.shadows.sm,
           p: `${mobileTheme.spacing.md}px`
         }}
       >

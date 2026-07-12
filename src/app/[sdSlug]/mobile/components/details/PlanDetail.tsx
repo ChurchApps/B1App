@@ -267,8 +267,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center",
             mt: 4
@@ -308,8 +308,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.lg}px`,
             textAlign: "center",
             mt: 4
@@ -334,10 +334,9 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     <Box
       sx={{
         borderRadius: `${mobileTheme.radius.xl}px`,
-        boxShadow: mobileTheme.shadows.md,
         p: `${mobileTheme.spacing.lg}px`,
         mb: `${mobileTheme.spacing.lg}px`,
-        background: `linear-gradient(135deg, ${tc.primary} 0%, ${tc.secondary} 100%)`,
+        background: mobileTheme.colorWash,
         color: "#FFFFFF",
         textAlign: "center",
         minHeight: 140,
@@ -376,8 +375,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
       <Box
         sx={{
           bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
           borderRadius: `${mobileTheme.radius.lg}px`,
-          boxShadow: mobileTheme.shadows.sm,
           mb: `${mobileTheme.spacing.md}px`,
           overflow: "hidden"
         }}
@@ -448,8 +447,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
               <Box
                 sx={{
                   bgcolor: tc.surface,
+                  border: `1px solid ${tc.border}`,
                   borderRadius: `${mobileTheme.radius.lg}px`,
-                  boxShadow: mobileTheme.shadows.sm,
                   p: `${mobileTheme.spacing.lg}px`,
                   textAlign: "center"
                 }}
@@ -486,8 +485,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
           <Box
             sx={{
               bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
               borderRadius: `${mobileTheme.radius.lg}px`,
-              boxShadow: mobileTheme.shadows.sm,
               p: `${mobileTheme.spacing.md}px`
             }}
           >
@@ -512,8 +511,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
         <Box
           sx={{
             bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
             borderRadius: `${mobileTheme.radius.lg}px`,
-            boxShadow: mobileTheme.shadows.sm,
             p: `${mobileTheme.spacing.md}px`
           }}
         >
@@ -568,8 +567,8 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             <Box
               sx={{
                 bgcolor: tc.surface,
+                border: `1px solid ${tc.border}`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
-                boxShadow: mobileTheme.shadows.sm,
                 p: `${mobileTheme.spacing.lg}px`,
                 textAlign: "center"
               }}
@@ -666,8 +665,8 @@ const PositionDetailsCard = ({
     <Box
       sx={{
         bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
         borderRadius: `${mobileTheme.radius.lg}px`,
-        boxShadow: mobileTheme.shadows.sm,
         p: `${mobileTheme.spacing.md}px`
       }}
     >
@@ -686,8 +685,8 @@ const PositionDetailsCard = ({
             borderRadius: "999px",
             px: 1.25,
             py: 0.25,
-            fontSize: 12,
-            fontWeight: 600
+            fontSize: 10.5,
+            fontWeight: 700
           }}
         >
           <Icon sx={{ fontSize: 14, color: "#FFFFFF" }}>{meta.icon}</Icon>
