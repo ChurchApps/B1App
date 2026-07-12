@@ -77,7 +77,7 @@ export const MobileTabBar = ({ links, onMore }: Props) => {
         return (
           <Box key={link.id || route} component={Link} href={route} sx={tabSx(active)}>
             <Icon sx={{ fontSize: 24 }}>{linkTypeToIcon(link.linkType, link.icon)}</Icon>
-            {label(link.text, active)}
+            {label(link.text || "", active)}
           </Box>
         );
       })}
