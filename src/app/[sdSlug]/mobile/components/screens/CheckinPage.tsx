@@ -16,6 +16,7 @@ import {
   Icon,
   Typography
 } from "@mui/material";
+import { QRCodeSVG } from "qrcode.react";
 import { ApiHelper, ArrayHelper, Locale, PersonHelper as ApphelperPersonHelper } from "@churchapps/apphelper";
 import type {
   CampusInterface,
@@ -37,6 +38,8 @@ interface Props {
 }
 
 type Step = "services" | "household" | "groups" | "complete";
+
+type VisitWithCode = VisitInterface & { securityCode?: string };
 
 interface GroupCategory {
   key: number;
@@ -469,7 +472,7 @@ const HouseholdStep = ({
   onBack
 }: {
   onShowGroups: (member: PersonInterface, time: ServiceTimeInterface) => void;
-  onComplete: () => void;
+  onComplete: (securityCode?: string) => void;
   onBack: () => void;
 }) => {
   const [selectedMember, setSelectedMember] = useState<PersonInterface | null>(null);
@@ -729,9 +732,13 @@ const HouseholdStep = ({
       "&peopleIds=" +
       encodeURIComponent(peopleIds.join(","));
     ApiHelper.post(url, CheckinHelper.pendingVisits, "AttendanceApi")
-      .then(() => onComplete())
+      .then((data) => onComplete(typeof data?.securityCode === "string" ? data.securityCode : undefined))
       .finally(() => setIsLoading(false));
   };
+
+  const existingCode = (CheckinHelper.existingVisits as VisitWithCode[])?.find(
+    (v) => v.id && v.securityCode
+  )?.securityCode;
 
   if (isLoading) {
     return (
@@ -744,6 +751,27 @@ const HouseholdStep = ({
   return (
     <>
       <ScreenSubhead iconName="people" subtitle={Locale.label("mobile.screens.selectGroupsSubtitle")} />
+
+      {existingCode && (
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={() => onComplete(existingCode)}
+          startIcon={<Icon>qr_code_2</Icon>}
+          data-testid="checkin-show-code-button"
+          sx={{
+            mb: `${spacing.md}px`,
+            borderColor: tc.primary,
+            color: tc.primary,
+            borderRadius: `${radius.lg}px`,
+            height: 48,
+            fontWeight: 600,
+            textTransform: "none"
+          }}
+        >
+          Show check-in code
+        </Button>
+      )}
 
       {!CheckinHelper.householdMembers || CheckinHelper.householdMembers.length === 0 ? (
         <EmptyState
@@ -820,11 +848,85 @@ const HouseholdStep = ({
   );
 };
 
-const CompleteStep = ({ onDone }: { onDone: () => void }) => {
+const CompleteStep = ({ securityCode, onDone }: { securityCode?: string; onDone: () => void }) => {
   useEffect(() => {
+    if (securityCode) return undefined;
     const id = setTimeout(() => onDone(), 1500);
     return () => clearTimeout(id);
-  }, [onDone]);
+  }, [securityCode, onDone]);
+
+  if (securityCode) {
+    return (
+      <Box
+        data-testid="checkin-complete"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "60vh",
+          borderRadius: `${radius.xl}px`,
+          background: mobileTheme.colorWash,
+          p: `${spacing.xl}px`
+        }}
+      >
+        <Box sx={{ textAlign: "center", maxWidth: 400, width: "100%" }}>
+          <Typography
+            sx={{
+              color: "#FFFFFF",
+              fontWeight: 800,
+              fontSize: 24,
+              mb: `${spacing.md}px`,
+              textShadow: "0 2px 4px rgba(0,0,0,0.25)"
+            }}
+          >
+            You&apos;re checked in!
+          </Typography>
+          <Box
+            sx={{
+              display: "inline-block",
+              bgcolor: "#FFFFFF",
+              borderRadius: `${radius.lg}px`,
+              p: `${spacing.lg}px`,
+              boxShadow: shadows.lg
+            }}
+          >
+            <QRCodeSVG value={securityCode} size={200} data-testid="checkin-qr-code" />
+            <Typography sx={{ fontSize: 32, fontWeight: 800, letterSpacing: 6, color: tc.text, mt: `${spacing.sm}px` }}>
+              {securityCode}
+            </Typography>
+          </Box>
+          <Typography
+            sx={{
+              color: "#FFFFFF",
+              opacity: 0.9,
+              fontSize: 15,
+              mt: `${spacing.md}px`,
+              textShadow: "0 1px 2px rgba(0,0,0,0.2)"
+            }}
+          >
+            Show this code at a check-in station to print your name tags.
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={onDone}
+            sx={{
+              mt: `${spacing.lg}px`,
+              bgcolor: "rgba(255,255,255,0.92)",
+              color: tc.primary,
+              borderRadius: `${radius.lg}px`,
+              height: 48,
+              px: `${spacing.xl}px`,
+              fontWeight: 700,
+              textTransform: "none",
+              "&:hover": { bgcolor: "#FFFFFF" }
+            }}
+          >
+            Done
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -886,11 +988,13 @@ export const CheckinPage = ({ config: _config }: Props) => {
   const [step, setStep] = useState<Step>("services");
   const [groupsMember, setGroupsMember] = useState<PersonInterface | null>(null);
   const [groupsTime, setGroupsTime] = useState<ServiceTimeInterface | null>(null);
+  const [securityCode, setSecurityCode] = useState<string>("");
 
   const handleCompleteDone = useCallback(() => {
     CheckinHelper.clearData();
     setGroupsMember(null);
     setGroupsTime(null);
+    setSecurityCode("");
     setStep("services");
   }, []);
 
@@ -961,7 +1065,10 @@ export const CheckinPage = ({ config: _config }: Props) => {
           setGroupsTime(time);
           setStep("groups");
         }}
-        onComplete={() => setStep("complete")}
+        onComplete={(code) => {
+          setSecurityCode(code || "");
+          setStep("complete");
+        }}
         onBack={() => setStep("services")}
       />
     );
@@ -975,7 +1082,7 @@ export const CheckinPage = ({ config: _config }: Props) => {
       />
     );
   } else if (step === "complete") {
-    content = <CompleteStep onDone={handleCompleteDone} />;
+    content = <CompleteStep securityCode={securityCode} onDone={handleCompleteDone} />;
   }
 
   return (
