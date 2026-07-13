@@ -27,7 +27,7 @@
   "dependencies": {
     "@churchapps/apphelper": "^0.22.2",
     "@churchapps/content-providers": "^0.7.0",
-    "@churchapps/helpers": "^1.10.1",
+    "@churchapps/helpers": "^1.11.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.11",

@@ -261,9 +261,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@churchapps/helpers@npm:^1.10.1":
-  version: 1.10.1
-  resolution: "@churchapps/helpers@npm:1.10.1"
+"@churchapps/helpers@npm:^1.11.1":
+  version: 1.11.1
+  resolution: "@churchapps/helpers@npm:1.11.1"
   dependencies:
     dayjs: "npm:^1.11.20"
   peerDependencies:
@@ -271,7 +271,7 @@ __metadata:
   peerDependenciesMeta:
     rrule:
       optional: true
-  checksum: 10c0/d2abb501fd8100231bd5e2142a4029e0189565958eb160a7b8c1ef9670599ed80660cb33a6a89fdd05003086843a76484ec14e9c81ad50ab3d76a31ac579d026
+  checksum: 10c0/e09a1dd1113a0410baa835731f941e991b36042d7ec7086dcb318534342d7a392593d78c06f2d86f3c323040a1e753145bb64bae2fa6b79d041793e86628e37c
   languageName: node
   linkType: hard
 
@@ -4162,7 +4162,7 @@ __metadata:
   dependencies:
     "@churchapps/apphelper": "npm:^0.22.2"
     "@churchapps/content-providers": "npm:^0.7.0"
-    "@churchapps/helpers": "npm:^1.10.1"
+    "@churchapps/helpers": "npm:^1.11.1"
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@mui/icons-material": "npm:^7.3.11"

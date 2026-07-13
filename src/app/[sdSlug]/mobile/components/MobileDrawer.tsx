@@ -13,6 +13,7 @@ import { type LinkInterface } from "@churchapps/helpers";
 import { Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { Permissions } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers";
+import { WebPushHelperBase } from "@/helpers/WebPushHelperBase";
 import UserContext from "@/context/UserContext";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute } from "./mobileTheme";
 import { getInitials } from "./util";
@@ -35,6 +36,9 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const lastName = context?.person?.name?.last || context?.user?.lastName || "";
   const initials = getInitials({ name: { first: firstName, last: lastName } });
   const canAccessAdmin = UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit);
+
+  const [showInstall, setShowInstall] = React.useState(false);
+  React.useEffect(() => { setShowInstall(!WebPushHelperBase.isStandalone()); }, []);
 
   const adminUrl = React.useMemo(() => {
     if (!canAccessAdmin || !context?.userChurch?.jwt || !context?.userChurch?.church?.id) return "";
@@ -223,6 +227,29 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
             </Link>
           );
         })}
+        {showInstall && (
+          <Link href="/mobile/install" style={{ textDecoration: "none", color: "inherit" }} onClick={onNavigate}>
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              minHeight: 48,
+              px: `${mobileTheme.spacing.md}px`,
+              py: `${mobileTheme.spacing.sm + 4}px`,
+              mx: "8px",
+              mb: "2px",
+              borderRadius: `${mobileTheme.radius.md}px`,
+              bgcolor: isActive("/mobile/install") ? tc.primaryLight : "transparent",
+              cursor: "pointer",
+              "&:hover": { bgcolor: isActive("/mobile/install") ? tc.primaryLight : tc.iconBackground }
+            }}>
+              <Icon sx={{ fontSize: 24, color: tc.primary }}>install_mobile</Icon>
+              <Typography sx={{ fontSize: 16, fontWeight: 500, color: isActive("/mobile/install") ? tc.primary : tc.text, flex: 1 }}>
+                {Locale.label("mobile.screenTitles.installApp")}
+              </Typography>
+            </Box>
+          </Link>
+        )}
       </Box>
 
       <Box sx={{
