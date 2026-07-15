@@ -85,12 +85,27 @@ export default async function BlogListPage({ params, searchParams }: { params: P
       <Theme config={config} />
       <ChurchJsonLd config={config} />
       <DefaultPageWrapper config={config}>
-        <Container maxWidth="md" sx={{ py: 4 }}>
+        <Container maxWidth="md" sx={{ py: { xs: 4, md: 7 } }}>
           <div id="mainContent">
-            <Typography variant="h3" component="h1" sx={{ mb: 3 }}>Blog</Typography>
+            <Box component="header" sx={{ textAlign: "center" }}>
+              {activeFilter && (
+                <Typography component="span" sx={{ textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.75rem", fontWeight: 700, color: "primary.main" }}>
+                  {category ? "Category" : "Tag"}
+                </Typography>
+              )}
+              <Typography variant="h3" component="h1" sx={{ mt: activeFilter ? 1.5 : 0, fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.01em", fontSize: { xs: "2rem", md: "2.75rem" } }}>
+                {activeFilter || "Blog"}
+              </Typography>
+              {activeFilter && (
+                <Typography sx={{ mt: 1.5, fontSize: "0.95rem" }}>
+                  <Link href="/blog">&larr; All posts</Link>
+                </Typography>
+              )}
+              <Box sx={{ width: 40, height: 3, borderRadius: 2, backgroundColor: "primary.main", mx: "auto", mt: 3 }} />
+            </Box>
 
             {categories.length > 0 && (
-              <Box sx={{ mb: 3, display: "flex", flexWrap: "wrap", gap: 1 }}>
+              <Box sx={{ mt: 4, display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
                 {categories.map((c) => (
                   <Link key={c} href={c === category ? "/blog" : buildQuery({ category: c })} style={{ textDecoration: "none" }}>
                     <Chip size="small" label={c} clickable color={c === category ? "primary" : "default"} />
@@ -99,52 +114,46 @@ export default async function BlogListPage({ params, searchParams }: { params: P
               </Box>
             )}
 
-            {activeFilter && (
-              <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
-                <Typography variant="body2">Filtered by:</Typography>
-                <Chip label={(category ? "Category: " : "Tag: ") + activeFilter} />
-                <Link href="/blog">Clear filter</Link>
-              </Box>
-            )}
-
             {posts.length === 0 ? (
-              <Typography variant="body1" color="text.secondary" sx={{ py: 6, textAlign: "center" }}>No posts yet</Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ py: 8, textAlign: "center" }}>No posts yet</Typography>
             ) : (
-              <Stack divider={<Divider />} spacing={4}>
+              <Stack divider={<Divider />} spacing={4} sx={{ mt: 5 }}>
                 {posts.map((post) => (
-                  <Box key={post.id} component="article" sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", sm: "row" } }}>
+                  <Box key={post.id} component="article" sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", sm: "row" }, "&:hover img": { opacity: 0.9 } }}>
                     {post.photoUrl && (
                       <Link href={"/blog/" + post.slug} style={{ flexShrink: 0 }}>
-                        <Box component="img" src={post.photoUrl} alt={post.title || ""} sx={{ width: { xs: "100%", sm: 260 }, aspectRatio: "16/9", objectFit: "cover", borderRadius: 1, display: "block" }} />
+                        <Box component="img" src={post.photoUrl} alt={post.title || ""} sx={{ width: { xs: "100%", sm: 260 }, aspectRatio: "16/9", objectFit: "cover", borderRadius: 2, display: "block", transition: "opacity .15s" }} />
                       </Link>
                     )}
                     <Box sx={{ minWidth: 0 }}>
                       {post.category && (
                         <Link href={buildQuery({ category: post.category })} style={{ textDecoration: "none" }}>
-                          <Chip size="small" label={post.category} clickable sx={{ mb: 1 }} />
+                          <Typography component="span" sx={{ textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.7rem", fontWeight: 700, color: "primary.main" }}>
+                            {post.category}
+                          </Typography>
                         </Link>
                       )}
-                      <Typography variant="h5" component="h2">
+                      <Typography variant="h5" component="h2" sx={{ mt: 0.5, fontWeight: 600, lineHeight: 1.25, "& a": { textDecoration: "none", color: "inherit" }, "& a:hover": { textDecoration: "underline" } }}>
                         <Link href={"/blog/" + post.slug}>{post.title}</Link>
                       </Typography>
                       {(post.authorName || post.publishDate) && (
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
                           {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate)].filter(Boolean).join(" · ")}
                         </Typography>
                       )}
-                      {excerptOf(post) && <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>{excerptOf(post)}</Typography>}
+                      {excerptOf(post) && <Typography variant="body2" color="text.secondary" sx={{ mt: 1, lineHeight: 1.6 }}>{excerptOf(post)}</Typography>}
                     </Box>
                   </Box>
                 ))}
               </Stack>
             )}
 
-            <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
+            <Box sx={{ mt: 6, display: "flex", justifyContent: "space-between", fontSize: "0.9rem" }}>
               {page > 1
-                ? <Link href={buildQuery({ page: page - 1, category, tag })}>&larr; Newer</Link>
+                ? <Link href={buildQuery({ page: page - 1, category, tag })}>&larr; Newer posts</Link>
                 : <span />}
               {posts.length === PAGE_SIZE
-                ? <Link href={buildQuery({ page: page + 1, category, tag })}>Older &rarr;</Link>
+                ? <Link href={buildQuery({ page: page + 1, category, tag })}>Older posts &rarr;</Link>
                 : <span />}
             </Box>
           </div>

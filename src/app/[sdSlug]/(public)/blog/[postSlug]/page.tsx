@@ -73,45 +73,73 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
       <Theme config={config} />
       <BlogPostingJsonLd config={config} post={post} url={url} />
       <DefaultPageWrapper config={config}>
-        <Container maxWidth="md" sx={{ py: 4 }}>
+        <Container maxWidth="md" sx={{ py: { xs: 4, md: 7 } }}>
           <div id="mainContent">
-            <Typography variant="h3" component="h1">{post.title}</Typography>
-            {(post.authorName || post.publishDate) && (
-              <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1 }}>
-                {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate)].filter(Boolean).join(" · ")}
+            <Box component="header" sx={{ textAlign: "center", maxWidth: 720, mx: "auto" }}>
+              <Link href={post.category ? "/blog?category=" + encodeURIComponent(post.category) : "/blog"} style={{ textDecoration: "none" }}>
+                <Typography component="span" sx={{ textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.75rem", fontWeight: 700, color: "primary.main" }}>
+                  {post.category || "Blog"}
+                </Typography>
+              </Link>
+              <Typography variant="h3" component="h1" sx={{ mt: 1.5, fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.01em", textWrap: "balance", fontSize: { xs: "2rem", md: "2.75rem" } }}>
+                {post.title}
               </Typography>
+              {(post.authorName || post.publishDate) && (
+                <Typography sx={{ mt: 2, color: "text.secondary", fontSize: "0.95rem" }}>
+                  {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate)].filter(Boolean).join(" · ")}
+                </Typography>
+              )}
+              <Box sx={{ width: 40, height: 3, borderRadius: 2, backgroundColor: "primary.main", mx: "auto", mt: 3 }} />
+            </Box>
+
+            {post.photoUrl && (
+              <Box component="img" src={post.photoUrl} alt={post.title || ""} sx={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", borderRadius: 3, mt: 5, display: "block" }} />
             )}
-            {(post.category || post.tags) && (
-              <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1 }}>
-                {post.category && (
-                  <Link href={"/blog?category=" + encodeURIComponent(post.category)} style={{ textDecoration: "none" }}>
-                    <Chip size="small" label={post.category} clickable />
-                  </Link>
-                )}
-                {post.tags?.split(",").map((t) => t.trim()).filter(Boolean).map((t) => (
+
+            {post.content && (
+              <Box sx={{
+                maxWidth: 720,
+                mx: "auto",
+                mt: 5,
+                fontSize: "1.0625rem",
+                lineHeight: 1.75,
+                "& p": { mt: 0, mb: 2.5 },
+                "& h1, & h2, & h3, & h4": { mt: 4.5, mb: 1.5, lineHeight: 1.25 },
+                "& img": { maxWidth: "100%", height: "auto", borderRadius: 2 },
+                "& blockquote": { borderLeft: "3px solid", borderColor: "primary.main", pl: 2.5, mx: 0, my: 3, color: "text.secondary" },
+                "& ul, & ol": { pl: 3, mb: 2.5 },
+                "& li": { mb: 0.75 },
+                "& hr": { border: 0, borderTop: "1px solid", borderColor: "divider", my: 4 }
+              }}>
+                <MarkdownPreviewLight value={post.content} />
+              </Box>
+            )}
+
+            {post.tags && (
+              <Box sx={{ maxWidth: 720, mx: "auto", mt: 5, display: "flex", justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
+                {post.tags.split(",").map((t) => t.trim()).filter(Boolean).map((t) => (
                   <Link key={t} href={"/blog?tag=" + encodeURIComponent(t)} style={{ textDecoration: "none" }}>
                     <Chip size="small" variant="outlined" label={t} clickable />
                   </Link>
                 ))}
               </Box>
             )}
-            {post.photoUrl && (
-              <Box component="img" src={post.photoUrl} alt={post.title || ""} sx={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", borderRadius: 2, mt: 3, display: "block" }} />
-            )}
-            {post.content && <Box sx={{ mt: 3 }}><MarkdownPreviewLight value={post.content} /></Box>}
+
             {related.length > 0 && (
-              <Box sx={{ mt: 6, pt: 3, borderTop: "1px solid", borderColor: "divider" }}>
-                <Typography variant="h5" component="h2" sx={{ mb: 2 }}>More in {post.category}</Typography>
-                <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" } }}>
+              <Box component="aside" sx={{ mt: 8, pt: 5, borderTop: "1px solid", borderColor: "divider" }}>
+                <Typography component="h2" sx={{ textAlign: "center", textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.75rem", fontWeight: 700, color: "text.secondary" }}>
+                  More in {post.category}
+                </Typography>
+                <Box sx={{ mt: 3, display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "repeat(" + Math.min(related.length, 3) + ", 1fr)" } }}>
                   {related.map((r) => (
-                    <Box key={r.id}>
+                    <Box key={r.id} sx={{ "&:hover img": { opacity: 0.9 }, "&:hover a": { textDecoration: "underline" } }}>
                       {r.photoUrl && (
                         <Link href={"/blog/" + r.slug}>
-                          <Box component="img" src={r.photoUrl} alt={r.title || ""} sx={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", borderRadius: 1, display: "block" }} />
+                          <Box component="img" src={r.photoUrl} alt={r.title || ""} sx={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", borderRadius: 2, display: "block", transition: "opacity .15s" }} />
                         </Link>
                       )}
-                      <Typography variant="subtitle1" sx={{ mt: 1 }}>
-                        <Link href={"/blog/" + r.slug}>{r.title}</Link>
+                      <Typography variant="subtitle1" sx={{ mt: 1.5, fontWeight: 600, lineHeight: 1.3 }}>
+                        <Link href={"/blog/" + r.slug} style={{ textDecoration: "none", color: "inherit" }}>{r.title}</Link>
                       </Typography>
                       {r.publishDate && <Typography variant="caption" color="text.secondary">{formatDate(r.publishDate)}</Typography>}
                     </Box>
