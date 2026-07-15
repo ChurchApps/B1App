@@ -67,6 +67,7 @@ export interface PostInterface {
   excerpt?: string;
   content?: string;
   authorId?: string;
+  authorName?: string;
   photoUrl?: string;
   publishDate?: string;
   category?: string;

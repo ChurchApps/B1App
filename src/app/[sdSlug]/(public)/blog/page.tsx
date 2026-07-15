@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { headers } from "next/headers";
-import { Box, Card, CardContent, CardMedia, Chip, Container, Typography } from "@mui/material";
+import { Box, Chip, Container, Divider, Stack, Typography } from "@mui/material";
 import { Metadata } from "next";
 import { ApiHelper } from "@churchapps/apphelper";
 import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/components/DefaultPageWrapper";
@@ -29,6 +29,8 @@ const formatDate = (value?: string) => {
   const d = new Date(value);
   return isNaN(d.getTime()) ? "" : d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
 };
+
+const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
 
 const buildQuery = (params: { page?: number; category?: string; tag?: string }) => {
   const qs = new URLSearchParams();
@@ -62,7 +64,11 @@ const loadData = async (sdSlug: string, page: number, category?: string, tag?: s
   try {
     posts = await fetchCached<PostInterface[]>("/posts/public/" + config.church.id + "?" + qs.toString(), "ContentApi", sdSlug);
   } catch { posts = []; }
-  return { config, posts: Array.isArray(posts) ? posts : [] };
+  let categories: string[] = [];
+  try {
+    categories = await fetchCached<string[]>("/posts/public/" + config.church.id + "/categories", "ContentApi", sdSlug);
+  } catch { categories = []; }
+  return { config, posts: Array.isArray(posts) ? posts : [], categories: Array.isArray(categories) ? categories : [] };
 };
 
 export default async function BlogListPage({ params, searchParams }: { params: PageParams; searchParams: SearchParams }) {
@@ -70,7 +76,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
   const { sdSlug } = await params;
   const { page: pageParam, category, tag } = await searchParams;
   const page = Math.max(1, parseInt(pageParam || "1", 10) || 1);
-  const { config, posts } = await loadData(sdSlug, page, category, tag);
+  const { config, posts, categories } = await loadData(sdSlug, page, category, tag);
 
   const activeFilter = category || tag;
 
@@ -79,9 +85,19 @@ export default async function BlogListPage({ params, searchParams }: { params: P
       <Theme config={config} />
       <ChurchJsonLd config={config} />
       <DefaultPageWrapper config={config}>
-        <Container sx={{ py: 4 }}>
+        <Container maxWidth="md" sx={{ py: 4 }}>
           <div id="mainContent">
             <Typography variant="h3" component="h1" sx={{ mb: 3 }}>Blog</Typography>
+
+            {categories.length > 0 && (
+              <Box sx={{ mb: 3, display: "flex", flexWrap: "wrap", gap: 1 }}>
+                {categories.map((c) => (
+                  <Link key={c} href={c === category ? "/blog" : buildQuery({ category: c })} style={{ textDecoration: "none" }}>
+                    <Chip size="small" label={c} clickable color={c === category ? "primary" : "default"} />
+                  </Link>
+                ))}
+              </Box>
+            )}
 
             {activeFilter && (
               <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
@@ -94,25 +110,33 @@ export default async function BlogListPage({ params, searchParams }: { params: P
             {posts.length === 0 ? (
               <Typography variant="body1" color="text.secondary" sx={{ py: 6, textAlign: "center" }}>No posts yet</Typography>
             ) : (
-              <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", md: "1fr 1fr 1fr" } }}>
+              <Stack divider={<Divider />} spacing={4}>
                 {posts.map((post) => (
-                  <Card key={post.id} sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+                  <Box key={post.id} component="article" sx={{ display: "flex", gap: 3, flexDirection: { xs: "column", sm: "row" } }}>
                     {post.photoUrl && (
-                      <Link href={"/blog/" + post.slug}>
-                        <CardMedia component="img" image={post.photoUrl} alt={post.title || ""} sx={{ aspectRatio: "16/9", objectFit: "cover" }} />
+                      <Link href={"/blog/" + post.slug} style={{ flexShrink: 0 }}>
+                        <Box component="img" src={post.photoUrl} alt={post.title || ""} sx={{ width: { xs: "100%", sm: 260 }, aspectRatio: "16/9", objectFit: "cover", borderRadius: 1, display: "block" }} />
                       </Link>
                     )}
-                    <CardContent sx={{ flexGrow: 1 }}>
-                      {post.category && <Chip size="small" label={post.category} sx={{ mb: 1 }} />}
-                      <Typography variant="h6" component="h2">
+                    <Box sx={{ minWidth: 0 }}>
+                      {post.category && (
+                        <Link href={buildQuery({ category: post.category })} style={{ textDecoration: "none" }}>
+                          <Chip size="small" label={post.category} clickable sx={{ mb: 1 }} />
+                        </Link>
+                      )}
+                      <Typography variant="h5" component="h2">
                         <Link href={"/blog/" + post.slug}>{post.title}</Link>
                       </Typography>
-                      {post.publishDate && <Typography variant="caption" color="text.secondary">{formatDate(post.publishDate)}</Typography>}
-                      {post.excerpt && <Typography variant="body2" sx={{ mt: 1 }}>{post.excerpt}</Typography>}
-                    </CardContent>
-                  </Card>
+                      {(post.authorName || post.publishDate) && (
+                        <Typography variant="caption" color="text.secondary">
+                          {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate)].filter(Boolean).join(" · ")}
+                        </Typography>
+                      )}
+                      {excerptOf(post) && <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>{excerptOf(post)}</Typography>}
+                    </Box>
+                  </Box>
                 ))}
-              </Box>
+              </Stack>
             )}
 
             <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>

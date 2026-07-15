@@ -17,6 +17,7 @@ export function BlogPostingJsonLd({ config, post, url }: Props) {
     publisher: { "@type": "Organization", name: church.name }
   };
 
+  if (post.authorName) data.author = { "@type": "Person", name: post.authorName };
   if (post.excerpt) data.description = post.excerpt;
   if (post.photoUrl) data.image = post.photoUrl;
   if (post.category) data.articleSection = post.category;
