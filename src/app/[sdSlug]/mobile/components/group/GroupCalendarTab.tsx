@@ -3,7 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, Button, Chip, Dialog, DialogContent, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, CircularProgress, Dialog, DialogContent, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
@@ -99,6 +99,7 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
   const [selected, setSelected] = React.useState<string>(isoDate(new Date()));
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [rosterFor, setRosterFor] = React.useState<{ eventId: string; occurrenceStart: string; title: string } | null>(null);
+  const [rsvpLoading, setRsvpLoading] = React.useState<string | null>(null);
 
   const { data: rawEvents, isLoading } = useQuery<EventRow[]>({
     queryKey: ["group-events", groupId],
@@ -139,15 +140,20 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
   const setRsvp = async (event: EventRow, occurrenceStart: Date, response: RsvpResponse | null) => {
     if (!event.id) return;
     const iso = occurrenceStart.toISOString();
+    // Include the response value so we track which specific button was clicked
+    const loadingKey = `${event.id}|${occKey(occurrenceStart)}|${response ?? "remove"}`;
+    setRsvpLoading(loadingKey);
     try {
       if (response === null) {
         await ApiHelper.delete(`/events/${event.id}/rsvp?occurrenceStart=${encodeURIComponent(iso)}`, "ContentApi");
       } else {
         await ApiHelper.post(`/events/${event.id}/rsvp`, { occurrenceStart: iso, response }, "ContentApi");
       }
-      refreshRsvps();
+      await refreshRsvps();
     } catch {
       /* ignore — control reflects server on next refetch */
+    } finally {
+      setRsvpLoading(null);
     }
   };
 
@@ -250,6 +256,8 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
     if (!occ || isNaN(occ.getTime())) return null;
     const entry = rsvpByOccurrence[`${e.id}|${occKey(occ)}`];
     const mine = entry?.mine ?? null;
+    const thisOccKey = `${e.id}|${occKey(occ)}`;
+    const isAnyLoading = rsvpLoading !== null && rsvpLoading.startsWith(thisOccKey);
     const options: { value: RsvpResponse; label: string; color: string }[] = [
       { value: "yes", label: Locale.label("mobile.group.rsvpGoing"), color: tc.success },
       { value: "maybe", label: Locale.label("mobile.group.rsvpMaybe"), color: tc.warning },
@@ -264,11 +272,15 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
               {options.map((opt) => {
                 const active = mine === opt.value;
                 const count = entry ? entry[opt.value] : 0;
+                // The clicked button key includes the response being submitted
+                const clickedValue = active ? "remove" : opt.value;
+                const isThisButtonLoading = rsvpLoading === `${thisOccKey}|${clickedValue}`;
                 return (
                   <Button
                     key={opt.value}
                     size="small"
                     variant={active ? "contained" : "outlined"}
+                    disabled={isAnyLoading}
                     onClick={() => setRsvp(e, occ, active ? null : opt.value)}
                     data-testid={`rsvp-${e.id}-${opt.value}`}
                     sx={{
@@ -276,14 +288,29 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                       textTransform: "none",
                       fontWeight: 600,
                       fontSize: 12,
+                      minHeight: 32,
                       borderRadius: `${mobileTheme.radius.md}px`,
                       bgcolor: active ? opt.color : "transparent",
                       color: active ? "#fff" : opt.color,
                       borderColor: opt.color,
+                      opacity: isAnyLoading && !isThisButtonLoading ? 0.5 : 1,
+                      "&.Mui-disabled": {
+                        bgcolor: active ? opt.color : "transparent",
+                        color: active ? "#fff" : opt.color,
+                        borderColor: opt.color
+                      },
                       "&:hover": { bgcolor: active ? opt.color : `${opt.color}1A`, borderColor: opt.color }
                     }}
                   >
-                    {opt.label}{count > 0 ? ` ${count}` : ""}
+                    {isThisButtonLoading ? (
+                      <CircularProgress
+                        size={14}
+                        thickness={5}
+                        sx={{ color: active ? "#fff" : opt.color }}
+                      />
+                    ) : (
+                      <>{opt.label}{count > 0 ? ` ${count}` : ""}</>
+                    )}
                   </Button>
                 );
               })}

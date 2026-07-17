@@ -30,6 +30,10 @@ interface PeopleSection {
   people: PersonInterface[];
 }
 
+const escapeRegExp = (string: string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 export const CommunityPage = ({ config: _config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
@@ -233,19 +237,48 @@ export const CommunityPage = ({ config: _config }: Props) => {
         {renderAvatar(p)}
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "baseline" }}>
-            <Typography
-              component="span"
-              sx={{ fontSize: 16, fontWeight: 600, color: tc.text, lineHeight: 1.3, mr: last ? "4px" : 0 }}
-            >
-              {first}
-            </Typography>
-            {last && (
+            {searchText ? (
               <Typography
                 component="span"
-                sx={{ fontSize: 16, fontWeight: 800, color: tc.text, lineHeight: 1.3 }}
+                sx={{ fontSize: 16, color: tc.text, lineHeight: 1.3 }}
               >
-                {last}
+                {(() => {
+                  const fullName = [first, last].filter(Boolean).join(" ");
+                  const escaped = escapeRegExp(searchText);
+                  const regex = new RegExp(`(${escaped})`, "gi");
+                  const parts = fullName.split(regex);
+                  return parts.map((part, index) => {
+                    const isMatch = part.toLowerCase() === searchText.toLowerCase();
+                    return (
+                      <span
+                        key={index}
+                        style={{
+                          fontWeight: isMatch ? 800 : 400
+                        }}
+                      >
+                        {part}
+                      </span>
+                    );
+                  });
+                })()}
               </Typography>
+            ) : (
+              <>
+                <Typography
+                  component="span"
+                  sx={{ fontSize: 16, fontWeight: 600, color: tc.text, lineHeight: 1.3, mr: last ? "4px" : 0 }}
+                >
+                  {first}
+                </Typography>
+                {last && (
+                  <Typography
+                    component="span"
+                    sx={{ fontSize: 16, fontWeight: 800, color: tc.text, lineHeight: 1.3 }}
+                  >
+                    {last}
+                  </Typography>
+                )}
+              </>
             )}
           </Box>
         </Box>
