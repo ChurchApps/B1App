@@ -4,7 +4,7 @@ import { Container } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import { useState, useEffect } from "react";
 
-export function VotdPage() {
+export function VotdPage(props: { title: string }) {
   const [shape, setShape] = useState("16x9");
   const [day, setDay] = useState<number | null>(null);
   const [isClient, setIsClient] = useState(false);
@@ -44,7 +44,7 @@ export function VotdPage() {
   if (!isClient || day === null) {
     return (
       <Container>
-        <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.verseOfTheDay")}</h1>
+        <h1 style={{ textAlign: "center" }}>{props.title}</h1>
         <div className="full-frame" style={{ minHeight: "200px" }} />
       </Container>
     );
@@ -52,11 +52,11 @@ export function VotdPage() {
 
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.verseOfTheDay")}</h1>
+      <h1 style={{ textAlign: "center" }}>{props.title}</h1>
       <img
         src={"https://votd.org/v1/" + day + "/" + shape + ".jpg"}
         className="full-frame"
-        alt={Locale.label("pageSlug.verseOfTheDay")}
+        alt={props.title}
       />
     </Container>
   );

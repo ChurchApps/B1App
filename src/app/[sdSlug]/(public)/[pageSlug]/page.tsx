@@ -25,12 +25,12 @@ const VIRTUAL_PAGE_SLUGS = ["votd", "bible", "donate", "stream", "sermons"];
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; }>
 
 // cache() shares one load between generateMetadata and the page render.
-const loadSharedData = cache((sdSlug:string, pageSlug:string) => {
-  EnvironmentHelper.init();
+const loadSharedData = cache(async (sdSlug: string, pageSlug: string) => {
+  await EnvironmentHelper.initServerSide();
   return loadData(sdSlug, pageSlug);
 });
 
-export async function generateMetadata({ params }: {params:PageParams}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const { sdSlug, pageSlug } = await params;
   const props = await loadSharedData(sdSlug, pageSlug);
   let title = props.pageData.title;
@@ -48,14 +48,13 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
   return MetaHelper.getMetaData(pageTitle + " - " + props.config.church.name, description, undefined, props.config.appearance);
 }
 
-const loadData = async (sdSlug:string, pageSlug:string) => {
+const loadData = async (sdSlug: string, pageSlug: string) => {
   const config: ConfigurationInterface = await ConfigHelper.load(sdSlug, "website");
   const pageData = await fetchCachedOrNull<PageInterface>("/pages/" + config.church.id + "/tree?url=" + pageSlug + (config.siteId ? "&siteId=" + config.siteId : ""), "ContentApi", sdSlug);
   return { pageData: pageData || ({} as PageInterface), config };
 };
 
 export default async function Home({ params }: { params: PageParams }) {
-  await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug } = await params;
   const { pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
@@ -81,10 +80,10 @@ export default async function Home({ params }: { params: PageParams }) {
 
     if (!pageData?.url) {
       switch (pageSlug) {
-        case "votd": result = wrapDefaultPage(<VotdPage />); break;
-        case "bible": result = wrapDefaultPage(<BiblePage />); break;
-        case "donate": result = wrapDefaultPage(<DonatePage config={config} />); break;
-        case "stream": result = wrapDefaultPage(<StreamPage config={config} />); break;
+        case "votd": result = wrapDefaultPage(<VotdPage title={Locale.label("pageSlug.verseOfTheDay")} />); break;
+        case "bible": result = wrapDefaultPage(<BiblePage title={Locale.label("pageSlug.bible")} previousChapter={Locale.label("pageSlug.previousChapter")} nextChapter={Locale.label("pageSlug.nextChapter")} />); break;
+        case "donate": result = wrapDefaultPage(<DonatePage config={config} title={Locale.label("pageSlug.donate")} manageDonations={Locale.label("pageSlug.manageDonations")} achInstructions={Locale.label("pageSlug.achInstructions")} loginToManageDonations={Locale.label("pageSlug.loginToManageDonations")} login={Locale.label("login.login")} />); break;
+        case "stream": result = wrapDefaultPage(<StreamPage config={config} title={Locale.label("pageSlug.liveStream")} />); break;
         case "sermons": result = wrapDefaultPage(<SermonsPage config={config} title={Locale.label("pageSlug.sermons")} />); break;
         default: return notFound();
       }
