@@ -17,8 +17,8 @@ import { DefaultPageWrapper } from "./[pageSlug]/components/DefaultPageWrapper";
 type PageParams = { sdSlug: string; }
 
 
-const loadSharedData = async (sdSlug: string) => {
-  await EnvironmentHelper.initServerSide();
+const loadSharedData = (sdSlug: string) => {
+  EnvironmentHelper.init();
   return loadData(sdSlug);
 };
 
@@ -38,6 +38,7 @@ const loadData = async (sdSlug: string) => {
 };
 
 export default async function Home({ params }: { params: Promise<PageParams> }) {
+  await EnvironmentHelper.initServerSide();
   const { sdSlug } = await params;
   const props = await loadSharedData(sdSlug);
 

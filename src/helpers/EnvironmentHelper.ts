@@ -23,8 +23,8 @@ export class EnvironmentHelper {
   static init = () => {
     if (this.hasInit) return;
     this.hasInit = true;
-    const stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE || "prod";
-    console.log(stage, '--stage')
+    const stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
+
     //stage = "prod"
     switch (stage) {
       case "staging": EnvironmentHelper.initStaging(); break;
@@ -46,7 +46,7 @@ export class EnvironmentHelper {
   };
 
   static initLocale = async () => {
-    let baseUrl = process.env.NEXT_PUBLIC_CHURCH_APPS_URL || "https://b1.church";
+    let baseUrl = "https://ironwood.staging.b1.church";
     if (typeof window !== "undefined") {
       baseUrl = window.location.origin;
     } else if (process.env.NEXT_PUBLIC_STAGE === "dev" || process.env.NEXT_STAGE === "dev") {
