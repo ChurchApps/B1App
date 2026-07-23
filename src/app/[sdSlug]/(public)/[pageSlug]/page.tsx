@@ -25,8 +25,8 @@ const VIRTUAL_PAGE_SLUGS = ["votd", "bible", "donate", "stream", "sermons"];
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; }>
 
 // cache() shares one load between generateMetadata and the page render.
-const loadSharedData = cache((sdSlug:string, pageSlug:string) => {
-  EnvironmentHelper.init();
+const loadSharedData = cache(async (sdSlug:string, pageSlug:string) => {
+  await EnvironmentHelper.initServerSide();
   return loadData(sdSlug, pageSlug);
 });
 

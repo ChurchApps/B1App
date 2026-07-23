@@ -10,7 +10,7 @@ import { CampaignProgress } from "@/components/donate/CampaignProgress";
 
 type Props = { config?: ConfigurationInterface; };
 
-export function DonatePage(props:Props) {
+export function DonatePage(props: Props) {
 
   // Stripe Elements + reCAPTCHA inside NonAuthDonationWrapper read browser-only
   // state during render, mismatching the SSR snapshot. Defer until mount.
@@ -20,7 +20,7 @@ export function DonatePage(props:Props) {
   if (UserHelper.currentUserChurch?.person?.id) redirect("/mobile/donate");
   return <>
     <Container>
-      <h1>{Locale.label("pageSlug.donate")}</h1>
+      <h1>{Locale.label("pageSlug.donate", "Donate")}</h1>
       {mounted && <CampaignProgress churchId={props.config?.church?.id || ""} />}
       <Grid container spacing={3}>
         <Grid size={{ md: 8, xs: 12 }}>

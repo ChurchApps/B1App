@@ -49,9 +49,25 @@ export class EnvironmentHelper {
     let baseUrl = "https://ironwood.staging.b1.church";
     if (typeof window !== "undefined") {
       baseUrl = window.location.origin;
-    } else if (process.env.NEXT_PUBLIC_STAGE === "dev" || process.env.NEXT_STAGE === "dev") {
-      const port = process.env.PORT || "3301";
-      baseUrl = `http://localhost:${port}`;
+    } else {
+      try {
+        const { headers } = require("next/headers");
+        const headersList = await headers();
+        const host = headersList.get("host");
+        const protocol = headersList.get("x-forwarded-proto") || "https";
+        if (host && (host.includes("localhost") || host.includes("127.0.0.1"))) {
+          const portMatch = host.match(/:(\d+)/);
+          const port = portMatch ? portMatch[1] : (process.env.PORT || "3301");
+          baseUrl = `http://127.0.0.1:${port}`;
+        } else if (host) {
+          baseUrl = `${protocol}://${host}`;
+        }
+      } catch (e) {
+        if (process.env.NEXT_PUBLIC_STAGE === "dev" || process.env.NEXT_STAGE === "dev") {
+          const port = process.env.PORT || "3301";
+          baseUrl = `http://localhost:${port}`;
+        }
+      }
     }
     await Locale.init([baseUrl + `/locales/{{lng}}.json?v=1`, baseUrl + `/apphelper/locales/{{lng}}.json`]);
   };

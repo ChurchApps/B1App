@@ -40,7 +40,7 @@ export function BiblePage() {
 
   return (
     <Container>
-      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.bible")}</h1>
+      <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.bible", "Bible")}</h1>
       <YouVersionProvider appKey={apiKey}>
         <div style={{ marginTop: "20px" }}>
           <BibleReader.Root versionId={versionId} onVersionChange={setVersionId} book={book} onBookChange={setBook} chapter={chapter} onChapterChange={setChapter}>
