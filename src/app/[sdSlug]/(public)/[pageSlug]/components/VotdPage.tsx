@@ -45,7 +45,7 @@ export function VotdPage() {
     return (
       <Container>
         <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.verseOfTheDay", "Verse of the Day")}</h1>
-        <div className="full-frame" style={{ minHeight: "200px" }} />
+        <div className="full-frame" style={{ minHeight: "200px", marginTop: 0 }} />
       </Container>
     );
   }
@@ -56,6 +56,7 @@ export function VotdPage() {
       <img
         src={"https://votd.org/v1/" + day + "/" + shape + ".jpg"}
         className="full-frame"
+        style={{ marginTop: 0 }}
         alt={Locale.label("pageSlug.verseOfTheDay", "Verse of the Day")}
       />
     </Container>
