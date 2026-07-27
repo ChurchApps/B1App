@@ -4,7 +4,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { accent as deriveAccent, isValidHex, shade, tint } from "@/helpers/colorTints";
 import React from "react";
 
-interface Props { config:ConfigurationInterface }
+interface Props { config: ConfigurationInterface }
 
 const RADIUS_DEFAULTS = { sm: "4px", md: "8px", lg: "12px", xl: "16px" };
 const SHADOW_DEFAULTS = {
@@ -101,7 +101,7 @@ export const Theme: React.FC<Props> = (props) => {
   // Rendered as a hoisted <link> below so fonts ship in the initial HTML (no FOUT/CLS).
   let googleFontsUrl = "";
   if (googleFonts.length > 0) {
-    const fontList:string[] = [];
+    const fontList: string[] = [];
     googleFonts.forEach(f => fontList.push(f.replace(/ /g, "+") + ":wght@400;700"));
     googleFontsUrl = "https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap";
   }
@@ -123,7 +123,7 @@ export const Theme: React.FC<Props> = (props) => {
   }, [props?.config?.globalStyles?.customJS]);
 
   return (<>
-    <style jsx>
+    <style jsx global>
       {css}
     </style>
     {googleFontsUrl && <>
