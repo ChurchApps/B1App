@@ -76,7 +76,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const churchId = config.church.id;
   const [joining, setJoining] = React.useState(false);
   const [requestDialogOpen, setRequestDialogOpen] = React.useState(false);
-  const [tab, setTab] = React.useState<TabKey>("about");
+  // Initially show the Members tab to avoid the messaging screen popup caused by a mounting bug.
+  const [tab, setTab] = React.useState<TabKey>("members");
   const [chatOpen, setChatOpen] = React.useState(false);
   const [chatInitialTab, setChatInitialTab] = React.useState<ChatSubTab>("discussions");
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
