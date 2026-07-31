@@ -622,8 +622,11 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   React.useEffect(() => {
     if (!group) return;
+    // Use Members as the initial tab to avoid the Messages modal mounting
+    // before the screen is ready. Users can switch to Messages afterward,
+    // allowing the modal to open correctly.
     if (!availableTabs.some((t) => t.key === tab)) {
-      setTab(availableTabs[0].key);
+      setTab('members');
     }
   }, [group, hasAbout, hasPlans, isMember, isLeader, tab]);
 
