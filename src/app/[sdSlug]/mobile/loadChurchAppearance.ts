@@ -5,6 +5,7 @@ export interface ChurchAppearance {
   churchName?: string;
   primaryColor?: string;
   favicon?: string;
+  pwaShortName?: string;
 }
 
 export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppearance> {
@@ -17,7 +18,7 @@ export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppear
   try {
     const churchRes = await fetch(
       `${base}/churches/lookup/?subDomain=${encodeURIComponent(sdSlug)}`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 60 } }
     );
     if (!churchRes.ok) return {};
     const church = await churchRes.json();
@@ -25,7 +26,7 @@ export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppear
 
     const appearanceRes = await fetch(
       `${base}/settings/public/${church.id}`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 60 } }
     );
     if (!appearanceRes.ok) {
       return { churchId: church.id, churchName: church.name };
@@ -42,7 +43,8 @@ export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppear
       churchId: church.id,
       churchName: church.name,
       primaryColor: appThemePrimary || appearance?.primaryColor,
-      favicon: appearance?.favicon_400x400 || appearance?.favicon_16x16
+      favicon: appearance?.favicon_400x400 || appearance?.favicon_16x16,
+      pwaShortName: appearance?.pwaShortName
     };
   } catch {
     return {};
