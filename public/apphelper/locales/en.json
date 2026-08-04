@@ -354,6 +354,7 @@
 	},
 	"wrapper": {
 		"chatWith": "Chat with",
+		"currentChurch": "Current church",
 		"deleteChurch": "Delete",
 		"editAccount": "Edit Account",
 		"editChurchProfile": "Edit Church Profile",

@@ -677,6 +677,7 @@
       "deleteBlockoutTitle": "Delete blockout date?",
       "endDate": "End date",
       "files": "Files",
+      "audioUnsupported": "Your browser does not support audio playback.",
       "keySignature": "Key Signature",
       "keys": "Keys",
       "language": "Language",

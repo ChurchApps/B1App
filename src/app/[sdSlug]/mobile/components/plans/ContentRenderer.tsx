@@ -6,7 +6,7 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 
 interface ContentRendererProps {
   url?: string;
-  mediaType?: "video" | "image" | "text" | "iframe";
+  mediaType?: "video" | "image" | "audio" | "text" | "iframe";
   title?: string;
   description?: string;
   loading?: boolean;
@@ -17,6 +17,12 @@ interface ContentRendererProps {
 function isVideoUrl(url: string): boolean {
   const videoExtensions = [".mp4", ".webm", ".ogg", ".m3u8", ".mov", ".avi"];
   return videoExtensions.some(ext => url.toLowerCase().includes(ext));
+}
+
+// .ogg stays in the video list; provider content already relies on it
+export function isAudioUrl(url: string): boolean {
+  const audioExtensions = [".mp3", ".m4a", ".aac", ".wav", ".flac", ".oga"];
+  return audioExtensions.some(ext => url.toLowerCase().includes(ext));
 }
 
 function isIframeUrl(url: string): boolean {
@@ -78,7 +84,8 @@ export const ContentRenderer: React.FC<ContentRendererProps> = ({
 
   let effectiveMediaType = mediaType;
   if (!effectiveMediaType) {
-    if (isVideoUrl(url)) effectiveMediaType = "video";
+    if (isAudioUrl(url)) effectiveMediaType = "audio";
+    else if (isVideoUrl(url)) effectiveMediaType = "video";
     else if (isIframeUrl(url)) effectiveMediaType = "iframe";
     else if (isImageUrl(url)) effectiveMediaType = "image";
     else effectiveMediaType = "image";
@@ -91,6 +98,15 @@ export const ContentRenderer: React.FC<ContentRendererProps> = ({
           <video controls autoPlay={false} style={{ maxWidth: "100%", maxHeight: "70vh" }} src={url}>
             Your browser does not support the video tag.
           </video>
+        </Box>
+      );
+
+    case "audio":
+      return (
+        <Box sx={{ width: "100%", p: 2 }}>
+          <audio controls preload="metadata" style={{ width: "100%" }} src={url}>
+            {Locale.label("mobile.plans.audioUnsupported")}
+          </audio>
         </Box>
       );
 
