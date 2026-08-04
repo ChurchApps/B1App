@@ -189,7 +189,21 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
                     router.push(`/mobile/community/${l.person.id}`);
                   }
                 }}
-                sx={{ display: "flex", alignItems: "center", gap: 1, cursor: "pointer" }}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  cursor: "pointer",
+                  p: 1,
+                  borderRadius: "8px",
+                  transition: "background-color 0.2s ease, transform 0.1s ease",
+                  "&:hover": {
+                    bgcolor: "action.hover"
+                  },
+                  "&:active": {
+                    transform: "scale(0.98)"
+                  }
+                }}
               >
                 {photo ? (
                   <Box

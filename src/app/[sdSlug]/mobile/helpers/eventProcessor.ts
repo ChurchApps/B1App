@@ -66,7 +66,7 @@ export class EventProcessor {
             } else if (eventDate < startRange) {
               const dayOfWeek = eventDate.getDay();
               const weekNumber = parseInt(rule.match(/BYSETPOS=(\d+)/)?.[1] || "1", 10);
-              const targetDay = new Date(targetYear, targetMonth, 1);
+              const targetDay = new Date(targetYear, targetMonth, 1, eventDate.getHours(), eventDate.getMinutes(), eventDate.getSeconds(), eventDate.getMilliseconds());
               while (targetDay.getDay() !== dayOfWeek) targetDay.setDate(targetDay.getDate() + 1);
               targetDay.setDate(targetDay.getDate() + (weekNumber - 1) * 7);
               if (targetDay.getMonth() === targetMonth) dates = [targetDay];
