@@ -33,7 +33,7 @@ interface Props {
 
 interface MediaState {
   url?: string;
-  mediaType?: "video" | "image" | "text" | "iframe";
+  mediaType?: "video" | "image" | "audio" | "text" | "iframe";
   label?: string;
   description?: string;
 }
@@ -45,7 +45,7 @@ const FILE_TYPES = new Set(["file", "providerFile", "addon", "lessonAddOn"]);
 const getDisplayText = (item: InstructionItem): string =>
   (item.content && item.content.trim()) || item.label || "";
 
-const findDownloadable = (item: InstructionItem): { url?: string; mediaType?: "video" | "image"; thumbnail?: string } => {
+const findDownloadable = (item: InstructionItem): { url?: string; mediaType?: "video" | "image" | "audio"; thumbnail?: string } => {
   if (item.downloadUrl) return { url: item.downloadUrl, mediaType: item.mediaType, thumbnail: item.thumbnail };
   if (item.children?.length) {
     for (const child of item.children) {

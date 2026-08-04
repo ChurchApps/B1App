@@ -5,6 +5,7 @@ import { PlanItemInterface, PlanHelper } from "@/helpers";
 import { SongDialog } from "./SongDialog";
 import { LessonDialog } from "./LessonDialog";
 import { ActionDialog } from "./ActionDialog";
+import { isAudioUrl } from "./ContentRenderer";
 
 interface Props {
   planItem: PlanItemInterface;
@@ -117,6 +118,8 @@ export const PlanItem = (props: Props) => {
         );
       case "item":
       default:
+        // Audio links open the inline player dialog instead of downloading via the OS (issue #960)
+        if (!pi.relatedId && pi.link && isAudioUrl(pi.link)) return getItemRow(() => setActionId(pi.id || null));
         return getItemRow(pi.relatedId ? () => setLessonSectionId(pi.relatedId || null) : undefined);
     }
   };

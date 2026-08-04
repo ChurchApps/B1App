@@ -4,6 +4,7 @@ import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
 import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface, SongInterface } from "@/helpers";
 import { SongDetails } from "./SongDetails";
+import { isAudioUrl } from "./ContentRenderer";
 import { ChordProHelper } from "@/helpers/ChordProHelper";
 import { PraiseChartsHelper } from "@/helpers/PraiseChartsHelper";
 
@@ -62,6 +63,9 @@ export const SongDialog: React.FC<Props> = (props) => {
   const listLinks = () => (<ul>
     {links.map((l, i) => (<li key={l.id}>
       <a href={l.url} target="_blank" rel="noreferrer" data-testid={`song-external-${i}-link`}>{l.text}</a>
+      {l.url && isAudioUrl(l.url) && (
+        <audio controls preload="metadata" style={{ width: "100%", display: "block", marginTop: 4 }} src={l.url} data-testid={`song-external-${i}-audio`} />
+      )}
     </li>))}
   </ul>);
 
