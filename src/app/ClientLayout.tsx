@@ -62,7 +62,7 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
         }
       }
     },
-    typography: { fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' },
+    typography: { fontFamily: 'var(--bodyFont), "Roboto", "Helvetica", "Arial", sans-serif' },
     shape: { borderRadius: 6 }
   });
 
