@@ -32,6 +32,10 @@ interface PrivateMessageRow {
   toPersonId?: string;
 }
 
+interface PersonWithDM extends PersonInterface {
+  allowDirectMessages?: boolean;
+}
+
 export const MessageConversation = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
@@ -57,18 +61,18 @@ export const MessageConversation = ({ id, config }: Props) => {
   const myPersonId = userContext?.person?.id || UserHelper.currentUserChurch?.person?.id || "";
   const myDisplayName = userContext?.person?.name?.display || UserHelper.currentUserChurch?.person?.name?.display || "";
 
-  const { data: personData } = useQuery<PersonInterface | null>({
+  const { data: personData } = useQuery<PersonWithDM | null>({
     queryKey: ["community-person", id],
     queryFn: async () => {
       try {
         const p = await ApiHelper.get("/people/" + id, "MembershipApi");
-        if (p) return p as PersonInterface;
+        if (p) return p as PersonWithDM;
       } catch {
 
       }
       try {
         const people = await ApiHelper.get("/people/basic?ids=" + id, "MembershipApi");
-        if (Array.isArray(people) && people.length > 0) return people[0] as PersonInterface;
+        if (Array.isArray(people) && people.length > 0) return people[0] as PersonWithDM;
       } catch {
 
       }
@@ -77,6 +81,8 @@ export const MessageConversation = ({ id, config }: Props) => {
     enabled: !!id
   });
   const person = personData ?? null;
+  // Existing threads stay writable; the age gate only blocks opening a new conversation.
+  const messagingBlocked = person?.allowDirectMessages === false && !conversationId;
 
   const { data: existingConvId } = useQuery<string | null>({
     queryKey: ["private-message-conv", myPersonId, id],
@@ -327,8 +333,9 @@ export const MessageConversation = ({ id, config }: Props) => {
       } else {
         await createConversationAndSend(content);
       }
-    } catch {
-      setError(Locale.label("mobile.details.messageFailed"));
+    } catch (e) {
+      if ((e as Error)?.message === "ageRestricted") setError(Locale.label("mobile.details.messageBlockedAge"));
+      else setError(Locale.label("mobile.details.messageFailed"));
 
       setPending((prev) => prev.filter((m) => m.id !== optimistic.id));
     } finally {
@@ -624,76 +631,96 @@ export const MessageConversation = ({ id, config }: Props) => {
         </Box>
       )}
 
-      <Box
-        sx={{
-          flexShrink: 0,
-          width: "100%",
-          minWidth: 0,
-          bgcolor: tc.surface,
-          borderTop: `1px solid ${tc.border}`,
-          px: "10px",
-          pt: "10px",
-          pb: "calc(10px + env(safe-area-inset-bottom))",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px"
-        }}
-      >
-        <IconButton
-          aria-label={Locale.label("mobile.details.openEmojiPicker")}
-          onClick={(e) => setEmojiAnchor(e.currentTarget)}
-          sx={{ flexShrink: 0, color: tc.textMuted, width: 36, height: 36 }}
-        >
-          <EmojiEmotionsOutlinedIcon sx={{ fontSize: 22 }} />
-        </IconButton>
-        <TextField
-          inputRef={inputRef}
-          multiline
-          maxRows={4}
-          placeholder={Locale.label("mobile.details.typeMessage")}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
-          }}
-          size="small"
-          sx={{
-            flex: 1,
-            minWidth: 0,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "22px",
-              bgcolor: tc.background,
-              fontSize: 14,
-              px: "12px",
-              py: "8px"
-            },
-            "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
-          }}
-        />
-        <IconButton
-          aria-label={Locale.label("mobile.details.send")}
-          onClick={handleSend}
-          disabled={sending || !text.trim()}
+      {messagingBlocked && (
+        <Box
           sx={{
             flexShrink: 0,
-            bgcolor: tc.primary,
-            color: tc.onPrimary,
-            "&:hover": { bgcolor: tc.primary },
-            "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
-            width: 40,
-            height: 40
+            width: "100%",
+            bgcolor: tc.surface,
+            borderTop: `1px solid ${tc.border}`,
+            px: `${mobileTheme.spacing.md}px`,
+            pt: "14px",
+            pb: "calc(14px + env(safe-area-inset-bottom))",
+            textAlign: "center"
           }}
         >
-          {sending ? (
-            <CircularProgress size={18} sx={{ color: tc.onPrimary }} />
-          ) : (
-            <SendIcon sx={{ fontSize: 20 }} />
-          )}
-        </IconButton>
-      </Box>
+          <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
+            {Locale.label("mobile.details.messagingNotAvailable")}
+          </Typography>
+        </Box>
+      )}
+      {!messagingBlocked && (
+        <Box
+          sx={{
+            flexShrink: 0,
+            width: "100%",
+            minWidth: 0,
+            bgcolor: tc.surface,
+            borderTop: `1px solid ${tc.border}`,
+            px: "10px",
+            pt: "10px",
+            pb: "calc(10px + env(safe-area-inset-bottom))",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px"
+          }}
+        >
+          <IconButton
+            aria-label={Locale.label("mobile.details.openEmojiPicker")}
+            onClick={(e) => setEmojiAnchor(e.currentTarget)}
+            sx={{ flexShrink: 0, color: tc.textMuted, width: 36, height: 36 }}
+          >
+            <EmojiEmotionsOutlinedIcon sx={{ fontSize: 22 }} />
+          </IconButton>
+          <TextField
+            inputRef={inputRef}
+            multiline
+            maxRows={4}
+            placeholder={Locale.label("mobile.details.typeMessage")}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            size="small"
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "22px",
+                bgcolor: tc.background,
+                fontSize: 14,
+                px: "12px",
+                py: "8px"
+              },
+              "& .MuiOutlinedInput-notchedOutline": { borderColor: tc.border }
+            }}
+          />
+          <IconButton
+            aria-label={Locale.label("mobile.details.send")}
+            onClick={handleSend}
+            disabled={sending || !text.trim()}
+            sx={{
+              flexShrink: 0,
+              bgcolor: tc.primary,
+              color: tc.onPrimary,
+              "&:hover": { bgcolor: tc.primary },
+              "&.Mui-disabled": { bgcolor: tc.border, color: tc.textSecondary },
+              width: 40,
+              height: 40
+            }}
+          >
+            {sending ? (
+              <CircularProgress size={18} sx={{ color: tc.onPrimary }} />
+            ) : (
+              <SendIcon sx={{ fontSize: 20 }} />
+            )}
+          </IconButton>
+        </Box>
+      )}
 
       <Popover
         anchorEl={emojiAnchor}

@@ -63,7 +63,7 @@ export const MessageComposePage = ({ config: _config }: Props) => {
         `/people/search/?term=${encodeURIComponent(term)}`,
         "MembershipApi"
       );
-      setResults(Array.isArray(data) ? data : []);
+      setResults((Array.isArray(data) ? data : []).filter((p) => (p as { allowDirectMessages?: boolean }).allowDirectMessages !== false));
     } catch {
       setResults([]);
     } finally {

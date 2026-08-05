@@ -46,4 +46,20 @@ test.describe("Mobile community", () => {
     await expect(main).toContainText(/Donald/, { timeout: 30000 });
     await expect(main).toContainText(/Carol/);
   });
+
+  test("adult profile shows the Message quick action", async ({ page }) => {
+    await page.goto("/mobile/community/PER00000080");
+    const main = page.locator("main");
+    await expect(main).toContainText(/Donald/, { timeout: 30000 });
+    await expect(main.getByRole("button", { name: /Send message/i })).toBeVisible({ timeout: 15000 });
+  });
+
+  test("minor profile hides the Message quick action", async ({ page }) => {
+    // Noah Davis (PER00000030, b. 2020) is under the default-18 messaging minimum age.
+    await page.goto("/mobile/community/PER00000030");
+    const main = page.locator("main");
+    await expect(main).toContainText(/Noah/, { timeout: 30000 });
+    // Call/text/email actions may also be absent (data-gated); the adult test above guards against a false pass.
+    await expect(main.getByRole("button", { name: /Send message/i })).toHaveCount(0);
+  });
 });
