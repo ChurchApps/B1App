@@ -18,7 +18,7 @@ export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppear
   try {
     const churchRes = await fetch(
       `${base}/churches/lookup/?subDomain=${encodeURIComponent(sdSlug)}`,
-      { next: { revalidate: 60 } }
+      { next: { revalidate: 3600 } }
     );
     if (!churchRes.ok) return {};
     const church = await churchRes.json();
