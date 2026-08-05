@@ -36,10 +36,12 @@ export function PageLayout(props: Props) {
     }
   }
   const css = StyleHelper.getCss(props.pageData.sections || []);
+  const fontUrls = StyleHelper.getFontUrls(props.pageData.sections || []);
   const firstBg = props.pageData.sections?.[0]?.background;
   const isImageBg = firstBg && firstBg.indexOf("/") > -1 && firstBg.indexOf("youtube:") === -1;
   return <>
     {isImageBg && <link rel="preload" as="image" href={b1ImageOptimizer.backgroundSrc(firstBg)} fetchPriority="high" />}
+    {fontUrls.map((url) => <link key={url} rel="stylesheet" href={url} precedence="default" />)}
     <style>{css}</style>
     {result}
   </>;

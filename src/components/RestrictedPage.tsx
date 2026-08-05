@@ -44,6 +44,7 @@ export function RestrictedPage({ config, pageUrl, siteId = "" }: Props) {
     StyleHelper.getAllStyles(pageData.sections);
     const css = StyleHelper.getCss(pageData.sections);
     return (<>
+      {StyleHelper.getFontUrls(pageData.sections).map((url: string) => <link key={url} rel="stylesheet" href={url} precedence="default" />)}
       <style>{css}</style>
       <Zone church={config.church} sections={pageData.sections} zone="main" churchSettings={config.appearance} />
     </>);
