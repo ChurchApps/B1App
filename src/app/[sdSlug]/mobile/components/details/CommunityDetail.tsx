@@ -27,6 +27,7 @@ interface HouseholdMember extends PersonInterface {
 
 interface PersonWithPrivacy extends PersonInterface {
   optedOut?: boolean;
+  allowDirectMessages?: boolean;
 }
 
 export const CommunityDetail = ({ id, config: _config }: Props) => {
@@ -234,15 +235,17 @@ export const CommunityDetail = ({ id, config: _config }: Props) => {
         />
       );
     }
-    actions.push(
-      <QuickAction
-        key="msg"
-        icon="message"
-        label={Locale.label("mobile.details.message")}
-        ariaLabel={Locale.label("mobile.details.sendMessage")}
-        onClick={handleMessage}
-      />
-    );
+    if (person?.allowDirectMessages !== false) {
+      actions.push(
+        <QuickAction
+          key="msg"
+          icon="message"
+          label={Locale.label("mobile.details.message")}
+          ariaLabel={Locale.label("mobile.details.sendMessage")}
+          onClick={handleMessage}
+        />
+      );
+    }
     if (primaryPhone) {
       actions.push(
         <QuickAction
