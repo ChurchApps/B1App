@@ -1,13 +1,13 @@
 import { loadChurchAppearance } from "./[sdSlug]/mobile/loadChurchAppearance";
 
 export async function buildManifest(sdSlug: string) {
-  const { churchName, primaryColor } = await loadChurchAppearance(sdSlug);
+  const { churchName, primaryColor, pwaShortName } = await loadChurchAppearance(sdSlug);
   const themeColor = primaryColor || "#0D47A1";
   const safeName = (churchName && churchName.trim()) || sdSlug || "Church";
-  const shortName = safeName.length > 12 ? safeName.substring(0, 12) : safeName;
+  const shortName = pwaShortName?.trim().slice(0, 12) || (safeName.length > 12 ? safeName.substring(0, 12).trim() : safeName);
 
   return {
-    id: "/mobile/dashboard",
+    id: `/mobile/dashboard?church=${encodeURIComponent(sdSlug)}`,
     name: safeName,
     short_name: shortName,
     description: `${safeName} mobile app`,
