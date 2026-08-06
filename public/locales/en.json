@@ -217,7 +217,7 @@
     "noGroups": "No groups found",
     "phone": "Phone Number",
     "phoneLabel": "Your phone number",
-    "storageInfo": "100 MB of storage space is provided for free for storing PDFs and other documents commonly needed. We suggest using Google Drive or Dropbox to store files if additional space is needed.",
+    "storageInfo": "100 MB of storage space is provided for free for storing PDFs and other documents commonly needed. A church admin can link Google Drive, Dropbox, OneDrive or an S3 bucket for more space.",
     "submit": "Submit",
     "submitLabel": "Send message to group leader",
     "upload": "Upload",

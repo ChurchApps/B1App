@@ -23,9 +23,12 @@ export const GroupResources: React.FC<Props> = (props) => {
   const [pendingFileSave, setPendingFileSave] = useState(false);
   const [files, setFiles] = useState<FileInterface[] | null>(null);
   const [links, setLinks] = useState<LinkInterface[] | null>(null);
+  const [storageStatus, setStorageStatus] = useState<{ provider?: string; quotaBytes?: number } | null>(null);
 
   let usedSpace = 0;
   files?.forEach((f) => (usedSpace += f.size || 0));
+  // churches with linked external storage have no 100MB cap
+  const unlimited = !!storageStatus?.provider && storageStatus.provider !== "churchapps" && !storageStatus.quotaBytes;
 
   const handleFileSaved = (file: FileInterface) => {
     setPendingFileSave(false);
@@ -39,6 +42,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   const loadData = () => {
     ApiHelper.get("/files/group/" + props.groupId, "ContentApi").then((d: FileInterface[]) =>
       setFiles(d));
+    ApiHelper.get("/storage/status", "ContentApi").then(setStorageStatus).catch(() => setStorageStatus(null));
 
     ApiHelper.get("/links?category=groupLink", "ContentApi").then((data: LinkInterface[]) => {
       const result: LinkInterface[] = [];
@@ -71,7 +75,8 @@ export const GroupResources: React.FC<Props> = (props) => {
   };
 
   const getStorage = () => {
-    const percent = usedSpace / 100000000;
+    if (unlimited) return <div>{Locale.label("groups.usedSpace").replace("{}", formatSize(usedSpace))}</div>;
+    const percent = Math.min(100, (usedSpace / 100000000) * 100);
     return (
       <>
         <div>{Locale.label("groups.usedSpace").replace("{}", formatSize(usedSpace))}</div>
@@ -191,8 +196,8 @@ export const GroupResources: React.FC<Props> = (props) => {
       {canEditGroupResources && (
         <InputBox headerIcon="description" headerText={Locale.label("groups.upload")} saveFunction={handleSave} saveText={Locale.label("groups.upload")} data-testid="group-upload-inputbox">
           {getStorage()}
-          <p>{Locale.label("groups.storageInfo")}</p>
-          {usedSpace < 100000000 && (
+          {!unlimited && <p>{Locale.label("groups.storageInfo")}</p>}
+          {(unlimited || usedSpace < 100000000) && (
             <FileUpload
               contentType="group"
               contentId={props.groupId}
