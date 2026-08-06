@@ -562,7 +562,9 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: unlimited ? 0 : 1 }}>
             <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-              {Locale.label("mobile.group.usedStorage").replace("{}", formatSize(used))}
+              {unlimited
+                ? Locale.label("mobile.group.usedStorageUnlimited", "Used {}").replace("{}", formatSize(used))
+                : Locale.label("mobile.group.usedStorage").replace("{}", formatSize(used))}
             </Typography>
             {!unlimited && (
               <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>

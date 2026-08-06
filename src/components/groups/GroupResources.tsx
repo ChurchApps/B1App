@@ -75,7 +75,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   };
 
   const getStorage = () => {
-    if (unlimited) return <div>{Locale.label("groups.usedSpace").replace("{}", formatSize(usedSpace))}</div>;
+    if (unlimited) return <div>{Locale.label("groups.usedSpaceUnlimited", "Used space: {}").replace("{}", formatSize(usedSpace))}</div>;
     const percent = Math.min(100, (usedSpace / 100000000) * 100);
     return (
       <>
