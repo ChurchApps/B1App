@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import axios, { type AxiosProgressEvent } from "axios";
+import { FileHelper } from "@churchapps/helpers";
 import {
   Box,
   Button,
@@ -71,6 +71,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
   const [pendingFile, setPendingFile] = React.useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = React.useState<number>(-1);
   const [uploadError, setUploadError] = React.useState<string | null>(null);
+  const [storageStatus, setStorageStatus] = React.useState<{ provider?: string; quotaBytes?: number } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const load = React.useCallback(async () => {
@@ -88,6 +89,11 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       setLinks(matches);
     } catch {
       setLinks([]);
+    }
+    try {
+      setStorageStatus(await ApiHelper.get("/storage/status", "ContentApi"));
+    } catch {
+      setStorageStatus(null);
     }
   }, [groupId]);
 
@@ -149,27 +155,11 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
     }
   };
 
-  const postPresigned = async (presigned: PresignedResponse, file: File) => {
-    const formData = new FormData();
-    formData.append("acl", "public-read");
-    formData.append("Content-Type", file.type);
-    for (const prop in presigned.fields) formData.append(prop, presigned.fields[prop]);
-    formData.append("file", file);
-    await axios.post(presigned.url, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-      onUploadProgress: (evt: AxiosProgressEvent) => {
-        if (evt.total) {
-          setUploadProgress(Math.round((100 * evt.loaded) / evt.total));
-        }
-      }
-    });
-  };
-
   const doUpload = async (file: File) => {
     setUploadError(null);
     setUploadProgress(0);
     try {
-      const params = { fileName: file.name, contentType: "group", contentId: groupId };
+      const params = { fileName: file.name, contentType: "group", contentId: groupId, size: file.size, mimeType: file.type };
       let presigned: PresignedResponse | null = null;
       try {
         presigned = await ApiHelper.post("/files/postUrl", params, "ContentApi");
@@ -184,7 +174,8 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
         contentId: groupId
       };
       if (presigned && presigned.key) {
-        await postPresigned(presigned, file);
+        const uploaded = await FileHelper.uploadPresignedFile(presigned, file, setUploadProgress);
+        if (uploaded.externalId) record.externalId = uploaded.externalId;
       } else {
         const base64 = await convertBase64(file);
         record.fileContents = base64;
@@ -208,8 +199,10 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
   };
 
   const used = (files || []).reduce((s, f) => s + (f.size || 0), 0);
-  const percent = Math.min(100, (used / STORAGE_CAP) * 100);
-  const storageFull = used >= STORAGE_CAP;
+  // churches with linked external storage have no 100MB cap
+  const unlimited = !!storageStatus?.provider && storageStatus.provider !== "churchapps" && !storageStatus.quotaBytes;
+  const percent = unlimited ? 0 : Math.min(100, (used / STORAGE_CAP) * 100);
+  const storageFull = !unlimited && used >= STORAGE_CAP;
 
   const renderFileRow = (f: FileRow) => {
     const href = f.contentPath
@@ -567,24 +560,28 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
             p: `${mobileTheme.spacing.md}px`
           }}
         >
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: 1 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: unlimited ? 0 : 1 }}>
             <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
               {Locale.label("mobile.group.usedStorage").replace("{}", formatSize(used))}
             </Typography>
-            <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-              {Math.round(percent)}%
-            </Typography>
+            {!unlimited && (
+              <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
+                {Math.round(percent)}%
+              </Typography>
+            )}
           </Box>
-          <LinearProgress
-            variant="determinate"
-            value={percent}
-            sx={{
-              height: 8,
-              borderRadius: 4,
-              bgcolor: tc.border,
-              "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 4 }
-            }}
-          />
+          {!unlimited && (
+            <LinearProgress
+              variant="determinate"
+              value={percent}
+              sx={{
+                height: 8,
+                borderRadius: 4,
+                bgcolor: tc.border,
+                "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 4 }
+              }}
+            />
+          )}
         </Box>
       )}
     </Box>

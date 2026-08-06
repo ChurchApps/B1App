@@ -210,7 +210,10 @@
 		}
 	},
 	"fileUpload": {
-		"file": "File"
+		"chooseFile": "Choose File",
+		"file": "File",
+		"quotaExceeded": "Storage quota exceeded. Delete unused files or upgrade your storage plan.",
+		"uploadFailed": "Upload failed. Please try again."
 	},
 	"formSubmissionEdit": {
 		"back": "Back",
