@@ -223,6 +223,7 @@
     "upload": "Upload",
     "uploadedFiles": "Uploaded Files",
     "usedSpace": "Used space: {} / 100MB",
+    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Please enter valid text",
       "linkUrl": "Please enter link",
@@ -605,6 +606,7 @@
       "uploadingProgress": "Uploading {}… {}%",
       "url": "URL",
       "usedStorage": "Used {} / 100MB",
+      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibility",
       "weekly": "Weekly",
       "yearly": "Yearly",
