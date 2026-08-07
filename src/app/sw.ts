@@ -60,11 +60,13 @@ const mobileRuntimeCaching: RuntimeCaching[] = [
       ]
     })
   },
-  // Content-shape API responses: stale-while-revalidate, 12h.
+  // Content-shape API responses: network-first — stale-while-revalidate served pre-write
+  // copies right after a save (upload, then list shows nothing until you navigate away).
   {
     matcher: isContentApi,
-    handler: new StaleWhileRevalidate({
+    handler: new NetworkFirst({
       cacheName: "api-content",
+      networkTimeoutSeconds: 3,
       plugins: [
         new CacheableResponsePlugin({ statuses: [0, 200] }),
         new ExpirationPlugin({ maxEntries: 200, maxAgeSeconds: 12 * 60 * 60 })
