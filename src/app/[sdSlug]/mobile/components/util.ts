@@ -88,7 +88,8 @@ export const shadePrimary = (cssColor: string, percent: number): string => {
   return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;
 };
 
-export const deriveNotificationUrl = (n: { contentType?: string; contentId?: string }): string | undefined => {
+export const deriveNotificationUrl = (n: { contentType?: string; contentId?: string; link?: string }): string | undefined => {
+  if (n.link?.startsWith("/mobile/")) return n.link; // server-provided deep link (e.g. event reminders); non-mobile links are staff paths
   if (!n.contentId) return undefined;
   const type = String(n.contentType || "").toLowerCase();
   const id = n.contentId;
@@ -112,6 +113,7 @@ export const getNotificationIcon = (contentType?: string): string => {
     case "group":
     case "groupannouncement": return "group";
     case "assignment": return "assignment";
+    case "event": return "event";
     case "donation": return "payment";
     default: return "notifications";
   }
