@@ -45,6 +45,7 @@ export const LessonDialog: React.FC<Props> = (props) => {
     providerId: hasProviderData ? props.providerId : undefined,
     providerPath: hasProviderData ? props.providerPath : undefined,
     providerContentPath: hasProviderData ? props.providerContentPath : undefined,
+    relatedId: hasProviderData ? props.sectionId : undefined,
     fallbackUrl: hasProviderData ? props.downloadUrl : undefined
   });
 
