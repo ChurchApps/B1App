@@ -30,6 +30,7 @@ export const ActionDialog: React.FC<Props> = (props) => {
     providerId: (hasProviderData || hasFallbackUrl) ? props.providerId : undefined,
     providerPath: hasProviderData ? props.providerPath : undefined,
     providerContentPath: hasProviderData ? props.providerContentPath : undefined,
+    relatedId: hasProviderData ? props.actionId : undefined,
     fallbackUrl: props.downloadUrl
   });
 
