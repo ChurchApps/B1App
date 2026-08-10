@@ -59,7 +59,7 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
     };
     iconName = "notifications_off";
     title = "Enable notifications in your browser";
-    body = "Notifications are currently blocked. Open your browser or device site settings, allow notifications for this app, then return here.";
+    body = `Notifications are currently blocked. ${WebPushHelper.getUnblockInstructions()}`;
     primaryLabel = "View Notification Settings";
     primaryAction = () => router.push("/mobile/notifications");
   } else if (diagnostics.permission !== "granted" && installRequired) {

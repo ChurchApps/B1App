@@ -120,6 +120,12 @@ const isIos = () => {
 
 const requiresInstallForPush = () => SharedWebPushHelper.isSupported() && isIos() && !SharedWebPushHelper.isStandalone();
 
+// On Android the installed app's notification toggle mirrors Chrome's site permission — App info alone can't unblock it.
+const getUnblockInstructions = () => {
+  if (isIos()) return "Open iPhone Settings, find this app under Notifications, and turn Allow Notifications on. Then return here.";
+  return "Open this site in Chrome, tap the icon next to the address bar, choose Permissions, and set Notifications to Allow. The phone's App info toggle follows this browser setting and won't stay on until Chrome allows it.";
+};
+
 const ensureServiceWorkerReady = async (): Promise<ServiceWorkerRegistration | null> => {
   if (typeof window === "undefined" || !("serviceWorker" in navigator)) return null;
 
@@ -261,6 +267,7 @@ const postSubscription = async (subscription: PushSubscription) => {
 export const WebPushHelper = {
   ...SharedWebPushHelper,
   getPermissionState,
+  getUnblockInstructions,
   isServerRegistrationEnabled: () => isWebPushServerEnabled(),
   getRegistration: async () => ensureServiceWorkerReady(),
   getExistingSubscription: async () => {

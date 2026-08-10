@@ -310,7 +310,7 @@ export const NotificationsPage = ({ config }: Props) => {
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
             {blocked
-              ? "Blocked in browser settings"
+              ? `Blocked. ${WebPushHelper.getUnblockInstructions()}`
               : installRequired
                 ? (diagnostics.statusReason || "Install this app to finish notification setup on this device")
                 : pendingRegistration
