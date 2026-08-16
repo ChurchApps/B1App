@@ -13,10 +13,19 @@ import { SiteWidgets } from "@/components/SiteWidgets";
 import { ChurchAnalytics } from "@/components/ChurchAnalytics";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { fetchCached } from "@/helpers/ConfigHelper";
+import { isNoindexHost } from "@/helpers/noindexHost";
+import { headers } from "next/headers";
+import type { Metadata } from "next";
 
 type LayoutParams = Promise<{ sdSlug: string }>;
 
 export const viewport = { themeColor: "#ffffff" };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const headerList = await headers();
+  if (isNoindexHost(headerList.get("x-forwarded-host") || headerList.get("host"))) return { robots: { index: false, follow: false } };
+  return {};
+}
 
 async function loadSiteSettings(sdSlug: string, churchId?: string): Promise<{ announcementRaw?: string; launcherRaw?: string; ga4MeasurementId?: string }> {
   if (!churchId) return {};

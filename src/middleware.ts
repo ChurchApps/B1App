@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isNoindexHost } from "@/helpers/noindexHost";
 
 const INTERNAL_HOSTS = ["localhost", "b1.church", "localtest.me"];
 const INTERNAL_SUFFIXES = [".b1.church", ".localtest.me", ".localhost", ".up.railway.app", ".vercel.app"];
@@ -14,7 +15,7 @@ const apiBase = () => {
 };
 
 export async function middleware(req: NextRequest) {
-  const host = (req.headers.get("host") || "").split(":")[0].toLowerCase();
+  const host = (req.headers.get("x-forwarded-host") || req.headers.get("host") || "").split(",")[0].split(":")[0].trim().toLowerCase();
   const isInternal = !host || INTERNAL_HOSTS.includes(host) || INTERNAL_SUFFIXES.some((s) => host.endsWith(s));
 
   const headers = new Headers(req.headers);
@@ -36,5 +37,7 @@ export async function middleware(req: NextRequest) {
     }
     if (entry.site) headers.set("x-site", entry.site);
   }
-  return NextResponse.next({ request: { headers } });
+  const res = NextResponse.next({ request: { headers } });
+  if (isNoindexHost(host)) res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return res;
 }
