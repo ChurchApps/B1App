@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { buildContentSecurityPolicy, generateNonce } from "@/helpers/contentSecurityPolicy";
+import { isNoindexHost } from "@/helpers/noindexHost";
 
 const INTERNAL_HOSTS = ["localhost", "b1.church", "localtest.me"];
 const INTERNAL_SUFFIXES = [".b1.church", ".localtest.me", ".localhost", ".up.railway.app", ".vercel.app"];
@@ -14,11 +16,17 @@ const apiBase = () => {
 };
 
 export async function middleware(req: NextRequest) {
-  const host = (req.headers.get("host") || "").split(":")[0].toLowerCase();
+  const host = (req.headers.get("x-forwarded-host") || req.headers.get("host") || "").split(",")[0].split(":")[0].trim().toLowerCase();
   const isInternal = !host || INTERNAL_HOSTS.includes(host) || INTERNAL_SUFFIXES.some((s) => host.endsWith(s));
 
   const headers = new Headers(req.headers);
   headers.delete("x-site"); // never trust a client-supplied x-site (spoofable rewrite input)
+
+  // Next reads the nonce off the request-side CSP header and stamps it onto the
+  // scripts it renders, which is what lets script-src drop 'unsafe-inline'.
+  const nonce = generateNonce();
+  const csp = buildContentSecurityPolicy({ nonce, dev: process.env.NODE_ENV !== "production" });
+  headers.set("Content-Security-Policy", csp);
 
   if (!isInternal) {
     let entry = cache.get(host);
@@ -36,5 +44,8 @@ export async function middleware(req: NextRequest) {
     }
     if (entry.site) headers.set("x-site", entry.site);
   }
-  return NextResponse.next({ request: { headers } });
+  const res = NextResponse.next({ request: { headers } });
+  res.headers.set("Content-Security-Policy", csp);
+  if (isNoindexHost(host)) res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return res;
 }

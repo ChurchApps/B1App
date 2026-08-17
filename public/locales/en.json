@@ -737,6 +737,7 @@
       "couldNotUpdateDisplayName": "Could not update display name.",
       "couldNotUpdateEmail": "Could not update email.",
       "couldNotUpdatePassword": "Could not update password.",
+      "currentPassword": "Current password",
       "deleteConversation": "Delete conversation",
       "deleteNotification": "Delete notification",
       "detectingDevice": "Detecting your device…",
