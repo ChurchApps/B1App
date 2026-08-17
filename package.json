@@ -18,6 +18,7 @@
     "lint": "eslint --fix src/",
     "pretest": "node tests/setup/pretest.mjs",
     "test": "playwright test",
+    "test:unit": "node --experimental-strip-types --test tests/unit/contentSecurityPolicy.test.ts tests/unit/customContentSecurity.test.ts",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
