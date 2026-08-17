@@ -620,13 +620,19 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
   availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
 
+  // Default to the first tab, but never Messages — its modal can't mount before the screen is ready.
+  const defaultTab = availableTabs.find((t) => t.key !== "messages")?.key ?? "members";
+  const tabInitialized = React.useRef(false);
   React.useEffect(() => {
     if (!group) return;
-    // Use Members as the initial tab to avoid the Messages modal mounting
-    // before the screen is ready. Users can switch to Messages afterward,
-    // allowing the modal to open correctly.
+    const explicit = searchParams?.get("activeTab");
+    if (!tabInitialized.current && !explicit) {
+      tabInitialized.current = true;
+      setTab(defaultTab);
+      return;
+    }
     if (!availableTabs.some((t) => t.key === tab)) {
-      setTab('members');
+      setTab(defaultTab);
     }
   }, [group, hasAbout, hasPlans, isMember, isLeader, tab]);
 
