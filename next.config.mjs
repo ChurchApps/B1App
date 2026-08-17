@@ -131,28 +131,13 @@ const nextConfig = {
   },
 
   async headers() {
-    // frame-ancestors lists Lessons/B1 embedders. Omitted X-Frame-Options: DENY because church sites are framed by Lessons and B1. frame-src is https: because WebsiteUrlPage, stream tabs, and sermon videoUrl embed church-chosen URLs.
-    const contentSecurityPolicy = [
-      "default-src 'self'",
-      "base-uri 'self'",
-      "object-src 'none'",
-      "img-src 'self' data: blob: https:",
-      "font-src 'self' data: https://fonts.gstatic.com https://storage.googleapis.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://js.stripe.com https://www.google.com https://www.gstatic.com",
-      "connect-src 'self' https://*.churchapps.org https://*.b1.church https://*.lessons.church https://lessons.church https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com https://*.ingest.us.sentry.io https://*.sentry.io https://*.stripe.com https://api.youversion.com https://*.youversion.com https://www.google.com https://www.gstatic.com wss://*.churchapps.org wss://*.b1.church",
-      "frame-src 'self' https:",
-      "frame-ancestors 'self' https://*.b1.church https://b1.church https://*.churchapps.org https://churchapps.org https://lessons.church https://*.lessons.church",
-      "worker-src 'self' blob:",
-      "media-src 'self' blob: https:",
-      "form-action 'self' https://*.churchapps.org https://*.stripe.com"
-    ].join("; ");
-
+    // Content-Security-Policy is not set here: it needs a per-request nonce so
+    // script-src can drop 'unsafe-inline', which only middleware can issue.
+    // See src/helpers/contentSecurityPolicy.ts and src/middleware.ts.
     const securityHeaders = [
       { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
       { key: "X-Content-Type-Options", value: "nosniff" },
-      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-      { key: "Content-Security-Policy", value: contentSecurityPolicy }
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" }
     ];
 
     return [

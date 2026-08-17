@@ -102,4 +102,22 @@ describe("sanitizeCustomCss", () => {
     assert.equal(clean.includes("https://fonts.googleapis.com/css?family=Roboto"), true);
     assert.equal(clean.includes("color: red;"), true);
   });
+
+  it("strips payloads that would reassemble after a single pass", () => {
+    const clean = sanitizeCustomCss(`width: expexpression(ression(alert(1)); background: <scr<script>ipt>x; -moz--moz-bindingbinding: url(#x);`);
+    assert.equal(/expression\s*\(/i.test(clean), false);
+    assert.equal(/<script/i.test(clean), false);
+    assert.equal(clean.includes("-moz-binding"), false);
+  });
+
+  it("drops @import from hosts CSP style-src does not allow", () => {
+    const clean = sanitizeCustomCss(`@import url('https://evil.test/x.css'); @import url('https://fonts.googleapis.com.evil.test/x.css'); @import url('https://user:pass@fonts.googleapis.com/x.css'); color: red;`);
+    assert.equal(clean.includes("evil.test"), false);
+    assert.equal(clean.includes("user:pass"), false);
+    assert.equal(clean.includes("color: red;"), true);
+  });
+
+  it("strips IE behavior bindings", () => {
+    assert.equal(/behavior\s*:/i.test(sanitizeCustomCss(`behavior: url(evil.htc); color: red;`)), false);
+  });
 });
