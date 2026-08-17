@@ -4,9 +4,6 @@ import unusedImports from "eslint-plugin-unused-imports";
 import nextPlugin from "@next/eslint-plugin-next";
 import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
 
 export default [
   { ignores: ["node_modules/", "dist/", "build/", ".next/", "coverage/", "*.config.js"] },
