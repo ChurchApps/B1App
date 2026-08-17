@@ -175,6 +175,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const [newEmail, setNewEmail] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [savingEmail, setSavingEmail] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -442,6 +443,10 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const handleSavePassword = async () => {
     setPasswordError(null);
+    if (!currentPassword) {
+      setPasswordError("Current password is required.");
+      return;
+    }
     if (!newPassword || newPassword.length < 8) {
       setPasswordError("Password must be at least 8 characters.");
       return;
@@ -452,7 +457,8 @@ export const ProfileEditPage = ({ config }: Props) => {
     }
     setSavingPassword(true);
     try {
-      await ApiHelper.post("/users/updatePassword", { newPassword }, "MembershipApi");
+      await ApiHelper.post("/users/updatePassword", { currentPassword, newPassword }, "MembershipApi");
+      setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setSnack({ open: true, msg: Locale.label("mobile.screens.passwordUpdated"), severity: "success" });
@@ -987,6 +993,17 @@ export const ProfileEditPage = ({ config }: Props) => {
         {sectionHeader("Change Password", "lock")}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
+            label={Locale.label("mobile.screens.currentPassword")}
+            value={currentPassword}
+            onChange={(e) => { setCurrentPassword(e.target.value); setPasswordError(null); }}
+            type="password"
+            inputProps={{ autoComplete: "current-password" }}
+            variant="outlined"
+            size="medium"
+            fullWidth
+            sx={inputSx}
+          />
+          <TextField
             label={Locale.label("mobile.screens.newPassword")}
             value={newPassword}
             onChange={(e) => { setNewPassword(e.target.value); setPasswordError(null); }}
@@ -1017,7 +1034,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           <Button
             variant="contained"
             onClick={handleSavePassword}
-            disabled={savingPassword || !newPassword || !confirmPassword}
+            disabled={savingPassword || !currentPassword || !newPassword || !confirmPassword}
             sx={{
               bgcolor: tc.primary,
               borderRadius: `${mobileTheme.radius.md}px`,

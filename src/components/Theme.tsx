@@ -2,6 +2,7 @@
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { accent as deriveAccent, isValidHex, shade, tint } from "@/helpers/colorTints";
+import { gtagLoaderSrc, parseCustomJs, sanitizeCustomCss } from "@/helpers/customContentSecurity";
 import React from "react";
 
 interface Props { config: ConfigurationInterface }
@@ -94,7 +95,8 @@ export const Theme: React.FC<Props> = (props) => {
     } catch { /* malformed JSON */ }
   }
 
-  if (props.config.globalStyles?.customCss) lines.push(props.config.globalStyles?.customCss);
+  const customCss = sanitizeCustomCss(props.config.globalStyles?.customCss || "");
+  if (customCss) lines.push(customCss);
 
   const css = ":root { " + lines.join("\n") + " } " + navRules.join("\n");
 
@@ -106,20 +108,37 @@ export const Theme: React.FC<Props> = (props) => {
     googleFontsUrl = "https://fonts.googleapis.com/css2?family=" + fontList.join("&family=") + "&display=swap";
   }
 
-  // Execute customJS scripts properly — dangerouslySetInnerHTML doesn't execute <script> tags
   const customJsRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
+    const root = customJsRef.current;
+    if (!root) return;
+    root.replaceChildren();
     const customJS = props?.config?.globalStyles?.customJS;
-    if (!customJS || !customJsRef.current) return;
-    const container = customJsRef.current;
-    container.innerHTML = customJS;
-    const scripts = container.querySelectorAll("script");
-    scripts.forEach((orig) => {
+    if (!customJS) return;
+    const { externalScripts, measurementIds } = parseCustomJs(customJS);
+    const w = window as Window & { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void };
+    w.dataLayer = w.dataLayer || [];
+    if (typeof w.gtag !== "function") w.gtag = function gtag() { w.dataLayer!.push(arguments); };
+    for (const item of externalScripts) {
       const script = document.createElement("script");
-      orig.getAttributeNames().forEach((name) => { script.setAttribute(name, orig.getAttribute(name) || ""); });
-      if (orig.textContent) script.textContent = orig.textContent;
-      orig.replaceWith(script);
-    });
+      script.src = item.src;
+      if (item.async) script.async = true;
+      if (item.defer) script.defer = true;
+      root.appendChild(script);
+    }
+    for (const id of measurementIds) {
+      const src = gtagLoaderSrc(id);
+      if (src && !document.querySelector(`script[src="${src}"]`) && !externalScripts.some((s) => s.src === src || s.src.startsWith(src))) {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
+        root.appendChild(script);
+      }
+      if (id.startsWith("G-")) {
+        w.gtag("js", new Date());
+        w.gtag("config", id);
+      }
+    }
   }, [props?.config?.globalStyles?.customJS]);
 
   return (<>
