@@ -16,6 +16,7 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Permissions, type GroupInterface, type PlanInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { getFirstDayOfWeek } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
 import { getInitials } from "../util";
 import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
@@ -707,7 +708,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
               isMember={isMember}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
               onEditEvent={(ev) => setEditEvent(ev)}
-              firstDayOfWeek={(config.church as any)?.firstDayOfWeek || 0}
+              firstDayOfWeek={getFirstDayOfWeek(config.church)}
             />
           )}
           {tab === "attendance" && groupId && members !== null && (
