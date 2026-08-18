@@ -91,6 +91,10 @@ This document contains all data-testid attributes found in the B1 Church codebas
 - `calendar-errors` - Calendar validation errors
 - `calendar-name-input` - Calendar name input
 
+### Group Calendar (Mobile)
+- `weekday-{0-6}` - Weekday header cells in the month grid, in church firstDayOfWeek order
+- `day-{yyyy-MM-dd}` - Day cells in the month grid
+
 ### Site Admin
 - `add-navigation-link` - Add navigation link button
 - `show-login-switch` - Show login toggle switch

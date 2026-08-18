@@ -7,6 +7,7 @@ import { Box, Button, Chip, CircularProgress, Dialog, DialogContent, DialogTitle
 import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
+import { rotateWeekdays, weekdayColumn } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
 import { EventProcessor } from "../../helpers/eventProcessor";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
@@ -203,16 +204,14 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
-  const firstWeekdayRaw = monthStart.getDay();
-  const firstWeekday = (firstWeekdayRaw - firstDayOfWeek + 7) % 7;
+  const firstWeekday = weekdayColumn(monthStart.getDay(), firstDayOfWeek);
   const daysInMonth = monthEnd.getDate();
 
   const days: (Date | null)[] = [];
   for (let i = 0; i < firstWeekday; i++) days.push(null);
   for (let d = 1; d <= daysInMonth; d++) days.push(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d));
 
-  const baseLabels = ["S", "M", "T", "W", "T", "F", "S"];
-  const weekdayLabels = [...baseLabels.slice(firstDayOfWeek), ...baseLabels.slice(0, firstDayOfWeek)];
+  const weekdayLabels = rotateWeekdays(["S", "M", "T", "W", "T", "F", "S"], firstDayOfWeek);
 
   const goPrev = () => {
     const d = new Date(currentMonth);
@@ -435,6 +434,7 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
           {weekdayLabels.map((w, i) => (
             <Box
               key={`wd-${i}`}
+              data-testid={`weekday-${i}`}
               sx={{ textAlign: "center", fontSize: 12, fontWeight: 600, color: tc.primary, py: "4px" }}
             >
               {w}
