@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Smazat datum blokace?",
       "endDate": "Datum konce",
       "files": "Soubory",
+      "audioUnsupported": "Váš prohlížeč nepodporuje přehrávání zvuku.",
       "keySignature": "Tónina",
       "keys": "Tóniny",
       "language": "Jazyk",

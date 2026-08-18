@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Slet blokeringsdato?",
       "endDate": "Slutdato",
       "files": "Filer",
+      "audioUnsupported": "Din browser understøtter ikke lydafspilning.",
       "keySignature": "Toneart",
       "keys": "Tonearter",
       "language": "Sprog",

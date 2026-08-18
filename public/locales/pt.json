@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Excluir data de bloqueio?",
       "endDate": "Data de término",
       "files": "Arquivos",
+      "audioUnsupported": "Seu navegador não suporta reprodução de áudio.",
       "keySignature": "Tonalidade",
       "keys": "Tons",
       "language": "Idioma",

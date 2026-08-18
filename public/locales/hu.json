@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Letiltási dátum törlése?",
       "endDate": "Befejező dátum",
       "files": "Fájlok",
+      "audioUnsupported": "A böngészője nem támogatja a hanglejátszást.",
       "keySignature": "Hangnem",
       "keys": "Hangnemek",
       "language": "Nyelv",

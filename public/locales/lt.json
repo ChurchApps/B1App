@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Ištrinti nepasiekiamumo datą?",
       "endDate": "Pabaigos data",
       "files": "Failai",
+      "audioUnsupported": "Jūsų naršyklė nepalaiko garso atkūrimo.",
       "keySignature": "Tonacija",
       "keys": "Tonacijos",
       "language": "Kalba",

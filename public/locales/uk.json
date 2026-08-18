@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Видалити дату блокування?",
       "endDate": "Дата завершення",
       "files": "Файли",
+      "audioUnsupported": "Ваш браузер не підтримує відтворення аудіо.",
       "keySignature": "Тональність",
       "keys": "Ключі",
       "language": "Мова",
