@@ -26,6 +26,7 @@ export const SongDialog: React.FC<Props> = (props) => {
   const [songDetail, setSongDetail] = React.useState<SongDetailInterface | null>(null);
   const [products, setProducts] = React.useState<PraiseChartsProduct[]>([]);
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
+  const [audioFiles, setAudioFiles] = React.useState<any[]>([]);
   const [keyOffset, setKeyOffset] = React.useState(0);
 
   const loadData = async () => {
@@ -37,6 +38,8 @@ export const SongDialog: React.FC<Props> = (props) => {
     setSong(s);
     const sd = await ApiHelper.get("/songDetails/" + arr.songDetailId, "ContentApi");
     setSongDetail(sd);
+    const files = await ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi");
+    setAudioFiles(files || []);
   };
 
   useEffect(() => {
@@ -66,6 +69,15 @@ export const SongDialog: React.FC<Props> = (props) => {
       {l.url && isAudioUrl(l.url) && (
         <audio controls preload="metadata" style={{ width: "100%", display: "block", marginTop: 4 }} src={l.url} data-testid={`song-external-${i}-audio`} />
       )}
+    </li>))}
+  </ul>);
+
+  const listAudioFiles = () => (<ul>
+    {audioFiles.map((f, i) => (<li key={f.id}>
+      {f.fileName}
+      <audio controls preload="metadata" style={{ width: "100%", display: "block", marginTop: 4 }} src={f.contentPath} data-testid={`song-audio-${i}-audio`}>
+        {Locale.label("mobile.plans.audioUnsupported")}
+      </audio>
     </li>))}
   </ul>);
 
@@ -119,10 +131,14 @@ export const SongDialog: React.FC<Props> = (props) => {
       <DialogContent>
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, md: 9 }}>
-            {(products?.length > 0 || links.length > 0) && <>
+            {(products?.length > 0 || links.length > 0 || audioFiles.length > 0) && <>
               <h3>{Locale.label("mobile.plans.files")}</h3>
               {listProducts()}
               {listLinks()}
+              {audioFiles.length > 0 && <>
+                <h4>{Locale.label("mobile.plans.audioTracks")}</h4>
+                {listAudioFiles()}
+              </>}
             </>}
 
 

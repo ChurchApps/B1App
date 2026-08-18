@@ -614,7 +614,8 @@
       "previewNotAvailable": "此内容无法预览。",
       "previewNotAvailableSection": "此部分没有可用预览。",
       "releaseDate": "发布日期",
-      "startDate": "开始日期"
+      "startDate": "开始日期",
+      "audioTracks": "音轨"
     },
     "screenTitles": {
       "bible": "圣经",

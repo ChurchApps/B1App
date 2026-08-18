@@ -614,7 +614,8 @@
       "previewNotAvailable": "Pré-visualização não disponível para este conteúdo.",
       "previewNotAvailableSection": "Pré-visualização não disponível para esta seção.",
       "releaseDate": "Data de Lançamento",
-      "startDate": "Data de início"
+      "startDate": "Data de início",
+      "audioTracks": "Faixas de áudio"
     },
     "screenTitles": {
       "bible": "Bíblia",

@@ -614,7 +614,8 @@
       "previewNotAvailable": "Forhåndsvisning ikke tilgængelig for dette indhold.",
       "previewNotAvailableSection": "Forhåndsvisning ikke tilgængelig for denne sektion.",
       "releaseDate": "Udgivelsesdato",
-      "startDate": "Startdato"
+      "startDate": "Startdato",
+      "audioTracks": "Lydspor"
     },
     "screenTitles": {
       "bible": "Bibel",

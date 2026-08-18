@@ -614,7 +614,8 @@
       "previewNotAvailable": "Преглед није доступан за овај садржај.",
       "previewNotAvailableSection": "Преглед није доступан за ову секцију.",
       "releaseDate": "Датум издавања",
-      "startDate": "Датум почетка"
+      "startDate": "Датум почетка",
+      "audioTracks": "Аудио нумере"
     },
     "screenTitles": {
       "bible": "Библија",
