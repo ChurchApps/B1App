@@ -19,7 +19,6 @@ export class EventProcessor {
     try {
       const start = new Date(event.start!);
       const options = RRule.parseString(event.recurrenceRule!);
-      console.log(options, 'options');
       options.dtstart = new Date(start);
       const rule = new RRule(options);
       const dates = rule.between(startDate, endDate, true);
