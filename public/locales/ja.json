@@ -614,7 +614,8 @@
       "previewNotAvailable": "このコンテンツのプレビューは利用できません。",
       "previewNotAvailableSection": "このセクションのプレビューは利用できません。",
       "releaseDate": "リリース日",
-      "startDate": "開始日"
+      "startDate": "開始日",
+      "audioTracks": "音声トラック"
     },
     "screenTitles": {
       "bible": "聖書",

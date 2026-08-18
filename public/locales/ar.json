@@ -614,7 +614,8 @@
       "previewNotAvailable": "المعاينة غير متاحة لهذا المحتوى.",
       "previewNotAvailableSection": "المعاينة غير متاحة لهذا القسم.",
       "releaseDate": "تاريخ الإصدار",
-      "startDate": "تاريخ البدء"
+      "startDate": "تاريخ البدء",
+      "audioTracks": "المقاطع الصوتية"
     },
     "screenTitles": {
       "bible": "الكتاب المقدس",
