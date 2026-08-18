@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Удалить недоступную дату?",
       "endDate": "Дата окончания",
       "files": "Файлы",
+      "audioUnsupported": "Ваш браузер не поддерживает воспроизведение аудио.",
       "keySignature": "Тональность",
       "keys": "Тональности",
       "language": "Язык",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Предварительный просмотр недоступен для этого содержимого.",
       "previewNotAvailableSection": "Предварительный просмотр недоступен для этого раздела.",
       "releaseDate": "Дата выпуска",
-      "startDate": "Дата начала"
+      "startDate": "Дата начала",
+      "audioTracks": "Аудиодорожки"
     },
     "screenTitles": {
       "bible": "Библия",

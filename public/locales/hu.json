@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Letiltási dátum törlése?",
       "endDate": "Befejező dátum",
       "files": "Fájlok",
+      "audioUnsupported": "A böngészője nem támogatja a hanglejátszást.",
       "keySignature": "Hangnem",
       "keys": "Hangnemek",
       "language": "Nyelv",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Ehhez a tartalomhoz nem érhető el előnézet.",
       "previewNotAvailableSection": "Ehhez a szakaszhoz nem érhető el előnézet.",
       "releaseDate": "Megjelenés dátuma",
-      "startDate": "Kezdő dátum"
+      "startDate": "Kezdő dátum",
+      "audioTracks": "Sávok"
     },
     "screenTitles": {
       "bible": "Biblia",

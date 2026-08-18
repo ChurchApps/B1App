@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Slette sperredag?",
       "endDate": "Sluttdato",
       "files": "Filer",
+      "audioUnsupported": "Nettleseren din støtter ikke lydavspilling.",
       "keySignature": "Toneart",
       "keys": "Tonearter",
       "language": "Språk",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Forhåndsvisning ikke tilgjengelig for dette innholdet.",
       "previewNotAvailableSection": "Forhåndsvisning ikke tilgjengelig for denne seksjonen.",
       "releaseDate": "Utgivelsesdato",
-      "startDate": "Startdato"
+      "startDate": "Startdato",
+      "audioTracks": "Lydspor"
     },
     "screenTitles": {
       "bible": "Bibelen",

@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Hapus tanggal blockout?",
       "endDate": "Tanggal selesai",
       "files": "Berkas",
+      "audioUnsupported": "Browser Anda tidak mendukung pemutaran audio.",
       "keySignature": "Tanda Kunci",
       "keys": "Kunci",
       "language": "Bahasa",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Pratinjau tidak tersedia untuk konten ini.",
       "previewNotAvailableSection": "Pratinjau tidak tersedia untuk bagian ini.",
       "releaseDate": "Tanggal Rilis",
-      "startDate": "Tanggal mulai"
+      "startDate": "Tanggal mulai",
+      "audioTracks": "Trek audio"
     },
     "screenTitles": {
       "bible": "Alkitab",

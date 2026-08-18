@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Обрисати блокирани датум?",
       "endDate": "Датум завршетка",
       "files": "Датотеке",
+      "audioUnsupported": "Ваш прегледач не подржава репродукцију звука.",
       "keySignature": "Тоналитет",
       "keys": "Тонови",
       "language": "Језик",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Преглед није доступан за овај садржај.",
       "previewNotAvailableSection": "Преглед није доступан за ову секцију.",
       "releaseDate": "Датум издавања",
-      "startDate": "Датум почетка"
+      "startDate": "Датум почетка",
+      "audioTracks": "Аудио нумере"
     },
     "screenTitles": {
       "bible": "Библија",

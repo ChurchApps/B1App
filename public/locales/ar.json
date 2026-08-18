@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "حذف تاريخ الحجب؟",
       "endDate": "تاريخ الانتهاء",
       "files": "الملفات",
+      "audioUnsupported": "متصفحك لا يدعم تشغيل الصوت.",
       "keySignature": "السلّم الموسيقي",
       "keys": "المفاتيح",
       "language": "اللغة",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "المعاينة غير متاحة لهذا المحتوى.",
       "previewNotAvailableSection": "المعاينة غير متاحة لهذا القسم.",
       "releaseDate": "تاريخ الإصدار",
-      "startDate": "تاريخ البدء"
+      "startDate": "تاريخ البدء",
+      "audioTracks": "المقاطع الصوتية"
     },
     "screenTitles": {
       "bible": "الكتاب المقدس",

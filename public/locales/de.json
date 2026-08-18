@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Sperrdatum löschen?",
       "endDate": "Enddatum",
       "files": "Dateien",
+      "audioUnsupported": "Ihr Browser unterstützt die Audiowiedergabe nicht.",
       "keySignature": "Tonart",
       "keys": "Tasten",
       "language": "Sprache",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Vorschau für diesen Inhalt nicht verfügbar.",
       "previewNotAvailableSection": "Vorschau für diesen Abschnitt nicht verfügbar.",
       "releaseDate": "Veröffentlichungsdatum",
-      "startDate": "Startdatum"
+      "startDate": "Startdatum",
+      "audioTracks": "Audiospuren"
     },
     "screenTitles": {
       "bible": "Bibel",

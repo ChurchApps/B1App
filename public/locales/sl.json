@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Izbriši blokiran datum?",
       "endDate": "Končni datum",
       "files": "Datoteke",
+      "audioUnsupported": "Vaš brskalnik ne podpira predvajanja zvoka.",
       "keySignature": "Predznak",
       "keys": "Toni",
       "language": "Jezik",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Predogled ni na voljo za to vsebino.",
       "previewNotAvailableSection": "Predogled za ta razdelek ni na voljo.",
       "releaseDate": "Datum izdaje",
-      "startDate": "Začetni datum"
+      "startDate": "Začetni datum",
+      "audioTracks": "Zvočne sledi"
     },
     "screenTitles": {
       "bible": "Sveto pismo",

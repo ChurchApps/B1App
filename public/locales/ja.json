@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "ブロックアウト日を削除しますか?",
       "endDate": "終了日",
       "files": "ファイル",
+      "audioUnsupported": "お使いのブラウザは音声再生に対応していません。",
       "keySignature": "調号",
       "keys": "キー",
       "language": "言語",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "このコンテンツのプレビューは利用できません。",
       "previewNotAvailableSection": "このセクションのプレビューは利用できません。",
       "releaseDate": "リリース日",
-      "startDate": "開始日"
+      "startDate": "開始日",
+      "audioTracks": "音声トラック"
     },
     "screenTitles": {
       "bible": "聖書",

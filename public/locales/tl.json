@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Burahin ang blockout date?",
       "endDate": "Petsa ng pagtatapos",
       "files": "Mga File",
+      "audioUnsupported": "Hindi suportado ng iyong browser ang pag-play ng audio.",
       "keySignature": "Key Signature",
       "keys": "Keys",
       "language": "Wika",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Hindi available ang preview para sa content na ito.",
       "previewNotAvailableSection": "Hindi available ang preview para sa section na ito.",
       "releaseDate": "Petsa ng Release",
-      "startDate": "Petsa ng simula"
+      "startDate": "Petsa ng simula",
+      "audioTracks": "Mga audio track"
     },
     "screenTitles": {
       "bible": "Bibliya",

@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Ištrinti nepasiekiamumo datą?",
       "endDate": "Pabaigos data",
       "files": "Failai",
+      "audioUnsupported": "Jūsų naršyklė nepalaiko garso atkūrimo.",
       "keySignature": "Tonacija",
       "keys": "Tonacijos",
       "language": "Kalba",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Šio turinio peržiūra nepasiekiama.",
       "previewNotAvailableSection": "Šios skilties peržiūra nepasiekiama.",
       "releaseDate": "Išleidimo data",
-      "startDate": "Pradžios data"
+      "startDate": "Pradžios data",
+      "audioTracks": "Garso takeliai"
     },
     "screenTitles": {
       "bible": "Biblija",

@@ -1,4 +1,5 @@
 import { EventHelper, type EventInterface } from "@churchapps/helpers";
+import { RRule } from "rrule";
 
 const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
 const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
@@ -12,6 +13,20 @@ export class EventProcessor {
       ev.end = ev.end ? new Date(ev.end) : new Date();
       return ev;
     });
+  }
+
+  private static getRange(event: EventInterface, startDate: Date, endDate: Date): Date[] {
+    try {
+      const start = new Date(event.start!);
+      const options = RRule.parseString(event.recurrenceRule!);
+      options.dtstart = new Date(start);
+      const rule = new RRule(options);
+      const dates = rule.between(startDate, endDate, true);
+      return dates.map((d: Date) => new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), start.getHours(), start.getMinutes(), start.getSeconds()));
+    } catch (e) {
+      console.error("Error in getRange:", e);
+      return [];
+    }
   }
 
   static expandEventsForMonth(allEvents: EventInterface[], month: Date): EventInterface[] {
@@ -73,7 +88,7 @@ export class EventProcessor {
             }
           } else {
             try {
-              dates = EventHelper.getRange(event, startRange, endRange) || [];
+              dates = this.getRange(event, startRange, endRange) || [];
             } catch {
               dates = [];
             }

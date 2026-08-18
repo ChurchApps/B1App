@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Poistetaanko estopäivä?",
       "endDate": "Päättymispäivä",
       "files": "Tiedostot",
+      "audioUnsupported": "Selaimesi ei tue äänen toistoa.",
       "keySignature": "Sävellaji",
       "keys": "Sävellajit",
       "language": "Kieli",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Esikatselu ei ole saatavilla tälle sisällölle.",
       "previewNotAvailableSection": "Esikatselu ei ole saatavilla tälle osiolle.",
       "releaseDate": "Julkaisupäivä",
-      "startDate": "Alkamispäivä"
+      "startDate": "Alkamispäivä",
+      "audioTracks": "Ääniraidat"
     },
     "screenTitles": {
       "bible": "Raamattu",

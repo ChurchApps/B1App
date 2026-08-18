@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Ta bort spärrdatum?",
       "endDate": "Slutdatum",
       "files": "Filer",
+      "audioUnsupported": "Din webbläsare stöder inte ljuduppspelning.",
       "keySignature": "Tonart",
       "keys": "Tonarter",
       "language": "Språk",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Förhandsgranskning inte tillgänglig för detta innehåll.",
       "previewNotAvailableSection": "Förhandsgranskning inte tillgänglig för detta avsnitt.",
       "releaseDate": "Utgivningsdatum",
-      "startDate": "Startdatum"
+      "startDate": "Startdatum",
+      "audioTracks": "Ljudspår"
     },
     "screenTitles": {
       "bible": "Bibeln",

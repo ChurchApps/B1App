@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Blokkeringsdatum verwijderen?",
       "endDate": "Einddatum",
       "files": "Bestanden",
+      "audioUnsupported": "Uw browser ondersteunt geen audioweergave.",
       "keySignature": "Toonsoort",
       "keys": "Toonsoorten",
       "language": "Taal",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Voorbeeld niet beschikbaar voor deze inhoud.",
       "previewNotAvailableSection": "Voorbeeld niet beschikbaar voor deze sectie.",
       "releaseDate": "Releasedatum",
-      "startDate": "Startdatum"
+      "startDate": "Startdatum",
+      "audioTracks": "Audiosporen"
     },
     "screenTitles": {
       "bible": "Bijbel",

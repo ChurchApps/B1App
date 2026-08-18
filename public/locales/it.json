@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Eliminare la data di blocco?",
       "endDate": "Data di fine",
       "files": "File",
+      "audioUnsupported": "Il tuo browser non supporta la riproduzione audio.",
       "keySignature": "Tonalità",
       "keys": "Tonalità",
       "language": "Lingua",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Anteprima non disponibile per questo contenuto.",
       "previewNotAvailableSection": "Anteprima non disponibile per questa sezione.",
       "releaseDate": "Data di Pubblicazione",
-      "startDate": "Data di inizio"
+      "startDate": "Data di inizio",
+      "audioTracks": "Tracce audio"
     },
     "screenTitles": {
       "bible": "Bibbia",

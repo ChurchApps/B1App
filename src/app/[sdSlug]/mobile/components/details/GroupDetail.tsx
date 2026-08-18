@@ -707,6 +707,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
               isMember={isMember}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
               onEditEvent={(ev) => setEditEvent(ev)}
+              firstDayOfWeek={(config.church as any)?.firstDayOfWeek || 0}
             />
           )}
           {tab === "attendance" && groupId && members !== null && (

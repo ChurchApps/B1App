@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Xóa ngày bận?",
       "endDate": "Ngày kết thúc",
       "files": "Tệp",
+      "audioUnsupported": "Trình duyệt của bạn không hỗ trợ phát âm thanh.",
       "keySignature": "Chủ âm",
       "keys": "Phím",
       "language": "Ngôn ngữ",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Không có bản xem trước cho nội dung này.",
       "previewNotAvailableSection": "Không có bản xem trước cho phần này.",
       "releaseDate": "Ngày phát hành",
-      "startDate": "Ngày bắt đầu"
+      "startDate": "Ngày bắt đầu",
+      "audioTracks": "Bản nhạc"
     },
     "screenTitles": {
       "bible": "Kinh Thánh",

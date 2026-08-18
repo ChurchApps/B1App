@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "ब्लॉकआउट तिथि हटाएं?",
       "endDate": "समाप्ति तिथि",
       "files": "फ़ाइलें",
+      "audioUnsupported": "आपका ब्राउज़र ऑडियो प्लेबैक का समर्थन नहीं करता है।",
       "keySignature": "की सिग्नेचर",
       "keys": "कुंजी",
       "language": "भाषा",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "इस सामग्री के लिए पूर्वावलोकन उपलब्ध नहीं है।",
       "previewNotAvailableSection": "इस अनुभाग के लिए पूर्वावलोकन उपलब्ध नहीं है।",
       "releaseDate": "रिलीज़ तिथि",
-      "startDate": "प्रारंभ तिथि"
+      "startDate": "प्रारंभ तिथि",
+      "audioTracks": "ऑडियो ट्रैक"
     },
     "screenTitles": {
       "bible": "बाइबिल",

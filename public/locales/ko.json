@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "차단 날짜를 삭제하시겠습니까?",
       "endDate": "종료일",
       "files": "파일",
+      "audioUnsupported": "브라우저가 오디오 재생을 지원하지 않습니다.",
       "keySignature": "조표",
       "keys": "키",
       "language": "언어",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "이 콘텐츠에 대한 미리보기를 사용할 수 없습니다.",
       "previewNotAvailableSection": "이 섹션에 대한 미리보기를 사용할 수 없습니다.",
       "releaseDate": "발매일",
-      "startDate": "시작일"
+      "startDate": "시작일",
+      "audioTracks": "오디오 트랙"
     },
     "screenTitles": {
       "bible": "성경",

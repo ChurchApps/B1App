@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Видалити дату блокування?",
       "endDate": "Дата завершення",
       "files": "Файли",
+      "audioUnsupported": "Ваш браузер не підтримує відтворення аудіо.",
       "keySignature": "Тональність",
       "keys": "Ключі",
       "language": "Мова",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Попередній перегляд недоступний для цього вмісту.",
       "previewNotAvailableSection": "Попередній перегляд недоступний для цього розділу.",
       "releaseDate": "Дата випуску",
-      "startDate": "Дата початку"
+      "startDate": "Дата початку",
+      "audioTracks": "Аудіодоріжки"
     },
     "screenTitles": {
       "bible": "Біблія",

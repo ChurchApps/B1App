@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "删除不可服事日期？",
       "endDate": "结束日期",
       "files": "文件",
+      "audioUnsupported": "您的浏览器不支持音频播放。",
       "keySignature": "调号",
       "keys": "键",
       "language": "语言",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "此内容无法预览。",
       "previewNotAvailableSection": "此部分没有可用预览。",
       "releaseDate": "发布日期",
-      "startDate": "开始日期"
+      "startDate": "开始日期",
+      "audioTracks": "音轨"
     },
     "screenTitles": {
       "bible": "圣经",

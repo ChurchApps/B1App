@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Engelleme tarihi silinsin mi?",
       "endDate": "Bitiş tarihi",
       "files": "Dosyalar",
+      "audioUnsupported": "Tarayıcınız ses oynatmayı desteklemiyor.",
       "keySignature": "Nota Anahtarı",
       "keys": "Tonlar",
       "language": "Dil",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Bu içerik için önizleme mevcut değil.",
       "previewNotAvailableSection": "Bu bölüm için önizleme mevcut değil.",
       "releaseDate": "Yayın Tarihi",
-      "startDate": "Başlangıç tarihi"
+      "startDate": "Başlangıç tarihi",
+      "audioTracks": "Ses parçaları"
     },
     "screenTitles": {
       "bible": "İncil",

@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Odstrániť dátum blokovania?",
       "endDate": "Dátum konca",
       "files": "Súbory",
+      "audioUnsupported": "Váš prehliadač nepodporuje prehrávanie zvuku.",
       "keySignature": "Predznamenanie",
       "keys": "Tóniny",
       "language": "Jazyk",
@@ -613,7 +614,8 @@
       "previewNotAvailable": "Náhľad nie je dostupný pre tento obsah.",
       "previewNotAvailableSection": "Náhľad nie je dostupný pre túto sekciu.",
       "releaseDate": "Dátum vydania",
-      "startDate": "Dátum začiatku"
+      "startDate": "Dátum začiatku",
+      "audioTracks": "Zvukové stopy"
     },
     "screenTitles": {
       "bible": "Biblia",
