@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "ブロックアウト日を削除しますか?",
       "endDate": "終了日",
       "files": "ファイル",
+      "audioUnsupported": "お使いのブラウザは音声再生に対応していません。",
       "keySignature": "調号",
       "keys": "キー",
       "language": "言語",

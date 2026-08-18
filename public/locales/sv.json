@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Ta bort spärrdatum?",
       "endDate": "Slutdatum",
       "files": "Filer",
+      "audioUnsupported": "Din webbläsare stöder inte ljuduppspelning.",
       "keySignature": "Tonart",
       "keys": "Tonarter",
       "language": "Språk",

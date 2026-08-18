@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Supprimer la date d'indisponibilité ?",
       "endDate": "Date de fin",
       "files": "Fichiers",
+      "audioUnsupported": "Votre navigateur ne prend pas en charge la lecture audio.",
       "keySignature": "Tonalité",
       "keys": "Tonalités",
       "language": "Langue",

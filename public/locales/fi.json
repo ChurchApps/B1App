@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Poistetaanko estopäivä?",
       "endDate": "Päättymispäivä",
       "files": "Tiedostot",
+      "audioUnsupported": "Selaimesi ei tue äänen toistoa.",
       "keySignature": "Sävellaji",
       "keys": "Sävellajit",
       "language": "Kieli",

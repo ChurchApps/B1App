@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Izbriši blokiran datum?",
       "endDate": "Končni datum",
       "files": "Datoteke",
+      "audioUnsupported": "Vaš brskalnik ne podpira predvajanja zvoka.",
       "keySignature": "Predznak",
       "keys": "Toni",
       "language": "Jezik",

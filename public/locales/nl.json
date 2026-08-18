@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Blokkeringsdatum verwijderen?",
       "endDate": "Einddatum",
       "files": "Bestanden",
+      "audioUnsupported": "Uw browser ondersteunt geen audioweergave.",
       "keySignature": "Toonsoort",
       "keys": "Toonsoorten",
       "language": "Taal",

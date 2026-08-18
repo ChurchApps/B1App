@@ -3,6 +3,9 @@ import React from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
+import { isAudioUrl } from "./mediaUrl";
+
+export { isAudioUrl };
 
 interface ContentRendererProps {
   url?: string;
@@ -17,12 +20,6 @@ interface ContentRendererProps {
 function isVideoUrl(url: string): boolean {
   const videoExtensions = [".mp4", ".webm", ".ogg", ".m3u8", ".mov", ".avi"];
   return videoExtensions.some(ext => url.toLowerCase().includes(ext));
-}
-
-// .ogg stays in the video list; provider content already relies on it
-export function isAudioUrl(url: string): boolean {
-  const audioExtensions = [".mp3", ".m4a", ".aac", ".wav", ".flac", ".oga"];
-  return audioExtensions.some(ext => url.toLowerCase().includes(ext));
 }
 
 function isIframeUrl(url: string): boolean {

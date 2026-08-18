@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Sperrdatum löschen?",
       "endDate": "Enddatum",
       "files": "Dateien",
+      "audioUnsupported": "Ihr Browser unterstützt die Audiowiedergabe nicht.",
       "keySignature": "Tonart",
       "keys": "Tasten",
       "language": "Sprache",

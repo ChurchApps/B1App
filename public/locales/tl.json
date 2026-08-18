@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Burahin ang blockout date?",
       "endDate": "Petsa ng pagtatapos",
       "files": "Mga File",
+      "audioUnsupported": "Hindi suportado ng iyong browser ang pag-play ng audio.",
       "keySignature": "Key Signature",
       "keys": "Keys",
       "language": "Wika",

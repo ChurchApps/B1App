@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "차단 날짜를 삭제하시겠습니까?",
       "endDate": "종료일",
       "files": "파일",
+      "audioUnsupported": "브라우저가 오디오 재생을 지원하지 않습니다.",
       "keySignature": "조표",
       "keys": "키",
       "language": "언어",

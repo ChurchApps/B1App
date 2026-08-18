@@ -600,6 +600,7 @@
       "deleteBlockoutTitle": "Engelleme tarihi silinsin mi?",
       "endDate": "Bitiş tarihi",
       "files": "Dosyalar",
+      "audioUnsupported": "Tarayıcınız ses oynatmayı desteklemiyor.",
       "keySignature": "Nota Anahtarı",
       "keys": "Tonlar",
       "language": "Dil",
