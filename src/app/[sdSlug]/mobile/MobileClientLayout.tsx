@@ -68,7 +68,32 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
       <ThemeProvider theme={mobileMuiTheme}>
         <GlobalStyles styles={{
           "html, body": { overflowX: "hidden", maxWidth: "100%" },
-          img: { maxWidth: "100%" }
+          img: { maxWidth: "100%" },
+          "body.MuiModal-open": {
+            position: "fixed !important",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100% !important",
+            height: "100% !important",
+            overflow: "hidden !important"
+          },
+          "body.MuiModal-open .mobileAppRoot, body.MuiModal-open main": {
+            overflow: "hidden !important",
+            height: "100vh !important",
+            touchAction: "none !important"
+          },
+          ".link-editor": {
+            zIndex: "1400 !important",
+            color: "#222 !important"
+          },
+          ".link-editor label, .link-editor .MuiFormControlLabel-label, .link-editor .MuiInputLabel-root": {
+            color: "#222 !important",
+            fontWeight: "500 !important"
+          },
+          ".link-editor .MuiInputBase-input": { color: "#222 !important" },
+          ".MuiPopover-root, .MuiMenu-root, .dropdown": { zIndex: "1500 !important" }
         }} />
         <UserProvider>
           <MobileQueryProvider>

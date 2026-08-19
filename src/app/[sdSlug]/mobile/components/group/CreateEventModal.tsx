@@ -405,7 +405,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           <MarkdownEditor
             value={description}
             onChange={(val) => setDescription(val)}
-            style={{ maxHeight: 200, overflowY: "scroll" }}
+            style={{ minHeight: 120, overflow: "visible" }}
           />
           <FormControlLabel
             control={<Switch checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />}
