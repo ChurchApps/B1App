@@ -40,7 +40,17 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
     redirect(url);
   };
 
-  const jwt = searchParams.get("jwt") || cookies.jwt;
+  const [hashJwt, setHashJwt] = useState("");
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+    const fromHash = params.get("jwt") || "";
+    if (fromHash) {
+      setHashJwt(fromHash);
+      const clean = window.location.pathname + window.location.search;
+      window.history.replaceState(null, "", clean);
+    }
+  }, []);
+  const jwt = hashJwt || searchParams.get("jwt") || cookies.jwt;
 
   return (
     <Layout withoutNavbar>

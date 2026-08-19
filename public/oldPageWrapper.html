@@ -26,11 +26,17 @@
       return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
 
-    async function loadContent() {
-      const contents = await fetch(getUrlParameter("url"), { method: 'GET' }).then(response => response.text());
-      document.getElementById('root').innerHTML = contents;
-    }
-    loadContent();
+    (function () {
+      var raw = getUrlParameter("url");
+      var url;
+      try { url = new URL(raw, window.location.href); } catch (e) { return; }
+      if (url.protocol !== "https:" && url.protocol !== "http:") return;
+      var frame = document.createElement("iframe");
+      frame.src = url.href;
+      frame.setAttribute("sandbox", "");
+      frame.style.cssText = "border:0;width:100%;min-height:100vh;";
+      document.getElementById("root").appendChild(frame);
+    })();
 
   </script>
 

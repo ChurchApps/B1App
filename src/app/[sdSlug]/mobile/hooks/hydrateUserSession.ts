@@ -94,13 +94,14 @@ export async function hydrateUserSession(
   if (person) context?.setPerson(person);
 
   if (writeCookies && typeof document !== "undefined") {
-    const maxAge = 180 * 24 * 60 * 60;
-    document.cookie = `jwt=${resp.user.jwt}; path=/; max-age=${maxAge}; SameSite=Lax`;
-    document.cookie = `name=${encodeURIComponent(`${resp.user.firstName || ""} ${resp.user.lastName || ""}`.trim())}; path=/; max-age=${maxAge}; SameSite=Lax`;
-    document.cookie = `email=${encodeURIComponent(resp.user.email || "")}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    const maxAge = 2 * 24 * 60 * 60;
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `jwt=${resp.user.jwt}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
+    document.cookie = `name=${encodeURIComponent(`${resp.user.firstName || ""} ${resp.user.lastName || ""}`.trim())}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
+    document.cookie = `email=${encodeURIComponent(resp.user.email || "")}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
     const lastChurchId = UserHelper.currentUserChurch?.church?.id;
     if (lastChurchId) {
-      document.cookie = `lastChurchId=${lastChurchId}; path=/; max-age=${maxAge}; SameSite=Lax`;
+      document.cookie = `lastChurchId=${lastChurchId}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
     }
   }
 

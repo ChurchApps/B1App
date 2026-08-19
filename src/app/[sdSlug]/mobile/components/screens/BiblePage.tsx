@@ -170,9 +170,7 @@ export const BiblePage = () => {
     if (isClient) saveSelection(selection);
   }, [isClient, selection]);
 
-  const apiKey =
-    process.env.NEXT_PUBLIC_YOUVERSION_API_KEY ||
-    "kcjG9986IOT5ThXvd3lJT1DArk9RBlYt6gzAVNA8Lnb9a8Ld";
+  const apiKey = process.env.NEXT_PUBLIC_YOUVERSION_API_KEY || "";
 
   return (
     <Box sx={{

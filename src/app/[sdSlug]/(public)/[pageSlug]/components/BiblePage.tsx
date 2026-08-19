@@ -33,7 +33,7 @@ function ChapterNavigation({ chapter, onChapterChange }: { chapter: string; onCh
 }
 
 export function BiblePage() {
-  const apiKey = process.env.NEXT_PUBLIC_YOUVERSION_API_KEY || "kcjG9986IOT5ThXvd3lJT1DArk9RBlYt6gzAVNA8Lnb9a8Ld";
+  const apiKey = process.env.NEXT_PUBLIC_YOUVERSION_API_KEY || "";
   const [chapter, setChapter] = useState("1");
   const [book, setBook] = useState("GEN");
   const [versionId, setVersionId] = useState(12);
