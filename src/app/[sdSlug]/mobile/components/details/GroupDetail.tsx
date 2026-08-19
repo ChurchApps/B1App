@@ -25,6 +25,7 @@ import { GroupResourcesTab } from "../group/GroupResourcesTab";
 import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
+import { GroupLessonTakeHome } from "../group/GroupLessonTakeHome";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
 import { GroupContact } from "@/components/groups/GroupContact";
 import { RequestToJoinDialog } from "./RequestToJoinDialog";
@@ -644,6 +645,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       {group && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
           {renderHero()}
+
+          <GroupLessonTakeHome isMember={isMember} plans={groupPlans} />
 
           <Box
             sx={{

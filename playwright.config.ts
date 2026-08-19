@@ -44,10 +44,19 @@ export default defineConfig({
       stderr: "pipe"
     },
     {
+      command: "npm --prefix ../LessonsApi run dev",
+      url: "http://localhost:8090/health",
+      reuseExistingServer: true,
+      timeout: 90 * 1000,
+      stdout: "pipe",
+      stderr: "pipe"
+    },
+    {
       // Force dev so EnvironmentHelper uses localhost API URLs from .env
       command: "npm run dev",
       env: {
         NEXT_PUBLIC_STAGE: "dev",
+        NEXT_PUBLIC_LESSONS_API: "http://localhost:8090",
         // Localhost socket for consolidated subscription stack and cross-user realtime tests
         NEXT_PUBLIC_MESSAGING_API_SOCKET: "ws://localhost:8087"
       },
