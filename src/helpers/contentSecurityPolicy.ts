@@ -23,9 +23,11 @@ export const SCRIPT_SRC_HOSTS = [
   "https://www.gstatic.com"
 ] as const;
 
-export const STYLE_SRC_HOSTS = ["https://fonts.googleapis.com"] as const;
+// cdnjs/use.fontawesome: legacy church content embeds Font Awesome via rawHTML.
+export const STYLE_SRC_HOSTS = ["https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com"] as const;
 
-export const FONT_SRC_HOSTS = ["https://fonts.gstatic.com", "https://storage.googleapis.com"] as const;
+// Font Awesome CSS loads its webfonts from the same CDN origins.
+export const FONT_SRC_HOSTS = ["https://fonts.gstatic.com", "https://storage.googleapis.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com"] as const;
 
 export const CONNECT_SRC_HOSTS = [
   "https://*.churchapps.org",
