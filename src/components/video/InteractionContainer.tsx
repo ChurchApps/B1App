@@ -45,15 +45,11 @@ export const InteractionContainer: React.FC<Props> = (props) => {
     let url = tab.url;
     if (!url.startsWith("http") && !url.startsWith("/stream")) url = EnvironmentHelper.Common.ContentRoot + "/" + url;
 
-    if (url.startsWith("/stream")) {
-      return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-        <iframe src={url} frameBorder="0" title={"frame" + i.toString()} /> :
-      </div>);
-    } else {
-      return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-        <iframe src={"/oldPageWrapper.html?url=" + encodeURIComponent(url)} frameBorder="0" title={"frame" + i.toString()} /> :
-      </div>);
-    }
+    const isHttp = /^https?:\/\//i.test(url);
+    const src = url.startsWith("/stream") || isHttp ? url : "";
+    return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
+      {src ? <iframe src={src} frameBorder="0" title={"frame" + i.toString()} sandbox="" /> : null}
+    </div>);
   };
 
   const getItems = () => {

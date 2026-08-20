@@ -41,7 +41,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
     if (!ApiHelper.isAuthenticated) return (<li className="nav-item"><ChatName user={props.user} updateFunction={updateName} promptName={promptName} /></li>);
     else {
       const jwt = ApiHelper.getConfig("MembershipApi").jwt;
-      const profileUrl = `${EnvironmentHelper.Common.B1AdminRoot}/login?jwt=${jwt}&returnUrl=/profile`;
+      const profileUrl = `${EnvironmentHelper.Common.B1AdminRoot}/login?returnUrl=/profile#jwt=${encodeURIComponent(jwt || "")}`;
       return (<li className="nav-item"><a href={profileUrl} target="_blank" rel="noopener noreferrer" className="nav-link" data-testid="stream-profile-link">{Locale.label("wrapper.profile")}</a></li>);
     }
   };
@@ -50,7 +50,7 @@ export const StreamingHeader: React.FC<Props> = (props) => {
       const jwt = UserHelper.currentUserChurch?.jwt;
       const churchId = UserHelper.currentUserChurch?.church?.id;
       return (
-        <li className="nav-item"><a href={`https://admin.b1.church/login?jwt=${jwt}&churchId=${churchId}&returnUrl=/`} className="nav-link" data-testid="stream-admin-link">{Locale.label("video.adminDashboard")}</a></li>
+        <li className="nav-item"><a href={`https://admin.b1.church/login?churchId=${churchId}&returnUrl=/#jwt=${encodeURIComponent(jwt || "")}`} className="nav-link" data-testid="stream-admin-link">{Locale.label("video.adminDashboard")}</a></li>
       );
     }
   };

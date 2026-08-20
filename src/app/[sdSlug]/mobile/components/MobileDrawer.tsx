@@ -43,9 +43,9 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
   const adminUrl = React.useMemo(() => {
     if (!canAccessAdmin || !context?.userChurch?.jwt || !context?.userChurch?.church?.id) return "";
     const url = new URL("/login", EnvironmentHelper.Common.B1AdminRoot);
-    url.searchParams.set("jwt", context.userChurch.jwt);
     url.searchParams.set("churchId", context.userChurch.church.id);
     url.searchParams.set("returnUrl", "/");
+    url.hash = "jwt=" + encodeURIComponent(context.userChurch.jwt);
     return url.toString();
   }, [canAccessAdmin, context?.userChurch?.jwt, context?.userChurch?.church?.id]);
 

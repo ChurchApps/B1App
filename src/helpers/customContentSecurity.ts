@@ -134,7 +134,7 @@ export const gtagLoaderSrc = (id: string): string | null => {
 // Hostnames an @import may point at. Keep in sync with STYLE_SRC_HOSTS in
 // contentSecurityPolicy.ts — CSP blocks anything else anyway, so allowing more
 // here would only produce stylesheets that silently fail to load.
-export const ALLOWED_STYLE_IMPORT_HOSTS = ["fonts.googleapis.com"] as const;
+export const ALLOWED_STYLE_IMPORT_HOSTS = ["fonts.googleapis.com", "cdnjs.cloudflare.com", "use.fontawesome.com"] as const;
 
 const CSS_STRIP_PATTERNS = [
   /<\/?[a-zA-Z][^>]*>/g, // HTML tags

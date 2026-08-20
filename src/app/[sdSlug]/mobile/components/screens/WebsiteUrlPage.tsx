@@ -60,7 +60,14 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
       const slug = rawId.startsWith("/") ? rawId : `/${rawId}`;
       return `${window.location.origin}${slug}`;
     }
-    return rawUrl;
+    if (!rawUrl) return "";
+    try {
+      const parsed = new URL(rawUrl, typeof window === "undefined" ? "https://b1.church" : window.location.href);
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return "";
+      return parsed.href;
+    } catch {
+      return "";
+    }
   }, [isPage, rawId, rawUrl]);
 
   const isCrossOrigin = useMemo(() => {

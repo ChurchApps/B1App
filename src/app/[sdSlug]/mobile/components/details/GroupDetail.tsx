@@ -16,6 +16,7 @@ import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Permissions, type GroupInterface, type PlanInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { getFirstDayOfWeek } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
 import { getInitials } from "../util";
 import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
@@ -24,6 +25,7 @@ import { GroupResourcesTab } from "../group/GroupResourcesTab";
 import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
+import { GroupLessonTakeHome } from "../group/GroupLessonTakeHome";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
 import { GroupContact } from "@/components/groups/GroupContact";
 import { RequestToJoinDialog } from "./RequestToJoinDialog";
@@ -644,6 +646,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
           {renderHero()}
 
+          <GroupLessonTakeHome isMember={isMember} plans={groupPlans} />
+
           <Box
             sx={{
               bgcolor: tc.surface,
@@ -707,7 +711,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
               isMember={isMember}
               onAddEvent={(dateIso) => setCreateEvent(dateIso)}
               onEditEvent={(ev) => setEditEvent(ev)}
-              firstDayOfWeek={(config.church as any)?.firstDayOfWeek || 0}
+              firstDayOfWeek={getFirstDayOfWeek(config.church)}
             />
           )}
           {tab === "attendance" && groupId && members !== null && (
