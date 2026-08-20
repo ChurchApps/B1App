@@ -29,14 +29,14 @@ const loadData = async (sdSlug: string, postSlug: string) => {
   let related: PostInterface[] = [];
   if (post?.id && post.category) {
     try {
-      const sameCategory = await fetchCached<PostInterface[]>("/posts/public/" + config.church.id + "?category=" + encodeURIComponent(typeof post.category === "string" ? post.category : "") + "&pageSize=4", "ContentApi", sdSlug);
+      const sameCategory = await fetchCached<PostInterface[]>("/posts/public/" + config.church.id + "?category=" + encodeURIComponent(post.category || "") + "&pageSize=4", "ContentApi", sdSlug);
       related = (Array.isArray(sameCategory) ? sameCategory : []).filter((p) => p.id !== post.id).slice(0, 3);
     } catch { related = []; }
   }
   return { config, post, related };
 };
 
-const excerptOf = (post: PostInterface) => post.excerpt || (typeof post.content === "string" ? post.content : "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
+const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
 
 const getBaseUrl = async (sdSlug: string) => {
   const h = await headers();
@@ -68,8 +68,6 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
   let parsedTags: string[] = [];
   if (typeof post.tags === "string") {
     parsedTags = post.tags.split(",").map((t) => t.trim()).filter(Boolean);
-  } else if (Array.isArray(post.tags)) {
-    parsedTags = post.tags.map((t) => (typeof t === "string" ? t.trim() : "")).filter(Boolean);
   }
 
   const base = await getBaseUrl(sdSlug);
@@ -83,9 +81,9 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
           <Container maxWidth="md" sx={{ py: { xs: 4, md: 7 } }}>
             <div id="mainContent">
               <Box component="header" sx={{ textAlign: "center", maxWidth: 720, mx: "auto" }}>
-                <Link href={typeof post.category === "string" && post.category ? "/blog?category=" + encodeURIComponent(post.category) : "/blog"} style={{ textDecoration: "none" }}>
+                <Link href={post.category ? "/blog?category=" + encodeURIComponent(post.category) : "/blog"} style={{ textDecoration: "none" }}>
                   <Typography component="span" sx={{ textTransform: "uppercase", letterSpacing: "0.14em", fontSize: "0.75rem", fontWeight: 700, color: "primary.main" }}>
-                    {(typeof post.category === "string" && post.category) || "Blog"}
+                    {post.category || "Blog"}
                   </Typography>
                 </Link>
                 <Typography variant="h3" component="h1" sx={{ mt: 1.5, fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.01em", textWrap: "balance", fontSize: { xs: "2rem", md: "2.75rem" } }}>
