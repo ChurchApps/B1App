@@ -44,6 +44,9 @@ export async function middleware(req: NextRequest) {
     }
     if (entry.site) headers.set("x-site", entry.site);
   }
+  // debug-1001: let a preview deployment impersonate a tenant host
+  const debugSite = req.headers.get("x-debug-site");
+  if (host.endsWith(".vercel.app") && debugSite) headers.set("x-site", debugSite);
   const res = NextResponse.next({ request: { headers } });
   res.headers.set("Content-Security-Policy", csp);
   if (isNoindexHost(host)) res.headers.set("X-Robots-Tag", "noindex, nofollow");
