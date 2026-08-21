@@ -2,8 +2,11 @@
 //
 // script-src carries a per-request nonce issued by middleware instead of
 // 'unsafe-inline'. Next injects that nonce into its own bootstrap/streaming
-// scripts and into <Script> tags, so first-party JS still runs while anything
-// injected into the HTML (church customJS, stored XSS) does not.
+// scripts and into <Script> tags. 'strict-dynamic' extends trust to scripts
+// those create via createElement — that is the deliberate path church customJS
+// and the rawHTML element's javascript field use (Theme/RawHTMLElement recreate
+// script nodes). Parser-inserted markup without a nonce (stored XSS via
+// dangerouslySetInnerHTML, injected <script> tags) still never executes.
 //
 // style-src keeps 'unsafe-inline'. A nonce cannot authorize a style *attribute*,
 // and React/MUI set element style props all over the app, so dropping it would
@@ -76,7 +79,7 @@ export interface CspOptions {
 export const buildContentSecurityPolicy = (options: CspOptions = {}): string => {
   const { nonce, dev = false } = options;
 
-  const scriptSrc = ["'self'", ...(nonce ? [`'nonce-${nonce}'`] : []), ...SCRIPT_SRC_HOSTS, ...(dev ? DEV_SCRIPT_SRC : [])];
+  const scriptSrc = ["'self'", ...(nonce ? [`'nonce-${nonce}'`, "'strict-dynamic'"] : []), ...SCRIPT_SRC_HOSTS, ...(dev ? DEV_SCRIPT_SRC : [])];
   const connectSrc = ["'self'", ...CONNECT_SRC_HOSTS, ...(dev ? DEV_CONNECT_SRC : [])];
 
   return [
