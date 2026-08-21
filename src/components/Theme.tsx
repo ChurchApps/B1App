@@ -2,7 +2,7 @@
 
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { accent as deriveAccent, isValidHex, shade, tint } from "@/helpers/colorTints";
-import { gtagLoaderSrc, parseCustomJs, sanitizeCustomCss } from "@/helpers/customContentSecurity";
+import { sanitizeCustomCss } from "@/helpers/customContentSecurity";
 import React from "react";
 
 interface Props { config: ConfigurationInterface }
@@ -115,30 +115,17 @@ export const Theme: React.FC<Props> = (props) => {
     root.replaceChildren();
     const customJS = props?.config?.globalStyles?.customJS;
     if (!customJS) return;
-    const { externalScripts, measurementIds } = parseCustomJs(customJS);
-    const w = window as Window & { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void };
-    w.dataLayer = w.dataLayer || [];
-    if (typeof w.gtag !== "function") w.gtag = function gtag() { w.dataLayer!.push(arguments); };
-    for (const item of externalScripts) {
+    const template = document.createElement("template");
+    template.innerHTML = customJS;
+    root.append(template.content);
+    // innerHTML-inserted scripts never execute; recreate them so they do.
+    // CSP script-src 'strict-dynamic' trusts these non-parser-inserted nodes.
+    root.querySelectorAll("script").forEach((old) => {
       const script = document.createElement("script");
-      script.src = item.src;
-      if (item.async) script.async = true;
-      if (item.defer) script.defer = true;
-      root.appendChild(script);
-    }
-    for (const id of measurementIds) {
-      const src = gtagLoaderSrc(id);
-      if (src && !document.querySelector(`script[src="${src}"]`) && !externalScripts.some((s) => s.src === src || s.src.startsWith(src))) {
-        const script = document.createElement("script");
-        script.src = src;
-        script.async = true;
-        root.appendChild(script);
-      }
-      if (id.startsWith("G-")) {
-        w.gtag("js", new Date());
-        w.gtag("config", id);
-      }
-    }
+      Array.from(old.attributes).forEach((attr) => script.setAttribute(attr.name, attr.value));
+      script.text = old.text;
+      old.replaceWith(script);
+    });
   }, [props?.config?.globalStyles?.customJS]);
 
   return (<>
