@@ -196,6 +196,22 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
     return groups;
   }, [positions]);
 
+  const positionLabels = useMemo(() => {
+    if (!plan?.showVolunteerNames) return {};
+    const result: Record<string, string> = {};
+    positions.forEach((p) => {
+      const names = assignments
+        .filter((a) => a.positionId === p.id)
+        .map((a) => {
+          const person = ArrayHelper.getOne(people, "id", a.personId) as PersonInterface | null;
+          return person?.name?.display || [person?.name?.first, person?.name?.last].filter(Boolean).join(" ");
+        })
+        .filter(Boolean);
+      if (p.id && names.length > 0) result[p.id] = names.join(", ");
+    });
+    return result;
+  }, [plan?.showVolunteerNames, positions, assignments, people]);
+
   const myAssignments = useMemo(
     () => (myPersonId ? ArrayHelper.getAll(assignments, "personId", myPersonId) : []),
     [assignments, myPersonId]
@@ -554,6 +570,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                   associatedProviderId={plan.providerId}
                   associatedVenueId={plan.providerPlanId}
                   ministryId={plan.ministryId}
+                  positionLabels={positionLabels}
                 />
               ))}
             </Box>

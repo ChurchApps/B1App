@@ -13,6 +13,7 @@ interface Props {
   associatedProviderId?: string;
   associatedVenueId?: string;
   ministryId?: string;
+  positionLabels?: Record<string, string>;
 }
 
 export const PlanItem = (props: Props) => {
@@ -21,6 +22,7 @@ export const PlanItem = (props: Props) => {
   const [actionId, setActionId] = React.useState<string | null>(null);
 
   const pi = props.planItem;
+  const positionName = pi.positionId ? props.positionLabels?.[pi.positionId] : undefined;
   const hasProviderFields = pi.providerId && pi.providerPath && pi.providerContentPath;
 
   const getChildren = () => {
@@ -36,6 +38,7 @@ export const PlanItem = (props: Props) => {
           associatedProviderId={props.associatedProviderId}
           associatedVenueId={props.associatedVenueId}
           ministryId={props.ministryId}
+          positionLabels={props.positionLabels}
         />
       );
       cumulativeTime += c.seconds || 0;
@@ -54,6 +57,7 @@ export const PlanItem = (props: Props) => {
           </span>
         </span>
         <span>{pi.label}</span>
+        {positionName && <span className="planItemPosition" style={{ color: "#666", fontSize: "0.85em", marginLeft: 8 }}>{positionName}</span>}
       </div>
       {getChildren()}
     </>;
@@ -84,6 +88,7 @@ export const PlanItem = (props: Props) => {
         )}
       </div>
       {getDescriptionRow()}
+      {positionName && <div className="planItemPosition" style={{ color: "#666", fontSize: "0.85em", textAlign: "right" }}>{positionName}</div>}
     </div>
   </>;
 

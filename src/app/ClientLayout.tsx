@@ -10,6 +10,7 @@ import { EnvironmentHelper } from "@/helpers";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CookieProviderWrapper } from "@/components/CookieProviderWrapper";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { useHashScroll } from "@/hooks/useHashScroll";
 
 
 
@@ -25,6 +26,8 @@ function ClientLayout({ children }: { children: React.ReactNode }) {
     // Error handling configuration
     ErrorHelper.init(getErrorAppData, customErrorHandler);
   }, []);
+
+  useHashScroll(localeInit);
 
 
   const getErrorAppData = () => {
