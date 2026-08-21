@@ -96,6 +96,14 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
 
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  const descriptionRef = React.useRef("");
+  const markdownEditorStyle = React.useMemo(
+      () => ({
+        maxHeight: 200,
+        overflowY: "scroll" as const,
+      }),
+      []
+  );
   const [start, setStart] = React.useState("");
   const [end, setEnd] = React.useState("");
   const [allDay, setAllDay] = React.useState(false);
@@ -118,7 +126,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
     if (open) {
       const d = computeDefaults();
       setTitle(d.title);
-      setDescription(d.description);
+      descriptionRef.current = d.description || "";
+      setDescription(d.description || "");
       setStart(d.start);
       setEnd(d.end);
       setAllDay(d.allDay);
@@ -177,7 +186,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       ...(eventProp || {}),
       groupId: eventProp?.groupId || groupId,
       title: title.trim(),
-      description: description.trim() || undefined,
+      description: descriptionRef.current.trim() || undefined,
       start: localToIsoString(allDay ? `${start.slice(0, 10)}T00:00` : start) as unknown as Date,
       end: localToIsoString(allDay ? `${end.slice(0, 10)}T23:59` : end) as unknown as Date,
       allDay,
@@ -403,9 +412,11 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             autoFocus
           />
           <MarkdownEditor
-            value={description}
-            onChange={(val) => setDescription(val)}
-            style={{ maxHeight: 200, overflowY: "scroll" }}
+              value={description}
+              onChange={React.useCallback((val: string) => {
+                descriptionRef.current = val;
+              }, [])}
+              style={markdownEditorStyle}
           />
           <FormControlLabel
             control={<Switch checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />}
