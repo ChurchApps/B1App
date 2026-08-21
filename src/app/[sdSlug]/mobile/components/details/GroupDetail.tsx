@@ -196,6 +196,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const isLeader = members !== null ? !!myMembership?.leader : !!seedGroup?.leader;
   const canEditResources = isLeader || UserHelper.checkAccess(Permissions.membershipApi.groups.edit);
   const canManageGroup = canEditResources;
+  // Mirrors the server gate: group leaders, or staff who actually hold the attendance permission
+  const canTakeAttendance = isLeader || UserHelper.checkAccess(Permissions.attendanceApi.attendance.edit);
 
   const handleMemberClick = (m: GroupMember) => {
     const pid = m.personId || m.person?.id;
@@ -618,7 +620,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
   if (isMember) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
   availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
-  if (canManageGroup) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
+  if (canTakeAttendance) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
   availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
 
@@ -636,7 +638,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     if (!availableTabs.some((t) => t.key === tab)) {
       setTab(defaultTab);
     }
-  }, [group, hasAbout, hasPlans, isMember, isLeader, tab]);
+  }, [group, hasAbout, hasPlans, isMember, isLeader, canTakeAttendance, tab]);
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -714,7 +716,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
               firstDayOfWeek={getFirstDayOfWeek(config.church)}
             />
           )}
-          {tab === "attendance" && groupId && members !== null && (
+          {tab === "attendance" && canTakeAttendance && groupId && members !== null && (
             <GroupAttendanceTab
               groupId={groupId}
               members={(members || [])
