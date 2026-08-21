@@ -8,4 +8,13 @@ declare module "@churchapps/helpers" {
   interface GroupInterface {
     campusId?: string;
   }
+
+  // Remove once @churchapps/helpers is republished with ChurchApps/Packages#24.
+  interface PlanItemInterface {
+    positionId?: string;
+  }
+
+  interface PlanInterface {
+    showVolunteerNames?: boolean;
+  }
 }
