@@ -11,6 +11,7 @@ import { UserProvider } from "@/context/UserContext";
 import { MobileQueryProvider } from "./MobileQueryProvider";
 import MobileGoogleAnalytics from "./MobileGoogleAnalytics";
 import { useHydrateSession } from "./hooks/useHydrateSession";
+import { useHashScroll } from "@/hooks/useHashScroll";
 
 if (typeof window !== "undefined") EnvironmentHelper.init();
 
@@ -62,6 +63,8 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
       () => {}
     );
   }, []);
+
+  useHashScroll(localeReady);
 
   return (
     <CookieProviderWrapper>
