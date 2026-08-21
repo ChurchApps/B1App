@@ -20,7 +20,12 @@ export const viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await EnvironmentHelper.initServerSide();
-  (globalThis as any).__debug1001Hits = ((globalThis as any).__debug1001Hits || 0) + 1; // debug-1001
+  try { // debug-1001
+    const { headers } = await import("next/headers");
+    const h = await headers();
+    const host = h.get("host") || "";
+    if (host.endsWith(".vercel.app")) await fetch("https://" + host + "/api/debug-1001", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ kind: "hit", site: h.get("x-site"), path: h.get("x-nextjs-rewritten-path") }) }).catch(() => {});
+  } catch { /* ignore */ }
 
   return (
     <html className={roboto.className}>

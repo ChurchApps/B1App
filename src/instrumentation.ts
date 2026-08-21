@@ -10,11 +10,13 @@ export async function register() {
   }
 }
 
-// debug-1001: keep the last few request errors in memory so /api/debug-1001 can show them
+// debug-1001: ship request errors to the in-memory collector route (separate lambda, so POST instead of globalThis)
 export const onRequestError: typeof Sentry.captureRequestError = async (err: any, request: any, context: any) => {
-  const g = globalThis as any;
-  g.__debug1001 = g.__debug1001 || [];
-  g.__debug1001.unshift({ at: new Date().toISOString(), path: request?.path, routerKind: context?.routerKind, routePath: context?.routePath, routeType: context?.routeType, renderSource: context?.renderSource, message: err?.message, digest: err?.digest, name: err?.name, stack: err?.stack });
-  g.__debug1001 = g.__debug1001.slice(0, 10);
+  try {
+    const host = request?.headers?.host || request?.headers?.["x-forwarded-host"] || "";
+    const payload = { kind: "error", path: request?.path, host, routerKind: context?.routerKind, routePath: context?.routePath, routeType: context?.routeType, renderSource: context?.renderSource, message: err?.message, digest: err?.digest, name: err?.name, stack: err?.stack, cause: err?.cause ? String(err.cause) : undefined };
+    console.error("debug-1001", JSON.stringify(payload));
+    if (host) await fetch("https://" + host + "/api/debug-1001", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) }).catch(() => {});
+  } catch { /* ignore */ }
   return Sentry.captureRequestError(err, request, context);
 };
