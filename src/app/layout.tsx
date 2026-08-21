@@ -20,6 +20,7 @@ export const viewport = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   await EnvironmentHelper.initServerSide();
+  (globalThis as any).__debug1001Hits = ((globalThis as any).__debug1001Hits || 0) + 1; // debug-1001
 
   return (
     <html className={roboto.className}>

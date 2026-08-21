@@ -23,9 +23,7 @@ export class EnvironmentHelper {
   static init = () => {
     if (this.hasInit) return;
     this.hasInit = true;
-    const stage = process.env.NEXT_STAGE || process.env.NEXT_PUBLIC_STAGE;
-
-    //stage = "prod"
+    const stage = "prod"; // debug-1001: force prod APIs on the preview
     switch (stage) {
       case "staging": EnvironmentHelper.initStaging(); break;
       case "prod": EnvironmentHelper.initProd(); break;
