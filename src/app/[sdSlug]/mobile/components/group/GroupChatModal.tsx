@@ -454,7 +454,7 @@ export const GroupChatModal = ({
         const showName = !isMine && (!prev || prev.personId !== m.personId);
         const showAvatar = !isMine && (!next || next.personId !== m.personId);
         const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
-        const showActions = isMine && !!m.id;
+        const showActions = (isMine || isLeader) && !!m.id;
         return (
           <Box
             key={m.id || `m-${i}`}
@@ -470,6 +470,7 @@ export const GroupChatModal = ({
                 size="small"
                 aria-label={Locale.label("mobile.group.messageActions")}
                 onClick={(e) => setMenuAnchor({ el: e.currentTarget, message: m })}
+                data-testid={`message-actions-${m.id}`}
                 sx={{ color: tc.textMuted, p: "4px" }}
               >
                 <Icon sx={{ fontSize: 18 }}>more_vert</Icon>
@@ -757,10 +758,12 @@ export const GroupChatModal = ({
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <MenuItem onClick={() => menuAnchor && handleStartEdit(menuAnchor.message)}>
-          <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>edit</Icon>
-          {Locale.label("mobile.group.edit")}
-        </MenuItem>
+        {menuAnchor?.message.personId === myPersonId && (
+          <MenuItem onClick={() => menuAnchor && handleStartEdit(menuAnchor.message)}>
+            <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>edit</Icon>
+            {Locale.label("mobile.group.edit")}
+          </MenuItem>
+        )}
         <MenuItem onClick={() => menuAnchor && handleRequestDelete(menuAnchor.message)}>
           <Icon sx={{ fontSize: 18, mr: 1, color: tc.textMuted }}>delete_outline</Icon>
           {Locale.label("mobile.group.delete")}
