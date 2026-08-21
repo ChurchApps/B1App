@@ -1,0 +1,73 @@
+import { request as pwRequest, type APIRequestContext } from "@playwright/test";
+import { test, expect } from "@playwright/test";
+
+// Issue #988: the member-facing plan view shows the volunteer assigned to each
+// order-of-service item, gated by the plan's showVolunteerNames toggle.
+const API = "http://localhost:8084";
+const PERSON_ID = "PER00000001";
+const PERSON_NAME = "John Smith";
+
+async function apiLogin(ctx: APIRequestContext): Promise<string> {
+  const res = await ctx.post(`${API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
+  expect(res.ok()).toBeTruthy();
+  const body = await res.json();
+  const uc = (body.userChurches || []).find((c: any) => c.church?.id === "CHU00000001") || body.userChurches?.[0];
+  expect(uc?.jwt).toBeTruthy();
+  return uc.jwt as string;
+}
+
+test.describe("Mobile plan detail - assigned volunteer", () => {
+  let ctx: APIRequestContext;
+  let jwt: string;
+  let planId: string;
+
+  test.beforeAll(async () => {
+    ctx = await pwRequest.newContext();
+    jwt = await apiLogin(ctx);
+    const auth = { headers: { Authorization: "Bearer " + jwt } };
+
+    const planRes = await ctx.post(`${API}/doing/plans`, {
+      ...auth,
+      data: [{ name: "Issue988 Member Plan", ministryId: "GRP0000000a", serviceDate: "2030-06-01", serviceOrder: true, showVolunteerNames: true }]
+    });
+    expect(planRes.ok()).toBeTruthy();
+    planId = (await planRes.json())[0].id;
+
+    const posRes = await ctx.post(`${API}/doing/positions`, {
+      ...auth,
+      data: [{ planId, categoryName: "Issue988 Team", name: "Issue988 Speaker", count: 1 }]
+    });
+    expect(posRes.ok()).toBeTruthy();
+    const positionId = (await posRes.json())[0].id;
+
+    const assignRes = await ctx.post(`${API}/doing/assignments`, {
+      ...auth,
+      data: [{ positionId, personId: PERSON_ID, status: "Accepted" }]
+    });
+    expect(assignRes.ok()).toBeTruthy();
+
+    const headerRes = await ctx.post(`${API}/doing/planItems`, {
+      ...auth,
+      data: [{ planId, sort: 1, itemType: "header", label: "Issue988 Section" }]
+    });
+    expect(headerRes.ok()).toBeTruthy();
+    const headerId = (await headerRes.json())[0].id;
+
+    const itemRes = await ctx.post(`${API}/doing/planItems`, {
+      ...auth,
+      data: [{ planId, parentId: headerId, sort: 1, itemType: "item", label: "Issue988 Sermon", seconds: 600, positionId }]
+    });
+    expect(itemRes.ok()).toBeTruthy();
+  });
+
+  test.afterAll(async () => {
+    if (planId) await ctx.delete(`${API}/doing/plans/${planId}`, { headers: { Authorization: "Bearer " + jwt } });
+    await ctx.dispose();
+  });
+
+  test("assigned volunteer name shows next to the order-of-service item", async ({ page }) => {
+    await page.goto(`/mobile/plans/${planId}`);
+    await expect(page.getByText("Issue988 Sermon")).toBeVisible({ timeout: 30000 });
+    await expect(page.locator(".planItemPosition")).toHaveText(PERSON_NAME, { timeout: 15000 });
+  });
+});
