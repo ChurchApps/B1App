@@ -23,7 +23,7 @@ export class EnvironmentHelper {
   static init = () => {
     if (this.hasInit) return;
     this.hasInit = true;
-    const stage = "prod"; // debug-1001: force prod APIs on the preview
+    const stage = "prod" as string; // debug-1001: force prod APIs on the preview
     switch (stage) {
       case "staging": EnvironmentHelper.initStaging(); break;
       case "prod": EnvironmentHelper.initProd(); break;
