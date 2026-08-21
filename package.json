@@ -75,7 +75,8 @@
   },
   "resolutions": {
     "react-is": "18.3.1",
-    "jsdom": "27.0.0"
+    "jsdom": "25.0.1",
+    "cssstyle": "4.1.0"
   },
   "dependenciesMeta": {
     "@sentry/cli": {
