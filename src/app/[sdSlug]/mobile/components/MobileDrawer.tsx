@@ -56,7 +56,9 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
     const relevant = pathname.substring(idx).split("?")[0];
     const target = url.split("?")[0];
 
-    if (target === "/mobile/dashboard") return false;
+    if (target === "/mobile/dashboard") {
+      return relevant === "/mobile/dashboard" || relevant === "/mobile";
+    }
     return relevant === target || relevant.startsWith(target + "/");
   };
 
@@ -113,6 +115,28 @@ export const MobileDrawer = ({ links, onNavigate }: Props) => {
       </Box>
 
       <Box sx={{ flex: 1, overflowY: "auto" }}>
+        <Link href="/mobile/dashboard" style={{ textDecoration: "none", color: "inherit" }} onClick={onNavigate}>
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+            minHeight: 48,
+            px: `${mobileTheme.spacing.md}px`,
+            py: `${mobileTheme.spacing.sm + 4}px`,
+            mx: "8px",
+            mb: "2px",
+            mt: "6px",
+            borderRadius: `${mobileTheme.radius.md}px`,
+            bgcolor: isActive("/mobile/dashboard") ? tc.primaryLight : "transparent",
+            cursor: "pointer",
+            "&:hover": { bgcolor: isActive("/mobile/dashboard") ? tc.primaryLight : tc.iconBackground }
+          }}>
+            <Icon sx={{ fontSize: 24, color: tc.primary }}>home</Icon>
+            <Typography sx={{ fontSize: 16, fontWeight: isActive("/mobile/dashboard") ? 600 : 500, color: isActive("/mobile/dashboard") ? tc.primary : tc.text, flex: 1 }}>
+              {Locale.label("mobile.components.home")}
+            </Typography>
+          </Box>
+        </Link>
         {context?.user && (
           <Link href="/mobile/me" style={{ textDecoration: "none", color: "inherit" }} onClick={onNavigate}>
             <Box sx={{
