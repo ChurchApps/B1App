@@ -116,7 +116,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
                     "& li": { mb: 0.75 },
                     "& hr": { border: 0, borderTop: "1px solid", borderColor: "divider", my: 4 }
                   }}>
-                    <MarkdownPreviewLight value={(post.content || "").replace(/\\!\[/g, "![").replace(/\[!\s*([iI]mage)\s*\]\(([^)]+)\)(\{[^}]+\})?/g, "![$1]($2)").replace(/!\s*\[([^\]]*)\]\(([^)]+)\)(\{[^}]+\})?/g, "![$1]($2)")} />
+                    <MarkdownPreviewLight value={post.content} />
                   </Box>
               )}
 
