@@ -227,7 +227,8 @@
       "linkText": "Пожалуйста, введите корректный текст",
       "linkUrl": "Пожалуйста, введите ссылку",
       "unauthorized": "Нет прав для добавления ссылок"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "События календаря:",
@@ -257,7 +258,8 @@
     "loginAccount": "Войти в свой аккаунт",
     "memberPortal": "Портал участников",
     "openNav": "Открыть меню навигации",
-    "userMenu": "Меню пользователя"
+    "userMenu": "Меню пользователя",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "Доступные иконки",
@@ -465,7 +467,13 @@
       "unableToShare": "Невозможно поделиться на этом устройстве",
       "untitledSeries": "Серия без названия",
       "viewTeach": "Обучение",
-      "watchSermon": "Смотреть проповедь"
+      "watchSermon": "Смотреть проповедь",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "Похоже, вкладки ещё не настроены. Откройте панель администратора, чтобы настроить главный экран для участников.",
@@ -582,7 +590,36 @@
       "usedStorage": "Использовано {} / 100МБ",
       "visibility": "Видимость",
       "weekly": "Еженедельно",
-      "yearly": "Ежегодно"
+      "yearly": "Ежегодно",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "Недействительная ссылка",
     "invalidLinkDescription": "Запрошенный ID отсутствует или недействителен.",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({} свободно)",
       "volunteerPositionsFilled": "Заполнено {} из {} мест",
       "volunteerViewSignUp": "Просмотреть и записаться",
-      "watchLive": "Смотреть в прямом эфире"
+      "watchLive": "Смотреть в прямом эфире",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "Читайте Священное Писание",
@@ -751,7 +790,55 @@
       "volunteer": "Запишитесь служить",
       "votd": "Стих сегодняшнего дня"
     },
-    "yesterday": "вчера"
+    "yesterday": "вчера",
+    "me": {
+      "title": "Я",
+      "upcoming": "Предстоящие",
+      "serving": "Служение",
+      "event": "Событие",
+      "registration": "Регистрация",
+      "recentNotifications": "Последние уведомления",
+      "nothingUpcoming": "Ничего не предвидится",
+      "nothingUpcomingBody": "Время вашего служения, события и регистрации будут отображаться здесь.",
+      "myRequests": "Мои запросы",
+      "requestEvent": "Запросить событие",
+      "shortcuts": "Ярлыки"
+    },
+    "requests": {
+      "title": "Запросить событие",
+      "myRequests": "Мои запросы",
+      "newRequest": "Новый запрос",
+      "eventTitle": "Название события",
+      "description": "Описание",
+      "allDay": "Весь день",
+      "start": "Начало",
+      "end": "Конец",
+      "recurring": "Повторяется",
+      "rooms": "Комнаты",
+      "resources": "Ресурсы",
+      "quantity": "Кол-во",
+      "submit": "Отправить запрос",
+      "submitting": "Отправка…",
+      "cancel": "Отмена",
+      "close": "Закрыть",
+      "conflictWarning": "Это время совпадает с существующим бронированием.",
+      "outcomeTitle": "Запрос отправлен",
+      "outcomeBody": "Здесь отображается статус каждой запрошенной вами комнаты и ресурса.",
+      "approved": "Одобрено",
+      "pending": "Ожидает одобрения",
+      "emptyTitle": "Пока нет запросов",
+      "emptyBody": "Ваши запросы на события и комнаты будут отображаться здесь.",
+      "statusPending": "В ожидании",
+      "statusApproved": "Одобрено",
+      "statusRejected": "Отклонено",
+      "cancelRequest": "Отменить запрос",
+      "cancelConfirm": "Отменить этот запрос? Это действие нельзя отменить.",
+      "keep": "Оставить",
+      "requestedOn": "Запрошено",
+      "enterTitle": "Пожалуйста, введите название.",
+      "failedToSubmit": "Не удалось отправить запрос. Пожалуйста, попробуйте еще раз.",
+      "noBookingItems": "Не выбраны комнаты или ресурсы."
+    }
   },
   "notes": {
     "comment": "Комментарий",
@@ -848,7 +935,10 @@
       "emailRequired": "Электронная почта обязательна для гостевой регистрации.",
       "memberNamesRequired": "Имя и фамилия обязательны для каждого дополнительного участника.",
       "namesRequired": "Имя и фамилия обязательны.",
-      "registrationFailed": "Регистрация не удалась. Возможно, событие заполнено или регистрация закрыта."
+      "registrationFailed": "Регистрация не удалась. Возможно, событие заполнено или регистрация закрыта.",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "Событие",
     "eventFull": "Событие заполнено",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} мест заполнено",
     "status": "Статус",
     "youAreRegistered": "Вы зарегистрированы на",
-    "yourInformation": "Ваша информация"
+    "yourInformation": "Ваша информация",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "Все {} мест заполнены",

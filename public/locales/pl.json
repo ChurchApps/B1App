@@ -227,7 +227,8 @@
       "linkText": "Wprowadź prawidłowy tekst",
       "linkUrl": "Wprowadź link",
       "unauthorized": "Brak uprawnień do dodawania linków"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "Wydarzenia w kalendarzu:",
@@ -257,7 +258,8 @@
     "loginAccount": "Zaloguj się do swojego konta",
     "memberPortal": "Portal członka",
     "openNav": "Otwórz menu nawigacyjne",
-    "userMenu": "Menu użytkownika"
+    "userMenu": "Menu użytkownika",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "Dostępne ikony",
@@ -465,7 +467,13 @@
       "unableToShare": "Nie można udostępnić na tym urządzeniu",
       "untitledSeries": "Seria bez tytułu",
       "viewTeach": "Naucz",
-      "watchSermon": "Obejrzyj kazanie"
+      "watchSermon": "Obejrzyj kazanie",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "Wygląda na to, że nie skonfigurowano jeszcze żadnych kart. Otwórz panel administracyjny, aby skonfigurować ekran główny dla członków.",
@@ -582,7 +590,36 @@
       "usedStorage": "Wykorzystane {} / 100MB",
       "visibility": "Widoczność",
       "weekly": "Co tydzień",
-      "yearly": "Co rok"
+      "yearly": "Co rok",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "Nieprawidłowy link",
     "invalidLinkDescription": "Żądany identyfikator jest brakujący lub nieprawidłowy.",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({} wolnych)",
       "volunteerPositionsFilled": "{} z {} miejsc obsadzonych",
       "volunteerViewSignUp": "Zobacz i zapisz się",
-      "watchLive": "Oglądaj na żywo"
+      "watchLive": "Oglądaj na żywo",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "Czytaj Pismo Święte",
@@ -751,7 +790,55 @@
       "volunteer": "Zapisz się do służby",
       "votd": "Werset dnia"
     },
-    "yesterday": "wczoraj"
+    "yesterday": "wczoraj",
+    "me": {
+      "title": "Ja",
+      "upcoming": "Nadchodzące",
+      "serving": "Służba",
+      "event": "Wydarzenie",
+      "registration": "Rejestracja",
+      "recentNotifications": "Ostatnie powiadomienia",
+      "nothingUpcoming": "Brak nadchodzących wydarzeń",
+      "nothingUpcomingBody": "Twoje czasy służby, wydarzenia i rejestracje pojawią się tutaj.",
+      "myRequests": "Moje prośby",
+      "requestEvent": "Poproś o wydarzenie",
+      "shortcuts": "Skróty"
+    },
+    "requests": {
+      "title": "Request an Event",
+      "myRequests": "My Requests",
+      "newRequest": "New Request",
+      "eventTitle": "Event title",
+      "description": "Description",
+      "allDay": "All day",
+      "start": "Start",
+      "end": "End",
+      "recurring": "Repeats",
+      "rooms": "Rooms",
+      "resources": "Resources",
+      "quantity": "Qty",
+      "submit": "Submit Request",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "conflictWarning": "This time conflicts with an existing booking.",
+      "outcomeTitle": "Request submitted",
+      "outcomeBody": "Here is the status of each room and resource you requested.",
+      "approved": "Approved",
+      "pending": "Pending approval",
+      "emptyTitle": "No requests yet",
+      "emptyBody": "Your event and room requests will appear here.",
+      "statusPending": "Pending",
+      "statusApproved": "Approved",
+      "statusRejected": "Rejected",
+      "cancelRequest": "Cancel request",
+      "cancelConfirm": "Cancel this request? This cannot be undone.",
+      "keep": "Keep",
+      "requestedOn": "Requested",
+      "enterTitle": "Please enter a title.",
+      "failedToSubmit": "Could not submit your request. Please try again.",
+      "noBookingItems": "No rooms or resources selected."
+    }
   },
   "notes": {
     "comment": "Komentarz",
@@ -848,7 +935,10 @@
       "emailRequired": "E-mail jest wymagany do rejestracji gości.",
       "memberNamesRequired": "Imię i nazwisko są wymagane dla każdego dodatkowego członka.",
       "namesRequired": "Imię i nazwisko są wymagane.",
-      "registrationFailed": "Rejestracja nie powiodła się. Wydarzenie może być pełne lub rejestracja mogła zostać zamknięta."
+      "registrationFailed": "Rejestracja nie powiodła się. Wydarzenie może być pełne lub rejestracja mogła zostać zamknięta.",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "Wydarzenie",
     "eventFull": "Wydarzenie pełne",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} miejsc zajętych",
     "status": "Status",
     "youAreRegistered": "Jesteś zarejestrowany na",
-    "yourInformation": "Twoje informacje"
+    "yourInformation": "Twoje informacje",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "Wszystkie {} miejsc zajętych",

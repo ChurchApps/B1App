@@ -227,7 +227,8 @@
       "linkText": "请输入有效的文本",
       "linkUrl": "请输入链接",
       "unauthorized": "无权添加链接"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "日历活动：",
@@ -257,7 +258,8 @@
     "loginAccount": "登录您的账户",
     "memberPortal": "成员门户",
     "openNav": "打开导航菜单",
-    "userMenu": "用户菜单"
+    "userMenu": "用户菜单",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "可用图标",
@@ -465,7 +467,13 @@
       "unableToShare": "无法在此设备上分享",
       "untitledSeries": "未命名系列",
       "viewTeach": "教导",
-      "watchSermon": "观看讲道"
+      "watchSermon": "观看讲道",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "似乎尚未配置任何标签页。打开管理后台来设置成员的主屏幕。",
@@ -582,7 +590,36 @@
       "usedStorage": "已使用 {} / 100MB",
       "visibility": "可见性",
       "weekly": "每周",
-      "yearly": "每年"
+      "yearly": "每年",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "无效链接",
     "invalidLinkDescription": "请求的 ID 缺失或无效。",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{}（{} 个空缺）",
       "volunteerPositionsFilled": "已填补 {} 个职位（共 {} 个）",
       "volunteerViewSignUp": "查看并报名",
-      "watchLive": "观看直播"
+      "watchLive": "观看直播",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "阅读经文",
@@ -751,7 +790,55 @@
       "volunteer": "报名服事",
       "votd": "今日经文"
     },
-    "yesterday": "昨天"
+    "yesterday": "昨天",
+    "me": {
+      "title": "我",
+      "upcoming": "即将到来",
+      "serving": "服务",
+      "event": "事件",
+      "registration": "注册",
+      "recentNotifications": "最近通知",
+      "nothingUpcoming": "没有即将到来的事项",
+      "nothingUpcomingBody": "您的服务时间、活动和注册将显示在这里。",
+      "myRequests": "我的请求",
+      "requestEvent": "请求活动",
+      "shortcuts": "快捷方式"
+    },
+    "requests": {
+      "title": "请求活动",
+      "myRequests": "我的请求",
+      "newRequest": "新请求",
+      "eventTitle": "活动标题",
+      "description": "描述",
+      "allDay": "全天",
+      "start": "开始",
+      "end": "结束",
+      "recurring": "重复",
+      "rooms": "房间",
+      "resources": "资源",
+      "quantity": "数量",
+      "submit": "提交请求",
+      "submitting": "提交中…",
+      "cancel": "取消",
+      "close": "关闭",
+      "conflictWarning": "此时间与现有预订冲突。",
+      "outcomeTitle": "请求已提交",
+      "outcomeBody": "这是您请求的每个房间和资源的状态。",
+      "approved": "已批准",
+      "pending": "等待批准",
+      "emptyTitle": "暂无请求",
+      "emptyBody": "您的活动和房间请求将显示在这里。",
+      "statusPending": "待处理",
+      "statusApproved": "已批准",
+      "statusRejected": "已拒绝",
+      "cancelRequest": "取消请求",
+      "cancelConfirm": "取消此请求？此操作无法撤消。",
+      "keep": "保留",
+      "requestedOn": "请求时间",
+      "enterTitle": "请输入标题。",
+      "failedToSubmit": "无法提交您的请求。请重试。",
+      "noBookingItems": "未选择房间或资源。"
+    }
   },
   "notes": {
     "comment": "评论",
@@ -848,7 +935,10 @@
       "emailRequired": "访客报名需要提供邮箱。",
       "memberNamesRequired": "每位附加成员都必须填写名字和姓氏。",
       "namesRequired": "名字和姓氏为必填项。",
-      "registrationFailed": "报名失败。活动可能已满或报名已关闭。"
+      "registrationFailed": "报名失败。活动可能已满或报名已关闭。",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "活动",
     "eventFull": "活动已满",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} 个名额已填",
     "status": "状态",
     "youAreRegistered": "您已报名",
-    "yourInformation": "您的信息"
+    "yourInformation": "您的信息",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "全部 {} 个名额已满",

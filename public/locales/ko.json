@@ -227,7 +227,8 @@
       "linkText": "유효한 텍스트를 입력해 주세요",
       "linkUrl": "링크를 입력해 주세요",
       "unauthorized": "링크를 추가할 권한이 없습니다"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "캘린더 이벤트:",
@@ -257,7 +258,8 @@
     "loginAccount": "계정에 로그인",
     "memberPortal": "회원 포털",
     "openNav": "탐색 메뉴 열기",
-    "userMenu": "사용자 메뉴"
+    "userMenu": "사용자 메뉴",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "사용 가능한 아이콘",
@@ -465,7 +467,13 @@
       "unableToShare": "이 기기에서 공유할 수 없습니다",
       "untitledSeries": "제목 없는 시리즈",
       "viewTeach": "가르침",
-      "watchSermon": "설교 보기"
+      "watchSermon": "설교 보기",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "아직 구성된 탭이 없는 것 같습니다. 관리자 화면을 열어 멤버의 홈 화면을 설정하세요.",
@@ -582,7 +590,36 @@
       "usedStorage": "사용됨 {} / 100MB",
       "visibility": "공개 설정",
       "weekly": "매주",
-      "yearly": "매년"
+      "yearly": "매년",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "잘못된 링크",
     "invalidLinkDescription": "요청하신 ID가 없거나 유효하지 않습니다.",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({}자리 남음)",
       "volunteerPositionsFilled": "{}자리 중 {}자리 충원됨",
       "volunteerViewSignUp": "보기 및 신청",
-      "watchLive": "실시간 시청"
+      "watchLive": "실시간 시청",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "성경 읽기",
@@ -751,7 +790,55 @@
       "volunteer": "봉사 신청하기",
       "votd": "오늘의 말씀"
     },
-    "yesterday": "어제"
+    "yesterday": "어제",
+    "me": {
+      "title": "나",
+      "upcoming": "예정된",
+      "serving": "봉사",
+      "event": "이벤트",
+      "registration": "등록",
+      "recentNotifications": "최근 알림",
+      "nothingUpcoming": "예정된 일정 없음",
+      "nothingUpcomingBody": "봉사 시간, 이벤트 및 등록이 여기에 표시됩니다.",
+      "myRequests": "내 요청",
+      "requestEvent": "이벤트 요청",
+      "shortcuts": "단축키"
+    },
+    "requests": {
+      "title": "Request an Event",
+      "myRequests": "My Requests",
+      "newRequest": "New Request",
+      "eventTitle": "Event title",
+      "description": "Description",
+      "allDay": "All day",
+      "start": "Start",
+      "end": "End",
+      "recurring": "Repeats",
+      "rooms": "Rooms",
+      "resources": "Resources",
+      "quantity": "Qty",
+      "submit": "Submit Request",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "conflictWarning": "This time conflicts with an existing booking.",
+      "outcomeTitle": "Request submitted",
+      "outcomeBody": "Here is the status of each room and resource you requested.",
+      "approved": "Approved",
+      "pending": "Pending approval",
+      "emptyTitle": "No requests yet",
+      "emptyBody": "Your event and room requests will appear here.",
+      "statusPending": "Pending",
+      "statusApproved": "Approved",
+      "statusRejected": "Rejected",
+      "cancelRequest": "Cancel request",
+      "cancelConfirm": "Cancel this request? This cannot be undone.",
+      "keep": "Keep",
+      "requestedOn": "Requested",
+      "enterTitle": "Please enter a title.",
+      "failedToSubmit": "Could not submit your request. Please try again.",
+      "noBookingItems": "No rooms or resources selected."
+    }
   },
   "notes": {
     "comment": "댓글",
@@ -848,7 +935,10 @@
       "emailRequired": "방문자 등록에는 이메일이 필요합니다.",
       "memberNamesRequired": "추가 구성원 각각에 대해 이름과 성이 필요합니다.",
       "namesRequired": "이름과 성이 필요합니다.",
-      "registrationFailed": "등록에 실패했습니다. 이벤트가 가득 찼거나 등록이 마감되었을 수 있습니다."
+      "registrationFailed": "등록에 실패했습니다. 이벤트가 가득 찼거나 등록이 마감되었을 수 있습니다.",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "이벤트",
     "eventFull": "이벤트 마감",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} 자리가 찼습니다",
     "status": "상태",
     "youAreRegistered": "다음에 등록되었습니다",
-    "yourInformation": "귀하의 정보"
+    "yourInformation": "귀하의 정보",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "모든 {} 자리가 찼습니다",
