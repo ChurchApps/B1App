@@ -70,7 +70,7 @@ export const PlanItem = (props: Props) => {
       <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
         <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
         <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {PlanHelper.formatTime(pi.children?.length ? PlanHelper.getSectionDuration(pi) : pi.seconds || 0)}
+          {PlanHelper.formatTime(pi.seconds || 0)}
         </span>
       </span>
       <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
@@ -118,11 +118,9 @@ export const PlanItem = (props: Props) => {
       case "providerSection":
       case "lessonSection":
       case "section":
-        // A section expanded into actions in B1Admin is a folder: show its nested actions beneath it.
-        return <>
-          {getItemRow((pi.relatedId || hasProviderFields) ? () => setLessonSectionId(pi.relatedId || pi.providerContentPath || pi.id || null) : undefined)}
-          {pi.children?.length ? <div style={{ paddingLeft: 16 }}>{getChildren()}</div> : null}
-        </>;
+        return getItemRow(
+          (pi.relatedId || hasProviderFields) ? () => setLessonSectionId(pi.relatedId || pi.providerContentPath || pi.id || null) : undefined
+        );
       case "item":
       default:
         // Audio links open the inline player dialog instead of downloading via the OS (issue #960)
