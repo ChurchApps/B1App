@@ -227,7 +227,8 @@
       "linkText": "कृपया मान्य पाठ दर्ज करें",
       "linkUrl": "कृपया लिंक दर्ज करें",
       "unauthorized": "लिंक जोड़ने के लिए अनधिकृत"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "कैलेंडर कार्यक्रम:",
@@ -257,7 +258,8 @@
     "loginAccount": "अपने खाते में लॉगिन करें",
     "memberPortal": "सदस्य पोर्टल",
     "openNav": "नेविगेशन मेनू खोलें",
-    "userMenu": "उपयोगकर्ता मेनू"
+    "userMenu": "उपयोगकर्ता मेनू",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "उपलब्ध आइकन",
@@ -465,7 +467,13 @@
       "unableToShare": "इस डिवाइस पर साझा करने में असमर्थ",
       "untitledSeries": "बिना शीर्षक श्रृंखला",
       "viewTeach": "शिक्षण",
-      "watchSermon": "उपदेश देखें"
+      "watchSermon": "उपदेश देखें",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "लगता है अभी तक कोई टैब कॉन्फ़िगर नहीं किया गया है। अपने सदस्यों की होम स्क्रीन सेट करने के लिए एडमिन खोलें।",
@@ -582,7 +590,36 @@
       "usedStorage": "{} / 100MB उपयोग किया गया",
       "visibility": "दृश्यता",
       "weekly": "साप्ताहिक",
-      "yearly": "वार्षिक"
+      "yearly": "वार्षिक",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "अमान्य लिंक",
     "invalidLinkDescription": "अनुरोधित ID अनुपस्थित या अमान्य है।",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({} रिक्त)",
       "volunteerPositionsFilled": "{} में से {} पद भरे गए",
       "volunteerViewSignUp": "देखें और साइन अप करें",
-      "watchLive": "लाइव देखें"
+      "watchLive": "लाइव देखें",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "धर्मग्रंथ पढ़ें",
@@ -751,7 +790,55 @@
       "volunteer": "सेवा के लिए साइन अप करें",
       "votd": "आज का वचन"
     },
-    "yesterday": "कल"
+    "yesterday": "कल",
+    "me": {
+      "title": "मैं",
+      "upcoming": "आगामी",
+      "serving": "सेवा",
+      "event": "कार्यक्रम",
+      "registration": "पंजीकरण",
+      "recentNotifications": "हाल की सूचनाएं",
+      "nothingUpcoming": "कुछ भी आगामी नहीं है",
+      "nothingUpcomingBody": "आपकी सेवा का समय, कार्यक्रम और पंजीकरण यहां दिखाई देंगे।",
+      "myRequests": "मेरे अनुरोध",
+      "requestEvent": "कार्यक्रम का अनुरोध करें",
+      "shortcuts": "शॉर्टकट"
+    },
+    "requests": {
+      "title": "इवेंट का अनुरोध करें",
+      "myRequests": "मेरे अनुरोध",
+      "newRequest": "नया अनुरोध",
+      "eventTitle": "इवेंट का शीर्षक",
+      "description": "विवरण",
+      "allDay": "पूरा दिन",
+      "start": "शुरू",
+      "end": "समाप्त",
+      "recurring": "दोहराता है",
+      "rooms": "कमरे",
+      "resources": "संसाधन",
+      "quantity": "मात्रा",
+      "submit": "अनुरोध सबमिट करें",
+      "submitting": "सबमिट कर रहा है…",
+      "cancel": "रद्द करें",
+      "close": "बंद करें",
+      "conflictWarning": "यह समय मौजूदा बुकिंग के साथ टकराता है।",
+      "outcomeTitle": "अनुरोध सबमिट किया गया",
+      "outcomeBody": "यहाँ आपके द्वारा अनुरोधित प्रत्येक कमरे और संसाधन की स्थिति है।",
+      "approved": "स्वीकृत",
+      "pending": "अनुमोदन लंबित",
+      "emptyTitle": "अभी तक कोई अनुरोध नहीं",
+      "emptyBody": "आपके इवेंट और कमरे के अनुरोध यहाँ दिखाई देंगे।",
+      "statusPending": "लंबित",
+      "statusApproved": "स्वीकृत",
+      "statusRejected": "अस्वीकृत",
+      "cancelRequest": "अनुरोध रद्द करें",
+      "cancelConfirm": "क्या आप इस अनुरोध को रद्द करना चाहते हैं? इसे वापस नहीं लिया जा सकता।",
+      "keep": "रखें",
+      "requestedOn": "अनुरोध किया गया",
+      "enterTitle": "कृपया एक शीर्षक दर्ज करें।",
+      "failedToSubmit": "आपका अनुरोध सबमिट नहीं किया जा सका। कृपया पुनः प्रयास करें।",
+      "noBookingItems": "कोई कमरा या संसाधन नहीं चुना गया।"
+    }
   },
   "notes": {
     "comment": "टिप्पणी",
@@ -848,7 +935,10 @@
       "emailRequired": "अतिथि पंजीकरण के लिए ईमेल आवश्यक है।",
       "memberNamesRequired": "प्रत्येक अतिरिक्त सदस्य के लिए पहला और अंतिम नाम आवश्यक है।",
       "namesRequired": "पहला नाम और अंतिम नाम आवश्यक हैं।",
-      "registrationFailed": "पंजीकरण विफल हुआ। कार्यक्रम पूरा हो सकता है या पंजीकरण बंद हो सकता है।"
+      "registrationFailed": "पंजीकरण विफल हुआ। कार्यक्रम पूरा हो सकता है या पंजीकरण बंद हो सकता है।",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "कार्यक्रम",
     "eventFull": "कार्यक्रम पूर्ण",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} स्थान भरे गए",
     "status": "स्थिति",
     "youAreRegistered": "आप इसके लिए पंजीकृत हैं",
-    "yourInformation": "आपकी जानकारी"
+    "yourInformation": "आपकी जानकारी",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "सभी {} स्लॉट भर गए",

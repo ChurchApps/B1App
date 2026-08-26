@@ -227,7 +227,8 @@
       "linkText": "Vennligst skriv inn gyldig tekst",
       "linkUrl": "Vennligst skriv inn lenke",
       "unauthorized": "Ikke autorisert til å legge til lenker"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "Kalenderhendelser:",
@@ -257,7 +258,8 @@
     "loginAccount": "Logg inn på kontoen din",
     "memberPortal": "Medlemsportal",
     "openNav": "Åpne navigasjonsmeny",
-    "userMenu": "Brukermeny"
+    "userMenu": "Brukermeny",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "Tilgjengelige ikoner",
@@ -465,7 +467,13 @@
       "unableToShare": "Kan ikke dele på denne enheten",
       "untitledSeries": "Serie uten tittel",
       "viewTeach": "Undervis",
-      "watchSermon": "Se preken"
+      "watchSermon": "Se preken",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "Det ser ut til at ingen faner er konfigurert ennå. Åpne administrasjonen for å sette opp hjemskjermen for medlemmene dine.",
@@ -582,7 +590,36 @@
       "usedStorage": "Brukt {} / 100 MB",
       "visibility": "Synlighet",
       "weekly": "Ukentlig",
-      "yearly": "Årlig"
+      "yearly": "Årlig",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "Ugyldig lenke",
     "invalidLinkDescription": "Forespurt ID mangler eller er ugyldig.",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({} ledige)",
       "volunteerPositionsFilled": "{} av {} plasser fylt",
       "volunteerViewSignUp": "Vis og meld deg på",
-      "watchLive": "Se direkte"
+      "watchLive": "Se direkte",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "Les Skriften",
@@ -751,7 +790,55 @@
       "volunteer": "Meld deg til tjeneste",
       "votd": "Dagens vers"
     },
-    "yesterday": "i går"
+    "yesterday": "i går",
+    "me": {
+      "title": "Meg",
+      "upcoming": "Kommende",
+      "serving": "Tjeneste",
+      "event": "Arrangement",
+      "registration": "Registrering",
+      "recentNotifications": "Nylige varsler",
+      "nothingUpcoming": "Ingenting kommende",
+      "nothingUpcomingBody": "Dine tjenestetider, arrangementer og registreringer vil vises her.",
+      "myRequests": "Mine forespørsler",
+      "requestEvent": "Be om et arrangement",
+      "shortcuts": "Snarveier"
+    },
+    "requests": {
+      "title": "Request an Event",
+      "myRequests": "My Requests",
+      "newRequest": "New Request",
+      "eventTitle": "Event title",
+      "description": "Description",
+      "allDay": "All day",
+      "start": "Start",
+      "end": "End",
+      "recurring": "Repeats",
+      "rooms": "Rooms",
+      "resources": "Resources",
+      "quantity": "Qty",
+      "submit": "Submit Request",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "conflictWarning": "This time conflicts with an existing booking.",
+      "outcomeTitle": "Request submitted",
+      "outcomeBody": "Here is the status of each room and resource you requested.",
+      "approved": "Approved",
+      "pending": "Pending approval",
+      "emptyTitle": "No requests yet",
+      "emptyBody": "Your event and room requests will appear here.",
+      "statusPending": "Pending",
+      "statusApproved": "Approved",
+      "statusRejected": "Rejected",
+      "cancelRequest": "Cancel request",
+      "cancelConfirm": "Cancel this request? This cannot be undone.",
+      "keep": "Keep",
+      "requestedOn": "Requested",
+      "enterTitle": "Please enter a title.",
+      "failedToSubmit": "Could not submit your request. Please try again.",
+      "noBookingItems": "No rooms or resources selected."
+    }
   },
   "notes": {
     "comment": "Kommentar",
@@ -848,7 +935,10 @@
       "emailRequired": "E-post er påkrevd for gjestepåmelding.",
       "memberNamesRequired": "For- og etternavn er påkrevd for hvert ekstra medlem.",
       "namesRequired": "Fornavn og etternavn er påkrevd.",
-      "registrationFailed": "Påmelding mislyktes. Arrangementet kan være fullt eller påmeldingen kan ha stengt."
+      "registrationFailed": "Påmelding mislyktes. Arrangementet kan være fullt eller påmeldingen kan ha stengt.",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "Arrangement",
     "eventFull": "Arrangement fullt",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} plasser fylt",
     "status": "Status",
     "youAreRegistered": "Du er påmeldt",
-    "yourInformation": "Din informasjon"
+    "yourInformation": "Din informasjon",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "Alle {} plasser fylt",
