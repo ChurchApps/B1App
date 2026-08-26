@@ -21,7 +21,7 @@ describe("buildContentSecurityPolicy", () => {
 
   it("never emits 'unsafe-inline' or 'unsafe-eval' for scripts, even without a nonce", () => {
     const scriptSrc = directive(buildContentSecurityPolicy(), "script-src");
-    assert.equal(scriptSrc, "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://js.stripe.com https://www.google.com https://www.gstatic.com");
+    assert.equal(scriptSrc, "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://js.stripe.com https://www.google.com https://www.gstatic.com https://lotusconsulting.transactiongateway.com");
   });
 
   it("relaxes only dev-server needs when dev is set", () => {

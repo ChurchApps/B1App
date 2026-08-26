@@ -18,16 +18,20 @@
 // frame-src stays broad (https:) because WebsiteUrlPage, stream interaction
 // tabs, and sermon videoUrl embed church-chosen URLs.
 
+// Kingdom Funding Collect.js (white-label NMI host): script, styles.css, and /token/api XHR.
+const NMI_HOST = "https://lotusconsulting.transactiongateway.com";
+
 export const SCRIPT_SRC_HOSTS = [
   "https://www.googletagmanager.com",
   "https://www.google-analytics.com",
   "https://js.stripe.com",
   "https://www.google.com",
-  "https://www.gstatic.com"
+  "https://www.gstatic.com",
+  NMI_HOST
 ] as const;
 
 // cdnjs/use.fontawesome: legacy church content embeds Font Awesome via rawHTML.
-export const STYLE_SRC_HOSTS = ["https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com"] as const;
+export const STYLE_SRC_HOSTS = ["https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com", NMI_HOST] as const;
 
 // Font Awesome CSS loads its webfonts from the same CDN origins.
 export const FONT_SRC_HOSTS = ["https://fonts.gstatic.com", "https://storage.googleapis.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com"] as const;
@@ -51,7 +55,8 @@ export const CONNECT_SRC_HOSTS = [
   "https://www.google.com",
   "https://www.gstatic.com",
   "wss://*.churchapps.org",
-  "wss://*.b1.church"
+  "wss://*.b1.church",
+  NMI_HOST
 ] as const;
 
 export const FRAME_ANCESTORS = [

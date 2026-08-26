@@ -141,7 +141,8 @@ function DonatePageInner({ config }: Props) {
         })
       );
     },
-    enabled: donationsEnabled && !!customerId
+    enabled: donationsEnabled && !!customerId,
+    staleTime: 0
   });
 
   const handleDataUpdate = (msg?: string) => {
