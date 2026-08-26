@@ -227,7 +227,8 @@
       "linkText": "يرجى إدخال نص صالح",
       "linkUrl": "يرجى إدخال الرابط",
       "unauthorized": "غير مصرح بإضافة روابط"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "أحداث التقويم:",
@@ -257,7 +258,8 @@
     "loginAccount": "تسجيل الدخول إلى حسابك",
     "memberPortal": "بوابة الأعضاء",
     "openNav": "فتح قائمة التنقل",
-    "userMenu": "قائمة المستخدم"
+    "userMenu": "قائمة المستخدم",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "الأيقونات المتاحة",
@@ -465,7 +467,13 @@
       "unableToShare": "تعذّر المشاركة على هذا الجهاز",
       "untitledSeries": "سلسلة بدون عنوان",
       "viewTeach": "تعليم",
-      "watchSermon": "مشاهدة العظة"
+      "watchSermon": "مشاهدة العظة",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "يبدو أنه لم يتم إعداد أي علامات تبويب بعد. افتح لوحة الإدارة لإعداد الشاشة الرئيسية لأعضائك.",
@@ -582,7 +590,36 @@
       "usedStorage": "المستخدم {} / 100 ميجابايت",
       "visibility": "الظهور",
       "weekly": "أسبوعيًا",
-      "yearly": "سنويًا"
+      "yearly": "سنويًا",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "رابط غير صالح",
     "invalidLinkDescription": "المعرف المطلوب مفقود أو غير صالح.",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({} متاح)",
       "volunteerPositionsFilled": "تم شغل {} من {} منصب",
       "volunteerViewSignUp": "عرض والتسجيل",
-      "watchLive": "شاهد البث المباشر"
+      "watchLive": "شاهد البث المباشر",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "اقرأ الكتاب المقدس",
@@ -751,7 +790,55 @@
       "volunteer": "سجّل للخدمة",
       "votd": "آية اليوم"
     },
-    "yesterday": "أمس"
+    "yesterday": "أمس",
+    "me": {
+      "title": "أنا",
+      "upcoming": "القادمة",
+      "serving": "الخدمة",
+      "event": "حدث",
+      "registration": "تسجيل",
+      "recentNotifications": "الإشعارات الأخيرة",
+      "nothingUpcoming": "لا يوجد شيء قادم",
+      "nothingUpcomingBody": "ستظهر أوقات الخدمة والأحداث والتسجيلات الخاصة بك هنا.",
+      "myRequests": "طلباتي",
+      "requestEvent": "طلب حدث",
+      "shortcuts": "اختصارات"
+    },
+    "requests": {
+      "title": "طلب حدث",
+      "myRequests": "طلباتي",
+      "newRequest": "طلب جديد",
+      "eventTitle": "عنوان الحدث",
+      "description": "الوصف",
+      "allDay": "طوال اليوم",
+      "start": "البداية",
+      "end": "النهاية",
+      "recurring": "يتكرر",
+      "rooms": "غرف",
+      "resources": "الموارد",
+      "quantity": "الكمية",
+      "submit": "تقديم الطلب",
+      "submitting": "جاري التقديم...",
+      "cancel": "إلغاء",
+      "close": "إغلاق",
+      "conflictWarning": "هذا الوقت يتعارض مع حجز حالي.",
+      "outcomeTitle": "تم تقديم الطلب",
+      "outcomeBody": "فيما يلي حالة كل غرفة ومورد طلبته.",
+      "approved": "موافق عليه",
+      "pending": "في انتظار الموافقة",
+      "emptyTitle": "لا توجد طلبات بعد",
+      "emptyBody": "ستظهر طلبات الحدث والغرف هنا.",
+      "statusPending": "قيد الانتظار",
+      "statusApproved": "موافق عليه",
+      "statusRejected": "مرفوض",
+      "cancelRequest": "إلغاء الطلب",
+      "cancelConfirm": "هل تريد إلغاء هذا الطلب؟ لا يمكن التراجع عن هذا.",
+      "keep": "احتفاظ",
+      "requestedOn": "تم الطلب في",
+      "enterTitle": "الرجاء إدخال عنوان.",
+      "failedToSubmit": "تعذر تقديم طلبك. يرجى المحاولة مرة أخرى.",
+      "noBookingItems": "لم يتم تحديد أي غرف أو موارد."
+    }
   },
   "notes": {
     "comment": "تعليق",
@@ -848,7 +935,10 @@
       "emailRequired": "البريد الإلكتروني مطلوب لتسجيل الضيوف.",
       "memberNamesRequired": "الاسم الأول واسم العائلة مطلوبان لكل عضو إضافي.",
       "namesRequired": "الاسم الأول واسم العائلة مطلوبان.",
-      "registrationFailed": "فشل التسجيل. ربما يكون الحدث ممتلئًا أو أُغلق التسجيل."
+      "registrationFailed": "فشل التسجيل. ربما يكون الحدث ممتلئًا أو أُغلق التسجيل.",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "الحدث",
     "eventFull": "الحدث ممتلئ",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} مكان مشغول",
     "status": "الحالة",
     "youAreRegistered": "أنت مسجّل في",
-    "yourInformation": "معلوماتك"
+    "yourInformation": "معلوماتك",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "تم شغل جميع الأماكن البالغ عددها {}",

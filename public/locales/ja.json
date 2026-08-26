@@ -227,7 +227,8 @@
       "linkText": "有効なテキストを入力してください",
       "linkUrl": "リンクを入力してください",
       "unauthorized": "リンクを追加する権限がありません"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "カレンダーイベント:",
@@ -257,7 +258,8 @@
     "loginAccount": "アカウントにログイン",
     "memberPortal": "メンバーポータル",
     "openNav": "ナビゲーションメニューを開く",
-    "userMenu": "ユーザーメニュー"
+    "userMenu": "ユーザーメニュー",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "利用可能なアイコン",
@@ -465,7 +467,13 @@
       "unableToShare": "このデバイスでは共有できません",
       "untitledSeries": "無題のシリーズ",
       "viewTeach": "教え",
-      "watchSermon": "説教を視聴"
+      "watchSermon": "説教を視聴",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "まだタブが設定されていないようです。管理画面を開いてメンバーのホーム画面を設定してください。",
@@ -582,7 +590,36 @@
       "usedStorage": "使用中 {} / 100MB",
       "visibility": "公開設定",
       "weekly": "毎週",
-      "yearly": "毎年"
+      "yearly": "毎年",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "無効なリンク",
     "invalidLinkDescription": "リクエストされたIDが見つからないか無効です。",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{}（残り{}名）",
       "volunteerPositionsFilled": "{}件中{}件の枠が埋まりました",
       "volunteerViewSignUp": "詳細を見て申し込む",
-      "watchLive": "ライブ視聴"
+      "watchLive": "ライブ視聴",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "聖書を読む",
@@ -751,7 +790,55 @@
       "volunteer": "奉仕に申し込む",
       "votd": "今日の聖句"
     },
-    "yesterday": "昨日"
+    "yesterday": "昨日",
+    "me": {
+      "title": "私",
+      "upcoming": "予定",
+      "serving": "奉仕",
+      "event": "イベント",
+      "registration": "登録",
+      "recentNotifications": "最近の通知",
+      "nothingUpcoming": "今後の予定はありません",
+      "nothingUpcomingBody": "奉仕の時間、イベント、登録がここに表示されます。",
+      "myRequests": "私のリクエスト",
+      "requestEvent": "イベントをリクエストする",
+      "shortcuts": "ショートカット"
+    },
+    "requests": {
+      "title": "Request an Event",
+      "myRequests": "My Requests",
+      "newRequest": "New Request",
+      "eventTitle": "Event title",
+      "description": "Description",
+      "allDay": "All day",
+      "start": "Start",
+      "end": "End",
+      "recurring": "Repeats",
+      "rooms": "Rooms",
+      "resources": "Resources",
+      "quantity": "Qty",
+      "submit": "Submit Request",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "conflictWarning": "This time conflicts with an existing booking.",
+      "outcomeTitle": "Request submitted",
+      "outcomeBody": "Here is the status of each room and resource you requested.",
+      "approved": "Approved",
+      "pending": "Pending approval",
+      "emptyTitle": "No requests yet",
+      "emptyBody": "Your event and room requests will appear here.",
+      "statusPending": "Pending",
+      "statusApproved": "Approved",
+      "statusRejected": "Rejected",
+      "cancelRequest": "Cancel request",
+      "cancelConfirm": "Cancel this request? This cannot be undone.",
+      "keep": "Keep",
+      "requestedOn": "Requested",
+      "enterTitle": "Please enter a title.",
+      "failedToSubmit": "Could not submit your request. Please try again.",
+      "noBookingItems": "No rooms or resources selected."
+    }
   },
   "notes": {
     "comment": "コメント",
@@ -848,7 +935,10 @@
       "emailRequired": "ゲスト登録にはメールアドレスが必要です。",
       "memberNamesRequired": "各追加メンバーの姓名が必要です。",
       "namesRequired": "姓名が必要です。",
-      "registrationFailed": "登録に失敗しました。イベントが満員か、登録が終了している可能性があります。"
+      "registrationFailed": "登録に失敗しました。イベントが満員か、登録が終了している可能性があります。",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "イベント",
     "eventFull": "イベント満員",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} 枠が埋まりました",
     "status": "ステータス",
     "youAreRegistered": "登録済みのイベント:",
-    "yourInformation": "あなたの情報"
+    "yourInformation": "あなたの情報",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "すべての {} 枠が埋まりました",

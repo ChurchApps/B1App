@@ -227,7 +227,8 @@
       "linkText": "Sicela ufake umbhalo losebentako",
       "linkUrl": "Sicela ufake sixhumanisi",
       "unauthorized": "Awukavunyelwa kwengeta tixhumanisi"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "Imicimbi Yekhalenda:",
@@ -469,7 +470,13 @@
       "unableToShare": "Akukhonakali kwabelana ngale divayisi",
       "untitledSeries": "Luchungechunge Lolungenasihloko",
       "viewTeach": "Fundzisa",
-      "watchSermon": "Buka Intshumayelo"
+      "watchSermon": "Buka Intshumayelo",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "Kubukeka ngasho kutsi akukho ma-tab lahlelekile okwamanje. Vula umphatsi kute uhlele sikrini sasekhaya semalunga akho.",
@@ -614,7 +621,8 @@
       "rsvpNotGoing": "Angikhoni kuhamba",
       "rsvpViewResponses": "Buka timphendvulo",
       "rsvpResponses": "Timphendvulo",
-      "rsvpNoResponses": "Akukho timphendvulo okwamanje"
+      "rsvpNoResponses": "Akukho timphendvulo okwamanje",
+      "usedStorageUnlimited": "Used {}"
     },
     "me": {
       "title": "Mine",
@@ -813,7 +821,8 @@
       "volunteerPositionsFilled": "{} kwa-{} tikhundla tigcwele",
       "volunteerViewSignUp": "Buka & Bhalisa",
       "watchLive": "Buka Ngendlela Lephilako",
-      "done": "Kuphelile"
+      "done": "Kuphelile",
+      "currentPassword": "Current password"
     },
     "taglines": {
       "bible": "Fundza umbhalo longcwele",
