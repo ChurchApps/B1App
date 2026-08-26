@@ -166,6 +166,12 @@
 				"captchaRequired": "Please complete the reCAPTCHA verification",
 				"captchaFailed": "reCAPTCHA verification failed. Please try again."
 			}
+		},
+		"paystack": {
+			"popupHint": "You'll complete payment in a secure Paystack window. Card, mobile money and bank transfer are accepted.",
+			"saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift.",
+			"emailRequired": "An email address is required to pay with Paystack.",
+			"paymentFailed": "Payment was not completed."
 		}
 	},
 	"eventCalendar": {

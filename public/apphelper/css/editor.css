@@ -56,12 +56,10 @@
   min-height: 150px;
   resize: none;
   font-size: 15px;
-  caret-color: rgb(5, 5, 5);
   position: relative;
   tab-size: 1;
   outline: 0;
   padding: 15px 10px;
-  caret-color: #444;
 }
 
 .editor-container.preview .editor-input {
@@ -209,6 +207,21 @@
   color: rgba(0, 0, 0, 0.5);
 }
 
+body.dark-theme .editor-text-code,
+body.dark-theme .editor-code {
+  background-color: #2a2a2a;
+}
+
+body.dark-theme .editor-code:before {
+  background-color: #222;
+  border-right-color: #444;
+  color: #aaa;
+}
+
+body.dark-theme .editor-code:after {
+  color: rgba(255, 255, 255, 0.5);
+}
+
 .editor-tokenComment {
   color: slategray;
 }
@@ -284,6 +297,11 @@
   border-left-width: 4px;
   border-left-style: solid;
   padding-left: 16px;
+}
+
+body.dark-theme .editor-quote {
+  color: rgb(180, 182, 186);
+  border-left-color: rgb(100, 102, 106);
 }
 
 /*
@@ -379,14 +397,35 @@
   display: flex;
   position:sticky;
   top: 0;
-  background-color: white;
   z-index: 1;
   margin-bottom: 1px;
   padding: 4px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   vertical-align: middle;
-  border-bottom: 1px solid lightgray;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  background-color: white;
+  border-bottom-color: lightgray;
+}
+
+body.dark-theme .toolbar {
+  background-color: #333333;
+  border-bottom-color: #444444;
+}
+
+.floating-toolbar {
+  background-color: white;
+}
+
+body.dark-theme .floating-toolbar,
+body.dark-theme .dropdown,
+body.dark-theme .dropdown .item,
+body.dark-theme .link-editor,
+body.dark-theme .typeahead-popover,
+body.dark-theme .typeahead-popover li {
+  background-color: #333333;
+  color: #ffffff;
 }
 
 .toolbar button.toolbar-item {
@@ -431,12 +470,21 @@
 }
 
 /* Active state for MUI IconButton components */
-.toolbar .MuiIconButton-root.active {
+.toolbar .MuiIconButton-root.active,
+.floating-toolbar .MuiIconButton-root.active {
   background-color: rgba(25, 118, 210, 0.12);
 }
 
-.toolbar .toolbar-item:hover:not([disabled]) {
+.toolbar .toolbar-item:hover:not([disabled]),
+.floating-toolbar .toolbar-item:hover:not([disabled]),
+.floating-toolbar .MuiIconButton-root:hover:not([disabled]) {
   background-color: #eee;
+}
+
+body.dark-theme .toolbar .toolbar-item:hover:not([disabled]),
+body.dark-theme .floating-toolbar .toolbar-item:hover:not([disabled]),
+body.dark-theme .floating-toolbar .MuiIconButton-root:hover:not([disabled]) {
+  background-color: #555;
 }
 
 .toolbar .divider {
