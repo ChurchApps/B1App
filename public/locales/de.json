@@ -227,7 +227,8 @@
       "linkText": "Bitte geben Sie einen gültigen Text ein",
       "linkUrl": "Bitte geben Sie einen Link ein",
       "unauthorized": "Nicht berechtigt, Links hinzuzufügen"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "Kalenderereignisse:",
@@ -257,7 +258,8 @@
     "loginAccount": "Bei Ihrem Konto anmelden",
     "memberPortal": "Mitgliederportal",
     "openNav": "Navigationsmenü öffnen",
-    "userMenu": "Benutzermenü"
+    "userMenu": "Benutzermenü",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "Verfügbare Symbole",
@@ -465,7 +467,13 @@
       "unableToShare": "Auf diesem Gerät kann nicht geteilt werden",
       "untitledSeries": "Reihe ohne Titel",
       "viewTeach": "Lehren",
-      "watchSermon": "Predigt ansehen"
+      "watchSermon": "Predigt ansehen",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "Es sind anscheinend noch keine Tabs konfiguriert. Öffnen Sie die Verwaltung, um den Startbildschirm Ihrer Mitglieder einzurichten.",
@@ -582,7 +590,36 @@
       "usedStorage": "Belegt {} / 100MB",
       "visibility": "Sichtbarkeit",
       "weekly": "Wöchentlich",
-      "yearly": "Jährlich"
+      "yearly": "Jährlich",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "Ungültiger Link",
     "invalidLinkDescription": "Die angeforderte ID fehlt oder ist ungültig.",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({} frei)",
       "volunteerPositionsFilled": "{} von {} Plätzen besetzt",
       "volunteerViewSignUp": "Ansehen & Anmelden",
-      "watchLive": "Live ansehen"
+      "watchLive": "Live ansehen",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "Heilige Schrift lesen",
@@ -751,7 +790,55 @@
       "volunteer": "Zum Dienen anmelden",
       "votd": "Heutiger Vers"
     },
-    "yesterday": "gestern"
+    "yesterday": "gestern",
+    "me": {
+      "title": "Ich",
+      "upcoming": "Anstehend",
+      "serving": "Dienst",
+      "event": "Ereignis",
+      "registration": "Registrierung",
+      "recentNotifications": "Aktuelle Benachrichtigungen",
+      "nothingUpcoming": "Nichts anstehendes",
+      "nothingUpcomingBody": "Deine Dienstzeiten, Ereignisse und Registrierungen werden hier angezeigt.",
+      "myRequests": "Meine Anfragen",
+      "requestEvent": "Ereignis anfragen",
+      "shortcuts": "Verknüpfungen"
+    },
+    "requests": {
+      "title": "Ein Event anfragen",
+      "myRequests": "Meine Anfragen",
+      "newRequest": "Neue Anfrage",
+      "eventTitle": "Event-Titel",
+      "description": "Beschreibung",
+      "allDay": "Ganztägig",
+      "start": "Start",
+      "end": "Ende",
+      "recurring": "Wiederholt sich",
+      "rooms": "Räume",
+      "resources": "Ressourcen",
+      "quantity": "Menge",
+      "submit": "Anfrage einreichen",
+      "submitting": "Einreichen…",
+      "cancel": "Abbrechen",
+      "close": "Schließen",
+      "conflictWarning": "Diese Zeit überschneidet sich mit einer bestehenden Buchung.",
+      "outcomeTitle": "Anfrage eingereicht",
+      "outcomeBody": "Hier ist der Status jedes angefragten Raums und jeder Ressource.",
+      "approved": "Genehmigt",
+      "pending": "Ausstehende Genehmigung",
+      "emptyTitle": "Noch keine Anfragen",
+      "emptyBody": "Ihre Event- und Raumanfragen werden hier angezeigt.",
+      "statusPending": "Ausstehend",
+      "statusApproved": "Genehmigt",
+      "statusRejected": "Abgelehnt",
+      "cancelRequest": "Anfrage abbrechen",
+      "cancelConfirm": "Diese Anfrage abbrechen? Dies kann nicht rückgängig gemacht werden.",
+      "keep": "Behalten",
+      "requestedOn": "Angefragt am",
+      "enterTitle": "Bitte geben Sie einen Titel ein.",
+      "failedToSubmit": "Ihre Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+      "noBookingItems": "Keine Räume oder Ressourcen ausgewählt."
+    }
   },
   "notes": {
     "comment": "Kommentar",
@@ -848,7 +935,10 @@
       "emailRequired": "E-Mail ist für die Gästeregistrierung erforderlich.",
       "memberNamesRequired": "Vor- und Nachname sind für jedes weitere Mitglied erforderlich.",
       "namesRequired": "Vor- und Nachname sind erforderlich.",
-      "registrationFailed": "Registrierung fehlgeschlagen. Die Veranstaltung ist möglicherweise voll oder die Registrierung wurde geschlossen."
+      "registrationFailed": "Registrierung fehlgeschlagen. Die Veranstaltung ist möglicherweise voll oder die Registrierung wurde geschlossen.",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "Veranstaltung",
     "eventFull": "Veranstaltung voll",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} Plätze belegt",
     "status": "Status",
     "youAreRegistered": "Sie sind registriert für",
-    "yourInformation": "Ihre Informationen"
+    "yourInformation": "Ihre Informationen",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "Alle {} Plätze besetzt",

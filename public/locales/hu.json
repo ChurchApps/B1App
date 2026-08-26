@@ -227,7 +227,8 @@
       "linkText": "Kérjük, adj meg érvényes szöveget",
       "linkUrl": "Kérjük, adj meg linket",
       "unauthorized": "Nincs jogosultságod linkek hozzáadásához"
-    }
+    },
+    "usedSpaceUnlimited": "Used space: {}"
   },
   "groupsPage": {
     "calendarEvents": "Naptári események:",
@@ -257,7 +258,8 @@
     "loginAccount": "Bejelentkezés a fiókodba",
     "memberPortal": "Tagi portál",
     "openNav": "Navigációs menü megnyitása",
-    "userMenu": "Felhasználói menü"
+    "userMenu": "Felhasználói menü",
+    "mainNav": "Main navigation"
   },
   "iconPicker": {
     "iconsAvailable": "Elérhető ikonok",
@@ -465,7 +467,13 @@
       "unableToShare": "Nem osztható meg ezen az eszközön",
       "untitledSeries": "Cím nélküli sorozat",
       "viewTeach": "Tanítás",
-      "watchSermon": "Prédikáció megtekintése"
+      "watchSermon": "Prédikáció megtekintése",
+      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
+      "messagingNotAvailable": "Messaging isn't available for this profile.",
+      "thisWeeksLesson": "This week's lesson",
+      "bottomLine": "Bottom line",
+      "verse": "Verse",
+      "parentQuestion": "Question"
     },
     "empty": {
       "dashboardAdminBody": "Úgy tűnik, még nincsenek beállítva lapok. Nyissa meg az adminisztrációt a tagok kezdőképernyőjének beállításához.",
@@ -582,7 +590,36 @@
       "usedStorage": "Használt: {} / 100MB",
       "visibility": "Láthatóság",
       "weekly": "Hetente",
-      "yearly": "Évente"
+      "yearly": "Évente",
+      "reminders": {
+        "channels": "Channels",
+        "day1": "1 day before",
+        "dayOf": "Day of",
+        "days3": "3 days before",
+        "days7": "7 days before",
+        "enable": "Send reminders",
+        "message": "Message (optional)",
+        "messageHint": "Leave blank to use a default reminder message.",
+        "modeAuto": "Automatic",
+        "modeGroup": "Group members",
+        "modeRegistrants": "Registrants",
+        "modeRegistrantsHoh": "Registrants (heads of household)",
+        "saveReminder": "Save Reminder",
+        "saved": "Reminder saved.",
+        "timeOfDay": "Time of day",
+        "when": "When to remind",
+        "who": "Who to remind"
+      },
+      "usedStorageUnlimited": "Used {}",
+      "allowRsvps": "Allow RSVPs",
+      "addReaction": "Add reaction",
+      "rsvpQuestion": "Will you attend?",
+      "rsvpGoing": "Going",
+      "rsvpMaybe": "Maybe",
+      "rsvpNotGoing": "Can't go",
+      "rsvpViewResponses": "View responses",
+      "rsvpResponses": "Responses",
+      "rsvpNoResponses": "No responses yet"
     },
     "invalidLink": "Érvénytelen link",
     "invalidLinkDescription": "A kért azonosító hiányzik vagy érvénytelen.",
@@ -735,7 +772,9 @@
       "volunteerPositionOpen": "{} ({} szabad hely)",
       "volunteerPositionsFilled": "{} / {} pozíció betöltve",
       "volunteerViewSignUp": "Megtekintés és jelentkezés",
-      "watchLive": "Élő megtekintés"
+      "watchLive": "Élő megtekintés",
+      "currentPassword": "Current password",
+      "done": "Done"
     },
     "taglines": {
       "bible": "Olvasd a Szentírást",
@@ -751,7 +790,55 @@
       "volunteer": "Jelentkezz szolgálatra",
       "votd": "Mai ige"
     },
-    "yesterday": "tegnap"
+    "yesterday": "tegnap",
+    "me": {
+      "title": "Én",
+      "upcoming": "Közelgő",
+      "serving": "Szolgálat",
+      "event": "Esemény",
+      "registration": "Regisztráció",
+      "recentNotifications": "Legutóbbi értesítések",
+      "nothingUpcoming": "Nincs közelgő esemény",
+      "nothingUpcomingBody": "A szolgálati idők, események és regisztrációk itt fognak megjelenni.",
+      "myRequests": "Kéréseim",
+      "requestEvent": "Esemény kérése",
+      "shortcuts": "Parancsikonok"
+    },
+    "requests": {
+      "title": "Request an Event",
+      "myRequests": "My Requests",
+      "newRequest": "New Request",
+      "eventTitle": "Event title",
+      "description": "Description",
+      "allDay": "All day",
+      "start": "Start",
+      "end": "End",
+      "recurring": "Repeats",
+      "rooms": "Rooms",
+      "resources": "Resources",
+      "quantity": "Qty",
+      "submit": "Submit Request",
+      "submitting": "Submitting…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "conflictWarning": "This time conflicts with an existing booking.",
+      "outcomeTitle": "Request submitted",
+      "outcomeBody": "Here is the status of each room and resource you requested.",
+      "approved": "Approved",
+      "pending": "Pending approval",
+      "emptyTitle": "No requests yet",
+      "emptyBody": "Your event and room requests will appear here.",
+      "statusPending": "Pending",
+      "statusApproved": "Approved",
+      "statusRejected": "Rejected",
+      "cancelRequest": "Cancel request",
+      "cancelConfirm": "Cancel this request? This cannot be undone.",
+      "keep": "Keep",
+      "requestedOn": "Requested",
+      "enterTitle": "Please enter a title.",
+      "failedToSubmit": "Could not submit your request. Please try again.",
+      "noBookingItems": "No rooms or resources selected."
+    }
   },
   "notes": {
     "comment": "Megjegyzés",
@@ -848,7 +935,10 @@
       "emailRequired": "Vendégregisztrációhoz e-mail szükséges.",
       "memberNamesRequired": "Minden további tag esetében kötelező a vezeték- és keresztnév.",
       "namesRequired": "A vezeték- és keresztnév megadása kötelező.",
-      "registrationFailed": "A regisztráció sikertelen. Az esemény megtelhetett, vagy a regisztráció lezárult."
+      "registrationFailed": "A regisztráció sikertelen. Az esemény megtelhetett, vagy a regisztráció lezárult.",
+      "typeRequired": "Please select a registration type for each attendee.",
+      "typeFull": "That attendee type is sold out. Please choose another.",
+      "selectionFull": "A selected option is sold out. Please adjust quantities."
     },
     "event": "Esemény",
     "eventFull": "Az esemény megtelt",
@@ -862,7 +952,59 @@
     "spotsFilled": "{0} / {1} hely betelt",
     "status": "Állapot",
     "youAreRegistered": "Regisztrálva vagy a következőre:",
-    "yourInformation": "A te adataid"
+    "yourInformation": "A te adataid",
+    "soldOut": "Sold out",
+    "free": "Free",
+    "remaining": "{} remaining",
+    "selectType": "Select a type",
+    "yourType": "Your registration type",
+    "spotsWord": "spots filled",
+    "noAdditional": "No additional members added",
+    "selections": {
+      "title": "Options & Selections"
+    },
+    "payment": {
+      "title": "Payment",
+      "orderSummary": "Order Summary",
+      "discount": "Discount",
+      "total": "Total",
+      "newCard": "Use a new card",
+      "payAndRegister": "Pay {} & Register",
+      "cardNotReady": "Card form is not ready. Please wait and try again.",
+      "authFailed": "Card authentication failed. Please try another card.",
+      "noGateway": "Online payment is not available for this event.",
+      "subtotalNote": "subtotal before discounts"
+    },
+    "coupon": {
+      "label": "Discount code",
+      "apply": "Apply",
+      "applied": "Code {} applied",
+      "remove": "Remove",
+      "invalid": "This code is not valid.",
+      "not-found": "This code was not found.",
+      "inactive": "This code is no longer active.",
+      "not-started": "This code is not active yet.",
+      "expired": "This code has expired.",
+      "min-members": "Add more attendees to use this code.",
+      "max-uses": "This code has reached its usage limit."
+    },
+    "waitlist": {
+      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens.",
+      "confirmedTitle": "You are on the waitlist",
+      "confirmedBody": "We will email you if a spot opens for"
+    },
+    "mine": {
+      "emptyTitle": "No registrations yet",
+      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
+      "balanceDue": "Balance due: {}",
+      "balanceLabel": "Balance due",
+      "completePayment": "Complete payment",
+      "edit": "Edit",
+      "cancel": "Cancel Registration",
+      "registered": "Registered",
+      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
+      "editTitle": "Edit Registration"
+    }
   },
   "serving": {
     "allSlotsFilled": "Mind a(z) {} hely betelt",
