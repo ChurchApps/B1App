@@ -9,7 +9,7 @@ import type { PersonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
-import { getInitials } from "../util";
+import { formatRelative, getInitials } from "../util";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -22,6 +22,9 @@ interface Conversation {
   conversationId?: string;
   personName: string;
   personPhoto?: string;
+  preview: string;
+  lastTime?: string;
+  unread: boolean;
 }
 
 export const MessagesPage = ({ config }: Props) => {
@@ -96,12 +99,17 @@ export const MessagesPage = ({ config }: Props) => {
           personId: otherId,
           conversationId,
           personName: displayName,
-          personPhoto: photo
+          personPhoto: photo,
+          preview: (pm.conversation?.messages?.[0]?.content || "").replace(/<[^>]+>/g, ""),
+          lastTime: pm.lastMessageTime || pm.conversation?.dateCreated,
+          unread: !!myPersonId && pm.notifyPersonId === myPersonId
         });
       });
       return result;
     },
-    enabled: loggedIn
+    enabled: loggedIn,
+    // Unread state changes as soon as a thread is opened, so never serve the persisted cache here.
+    staleTime: 0
   });
 
   const handleDelete = async (c: Conversation, e: React.MouseEvent | React.KeyboardEvent) => {
@@ -162,6 +170,7 @@ export const MessagesPage = ({ config }: Props) => {
   const renderRow = (c: Conversation) => (
     <Box
       key={c.id}
+      data-testid={`conversation-row-${c.pmId}`}
       onClick={() => handleClick(c)}
       role="button"
       tabIndex={0}
@@ -187,17 +196,35 @@ export const MessagesPage = ({ config }: Props) => {
     >
       {renderAvatar(c)}
       <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+          <Typography
+            sx={{
+              flex: 1,
+              minWidth: 0,
+              fontSize: 16,
+              fontWeight: c.unread ? 700 : 600,
+              color: tc.text,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
+            }}
+          >
+            {c.personName}
+          </Typography>
+          <Typography sx={{ fontSize: 12, color: tc.textSecondary, flexShrink: 0 }}>
+            {formatRelative(c.lastTime)}
+          </Typography>
+        </Box>
         <Typography
           sx={{
-            fontSize: 16,
-            fontWeight: 600,
-            color: tc.text,
+            fontSize: 13,
+            color: tc.textSecondary,
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap"
           }}
         >
-          {c.personName}
+          {c.preview}
         </Typography>
       </Box>
       <IconButton
@@ -209,6 +236,13 @@ export const MessagesPage = ({ config }: Props) => {
       >
         <Icon sx={{ fontSize: 20 }}>delete_outline</Icon>
       </IconButton>
+      {c.unread && (
+        <Box
+          aria-label={Locale.label("mobile.screens.unread")}
+          data-testid={`conversation-unread-${c.pmId}`}
+          sx={{ width: 8, height: 8, borderRadius: "4px", bgcolor: tc.primary, flexShrink: 0 }}
+        />
+      )}
       <Icon sx={{ color: tc.textSecondary, flexShrink: 0 }}>chevron_right</Icon>
     </Box>
   );
