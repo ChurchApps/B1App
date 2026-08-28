@@ -1,339 +1,254 @@
-{
-  "b1Share": {
-    "comment": "Bình luận",
-    "commentPlaceholder": "Thêm bình luận vào bài đăng của bạn.",
-    "contentShared": "Đã chia sẻ nội dung",
-    "group": "Nhóm",
-    "sharingToGroup": "Chia sẻ {} với Nhóm B1",
-    "validate": {
-      "addComment": "Vui lòng thêm một bình luận.",
-      "loginFirst": "Vui lòng đăng nhập trước.",
-      "notMember": "Bạn hiện không phải là thành viên của bất kỳ nhóm nào trên B1.",
-      "selectGroup": "Vui lòng chọn một nhóm."
-    }
-  },
-  "common": {
-    "add": "Thêm",
-    "cancel": "Hủy",
-    "close": "Đóng",
-    "date": "Ngày",
-    "delete": "Xóa",
-    "edit": "Chỉnh sửa",
-    "error": "Lỗi",
-    "pleaseWait": "Vui lòng đợi...",
-    "save": "Lưu",
-    "search": "Tìm kiếm",
-    "submit": "Gửi",
-    "update": "Cập nhật"
-  },
-  "createPerson": {
-    "addNewPerson": "Thêm người mới",
-    "email": "Email",
-    "firstName": "Tên",
-    "lastName": "Họ"
-  },
-  "donation": {
-    "bankForm": {
-      "accountNumber": "Số tài khoản",
-      "added": "Đã thêm tài khoản ngân hàng. Xác minh tài khoản ngân hàng của bạn để quyên góp.",
-      "company": "Công ty",
-      "firstDeposit": "Khoản tiền gửi đầu tiên",
-      "holderName": "Tên chủ tài khoản là bắt buộc.",
-      "individual": "Cá nhân",
-      "name": "Tên chủ tài khoản",
-      "needVerified": "Các tài khoản ngân hàng sẽ cần được xác minh trước khi quyên góp. Tài khoản của bạn sẽ nhận được hai khoản tiền gửi nhỏ trong khoảng 1-3 ngày làm việc. Bạn sẽ cần nhập số tiền của những khoản tiền gửi đó để hoàn tất xác minh tài khoản bằng cách chọn liên kết xác minh tài khoản bên cạnh tài khoản ngân hàng của bạn trong phần phương thức thanh toán.",
-      "routingNumber": "Mã định tuyến",
-      "secondDeposit": "Khoản tiền gửi thứ hai",
-      "twoDeposits": "Nhập hai khoản tiền gửi mà bạn nhận được trên tài khoản của mình để hoàn tất xác minh tài khoản ngân hàng.",
-      "updated": "Đã cập nhật tài khoản ngân hàng.",
-      "validate": {
-        "accountNumber": "Mã định tuyến và số tài khoản là bắt buộc.",
-        "holderName": "Tên chủ tài khoản là bắt buộc."
-      },
-      "verified": "Tài khoản ngân hàng đã được xác minh."
-    },
-    "cardForm": {
-      "addNew": "Thêm thẻ mới",
-      "added": "Thẻ được thêm thành công.",
-      "expirationMonth": "Tháng hết hạn:",
-      "expirationYear": "Năm hết hạn:",
-      "updated": "Thẻ được cập nhật thành công."
-    },
-    "donationForm": {
-      "annually": "Hàng năm",
-      "biWeekly": "Mỗi hai tuần",
-      "cancelled": "Quyên góp định kỳ đã bị hủy.",
-      "confirmDelete": "Bạn có chắc chắn muốn xóa quyên góp định kỳ này không?",
-      "cover": "Tôi sẽ thêm {} một cách rộng rãi để chi trả phí giao dịch để bạn có thể giữ 100% quyên góp của bạn.",
-      "donate": "Quyên góp",
-      "editRecurring": "Chỉnh sửa quyên góp định kỳ",
-      "fees": "Áp dụng phí giao dịch {}.",
-      "frequency": "Tần suất",
-      "fund": "Quỹ",
-      "funds": "Quỹ",
-      "make": "Quyên góp",
-      "makeRecurring": "Thực hiện quyên góp định kỳ",
-      "method": "Phương pháp",
-      "monthly": "Hàng tháng",
-      "notes": "Ghi chú",
-      "preview": "Xem trước quyên góp",
-      "quarterly": "Hàng quý",
-      "recurringUpdated": "Đã cập nhật quyên góp định kỳ.",
-      "startDate": "Ngày bắt đầu",
-      "thankYou": "Cảm ơn bạn vì quyên góp!",
-      "tooLow": "Số tiền quyên góp phải lớn hơn $0,50",
-      "total": "Tổng số tiền quyên góp",
-      "validate": {
-        "amount": "Số tiền không thể là 0 đô la.",
-        "email": "Vui lòng nhập địa chỉ email của bạn.",
-        "firstName": "Vui lòng nhập tên của bạn.",
-        "lastName": "Vui lòng nhập họ của bạn.",
-        "validEmail": "Vui lòng nhập một địa chỉ email hợp lệ."
-      },
-      "weekly": "Hàng tuần"
-    },
-    "fundDonations": {
-      "addMore": "Thêm nữa",
-      "amount": "Số tiền",
-      "fund": "Quỹ"
-    },
-    "page": {
-      "amount": "Số tiền",
-      "batch": "Lô",
-      "date": "Ngày",
-      "fund": "Quỹ",
-      "method": "Phương pháp",
-      "willAppear": "Quyên góp sẽ xuất hiện khi quyên góp được nhập."
-    },
-    "paymentMethods": {
-      "addBank": "Thêm tài khoản ngân hàng",
-      "addCard": "Thêm thẻ",
-      "confirmDelete": "Bạn có chắc chắn muốn xóa phương thức thanh toán này không?",
-      "deleted": "Đã xóa phương thức thanh toán.",
-      "noMethods": "Không có phương thức thanh toán. Thêm phương thức thanh toán để quyên góp.",
-      "verify": "Xác minh tài khoản"
-    },
-    "preview": {
-      "date": "Ngày quyên góp",
-      "donate": "Quyên góp",
-      "every": "Quyên góp định kỳ mỗi",
-      "fee": "Phí giao dịch",
-      "funds": "Quỹ",
-      "method": "Phương thức quyên góp",
-      "notes": "Ghi chú",
-      "startingOn": "Bắt đầu từ",
-      "total": "Tổng",
-      "type": "Loại quyên góp"
-    },
-    "recurring": {
-      "amount": "Số tiền",
-      "confirmPause": "Bạn có chắc chắn muốn tạm dừng quyên góp định kỳ này không?",
-      "every": "Mỗi",
-      "interval": "Khoảng thời gian",
-      "notFound": "Không tìm thấy phương thức thanh toán.",
-      "pauseFailed": "Không thể tạm dừng quyên góp định kỳ. Vui lòng thử lại.",
-      "pauseTooltip": "Tạm dừng quyên góp định kỳ",
-      "paused": "Đã tạm dừng",
-      "pausedMessage": "Quyên góp định kỳ đã được tạm dừng.",
-      "paymentMethod": "Phương thức thanh toán",
-      "resumeFailed": "Không thể tiếp tục quyên góp định kỳ. Vui lòng thử lại.",
-      "resumeTooltip": "Tiếp tục quyên góp định kỳ",
-      "resumedMessage": "Quyên góp định kỳ đã được tiếp tục.",
-      "startDate": "Ngày bắt đầu"
-    }
-  },
-  "eventCalendar": {
-    "recurring": {
-      "day": {
-        "friday": "Thứ Sáu",
-        "monday": "Thứ Hai",
-        "saturday": "Thứ Bảy",
-        "sunday": "Chủ Nhật",
-        "thursday": "Thứ Năm",
-        "tuesday": "Thứ Ba",
-        "wednesday": "Thứ Tư"
-      },
-      "endDate": "Ngày kết thúc",
-      "endDateAria": "Ngày kết thúc lặp lại",
-      "ends": "Kết thúc",
-      "endsAfter": "Sau",
-      "endsAria": "Chọn thời điểm kết thúc lặp lại",
-      "endsOn": "Vào",
-      "freqDay": "Ngày",
-      "freqMonth": "Tháng",
-      "freqWeek": "Tuần",
-      "frequency": "Tần suất",
-      "frequencyAria": "Chọn tần suất lặp lại",
-      "interval": "Khoảng cách",
-      "intervalAria": "Khoảng cách lặp lại",
-      "monthlyOnDay": "Hàng tháng vào ngày {}",
-      "monthlyOnNth": "Hàng tháng vào {ordinal} {day}",
-      "monthlyOptionAria": "Chọn tùy chọn lặp lại hàng tháng",
-      "never": "Không bao giờ",
-      "occurrences": "Số lần",
-      "occurrencesAria": "Số lần lặp lại",
-      "on": "Vào",
-      "ordinal": {
-        "first": "thứ nhất",
-        "fourth": "thứ tư",
-        "last": "cuối cùng",
-        "second": "thứ hai",
-        "third": "thứ ba"
-      },
-      "toggleWeekday": "Bật/tắt {} cho lặp lại hàng tuần"
-    }
-  },
-  "formSubmissionEdit": {
-    "back": "Quay lại",
-    "continue": "Tiếp tục",
-    "stepProgress": "{current} / {total}",
-    "confirmDelete": "Bạn có chắc chắn muốn xóa dữ liệu biểu mẫu này không?",
-    "editForm": "Chỉnh sửa biểu mẫu",
-    "isRequired": "là bắt buộc",
-    "submit": "Gửi"
-  },
-  "gallery": {
-    "aspectRatio": "Tỉ lệ khung hình",
-    "confirmDelete": "Bạn có chắc chắn muốn xóa hình ảnh này khỏi thư viện không?",
-    "freeForm": "Hình thức tự do"
-  },
-  "iconPicker": {
-    "iconsAvailable": "biểu tượng có sẵn",
-    "matchingResults": "kết quả phù hợp",
-    "search": "Tìm kiếm biểu tượng..."
-  },
-  "login": {
-    "createAccount": "Tạo một tài khoản",
-    "email": "Email",
-    "enterCode": "Nhập mã xác minh",
-    "enterCodeInstructions": "Nhập mã 6 chữ số mà chúng tôi vừa gửi qua email.",
-    "expiredLink": "Liên kết hiện tại đã hết hạn.",
-    "forgot": "Quên mật khẩu",
-    "goLogin": "Đi đến đăng nhập",
-    "login": "Đăng nhập",
-    "noAcc": "Không có tài khoản?",
-    "noAccountFound": "Không tìm thấy tài khoản nào với email đó. Vui lòng đăng ký để tiếp tục.",
-    "password": "Mật khẩu",
-    "register": "Đăng ký",
-    "registerThankYou": "Cảm ơn bạn đã đăng ký! Vui lòng kiểm tra email của bạn để xác minh tài khoản của bạn.",
-    "requestLink": "Yêu cầu liên kết đặt lại mới",
-    "resendCode": "Gửi lại mã",
-    "reset": "Đặt lại",
-    "resetInstructions": "Nhập địa chỉ email của bạn để yêu cầu đặt lại mật khẩu.",
-    "resetPassword": "Đặt lại mật khẩu",
-    "resetSent": "Đã gửi email đặt lại mật khẩu!",
-    "setPassword": "Đặt mật khẩu",
-    "signIn": "Đăng nhập",
-    "signInTitle": "Vui lòng đăng nhập",
-    "validate": {
-      "code": "Vui lòng nhập mã 6 chữ số.",
-      "email": "Vui lòng nhập một địa chỉ email hợp lệ.",
-      "firstName": "Vui lòng nhập tên của bạn.",
-      "invalid": "Đăng nhập không hợp lệ. Vui lòng kiểm tra email hoặc mật khẩu của bạn.",
-      "lastName": "Vui lòng nhập họ của bạn.",
-      "password": "Vui lòng nhập mật khẩu.",
-      "passwordLength": "Mật khẩu phải dài ít nhất 8 ký tự.",
-      "passwordMatch": "Mật khẩu không khớp.",
-      "selectingChurch": "Lỗi khi chọn nhà thờ. Vui lòng xác minh và thử lại"
-    },
-    "verifyCode": "Xác minh mã",
-    "verifyPassword": "Xác minh mật khẩu",
-    "welcomeBack": "Chào mừng trở lại",
-    "welcomeName": "Chào mừng trở lại, <b>{}</b>! Vui lòng đợi trong khi chúng tôi tải dữ liệu của bạn."
-  },
-  "markdownEditor": {
-    "content": "Nội dung",
-    "markdownEditor": "Trình chỉnh sửa Markdown",
-    "markdownGuide": "Hướng dẫn Markdown"
-  },
-  "month": {
-    "april": "Tháng tư",
-    "august": "Tháng 8",
-    "december": "Tháng mười hai",
-    "february": "Tháng hai",
-    "january": "Tháng một",
-    "july": "Tháng bảy",
-    "june": "Tháng sáu",
-    "march": "Tháng ba",
-    "may": "Có thể",
-    "november": "Tháng mười một",
-    "october": "Tháng mười",
-    "september": "Tháng chín"
-  },
-  "notes": {
-    "comment": "bình luận",
-    "comments": "bình luận",
-    "notes": "Ghi chú",
-    "startConversation": "Bắt đầu một cuộc trò chuyện",
-    "validate": {
-      "content": "Vui lòng nhập ghi chú."
-    },
-    "viewAll": "Xem tất cả"
-  },
-  "person": {
-    "email": "Email",
-    "firstName": "Tên",
-    "lastName": "Họ",
-    "name": "Tên",
-    "noRec": "Bạn không có hồ sơ người?",
-    "person": "Người",
-    "years": "năm"
-  },
-  "reporting": {
-    "detailed": "Báo cáo chi tiết",
-    "downloadOptions": "Tùy chọn tải xuống",
-    "noData": "Không có dữ liệu để hiển thị.",
-    "runReport": "Chạy báo cáo",
-    "sampleTemplate": "Mẫu Word mẫu",
-    "summary": "Tóm tắt",
-    "useFilter": "Sử dụng bộ lọc để chạy báo cáo."
-  },
-  "selectChurch": {
-    "address1": "Địa chỉ - dòng 1",
-    "address2": "Địa chỉ - dòng 2",
-    "another": "Chọn một nhà thờ khác",
-    "city": "Thành phố",
-    "confirmRegister": "Bạn có chắc chắn muốn đăng ký một nhà thờ mới không?",
-    "country": "Nước",
-    "name": "Tên nhà thờ",
-    "noMatches": "Không tìm thấy kết quả trùng khớp.",
-    "register": "Đăng ký một nhà thờ mới",
-    "selectChurch": "Chọn một nhà thờ",
-    "state": "Tiểu bang / Tỉnh",
-    "validate": {
-      "address": "Địa chỉ không được để trống.",
-      "city": "Thành phố không được để trống.",
-      "country": "Nước không được để trống.",
-      "name": "Tên nhà thờ không được để trống.",
-      "state": "Tiểu bang/Tỉnh không được để trống.",
-      "zip": "Mã bưu chính/mã bưu chính không được để trống."
-    },
-    "zip": "Mã bưu chính / Mã bưu chính"
-  },
-  "stockPhotos": {
-    "photoBy": "Ảnh của:",
-    "providedBy": "Ảnh kho được cung cấp bởi"
-  },
-  "support": {
-    "discussions": "Diễn đàn hỗ trợ",
-    "documentation": "Tài liệu"
-  },
-  "wrapper": {
-    "chatWith": "Trò chuyện với",
-    "deleteChurch": "Xóa",
-    "editAccount": "Chỉnh sửa tài khoản",
-    "editChurchProfile": "Chỉnh sửa hồ sơ nhà thờ",
-    "editProfile": "Chỉnh sửa hồ sơ",
-    "logout": "Đăng xuất",
-    "messages": "Tin nhắn",
-    "newPrivateMessage": "Tin nhắn riêng tư mới",
-    "notifications": "Thông báo",
-    "privateMessage": "Tin nhắn riêng tư",
-    "profile": "Hồ sơ",
-    "searchForPerson": "Tìm kiếm một người",
-    "support": "Hỗ trợ",
-    "sureRemoveChurch": "Bạn có chắc chắn muốn xóa nhà thờ này không? Bạn sẽ không còn là thành viên của {}.",
-    "switchApp": "Chuyển ứng dụng",
-    "switchChurch": "Chuyển nhà thờ"
-  }
+﻿{
+    "common":  {
+                   "cancel":  "Há»§y",
+                   "close":  "ÄÃ³ng",
+                   "delete":  "XÃ³a",
+                   "pleaseWait":  "Vui lÃ²ng Ä‘á»£i...",
+                   "save":  "LÆ°u",
+                   "search":  "TÃ¬m kiáº¿m",
+                   "update":  "Cáº­p nháº­t"
+               },
+    "donation":  {
+                     "bankForm":  {
+                                      "accountNumber":  "Sá»‘ tÃ i khoáº£n",
+                                      "added":  "ÄÃ£ thÃªm tÃ i khoáº£n ngÃ¢n hÃ ng. XÃ¡c minh tÃ i khoáº£n ngÃ¢n hÃ ng cá»§a báº¡n Ä‘á»ƒ quyÃªn gÃ³p.",
+                                      "company":  "CÃ´ng ty",
+                                      "firstDeposit":  "Khoáº£n tiá»n gá»­i Ä‘áº§u tiÃªn",
+                                      "individual":  "CÃ¡ nhÃ¢n",
+                                      "name":  "TÃªn chá»§ tÃ i khoáº£n",
+                                      "needVerified":  "CÃ¡c tÃ i khoáº£n ngÃ¢n hÃ ng sáº½ cáº§n Ä‘Æ°á»£c xÃ¡c minh trÆ°á»›c khi quyÃªn gÃ³p. TÃ i khoáº£n cá»§a báº¡n sáº½ nháº­n Ä‘Æ°á»£c hai khoáº£n tiá»n gá»­i nhá» trong khoáº£ng 1-3 ngÃ y lÃ m viá»‡c. Báº¡n sáº½ cáº§n nháº­p sá»‘ tiá»n cá»§a nhá»¯ng khoáº£n tiá»n gá»­i Ä‘Ã³ Ä‘á»ƒ hoÃ n táº¥t xÃ¡c minh tÃ i khoáº£n báº±ng cÃ¡ch chá»n liÃªn káº¿t xÃ¡c minh tÃ i khoáº£n bÃªn cáº¡nh tÃ i khoáº£n ngÃ¢n hÃ ng cá»§a báº¡n trong pháº§n phÆ°Æ¡ng thá»©c thanh toÃ¡n.",
+                                      "routingNumber":  "MÃ£ Ä‘á»‹nh tuyáº¿n",
+                                      "secondDeposit":  "Khoáº£n tiá»n gá»­i thá»© hai",
+                                      "twoDeposits":  "Nháº­p hai khoáº£n tiá»n gá»­i mÃ  báº¡n nháº­n Ä‘Æ°á»£c trÃªn tÃ i khoáº£n cá»§a mÃ¬nh Ä‘á»ƒ hoÃ n táº¥t xÃ¡c minh tÃ i khoáº£n ngÃ¢n hÃ ng.",
+                                      "updated":  "ÄÃ£ cáº­p nháº­t tÃ i khoáº£n ngÃ¢n hÃ ng.",
+                                      "validate":  {
+                                                       "accountNumber":  "MÃ£ Ä‘á»‹nh tuyáº¿n vÃ  sá»‘ tÃ i khoáº£n lÃ  báº¯t buá»™c.",
+                                                       "holderName":  "TÃªn chá»§ tÃ i khoáº£n lÃ  báº¯t buá»™c."
+                                                   },
+                                      "verified":  "TÃ i khoáº£n ngÃ¢n hÃ ng Ä‘Ã£ Ä‘Æ°á»£c xÃ¡c minh."
+                                  },
+                     "cardForm":  {
+                                      "added":  "Tháº» Ä‘Æ°á»£c thÃªm thÃ nh cÃ´ng.",
+                                      "addNew":  "ThÃªm tháº» má»›i",
+                                      "expirationMonth":  "ThÃ¡ng háº¿t háº¡n:",
+                                      "expirationYear":  "NÄƒm háº¿t háº¡n:",
+                                      "updated":  "Tháº» Ä‘Æ°á»£c cáº­p nháº­t thÃ nh cÃ´ng."
+                                  },
+                     "donationForm":  {
+                                          "annually":  "HÃ ng nÄƒm",
+                                          "biWeekly":  "Má»—i hai tuáº§n",
+                                          "cancelled":  "QuyÃªn gÃ³p Ä‘á»‹nh ká»³ Ä‘Ã£ bá»‹ há»§y.",
+                                          "confirmDelete":  "Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a quyÃªn gÃ³p Ä‘á»‹nh ká»³ nÃ y khÃ´ng?",
+                                          "cover":  "TÃ´i sáº½ thÃªm {} má»™t cÃ¡ch rá»™ng rÃ£i Ä‘á»ƒ chi tráº£ phÃ­ giao dá»‹ch Ä‘á»ƒ báº¡n cÃ³ thá»ƒ giá»¯ 100% quyÃªn gÃ³p cá»§a báº¡n.",
+                                          "donate":  "QuyÃªn gÃ³p",
+                                          "editRecurring":  "Chá»‰nh sá»­a quyÃªn gÃ³p Ä‘á»‹nh ká»³",
+                                          "fees":  "Ãp dá»¥ng phÃ­ giao dá»‹ch {}.",
+                                          "frequency":  "Táº§n suáº¥t",
+                                          "fund":  "Quá»¹",
+                                          "funds":  "Quá»¹",
+                                          "make":  "QuyÃªn gÃ³p",
+                                          "makeRecurring":  "Thá»±c hiá»‡n quyÃªn gÃ³p Ä‘á»‹nh ká»³",
+                                          "method":  "PhÆ°Æ¡ng phÃ¡p",
+                                          "monthly":  "HÃ ng thÃ¡ng",
+                                          "preview":  "Xem trÆ°á»›c quyÃªn gÃ³p",
+                                          "quarterly":  "HÃ ng quÃ½",
+                                          "recurringUpdated":  "ÄÃ£ cáº­p nháº­t quyÃªn gÃ³p Ä‘á»‹nh ká»³.",
+                                          "startDate":  "NgÃ y báº¯t Ä‘áº§u",
+                                          "thankYou":  "Cáº£m Æ¡n báº¡n vÃ¬ quyÃªn gÃ³p!",
+                                          "tooLow":  "Sá»‘ tiá»n quyÃªn gÃ³p pháº£i lá»›n hÆ¡n $0,50",
+                                          "total":  "Tá»•ng sá»‘ tiá»n quyÃªn gÃ³p",
+                                          "validate":  {
+                                                           "amount":  "Sá»‘ tiá»n khÃ´ng thá»ƒ lÃ  0 Ä‘Ã´ la.",
+                                                           "email":  "Vui lÃ²ng nháº­p Ä‘á»‹a chá»‰ email cá»§a báº¡n.",
+                                                           "firstName":  "Vui lÃ²ng nháº­p tÃªn cá»§a báº¡n.",
+                                                           "lastName":  "Vui lÃ²ng nháº­p há» cá»§a báº¡n.",
+                                                           "validEmail":  "Vui lÃ²ng nháº­p má»™t Ä‘á»‹a chá»‰ email há»£p lá»‡."
+                                                       },
+                                          "weekly":  "HÃ ng tuáº§n"
+                                      },
+                     "fundDonations":  {
+                                           "addMore":  "ThÃªm ná»¯a",
+                                           "amount":  "Sá»‘ tiá»n",
+                                           "fund":  "Quá»¹"
+                                       },
+                     "paymentMethods":  {
+                                            "addBank":  "ThÃªm tÃ i khoáº£n ngÃ¢n hÃ ng",
+                                            "addCard":  "ThÃªm tháº»",
+                                            "confirmDelete":  "Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a phÆ°Æ¡ng thá»©c thanh toÃ¡n nÃ y khÃ´ng?",
+                                            "deleted":  "ÄÃ£ xÃ³a phÆ°Æ¡ng thá»©c thanh toÃ¡n.",
+                                            "verify":  "XÃ¡c minh tÃ i khoáº£n"
+                                        },
+                     "preview":  {
+                                     "date":  "NgÃ y quyÃªn gÃ³p",
+                                     "donate":  "QuyÃªn gÃ³p",
+                                     "every":  "QuyÃªn gÃ³p Ä‘á»‹nh ká»³ má»—i",
+                                     "fee":  "PhÃ­ giao dá»‹ch",
+                                     "funds":  "Quá»¹",
+                                     "method":  "PhÆ°Æ¡ng thá»©c quyÃªn gÃ³p",
+                                     "notes":  "Ghi chÃº",
+                                     "startingOn":  "Báº¯t Ä‘áº§u tá»«",
+                                     "total":  "Tá»•ng",
+                                     "type":  "Loáº¡i quyÃªn gÃ³p"
+                                 },
+                     "recurring":  {
+                                       "amount":  "Sá»‘ tiá»n",
+                                       "confirmPause":  "Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n táº¡m dá»«ng quyÃªn gÃ³p Ä‘á»‹nh ká»³ nÃ y khÃ´ng?",
+                                       "every":  "Má»—i",
+                                       "interval":  "Khoáº£ng thá»i gian",
+                                       "notFound":  "KhÃ´ng tÃ¬m tháº¥y phÆ°Æ¡ng thá»©c thanh toÃ¡n.",
+                                       "paused":  "ÄÃ£ táº¡m dá»«ng",
+                                       "pausedMessage":  "QuyÃªn gÃ³p Ä‘á»‹nh ká»³ Ä‘Ã£ Ä‘Æ°á»£c táº¡m dá»«ng.",
+                                       "pauseFailed":  "KhÃ´ng thá»ƒ táº¡m dá»«ng quyÃªn gÃ³p Ä‘á»‹nh ká»³. Vui lÃ²ng thá»­ láº¡i.",
+                                       "pauseTooltip":  "Táº¡m dá»«ng quyÃªn gÃ³p Ä‘á»‹nh ká»³",
+                                       "paymentMethod":  "PhÆ°Æ¡ng thá»©c thanh toÃ¡n",
+                                       "resumedMessage":  "QuyÃªn gÃ³p Ä‘á»‹nh ká»³ Ä‘Ã£ Ä‘Æ°á»£c tiáº¿p tá»¥c.",
+                                       "resumeFailed":  "KhÃ´ng thá»ƒ tiáº¿p tá»¥c quyÃªn gÃ³p Ä‘á»‹nh ká»³. Vui lÃ²ng thá»­ láº¡i.",
+                                       "resumeTooltip":  "Tiáº¿p tá»¥c quyÃªn gÃ³p Ä‘á»‹nh ká»³",
+                                       "startDate":  "NgÃ y báº¯t Ä‘áº§u"
+                                   }
+                 },
+    "eventCalendar":  {
+                          "recurring":  {
+                                            "day":  {
+                                                        "friday":  "Thá»© SÃ¡u",
+                                                        "monday":  "Thá»© Hai",
+                                                        "saturday":  "Thá»© Báº£y",
+                                                        "sunday":  "Chá»§ Nháº­t",
+                                                        "thursday":  "Thá»© NÄƒm",
+                                                        "tuesday":  "Thá»© Ba",
+                                                        "wednesday":  "Thá»© TÆ°"
+                                                    },
+                                            "endDate":  "NgÃ y káº¿t thÃºc",
+                                            "endDateAria":  "NgÃ y káº¿t thÃºc láº·p láº¡i",
+                                            "ends":  "Káº¿t thÃºc",
+                                            "endsAfter":  "Sau",
+                                            "endsAria":  "Chá»n thá»i Ä‘iá»ƒm káº¿t thÃºc láº·p láº¡i",
+                                            "endsOn":  "VÃ o",
+                                            "freqDay":  "NgÃ y",
+                                            "freqMonth":  "ThÃ¡ng",
+                                            "frequency":  "Táº§n suáº¥t",
+                                            "frequencyAria":  "Chá»n táº§n suáº¥t láº·p láº¡i",
+                                            "freqWeek":  "Tuáº§n",
+                                            "interval":  "Khoáº£ng cÃ¡ch",
+                                            "intervalAria":  "Khoáº£ng cÃ¡ch láº·p láº¡i",
+                                            "monthlyOnDay":  "HÃ ng thÃ¡ng vÃ o ngÃ y {}",
+                                            "monthlyOnNth":  "HÃ ng thÃ¡ng vÃ o {ordinal} {day}",
+                                            "monthlyOptionAria":  "Chá»n tÃ¹y chá»n láº·p láº¡i hÃ ng thÃ¡ng",
+                                            "never":  "KhÃ´ng bao giá»",
+                                            "occurrences":  "Sá»‘ láº§n",
+                                            "occurrencesAria":  "Sá»‘ láº§n láº·p láº¡i",
+                                            "on":  "VÃ o",
+                                            "ordinal":  {
+                                                            "first":  "thá»© nháº¥t",
+                                                            "fourth":  "thá»© tÆ°",
+                                                            "last":  "cuá»‘i cÃ¹ng",
+                                                            "second":  "thá»© hai",
+                                                            "third":  "thá»© ba"
+                                                        },
+                                            "toggleWeekday":  "Báº­t/táº¯t {} cho láº·p láº¡i hÃ ng tuáº§n"
+                                        }
+                      },
+    "formSubmissionEdit":  {
+                               "back":  "Quay láº¡i",
+                               "confirmDelete":  "Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a dá»¯ liá»‡u biá»ƒu máº«u nÃ y khÃ´ng?",
+                               "continue":  "Tiáº¿p tá»¥c",
+                               "editForm":  "Chá»‰nh sá»­a biá»ƒu máº«u",
+                               "isRequired":  "lÃ  báº¯t buá»™c",
+                               "stepProgress":  "{current} / {total}",
+                               "submit":  "Gá»­i"
+                           },
+    "gallery":  {
+                    "aspectRatio":  "Tá»‰ lá»‡ khung hÃ¬nh",
+                    "confirmDelete":  "Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a hÃ¬nh áº£nh nÃ y khá»i thÆ° viá»‡n khÃ´ng?",
+                    "freeForm":  "HÃ¬nh thá»©c tá»± do"
+                },
+    "login":  {
+                  "email":  "Email",
+                  "enterCode":  "Nháº­p mÃ£ xÃ¡c minh",
+                  "enterCodeInstructions":  "Nháº­p mÃ£ 6 chá»¯ sá»‘ mÃ  chÃºng tÃ´i vá»«a gá»­i qua email.",
+                  "expiredLink":  "LiÃªn káº¿t hiá»‡n táº¡i Ä‘Ã£ háº¿t háº¡n.",
+                  "forgot":  "QuÃªn máº­t kháº©u",
+                  "login":  "ÄÄƒng nháº­p",
+                  "noAcc":  "KhÃ´ng cÃ³ tÃ i khoáº£n?",
+                  "noAccountFound":  "KhÃ´ng tÃ¬m tháº¥y tÃ i khoáº£n nÃ o vá»›i email Ä‘Ã³. Vui lÃ²ng Ä‘Äƒng kÃ½ Ä‘á»ƒ tiáº¿p tá»¥c.",
+                  "password":  "Máº­t kháº©u",
+                  "register":  "ÄÄƒng kÃ½",
+                  "registerThankYou":  "Cáº£m Æ¡n báº¡n Ä‘Ã£ Ä‘Äƒng kÃ½! Vui lÃ²ng kiá»ƒm tra email cá»§a báº¡n Ä‘á»ƒ xÃ¡c minh tÃ i khoáº£n cá»§a báº¡n.",
+                  "requestLink":  "YÃªu cáº§u liÃªn káº¿t Ä‘áº·t láº¡i má»›i",
+                  "resendCode":  "Gá»­i láº¡i mÃ£",
+                  "reset":  "Äáº·t láº¡i",
+                  "resetInstructions":  "Nháº­p Ä‘á»‹a chá»‰ email cá»§a báº¡n Ä‘á»ƒ yÃªu cáº§u Ä‘áº·t láº¡i máº­t kháº©u.",
+                  "resetPassword":  "Äáº·t láº¡i máº­t kháº©u",
+                  "setPassword":  "Äáº·t máº­t kháº©u",
+                  "signIn":  "ÄÄƒng nháº­p",
+                  "signInTitle":  "Vui lÃ²ng Ä‘Äƒng nháº­p",
+                  "validate":  {
+                                   "code":  "Vui lÃ²ng nháº­p mÃ£ 6 chá»¯ sá»‘.",
+                                   "email":  "Vui lÃ²ng nháº­p má»™t Ä‘á»‹a chá»‰ email há»£p lá»‡.",
+                                   "firstName":  "Vui lÃ²ng nháº­p tÃªn cá»§a báº¡n.",
+                                   "invalid":  "ÄÄƒng nháº­p khÃ´ng há»£p lá»‡. Vui lÃ²ng kiá»ƒm tra email hoáº·c máº­t kháº©u cá»§a báº¡n.",
+                                   "lastName":  "Vui lÃ²ng nháº­p há» cá»§a báº¡n.",
+                                   "password":  "Vui lÃ²ng nháº­p máº­t kháº©u.",
+                                   "passwordLength":  "Máº­t kháº©u pháº£i dÃ i Ã­t nháº¥t 8 kÃ½ tá»±.",
+                                   "passwordMatch":  "Máº­t kháº©u khÃ´ng khá»›p.",
+                                   "selectingChurch":  "Lá»—i khi chá»n nhÃ  thá». Vui lÃ²ng xÃ¡c minh vÃ  thá»­ láº¡i"
+                               },
+                  "verifyCode":  "XÃ¡c minh mÃ£",
+                  "verifyPassword":  "XÃ¡c minh máº­t kháº©u",
+                  "welcomeBack":  "ChÃ o má»«ng trá»Ÿ láº¡i",
+                  "welcomeName":  "ChÃ o má»«ng trá»Ÿ láº¡i, \u003cb\u003e{}\u003c/b\u003e! Vui lÃ²ng Ä‘á»£i trong khi chÃºng tÃ´i táº£i dá»¯ liá»‡u cá»§a báº¡n."
+              },
+    "markdownEditor":  {
+                           "content":  "Ná»™i dung",
+                           "markdownGuide":  "HÆ°á»›ng dáº«n Markdown"
+                       },
+    "notes":  {
+                  "comment":  "bÃ¬nh luáº­n",
+                  "comments":  "bÃ¬nh luáº­n",
+                  "notes":  "Ghi chÃº",
+                  "validate":  {
+                                   "content":  "Vui lÃ²ng nháº­p ghi chÃº."
+                               }
+              },
+    "person":  {
+                   "email":  "Email",
+                   "firstName":  "TÃªn",
+                   "lastName":  "Há»",
+                   "name":  "TÃªn"
+               },
+    "selectChurch":  {
+                         "address1":  "Äá»‹a chá»‰ - dÃ²ng 1",
+                         "address2":  "Äá»‹a chá»‰ - dÃ²ng 2",
+                         "another":  "Chá»n má»™t nhÃ  thá» khÃ¡c",
+                         "city":  "ThÃ nh phá»‘",
+                         "confirmRegister":  "Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n Ä‘Äƒng kÃ½ má»™t nhÃ  thá» má»›i khÃ´ng?",
+                         "country":  "NÆ°á»›c",
+                         "name":  "TÃªn nhÃ  thá»",
+                         "noMatches":  "KhÃ´ng tÃ¬m tháº¥y káº¿t quáº£ trÃ¹ng khá»›p.",
+                         "register":  "ÄÄƒng kÃ½ má»™t nhÃ  thá» má»›i",
+                         "selectChurch":  "Chá»n má»™t nhÃ  thá»",
+                         "state":  "Tiá»ƒu bang / Tá»‰nh",
+                         "validate":  {
+                                          "address":  "Äá»‹a chá»‰ khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.",
+                                          "city":  "ThÃ nh phá»‘ khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.",
+                                          "country":  "NÆ°á»›c khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.",
+                                          "name":  "TÃªn nhÃ  thá» khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.",
+                                          "state":  "Tiá»ƒu bang/Tá»‰nh khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng.",
+                                          "zip":  "MÃ£ bÆ°u chÃ­nh/mÃ£ bÆ°u chÃ­nh khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng."
+                                      },
+                         "zip":  "MÃ£ bÆ°u chÃ­nh / MÃ£ bÆ°u chÃ­nh"
+                     },
+    "stockPhotos":  {
+                        "photoBy":  "áº¢nh cá»§a:",
+                        "providedBy":  "áº¢nh kho Ä‘Æ°á»£c cung cáº¥p bá»Ÿi"
+                    },
+    "support":  {
+                    "discussions":  "Diá»…n Ä‘Ã n há»— trá»£",
+                    "documentation":  "TÃ i liá»‡u"
+                },
+    "wrapper":  {
+                    "newPrivateMessage":  "Tin nháº¯n riÃªng tÆ° má»›i",
+                    "privateMessage":  "Tin nháº¯n riÃªng tÆ°",
+                    "searchForPerson":  "TÃ¬m kiáº¿m má»™t ngÆ°á»i"
+                }
 }

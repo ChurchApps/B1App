@@ -1,339 +1,254 @@
-{
-  "b1Share": {
-    "comment": "Comente",
-    "commentPlaceholder": "Inclua um comentário em sua postagem.",
-    "contentShared": "Conteúdo compartilhado",
-    "group": "Grupo",
-    "sharingToGroup": "Compartilhando {} com o grupo B1",
-    "validate": {
-      "addComment": "Por favor, adicione um comentário.",
-      "loginFirst": "Faça login primeiro.",
-      "notMember": "Atualmente você não é membro de nenhum grupo no B1.",
-      "selectGroup": "Selecione um grupo."
-    }
-  },
-  "common": {
-    "add": "Adicionar",
-    "cancel": "Cancelar",
-    "close": "Fechar",
-    "date": "Data",
-    "delete": "Excluir",
-    "edit": "Editar",
-    "error": "Erro",
-    "pleaseWait": "Por favor, aguarde...",
-    "save": "Salvar",
-    "search": "Procurar",
-    "submit": "Enviar",
-    "update": "Atualizar"
-  },
-  "createPerson": {
-    "addNewPerson": "Adicionar uma nova pessoa",
-    "email": "E-mail",
-    "firstName": "Primeiro nome",
-    "lastName": "Sobrenome"
-  },
-  "donation": {
-    "bankForm": {
-      "accountNumber": "Número de conta",
-      "added": "Conta bancária adicionada. ",
-      "company": "Empresa",
-      "firstDeposit": "Primeiro Depósito",
-      "holderName": "O nome do titular da conta é obrigatório.",
-      "individual": "Individual",
-      "name": "nome do titular da conta",
-      "needVerified": "As contas bancárias precisarão ser verificadas antes de fazer qualquer doação. ",
-      "routingNumber": "Número de roteamento",
-      "secondDeposit": "Segundo Depósito",
-      "twoDeposits": "Insira os dois depósitos que você recebeu em sua conta para concluir a verificação de sua conta bancária.",
-      "updated": "Conta bancária atualizada.",
-      "validate": {
-        "accountNumber": "O roteamento e o número da conta são obrigatórios.",
-        "holderName": "O nome do titular da conta é obrigatório."
-      },
-      "verified": "Conta bancária verificada."
-    },
-    "cardForm": {
-      "addNew": "Adicionar novo cartão",
-      "added": "Cartão adicionado com sucesso.",
-      "expirationMonth": "Mês de validade:",
-      "expirationYear": "Ano de expiração:",
-      "updated": "Cartão atualizado com sucesso."
-    },
-    "donationForm": {
-      "annually": "Anualmente",
-      "biWeekly": "Quinzenal",
-      "cancelled": "Doação recorrente cancelada.",
-      "confirmDelete": "Tem certeza de que deseja excluir esta doação recorrente?",
-      "cover": "Acrescentarei generosamente {} para cobrir as taxas de transação para que você possa ficar com 100% da minha doação.",
-      "donate": "Doar",
-      "editRecurring": "Editar doação recorrente",
-      "fees": "São aplicadas taxas de transação de {}.",
-      "frequency": "Frequência",
-      "fund": "Fundo",
-      "funds": "Fundos",
-      "make": "Faça uma doação",
-      "makeRecurring": "Faça uma doação recorrente",
-      "method": "Método",
-      "monthly": "Por mês",
-      "notes": "Notas",
-      "preview": "Visualizar doação",
-      "quarterly": "Trimestral",
-      "recurringUpdated": "Doação recorrente atualizada.",
-      "startDate": "Data de início",
-      "thankYou": "Obrigado por sua doação!",
-      "tooLow": "O valor da doação deve ser superior a US$ 0,50",
-      "total": "Valor total da doação",
-      "validate": {
-        "amount": "O valor não pode ser $0.",
-        "email": "Por favor, indique o seu endereço de e-mail.",
-        "firstName": "Por favor entre com seu primeiro nome.",
-        "lastName": "Por favor insira seu sobrenome.",
-        "validEmail": "Por favor insira um endereço de e-mail válido."
-      },
-      "weekly": "Semanalmente"
-    },
-    "fundDonations": {
-      "addMore": "Adicione mais",
-      "amount": "Quantia",
-      "fund": "Fundo"
-    },
-    "page": {
-      "amount": "Quantia",
-      "batch": "Lote",
-      "date": "Data",
-      "fund": "Fundo",
-      "method": "Método",
-      "willAppear": "As doações aparecerão assim que uma doação for inserida."
-    },
-    "paymentMethods": {
-      "addBank": "Adicionar conta bancária",
-      "addCard": "Adicionar cartão",
-      "confirmDelete": "Tem certeza de que deseja excluir esta forma de pagamento?",
-      "deleted": "Forma de pagamento excluída.",
-      "noMethods": "Sem métodos de pagamento.  ",
-      "verify": "Verificar conta"
-    },
-    "preview": {
-      "date": "Data da Doação",
-      "donate": "Doar",
-      "every": "Tudo recorrente",
-      "fee": "Taxa de transação",
-      "funds": "Fundos",
-      "method": "Método de doação",
-      "notes": "Notas",
-      "startingOn": "Começando",
-      "total": "Total",
-      "type": "Tipo de doação"
-    },
-    "recurring": {
-      "amount": "Quantia",
-      "confirmPause": "Tem certeza de que deseja pausar esta doação recorrente?",
-      "every": "Todo",
-      "interval": "Intervalo",
-      "notFound": "Forma de pagamento não encontrada.",
-      "pauseFailed": "Falha ao pausar a doação recorrente. Por favor, tente novamente.",
-      "pauseTooltip": "Pausar doação recorrente",
-      "paused": "Pausada",
-      "pausedMessage": "Doação recorrente pausada.",
-      "paymentMethod": "Forma de pagamento",
-      "resumeFailed": "Falha ao retomar a doação recorrente. Por favor, tente novamente.",
-      "resumeTooltip": "Retomar doação recorrente",
-      "resumedMessage": "Doação recorrente retomada.",
-      "startDate": "Data de início"
-    }
-  },
-  "eventCalendar": {
-    "recurring": {
-      "day": {
-        "friday": "Sexta-feira",
-        "monday": "Segunda-feira",
-        "saturday": "Sábado",
-        "sunday": "Domingo",
-        "thursday": "Quinta-feira",
-        "tuesday": "Terça-feira",
-        "wednesday": "Quarta-feira"
-      },
-      "endDate": "Data de Término",
-      "endDateAria": "Data de término da recorrência",
-      "ends": "Termina",
-      "endsAfter": "Após",
-      "endsAria": "Selecione quando a recorrência termina",
-      "endsOn": "Em",
-      "freqDay": "Dia",
-      "freqMonth": "Mês",
-      "freqWeek": "Semana",
-      "frequency": "Frequência",
-      "frequencyAria": "Selecione a frequência de recorrência",
-      "interval": "Intervalo",
-      "intervalAria": "Intervalo de recorrência",
-      "monthlyOnDay": "Mensalmente no dia {}",
-      "monthlyOnNth": "Mensalmente na {ordinal} {day}",
-      "monthlyOptionAria": "Selecione a opção de recorrência mensal",
-      "never": "Nunca",
-      "occurrences": "Ocorrências",
-      "occurrencesAria": "Número de ocorrências da recorrência",
-      "on": "Em",
-      "ordinal": {
-        "first": "primeira",
-        "fourth": "quarta",
-        "last": "última",
-        "second": "segunda",
-        "third": "terceira"
-      },
-      "toggleWeekday": "Alternar {} para recorrência semanal"
-    }
-  },
-  "formSubmissionEdit": {
-    "back": "Voltar",
-    "continue": "Continuar",
-    "stepProgress": "{current} de {total}",
-    "confirmDelete": "Tem certeza de que deseja excluir os dados deste formulário?",
-    "editForm": "Editar formulário",
-    "isRequired": "é necessário",
-    "submit": "Enviar"
-  },
-  "gallery": {
-    "aspectRatio": "Proporção da tela",
-    "confirmDelete": "Tem certeza de que deseja excluir esta imagem da galeria?",
-    "freeForm": "Forma livre"
-  },
-  "iconPicker": {
-    "iconsAvailable": "ícones disponíveis",
-    "matchingResults": "resultados correspondentes",
-    "search": "Pesquisar ícones..."
-  },
-  "login": {
-    "createAccount": "Crie a sua conta aqui",
-    "email": "E-mail",
-    "enterCode": "Digite o código de verificação",
-    "enterCodeInstructions": "Digite o código de 6 dígitos que acabamos de enviar por e-mail.",
-    "expiredLink": "O link atual expirou.",
-    "forgot": "Esqueceu sua senha",
-    "goLogin": "Vá para Entrar",
-    "login": "Conecte-se",
-    "noAcc": "Não tem uma conta?",
-    "noAccountFound": "Nenhuma conta foi encontrada com esse e-mail. Por favor, registre-se para continuar.",
-    "password": "Senha",
-    "register": "Registro",
-    "registerThankYou": "Obrigado por se registrar! ",
-    "requestLink": "Solicitar um novo link de redefinição",
-    "resendCode": "Reenviar código",
-    "reset": "Reiniciar",
-    "resetInstructions": "Digite seu endereço de e-mail para solicitar uma redefinição de senha.",
-    "resetPassword": "Redefinir senha",
-    "resetSent": "E-mail de redefinição de senha enviado!",
-    "setPassword": "Configurar senha",
-    "signIn": "Entrar",
-    "signInTitle": "Por favor, inscreva-se",
-    "validate": {
-      "code": "Por favor, digite o código de 6 dígitos.",
-      "email": "Por favor insira um endereço de e-mail válido.",
-      "firstName": "Por favor entre com seu primeiro nome.",
-      "invalid": "Login inválido. ",
-      "lastName": "Por favor insira seu sobrenome.",
-      "password": "Por favor insira uma senha.",
-      "passwordLength": "A senha deve ter pelo menos 8 caracteres.",
-      "passwordMatch": "As senhas não coincidem.",
-      "selectingChurch": "Erro ao selecionar igreja. "
-    },
-    "verifyCode": "Verificar código",
-    "verifyPassword": "verifique a senha",
-    "welcomeBack": "bem vindo de volta",
-    "welcomeName": "Bem vindo de volta, <b>{}</b>!  "
-  },
-  "markdownEditor": {
-    "content": "Contente",
-    "markdownEditor": "Editor de redução",
-    "markdownGuide": "Guia de redução"
-  },
-  "month": {
-    "april": "abril",
-    "august": "Agosto",
-    "december": "dezembro",
-    "february": "Fevereiro",
-    "january": "Janeiro",
-    "july": "Julho",
-    "june": "Junho",
-    "march": "Marchar",
-    "may": "Poderia",
-    "november": "novembro",
-    "october": "Outubro",
-    "september": "Setembro"
-  },
-  "notes": {
-    "comment": "Comente",
-    "comments": "comentários",
-    "notes": "Notas",
-    "startConversation": "Inicie uma conversa",
-    "validate": {
-      "content": "Por favor, insira uma observação."
-    },
-    "viewAll": "Ver tudo"
-  },
-  "person": {
-    "email": "E-mail",
-    "firstName": "Primeiro nome",
-    "lastName": "Sobrenome",
-    "name": "Nome",
-    "noRec": "Não tem um registro de pessoa?",
-    "person": "Pessoa",
-    "years": "anos"
-  },
-  "reporting": {
-    "detailed": "Relatório detalhado",
-    "downloadOptions": "Opções de download",
-    "noData": "Não há dados para exibir.",
-    "runReport": "Executar relatório",
-    "sampleTemplate": "Modelo Word de exemplo",
-    "summary": "Resumo",
-    "useFilter": "Use o filtro para gerar o relatório."
-  },
-  "selectChurch": {
-    "address1": "Endereço Linha 1",
-    "address2": "endereço linha 2",
-    "another": "Escolha outra igreja",
-    "city": "Cidade",
-    "confirmRegister": "Tem certeza de que deseja registrar uma nova igreja?",
-    "country": "País",
-    "name": "Nome da Igreja",
-    "noMatches": "Nenhuma equivalência encontrada.",
-    "register": "Cadastre uma nova igreja",
-    "selectChurch": "Selecione uma Igreja",
-    "state": "Estado/Província",
-    "validate": {
-      "address": "O endereço não pode ficar em branco.",
-      "city": "A cidade não pode ficar em branco.",
-      "country": "O país não pode ficar em branco.",
-      "name": "O nome da igreja não pode ficar em branco.",
-      "state": "Estado/Província não pode ficar em branco.",
-      "zip": "O CEP/código postal não pode ficar em branco."
-    },
-    "zip": "CEP / Código Postal"
-  },
-  "stockPhotos": {
-    "photoBy": "Foto por:",
-    "providedBy": "Fotos de estoque fornecidas por"
-  },
-  "support": {
-    "discussions": "Fórum de suporte",
-    "documentation": "Documentação"
-  },
-  "wrapper": {
-    "chatWith": "Conversar com",
-    "deleteChurch": "Excluir igreja da lista",
-    "editAccount": "Editar Conta",
-    "editChurchProfile": "Editar Perfil da Igreja",
-    "editProfile": "Editar Perfil",
-    "logout": "Sair",
-    "messages": "Mensagens",
-    "newPrivateMessage": "Nova Mensagem Privada",
-    "notifications": "Notificações",
-    "privateMessage": "Mensagem privada",
-    "profile": "Perfil",
-    "searchForPerson": "Procure uma pessoa",
-    "support": "Apoiar",
-    "sureRemoveChurch": "Tem certeza de que deseja excluir {} da lista?",
-    "switchApp": "Trocar de aplicativo",
-    "switchChurch": "Mudar de Igreja"
-  }
+﻿{
+    "common":  {
+                   "cancel":  "Cancelar",
+                   "close":  "Fechar",
+                   "delete":  "Excluir",
+                   "pleaseWait":  "Por favor, aguarde...",
+                   "save":  "Salvar",
+                   "search":  "Procurar",
+                   "update":  "Atualizar"
+               },
+    "donation":  {
+                     "bankForm":  {
+                                      "accountNumber":  "NÃºmero de conta",
+                                      "added":  "Conta bancÃ¡ria adicionada. ",
+                                      "company":  "Empresa",
+                                      "firstDeposit":  "Primeiro DepÃ³sito",
+                                      "individual":  "Individual",
+                                      "name":  "nome do titular da conta",
+                                      "needVerified":  "As contas bancÃ¡rias precisarÃ£o ser verificadas antes de fazer qualquer doaÃ§Ã£o. ",
+                                      "routingNumber":  "NÃºmero de roteamento",
+                                      "secondDeposit":  "Segundo DepÃ³sito",
+                                      "twoDeposits":  "Insira os dois depÃ³sitos que vocÃª recebeu em sua conta para concluir a verificaÃ§Ã£o de sua conta bancÃ¡ria.",
+                                      "updated":  "Conta bancÃ¡ria atualizada.",
+                                      "validate":  {
+                                                       "accountNumber":  "O roteamento e o nÃºmero da conta sÃ£o obrigatÃ³rios.",
+                                                       "holderName":  "O nome do titular da conta Ã© obrigatÃ³rio."
+                                                   },
+                                      "verified":  "Conta bancÃ¡ria verificada."
+                                  },
+                     "cardForm":  {
+                                      "added":  "CartÃ£o adicionado com sucesso.",
+                                      "addNew":  "Adicionar novo cartÃ£o",
+                                      "expirationMonth":  "MÃªs de validade:",
+                                      "expirationYear":  "Ano de expiraÃ§Ã£o:",
+                                      "updated":  "CartÃ£o atualizado com sucesso."
+                                  },
+                     "donationForm":  {
+                                          "annually":  "Anualmente",
+                                          "biWeekly":  "Quinzenal",
+                                          "cancelled":  "DoaÃ§Ã£o recorrente cancelada.",
+                                          "confirmDelete":  "Tem certeza de que deseja excluir esta doaÃ§Ã£o recorrente?",
+                                          "cover":  "Acrescentarei generosamente {} para cobrir as taxas de transaÃ§Ã£o para que vocÃª possa ficar com 100% da minha doaÃ§Ã£o.",
+                                          "donate":  "Doar",
+                                          "editRecurring":  "Editar doaÃ§Ã£o recorrente",
+                                          "fees":  "SÃ£o aplicadas taxas de transaÃ§Ã£o de {}.",
+                                          "frequency":  "FrequÃªncia",
+                                          "fund":  "Fundo",
+                                          "funds":  "Fundos",
+                                          "make":  "FaÃ§a uma doaÃ§Ã£o",
+                                          "makeRecurring":  "FaÃ§a uma doaÃ§Ã£o recorrente",
+                                          "method":  "MÃ©todo",
+                                          "monthly":  "Por mÃªs",
+                                          "preview":  "Visualizar doaÃ§Ã£o",
+                                          "quarterly":  "Trimestral",
+                                          "recurringUpdated":  "DoaÃ§Ã£o recorrente atualizada.",
+                                          "startDate":  "Data de inÃ­cio",
+                                          "thankYou":  "Obrigado por sua doaÃ§Ã£o!",
+                                          "tooLow":  "O valor da doaÃ§Ã£o deve ser superior a US$ 0,50",
+                                          "total":  "Valor total da doaÃ§Ã£o",
+                                          "validate":  {
+                                                           "amount":  "O valor nÃ£o pode ser $0.",
+                                                           "email":  "Por favor, indique o seu endereÃ§o de e-mail.",
+                                                           "firstName":  "Por favor entre com seu primeiro nome.",
+                                                           "lastName":  "Por favor insira seu sobrenome.",
+                                                           "validEmail":  "Por favor insira um endereÃ§o de e-mail vÃ¡lido."
+                                                       },
+                                          "weekly":  "Semanalmente"
+                                      },
+                     "fundDonations":  {
+                                           "addMore":  "Adicione mais",
+                                           "amount":  "Quantia",
+                                           "fund":  "Fundo"
+                                       },
+                     "paymentMethods":  {
+                                            "addBank":  "Adicionar conta bancÃ¡ria",
+                                            "addCard":  "Adicionar cartÃ£o",
+                                            "confirmDelete":  "Tem certeza de que deseja excluir esta forma de pagamento?",
+                                            "deleted":  "Forma de pagamento excluÃ­da.",
+                                            "verify":  "Verificar conta"
+                                        },
+                     "preview":  {
+                                     "date":  "Data da DoaÃ§Ã£o",
+                                     "donate":  "Doar",
+                                     "every":  "Tudo recorrente",
+                                     "fee":  "Taxa de transaÃ§Ã£o",
+                                     "funds":  "Fundos",
+                                     "method":  "MÃ©todo de doaÃ§Ã£o",
+                                     "notes":  "Notas",
+                                     "startingOn":  "ComeÃ§ando",
+                                     "total":  "Total",
+                                     "type":  "Tipo de doaÃ§Ã£o"
+                                 },
+                     "recurring":  {
+                                       "amount":  "Quantia",
+                                       "confirmPause":  "Tem certeza de que deseja pausar esta doaÃ§Ã£o recorrente?",
+                                       "every":  "Todo",
+                                       "interval":  "Intervalo",
+                                       "notFound":  "Forma de pagamento nÃ£o encontrada.",
+                                       "paused":  "Pausada",
+                                       "pausedMessage":  "DoaÃ§Ã£o recorrente pausada.",
+                                       "pauseFailed":  "Falha ao pausar a doaÃ§Ã£o recorrente. Por favor, tente novamente.",
+                                       "pauseTooltip":  "Pausar doaÃ§Ã£o recorrente",
+                                       "paymentMethod":  "Forma de pagamento",
+                                       "resumedMessage":  "DoaÃ§Ã£o recorrente retomada.",
+                                       "resumeFailed":  "Falha ao retomar a doaÃ§Ã£o recorrente. Por favor, tente novamente.",
+                                       "resumeTooltip":  "Retomar doaÃ§Ã£o recorrente",
+                                       "startDate":  "Data de inÃ­cio"
+                                   }
+                 },
+    "eventCalendar":  {
+                          "recurring":  {
+                                            "day":  {
+                                                        "friday":  "Sexta-feira",
+                                                        "monday":  "Segunda-feira",
+                                                        "saturday":  "SÃ¡bado",
+                                                        "sunday":  "Domingo",
+                                                        "thursday":  "Quinta-feira",
+                                                        "tuesday":  "TerÃ§a-feira",
+                                                        "wednesday":  "Quarta-feira"
+                                                    },
+                                            "endDate":  "Data de TÃ©rmino",
+                                            "endDateAria":  "Data de tÃ©rmino da recorrÃªncia",
+                                            "ends":  "Termina",
+                                            "endsAfter":  "ApÃ³s",
+                                            "endsAria":  "Selecione quando a recorrÃªncia termina",
+                                            "endsOn":  "Em",
+                                            "freqDay":  "Dia",
+                                            "freqMonth":  "MÃªs",
+                                            "frequency":  "FrequÃªncia",
+                                            "frequencyAria":  "Selecione a frequÃªncia de recorrÃªncia",
+                                            "freqWeek":  "Semana",
+                                            "interval":  "Intervalo",
+                                            "intervalAria":  "Intervalo de recorrÃªncia",
+                                            "monthlyOnDay":  "Mensalmente no dia {}",
+                                            "monthlyOnNth":  "Mensalmente na {ordinal} {day}",
+                                            "monthlyOptionAria":  "Selecione a opÃ§Ã£o de recorrÃªncia mensal",
+                                            "never":  "Nunca",
+                                            "occurrences":  "OcorrÃªncias",
+                                            "occurrencesAria":  "NÃºmero de ocorrÃªncias da recorrÃªncia",
+                                            "on":  "Em",
+                                            "ordinal":  {
+                                                            "first":  "primeira",
+                                                            "fourth":  "quarta",
+                                                            "last":  "Ãºltima",
+                                                            "second":  "segunda",
+                                                            "third":  "terceira"
+                                                        },
+                                            "toggleWeekday":  "Alternar {} para recorrÃªncia semanal"
+                                        }
+                      },
+    "formSubmissionEdit":  {
+                               "back":  "Voltar",
+                               "confirmDelete":  "Tem certeza de que deseja excluir os dados deste formulÃ¡rio?",
+                               "continue":  "Continuar",
+                               "editForm":  "Editar formulÃ¡rio",
+                               "isRequired":  "Ã© necessÃ¡rio",
+                               "stepProgress":  "{current} de {total}",
+                               "submit":  "Enviar"
+                           },
+    "gallery":  {
+                    "aspectRatio":  "ProporÃ§Ã£o da tela",
+                    "confirmDelete":  "Tem certeza de que deseja excluir esta imagem da galeria?",
+                    "freeForm":  "Forma livre"
+                },
+    "login":  {
+                  "email":  "E-mail",
+                  "enterCode":  "Digite o cÃ³digo de verificaÃ§Ã£o",
+                  "enterCodeInstructions":  "Digite o cÃ³digo de 6 dÃ­gitos que acabamos de enviar por e-mail.",
+                  "expiredLink":  "O link atual expirou.",
+                  "forgot":  "Esqueceu sua senha",
+                  "login":  "Conecte-se",
+                  "noAcc":  "NÃ£o tem uma conta?",
+                  "noAccountFound":  "Nenhuma conta foi encontrada com esse e-mail. Por favor, registre-se para continuar.",
+                  "password":  "Senha",
+                  "register":  "Registro",
+                  "registerThankYou":  "Obrigado por se registrar! ",
+                  "requestLink":  "Solicitar um novo link de redefiniÃ§Ã£o",
+                  "resendCode":  "Reenviar cÃ³digo",
+                  "reset":  "Reiniciar",
+                  "resetInstructions":  "Digite seu endereÃ§o de e-mail para solicitar uma redefiniÃ§Ã£o de senha.",
+                  "resetPassword":  "Redefinir senha",
+                  "setPassword":  "Configurar senha",
+                  "signIn":  "Entrar",
+                  "signInTitle":  "Por favor, inscreva-se",
+                  "validate":  {
+                                   "code":  "Por favor, digite o cÃ³digo de 6 dÃ­gitos.",
+                                   "email":  "Por favor insira um endereÃ§o de e-mail vÃ¡lido.",
+                                   "firstName":  "Por favor entre com seu primeiro nome.",
+                                   "invalid":  "Login invÃ¡lido. ",
+                                   "lastName":  "Por favor insira seu sobrenome.",
+                                   "password":  "Por favor insira uma senha.",
+                                   "passwordLength":  "A senha deve ter pelo menos 8 caracteres.",
+                                   "passwordMatch":  "As senhas nÃ£o coincidem.",
+                                   "selectingChurch":  "Erro ao selecionar igreja. "
+                               },
+                  "verifyCode":  "Verificar cÃ³digo",
+                  "verifyPassword":  "verifique a senha",
+                  "welcomeBack":  "bem vindo de volta",
+                  "welcomeName":  "Bem vindo de volta, \u003cb\u003e{}\u003c/b\u003e!  "
+              },
+    "markdownEditor":  {
+                           "content":  "Contente",
+                           "markdownGuide":  "Guia de reduÃ§Ã£o"
+                       },
+    "notes":  {
+                  "comment":  "Comente",
+                  "comments":  "comentÃ¡rios",
+                  "notes":  "Notas",
+                  "validate":  {
+                                   "content":  "Por favor, insira uma observaÃ§Ã£o."
+                               }
+              },
+    "person":  {
+                   "email":  "E-mail",
+                   "firstName":  "Primeiro nome",
+                   "lastName":  "Sobrenome",
+                   "name":  "Nome"
+               },
+    "selectChurch":  {
+                         "address1":  "EndereÃ§o Linha 1",
+                         "address2":  "endereÃ§o linha 2",
+                         "another":  "Escolha outra igreja",
+                         "city":  "Cidade",
+                         "confirmRegister":  "Tem certeza de que deseja registrar uma nova igreja?",
+                         "country":  "PaÃ­s",
+                         "name":  "Nome da Igreja",
+                         "noMatches":  "Nenhuma equivalÃªncia encontrada.",
+                         "register":  "Cadastre uma nova igreja",
+                         "selectChurch":  "Selecione uma Igreja",
+                         "state":  "Estado/ProvÃ­ncia",
+                         "validate":  {
+                                          "address":  "O endereÃ§o nÃ£o pode ficar em branco.",
+                                          "city":  "A cidade nÃ£o pode ficar em branco.",
+                                          "country":  "O paÃ­s nÃ£o pode ficar em branco.",
+                                          "name":  "O nome da igreja nÃ£o pode ficar em branco.",
+                                          "state":  "Estado/ProvÃ­ncia nÃ£o pode ficar em branco.",
+                                          "zip":  "O CEP/cÃ³digo postal nÃ£o pode ficar em branco."
+                                      },
+                         "zip":  "CEP / CÃ³digo Postal"
+                     },
+    "stockPhotos":  {
+                        "photoBy":  "Foto por:",
+                        "providedBy":  "Fotos de estoque fornecidas por"
+                    },
+    "support":  {
+                    "discussions":  "FÃ³rum de suporte",
+                    "documentation":  "DocumentaÃ§Ã£o"
+                },
+    "wrapper":  {
+                    "newPrivateMessage":  "Nova Mensagem Privada",
+                    "privateMessage":  "Mensagem privada",
+                    "searchForPerson":  "Procure uma pessoa"
+                }
 }
