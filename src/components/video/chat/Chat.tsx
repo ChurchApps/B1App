@@ -5,6 +5,7 @@ import { ChatUserInterface } from "../../../helpers";
 import { ChatReceive } from "./ChatReceive";
 import { EmbeddedChatName } from "./EmbeddedChatName";
 import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
+import { Locale } from "@churchapps/apphelper";
 import type { ConversationInterface } from "@churchapps/helpers";
 
 interface Props {
@@ -16,16 +17,17 @@ interface Props {
 }
 
 export const Chat: React.FC<Props> = (props) => {
-  const [chatEnabled, setChatEnabled] = React.useState(false);
+  const [chatWindow, setChatWindow] = React.useState<{ enabled: boolean, start: Date | null }>({ enabled: false, start: null });
 
   const updateChatEnabled = React.useCallback(() => {
     const cs = StreamingServiceHelper.currentService;
-    let result = false;
+    let enabled = false;
     if (cs !== null) {
       const currentTime = new Date();
-      result = currentTime >= (cs.localChatStart || new Date()) && currentTime <= (cs.localChatEnd || new Date());
+      enabled = currentTime >= (cs.localChatStart || new Date()) && currentTime <= (cs.localChatEnd || new Date());
     }
-    setChatEnabled(prev => (result !== prev ? result : prev));
+    const start = cs?.localChatStart || null;
+    setChatWindow(prev => (prev.enabled !== enabled || prev.start?.getTime() !== start?.getTime() ? { enabled, start } : prev));
   }, []);
 
   React.useEffect(() => {
@@ -33,14 +35,16 @@ export const Chat: React.FC<Props> = (props) => {
     return () => clearInterval(id);
   }, [updateChatEnabled]);
 
-  const className = chatEnabled ? "chatContainer" : "chatContainer chatDisabled";
+  const className = chatWindow.enabled ? "chatContainer" : "chatContainer chatDisabled";
 
   return (
     <div className={className} style={props.visible ? {} : { display: "none" }}>
       {props.enableAttendance ? <Attendance conversationId={props.conversation.id || ""} /> : null}
       <ChatReceive conversationId={props.conversation.id || ""} user={props.user} />
       {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
-      <ChatSend conversation={props.conversation} />
+      {chatWindow.enabled
+        ? <ChatSend conversation={props.conversation} />
+        : <div id="chatClosed">{Locale.label("video.chat.chatOpensAt").replace("{}", chatWindow.start?.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) || "")}</div>}
     </div>
   );
 };

@@ -1047,6 +1047,7 @@
     "chat": {
       "attendees": "{} attendees",
       "changeName": "Change Name",
+      "chatOpensAt": "Chat opens at {}",
       "emoji": "emoji",
       "enterFullName": "Please enter a full name",
       "message": "Message",
