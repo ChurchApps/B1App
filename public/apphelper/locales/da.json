@@ -1,254 +1,339 @@
-﻿{
-    "common":  {
-                   "cancel":  "Annuller",
-                   "close":  "Luk",
-                   "delete":  "Slet",
-                   "pleaseWait":  "Vent venligst...",
-                   "save":  "Gem",
-                   "search":  "SÃ¸g",
-                   "update":  "Opdater"
-               },
-    "donation":  {
-                     "bankForm":  {
-                                      "accountNumber":  "Kontonummer",
-                                      "added":  "Bankkonto tilfÃ¸jet. BekrÃ¦ft din bankkonto for at foretage en donation.",
-                                      "company":  "Firma",
-                                      "firstDeposit":  "FÃ¸rste indbetaling",
-                                      "individual":  "Privatperson",
-                                      "name":  "Kontoindehaverens navn",
-                                      "needVerified":  "Bankkonti skal verificeres, fÃ¸r der kan foretages donationer. Din konto vil modtage to smÃ¥ indbetalinger om cirka 1-3 arbejdsdage. Du skal indtaste disse indbetalingsbelÃ¸b for at fuldfÃ¸re verificeringen af din konto ved at vÃ¦lge linket til kontoverificering ved siden af din bankkonto under betalingsmetoder.",
-                                      "routingNumber":  "Rutenummer",
-                                      "secondDeposit":  "Anden indbetaling",
-                                      "twoDeposits":  "Indtast de to indbetalinger, du modtog pÃ¥ din konto, for at fuldfÃ¸re verificeringen af din bankkonto.",
-                                      "updated":  "Bankkonto opdateret.",
-                                      "validate":  {
-                                                       "accountNumber":  "Rutenummer og kontonummer er pÃ¥krÃ¦vet.",
-                                                       "holderName":  "Kontoindehaverens navn er pÃ¥krÃ¦vet."
-                                                   },
-                                      "verified":  "Bankkonto verificeret."
-                                  },
-                     "cardForm":  {
-                                      "added":  "Kort tilfÃ¸jet.",
-                                      "addNew":  "TilfÃ¸j nyt kort",
-                                      "expirationMonth":  "UdlÃ¸bsmÃ¥ned:",
-                                      "expirationYear":  "UdlÃ¸bsÃ¥r:",
-                                      "updated":  "Kort opdateret."
-                                  },
-                     "donationForm":  {
-                                          "annually":  "Ã…rligt",
-                                          "biWeekly":  "Hver 14. dag",
-                                          "cancelled":  "Tilbagevendende donation annulleret.",
-                                          "confirmDelete":  "Er du sikker pÃ¥, at du vil slette denne tilbagevendende donation?",
-                                          "cover":  "Jeg tilfÃ¸jer gerne {} for at dÃ¦kke transaktionsgebyrerne, sÃ¥ du kan beholde 100% af min donation.",
-                                          "donate":  "Doner",
-                                          "editRecurring":  "Rediger tilbagevendende donation",
-                                          "fees":  "Transaktionsgebyrer pÃ¥ {} anvendes.",
-                                          "frequency":  "Frekvens",
-                                          "fund":  "Fond",
-                                          "funds":  "Fonde",
-                                          "make":  "Foretag en donation",
-                                          "makeRecurring":  "Foretag en tilbagevendende donation",
-                                          "method":  "Metode",
-                                          "monthly":  "MÃ¥nedligt",
-                                          "preview":  "ForhÃ¥ndsvisning af donation",
-                                          "quarterly":  "Kvartalsvis",
-                                          "recurringUpdated":  "Tilbagevendende donation opdateret.",
-                                          "startDate":  "Startdato",
-                                          "thankYou":  "Tak for din donation!",
-                                          "tooLow":  "DonationsbelÃ¸b skal vÃ¦re stÃ¸rre end $0,50",
-                                          "total":  "Samlet donationsbelÃ¸b",
-                                          "validate":  {
-                                                           "amount":  "BelÃ¸b kan ikke vÃ¦re $0.",
-                                                           "email":  "Indtast venligst din e-mailadresse.",
-                                                           "firstName":  "Indtast venligst dit fornavn.",
-                                                           "lastName":  "Indtast venligst dit efternavn.",
-                                                           "validEmail":  "Indtast venligst en gyldig e-mailadresse."
-                                                       },
-                                          "weekly":  "Ugentligt"
-                                      },
-                     "fundDonations":  {
-                                           "addMore":  "TilfÃ¸j flere",
-                                           "amount":  "BelÃ¸b",
-                                           "fund":  "Fond"
-                                       },
-                     "paymentMethods":  {
-                                            "addBank":  "TilfÃ¸j bankkonto",
-                                            "addCard":  "TilfÃ¸j kort",
-                                            "confirmDelete":  "Er du sikker pÃ¥, at du vil slette denne betalingsmetode?",
-                                            "deleted":  "Betalingsmetode slettet.",
-                                            "verify":  "Verificer konto"
-                                        },
-                     "preview":  {
-                                     "date":  "Donationsdato",
-                                     "donate":  "Doner",
-                                     "every":  "Tilbagevendende hver",
-                                     "fee":  "Transaktionsgebyr",
-                                     "funds":  "Fonde",
-                                     "method":  "Donationsmetode",
-                                     "notes":  "Noter",
-                                     "startingOn":  "Begyndende den",
-                                     "total":  "I alt",
-                                     "type":  "Donationstype"
-                                 },
-                     "recurring":  {
-                                       "amount":  "BelÃ¸b",
-                                       "confirmPause":  "Er du sikker pÃ¥, at du vil pausere denne tilbagevendende donation?",
-                                       "every":  "Hver",
-                                       "interval":  "Interval",
-                                       "notFound":  "Betalingsmetode ikke fundet.",
-                                       "paused":  "Pauseret",
-                                       "pausedMessage":  "Tilbagevendende donation pauseret.",
-                                       "pauseFailed":  "Kunne ikke pausere tilbagevendende donation. PrÃ¸v igen.",
-                                       "pauseTooltip":  "PausÃ©r tilbagevendende donation",
-                                       "paymentMethod":  "Betalingsmetode",
-                                       "resumedMessage":  "Tilbagevendende donation genoptaget.",
-                                       "resumeFailed":  "Kunne ikke genoptage tilbagevendende donation. PrÃ¸v igen.",
-                                       "resumeTooltip":  "Genoptag tilbagevendende donation",
-                                       "startDate":  "Startdato"
-                                   }
-                 },
-    "eventCalendar":  {
-                          "recurring":  {
-                                            "day":  {
-                                                        "friday":  "Fredag",
-                                                        "monday":  "Mandag",
-                                                        "saturday":  "LÃ¸rdag",
-                                                        "sunday":  "SÃ¸ndag",
-                                                        "thursday":  "Torsdag",
-                                                        "tuesday":  "Tirsdag",
-                                                        "wednesday":  "Onsdag"
-                                                    },
-                                            "endDate":  "Slutdato",
-                                            "endDateAria":  "Slutdato for gentagelse",
-                                            "ends":  "Slutter",
-                                            "endsAfter":  "Efter",
-                                            "endsAria":  "VÃ¦lg hvornÃ¥r gentagelsen slutter",
-                                            "endsOn":  "Den",
-                                            "freqDay":  "Dag",
-                                            "freqMonth":  "MÃ¥ned",
-                                            "frequency":  "Frekvens",
-                                            "frequencyAria":  "VÃ¦lg gentagelsesfrekvens",
-                                            "freqWeek":  "Uge",
-                                            "interval":  "Interval",
-                                            "intervalAria":  "Gentagelsesinterval",
-                                            "monthlyOnDay":  "MÃ¥nedligt pÃ¥ dag {}",
-                                            "monthlyOnNth":  "MÃ¥nedligt pÃ¥ den {ordinal} {day}",
-                                            "monthlyOptionAria":  "VÃ¦lg mÃ¥nedlig gentagelsesindstilling",
-                                            "never":  "Aldrig",
-                                            "occurrences":  "Forekomster",
-                                            "occurrencesAria":  "Antal gentagelsesforekomster",
-                                            "on":  "Den",
-                                            "ordinal":  {
-                                                            "first":  "fÃ¸rste",
-                                                            "fourth":  "fjerde",
-                                                            "last":  "sidste",
-                                                            "second":  "anden",
-                                                            "third":  "tredje"
-                                                        },
-                                            "toggleWeekday":  "Skift {} for ugentlig gentagelse"
-                                        }
-                      },
-    "formSubmissionEdit":  {
-                               "back":  "Tilbage",
-                               "confirmDelete":  "Er du sikker pÃ¥, at du vil slette disse formulardata?",
-                               "continue":  "FortsÃ¦t",
-                               "editForm":  "Rediger formular",
-                               "isRequired":  "er pÃ¥krÃ¦vet",
-                               "stepProgress":  "{current} af {total}",
-                               "submit":  "Indsend"
-                           },
-    "gallery":  {
-                    "aspectRatio":  "Billedformat",
-                    "confirmDelete":  "Er du sikker pÃ¥, at du vil slette dette billede fra galleriet?",
-                    "freeForm":  "Fri form"
-                },
-    "login":  {
-                  "email":  "E-mail",
-                  "enterCode":  "Indtast bekrÃ¦ftelseskode",
-                  "enterCodeInstructions":  "Indtast den 6-cifrede kode, vi lige har sendt dig pÃ¥ e-mail.",
-                  "expiredLink":  "Det aktuelle link er udlÃ¸bet.",
-                  "forgot":  "Glemt adgangskode",
-                  "login":  "Log ind",
-                  "noAcc":  "Har du ikke en konto?",
-                  "noAccountFound":  "Ingen konto blev fundet med denne e-mail. Registrer dig for at fortsÃ¦tte.",
-                  "password":  "Adgangskode",
-                  "register":  "Registrer",
-                  "registerThankYou":  "Tak for din registrering! Tjek venligst din e-mail for at bekrÃ¦fte din konto.",
-                  "requestLink":  "Anmod om et nyt nulstillingslink",
-                  "resendCode":  "Send kode igen",
-                  "reset":  "Nulstil",
-                  "resetInstructions":  "Indtast din e-mailadresse for at anmode om nulstilling af adgangskode.",
-                  "resetPassword":  "Nulstil adgangskode",
-                  "setPassword":  "Indstil adgangskode",
-                  "signIn":  "Log ind",
-                  "signInTitle":  "Log venligst ind",
-                  "validate":  {
-                                   "code":  "Indtast venligst den 6-cifrede kode.",
-                                   "email":  "Indtast venligst en gyldig e-mailadresse.",
-                                   "firstName":  "Indtast venligst dit fornavn.",
-                                   "invalid":  "Ugyldigt login. Tjek venligst din e-mail eller adgangskode.",
-                                   "lastName":  "Indtast venligst dit efternavn.",
-                                   "password":  "Indtast venligst en adgangskode.",
-                                   "passwordLength":  "Adgangskoden skal vÃ¦re mindst 8 tegn lang.",
-                                   "passwordMatch":  "Adgangskoderne stemmer ikke overens.",
-                                   "selectingChurch":  "Fejl ved valg af kirke. BekrÃ¦ft og prÃ¸v igen"
-                               },
-                  "verifyCode":  "BekrÃ¦ft kode",
-                  "verifyPassword":  "BekrÃ¦ft adgangskode",
-                  "welcomeBack":  "Velkommen tilbage",
-                  "welcomeName":  "Velkommen tilbage, \u003cb\u003e{}\u003c/b\u003e! Vent venligst, mens vi indlÃ¦ser dine data."
-              },
-    "markdownEditor":  {
-                           "content":  "Indhold",
-                           "markdownGuide":  "Markdown-guide"
-                       },
-    "notes":  {
-                  "comment":  "kommentar",
-                  "comments":  "kommentarer",
-                  "notes":  "Noter",
-                  "validate":  {
-                                   "content":  "Indtast venligst en note."
-                               }
-              },
-    "person":  {
-                   "email":  "E-mail",
-                   "firstName":  "Fornavn",
-                   "lastName":  "Efternavn",
-                   "name":  "Navn"
-               },
-    "selectChurch":  {
-                         "address1":  "Adresselinje 1",
-                         "address2":  "Adresselinje 2",
-                         "another":  "VÃ¦lg en anden kirke",
-                         "city":  "By",
-                         "confirmRegister":  "Er du sikker pÃ¥, at du vil registrere en ny kirke?",
-                         "country":  "Land",
-                         "name":  "Kirkens navn",
-                         "noMatches":  "Ingen match fundet.",
-                         "register":  "Registrer en ny kirke",
-                         "selectChurch":  "VÃ¦lg en kirke",
-                         "state":  "Stat / Region",
-                         "validate":  {
-                                          "address":  "Adresse mÃ¥ ikke vÃ¦re tom.",
-                                          "city":  "By mÃ¥ ikke vÃ¦re tom.",
-                                          "country":  "Land mÃ¥ ikke vÃ¦re tomt.",
-                                          "name":  "Kirkens navn mÃ¥ ikke vÃ¦re tomt.",
-                                          "state":  "Stat/Region mÃ¥ ikke vÃ¦re tom.",
-                                          "zip":  "Postnummer mÃ¥ ikke vÃ¦re tomt."
-                                      },
-                         "zip":  "Postnummer"
-                     },
-    "stockPhotos":  {
-                        "photoBy":  "Foto af:",
-                        "providedBy":  "Stockfotos leveret af"
-                    },
-    "support":  {
-                    "discussions":  "Supportforum",
-                    "documentation":  "Dokumentation"
-                },
-    "wrapper":  {
-                    "newPrivateMessage":  "Ny privat besked",
-                    "privateMessage":  "Privat besked",
-                    "searchForPerson":  "SÃ¸g efter en person"
-                }
+{
+	"b1Share": {
+		"comment": "Kommentar",
+		"commentPlaceholder": "Inkluder en kommentar med dit opslag.",
+		"contentShared": "Indhold delt",
+		"group": "Gruppe",
+		"sharingToGroup": "Deler {} til B1-gruppe",
+		"validate": {
+			"addComment": "Tilføj venligst en kommentar.",
+			"loginFirst": "Log venligst ind først.",
+			"notMember": "Du er i øjeblikket ikke medlem af nogen grupper på B1.",
+			"selectGroup": "Vælg venligst en gruppe."
+		}
+	},
+	"common": {
+		"add": "Tilføj",
+		"cancel": "Annuller",
+		"close": "Luk",
+		"date": "Dato",
+		"delete": "Slet",
+		"edit": "Rediger",
+		"error": "Fejl",
+		"pleaseWait": "Vent venligst...",
+		"save": "Gem",
+		"search": "SÃ¸g",
+		"submit": "Indsend",
+		"update": "Opdater"
+	},
+	"createPerson": {
+		"addNewPerson": "Tilføj en ny person",
+		"email": "E-mail",
+		"firstName": "Fornavn",
+		"lastName": "Efternavn"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "Kontonummer",
+			"added": "Bankkonto tilfÃ¸jet. BekrÃ¦ft din bankkonto for at foretage en donation.",
+			"company": "Firma",
+			"firstDeposit": "FÃ¸rste indbetaling",
+			"holderName": "Kontoindehaverens navn er påkrævet.",
+			"individual": "Privatperson",
+			"name": "Kontoindehaverens navn",
+			"needVerified": "Bankkonti skal verificeres, fÃ¸r der kan foretages donationer. Din konto vil modtage to smÃ¥ indbetalinger om cirka 1-3 arbejdsdage. Du skal indtaste disse indbetalingsbelÃ¸b for at fuldfÃ¸re verificeringen af din konto ved at vÃ¦lge linket til kontoverificering ved siden af din bankkonto under betalingsmetoder.",
+			"routingNumber": "Rutenummer",
+			"secondDeposit": "Anden indbetaling",
+			"twoDeposits": "Indtast de to indbetalinger, du modtog pÃ¥ din konto, for at fuldfÃ¸re verificeringen af din bankkonto.",
+			"updated": "Bankkonto opdateret.",
+			"validate": {
+				"accountNumber": "Rutenummer og kontonummer er pÃ¥krÃ¦vet.",
+				"holderName": "Kontoindehaverens navn er pÃ¥krÃ¦vet."
+			},
+			"verified": "Bankkonto verificeret."
+		},
+		"cardForm": {
+			"addNew": "TilfÃ¸j nyt kort",
+			"added": "Kort tilfÃ¸jet.",
+			"expirationMonth": "UdlÃ¸bsmÃ¥ned:",
+			"expirationYear": "UdlÃ¸bsÃ¥r:",
+			"updated": "Kort opdateret."
+		},
+		"donationForm": {
+			"annually": "Ã…rligt",
+			"biWeekly": "Hver 14. dag",
+			"cancelled": "Tilbagevendende donation annulleret.",
+			"confirmDelete": "Er du sikker pÃ¥, at du vil slette denne tilbagevendende donation?",
+			"cover": "Jeg tilfÃ¸jer gerne {} for at dÃ¦kke transaktionsgebyrerne, sÃ¥ du kan beholde 100% af min donation.",
+			"donate": "Doner",
+			"editRecurring": "Rediger tilbagevendende donation",
+			"fees": "Transaktionsgebyrer pÃ¥ {} anvendes.",
+			"frequency": "Frekvens",
+			"fund": "Fond",
+			"funds": "Fonde",
+			"make": "Foretag en donation",
+			"makeRecurring": "Foretag en tilbagevendende donation",
+			"method": "Metode",
+			"monthly": "MÃ¥nedligt",
+			"notes": "Noter",
+			"preview": "ForhÃ¥ndsvisning af donation",
+			"quarterly": "Kvartalsvis",
+			"recurringUpdated": "Tilbagevendende donation opdateret.",
+			"startDate": "Startdato",
+			"thankYou": "Tak for din donation!",
+			"tooLow": "DonationsbelÃ¸b skal vÃ¦re stÃ¸rre end $0,50",
+			"total": "Samlet donationsbelÃ¸b",
+			"validate": {
+				"amount": "BelÃ¸b kan ikke vÃ¦re $0.",
+				"email": "Indtast venligst din e-mailadresse.",
+				"firstName": "Indtast venligst dit fornavn.",
+				"lastName": "Indtast venligst dit efternavn.",
+				"validEmail": "Indtast venligst en gyldig e-mailadresse."
+			},
+			"weekly": "Ugentligt"
+		},
+		"fundDonations": {
+			"addMore": "TilfÃ¸j flere",
+			"amount": "BelÃ¸b",
+			"fund": "Fond"
+		},
+		"page": {
+			"amount": "Beløb",
+			"batch": "Batch",
+			"date": "Dato",
+			"fund": "Fond",
+			"method": "Metode",
+			"willAppear": "Donationer vises, når en donation er blevet registreret."
+		},
+		"paymentMethods": {
+			"addBank": "TilfÃ¸j bankkonto",
+			"addCard": "TilfÃ¸j kort",
+			"confirmDelete": "Er du sikker pÃ¥, at du vil slette denne betalingsmetode?",
+			"deleted": "Betalingsmetode slettet.",
+			"noMethods": "Ingen betalingsmetoder. Tilføj en betalingsmetode for at foretage en donation.",
+			"verify": "Verificer konto"
+		},
+		"preview": {
+			"date": "Donationsdato",
+			"donate": "Doner",
+			"every": "Tilbagevendende hver",
+			"fee": "Transaktionsgebyr",
+			"funds": "Fonde",
+			"method": "Donationsmetode",
+			"notes": "Noter",
+			"startingOn": "Begyndende den",
+			"total": "I alt",
+			"type": "Donationstype"
+		},
+		"recurring": {
+			"amount": "BelÃ¸b",
+			"confirmPause": "Er du sikker pÃ¥, at du vil pausere denne tilbagevendende donation?",
+			"every": "Hver",
+			"interval": "Interval",
+			"notFound": "Betalingsmetode ikke fundet.",
+			"pauseFailed": "Kunne ikke pausere tilbagevendende donation. PrÃ¸v igen.",
+			"pauseTooltip": "PausÃ©r tilbagevendende donation",
+			"paused": "Pauseret",
+			"pausedMessage": "Tilbagevendende donation pauseret.",
+			"paymentMethod": "Betalingsmetode",
+			"resumeFailed": "Kunne ikke genoptage tilbagevendende donation. PrÃ¸v igen.",
+			"resumeTooltip": "Genoptag tilbagevendende donation",
+			"resumedMessage": "Tilbagevendende donation genoptaget.",
+			"startDate": "Startdato"
+		}
+	},
+	"eventCalendar": {
+		"recurring": {
+			"day": {
+				"friday": "Fredag",
+				"monday": "Mandag",
+				"saturday": "LÃ¸rdag",
+				"sunday": "SÃ¸ndag",
+				"thursday": "Torsdag",
+				"tuesday": "Tirsdag",
+				"wednesday": "Onsdag"
+			},
+			"endDate": "Slutdato",
+			"endDateAria": "Slutdato for gentagelse",
+			"ends": "Slutter",
+			"endsAfter": "Efter",
+			"endsAria": "VÃ¦lg hvornÃ¥r gentagelsen slutter",
+			"endsOn": "Den",
+			"freqDay": "Dag",
+			"freqMonth": "MÃ¥ned",
+			"freqWeek": "Uge",
+			"frequency": "Frekvens",
+			"frequencyAria": "VÃ¦lg gentagelsesfrekvens",
+			"interval": "Interval",
+			"intervalAria": "Gentagelsesinterval",
+			"monthlyOnDay": "MÃ¥nedligt pÃ¥ dag {}",
+			"monthlyOnNth": "MÃ¥nedligt pÃ¥ den {ordinal} {day}",
+			"monthlyOptionAria": "VÃ¦lg mÃ¥nedlig gentagelsesindstilling",
+			"never": "Aldrig",
+			"occurrences": "Forekomster",
+			"occurrencesAria": "Antal gentagelsesforekomster",
+			"on": "Den",
+			"ordinal": {
+				"first": "fÃ¸rste",
+				"fourth": "fjerde",
+				"last": "sidste",
+				"second": "anden",
+				"third": "tredje"
+			},
+			"toggleWeekday": "Skift {} for ugentlig gentagelse"
+		}
+	},
+	"formSubmissionEdit": {
+		"back": "Tilbage",
+		"confirmDelete": "Er du sikker pÃ¥, at du vil slette disse formulardata?",
+		"continue": "FortsÃ¦t",
+		"editForm": "Rediger formular",
+		"isRequired": "er pÃ¥krÃ¦vet",
+		"stepProgress": "{current} af {total}",
+		"submit": "Indsend"
+	},
+	"gallery": {
+		"aspectRatio": "Billedformat",
+		"confirmDelete": "Er du sikker pÃ¥, at du vil slette dette billede fra galleriet?",
+		"freeForm": "Fri form"
+	},
+	"iconPicker": {
+		"iconsAvailable": "ikoner tilgængelige",
+		"matchingResults": "matchende resultater",
+		"search": "Søg ikoner..."
+	},
+	"login": {
+		"createAccount": "Opret en konto",
+		"email": "E-mail",
+		"enterCode": "Indtast bekrÃ¦ftelseskode",
+		"enterCodeInstructions": "Indtast den 6-cifrede kode, vi lige har sendt dig pÃ¥ e-mail.",
+		"expiredLink": "Det aktuelle link er udlÃ¸bet.",
+		"forgot": "Glemt adgangskode",
+		"goLogin": "Gå til login",
+		"login": "Log ind",
+		"noAcc": "Har du ikke en konto?",
+		"noAccountFound": "Ingen konto blev fundet med denne e-mail. Registrer dig for at fortsÃ¦tte.",
+		"password": "Adgangskode",
+		"register": "Registrer",
+		"registerThankYou": "Tak for din registrering! Tjek venligst din e-mail for at bekrÃ¦fte din konto.",
+		"requestLink": "Anmod om et nyt nulstillingslink",
+		"resendCode": "Send kode igen",
+		"reset": "Nulstil",
+		"resetInstructions": "Indtast din e-mailadresse for at anmode om nulstilling af adgangskode.",
+		"resetPassword": "Nulstil adgangskode",
+		"resetSent": "E-mail til nulstilling af adgangskode sendt!",
+		"setPassword": "Indstil adgangskode",
+		"signIn": "Log ind",
+		"signInTitle": "Log venligst ind",
+		"validate": {
+			"code": "Indtast venligst den 6-cifrede kode.",
+			"email": "Indtast venligst en gyldig e-mailadresse.",
+			"firstName": "Indtast venligst dit fornavn.",
+			"invalid": "Ugyldigt login. Tjek venligst din e-mail eller adgangskode.",
+			"lastName": "Indtast venligst dit efternavn.",
+			"password": "Indtast venligst en adgangskode.",
+			"passwordLength": "Adgangskoden skal vÃ¦re mindst 8 tegn lang.",
+			"passwordMatch": "Adgangskoderne stemmer ikke overens.",
+			"selectingChurch": "Fejl ved valg af kirke. BekrÃ¦ft og prÃ¸v igen"
+		},
+		"verifyCode": "BekrÃ¦ft kode",
+		"verifyPassword": "BekrÃ¦ft adgangskode",
+		"welcomeBack": "Velkommen tilbage",
+		"welcomeName": "Velkommen tilbage, <b>{}</b>! Vent venligst, mens vi indlÃ¦ser dine data."
+	},
+	"markdownEditor": {
+		"content": "Indhold",
+		"markdownEditor": "Markdown-editor",
+		"markdownGuide": "Markdown-guide"
+	},
+	"month": {
+		"april": "April",
+		"august": "August",
+		"december": "December",
+		"february": "Februar",
+		"january": "Januar",
+		"july": "Juli",
+		"june": "Juni",
+		"march": "Marts",
+		"may": "Maj",
+		"november": "November",
+		"october": "Oktober",
+		"september": "September"
+	},
+	"notes": {
+		"comment": "kommentar",
+		"comments": "kommentarer",
+		"notes": "Noter",
+		"startConversation": "Start en samtale",
+		"validate": {
+			"content": "Indtast venligst en note."
+		},
+		"viewAll": "Se alle"
+	},
+	"person": {
+		"email": "E-mail",
+		"firstName": "Fornavn",
+		"lastName": "Efternavn",
+		"name": "Navn",
+		"noRec": "Har du ikke en persondatabase?",
+		"person": "Person",
+		"years": "år"
+	},
+	"reporting": {
+		"detailed": "Detaljeret rapport",
+		"downloadOptions": "Downloadmuligheder",
+		"noData": "Der er ingen data at vise.",
+		"runReport": "Kør rapport",
+		"sampleTemplate": "Word-skabeloneksempel",
+		"summary": "Oversigt",
+		"useFilter": "Brug filteret til at køre rapporten."
+	},
+	"selectChurch": {
+		"address1": "Adresselinje 1",
+		"address2": "Adresselinje 2",
+		"another": "VÃ¦lg en anden kirke",
+		"city": "By",
+		"confirmRegister": "Er du sikker pÃ¥, at du vil registrere en ny kirke?",
+		"country": "Land",
+		"name": "Kirkens navn",
+		"noMatches": "Ingen match fundet.",
+		"register": "Registrer en ny kirke",
+		"selectChurch": "VÃ¦lg en kirke",
+		"state": "Stat / Region",
+		"validate": {
+			"address": "Adresse mÃ¥ ikke vÃ¦re tom.",
+			"city": "By mÃ¥ ikke vÃ¦re tom.",
+			"country": "Land mÃ¥ ikke vÃ¦re tomt.",
+			"name": "Kirkens navn mÃ¥ ikke vÃ¦re tomt.",
+			"state": "Stat/Region mÃ¥ ikke vÃ¦re tom.",
+			"zip": "Postnummer mÃ¥ ikke vÃ¦re tomt."
+		},
+		"zip": "Postnummer"
+	},
+	"stockPhotos": {
+		"photoBy": "Foto af:",
+		"providedBy": "Stockfotos leveret af"
+	},
+	"support": {
+		"discussions": "Supportforum",
+		"documentation": "Dokumentation"
+	},
+	"wrapper": {
+		"chatWith": "Chat med",
+		"deleteChurch": "Slet",
+		"editAccount": "Rediger konto",
+		"editChurchProfile": "Rediger kirkeprofil",
+		"editProfile": "Rediger profil",
+		"logout": "Log ud",
+		"messages": "Beskeder",
+		"newPrivateMessage": "Ny privat besked",
+		"notifications": "Notifikationer",
+		"privateMessage": "Privat besked",
+		"profile": "Profil",
+		"searchForPerson": "SÃ¸g efter en person",
+		"support": "Support",
+		"sureRemoveChurch": "Er du sikker på, at du vil slette denne kirke? Du vil ikke længere være medlem af {}.",
+		"switchApp": "Skift app",
+		"switchChurch": "Skift kirke"
+	}
 }
