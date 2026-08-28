@@ -1,254 +1,339 @@
-﻿{
-    "common":  {
-                   "cancel":  "å–æ¶ˆ",
-                   "close":  "å…³é—­",
-                   "delete":  "åˆ é™¤",
-                   "pleaseWait":  "è¯·ç¨ç­‰...",
-                   "save":  "èŠ‚çœ",
-                   "search":  "æœç´¢",
-                   "update":  "æ›´æ–°"
-               },
-    "donation":  {
-                     "bankForm":  {
-                                      "accountNumber":  "å¸å·",
-                                      "added":  "é“¶è¡Œè´¦æˆ·å·²æ·»åŠ ã€‚",
-                                      "company":  "å…¬å¸",
-                                      "firstDeposit":  "é¦–æ¬¡å­˜æ¬¾",
-                                      "individual":  "ä¸ªäºº",
-                                      "name":  "è´¦æˆ·æŒæœ‰äººå§“å",
-                                      "needVerified":  "åœ¨è¿›è¡Œä»»ä½•æèµ ä¹‹å‰ï¼Œéœ€è¦éªŒè¯é“¶è¡Œè´¦æˆ·ã€‚",
-                                      "routingNumber":  "è·¯ç”±å·ç ",
-                                      "secondDeposit":  "ç¬¬äºŒæ¬¡å­˜æ¬¾",
-                                      "twoDeposits":  "è¾“å…¥æ‚¨å¸æˆ·ä¸­æ”¶åˆ°çš„ä¸¤ç¬”å­˜æ¬¾ä»¥å®ŒæˆéªŒè¯æ‚¨çš„é“¶è¡Œå¸æˆ·ã€‚",
-                                      "updated":  "é“¶è¡Œè´¦æˆ·å·²æ›´æ–°ã€‚",
-                                      "validate":  {
-                                                       "accountNumber":  "éœ€è¦è·¯ç”±å’Œå¸å·ã€‚",
-                                                       "holderName":  "å¸æˆ·æŒæœ‰äººå§“åä¸ºå¿…å¡«é¡¹ã€‚"
-                                                   },
-                                      "verified":  "é“¶è¡Œè´¦æˆ·å·²éªŒè¯ã€‚"
-                                  },
-                     "cardForm":  {
-                                      "added":  "å¡æ·»åŠ æˆåŠŸã€‚",
-                                      "addNew":  "æ·»åŠ æ–°å¡",
-                                      "expirationMonth":  "åˆ°æœŸæœˆä»½ï¼š",
-                                      "expirationYear":  "åˆ°æœŸå¹´ä»½ï¼š",
-                                      "updated":  "å¡æ›´æ–°æˆåŠŸã€‚"
-                                  },
-                     "donationForm":  {
-                                          "annually":  "æ¯å¹´",
-                                          "biWeekly":  "åŒå‘¨åˆŠ",
-                                          "cancelled":  "ç»å¸¸æ€§ææ¬¾å·²å–æ¶ˆã€‚",
-                                          "confirmDelete":  "æ‚¨ç¡®å®šè¦åˆ é™¤æ­¤å®šæœŸæèµ å—ï¼Ÿ",
-                                          "cover":  "æˆ‘å°†æ…·æ…¨åœ°æ·»åŠ  {} æ¥æ”¯ä»˜äº¤æ˜“è´¹ç”¨ï¼Œä»¥ä¾¿æ‚¨å¯ä»¥ä¿ç•™æˆ‘çš„ 100% ææ¬¾ã€‚",
-                                          "donate":  "æ",
-                                          "editRecurring":  "ç¼–è¾‘ç»å¸¸æ€§æèµ ",
-                                          "fees":  "åº”ç”¨ {} çš„äº¤æ˜“è´¹ç”¨ã€‚",
-                                          "frequency":  "é¢‘çŽ‡",
-                                          "fund":  "åŸºé‡‘",
-                                          "funds":  "èµ„é‡‘",
-                                          "make":  "åšæçŒ®",
-                                          "makeRecurring":  "å®šæœŸææ¬¾",
-                                          "method":  "æ–¹æ³•",
-                                          "monthly":  "æ¯æœˆ",
-                                          "preview":  "é¢„è§ˆæèµ ",
-                                          "quarterly":  "å­£åˆŠ",
-                                          "recurringUpdated":  "ç»å¸¸æ€§ææ¬¾å·²æ›´æ–°ã€‚",
-                                          "startDate":  "å¼€å§‹æ—¥æœŸ",
-                                          "thankYou":  "æ„Ÿè°¢æ‚¨çš„æèµ ï¼",
-                                          "tooLow":  "ææ¬¾é‡‘é¢å¿…é¡»å¤§äºŽ 0.50 ç¾Žå…ƒ",
-                                          "total":  "ææ¬¾æ€»é¢",
-                                          "validate":  {
-                                                           "amount":  "é‡‘é¢ä¸èƒ½ä¸º 0 ç¾Žå…ƒã€‚",
-                                                           "email":  "è¯·è¾“å…¥æ‚¨çš„ç”µå­é‚®ä»¶åœ°å€ã€‚",
-                                                           "firstName":  "è¯·è¾“å…¥æ‚¨çš„åå­—ã€‚",
-                                                           "lastName":  "è¯·è¾“å…¥æ‚¨çš„å§“æ°ã€‚",
-                                                           "validEmail":  "è¯·è¾“å…¥æœ‰æ•ˆçš„ç”µå­é‚®ä»¶åœ°å€ã€‚"
-                                                       },
-                                          "weekly":  "æ¯å‘¨"
-                                      },
-                     "fundDonations":  {
-                                           "addMore":  "æ·»åŠ æ›´å¤š",
-                                           "amount":  "æ•°é‡",
-                                           "fund":  "åŸºé‡‘"
-                                       },
-                     "paymentMethods":  {
-                                            "addBank":  "æ·»åŠ é“¶è¡Œè´¦æˆ·",
-                                            "addCard":  "æ·»åŠ å¡",
-                                            "confirmDelete":  "æ‚¨ç¡®å®šè¦åˆ é™¤æ­¤ä»˜æ¬¾æ–¹å¼å—ï¼Ÿ",
-                                            "deleted":  "ä»˜æ¬¾æ–¹å¼å·²åˆ é™¤ã€‚",
-                                            "verify":  "éªŒè¯è´¦æˆ·"
-                                        },
-                     "preview":  {
-                                     "date":  "æèµ æ—¥æœŸ",
-                                     "donate":  "æ",
-                                     "every":  "ä¸€åˆ‡é‡å¤",
-                                     "fee":  "æ‰‹ç»­è´¹",
-                                     "funds":  "èµ„é‡‘",
-                                     "method":  "æèµ æ–¹å¼",
-                                     "notes":  "ç¬”è®°",
-                                     "startingOn":  "å¼€å§‹äºŽ",
-                                     "total":  "å…¨éƒ¨çš„",
-                                     "type":  "æèµ ç±»åž‹"
-                                 },
-                     "recurring":  {
-                                       "amount":  "æ•°é‡",
-                                       "confirmPause":  "æ‚¨ç¡®å®šè¦æš‚åœæ­¤å®šæœŸæèµ å—ï¼Ÿ",
-                                       "every":  "æ¯ä¸€ä¸ª",
-                                       "interval":  "é—´éš”",
-                                       "notFound":  "æœªæ‰¾åˆ°ä»˜æ¬¾æ–¹å¼ã€‚",
-                                       "paused":  "å·²æš‚åœ",
-                                       "pausedMessage":  "å®šæœŸæèµ å·²æš‚åœã€‚",
-                                       "pauseFailed":  "æš‚åœå®šæœŸæèµ å¤±è´¥ã€‚è¯·é‡è¯•ã€‚",
-                                       "pauseTooltip":  "æš‚åœå®šæœŸæèµ ",
-                                       "paymentMethod":  "ä»˜æ¬¾æ–¹å¼",
-                                       "resumedMessage":  "å®šæœŸæèµ å·²æ¢å¤ã€‚",
-                                       "resumeFailed":  "æ¢å¤å®šæœŸæèµ å¤±è´¥ã€‚è¯·é‡è¯•ã€‚",
-                                       "resumeTooltip":  "æ¢å¤å®šæœŸæèµ ",
-                                       "startDate":  "å¼€å§‹æ—¥æœŸ"
-                                   }
-                 },
-    "eventCalendar":  {
-                          "recurring":  {
-                                            "day":  {
-                                                        "friday":  "å‘¨äº”",
-                                                        "monday":  "å‘¨ä¸€",
-                                                        "saturday":  "å‘¨å…­",
-                                                        "sunday":  "å‘¨æ—¥",
-                                                        "thursday":  "å‘¨å››",
-                                                        "tuesday":  "å‘¨äºŒ",
-                                                        "wednesday":  "å‘¨ä¸‰"
-                                                    },
-                                            "endDate":  "ç»“æŸæ—¥æœŸ",
-                                            "endDateAria":  "é‡å¤ç»“æŸæ—¥æœŸ",
-                                            "ends":  "ç»“æŸ",
-                                            "endsAfter":  "ä¹‹åŽ",
-                                            "endsAria":  "é€‰æ‹©é‡å¤ç»“æŸæ–¹å¼",
-                                            "endsOn":  "äºŽ",
-                                            "freqDay":  "å¤©",
-                                            "freqMonth":  "æœˆ",
-                                            "frequency":  "é¢‘çŽ‡",
-                                            "frequencyAria":  "é€‰æ‹©é‡å¤é¢‘çŽ‡",
-                                            "freqWeek":  "å‘¨",
-                                            "interval":  "é—´éš”",
-                                            "intervalAria":  "é‡å¤é—´éš”",
-                                            "monthlyOnDay":  "æ¯æœˆç¬¬ {} å¤©",
-                                            "monthlyOnNth":  "æ¯æœˆç¬¬ {ordinal} ä¸ª {day}",
-                                            "monthlyOptionAria":  "é€‰æ‹©æ¯æœˆé‡å¤é€‰é¡¹",
-                                            "never":  "ä»Žä¸",
-                                            "occurrences":  "æ¬¡æ•°",
-                                            "occurrencesAria":  "é‡å¤æ¬¡æ•°",
-                                            "on":  "äºŽ",
-                                            "ordinal":  {
-                                                            "first":  "ç¬¬ä¸€",
-                                                            "fourth":  "ç¬¬å››",
-                                                            "last":  "æœ€åŽ",
-                                                            "second":  "ç¬¬äºŒ",
-                                                            "third":  "ç¬¬ä¸‰"
-                                                        },
-                                            "toggleWeekday":  "åˆ‡æ¢ {} ç”¨äºŽæ¯å‘¨é‡å¤"
-                                        }
-                      },
-    "formSubmissionEdit":  {
-                               "back":  "è¿”å›ž",
-                               "confirmDelete":  "æ‚¨ç¡®å®šè¦åˆ é™¤æ­¤è¡¨å•æ•°æ®å—ï¼Ÿ",
-                               "continue":  "ç»§ç»­",
-                               "editForm":  "ç¼–è¾‘è¡¨æ ¼",
-                               "isRequired":  "æ˜¯å¿…é¡»çš„",
-                               "stepProgress":  "{current} / {total}",
-                               "submit":  "æäº¤"
-                           },
-    "gallery":  {
-                    "aspectRatio":  "çºµæ¨ªæ¯”",
-                    "confirmDelete":  "æ‚¨ç¡®å®šè¦ä»Žå›¾åº“ä¸­åˆ é™¤æ­¤å›¾ç‰‡å—ï¼Ÿ",
-                    "freeForm":  "è‡ªç”±å½¢å¼"
-                },
-    "login":  {
-                  "email":  "ç”µå­é‚®ä»¶",
-                  "enterCode":  "è¾“å…¥éªŒè¯ç ",
-                  "enterCodeInstructions":  "è¾“å…¥æˆ‘ä»¬åˆšåˆšé€šè¿‡ç”µå­é‚®ä»¶å‘é€ç»™æ‚¨çš„6ä½æ•°ä»£ç ã€‚",
-                  "expiredLink":  "å½“å‰é“¾æŽ¥å·²è¿‡æœŸã€‚",
-                  "forgot":  "å¿˜è®°å¯†ç ",
-                  "login":  "ç™»å½•",
-                  "noAcc":  "æ²¡æœ‰è´¦æˆ·ï¼Ÿ",
-                  "noAccountFound":  "æœªæ‰¾åˆ°è¯¥ç”µå­é‚®ä»¶å¯¹åº”çš„è´¦æˆ·ã€‚è¯·æ³¨å†Œä»¥ç»§ç»­ã€‚",
-                  "password":  "å¯†ç ",
-                  "register":  "ç™»è®°",
-                  "registerThankYou":  "æ„Ÿè°¢æ‚¨æ³¨å†Œï¼",
-                  "requestLink":  "è¯·æ±‚æ–°çš„é‡ç½®é“¾æŽ¥",
-                  "resendCode":  "é‡æ–°å‘é€éªŒè¯ç ",
-                  "reset":  "é‡ç½®",
-                  "resetInstructions":  "è¾“å…¥æ‚¨çš„ç”µå­é‚®ä»¶åœ°å€ä»¥è¯·æ±‚é‡ç½®å¯†ç ã€‚",
-                  "resetPassword":  "é‡è®¾å¯†ç ",
-                  "setPassword":  "è®¾ç½®å¯†ç ",
-                  "signIn":  "ç™»å…¥",
-                  "signInTitle":  "è¯·ç™»å½•",
-                  "validate":  {
-                                   "code":  "è¯·è¾“å…¥6ä½æ•°ä»£ç ã€‚",
-                                   "email":  "è¯·è¾“å…¥æœ‰æ•ˆçš„ç”µå­é‚®ä»¶åœ°å€ã€‚",
-                                   "firstName":  "è¯·è¾“å…¥æ‚¨çš„åå­—ã€‚",
-                                   "invalid":  "ç™»å½•æ— æ•ˆã€‚",
-                                   "lastName":  "è¯·è¾“å…¥æ‚¨çš„å§“æ°ã€‚",
-                                   "password":  "è¯·è¾“å…¥å¯†ç ã€‚",
-                                   "passwordLength":  "å¯†ç é•¿åº¦å¿…é¡»è‡³å°‘ä¸º 8 ä¸ªå­—ç¬¦ã€‚",
-                                   "passwordMatch":  "å¯†ç ä¸åŒ¹é…ã€‚",
-                                   "selectingChurch":  "é€‰æ‹©æ•™å ‚æ—¶å‡ºé”™ã€‚"
-                               },
-                  "verifyCode":  "éªŒè¯ä»£ç ",
-                  "verifyPassword":  "éªŒè¯å¯†ç ",
-                  "welcomeBack":  "æ¬¢è¿Žå›žæ¥",
-                  "welcomeName":  "æ¬¢è¿Žå›žæ¥ï¼Œ \u003cb\u003e{}\u003c/b\u003eï¼  "
-              },
-    "markdownEditor":  {
-                           "content":  "å†…å®¹",
-                           "markdownGuide":  "é™ä»·æŒ‡å—"
-                       },
-    "notes":  {
-                  "comment":  "è¯„è®º",
-                  "comments":  "è¯„è®º",
-                  "notes":  "ç¬”è®°",
-                  "validate":  {
-                                   "content":  "è¯·è¾“å…¥æ³¨é‡Šã€‚"
-                               }
-              },
-    "person":  {
-                   "email":  "ç”µå­é‚®ä»¶",
-                   "firstName":  "å",
-                   "lastName":  "å§“",
-                   "name":  "å§“å"
-               },
-    "selectChurch":  {
-                         "address1":  "åœ°å€ç¬¬ä¸€è¡Œ",
-                         "address2":  "åœ°å€è¡Œ 2",
-                         "another":  "é€‰æ‹©å¦ä¸€ä¸ªæ•™å ‚",
-                         "city":  "åŸŽå¸‚",
-                         "confirmRegister":  "æ‚¨ç¡®å®šè¦æ³¨å†Œä¸€ä¸ªæ–°æ•™ä¼šå—ï¼Ÿ",
-                         "country":  "å›½å®¶",
-                         "name":  "æ•™ä¼šåç§°",
-                         "noMatches":  "æœªæ‰¾åˆ°åŒ¹é…é¡¹ã€‚",
-                         "register":  "æ³¨å†Œæ–°æ•™ä¼š",
-                         "selectChurch":  "é€‰æ‹©ä¸€ä¸ªæ•™å ‚",
-                         "state":  "å·ž/çœ",
-                         "validate":  {
-                                          "address":  "åœ°å€ä¸èƒ½ä¸ºç©ºã€‚",
-                                          "city":  "åŸŽå¸‚ä¸èƒ½ä¸ºç©ºã€‚",
-                                          "country":  "å›½å®¶ä¸èƒ½ä¸ºç©ºã€‚",
-                                          "name":  "æ•™ä¼šåç§°ä¸èƒ½ä¸ºç©ºã€‚",
-                                          "state":  "å·ž/çœä¸èƒ½ä¸ºç©ºã€‚",
-                                          "zip":  "é‚®æ”¿ç¼–ç ä¸èƒ½ä¸ºç©ºã€‚"
-                                      },
-                         "zip":  "é‚®ç¼–/é‚®æ”¿ç¼–ç "
-                     },
-    "stockPhotos":  {
-                        "photoBy":  "æ‹æ‘„è€…ï¼š",
-                        "providedBy":  "åº“å­˜ç…§ç‰‡ç”±æä¾›"
-                    },
-    "support":  {
-                    "discussions":  "æ”¯æŒè®ºå›",
-                    "documentation":  "æ–‡æ¡£"
-                },
-    "wrapper":  {
-                    "newPrivateMessage":  "æ–°ç§ä¿¡",
-                    "privateMessage":  "ç§äººä¿¡æ¯",
-                    "searchForPerson":  "å¯»æ‰¾ä¸€ä¸ªäºº"
-                }
+{
+	"b1Share": {
+		"comment": "评论",
+		"commentPlaceholder": "在您的帖子中添加评论。",
+		"contentShared": "共享内容",
+		"group": "团体",
+		"sharingToGroup": "与 B1 组共享 {}",
+		"validate": {
+			"addComment": "请添加评论。",
+			"loginFirst": "请先登录。",
+			"notMember": "您当前不是 B1 上任何群组的成员。",
+			"selectGroup": "请选择一个组。"
+		}
+	},
+	"common": {
+		"add": "添加",
+		"cancel": "å–æ¶ˆ",
+		"close": "å…³é—­",
+		"date": "日期",
+		"delete": "åˆ é™¤",
+		"edit": "编辑",
+		"error": "错误",
+		"pleaseWait": "è¯·ç¨ç­‰...",
+		"save": "èŠ‚çœ",
+		"search": "æœç´¢",
+		"submit": "提交",
+		"update": "æ›´æ–°"
+	},
+	"createPerson": {
+		"addNewPerson": "添加新人",
+		"email": "电子邮件",
+		"firstName": "名",
+		"lastName": "姓"
+	},
+	"donation": {
+		"bankForm": {
+			"accountNumber": "å¸å·",
+			"added": "é“¶è¡Œè´¦æˆ·å·²æ·»åŠ ã€‚",
+			"company": "å…¬å¸",
+			"firstDeposit": "é¦–æ¬¡å­˜æ¬¾",
+			"holderName": "帐户持有人姓名为必填项。",
+			"individual": "ä¸ªäºº",
+			"name": "è´¦æˆ·æŒæœ‰äººå§“å",
+			"needVerified": "åœ¨è¿›è¡Œä»»ä½•æèµ ä¹‹å‰ï¼Œéœ€è¦éªŒè¯é“¶è¡Œè´¦æˆ·ã€‚",
+			"routingNumber": "è·¯ç”±å·ç ",
+			"secondDeposit": "ç¬¬äºŒæ¬¡å­˜æ¬¾",
+			"twoDeposits": "è¾“å…¥æ‚¨å¸æˆ·ä¸­æ”¶åˆ°çš„ä¸¤ç¬”å­˜æ¬¾ä»¥å®ŒæˆéªŒè¯æ‚¨çš„é“¶è¡Œå¸æˆ·ã€‚",
+			"updated": "é“¶è¡Œè´¦æˆ·å·²æ›´æ–°ã€‚",
+			"validate": {
+				"accountNumber": "éœ€è¦è·¯ç”±å’Œå¸å·ã€‚",
+				"holderName": "å¸æˆ·æŒæœ‰äººå§“åä¸ºå¿…å¡«é¡¹ã€‚"
+			},
+			"verified": "é“¶è¡Œè´¦æˆ·å·²éªŒè¯ã€‚"
+		},
+		"cardForm": {
+			"addNew": "æ·»åŠ æ–°å¡",
+			"added": "å¡æ·»åŠ æˆåŠŸã€‚",
+			"expirationMonth": "åˆ°æœŸæœˆä»½ï¼š",
+			"expirationYear": "åˆ°æœŸå¹´ä»½ï¼š",
+			"updated": "å¡æ›´æ–°æˆåŠŸã€‚"
+		},
+		"donationForm": {
+			"annually": "æ¯å¹´",
+			"biWeekly": "åŒå‘¨åˆŠ",
+			"cancelled": "ç»å¸¸æ€§ææ¬¾å·²å–æ¶ˆã€‚",
+			"confirmDelete": "æ‚¨ç¡®å®šè¦åˆ é™¤æ­¤å®šæœŸæèµ å—ï¼Ÿ",
+			"cover": "æˆ‘å°†æ…·æ…¨åœ°æ·»åŠ  {} æ¥æ”¯ä»˜äº¤æ˜“è´¹ç”¨ï¼Œä»¥ä¾¿æ‚¨å¯ä»¥ä¿ç•™æˆ‘çš„ 100% ææ¬¾ã€‚",
+			"donate": "æ",
+			"editRecurring": "ç¼–è¾‘ç»å¸¸æ€§æèµ ",
+			"fees": "åº”ç”¨ {} çš„äº¤æ˜“è´¹ç”¨ã€‚",
+			"frequency": "é¢‘çŽ‡",
+			"fund": "åŸºé‡‘",
+			"funds": "èµ„é‡‘",
+			"make": "åšæçŒ®",
+			"makeRecurring": "å®šæœŸææ¬¾",
+			"method": "æ–¹æ³•",
+			"monthly": "æ¯æœˆ",
+			"notes": "笔记",
+			"preview": "é¢„è§ˆæèµ ",
+			"quarterly": "å­£åˆŠ",
+			"recurringUpdated": "ç»å¸¸æ€§ææ¬¾å·²æ›´æ–°ã€‚",
+			"startDate": "å¼€å§‹æ—¥æœŸ",
+			"thankYou": "æ„Ÿè°¢æ‚¨çš„æèµ ï¼",
+			"tooLow": "ææ¬¾é‡‘é¢å¿…é¡»å¤§äºŽ 0.50 ç¾Žå…ƒ",
+			"total": "ææ¬¾æ€»é¢",
+			"validate": {
+				"amount": "é‡‘é¢ä¸èƒ½ä¸º 0 ç¾Žå…ƒã€‚",
+				"email": "è¯·è¾“å…¥æ‚¨çš„ç”µå­é‚®ä»¶åœ°å€ã€‚",
+				"firstName": "è¯·è¾“å…¥æ‚¨çš„åå­—ã€‚",
+				"lastName": "è¯·è¾“å…¥æ‚¨çš„å§“æ°ã€‚",
+				"validEmail": "è¯·è¾“å…¥æœ‰æ•ˆçš„ç”µå­é‚®ä»¶åœ°å€ã€‚"
+			},
+			"weekly": "æ¯å‘¨"
+		},
+		"fundDonations": {
+			"addMore": "æ·»åŠ æ›´å¤š",
+			"amount": "æ•°é‡",
+			"fund": "åŸºé‡‘"
+		},
+		"page": {
+			"amount": "数量",
+			"batch": "批",
+			"date": "日期",
+			"fund": "基金",
+			"method": "方法",
+			"willAppear": "一旦输入捐款，捐款就会出现。"
+		},
+		"paymentMethods": {
+			"addBank": "æ·»åŠ é“¶è¡Œè´¦æˆ·",
+			"addCard": "æ·»åŠ å¡",
+			"confirmDelete": "æ‚¨ç¡®å®šè¦åˆ é™¤æ­¤ä»˜æ¬¾æ–¹å¼å—ï¼Ÿ",
+			"deleted": "ä»˜æ¬¾æ–¹å¼å·²åˆ é™¤ã€‚",
+			"noMethods": "没有付款方式。  ",
+			"verify": "éªŒè¯è´¦æˆ·"
+		},
+		"preview": {
+			"date": "æèµ æ—¥æœŸ",
+			"donate": "æ",
+			"every": "ä¸€åˆ‡é‡å¤",
+			"fee": "æ‰‹ç»­è´¹",
+			"funds": "èµ„é‡‘",
+			"method": "æèµ æ–¹å¼",
+			"notes": "ç¬”è®°",
+			"startingOn": "å¼€å§‹äºŽ",
+			"total": "å…¨éƒ¨çš„",
+			"type": "æèµ ç±»åž‹"
+		},
+		"recurring": {
+			"amount": "æ•°é‡",
+			"confirmPause": "æ‚¨ç¡®å®šè¦æš‚åœæ­¤å®šæœŸæèµ å—ï¼Ÿ",
+			"every": "æ¯ä¸€ä¸ª",
+			"interval": "é—´éš”",
+			"notFound": "æœªæ‰¾åˆ°ä»˜æ¬¾æ–¹å¼ã€‚",
+			"pauseFailed": "æš‚åœå®šæœŸæèµ å¤±è´¥ã€‚è¯·é‡è¯•ã€‚",
+			"pauseTooltip": "æš‚åœå®šæœŸæèµ ",
+			"paused": "å·²æš‚åœ",
+			"pausedMessage": "å®šæœŸæèµ å·²æš‚åœã€‚",
+			"paymentMethod": "ä»˜æ¬¾æ–¹å¼",
+			"resumeFailed": "æ¢å¤å®šæœŸæèµ å¤±è´¥ã€‚è¯·é‡è¯•ã€‚",
+			"resumeTooltip": "æ¢å¤å®šæœŸæèµ ",
+			"resumedMessage": "å®šæœŸæèµ å·²æ¢å¤ã€‚",
+			"startDate": "å¼€å§‹æ—¥æœŸ"
+		}
+	},
+	"eventCalendar": {
+		"recurring": {
+			"day": {
+				"friday": "å‘¨äº”",
+				"monday": "å‘¨ä¸€",
+				"saturday": "å‘¨å…­",
+				"sunday": "å‘¨æ—¥",
+				"thursday": "å‘¨å››",
+				"tuesday": "å‘¨äºŒ",
+				"wednesday": "å‘¨ä¸‰"
+			},
+			"endDate": "ç»“æŸæ—¥æœŸ",
+			"endDateAria": "é‡å¤ç»“æŸæ—¥æœŸ",
+			"ends": "ç»“æŸ",
+			"endsAfter": "ä¹‹åŽ",
+			"endsAria": "é€‰æ‹©é‡å¤ç»“æŸæ–¹å¼",
+			"endsOn": "äºŽ",
+			"freqDay": "å¤©",
+			"freqMonth": "æœˆ",
+			"freqWeek": "å‘¨",
+			"frequency": "é¢‘çŽ‡",
+			"frequencyAria": "é€‰æ‹©é‡å¤é¢‘çŽ‡",
+			"interval": "é—´éš”",
+			"intervalAria": "é‡å¤é—´éš”",
+			"monthlyOnDay": "æ¯æœˆç¬¬ {} å¤©",
+			"monthlyOnNth": "æ¯æœˆç¬¬ {ordinal} ä¸ª {day}",
+			"monthlyOptionAria": "é€‰æ‹©æ¯æœˆé‡å¤é€‰é¡¹",
+			"never": "ä»Žä¸",
+			"occurrences": "æ¬¡æ•°",
+			"occurrencesAria": "é‡å¤æ¬¡æ•°",
+			"on": "äºŽ",
+			"ordinal": {
+				"first": "ç¬¬ä¸€",
+				"fourth": "ç¬¬å››",
+				"last": "æœ€åŽ",
+				"second": "ç¬¬äºŒ",
+				"third": "ç¬¬ä¸‰"
+			},
+			"toggleWeekday": "åˆ‡æ¢ {} ç”¨äºŽæ¯å‘¨é‡å¤"
+		}
+	},
+	"formSubmissionEdit": {
+		"back": "è¿”å›ž",
+		"confirmDelete": "æ‚¨ç¡®å®šè¦åˆ é™¤æ­¤è¡¨å•æ•°æ®å—ï¼Ÿ",
+		"continue": "ç»§ç»­",
+		"editForm": "ç¼–è¾‘è¡¨æ ¼",
+		"isRequired": "æ˜¯å¿…é¡»çš„",
+		"stepProgress": "{current} / {total}",
+		"submit": "æäº¤"
+	},
+	"gallery": {
+		"aspectRatio": "çºµæ¨ªæ¯”",
+		"confirmDelete": "æ‚¨ç¡®å®šè¦ä»Žå›¾åº“ä¸­åˆ é™¤æ­¤å›¾ç‰‡å—ï¼Ÿ",
+		"freeForm": "è‡ªç”±å½¢å¼"
+	},
+	"iconPicker": {
+		"iconsAvailable": "可用图标",
+		"matchingResults": "匹配结果",
+		"search": "搜索图标..."
+	},
+	"login": {
+		"createAccount": "创建一个帐户",
+		"email": "ç”µå­é‚®ä»¶",
+		"enterCode": "è¾“å…¥éªŒè¯ç ",
+		"enterCodeInstructions": "è¾“å…¥æˆ‘ä»¬åˆšåˆšé€šè¿‡ç”µå­é‚®ä»¶å‘é€ç»™æ‚¨çš„6ä½æ•°ä»£ç ã€‚",
+		"expiredLink": "å½“å‰é“¾æŽ¥å·²è¿‡æœŸã€‚",
+		"forgot": "å¿˜è®°å¯†ç ",
+		"goLogin": "前往登录",
+		"login": "ç™»å½•",
+		"noAcc": "æ²¡æœ‰è´¦æˆ·ï¼Ÿ",
+		"noAccountFound": "æœªæ‰¾åˆ°è¯¥ç”µå­é‚®ä»¶å¯¹åº”çš„è´¦æˆ·ã€‚è¯·æ³¨å†Œä»¥ç»§ç»­ã€‚",
+		"password": "å¯†ç ",
+		"register": "ç™»è®°",
+		"registerThankYou": "æ„Ÿè°¢æ‚¨æ³¨å†Œï¼",
+		"requestLink": "è¯·æ±‚æ–°çš„é‡ç½®é“¾æŽ¥",
+		"resendCode": "é‡æ–°å‘é€éªŒè¯ç ",
+		"reset": "é‡ç½®",
+		"resetInstructions": "è¾“å…¥æ‚¨çš„ç”µå­é‚®ä»¶åœ°å€ä»¥è¯·æ±‚é‡ç½®å¯†ç ã€‚",
+		"resetPassword": "é‡è®¾å¯†ç ",
+		"resetSent": "密码重置电子邮件已发送！",
+		"setPassword": "è®¾ç½®å¯†ç ",
+		"signIn": "ç™»å…¥",
+		"signInTitle": "è¯·ç™»å½•",
+		"validate": {
+			"code": "è¯·è¾“å…¥6ä½æ•°ä»£ç ã€‚",
+			"email": "è¯·è¾“å…¥æœ‰æ•ˆçš„ç”µå­é‚®ä»¶åœ°å€ã€‚",
+			"firstName": "è¯·è¾“å…¥æ‚¨çš„åå­—ã€‚",
+			"invalid": "ç™»å½•æ— æ•ˆã€‚",
+			"lastName": "è¯·è¾“å…¥æ‚¨çš„å§“æ°ã€‚",
+			"password": "è¯·è¾“å…¥å¯†ç ã€‚",
+			"passwordLength": "å¯†ç é•¿åº¦å¿…é¡»è‡³å°‘ä¸º 8 ä¸ªå­—ç¬¦ã€‚",
+			"passwordMatch": "å¯†ç ä¸åŒ¹é…ã€‚",
+			"selectingChurch": "é€‰æ‹©æ•™å ‚æ—¶å‡ºé”™ã€‚"
+		},
+		"verifyCode": "éªŒè¯ä»£ç ",
+		"verifyPassword": "éªŒè¯å¯†ç ",
+		"welcomeBack": "æ¬¢è¿Žå›žæ¥",
+		"welcomeName": "æ¬¢è¿Žå›žæ¥ï¼Œ <b>{}</b>ï¼  "
+	},
+	"markdownEditor": {
+		"content": "å†…å®¹",
+		"markdownEditor": "降价编辑器",
+		"markdownGuide": "é™ä»·æŒ‡å—"
+	},
+	"month": {
+		"april": "四月",
+		"august": "八月",
+		"december": "十二月",
+		"february": "二月",
+		"january": "一月",
+		"july": "七月",
+		"june": "六月",
+		"march": "行进",
+		"may": "可能",
+		"november": "十一月",
+		"october": "十月",
+		"september": "九月"
+	},
+	"notes": {
+		"comment": "è¯„è®º",
+		"comments": "è¯„è®º",
+		"notes": "ç¬”è®°",
+		"startConversation": "开始对话",
+		"validate": {
+			"content": "è¯·è¾“å…¥æ³¨é‡Šã€‚"
+		},
+		"viewAll": "查看全部"
+	},
+	"person": {
+		"email": "ç”µå­é‚®ä»¶",
+		"firstName": "å",
+		"lastName": "å§“",
+		"name": "å§“å",
+		"noRec": "没有个人记录？",
+		"person": "人",
+		"years": "年"
+	},
+	"reporting": {
+		"detailed": "详细报告",
+		"downloadOptions": "下载选项",
+		"noData": "没有数据可显示。",
+		"runReport": "运行报告",
+		"sampleTemplate": "示例 Word 模板",
+		"summary": "摘要",
+		"useFilter": "使用过滤器运行报告。"
+	},
+	"selectChurch": {
+		"address1": "åœ°å€ç¬¬ä¸€è¡Œ",
+		"address2": "åœ°å€è¡Œ 2",
+		"another": "é€‰æ‹©å¦ä¸€ä¸ªæ•™å ‚",
+		"city": "åŸŽå¸‚",
+		"confirmRegister": "æ‚¨ç¡®å®šè¦æ³¨å†Œä¸€ä¸ªæ–°æ•™ä¼šå—ï¼Ÿ",
+		"country": "å›½å®¶",
+		"name": "æ•™ä¼šåç§°",
+		"noMatches": "æœªæ‰¾åˆ°åŒ¹é…é¡¹ã€‚",
+		"register": "æ³¨å†Œæ–°æ•™ä¼š",
+		"selectChurch": "é€‰æ‹©ä¸€ä¸ªæ•™å ‚",
+		"state": "å·ž/çœ",
+		"validate": {
+			"address": "åœ°å€ä¸èƒ½ä¸ºç©ºã€‚",
+			"city": "åŸŽå¸‚ä¸èƒ½ä¸ºç©ºã€‚",
+			"country": "å›½å®¶ä¸èƒ½ä¸ºç©ºã€‚",
+			"name": "æ•™ä¼šåç§°ä¸èƒ½ä¸ºç©ºã€‚",
+			"state": "å·ž/çœä¸èƒ½ä¸ºç©ºã€‚",
+			"zip": "é‚®æ”¿ç¼–ç ä¸èƒ½ä¸ºç©ºã€‚"
+		},
+		"zip": "é‚®ç¼–/é‚®æ”¿ç¼–ç "
+	},
+	"stockPhotos": {
+		"photoBy": "æ‹æ‘„è€…ï¼š",
+		"providedBy": "åº“å­˜ç…§ç‰‡ç”±æä¾›"
+	},
+	"support": {
+		"discussions": "æ”¯æŒè®ºå›",
+		"documentation": "æ–‡æ¡£"
+	},
+	"wrapper": {
+		"chatWith": "和...聊天",
+		"deleteChurch": "从列表中删除教堂",
+		"editAccount": "编辑账户",
+		"editChurchProfile": "编辑教会资料",
+		"editProfile": "编辑个人资料",
+		"logout": "登出",
+		"messages": "消息",
+		"newPrivateMessage": "æ–°ç§ä¿¡",
+		"notifications": "通知",
+		"privateMessage": "ç§äººä¿¡æ¯",
+		"profile": "轮廓",
+		"searchForPerson": "å¯»æ‰¾ä¸€ä¸ªäºº",
+		"support": "支持",
+		"sureRemoveChurch": "您确定要从列表中删除 {} 吗？",
+		"switchApp": "切换应用程序",
+		"switchChurch": "开关教堂"
+	}
 }
