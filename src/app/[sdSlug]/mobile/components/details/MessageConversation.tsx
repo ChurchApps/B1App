@@ -84,20 +84,16 @@ export const MessageConversation = ({ id, config }: Props) => {
   // Existing threads stay writable; the age gate only blocks opening a new conversation.
   const messagingBlocked = person?.allowDirectMessages === false && !conversationId;
 
+  // Also the read receipt: the route clears notifyPersonId for this thread only.
   const { data: existingConvId } = useQuery<string | null>({
     queryKey: ["private-message-conv", myPersonId, id],
     queryFn: async () => {
-      const pm: PrivateMessageRow[] = await ApiHelper.get("/privateMessages", "MessagingApi");
-      const match = Array.isArray(pm)
-        ? pm.find(
-          (c) =>
-            (c.fromPersonId === myPersonId && c.toPersonId === id) ||
-              (c.toPersonId === myPersonId && c.fromPersonId === id)
-        )
-        : null;
+      const match: PrivateMessageRow = await ApiHelper.get(`/privateMessages/existing/${id}`, "MessagingApi");
       return match?.conversationId ?? null;
     },
-    enabled: !!id && !!myPersonId && !conversationIdParam
+    enabled: !!id && !!myPersonId,
+    // The mobile provider caches for 60s and persists to IndexedDB; a stale hit would skip the receipt.
+    staleTime: 0
   });
 
   const scrollToBottom = React.useCallback(() => {
@@ -164,7 +160,11 @@ export const MessageConversation = ({ id, config }: Props) => {
     if (churchId) SubscriptionManager.joinRoom(conversationId, churchId, myPersonId).catch(() => { /* ignore */ });
 
     const handlerId = `MessageConversation-${conversationId}`;
-    const onEvent = () => queryClient.invalidateQueries({ queryKey: ["mobile-message-conversation", conversationId] });
+    const onEvent = () => {
+      queryClient.invalidateQueries({ queryKey: ["mobile-message-conversation", conversationId] });
+      // Re-hit existing/:personId so a message arriving while the thread is open is marked read.
+      queryClient.invalidateQueries({ queryKey: ["private-message-conv", myPersonId, id] });
+    };
     SocketHelper.addHandler("message", handlerId + "-msg", onEvent);
     SocketHelper.addHandler("deleteMessage", handlerId + "-del", onEvent);
 
@@ -173,7 +173,7 @@ export const MessageConversation = ({ id, config }: Props) => {
       SocketHelper.removeHandler(handlerId + "-del");
       if (churchId) SubscriptionManager.leaveRoom(conversationId, churchId).catch(() => { /* ignore */ });
     };
-  }, [conversationId, myPersonId, queryClient]);
+  }, [conversationId, myPersonId, id, queryClient]);
 
   const {
     data: serverMessages,
@@ -264,17 +264,19 @@ export const MessageConversation = ({ id, config }: Props) => {
     const newConvId: string | undefined = convData?.[0]?.id;
     if (!newConvId) throw new Error(Locale.label("mobile.details.couldNotCreateConversation"));
 
-    await ApiHelper.post(
+    const pmData: any[] = await ApiHelper.post(
       "/privateMessages",
       [{ fromPersonId: myPersonId, toPersonId: id, conversationId: newConvId }],
       "MessagingApi"
     );
+    // The server returns the pair's existing row when there is one, so post into that thread instead.
+    const convId: string = pmData?.[0]?.conversationId || newConvId;
 
-    setConversationId(newConvId);
+    setConversationId(convId);
 
     await ApiHelper.post(
       "/messages",
-      [{ conversationId: newConvId, content, displayName: myDisplayName }],
+      [{ conversationId: convId, content, displayName: myDisplayName }],
       "MessagingApi"
     );
     await loadMessages();

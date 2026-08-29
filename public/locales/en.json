@@ -813,6 +813,7 @@
       "tabUpcoming": "Upcoming",
       "unableToLoadChurch": "Unable to load church configuration.",
       "unableToSubmitChanges": "Unable to submit changes.",
+      "unread": "Unread",
       "visibilityPreferencesSaved": "Visibility preferences saved.",
       "volunteerBrowseBody": "There are no volunteer opportunities available right now. Check back soon!",
       "volunteerBrowseTitle": "Browse Opportunities",
@@ -1046,6 +1047,7 @@
     "chat": {
       "attendees": "{} attendees",
       "changeName": "Change Name",
+      "chatOpensAt": "Chat opens at {}",
       "emoji": "emoji",
       "enterFullName": "Please enter a full name",
       "message": "Message",
