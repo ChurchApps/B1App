@@ -1,4 +1,5 @@
 import React from "react";
+import Script from "next/script";
 import type { ChurchInterface, SermonInterface } from "@churchapps/helpers";
 import { getSermonEmbed } from "@/helpers/sermonEmbed";
 
@@ -25,5 +26,5 @@ export function SermonJsonLd({ church, sermon }: Props) {
   if (typeof sermon.duration === "number" && sermon.duration > 0) video.duration = "PT" + Math.round(sermon.duration) + "S";
 
   if (!video.embedUrl && !video.contentUrl && !video.thumbnailUrl) return null;
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(video) }} />;
+  return <Script id="sermon-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(video) }} />;
 }

@@ -60,6 +60,12 @@ describe("buildContentSecurityPolicy", () => {
     }
   });
 
+  it("allows Google Maps geocode and JS hosts on connect-src", () => {
+    const connectSrc = directive(buildContentSecurityPolicy({ nonce: "n" }), "connect-src");
+    assert.ok(connectSrc.includes("https://maps.googleapis.com"));
+    assert.ok(connectSrc.includes("https://maps.gstatic.com"));
+  });
+
   it("keeps style-src inline (React style attributes) and matches the CSS @import allowlist", () => {
     const styleSrc = directive(buildContentSecurityPolicy({ nonce: "n" }), "style-src");
     assert.ok(styleSrc.includes("'unsafe-inline'"));

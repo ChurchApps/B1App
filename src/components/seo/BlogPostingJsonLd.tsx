@@ -1,4 +1,5 @@
 import React from "react";
+import Script from "next/script";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import type { PostInterface } from "@/helpers/interfaces";
 
@@ -30,5 +31,5 @@ export function BlogPostingJsonLd({ config, post, url }: Props) {
   const logo = config.appearance?.logoLight || config.appearance?.logoDark;
   if (logo) (data.publisher as Record<string, unknown>).logo = { "@type": "ImageObject", url: logo };
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+  return <Script id="blog-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }

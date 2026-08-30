@@ -659,7 +659,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
             }}
           >
             <Tabs
-              value={tab}
+              value={availableTabs.some((t) => t.key === tab) ? tab : defaultTab}
               onChange={(_, v) => {
                 if (v === "messages") {
                   setChatInitialTab("discussions");

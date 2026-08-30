@@ -1,4 +1,5 @@
 import React from "react";
+import Script from "next/script";
 import type { SermonInterface } from "@churchapps/helpers";
 import { fetchCached, type ConfigurationInterface } from "@/helpers/ConfigHelper";
 import type { PageInterface } from "@/helpers/interfaces";
@@ -58,7 +59,7 @@ export async function SermonVideoJsonLd({ config, pageData, sdSlug, sermonsPage 
 
     if (data.length === 0) return null;
     const payload = data.length === 1 ? data[0] : data;
-    return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />;
+    return <Script id="sermon-video-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />;
   } catch {
     return null;
   }
