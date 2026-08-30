@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 test.describe("Mobile groups", () => {
+  test.describe.configure({ mode: "serial" });
   test("groups page loads with logged-in chrome", async ({ page }) => {
     await page.goto("/mobile/groups");
     await expect(mobileLogoutButton(page)).toBeVisible();
@@ -64,6 +65,7 @@ test.describe("Mobile groups", () => {
 });
 
 test.describe("Mobile group event registration (leader)", () => {
+  test.describe.configure({ mode: "serial" });
   const GROUP_ID = "GRP00000023";
 
   test("leader can toggle registration on a new event and the fields round-trip", async ({ page }) => {
