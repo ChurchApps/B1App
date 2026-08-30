@@ -14,9 +14,9 @@ describe("buildContentSecurityPolicy", () => {
     const csp = buildContentSecurityPolicy({ nonce: "abc123==" });
     const scriptSrc = directive(csp, "script-src");
     assert.ok(scriptSrc.includes("'nonce-abc123=='"));
+    assert.ok(scriptSrc.includes("'strict-dynamic'"));
     assert.equal(scriptSrc.includes("'unsafe-inline'"), false);
     assert.equal(scriptSrc.includes("'unsafe-eval'"), false);
-    assert.equal(scriptSrc.includes("'strict-dynamic'"), false);
   });
 
   it("never emits 'unsafe-inline' or 'unsafe-eval' for scripts, even without a nonce", () => {
