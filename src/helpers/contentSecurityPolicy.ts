@@ -54,6 +54,10 @@ export const CONNECT_SRC_HOSTS = [
   "https://*.youversion.com",
   "https://www.google.com",
   "https://www.gstatic.com",
+  "https://maps.googleapis.com",
+  "https://maps.gstatic.com",
+  "https://*.googleapis.com",
+  "https://*.gstatic.com",
   "wss://*.churchapps.org",
   "wss://*.b1.church",
   NMI_HOST

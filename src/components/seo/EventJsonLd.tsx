@@ -1,4 +1,5 @@
 import React from "react";
+import Script from "next/script";
 import { EventHelper } from "@churchapps/helpers";
 import type { EventInterface, ChurchInterface } from "@churchapps/helpers";
 import { fetchCached, type ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -91,7 +92,7 @@ export async function EventJsonLd({ config, pageData, sdSlug }: Props) {
     });
 
     const payload = data.length === 1 ? data[0] : data;
-    return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />;
+    return <Script id="event-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />;
   } catch {
     return null;
   }
