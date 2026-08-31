@@ -213,6 +213,18 @@ export const ProfileEditPage = ({ config }: Props) => {
     enabled: !!personId
   });
 
+  const churchId = UserHelper.currentUserChurch?.church?.id || config?.church?.id;
+
+  const { data: publicSettings } = useQuery<any>({
+    queryKey: ["publicSettings", churchId],
+    queryFn: () => ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi"),
+    enabled: !!churchId
+  });
+
+  // Blank Directory Approval Group means member edits apply directly, with no staff review.
+  const approvalGroupId: string = publicSettings?.directoryApprovalGroupId || "";
+  const requiresApproval = !!approvalGroupId;
+
   useEffect(() => {
     if (!personId) {
       setPerson({ ...emptyPerson });
@@ -306,38 +318,45 @@ export const ProfileEditPage = ({ config }: Props) => {
     }
     setSaving(true);
     try {
-      const churchId = UserHelper.currentUserChurch?.church?.id || config?.church?.id;
       const id = person.id || UserHelper.currentUserChurch?.person?.id;
       const displayName = [person.name?.first, person.name?.last].filter(Boolean).join(" ");
 
-      const task: any = {
-        dateCreated: new Date(),
-        associatedWithType: "person",
-        associatedWithId: id,
-        associatedWithLabel: displayName,
-        createdByType: "person",
-        createdById: id,
-        createdByLabel: displayName,
-        title: `Profile changes for ${displayName || "member"}`,
-        status: "Open",
-        data: JSON.stringify(profileChanges)
-      };
+      if (requiresApproval) {
+        const task: any = {
+          dateCreated: new Date(),
+          associatedWithType: "person",
+          associatedWithId: id,
+          associatedWithLabel: displayName,
+          createdByType: "person",
+          createdById: id,
+          createdByLabel: displayName,
+          title: `Profile changes for ${displayName || "member"}`,
+          status: "Open",
+          data: JSON.stringify(profileChanges)
+        };
 
-      if (churchId) {
         try {
-          const publicSettings = await ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi");
-          if (publicSettings?.directoryApprovalGroupId) {
-            const group = await ApiHelper.get(`/groups/${publicSettings.directoryApprovalGroupId}`, "MembershipApi");
-            task.assignedToType = "group";
-            task.assignedToId = publicSettings.directoryApprovalGroupId;
-            task.assignedToLabel = group?.name;
-          }
+          const group = await ApiHelper.get(`/groups/${approvalGroupId}`, "MembershipApi");
+          task.assignedToType = "group";
+          task.assignedToId = approvalGroupId;
+          task.assignedToLabel = group?.name;
         } catch {
 
         }
-      }
 
-      await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
+        await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
+      } else {
+        // Nobody would ever review an unassigned task, so save the record itself.
+        await ApiHelper.post("/people", [{ ...person, id }], "MembershipApi");
+        if (pendingFamilyMembers.length > 0) {
+          const newMembers = pendingFamilyMembers.map((name) => ({
+            name: { first: name, last: person.name?.last },
+            contactInfo: {},
+            householdId: person.householdId
+          }));
+          await ApiHelper.post("/people", newMembers, "MembershipApi");
+        }
+      }
 
       // Photo uploads on submit, so refresh to show new image without sign-out.
       if (id) {
@@ -353,14 +372,22 @@ export const ProfileEditPage = ({ config }: Props) => {
       setInitial(JSON.parse(JSON.stringify(person)));
       setModifiedFields(new Set());
       setPendingFamilyMembers([]);
-      setSnack({ open: true, msg: Locale.label("mobile.screens.changesSubmittedForApproval"), severity: "success" });
+      setSnack({
+        open: true,
+        msg: Locale.label(requiresApproval ? "mobile.screens.changesSubmittedForApproval" : "mobile.screens.changesSaved"),
+        severity: "success"
+      });
 
       setTimeout(() => {
         try { router.back(); } catch { }
       }, 900);
     } catch (err: any) {
       console.error("Profile save error", err);
-      setSnack({ open: true, msg: err?.message || Locale.label("mobile.screens.unableToSubmitChanges"), severity: "error" });
+      setSnack({
+        open: true,
+        msg: err?.message || Locale.label(requiresApproval ? "mobile.screens.unableToSubmitChanges" : "mobile.screens.unableToSaveChanges"),
+        severity: "error"
+      });
     } finally {
       setSaving(false);
     }
@@ -1239,11 +1266,11 @@ export const ProfileEditPage = ({ config }: Props) => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
             <Icon sx={{ color: tc.warning, fontSize: 24 }}>pending_actions</Icon>
             <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-              Pending Changes
+              {requiresApproval ? "Pending Changes" : "Unsaved Changes"}
             </Typography>
           </Box>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-            Review your changes before submitting for approval.
+            {requiresApproval ? "Review your changes before submitting for approval." : "Review your changes before saving."}
           </Typography>
           <Box sx={{ maxHeight: 240, overflowY: "auto", mb: 2 }}>
             {profileChanges.map((c, i) => (
@@ -1298,7 +1325,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
               }}
             >
-              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Submit for Approval"}
+              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : requiresApproval ? "Submit for Approval" : "Save Changes"}
             </Button>
           </Box>
         </Box>
