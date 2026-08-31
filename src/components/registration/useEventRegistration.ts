@@ -333,7 +333,9 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       if (fsId) payload.formSubmissionId = fsId;
       if (payment) Object.assign(payload, payment);
 
-      const result: any = await ApiHelper.postAnonymous("/registrations/register", payload, "ContentApi");
+      const result: any = isLoggedIn
+        ? await ApiHelper.post("/registrations/register", payload, "ContentApi")
+        : await ApiHelper.postAnonymous("/registrations/register", payload, "ContentApi");
       if (result?.error) {
         setError(mapError(result));
         return result;

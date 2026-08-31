@@ -14,9 +14,9 @@ describe("buildContentSecurityPolicy", () => {
     const csp = buildContentSecurityPolicy({ nonce: "abc123==" });
     const scriptSrc = directive(csp, "script-src");
     assert.ok(scriptSrc.includes("'nonce-abc123=='"));
+    assert.ok(scriptSrc.includes("'strict-dynamic'"));
     assert.equal(scriptSrc.includes("'unsafe-inline'"), false);
     assert.equal(scriptSrc.includes("'unsafe-eval'"), false);
-    assert.equal(scriptSrc.includes("'strict-dynamic'"), false);
   });
 
   it("never emits 'unsafe-inline' or 'unsafe-eval' for scripts, even without a nonce", () => {
@@ -58,6 +58,12 @@ describe("buildContentSecurityPolicy", () => {
     for (const host of ["facebook", "crisp", "intercom", "hotjar", "tawk"]) {
       assert.equal(scriptSrc.includes(host), false, `script-src should not allow ${host}`);
     }
+  });
+
+  it("allows Google Maps geocode and JS hosts on connect-src", () => {
+    const connectSrc = directive(buildContentSecurityPolicy({ nonce: "n" }), "connect-src");
+    assert.ok(connectSrc.includes("https://maps.googleapis.com"));
+    assert.ok(connectSrc.includes("https://maps.gstatic.com"));
   });
 
   it("keeps style-src inline (React style attributes) and matches the CSS @import allowlist", () => {

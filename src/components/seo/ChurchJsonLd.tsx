@@ -1,4 +1,5 @@
 import React from "react";
+import Script from "next/script";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 
 interface Props { config: ConfigurationInterface; }
@@ -28,5 +29,5 @@ export function ChurchJsonLd({ config }: Props) {
     };
   }
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+  return <Script id="church-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
