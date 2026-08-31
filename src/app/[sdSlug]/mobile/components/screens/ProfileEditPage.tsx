@@ -215,15 +215,17 @@ export const ProfileEditPage = ({ config }: Props) => {
 
   const churchId = UserHelper.currentUserChurch?.church?.id || config?.church?.id;
 
-  const { data: publicSettings } = useQuery<any>({
+  const { data: publicSettings, isFetched: settingsFetched } = useQuery<any>({
     queryKey: ["publicSettings", churchId],
     queryFn: () => ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi"),
     enabled: !!churchId
   });
 
   // Blank Directory Approval Group means member edits apply directly, with no staff review.
-  const approvalGroupId: string = publicSettings?.directoryApprovalGroupId || "";
-  const requiresApproval = !!approvalGroupId;
+  // This cached copy only drives labels; handleSave re-reads settings before it picks a path.
+  const requiresApproval = !!(publicSettings?.directoryApprovalGroupId || "");
+  // Don't offer a button whose label promises a path we haven't confirmed yet.
+  const settingsSettled = !churchId || settingsFetched;
 
   useEffect(() => {
     if (!personId) {
@@ -317,11 +319,19 @@ export const ProfileEditPage = ({ config }: Props) => {
       return;
     }
     setSaving(true);
+    // Re-read settings on the write path so a still-loading or failed query can never
+    // downgrade an approval church into a direct save.
+    let saveWithApproval = requiresApproval;
     try {
+      if (!churchId) throw new Error(Locale.label("mobile.screens.unableToLoadChurch"));
+      const settings = await ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi");
+      const approvalGroupId: string = settings?.directoryApprovalGroupId || "";
+      saveWithApproval = !!approvalGroupId;
+
       const id = person.id || UserHelper.currentUserChurch?.person?.id;
       const displayName = [person.name?.first, person.name?.last].filter(Boolean).join(" ");
 
-      if (requiresApproval) {
+      if (saveWithApproval) {
         const task: any = {
           dateCreated: new Date(),
           associatedWithType: "person",
@@ -346,16 +356,10 @@ export const ProfileEditPage = ({ config }: Props) => {
 
         await ApiHelper.post("/tasks?type=directoryUpdate", [task], "DoingApi");
       } else {
-        // Nobody would ever review an unassigned task, so save the record itself.
+        // Nobody would ever review an unassigned task, so save the record itself. Edit Self
+        // only covers the member's own row, so pending family members stay unsaved here,
+        // exactly as they did under the old unassigned-task path.
         await ApiHelper.post("/people", [{ ...person, id }], "MembershipApi");
-        if (pendingFamilyMembers.length > 0) {
-          const newMembers = pendingFamilyMembers.map((name) => ({
-            name: { first: name, last: person.name?.last },
-            contactInfo: {},
-            householdId: person.householdId
-          }));
-          await ApiHelper.post("/people", newMembers, "MembershipApi");
-        }
       }
 
       // Photo uploads on submit, so refresh to show new image without sign-out.
@@ -374,7 +378,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       setPendingFamilyMembers([]);
       setSnack({
         open: true,
-        msg: Locale.label(requiresApproval ? "mobile.screens.changesSubmittedForApproval" : "mobile.screens.changesSaved"),
+        msg: Locale.label(saveWithApproval ? "mobile.screens.changesSubmittedForApproval" : "mobile.screens.changesSaved"),
         severity: "success"
       });
 
@@ -385,7 +389,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       console.error("Profile save error", err);
       setSnack({
         open: true,
-        msg: err?.message || Locale.label(requiresApproval ? "mobile.screens.unableToSubmitChanges" : "mobile.screens.unableToSaveChanges"),
+        msg: err?.message || Locale.label(saveWithApproval ? "mobile.screens.unableToSubmitChanges" : "mobile.screens.unableToSaveChanges"),
         severity: "error"
       });
     } finally {
@@ -1314,7 +1318,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             <Button
               variant="contained"
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !settingsSettled}
               sx={{
                 flex: 2,
                 bgcolor: tc.primary,
