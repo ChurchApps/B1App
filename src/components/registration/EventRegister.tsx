@@ -122,7 +122,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
           <Stack spacing={1} sx={{ textAlign: "left" }}>
             <Typography variant="body2"><b>{Locale.label("registration.event")}:</b> {event.title}</Typography>
             <Typography variant="body2"><b>{Locale.label("common.date")}:</b> {getDisplayTime()}</Typography>
-            <Typography variant="body2"><b>{Locale.label("registration.status")}:</b> <Chip label={reg.registration.status} size="small" color={waitlisted ? "warning" : "success"} /></Typography>
+            <Typography variant="body2" component="div"><b>{Locale.label("registration.status")}:</b> <Chip label={reg.registration.status} size="small" color={waitlisted ? "warning" : "success"} /></Typography>
             {reg.registration.totalAmount > 0 && (
               <Typography variant="body2"><b>{Locale.label("registration.payment.total")}:</b> {formatMoney(reg.registration.amountPaid || 0)} / {formatMoney(reg.registration.totalAmount)}</Typography>
             )}
@@ -321,7 +321,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
     <Card sx={{ borderRadius: 2 }}>
       <CardContent>
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>{event.title}</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+        <Typography variant="body2" component="div" color="text.secondary" sx={{ mb: 1 }}>
           <Icon sx={{ fontSize: 16, verticalAlign: "text-bottom", mr: 0.5 }}>schedule</Icon>
           {getDisplayTime()}
         </Typography>

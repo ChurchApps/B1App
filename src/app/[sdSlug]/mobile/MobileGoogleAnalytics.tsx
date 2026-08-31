@@ -1,21 +1,20 @@
 "use client";
 import Script from "next/script";
-import { Suspense, useEffect } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 
-function MobileGoogleAnalyticsInner() {
+export default function MobileGoogleAnalytics() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const gaId = EnvironmentHelper.Common.GoogleAnalyticsTag;
 
   useEffect(() => {
     if (!gaId || !pathname) return;
-    const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "");
+    const url = pathname + (typeof window !== "undefined" ? window.location.search : "");
     if (typeof window.gtag !== "undefined") {
       window.gtag("config", gaId, { page_path: url });
     }
-  }, [pathname, searchParams, gaId]);
+  }, [pathname, gaId]);
 
   if (!gaId) return null;
 
@@ -28,13 +27,5 @@ function MobileGoogleAnalyticsInner() {
         dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');` }}
       />
     </>
-  );
-}
-
-export default function MobileGoogleAnalytics() {
-  return (
-    <Suspense fallback={null}>
-      <MobileGoogleAnalyticsInner />
-    </Suspense>
   );
 }
