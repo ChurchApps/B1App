@@ -1,333 +1,298 @@
 {
-	"b1Share": {
-		"comment": "Komentaras",
-		"commentPlaceholder": "Įtraukite komentarą į savo postą.",
-		"contentShared": "Turinys bendrintas",
-		"group": "Grupė",
-		"sharingToGroup": "{} bendrinimas B1 grupei",
-		"validate": {
-			"addComment": "Prašome pridėti komentarą.",
-			"loginFirst": "Prašome pirmiausia prisijungti.",
-			"notMember": "Jūs šiuo metu nesate jokios B1 grupės narys.",
-			"selectGroup": "Prašome pasirinkti grupę."
-		}
-	},
-	"common": {
-		"add": "Pridėti",
-		"cancel": "AtÅ¡aukti",
-		"close": "UÅ¾daryti",
-		"date": "Data",
-		"delete": "IÅ¡trinti",
-		"edit": "Redaguoti",
-		"error": "Klaida",
-		"pleaseWait": "PraÅ¡ome palaukti...",
-		"save": "IÅ¡saugoti",
-		"search": "PaieÅ¡ka",
-		"submit": "Pateikti",
-		"update": "Atnaujinti"
-	},
-	"createPerson": {
-		"addNewPerson": "Pridėti naują asmenį",
-		"email": "El. paštas",
-		"firstName": "Vardas",
-		"lastName": "Pavardė"
-	},
-	"donation": {
-		"bankForm": {
-			"accountNumber": "SÄ…skaitos numeris",
-			"added": "Banko sÄ…skaita pridÄ—ta. Patvirtinkite banko sÄ…skaitÄ…, kad atliktumÄ—te aukÄ….",
-			"company": "Ä®monÄ—",
-			"firstDeposit": "Pirmas indÄ—lis",
-			"holderName": "Reikalingas sąskaitos savininko vardas.",
-			"individual": "Asmeninis",
-			"name": "SÄ…skaitos savininko vardas",
-			"needVerified": "Banko sÄ…skaitos turi bÅ«ti patvirtintos prieÅ¡ atliekant aukas. JÅ«sÅ³ sÄ…skaita per maÅ¾daug 1-3 darbo dienas gaus du maÅ¾us indÄ—lius. TurÄ—site Ä¯vesti Å¡ias indÄ—lio sumas, kad baigtusite sÄ…skaitos patvirtinimÄ…, pasirinkdami patvirtinimo saitÄ… Å¡alia banko sÄ…skaitos mokÄ—jimo bÅ«dÅ³ skyriuje.",
-			"routingNumber": "Marsruterizavimo numeris",
-			"secondDeposit": "Antrasis indÄ—lis",
-			"twoDeposits": "Ä®veskite du indÄ—lius, kuriuos gavote savo sÄ…skaitoje, kad baigtumÄ—te banko sÄ…skaitos patvirtinimÄ….",
-			"updated": "Banko sÄ…skaita atnaujinta.",
-			"validate": {
-				"accountNumber": "Reikalingas marsruterizavimo ir sÄ…skaitos numeris.",
-				"holderName": "Reikalingas sÄ…skaitos savininko vardas."
-			},
-			"verified": "Banko sÄ…skaita patvirtinta."
-		},
-		"cardForm": {
-			"addNew": "PridÄ—ti naujÄ… kortelÄ™",
-			"added": "KortelÄ— sÄ—kmingai pridÄ—ta.",
-			"expirationMonth": "Galiojimo pabaiga (mÄ—nuo):",
-			"expirationYear": "Galiojimo pabaiga (metai):",
-			"updated": "KortelÄ— sÄ—kmingai atnaujinta."
-		},
-		"donationForm": {
-			"annually": "Kasmet",
-			"biWeekly": "Kas dvi savaites",
-			"cancelled": "Pasikartojanti auka atÅ¡aukta.",
-			"confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iÄ… pasikartojanÄiÄ… aukÄ…?",
-			"cover": "Su malonumi pridÄ—siu {} operacijos mokesÄiams padengti, kad galÄ—tumÄ—te iÅ¡saugoti 100% mano aukos.",
-			"donate": "Aukoti",
-			"editRecurring": "Redaguoti pasikartojanÄiÄ… aukÄ…",
-			"fees": "Taikomos operacijos mokesÄiai {}.",
-			"frequency": "DaÅ¾numas",
-			"fund": "Fondas",
-			"funds": "Fondai",
-			"make": "Padaryk aukÄ…",
-			"makeRecurring": "Padaryk pasikartojanÄiÄ… aukÄ…",
-			"method": "Metodas",
-			"monthly": "Kas mÄ—nesÄ¯",
-			"notes": "Pastabos",
-			"preview": "PerÅ¾iÅ«rÄ—ti aukÄ…",
-			"quarterly": "Kas ketvirtÄ¯",
-			"recurringUpdated": "Pasikartojanti auka atnaujinta.",
-			"startDate": "PradÅ¾ios data",
-			"thankYou": "AÄiÅ« uÅ¾ aukÄ…!",
-			"tooLow": "Aukos suma turi bÅ«ti didesnÄ— nei 0,50 USD",
-			"total": "Bendra aukos suma",
-			"validate": {
-				"amount": "Suma negali bÅ«ti $0.",
-				"email": "PraÅ¡ome Ä¯vesti savo el. paÅ¡to adresÄ….",
-				"firstName": "PraÅ¡ome Ä¯vesti savo vardÄ….",
-				"lastName": "PraÅ¡ome Ä¯vesti savo pavardÄ™.",
-				"validEmail": "PraÅ¡ome Ä¯vesti galiojantÄ¯ el. paÅ¡to adresÄ…."
-			},
-			"weekly": "Kas savaitÄ™"
-		},
-		"fundDonations": {
-			"addMore": "PridÄ—ti daugiau",
-			"amount": "Suma",
-			"fund": "Fondas"
-		},
-		"page": {
-			"amount": "Suma",
-			"batch": "Partija",
-			"date": "Data",
-			"fund": "Fondas",
-			"method": "Metodas",
-			"willAppear": "Aukos pasirodyti, kai auka bus įvesta."
-		},
-		"paymentMethods": {
-			"addBank": "PridÄ—ti banko sÄ…skaitÄ…",
-			"addCard": "PridÄ—ti kortelÄ™",
-			"confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡Ä¯ mokÄ—jimo bÅ«dÄ…?",
-			"deleted": "MokÄ—jimo bÅ«das iÅ¡trintas.",
-			"noMethods": "Nėra mokėjimo būdų. Pridėkite mokėjimo būdą, norėdami aukoti.",
-			"verify": "Patvirtinti sÄ…skaitÄ…"
-		},
-		"preview": {
-			"date": "Aukos data",
-			"donate": "Aukoti",
-			"every": "Kartoti kiekvienÄ…",
-			"fee": "Operacijos mokestis",
-			"funds": "Fondai",
-			"method": "Aukos metodas",
-			"notes": "Pastabos",
-			"startingOn": "Pradedant nuo",
-			"total": "IÅ¡ viso",
-			"type": "Aukos tipas"
-		},
-		"recurring": {
-			"amount": "Suma",
-			"confirmPause": "Ar tikrai norite pristabdyti Å¡iÄ… pasikartojanÄiÄ… aukÄ…?",
-			"every": "Kiekvienas",
-			"interval": "Intervalas",
-			"notFound": "MokÄ—jimo bÅ«das nerastas.",
-			"pauseFailed": "Nepavyko pristabdyti pasikartojanÄios aukos. Bandykite dar kartÄ….",
-			"pauseTooltip": "Pristabdyti pasikartojanÄiÄ… aukÄ…",
-			"paused": "Pristabdyta",
-			"pausedMessage": "Pasikartojanti auka pristabdyta.",
-			"paymentMethod": "MokÄ—jimo bÅ«das",
-			"resumeFailed": "Nepavyko atnaujinti pasikartojanÄios aukos. Bandykite dar kartÄ….",
-			"resumeTooltip": "Atnaujinti pasikartojanÄiÄ… aukÄ…",
-			"resumedMessage": "Pasikartojanti auka atnaujinta.",
-			"startDate": "PradÅ¾ios data"
-		}
-	},
-	"eventCalendar": {
-		"recurring": {
-			"day": {
-				"friday": "Penktadienis",
-				"monday": "Pirmadienis",
-				"saturday": "Å eÅ¡tadienis",
-				"sunday": "Sekmadienis",
-				"thursday": "Ketvirtadienis",
-				"tuesday": "Antradienis",
-				"wednesday": "TreÄiadienis"
-			},
-			"endDate": "Pabaigos data",
-			"endDateAria": "Pasikartojimo pabaigos data",
-			"ends": "Baigiasi",
-			"endsAfter": "Po",
-			"endsAria": "Pasirinkite, kada baigsis pasikartojimas",
-			"endsOn": "DatÄ…",
-			"freqDay": "Diena",
-			"freqMonth": "MÄ—nuo",
-			"freqWeek": "SavaitÄ—",
-			"frequency": "DaÅ¾numas",
-			"frequencyAria": "Pasirinkite pasikartojimo daÅ¾numÄ…",
-			"interval": "Intervalas",
-			"intervalAria": "Pasikartojimo intervalas",
-			"monthlyOnDay": "Kas mÄ—nesÄ¯ {} dienÄ…",
-			"monthlyOnNth": "Kas mÄ—nesÄ¯ {ordinal} {day}",
-			"monthlyOptionAria": "Pasirinkite mÄ—nesinio pasikartojimo parinktÄ¯",
-			"never": "Niekada",
-			"occurrences": "Pasikartojimai",
-			"occurrencesAria": "PasikartojimÅ³ skaiÄius",
-			"on": "DatÄ…",
-			"ordinal": {
-				"first": "pirmÄ…",
-				"fourth": "ketvirtÄ…",
-				"last": "paskutinÄ¯",
-				"second": "antrÄ…",
-				"third": "treÄiÄ…"
-			},
-			"toggleWeekday": "Perjungti {} savaitiniam pasikartojimui"
-		}
-	},
-	"formSubmissionEdit": {
-		"back": "Atgal",
-		"confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iuos formos duomenis?",
-		"continue": "TÄ™sti",
-		"editForm": "Redaguoti formÄ…",
-		"isRequired": "reikalinga",
-		"stepProgress": "{current} iÅ¡ {total}",
-		"submit": "Pateikti"
-	},
-	"gallery": {
-		"aspectRatio": "Vaizdo santykis",
-		"confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iÄ… nuotraukÄ… iÅ¡ galerijos?",
-		"freeForm": "Laisva forma"
-	},
-	"iconPicker": {
-		"iconsAvailable": "ikona yra prieinama",
-		"matchingResults": "atitinkantys rezultatai",
-		"search": "Ieškoti ikonų..."
-	},
-	"login": {
-		"createAccount": "Sukurti sąskaitą",
-		"email": "El. paÅ¡tas",
-		"expiredLink": "DabartinÄ— nuoroda yra pasibaigusi.",
-		"forgot": "PamirÅ¡ote slaptaÅ¾odÄ¯",
-		"goLogin": "Eiti į prisijungimą",
-		"login": "Prisijungti",
-		"noAcc": "Neturite sÄ…skaitos?",
-		"password": "SlaptaÅ¾odis",
-		"register": "Registruotis",
-		"registerThankYou": "AÄiÅ«, kad uÅ¾siregistravote! Patikrinkite savo el. paÅ¡tÄ…, kad patvirtintumÄ—te savo sÄ…skaitÄ….",
-		"requestLink": "PapraÅ¡yti naujo nustatymo ryÅ¡io",
-		"reset": "IÅ¡ naujo nustatyti",
-		"resetInstructions": "Ä®veskite savo el. paÅ¡to adresÄ…, norÄ—dami papraÅ¡yti slaptaÅ¾odÅ¾io atstatymo.",
-		"resetPassword": "IÅ¡ naujo nustatyti slaptaÅ¾odÄ¯",
-		"resetSent": "Slaptažodžio atstatymo el. laiškas išsiųstas!",
-		"setPassword": "Nustatyti slaptaÅ¾odÄ¯",
-		"signIn": "Prisijungti",
-		"signInTitle": "PraÅ¡ome prisijungti",
-		"validate": {
-			"email": "PraÅ¡ome Ä¯vesti galiojantÄ¯ el. paÅ¡to adresÄ….",
-			"firstName": "PraÅ¡ome Ä¯vesti savo vardÄ….",
-			"invalid": "Negaliojantis prisijungimas. Patikrinkite savo el. paÅ¡to adresÄ… arba slaptaÅ¾odÄ¯.",
-			"lastName": "PraÅ¡ome Ä¯vesti savo pavardÄ™.",
-			"password": "PraÅ¡ome Ä¯vesti slaptaÅ¾odÄ¯.",
-			"passwordLength": "SlaptaÅ¾odis turi bÅ«ti maÅ¾iausiai 8 simboliai.",
-			"passwordMatch": "SlaptaÅ¾odÅ¾iai nesutampa.",
-			"selectingChurch": "Klaida pasirenkant baÅ¾nyÄiÄ…. Patikrinkite ir bandykite iÅ¡ naujo"
-		},
-		"verifyPassword": "Patvirtinti slaptaÅ¾odÄ¯",
-		"welcomeBack": "Sveiki sugrÄ¯Å¾Ä™",
-		"welcomeName": "Sveiki sugrÄ¯Å¾Ä™, <b>{}</b>! PraÅ¡ome palaukti, kol kraupiame jÅ«sÅ³ duomenis."
-	},
-	"markdownEditor": {
-		"content": "Turinys",
-		"markdownEditor": "Markdown redaktorius",
-		"markdownGuide": "Markdown vadovas"
-	},
-	"month": {
-		"april": "Balandis",
-		"august": "Rugpjūtis",
-		"december": "Gruodis",
-		"february": "Vasaris",
-		"january": "Sausis",
-		"july": "Liepa",
-		"june": "Birželis",
-		"march": "Kovas",
-		"may": "Gegužė",
-		"november": "Lapkritis",
-		"october": "Spalis",
-		"september": "Rugsėjis"
-	},
-	"notes": {
-		"comment": "komentaras",
-		"comments": "komentarai",
-		"notes": "Pastabos",
-		"startConversation": "Pradėti pokalbį",
-		"validate": {
-			"content": "PraÅ¡ome Ä¯vesti pastabÄ…."
-		},
-		"viewAll": "Žiūrėti visus"
-	},
-	"person": {
-		"email": "El. paÅ¡tas",
-		"firstName": "Vardas",
-		"lastName": "PavardÄ—",
-		"name": "Vardas",
-		"noRec": "Nėra asmeninių įrašų?",
-		"person": "Asmuo",
-		"years": "metų"
-	},
-	"reporting": {
-		"detailed": "Išsamus ataskaita",
-		"downloadOptions": "Atsisiuntimo variantai",
-		"noData": "Nėra duomenų rodymui.",
-		"runReport": "Paleisti ataskaitą",
-		"sampleTemplate": "Pavyzdinė Word šablono",
-		"summary": "Santrauka",
-		"useFilter": "Norėdami paleisti ataskaitą, naudokite filtrą."
-	},
-	"selectChurch": {
-		"address1": "Adresas 1",
-		"address2": "Adresas 2",
-		"another": "Pasirinkti kitÄ… baÅ¾nyÄiÄ…",
-		"city": "Miestas",
-		"confirmRegister": "Ar tikrai norite registruoti naujÄ… baÅ¾nyÄiÄ…?",
-		"country": "Å alis",
-		"name": "BaÅ¾nyÄios pavadinimas",
-		"noMatches": "Nenustatyta atitikÄiÅ³.",
-		"register": "Registruoti naujÄ… baÅ¾nyÄiÄ…",
-		"selectChurch": "Pasirinkti baÅ¾nyÄiÄ…",
-		"state": "Valstija / provincija",
-		"validate": {
-			"address": "Adresas negali bÅ«ti tuÅ¡Äias.",
-			"city": "Miestas negali bÅ«ti tuÅ¡Äias.",
-			"country": "Å alis negali bÅ«ti tuÅ¡Äia.",
-			"name": "BaÅ¾nyÄios pavadinimas negali bÅ«ti tuÅ¡Äias.",
-			"state": "Valstija/provincija negali bÅ«ti tuÅ¡Äia.",
-			"zip": "PaÅ¡to kodas negali bÅ«ti tuÅ¡Äias."
-		},
-		"zip": "PaÅ¡to kodas"
-	},
-	"stockPhotos": {
-		"photoBy": "Nuotrauka iÅ¡:",
-		"providedBy": "AkcijÅ³ nuotraukos teikia"
-	},
-	"support": {
-		"discussions": "Palaikymo forumas",
-		"documentation": "Dokumentacija"
-	},
-	"wrapper": {
-		"chatWith": "Pokalbis su",
-		"deleteChurch": "Ištrinti",
-		"editAccount": "Redaguoti sąskaitą",
-		"editChurchProfile": "Redaguoti bažnyčios profilį",
-		"editProfile": "Redaguoti profilį",
-		"logout": "Atsijungti",
-		"messages": "Žinutės",
-		"newPrivateMessage": "Nauja privati Å¾inutÄ—",
-		"notifications": "Pranešimai",
-		"privateMessage": "Privati Å¾inutÄ—",
-		"profile": "Profilis",
-		"searchForPerson": "IeÅ¡koti asmens",
-		"support": "Palaikyti",
-		"sureRemoveChurch": "Ar tikrai norite ištrinti šią bažnyčią? Jūs nebegrąsite būti {}.",
-		"switchApp": "Perjungti programą",
-		"switchChurch": "Perjungti bažnyčią"
-	}
+  "common": {
+    "cancel": "AtÅ¡aukti",
+    "close": "UÅ¾daryti",
+    "delete": "IÅ¡trinti",
+    "pleaseWait": "PraÅ¡ome palaukti...",
+    "save": "IÅ¡saugoti",
+    "search": "PaieÅ¡ka",
+    "update": "Atnaujinti"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "SÄ…skaitos numeris",
+      "added": "Banko sÄ…skaita pridÄ—ta. Patvirtinkite banko sÄ…skaitÄ…, kad atliktumÄ—te aukÄ….",
+      "company": "Ä®monÄ—",
+      "firstDeposit": "Pirmas indÄ—lis",
+      "individual": "Asmeninis",
+      "name": "SÄ…skaitos savininko vardas",
+      "needVerified": "Banko sÄ…skaitos turi bÅ«ti patvirtintos prieÅ¡ atliekant aukas. JÅ«sÅ³ sÄ…skaita per maÅ¾daug 1-3 darbo dienas gaus du maÅ¾us indÄ—lius. TurÄ—site Ä¯vesti Å¡ias indÄ—lio sumas, kad baigtusite sÄ…skaitos patvirtinimÄ…, pasirinkdami patvirtinimo saitÄ… Å¡alia banko sÄ…skaitos mokÄ—jimo bÅ«dÅ³ skyriuje.",
+      "routingNumber": "Marsruterizavimo numeris",
+      "secondDeposit": "Antrasis indÄ—lis",
+      "twoDeposits": "Ä®veskite du indÄ—lius, kuriuos gavote savo sÄ…skaitoje, kad baigtumÄ—te banko sÄ…skaitos patvirtinimÄ….",
+      "updated": "Banko sÄ…skaita atnaujinta.",
+      "validate": {
+        "accountNumber": "Reikalingas marsruterizavimo ir sÄ…skaitos numeris.",
+        "holderName": "Reikalingas sÄ…skaitos savininko vardas."
+      },
+      "verified": "Banko sÄ…skaita patvirtinta."
+    },
+    "cardForm": {
+      "addNew": "PridÄ—ti naujÄ… kortelÄ™",
+      "added": "KortelÄ— sÄ—kmingai pridÄ—ta.",
+      "expirationMonth": "Galiojimo pabaiga (mÄ—nuo):",
+      "expirationYear": "Galiojimo pabaiga (metai):",
+      "updated": "KortelÄ— sÄ—kmingai atnaujinta."
+    },
+    "common": {
+      "cancel": "Cancel",
+      "error": "Error"
+    },
+    "donationForm": {
+      "annually": "Kasmet",
+      "biWeekly": "Kas dvi savaites",
+      "cancelled": "Pasikartojanti auka atÅ¡aukta.",
+      "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iÄ… pasikartojanÄiÄ… aukÄ…?",
+      "cover": "Su malonumi pridÄ—siu {} operacijos mokesÄiams padengti, kad galÄ—tumÄ—te iÅ¡saugoti 100% mano aukos.",
+      "donate": "Aukoti",
+      "editRecurring": "Redaguoti pasikartojanÄiÄ… aukÄ…",
+      "fees": "Taikomos operacijos mokesÄiai {}.",
+      "frequency": "DaÅ¾numas",
+      "fund": "Fondas",
+      "funds": "Fondai",
+      "make": "Padaryk aukÄ…",
+      "makeRecurring": "Padaryk pasikartojanÄiÄ… aukÄ…",
+      "method": "Metodas",
+      "monthly": "Kas mÄ—nesÄ¯",
+      "preview": "PerÅ¾iÅ«rÄ—ti aukÄ…",
+      "quarterly": "Kas ketvirtÄ¯",
+      "recurringUpdated": "Pasikartojanti auka atnaujinta.",
+      "startDate": "PradÅ¾ios data",
+      "thankYou": "AÄiÅ« uÅ¾ aukÄ…!",
+      "tooLow": "Aukos suma turi bÅ«ti didesnÄ— nei 0,50 USD",
+      "total": "Bendra aukos suma",
+      "validate": {
+        "amount": "Suma negali bÅ«ti $0.",
+        "email": "PraÅ¡ome Ä¯vesti savo el. paÅ¡to adresÄ….",
+        "firstName": "PraÅ¡ome Ä¯vesti savo vardÄ….",
+        "lastName": "PraÅ¡ome Ä¯vesti savo pavardÄ™.",
+        "validEmail": "PraÅ¡ome Ä¯vesti galiojantÄ¯ el. paÅ¡to adresÄ…."
+      },
+      "weekly": "Kas savaitÄ™"
+    },
+    "fundDonations": {
+      "addMore": "PridÄ—ti daugiau",
+      "amount": "Suma",
+      "fund": "Fondas"
+    },
+    "kingdomFunding": {
+      "enterBankDetails": "Enter your bank account details",
+      "enterCardDetails": "Enter card details",
+      "errorProcessingDonation": "Error processing donation",
+      "failedToInitPaymentForm": "Failed to initialize payment form",
+      "failedToLoadPaymentForm": "Failed to load payment form",
+      "failedToProcessCard": "Failed to process card. Please check your card details and try again.",
+      "failedToTokenizeCard": "Failed to tokenize card",
+      "gatewayConfigMissing": "Payment form not available. Gateway configuration missing.",
+      "loadingPaymentForm": "Loading payment form...",
+      "memo": "Memo (optional)",
+      "missingTokenizationKey": "Missing tokenization key",
+      "payWithBank": "Bank (ACH)",
+      "payWithCard": "Card",
+      "paymentFormNotAvailable": "Payment form not available",
+      "paymentFormNotInitialized": "Payment form not initialized",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
+      "validate": {
+        "captchaFailed": "reCAPTCHA verification failed. Please try again.",
+        "captchaRequired": "Please complete the reCAPTCHA verification"
+      }
+    },
+    "paymentMethods": {
+      "addBank": "PridÄ—ti banko sÄ…skaitÄ…",
+      "addCard": "PridÄ—ti kortelÄ™",
+      "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡Ä¯ mokÄ—jimo bÅ«dÄ…?",
+      "deleted": "MokÄ—jimo bÅ«das iÅ¡trintas.",
+      "noMethod": "No Method",
+      "verify": "Patvirtinti sÄ…skaitÄ…"
+    },
+    "paystack": {
+      "emailRequired": "An email address is required to pay with Paystack.",
+      "paymentFailed": "Payment was not completed.",
+      "popupHint": "You'll complete payment in a secure Paystack window. Card, mobile money and bank transfer are accepted.",
+      "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
+    },
+    "preview": {
+      "date": "Aukos data",
+      "donate": "Aukoti",
+      "every": "Kartoti kiekvienÄ…",
+      "fee": "Operacijos mokestis",
+      "funds": "Fondai",
+      "method": "Aukos metodas",
+      "notes": "Pastabos",
+      "startingOn": "Pradedant nuo",
+      "total": "IÅ¡ viso",
+      "type": "Aukos tipas"
+    },
+    "recurring": {
+      "amount": "Suma",
+      "confirmPause": "Ar tikrai norite pristabdyti Å¡iÄ… pasikartojanÄiÄ… aukÄ…?",
+      "every": "Kiekvienas",
+      "interval": "Intervalas",
+      "noSubscriptions": "No Subscriptions",
+      "notFound": "MokÄ—jimo bÅ«das nerastas.",
+      "pauseFailed": "Nepavyko pristabdyti pasikartojanÄios aukos. Bandykite dar kartÄ….",
+      "pauseTooltip": "Pristabdyti pasikartojanÄiÄ… aukÄ…",
+      "paused": "Pristabdyta",
+      "pausedMessage": "Pasikartojanti auka pristabdyta.",
+      "paymentMethod": "MokÄ—jimo bÅ«das",
+      "resumeFailed": "Nepavyko atnaujinti pasikartojanÄios aukos. Bandykite dar kartÄ….",
+      "resumeTooltip": "Atnaujinti pasikartojanÄiÄ… aukÄ…",
+      "resumedMessage": "Pasikartojanti auka atnaujinta.",
+      "startDate": "PradÅ¾ios data"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Penktadienis",
+        "monday": "Pirmadienis",
+        "saturday": "Å eÅ¡tadienis",
+        "sunday": "Sekmadienis",
+        "thursday": "Ketvirtadienis",
+        "tuesday": "Antradienis",
+        "wednesday": "TreÄiadienis"
+      },
+      "endDate": "Pabaigos data",
+      "endDateAria": "Pasikartojimo pabaigos data",
+      "ends": "Baigiasi",
+      "endsAfter": "Po",
+      "endsAria": "Pasirinkite, kada baigsis pasikartojimas",
+      "endsOn": "DatÄ…",
+      "freqDay": "Diena",
+      "freqMonth": "MÄ—nuo",
+      "freqWeek": "SavaitÄ—",
+      "frequency": "DaÅ¾numas",
+      "frequencyAria": "Pasirinkite pasikartojimo daÅ¾numÄ…",
+      "interval": "Intervalas",
+      "intervalAria": "Pasikartojimo intervalas",
+      "monthlyOnDay": "Kas mÄ—nesÄ¯ {} dienÄ…",
+      "monthlyOnNth": "Kas mÄ—nesÄ¯ {ordinal} {day}",
+      "monthlyOptionAria": "Pasirinkite mÄ—nesinio pasikartojimo parinktÄ¯",
+      "never": "Niekada",
+      "occurrences": "Pasikartojimai",
+      "occurrencesAria": "PasikartojimÅ³ skaiÄius",
+      "on": "DatÄ…",
+      "ordinal": {
+        "first": "pirmÄ…",
+        "fourth": "ketvirtÄ…",
+        "last": "paskutinÄ¯",
+        "second": "antrÄ…",
+        "third": "treÄiÄ…"
+      },
+      "toggleWeekday": "Perjungti {} savaitiniam pasikartojimui"
+    }
+  },
+  "fileUpload": {
+    "file": "File",
+    "quotaExceeded": "Storage quota exceeded. Delete unused files or upgrade your storage plan.",
+    "uploadFailed": "Upload failed. Please try again."
+  },
+  "formSubmissionEdit": {
+    "back": "Atgal",
+    "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iuos formos duomenis?",
+    "continue": "TÄ™sti",
+    "editForm": "Redaguoti formÄ…",
+    "isRequired": "reikalinga",
+    "stepProgress": "{current} iÅ¡ {total}",
+    "submit": "Pateikti"
+  },
+  "gallery": {
+    "aspectRatio": "Vaizdo santykis",
+    "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iÄ… nuotraukÄ… iÅ¡ galerijos?",
+    "freeForm": "Laisva forma"
+  },
+  "login": {
+    "email": "El. paÅ¡tas",
+    "enterCode": "Enter Verification Code",
+    "enterCodeInstructions": "Enter the 6-digit code we just emailed you.",
+    "expiredLink": "DabartinÄ— nuoroda yra pasibaigusi.",
+    "forgot": "PamirÅ¡ote slaptaÅ¾odÄ¯",
+    "login": "Prisijungti",
+    "noAcc": "Neturite sÄ…skaitos?",
+    "noAccountFound": "No account was found with that email. Please register to continue.",
+    "or": "or",
+    "password": "SlaptaÅ¾odis",
+    "register": "Registruotis",
+    "registerThankYou": "AÄiÅ«, kad uÅ¾siregistravote! Patikrinkite savo el. paÅ¡tÄ…, kad patvirtintumÄ—te savo sÄ…skaitÄ….",
+    "requestLink": "PapraÅ¡yti naujo nustatymo ryÅ¡io",
+    "resendCode": "Resend code",
+    "reset": "IÅ¡ naujo nustatyti",
+    "resetInstructions": "Ä®veskite savo el. paÅ¡to adresÄ…, norÄ—dami papraÅ¡yti slaptaÅ¾odÅ¾io atstatymo.",
+    "resetPassword": "IÅ¡ naujo nustatyti slaptaÅ¾odÄ¯",
+    "setPassword": "Nustatyti slaptaÅ¾odÄ¯",
+    "signIn": "Prisijungti",
+    "signInTitle": "PraÅ¡ome prisijungti",
+    "validate": {
+      "code": "Please enter the 6-digit code.",
+      "email": "PraÅ¡ome Ä¯vesti galiojantÄ¯ el. paÅ¡to adresÄ….",
+      "firstName": "PraÅ¡ome Ä¯vesti savo vardÄ….",
+      "invalid": "Negaliojantis prisijungimas. Patikrinkite savo el. paÅ¡to adresÄ… arba slaptaÅ¾odÄ¯.",
+      "lastName": "PraÅ¡ome Ä¯vesti savo pavardÄ™.",
+      "password": "PraÅ¡ome Ä¯vesti slaptaÅ¾odÄ¯.",
+      "passwordLength": "SlaptaÅ¾odis turi bÅ«ti maÅ¾iausiai 8 simboliai.",
+      "passwordMatch": "SlaptaÅ¾odÅ¾iai nesutampa.",
+      "selectingChurch": "Klaida pasirenkant baÅ¾nyÄiÄ…. Patikrinkite ir bandykite iÅ¡ naujo"
+    },
+    "verifyCode": "Verify Code",
+    "verifyPassword": "Patvirtinti slaptaÅ¾odÄ¯",
+    "welcomeBack": "Sveiki sugrÄ¯Å¾Ä™",
+    "welcomeName": "Sveiki sugrÄ¯Å¾Ä™, <b>{}</b>! PraÅ¡ome palaukti, kol kraupiame jÅ«sÅ³ duomenis."
+  },
+  "markdownEditor": {
+    "content": "Turinys",
+    "markdownGuide": "Markdown vadovas"
+  },
+  "notes": {
+    "comment": "komentaras",
+    "comments": "komentarai",
+    "notes": "Pastabos",
+    "notifyOff": "Notify Off",
+    "notifyOn": "Notify On",
+    "openFile": "Open file",
+    "validate": {
+      "content": "PraÅ¡ome Ä¯vesti pastabÄ…."
+    }
+  },
+  "person": {
+    "email": "El. paÅ¡tas",
+    "firstName": "Vardas",
+    "lastName": "PavardÄ—",
+    "name": "Vardas"
+  },
+  "selectChurch": {
+    "address1": "Adresas 1",
+    "address2": "Adresas 2",
+    "another": "Pasirinkti kitÄ… baÅ¾nyÄiÄ…",
+    "city": "Miestas",
+    "confirmRegister": "Ar tikrai norite registruoti naujÄ… baÅ¾nyÄiÄ…?",
+    "country": "Å alis",
+    "name": "BaÅ¾nyÄios pavadinimas",
+    "noMatches": "Nenustatyta atitikÄiÅ³.",
+    "register": "Registruoti naujÄ… baÅ¾nyÄiÄ…",
+    "selectChurch": "Pasirinkti baÅ¾nyÄiÄ…",
+    "state": "Valstija / provincija",
+    "validate": {
+      "address": "Adresas negali bÅ«ti tuÅ¡Äias.",
+      "city": "Miestas negali bÅ«ti tuÅ¡Äias.",
+      "country": "Å alis negali bÅ«ti tuÅ¡Äia.",
+      "name": "BaÅ¾nyÄios pavadinimas negali bÅ«ti tuÅ¡Äias.",
+      "state": "Valstija/provincija negali bÅ«ti tuÅ¡Äia.",
+      "zip": "PaÅ¡to kodas negali bÅ«ti tuÅ¡Äias."
+    },
+    "zip": "PaÅ¡to kodas"
+  },
+  "stockPhotos": {
+    "photoBy": "Nuotrauka iÅ¡:",
+    "providedBy": "AkcijÅ³ nuotraukos teikia"
+  },
+  "support": {
+    "discussions": "Palaikymo forumas",
+    "documentation": "Dokumentacija"
+  },
+  "wrapper": {
+    "newPrivateMessage": "Nauja privati Å¾inutÄ—",
+    "privateConversation": "Private Conversation",
+    "privateMessage": "Privati Å¾inutÄ—",
+    "searchForPerson": "IeÅ¡koti asmens"
+  }
 }
