@@ -1,339 +1,298 @@
 {
-	"b1Share": {
-		"comment": "Komentar",
-		"commentPlaceholder": "Dodajte komentar k svoji objavi.",
-		"contentShared": "Vsebina je deljena",
-		"group": "Skupina",
-		"sharingToGroup": "Deljenje {} v skupino B1",
-		"validate": {
-			"addComment": "Prosim dodajte komentar.",
-			"loginFirst": "Prosim se najprej prijavite.",
-			"notMember": "Trenutno niste član nobene skupine na B1.",
-			"selectGroup": "Prosim izberite skupino."
-		}
-	},
-	"common": {
-		"add": "Dodaj",
-		"cancel": "PrekliÄi",
-		"close": "Zapri",
-		"date": "Datum",
-		"delete": "IzbriÅ¡i",
-		"edit": "Uredi",
-		"error": "Napaka",
-		"pleaseWait": "Prosim Äakajte...",
-		"save": "Shrani",
-		"search": "Iskanje",
-		"submit": "Pošlji",
-		"update": "Posodobi"
-	},
-	"createPerson": {
-		"addNewPerson": "Dodaj novo osebo",
-		"email": "Email",
-		"firstName": "Ime",
-		"lastName": "Priimek"
-	},
-	"donation": {
-		"bankForm": {
-			"accountNumber": "Å tevilka raÄuna",
-			"added": "BanÄni raÄun dodan. Preverite svoj banÄni raÄun, da lahko darujete.",
-			"company": "Podjetje",
-			"firstDeposit": "Prva pologu",
-			"holderName": "Ime imetnika računa je obvezno.",
-			"individual": "Oseba",
-			"name": "Ime imetnika raÄuna",
-			"needVerified": "BanÄni raÄuni se morajo preveriti pred darovanjem. VaÅ¡ raÄun bo prejel dve majhni vplati v pribliÅ¾no 1-3 delovnih dneh. Vnesti morate zneska teh vlog, da dokonÄate preverjanje raÄuna z izbiro povezave za preverjanje raÄuna ob vaÅ¡em banÄnem raÄunu v razdelku naÄin plaÄila.",
-			"routingNumber": "Usmerjevalna koda",
-			"secondDeposit": "Druga pologu",
-			"twoDeposits": "Vnesite dve vlogi, ki ste ju prejeli na svoj raÄun, da dokonÄate preverjanje banÄnega raÄuna.",
-			"updated": "BanÄni raÄun posodobljen.",
-			"validate": {
-				"accountNumber": "Usmerjevalna koda in Å¡tevilka raÄuna sta obvezni.",
-				"holderName": "Ime imetnika raÄuna je obvezno."
-			},
-			"verified": "BanÄni raÄun preverjen."
-		},
-		"cardForm": {
-			"addNew": "Dodaj novo kartico",
-			"added": "Kartica uspeÅ¡no dodana.",
-			"expirationMonth": "Mesec poteka:",
-			"expirationYear": "Leto poteka:",
-			"updated": "Kartica uspeÅ¡no posodobljena."
-		},
-		"donationForm": {
-			"annually": "Letno",
-			"biWeekly": "Vsaki dve tedni",
-			"cancelled": "PonavljajoÄa se donacija preklicana.",
-			"confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati to ponavljajoÄo se donacijo?",
-			"cover": "Gostoljubno dodajam {} za kritje provizij za transakcije, da lahko ohranite 100% svoje donacije.",
-			"donate": "Doniraj",
-			"editRecurring": "Uredi ponavljajoÄo se donacijo",
-			"fees": "Uporabljajo se provizije za transakcije {}.",
-			"frequency": "Pogostost",
-			"fund": "Sklad",
-			"funds": "Sredstva",
-			"make": "Naredi donacijo",
-			"makeRecurring": "Naredi ponavljajoÄo se donacijo",
-			"method": "Metoda",
-			"monthly": "MeseÄno",
-			"notes": "Opombe",
-			"preview": "Predogled donacije",
-			"quarterly": "ÄŒetrtletno",
-			"recurringUpdated": "PonavljajoÄa se donacija je bila posodobljena.",
-			"startDate": "Datum zaÄetka",
-			"thankYou": "Hvala za vaÅ¡o donacijo!",
-			"tooLow": "Znesek donacije mora biti veÄji od 0,50 USD",
-			"total": "Skupni znesek donacije",
-			"validate": {
-				"amount": "Znesek ne more biti 0 USD.",
-				"email": "Prosim vnesite svoj e-naslov.",
-				"firstName": "Prosim vnesite svoje ime.",
-				"lastName": "Prosim vnesite svoj priimek.",
-				"validEmail": "Prosim vnesite veljaven e-naslov."
-			},
-			"weekly": "Tedensko"
-		},
-		"fundDonations": {
-			"addMore": "Dodaj veÄ",
-			"amount": "Znesek",
-			"fund": "Sklad"
-		},
-		"page": {
-			"amount": "Znesek",
-			"batch": "Skupna pošiljka",
-			"date": "Datum",
-			"fund": "Sklad",
-			"method": "Metoda",
-			"willAppear": "Donacije se bodo pojavile, ko bo donacija vpisana."
-		},
-		"paymentMethods": {
-			"addBank": "Dodaj banÄni raÄun",
-			"addCard": "Dodaj kartico",
-			"confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati ta naÄin plaÄila?",
-			"deleted": "NaÄin plaÄila izbrisan.",
-			"noMethods": "Brez načinov plačila. Dodajte način plačila, da lahko darujete.",
-			"verify": "Preveri raÄun"
-		},
-		"preview": {
-			"date": "Datum donacije",
-			"donate": "Doniraj",
-			"every": "PonavljajoÄa se donacija vsake",
-			"fee": "Provizija za transakcije",
-			"funds": "Sredstva",
-			"method": "NaÄin donacije",
-			"notes": "Opombe",
-			"startingOn": "ZaÄenÅ¡i od",
-			"total": "Skupaj",
-			"type": "Vrsta donacije"
-		},
-		"recurring": {
-			"amount": "Znesek",
-			"confirmPause": "Ali ste prepriÄani, da Å¾elite zaustaviti to ponavljajoÄo se donacijo?",
-			"every": "Vsaka",
-			"interval": "Interval",
-			"notFound": "NaÄin plaÄila ni bil najden.",
-			"pauseFailed": "Zaustavitev ponavljajoÄe se donacije ni uspela. Prosim poskusite znova.",
-			"pauseTooltip": "Zaustavi ponavljajoÄo se donacijo",
-			"paused": "Zaustavljen",
-			"pausedMessage": "PonavljajoÄa se donacija zaustavljena.",
-			"paymentMethod": "NaÄin plaÄila",
-			"resumeFailed": "Nadaljevanje ponavljajoÄe se donacije ni uspelo. Prosim poskusite znova.",
-			"resumeTooltip": "Nadaljuj ponavljajoÄo se donacijo",
-			"resumedMessage": "PonavljajoÄa se donacija nadaljevana.",
-			"startDate": "Datum zaÄetka"
-		}
-	},
-	"eventCalendar": {
-		"recurring": {
-			"day": {
-				"friday": "Petek",
-				"monday": "Ponedeljek",
-				"saturday": "Sobota",
-				"sunday": "Nedelja",
-				"thursday": "ÄŒetrtek",
-				"tuesday": "Torek",
-				"wednesday": "Sreda"
-			},
-			"endDate": "KonÄni datum",
-			"endDateAria": "KonÄni datum ponavljanja",
-			"ends": "KonÄa se",
-			"endsAfter": "Po",
-			"endsAria": "Izberi, kdaj se ponavljanje konÄa",
-			"endsOn": "Na",
-			"freqDay": "Dan",
-			"freqMonth": "Mesec",
-			"freqWeek": "Teden",
-			"frequency": "Pogostost",
-			"frequencyAria": "Izberi pogostost ponavljanja",
-			"interval": "Interval",
-			"intervalAria": "Interval ponavljanja",
-			"monthlyOnDay": "MeseÄno na dan {}",
-			"monthlyOnNth": "MeseÄno na {ordinal} {day}",
-			"monthlyOptionAria": "Izberi moÅ¾nost meseÄnega ponavljanja",
-			"never": "Nikoli",
-			"occurrences": "Ponovitve",
-			"occurrencesAria": "Å tevilo ponovitev",
-			"on": "Na",
-			"ordinal": {
-				"first": "prvi",
-				"fourth": "Äetrti",
-				"last": "zadnji",
-				"second": "drugi",
-				"third": "tretji"
-			},
-			"toggleWeekday": "Preklopi {} za tedensko ponavljanje"
-		}
-	},
-	"formSubmissionEdit": {
-		"back": "Nazaj",
-		"confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati te podatke obrazca?",
-		"continue": "Nadaljuj",
-		"editForm": "Uredi obrazec",
-		"isRequired": "je obvezno",
-		"stepProgress": "{current} od {total}",
-		"submit": "PoÅ¡lji"
-	},
-	"gallery": {
-		"aspectRatio": "Razmerje stranic",
-		"confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati to sliko iz galerije?",
-		"freeForm": "Prosta oblika"
-	},
-	"iconPicker": {
-		"iconsAvailable": "ikon na voljo",
-		"matchingResults": "ujemajočih rezultatov",
-		"search": "Iskanje ikon..."
-	},
-	"login": {
-		"createAccount": "Ustvari račun",
-		"email": "Email",
-		"enterCode": "Vnesite potrditveno kodo",
-		"enterCodeInstructions": "Vnesite 6-mestno kodo, ki smo vam jo pravkar poslali po e-poÅ¡ti.",
-		"expiredLink": "Trenutna povezava je potekla.",
-		"forgot": "Ste pozabili geslo",
-		"goLogin": "Pojdi na prijavo",
-		"login": "Prijava",
-		"noAcc": "Nimate raÄuna?",
-		"noAccountFound": "RaÄun s tem e-poÅ¡tnim naslovom ni bil najden. Registrirajte se za nadaljevanje.",
-		"password": "Geslo",
-		"register": "Registracija",
-		"registerThankYou": "Hvala, ker ste se registrirali! Prosim preverite e-poÅ¡to, da preverite svoj raÄun.",
-		"requestLink": "Zahtevaj novo povezavo za ponastavitev",
-		"resendCode": "Ponovno poÅ¡lji kodo",
-		"reset": "Ponastaviti",
-		"resetInstructions": "Vnesite svoj e-naslov, da zahtevate ponastavitev gesla.",
-		"resetPassword": "Ponastaviti geslo",
-		"resetSent": "Poslana e-pošta za ponastavitev gesla!",
-		"setPassword": "Nastavi geslo",
-		"signIn": "Prijava",
-		"signInTitle": "Prosim prijavite se",
-		"validate": {
-			"code": "Vnesite 6-mestno kodo.",
-			"email": "Prosim vnesite veljaven e-naslov.",
-			"firstName": "Prosim vnesite svoje ime.",
-			"invalid": "Neveljavna prijava. Prosim preverite svojo e-poÅ¡to ali geslo.",
-			"lastName": "Prosim vnesite svoj priimek.",
-			"password": "Prosim vnesite geslo.",
-			"passwordLength": "Geslo mora imeti najmanj 8 znakov.",
-			"passwordMatch": "Gesli se ne ujemata.",
-			"selectingChurch": "Napaka pri izbiri cerkve. Prosim preverite in poskusite znova"
-		},
-		"verifyCode": "Preveri kodo",
-		"verifyPassword": "Preveri geslo",
-		"welcomeBack": "DobrodoÅ¡li nazaj",
-		"welcomeName": "DobrodoÅ¡li nazaj, <b>{}</b>! Prosim Äakajte, medtem ko nalagamo vaÅ¡e podatke."
-	},
-	"markdownEditor": {
-		"content": "Vsebina",
-		"markdownEditor": "Urejevalnik Markdown",
-		"markdownGuide": "Vodnik Markdown"
-	},
-	"month": {
-		"april": "April",
-		"august": "Avgust",
-		"december": "December",
-		"february": "Februar",
-		"january": "Januar",
-		"july": "Julij",
-		"june": "Junij",
-		"march": "Marec",
-		"may": "Maj",
-		"november": "November",
-		"october": "Oktober",
-		"september": "September"
-	},
-	"notes": {
-		"comment": "komentar",
-		"comments": "komentarji",
-		"notes": "Opombe",
-		"startConversation": "Začni pogovor",
-		"validate": {
-			"content": "Prosim vnesite opombo."
-		},
-		"viewAll": "Poglejte vse"
-	},
-	"person": {
-		"email": "Email",
-		"firstName": "Ime",
-		"lastName": "Priimek",
-		"name": "Ime",
-		"noRec": "Nimate evidence osebe?",
-		"person": "Oseba",
-		"years": "let"
-	},
-	"reporting": {
-		"detailed": "Podrobno poročilo",
-		"downloadOptions": "Možnosti prenosa",
-		"noData": "Ni podatkov za prikaz.",
-		"runReport": "Zaženi poročilo",
-		"sampleTemplate": "Vzorec predloge Word",
-		"summary": "Povzetek",
-		"useFilter": "Uporabite filter, če želite zagnati poročilo."
-	},
-	"selectChurch": {
-		"address1": "Naslov - vrstica 1",
-		"address2": "Naslov - vrstica 2",
-		"another": "Izberite drugo cerkev",
-		"city": "Mesto",
-		"confirmRegister": "Ali ste prepriÄani, da Å¾elite registrirati novo cerkev?",
-		"country": "DrÅ¾ava",
-		"name": "Ime cerkve",
-		"noMatches": "Ni ujemajoÄih.",
-		"register": "Registriraj novo cerkev",
-		"selectChurch": "Izberite cerkev",
-		"state": "DrÅ¾ava / Provinca",
-		"validate": {
-			"address": "Naslov ne sme biti prazen.",
-			"city": "Mesto ne sme biti prazno.",
-			"country": "DrÅ¾ava ne sme biti prazna.",
-			"name": "Ime cerkve ne sme biti prazno.",
-			"state": "DrÅ¾ava/Provinca ne sme biti prazna.",
-			"zip": "PoÅ¡tna Å¡tevilka/poÅ¡tni kod ne smeta biti prazna."
-		},
-		"zip": "PoÅ¡tna Å¡tevilka / PoÅ¡tni kod"
-	},
-	"stockPhotos": {
-		"photoBy": "Fotografija od:",
-		"providedBy": "Arhivne fotografije zagotavlja"
-	},
-	"support": {
-		"discussions": "Forum za podporo",
-		"documentation": "Dokumentacija"
-	},
-	"wrapper": {
-		"chatWith": "Klepet z",
-		"deleteChurch": "Izbriši",
-		"editAccount": "Uredi račun",
-		"editChurchProfile": "Uredi profil cerkve",
-		"editProfile": "Uredi profil",
-		"logout": "Odjava",
-		"messages": "Sporočila",
-		"newPrivateMessage": "Novo zasebno sporoÄilo",
-		"notifications": "Obvestila",
-		"privateMessage": "Zasebno sporoÄilo",
-		"profile": "Profil",
-		"searchForPerson": "Iskanje osebe",
-		"support": "Podpora",
-		"sureRemoveChurch": "Ali ste prepričani, da želite izbrisati to cerkev? Več ne boste član {}.",
-		"switchApp": "Preklopi aplikacijo",
-		"switchChurch": "Preklopi cerkev"
-	}
+  "common": {
+    "cancel": "PrekliÄi",
+    "close": "Zapri",
+    "delete": "IzbriÅ¡i",
+    "pleaseWait": "Prosim Äakajte...",
+    "save": "Shrani",
+    "search": "Iskanje",
+    "update": "Posodobi"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "Å tevilka raÄuna",
+      "added": "BanÄni raÄun dodan. Preverite svoj banÄni raÄun, da lahko darujete.",
+      "company": "Podjetje",
+      "firstDeposit": "Prva pologu",
+      "individual": "Oseba",
+      "name": "Ime imetnika raÄuna",
+      "needVerified": "BanÄni raÄuni se morajo preveriti pred darovanjem. VaÅ¡ raÄun bo prejel dve majhni vplati v pribliÅ¾no 1-3 delovnih dneh. Vnesti morate zneska teh vlog, da dokonÄate preverjanje raÄuna z izbiro povezave za preverjanje raÄuna ob vaÅ¡em banÄnem raÄunu v razdelku naÄin plaÄila.",
+      "routingNumber": "Usmerjevalna koda",
+      "secondDeposit": "Druga pologu",
+      "twoDeposits": "Vnesite dve vlogi, ki ste ju prejeli na svoj raÄun, da dokonÄate preverjanje banÄnega raÄuna.",
+      "updated": "BanÄni raÄun posodobljen.",
+      "validate": {
+        "accountNumber": "Usmerjevalna koda in Å¡tevilka raÄuna sta obvezni.",
+        "holderName": "Ime imetnika raÄuna je obvezno."
+      },
+      "verified": "BanÄni raÄun preverjen."
+    },
+    "cardForm": {
+      "addNew": "Dodaj novo kartico",
+      "added": "Kartica uspeÅ¡no dodana.",
+      "expirationMonth": "Mesec poteka:",
+      "expirationYear": "Leto poteka:",
+      "updated": "Kartica uspeÅ¡no posodobljena."
+    },
+    "common": {
+      "cancel": "Cancel",
+      "error": "Error"
+    },
+    "donationForm": {
+      "annually": "Letno",
+      "biWeekly": "Vsaki dve tedni",
+      "cancelled": "PonavljajoÄa se donacija preklicana.",
+      "confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati to ponavljajoÄo se donacijo?",
+      "cover": "Gostoljubno dodajam {} za kritje provizij za transakcije, da lahko ohranite 100% svoje donacije.",
+      "donate": "Doniraj",
+      "editRecurring": "Uredi ponavljajoÄo se donacijo",
+      "fees": "Uporabljajo se provizije za transakcije {}.",
+      "frequency": "Pogostost",
+      "fund": "Sklad",
+      "funds": "Sredstva",
+      "make": "Naredi donacijo",
+      "makeRecurring": "Naredi ponavljajoÄo se donacijo",
+      "method": "Metoda",
+      "monthly": "MeseÄno",
+      "preview": "Predogled donacije",
+      "quarterly": "ÄŒetrtletno",
+      "recurringUpdated": "PonavljajoÄa se donacija je bila posodobljena.",
+      "startDate": "Datum zaÄetka",
+      "thankYou": "Hvala za vaÅ¡o donacijo!",
+      "tooLow": "Znesek donacije mora biti veÄji od 0,50 USD",
+      "total": "Skupni znesek donacije",
+      "validate": {
+        "amount": "Znesek ne more biti 0 USD.",
+        "email": "Prosim vnesite svoj e-naslov.",
+        "firstName": "Prosim vnesite svoje ime.",
+        "lastName": "Prosim vnesite svoj priimek.",
+        "validEmail": "Prosim vnesite veljaven e-naslov."
+      },
+      "weekly": "Tedensko"
+    },
+    "fundDonations": {
+      "addMore": "Dodaj veÄ",
+      "amount": "Znesek",
+      "fund": "Sklad"
+    },
+    "kingdomFunding": {
+      "enterBankDetails": "Enter your bank account details",
+      "enterCardDetails": "Enter card details",
+      "errorProcessingDonation": "Error processing donation",
+      "failedToInitPaymentForm": "Failed to initialize payment form",
+      "failedToLoadPaymentForm": "Failed to load payment form",
+      "failedToProcessCard": "Failed to process card. Please check your card details and try again.",
+      "failedToTokenizeCard": "Failed to tokenize card",
+      "gatewayConfigMissing": "Payment form not available. Gateway configuration missing.",
+      "loadingPaymentForm": "Loading payment form...",
+      "memo": "Memo (optional)",
+      "missingTokenizationKey": "Missing tokenization key",
+      "payWithBank": "Bank (ACH)",
+      "payWithCard": "Card",
+      "paymentFormNotAvailable": "Payment form not available",
+      "paymentFormNotInitialized": "Payment form not initialized",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
+      "validate": {
+        "captchaFailed": "reCAPTCHA verification failed. Please try again.",
+        "captchaRequired": "Please complete the reCAPTCHA verification"
+      }
+    },
+    "paymentMethods": {
+      "addBank": "Dodaj banÄni raÄun",
+      "addCard": "Dodaj kartico",
+      "confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati ta naÄin plaÄila?",
+      "deleted": "NaÄin plaÄila izbrisan.",
+      "noMethod": "No Method",
+      "verify": "Preveri raÄun"
+    },
+    "paystack": {
+      "emailRequired": "An email address is required to pay with Paystack.",
+      "paymentFailed": "Payment was not completed.",
+      "popupHint": "You'll complete payment in a secure Paystack window. Card, mobile money and bank transfer are accepted.",
+      "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
+    },
+    "preview": {
+      "date": "Datum donacije",
+      "donate": "Doniraj",
+      "every": "PonavljajoÄa se donacija vsake",
+      "fee": "Provizija za transakcije",
+      "funds": "Sredstva",
+      "method": "NaÄin donacije",
+      "notes": "Opombe",
+      "startingOn": "ZaÄenÅ¡i od",
+      "total": "Skupaj",
+      "type": "Vrsta donacije"
+    },
+    "recurring": {
+      "amount": "Znesek",
+      "confirmPause": "Ali ste prepriÄani, da Å¾elite zaustaviti to ponavljajoÄo se donacijo?",
+      "every": "Vsaka",
+      "interval": "Interval",
+      "noSubscriptions": "No Subscriptions",
+      "notFound": "NaÄin plaÄila ni bil najden.",
+      "pauseFailed": "Zaustavitev ponavljajoÄe se donacije ni uspela. Prosim poskusite znova.",
+      "pauseTooltip": "Zaustavi ponavljajoÄo se donacijo",
+      "paused": "Zaustavljen",
+      "pausedMessage": "PonavljajoÄa se donacija zaustavljena.",
+      "paymentMethod": "NaÄin plaÄila",
+      "resumeFailed": "Nadaljevanje ponavljajoÄe se donacije ni uspelo. Prosim poskusite znova.",
+      "resumeTooltip": "Nadaljuj ponavljajoÄo se donacijo",
+      "resumedMessage": "PonavljajoÄa se donacija nadaljevana.",
+      "startDate": "Datum zaÄetka"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Petek",
+        "monday": "Ponedeljek",
+        "saturday": "Sobota",
+        "sunday": "Nedelja",
+        "thursday": "ÄŒetrtek",
+        "tuesday": "Torek",
+        "wednesday": "Sreda"
+      },
+      "endDate": "KonÄni datum",
+      "endDateAria": "KonÄni datum ponavljanja",
+      "ends": "KonÄa se",
+      "endsAfter": "Po",
+      "endsAria": "Izberi, kdaj se ponavljanje konÄa",
+      "endsOn": "Na",
+      "freqDay": "Dan",
+      "freqMonth": "Mesec",
+      "freqWeek": "Teden",
+      "frequency": "Pogostost",
+      "frequencyAria": "Izberi pogostost ponavljanja",
+      "interval": "Interval",
+      "intervalAria": "Interval ponavljanja",
+      "monthlyOnDay": "MeseÄno na dan {}",
+      "monthlyOnNth": "MeseÄno na {ordinal} {day}",
+      "monthlyOptionAria": "Izberi moÅ¾nost meseÄnega ponavljanja",
+      "never": "Nikoli",
+      "occurrences": "Ponovitve",
+      "occurrencesAria": "Å tevilo ponovitev",
+      "on": "Na",
+      "ordinal": {
+        "first": "prvi",
+        "fourth": "Äetrti",
+        "last": "zadnji",
+        "second": "drugi",
+        "third": "tretji"
+      },
+      "toggleWeekday": "Preklopi {} za tedensko ponavljanje"
+    }
+  },
+  "fileUpload": {
+    "file": "File",
+    "quotaExceeded": "Storage quota exceeded. Delete unused files or upgrade your storage plan.",
+    "uploadFailed": "Upload failed. Please try again."
+  },
+  "formSubmissionEdit": {
+    "back": "Nazaj",
+    "confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati te podatke obrazca?",
+    "continue": "Nadaljuj",
+    "editForm": "Uredi obrazec",
+    "isRequired": "je obvezno",
+    "stepProgress": "{current} od {total}",
+    "submit": "PoÅ¡lji"
+  },
+  "gallery": {
+    "aspectRatio": "Razmerje stranic",
+    "confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati to sliko iz galerije?",
+    "freeForm": "Prosta oblika"
+  },
+  "login": {
+    "email": "Email",
+    "enterCode": "Vnesite potrditveno kodo",
+    "enterCodeInstructions": "Vnesite 6-mestno kodo, ki smo vam jo pravkar poslali po e-poÅ¡ti.",
+    "expiredLink": "Trenutna povezava je potekla.",
+    "forgot": "Ste pozabili geslo",
+    "login": "Prijava",
+    "noAcc": "Nimate raÄuna?",
+    "noAccountFound": "RaÄun s tem e-poÅ¡tnim naslovom ni bil najden. Registrirajte se za nadaljevanje.",
+    "or": "or",
+    "password": "Geslo",
+    "register": "Registracija",
+    "registerThankYou": "Hvala, ker ste se registrirali! Prosim preverite e-poÅ¡to, da preverite svoj raÄun.",
+    "requestLink": "Zahtevaj novo povezavo za ponastavitev",
+    "resendCode": "Ponovno poÅ¡lji kodo",
+    "reset": "Ponastaviti",
+    "resetInstructions": "Vnesite svoj e-naslov, da zahtevate ponastavitev gesla.",
+    "resetPassword": "Ponastaviti geslo",
+    "setPassword": "Nastavi geslo",
+    "signIn": "Prijava",
+    "signInTitle": "Prosim prijavite se",
+    "validate": {
+      "code": "Vnesite 6-mestno kodo.",
+      "email": "Prosim vnesite veljaven e-naslov.",
+      "firstName": "Prosim vnesite svoje ime.",
+      "invalid": "Neveljavna prijava. Prosim preverite svojo e-poÅ¡to ali geslo.",
+      "lastName": "Prosim vnesite svoj priimek.",
+      "password": "Prosim vnesite geslo.",
+      "passwordLength": "Geslo mora imeti najmanj 8 znakov.",
+      "passwordMatch": "Gesli se ne ujemata.",
+      "selectingChurch": "Napaka pri izbiri cerkve. Prosim preverite in poskusite znova"
+    },
+    "verifyCode": "Preveri kodo",
+    "verifyPassword": "Preveri geslo",
+    "welcomeBack": "DobrodoÅ¡li nazaj",
+    "welcomeName": "DobrodoÅ¡li nazaj, <b>{}</b>! Prosim Äakajte, medtem ko nalagamo vaÅ¡e podatke."
+  },
+  "markdownEditor": {
+    "content": "Vsebina",
+    "markdownGuide": "Vodnik Markdown"
+  },
+  "notes": {
+    "comment": "komentar",
+    "comments": "komentarji",
+    "notes": "Opombe",
+    "notifyOff": "Notify Off",
+    "notifyOn": "Notify On",
+    "openFile": "Open file",
+    "validate": {
+      "content": "Prosim vnesite opombo."
+    }
+  },
+  "person": {
+    "email": "Email",
+    "firstName": "Ime",
+    "lastName": "Priimek",
+    "name": "Ime"
+  },
+  "selectChurch": {
+    "address1": "Naslov - vrstica 1",
+    "address2": "Naslov - vrstica 2",
+    "another": "Izberite drugo cerkev",
+    "city": "Mesto",
+    "confirmRegister": "Ali ste prepriÄani, da Å¾elite registrirati novo cerkev?",
+    "country": "DrÅ¾ava",
+    "name": "Ime cerkve",
+    "noMatches": "Ni ujemajoÄih.",
+    "register": "Registriraj novo cerkev",
+    "selectChurch": "Izberite cerkev",
+    "state": "DrÅ¾ava / Provinca",
+    "validate": {
+      "address": "Naslov ne sme biti prazen.",
+      "city": "Mesto ne sme biti prazno.",
+      "country": "DrÅ¾ava ne sme biti prazna.",
+      "name": "Ime cerkve ne sme biti prazno.",
+      "state": "DrÅ¾ava/Provinca ne sme biti prazna.",
+      "zip": "PoÅ¡tna Å¡tevilka/poÅ¡tni kod ne smeta biti prazna."
+    },
+    "zip": "PoÅ¡tna Å¡tevilka / PoÅ¡tni kod"
+  },
+  "stockPhotos": {
+    "photoBy": "Fotografija od:",
+    "providedBy": "Arhivne fotografije zagotavlja"
+  },
+  "support": {
+    "discussions": "Forum za podporo",
+    "documentation": "Dokumentacija"
+  },
+  "wrapper": {
+    "newPrivateMessage": "Novo zasebno sporoÄilo",
+    "privateConversation": "Private Conversation",
+    "privateMessage": "Zasebno sporoÄilo",
+    "searchForPerson": "Iskanje osebe"
+  }
 }

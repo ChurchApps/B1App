@@ -1,339 +1,298 @@
 {
-	"b1Share": {
-		"comment": "Komentář",
-		"commentPlaceholder": "Přidejte komentář ke svému příspěvku.",
-		"contentShared": "Obsah sdílen",
-		"group": "Skupina",
-		"sharingToGroup": "Sdílení {} do skupiny B1",
-		"validate": {
-			"addComment": "Prosím přidejte komentář.",
-			"loginFirst": "Prosím nejprve se přihlaste.",
-			"notMember": "V současné době nejste členem žádné skupiny na B1.",
-			"selectGroup": "Prosím vyberte skupinu."
-		}
-	},
-	"common": {
-		"add": "Přidat",
-		"cancel": "ZruÅ¡it",
-		"close": "ZavÅ™Ã­t",
-		"date": "Datum",
-		"delete": "Smazat",
-		"edit": "Upravit",
-		"error": "Chyba",
-		"pleaseWait": "ProsÃ­m Äekejte...",
-		"save": "UloÅ¾it",
-		"search": "Hledat",
-		"submit": "Odeslat",
-		"update": "Aktualizovat"
-	},
-	"createPerson": {
-		"addNewPerson": "Přidat novou osobu",
-		"email": "E-mail",
-		"firstName": "Jméno",
-		"lastName": "Příjmení"
-	},
-	"donation": {
-		"bankForm": {
-			"accountNumber": "ÄŒÃ­slo ÃºÄtu",
-			"added": "BankovnÃ­ ÃºÄet pÅ™idÃ¡n. Pro provedenÃ­ daru ovÄ›Å™te svÅ¯j bankovnÃ­ ÃºÄet.",
-			"company": "Firma",
-			"firstDeposit": "PrvnÃ­ vklad",
-			"holderName": "Jméno majitele účtu je povinné.",
-			"individual": "FyzickÃ¡ osoba",
-			"name": "JmÃ©no majitele ÃºÄtu",
-			"needVerified": "BankovnÃ­ ÃºÄty musÃ­ bÃ½t ovÄ›Å™eny pÅ™ed provedenÃ­m jakÃ½chkoli darÅ¯. Na vÃ¡Å¡ ÃºÄet budou pÅ™ipsÃ¡ny dva malÃ© vklady pÅ™ibliÅ¾nÄ› za 1â€“3 pracovnÃ­ dny. Pro dokonÄenÃ­ ovÄ›Å™enÃ­ ÃºÄtu budete muset zadat ÄÃ¡stky tÄ›chto vkladÅ¯ kliknutÃ­m na odkaz pro ovÄ›Å™enÃ­ ÃºÄtu vedle vaÅ¡eho bankovnÃ­ho ÃºÄtu v sekci platebnÃ­ch metod.",
-			"routingNumber": "SmÄ›rovÃ½ kÃ³d",
-			"secondDeposit": "DruhÃ½ vklad",
-			"twoDeposits": "Pro dokonÄenÃ­ ovÄ›Å™enÃ­ bankovnÃ­ho ÃºÄtu zadejte dva vklady, kterÃ© jste obdrÅ¾eli na svÅ¯j ÃºÄet.",
-			"updated": "BankovnÃ­ ÃºÄet aktualizovÃ¡n.",
-			"validate": {
-				"accountNumber": "SmÄ›rovÃ½ kÃ³d a ÄÃ­slo ÃºÄtu jsou povinnÃ©.",
-				"holderName": "JmÃ©no majitele ÃºÄtu je povinnÃ©."
-			},
-			"verified": "BankovnÃ­ ÃºÄet ovÄ›Å™en."
-		},
-		"cardForm": {
-			"addNew": "PÅ™idat novou kartu",
-			"added": "Karta ÃºspÄ›Å¡nÄ› pÅ™idÃ¡na.",
-			"expirationMonth": "MÄ›sÃ­c expirace:",
-			"expirationYear": "Rok expirace:",
-			"updated": "Karta ÃºspÄ›Å¡nÄ› aktualizovÃ¡na."
-		},
-		"donationForm": {
-			"annually": "RoÄnÄ›",
-			"biWeekly": "Jednou za dva tÃ½dny",
-			"cancelled": "OpakovanÃ½ dar zruÅ¡en.",
-			"confirmDelete": "Opravdu chcete smazat tento opakovanÃ½ dar?",
-			"cover": "RÃ¡d/a pÅ™idÃ¡m {} na pokrytÃ­ transakÄnÃ­ch poplatkÅ¯, abyste mohli ponechat 100 % mÃ©ho daru.",
-			"donate": "Darovat",
-			"editRecurring": "Upravit opakovanÃ½ dar",
-			"fees": "Jsou ÃºÄtovÃ¡ny transakÄnÃ­ poplatky ve vÃ½Å¡i {}.",
-			"frequency": "Frekvence",
-			"fund": "Fond",
-			"funds": "Fondy",
-			"make": "PÅ™ispÄ›t darem",
-			"makeRecurring": "Nastavit opakovanÃ½ dar",
-			"method": "Metoda",
-			"monthly": "MÄ›sÃ­ÄnÄ›",
-			"notes": "Poznámky",
-			"preview": "NÃ¡hled daru",
-			"quarterly": "ÄŒtvrtletnÄ›",
-			"recurringUpdated": "OpakovanÃ½ dar aktualizovÃ¡n.",
-			"startDate": "Datum zahÃ¡jenÃ­",
-			"thankYou": "DÄ›kujeme za vÃ¡Å¡ dar!",
-			"tooLow": "ÄŒÃ¡stka daru musÃ­ bÃ½t vyÅ¡Å¡Ã­ neÅ¾ $0,50",
-			"total": "CelkovÃ¡ ÄÃ¡stka daru",
-			"validate": {
-				"amount": "ÄŒÃ¡stka nemÅ¯Å¾e bÃ½t $0.",
-				"email": "ProsÃ­m zadejte svou e-mailovou adresu.",
-				"firstName": "ProsÃ­m zadejte svÃ© jmÃ©no.",
-				"lastName": "ProsÃ­m zadejte svÃ© pÅ™Ã­jmenÃ­.",
-				"validEmail": "ProsÃ­m zadejte platnou e-mailovou adresu."
-			},
-			"weekly": "TÃ½dnÄ›"
-		},
-		"fundDonations": {
-			"addMore": "PÅ™idat dalÅ¡Ã­",
-			"amount": "ÄŒÃ¡stka",
-			"fund": "Fond"
-		},
-		"page": {
-			"amount": "Částka",
-			"batch": "Dávka",
-			"date": "Datum",
-			"fund": "Fond",
-			"method": "Metoda",
-			"willAppear": "Dary se zobrazí po zadání daru."
-		},
-		"paymentMethods": {
-			"addBank": "PÅ™idat bankovnÃ­ ÃºÄet",
-			"addCard": "PÅ™idat kartu",
-			"confirmDelete": "Opravdu chcete smazat tuto platebnÃ­ metodu?",
-			"deleted": "PlatebnÃ­ metoda smazÃ¡na.",
-			"noMethods": "Žádné platební metody. Pro provedení daru přidejte platební metodu.",
-			"verify": "OvÄ›Å™it ÃºÄet"
-		},
-		"preview": {
-			"date": "Datum daru",
-			"donate": "Darovat",
-			"every": "OpakovanÄ› kaÅ¾dÃ½",
-			"fee": "TransakÄnÃ­ poplatek",
-			"funds": "Fondy",
-			"method": "Metoda daru",
-			"notes": "PoznÃ¡mky",
-			"startingOn": "PoÄÃ­naje",
-			"total": "Celkem",
-			"type": "Typ daru"
-		},
-		"recurring": {
-			"amount": "ÄŒÃ¡stka",
-			"confirmPause": "Opravdu chcete pozastavit tento opakovanÃ½ dar?",
-			"every": "KaÅ¾dÃ½",
-			"interval": "Interval",
-			"notFound": "PlatebnÃ­ metoda nenalezena.",
-			"pauseFailed": "NepodaÅ™ilo se pozastavit opakovanÃ½ dar. Zkuste to prosÃ­m znovu.",
-			"pauseTooltip": "Pozastavit opakovanÃ½ dar",
-			"paused": "Pozastaveno",
-			"pausedMessage": "OpakovanÃ½ dar pozastaven.",
-			"paymentMethod": "PlatebnÃ­ metoda",
-			"resumeFailed": "NepodaÅ™ilo se obnovit opakovanÃ½ dar. Zkuste to prosÃ­m znovu.",
-			"resumeTooltip": "Obnovit opakovanÃ½ dar",
-			"resumedMessage": "OpakovanÃ½ dar obnoven.",
-			"startDate": "Datum zahÃ¡jenÃ­"
-		}
-	},
-	"eventCalendar": {
-		"recurring": {
-			"day": {
-				"friday": "PÃ¡tek",
-				"monday": "PondÄ›lÃ­",
-				"saturday": "Sobota",
-				"sunday": "NedÄ›le",
-				"thursday": "ÄŒtvrtek",
-				"tuesday": "ÃšterÃ½",
-				"wednesday": "StÅ™eda"
-			},
-			"endDate": "Datum ukonÄenÃ­",
-			"endDateAria": "Datum ukonÄenÃ­ opakovÃ¡nÃ­",
-			"ends": "KonÄÃ­",
-			"endsAfter": "Po",
-			"endsAria": "Vyberte, kdy opakovÃ¡nÃ­ konÄÃ­",
-			"endsOn": "Dne",
-			"freqDay": "Den",
-			"freqMonth": "MÄ›sÃ­c",
-			"freqWeek": "TÃ½den",
-			"frequency": "Frekvence",
-			"frequencyAria": "Vyberte frekvenci opakovÃ¡nÃ­",
-			"interval": "Interval",
-			"intervalAria": "Interval opakovÃ¡nÃ­",
-			"monthlyOnDay": "MÄ›sÃ­ÄnÄ› v den {}",
-			"monthlyOnNth": "MÄ›sÃ­ÄnÄ› {ordinal} {day}",
-			"monthlyOptionAria": "Vyberte moÅ¾nost mÄ›sÃ­ÄnÃ­ho opakovÃ¡nÃ­",
-			"never": "Nikdy",
-			"occurrences": "VÃ½skyty",
-			"occurrencesAria": "PoÄet vÃ½skytÅ¯ opakovÃ¡nÃ­",
-			"on": "V",
-			"ordinal": {
-				"first": "prvnÃ­",
-				"fourth": "ÄtvrtÃ½",
-				"last": "poslednÃ­",
-				"second": "druhÃ½",
-				"third": "tÅ™etÃ­"
-			},
-			"toggleWeekday": "PÅ™epnout {} pro tÃ½dennÃ­ opakovÃ¡nÃ­"
-		}
-	},
-	"formSubmissionEdit": {
-		"back": "ZpÄ›t",
-		"confirmDelete": "Opravdu chcete smazat tyto Ãºdaje formulÃ¡Å™e?",
-		"continue": "PokraÄovat",
-		"editForm": "Upravit formulÃ¡Å™",
-		"isRequired": "je povinnÃ©",
-		"stepProgress": "{current} z {total}",
-		"submit": "Odeslat"
-	},
-	"gallery": {
-		"aspectRatio": "PomÄ›r stran",
-		"confirmDelete": "Opravdu chcete smazat tento obrÃ¡zek z galerie?",
-		"freeForm": "VolnÃ½ formÃ¡t"
-	},
-	"iconPicker": {
-		"iconsAvailable": "dostupných ikon",
-		"matchingResults": "odpovídajících výsledků",
-		"search": "Hledat ikony..."
-	},
-	"login": {
-		"createAccount": "Vytvořit účet",
-		"email": "E-mail",
-		"enterCode": "Zadejte ovÄ›Å™ovacÃ­ kÃ³d",
-		"enterCodeInstructions": "Zadejte 6mÃ­stnÃ½ kÃ³d, kterÃ½ jsme vÃ¡m prÃ¡vÄ› odeslali e-mailem.",
-		"expiredLink": "AktuÃ¡lnÃ­ odkaz vyprÅ¡el.",
-		"forgot": "ZapomenutÃ© heslo",
-		"goLogin": "Přejít na přihlášení",
-		"login": "PÅ™ihlÃ¡sit se",
-		"noAcc": "NemÃ¡te ÃºÄet?",
-		"noAccountFound": "Pro tento e-mail nebyl nalezen Å¾Ã¡dnÃ½ ÃºÄet. PokraÄujte registracÃ­.",
-		"password": "Heslo",
-		"register": "Registrovat",
-		"registerThankYou": "DÄ›kujeme za registraci! Zkontrolujte prosÃ­m svÅ¯j e-mail pro ovÄ›Å™enÃ­ ÃºÄtu.",
-		"requestLink": "PoÅ¾Ã¡dat o novÃ½ odkaz pro obnovenÃ­",
-		"resendCode": "Odeslat kÃ³d znovu",
-		"reset": "Obnovit",
-		"resetInstructions": "Zadejte svou e-mailovou adresu pro obnovenÃ­ hesla.",
-		"resetPassword": "Obnovit heslo",
-		"resetSent": "E-mail pro obnovení hesla odeslán!",
-		"setPassword": "Nastavit heslo",
-		"signIn": "PÅ™ihlÃ¡sit se",
-		"signInTitle": "ProsÃ­m pÅ™ihlaste se",
-		"validate": {
-			"code": "Zadejte prosÃ­m 6mÃ­stnÃ½ kÃ³d.",
-			"email": "ProsÃ­m zadejte platnou e-mailovou adresu.",
-			"firstName": "ProsÃ­m zadejte svÃ© jmÃ©no.",
-			"invalid": "NeplatnÃ© pÅ™ihlÃ¡Å¡enÃ­. Zkontrolujte prosÃ­m svÅ¯j e-mail nebo heslo.",
-			"lastName": "ProsÃ­m zadejte svÃ© pÅ™Ã­jmenÃ­.",
-			"password": "ProsÃ­m zadejte heslo.",
-			"passwordLength": "Heslo musÃ­ mÃ­t alespoÅˆ 8 znakÅ¯.",
-			"passwordMatch": "Hesla se neshodujÃ­.",
-			"selectingChurch": "Chyba pÅ™i vÃ½bÄ›ru sboru. ProsÃ­m ovÄ›Å™te a zkuste to znovu."
-		},
-		"verifyCode": "OvÄ›Å™it kÃ³d",
-		"verifyPassword": "OvÄ›Å™it heslo",
-		"welcomeBack": "VÃ­tejte zpÄ›t",
-		"welcomeName": "VÃ­tejte zpÄ›t, <b>{}</b>! ProsÃ­m Äekejte, naÄÃ­tÃ¡me vaÅ¡e Ãºdaje."
-	},
-	"markdownEditor": {
-		"content": "Obsah",
-		"markdownEditor": "Markdown editor",
-		"markdownGuide": "PrÅ¯vodce Markdownem"
-	},
-	"month": {
-		"april": "Duben",
-		"august": "Srpen",
-		"december": "Prosinec",
-		"february": "Únor",
-		"january": "Leden",
-		"july": "Červenec",
-		"june": "Červen",
-		"march": "Březen",
-		"may": "Květen",
-		"november": "Listopad",
-		"october": "Říjen",
-		"september": "Září"
-	},
-	"notes": {
-		"comment": "komentÃ¡Å™",
-		"comments": "komentÃ¡Å™e",
-		"notes": "PoznÃ¡mky",
-		"startConversation": "Zahájit konverzaci",
-		"validate": {
-			"content": "ProsÃ­m zadejte poznÃ¡mku."
-		},
-		"viewAll": "Zobrazit vše"
-	},
-	"person": {
-		"email": "E-mail",
-		"firstName": "JmÃ©no",
-		"lastName": "PÅ™Ã­jmenÃ­",
-		"name": "JmÃ©no",
-		"noRec": "Nemáte záznam osoby?",
-		"person": "Osoba",
-		"years": "let"
-	},
-	"reporting": {
-		"detailed": "Podrobná zpráva",
-		"downloadOptions": "Možnosti stažení",
-		"noData": "Nejsou k dispozici žádná data.",
-		"runReport": "Spustit zprávu",
-		"sampleTemplate": "Vzorová šablona pro Word",
-		"summary": "Souhrn",
-		"useFilter": "Použijte filtr ke spuštění zprávy."
-	},
-	"selectChurch": {
-		"address1": "Adresa â€“ Å™Ã¡dek 1",
-		"address2": "Adresa â€“ Å™Ã¡dek 2",
-		"another": "Vybrat jinÃ½ sbor",
-		"city": "MÄ›sto",
-		"confirmRegister": "Opravdu chcete zaregistrovat novÃ½ sbor?",
-		"country": "ZemÄ›",
-		"name": "NÃ¡zev sboru",
-		"noMatches": "Nebyly nalezeny Å¾Ã¡dnÃ© shody.",
-		"register": "Zaregistrovat novÃ½ sbor",
-		"selectChurch": "Vybrat sbor",
-		"state": "StÃ¡t / Kraj",
-		"validate": {
-			"address": "Adresa nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ¡.",
-			"city": "MÄ›sto nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ©.",
-			"country": "ZemÄ› nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ¡.",
-			"name": "NÃ¡zev sboru nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ½.",
-			"state": "StÃ¡t/Kraj nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ½.",
-			"zip": "PSÄŒ nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ©."
-		},
-		"zip": "PSÄŒ"
-	},
-	"stockPhotos": {
-		"photoBy": "Foto:",
-		"providedBy": "Fotobanku poskytuje"
-	},
-	"support": {
-		"discussions": "FÃ³rum podpory",
-		"documentation": "Dokumentace"
-	},
-	"wrapper": {
-		"chatWith": "Chatovat s",
-		"deleteChurch": "Smazat",
-		"editAccount": "Upravit účet",
-		"editChurchProfile": "Upravit profil sboru",
-		"editProfile": "Upravit profil",
-		"logout": "Odhlásit se",
-		"messages": "Zprávy",
-		"newPrivateMessage": "NovÃ¡ soukromÃ¡ zprÃ¡va",
-		"notifications": "Oznámení",
-		"privateMessage": "SoukromÃ¡ zprÃ¡va",
-		"profile": "Profil",
-		"searchForPerson": "Hledat osobu",
-		"support": "Podpora",
-		"sureRemoveChurch": "Opravdu chcete smazat tento sbor? Již nebudete členem {}.",
-		"switchApp": "Přepnout aplikaci",
-		"switchChurch": "Přepnout sbor"
-	}
+  "common": {
+    "cancel": "ZruÅ¡it",
+    "close": "ZavÅ™Ã­t",
+    "delete": "Smazat",
+    "pleaseWait": "ProsÃ­m Äekejte...",
+    "save": "UloÅ¾it",
+    "search": "Hledat",
+    "update": "Aktualizovat"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "ÄŒÃ­slo ÃºÄtu",
+      "added": "BankovnÃ­ ÃºÄet pÅ™idÃ¡n. Pro provedenÃ­ daru ovÄ›Å™te svÅ¯j bankovnÃ­ ÃºÄet.",
+      "company": "Firma",
+      "firstDeposit": "PrvnÃ­ vklad",
+      "individual": "FyzickÃ¡ osoba",
+      "name": "JmÃ©no majitele ÃºÄtu",
+      "needVerified": "BankovnÃ­ ÃºÄty musÃ­ bÃ½t ovÄ›Å™eny pÅ™ed provedenÃ­m jakÃ½chkoli darÅ¯. Na vÃ¡Å¡ ÃºÄet budou pÅ™ipsÃ¡ny dva malÃ© vklady pÅ™ibliÅ¾nÄ› za 1â€“3 pracovnÃ­ dny. Pro dokonÄenÃ­ ovÄ›Å™enÃ­ ÃºÄtu budete muset zadat ÄÃ¡stky tÄ›chto vkladÅ¯ kliknutÃ­m na odkaz pro ovÄ›Å™enÃ­ ÃºÄtu vedle vaÅ¡eho bankovnÃ­ho ÃºÄtu v sekci platebnÃ­ch metod.",
+      "routingNumber": "SmÄ›rovÃ½ kÃ³d",
+      "secondDeposit": "DruhÃ½ vklad",
+      "twoDeposits": "Pro dokonÄenÃ­ ovÄ›Å™enÃ­ bankovnÃ­ho ÃºÄtu zadejte dva vklady, kterÃ© jste obdrÅ¾eli na svÅ¯j ÃºÄet.",
+      "updated": "BankovnÃ­ ÃºÄet aktualizovÃ¡n.",
+      "validate": {
+        "accountNumber": "SmÄ›rovÃ½ kÃ³d a ÄÃ­slo ÃºÄtu jsou povinnÃ©.",
+        "holderName": "JmÃ©no majitele ÃºÄtu je povinnÃ©."
+      },
+      "verified": "BankovnÃ­ ÃºÄet ovÄ›Å™en."
+    },
+    "cardForm": {
+      "addNew": "PÅ™idat novou kartu",
+      "added": "Karta ÃºspÄ›Å¡nÄ› pÅ™idÃ¡na.",
+      "expirationMonth": "MÄ›sÃ­c expirace:",
+      "expirationYear": "Rok expirace:",
+      "updated": "Karta ÃºspÄ›Å¡nÄ› aktualizovÃ¡na."
+    },
+    "common": {
+      "cancel": "Cancel",
+      "error": "Error"
+    },
+    "donationForm": {
+      "annually": "RoÄnÄ›",
+      "biWeekly": "Jednou za dva tÃ½dny",
+      "cancelled": "OpakovanÃ½ dar zruÅ¡en.",
+      "confirmDelete": "Opravdu chcete smazat tento opakovanÃ½ dar?",
+      "cover": "RÃ¡d/a pÅ™idÃ¡m {} na pokrytÃ­ transakÄnÃ­ch poplatkÅ¯, abyste mohli ponechat 100 % mÃ©ho daru.",
+      "donate": "Darovat",
+      "editRecurring": "Upravit opakovanÃ½ dar",
+      "fees": "Jsou ÃºÄtovÃ¡ny transakÄnÃ­ poplatky ve vÃ½Å¡i {}.",
+      "frequency": "Frekvence",
+      "fund": "Fond",
+      "funds": "Fondy",
+      "make": "PÅ™ispÄ›t darem",
+      "makeRecurring": "Nastavit opakovanÃ½ dar",
+      "method": "Metoda",
+      "monthly": "MÄ›sÃ­ÄnÄ›",
+      "preview": "NÃ¡hled daru",
+      "quarterly": "ÄŒtvrtletnÄ›",
+      "recurringUpdated": "OpakovanÃ½ dar aktualizovÃ¡n.",
+      "startDate": "Datum zahÃ¡jenÃ­",
+      "thankYou": "DÄ›kujeme za vÃ¡Å¡ dar!",
+      "tooLow": "ÄŒÃ¡stka daru musÃ­ bÃ½t vyÅ¡Å¡Ã­ neÅ¾ $0,50",
+      "total": "CelkovÃ¡ ÄÃ¡stka daru",
+      "validate": {
+        "amount": "ÄŒÃ¡stka nemÅ¯Å¾e bÃ½t $0.",
+        "email": "ProsÃ­m zadejte svou e-mailovou adresu.",
+        "firstName": "ProsÃ­m zadejte svÃ© jmÃ©no.",
+        "lastName": "ProsÃ­m zadejte svÃ© pÅ™Ã­jmenÃ­.",
+        "validEmail": "ProsÃ­m zadejte platnou e-mailovou adresu."
+      },
+      "weekly": "TÃ½dnÄ›"
+    },
+    "fundDonations": {
+      "addMore": "PÅ™idat dalÅ¡Ã­",
+      "amount": "ÄŒÃ¡stka",
+      "fund": "Fond"
+    },
+    "kingdomFunding": {
+      "enterBankDetails": "Enter your bank account details",
+      "enterCardDetails": "Enter card details",
+      "errorProcessingDonation": "Error processing donation",
+      "failedToInitPaymentForm": "Failed to initialize payment form",
+      "failedToLoadPaymentForm": "Failed to load payment form",
+      "failedToProcessCard": "Failed to process card. Please check your card details and try again.",
+      "failedToTokenizeCard": "Failed to tokenize card",
+      "gatewayConfigMissing": "Payment form not available. Gateway configuration missing.",
+      "loadingPaymentForm": "Loading payment form...",
+      "memo": "Memo (optional)",
+      "missingTokenizationKey": "Missing tokenization key",
+      "payWithBank": "Bank (ACH)",
+      "payWithCard": "Card",
+      "paymentFormNotAvailable": "Payment form not available",
+      "paymentFormNotInitialized": "Payment form not initialized",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
+      "validate": {
+        "captchaFailed": "reCAPTCHA verification failed. Please try again.",
+        "captchaRequired": "Please complete the reCAPTCHA verification"
+      }
+    },
+    "paymentMethods": {
+      "addBank": "PÅ™idat bankovnÃ­ ÃºÄet",
+      "addCard": "PÅ™idat kartu",
+      "confirmDelete": "Opravdu chcete smazat tuto platebnÃ­ metodu?",
+      "deleted": "PlatebnÃ­ metoda smazÃ¡na.",
+      "noMethod": "No Method",
+      "verify": "OvÄ›Å™it ÃºÄet"
+    },
+    "paystack": {
+      "emailRequired": "An email address is required to pay with Paystack.",
+      "paymentFailed": "Payment was not completed.",
+      "popupHint": "You'll complete payment in a secure Paystack window. Card, mobile money and bank transfer are accepted.",
+      "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
+    },
+    "preview": {
+      "date": "Datum daru",
+      "donate": "Darovat",
+      "every": "OpakovanÄ› kaÅ¾dÃ½",
+      "fee": "TransakÄnÃ­ poplatek",
+      "funds": "Fondy",
+      "method": "Metoda daru",
+      "notes": "PoznÃ¡mky",
+      "startingOn": "PoÄÃ­naje",
+      "total": "Celkem",
+      "type": "Typ daru"
+    },
+    "recurring": {
+      "amount": "ÄŒÃ¡stka",
+      "confirmPause": "Opravdu chcete pozastavit tento opakovanÃ½ dar?",
+      "every": "KaÅ¾dÃ½",
+      "interval": "Interval",
+      "noSubscriptions": "No Subscriptions",
+      "notFound": "PlatebnÃ­ metoda nenalezena.",
+      "pauseFailed": "NepodaÅ™ilo se pozastavit opakovanÃ½ dar. Zkuste to prosÃ­m znovu.",
+      "pauseTooltip": "Pozastavit opakovanÃ½ dar",
+      "paused": "Pozastaveno",
+      "pausedMessage": "OpakovanÃ½ dar pozastaven.",
+      "paymentMethod": "PlatebnÃ­ metoda",
+      "resumeFailed": "NepodaÅ™ilo se obnovit opakovanÃ½ dar. Zkuste to prosÃ­m znovu.",
+      "resumeTooltip": "Obnovit opakovanÃ½ dar",
+      "resumedMessage": "OpakovanÃ½ dar obnoven.",
+      "startDate": "Datum zahÃ¡jenÃ­"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "PÃ¡tek",
+        "monday": "PondÄ›lÃ­",
+        "saturday": "Sobota",
+        "sunday": "NedÄ›le",
+        "thursday": "ÄŒtvrtek",
+        "tuesday": "ÃšterÃ½",
+        "wednesday": "StÅ™eda"
+      },
+      "endDate": "Datum ukonÄenÃ­",
+      "endDateAria": "Datum ukonÄenÃ­ opakovÃ¡nÃ­",
+      "ends": "KonÄÃ­",
+      "endsAfter": "Po",
+      "endsAria": "Vyberte, kdy opakovÃ¡nÃ­ konÄÃ­",
+      "endsOn": "Dne",
+      "freqDay": "Den",
+      "freqMonth": "MÄ›sÃ­c",
+      "freqWeek": "TÃ½den",
+      "frequency": "Frekvence",
+      "frequencyAria": "Vyberte frekvenci opakovÃ¡nÃ­",
+      "interval": "Interval",
+      "intervalAria": "Interval opakovÃ¡nÃ­",
+      "monthlyOnDay": "MÄ›sÃ­ÄnÄ› v den {}",
+      "monthlyOnNth": "MÄ›sÃ­ÄnÄ› {ordinal} {day}",
+      "monthlyOptionAria": "Vyberte moÅ¾nost mÄ›sÃ­ÄnÃ­ho opakovÃ¡nÃ­",
+      "never": "Nikdy",
+      "occurrences": "VÃ½skyty",
+      "occurrencesAria": "PoÄet vÃ½skytÅ¯ opakovÃ¡nÃ­",
+      "on": "V",
+      "ordinal": {
+        "first": "prvnÃ­",
+        "fourth": "ÄtvrtÃ½",
+        "last": "poslednÃ­",
+        "second": "druhÃ½",
+        "third": "tÅ™etÃ­"
+      },
+      "toggleWeekday": "PÅ™epnout {} pro tÃ½dennÃ­ opakovÃ¡nÃ­"
+    }
+  },
+  "fileUpload": {
+    "file": "File",
+    "quotaExceeded": "Storage quota exceeded. Delete unused files or upgrade your storage plan.",
+    "uploadFailed": "Upload failed. Please try again."
+  },
+  "formSubmissionEdit": {
+    "back": "ZpÄ›t",
+    "confirmDelete": "Opravdu chcete smazat tyto Ãºdaje formulÃ¡Å™e?",
+    "continue": "PokraÄovat",
+    "editForm": "Upravit formulÃ¡Å™",
+    "isRequired": "je povinnÃ©",
+    "stepProgress": "{current} z {total}",
+    "submit": "Odeslat"
+  },
+  "gallery": {
+    "aspectRatio": "PomÄ›r stran",
+    "confirmDelete": "Opravdu chcete smazat tento obrÃ¡zek z galerie?",
+    "freeForm": "VolnÃ½ formÃ¡t"
+  },
+  "login": {
+    "email": "E-mail",
+    "enterCode": "Zadejte ovÄ›Å™ovacÃ­ kÃ³d",
+    "enterCodeInstructions": "Zadejte 6mÃ­stnÃ½ kÃ³d, kterÃ½ jsme vÃ¡m prÃ¡vÄ› odeslali e-mailem.",
+    "expiredLink": "AktuÃ¡lnÃ­ odkaz vyprÅ¡el.",
+    "forgot": "ZapomenutÃ© heslo",
+    "login": "PÅ™ihlÃ¡sit se",
+    "noAcc": "NemÃ¡te ÃºÄet?",
+    "noAccountFound": "Pro tento e-mail nebyl nalezen Å¾Ã¡dnÃ½ ÃºÄet. PokraÄujte registracÃ­.",
+    "or": "or",
+    "password": "Heslo",
+    "register": "Registrovat",
+    "registerThankYou": "DÄ›kujeme za registraci! Zkontrolujte prosÃ­m svÅ¯j e-mail pro ovÄ›Å™enÃ­ ÃºÄtu.",
+    "requestLink": "PoÅ¾Ã¡dat o novÃ½ odkaz pro obnovenÃ­",
+    "resendCode": "Odeslat kÃ³d znovu",
+    "reset": "Obnovit",
+    "resetInstructions": "Zadejte svou e-mailovou adresu pro obnovenÃ­ hesla.",
+    "resetPassword": "Obnovit heslo",
+    "setPassword": "Nastavit heslo",
+    "signIn": "PÅ™ihlÃ¡sit se",
+    "signInTitle": "ProsÃ­m pÅ™ihlaste se",
+    "validate": {
+      "code": "Zadejte prosÃ­m 6mÃ­stnÃ½ kÃ³d.",
+      "email": "ProsÃ­m zadejte platnou e-mailovou adresu.",
+      "firstName": "ProsÃ­m zadejte svÃ© jmÃ©no.",
+      "invalid": "NeplatnÃ© pÅ™ihlÃ¡Å¡enÃ­. Zkontrolujte prosÃ­m svÅ¯j e-mail nebo heslo.",
+      "lastName": "ProsÃ­m zadejte svÃ© pÅ™Ã­jmenÃ­.",
+      "password": "ProsÃ­m zadejte heslo.",
+      "passwordLength": "Heslo musÃ­ mÃ­t alespoÅˆ 8 znakÅ¯.",
+      "passwordMatch": "Hesla se neshodujÃ­.",
+      "selectingChurch": "Chyba pÅ™i vÃ½bÄ›ru sboru. ProsÃ­m ovÄ›Å™te a zkuste to znovu."
+    },
+    "verifyCode": "OvÄ›Å™it kÃ³d",
+    "verifyPassword": "OvÄ›Å™it heslo",
+    "welcomeBack": "VÃ­tejte zpÄ›t",
+    "welcomeName": "VÃ­tejte zpÄ›t, <b>{}</b>! ProsÃ­m Äekejte, naÄÃ­tÃ¡me vaÅ¡e Ãºdaje."
+  },
+  "markdownEditor": {
+    "content": "Obsah",
+    "markdownGuide": "PrÅ¯vodce Markdownem"
+  },
+  "notes": {
+    "comment": "komentÃ¡Å™",
+    "comments": "komentÃ¡Å™e",
+    "notes": "PoznÃ¡mky",
+    "notifyOff": "Notify Off",
+    "notifyOn": "Notify On",
+    "openFile": "Open file",
+    "validate": {
+      "content": "ProsÃ­m zadejte poznÃ¡mku."
+    }
+  },
+  "person": {
+    "email": "E-mail",
+    "firstName": "JmÃ©no",
+    "lastName": "PÅ™Ã­jmenÃ­",
+    "name": "JmÃ©no"
+  },
+  "selectChurch": {
+    "address1": "Adresa â€“ Å™Ã¡dek 1",
+    "address2": "Adresa â€“ Å™Ã¡dek 2",
+    "another": "Vybrat jinÃ½ sbor",
+    "city": "MÄ›sto",
+    "confirmRegister": "Opravdu chcete zaregistrovat novÃ½ sbor?",
+    "country": "ZemÄ›",
+    "name": "NÃ¡zev sboru",
+    "noMatches": "Nebyly nalezeny Å¾Ã¡dnÃ© shody.",
+    "register": "Zaregistrovat novÃ½ sbor",
+    "selectChurch": "Vybrat sbor",
+    "state": "StÃ¡t / Kraj",
+    "validate": {
+      "address": "Adresa nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ¡.",
+      "city": "MÄ›sto nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ©.",
+      "country": "ZemÄ› nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ¡.",
+      "name": "NÃ¡zev sboru nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ½.",
+      "state": "StÃ¡t/Kraj nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ½.",
+      "zip": "PSÄŒ nemÅ¯Å¾e bÃ½t prÃ¡zdnÃ©."
+    },
+    "zip": "PSÄŒ"
+  },
+  "stockPhotos": {
+    "photoBy": "Foto:",
+    "providedBy": "Fotobanku poskytuje"
+  },
+  "support": {
+    "discussions": "FÃ³rum podpory",
+    "documentation": "Dokumentace"
+  },
+  "wrapper": {
+    "newPrivateMessage": "NovÃ¡ soukromÃ¡ zprÃ¡va",
+    "privateConversation": "Private Conversation",
+    "privateMessage": "SoukromÃ¡ zprÃ¡va",
+    "searchForPerson": "Hledat osobu"
+  }
 }

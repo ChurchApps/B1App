@@ -1,392 +1,300 @@
 {
-	"b1Share": {
-		"comment": "Comment",
-		"commentPlaceholder": "Include a comment with your post.",
-		"contentShared": "Content Shared",
-		"group": "Group",
-		"sharingToGroup": "Sharing {} to B1 Group",
-		"validate": {
-			"addComment": "Please add a comment.",
-			"loginFirst": "Please login first.",
-			"notMember": "You are not currently a member of any groups on B1.",
-			"selectGroup": "Please select a group."
-		}
-	},
-	"common": {
-		"add": "Add",
-		"cancel": "Cancel",
-		"close": "Close",
-		"date": "Date",
-		"delete": "Delete",
-		"edit": "Edit",
-		"error": "Error",
-		"pleaseWait": "Please wait...",
-		"save": "Save",
-		"search": "Search",
-		"submit": "Submit",
-		"update": "Update"
-	},
-	"createPerson": {
-		"addNewPerson": "Add a New Person",
-		"email": "Email",
-		"firstName": "First Name",
-		"lastName": "Last Name"
-	},
-	"donation": {
-		"bankForm": {
-			"accountNumber": "Account Number",
-			"added": "Bank account added. Verify your bank account to make a donation.",
-			"company": "Company",
-			"firstDeposit": "First Deposit",
-			"holderName": "Account holder name is required.",
-			"individual": "Individual",
-			"name": "Account Holder Name",
-			"needVerified": "Bank accounts will need to be verified before making any donations. Your account will receive two small deposits in approximately 1-3 business days. You will need to enter those deposit amounts to finish verifying your account by selecting the verify account link next to your bank account under the payment methods section.",
-			"routingNumber": "Routing Number",
-			"secondDeposit": "Second Deposit",
-			"twoDeposits": "Enter the two deposits you received in your account to finish verifying your bank account.",
-			"updated": "Bank account updated.",
-			"validate": {
-				"accountNumber": "Routing and account number are required.",
-				"holderName": "Account holder name is required."
-			},
-			"verified": "Bank account verified."
-		},
-		"cardForm": {
-			"addNew": "Add New Card",
-			"added": "Card added successfully.",
-			"expirationMonth": "Expiration Month:",
-			"expirationYear": "Expiration Year:",
-			"updated": "Card updated successfully."
-		},
-		"common": {
-			"cancel": "Cancel",
-			"error": "Error"
-		},
-		"donationForm": {
-			"annually": "Annually",
-			"biWeekly": "Bi-Weekly",
-			"cancelled": "Recurring donation cancelled.",
-			"confirmDelete": "Are you sure you wish to delete this recurring donation?",
-			"cover": "I'll generously add {} to cover the transaction fees so you can keep 100% of my donation.",
-			"donate": "Donate",
-			"editRecurring": "Edit Recurring Donation",
-			"fees": "Transaction fees of {} are applied.",
-			"frequency": "Frequency",
-			"fund": "Fund",
-			"funds": "Funds",
-			"make": "Make a Donation",
-			"makeRecurring": "Make a Recurring Donation",
-			"method": "Method",
-			"monthly": "Monthly",
-			"notes": "Notes",
-			"preview": "Preview Donation",
-			"quarterly": "Quarterly",
-			"recurringUpdated": "Recurring donation updated.",
-			"startDate": "Start Date",
-			"thankYou": "Thank you for your donation!",
-			"tooLow": "Donation amount must be greater than $0.50",
-			"total": "Total Donation Amount",
-			"validate": {
-				"amount": "Ammount cannot be $0.",
-				"email": "Please enter your email address.",
-				"firstName": "Please enter your first name.",
-				"lastName": "Please enter your last name.",
-				"validEmail": "Please enter a valid email address."
-			},
-			"weekly": "Weekly"
-		},
-		"fundDonations": {
-			"addMore": "Add More",
-			"amount": "Amount",
-			"fund": "Fund"
-		},
-		"kingdomFunding": {
-			"enterBankDetails": "Enter your bank account details",
-			"enterCardDetails": "Enter card details",
-			"errorProcessingDonation": "Error processing donation",
-			"failedToInitPaymentForm": "Failed to initialize payment form",
-			"failedToLoadPaymentForm": "Failed to load payment form",
-			"failedToProcessCard": "Failed to process card. Please check your card details and try again.",
-			"failedToTokenizeCard": "Failed to tokenize card",
-			"gatewayConfigMissing": "Payment form not available. Gateway configuration missing.",
-			"loadingPaymentForm": "Loading payment form...",
-			"memo": "Memo (optional)",
-			"missingTokenizationKey": "Missing tokenization key",
-			"payWithBank": "Bank (ACH)",
-			"payWithCard": "Card",
-			"paymentFormNotAvailable": "Payment form not available",
-			"paymentFormNotInitialized": "Payment form not initialized",
-			"paymentProvider": "Payment Provider",
-			"providerName": "Kingdom Funding",
-			"unexpectedError": "An unexpected error occurred. Please try again.",
-			"validate": {
-				"accountNumber": "Please enter a valid account number",
-				"captchaFailed": "reCAPTCHA verification failed. Please try again.",
-				"captchaRequired": "Please complete the reCAPTCHA verification",
-				"routingNumber": "Please enter a valid routing number"
-			}
-		},
-		"page": {
-			"amount": "Amount",
-			"batch": "Batch",
-			"date": "Date",
-			"fund": "Fund",
-			"method": "Method",
-			"willAppear": "Donations will appear once a donation has been entered."
-		},
-		"paymentMethods": {
-			"addBank": "Add Bank Account",
-			"addCard": "Add Card",
-			"confirmDelete": "Are you sure you wish to delete this payment method?",
-			"deleted": "Payment method deleted.",
-			"noMethod": "No Method",
-			"noMethods": "No payment methods.  Add a payment method to make a donation.",
-			"verify": "Verify Account"
-		},
-		"paystack": {
-			"emailRequired": "An email address is required to pay with Paystack.",
-			"paymentFailed": "Payment was not completed.",
-			"popupHint": "You'll complete payment in a secure Paystack window. Card, mobile money and bank transfer are accepted.",
-			"saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
-		},
-		"preview": {
-			"date": "Donation Date",
-			"donate": "Donate",
-			"every": "Recurring Everyth",
-			"fee": "Transaction Fee",
-			"funds": "Funds",
-			"method": "Donation Method",
-			"notes": "Notes",
-			"startingOn": "Starting On",
-			"total": "Total",
-			"type": "Donation Type"
-		},
-		"recurring": {
-			"amount": "Amount",
-			"confirmPause": "Are you sure you want to pause this recurring donation?",
-			"every": "Every",
-			"interval": "Interval",
-			"noSubscriptions": "No Subscriptions",
-			"notFound": "Payment method not found.",
-			"pauseFailed": "Failed to pause recurring donation. Please try again.",
-			"pauseTooltip": "Pause recurring donation",
-			"paused": "Paused",
-			"pausedMessage": "Recurring donation paused.",
-			"paymentMethod": "Payment Method",
-			"resumeFailed": "Failed to resume recurring donation. Please try again.",
-			"resumeTooltip": "Resume recurring donation",
-			"resumedMessage": "Recurring donation resumed.",
-			"startDate": "Start Date"
-		}
-	},
-	"eventCalendar": {
-		"recurring": {
-			"day": {
-				"friday": "Friday",
-				"monday": "Monday",
-				"saturday": "Saturday",
-				"sunday": "Sunday",
-				"thursday": "Thursday",
-				"tuesday": "Tuesday",
-				"wednesday": "Wednesday"
-			},
-			"endDate": "End Date",
-			"endDateAria": "Recurrence end date",
-			"ends": "Ends",
-			"endsAfter": "After",
-			"endsAria": "Select when recurrence ends",
-			"endsOn": "On",
-			"freqDay": "Day",
-			"freqMonth": "Month",
-			"freqWeek": "Week",
-			"frequency": "Frequency",
-			"frequencyAria": "Select recurrence frequency",
-			"interval": "Interval",
-			"intervalAria": "Recurrence interval",
-			"monthlyOnDay": "Monthly on day {}",
-			"monthlyOnNth": "Monthly on the {ordinal} {day}",
-			"monthlyOptionAria": "Select monthly recurrence option",
-			"never": "Never",
-			"occurrences": "Occurances",
-			"occurrencesAria": "Number of recurrence occurrances",
-			"on": "On",
-			"ordinal": {
-				"first": "first",
-				"fourth": "fourth",
-				"last": "last",
-				"second": "second",
-				"third": "third"
-			},
-			"toggleWeekday": "Toggle {} for weekly recurrence"
-		}
-	},
-	"fileUpload": {
-		"chooseFile": "Choose File",
-		"file": "File",
-		"quotaExceeded": "Storage quota exceeded. Delete unused files or upgrade your storage plan.",
-		"uploadFailed": "Upload failed. Please try again."
-	},
-	"formSubmissionEdit": {
-		"back": "Back",
-		"confirmDelete": "Are you sure you wish to delete this form data?",
-		"continue": "Continue",
-		"editForm": "Edit Form",
-		"isRequired": "is required",
-		"stepProgress": "{current} of {total}",
-		"submit": "Submit"
-	},
-	"gallery": {
-		"aspectRatio": "Aspect Ratio",
-		"confirmDelete": "Are you sure you wish to delete this image from gallery?",
-		"freeForm": "Free Form"
-	},
-	"iconPicker": {
-		"iconsAvailable": "icons available",
-		"matchingResults": "matching results",
-		"search": "Search icons..."
-	},
-	"login": {
-		"continueGoogle": "Continue with Google",
-		"continueMicrosoft": "Continue with Microsoft",
-		"createAccount": "Create an Account",
-		"email": "Email",
-		"enterCode": "Enter Verification Code",
-		"enterCodeInstructions": "Enter the 6-digit code we just emailed you.",
-		"expiredLink": "The current link is expired.",
-		"forgot": "Forgot Password",
-		"goLogin": "Go to Login",
-		"login": "Login",
-		"noAcc": "Don't have an account?",
-		"noAccountFound": "No account was found with that email. Please register to continue.",
-		"or": "or",
-		"password": "Password",
-		"register": "Register",
-		"registerThankYou": "Thank you for registering! Please check your email to verify your account.",
-		"requestLink": "Request a new reset link",
-		"resendCode": "Resend code",
-		"reset": "Reset",
-		"resetInstructions": "Enter your email address to request a password reset.",
-		"resetPassword": "Reset Password",
-		"resetSent": "Password reset email sent!",
-		"setPassword": "Set Password",
-		"signIn": "Sign In",
-		"signInTitle": "Please Sign In",
-		"ssoError": "Sign-in with that provider failed. Please try again.",
-		"validate": {
-			"code": "Please enter the 6-digit code.",
-			"email": "Please enter a valid email address.",
-			"firstName": "Please enter your first name.",
-			"invalid": "Invalid login. Please check your email or password.",
-			"lastName": "Please enter your last name.",
-			"password": "Please enter a password.",
-			"passwordLength": "Password must be at least 8 characters long.",
-			"passwordMatch": "Passwords do not match.",
-			"selectingChurch": "Error in selecting church. Please verify and try again"
-		},
-		"verifyCode": "Verify Code",
-		"verifyPassword": "Verify Password",
-		"welcomeBack": "Welcome back",
-		"welcomeName": "Welcome back, <b>{}</b>!  Please wait while we load your data."
-	},
-	"markdownEditor": {
-		"content": "Content",
-		"markdownEditor": "Markdown Editor",
-		"markdownGuide": "Markdown Guide"
-	},
-	"month": {
-		"april": "April",
-		"august": "August",
-		"december": "December",
-		"february": "February",
-		"january": "January",
-		"july": "July",
-		"june": "June",
-		"march": "March",
-		"may": "May",
-		"november": "November",
-		"october": "October",
-		"september": "September"
-	},
-	"notes": {
-		"comment": "comment",
-		"comments": "comments",
-		"notes": "Notes",
-		"notifyOff": "Notify Off",
-		"notifyOn": "Notify On",
-		"openFile": "Open file",
-		"startConversation": "Start a conversation",
-		"validate": {
-			"content": "Please enter a note."
-		},
-		"viewAll": "View all"
-	},
-	"person": {
-		"email": "Email",
-		"firstName": "First Name",
-		"lastName": "Last Name",
-		"name": "Name",
-		"noRec": "Don't have a person record?",
-		"person": "Person",
-		"years": "years"
-	},
-	"reporting": {
-		"detailed": "Detailed Report",
-		"downloadOptions": "Download Options",
-		"noData": "There is no data to display.",
-		"runReport": "Run Report",
-		"sampleTemplate": "Sample Word Template",
-		"summary": "Summary",
-		"useFilter": "Use the filter to run the report."
-	},
-	"selectChurch": {
-		"address1": "Address Line 1",
-		"address2": "Address Line 2",
-		"another": "Choose another church",
-		"city": "City",
-		"confirmRegister": "Are you sure you wish to register a new church?",
-		"country": "Country",
-		"name": "Church Name",
-		"noMatches": "No matches found.",
-		"register": "Register a New Church",
-		"selectChurch": "Select a Church",
-		"state": "State / Province",
-		"validate": {
-			"address": "Address cannot be blank.",
-			"city": "City cannot be blank.",
-			"country": "Country cannot be blank.",
-			"name": "Church name cannot be blank.",
-			"state": "State/Province cannot be blank.",
-			"zip": "Zip/Postal code cannot be blank."
-		},
-		"zip": "Zip / Postal Code"
-	},
-	"stockPhotos": {
-		"photoBy": "Photo by:",
-		"providedBy": "Stock photos provided by"
-	},
-	"support": {
-		"discussions": "Support Forum",
-		"documentation": "Documentation"
-	},
-	"wrapper": {
-		"chatWith": "Chat with",
-		"currentChurch": "Current church",
-		"deleteChurch": "Delete",
-		"editAccount": "Edit Account",
-		"editChurchProfile": "Edit Church Profile",
-		"editProfile": "Edit Profile",
-		"logout": "Logout",
-		"messages": "Messages",
-		"newPrivateMessage": "New Private Message",
-		"notifications": "Notifications",
-		"privateConversation": "Private Conversation",
-		"privateMessage": "Private Message",
-		"profile": "Profile",
-		"searchForPerson": "Search for a person",
-		"support": "Support",
-		"sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
-		"switchApp": "Switch App",
-		"switchChurch": "Switch Church"
-	}
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "pleaseWait": "Please wait...",
+    "save": "Save",
+    "search": "Search",
+    "update": "Update"
+  },
+  "donation": {
+    "bankForm": {
+      "accountNumber": "Account Number",
+      "added": "Bank account added. Verify your bank account to make a donation.",
+      "company": "Company",
+      "firstDeposit": "First Deposit",
+      "individual": "Individual",
+      "name": "Account Holder Name",
+      "needVerified": "Bank accounts will need to be verified before making any donations. Your account will receive two small deposits in approximately 1-3 business days. You will need to enter those deposit amounts to finish verifying your account by selecting the verify account link next to your bank account under the payment methods section.",
+      "routingNumber": "Routing Number",
+      "secondDeposit": "Second Deposit",
+      "twoDeposits": "Enter the two deposits you received in your account to finish verifying your bank account.",
+      "updated": "Bank account updated.",
+      "validate": {
+        "accountNumber": "Routing and account number are required.",
+        "holderName": "Account holder name is required."
+      },
+      "verified": "Bank account verified."
+    },
+    "cardForm": {
+      "addNew": "Add New Card",
+      "added": "Card added successfully.",
+      "expirationMonth": "Expiration Month:",
+      "expirationYear": "Expiration Year:",
+      "updated": "Card updated successfully."
+    },
+    "common": {
+      "cancel": "Cancel",
+      "error": "Error"
+    },
+    "donationForm": {
+      "annually": "Annually",
+      "biWeekly": "Bi-Weekly",
+      "cancelled": "Recurring donation cancelled.",
+      "confirmDelete": "Are you sure you wish to delete this recurring donation?",
+      "cover": "I'll generously add {} to cover the transaction fees so you can keep 100% of my donation.",
+      "donate": "Donate",
+      "editRecurring": "Edit Recurring Donation",
+      "fees": "Transaction fees of {} are applied.",
+      "frequency": "Frequency",
+      "fund": "Fund",
+      "funds": "Funds",
+      "make": "Make a Donation",
+      "makeRecurring": "Make a Recurring Donation",
+      "method": "Method",
+      "monthly": "Monthly",
+      "preview": "Preview Donation",
+      "quarterly": "Quarterly",
+      "recurringUpdated": "Recurring donation updated.",
+      "startDate": "Start Date",
+      "thankYou": "Thank you for your donation!",
+      "tooLow": "Donation amount must be greater than $0.50",
+      "total": "Total Donation Amount",
+      "validate": {
+        "amount": "Ammount cannot be $0.",
+        "email": "Please enter your email address.",
+        "firstName": "Please enter your first name.",
+        "lastName": "Please enter your last name.",
+        "validEmail": "Please enter a valid email address."
+      },
+      "weekly": "Weekly"
+    },
+    "fundDonations": {
+      "addMore": "Add More",
+      "amount": "Amount",
+      "fund": "Fund"
+    },
+    "kingdomFunding": {
+      "enterBankDetails": "Enter your bank account details",
+      "enterCardDetails": "Enter card details",
+      "errorProcessingDonation": "Error processing donation",
+      "failedToInitPaymentForm": "Failed to initialize payment form",
+      "failedToLoadPaymentForm": "Failed to load payment form",
+      "failedToProcessCard": "Failed to process card. Please check your card details and try again.",
+      "failedToTokenizeCard": "Failed to tokenize card",
+      "gatewayConfigMissing": "Payment form not available. Gateway configuration missing.",
+      "loadingPaymentForm": "Loading payment form...",
+      "memo": "Memo (optional)",
+      "missingTokenizationKey": "Missing tokenization key",
+      "payWithBank": "Bank (ACH)",
+      "payWithCard": "Card",
+      "paymentFormNotAvailable": "Payment form not available",
+      "paymentFormNotInitialized": "Payment form not initialized",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
+      "validate": {
+        "captchaFailed": "reCAPTCHA verification failed. Please try again.",
+        "captchaRequired": "Please complete the reCAPTCHA verification"
+      }
+    },
+    "paymentMethods": {
+      "addBank": "Add Bank Account",
+      "addCard": "Add Card",
+      "confirmDelete": "Are you sure you wish to delete this payment method?",
+      "deleted": "Payment method deleted.",
+      "noMethod": "No Method",
+      "verify": "Verify Account"
+    },
+    "paystack": {
+      "emailRequired": "An email address is required to pay with Paystack.",
+      "paymentFailed": "Payment was not completed.",
+      "popupHint": "You'll complete payment in a secure Paystack window. Card, mobile money and bank transfer are accepted.",
+      "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
+    },
+    "preview": {
+      "date": "Donation Date",
+      "donate": "Donate",
+      "every": "Recurring Everyth",
+      "fee": "Transaction Fee",
+      "funds": "Funds",
+      "method": "Donation Method",
+      "notes": "Notes",
+      "startingOn": "Starting On",
+      "total": "Total",
+      "type": "Donation Type"
+    },
+    "recurring": {
+      "amount": "Amount",
+      "confirmPause": "Are you sure you want to pause this recurring donation?",
+      "every": "Every",
+      "interval": "Interval",
+      "noSubscriptions": "No Subscriptions",
+      "notFound": "Payment method not found.",
+      "pauseFailed": "Failed to pause recurring donation. Please try again.",
+      "pauseTooltip": "Pause recurring donation",
+      "paused": "Paused",
+      "pausedMessage": "Recurring donation paused.",
+      "paymentMethod": "Payment Method",
+      "resumeFailed": "Failed to resume recurring donation. Please try again.",
+      "resumeTooltip": "Resume recurring donation",
+      "resumedMessage": "Recurring donation resumed.",
+      "startDate": "Start Date"
+    }
+  },
+  "eventCalendar": {
+    "recurring": {
+      "day": {
+        "friday": "Friday",
+        "monday": "Monday",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "thursday": "Thursday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday"
+      },
+      "endDate": "End Date",
+      "endDateAria": "Recurrence end date",
+      "ends": "Ends",
+      "endsAfter": "After",
+      "endsAria": "Select when recurrence ends",
+      "endsOn": "On",
+      "freqDay": "Day",
+      "freqMonth": "Month",
+      "freqWeek": "Week",
+      "frequency": "Frequency",
+      "frequencyAria": "Select recurrence frequency",
+      "interval": "Interval",
+      "intervalAria": "Recurrence interval",
+      "monthlyOnDay": "Monthly on day {}",
+      "monthlyOnNth": "Monthly on the {ordinal} {day}",
+      "monthlyOptionAria": "Select monthly recurrence option",
+      "never": "Never",
+      "occurrences": "Occurances",
+      "occurrencesAria": "Number of recurrence occurrances",
+      "on": "On",
+      "ordinal": {
+        "first": "first",
+        "fourth": "fourth",
+        "last": "last",
+        "second": "second",
+        "third": "third"
+      },
+      "toggleWeekday": "Toggle {} for weekly recurrence"
+    }
+  },
+  "fileUpload": {
+    "file": "File",
+    "quotaExceeded": "Storage quota exceeded. Delete unused files or upgrade your storage plan.",
+    "uploadFailed": "Upload failed. Please try again."
+  },
+  "formSubmissionEdit": {
+    "back": "Back",
+    "confirmDelete": "Are you sure you wish to delete this form data?",
+    "continue": "Continue",
+    "editForm": "Edit Form",
+    "isRequired": "is required",
+    "stepProgress": "{current} of {total}",
+    "submit": "Submit"
+  },
+  "gallery": {
+    "aspectRatio": "Aspect Ratio",
+    "confirmDelete": "Are you sure you wish to delete this image from gallery?",
+    "freeForm": "Free Form"
+  },
+  "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
+    "email": "Email",
+    "enterCode": "Enter Verification Code",
+    "enterCodeInstructions": "Enter the 6-digit code we just emailed you.",
+    "expiredLink": "The current link is expired.",
+    "forgot": "Forgot Password",
+    "login": "Login",
+    "noAcc": "Don't have an account?",
+    "noAccountFound": "No account was found with that email. Please register to continue.",
+    "or": "or",
+    "password": "Password",
+    "register": "Register",
+    "registerThankYou": "Thank you for registering! Please check your email to verify your account.",
+    "requestLink": "Request a new reset link",
+    "resendCode": "Resend code",
+    "reset": "Reset",
+    "resetInstructions": "Enter your email address to request a password reset.",
+    "resetPassword": "Reset Password",
+    "setPassword": "Set Password",
+    "signIn": "Sign In",
+    "signInTitle": "Please Sign In",
+    "validate": {
+      "code": "Please enter the 6-digit code.",
+      "email": "Please enter a valid email address.",
+      "firstName": "Please enter your first name.",
+      "invalid": "Invalid login. Please check your email or password.",
+      "lastName": "Please enter your last name.",
+      "password": "Please enter a password.",
+      "passwordLength": "Password must be at least 8 characters long.",
+      "passwordMatch": "Passwords do not match.",
+      "selectingChurch": "Error in selecting church. Please verify and try again"
+    },
+    "verifyCode": "Verify Code",
+    "verifyPassword": "Verify Password",
+    "welcomeBack": "Welcome back",
+    "welcomeName": "Welcome back, <b>{}</b>!  Please wait while we load your data."
+  },
+  "markdownEditor": {
+    "content": "Content",
+    "markdownGuide": "Markdown Guide"
+  },
+  "notes": {
+    "comment": "comment",
+    "comments": "comments",
+    "notes": "Notes",
+    "notifyOff": "Notify Off",
+    "notifyOn": "Notify On",
+    "openFile": "Open file",
+    "validate": {
+      "content": "Please enter a note."
+    }
+  },
+  "person": {
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "name": "Name"
+  },
+  "selectChurch": {
+    "address1": "Address Line 1",
+    "address2": "Address Line 2",
+    "another": "Choose another church",
+    "city": "City",
+    "confirmRegister": "Are you sure you wish to register a new church?",
+    "country": "Country",
+    "name": "Church Name",
+    "noMatches": "No matches found.",
+    "register": "Register a New Church",
+    "selectChurch": "Select a Church",
+    "state": "State / Province",
+    "validate": {
+      "address": "Address cannot be blank.",
+      "city": "City cannot be blank.",
+      "country": "Country cannot be blank.",
+      "name": "Church name cannot be blank.",
+      "state": "State/Province cannot be blank.",
+      "zip": "Zip/Postal code cannot be blank."
+    },
+    "zip": "Zip / Postal Code"
+  },
+  "stockPhotos": {
+    "photoBy": "Photo by:",
+    "providedBy": "Stock photos provided by"
+  },
+  "support": {
+    "discussions": "Support Forum",
+    "documentation": "Documentation"
+  },
+  "wrapper": {
+    "newPrivateMessage": "New Private Message",
+    "privateConversation": "Private Conversation",
+    "privateMessage": "Private Message",
+    "searchForPerson": "Search for a person"
+  }
 }
