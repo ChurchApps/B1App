@@ -22,6 +22,32 @@ test.describe("Public built-in routes", () => {
     expect(/General Fund|login|Sign In/i.test(text)).toBe(true);
   });
 
+  test("/donate hides the wallet buttons until a fund amount is entered", async ({ page }) => {
+    await page.goto("/donate");
+    await page.locator('input[name="amount"]').first().waitFor({ state: "visible", timeout: 30000 });
+    await expect(page.getByTestId("express-checkout")).toHaveCount(0);
+  });
+
+  test("/donate offers Apple Pay / Google Pay once fund and amount are set", async ({ page }) => {
+    await page.goto("/donate");
+    const amount = page.locator('input[name="amount"]').first();
+    await amount.waitFor({ state: "visible", timeout: 30000 });
+    await amount.fill("25");
+    await expect(page.getByTestId("express-checkout")).toBeAttached({ timeout: 20000 });
+    // Wallet availability is browser-dependent, so pin the mount point and its iframe rather than a button.
+    await expect(page.getByTestId("express-checkout").locator("iframe")).toBeAttached({ timeout: 20000 });
+  });
+
+  test("/donate still collects a card alongside the wallet buttons", async ({ page }) => {
+    await page.goto("/donate");
+    const amount = page.locator('input[name="amount"]').first();
+    await amount.waitFor({ state: "visible", timeout: 30000 });
+    await amount.fill("25");
+    await expect(page.getByTestId("express-checkout")).toBeAttached({ timeout: 20000 });
+    await expect(page.frameLocator('iframe[title="Secure card number input frame"]').locator('[name="cardnumber"]')).toBeVisible({ timeout: 20000 });
+    await expect(page.getByRole("button", { name: "Donate", exact: true })).toBeVisible();
+  });
+
   test("/stream renders streaming page", async ({ page }) => {
     await page.goto("/stream");
     await expect(page).toHaveURL(/\/stream/);
