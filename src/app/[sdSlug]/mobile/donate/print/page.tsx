@@ -39,6 +39,7 @@ export default function PrintPage({ params }: { params: Params }) {
   const [fundDonations, setFundDonations] = useState<FundDonationInterface[]>([]);
   const [donations, setDonations] = useState<DonationInterface[]>([]);
   const [currency, setCurrency] = useState<string>("usd");
+  const [churchSettings, setChurchSettings] = useState<Record<string, string>>({});
 
 
   const loadData = () => {
@@ -135,6 +136,50 @@ export default function PrintPage({ params }: { params: Params }) {
     return tableValues;
   };
 
+  const churchId = context?.userChurch?.church?.id;
+  useEffect(() => {
+    if (!churchId) return;
+    ApiHelper.get("/settings/public/" + churchId, "MembershipApi").then((s: Record<string, string>) => { setChurchSettings(s || {}); });
+  }, [churchId]);
+
+  // ponytail: duplicate of B1Admin's GivingStatementDocument legal block. Ceiling: the two
+  // templates drift apart. Upgrade path: move the statement document into apphelper.
+  const legalBlock = () => {
+    const format = churchSettings.statementFormat;
+    if (!format) return null;
+    let eligible = 0;
+    let nonEligible = 0;
+    fundDonations.forEach((fd) => {
+      if (!ArrayHelper.getOne(donations, "id", fd.donationId)) return;
+      const fund: FundInterface = ArrayHelper.getOne(funds, "id", fd.fundId);
+      if (fund?.taxDeductible === false) nonEligible += fd.amount || 0;
+      else eligible += fd.amount || 0;
+    });
+    const church = context?.userChurch?.church;
+    const orgAddress = churchSettings.statementOrgAddress || [church?.address1, church?.address2, church?.city, church?.country, church?.zip].filter(Boolean).join(", ");
+    const contact = context?.person?.contactInfo;
+    const donorAddress = [contact?.address1, contact?.address2, contact?.city, contact?.state, contact?.zip].filter(Boolean).join(", ");
+    const title = format === "canada" ? "Official Receipt for Income Tax Purposes" : format === "australia" ? "Receipt for Donation" : "Donation Receipt";
+    const numberLabel = format === "australia" ? "ABN" : "Charity registration number";
+    return (
+      <div data-testid="statement-legal-block" style={{ border: "2px solid var(--print-accent)", padding: "16px", margin: "16px 0" }}>
+        <h2 style={{ marginTop: 0 }}>{title}</h2>
+        <p>Receipt number: {currYear}-{context?.person?.id}</p>
+        <p>{numberLabel}: {churchSettings.statementRegistrationNumber}</p>
+        <p>Date issued: {DateHelper.prettyDate(new Date()).toString()}</p>
+        {format === "canada" && <p>Place of issue: {churchSettings.statementCityOfIssue}</p>}
+        <p>{church?.name}{orgAddress ? ", " + orgAddress : ""}</p>
+        <p>{context?.person?.name?.display}{donorAddress ? ", " + donorAddress : ""}</p>
+        {format === "australia" && <p>{church?.name} is endorsed as a Deductible Gift Recipient. Donations of $2 or more are tax deductible.</p>}
+        {format === "newZealand" && <p>Donation</p>}
+        <p style={{ fontWeight: "bold" }}>Eligible amount of gift for income tax purposes: {CurrencyHelper.formatCurrencyWithLocale(eligible, currency)}</p>
+        {nonEligible > 0 && <p>Gifts not eligible for a tax receipt: {CurrencyHelper.formatCurrencyWithLocale(nonEligible, currency)}</p>}
+        {format !== "australia" && <p style={{ borderTop: "1px solid #333", width: "260px", paddingTop: "4px" }}>{churchSettings.statementSignatory} — Authorized signature</p>}
+        {format === "canada" && <p>Canada Revenue Agency: canada.ca/charities-giving</p>}
+      </div>
+    );
+  };
+
   useEffect(loadData, []);
 
   return (
@@ -165,6 +210,8 @@ export default function PrintPage({ params }: { params: Params }) {
           </div>
         </div>
         <div style={{ margin: "0px", padding: "0px", borderTop: "2px solid var(--print-accent)", width: "80%" }}></div>
+
+        {legalBlock()}
 
         <div>
           <h1>Statement Summary:</h1>
