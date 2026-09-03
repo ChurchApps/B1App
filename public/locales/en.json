@@ -301,6 +301,7 @@
       "declined": "Declined",
       "delete": "Delete",
       "deleteFailed": "Could not delete the message.",
+      "downloads": "Downloads",
       "edit": "Edit",
       "editProfile": "Edit profile",
       "editingMessage": "Editing message",
@@ -491,6 +492,9 @@
       "registration": "Registration",
       "registrationCloses": "Registration Closes",
       "registrationOpens": "Registration Opens",
+      "reminders": {
+        "": "Reminders"
+      },
       "repeats": "Repeats",
       "requestNote": "Optionally include a short note for the group leader.",
       "requestToJoin": "Request to Join",
@@ -637,8 +641,6 @@
       "alreadyCheckedIn": "Already Checked In",
       "cancel": "Cancel",
       "cancelRegistration": "Cancel Registration?",
-      "changesSaved": "Your changes have been saved.",
-      "changesSubmittedForApproval": "Your changes have been submitted for approval.",
       "chooseServiceSubtitle": "Choose which service you're checking in for",
       "clear": "Clear",
       "confirmPassword": "Confirm password",
@@ -718,8 +720,6 @@
       "tabSeries": "Series",
       "tabUpcoming": "Upcoming",
       "unableToLoadChurch": "Unable to load church configuration.",
-      "unableToSaveChanges": "Unable to save changes.",
-      "unableToSubmitChanges": "Unable to submit changes.",
       "unread": "Unread",
       "visibilityPreferencesSaved": "Visibility preferences saved.",
       "volunteerBrowseBody": "There are no volunteer opportunities available right now. Check back soon!",
@@ -839,6 +839,7 @@
     "confirmed": "Registration Confirmed!",
     "continue": "Continue",
     "coupon": {
+      "": "Reminders",
       "applied": "Code {} applied",
       "apply": "Apply",
       "invalid": "This code is not valid.",
