@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "ë§¤ë…„",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "ê²©ì£¼ ê°„í–‰ë¬¼",
       "cancelled": "ì •ê¸° ê¸°ë¶€ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.",
       "confirmDelete": "ì´ ë°˜ë³µ ê¸°ë¶€ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
@@ -54,6 +55,7 @@
       "makeRecurring": "ì •ê¸° ê¸°ë¶€í•˜ê¸°",
       "method": "ë°©ë²•",
       "monthly": "ì›”ê°„ ê°„í–‰ë¬¼",
+      "orPayWith": "Or pay with",
       "preview": "ë¯¸ë¦¬ë³´ê¸° ê¸°ë¶€",
       "quarterly": "ê³„ê°„ì§€",
       "recurringUpdated": "ì •ê¸° ê¸°ë¶€ê°€ ì—…ë°ì´íŠ¸ë˜ì—ˆìŠµë‹ˆë‹¤.",
@@ -68,6 +70,7 @@
         "lastName": "ë‹¹ì‹ ì˜ ì„±ì„ ìž…ë ¥í•˜ì„¸ìš”.",
         "validEmail": "ìœ íš¨í•œ ì´ë©”ì¼ ì£¼ì†Œë¥¼ ìž…ë ¥í•˜ì„¸ìš”."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "ì£¼ê°„"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "ìžìœ  í˜•ì‹"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "ì´ë©”ì¼",
     "enterCode": "ì¸ì¦ ì½”ë“œ ìž…ë ¥",
     "enterCodeInstructions": "ë°©ê¸ˆ ì´ë©”ì¼ë¡œ ë³´ë‚¸ 6ìžë¦¬ ì½”ë“œë¥¼ ìž…ë ¥í•˜ì„¸ìš”.",

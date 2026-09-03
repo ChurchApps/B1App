@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Jaarlijks",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Tweewekelijks",
       "cancelled": "Terugkerende donatie geannuleerd.",
       "confirmDelete": "Weet u zeker dat u deze terugkerende donatie wilt verwijderen?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Een terugkerende donatie doen",
       "method": "Methode",
       "monthly": "Maandelijks",
+      "orPayWith": "Or pay with",
       "preview": "Donatie voorbeeld",
       "quarterly": "Per kwartaal",
       "recurringUpdated": "Terugkerende donatie bijgewerkt.",
@@ -68,6 +70,7 @@
         "lastName": "Voer uw achternaam in.",
         "validEmail": "Voer een geldig e-mailadres in."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Wekelijks"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Vrije vorm"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "E-mail",
     "enterCode": "Voer verificatiecode in",
     "enterCodeInstructions": "Voer de 6-cijferige code in die we u zojuist per e-mail hebben gestuurd.",

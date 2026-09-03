@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "YÄ±llÄ±k",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Ä°ki haftada bir",
       "cancelled": "Tekrarlayan baÄŸÄ±ÅŸ iptal edildi.",
       "confirmDelete": "Bu tekrarlayan baÄŸÄ±ÅŸÄ± silmek istediÄŸinizden emin misiniz?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Tekrarlayan BaÄŸÄ±ÅŸ Yap",
       "method": "YÃ¶ntem",
       "monthly": "AylÄ±k",
+      "orPayWith": "Or pay with",
       "preview": "BaÄŸÄ±ÅŸ Ã–nizlemesi",
       "quarterly": "ÃœÃ§ AylÄ±k",
       "recurringUpdated": "Tekrarlayan baÄŸÄ±ÅŸ gÃ¼ncellendi.",
@@ -68,6 +70,7 @@
         "lastName": "LÃ¼tfen soyadÄ±nÄ±zÄ± girin.",
         "validEmail": "LÃ¼tfen geÃ§erli bir e-posta adresi girin."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "HaftalÄ±k"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Serbest Form"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "DoÄŸrulama Kodunu Girin",
     "enterCodeInstructions": "Size az Ã¶nce e-postayla gÃ¶nderdiÄŸimiz 6 haneli kodu girin.",

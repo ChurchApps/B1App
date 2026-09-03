@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Taun-taon",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Bi-Lingguhan",
       "cancelled": "Kinansela ang umuulit na donasyon.",
       "confirmDelete": "Sigurado ka bang gusto mong tanggalin itong umuulit na donasyon?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Gumawa ng Paulit-ulit na Donasyon",
       "method": "Pamamaraan",
       "monthly": "Buwan-buwan",
+      "orPayWith": "Or pay with",
       "preview": "Silipin ang Donasyon",
       "quarterly": "quarterly",
       "recurringUpdated": "Na-update ang umuulit na donasyon.",
@@ -68,6 +70,7 @@
         "lastName": "Pakilagay ang iyong apelyido.",
         "validEmail": "Mangyaring magpasok ng wastong email address."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Linggu-linggo"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Libreng Form"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "Ipasok ang Verification Code",
     "enterCodeInstructions": "Ipasok ang 6-digit na code na kaka-email lang namin sa iyo.",
