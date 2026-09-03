@@ -223,6 +223,19 @@ test.describe("Stripe guest (unauthenticated) donation", () => {
     if (!ok) console.log("DIAG:\n" + diag.join("\n"));
     expect(ok, "guest donation produced no thank-you confirmation").toBe(true);
   });
+
+  test("choosing to give anonymously drops the name fields and the recurring option", async ({ page }) => {
+    await page.goto("/mobile/donate");
+    await page.locator('input[name="firstName"]').waitFor({ state: "visible", timeout: 30000 });
+    await expect(page.locator('button[aria-label="recurring-donation"]')).toBeVisible();
+
+    await page.getByLabel("anonymous").check();
+
+    await expect(page.locator('input[name="firstName"]')).toHaveCount(0);
+    await expect(page.locator('input[name="lastName"]')).toHaveCount(0);
+    await expect(page.locator('button[aria-label="recurring-donation"]')).toHaveCount(0);
+    await expect(page.locator('input[name="email"]')).toBeVisible();
+  });
 });
 
 test.describe.serial("Stripe donation error handling", () => {
