@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Tahunan",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Dua Mingguan",
       "cancelled": "Donasi berulang dibatalkan.",
       "confirmDelete": "Apakah Anda yakin ingin menghapus donasi berulang ini?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Buat Donasi Berulang",
       "method": "Metode",
       "monthly": "Bulanan",
+      "orPayWith": "Or pay with",
       "preview": "Pratinjau Donasi",
       "quarterly": "Triwulanan",
       "recurringUpdated": "Donasi berulang diperbarui.",
@@ -68,6 +70,7 @@
         "lastName": "Silakan masukkan nama belakang Anda.",
         "validEmail": "Silakan masukkan alamat email yang valid."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Mingguan"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Bentuk Bebas"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "Masukkan Kode Verifikasi",
     "enterCodeInstructions": "Masukkan kode 6 digit yang baru saja kami kirim melalui email.",

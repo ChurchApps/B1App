@@ -108,6 +108,10 @@
       "noMethod": "No Method",
       "verify": "Verify Account"
     },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
+    },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
       "paymentFailed": "Payment was not completed.",

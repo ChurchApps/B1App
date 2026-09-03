@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Ã‰vente",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "KÃ©thetente",
       "cancelled": "IsmÃ©tlÅ‘dÅ‘ adomÃ¡nyozÃ¡s tÃ¶rlÃ©sre.",
       "confirmDelete": "Biztosan szeretnÃ© tÃ¶rÃ¶lni ezt az ismÃ©tlÅ‘dÅ‘ adomÃ¡nyozÃ¡st?",
@@ -54,6 +55,7 @@
       "makeRecurring": "IsmÃ©tlÅ‘dÅ‘ adomÃ¡nyzÃ¡s",
       "method": "MÃ³dszer",
       "monthly": "Havonta",
+      "orPayWith": "Or pay with",
       "preview": "AdomÃ¡nyzÃ¡s elÅ‘nÃ©zete",
       "quarterly": "NegyedÃ©vente",
       "recurringUpdated": "IsmÃ©tlÅ‘dÅ‘ adomÃ¡nyzÃ¡s frissÃ­tve.",
@@ -68,6 +70,7 @@
         "lastName": "KÃ©rjÃ¼k, adja meg a vezetÃ©knevÃ©t.",
         "validEmail": "KÃ©rjÃ¼k, adjon meg egy Ã©rvÃ©nyes e-mail cÃ­met."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Hetente"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Szabad forma"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "E-mail",
     "enterCode": "Adja meg az ellenÅ‘rzÅ‘ kÃ³dot",
     "enterCodeInstructions": "Adja meg a 6 jegyÅ± kÃ³dot, amelyet most kÃ¼ldtÃ¼nk e-mailben.",

@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Kasmet",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Kas dvi savaites",
       "cancelled": "Pasikartojanti auka atÅ¡aukta.",
       "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iÄ… pasikartojanÄiÄ… aukÄ…?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Padaryk pasikartojanÄiÄ… aukÄ…",
       "method": "Metodas",
       "monthly": "Kas mÄ—nesÄ¯",
+      "orPayWith": "Or pay with",
       "preview": "PerÅ¾iÅ«rÄ—ti aukÄ…",
       "quarterly": "Kas ketvirtÄ¯",
       "recurringUpdated": "Pasikartojanti auka atnaujinta.",
@@ -68,6 +70,7 @@
         "lastName": "PraÅ¡ome Ä¯vesti savo pavardÄ™.",
         "validEmail": "PraÅ¡ome Ä¯vesti galiojantÄ¯ el. paÅ¡to adresÄ…."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Kas savaitÄ™"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Laisva forma"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "El. paÅ¡tas",
     "enterCode": "Enter Verification Code",
     "enterCodeInstructions": "Enter the 6-digit code we just emailed you.",

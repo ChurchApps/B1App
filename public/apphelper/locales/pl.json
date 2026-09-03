@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Corocznie",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Co dwa tygodnie",
       "cancelled": "Darowizna cykliczna anulowana.",
       "confirmDelete": "Czy na pewno chcesz usunÄ…Ä‡ tÄ™ darowiznÄ™ cyklicznÄ…?",
@@ -54,6 +55,7 @@
       "makeRecurring": "WnieÅ› darowiznÄ™ cyklicznÄ…",
       "method": "Metoda",
       "monthly": "MiesiÄ™cznie",
+      "orPayWith": "Or pay with",
       "preview": "PodglÄ…d darowizny",
       "quarterly": "Kwartalnie",
       "recurringUpdated": "Darowizna cykliczna zaktualizowana.",
@@ -68,6 +70,7 @@
         "lastName": "ProszÄ™ podaj swoje nazwisko.",
         "validEmail": "ProszÄ™ podaj prawidÅ‚owy adres email."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Tygodniowo"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Forma wolna"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "WprowadÅº kod weryfikacyjny",
     "enterCodeInstructions": "WprowadÅº 6-cyfrowy kod, ktÃ³ry wÅ‚aÅ›nie wysÅ‚aliÅ›my e-mailem.",

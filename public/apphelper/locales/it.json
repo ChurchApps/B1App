@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Annualmente",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Bisettimanale",
       "cancelled": "Donazione ricorrente annullata.",
       "confirmDelete": "Sei sicuro di voler eliminare questa donazione ricorrente?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Fai una donazione ricorrente",
       "method": "Metodo",
       "monthly": "Mensile",
+      "orPayWith": "Or pay with",
       "preview": "Anteprima della donazione",
       "quarterly": "Trimestrale",
       "recurringUpdated": "Donazione ricorrente aggiornata.",
@@ -68,6 +70,7 @@
         "lastName": "Per favore inserisci il tuo cognome.",
         "validEmail": "Si prega di inserire un indirizzo email valido."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "settimanalmente"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Forma libera"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "E-mail",
     "enterCode": "Inserisci il codice di verifica",
     "enterCodeInstructions": "Inserisci il codice a 6 cifre che ti abbiamo appena inviato via e-mail.",
