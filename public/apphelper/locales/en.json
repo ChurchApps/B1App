@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Annually",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Bi-Weekly",
       "cancelled": "Recurring donation cancelled.",
       "confirmDelete": "Are you sure you wish to delete this recurring donation?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Make a Recurring Donation",
       "method": "Method",
       "monthly": "Monthly",
+      "orPayWith": "Or pay with",
       "preview": "Preview Donation",
       "quarterly": "Quarterly",
       "recurringUpdated": "Recurring donation updated.",
@@ -68,6 +70,7 @@
         "lastName": "Please enter your last name.",
         "validEmail": "Please enter a valid email address."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Weekly"
     },
     "fundDonations": {
