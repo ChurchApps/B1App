@@ -48,8 +48,14 @@ export function GroupContact({ leaders, group, config }: Props) {
     const email = {
       churchId: formData.churchId,
       personId: formData.personId,
+      groupId: group.id,
       appName: "B1",
       subject: "Contact Request For " + group.name,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
       body:
         "First Name: " + formData.firstName + "<br />"
         + "Last Name: " + formData.lastName + "<br />"
