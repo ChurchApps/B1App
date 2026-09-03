@@ -407,6 +407,19 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
           "& a": { color: "#1d6fb8" }
         }}
       >
+        {!!instructions.downloads?.length && (
+          <Box data-testid="teach-downloads" sx={{ mb: 3, p: 2, border: "1px solid #ccc", borderRadius: "10px", backgroundColor: "#fff" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+              <Icon sx={{ color: "#1d6fb8" }}>download</Icon>
+              <Typography sx={{ fontSize: 16, fontWeight: 700 }}>{Locale.label("mobile.details.downloads")}</Typography>
+            </Box>
+            {instructions.downloads.map((d, idx) => (
+              <Box key={d.id || `${d.url}-${idx}`} sx={{ mb: 0.5 }}>
+                <a href={d.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, textDecoration: "none" }}>{d.title}</a>
+              </Box>
+            ))}
+          </Box>
+        )}
         {instructions.items.map((item, idx) => renderTopLevel(item, `top-${item.id || idx}`, sectionDomMap))}
       </Box>
 
