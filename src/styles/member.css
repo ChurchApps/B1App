@@ -395,15 +395,16 @@ body {
   font-size: 26px;
 }
 
-/* Override church style preferences for headers in my section - use standard Roboto like B1Admin */
+/* Override church style preferences for headers in my section - use standard Roboto like B1Admin.
+   Site-builder content lives in .page and keeps the church's own heading font. */
 #mainContent h1,
 #mainContent h2,
 #mainContent h3,
 #mainContent h4,
-.MuiContainer-root h1,
-.MuiContainer-root h2,
-.MuiContainer-root h3,
-.MuiContainer-root h4 {
+.MuiContainer-root h1:not(.page *),
+.MuiContainer-root h2:not(.page *),
+.MuiContainer-root h3:not(.page *),
+.MuiContainer-root h4:not(.page *) {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   color: rgba(0, 0, 0, 0.87);
   font-weight: 500;
