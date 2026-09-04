@@ -1,5 +1,19 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, request, type APIRequestContext } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
+
+const MAIN_API = "http://localhost:8084";
+const CHURCH_ID = "CHU00000001";
+
+async function membershipHeaders(ctx: APIRequestContext) {
+  const login = await ctx.post(`${MAIN_API}/membership/users/login`, {
+    data: { email: "demo@b1.church", password: "password" },
+    headers: { "Content-Type": "application/json" }
+  });
+  expect(login.ok()).toBeTruthy();
+  const uc = (await login.json()).userChurches.find((c: any) => c.church?.id === CHURCH_ID);
+  const jwt = uc.apis.find((a: any) => a.keyName === "MembershipApi").jwt;
+  return { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
+}
 
 test.describe("Mobile groups", () => {
   test.describe.configure({ mode: "serial" });
@@ -109,5 +123,59 @@ test.describe("Mobile group event registration (leader)", () => {
     await expect(editDialog.getByText(/^Edit event$/i)).toBeVisible();
     await expect(editDialog.getByRole("switch", { name: /Registration/i })).toBeChecked();
     await expect(editDialog.getByLabel(/^Capacity$/)).toHaveValue("42");
+  });
+});
+
+test.describe("Mobile group chat feed toggles", () => {
+  test.describe.configure({ mode: "serial" });
+  // Adult Bible Class: demo@b1.church is a member but not a leader, so the announcements feed is read-only for them.
+  const GROUP_ID = "GRP00000004";
+  let ctx: APIRequestContext;
+  let headers: Record<string, string>;
+  let original: any;
+
+  const saveGroup = async (patch: Record<string, boolean>) => {
+    const res = await ctx.post(`${MAIN_API}/membership/groups`, { headers, data: [{ ...original, ...patch }] });
+    expect(res.ok()).toBeTruthy();
+  };
+
+  test.beforeAll(async () => {
+    ctx = await request.newContext();
+    headers = await membershipHeaders(ctx);
+    original = await (await ctx.get(`${MAIN_API}/membership/groups/${GROUP_ID}`, { headers })).json();
+    expect(original?.id).toBe(GROUP_ID);
+  });
+
+  test.afterAll(async () => {
+    if (original?.id) await saveGroup({ discussionsEnabled: true, announcementsEnabled: true });
+    await ctx?.dispose();
+  });
+
+  test("with discussions off, the chat opens straight to the announcements feed", async ({ page }) => {
+    await saveGroup({ discussionsEnabled: false, announcementsEnabled: true });
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await page.getByRole("tab", { name: /Messages/i }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible({ timeout: 15000 });
+    await expect(dialog.getByTestId("group-chat-feed-label")).toHaveText(/Announcements/i);
+    await expect(dialog.getByRole("tab", { name: /Discussions/i })).toHaveCount(0);
+    await expect(dialog.getByText(/Only group leaders can post announcements/i)).toBeVisible();
+    await expect(dialog.getByPlaceholder(/Send a message/i)).toHaveCount(0);
+  });
+
+  test("with both feeds off, the Messages tab is gone", async ({ page }) => {
+    await saveGroup({ discussionsEnabled: false, announcementsEnabled: false });
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await expect(page.getByRole("tab", { name: /Members/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("tab", { name: /Messages/i })).toHaveCount(0);
+  });
+
+  test("with both feeds back on, the chat opens to discussions again", async ({ page }) => {
+    await saveGroup({ discussionsEnabled: true, announcementsEnabled: true });
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await page.getByRole("tab", { name: /Messages/i }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible({ timeout: 15000 });
+    await expect(dialog.getByPlaceholder(/Send a message/i)).toBeVisible();
   });
 });
