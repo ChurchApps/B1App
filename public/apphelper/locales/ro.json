@@ -1,38 +1,38 @@
 {
   "common": {
     "cancel": "Anulare",
-    "close": "ÃŽnchidere",
-    "delete": "È˜tergere",
-    "pleaseWait": "VÄƒ rugÄƒm aÈ™teptaÈ›i...",
+    "close": "Închidere",
+    "delete": "Ștergere",
+    "pleaseWait": "Vă rugăm așteptați...",
     "save": "Salvare",
-    "search": "CÄƒutare",
+    "search": "Căutare",
     "update": "Actualizare"
   },
   "donation": {
     "bankForm": {
-      "accountNumber": "NumÄƒrul contului",
-      "added": "Cont bancar adÄƒugat. VerificaÈ›i contul bancar pentru a face o donaÈ›ie.",
+      "accountNumber": "Numărul contului",
+      "added": "Cont bancar adăugat. Verificați contul bancar pentru a face o donație.",
       "company": "Companie",
       "firstDeposit": "Prima depunere",
-      "individual": "PersoanÄƒ fizicÄƒ",
+      "individual": "Persoană fizică",
       "name": "Numele titularului contului",
-      "needVerified": "Conturile bancare vor trebui verificate Ã®nainte de a face donaÈ›ii. Contul dvs. va primi douÄƒ mici depuneri Ã®n aproximativ 1-3 zile lucrÄƒtoare. Va trebui sÄƒ introduceÈ›i acele sume de depunere pentru a termina verificarea contului selectÃ¢nd link-ul de verificare a contului lÃ¢ngÄƒ contul bancar din secÈ›iunea metodelor de platÄƒ.",
+      "needVerified": "Conturile bancare vor trebui verificate înainte de a face donații. Contul dvs. va primi două mici depuneri în aproximativ 1-3 zile lucrătoare. Va trebui să introduceți acele sume de depunere pentru a termina verificarea contului selectând link-ul de verificare a contului lângă contul bancar din secțiunea metodelor de plată.",
       "routingNumber": "Cod de rutare",
       "secondDeposit": "A doua depunere",
-      "twoDeposits": "IntroduceÈ›i cele douÄƒ depuneri pe care le-aÈ›i primit Ã®n cont pentru a termina verificarea contului bancar.",
+      "twoDeposits": "Introduceți cele două depuneri pe care le-ați primit în cont pentru a termina verificarea contului bancar.",
       "updated": "Cont bancar actualizat.",
       "validate": {
-        "accountNumber": "Sunt necesare codul de rutare È™i numÄƒrul contului.",
+        "accountNumber": "Sunt necesare codul de rutare și numărul contului.",
         "holderName": "Este necesar numele titularului contului."
       },
       "verified": "Cont bancar verificat."
     },
     "cardForm": {
-      "addNew": "AdÄƒugare nouÄƒ carte",
-      "added": "Carte adÄƒugatÄƒ cu succes.",
-      "expirationMonth": "Luna expirÄƒrii:",
-      "expirationYear": "Anul expirÄƒrii:",
-      "updated": "Carte actualizatÄƒ cu succes."
+      "addNew": "Adăugare nouă carte",
+      "added": "Carte adăugată cu succes.",
+      "expirationMonth": "Luna expirării:",
+      "expirationYear": "Anul expirării:",
+      "updated": "Carte actualizată cu succes."
     },
     "common": {
       "cancel": "Cancel",
@@ -41,40 +41,40 @@
     "donationForm": {
       "annually": "Anual",
       "anonymous": "Give anonymously (one-time gifts only)",
-      "biWeekly": "OdatÄƒ la douÄƒ sÄƒptÄƒmÃ¢ni",
-      "cancelled": "DonaÈ›ie recurentÄƒ anulatÄƒ.",
-      "confirmDelete": "SunteÈ›i sigur cÄƒ doriti sÄƒ È™tergeÈ›i aceastÄƒ donaÈ›ie recurentÄƒ?",
-      "cover": "Voi adÄƒuga generos {} pentru a acoperi taxele de tranzacÈ›ie, astfel Ã®ncÃ¢t sÄƒ puteÈ›i pÄƒstra 100% din donaÈ›ia mea.",
-      "donate": "DonaÈ›i",
-      "editRecurring": "Editare donaÈ›ie recurentÄƒ",
-      "fees": "Se aplicÄƒ taxe de tranzacÈ›ie {}.",
-      "frequency": "FrecvenÈ›Äƒ",
+      "biWeekly": "Odată la două săptămâni",
+      "cancelled": "Donație recurentă anulată.",
+      "confirmDelete": "Sunteți sigur că doriti să ștergeți această donație recurentă?",
+      "cover": "Voi adăuga generos {} pentru a acoperi taxele de tranzacție, astfel încât să puteți păstra 100% din donația mea.",
+      "donate": "Donați",
+      "editRecurring": "Editare donație recurentă",
+      "fees": "Se aplică taxe de tranzacție {}.",
+      "frequency": "Frecvență",
       "fund": "Fond",
       "funds": "Fonduri",
-      "make": "FaceÈ›i o donaÈ›ie",
-      "makeRecurring": "FaceÈ›i o donaÈ›ie recurentÄƒ",
-      "method": "MetodÄƒ",
+      "make": "Faceți o donație",
+      "makeRecurring": "Faceți o donație recurentă",
+      "method": "Metodă",
       "monthly": "Lunar",
       "orPayWith": "Or pay with",
-      "preview": "Previzualizare donaÈ›ie",
+      "preview": "Previzualizare donație",
       "quarterly": "Trimestrial",
-      "recurringUpdated": "DonaÈ›ie recurentÄƒ actualizatÄƒ.",
-      "startDate": "Data de Ã®nceput",
-      "thankYou": "MulÈ›umim pentru donaÈ›ia dvs.!",
-      "tooLow": "Suma donaÈ›iei trebuie sÄƒ fie mai mare de 0,50 USD",
-      "total": "Suma totalÄƒ a donaÈ›iei",
+      "recurringUpdated": "Donație recurentă actualizată.",
+      "startDate": "Data de început",
+      "thankYou": "Mulțumim pentru donația dvs.!",
+      "tooLow": "Suma donației trebuie să fie mai mare de 0,50 USD",
+      "total": "Suma totală a donației",
       "validate": {
         "amount": "Suma nu poate fi 0 USD.",
-        "email": "VÄƒ rugÄƒm introduceÈ›i adresa de email.",
-        "firstName": "VÄƒ rugÄƒm introduceÈ›i prenumele.",
-        "lastName": "VÄƒ rugÄƒm introduceÈ›i numele de familie.",
-        "validEmail": "VÄƒ rugÄƒm introduceÈ›i o adresÄƒ de email validÄƒ."
+        "email": "Vă rugăm introduceți adresa de email.",
+        "firstName": "Vă rugăm introduceți prenumele.",
+        "lastName": "Vă rugăm introduceți numele de familie.",
+        "validEmail": "Vă rugăm introduceți o adresă de email validă."
       },
       "walletFailed": "Wallet payment could not be completed. Please try again.",
-      "weekly": "SÄƒptÄƒmÃ¢nal"
+      "weekly": "Săptămânal"
     },
     "fundDonations": {
-      "addMore": "AdÄƒugare mai mult",
+      "addMore": "Adăugare mai mult",
       "amount": "Suma",
       "fund": "Fond"
     },
@@ -101,10 +101,10 @@
       }
     },
     "paymentMethods": {
-      "addBank": "AdÄƒugare cont bancar",
-      "addCard": "AdÄƒugare carte",
-      "confirmDelete": "SunteÈ›i sigur cÄƒ doriti sÄƒ È™tergeÈ›i aceastÄƒ metodÄƒ de platÄƒ?",
-      "deleted": "MetodÄƒ de platÄƒ È™tearsÄƒ.",
+      "addBank": "Adăugare cont bancar",
+      "addCard": "Adăugare carte",
+      "confirmDelete": "Sunteți sigur că doriti să ștergeți această metodă de plată?",
+      "deleted": "Metodă de plată ștearsă.",
       "noMethod": "No Method",
       "verify": "Verificare cont"
     },
@@ -115,33 +115,33 @@
       "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
     },
     "preview": {
-      "date": "Data donaÈ›iei",
-      "donate": "DonaÈ›i",
-      "every": "DonaÈ›ie recurentÄƒ la fiecare",
-      "fee": "Taxa de tranzacÈ›ie",
+      "date": "Data donației",
+      "donate": "Donați",
+      "every": "Donație recurentă la fiecare",
+      "fee": "Taxa de tranzacție",
       "funds": "Fonduri",
-      "method": "Metoda de donaÈ›ie",
+      "method": "Metoda de donație",
       "notes": "Note",
-      "startingOn": "ÃŽncepÃ¢nd cu",
+      "startingOn": "Începând cu",
       "total": "Total",
-      "type": "Tip de donaÈ›ie"
+      "type": "Tip de donație"
     },
     "recurring": {
       "amount": "Suma",
-      "confirmPause": "SunteÈ›i sigur cÄƒ doriÈ›i sÄƒ suspendaÈ›i aceastÄƒ donaÈ›ie recurentÄƒ?",
+      "confirmPause": "Sunteți sigur că doriți să suspendați această donație recurentă?",
       "every": "Fiecare",
       "interval": "Interval",
       "noSubscriptions": "No Subscriptions",
-      "notFound": "MetodÄƒ de platÄƒ nu a fost gÄƒsitÄƒ.",
-      "pauseFailed": "Suspendarea donaÈ›iei recurente a eÈ™uat. VÄƒ rugÄƒm Ã®ncercaÈ›i din nou.",
-      "pauseTooltip": "Suspendare donaÈ›ie recurentÄƒ",
-      "paused": "SuspendatÄƒ",
-      "pausedMessage": "DonaÈ›ie recurentÄƒ suspendatÄƒ.",
-      "paymentMethod": "Metoda de platÄƒ",
-      "resumeFailed": "Reluarea donaÈ›iei recurente a eÈ™uat. VÄƒ rugÄƒm Ã®ncercaÈ›i din nou.",
-      "resumeTooltip": "Reluare donaÈ›ie recurentÄƒ",
-      "resumedMessage": "DonaÈ›ie recurentÄƒ reluatÄƒ.",
-      "startDate": "Data de Ã®nceput"
+      "notFound": "Metodă de plată nu a fost găsită.",
+      "pauseFailed": "Suspendarea donației recurente a eșuat. Vă rugăm încercați din nou.",
+      "pauseTooltip": "Suspendare donație recurentă",
+      "paused": "Suspendată",
+      "pausedMessage": "Donație recurentă suspendată.",
+      "paymentMethod": "Metoda de plată",
+      "resumeFailed": "Reluarea donației recurente a eșuat. Vă rugăm încercați din nou.",
+      "resumeTooltip": "Reluare donație recurentă",
+      "resumedMessage": "Donație recurentă reluată.",
+      "startDate": "Data de început"
     }
   },
   "eventCalendar": {
@@ -149,31 +149,31 @@
       "day": {
         "friday": "Vineri",
         "monday": "Luni",
-        "saturday": "SÃ¢mbÄƒtÄƒ",
-        "sunday": "DuminicÄƒ",
+        "saturday": "Sâmbătă",
+        "sunday": "Duminică",
         "thursday": "Joi",
-        "tuesday": "MarÈ›i",
+        "tuesday": "Marți",
         "wednesday": "Miercuri"
       },
-      "endDate": "Data de sfÃ¢rÈ™it",
-      "endDateAria": "Data de sfÃ¢rÈ™it a repetiÈ›iei",
-      "ends": "Se terminÄƒ",
-      "endsAfter": "DupÄƒ",
-      "endsAria": "SelectaÈ›i cÃ¢nd se terminÄƒ repetiÈ›ia",
+      "endDate": "Data de sfârșit",
+      "endDateAria": "Data de sfârșit a repetiției",
+      "ends": "Se termină",
+      "endsAfter": "După",
+      "endsAria": "Selectați când se termină repetiția",
       "endsOn": "La",
       "freqDay": "Zi",
-      "freqMonth": "LunÄƒ",
-      "freqWeek": "SÄƒptÄƒmÃ¢nÄƒ",
-      "frequency": "FrecvenÈ›Äƒ",
-      "frequencyAria": "SelectaÈ›i frecvenÈ›a repetiÈ›iei",
+      "freqMonth": "Lună",
+      "freqWeek": "Săptămână",
+      "frequency": "Frecvență",
+      "frequencyAria": "Selectați frecvența repetiției",
       "interval": "Interval",
-      "intervalAria": "Intervalul repetiÈ›iei",
-      "monthlyOnDay": "Lunar Ã®n ziua {}",
-      "monthlyOnNth": "Lunar Ã®n {ordinal} {day}",
-      "monthlyOptionAria": "SelectaÈ›i opÈ›iunea de repetiÈ›ie lunarÄƒ",
-      "never": "NiciodatÄƒ",
-      "occurrences": "RepetÄƒri",
-      "occurrencesAria": "NumÄƒrul de repetÄƒri",
+      "intervalAria": "Intervalul repetiției",
+      "monthlyOnDay": "Lunar în ziua {}",
+      "monthlyOnNth": "Lunar în {ordinal} {day}",
+      "monthlyOptionAria": "Selectați opțiunea de repetiție lunară",
+      "never": "Niciodată",
+      "occurrences": "Repetări",
+      "occurrencesAria": "Numărul de repetări",
       "on": "La",
       "ordinal": {
         "first": "primul",
@@ -182,7 +182,7 @@
         "second": "al doilea",
         "third": "al treilea"
       },
-      "toggleWeekday": "ComutaÈ›i {} pentru repetiÈ›ia sÄƒptÄƒmÃ¢nalÄƒ"
+      "toggleWeekday": "Comutați {} pentru repetiția săptămânală"
     }
   },
   "fileUpload": {
@@ -191,60 +191,60 @@
     "uploadFailed": "Upload failed. Please try again."
   },
   "formSubmissionEdit": {
-    "back": "ÃŽnapoi",
-    "confirmDelete": "SunteÈ›i sigur cÄƒ doriti sÄƒ È™tergeÈ›i aceste date de formular?",
-    "continue": "ContinuÄƒ",
+    "back": "Înapoi",
+    "confirmDelete": "Sunteți sigur că doriti să ștergeți aceste date de formular?",
+    "continue": "Continuă",
     "editForm": "Editare formular",
     "isRequired": "este necesar",
     "stepProgress": "{current} din {total}",
     "submit": "Trimitere"
   },
   "gallery": {
-    "aspectRatio": "ProporÈ›ie de aspect",
-    "confirmDelete": "SunteÈ›i sigur cÄƒ doriti sÄƒ È™tergeÈ›i aceastÄƒ imagine din galerie?",
-    "freeForm": "FormÄƒ liberÄƒ"
+    "aspectRatio": "Proporție de aspect",
+    "confirmDelete": "Sunteți sigur că doriti să ștergeți această imagine din galerie?",
+    "freeForm": "Formă liberă"
   },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
-    "enterCode": "IntroduceÈ›i codul de verificare",
-    "enterCodeInstructions": "IntroduceÈ›i codul de 6 cifre pe care tocmai vi l-am trimis prin e-mail.",
+    "enterCode": "Introduceți codul de verificare",
+    "enterCodeInstructions": "Introduceți codul de 6 cifre pe care tocmai vi l-am trimis prin e-mail.",
     "expiredLink": "Linkul curent a expirat.",
     "forgot": "Ati uitat parola",
     "login": "Conectare",
     "noAcc": "Nu aveti cont?",
-    "noAccountFound": "Nu a fost gÄƒsit niciun cont cu acel e-mail. ÃŽnregistraÈ›i-vÄƒ pentru a continua.",
+    "noAccountFound": "Nu a fost găsit niciun cont cu acel e-mail. Înregistrați-vă pentru a continua.",
     "or": "or",
-    "password": "ParolÄƒ",
-    "register": "ÃŽnregistrare",
-    "registerThankYou": "VÄƒ mulÈ›umim pentru Ã®nregistrare! VÄƒ rugÄƒm verificaÈ›i email-ul pentru a vÄƒ verifica contul.",
-    "requestLink": "CereÈ›i un nou link de resetare",
+    "password": "Parolă",
+    "register": "Înregistrare",
+    "registerThankYou": "Vă mulțumim pentru înregistrare! Vă rugăm verificați email-ul pentru a vă verifica contul.",
+    "requestLink": "Cereți un nou link de resetare",
     "resendCode": "Retrimite codul",
     "reset": "Resetare",
-    "resetInstructions": "IntroduceÈ›i adresa de email pentru a cere o resetare a parolei.",
-    "resetPassword": "Resetare parolÄƒ",
-    "setPassword": "Stabilire parolÄƒ",
+    "resetInstructions": "Introduceți adresa de email pentru a cere o resetare a parolei.",
+    "resetPassword": "Resetare parolă",
+    "setPassword": "Stabilire parolă",
     "signIn": "Conectare",
-    "signInTitle": "VÄƒ rugÄƒm conectaÈ›i-vÄƒ",
+    "signInTitle": "Vă rugăm conectați-vă",
     "validate": {
-      "code": "IntroduceÈ›i codul de 6 cifre.",
-      "email": "VÄƒ rugÄƒm introduceÈ›i o adresÄƒ de email validÄƒ.",
-      "firstName": "VÄƒ rugÄƒm introduceÈ›i prenumele.",
-      "invalid": "Conectare nevalidÄƒ. VÄƒ rugÄƒm verificaÈ›i email-ul sau parola.",
-      "lastName": "VÄƒ rugÄƒm introduceÈ›i numele de familie.",
-      "password": "VÄƒ rugÄƒm introduceÈ›i o parolÄƒ.",
-      "passwordLength": "Parola trebuie sÄƒ aibÄƒ cel puÈ›in 8 caractere.",
+      "code": "Introduceți codul de 6 cifre.",
+      "email": "Vă rugăm introduceți o adresă de email validă.",
+      "firstName": "Vă rugăm introduceți prenumele.",
+      "invalid": "Conectare nevalidă. Vă rugăm verificați email-ul sau parola.",
+      "lastName": "Vă rugăm introduceți numele de familie.",
+      "password": "Vă rugăm introduceți o parolă.",
+      "passwordLength": "Parola trebuie să aibă cel puțin 8 caractere.",
       "passwordMatch": "Parolele nu se potrivesc.",
-      "selectingChurch": "Eroare la selectarea bisericii. VÄƒ rugÄƒm verificaÈ›i È™i Ã®ncercaÈ›i din nou"
+      "selectingChurch": "Eroare la selectarea bisericii. Vă rugăm verificați și încercați din nou"
     },
-    "verifyCode": "VerificÄƒ codul",
-    "verifyPassword": "Verificare parolÄƒ",
+    "verifyCode": "Verifică codul",
+    "verifyPassword": "Verificare parolă",
     "welcomeBack": "Bine ati revenit",
-    "welcomeName": "Bine ati revenit, <b>{}</b>! VÄƒ rugÄƒm aÈ™teptaÈ›i Ã®n timp ce vÄƒ Ã®ncÄƒrcÄƒm datele."
+    "welcomeName": "Bine ati revenit, <b>{}</b>! Vă rugăm așteptați în timp ce vă încărcăm datele."
   },
   "markdownEditor": {
-    "content": "ConÈ›inut",
+    "content": "Conținut",
     "markdownGuide": "Ghid Markdown"
   },
   "notes": {
@@ -255,7 +255,7 @@
     "notifyOn": "Notify On",
     "openFile": "Open file",
     "validate": {
-      "content": "VÄƒ rugÄƒm introduceÈ›i o notÄƒ."
+      "content": "Vă rugăm introduceți o notă."
     }
   },
   "person": {
@@ -267,37 +267,37 @@
   "selectChurch": {
     "address1": "Linia adresei 1",
     "address2": "Linia adresei 2",
-    "another": "AlegeÈ›i o altÄƒ bisericÄƒ",
-    "city": "OraÈ™",
-    "confirmRegister": "SunteÈ›i sigur cÄƒ doriti sÄƒ Ã®nregistraÈ›i o nouÄƒ bisericÄƒ?",
-    "country": "ÈšarÄƒ",
+    "another": "Alegeți o altă biserică",
+    "city": "Oraș",
+    "confirmRegister": "Sunteți sigur că doriti să înregistrați o nouă biserică?",
+    "country": "Țară",
     "name": "Numele bisericii",
-    "noMatches": "Nu au fost gÄƒsite potriviri.",
-    "register": "ÃŽnregistraÈ›i o nouÄƒ bisericÄƒ",
-    "selectChurch": "Selectare bisericÄƒ",
+    "noMatches": "Nu au fost găsite potriviri.",
+    "register": "Înregistrați o nouă biserică",
+    "selectChurch": "Selectare biserică",
     "state": "Stat / Provincie",
     "validate": {
-      "address": "Adresa nu poate fi goalÄƒ.",
-      "city": "OraÈ™ul nu poate fi gol.",
-      "country": "Èšara nu poate fi goalÄƒ.",
+      "address": "Adresa nu poate fi goală.",
+      "city": "Orașul nu poate fi gol.",
+      "country": "Țara nu poate fi goală.",
       "name": "Numele bisericii nu poate fi gol.",
       "state": "Statul/Provincia nu poate fi gol.",
-      "zip": "Codul poÈ™tal/codul poÈ™tal nu poate fi gol."
+      "zip": "Codul poștal/codul poștal nu poate fi gol."
     },
-    "zip": "Cod poÈ™tal / Cod poÈ™tal"
+    "zip": "Cod poștal / Cod poștal"
   },
   "stockPhotos": {
     "photoBy": "Fotografie de:",
     "providedBy": "Fotografii de stoc furnizate de"
   },
   "support": {
-    "discussions": "Forum de asistenÈ›Äƒ",
-    "documentation": "DocumentaÈ›ie"
+    "discussions": "Forum de asistență",
+    "documentation": "Documentație"
   },
   "wrapper": {
     "newPrivateMessage": "Mesaj privat nou",
     "privateConversation": "Private Conversation",
     "privateMessage": "Mesaj privat",
-    "searchForPerson": "CÄƒutare persoanÄƒ"
+    "searchForPerson": "Căutare persoană"
   }
 }
