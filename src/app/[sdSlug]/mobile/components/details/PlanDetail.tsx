@@ -24,7 +24,7 @@ import type {
   VenuePlanItemsResponseInterface
 } from "@churchapps/helpers";
 import { LessonsContentProvider } from "@churchapps/helpers";
-import { getProvider, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
+import { getProvider, type ContentDownload, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
 import { PlanItem as PlanItemRow } from "@/app/[sdSlug]/mobile/components/plans/PlanItem";
 import { LessonPreview } from "@/app/[sdSlug]/mobile/components/plans/LessonPreview";
 import { ExpandedLessonView } from "@/app/[sdSlug]/mobile/components/plans/ExpandedLessonView";
@@ -263,9 +263,11 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
       }
       return { items: [], instructions: null };
     },
-    enabled: isLoggedIn && !!plan && hasAssociatedContent && planItems.length === 0
+    // Provider instructions load even when the service order was customized (planItems exist) — downloads still belong to the associated lesson
+    enabled: isLoggedIn && !!plan && hasAssociatedContent && (planItems.length === 0 || (!!provider && !!plan.providerPlanId))
   });
   const showPreviewMode = hasAssociatedContent && planItems.length === 0 && (lessonPreview?.items?.length ?? 0) > 0;
+  const downloads: ContentDownload[] = lessonPreview?.instructions?.downloads ?? [];
 
   const refreshAssignments = () => {
     queryClient.invalidateQueries({ queryKey });
@@ -519,6 +521,47 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                 {Locale.label("mobile.details.noNotes")}
               </Typography>
             )}
+          </Box>
+        </Box>
+      )}
+
+      {tab === "order" && downloads.length > 0 && (
+        <Box
+          data-testid="plan-downloads"
+          sx={{
+            bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
+            borderRadius: `${mobileTheme.radius.lg}px`,
+            p: `${mobileTheme.spacing.md}px`,
+            mb: `${mobileTheme.spacing.md}px`
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+            <Icon sx={{ color: tc.primary }}>download</Icon>
+            <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.details.downloads")}</Typography>
+          </Box>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+            {downloads.map((d, idx) => (
+              <Box
+                key={d.id || `${d.url}-${idx}`}
+                component="a"
+                href={d.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  p: 1,
+                  borderRadius: `${mobileTheme.radius.md}px`,
+                  bgcolor: `${tc.primary}0D`,
+                  textDecoration: "none"
+                }}
+              >
+                <Icon sx={{ color: tc.primary, fontSize: 18 }}>description</Icon>
+                <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.primary }}>{d.title}</Typography>
+              </Box>
+            ))}
           </Box>
         </Box>
       )}

@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Letno",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Vsaki dve tedni",
       "cancelled": "PonavljajoÄa se donacija preklicana.",
       "confirmDelete": "Ali ste prepriÄani, da Å¾elite izbrisati to ponavljajoÄo se donacijo?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Naredi ponavljajoÄo se donacijo",
       "method": "Metoda",
       "monthly": "MeseÄno",
+      "orPayWith": "Or pay with",
       "preview": "Predogled donacije",
       "quarterly": "ÄŒetrtletno",
       "recurringUpdated": "PonavljajoÄa se donacija je bila posodobljena.",
@@ -68,6 +70,7 @@
         "lastName": "Prosim vnesite svoj priimek.",
         "validEmail": "Prosim vnesite veljaven e-naslov."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Tedensko"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Prosta oblika"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "Vnesite potrditveno kodo",
     "enterCodeInstructions": "Vnesite 6-mestno kodo, ki smo vam jo pravkar poslali po e-poÅ¡ti.",

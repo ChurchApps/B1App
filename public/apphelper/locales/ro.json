@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Anual",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "OdatÄƒ la douÄƒ sÄƒptÄƒmÃ¢ni",
       "cancelled": "DonaÈ›ie recurentÄƒ anulatÄƒ.",
       "confirmDelete": "SunteÈ›i sigur cÄƒ doriti sÄƒ È™tergeÈ›i aceastÄƒ donaÈ›ie recurentÄƒ?",
@@ -54,6 +55,7 @@
       "makeRecurring": "FaceÈ›i o donaÈ›ie recurentÄƒ",
       "method": "MetodÄƒ",
       "monthly": "Lunar",
+      "orPayWith": "Or pay with",
       "preview": "Previzualizare donaÈ›ie",
       "quarterly": "Trimestrial",
       "recurringUpdated": "DonaÈ›ie recurentÄƒ actualizatÄƒ.",
@@ -68,6 +70,7 @@
         "lastName": "VÄƒ rugÄƒm introduceÈ›i numele de familie.",
         "validEmail": "VÄƒ rugÄƒm introduceÈ›i o adresÄƒ de email validÄƒ."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "SÄƒptÄƒmÃ¢nal"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "FormÄƒ liberÄƒ"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "IntroduceÈ›i codul de verificare",
     "enterCodeInstructions": "IntroduceÈ›i codul de 6 cifre pe care tocmai vi l-am trimis prin e-mail.",

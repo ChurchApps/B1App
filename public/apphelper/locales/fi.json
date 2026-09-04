@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Vuosittain",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Kahden viikon vÃ¤lein",
       "cancelled": "Toistuva lahjoitus peruutettu.",
       "confirmDelete": "Haluatko varmasti poistaa tÃ¤mÃ¤n toistuvan lahjoituksen?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Tee toistuva lahjoitus",
       "method": "MenetelmÃ¤",
       "monthly": "Kuukausittain",
+      "orPayWith": "Or pay with",
       "preview": "Esikatsele lahjoitus",
       "quarterly": "NeljÃ¤nnesvuosittain",
       "recurringUpdated": "Toistuva lahjoitus pÃ¤ivitetty.",
@@ -68,6 +70,7 @@
         "lastName": "Kirjoita sukunimesi.",
         "validEmail": "SyÃ¶tÃ¤ kelvollinen sÃ¤hkÃ¶postiosoite."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Viikoittain"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Vapaa muoto"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "SÃ¤hkÃ¶posti",
     "enterCode": "SyÃ¶tÃ¤ vahvistuskoodi",
     "enterCodeInstructions": "SyÃ¶tÃ¤ 6-numeroinen koodi, jonka lÃ¤hetimme juuri sÃ¤hkÃ¶postiisi.",

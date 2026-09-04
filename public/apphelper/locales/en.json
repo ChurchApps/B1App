@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Annually",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Bi-Weekly",
       "cancelled": "Recurring donation cancelled.",
       "confirmDelete": "Are you sure you wish to delete this recurring donation?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Make a Recurring Donation",
       "method": "Method",
       "monthly": "Monthly",
+      "orPayWith": "Or pay with",
       "preview": "Preview Donation",
       "quarterly": "Quarterly",
       "recurringUpdated": "Recurring donation updated.",
@@ -68,6 +70,7 @@
         "lastName": "Please enter your last name.",
         "validEmail": "Please enter a valid email address."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Weekly"
     },
     "fundDonations": {
@@ -104,6 +107,10 @@
       "deleted": "Payment method deleted.",
       "noMethod": "No Method",
       "verify": "Verify Account"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",

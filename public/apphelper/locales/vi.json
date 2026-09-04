@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "HÃ ng nÄƒm",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Má»—i hai tuáº§n",
       "cancelled": "QuyÃªn gÃ³p Ä‘á»‹nh ká»³ Ä‘Ã£ bá»‹ há»§y.",
       "confirmDelete": "Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a quyÃªn gÃ³p Ä‘á»‹nh ká»³ nÃ y khÃ´ng?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Thá»±c hiá»‡n quyÃªn gÃ³p Ä‘á»‹nh ká»³",
       "method": "PhÆ°Æ¡ng phÃ¡p",
       "monthly": "HÃ ng thÃ¡ng",
+      "orPayWith": "Or pay with",
       "preview": "Xem trÆ°á»›c quyÃªn gÃ³p",
       "quarterly": "HÃ ng quÃ½",
       "recurringUpdated": "ÄÃ£ cáº­p nháº­t quyÃªn gÃ³p Ä‘á»‹nh ká»³.",
@@ -68,6 +70,7 @@
         "lastName": "Vui lÃ²ng nháº­p há» cá»§a báº¡n.",
         "validEmail": "Vui lÃ²ng nháº­p má»™t Ä‘á»‹a chá»‰ email há»£p lá»‡."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "HÃ ng tuáº§n"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "HÃ¬nh thá»©c tá»± do"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "Nháº­p mÃ£ xÃ¡c minh",
     "enterCodeInstructions": "Nháº­p mÃ£ 6 chá»¯ sá»‘ mÃ  chÃºng tÃ´i vá»«a gá»­i qua email.",
