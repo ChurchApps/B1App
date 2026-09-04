@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Ã…rlig",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Annenhver uke",
       "cancelled": "Gjentakende donasjon kansellert.",
       "confirmDelete": "Er du sikker pÃ¥ at du vil slette denne gjentakende donasjonen?",
@@ -54,6 +55,7 @@
       "makeRecurring": "Gi en gjentakende donasjon",
       "method": "Metode",
       "monthly": "MÃ¥nedlig",
+      "orPayWith": "Or pay with",
       "preview": "ForhÃ¥ndsvisning av donasjon",
       "quarterly": "Kvartalsvis",
       "recurringUpdated": "Gjentakende donasjon oppdatert.",
@@ -68,6 +70,7 @@
         "lastName": "Vennligst skriv inn etternavnet ditt.",
         "validEmail": "Vennligst skriv inn en gyldig e-postadresse."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Ukentlig"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Fri form"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "E-post",
     "enterCode": "Skriv inn bekreftelseskode",
     "enterCodeInstructions": "Skriv inn den 6-sifrede koden vi nettopp sendte deg pÃ¥ e-post.",

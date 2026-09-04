@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "RoÄne",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Biweekly",
       "cancelled": "PravidelnÃ½ dar zruÅ¡enÃ½.",
       "confirmDelete": "Ste si istÃ­, Å¾e chcete odstrÃ¡niÅ¥ tÃºto pravideÄ¾nÃº donÃ¡ciu?",
@@ -54,6 +55,7 @@
       "makeRecurring": "UrobiÅ¥ pravideÄ¾nÃº donÃ¡ciu",
       "method": "MetÃ³da",
       "monthly": "MesaÄne",
+      "orPayWith": "Or pay with",
       "preview": "NÃ¡hÄ¾ad donÃ¡cie",
       "quarterly": "Å tvrÅ¥roÄne",
       "recurringUpdated": "PravidelnÃ¡ donÃ¡cia aktualizovanÃ¡.",
@@ -68,6 +70,7 @@
         "lastName": "ProsÃ­m zadajte svoje priezvisko.",
         "validEmail": "ProsÃ­m zadajte platnÃº e-mailovÃº adresu."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "TÃ½Å¾denne"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "VoÄ¾nÃ¡ forma"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
     "enterCode": "Zadajte overovacÃ­ kÃ³d",
     "enterCodeInstructions": "Zadajte 6-miestny kÃ³d, ktorÃ½ sme vÃ¡m prÃ¡ve poslali e-mailom.",

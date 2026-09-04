@@ -48,6 +48,16 @@ test.describe("Public built-in routes", () => {
     await expect(page.getByRole("button", { name: "Donate", exact: true })).toBeVisible();
   });
 
+  // FUN00000002 = "Building Fund" (demo.sql), a non-default fund so preselection is provable.
+  test("/donate?fundId=&amount= preselects the fund and amount", async ({ page }) => {
+    await page.goto("/donate?fundId=FUN00000002&amount=25");
+    const amountInput = page.locator('input[name="amount"]').first();
+    await amountInput.waitFor({ state: "visible", timeout: 15000 });
+    await expect(amountInput).toHaveValue("25");
+    await expect(page.getByText("Building Fund").first()).toBeVisible();
+    await expect(page.getByText(/Total Donation Amount:\s*\$\s*25\.00/)).toBeVisible({ timeout: 15000 });
+  });
+
   test("/stream renders streaming page", async ({ page }) => {
     await page.goto("/stream");
     await expect(page).toHaveURL(/\/stream/);

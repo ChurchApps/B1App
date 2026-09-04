@@ -40,6 +40,7 @@
     },
     "donationForm": {
       "annually": "Ã…rligen",
+      "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Varannan vecka",
       "cancelled": "Ã…terkommande donation avbruten.",
       "confirmDelete": "Ã„r du sÃ¤ker pÃ¥ att du vill radera denna Ã¥terkommande donation?",
@@ -54,6 +55,7 @@
       "makeRecurring": "GÃ¶r en Ã¥terkommande donation",
       "method": "Metod",
       "monthly": "MÃ¥nadsvis",
+      "orPayWith": "Or pay with",
       "preview": "FÃ¶rhandsgranska donation",
       "quarterly": "Kvartalsvis",
       "recurringUpdated": "Ã…terkommande donation uppdaterad.",
@@ -68,6 +70,7 @@
         "lastName": "VÃ¤nligen ange ditt efternamn.",
         "validEmail": "VÃ¤nligen ange en giltig e-postadress."
       },
+      "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Veckovis"
     },
     "fundDonations": {
@@ -202,6 +205,8 @@
     "freeForm": "Fritt format"
   },
   "login": {
+    "continueGoogle": "Continue with Google",
+    "continueMicrosoft": "Continue with Microsoft",
     "email": "E-post",
     "enterCode": "Ange verifieringskod",
     "enterCodeInstructions": "Ange den 6-siffriga koden vi precis skickade till dig via e-post.",
