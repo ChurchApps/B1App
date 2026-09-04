@@ -1,37 +1,37 @@
 {
   "common": {
     "cancel": "Avbryt",
-    "close": "StÃ¤ng",
+    "close": "Stäng",
     "delete": "Radera",
-    "pleaseWait": "VÃ¤nligen vÃ¤nta...",
+    "pleaseWait": "Vänligen vänta...",
     "save": "Spara",
-    "search": "SÃ¶k",
+    "search": "Sök",
     "update": "Uppdatera"
   },
   "donation": {
     "bankForm": {
       "accountNumber": "Kontonummer",
-      "added": "Bankkonto tillagt. Verifiera ditt bankkonto fÃ¶r att gÃ¶ra en donation.",
-      "company": "FÃ¶retag",
-      "firstDeposit": "FÃ¶rsta insÃ¤ttningen",
+      "added": "Bankkonto tillagt. Verifiera ditt bankkonto för att göra en donation.",
+      "company": "Företag",
+      "firstDeposit": "Första insättningen",
       "individual": "Privatperson",
       "name": "Kontoinnehavarens namn",
-      "needVerified": "Bankkonton mÃ¥ste verifieras innan donationer kan gÃ¶ras. Ditt konto kommer att ta emot tvÃ¥ smÃ¥ insÃ¤ttningar inom cirka 1â€“3 arbetsdagar. Du behÃ¶ver ange dessa insÃ¤ttningsbelopp fÃ¶r att slutfÃ¶ra verifieringen av ditt konto genom att vÃ¤lja lÃ¤nken fÃ¶r kontoverifiering bredvid ditt bankkonto under avsnittet betalningsmetoder.",
+      "needVerified": "Bankkonton måste verifieras innan donationer kan göras. Ditt konto kommer att ta emot två små insättningar inom cirka 1–3 arbetsdagar. Du behöver ange dessa insättningsbelopp för att slutföra verifieringen av ditt konto genom att välja länken för kontoverifiering bredvid ditt bankkonto under avsnittet betalningsmetoder.",
       "routingNumber": "Clearingnummer",
-      "secondDeposit": "Andra insÃ¤ttningen",
-      "twoDeposits": "Ange de tvÃ¥ insÃ¤ttningarna du mottagit pÃ¥ ditt konto fÃ¶r att slutfÃ¶ra verifieringen av ditt bankkonto.",
+      "secondDeposit": "Andra insättningen",
+      "twoDeposits": "Ange de två insättningarna du mottagit på ditt konto för att slutföra verifieringen av ditt bankkonto.",
       "updated": "Bankkonto uppdaterat.",
       "validate": {
-        "accountNumber": "Clearing- och kontonummer krÃ¤vs.",
-        "holderName": "Kontoinnehavarens namn krÃ¤vs."
+        "accountNumber": "Clearing- och kontonummer krävs.",
+        "holderName": "Kontoinnehavarens namn krävs."
       },
       "verified": "Bankkonto verifierat."
     },
     "cardForm": {
-      "addNew": "LÃ¤gg till nytt kort",
+      "addNew": "Lägg till nytt kort",
       "added": "Kort tillagt.",
-      "expirationMonth": "UtgÃ¥ngsmÃ¥nad:",
-      "expirationYear": "UtgÃ¥ngsÃ¥r:",
+      "expirationMonth": "Utgångsmånad:",
+      "expirationYear": "Utgångsår:",
       "updated": "Kort uppdaterat."
     },
     "common": {
@@ -39,42 +39,42 @@
       "error": "Error"
     },
     "donationForm": {
-      "annually": "Ã…rligen",
+      "annually": "Årligen",
       "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Varannan vecka",
-      "cancelled": "Ã…terkommande donation avbruten.",
-      "confirmDelete": "Ã„r du sÃ¤ker pÃ¥ att du vill radera denna Ã¥terkommande donation?",
-      "cover": "Jag lÃ¤gger gÃ¤rna till {} fÃ¶r att tÃ¤cka transaktionsavgifterna sÃ¥ att ni kan behÃ¥lla 100 % av min donation.",
+      "cancelled": "Återkommande donation avbruten.",
+      "confirmDelete": "Är du säker på att du vill radera denna återkommande donation?",
+      "cover": "Jag lägger gärna till {} för att täcka transaktionsavgifterna så att ni kan behålla 100 % av min donation.",
       "donate": "Donera",
-      "editRecurring": "Redigera Ã¥terkommande donation",
-      "fees": "Transaktionsavgifter pÃ¥ {} tillkommer.",
+      "editRecurring": "Redigera återkommande donation",
+      "fees": "Transaktionsavgifter på {} tillkommer.",
       "frequency": "Frekvens",
       "fund": "Fond",
       "funds": "Fonder",
-      "make": "GÃ¶r en donation",
-      "makeRecurring": "GÃ¶r en Ã¥terkommande donation",
+      "make": "Gör en donation",
+      "makeRecurring": "Gör en återkommande donation",
       "method": "Metod",
-      "monthly": "MÃ¥nadsvis",
+      "monthly": "Månadsvis",
       "orPayWith": "Or pay with",
-      "preview": "FÃ¶rhandsgranska donation",
+      "preview": "Förhandsgranska donation",
       "quarterly": "Kvartalsvis",
-      "recurringUpdated": "Ã…terkommande donation uppdaterad.",
+      "recurringUpdated": "Återkommande donation uppdaterad.",
       "startDate": "Startdatum",
-      "thankYou": "Tack fÃ¶r din donation!",
-      "tooLow": "Donationsbeloppet mÃ¥ste vara stÃ¶rre Ã¤n $0,50",
+      "thankYou": "Tack för din donation!",
+      "tooLow": "Donationsbeloppet måste vara större än $0,50",
       "total": "Totalt donationsbelopp",
       "validate": {
         "amount": "Beloppet kan inte vara $0.",
-        "email": "VÃ¤nligen ange din e-postadress.",
-        "firstName": "VÃ¤nligen ange ditt fÃ¶rnamn.",
-        "lastName": "VÃ¤nligen ange ditt efternamn.",
-        "validEmail": "VÃ¤nligen ange en giltig e-postadress."
+        "email": "Vänligen ange din e-postadress.",
+        "firstName": "Vänligen ange ditt förnamn.",
+        "lastName": "Vänligen ange ditt efternamn.",
+        "validEmail": "Vänligen ange en giltig e-postadress."
       },
       "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Veckovis"
     },
     "fundDonations": {
-      "addMore": "LÃ¤gg till fler",
+      "addMore": "Lägg till fler",
       "amount": "Belopp",
       "fund": "Fond"
     },
@@ -101,9 +101,9 @@
       }
     },
     "paymentMethods": {
-      "addBank": "LÃ¤gg till bankkonto",
-      "addCard": "LÃ¤gg till kort",
-      "confirmDelete": "Ã„r du sÃ¤ker pÃ¥ att du vill radera denna betalningsmetod?",
+      "addBank": "Lägg till bankkonto",
+      "addCard": "Lägg till kort",
+      "confirmDelete": "Är du säker på att du vill radera denna betalningsmetod?",
       "deleted": "Betalningsmetod raderad.",
       "noMethod": "No Method",
       "verify": "Verifiera konto"
@@ -117,30 +117,30 @@
     "preview": {
       "date": "Donationsdatum",
       "donate": "Donera",
-      "every": "Ã…terkommande varje",
+      "every": "Återkommande varje",
       "fee": "Transaktionsavgift",
       "funds": "Fonder",
       "method": "Donationsmetod",
       "notes": "Anteckningar",
-      "startingOn": "BÃ¶rjar den",
+      "startingOn": "Börjar den",
       "total": "Totalt",
       "type": "Donationstyp"
     },
     "recurring": {
       "amount": "Belopp",
-      "confirmPause": "Ã„r du sÃ¤ker pÃ¥ att du vill pausa denna Ã¥terkommande donation?",
+      "confirmPause": "Är du säker på att du vill pausa denna återkommande donation?",
       "every": "Varje",
       "interval": "Intervall",
       "noSubscriptions": "No Subscriptions",
       "notFound": "Betalningsmetod hittades inte.",
-      "pauseFailed": "Det gick inte att pausa den Ã¥terkommande donationen. FÃ¶rsÃ¶k igen.",
-      "pauseTooltip": "Pausa Ã¥terkommande donation",
+      "pauseFailed": "Det gick inte att pausa den återkommande donationen. Försök igen.",
+      "pauseTooltip": "Pausa återkommande donation",
       "paused": "Pausad",
-      "pausedMessage": "Ã…terkommande donation pausad.",
+      "pausedMessage": "Återkommande donation pausad.",
       "paymentMethod": "Betalningsmetod",
-      "resumeFailed": "Det gick inte att Ã¥teruppta den Ã¥terkommande donationen. FÃ¶rsÃ¶k igen.",
-      "resumeTooltip": "Ã…teruppta Ã¥terkommande donation",
-      "resumedMessage": "Ã…terkommande donation Ã¥terupptagen.",
+      "resumeFailed": "Det gick inte att återuppta den återkommande donationen. Försök igen.",
+      "resumeTooltip": "Återuppta återkommande donation",
+      "resumedMessage": "Återkommande donation återupptagen.",
       "startDate": "Startdatum"
     }
   },
@@ -148,41 +148,41 @@
     "recurring": {
       "day": {
         "friday": "Fredag",
-        "monday": "MÃ¥ndag",
-        "saturday": "LÃ¶rdag",
-        "sunday": "SÃ¶ndag",
+        "monday": "Måndag",
+        "saturday": "Lördag",
+        "sunday": "Söndag",
         "thursday": "Torsdag",
         "tuesday": "Tisdag",
         "wednesday": "Onsdag"
       },
       "endDate": "Slutdatum",
-      "endDateAria": "Slutdatum fÃ¶r Ã¥terkommande",
+      "endDateAria": "Slutdatum för återkommande",
       "ends": "Slutar",
       "endsAfter": "Efter",
-      "endsAria": "VÃ¤lj nÃ¤r Ã¥terkommandet slutar",
+      "endsAria": "Välj när återkommandet slutar",
       "endsOn": "Den",
       "freqDay": "Dag",
-      "freqMonth": "MÃ¥nad",
+      "freqMonth": "Månad",
       "freqWeek": "Vecka",
       "frequency": "Frekvens",
-      "frequencyAria": "VÃ¤lj Ã¥terkommande frekvens",
+      "frequencyAria": "Välj återkommande frekvens",
       "interval": "Intervall",
-      "intervalAria": "Ã…terkommande intervall",
-      "monthlyOnDay": "MÃ¥natligen den {}",
-      "monthlyOnNth": "MÃ¥natligen den {ordinal} {day}",
-      "monthlyOptionAria": "VÃ¤lj mÃ¥natligt Ã¥terkommande alternativ",
+      "intervalAria": "Återkommande intervall",
+      "monthlyOnDay": "Månatligen den {}",
+      "monthlyOnNth": "Månatligen den {ordinal} {day}",
+      "monthlyOptionAria": "Välj månatligt återkommande alternativ",
       "never": "Aldrig",
-      "occurrences": "FÃ¶rekomster",
-      "occurrencesAria": "Antal Ã¥terkommande fÃ¶rekomster",
+      "occurrences": "Förekomster",
+      "occurrencesAria": "Antal återkommande förekomster",
       "on": "Den",
       "ordinal": {
-        "first": "fÃ¶rsta",
-        "fourth": "fjÃ¤rde",
+        "first": "första",
+        "fourth": "fjärde",
         "last": "sista",
         "second": "andra",
         "third": "tredje"
       },
-      "toggleWeekday": "VÃ¤xla {} fÃ¶r veckovis Ã¥terkommande"
+      "toggleWeekday": "Växla {} för veckovis återkommande"
     }
   },
   "fileUpload": {
@@ -192,16 +192,16 @@
   },
   "formSubmissionEdit": {
     "back": "Tillbaka",
-    "confirmDelete": "Ã„r du sÃ¤ker pÃ¥ att du vill radera dessa formulÃ¤rdata?",
-    "continue": "FortsÃ¤tt",
-    "editForm": "Redigera formulÃ¤r",
-    "isRequired": "Ã¤r obligatoriskt",
+    "confirmDelete": "Är du säker på att du vill radera dessa formulärdata?",
+    "continue": "Fortsätt",
+    "editForm": "Redigera formulär",
+    "isRequired": "är obligatoriskt",
     "stepProgress": "{current} av {total}",
     "submit": "Skicka"
   },
   "gallery": {
-    "aspectRatio": "BildfÃ¶rhÃ¥llande",
-    "confirmDelete": "Ã„r du sÃ¤ker pÃ¥ att du vill radera denna bild frÃ¥n galleriet?",
+    "aspectRatio": "Bildförhållande",
+    "confirmDelete": "Är du säker på att du vill radera denna bild från galleriet?",
     "freeForm": "Fritt format"
   },
   "login": {
@@ -210,41 +210,41 @@
     "email": "E-post",
     "enterCode": "Ange verifieringskod",
     "enterCodeInstructions": "Ange den 6-siffriga koden vi precis skickade till dig via e-post.",
-    "expiredLink": "Den aktuella lÃ¤nken har utgÃ¥tt.",
-    "forgot": "GlÃ¶mt lÃ¶senord",
+    "expiredLink": "Den aktuella länken har utgått.",
+    "forgot": "Glömt lösenord",
     "login": "Logga in",
     "noAcc": "Har du inget konto?",
-    "noAccountFound": "Inget konto hittades med den e-postadressen. Registrera dig fÃ¶r att fortsÃ¤tta.",
+    "noAccountFound": "Inget konto hittades med den e-postadressen. Registrera dig för att fortsätta.",
     "or": "or",
-    "password": "LÃ¶senord",
+    "password": "Lösenord",
     "register": "Registrera",
-    "registerThankYou": "Tack fÃ¶r din registrering! VÃ¤nligen kontrollera din e-post fÃ¶r att verifiera ditt konto.",
-    "requestLink": "BegÃ¤r en ny Ã¥terstÃ¤llningslÃ¤nk",
+    "registerThankYou": "Tack för din registrering! Vänligen kontrollera din e-post för att verifiera ditt konto.",
+    "requestLink": "Begär en ny återställningslänk",
     "resendCode": "Skicka koden igen",
-    "reset": "Ã…terstÃ¤ll",
-    "resetInstructions": "Ange din e-postadress fÃ¶r att begÃ¤ra en lÃ¶senordsÃ¥terstÃ¤llning.",
-    "resetPassword": "Ã…terstÃ¤ll lÃ¶senord",
-    "setPassword": "Ange lÃ¶senord",
+    "reset": "Återställ",
+    "resetInstructions": "Ange din e-postadress för att begära en lösenordsåterställning.",
+    "resetPassword": "Återställ lösenord",
+    "setPassword": "Ange lösenord",
     "signIn": "Logga in",
-    "signInTitle": "VÃ¤nligen logga in",
+    "signInTitle": "Vänligen logga in",
     "validate": {
       "code": "Ange den 6-siffriga koden.",
-      "email": "VÃ¤nligen ange en giltig e-postadress.",
-      "firstName": "VÃ¤nligen ange ditt fÃ¶rnamn.",
-      "invalid": "Ogiltig inloggning. VÃ¤nligen kontrollera din e-post eller ditt lÃ¶senord.",
-      "lastName": "VÃ¤nligen ange ditt efternamn.",
-      "password": "VÃ¤nligen ange ett lÃ¶senord.",
-      "passwordLength": "LÃ¶senordet mÃ¥ste vara minst 8 tecken lÃ¥ngt.",
-      "passwordMatch": "LÃ¶senorden matchar inte.",
-      "selectingChurch": "Fel vid val av fÃ¶rsamling. VÃ¤nligen kontrollera och fÃ¶rsÃ¶k igen."
+      "email": "Vänligen ange en giltig e-postadress.",
+      "firstName": "Vänligen ange ditt förnamn.",
+      "invalid": "Ogiltig inloggning. Vänligen kontrollera din e-post eller ditt lösenord.",
+      "lastName": "Vänligen ange ditt efternamn.",
+      "password": "Vänligen ange ett lösenord.",
+      "passwordLength": "Lösenordet måste vara minst 8 tecken långt.",
+      "passwordMatch": "Lösenorden matchar inte.",
+      "selectingChurch": "Fel vid val av församling. Vänligen kontrollera och försök igen."
     },
     "verifyCode": "Verifiera kod",
-    "verifyPassword": "BekrÃ¤fta lÃ¶senord",
-    "welcomeBack": "VÃ¤lkommen tillbaka",
-    "welcomeName": "VÃ¤lkommen tillbaka, <b>{}</b>! VÃ¤nligen vÃ¤nta medan vi laddar dina uppgifter."
+    "verifyPassword": "Bekräfta lösenord",
+    "welcomeBack": "Välkommen tillbaka",
+    "welcomeName": "Välkommen tillbaka, <b>{}</b>! Vänligen vänta medan vi laddar dina uppgifter."
   },
   "markdownEditor": {
-    "content": "InnehÃ¥ll",
+    "content": "Innehåll",
     "markdownGuide": "Markdown-guide"
   },
   "notes": {
@@ -255,32 +255,32 @@
     "notifyOn": "Notify On",
     "openFile": "Open file",
     "validate": {
-      "content": "VÃ¤nligen ange en anteckning."
+      "content": "Vänligen ange en anteckning."
     }
   },
   "person": {
     "email": "E-post",
-    "firstName": "FÃ¶rnamn",
+    "firstName": "Förnamn",
     "lastName": "Efternamn",
     "name": "Namn"
   },
   "selectChurch": {
     "address1": "Adressrad 1",
     "address2": "Adressrad 2",
-    "another": "VÃ¤lj en annan fÃ¶rsamling",
+    "another": "Välj en annan församling",
     "city": "Stad",
-    "confirmRegister": "Ã„r du sÃ¤ker pÃ¥ att du vill registrera en ny fÃ¶rsamling?",
+    "confirmRegister": "Är du säker på att du vill registrera en ny församling?",
     "country": "Land",
-    "name": "FÃ¶rsamlingsnamn",
-    "noMatches": "Inga trÃ¤ffar hittades.",
-    "register": "Registrera en ny fÃ¶rsamling",
-    "selectChurch": "VÃ¤lj en fÃ¶rsamling",
+    "name": "Församlingsnamn",
+    "noMatches": "Inga träffar hittades.",
+    "register": "Registrera en ny församling",
+    "selectChurch": "Välj en församling",
     "state": "Delstat / Provins",
     "validate": {
       "address": "Adressen kan inte vara tom.",
       "city": "Staden kan inte vara tom.",
       "country": "Landet kan inte vara tomt.",
-      "name": "FÃ¶rsamlingsnamnet kan inte vara tomt.",
+      "name": "Församlingsnamnet kan inte vara tomt.",
       "state": "Delstat/Provins kan inte vara tom.",
       "zip": "Postnumret kan inte vara tomt."
     },
@@ -288,7 +288,7 @@
   },
   "stockPhotos": {
     "photoBy": "Foto av:",
-    "providedBy": "Stockfoton tillhandahÃ¥lls av"
+    "providedBy": "Stockfoton tillhandahålls av"
   },
   "support": {
     "discussions": "Supportforum",
@@ -298,6 +298,6 @@
     "newPrivateMessage": "Nytt privat meddelande",
     "privateConversation": "Private Conversation",
     "privateMessage": "Privat meddelande",
-    "searchForPerson": "SÃ¶k efter en person"
+    "searchForPerson": "Sök efter en person"
   }
 }
