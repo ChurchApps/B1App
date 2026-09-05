@@ -89,7 +89,7 @@ export const buildContentSecurityPolicy = (options: CspOptions = {}): string => 
   const { nonce, dev = false } = options;
 
   const scriptSrc = ["'self'", ...(nonce ? [`'nonce-${nonce}'`, "'strict-dynamic'"] : []), ...SCRIPT_SRC_HOSTS, ...(dev ? DEV_SCRIPT_SRC : [])];
-  const connectSrc = ["'self'", ...CONNECT_SRC_HOSTS, ...(dev ? DEV_CONNECT_SRC : [])];
+  const connectSrc = ["'self'", "https://api.frankfurter.dev", ...CONNECT_SRC_HOSTS, ...(dev ? DEV_CONNECT_SRC : [])];
 
   return [
     "default-src 'self'",

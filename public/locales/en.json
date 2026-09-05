@@ -83,7 +83,8 @@
     "pleaseWait": "Please Wait",
     "save": "Save",
     "search": "Search",
-    "update": "Update"
+    "update": "Update",
+    "currencyRatesInfo": "Converted to the church’s selected currency at current exchange rates."
   },
   "donate": {
     "authLanding": "This is with Auth",
