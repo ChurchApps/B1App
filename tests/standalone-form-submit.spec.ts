@@ -30,6 +30,22 @@ test.describe("Standalone form submission (anonymous)", () => {
     expect(submitStatus, "POST /formsubmissions should be 200").toBe(200);
   });
 
+  test("unrestricted form: shows the admin-authored description above the fields", async ({ page }) => {
+    await page.goto("/forms/FRM00000004");
+
+    const input = page.getByLabel(/Child Full Name/i);
+    await expect(input).toBeVisible({ timeout: 15000 });
+
+    const description = page.getByTestId("form-description");
+    await expect(description).toBeVisible();
+    await expect(description).toContainText("Register your child for Vacation Bible School");
+
+    const [descriptionBox, inputBox] = await Promise.all([description.boundingBox(), input.boundingBox()]);
+    expect(descriptionBox, "description should be rendered").not.toBeNull();
+    expect(inputBox, "first field should be rendered").not.toBeNull();
+    expect(descriptionBox!.y, "description should sit above the first field").toBeLessThan(inputBox!.y);
+  });
+
   test("restricted form: anonymous parent is prompted to log in (not access-denied crash)", async ({ page }) => {
     await page.goto("/forms/FRM00000005");
     // FormPage shows a login link for restricted forms to anonymous users

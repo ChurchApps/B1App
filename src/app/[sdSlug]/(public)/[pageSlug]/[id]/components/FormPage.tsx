@@ -15,6 +15,8 @@ interface Props extends WrapperPageProps {
   formId: string;
 }
 
+type StandaloneFormInterface = FormInterface & { description?: string; displayMode?: "standard" | "conversational" };
+
 export function FormPage(props: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
@@ -23,12 +25,12 @@ export function FormPage(props: Props) {
   const [late, setLate] = useState<Date | null>(null);
   const [addFormId, setAddFormId] = useState<string>("");
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
-  const [form, setForm] = useState<FormInterface | null>(null);
+  const [form, setForm] = useState<StandaloneFormInterface | null>(null);
 
   const loadData = async () => {
     setIsLoading(true);
 
-    const data = await ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi") as FormInterface;
+    const data = await ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi") as StandaloneFormInterface;
     const now = new Date().setHours(0, 0, 0, 0);
     const start = data.accessStartTime ? new Date(data.accessStartTime) : null;
     const end = data.accessEndTime ? new Date(data.accessEndTime) : null;
@@ -53,7 +55,7 @@ export function FormPage(props: Props) {
       contentId={props.formId}
       formSubmissionId=""
       personId={PersonHelper?.person?.id}
-      displayMode={(form as any)?.displayMode}
+      displayMode={form?.displayMode}
       updatedFunction={handleUpdate}
       cancelFunction={() => redirect("/")}
     />
@@ -82,6 +84,9 @@ export function FormPage(props: Props) {
     <>
       <Container>
         <h1>{form?.name}</h1>
+        {!isFormSubmitted && form?.description && (
+          <p data-testid="form-description" style={{ whiteSpace: "pre-wrap" }}>{form.description}</p>
+        )}
         {isFormSubmitted
           ? (
             <h3 className="text-center">{Locale.label("pageSlug.formSubmitted")}</h3>
