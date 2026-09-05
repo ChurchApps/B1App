@@ -58,6 +58,7 @@ interface SubscriptionRow {
 }
 
 function DonatePageInner({ config }: Props) {
+  CurrencyHelper.initializeExchangeRates();
   const tc = mobileTheme.colors;
   const context = useContext(UserContext);
   const personId = context?.userChurch?.person?.id || UserHelper.currentUserChurch?.person?.id;
@@ -172,7 +173,11 @@ function DonatePageInner({ config }: Props) {
     for (const d of donations) {
       const dt = DateHelper.toDate(d.donationDate);
       if (dt.getFullYear() === currentYear) {
-        ytd += ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
+        ytd += CurrencyHelper.convertAmount(
+          ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number,
+          d.currency ?? "usd",
+          pageCurrency
+        );
         totalGifts += 1;
       }
     }
@@ -245,7 +250,7 @@ function DonatePageInner({ config }: Props) {
                 Your Giving Impact
               </Typography>
               <Typography sx={{ fontSize: 36, fontWeight: 800, mb: 1, fontVariantNumeric: "tabular-nums" }}>
-                {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)}
+                {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)} *
               </Typography>
               <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
                 Total this year • {givingStats.totalGifts}{" "}
@@ -266,6 +271,9 @@ function DonatePageInner({ config }: Props) {
             </>
           )}
         </Box>
+        <Typography sx={{ fontSize: 12, color: tc.textMuted, fontWeight: 400, textAlign: "center", fontStyle: "italic" }}>
+          * {Locale.label("common.currencyRatesInfo")}
+        </Typography>
 
         {church?.id && (
           <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>
@@ -514,12 +522,10 @@ function DonatePageInner({ config }: Props) {
   }, [donations, period]);
 
   const filteredTotal = useMemo(
-    () =>
-      filteredDonations.reduce(
-        (sum, d) => sum + (((d as any).fund?.amount ?? (d as any).amount ?? 0) as number),
-        0
-      ),
-    [filteredDonations]
+    () =>{
+      const pairs = filteredDonations.map((d) => ({ amount: d.amount ?? 0, currency: d.currency ?? "usd" }));
+      return CurrencyHelper.convertDonationTotals(pairs, pageCurrency);
+    }, [filteredDonations, pageCurrency]
   );
 
   const getSubPaymentMethod = (sub: SubscriptionRow) => {
@@ -594,7 +600,7 @@ function DonatePageInner({ config }: Props) {
         ) : (
           <Box sx={{ textAlign: "center", py: 1 }}>
             <Typography sx={{ fontSize: 32, fontWeight: 800, color: tc.primary, fontVariantNumeric: "tabular-nums" }}>
-              {CurrencyHelper.formatCurrencyWithLocale(filteredTotal, pageCurrency)}
+              {filteredTotal} *
             </Typography>
             <Typography sx={{ fontSize: 14, color: tc.textMuted, fontWeight: 500 }}>
               {periodLabels[period]}
@@ -602,6 +608,9 @@ function DonatePageInner({ config }: Props) {
           </Box>
         )}
       </Box>
+      <Typography sx={{ fontSize: 12, color: tc.textMuted, fontWeight: 400, textAlign: "center", fontStyle: "italic" }}>
+        *{Locale.label("common.currencyRatesInfo")}
+      </Typography>
 
       {!donationsLoading && donations.length > 0 && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
