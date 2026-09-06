@@ -907,7 +907,9 @@
       "confirmedTitle": "You are on the waitlist",
       "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
     },
+    "you": "You",
     "youAreRegistered": "You are registered for",
+    "yourHousehold": "Your Household",
     "yourInformation": "Your Information",
     "yourType": "Your registration type"
   },
