@@ -10,6 +10,8 @@ export interface RegType {
   price: number | null;
   capacity: number | null;
   remainingCapacity: number | null;
+  minAgeYears?: number | null;
+  maxAgeYears?: number | null;
   sort?: number;
   active?: boolean;
 }
@@ -44,7 +46,15 @@ export interface RegistrationPayment {
 export interface WizardMember {
   firstName: string;
   lastName: string;
+  personId?: string;
   registrationTypeId?: string;
+}
+
+export interface HouseholdMember {
+  id: string;
+  firstName: string;
+  lastName: string;
+  birthDate?: Date | string;
 }
 
 export type RegStep = "info" | "members" | "selections" | "questions" | "payment" | "confirm";
@@ -54,6 +64,7 @@ export interface WizardPerson {
   email?: string;
   firstName?: string;
   lastName?: string;
+  householdId?: string;
 }
 
 interface Params {
@@ -78,6 +89,17 @@ export const apiPut = (path: string, data: any, apiName: string): Promise<any> =
 
 const num = (v: any): number => (v == null || isNaN(Number(v)) ? 0 : Number(v));
 
+const ageYears = (birthDate?: Date | string): number | null => {
+  if (!birthDate) return null;
+  const bd = new Date(birthDate);
+  if (isNaN(bd.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - bd.getFullYear();
+  const m = now.getMonth() - bd.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < bd.getDate())) age--;
+  return age;
+};
+
 export function useEventRegistration({ churchId, eventId, event, isLoggedIn, person }: Params) {
   const [types, setTypes] = useState<RegType[]>([]);
   const [selections, setSelections] = useState<RegSelection[]>([]);
@@ -99,6 +121,7 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   const [unRestrictedFormId, setUnRestrictedFormId] = useState("");
   const [formSubmissionId, setFormSubmissionId] = useState<string | undefined>(undefined);
   const [atCapacity, setAtCapacity] = useState(false);
+  const [householdMembers, setHouseholdMembers] = useState<HouseholdMember[]>([]);
 
   useEffect(() => {
     if (!churchId || !eventId) return;
@@ -109,6 +132,23 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
       .then((data: any) => setSelections(Array.isArray(data) ? data : []))
       .catch(() => setSelections([]));
   }, [churchId, eventId]);
+
+  const householdId = isLoggedIn ? person?.householdId : undefined;
+  const selfId = person?.id;
+  useEffect(() => {
+    if (!householdId) {
+      setHouseholdMembers([]);
+      return;
+    }
+    ApiHelper.get("/people/household/" + householdId, "MembershipApi")
+      .then((data: any) => {
+        const rows = Array.isArray(data) ? data : [];
+        setHouseholdMembers(rows
+          .filter((p: any) => p.id && p.id !== selfId)
+          .map((p: any) => ({ id: p.id, firstName: p.name?.first || "", lastName: p.name?.last || "", birthDate: p.birthDate })));
+      })
+      .catch(() => setHouseholdMembers([]));
+  }, [householdId, selfId]);
 
   const hasTypes = types.length > 0;
   const hasSelections = selections.length > 0;
@@ -122,6 +162,24 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     setMembers([...members, { firstName: "", lastName: isLoggedIn ? "" : guestLastName, registrationTypeId: "" }]);
   };
   const removeMember = (index: number) => setMembers(members.filter((_, i) => i !== index));
+
+  // Only types that actually declare an age range can be auto-fit; an unbounded type would match everyone.
+  const ageFitTypeId = (birthDate?: Date | string): string => {
+    const age = ageYears(birthDate);
+    if (age == null) return "";
+    const fit = types.find((t) => (t.minAgeYears != null || t.maxAgeYears != null)
+      && (t.minAgeYears == null || age >= t.minAgeYears)
+      && (t.maxAgeYears == null || age <= t.maxAgeYears));
+    return fit?.id || "";
+  };
+
+  const isHouseholdMemberSelected = (personId: string) => members.some((m) => m.personId === personId);
+
+  const toggleHouseholdMember = (hm: HouseholdMember) => {
+    setMembers((prev) => (prev.some((m) => m.personId === hm.id)
+      ? prev.filter((m) => m.personId !== hm.id)
+      : [...prev, { firstName: hm.firstName, lastName: hm.lastName, personId: hm.id, registrationTypeId: ageFitTypeId(hm.birthDate) }]));
+  };
   const updateMember = (index: number, field: keyof WizardMember, value: string) => {
     const updated = [...members];
     updated[index] = { ...updated[index], [field]: value };
@@ -133,11 +191,13 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
   };
 
   const buildMembersPayload = (): WizardMember[] => {
-    if (!hasTypes) return members.map((m) => ({ firstName: m.firstName.trim(), lastName: m.lastName.trim() }));
+    if (!hasTypes) return members.map((m) => ({ firstName: m.firstName.trim(), lastName: m.lastName.trim(), ...(m.personId ? { personId: m.personId } : {}) }));
     const primary: WizardMember = { firstName: primaryFirstName.trim(), lastName: primaryLastName.trim() };
+    if (isLoggedIn && person?.id) primary.personId = person.id;
     if (primaryTypeId) primary.registrationTypeId = primaryTypeId;
     const extra = members.map((m) => {
       const out: WizardMember = { firstName: m.firstName.trim(), lastName: m.lastName.trim() };
+      if (m.personId) out.personId = m.personId;
       if (m.registrationTypeId) out.registrationTypeId = m.registrationTypeId;
       return out;
     });
@@ -385,6 +445,9 @@ export function useEventRegistration({ churchId, eventId, event, isLoggedIn, per
     addMember,
     removeMember,
     updateMember,
+    householdMembers,
+    isHouseholdMemberSelected,
+    toggleHouseholdMember,
     selectionQty,
     setQuantity,
     couponCode,
