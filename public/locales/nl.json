@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Binnenkort beschikbaar in de mobiele PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Terug",
       "backToDashboard": "Terug naar dashboard",
       "close": "Sluiten",
@@ -250,7 +248,6 @@
       "playSermon": "Preek afspelen",
       "privacyPolicy": "Privacybeleid",
       "profile": "Profiel",
-      "screenNotImplemented": "Het scherm '{}' is nog niet geïmplementeerd.",
       "signIn": "Inloggen",
       "switchToDark": "Overschakelen naar donkere modus",
       "switchToLight": "Overschakelen naar lichte modus",
@@ -439,7 +436,6 @@
       "deleteEvent": "Evenement verwijderen",
       "deleteFile": "Bestand verwijderen",
       "deleteLink": "Link verwijderen",
-      "deleteLinkConfirm": "Link \"{}\" verwijderen?",
       "discussions": "Discussies",
       "edit": "Bewerken",
       "editEvent": "Evenement bewerken",

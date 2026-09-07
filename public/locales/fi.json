@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Tulossa pian mobiilisovellukseen.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Takaisin",
       "backToDashboard": "Takaisin kojelautaan",
       "close": "Sulje",
@@ -250,7 +248,6 @@
       "playSermon": "Toista saarna",
       "privacyPolicy": "Tietosuojakäytäntö",
       "profile": "Profiili",
-      "screenNotImplemented": "Näkymää '{}' ei ole vielä toteutettu.",
       "signIn": "Kirjaudu sisään",
       "switchToDark": "Vaihda tummaan tilaan",
       "switchToLight": "Vaihda vaaleaan tilaan",
@@ -439,7 +436,6 @@
       "deleteEvent": "Poista tapahtuma",
       "deleteFile": "Poista tiedosto",
       "deleteLink": "Poista linkki",
-      "deleteLinkConfirm": "Poistetaanko linkki \"{}\"?",
       "discussions": "Keskustelut",
       "edit": "Muokkaa",
       "editEvent": "Muokkaa tapahtumaa",

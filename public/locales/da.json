@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Kommer snart til mobil-PWA'en.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Tilbage",
       "backToDashboard": "Tilbage til dashboard",
       "close": "Luk",
@@ -250,7 +248,6 @@
       "playSermon": "Afspil prædiken",
       "privacyPolicy": "Privatlivspolitik",
       "profile": "Profil",
-      "screenNotImplemented": "Skærmen '{}' er endnu ikke implementeret.",
       "signIn": "Log ind",
       "switchToDark": "Skift til mørk tilstand",
       "switchToLight": "Skift til lys tilstand",
@@ -439,7 +436,6 @@
       "deleteEvent": "Slet begivenhed",
       "deleteFile": "Slet fil",
       "deleteLink": "Slet link",
-      "deleteLinkConfirm": "Slet link \"{}\"?",
       "discussions": "Diskussioner",
       "edit": "Rediger",
       "editEvent": "Rediger begivenhed",

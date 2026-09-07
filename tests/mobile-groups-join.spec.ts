@@ -26,6 +26,26 @@ async function membershipHeaders(ctx: APIRequestContext, email: string) {
   return { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
 }
 
+test.describe("Mobile groups — signed out", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("my-groups empty state offers Sign In and a public group browser", async ({ page }) => {
+    await page.goto("/mobile/groups");
+    const main = page.locator("main");
+    await expect(main.getByTestId("groups-sign-in")).toBeVisible({ timeout: 20000 });
+    await expect(main).not.toContainText(/Explore Community/i);
+    await main.getByTestId("groups-browse").click();
+    await expect(page).toHaveURL(/\/groups$/, { timeout: 20000 });
+  });
+
+  test("anonymous group page offers Sign in to join with a return url", async ({ page }) => {
+    await page.goto("/mobile/groups/youth-group");
+    const cta = page.getByTestId("anonymous-group-sign-in");
+    await expect(cta).toBeVisible({ timeout: 20000 });
+    await expect(cta).toHaveAttribute("href", /\/mobile\/login\?returnUrl=.*mobile.*groups.*youth-group/);
+  });
+});
+
 test.describe("Mobile groups — request-to-join UX", () => {
   const NON_MEMBER_GROUP_ID = "GRP00000005";
 

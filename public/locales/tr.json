@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Mobil PWA'ya yakında geliyor.",
     "components": {
-      "b1MobileWeb": "B1 Mobil Web",
       "back": "Geri",
       "backToDashboard": "Panele dön",
       "close": "Kapat",
@@ -250,7 +248,6 @@
       "playSermon": "Vaazı oynat",
       "privacyPolicy": "Gizlilik Politikası",
       "profile": "Profil",
-      "screenNotImplemented": "'{}' ekranı henüz uygulanmadı.",
       "signIn": "Giriş Yap",
       "switchToDark": "Koyu moda geç",
       "switchToLight": "Açık moda geç",
@@ -439,7 +436,6 @@
       "deleteEvent": "Etkinliği sil",
       "deleteFile": "Dosyayı sil",
       "deleteLink": "Bağlantıyı sil",
-      "deleteLinkConfirm": "\"{}\" bağlantısı silinsin mi?",
       "discussions": "Tartışmalar",
       "edit": "Düzenle",
       "editEvent": "Etkinliği düzenle",

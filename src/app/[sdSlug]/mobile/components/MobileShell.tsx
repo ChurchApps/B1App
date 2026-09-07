@@ -73,7 +73,7 @@ const MobileShellInner = ({ config, children }: Props) => {
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth, bgcolor: mobileTheme.colors.surface }
         }}
       >
-        <MobileDrawer links={links} onNavigate={() => setOpen(false)} />
+        <MobileDrawer links={links} churchName={config?.church?.name} onNavigate={() => setOpen(false)} />
       </Drawer>
 
       <Drawer
@@ -91,7 +91,7 @@ const MobileShellInner = ({ config, children }: Props) => {
           }
         }}
       >
-        <MobileDrawer links={links} />
+        <MobileDrawer links={links} churchName={config?.church?.name} />
       </Drawer>
 
       <Box component="main" sx={{

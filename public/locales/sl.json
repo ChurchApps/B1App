@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Kmalu na voljo v mobilni PWA aplikaciji.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Nazaj",
       "backToDashboard": "Nazaj na nadzorno ploščo",
       "close": "Zapri",
@@ -250,7 +248,6 @@
       "playSermon": "Predvajaj pridigo",
       "privacyPolicy": "Politika zasebnosti",
       "profile": "Profil",
-      "screenNotImplemented": "Zaslon '{}' še ni implementiran.",
       "signIn": "Prijava",
       "switchToDark": "Preklopi na temni način",
       "switchToLight": "Preklopi na svetli način",
@@ -439,7 +436,6 @@
       "deleteEvent": "Izbriši dogodek",
       "deleteFile": "Izbriši datoteko",
       "deleteLink": "Izbriši povezavo",
-      "deleteLinkConfirm": "Izbriši povezavo \"{}\"?",
       "discussions": "Razprave",
       "edit": "Uredi",
       "editEvent": "Uredi dogodek",

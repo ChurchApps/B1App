@@ -3,7 +3,7 @@
 import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface, GroupJoinRequestInterface } from "@churchapps/helpers";
@@ -89,7 +89,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
     const start = new Date(event.start);
     if (isNaN(start.getTime())) return "";
     if (event.allDay) {
-      return start.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }) + " (All day)";
+      return `${start.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })} (${Locale.label("mobile.group.allDay")})`;
     }
     const fmtDate = (d: Date) => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
     const fmtTime = (d: Date) => d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
@@ -154,7 +154,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             {group.name}
           </Typography>
           <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14 }}>
-            {groupSubtext(group) || "Tap to explore"}
+            {groupSubtext(group) || Locale.label("mobile.screens.tapToExplore")}
           </Typography>
         </Box>
       </Box>
@@ -265,7 +265,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             <Box
               component="img"
               src={group.photoUrl}
-              alt={group.name || "Group"}
+              alt={group.name || Locale.label("mobile.screens.groupFallback")}
               sx={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
@@ -289,7 +289,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
             {group.name}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-            {groupSubtext(group) || "Tap to explore"}
+            {groupSubtext(group) || Locale.label("mobile.screens.tapToExplore")}
           </Typography>
           {group.about && (
             <Box
@@ -337,51 +337,74 @@ export const GroupsPage = ({ config: _config }: Props) => {
     </Box>
   );
 
-  const renderEmpty = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center"
-      }}
-    >
+  const renderEmpty = () => {
+    const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
+    return (
       <Box
         sx={{
-          width: 64,
-          height: 64,
-          borderRadius: "11px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`
+          bgcolor: tc.surface,
+          border: `1px solid ${tc.border}`,
+          borderRadius: `${mobileTheme.radius.xl}px`,
+          p: `${mobileTheme.spacing.lg}px`,
+          textAlign: "center"
         }}
       >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>groups</Icon>
+        <Box
+          sx={{
+            width: 64,
+            height: 64,
+            borderRadius: "11px",
+            bgcolor: tc.iconBackground,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mb: `${mobileTheme.spacing.md}px`
+          }}
+        >
+          <Icon sx={{ fontSize: 32, color: tc.primary }}>groups</Icon>
+        </Box>
+        <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+          {Locale.label(loggedIn ? "mobile.screens.noGroupsTitle" : "mobile.screens.groupsSignInTitle")}
+        </Typography>
+        <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
+          {Locale.label(loggedIn ? "mobile.screens.noGroupsBody" : "mobile.screens.groupsSignInBody")}
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px`, alignItems: "center" }}>
+          {!loggedIn && (
+            <Button
+              variant="contained"
+              href={returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login"}
+              data-testid="groups-sign-in"
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                textTransform: "none",
+                fontWeight: 600,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                "&:hover": { bgcolor: tc.primary }
+              }}
+            >
+              {Locale.label("mobile.components.signIn")}
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            onClick={() => router.push("/groups")}
+            data-testid="groups-browse"
+            sx={{
+              borderColor: tc.primary,
+              color: tc.primary,
+              textTransform: "none",
+              fontWeight: 500,
+              borderRadius: `${mobileTheme.radius.md}px`
+            }}
+          >
+            {Locale.label("mobile.screens.browseGroups")}
+          </Button>
+        </Box>
       </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        You&apos;re not in any groups yet
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-        Find a group to connect with others in your church.
-      </Typography>
-      <Button
-        variant="outlined"
-        onClick={() => router.push("/mobile/community")}
-        sx={{
-          borderColor: tc.primary,
-          color: tc.primary,
-          textTransform: "none",
-          fontWeight: 500,
-          borderRadius: `${mobileTheme.radius.md}px`
-        }}
-      >
-        Explore Community
-      </Button>
-    </Box>
-  );
+    );
+  };
 
   const { hero, featured, regular } = sortedGroups;
   const hasAnyGroups = effectiveGroups !== null && effectiveGroups.length > 0;
@@ -391,7 +414,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
     return (
       <Box data-testid="my-pending-requests" sx={{ mb: `${mobileTheme.spacing.md}px` }}>
         <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
-          Pending Requests
+          {Locale.label("mobile.screens.pendingRequests")}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
           {pendingRequests.map((req) => (
@@ -409,11 +432,11 @@ export const GroupsPage = ({ config: _config }: Props) => {
               }}>
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-                  {(req as any).groupName || req.group?.name || "Group"}
+                  {(req as any).groupName || req.group?.name || Locale.label("mobile.screens.groupFallback")}
                 </Typography>
                 {req.requestDate && (
                   <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-                    Requested {new Date(req.requestDate).toLocaleDateString()}
+                    {Locale.label("mobile.screens.requestedOn").replace("{}", new Date(req.requestDate).toLocaleDateString())}
                   </Typography>
                 )}
               </Box>
@@ -422,7 +445,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
                 onClick={() => handleCancelRequest(req.id || "")}
                 data-testid={`cancel-request-${req.id}`}
                 sx={{ textTransform: "none" }}>
-                Cancel
+                {Locale.label("common.cancel")}
               </Button>
             </Box>
           ))}
@@ -450,7 +473,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           {featured.length > 0 && (
             <Box>
               <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
-                Featured
+                {Locale.label("mobile.screens.featured")}
               </Typography>
               <Box
                 sx={{
@@ -467,7 +490,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
           {regular.length > 0 && (
             <Box>
               <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
-                Other Groups
+                {Locale.label("mobile.screens.otherGroups")}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
                 {regular.map(renderCard)}
@@ -480,7 +503,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
       {upcomingEvents.length > 0 && (
         <Box sx={{ mt: `${mobileTheme.spacing.lg}px` }}>
           <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.md}px` }}>
-            Upcoming Events
+            {Locale.label("mobile.screens.upcomingEvents")}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
             {upcomingEvents.map((event) => (
@@ -558,7 +581,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
                       "&:hover": { bgcolor: tc.success }
                     }}
                   >
-                    Register
+                    {Locale.label("mobile.group.register")}
                   </Button>
                 </Box>
               </Box>

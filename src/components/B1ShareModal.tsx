@@ -3,7 +3,7 @@
 import { GroupInterface } from "@churchapps/helpers";
 import { ApiHelper } from "@churchapps/apphelper";
 import { Locale } from "@churchapps/apphelper";
-import { Modal, Box, FormControl, InputLabel, MenuItem, Select, TextField, SelectChangeEvent, Button, DialogActions, Alert, Snackbar } from "@mui/material";
+import { Modal, Box, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, SelectChangeEvent, Button, DialogActions, Alert, Snackbar } from "@mui/material";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Loading } from "@churchapps/apphelper";
@@ -20,6 +20,8 @@ export function B1ShareModal(props: Props) {
   const [groups, setGroups] = useState<GroupInterface[] | null>(null);
   const [comment, setComment] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [groupError, setGroupError] = useState("");
+  const [commentError, setCommentError] = useState("");
 
   const loadData = async () => {
     const g = await ApiHelper.get("/groups/my", "MembershipApi");
@@ -30,15 +32,16 @@ export function B1ShareModal(props: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     e.preventDefault();
     switch (e.target.name) {
-      case "group": setGroupId(e.target.value as string); break;
-      case "comment": setComment(e.target.value as string); break;
+      case "group": setGroupId(e.target.value as string); setGroupError(""); break;
+      case "comment": setComment(e.target.value as string); setCommentError(""); break;
     }
   };
 
   const handlePost = () => {
-    setShowSuccess(true);
-    if (groupId === "") alert(Locale.label("b1Share.validate.selectGroup"));
-    else if (comment === "") alert(Locale.label("b1Share.validate.addComment"));
+    setGroupError("");
+    setCommentError("");
+    if (groupId === "") setGroupError(Locale.label("b1Share.validate.selectGroup"));
+    else if (comment === "") setCommentError(Locale.label("b1Share.validate.addComment"));
     else {
       const payload = {
         groupId: groupId,
@@ -73,13 +76,14 @@ export function B1ShareModal(props: Props) {
     else {
       return (<>
         <h2>{Locale.label("b1Share.sharingToGroup").replace("{}", props.contentDisplayName)}</h2>
-        <FormControl fullWidth>
+        <FormControl fullWidth error={!!groupError}>
           <InputLabel>{Locale.label("b1Share.group")}</InputLabel>
           <Select label={Locale.label("b1Share.group")} name="group" value={groupId} onChange={handleChange} data-testid="share-group-select">
             {groups.map(g => <MenuItem key={g.id} value={g.id}>{g.name}</MenuItem>)}
           </Select>
+          {groupError && <FormHelperText>{groupError}</FormHelperText>}
         </FormControl>
-        <TextField fullWidth multiline label={Locale.label("b1Share.comment")} name="comment" value={comment} onChange={handleChange} rows={3} placeholder={Locale.label("b1Share.commentPlaceholder")} data-testid="share-comment-input" />
+        <TextField fullWidth multiline label={Locale.label("b1Share.comment")} name="comment" value={comment} onChange={handleChange} rows={3} placeholder={Locale.label("b1Share.commentPlaceholder")} error={!!commentError} helperText={commentError} data-testid="share-comment-input" />
       </>);
     }
   };

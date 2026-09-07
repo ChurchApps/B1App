@@ -222,9 +222,7 @@
     "demoTitle": "Демо:"
   },
   "mobile": {
-    "comingSoon": "Незабаром у мобільному PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Назад",
       "backToDashboard": "Назад до панелі",
       "close": "Закрити",
@@ -250,7 +248,6 @@
       "playSermon": "Відтворити проповідь",
       "privacyPolicy": "Політика конфіденційності",
       "profile": "Профіль",
-      "screenNotImplemented": "Екран '{}' ще не реалізовано.",
       "signIn": "Увійти",
       "switchToDark": "Перемкнути на темний режим",
       "switchToLight": "Перемкнути на світлий режим",
@@ -439,7 +436,6 @@
       "deleteEvent": "Видалити подію",
       "deleteFile": "Видалити файл",
       "deleteLink": "Видалити посилання",
-      "deleteLinkConfirm": "Видалити посилання \"{}\"?",
       "discussions": "Обговорення",
       "edit": "Редагувати",
       "editEvent": "Редагувати подію",

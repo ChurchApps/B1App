@@ -75,12 +75,10 @@ export const CommunityPage = ({ config: _config }: Props) => {
             <Icon sx={{ fontSize: 32, color: tc.primary }}>lock</Icon>
           </Box>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-            {loggedIn ? "Members Only" : "Sign In Required"}
+            {Locale.label(loggedIn ? "mobile.screens.membersOnly" : "mobile.details.signInRequired")}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-            {loggedIn
-              ? "The member directory is available to members of your church."
-              : "The member directory is available to signed-in members of your church."}
+            {Locale.label(loggedIn ? "mobile.screens.directoryMembersBody" : "mobile.screens.directorySignInBody")}
           </Typography>
           {!loggedIn && (
             <Button
@@ -95,7 +93,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
                 "&:hover": { bgcolor: tc.primary }
               }}
             >
-              Sign In
+              {Locale.label("mobile.components.signIn")}
             </Button>
           )}
         </Box>
@@ -129,6 +127,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
 
   const sections = React.useMemo<PeopleSection[]>(() => {
     if (!filteredPeople || filteredPeople.length === 0) return [];
+    const otherLabel = Locale.label("mobile.screens.otherLetter");
     const groups: { [key: string]: PersonInterface[] } = {};
 
     filteredPeople.forEach((p) => {
@@ -136,7 +135,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
       const firstRaw = (p.name?.first || "").trim();
       const displayRaw = (p.name?.display || "").trim();
 
-      let letter = "Other";
+      let letter = otherLabel;
       if (firstRaw) {
         letter = firstRaw.charAt(0).toUpperCase();
       } else if (displayRaw) {
@@ -148,7 +147,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
         letter = lastRaw.charAt(0).toUpperCase();
       }
 
-      if (!/^[A-Z]$/.test(letter)) letter = "Other";
+      if (!/^[A-Z]$/.test(letter)) letter = otherLabel;
 
       if (!groups[letter]) groups[letter] = [];
       groups[letter].push(p);
@@ -166,8 +165,8 @@ export const CommunityPage = ({ config: _config }: Props) => {
     });
 
     const letters = Object.keys(groups).sort((a, b) => {
-      if (a === "Other") return 1;
-      if (b === "Other") return -1;
+      if (a === otherLabel) return 1;
+      if (b === otherLabel) return -1;
       return a.localeCompare(b);
     });
 
@@ -189,7 +188,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
   const renderAvatar = (p: PersonInterface) => (
     <Avatar
       src={getPhoto(p) || undefined}
-      alt={p.name?.display || "Member"}
+      alt={p.name?.display || Locale.label("mobile.components.member")}
       sx={{
         width: 48,
         height: 48,
@@ -252,9 +251,7 @@ export const CommunityPage = ({ config: _config }: Props) => {
                     return (
                       <span
                         key={index}
-                        style={{
-                          fontWeight: isMatch ? 800 : 400
-                        }}
+                        style={{ fontWeight: isMatch ? 800 : 400 }}
                       >
                         {part}
                       </span>
@@ -369,10 +366,10 @@ export const CommunityPage = ({ config: _config }: Props) => {
           mb: `${mobileTheme.spacing.xs}px`
         }}
       >
-        {searchText ? "No members found" : "Directory"}
+        {searchText ? Locale.label("mobile.screens.noMembersFound") : Locale.label("mobile.screenTitles.directory")}
       </Typography>
       <Typography sx={{ fontSize: 14, color: tc.textSecondary, lineHeight: "20px" }}>
-        {searchText ? "Try adjusting your search." : "Search for members in your church."}
+        {Locale.label(searchText ? "mobile.screens.adjustSearch" : "mobile.screens.searchDirectoryBody")}
       </Typography>
     </Box>
   );

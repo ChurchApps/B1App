@@ -71,6 +71,20 @@ test.describe("Mobile groups", () => {
     await expect(page.locator('[data-testid="group-contact-submit-button"]')).toBeVisible();
   });
 
+  test("leaving a group asks for confirmation first", async ({ page }) => {
+    await page.goto("/mobile/groups/GRP00000004");
+    await page.getByRole("tab", { name: /^About$/i }).click();
+    const leave = page.getByTestId("leave-group-button");
+    await expect(leave).toBeVisible({ timeout: 15000 });
+    await leave.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible({ timeout: 5000 });
+    await expect(dialog).toContainText(/Leave this group/i);
+    await dialog.getByRole("button", { name: /^Cancel$/i }).click();
+    await expect(dialog).toBeHidden({ timeout: 5000 });
+    await expect(leave).toBeVisible();
+  });
+
   test("authed member does not see contact form on their own group", async ({ page }) => {
     await page.goto("/mobile/groups/GRP00000004");
     await expect(page.getByRole("tab", { name: /About/i })).toBeVisible({ timeout: 15000 });

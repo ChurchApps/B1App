@@ -222,9 +222,7 @@
     "demoTitle": "デモ:"
   },
   "mobile": {
-    "comingSoon": "モバイルPWAに近日公開予定。",
     "components": {
-      "b1MobileWeb": "B1 モバイルウェブ",
       "back": "戻る",
       "backToDashboard": "ダッシュボードに戻る",
       "close": "閉じる",
@@ -250,7 +248,6 @@
       "playSermon": "説教を再生",
       "privacyPolicy": "プライバシーポリシー",
       "profile": "プロフィール",
-      "screenNotImplemented": "'{}' 画面はまだ実装されていません。",
       "signIn": "サインイン",
       "switchToDark": "ダークモードに切り替え",
       "switchToLight": "ライトモードに切り替え",
@@ -439,7 +436,6 @@
       "deleteEvent": "イベントを削除",
       "deleteFile": "ファイルを削除",
       "deleteLink": "リンクを削除",
-      "deleteLinkConfirm": "リンク \"{}\" を削除しますか?",
       "discussions": "ディスカッション",
       "edit": "編集",
       "editEvent": "イベントを編集",

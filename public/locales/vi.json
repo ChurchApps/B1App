@@ -222,9 +222,7 @@
     "demoTitle": "Bản dùng thử:"
   },
   "mobile": {
-    "comingSoon": "Sắp ra mắt trên ứng dụng di động PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Quay lại",
       "backToDashboard": "Quay lại bảng điều khiển",
       "close": "Đóng",
@@ -250,7 +248,6 @@
       "playSermon": "Phát bài giảng",
       "privacyPolicy": "Chính sách bảo mật",
       "profile": "Hồ sơ",
-      "screenNotImplemented": "Màn hình '{}' chưa được triển khai.",
       "signIn": "Đăng nhập",
       "switchToDark": "Chuyển sang chế độ tối",
       "switchToLight": "Chuyển sang chế độ sáng",
@@ -439,7 +436,6 @@
       "deleteEvent": "Xóa sự kiện",
       "deleteFile": "Xóa tệp",
       "deleteLink": "Xóa liên kết",
-      "deleteLinkConfirm": "Xóa liên kết \"{}\"?",
       "discussions": "Thảo luận",
       "edit": "Chỉnh sửa",
       "editEvent": "Chỉnh sửa sự kiện",

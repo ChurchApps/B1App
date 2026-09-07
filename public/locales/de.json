@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Demnächst in der mobilen PWA verfügbar.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Zurück",
       "backToDashboard": "Zurück zum Dashboard",
       "close": "Schließen",
@@ -250,7 +248,6 @@
       "playSermon": "Predigt abspielen",
       "privacyPolicy": "Datenschutzrichtlinie",
       "profile": "Profil",
-      "screenNotImplemented": "Der Bildschirm '{}' ist noch nicht implementiert.",
       "signIn": "Anmelden",
       "switchToDark": "Zum dunklen Modus wechseln",
       "switchToLight": "Zum hellen Modus wechseln",
@@ -439,7 +436,6 @@
       "deleteEvent": "Veranstaltung löschen",
       "deleteFile": "Datei löschen",
       "deleteLink": "Link löschen",
-      "deleteLinkConfirm": "Link \"{}\" löschen?",
       "discussions": "Diskussionen",
       "edit": "Bearbeiten",
       "editEvent": "Veranstaltung bearbeiten",

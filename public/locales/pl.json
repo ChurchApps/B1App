@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Wkrótce dostępne w mobilnej aplikacji PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Wstecz",
       "backToDashboard": "Powrót do panelu",
       "close": "Zamknij",
@@ -250,7 +248,6 @@
       "playSermon": "Odtwórz kazanie",
       "privacyPolicy": "Polityka prywatności",
       "profile": "Profil",
-      "screenNotImplemented": "Ekran '{}' nie został jeszcze zaimplementowany.",
       "signIn": "Zaloguj się",
       "switchToDark": "Przełącz na tryb ciemny",
       "switchToLight": "Przełącz na tryb jasny",
@@ -439,7 +436,6 @@
       "deleteEvent": "Usuń wydarzenie",
       "deleteFile": "Usuń plik",
       "deleteLink": "Usuń link",
-      "deleteLinkConfirm": "Usunąć link \"{}\"?",
       "discussions": "Dyskusje",
       "edit": "Edytuj",
       "editEvent": "Edytuj wydarzenie",

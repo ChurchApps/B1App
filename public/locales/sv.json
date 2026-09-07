@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Kommer snart till mobil-PWA:n.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Tillbaka",
       "backToDashboard": "Tillbaka till instrumentpanelen",
       "close": "Stäng",
@@ -250,7 +248,6 @@
       "playSermon": "Spela predikan",
       "privacyPolicy": "Integritetspolicy",
       "profile": "Profil",
-      "screenNotImplemented": "Skärmen '{}' är inte implementerad än.",
       "signIn": "Logga in",
       "switchToDark": "Byt till mörkt läge",
       "switchToLight": "Byt till ljust läge",
@@ -439,7 +436,6 @@
       "deleteEvent": "Ta bort händelse",
       "deleteFile": "Ta bort fil",
       "deleteLink": "Ta bort länk",
-      "deleteLinkConfirm": "Ta bort länken \"{}\"?",
       "discussions": "Diskussioner",
       "edit": "Redigera",
       "editEvent": "Redigera händelse",

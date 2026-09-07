@@ -222,9 +222,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Segera hadir di PWA mobile.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Kembali",
       "backToDashboard": "Kembali ke dasbor",
       "close": "Tutup",
@@ -250,7 +248,6 @@
       "playSermon": "Putar khotbah",
       "privacyPolicy": "Kebijakan Privasi",
       "profile": "Profil",
-      "screenNotImplemented": "Layar '{}' belum diimplementasikan.",
       "signIn": "Masuk",
       "switchToDark": "Beralih ke mode gelap",
       "switchToLight": "Beralih ke mode terang",
@@ -439,7 +436,6 @@
       "deleteEvent": "Hapus acara",
       "deleteFile": "Hapus berkas",
       "deleteLink": "Hapus tautan",
-      "deleteLinkConfirm": "Hapus tautan \"{}\"?",
       "discussions": "Diskusi",
       "edit": "Edit",
       "editEvent": "Edit acara",

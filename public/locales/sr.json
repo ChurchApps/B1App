@@ -222,9 +222,7 @@
     "demoTitle": "Демо:"
   },
   "mobile": {
-    "comingSoon": "Ускоро у мобилном PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Назад",
       "backToDashboard": "Назад на контролну таблу",
       "close": "Затвори",
@@ -250,7 +248,6 @@
       "playSermon": "Пусти проповед",
       "privacyPolicy": "Политика приватности",
       "profile": "Профил",
-      "screenNotImplemented": "Екран '{}' још није имплементиран.",
       "signIn": "Пријава",
       "switchToDark": "Пребаци на тамни режим",
       "switchToLight": "Пребаци на светли режим",
@@ -439,7 +436,6 @@
       "deleteEvent": "Обриши догађај",
       "deleteFile": "Обриши датотеку",
       "deleteLink": "Обриши везу",
-      "deleteLinkConfirm": "Обрисати везу \"{}\"?",
       "discussions": "Дискусије",
       "edit": "Izmeni",
       "editEvent": "Измени догађај",
