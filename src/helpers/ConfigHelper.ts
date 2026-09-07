@@ -76,32 +76,4 @@ export class ConfigHelper {
     return result;
   });
 
-  static getFirstRoute(config: ConfigurationInterface) {
-    if (!config.navLinks || config.navLinks.length === 0) {
-      return "/";
-    }
-
-    const firstTab = config.navLinks[0];
-
-    if (!firstTab) {
-      return "/";
-    }
-
-    let route = "";
-    switch (firstTab.linkType) {
-      case "lessons": route = "/lessons"; break;
-      case "donation": route = "/donate"; break;
-      case "checkin": route = "/checkin"; break;
-      case "stream": route = "/stream"; break;
-      case "directory": route = "/directory"; break;
-      case "bible": route = "/bible"; break;
-      case "url": route = `/url/${firstTab.id}`; break;
-      case "page": route = `/pages/${firstTab.churchId}/${firstTab.linkData}`; break;
-      case "donationLanding": route = "/donation-landing"; break;
-      default: route = "/"; break;
-    }
-
-    return route;
-  }
-
 }

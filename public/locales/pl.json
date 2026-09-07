@@ -20,10 +20,6 @@
     "navigateTo": "Przejdź do {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Twoja obecność została zapisana. Dziękujemy!",
-      "title": "Rejestracja zakończona"
-    },
     "groups": {
       "chooseGroupFor": "Wybierz grupę dla {}",
       "generalGroups": "Grupy ogólne",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Imię i nazwisko są wymagane dla każdego członka."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Już zarejestrowany",
-      "alreadyCheckedInTitle": "Już zarejestrowany",
-      "change": "Zmień",
-      "checkInAgain": "Zarejestruj ponownie",
-      "completeCheckin": "Zakończ rejestrację",
-      "duplicateMessage": "{} już zarejestrowany na to nabożeństwo. Zarejestruj ponownie, aby zaktualizować grupy.",
-      "loginPrompt": "Upewnij się, że jesteś zalogowany i masz zarejestrowanych członków gospodarstwa domowego.",
-      "member": "Członek",
-      "memberAvatar": "awatar {}",
-      "noGroupSelected": "Nie wybrano grupy",
-      "noMembersFound": "Nie znaleziono członków gospodarstwa domowego",
-      "none": "Brak",
-      "noneLower": "brak",
-      "subtitle": "Wybierz grupy dla każdego członka rodziny",
-      "tapToSelect": "Dotknij, aby wybrać grupy",
-      "title": "Członkowie gospodarstwa domowego",
-      "unknown": "Nieznany"
-    },
-    "services": {
-      "checkBackLater": "Sprawdź ponownie później lub skontaktuj się z administratorem kościoła",
-      "noServicesAvailable": "Brak dostępnych nabożeństw",
-      "subtitle": "Wybierz nabożeństwo, na które się rejestrujesz",
-      "title": "Wybierz nabożeństwo"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Zapisz",
     "search": "Szukaj",
     "update": "Aktualizuj"
-  },
-  "donate": {
-    "authLanding": "To jest z uwierzytelnianiem",
-    "currentYearCsv": "Bieżący rok (CSV)",
-    "currentYearPrint": "BIEŻĄCY ROK (DRUK)",
-    "donations": "Darowizny",
-    "downloadRecords": "Pobierz rejestry darowizn",
-    "exportCurrentYearCsv": "Eksportuj darowizny z bieżącego roku jako CSV",
-    "exportLastYearCsv": "Eksportuj darowizny z ubiegłego roku jako CSV",
-    "lastYearCsv": "Ubiegły rok (CSV)",
-    "lastYearPrint": "UBIEGŁY ROK (DRUK)",
-    "pending": "Oczekujące",
-    "printCurrentYear": "Drukuj darowizny z bieżącego roku",
-    "printLastYear": "Drukuj darowizny z ubiegłego roku"
-  },
-  "donation": {
-    "page": {
-      "amount": "Kwota",
-      "batch": "Partia",
-      "date": "Data",
-      "fund": "Fundusz",
-      "method": "Metoda",
-      "willAppear": "Pojawi się"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Moja darowizna"
   },
   "element": {
     "offlinePlaceholder": "Symbol zastępczy wideo offline"

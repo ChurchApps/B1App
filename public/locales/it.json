@@ -20,10 +20,6 @@
     "navigateTo": "Vai a {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "La tua presenza è stata salvata. Grazie!",
-      "title": "Check-in Completato"
-    },
     "groups": {
       "chooseGroupFor": "Scegli un gruppo per {}",
       "generalGroups": "Gruppi Generali",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Nome e cognome sono obbligatori per ogni membro."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Check-in già effettuato",
-      "alreadyCheckedInTitle": "Check-in Già Effettuato",
-      "change": "Modifica",
-      "checkInAgain": "Effettua Nuovamente il Check-in",
-      "completeCheckin": "Completa Check-in",
-      "duplicateMessage": "{} ha già effettuato il check-in per questo servizio. Effettua nuovamente il check-in per aggiornare i suoi gruppi.",
-      "loginPrompt": "Assicurati di aver effettuato l'accesso e di avere i membri del nucleo familiare registrati.",
-      "member": "Membro",
-      "memberAvatar": "avatar di {}",
-      "noGroupSelected": "Nessun gruppo selezionato",
-      "noMembersFound": "Nessun Membro del Nucleo Familiare Trovato",
-      "none": "Nessuno",
-      "noneLower": "nessuno",
-      "subtitle": "Seleziona i gruppi per ogni membro della famiglia",
-      "tapToSelect": "Tocca per selezionare i gruppi",
-      "title": "Membri del Nucleo Familiare",
-      "unknown": "Sconosciuto"
-    },
-    "services": {
-      "checkBackLater": "Riprova più tardi o contatta l'amministratore della chiesa",
-      "noServicesAvailable": "Nessun Servizio Disponibile",
-      "subtitle": "Scegli per quale servizio stai effettuando il check-in",
-      "title": "Seleziona Servizio"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Salva",
     "search": "Cerca",
     "update": "Aggiorna"
-  },
-  "donate": {
-    "authLanding": "Questo è con autenticazione",
-    "currentYearCsv": "Anno Corrente (CSV)",
-    "currentYearPrint": "ANNO CORRENTE (STAMPA)",
-    "donations": "Donazioni",
-    "downloadRecords": "Scarica i registri delle donazioni",
-    "exportCurrentYearCsv": "Esporta le donazioni dell'anno corrente come CSV",
-    "exportLastYearCsv": "Esporta le donazioni dell'anno scorso come CSV",
-    "lastYearCsv": "Anno Scorso (CSV)",
-    "lastYearPrint": "ANNO SCORSO (STAMPA)",
-    "pending": "In Attesa",
-    "printCurrentYear": "Stampa le donazioni dell'anno corrente",
-    "printLastYear": "Stampa le donazioni dell'anno scorso"
-  },
-  "donation": {
-    "page": {
-      "amount": "Importo",
-      "batch": "Lotto",
-      "date": "Data",
-      "fund": "Fondo",
-      "method": "Metodo",
-      "willAppear": "Apparirà"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "La Mia Donazione"
   },
   "element": {
     "offlinePlaceholder": "Segnaposto Video Offline"

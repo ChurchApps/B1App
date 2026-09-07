@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { SEED_NAV_LINKS } from "./helpers/fixtures";
+import { SEED_NAV_LINKS, DEMO_CHURCH } from "./helpers/fixtures";
 
 test.describe("Public navigation", () => {
   test.beforeEach(async ({ page }) => {
@@ -83,6 +83,33 @@ test.describe("Public navigation", () => {
         data: [restored],
         headers: { ...authHeaders, "Content-Type": "application/json" }
       });
+    }
+  });
+
+  test("footer falls back to logo, address, and nav links when no footer block is configured", async ({ page, request }) => {
+    const API_BASE = "http://localhost:8084";
+    const loginRes = await request.post(`${API_BASE}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
+    const loginBody = await loginRes.json();
+    const grace = loginBody.userChurches.find((uc: any) => uc.church.id === DEMO_CHURCH.ID);
+    const contentJwt = grace.apis.find((a: any) => a.keyName === "ContentApi").jwt;
+    const authHeaders = { Authorization: `Bearer ${contentJwt}` };
+
+    const blockRes = await request.get(`${API_BASE}/content/blocks/BLK00000002`, { headers: authHeaders });
+    const originalBlock = await blockRes.json();
+
+    try {
+      const hidden = { ...originalBlock, blockType: "footerBlockHiddenForTest" };
+      const saveRes = await request.post(`${API_BASE}/content/blocks`, { data: [hidden], headers: { ...authHeaders, "Content-Type": "application/json" } });
+      expect(saveRes.ok()).toBeTruthy();
+
+      await page.goto("/");
+      const footer = page.locator("footer");
+      await expect(footer).toContainText(DEMO_CHURCH.NAME);
+      await expect(footer.getByRole("link", { name: SEED_NAV_LINKS.GIVE.text })).toBeVisible();
+      await expect(footer.getByRole("link", { name: SEED_NAV_LINKS.SERMONS.text })).toBeVisible();
+    } finally {
+      const restoreRes = await request.post(`${API_BASE}/content/blocks`, { data: [originalBlock], headers: { ...authHeaders, "Content-Type": "application/json" } });
+      expect(restoreRes.ok()).toBeTruthy();
     }
   });
 });

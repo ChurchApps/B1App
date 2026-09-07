@@ -20,10 +20,6 @@
     "navigateTo": "Иди на {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Ваше присуство је сачувано. Хвала!",
-      "title": "Пријава завршена"
-    },
     "groups": {
       "chooseGroupFor": "Изаберите групу за {}",
       "generalGroups": "Опште групе",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Име и презиме су обавезни за сваког члана."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Већ пријављен",
-      "alreadyCheckedInTitle": "Већ пријављен",
-      "change": "Промени",
-      "checkInAgain": "Пријави се поново",
-      "completeCheckin": "Заврши пријаву",
-      "duplicateMessage": "{} је већ пријављен за ову службу. Пријавите се поново да бисте ажурирали групе.",
-      "loginPrompt": "Уверите се да сте пријављени и да имате регистроване чланове домаћинства.",
-      "member": "Члан",
-      "memberAvatar": "{} аватар",
-      "noGroupSelected": "Ниједна група није изабрана",
-      "noMembersFound": "Нема пронађених чланова домаћинства",
-      "none": "Ниједан",
-      "noneLower": "ниједан",
-      "subtitle": "Изаберите групе за сваког члана породице",
-      "tapToSelect": "Додирните да изаберете групе",
-      "title": "Чланови домаћинства",
-      "unknown": "Непознато"
-    },
-    "services": {
-      "checkBackLater": "Молимо проверите касније или контактирајте администратора цркве",
-      "noServicesAvailable": "Нема доступних служби",
-      "subtitle": "Изаберите за коју службу се пријављујете",
-      "title": "Изаберите службу"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Сачувај",
     "search": "Тражи",
     "update": "Ажурирај"
-  },
-  "donate": {
-    "authLanding": "Ово је са аутентификацијом",
-    "currentYearCsv": "Текућа година (CSV)",
-    "currentYearPrint": "ТЕКУЋА ГОДИНА (ШТАМПА)",
-    "donations": "Прилози",
-    "downloadRecords": "Преузмите евиденцију прилога",
-    "exportCurrentYearCsv": "Извези прилоге за текућу годину као CSV",
-    "exportLastYearCsv": "Извези прилоге за прошлу годину као CSV",
-    "lastYearCsv": "Прошла година (CSV)",
-    "lastYearPrint": "ПРОШЛА ГОДИНА (ШТАМПА)",
-    "pending": "На чекању",
-    "printCurrentYear": "Штампај прилоге за текућу годину",
-    "printLastYear": "Штампај прилоге за прошлу годину"
-  },
-  "donation": {
-    "page": {
-      "amount": "Износ",
-      "batch": "Серија",
-      "date": "Датум",
-      "fund": "Фонд",
-      "method": "Начин",
-      "willAppear": "Биће приказано"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Мој прилог"
   },
   "element": {
     "offlinePlaceholder": "Чувар места за офлајн видео"
