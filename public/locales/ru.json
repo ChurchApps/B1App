@@ -20,10 +20,6 @@
     "navigateTo": "Перейти к {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Ваше посещение сохранено. Спасибо!",
-      "title": "Регистрация завершена"
-    },
     "groups": {
       "chooseGroupFor": "Выберите группу для {}",
       "generalGroups": "Общие группы",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Для каждого члена семьи необходимо указать имя и фамилию."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Уже зарегистрирован",
-      "alreadyCheckedInTitle": "Уже зарегистрирован",
-      "change": "Изменить",
-      "checkInAgain": "Зарегистрироваться снова",
-      "completeCheckin": "Завершить регистрацию",
-      "duplicateMessage": "{} уже зарегистрирован на это служение. Зарегистрируйтесь снова, чтобы обновить группы.",
-      "loginPrompt": "Пожалуйста, убедитесь, что вы вошли в систему и у вас есть зарегистрированные члены семьи.",
-      "member": "Член",
-      "memberAvatar": "Аватар {}",
-      "noGroupSelected": "Группа не выбрана",
-      "noMembersFound": "Члены семьи не найдены",
-      "none": "Нет",
-      "noneLower": "нет",
-      "subtitle": "Выберите группы для каждого члена семьи",
-      "tapToSelect": "Нажмите, чтобы выбрать группы",
-      "title": "Члены семьи",
-      "unknown": "Неизвестно"
-    },
-    "services": {
-      "checkBackLater": "Пожалуйста, зайдите позже или свяжитесь с администратором церкви",
-      "noServicesAvailable": "Нет доступных служений",
-      "subtitle": "Выберите служение, на которое вы регистрируетесь",
-      "title": "Выберите служение"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Сохранить",
     "search": "Поиск",
     "update": "Обновить"
-  },
-  "donate": {
-    "authLanding": "Это с авторизацией",
-    "currentYearCsv": "Текущий год (CSV)",
-    "currentYearPrint": "ТЕКУЩИЙ ГОД (ПЕЧАТЬ)",
-    "donations": "Пожертвования",
-    "downloadRecords": "Загрузить записи о пожертвованиях",
-    "exportCurrentYearCsv": "Экспортировать пожертвования текущего года в CSV",
-    "exportLastYearCsv": "Экспортировать пожертвования прошлого года в CSV",
-    "lastYearCsv": "Прошлый год (CSV)",
-    "lastYearPrint": "ПРОШЛЫЙ ГОД (ПЕЧАТЬ)",
-    "pending": "В ожидании",
-    "printCurrentYear": "Печать пожертвований за текущий год",
-    "printLastYear": "Печать пожертвований за прошлый год"
-  },
-  "donation": {
-    "page": {
-      "amount": "Сумма",
-      "batch": "Пакет",
-      "date": "Дата",
-      "fund": "Фонд",
-      "method": "Способ",
-      "willAppear": "Будет отображаться"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Моё пожертвование"
   },
   "element": {
     "offlinePlaceholder": "Заполнитель видео офлайн"

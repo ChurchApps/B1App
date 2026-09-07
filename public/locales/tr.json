@@ -20,10 +20,6 @@
     "navigateTo": "{} sayfasına git"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Katılımınız kaydedildi. Teşekkür ederiz!",
-      "title": "Giriş Tamamlandı"
-    },
     "groups": {
       "chooseGroupFor": "{} için bir grup seçin",
       "generalGroups": "Genel Gruplar",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Her üye için ad ve soyad gereklidir."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Zaten giriş yapılmış",
-      "alreadyCheckedInTitle": "Zaten Giriş Yapıldı",
-      "change": "Değiştir",
-      "checkInAgain": "Tekrar Giriş Yap",
-      "completeCheckin": "Girişi Tamamla",
-      "duplicateMessage": "{} bu hizmet için zaten giriş yapmış. Gruplarını güncellemek için tekrar giriş yapın.",
-      "loginPrompt": "Lütfen giriş yaptığınızdan ve hane üyelerinizin kayıtlı olduğundan emin olun.",
-      "member": "Üye",
-      "memberAvatar": "{} avatarı",
-      "noGroupSelected": "Grup seçilmedi",
-      "noMembersFound": "Hane Üyesi Bulunamadı",
-      "none": "Yok",
-      "noneLower": "yok",
-      "subtitle": "Her aile üyesi için grup seçin",
-      "tapToSelect": "Grup seçmek için dokunun",
-      "title": "Hane Üyeleri",
-      "unknown": "Bilinmiyor"
-    },
-    "services": {
-      "checkBackLater": "Lütfen daha sonra tekrar kontrol edin veya kilise yöneticinizle iletişime geçin",
-      "noServicesAvailable": "Mevcut Hizmet Yok",
-      "subtitle": "Giriş yapmak istediğiniz hizmeti seçin",
-      "title": "Hizmet Seçin"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Kaydet",
     "search": "Ara",
     "update": "Güncelle"
-  },
-  "donate": {
-    "authLanding": "Bu, kimlik doğrulamalı sayfadır",
-    "currentYearCsv": "Bu Yıl (CSV)",
-    "currentYearPrint": "BU YIL (YAZDIR)",
-    "donations": "Bağışlar",
-    "downloadRecords": "Bağış kayıtlarını indir",
-    "exportCurrentYearCsv": "Bu yılki bağışları CSV olarak dışa aktar",
-    "exportLastYearCsv": "Geçen yılki bağışları CSV olarak dışa aktar",
-    "lastYearCsv": "Geçen Yıl (CSV)",
-    "lastYearPrint": "GEÇEN YIL (YAZDIR)",
-    "pending": "Beklemede",
-    "printCurrentYear": "Bu yılki bağışları yazdır",
-    "printLastYear": "Geçen yılki bağışları yazdır"
-  },
-  "donation": {
-    "page": {
-      "amount": "Tutar",
-      "batch": "Toplu",
-      "date": "Tarih",
-      "fund": "Fon",
-      "method": "Yöntem",
-      "willAppear": "Görünecek"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Bağışım"
   },
   "element": {
     "offlinePlaceholder": "Çevrimdışı Video Yer Tutucusu"
