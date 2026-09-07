@@ -20,10 +20,6 @@
     "navigateTo": "Navigera till {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Din närvaro har sparats. Tack!",
-      "title": "Incheckning klar"
-    },
     "groups": {
       "chooseGroupFor": "Välj en grupp för {}",
       "generalGroups": "Allmänna grupper",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Förnamn och efternamn krävs för varje medlem."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Redan incheckad",
-      "alreadyCheckedInTitle": "Redan incheckad",
-      "change": "Ändra",
-      "checkInAgain": "Checka in igen",
-      "completeCheckin": "Slutför incheckning",
-      "duplicateMessage": "{} är redan incheckad för denna gudstjänst. Checka in igen för att uppdatera deras grupper.",
-      "loginPrompt": "Se till att du är inloggad och har hushållsmedlemmar registrerade.",
-      "member": "Medlem",
-      "memberAvatar": "{} avatar",
-      "noGroupSelected": "Ingen grupp vald",
-      "noMembersFound": "Inga hushållsmedlemmar hittades",
-      "none": "Ingen",
-      "noneLower": "ingen",
-      "subtitle": "Välj grupper för varje familjemedlem",
-      "tapToSelect": "Tryck för att välja grupper",
-      "title": "Hushållsmedlemmar",
-      "unknown": "Okänd"
-    },
-    "services": {
-      "checkBackLater": "Vänligen återkom senare eller kontakta din församlingsadministratör",
-      "noServicesAvailable": "Inga gudstjänster tillgängliga",
-      "subtitle": "Välj vilken gudstjänst du checkar in för",
-      "title": "Välj gudstjänst"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Spara",
     "search": "Sök",
     "update": "Uppdatera"
-  },
-  "donate": {
-    "authLanding": "Detta är med autentisering",
-    "currentYearCsv": "Innevarande år (CSV)",
-    "currentYearPrint": "INNEVARANDE ÅR (UTSKRIFT)",
-    "donations": "Gåvor",
-    "downloadRecords": "Ladda ner gåvoregister",
-    "exportCurrentYearCsv": "Exportera innevarande års gåvor som CSV",
-    "exportLastYearCsv": "Exportera förra årets gåvor som CSV",
-    "lastYearCsv": "Förra året (CSV)",
-    "lastYearPrint": "FÖRRA ÅRET (UTSKRIFT)",
-    "pending": "Väntande",
-    "printCurrentYear": "Skriv ut innevarande års gåvor",
-    "printLastYear": "Skriv ut förra årets gåvor"
-  },
-  "donation": {
-    "page": {
-      "amount": "Belopp",
-      "batch": "Batch",
-      "date": "Datum",
-      "fund": "Fond",
-      "method": "Metod",
-      "willAppear": "Visas här"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Min gåva"
   },
   "element": {
     "offlinePlaceholder": "Platshållare för offlinevideo"

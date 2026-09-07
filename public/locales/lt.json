@@ -20,10 +20,6 @@
     "navigateTo": "Pereiti į {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Jūsų dalyvavimas išsaugotas. Ačiū!",
-      "title": "Registracija baigta"
-    },
     "groups": {
       "chooseGroupFor": "Pasirinkite grupę {}",
       "generalGroups": "Bendrosios grupės",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Kiekvienam nariui privaloma įrašyti vardą ir pavardę."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Jau užregistruotas",
-      "alreadyCheckedInTitle": "Jau užregistruotas",
-      "change": "Keisti",
-      "checkInAgain": "Registruotis dar kartą",
-      "completeCheckin": "Užbaigti registraciją",
-      "duplicateMessage": "{} jau užregistruotas šiai pamaldai. Užsiregistruokite dar kartą, kad atnaujintumėte grupes.",
-      "loginPrompt": "Įsitikinkite, kad esate prisijungę ir užregistruoti šeimos nariai.",
-      "member": "Narys",
-      "memberAvatar": "{} avataras",
-      "noGroupSelected": "Grupė nepasirinkta",
-      "noMembersFound": "Šeimos narių nerasta",
-      "none": "Nėra",
-      "noneLower": "nėra",
-      "subtitle": "Pasirinkite grupes kiekvienam šeimos nariui",
-      "tapToSelect": "Bakstelėkite, kad pasirinktumėte grupes",
-      "title": "Šeimos nariai",
-      "unknown": "Nežinoma"
-    },
-    "services": {
-      "checkBackLater": "Užsukite vėliau arba susisiekite su bažnyčios administratoriumi",
-      "noServicesAvailable": "Pamaldų nėra",
-      "subtitle": "Pasirinkite, į kurią pamaldą registruojatės",
-      "title": "Pasirinkti pamaldas"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Išsaugoti",
     "search": "Ieškoti",
     "update": "Atnaujinti"
-  },
-  "donate": {
-    "authLanding": "Tai prisijungta versija",
-    "currentYearCsv": "Einamieji metai (CSV)",
-    "currentYearPrint": "EINAMIEJI METAI (SPAUSDINTI)",
-    "donations": "Aukos",
-    "downloadRecords": "Atsisiųsti aukų įrašus",
-    "exportCurrentYearCsv": "Eksportuoti einamųjų metų aukas kaip CSV",
-    "exportLastYearCsv": "Eksportuoti praėjusių metų aukas kaip CSV",
-    "lastYearCsv": "Praėję metai (CSV)",
-    "lastYearPrint": "PRAĖJĘ METAI (SPAUSDINTI)",
-    "pending": "Laukiama",
-    "printCurrentYear": "Spausdinti einamųjų metų aukas",
-    "printLastYear": "Spausdinti praėjusių metų aukas"
-  },
-  "donation": {
-    "page": {
-      "amount": "Suma",
-      "batch": "Paketas",
-      "date": "Data",
-      "fund": "Fondas",
-      "method": "Būdas",
-      "willAppear": "Bus matoma"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Mano auka"
   },
   "element": {
     "offlinePlaceholder": "Vaizdo įrašo nepasiekiamumo žymė"

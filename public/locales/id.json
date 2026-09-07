@@ -20,10 +20,6 @@
     "navigateTo": "Navigasi ke {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Kehadiran Anda telah disimpan. Terima kasih!",
-      "title": "Check-in Selesai"
-    },
     "groups": {
       "chooseGroupFor": "Pilih grup untuk {}",
       "generalGroups": "Grup Umum",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Nama depan dan nama belakang wajib diisi untuk setiap anggota."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Sudah check-in",
-      "alreadyCheckedInTitle": "Sudah Check-in",
-      "change": "Ubah",
-      "checkInAgain": "Check-in Lagi",
-      "completeCheckin": "Selesaikan Check-in",
-      "duplicateMessage": "{} sudah check-in untuk ibadah ini. Check-in lagi untuk memperbarui grup mereka.",
-      "loginPrompt": "Pastikan Anda sudah login dan memiliki anggota rumah tangga yang terdaftar.",
-      "member": "Anggota",
-      "memberAvatar": "Avatar {}",
-      "noGroupSelected": "Tidak ada grup yang dipilih",
-      "noMembersFound": "Tidak Ada Anggota Rumah Tangga Ditemukan",
-      "none": "Tidak Ada",
-      "noneLower": "tidak ada",
-      "subtitle": "Pilih grup untuk setiap anggota keluarga",
-      "tapToSelect": "Ketuk untuk memilih grup",
-      "title": "Anggota Rumah Tangga",
-      "unknown": "Tidak Diketahui"
-    },
-    "services": {
-      "checkBackLater": "Silakan periksa kembali nanti atau hubungi administrator gereja Anda",
-      "noServicesAvailable": "Tidak Ada Ibadah Tersedia",
-      "subtitle": "Pilih ibadah yang Anda ikuti untuk check-in",
-      "title": "Pilih Ibadah"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Simpan",
     "search": "Cari",
     "update": "Perbarui"
-  },
-  "donate": {
-    "authLanding": "Ini dengan Auth",
-    "currentYearCsv": "Tahun Berjalan (CSV)",
-    "currentYearPrint": "TAHUN BERJALAN (CETAK)",
-    "donations": "Persembahan",
-    "downloadRecords": "Unduh catatan persembahan",
-    "exportCurrentYearCsv": "Ekspor persembahan tahun berjalan sebagai CSV",
-    "exportLastYearCsv": "Ekspor persembahan tahun lalu sebagai CSV",
-    "lastYearCsv": "Tahun Lalu (CSV)",
-    "lastYearPrint": "TAHUN LALU (CETAK)",
-    "pending": "Tertunda",
-    "printCurrentYear": "Cetak persembahan tahun berjalan",
-    "printLastYear": "Cetak persembahan tahun lalu"
-  },
-  "donation": {
-    "page": {
-      "amount": "Jumlah",
-      "batch": "Batch",
-      "date": "Tanggal",
-      "fund": "Dana",
-      "method": "Metode",
-      "willAppear": "Akan Muncul"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Persembahan Saya"
   },
   "element": {
     "offlinePlaceholder": "Placeholder Video Offline"

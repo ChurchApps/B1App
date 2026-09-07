@@ -20,10 +20,6 @@
     "navigateTo": "Naviguer vers {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Votre présence a été enregistrée. Merci !",
-      "title": "Enregistrement terminé"
-    },
     "groups": {
       "chooseGroupFor": "Choisir un groupe pour {}",
       "generalGroups": "Groupes généraux",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Le prénom et le nom sont requis pour chaque membre."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Déjà enregistré",
-      "alreadyCheckedInTitle": "Déjà enregistré",
-      "change": "Modifier",
-      "checkInAgain": "Enregistrer à nouveau",
-      "completeCheckin": "Terminer l'enregistrement",
-      "duplicateMessage": "{} est déjà enregistré pour ce service. Enregistrez à nouveau pour mettre à jour les groupes.",
-      "loginPrompt": "Veuillez vous assurer que vous êtes connecté et que les membres du ménage sont enregistrés.",
-      "member": "Membre",
-      "memberAvatar": "Avatar de {}",
-      "noGroupSelected": "Aucun groupe sélectionné",
-      "noMembersFound": "Aucun membre du ménage trouvé",
-      "none": "Aucun",
-      "noneLower": "aucun",
-      "subtitle": "Sélectionnez les groupes pour chaque membre de la famille",
-      "tapToSelect": "Appuyez pour sélectionner les groupes",
-      "title": "Membres du ménage",
-      "unknown": "Inconnu"
-    },
-    "services": {
-      "checkBackLater": "Veuillez revenir plus tard ou contacter l'administrateur de votre église",
-      "noServicesAvailable": "Aucun service disponible",
-      "subtitle": "Choisissez le service pour lequel vous vous enregistrez",
-      "title": "Sélectionner un service"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Enregistrer",
     "search": "Rechercher",
     "update": "Mettre à jour"
-  },
-  "donate": {
-    "authLanding": "Ceci est avec authentification",
-    "currentYearCsv": "Année en cours (CSV)",
-    "currentYearPrint": "ANNÉE EN COURS (IMPRIMER)",
-    "donations": "Dons",
-    "downloadRecords": "Télécharger les relevés de dons",
-    "exportCurrentYearCsv": "Exporter les dons de l'année en cours en CSV",
-    "exportLastYearCsv": "Exporter les dons de l'année dernière en CSV",
-    "lastYearCsv": "Année dernière (CSV)",
-    "lastYearPrint": "ANNÉE DERNIÈRE (IMPRIMER)",
-    "pending": "En attente",
-    "printCurrentYear": "Imprimer les dons de l'année en cours",
-    "printLastYear": "Imprimer les dons de l'année dernière"
-  },
-  "donation": {
-    "page": {
-      "amount": "Montant",
-      "batch": "Lot",
-      "date": "Date",
-      "fund": "Fonds",
-      "method": "Méthode",
-      "willAppear": "Apparaîtra"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Mon don"
   },
   "element": {
     "offlinePlaceholder": "Espace réservé pour vidéo hors ligne"

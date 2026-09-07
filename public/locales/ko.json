@@ -20,10 +20,6 @@
     "navigateTo": "{}(으)로 이동"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "출석이 저장되었습니다. 감사합니다!",
-      "title": "체크인 완료"
-    },
     "groups": {
       "chooseGroupFor": "{}을(를) 위한 그룹을 선택하세요",
       "generalGroups": "일반 그룹",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "각 구성원의 이름과 성을 입력해야 합니다."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "이미 체크인됨",
-      "alreadyCheckedInTitle": "이미 체크인됨",
-      "change": "변경",
-      "checkInAgain": "다시 체크인",
-      "completeCheckin": "체크인 완료",
-      "duplicateMessage": "{}님은 이미 이 예배에 체크인되었습니다. 그룹을 업데이트하려면 다시 체크인하세요.",
-      "loginPrompt": "로그인되어 있고 가족 구성원이 등록되어 있는지 확인해 주세요.",
-      "member": "구성원",
-      "memberAvatar": "{} 아바타",
-      "noGroupSelected": "선택된 그룹 없음",
-      "noMembersFound": "가족 구성원을 찾을 수 없습니다",
-      "none": "없음",
-      "noneLower": "없음",
-      "subtitle": "각 가족 구성원을 위한 그룹을 선택하세요",
-      "tapToSelect": "탭하여 그룹 선택",
-      "title": "가족 구성원",
-      "unknown": "알 수 없음"
-    },
-    "services": {
-      "checkBackLater": "나중에 다시 확인하시거나 교회 관리자에게 문의해 주세요",
-      "noServicesAvailable": "사용 가능한 예배가 없습니다",
-      "subtitle": "체크인할 예배를 선택하세요",
-      "title": "예배 선택"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "저장",
     "search": "검색",
     "update": "업데이트"
-  },
-  "donate": {
-    "authLanding": "인증된 페이지입니다",
-    "currentYearCsv": "올해 (CSV)",
-    "currentYearPrint": "올해 (인쇄)",
-    "donations": "헌금",
-    "downloadRecords": "헌금 기록 다운로드",
-    "exportCurrentYearCsv": "올해 헌금을 CSV로 내보내기",
-    "exportLastYearCsv": "작년 헌금을 CSV로 내보내기",
-    "lastYearCsv": "작년 (CSV)",
-    "lastYearPrint": "작년 (인쇄)",
-    "pending": "대기 중",
-    "printCurrentYear": "올해 헌금 인쇄",
-    "printLastYear": "작년 헌금 인쇄"
-  },
-  "donation": {
-    "page": {
-      "amount": "금액",
-      "batch": "배치",
-      "date": "날짜",
-      "fund": "기금",
-      "method": "방법",
-      "willAppear": "표시될 예정"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "내 헌금"
   },
   "element": {
     "offlinePlaceholder": "오프라인 비디오 플레이스홀더"

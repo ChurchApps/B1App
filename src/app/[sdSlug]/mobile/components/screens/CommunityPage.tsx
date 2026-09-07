@@ -13,7 +13,7 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import { getInitials } from "../util";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
@@ -30,76 +30,30 @@ interface PeopleSection {
   people: PersonInterface[];
 }
 
+const STATUS_RANK: Record<string, number> = { staff: 3, member: 2, "regular attendee": 1 };
+const REQUIRED_RANK: Record<string, number> = { Staff: 3, Members: 2, "Regular Attendees": 1, Everyone: 0 };
+
 const escapeRegExp = (string: string) => {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
-export const CommunityPage = ({ config: _config }: Props) => {
+export const CommunityPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
-  // Directory is a "members" feature (matches VisibilityHelper's "members" rule) —
-  // a logged-in visitor would otherwise see an empty list with no explanation.
   const membershipStatus = (context?.userChurch?.person as any)?.membershipStatus?.toLowerCase();
-  const canViewDirectory = loggedIn && (membershipStatus === "member" || membershipStatus === "staff");
   const [searchText, setSearchText] = React.useState("");
 
-  if (!canViewDirectory) {
+  const churchId = UserHelper.currentUserChurch?.church?.id || config?.church?.id;
+  const { data: publicSettings, isFetched: settingsFetched } = useQuery<any>({
+    queryKey: ["publicSettings", churchId],
+    queryFn: () => ApiHelper.get(`/settings/public/${churchId}`, "MembershipApi"),
+    enabled: loggedIn && !!churchId
+  });
 
-    const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
-    const loginHref = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
-    return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.xl}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center"
-          }}
-        >
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: "19px",
-              bgcolor: tc.iconBackground,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mb: `${mobileTheme.spacing.md}px`
-            }}
-          >
-            <Icon sx={{ fontSize: 32, color: tc.primary }}>lock</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-            {Locale.label(loggedIn ? "mobile.screens.membersOnly" : "mobile.details.signInRequired")}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-            {Locale.label(loggedIn ? "mobile.screens.directoryMembersBody" : "mobile.screens.directorySignInBody")}
-          </Typography>
-          {!loggedIn && (
-            <Button
-              variant="contained"
-              onClick={() => { window.location.href = loginHref; }}
-              sx={{
-                bgcolor: tc.primary,
-                color: tc.onPrimary,
-                textTransform: "none",
-                fontWeight: 500,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                "&:hover": { bgcolor: tc.primary }
-              }}
-            >
-              {Locale.label("mobile.components.signIn")}
-            </Button>
-          )}
-        </Box>
-      </Box>
-    );
-  }
+  const canViewDirectory = loggedIn && (STATUS_RANK[membershipStatus] || 0) >= (REQUIRED_RANK[publicSettings?.directoryVisibility] ?? REQUIRED_RANK.Members);
+  const settingsSettled = !loggedIn || !churchId || settingsFetched;
 
   const { data: serverPeople = null, isFetching } = useQuery<PersonInterface[]>({
     queryKey: ["/people", "MembershipApi"],
@@ -108,12 +62,12 @@ export const CommunityPage = ({ config: _config }: Props) => {
       const list = Array.isArray(data) ? (data as PersonInterface[]) : [];
       return Array.from(new Map(list.map((p) => [p.id, p])).values());
     },
-    enabled: loggedIn,
+    enabled: canViewDirectory,
     staleTime: 10 * 60 * 1000,
     gcTime: 30 * 60 * 1000
   });
 
-  const people = loggedIn ? (isFetching && !serverPeople ? null : (serverPeople ?? null)) : [];
+  const people = canViewDirectory ? (isFetching && !serverPeople ? null : (serverPeople ?? null)) : [];
 
   const filteredPeople = React.useMemo<PersonInterface[] | null>(() => {
     if (people === null) return null;
@@ -373,6 +327,62 @@ export const CommunityPage = ({ config: _config }: Props) => {
       </Typography>
     </Box>
   );
+
+  if (settingsSettled && !canViewDirectory) {
+
+    const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
+    const loginHref = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
+    return (
+      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+        <Box
+          sx={{
+            bgcolor: tc.surface,
+            border: `1px solid ${tc.border}`,
+            borderRadius: `${mobileTheme.radius.xl}px`,
+            p: `${mobileTheme.spacing.lg}px`,
+            textAlign: "center"
+          }}
+        >
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: "19px",
+              bgcolor: tc.iconBackground,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: `${mobileTheme.spacing.md}px`
+            }}
+          >
+            <Icon sx={{ fontSize: 32, color: tc.primary }}>lock</Icon>
+          </Box>
+          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+            {Locale.label(loggedIn ? "mobile.screens.membersOnly" : "mobile.details.signInRequired")}
+          </Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
+            {Locale.label(loggedIn ? "mobile.screens.directoryMembersBody" : "mobile.screens.directorySignInBody")}
+          </Typography>
+          {!loggedIn && (
+            <Button
+              variant="contained"
+              onClick={() => { window.location.href = loginHref; }}
+              sx={{
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                textTransform: "none",
+                fontWeight: 500,
+                borderRadius: `${mobileTheme.radius.md}px`,
+                "&:hover": { bgcolor: tc.primary }
+              }}
+            >
+              {Locale.label("mobile.components.signIn")}
+            </Button>
+          )}
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ bgcolor: tc.background, minHeight: "100%", display: "flex", flexDirection: "column" }}>

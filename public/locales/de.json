@@ -20,10 +20,6 @@
     "navigateTo": "Navigieren zu {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Ihre Anwesenheit wurde gespeichert. Vielen Dank!",
-      "title": "Check-in abgeschlossen"
-    },
     "groups": {
       "chooseGroupFor": "Wählen Sie eine Gruppe für {}",
       "generalGroups": "Allgemeine Gruppen",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Vor- und Nachname sind für jedes Mitglied erforderlich."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Bereits eingecheckt",
-      "alreadyCheckedInTitle": "Bereits eingecheckt",
-      "change": "Ändern",
-      "checkInAgain": "Erneut einchecken",
-      "completeCheckin": "Check-in abschließen",
-      "duplicateMessage": "{} ist für diesen Gottesdienst bereits eingecheckt. Erneut einchecken, um die Gruppen zu aktualisieren.",
-      "loginPrompt": "Bitte stellen Sie sicher, dass Sie angemeldet sind und Haushaltsmitglieder registriert haben.",
-      "member": "Mitglied",
-      "memberAvatar": "Avatar von {}",
-      "noGroupSelected": "Keine Gruppe ausgewählt",
-      "noMembersFound": "Keine Haushaltsmitglieder gefunden",
-      "none": "Keine",
-      "noneLower": "keine",
-      "subtitle": "Wählen Sie Gruppen für jedes Familienmitglied",
-      "tapToSelect": "Tippen, um Gruppen auszuwählen",
-      "title": "Haushaltsmitglieder",
-      "unknown": "Unbekannt"
-    },
-    "services": {
-      "checkBackLater": "Bitte schauen Sie später wieder vorbei oder kontaktieren Sie Ihren Gemeindeadministrator",
-      "noServicesAvailable": "Keine Gottesdienste verfügbar",
-      "subtitle": "Wählen Sie aus, für welchen Gottesdienst Sie einchecken",
-      "title": "Gottesdienst auswählen"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Speichern",
     "search": "Suchen",
     "update": "Aktualisieren"
-  },
-  "donate": {
-    "authLanding": "Dies ist mit Authentifizierung",
-    "currentYearCsv": "Aktuelles Jahr (CSV)",
-    "currentYearPrint": "AKTUELLES JAHR (DRUCKEN)",
-    "donations": "Spenden",
-    "downloadRecords": "Spendenunterlagen herunterladen",
-    "exportCurrentYearCsv": "Spenden des aktuellen Jahres als CSV exportieren",
-    "exportLastYearCsv": "Spenden des letzten Jahres als CSV exportieren",
-    "lastYearCsv": "Letztes Jahr (CSV)",
-    "lastYearPrint": "LETZTES JAHR (DRUCKEN)",
-    "pending": "Ausstehend",
-    "printCurrentYear": "Spenden des aktuellen Jahres drucken",
-    "printLastYear": "Spenden des letzten Jahres drucken"
-  },
-  "donation": {
-    "page": {
-      "amount": "Betrag",
-      "batch": "Charge",
-      "date": "Datum",
-      "fund": "Fonds",
-      "method": "Methode",
-      "willAppear": "Wird angezeigt"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Meine Spende"
   },
   "element": {
     "offlinePlaceholder": "Offline-Video-Platzhalter"

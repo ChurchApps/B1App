@@ -20,10 +20,6 @@
     "navigateTo": "الانتقال إلى {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "تم حفظ حضورك. شكرًا لك!",
-      "title": "اكتمل تسجيل الحضور"
-    },
     "groups": {
       "chooseGroupFor": "اختر مجموعة لـ {}",
       "generalGroups": "المجموعات العامة",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "الاسم الأول واسم العائلة مطلوبان لكل فرد."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "تم تسجيل الحضور بالفعل",
-      "alreadyCheckedInTitle": "تم تسجيل الحضور بالفعل",
-      "change": "تغيير",
-      "checkInAgain": "تسجيل الحضور مرة أخرى",
-      "completeCheckin": "إكمال تسجيل الحضور",
-      "duplicateMessage": "تم تسجيل حضور {} لهذه الخدمة بالفعل. سجّل الحضور مرة أخرى لتحديث المجموعات.",
-      "loginPrompt": "يرجى التأكد من تسجيل الدخول وتسجيل أفراد الأسرة.",
-      "member": "عضو",
-      "memberAvatar": "صورة {}",
-      "noGroupSelected": "لم يتم اختيار مجموعة",
-      "noMembersFound": "لم يتم العثور على أفراد في الأسرة",
-      "none": "لا شيء",
-      "noneLower": "لا شيء",
-      "subtitle": "اختر مجموعات لكل فرد من العائلة",
-      "tapToSelect": "انقر لاختيار المجموعات",
-      "title": "أفراد الأسرة",
-      "unknown": "غير معروف"
-    },
-    "services": {
-      "checkBackLater": "يرجى التحقق لاحقًا أو التواصل مع مسؤول الكنيسة",
-      "noServicesAvailable": "لا توجد خدمات متاحة",
-      "subtitle": "اختر الخدمة التي تريد تسجيل الحضور لها",
-      "title": "اختر الخدمة"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "حفظ",
     "search": "بحث",
     "update": "تحديث"
-  },
-  "donate": {
-    "authLanding": "هذا مع المصادقة",
-    "currentYearCsv": "السنة الحالية (CSV)",
-    "currentYearPrint": "السنة الحالية (طباعة)",
-    "donations": "التبرعات",
-    "downloadRecords": "تنزيل سجلات التبرعات",
-    "exportCurrentYearCsv": "تصدير تبرعات السنة الحالية بصيغة CSV",
-    "exportLastYearCsv": "تصدير تبرعات السنة الماضية بصيغة CSV",
-    "lastYearCsv": "السنة الماضية (CSV)",
-    "lastYearPrint": "السنة الماضية (طباعة)",
-    "pending": "قيد الانتظار",
-    "printCurrentYear": "طباعة تبرعات السنة الحالية",
-    "printLastYear": "طباعة تبرعات السنة الماضية"
-  },
-  "donation": {
-    "page": {
-      "amount": "المبلغ",
-      "batch": "الدفعة",
-      "date": "التاريخ",
-      "fund": "الصندوق",
-      "method": "طريقة الدفع",
-      "willAppear": "سيظهر"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "تبرعي"
   },
   "element": {
     "offlinePlaceholder": "عنصر نائب لفيديو غير متصل"

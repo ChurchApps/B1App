@@ -20,10 +20,6 @@
     "navigateTo": "Prejsť na {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Vaša účasť bola uložená. Ďakujeme!",
-      "title": "Registrácia dokončená"
-    },
     "groups": {
       "chooseGroupFor": "Vyberte skupinu pre {}",
       "generalGroups": "Všeobecné skupiny",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Pre každého člena je potrebné meno a priezvisko."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Už zaregistrovaný",
-      "alreadyCheckedInTitle": "Už zaregistrovaný",
-      "change": "Zmeniť",
-      "checkInAgain": "Zaregistrovať znova",
-      "completeCheckin": "Dokončiť registráciu",
-      "duplicateMessage": "{} je už zaregistrovaný na túto bohoslužbu. Zaregistrujte sa znova pre aktualizáciu skupín.",
-      "loginPrompt": "Prosím uistite sa, že ste prihlásení a máte zaregistrovaných členov domácnosti.",
-      "member": "Člen",
-      "memberAvatar": "avatar {}",
-      "noGroupSelected": "Nie je vybraná žiadna skupina",
-      "noMembersFound": "Nenašli sa žiadni členovia domácnosti",
-      "none": "Žiadne",
-      "noneLower": "žiadne",
-      "subtitle": "Vyberte skupiny pre každého člena rodiny",
-      "tapToSelect": "Klepnite pre výber skupín",
-      "title": "Členovia domácnosti",
-      "unknown": "Neznáme"
-    },
-    "services": {
-      "checkBackLater": "Skúste to neskôr alebo kontaktujte správcu cirkvi",
-      "noServicesAvailable": "Nie sú dostupné žiadne bohoslužby",
-      "subtitle": "Vyberte bohoslužbu, na ktorú sa registrujete",
-      "title": "Vyberte bohoslužbu"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Uložiť",
     "search": "Hľadať",
     "update": "Aktualizovať"
-  },
-  "donate": {
-    "authLanding": "Toto je s overením",
-    "currentYearCsv": "Aktuálny rok (CSV)",
-    "currentYearPrint": "AKTUÁLNY ROK (TLAČ)",
-    "donations": "Dary",
-    "downloadRecords": "Stiahnuť záznamy o daroch",
-    "exportCurrentYearCsv": "Exportovať dary aktuálneho roka ako CSV",
-    "exportLastYearCsv": "Exportovať dary minulého roka ako CSV",
-    "lastYearCsv": "Minulý rok (CSV)",
-    "lastYearPrint": "MINULÝ ROK (TLAČ)",
-    "pending": "Čakajúce",
-    "printCurrentYear": "Tlačiť dary aktuálneho roka",
-    "printLastYear": "Tlačiť dary minulého roka"
-  },
-  "donation": {
-    "page": {
-      "amount": "Suma",
-      "batch": "Dávka",
-      "date": "Dátum",
-      "fund": "Fond",
-      "method": "Spôsob",
-      "willAppear": "Zobrazí sa"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Môj dar"
   },
   "element": {
     "offlinePlaceholder": "Zástupný symbol pre offline video"
