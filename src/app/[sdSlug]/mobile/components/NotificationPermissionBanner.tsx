@@ -3,6 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Box, Button, Icon, Typography } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "./mobileTheme";
 import { useNotificationDiagnostics } from "../hooks/useNotificationDiagnostics";
 import { WebPushHelper } from "@/helpers";
@@ -16,6 +17,7 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
   const tc = mobileTheme.colors;
   const { diagnostics, loading, refresh } = useNotificationDiagnostics(enabled);
   const [busy, setBusy] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const handleEnable = async () => {
     if (WebPushHelper.requiresInstallForPush()) {
@@ -24,6 +26,7 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
     }
 
     setBusy(true);
+    setErrorMessage("");
     try {
       const subscription = await WebPushHelper.subscribe();
       if (!subscription && WebPushHelper.getPermissionState() === "granted") {
@@ -31,6 +34,7 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
       }
     } catch (error) {
       console.error("[webpush] dashboard enable failed:", error);
+      setErrorMessage((error as Error)?.message || Locale.label("mobile.components.notificationEnableFailed"));
     } finally {
       setBusy(false);
       await refresh();
@@ -117,6 +121,9 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
             </Button>
           )}
         </Box>
+        {errorMessage && (
+          <Typography sx={{ fontSize: 12, color: "#dc2626", mt: 1 }}>{errorMessage}</Typography>
+        )}
       </Box>
     </Box>
   );

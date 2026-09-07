@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Box, GlobalStyles, Icon, Typography } from "@mui/material";
 import { keyframes } from "@emotion/react";
+import { QRCodeSVG } from "qrcode.react";
 import { Locale } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { InstallPromptHelper } from "@/helpers";
@@ -55,8 +56,11 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
+const withKbd = (text: string) =>
+  text.split(/\[|\]/).map((part, i) => (i % 2 ? <Kbd key={i}>{part}</Kbd> : part));
+
 export const InstallPage = ({ config }: Props) => {
-  const churchName = config?.church?.name || "our app";
+  const churchName = config?.church?.name || Locale.label("mobile.install.ourApp");
   const primary = config?.appTheme?.light?.primary || config?.appearance?.primaryColor || "#0D47A1";
   const primaryDark = darken(primary, 0.35);
   const accent = "#f97316";
@@ -69,7 +73,7 @@ export const InstallPage = ({ config }: Props) => {
   const [canInstall, setCanInstall] = useState(false);
   const [installing, setInstalling] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const [qrUrl, setQrUrl] = useState<string>("");
+  const [installUrl, setInstallUrl] = useState<string>("");
 
   useEffect(() => {
     InstallPromptHelper.start();
@@ -83,14 +87,13 @@ export const InstallPage = ({ config }: Props) => {
       return;
     }
 
-    const target = window.location.href;
-    setQrUrl(`https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=0&data=${encodeURIComponent(target)}`);
+    setInstallUrl(window.location.href);
 
     const unsubscribe = InstallPromptHelper.subscribe((state) => {
       setInstalled(state.installed);
       setCanInstall(!!state.deferred && !state.installed);
       if (state.installed) {
-        setStatusMessage("Installed! Look for the icon on your home screen.");
+        setStatusMessage(Locale.label("mobile.install.statusInstalled"));
       }
     });
 
@@ -114,27 +117,27 @@ export const InstallPage = ({ config }: Props) => {
   const handleInstall = async () => {
     const { deferred } = InstallPromptHelper.getState();
     if (!deferred) {
-      setStatusMessage("Install is not available yet. If you're on Android, open this page in Chrome and wait a moment.");
+      setStatusMessage(Locale.label("mobile.install.statusUnavailable"));
       return;
     }
     try {
       setInstalling(true);
       await deferred.prompt();
       const choice = await deferred.userChoice;
-      setStatusMessage(choice.outcome === "accepted" ? "Installing..." : "Install canceled. You can try again any time.");
+      setStatusMessage(choice.outcome === "accepted" ? Locale.label("mobile.install.statusInstalling") : Locale.label("mobile.install.statusCanceled"));
       InstallPromptHelper.clearDeferredPrompt();
     } catch {
-      setStatusMessage("Something went wrong. Please try again.");
+      setStatusMessage(Locale.label("mobile.install.statusError"));
     } finally {
       setInstalling(false);
     }
   };
 
   const benefits = useMemo(() => ([
-    { icon: "bolt", label: "Instant access" },
-    { icon: "wifi_off", label: "Works offline" },
-    { icon: "notifications_active", label: "Stay in the loop" },
-    { icon: "fullscreen", label: "Full-screen, app-like" }
+    { icon: "bolt", label: Locale.label("mobile.install.benefitInstant") },
+    { icon: "rocket_launch", label: Locale.label("mobile.install.benefitFast") },
+    { icon: "notifications_active", label: Locale.label("mobile.install.benefitNotifications") },
+    { icon: "fullscreen", label: Locale.label("mobile.install.benefitFullScreen") }
   ]), []);
 
   const globalStyles = (
@@ -178,10 +181,10 @@ export const InstallPage = ({ config }: Props) => {
               <Icon sx={{ fontSize: 44, color: "#22c55e" }}>check_circle</Icon>
             </Box>
             <Typography sx={{ fontSize: 24, fontWeight: 800, mb: 1, color: "#0f172a" }}>
-              You&apos;re all set!
+              {Locale.label("mobile.install.allSetTitle")}
             </Typography>
             <Typography sx={{ fontSize: 15, color: "#64748b" }}>
-              The {churchName} app is installed on this device.
+              {Locale.label("mobile.install.allSetBody").replace("{}", churchName)}
             </Typography>
           </Box>
         </Box>
@@ -322,7 +325,7 @@ export const InstallPage = ({ config }: Props) => {
                 border: `1px solid ${accent}59`
               }}>
                 <Icon sx={{ fontSize: 14 }}>auto_awesome</Icon>
-                One-tap install · No app store
+                {Locale.label("mobile.install.badge")}
               </Box>
 
               <Typography component="h1" sx={{
@@ -332,7 +335,7 @@ export const InstallPage = ({ config }: Props) => {
                 letterSpacing: "-0.035em",
                 mb: 3
               }}>
-                Worship, connect,
+                {Locale.label("mobile.install.heroTitle")}
                 <br />
                 <Box component="span" sx={{
                   background: `linear-gradient(120deg, ${accentLight} 0%, ${accent} 50%, #fbbf24 100%)`,
@@ -340,7 +343,7 @@ export const InstallPage = ({ config }: Props) => {
                   backgroundClip: "text",
                   color: "transparent"
                 }}>
-                  anywhere you are.
+                  {Locale.label("mobile.install.heroTitleAccent")}
                 </Box>
               </Typography>
 
@@ -351,7 +354,7 @@ export const InstallPage = ({ config }: Props) => {
                 lineHeight: 1.65,
                 mb: 4.5
               }}>
-                Add the {churchName} app to your home screen for fast, full-screen access to sermons, events, giving, and community &mdash; wherever the week takes you.
+                {Locale.label("mobile.install.heroBody").replace("{}", churchName)}
               </Typography>
 
               <Box sx={{
@@ -437,20 +440,14 @@ export const InstallPage = ({ config }: Props) => {
                 primary={primary}
                 accent={accent}
                 accentDeep={accentDeep}
-                qrUrl={qrUrl}
+                installUrl={installUrl}
+                canInstall={canInstall}
+                installing={installing}
+                onInstall={handleInstall}
+                statusMessage={statusMessage}
               />
             )}
           </Box>
-
-          <Typography sx={{
-            textAlign: "center",
-            mt: 4.5,
-            color: "rgba(248, 250, 252, 0.55)",
-            fontSize: "0.78rem",
-            position: "relative",
-            zIndex: 2
-          }}>
-          </Typography>
         </Box>
       </Box>
     </>
@@ -546,15 +543,15 @@ const PhoneMockup = ({ churchName, iconUrl, primary, primaryDark, accent, accent
             {churchName}
           </Typography>
           <Typography sx={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.65)" }}>
-            This Sunday · 10:30 AM
+            {Locale.label("mobile.install.mockupNextService")}
           </Typography>
         </Box>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25, mt: 1 }}>
           {[
-            { icon: "play_arrow", title: "Sunday Sermon", meta: "Watch now · 42 min" },
-            { icon: "event", title: "Youth Night", meta: "Wed · 6:30 PM" },
-            { icon: "volunteer_activism", title: "Give securely", meta: "One-tap donation" }
+            { icon: "play_arrow", title: Locale.label("mobile.install.mockupSermon"), meta: Locale.label("mobile.install.mockupSermonMeta") },
+            { icon: "event", title: Locale.label("mobile.install.mockupEvent"), meta: Locale.label("mobile.install.mockupEventMeta") },
+            { icon: "volunteer_activism", title: Locale.label("mobile.install.mockupGive"), meta: Locale.label("mobile.install.mockupGiveMeta") }
           ].map(card => (
             <Box key={card.title} sx={{
               bgcolor: "rgba(255,255,255,0.08)",
@@ -687,6 +684,39 @@ const Kbd = ({ children }: { children: React.ReactNode }) => (
   </Box>
 );
 
+interface InstallButtonProps { accent: string; accentDeep: string; installing: boolean; onInstall: () => void; label: string; }
+
+const InstallButton = ({ accent, accentDeep, installing, onInstall, label }: InstallButtonProps) => (
+  <Box
+    role="button"
+    tabIndex={installing ? -1 : 0}
+    aria-disabled={installing}
+    onClick={() => { if (!installing) onInstall(); }}
+    onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && !installing) onInstall(); }}
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 1.25,
+      width: "100%",
+      py: "18px",
+      borderRadius: "14px",
+      background: installing ? "#cbd5e1" : `linear-gradient(135deg, ${accent} 0%, ${accentDeep} 100%)`,
+      color: installing ? "#64748b" : "#ffffff",
+      fontWeight: 700,
+      fontSize: "1rem",
+      letterSpacing: "0.02em",
+      cursor: installing ? "not-allowed" : "pointer",
+      boxShadow: installing ? "none" : `0 10px 30px ${accent}66`,
+      transition: "all 0.3s ease",
+      "&:hover": installing ? {} : { transform: "translateY(-2px)", boxShadow: `0 16px 36px ${accent}80` }
+    }}
+  >
+    <Icon sx={{ fontSize: 22 }}>{installing ? "hourglass_top" : "download"}</Icon>
+    {installing ? Locale.label("mobile.install.statusInstalling") : label}
+  </Box>
+);
+
 interface AndroidProps {
   accent: string;
   accentDeep: string;
@@ -698,7 +728,7 @@ interface AndroidProps {
 
 const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onInstall, statusMessage }: AndroidProps) => (
   <Box sx={{ animation: `${fadeIn} 0.4s ease-out` }}>
-    {panelHeader("Install on Android", "Chrome will add the app to your home screen in one tap.")}
+    {panelHeader(Locale.label("mobile.install.androidTitle"), Locale.label("mobile.install.androidSubtitle"))}
 
     <Box sx={{
       display: "grid",
@@ -707,49 +737,27 @@ const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onIns
       mb: 3.5,
       mt: 2
     }}>
-      <Step num={1} title="Open in Chrome" body="If you're not already, open this page in Chrome on your Android device." accent={accent} accentDeep={accentDeep} />
-      <Step num={2} title="Tap the install button" body="Chrome will add the app to your home screen in one tap." accent={accent} accentDeep={accentDeep} />
-      <Step num={3} title="You're in!" body="Launch the app from your home screen any time — just like any other app." accent={accent} accentDeep={accentDeep} />
+      <Step num={1} title={Locale.label("mobile.install.androidStep1Title")} body={Locale.label("mobile.install.androidStep1Body")} accent={accent} accentDeep={accentDeep} />
+      <Step num={2} title={Locale.label("mobile.install.androidStep2Title")} body={Locale.label("mobile.install.androidStep2Body")} accent={accent} accentDeep={accentDeep} />
+      <Step num={3} title={Locale.label("mobile.install.androidStep3Title")} body={Locale.label("mobile.install.androidStep3Body")} accent={accent} accentDeep={accentDeep} />
     </Box>
 
-    <Box
-      role="button"
-      tabIndex={canInstall && !installing ? 0 : -1}
-      aria-disabled={!canInstall || installing}
-      onClick={() => { if (canInstall && !installing) onInstall(); }}
-      onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && canInstall && !installing) onInstall(); }}
-      sx={{
+    {canInstall || installing ? (
+      <InstallButton accent={accent} accentDeep={accentDeep} installing={installing} onInstall={onInstall} label={Locale.label("mobile.install.androidInstallCta")} />
+    ) : (
+      <Box sx={{
+        p: 2,
+        borderRadius: "12px",
+        bgcolor: "rgba(254, 170, 36, 0.1)",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 1.25,
-        width: "100%",
-        py: "18px",
-        borderRadius: "14px",
-        background: canInstall && !installing
-          ? `linear-gradient(135deg, ${accent} 0%, ${accentDeep} 100%)`
-          : "#cbd5e1",
-        color: canInstall && !installing ? "#ffffff" : "#64748b",
-        fontWeight: 700,
-        fontSize: "1rem",
-        letterSpacing: "0.02em",
-        cursor: canInstall && !installing ? "pointer" : "not-allowed",
-        boxShadow: canInstall && !installing ? `0 10px 30px ${accent}66` : "none",
-        transition: "all 0.3s ease",
-        "&:hover": canInstall && !installing ? {
-          transform: "translateY(-2px)",
-          boxShadow: `0 16px 36px ${accent}80`
-        } : {}
-      }}
-    >
-      <Icon sx={{ fontSize: 22 }}>{installing ? "hourglass_top" : "download"}</Icon>
-      {installing ? "Installing..." : canInstall ? "Install on Home Screen" : "Install Not Available"}
-    </Box>
-
-    {!canInstall && !installing && (
-      <Typography sx={{ mt: 1.75, fontSize: 13, color: "#64748b", textAlign: "center" }}>
-        If the button is greyed out, open this page in Chrome, then tap the menu (⋮) and choose <strong>Install app</strong>.
-      </Typography>
+        alignItems: "flex-start",
+        gap: 1.25
+      }}>
+        <Icon sx={{ fontSize: 20, color: "#d97706", mt: "1px" }}>info</Icon>
+        <Typography sx={{ fontSize: 13, color: "#0f172a", lineHeight: 1.5 }}>
+          {withKbd(Locale.label("mobile.install.androidMenuFallback"))}
+        </Typography>
+      </Box>
     )}
 
     {statusMessage && (
@@ -763,7 +771,7 @@ const AndroidInstructions = ({ accent, accentDeep, canInstall, installing, onIns
 
 const IOSInstructions = ({ accent, accentDeep }: { accent: string; accentDeep: string }) => (
   <Box sx={{ animation: `${fadeIn} 0.4s ease-out` }}>
-    {panelHeader("Install on iPhone", "Safari is required — just three taps and you're in.")}
+    {panelHeader(Locale.label("mobile.install.iosTitle"), Locale.label("mobile.install.iosSubtitle"))}
 
     <Box sx={{
       display: "grid",
@@ -772,9 +780,9 @@ const IOSInstructions = ({ accent, accentDeep }: { accent: string; accentDeep: s
       mb: 3,
       mt: 2
     }}>
-      <Step num={1} title="Open in Safari" body={<>iPhone installs only work in Safari. If you&apos;re in Chrome, tap the share icon and choose <Kbd>Open in Safari</Kbd>.</>} accent={accent} accentDeep={accentDeep} />
-      <Step num={2} title={<>Tap the <Kbd>Share</Kbd> button</>} body="Find the share icon at the bottom of Safari — the square with the upward arrow." accent={accent} accentDeep={accentDeep} />
-      <Step num={3} title="Add to Home Screen" body={<>Scroll down, tap <Kbd>Add to Home Screen</Kbd>, then <Kbd>Add</Kbd>. Done!</>} accent={accent} accentDeep={accentDeep} />
+      <Step num={1} title={Locale.label("mobile.install.iosStep1Title")} body={withKbd(Locale.label("mobile.install.iosStep1Body"))} accent={accent} accentDeep={accentDeep} />
+      <Step num={2} title={withKbd(Locale.label("mobile.install.iosStep2Title"))} body={Locale.label("mobile.install.iosStep2Body")} accent={accent} accentDeep={accentDeep} />
+      <Step num={3} title={Locale.label("mobile.install.iosStep3Title")} body={withKbd(Locale.label("mobile.install.iosStep3Body"))} accent={accent} accentDeep={accentDeep} />
     </Box>
 
     <Box sx={{
@@ -788,17 +796,37 @@ const IOSInstructions = ({ accent, accentDeep }: { accent: string; accentDeep: s
     }}>
       <Icon sx={{ fontSize: 20, color: "#d97706", mt: "1px" }}>info</Icon>
       <Typography sx={{ fontSize: 13, color: "#0f172a", lineHeight: 1.5 }}>
-        Using Chrome or another browser on iPhone? Apple requires Safari to install web apps. There is no one-tap install button — the steps above are the Apple way.
+        {Locale.label("mobile.install.iosNote")}
       </Typography>
     </Box>
   </Box>
 );
 
-interface DesktopProps { primary: string; accent: string; accentDeep: string; qrUrl: string; }
+interface DesktopProps {
+  primary: string;
+  accent: string;
+  accentDeep: string;
+  installUrl: string;
+  canInstall: boolean;
+  installing: boolean;
+  onInstall: () => void;
+  statusMessage: string | null;
+}
 
-const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProps) => (
+const DesktopInstructions = ({ primary, accent, accentDeep, installUrl, canInstall, installing, onInstall, statusMessage }: DesktopProps) => (
   <Box sx={{ animation: `${fadeIn} 0.4s ease-out` }}>
-    {panelHeader("Install on your phone", "Scan the QR code with your phone camera — you'll land right back on this page to install.")}
+    {panelHeader(Locale.label("mobile.install.desktopTitle"), Locale.label("mobile.install.desktopSubtitle"))}
+
+    {(canInstall || installing) && (
+      <Box sx={{ mb: 3.5 }}>
+        <InstallButton accent={accent} accentDeep={accentDeep} installing={installing} onInstall={onInstall} label={Locale.label("mobile.install.desktopInstallCta")} />
+        {statusMessage && (
+          <Typography sx={{ mt: 1.5, fontSize: 13, color: "#64748b", textAlign: "center" }}>
+            {statusMessage}
+          </Typography>
+        )}
+      </Box>
+    )}
 
     <Box sx={{
       display: "grid",
@@ -831,14 +859,8 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
           pointerEvents: "none"
         }
       }}>
-        {qrUrl ? (
-
-          <img
-            src={qrUrl}
-            alt="QR code linking to this install page"
-            width={220} height={220}
-            style={{ width: 220, height: 220, display: "block", background: "#fff", borderRadius: 8 }}
-          />
+        {installUrl ? (
+          <QRCodeSVG value={installUrl} size={220} title={Locale.label("mobile.install.qrAlt")} />
         ) : (
           <Box sx={{ width: 220, height: 220, bgcolor: "#f8fafc", borderRadius: "8px" }} />
         )}
@@ -851,7 +873,7 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
           lineHeight: 1.4
         }}>
           <Box component="span" sx={{ color: "#0f172a" }}>{Locale.label("mobile.screens.scanWithPhone")}</Box>
-          <br />to open this page and install
+          <br />{Locale.label("mobile.install.scanCaption")}
         </Typography>
       </Box>
 
@@ -864,7 +886,7 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
           color: accentDeep,
           mb: 1.5
         }}>
-          You&apos;re on desktop
+          {Locale.label("mobile.install.youreOnDesktop")}
         </Typography>
         <Typography sx={{
           fontSize: "1.3rem",
@@ -873,16 +895,16 @@ const DesktopInstructions = ({ primary, accent, accentDeep, qrUrl }: DesktopProp
           color: "#0f172a",
           mb: 1.75
         }}>
-          Install on your phone in three steps
+          {Locale.label("mobile.install.desktopHeading")}
         </Typography>
         <Typography sx={{ color: "#475569", fontSize: "0.95rem", lineHeight: 1.65, mb: 2.25 }}>
-          The app is designed for your phone. Point your phone&apos;s camera at the QR code and follow the link to install.
+          {Locale.label("mobile.install.desktopBody")}
         </Typography>
         <Box component="ol" sx={{ listStyle: "none", p: 0, m: 0, display: "flex", flexDirection: "column", gap: 1.25 }}>
           {[
-            "Open your phone's camera app",
-            "Point it at the QR code — tap the notification",
-            "Follow the install instructions on your phone"
+            Locale.label("mobile.install.desktopStep1"),
+            Locale.label("mobile.install.desktopStep2"),
+            Locale.label("mobile.install.desktopStep3")
           ].map((text, i) => (
             <Box component="li" key={i} sx={{
               display: "flex",

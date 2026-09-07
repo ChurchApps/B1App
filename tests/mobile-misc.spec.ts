@@ -77,3 +77,25 @@ test.describe("Mobile volunteer", () => {
     expect(text.toLowerCase()).not.toContain("last week");
   });
 });
+
+test.describe("Mobile install", () => {
+  test("install page draws its own QR code and drops the offline promise", async ({ page }) => {
+    const thirdParty: string[] = [];
+    page.on("request", (r) => { if (r.url().includes("qrserver.com")) thirdParty.push(r.url()); });
+    await page.goto("/mobile/install");
+    await expect(page.getByText("Scan with your phone camera")).toBeVisible({ timeout: 30000 });
+    await expect(page.locator('svg[width="220"][height="220"]')).toBeVisible();
+    expect(thirdParty).toHaveLength(0);
+    await expect(page.locator("body")).not.toContainText("Works offline");
+  });
+});
+
+test.describe("Mobile lessons", () => {
+  test("signed-out lessons screen offers Sign In with a returnUrl", async ({ page }) => {
+    await page.context().clearCookies();
+    await page.goto("/mobile/lessons");
+    const cta = page.getByTestId("lessons-signin-button");
+    await expect(cta).toBeVisible({ timeout: 30000 });
+    await expect(cta).toHaveAttribute("href", "/mobile/login?returnUrl=/mobile/lessons");
+  });
+});

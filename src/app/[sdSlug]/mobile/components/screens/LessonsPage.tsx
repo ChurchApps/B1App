@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Typography, Button } from "@mui/material";
-import { ApiHelper, UserHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface, LoginResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
@@ -55,7 +55,7 @@ export const LessonsPage = () => {
     );
     return lessonsLink?.text || null;
   }, [rawLinks]);
-  const title = linkTitle || "Lessons";
+  const title = linkTitle || Locale.label("mobile.screens.lessons");
 
   useEffect(() => {
     setIsClient(true);
@@ -203,11 +203,14 @@ export const LessonsPage = () => {
             <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
           </Box>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            Sign in to view {title.toLowerCase()}
+            {Locale.label("mobile.screens.signInToView").replace("{}", title.toLowerCase())}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-            {title} are available to signed-in members of this church.
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
+            {Locale.label("mobile.screens.signInToViewBody").replace("{}", title)}
           </Typography>
+          <Button variant="contained" href="/mobile/login?returnUrl=/mobile/lessons" data-testid="lessons-signin-button">
+            {Locale.label("mobile.screens.signIn")}
+          </Button>
         </Box>
       </Box>
     );
