@@ -103,7 +103,7 @@ export default function PrintPage({ params }: { params: Params }) {
       const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
       const fund = ArrayHelper.getOne(funds, "id", fd.fundId);
       if (donation) {
-        result.push(<tr style={{ height: "28px" }}>
+        result.push(<tr key={fd.id || fd.donationId} style={{ height: "28px" }}>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "20%", paddingLeft: "5px" }}>{DateHelper.prettyDate(donation?.donationDate).toString()}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "15%", paddingLeft: "5px" }}>{donation?.method}</td>
           <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "45%", paddingLeft: "5px" }}>{fund?.name}</td>
@@ -128,7 +128,7 @@ export default function PrintPage({ params }: { params: Params }) {
     const tableValues: React.ReactElement[] = [];
 
     result.forEach((tv) => {
-      tableValues.push(<tr style={{ height: "24px" }}>
+      tableValues.push(<tr key={tv.fund} style={{ height: "24px" }}>
         <td style={{ borderBottom: "2px solid var(--print-accent)", borderRight: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "left", width: "70%", paddingLeft: "5px" }}>{tv.fund}</td>
         <td style={{ borderBottom: "2px solid var(--print-accent)", borderLeft: "2px solid var(--print-accent)", borderCollapse: "collapse", textAlign: "right", width: "30%", paddingRight: "5px" }}>{CurrencyHelper.formatCurrencyWithLocale(tv.total, currency)}</td>
       </tr>);
