@@ -165,7 +165,6 @@
     "upload": "Subir",
     "uploadedFiles": "Archivos Subidos",
     "usedSpace": "Espacio usado: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Por favor, introduzca un texto válido",
       "linkUrl": "Por favor, introduzca un enlace",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Subiendo {}… {}%",
       "url": "URL",
       "usedStorage": "Usado {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibilidad",
       "weekly": "Semanalmente",
       "yearly": "Anualmente"

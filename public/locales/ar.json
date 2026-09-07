@@ -165,7 +165,6 @@
     "upload": "رفع",
     "uploadedFiles": "الملفات المرفوعة",
     "usedSpace": "المساحة المستخدمة: {} / 100 ميجابايت",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "يرجى إدخال نص صالح",
       "linkUrl": "يرجى إدخال الرابط",
@@ -529,7 +528,6 @@
       "uploadingProgress": "جارٍ رفع {}… {}%",
       "url": "العنوان",
       "usedStorage": "المستخدم {} / 100 ميجابايت",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "الظهور",
       "weekly": "أسبوعيًا",
       "yearly": "سنويًا"

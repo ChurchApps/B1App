@@ -165,7 +165,6 @@
     "upload": "Téléverser",
     "uploadedFiles": "Fichiers téléversés",
     "usedSpace": "Espace utilisé : {} / 100 Mo",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Veuillez saisir un texte valide",
       "linkUrl": "Veuillez saisir un lien",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Téléversement de {}… {}%",
       "url": "URL",
       "usedStorage": "Utilisé {} / 100 Mo",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibilité",
       "weekly": "Hebdomadaire",
       "yearly": "Annuel"

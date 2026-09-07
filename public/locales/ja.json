@@ -165,7 +165,6 @@
     "upload": "アップロード",
     "uploadedFiles": "アップロード済みファイル",
     "usedSpace": "使用容量: {} / 100MB",
-    "usedSpaceUnlimited": "使用容量: {}",
     "validate": {
       "linkText": "有効なテキストを入力してください",
       "linkUrl": "リンクを入力してください",
@@ -529,7 +528,6 @@
       "uploadingProgress": "{}をアップロード中… {}%",
       "url": "URL",
       "usedStorage": "使用中 {} / 100MB",
-      "usedStorageUnlimited": "使用量 {}",
       "visibility": "公開設定",
       "weekly": "毎週",
       "yearly": "毎年"

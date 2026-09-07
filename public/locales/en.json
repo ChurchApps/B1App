@@ -165,7 +165,6 @@
     "upload": "Upload",
     "uploadedFiles": "Uploaded Files",
     "usedSpace": "Used space: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Please enter valid text",
       "linkUrl": "Please enter link",
@@ -480,7 +479,6 @@
       "noLinks": "No links yet.",
       "noMembersGuests": "No members yet. Use Add to include guests.",
       "noResults": "No results found.",
-      "onlyLeadersPost": "Only group leaders can post announcements. Reply to a leader by direct message.",
       "postAnnouncement": "Post an announcement…",
       "postAnnouncementBelow": "Post an announcement below.",
       "present": "Present",
@@ -493,9 +491,6 @@
       "registration": "Registration",
       "registrationCloses": "Registration Closes",
       "registrationOpens": "Registration Opens",
-      "reminders": {
-        "": "Reminders"
-      },
       "repeats": "Repeats",
       "requestNote": "Optionally include a short note for the group leader.",
       "requestToJoin": "Request to Join",
@@ -533,7 +528,6 @@
       "uploadingProgress": "Uploading {}… {}%",
       "url": "URL",
       "usedStorage": "Used {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibility",
       "weekly": "Weekly",
       "yearly": "Yearly"
@@ -846,7 +840,6 @@
     "confirmed": "Registration Confirmed!",
     "continue": "Continue",
     "coupon": {
-      "": "Reminders",
       "applied": "Code {} applied",
       "apply": "Apply",
       "invalid": "This code is not valid.",

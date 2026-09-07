@@ -165,7 +165,6 @@
     "upload": "Prześlij",
     "uploadedFiles": "Przesłane pliki",
     "usedSpace": "Wykorzystane miejsce: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Wprowadź prawidłowy tekst",
       "linkUrl": "Wprowadź link",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Przesyłanie {}… {}%",
       "url": "URL",
       "usedStorage": "Wykorzystane {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Widoczność",
       "weekly": "Co tydzień",
       "yearly": "Co rok"

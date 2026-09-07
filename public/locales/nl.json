@@ -165,7 +165,6 @@
     "upload": "Uploaden",
     "uploadedFiles": "Geüploade bestanden",
     "usedSpace": "Gebruikte ruimte: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Voer geldige tekst in",
       "linkUrl": "Voer een link in",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Bezig met uploaden van {}… {}%",
       "url": "URL",
       "usedStorage": "Gebruikt {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Zichtbaarheid",
       "weekly": "Wekelijks",
       "yearly": "Jaarlijks"

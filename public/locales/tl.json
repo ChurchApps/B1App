@@ -165,7 +165,6 @@
     "upload": "Mag-upload",
     "uploadedFiles": "Mga Na-upload na File",
     "usedSpace": "Nagamit na espasyo: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Pakilagay ang valid na text",
       "linkUrl": "Pakilagay ang link",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Ina-upload ang {}… {}%",
       "url": "URL",
       "usedStorage": "Nagamit na {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibility",
       "weekly": "Lingguhan",
       "yearly": "Taunan"

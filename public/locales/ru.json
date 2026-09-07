@@ -165,7 +165,6 @@
     "upload": "Загрузить",
     "uploadedFiles": "Загруженные файлы",
     "usedSpace": "Использовано: {} / 100МБ",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Пожалуйста, введите корректный текст",
       "linkUrl": "Пожалуйста, введите ссылку",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Загрузка {}… {}%",
       "url": "URL",
       "usedStorage": "Использовано {} / 100МБ",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Видимость",
       "weekly": "Еженедельно",
       "yearly": "Ежегодно"

@@ -165,7 +165,6 @@
     "upload": "Отпреми",
     "uploadedFiles": "Отпремљене датотеке",
     "usedSpace": "Искоришћен простор: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Молимо унесите ваљан текст",
       "linkUrl": "Молимо унесите везу",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Отпремање {}… {}%",
       "url": "URL",
       "usedStorage": "Искоришћено {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Видљивост",
       "weekly": "Седмично",
       "yearly": "Годишње"

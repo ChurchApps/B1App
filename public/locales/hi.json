@@ -165,7 +165,6 @@
     "upload": "अपलोड करें",
     "uploadedFiles": "अपलोड की गई फ़ाइलें",
     "usedSpace": "उपयोग किया गया स्थान: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "कृपया मान्य पाठ दर्ज करें",
       "linkUrl": "कृपया लिंक दर्ज करें",
@@ -529,7 +528,6 @@
       "uploadingProgress": "{} अपलोड हो रहा है… {}%",
       "url": "URL",
       "usedStorage": "{} / 100MB उपयोग किया गया",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "दृश्यता",
       "weekly": "साप्ताहिक",
       "yearly": "वार्षिक"

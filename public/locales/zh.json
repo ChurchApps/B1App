@@ -165,7 +165,6 @@
     "upload": "上传",
     "uploadedFiles": "已上传文件",
     "usedSpace": "已用空间：{} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "请输入有效的文本",
       "linkUrl": "请输入链接",
@@ -529,7 +528,6 @@
       "uploadingProgress": "上传中 {}… {}%",
       "url": "URL",
       "usedStorage": "已使用 {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "可见性",
       "weekly": "每周",
       "yearly": "每年"

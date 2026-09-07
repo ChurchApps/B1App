@@ -165,7 +165,6 @@
     "upload": "Yükle",
     "uploadedFiles": "Yüklenen Dosyalar",
     "usedSpace": "Kullanılan alan: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Lütfen geçerli bir metin girin",
       "linkUrl": "Lütfen bağlantı girin",
@@ -529,7 +528,6 @@
       "uploadingProgress": "{} yükleniyor… %{}",
       "url": "URL",
       "usedStorage": "Kullanılan: {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Görünürlük",
       "weekly": "Haftalık",
       "yearly": "Yıllık"
