@@ -89,3 +89,89 @@ test.describe("Messaging API authorization", () => {
     expect(await after.json()).toEqual([]);
   });
 });
+
+/**
+ * Group chat feed toggles (ChurchAppsSupport#1054): announcements are leader-only on the server, and each
+ * feed honors the group's discussionsEnabled / announcementsEnabled setting. Raw HTTP against the demo DB
+ * so the real column type reaches the gate (the Jest suite mocks the membership gateway).
+ */
+test.describe("Group chat feed toggles (API)", () => {
+  test.describe.configure({ mode: "serial" });
+
+  const MEMBERSHIP = "http://localhost:8084/membership";
+  let volunteer: Identity;
+  let demo: Identity;
+  let demoMembership: Identity;
+  let originalGroup: any;
+  let discussionConversationId: string;
+  let announcementConversationId: string;
+  let seedMessageId: string;
+
+  const membershipLogin = async (email: string): Promise<Identity> => {
+    const ctx = await request.newContext();
+    const res = await ctx.post(`${MEMBERSHIP}/users/login`, { data: { email, password: "password" }, headers: { "Content-Type": "application/json" } });
+    if (!res.ok()) throw new Error(`login ${email} failed: ${res.status()}`);
+    const uc = ((await res.json()).userChurches || []).find((c: any) => c.church?.id === CHURCH_ID);
+    const jwt = (uc?.apis || []).find((a: any) => a.keyName === "MembershipApi")?.jwt || uc?.jwt;
+    if (!jwt) throw new Error(`no membership JWT for ${email}`);
+    return { ctx, jwt };
+  };
+  const saveGroup = async (patch: Record<string, boolean>) => {
+    const res = await demoMembership.ctx.post(`${MEMBERSHIP}/groups`, {
+      headers: { Authorization: `Bearer ${demoMembership.jwt}`, "Content-Type": "application/json" },
+      data: [{ ...originalGroup, ...patch }]
+    });
+    expect(res.status()).toBe(200);
+  };
+
+  test.beforeAll(async () => {
+    volunteer = await login("volunteer@b1.church");
+    demo = await login("demo@b1.church");
+    demoMembership = await membershipLogin("demo@b1.church");
+    const groupRes = await demoMembership.ctx.get(`${MEMBERSHIP}/groups/${OWN_GROUP}`, { headers: { Authorization: `Bearer ${demoMembership.jwt}` } });
+    expect(groupRes.status()).toBe(200);
+    originalGroup = await groupRes.json();
+    expect(originalGroup?.id).toBe(OWN_GROUP);
+
+    const seed = async (contentType: "group" | "groupAnnouncement") => {
+      const res = await post(demo, "/conversations", [{ contentType, contentId: OWN_GROUP, title: "feed toggles spec", visibility: "hidden", allowAnonymousPosts: false, groupId: OWN_GROUP }]);
+      expect(res.status()).toBe(200);
+      return (await res.json())[0].id as string;
+    };
+    discussionConversationId = await seed("group");
+    announcementConversationId = await seed("groupAnnouncement");
+    const msg = await post(demo, "/messages", [{ conversationId: discussionConversationId, content: "seed for reactions", messageType: "message" }]);
+    expect(msg.status()).toBe(200);
+    seedMessageId = (await msg.json())[0].id;
+  });
+
+  test.afterAll(async () => {
+    if (originalGroup?.id) await saveGroup({ discussionsEnabled: true, announcementsEnabled: true });
+  });
+
+  test("a member who is not a leader cannot post an announcement", async () => {
+    const res = await post(volunteer, "/messages", [{ conversationId: announcementConversationId, content: "not a leader", messageType: "message" }]);
+    expect(res.status()).toBe(401);
+    expect(await (await get(demo, `/messages/conversation/${announcementConversationId}`)).json()).toEqual([]);
+  });
+
+  test("a member can post to discussions while the feed is on", async () => {
+    const res = await post(volunteer, "/messages", [{ conversationId: discussionConversationId, content: "hello while open", messageType: "message" }]);
+    expect(res.status()).toBe(200);
+  });
+
+  test("turning discussions off blocks member posts but not reactions", async () => {
+    await saveGroup({ discussionsEnabled: false, announcementsEnabled: true });
+    const res = await post(volunteer, "/messages", [{ conversationId: discussionConversationId, content: "should be blocked", messageType: "message" }]);
+    expect(res.status()).toBe(401);
+    const react = await post(volunteer, `/messages/${seedMessageId}/reactions`, { emoji: "👍" });
+    expect(react.status()).toBe(200);
+    expect((await react.json()).added).toBe(true);
+  });
+
+  test("turning discussions back on lets members post again", async () => {
+    await saveGroup({ discussionsEnabled: true, announcementsEnabled: true });
+    const res = await post(volunteer, "/messages", [{ conversationId: discussionConversationId, content: "open again", messageType: "message" }]);
+    expect(res.status()).toBe(200);
+  });
+});

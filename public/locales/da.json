@@ -165,7 +165,6 @@
     "upload": "Upload",
     "uploadedFiles": "Uploadede filer",
     "usedSpace": "Brugt plads: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Indtast venligst gyldig tekst",
       "linkUrl": "Indtast venligst link",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Uploader {}… {}%",
       "url": "URL",
       "usedStorage": "Brugt {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Synlighed",
       "weekly": "Ugentligt",
       "yearly": "Årligt"
@@ -665,6 +663,7 @@
       "giving": "Bidrag",
       "keep": "Behold",
       "lastNameRegister": "Efternavn",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Indlæser...",
       "loadingForm": "Indlæser donationsformular...",
       "membersOnly": "Kun medlemmer",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Log ind for at tjekke ind",
       "signInToCheckInCta": "Log ind",
       "signInToCheckInMessage": "Log ind for at tjekke ind til en gudstjeneste.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Konto",
       "tabDonate": "Doner",
       "tabHistory": "Historik",

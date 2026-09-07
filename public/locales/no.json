@@ -165,7 +165,6 @@
     "upload": "Last opp",
     "uploadedFiles": "Opplastede filer",
     "usedSpace": "Brukt plass: {} / 100 MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Vennligst skriv inn gyldig tekst",
       "linkUrl": "Vennligst skriv inn lenke",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Laster opp {}… {} %",
       "url": "URL",
       "usedStorage": "Brukt {} / 100 MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Synlighet",
       "weekly": "Ukentlig",
       "yearly": "Årlig"
@@ -665,6 +663,7 @@
       "giving": "Gaver",
       "keep": "Behold",
       "lastNameRegister": "Etternavn",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Laster...",
       "loadingForm": "Laster gaveskjema...",
       "membersOnly": "Bare medlemmer",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Logg inn for å sjekke inn",
       "signInToCheckInCta": "Logg inn",
       "signInToCheckInMessage": "Logg inn for å sjekke inn til en gudstjeneste.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Konto",
       "tabDonate": "Gi",
       "tabHistory": "Historikk",

@@ -47,4 +47,17 @@ test.describe("Public home page", () => {
     await page.goto("/");
     await expect(page.getByRole("link", { name: /Login to your account/i })).toBeVisible();
   });
+
+  // Demo data sets Grace's globalStyles.fonts to {"heading": "Poppins", "body": "Inter"}.
+  test("applies the church Appearance fonts to page content", async ({ page }) => {
+    await page.goto("/");
+
+    const heading = page.getByRole("heading", { name: /Welcome Home to Grace Community Church/i }).first();
+    await expect(heading).toBeVisible();
+    expect(await heading.evaluate((el) => getComputedStyle(el).fontFamily)).toContain("Poppins");
+
+    const paragraph = page.getByText(/Join us this Sunday/i).first();
+    await expect(paragraph).toBeVisible();
+    expect(await paragraph.evaluate((el) => getComputedStyle(el).fontFamily)).toContain("Inter");
+  });
 });

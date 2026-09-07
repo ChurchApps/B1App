@@ -165,7 +165,6 @@
     "upload": "Загрузить",
     "uploadedFiles": "Загруженные файлы",
     "usedSpace": "Использовано: {} / 100МБ",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Пожалуйста, введите корректный текст",
       "linkUrl": "Пожалуйста, введите ссылку",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Загрузка {}… {}%",
       "url": "URL",
       "usedStorage": "Использовано {} / 100МБ",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Видимость",
       "weekly": "Еженедельно",
       "yearly": "Ежегодно"
@@ -665,6 +663,7 @@
       "giving": "Пожертвования",
       "keep": "Оставить",
       "lastNameRegister": "Фамилия",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Загрузка...",
       "loadingForm": "Загрузка формы пожертвования...",
       "membersOnly": "Только участники",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Войдите, чтобы зарегистрироваться",
       "signInToCheckInCta": "Войти",
       "signInToCheckInMessage": "Войдите, чтобы зарегистрироваться на служение.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Аккаунт",
       "tabDonate": "Пожертвовать",
       "tabHistory": "История",

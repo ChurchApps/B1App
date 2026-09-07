@@ -60,6 +60,9 @@ interface Props {
   groupId: string;
   groupName?: string;
   isLeader?: boolean;
+  // Per-group feed toggles set by staff in B1Admin; the Api enforces them on post.
+  discussionsEnabled?: boolean;
+  announcementsEnabled?: boolean;
   initialSubTab?: ChatSubTab;
   onClose: () => void;
 }
@@ -69,11 +72,18 @@ export const GroupChatModal = ({
   groupId,
   groupName,
   isLeader = false,
+  discussionsEnabled = true,
+  announcementsEnabled = true,
   initialSubTab = "discussions",
   onClose
 }: Props) => {
   const tc = mobileTheme.colors;
-  const [subTab, setSubTab] = React.useState<ChatSubTab>(initialSubTab);
+  const [requestedTab, setSubTab] = React.useState<ChatSubTab>(initialSubTab);
+  // A disabled feed can never be the active one, whatever the caller or a stale deep link asked for.
+  const subTab: ChatSubTab =
+    requestedTab === "discussions" && !discussionsEnabled ? "announcements"
+      : requestedTab === "announcements" && !announcementsEnabled ? "discussions"
+        : requestedTab;
   const [conversations, setConversations] = React.useState<Conversation[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [draft, setDraft] = React.useState("");
@@ -588,7 +598,10 @@ export const GroupChatModal = ({
     </Box>
   );
 
-  const showAnnouncementsTab = isLeader || hasAnnouncements;
+  const showDiscussionsTab = discussionsEnabled;
+  const showAnnouncementsTab = announcementsEnabled && (isLeader || hasAnnouncements);
+  // Only one feed to choose from: drop the tab bar and name the feed under the title instead.
+  const showTabBar = showDiscussionsTab && showAnnouncementsTab;
 
   return (
     <Dialog
@@ -617,9 +630,16 @@ export const GroupChatModal = ({
           borderBottom: `1px solid ${tc.border}`
         }}
       >
-        <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-          {groupName || Locale.label("mobile.group.groupChat")}
-        </Typography>
+        <Box>
+          <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
+            {groupName || Locale.label("mobile.group.groupChat")}
+          </Typography>
+          {!showTabBar && (
+            <Typography data-testid="group-chat-feed-label" sx={{ fontSize: 12, color: tc.textMuted }}>
+              {subTab === "announcements" ? Locale.label("mobile.group.announcements") : Locale.label("mobile.group.discussions")}
+            </Typography>
+          )}
+        </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
           <SubscriptionToggle
             conversationId={conversationId}
@@ -631,7 +651,7 @@ export const GroupChatModal = ({
           </IconButton>
         </Box>
       </Box>
-      {showAnnouncementsTab && (
+      {showTabBar && (
         <Box sx={{ borderBottom: `1px solid ${tc.border}` }}>
           <Tabs
             value={subTab}
@@ -747,7 +767,7 @@ export const GroupChatModal = ({
       ) : (
         <Box sx={{ py: 1.5, borderTop: `1px solid ${tc.border}`, bgcolor: tc.surface }}>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, textAlign: "center" }}>
-            Only group leaders can post announcements.
+            {Locale.label("mobile.group.onlyLeadersPost", "Only group leaders can post announcements.")}
           </Typography>
         </Box>
       )}

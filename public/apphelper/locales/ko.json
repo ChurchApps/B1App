@@ -1,82 +1,82 @@
 {
   "common": {
-    "cancel": "ì·¨ì†Œ",
-    "close": "ë‹«ë‹¤",
-    "delete": "ì‚­ì œ",
-    "pleaseWait": "ê¸°ë‹¤ë¦¬ì„¸ìš”...",
-    "save": "êµ¬í•˜ë‹¤",
-    "search": "ì°¾ë‹¤",
-    "update": "ì—…ë°ì´íŠ¸"
+    "cancel": "취소",
+    "close": "닫다",
+    "delete": "삭제",
+    "pleaseWait": "기다리세요...",
+    "save": "구하다",
+    "search": "찾다",
+    "update": "업데이트"
   },
   "donation": {
     "bankForm": {
-      "accountNumber": "ê³„ì¢Œ ë²ˆí˜¸",
-      "added": "ì€í–‰ ê³„ì¢Œê°€ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤. ",
-      "company": "íšŒì‚¬",
-      "firstDeposit": "ì²« ìž…ê¸ˆ",
-      "individual": "ê°œì¸",
-      "name": "ê³„ì¢Œ ì†Œìœ ìž ì´ë¦„",
-      "needVerified": "ê¸°ë¶€í•˜ê¸° ì „ì— ì€í–‰ ê³„ì¢Œë¥¼ í™•ì¸í•´ì•¼ í•©ë‹ˆë‹¤. ",
-      "routingNumber": "ë¼ìš°íŒ… ë²ˆí˜¸",
-      "secondDeposit": "ë‘ ë²ˆì§¸ ìž…ê¸ˆ",
-      "twoDeposits": "ê³„ì¢Œì— ìž…ê¸ˆëœ 2ê±´ì˜ ìž…ê¸ˆì•¡ì„ ìž…ë ¥í•˜ì—¬ ì€í–‰ê³„ì¢Œ í™•ì¸ì„ ì™„ë£Œí•˜ì„¸ìš”.",
-      "updated": "ì€í–‰ ê³„ì¢Œê°€ ì—…ë°ì´íŠ¸ë˜ì—ˆìŠµë‹ˆë‹¤.",
+      "accountNumber": "계좌 번호",
+      "added": "은행 계좌가 추가되었습니다. ",
+      "company": "회사",
+      "firstDeposit": "첫 입금",
+      "individual": "개인",
+      "name": "계좌 소유자 이름",
+      "needVerified": "기부하기 전에 은행 계좌를 확인해야 합니다. ",
+      "routingNumber": "라우팅 번호",
+      "secondDeposit": "두 번째 입금",
+      "twoDeposits": "계좌에 입금된 2건의 입금액을 입력하여 은행계좌 확인을 완료하세요.",
+      "updated": "은행 계좌가 업데이트되었습니다.",
       "validate": {
-        "accountNumber": "ë¼ìš°íŒ… ë²ˆí˜¸ì™€ ê³„ì¢Œ ë²ˆí˜¸ê°€ í•„ìš”í•©ë‹ˆë‹¤.",
-        "holderName": "ê³„ì¢Œ ì†Œìœ ìž ì´ë¦„ì´ í•„ìš”í•©ë‹ˆë‹¤."
+        "accountNumber": "라우팅 번호와 계좌 번호가 필요합니다.",
+        "holderName": "계좌 소유자 이름이 필요합니다."
       },
-      "verified": "ì€í–‰ ê³„ì¢Œê°€ í™•ì¸ë˜ì—ˆìŠµë‹ˆë‹¤."
+      "verified": "은행 계좌가 확인되었습니다."
     },
     "cardForm": {
-      "addNew": "ìƒˆ ì¹´ë“œ ì¶”ê°€",
-      "added": "ì¹´ë“œê°€ ì„±ê³µì ìœ¼ë¡œ ì¶”ê°€ë˜ì—ˆìŠµë‹ˆë‹¤.",
-      "expirationMonth": "ë§Œê¸° ì›”:",
-      "expirationYear": "ë§Œë£Œ ì—°ë„:",
-      "updated": "ì¹´ë“œê°€ ì„±ê³µì ìœ¼ë¡œ ì—…ë°ì´íŠ¸ë˜ì—ˆìŠµë‹ˆë‹¤."
+      "addNew": "새 카드 추가",
+      "added": "카드가 성공적으로 추가되었습니다.",
+      "expirationMonth": "만기 월:",
+      "expirationYear": "만료 연도:",
+      "updated": "카드가 성공적으로 업데이트되었습니다."
     },
     "common": {
       "cancel": "Cancel",
       "error": "Error"
     },
     "donationForm": {
-      "annually": "ë§¤ë…„",
+      "annually": "매년",
       "anonymous": "Give anonymously (one-time gifts only)",
-      "biWeekly": "ê²©ì£¼ ê°„í–‰ë¬¼",
-      "cancelled": "ì •ê¸° ê¸°ë¶€ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤.",
-      "confirmDelete": "ì´ ë°˜ë³µ ê¸°ë¶€ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
-      "cover": "ê·€í•˜ê°€ ì œ ê¸°ë¶€ê¸ˆì„ 100% ìœ ì§€í•  ìˆ˜ ìžˆë„ë¡ ê±°ëž˜ ìˆ˜ìˆ˜ë£Œë¥¼ ì¶©ë‹¹í•˜ê¸° ìœ„í•´ {}ë¥¼ ì•„ë‚Œì—†ì´ ì¶”ê°€í•˜ê² ìŠµë‹ˆë‹¤.",
-      "donate": "ê¸°ë¶€",
-      "editRecurring": "ë°˜ë³µ ê¸°ë¶€ íŽ¸ì§‘",
-      "fees": "{}ì˜ ê±°ëž˜ ìˆ˜ìˆ˜ë£Œê°€ ì ìš©ë©ë‹ˆë‹¤.",
-      "frequency": "ë¹ˆë„",
-      "fund": "ì¶•ì ",
-      "funds": "ìžê¸ˆ",
-      "make": "ê¸°ë¶€ í•´ì£¼ì„¸ìš”",
-      "makeRecurring": "ì •ê¸° ê¸°ë¶€í•˜ê¸°",
-      "method": "ë°©ë²•",
-      "monthly": "ì›”ê°„ ê°„í–‰ë¬¼",
+      "biWeekly": "격주 간행물",
+      "cancelled": "정기 기부가 취소되었습니다.",
+      "confirmDelete": "이 반복 기부를 삭제하시겠습니까?",
+      "cover": "귀하가 제 기부금을 100% 유지할 수 있도록 거래 수수료를 충당하기 위해 {}를 아낌없이 추가하겠습니다.",
+      "donate": "기부",
+      "editRecurring": "반복 기부 편집",
+      "fees": "{}의 거래 수수료가 적용됩니다.",
+      "frequency": "빈도",
+      "fund": "축적",
+      "funds": "자금",
+      "make": "기부 해주세요",
+      "makeRecurring": "정기 기부하기",
+      "method": "방법",
+      "monthly": "월간 간행물",
       "orPayWith": "Or pay with",
-      "preview": "ë¯¸ë¦¬ë³´ê¸° ê¸°ë¶€",
-      "quarterly": "ê³„ê°„ì§€",
-      "recurringUpdated": "ì •ê¸° ê¸°ë¶€ê°€ ì—…ë°ì´íŠ¸ë˜ì—ˆìŠµë‹ˆë‹¤.",
-      "startDate": "ì‹œìž‘ì¼",
-      "thankYou": "ê¸°ë¶€í•´ ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤!",
-      "tooLow": "ê¸°ë¶€ ê¸ˆì•¡ì€ $0.50ë³´ë‹¤ ì»¤ì•¼ í•©ë‹ˆë‹¤.",
-      "total": "ì´ ê¸°ë¶€ ê¸ˆì•¡",
+      "preview": "미리보기 기부",
+      "quarterly": "계간지",
+      "recurringUpdated": "정기 기부가 업데이트되었습니다.",
+      "startDate": "시작일",
+      "thankYou": "기부해 주셔서 감사합니다!",
+      "tooLow": "기부 금액은 $0.50보다 커야 합니다.",
+      "total": "총 기부 금액",
       "validate": {
-        "amount": "ê¸ˆì•¡ì€ $0ì¼ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
-        "email": "ë‹¹ì‹ ì˜ ì´ë©”ì¼ ì£¼ì†Œë¥¼ ìž…ë ¥í•˜ì‹­ì‹œì˜¤.",
-        "firstName": "ì´ë¦„ì„ ìž…ë ¥í•˜ì„¸ìš”.",
-        "lastName": "ë‹¹ì‹ ì˜ ì„±ì„ ìž…ë ¥í•˜ì„¸ìš”.",
-        "validEmail": "ìœ íš¨í•œ ì´ë©”ì¼ ì£¼ì†Œë¥¼ ìž…ë ¥í•˜ì„¸ìš”."
+        "amount": "금액은 $0일 수 없습니다.",
+        "email": "당신의 이메일 주소를 입력하십시오.",
+        "firstName": "이름을 입력하세요.",
+        "lastName": "당신의 성을 입력하세요.",
+        "validEmail": "유효한 이메일 주소를 입력하세요."
       },
       "walletFailed": "Wallet payment could not be completed. Please try again.",
-      "weekly": "ì£¼ê°„"
+      "weekly": "주간"
     },
     "fundDonations": {
-      "addMore": "ë” ì¶”ê°€",
-      "amount": "ì–‘",
-      "fund": "ì¶•ì "
+      "addMore": "더 추가",
+      "amount": "양",
+      "fund": "축적"
     },
     "kingdomFunding": {
       "enterBankDetails": "Enter your bank account details",
@@ -101,12 +101,12 @@
       }
     },
     "paymentMethods": {
-      "addBank": "ì€í–‰ ê³„ì¢Œ ì¶”ê°€",
-      "addCard": "ì¹´ë“œ ì¶”ê°€",
-      "confirmDelete": "ì´ ê²°ì œ ìˆ˜ë‹¨ì„ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
-      "deleted": "ê²°ì œ ìˆ˜ë‹¨ì´ ì‚­ì œë˜ì—ˆìŠµë‹ˆë‹¤.",
+      "addBank": "은행 계좌 추가",
+      "addCard": "카드 추가",
+      "confirmDelete": "이 결제 수단을 삭제하시겠습니까?",
+      "deleted": "결제 수단이 삭제되었습니다.",
       "noMethod": "No Method",
-      "verify": "ê³„ì • í™•ì¸"
+      "verify": "계정 확인"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -115,74 +115,74 @@
       "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
     },
     "preview": {
-      "date": "ê¸°ë¶€ì¼ìž",
-      "donate": "ê¸°ë¶€",
-      "every": "ë°˜ë³µë˜ëŠ” ëª¨ë“  ê²ƒ",
-      "fee": "ê±°ëž˜ ìˆ˜ìˆ˜ë£Œ",
-      "funds": "ìžê¸ˆ",
-      "method": "ê¸°ë¶€ë°©ë²•",
-      "notes": "ë…¸íŠ¸",
-      "startingOn": "ì‹œìž‘ì¼",
-      "total": "ì´",
-      "type": "ê¸°ë¶€ ìœ í˜•"
+      "date": "기부일자",
+      "donate": "기부",
+      "every": "반복되는 모든 것",
+      "fee": "거래 수수료",
+      "funds": "자금",
+      "method": "기부방법",
+      "notes": "노트",
+      "startingOn": "시작일",
+      "total": "총",
+      "type": "기부 유형"
     },
     "recurring": {
-      "amount": "ì–‘",
-      "confirmPause": "ì´ ì •ê¸° ê¸°ë¶€ë¥¼ ì¼ì‹œì •ì§€í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
-      "every": "ëª¨ë“ ",
-      "interval": "ê°„ê²©",
+      "amount": "양",
+      "confirmPause": "이 정기 기부를 일시정지하시겠습니까?",
+      "every": "모든",
+      "interval": "간격",
       "noSubscriptions": "No Subscriptions",
-      "notFound": "ê²°ì œ ìˆ˜ë‹¨ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
-      "pauseFailed": "ì •ê¸° ê¸°ë¶€ ì¼ì‹œì •ì§€ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•´ ì£¼ì„¸ìš”.",
-      "pauseTooltip": "ì •ê¸° ê¸°ë¶€ ì¼ì‹œì •ì§€",
-      "paused": "ì¼ì‹œì •ì§€ë¨",
-      "pausedMessage": "ì •ê¸° ê¸°ë¶€ê°€ ì¼ì‹œì •ì§€ë˜ì—ˆìŠµë‹ˆë‹¤.",
-      "paymentMethod": "ê²°ì œ ë°©ë²•",
-      "resumeFailed": "ì •ê¸° ê¸°ë¶€ ìž¬ê°œì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•´ ì£¼ì„¸ìš”.",
-      "resumeTooltip": "ì •ê¸° ê¸°ë¶€ ìž¬ê°œ",
-      "resumedMessage": "ì •ê¸° ê¸°ë¶€ê°€ ìž¬ê°œë˜ì—ˆìŠµë‹ˆë‹¤.",
-      "startDate": "ì‹œìž‘ì¼"
+      "notFound": "결제 수단을 찾을 수 없습니다.",
+      "pauseFailed": "정기 기부 일시정지에 실패했습니다. 다시 시도해 주세요.",
+      "pauseTooltip": "정기 기부 일시정지",
+      "paused": "일시정지됨",
+      "pausedMessage": "정기 기부가 일시정지되었습니다.",
+      "paymentMethod": "결제 방법",
+      "resumeFailed": "정기 기부 재개에 실패했습니다. 다시 시도해 주세요.",
+      "resumeTooltip": "정기 기부 재개",
+      "resumedMessage": "정기 기부가 재개되었습니다.",
+      "startDate": "시작일"
     }
   },
   "eventCalendar": {
     "recurring": {
       "day": {
-        "friday": "ê¸ˆìš”ì¼",
-        "monday": "ì›”ìš”ì¼",
-        "saturday": "í† ìš”ì¼",
-        "sunday": "ì¼ìš”ì¼",
-        "thursday": "ëª©ìš”ì¼",
-        "tuesday": "í™”ìš”ì¼",
-        "wednesday": "ìˆ˜ìš”ì¼"
+        "friday": "금요일",
+        "monday": "월요일",
+        "saturday": "토요일",
+        "sunday": "일요일",
+        "thursday": "목요일",
+        "tuesday": "화요일",
+        "wednesday": "수요일"
       },
-      "endDate": "ì¢…ë£Œì¼",
-      "endDateAria": "ë°˜ë³µ ì¢…ë£Œì¼",
-      "ends": "ì¢…ë£Œ",
-      "endsAfter": "íšŸìˆ˜ ì´í›„",
-      "endsAria": "ë°˜ë³µ ì¢…ë£Œ ì‹œì  ì„ íƒ",
-      "endsOn": "íŠ¹ì • ë‚ ì§œ",
-      "freqDay": "ì¼",
-      "freqMonth": "ì›”",
-      "freqWeek": "ì£¼",
-      "frequency": "ë¹ˆë„",
-      "frequencyAria": "ë°˜ë³µ ë¹ˆë„ ì„ íƒ",
-      "interval": "ê°„ê²©",
-      "intervalAria": "ë°˜ë³µ ê°„ê²©",
-      "monthlyOnDay": "ë§¤ì›” {}ì¼",
-      "monthlyOnNth": "ë§¤ì›” {ordinal} {day}",
-      "monthlyOptionAria": "ì›”ë³„ ë°˜ë³µ ì˜µì…˜ ì„ íƒ",
-      "never": "ì•ˆ í•¨",
-      "occurrences": "íšŸìˆ˜",
-      "occurrencesAria": "ë°˜ë³µ íšŸìˆ˜",
-      "on": "ìš”ì¼",
+      "endDate": "종료일",
+      "endDateAria": "반복 종료일",
+      "ends": "종료",
+      "endsAfter": "횟수 이후",
+      "endsAria": "반복 종료 시점 선택",
+      "endsOn": "특정 날짜",
+      "freqDay": "일",
+      "freqMonth": "월",
+      "freqWeek": "주",
+      "frequency": "빈도",
+      "frequencyAria": "반복 빈도 선택",
+      "interval": "간격",
+      "intervalAria": "반복 간격",
+      "monthlyOnDay": "매월 {}일",
+      "monthlyOnNth": "매월 {ordinal} {day}",
+      "monthlyOptionAria": "월별 반복 옵션 선택",
+      "never": "안 함",
+      "occurrences": "횟수",
+      "occurrencesAria": "반복 횟수",
+      "on": "요일",
       "ordinal": {
-        "first": "ì²« ë²ˆì§¸",
-        "fourth": "ë„¤ ë²ˆì§¸",
-        "last": "ë§ˆì§€ë§‰",
-        "second": "ë‘ ë²ˆì§¸",
-        "third": "ì„¸ ë²ˆì§¸"
+        "first": "첫 번째",
+        "fourth": "네 번째",
+        "last": "마지막",
+        "second": "두 번째",
+        "third": "세 번째"
       },
-      "toggleWeekday": "ì£¼ê°„ ë°˜ë³µì„ ìœ„í•œ {} í† ê¸€"
+      "toggleWeekday": "주간 반복을 위한 {} 토글"
     }
   },
   "fileUpload": {
@@ -191,113 +191,113 @@
     "uploadFailed": "Upload failed. Please try again."
   },
   "formSubmissionEdit": {
-    "back": "ë’¤ë¡œ",
-    "confirmDelete": "ì´ ì–‘ì‹ ë°ì´í„°ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
-    "continue": "ê³„ì†",
-    "editForm": "ì–‘ì‹ íŽ¸ì§‘",
-    "isRequired": "í•„ìˆ˜",
-    "stepProgress": "{total} ì¤‘ {current}",
-    "submit": "ì œì¶œí•˜ë‹¤"
+    "back": "뒤로",
+    "confirmDelete": "이 양식 데이터를 삭제하시겠습니까?",
+    "continue": "계속",
+    "editForm": "양식 편집",
+    "isRequired": "필수",
+    "stepProgress": "{total} 중 {current}",
+    "submit": "제출하다"
   },
   "gallery": {
-    "aspectRatio": "ì¢…íš¡ë¹„",
-    "confirmDelete": "ê°¤ëŸ¬ë¦¬ì—ì„œ ì´ ì´ë¯¸ì§€ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
-    "freeForm": "ìžìœ  í˜•ì‹"
+    "aspectRatio": "종횡비",
+    "confirmDelete": "갤러리에서 이 이미지를 삭제하시겠습니까?",
+    "freeForm": "자유 형식"
   },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
-    "email": "ì´ë©”ì¼",
-    "enterCode": "ì¸ì¦ ì½”ë“œ ìž…ë ¥",
-    "enterCodeInstructions": "ë°©ê¸ˆ ì´ë©”ì¼ë¡œ ë³´ë‚¸ 6ìžë¦¬ ì½”ë“œë¥¼ ìž…ë ¥í•˜ì„¸ìš”.",
-    "expiredLink": "í˜„ìž¬ ë§í¬ê°€ ë§Œë£Œë˜ì—ˆìŠµë‹ˆë‹¤.",
-    "forgot": "ë¹„ë°€ë²ˆí˜¸ë¥¼ ìžŠìœ¼ ì…¨ë‚˜ìš”",
-    "login": "ë¡œê·¸ì¸",
-    "noAcc": "ê³„ì •ì´ ì—†ìœ¼ì‹ ê°€ìš”?",
-    "noAccountFound": "í•´ë‹¹ ì´ë©”ì¼ë¡œ ë“±ë¡ëœ ê³„ì •ì´ ì—†ìŠµë‹ˆë‹¤. ê³„ì†í•˜ë ¤ë©´ ë“±ë¡í•´ ì£¼ì„¸ìš”.",
+    "email": "이메일",
+    "enterCode": "인증 코드 입력",
+    "enterCodeInstructions": "방금 이메일로 보낸 6자리 코드를 입력하세요.",
+    "expiredLink": "현재 링크가 만료되었습니다.",
+    "forgot": "비밀번호를 잊으 셨나요",
+    "login": "로그인",
+    "noAcc": "계정이 없으신가요?",
+    "noAccountFound": "해당 이메일로 등록된 계정이 없습니다. 계속하려면 등록해 주세요.",
     "or": "or",
-    "password": "ë¹„ë°€ë²ˆí˜¸",
-    "register": "ë“±ë¡í•˜ë‹¤",
-    "registerThankYou": "ë“±ë¡í•´ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤! ",
-    "requestLink": "ìƒˆ ìž¬ì„¤ì • ë§í¬ ìš”ì²­",
-    "resendCode": "ì½”ë“œ ë‹¤ì‹œ ë³´ë‚´ê¸°",
-    "reset": "ì´ˆê¸°í™”",
-    "resetInstructions": "ë¹„ë°€ë²ˆí˜¸ ìž¬ì„¤ì •ì„ ìš”ì²­í•˜ë ¤ë©´ ì´ë©”ì¼ ì£¼ì†Œë¥¼ ìž…ë ¥í•˜ì„¸ìš”.",
-    "resetPassword": "ì•”í˜¸ë¥¼ ìž¬ì„¤ì •",
-    "setPassword": "ì•”í˜¸ë¥¼ ì„¤ì •í•˜ì„¸ìš”",
-    "signIn": "ë¡œê·¸ì¸",
-    "signInTitle": "ë¡œê·¸ì¸ í•´ì£¼ì„¸ìš”",
+    "password": "비밀번호",
+    "register": "등록하다",
+    "registerThankYou": "등록해주셔서 감사합니다! ",
+    "requestLink": "새 재설정 링크 요청",
+    "resendCode": "코드 다시 보내기",
+    "reset": "초기화",
+    "resetInstructions": "비밀번호 재설정을 요청하려면 이메일 주소를 입력하세요.",
+    "resetPassword": "암호를 재설정",
+    "setPassword": "암호를 설정하세요",
+    "signIn": "로그인",
+    "signInTitle": "로그인 해주세요",
     "validate": {
-      "code": "6ìžë¦¬ ì½”ë“œë¥¼ ìž…ë ¥í•´ ì£¼ì„¸ìš”.",
-      "email": "ìœ íš¨í•œ ì´ë©”ì¼ ì£¼ì†Œë¥¼ ìž…ë ¥í•˜ì„¸ìš”.",
-      "firstName": "ì´ë¦„ì„ ìž…ë ¥í•˜ì„¸ìš”.",
-      "invalid": "ë¡œê·¸ì¸ ì˜¤ë¥˜. ",
-      "lastName": "ë‹¹ì‹ ì˜ ì„±ì„ ìž…ë ¥í•˜ì„¸ìš”.",
-      "password": "ë¹„ë°€ë²ˆí˜¸ë¥¼ ìž…ë ¥í•´ì£¼ì„¸ìš”.",
-      "passwordLength": "ë¹„ë°€ë²ˆí˜¸ëŠ” 8ìž ì´ìƒì´ì–´ì•¼ í•©ë‹ˆë‹¤.",
-      "passwordMatch": "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.",
-      "selectingChurch": "êµíšŒì„ íƒì— ì˜¤ë¥˜ê°€ ìžˆìŠµë‹ˆë‹¤. "
+      "code": "6자리 코드를 입력해 주세요.",
+      "email": "유효한 이메일 주소를 입력하세요.",
+      "firstName": "이름을 입력하세요.",
+      "invalid": "로그인 오류. ",
+      "lastName": "당신의 성을 입력하세요.",
+      "password": "비밀번호를 입력해주세요.",
+      "passwordLength": "비밀번호는 8자 이상이어야 합니다.",
+      "passwordMatch": "비밀번호가 일치하지 않습니다.",
+      "selectingChurch": "교회선택에 오류가 있습니다. "
     },
-    "verifyCode": "ì½”ë“œ í™•ì¸",
-    "verifyPassword": "ë¹„ë°€ë²ˆí˜¸ í™•ì¸",
-    "welcomeBack": "ëŒì•„ì˜¨ ê²ƒì„ í™˜ì˜í•©ë‹ˆë‹¤",
-    "welcomeName": "ëŒì•„ì˜¨ ê²ƒì„ í™˜ì˜í•©ë‹ˆë‹¤. <b>{}</b>!  "
+    "verifyCode": "코드 확인",
+    "verifyPassword": "비밀번호 확인",
+    "welcomeBack": "돌아온 것을 환영합니다",
+    "welcomeName": "돌아온 것을 환영합니다. <b>{}</b>!  "
   },
   "markdownEditor": {
-    "content": "ì½˜í…ì¸ ",
-    "markdownGuide": "ë§ˆí¬ë‹¤ìš´ ê°€ì´ë“œ"
+    "content": "콘텐츠",
+    "markdownGuide": "마크다운 가이드"
   },
   "notes": {
-    "comment": "ë…¼í‰",
-    "comments": "ì½”ë©˜íŠ¸",
-    "notes": "ë…¸íŠ¸",
+    "comment": "논평",
+    "comments": "코멘트",
+    "notes": "노트",
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
     "validate": {
-      "content": "ë©”ëª¨ë¥¼ ìž…ë ¥í•˜ì„¸ìš”."
+      "content": "메모를 입력하세요."
     }
   },
   "person": {
-    "email": "ì´ë©”ì¼",
-    "firstName": "ì´ë¦„",
-    "lastName": "ì„±",
-    "name": "ì´ë¦„"
+    "email": "이메일",
+    "firstName": "이름",
+    "lastName": "성",
+    "name": "이름"
   },
   "selectChurch": {
-    "address1": "ì£¼ì†Œ ë¼ì¸ 1",
-    "address2": "ì£¼ì†Œ 2",
-    "another": "ë‹¤ë¥¸ êµíšŒë¥¼ ì„ íƒí•˜ì„¸ìš”",
-    "city": "ë„ì‹œ",
-    "confirmRegister": "ì •ë§ë¡œ ìƒˆ êµíšŒë¥¼ ë“±ë¡í•˜ì‹œê² ìŠµë‹ˆê¹Œ?",
-    "country": "êµ­ê°€",
-    "name": "êµíšŒ ì´ë¦„",
-    "noMatches": "ê²€ìƒ‰ ê²°ê³¼ê°€ ì—†ìŠµë‹ˆë‹¤.",
-    "register": "ìƒˆ êµíšŒ ë“±ë¡",
-    "selectChurch": "êµíšŒë¥¼ ì„ íƒí•˜ì„¸ìš”",
-    "state": "ì£¼/ë„",
+    "address1": "주소 라인 1",
+    "address2": "주소 2",
+    "another": "다른 교회를 선택하세요",
+    "city": "도시",
+    "confirmRegister": "정말로 새 교회를 등록하시겠습니까?",
+    "country": "국가",
+    "name": "교회 이름",
+    "noMatches": "검색 결과가 없습니다.",
+    "register": "새 교회 등록",
+    "selectChurch": "교회를 선택하세요",
+    "state": "주/도",
     "validate": {
-      "address": "ì£¼ì†ŒëŠ” ë¹„ì›Œë‘˜ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
-      "city": "ë„ì‹œëŠ” ë¹„ì›Œë‘˜ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
-      "country": "êµ­ê°€ëŠ” ë¹„ì›Œë‘˜ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
-      "name": "êµíšŒ ì´ë¦„ì€ ë¹„ì›Œë‘˜ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
-      "state": "ì‹œ/ë„ëŠ” ë¹„ì›Œë‘˜ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.",
-      "zip": "ìš°íŽ¸ë²ˆí˜¸ëŠ” ë¹„ì›Œë‘˜ ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
+      "address": "주소는 비워둘 수 없습니다.",
+      "city": "도시는 비워둘 수 없습니다.",
+      "country": "국가는 비워둘 수 없습니다.",
+      "name": "교회 이름은 비워둘 수 없습니다.",
+      "state": "시/도는 비워둘 수 없습니다.",
+      "zip": "우편번호는 비워둘 수 없습니다."
     },
-    "zip": "ìš°íŽ¸ë²ˆí˜¸"
+    "zip": "우편번호"
   },
   "stockPhotos": {
-    "photoBy": "ì˜ ì‚¬ì§„:",
-    "providedBy": "ìŠ¤í†¡ ì‚¬ì§„ ì œê³µ:"
+    "photoBy": "의 사진:",
+    "providedBy": "스톡 사진 제공:"
   },
   "support": {
-    "discussions": "ì§€ì› í¬ëŸ¼",
-    "documentation": "ë¬¸ì„œ"
+    "discussions": "지원 포럼",
+    "documentation": "문서"
   },
   "wrapper": {
-    "newPrivateMessage": "ìƒˆ ë¹„ê³µê°œ ë©”ì‹œì§€",
+    "newPrivateMessage": "새 비공개 메시지",
     "privateConversation": "Private Conversation",
-    "privateMessage": "ì‚¬ì‹ ",
-    "searchForPerson": "ì‚¬ëžŒ ê²€ìƒ‰"
+    "privateMessage": "사신",
+    "searchForPerson": "사람 검색"
   }
 }

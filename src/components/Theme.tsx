@@ -129,9 +129,8 @@ export const Theme: React.FC<Props> = (props) => {
   }, [props?.config?.globalStyles?.customJS]);
 
   return (<>
-    <style jsx global>
-      {css}
-    </style>
+    {/* Plain style tag: styled-jsx only compiles literal children, so `<style jsx>{css}` rendered empty. */}
+    <style type="text/css">{css}</style>
     {googleFontsUrl && <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

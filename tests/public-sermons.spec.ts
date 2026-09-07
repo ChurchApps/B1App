@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { SEED_PLAYLISTS, SEED_SERMONS } from "./helpers/fixtures";
+import { DEMO_CHURCH, SEED_PLAYLISTS, SEED_SERMONS } from "./helpers/fixtures";
 
 test.describe("Public sermons page", () => {
   test.beforeEach(async ({ page }) => {
@@ -30,5 +30,13 @@ test.describe("Public sermons page", () => {
     await playlistCard.waitFor({ state: "visible", timeout: 15000 });
     await playlistCard.click();
     await expect(page.locator("body")).toContainText(SEED_SERMONS.YOUTUBE_RECENT.title, { timeout: 15000 });
+  });
+
+  test("sermon page advertises the podcast RSS feed", async ({ page }) => {
+    await page.goto("/sermons/" + SEED_SERMONS.YOUTUBE_RECENT.id);
+    await expect(page.locator("h1").filter({ hasText: SEED_SERMONS.YOUTUBE_RECENT.title }).first()).toBeVisible({ timeout: 15000 });
+    const rssLink = page.locator('link[rel="alternate"][type="application/rss+xml"]').first();
+    await expect(rssLink).toHaveCount(1);
+    expect(await rssLink.getAttribute("href")).toContain("/sermons/rss/" + DEMO_CHURCH.ID);
   });
 });

@@ -165,7 +165,6 @@
     "upload": "Upload",
     "uploadedFiles": "Uploaded Files",
     "usedSpace": "Used space: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Please enter valid text",
       "linkUrl": "Please enter link",
@@ -492,9 +491,6 @@
       "registration": "Registration",
       "registrationCloses": "Registration Closes",
       "registrationOpens": "Registration Opens",
-      "reminders": {
-        "": "Reminders"
-      },
       "repeats": "Repeats",
       "requestNote": "Optionally include a short note for the group leader.",
       "requestToJoin": "Request to Join",
@@ -532,7 +528,6 @@
       "uploadingProgress": "Uploading {}… {}%",
       "url": "URL",
       "usedStorage": "Used {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibility",
       "weekly": "Weekly",
       "yearly": "Yearly"
@@ -641,6 +636,8 @@
       "alreadyCheckedIn": "Already Checked In",
       "cancel": "Cancel",
       "cancelRegistration": "Cancel Registration?",
+      "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Your changes have been submitted for approval.",
       "chooseServiceSubtitle": "Choose which service you're checking in for",
       "clear": "Clear",
       "confirmPassword": "Confirm password",
@@ -668,6 +665,7 @@
       "giving": "Giving",
       "keep": "Keep",
       "lastNameRegister": "Last name",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Loading...",
       "loadingForm": "Loading donation form...",
       "membersOnly": "Members Only",
@@ -708,6 +706,7 @@
       "signInToCheckIn": "Please sign in to check in",
       "signInToCheckInCta": "Sign In",
       "signInToCheckInMessage": "Log in to check in to a service.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Account",
       "tabDonate": "Donate",
       "tabHistory": "History",
@@ -720,6 +719,8 @@
       "tabSeries": "Series",
       "tabUpcoming": "Upcoming",
       "unableToLoadChurch": "Unable to load church configuration.",
+      "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Unable to submit changes.",
       "unread": "Unread",
       "visibilityPreferencesSaved": "Visibility preferences saved.",
       "volunteerBrowseBody": "There are no volunteer opportunities available right now. Check back soon!",
@@ -839,7 +840,6 @@
     "confirmed": "Registration Confirmed!",
     "continue": "Continue",
     "coupon": {
-      "": "Reminders",
       "applied": "Code {} applied",
       "apply": "Apply",
       "invalid": "This code is not valid.",
@@ -904,7 +904,9 @@
       "confirmedTitle": "You are on the waitlist",
       "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
     },
+    "you": "You",
     "youAreRegistered": "You are registered for",
+    "yourHousehold": "Your Household",
     "yourInformation": "Your Information",
     "yourType": "Your registration type"
   },

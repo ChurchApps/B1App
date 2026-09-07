@@ -165,7 +165,6 @@
     "upload": "Lataa",
     "uploadedFiles": "Ladatut tiedostot",
     "usedSpace": "Käytetty tila: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Anna kelvollinen teksti",
       "linkUrl": "Anna linkki",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Ladataan {}… {}%",
       "url": "URL",
       "usedStorage": "Käytetty {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Näkyvyys",
       "weekly": "Viikoittain",
       "yearly": "Vuosittain"
@@ -665,6 +663,7 @@
       "giving": "Lahjoittaminen",
       "keep": "Säilytä",
       "lastNameRegister": "Sukunimi",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Ladataan...",
       "loadingForm": "Ladataan lahjoituslomaketta...",
       "membersOnly": "Vain jäsenet",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Kirjaudu sisään kirjautuaksesi paikalle",
       "signInToCheckInCta": "Kirjaudu sisään",
       "signInToCheckInMessage": "Kirjaudu sisään kirjautuaksesi jumalanpalvelukseen.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Tili",
       "tabDonate": "Lahjoita",
       "tabHistory": "Historia",

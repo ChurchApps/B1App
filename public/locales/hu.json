@@ -165,7 +165,6 @@
     "upload": "Feltöltés",
     "uploadedFiles": "Feltöltött fájlok",
     "usedSpace": "Használt tárhely: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Kérjük, adj meg érvényes szöveget",
       "linkUrl": "Kérjük, adj meg linket",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Feltöltés folyamatban: {}… {}%",
       "url": "URL",
       "usedStorage": "Használt: {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Láthatóság",
       "weekly": "Hetente",
       "yearly": "Évente"
@@ -665,6 +663,7 @@
       "giving": "Adományozás",
       "keep": "Megtartás",
       "lastNameRegister": "Vezetéknév",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Betöltés...",
       "loadingForm": "Adományozási űrlap betöltése...",
       "membersOnly": "Csak tagok",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "A bejelentkezéshez jelentkezzen be",
       "signInToCheckInCta": "Bejelentkezés",
       "signInToCheckInMessage": "Jelentkezzen be az istentiszteletre való bejelentkezéshez.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Fiók",
       "tabDonate": "Adományozás",
       "tabHistory": "Előzmények",

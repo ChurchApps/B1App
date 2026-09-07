@@ -22,8 +22,8 @@
       "twoDeposits": "Inserisci i due depositi che hai ricevuto sul tuo conto per completare la verifica del tuo conto bancario.",
       "updated": "Conto bancario aggiornato.",
       "validate": {
-        "accountNumber": "Sono richiesti il â€‹â€‹routing e il numero di conto.",
-        "holderName": "Il nome del titolare del conto Ã¨ obbligatorio."
+        "accountNumber": "Sono richiesti il ​​routing e il numero di conto.",
+        "holderName": "Il nome del titolare del conto è obbligatorio."
       },
       "verified": "Conto bancario verificato."
     },
@@ -44,7 +44,7 @@
       "biWeekly": "Bisettimanale",
       "cancelled": "Donazione ricorrente annullata.",
       "confirmDelete": "Sei sicuro di voler eliminare questa donazione ricorrente?",
-      "cover": "AggiungerÃ² generosamente {} per coprire le commissioni di transazione in modo che tu possa trattenere il 100% della mia donazione.",
+      "cover": "Aggiungerò generosamente {} per coprire le commissioni di transazione in modo che tu possa trattenere il 100% della mia donazione.",
       "donate": "Donare",
       "editRecurring": "Modifica donazione ricorrente",
       "fees": "Vengono applicate commissioni di transazione di {}.",
@@ -64,7 +64,7 @@
       "tooLow": "L'importo della donazione deve essere superiore a $ 0,50",
       "total": "Importo totale della donazione",
       "validate": {
-        "amount": "L'importo non puÃ² essere $ 0.",
+        "amount": "L'importo non può essere $ 0.",
         "email": "Inserisci il tuo indirizzo email.",
         "firstName": "Per favore immettere il proprio Nome.",
         "lastName": "Per favore inserisci il tuo cognome.",
@@ -75,7 +75,7 @@
     },
     "fundDonations": {
       "addMore": "Aggiungere altro",
-      "amount": "QuantitÃ ",
+      "amount": "Quantità",
       "fund": "Finanziare"
     },
     "kingdomFunding": {
@@ -127,7 +127,7 @@
       "type": "Tipo di donazione"
     },
     "recurring": {
-      "amount": "QuantitÃ ",
+      "amount": "Quantità",
       "confirmPause": "Sei sicuro di voler mettere in pausa questa donazione ricorrente?",
       "every": "Ogni",
       "interval": "Intervallo",
@@ -147,13 +147,13 @@
   "eventCalendar": {
     "recurring": {
       "day": {
-        "friday": "VenerdÃ¬",
-        "monday": "LunedÃ¬",
+        "friday": "Venerdì",
+        "monday": "Lunedì",
         "saturday": "Sabato",
         "sunday": "Domenica",
-        "thursday": "GiovedÃ¬",
-        "tuesday": "MartedÃ¬",
-        "wednesday": "MercoledÃ¬"
+        "thursday": "Giovedì",
+        "tuesday": "Martedì",
+        "wednesday": "Mercoledì"
       },
       "endDate": "Data di Fine",
       "endDateAria": "Data di fine ricorrenza",
@@ -195,7 +195,7 @@
     "confirmDelete": "Sei sicuro di voler eliminare i dati di questo modulo?",
     "continue": "Continua",
     "editForm": "Modifica modulo",
-    "isRequired": "Ã¨ obbligatorio",
+    "isRequired": "è obbligatorio",
     "stepProgress": "{current} di {total}",
     "submit": "Invia"
   },
@@ -210,7 +210,7 @@
     "email": "E-mail",
     "enterCode": "Inserisci il codice di verifica",
     "enterCodeInstructions": "Inserisci il codice a 6 cifre che ti abbiamo appena inviato via e-mail.",
-    "expiredLink": "Il link attuale Ã¨ scaduto.",
+    "expiredLink": "Il link attuale è scaduto.",
     "forgot": "Ha dimenticato la password",
     "login": "Login",
     "noAcc": "Non hai un account?",
@@ -268,7 +268,7 @@
     "address1": "Indirizzo Linea 1",
     "address2": "indirizzo 2",
     "another": "Scegli un'altra chiesa",
-    "city": "CittÃ ",
+    "city": "Città",
     "confirmRegister": "Sei sicuro di voler registrare una nuova chiesa?",
     "country": "Paese",
     "name": "Nome della chiesa",
@@ -277,12 +277,12 @@
     "selectChurch": "Seleziona una Chiesa",
     "state": "Stato/Provincia",
     "validate": {
-      "address": "L'indirizzo non puÃ² essere vuoto.",
-      "city": "La cittÃ  non puÃ² essere vuota.",
-      "country": "Il paese non puÃ² essere vuoto.",
-      "name": "Il nome della chiesa non puÃ² essere vuoto.",
-      "state": "Lo stato/provincia non puÃ² essere vuoto.",
-      "zip": "Il codice postale non puÃ² essere vuoto."
+      "address": "L'indirizzo non può essere vuoto.",
+      "city": "La città non può essere vuota.",
+      "country": "Il paese non può essere vuoto.",
+      "name": "Il nome della chiesa non può essere vuoto.",
+      "state": "Lo stato/provincia non può essere vuoto.",
+      "zip": "Il codice postale non può essere vuoto."
     },
     "zip": "Zip / Codice postale"
   },

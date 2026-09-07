@@ -34,7 +34,7 @@ interface Props {
 }
 
 type TabKey = "profile" | "household" | "account" | "visibility";
-type VisibilityScope = "everyone" | "members" | "groups";
+type VisibilityScope = "everyone" | "members" | "groups" | "leaders" | "staff";
 
 const fieldDefinitions: { key: string; label: string }[] = [
   { key: "name.first", label: "First Name" },
@@ -529,7 +529,11 @@ export const ProfileEditPage = ({ config }: Props) => {
         );
       }
       await Promise.all(tasks);
-      if (prefsChanged) setInitialVis({ address: addressVis, phone: phoneVis, email: emailVis });
+      if (prefsChanged) {
+        setInitialVis({ address: addressVis, phone: phoneVis, email: emailVis });
+        // The mobile query cache is persisted; refresh it so a reload shows the saved levels, not the stale copy.
+        queryClient.invalidateQueries({ queryKey: ["visibilityPreferences", "my"] });
+      }
       if (optedOutChanged) {
         setInitialOptedOut(optedOutLocal);
         setPerson((p) => (p ? { ...p, optedOut: optedOutLocal } : p));
@@ -1102,6 +1106,8 @@ export const ProfileEditPage = ({ config }: Props) => {
         <MenuItem value="everyone">{Locale.label("mobile.screens.everyone")}</MenuItem>
         <MenuItem value="members">{Locale.label("mobile.screens.membersOnly")}</MenuItem>
         <MenuItem value="groups">{Locale.label("mobile.screens.myGroupsOnly")}</MenuItem>
+        <MenuItem value="leaders">{Locale.label("mobile.screens.leadersOnly")}</MenuItem>
+        <MenuItem value="staff">{Locale.label("mobile.screens.staffOnly")}</MenuItem>
       </Select>
     </FormControl>
   );
@@ -1191,10 +1197,22 @@ export const ProfileEditPage = ({ config }: Props) => {
             Visible to other signed-in church members.
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{ mb: 1 }}>
           <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.myGroupsOnly")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
             Visible only to members of groups you belong to.
+          </Typography>
+        </Box>
+        <Box sx={{ mb: 1 }}>
+          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.leadersOnly")}</Typography>
+          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+            Visible only to church staff and the leaders of groups you belong to.
+          </Typography>
+        </Box>
+        <Box>
+          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.staffOnly")}</Typography>
+          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
+            Visible only to church staff.
           </Typography>
         </Box>
       </Box>

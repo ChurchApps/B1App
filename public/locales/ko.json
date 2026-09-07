@@ -165,7 +165,6 @@
     "upload": "업로드",
     "uploadedFiles": "업로드된 파일",
     "usedSpace": "사용된 공간: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "유효한 텍스트를 입력해 주세요",
       "linkUrl": "링크를 입력해 주세요",
@@ -529,7 +528,6 @@
       "uploadingProgress": "{} 업로드 중… {}%",
       "url": "URL",
       "usedStorage": "사용됨 {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "공개 설정",
       "weekly": "매주",
       "yearly": "매년"
@@ -665,6 +663,7 @@
       "giving": "헌금",
       "keep": "유지",
       "lastNameRegister": "성",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "로딩 중...",
       "loadingForm": "헌금 양식을 불러오는 중...",
       "membersOnly": "구성원 전용",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "체크인하려면 로그인하세요",
       "signInToCheckInCta": "로그인",
       "signInToCheckInMessage": "예배에 체크인하려면 로그인하세요.",
+      "staffOnly": "Staff Only",
       "tabAccount": "계정",
       "tabDonate": "헌금하기",
       "tabHistory": "기록",

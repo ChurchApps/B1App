@@ -2,6 +2,7 @@ import React, { cache } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
+import { ApiHelper } from "@churchapps/apphelper";
 import { Theme } from "@/components";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
@@ -44,6 +45,8 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   if (sermon.thumbnail && metadata.openGraph) {
     metadata.openGraph.images = [{ url: sermon.thumbnail }];
   }
+  const contentApi = ApiHelper.getConfig("ContentApi")?.url;
+  if (contentApi) metadata.alternates = { types: { "application/rss+xml": contentApi + "/sermons/rss/" + config.church.id } };
   return metadata;
 }
 

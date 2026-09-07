@@ -165,7 +165,6 @@
     "upload": "Tải lên",
     "uploadedFiles": "Tệp đã tải lên",
     "usedSpace": "Dung lượng đã dùng: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Vui lòng nhập văn bản hợp lệ",
       "linkUrl": "Vui lòng nhập liên kết",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Đang tải lên {}… {}%",
       "url": "URL",
       "usedStorage": "Đã dùng {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Hiển thị",
       "weekly": "Hàng tuần",
       "yearly": "Hàng năm"
@@ -665,6 +663,7 @@
       "giving": "Dâng hiến",
       "keep": "Giữ lại",
       "lastNameRegister": "Họ",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Đang tải...",
       "loadingForm": "Đang tải biểu mẫu dâng hiến...",
       "membersOnly": "Chỉ thành viên",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Vui lòng đăng nhập để điểm danh",
       "signInToCheckInCta": "Đăng nhập",
       "signInToCheckInMessage": "Đăng nhập để điểm danh cho một buổi lễ.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Tài khoản",
       "tabDonate": "Dâng hiến",
       "tabHistory": "Lịch sử",

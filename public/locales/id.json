@@ -165,7 +165,6 @@
     "upload": "Unggah",
     "uploadedFiles": "Berkas yang Diunggah",
     "usedSpace": "Ruang terpakai: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Silakan masukkan teks yang valid",
       "linkUrl": "Silakan masukkan tautan",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Mengunggah {}… {}%",
       "url": "URL",
       "usedStorage": "Terpakai {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibilitas",
       "weekly": "Mingguan",
       "yearly": "Tahunan"
@@ -665,6 +663,7 @@
       "giving": "Persembahan",
       "keep": "Pertahankan",
       "lastNameRegister": "Nama belakang",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Memuat...",
       "loadingForm": "Memuat formulir persembahan...",
       "membersOnly": "Hanya Anggota",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Silakan masuk untuk check-in",
       "signInToCheckInCta": "Masuk",
       "signInToCheckInMessage": "Masuk untuk check-in ke ibadah.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Akun",
       "tabDonate": "Beri Persembahan",
       "tabHistory": "Riwayat",

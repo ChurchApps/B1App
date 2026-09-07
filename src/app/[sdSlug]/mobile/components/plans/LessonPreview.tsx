@@ -73,7 +73,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
               </Stack>
             )}
           </Box>
-          {item.children?.map((child) => renderPreviewItem(child, true))}
+          {item.children?.map((child, i) => <React.Fragment key={child.id || `child-${i}`}>{renderPreviewItem(child, true)}</React.Fragment>)}
         </Box>
       );
     }
@@ -144,7 +144,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
           </Typography>
         </Box>
         <Box>
-          {props.lessonItems.map((item) => renderPreviewItem(item))}
+          {props.lessonItems.map((item, i) => <React.Fragment key={item.id || `lesson-${i}`}>{renderPreviewItem(item)}</React.Fragment>)}
         </Box>
       </Box>
       {actionItem && (

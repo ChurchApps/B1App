@@ -165,7 +165,6 @@
     "upload": "Carregar",
     "uploadedFiles": "Arquivos Carregados",
     "usedSpace": "Espaço usado: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Por favor, insira um texto válido",
       "linkUrl": "Por favor, insira o link",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Carregando {}… {}%",
       "url": "URL",
       "usedStorage": "Usado {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Visibilidade",
       "weekly": "Semanalmente",
       "yearly": "Anualmente"
@@ -665,6 +663,7 @@
       "giving": "Doações",
       "keep": "Manter",
       "lastNameRegister": "Sobrenome",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Carregando...",
       "loadingForm": "Carregando formulário de doação...",
       "membersOnly": "Apenas Membros",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Faça login para fazer check-in",
       "signInToCheckInCta": "Entrar",
       "signInToCheckInMessage": "Faça login para fazer check-in em um culto.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Conta",
       "tabDonate": "Doar",
       "tabHistory": "Histórico",

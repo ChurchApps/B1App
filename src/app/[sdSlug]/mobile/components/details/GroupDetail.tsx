@@ -50,6 +50,9 @@ interface GroupMember {
 }
 
 interface GroupWithExtras extends GroupInterface {
+  // Chat feed toggles (ChurchAppsSupport#1054); absent means on.
+  discussionsEnabled?: boolean;
+  announcementsEnabled?: boolean;
   about?: string;
   meetingDay?: string;
   meetingTime?: string;
@@ -198,6 +201,9 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const canManageGroup = canEditResources;
   // Mirrors the server gate: group leaders, or staff who actually hold the attendance permission
   const canTakeAttendance = isLeader || UserHelper.checkAccess(Permissions.attendanceApi.attendance.edit);
+  const discussionsEnabled = group?.discussionsEnabled !== false;
+  const announcementsEnabled = group?.announcementsEnabled !== false;
+  const chatEnabled = discussionsEnabled || announcementsEnabled;
 
   const handleMemberClick = (m: GroupMember) => {
     const pid = m.personId || m.person?.id;
@@ -618,7 +624,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const availableTabs: { key: TabKey; label: string; icon: string }[] = [];
   if (hasAbout) availableTabs.push({ key: "about", label: Locale.label("mobile.details.tabAbout"), icon: "info" });
   if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
-  if (isMember) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
+  if (isMember && chatEnabled) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
   availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
   if (canTakeAttendance) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
   availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
@@ -638,7 +644,9 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     if (!availableTabs.some((t) => t.key === tab)) {
       setTab(defaultTab);
     }
-  }, [group, hasAbout, hasPlans, isMember, isLeader, canTakeAttendance, tab]);
+  }, [
+    group, hasAbout, hasPlans, isMember, isLeader, canTakeAttendance, chatEnabled, tab
+  ]);
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
@@ -662,7 +670,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
               value={availableTabs.some((t) => t.key === tab) ? tab : defaultTab}
               onChange={(_, v) => {
                 if (v === "messages") {
-                  setChatInitialTab("discussions");
+                  setChatInitialTab(discussionsEnabled ? "discussions" : "announcements");
                   setChatOpen(true);
                   return;
                 }
@@ -738,10 +746,12 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
       {groupId && (
         <GroupChatModal
-          open={chatOpen}
+          open={chatOpen && chatEnabled}
           groupId={groupId}
           groupName={group?.name}
           isLeader={isLeader}
+          discussionsEnabled={discussionsEnabled}
+          announcementsEnabled={announcementsEnabled}
           initialSubTab={chatInitialTab}
           onClose={() => setChatOpen(false)}
         />

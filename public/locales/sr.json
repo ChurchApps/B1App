@@ -165,7 +165,6 @@
     "upload": "Отпреми",
     "uploadedFiles": "Отпремљене датотеке",
     "usedSpace": "Искоришћен простор: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Молимо унесите ваљан текст",
       "linkUrl": "Молимо унесите везу",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Отпремање {}… {}%",
       "url": "URL",
       "usedStorage": "Искоришћено {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Видљивост",
       "weekly": "Седмично",
       "yearly": "Годишње"
@@ -665,6 +663,7 @@
       "giving": "Прилози",
       "keep": "Задржи",
       "lastNameRegister": "Презиме",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Учитавање...",
       "loadingForm": "Учитавање формулара за прилог...",
       "membersOnly": "Само за чланове",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Prijavite se da biste se čekirali",
       "signInToCheckInCta": "Пријава",
       "signInToCheckInMessage": "Prijavite se da biste se čekirali na bogosluženje.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Налог",
       "tabDonate": "Приложи",
       "tabHistory": "Историја",

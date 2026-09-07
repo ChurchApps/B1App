@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
-  Alert, Box, Button, Card, CardContent, Chip, Divider, Icon, IconButton,
+  Alert, Box, Button, Card, CardContent, Checkbox, Chip, Divider, FormControlLabel, Icon, IconButton,
   LinearProgress, MenuItem, Select, Stack, TextField, Typography
 } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
@@ -34,7 +34,8 @@ export function EventRegister({ churchId, eventId, event }: Props) {
       id: context?.person?.id,
       email: context?.person?.contactInfo?.email,
       firstName: context?.person?.name?.first,
-      lastName: context?.person?.name?.last
+      lastName: context?.person?.name?.last,
+      householdId: context?.person?.householdId
     }
   });
 
@@ -218,7 +219,45 @@ export function EventRegister({ churchId, eventId, event }: Props) {
             {Locale.label("registration.additionalMembersInfo")}
           </Typography>
 
-          {reg.members.map((member, index) => (
+          {reg.householdMembers.length > 0 && (
+            <Box sx={{ mb: 2 }} data-testid="household-members">
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{Locale.label("registration.yourHousehold")}</Typography>
+              <FormControlLabel
+                control={<Checkbox checked disabled />}
+                label={`${reg.primaryFirstName} ${reg.primaryLastName} (${Locale.label("registration.you")})`}
+              />
+              {reg.householdMembers.map((hm) => {
+                const checked = reg.isHouseholdMemberSelected(hm.id);
+                const selected = reg.members.find((m) => m.personId === hm.id);
+                return (
+                  <Box key={hm.id} sx={{ display: "flex", gap: 1, alignItems: "center", flexWrap: "wrap" }}>
+                    <FormControlLabel
+                      sx={{ flex: 1, minWidth: 180 }}
+                      control={<Checkbox checked={checked} onChange={() => reg.toggleHouseholdMember(hm)} data-testid={`household-member-${hm.id}`} />}
+                      label={`${hm.firstName} ${hm.lastName}`.trim()}
+                    />
+                    {checked && reg.hasTypes && (
+                      <Select
+                        size="small"
+                        displayEmpty
+                        value={selected?.registrationTypeId || ""}
+                        onChange={(e) => reg.updateMember(reg.members.indexOf(selected!), "registrationTypeId", e.target.value)}
+                        data-testid={`household-type-${hm.id}`}
+                        sx={{ minWidth: 160 }}
+                      >
+                        <MenuItem value="" disabled>{Locale.label("registration.selectType")}</MenuItem>
+                        {reg.types.map((t) => (
+                          <MenuItem key={t.id} value={t.id} disabled={typeDisabled(t)}>{typeLabel(t)}</MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  </Box>
+                );
+              })}
+            </Box>
+          )}
+
+          {reg.members.map((member, index) => (member.personId ? null : (
             <Box key={index} sx={{ display: "flex", gap: 1, mb: 1, alignItems: "center", flexWrap: "wrap" }}>
               <TextField
                 label={Locale.label("person.firstName")}
@@ -255,7 +294,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
                 <Icon>close</Icon>
               </IconButton>
             </Box>
-          ))}
+          )))}
 
           <Button
             variant="outlined"

@@ -6,21 +6,21 @@
     "pleaseWait": "Odota...",
     "save": "Tallenna",
     "search": "Haku",
-    "update": "PÃ¤ivitÃ¤"
+    "update": "Päivitä"
   },
   "donation": {
     "bankForm": {
       "accountNumber": "Tilinumero",
-      "added": "Pankkitili lisÃ¤tty. Vahvista pankkitilisi lahjoituksen tekemiseksi.",
+      "added": "Pankkitili lisätty. Vahvista pankkitilisi lahjoituksen tekemiseksi.",
       "company": "Yritys",
-      "firstDeposit": "EnsimmÃ¤inen talletuskerroin",
-      "individual": "YksityishenkilÃ¶",
+      "firstDeposit": "Ensimmäinen talletuskerroin",
+      "individual": "Yksityishenkilö",
       "name": "Tilinomistajan nimi",
-      "needVerified": "Pankkitilit on vahvistettava ennen lahjoitusten tekemistÃ¤. Tilillesi saapuu kaksi pientÃ¤ talletusta noin 1â€“3 arkipÃ¤ivÃ¤n kuluessa. Sinun on syÃ¶tettÃ¤vÃ¤ nÃ¤mÃ¤ talletussummat tilisi vahvistuksen suorittamiseksi valitsemalla vahvistuslinkin pankkitilisi vierestÃ¤ maksutapakohdan alla.",
+      "needVerified": "Pankkitilit on vahvistettava ennen lahjoitusten tekemistä. Tilillesi saapuu kaksi pientä talletusta noin 1–3 arkipäivän kuluessa. Sinun on syötettävä nämä talletussummat tilisi vahvistuksen suorittamiseksi valitsemalla vahvistuslinkin pankkitilisi vierestä maksutapakohdan alla.",
       "routingNumber": "Reititysnumero",
       "secondDeposit": "Toinen talletuskerroin",
       "twoDeposits": "Kirjoita kaksi talletusta, jotka olet saanut tilillesi, pankkitilisi vahvistuksen suorittamiseksi.",
-      "updated": "Pankkitili pÃ¤ivitetty.",
+      "updated": "Pankkitili päivitetty.",
       "validate": {
         "accountNumber": "Reititys- ja tilinumero ovat pakollisia.",
         "holderName": "Tilin omistajan nimi on pakollinen."
@@ -28,11 +28,11 @@
       "verified": "Pankkitili vahvistettu."
     },
     "cardForm": {
-      "addNew": "LisÃ¤Ã¤ uusi kortti",
-      "added": "Kortti lisÃ¤tty onnistuneesti.",
+      "addNew": "Lisää uusi kortti",
+      "added": "Kortti lisätty onnistuneesti.",
       "expirationMonth": "Voimassaolokausi kuukaudessa:",
       "expirationYear": "Voimassaolokausi vuodessa:",
-      "updated": "Kortti pÃ¤ivitetty onnistuneesti."
+      "updated": "Kortti päivitetty onnistuneesti."
     },
     "common": {
       "cancel": "Cancel",
@@ -41,40 +41,40 @@
     "donationForm": {
       "annually": "Vuosittain",
       "anonymous": "Give anonymously (one-time gifts only)",
-      "biWeekly": "Kahden viikon vÃ¤lein",
+      "biWeekly": "Kahden viikon välein",
       "cancelled": "Toistuva lahjoitus peruutettu.",
-      "confirmDelete": "Haluatko varmasti poistaa tÃ¤mÃ¤n toistuvan lahjoituksen?",
-      "cover": "LisÃ¤Ã¤n mukaansa {} lahjoitukseen, jotta voit sÃ¤ilyttÃ¤Ã¤ 100 % lahjoituksestani.",
+      "confirmDelete": "Haluatko varmasti poistaa tämän toistuvan lahjoituksen?",
+      "cover": "Lisään mukaansa {} lahjoitukseen, jotta voit säilyttää 100 % lahjoituksestani.",
       "donate": "Lahjoita",
       "editRecurring": "Muokkaa toistuvaa lahjoitusta",
-      "fees": "Transaktiomaksut {}: ssa kÃ¤ytetÃ¤Ã¤n.",
+      "fees": "Transaktiomaksut {}: ssa käytetään.",
       "frequency": "Tiheys",
       "fund": "Rahasto",
       "funds": "Rahastot",
       "make": "Tee lahjoitus",
       "makeRecurring": "Tee toistuva lahjoitus",
-      "method": "MenetelmÃ¤",
+      "method": "Menetelmä",
       "monthly": "Kuukausittain",
       "orPayWith": "Or pay with",
       "preview": "Esikatsele lahjoitus",
-      "quarterly": "NeljÃ¤nnesvuosittain",
-      "recurringUpdated": "Toistuva lahjoitus pÃ¤ivitetty.",
-      "startDate": "AlkamispÃ¤ivÃ¤",
+      "quarterly": "Neljännesvuosittain",
+      "recurringUpdated": "Toistuva lahjoitus päivitetty.",
+      "startDate": "Alkamispäivä",
       "thankYou": "Kiitos lahjoituksestasi!",
       "tooLow": "Lahjoituksen summan on oltava yli 0,50 dollaria",
-      "total": "Lahjoituksen kokonaismÃ¤Ã¤rÃ¤",
+      "total": "Lahjoituksen kokonaismäärä",
       "validate": {
         "amount": "Summa ei voi olla 0 dollaria.",
-        "email": "Kirjoita sÃ¤hkÃ¶postiosoitteesi.",
+        "email": "Kirjoita sähköpostiosoitteesi.",
         "firstName": "Kirjoita etunimesi.",
         "lastName": "Kirjoita sukunimesi.",
-        "validEmail": "SyÃ¶tÃ¤ kelvollinen sÃ¤hkÃ¶postiosoite."
+        "validEmail": "Syötä kelvollinen sähköpostiosoite."
       },
       "walletFailed": "Wallet payment could not be completed. Please try again.",
       "weekly": "Viikoittain"
     },
     "fundDonations": {
-      "addMore": "LisÃ¤Ã¤ lisÃ¤Ã¤",
+      "addMore": "Lisää lisää",
       "amount": "Summa",
       "fund": "Rahasto"
     },
@@ -101,9 +101,9 @@
       }
     },
     "paymentMethods": {
-      "addBank": "LisÃ¤Ã¤ pankkitili",
-      "addCard": "LisÃ¤Ã¤ kortti",
-      "confirmDelete": "Haluatko varmasti poistaa tÃ¤mÃ¤n maksutavan?",
+      "addBank": "Lisää pankkitili",
+      "addCard": "Lisää kortti",
+      "confirmDelete": "Haluatko varmasti poistaa tämän maksutavan?",
       "deleted": "Maksutapa poistettu.",
       "noMethod": "No Method",
       "verify": "Vahvista tili"
@@ -115,33 +115,33 @@
       "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
     },
     "preview": {
-      "date": "LahjoituspÃ¤ivÃ¤",
+      "date": "Lahjoituspäivä",
       "donate": "Lahjoita",
       "every": "Toistuva joka",
       "fee": "Transaktiomaksu",
       "funds": "Rahastot",
-      "method": "LahjoitusmenetelmÃ¤",
+      "method": "Lahjoitusmenetelmä",
       "notes": "Muistiinpanot",
       "startingOn": "Alkaen",
-      "total": "YhteensÃ¤",
+      "total": "Yhteensä",
       "type": "Lahjoitustyyppi"
     },
     "recurring": {
       "amount": "Summa",
-      "confirmPause": "Haluatko varmasti keskeyttÃ¤Ã¤ tÃ¤mÃ¤n toistuvan lahjoituksen?",
+      "confirmPause": "Haluatko varmasti keskeyttää tämän toistuvan lahjoituksen?",
       "every": "Joka",
-      "interval": "VÃ¤li",
+      "interval": "Väli",
       "noSubscriptions": "No Subscriptions",
-      "notFound": "Maksutapaa ei lÃ¶ytynyt.",
-      "pauseFailed": "Toistuvan lahjoituksen keskeyttÃ¤minen epÃ¤onnistui. YritÃ¤ uudelleen.",
-      "pauseTooltip": "KeskeytÃ¤ toistuva lahjoitus",
+      "notFound": "Maksutapaa ei löytynyt.",
+      "pauseFailed": "Toistuvan lahjoituksen keskeyttäminen epäonnistui. Yritä uudelleen.",
+      "pauseTooltip": "Keskeytä toistuva lahjoitus",
       "paused": "Keskeytetty",
       "pausedMessage": "Toistuva lahjoitus keskeytetty.",
       "paymentMethod": "Maksutapa",
-      "resumeFailed": "Toistuvan lahjoituksen jatkaminen epÃ¤onnistui. YritÃ¤ uudelleen.",
+      "resumeFailed": "Toistuvan lahjoituksen jatkaminen epäonnistui. Yritä uudelleen.",
       "resumeTooltip": "Jatka toistuvaa lahjoitusta",
       "resumedMessage": "Toistuva lahjoitus jatkettu.",
-      "startDate": "AlkamispÃ¤ivÃ¤"
+      "startDate": "Alkamispäivä"
     }
   },
   "eventCalendar": {
@@ -155,29 +155,29 @@
         "tuesday": "Tiistai",
         "wednesday": "Keskiviikko"
       },
-      "endDate": "PÃ¤Ã¤ttymispÃ¤ivÃ¤",
-      "endDateAria": "Toistumisen pÃ¤Ã¤ttymispÃ¤ivÃ¤",
-      "ends": "PÃ¤Ã¤ttyy",
-      "endsAfter": "JÃ¤lkeen",
-      "endsAria": "Valitse, milloin toistuminen pÃ¤Ã¤ttyy",
-      "endsOn": "PÃ¤ivÃ¤nÃ¤",
-      "freqDay": "PÃ¤ivÃ¤",
+      "endDate": "Päättymispäivä",
+      "endDateAria": "Toistumisen päättymispäivä",
+      "ends": "Päättyy",
+      "endsAfter": "Jälkeen",
+      "endsAria": "Valitse, milloin toistuminen päättyy",
+      "endsOn": "Päivänä",
+      "freqDay": "Päivä",
       "freqMonth": "Kuukausi",
       "freqWeek": "Viikko",
       "frequency": "Tiheys",
       "frequencyAria": "Valitse toistumistiheys",
-      "interval": "AikavÃ¤li",
-      "intervalAria": "ToistumisvÃ¤li",
-      "monthlyOnDay": "Kuukausittain pÃ¤ivÃ¤nÃ¤ {}",
+      "interval": "Aikaväli",
+      "intervalAria": "Toistumisväli",
+      "monthlyOnDay": "Kuukausittain päivänä {}",
       "monthlyOnNth": "Kuukausittain {ordinal} {day}",
       "monthlyOptionAria": "Valitse kuukausittaisen toistumisen vaihtoehto",
       "never": "Ei koskaan",
       "occurrences": "Esiintymiskerrat",
-      "occurrencesAria": "Toistumiskertojen mÃ¤Ã¤rÃ¤",
-      "on": "PÃ¤ivÃ¤nÃ¤",
+      "occurrencesAria": "Toistumiskertojen määrä",
+      "on": "Päivänä",
       "ordinal": {
-        "first": "ensimmÃ¤inen",
-        "fourth": "neljÃ¤s",
+        "first": "ensimmäinen",
+        "fourth": "neljäs",
         "last": "viimeinen",
         "second": "toinen",
         "third": "kolmas"
@@ -192,51 +192,51 @@
   },
   "formSubmissionEdit": {
     "back": "Takaisin",
-    "confirmDelete": "Haluatko varmasti poistaa nÃ¤mÃ¤ lomakkeen tiedot?",
+    "confirmDelete": "Haluatko varmasti poistaa nämä lomakkeen tiedot?",
     "continue": "Jatka",
     "editForm": "Muokkaa lomaketta",
     "isRequired": "vaaditaan",
     "stepProgress": "{current} / {total}",
-    "submit": "LÃ¤hetÃ¤"
+    "submit": "Lähetä"
   },
   "gallery": {
     "aspectRatio": "Kuvasuhde",
-    "confirmDelete": "Haluatko varmasti poistaa tÃ¤mÃ¤n kuvan galleriasta?",
+    "confirmDelete": "Haluatko varmasti poistaa tämän kuvan galleriasta?",
     "freeForm": "Vapaa muoto"
   },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
-    "email": "SÃ¤hkÃ¶posti",
-    "enterCode": "SyÃ¶tÃ¤ vahvistuskoodi",
-    "enterCodeInstructions": "SyÃ¶tÃ¤ 6-numeroinen koodi, jonka lÃ¤hetimme juuri sÃ¤hkÃ¶postiisi.",
+    "email": "Sähköposti",
+    "enterCode": "Syötä vahvistuskoodi",
+    "enterCodeInstructions": "Syötä 6-numeroinen koodi, jonka lähetimme juuri sähköpostiisi.",
     "expiredLink": "Nykyinen linkki on vanhentunut.",
     "forgot": "Unohditko salasanan",
-    "login": "Kirjaudu sisÃ¤Ã¤n",
-    "noAcc": "EikÃ¶ sinulla ole tiliÃ¤?",
-    "noAccountFound": "TÃ¤llÃ¤ sÃ¤hkÃ¶postilla ei lÃ¶ytynyt tiliÃ¤. Jatka rekisterÃ¶itymÃ¤llÃ¤.",
+    "login": "Kirjaudu sisään",
+    "noAcc": "Eikö sinulla ole tiliä?",
+    "noAccountFound": "Tällä sähköpostilla ei löytynyt tiliä. Jatka rekisteröitymällä.",
     "or": "or",
     "password": "Salasana",
-    "register": "RekisterÃ¶idy",
-    "registerThankYou": "Kiitos rekisterÃ¶itymisestÃ¤! Tarkista sÃ¤hkÃ¶postisi tilin vahvistamiseksi.",
-    "requestLink": "PyydÃ¤ uutta nollaukslinkkiÃ¤",
-    "resendCode": "LÃ¤hetÃ¤ koodi uudelleen",
+    "register": "Rekisteröidy",
+    "registerThankYou": "Kiitos rekisteröitymisestä! Tarkista sähköpostisi tilin vahvistamiseksi.",
+    "requestLink": "Pyydä uutta nollaukslinkkiä",
+    "resendCode": "Lähetä koodi uudelleen",
     "reset": "Nollaa",
-    "resetInstructions": "Kirjoita sÃ¤hkÃ¶postiosoitteesi pyytÃ¤Ã¤ksesi salasanan nollausta.",
+    "resetInstructions": "Kirjoita sähköpostiosoitteesi pyytääksesi salasanan nollausta.",
     "resetPassword": "Nollaa salasana",
     "setPassword": "Aseta salasana",
     "signIn": "Kirjaudu",
-    "signInTitle": "Kirjaudu sisÃ¤Ã¤n",
+    "signInTitle": "Kirjaudu sisään",
     "validate": {
-      "code": "SyÃ¶tÃ¤ 6-numeroinen koodi.",
-      "email": "SyÃ¶tÃ¤ kelvollinen sÃ¤hkÃ¶postiosoite.",
+      "code": "Syötä 6-numeroinen koodi.",
+      "email": "Syötä kelvollinen sähköpostiosoite.",
       "firstName": "Kirjoita etunimesi.",
-      "invalid": "Virheellinen kirjautuminen. Tarkista sÃ¤hkÃ¶postiosoitteesi tai salasanasi.",
+      "invalid": "Virheellinen kirjautuminen. Tarkista sähköpostiosoitteesi tai salasanasi.",
       "lastName": "Kirjoita sukunimesi.",
       "password": "Kirjoita salasana.",
-      "passwordLength": "Salasanan on oltava vÃ¤hintÃ¤Ã¤n 8 merkkiÃ¤ pitkÃ¤.",
-      "passwordMatch": "Salasanat eivÃ¤t tÃ¤smÃ¤Ã¤.",
-      "selectingChurch": "Virhe seurakunnan valinnassa. Tarkista ja yritÃ¤ uudelleen"
+      "passwordLength": "Salasanan on oltava vähintään 8 merkkiä pitkä.",
+      "passwordMatch": "Salasanat eivät täsmää.",
+      "selectingChurch": "Virhe seurakunnan valinnassa. Tarkista ja yritä uudelleen"
     },
     "verifyCode": "Vahvista koodi",
     "verifyPassword": "Vahvista salasana",
@@ -244,7 +244,7 @@
     "welcomeName": "Tervetuloa takaisin, <b>{}</b>! Odota, kun lataamme tietojasi."
   },
   "markdownEditor": {
-    "content": "SisÃ¤ltÃ¶",
+    "content": "Sisältö",
     "markdownGuide": "Markdown-opas"
   },
   "notes": {
@@ -259,7 +259,7 @@
     }
   },
   "person": {
-    "email": "SÃ¤hkÃ¶posti",
+    "email": "Sähköposti",
     "firstName": "Etunimi",
     "lastName": "Sukunimi",
     "name": "Nimi"
@@ -269,26 +269,26 @@
     "address2": "Osoite 2",
     "another": "Valitse toinen seurakunta",
     "city": "Kaupunki",
-    "confirmRegister": "Haluatko varmasti rekisterÃ¶idÃ¤ uuden seurakunnan?",
+    "confirmRegister": "Haluatko varmasti rekisteröidä uuden seurakunnan?",
     "country": "Maa",
     "name": "Seurakunnan nimi",
-    "noMatches": "YhtÃ¤Ã¤n osumaa ei lÃ¶ytynyt.",
-    "register": "RekisterÃ¶i uusi seurakunta",
+    "noMatches": "Yhtään osumaa ei löytynyt.",
+    "register": "Rekisteröi uusi seurakunta",
     "selectChurch": "Valitse seurakunta",
     "state": "Osavaltio / Provinssi",
     "validate": {
-      "address": "Osoite ei voi olla tyhjÃ¤.",
-      "city": "Kaupunki ei voi olla tyhjÃ¤.",
-      "country": "Maa ei voi olla tyhjÃ¤.",
-      "name": "Seurakunnan nimi ei voi olla tyhjÃ¤.",
-      "state": "Osavaltio/Provinssi ei voi olla tyhjÃ¤.",
-      "zip": "Postinumero ei voi olla tyhjÃ¤."
+      "address": "Osoite ei voi olla tyhjä.",
+      "city": "Kaupunki ei voi olla tyhjä.",
+      "country": "Maa ei voi olla tyhjä.",
+      "name": "Seurakunnan nimi ei voi olla tyhjä.",
+      "state": "Osavaltio/Provinssi ei voi olla tyhjä.",
+      "zip": "Postinumero ei voi olla tyhjä."
     },
     "zip": "Postinumero"
   },
   "stockPhotos": {
-    "photoBy": "Kuva tekijÃ¤ltÃ¤:",
-    "providedBy": "PÃ¶rssikuvat toimittajalta"
+    "photoBy": "Kuva tekijältä:",
+    "providedBy": "Pörssikuvat toimittajalta"
   },
   "support": {
     "discussions": "Tukifoorumi",
@@ -298,6 +298,6 @@
     "newPrivateMessage": "Uusi yksityinen viesti",
     "privateConversation": "Private Conversation",
     "privateMessage": "Yksityinen viesti",
-    "searchForPerson": "Etsi henkilÃ¶Ã¤"
+    "searchForPerson": "Etsi henkilöä"
   }
 }

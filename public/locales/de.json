@@ -165,7 +165,6 @@
     "upload": "Hochladen",
     "uploadedFiles": "Hochgeladene Dateien",
     "usedSpace": "Belegter Speicher: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Bitte geben Sie einen gültigen Text ein",
       "linkUrl": "Bitte geben Sie einen Link ein",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Wird hochgeladen {}… {}%",
       "url": "URL",
       "usedStorage": "Belegt {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Sichtbarkeit",
       "weekly": "Wöchentlich",
       "yearly": "Jährlich"
@@ -665,6 +663,7 @@
       "giving": "Spenden",
       "keep": "Behalten",
       "lastNameRegister": "Nachname",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Wird geladen...",
       "loadingForm": "Spendenformular wird geladen...",
       "membersOnly": "Nur Mitglieder",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Bitte melden Sie sich an, um einzuchecken",
       "signInToCheckInCta": "Anmelden",
       "signInToCheckInMessage": "Melden Sie sich an, um bei einem Gottesdienst einzuchecken.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Konto",
       "tabDonate": "Spenden",
       "tabHistory": "Verlauf",

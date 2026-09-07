@@ -1,77 +1,77 @@
 {
   "common": {
-    "cancel": "Ä°ptal Et",
+    "cancel": "İptal Et",
     "close": "Kapat",
     "delete": "Sil",
-    "pleaseWait": "LÃ¼tfen bekleyin...",
+    "pleaseWait": "Lütfen bekleyin...",
     "save": "Kaydet",
     "search": "Ara",
-    "update": "GÃ¼ncelle"
+    "update": "Güncelle"
   },
   "donation": {
     "bankForm": {
-      "accountNumber": "Hesap NumarasÄ±",
-      "added": "Banka hesabÄ± eklendi. BaÄŸÄ±ÅŸ yapmak iÃ§in banka hesabÄ±nÄ±zÄ± doÄŸrulayÄ±n.",
-      "company": "Åžirket",
-      "firstDeposit": "Ä°lk Depozito",
+      "accountNumber": "Hesap Numarası",
+      "added": "Banka hesabı eklendi. Bağış yapmak için banka hesabınızı doğrulayın.",
+      "company": "Şirket",
+      "firstDeposit": "İlk Depozito",
       "individual": "Bireysel",
-      "name": "Hesap Sahibinin AdÄ±",
-      "needVerified": "Banka hesaplarÄ±nÄ±n baÄŸÄ±ÅŸ yapÄ±lmadan Ã¶nce doÄŸrulanmasÄ± gerekecektir. HesabÄ±nÄ±z yaklaÅŸÄ±k 1-3 iÅŸ gÃ¼nÃ¼ iÃ§inde iki kÃ¼Ã§Ã¼k mevduat alacaktÄ±r. Ã–deme yÃ¶ntemleri bÃ¶lÃ¼mÃ¼nÃ¼n altÄ±nda banka hesabÄ±nÄ±zÄ±n yanÄ±ndaki hesap doÄŸrulama baÄŸlantÄ±sÄ±nÄ± seÃ§erek hesap doÄŸrulamanÄ±zÄ± tamamlamak iÃ§in bu mevduat tutarlarÄ±nÄ± girmeniz gerekecektir.",
-      "routingNumber": "YÃ¶nlendirme NumarasÄ±",
-      "secondDeposit": "Ä°kinci Depozito",
-      "twoDeposits": "Banka hesabÄ± doÄŸrulamanÄ±zÄ± tamamlamak iÃ§in hesabÄ±nÄ±za aldÄ±ÄŸÄ±nÄ±z iki mevduatÄ± girin.",
-      "updated": "Banka hesabÄ± gÃ¼ncellendi.",
+      "name": "Hesap Sahibinin Adı",
+      "needVerified": "Banka hesaplarının bağış yapılmadan önce doğrulanması gerekecektir. Hesabınız yaklaşık 1-3 iş günü içinde iki küçük mevduat alacaktır. Ödeme yöntemleri bölümünün altında banka hesabınızın yanındaki hesap doğrulama bağlantısını seçerek hesap doğrulamanızı tamamlamak için bu mevduat tutarlarını girmeniz gerekecektir.",
+      "routingNumber": "Yönlendirme Numarası",
+      "secondDeposit": "İkinci Depozito",
+      "twoDeposits": "Banka hesabı doğrulamanızı tamamlamak için hesabınıza aldığınız iki mevduatı girin.",
+      "updated": "Banka hesabı güncellendi.",
       "validate": {
-        "accountNumber": "YÃ¶nlendirme numarasÄ± ve hesap numarasÄ± gereklidir.",
-        "holderName": "Hesap sahibinin adÄ± gereklidir."
+        "accountNumber": "Yönlendirme numarası ve hesap numarası gereklidir.",
+        "holderName": "Hesap sahibinin adı gereklidir."
       },
-      "verified": "Banka hesabÄ± doÄŸrulandÄ±."
+      "verified": "Banka hesabı doğrulandı."
     },
     "cardForm": {
       "addNew": "Yeni Kart Ekle",
-      "added": "Kart baÅŸarÄ±yla eklendi.",
-      "expirationMonth": "Son Kullanma AyÄ±:",
-      "expirationYear": "Son Kullanma YÄ±lÄ±:",
-      "updated": "Kart baÅŸarÄ±yla gÃ¼ncellendi."
+      "added": "Kart başarıyla eklendi.",
+      "expirationMonth": "Son Kullanma Ayı:",
+      "expirationYear": "Son Kullanma Yılı:",
+      "updated": "Kart başarıyla güncellendi."
     },
     "common": {
       "cancel": "Cancel",
       "error": "Error"
     },
     "donationForm": {
-      "annually": "YÄ±llÄ±k",
+      "annually": "Yıllık",
       "anonymous": "Give anonymously (one-time gifts only)",
-      "biWeekly": "Ä°ki haftada bir",
-      "cancelled": "Tekrarlayan baÄŸÄ±ÅŸ iptal edildi.",
-      "confirmDelete": "Bu tekrarlayan baÄŸÄ±ÅŸÄ± silmek istediÄŸinizden emin misiniz?",
-      "cover": "Ä°ÅŸlem Ã¼cretlerini karÅŸÄ±lamak iÃ§in {} ekleyerek baÄŸÄ±ÅŸÄ±nÄ±zÄ±n %100'Ã¼nÃ¼ tutmanÄ±zÄ± saÄŸlayacaÄŸÄ±m.",
-      "donate": "BaÄŸÄ±ÅŸ Yap",
-      "editRecurring": "Tekrarlayan BaÄŸÄ±ÅŸÄ± DÃ¼zenle",
-      "fees": "{} iÅŸlem Ã¼cretleri uygulanÄ±r.",
+      "biWeekly": "İki haftada bir",
+      "cancelled": "Tekrarlayan bağış iptal edildi.",
+      "confirmDelete": "Bu tekrarlayan bağışı silmek istediğinizden emin misiniz?",
+      "cover": "İşlem ücretlerini karşılamak için {} ekleyerek bağışınızın %100'ünü tutmanızı sağlayacağım.",
+      "donate": "Bağış Yap",
+      "editRecurring": "Tekrarlayan Bağışı Düzenle",
+      "fees": "{} işlem ücretleri uygulanır.",
       "frequency": "Frekans",
       "fund": "Fon",
       "funds": "Fonlar",
-      "make": "BaÄŸÄ±ÅŸ Yap",
-      "makeRecurring": "Tekrarlayan BaÄŸÄ±ÅŸ Yap",
-      "method": "YÃ¶ntem",
-      "monthly": "AylÄ±k",
+      "make": "Bağış Yap",
+      "makeRecurring": "Tekrarlayan Bağış Yap",
+      "method": "Yöntem",
+      "monthly": "Aylık",
       "orPayWith": "Or pay with",
-      "preview": "BaÄŸÄ±ÅŸ Ã–nizlemesi",
-      "quarterly": "ÃœÃ§ AylÄ±k",
-      "recurringUpdated": "Tekrarlayan baÄŸÄ±ÅŸ gÃ¼ncellendi.",
-      "startDate": "BaÅŸlangÄ±Ã§ Tarihi",
-      "thankYou": "BaÄŸÄ±ÅŸÄ±nÄ±z iÃ§in teÅŸekkÃ¼r ederiz!",
-      "tooLow": "BaÄŸÄ±ÅŸ tutarÄ± 0,50 USD'den fazla olmalÄ±dÄ±r",
-      "total": "Toplam BaÄŸÄ±ÅŸ TutarÄ±",
+      "preview": "Bağış Önizlemesi",
+      "quarterly": "Üç Aylık",
+      "recurringUpdated": "Tekrarlayan bağış güncellendi.",
+      "startDate": "Başlangıç Tarihi",
+      "thankYou": "Bağışınız için teşekkür ederiz!",
+      "tooLow": "Bağış tutarı 0,50 USD'den fazla olmalıdır",
+      "total": "Toplam Bağış Tutarı",
       "validate": {
         "amount": "Tutar 0 USD olamaz.",
-        "email": "LÃ¼tfen e-posta adresinizi girin.",
-        "firstName": "LÃ¼tfen adÄ±nÄ±zÄ± girin.",
-        "lastName": "LÃ¼tfen soyadÄ±nÄ±zÄ± girin.",
-        "validEmail": "LÃ¼tfen geÃ§erli bir e-posta adresi girin."
+        "email": "Lütfen e-posta adresinizi girin.",
+        "firstName": "Lütfen adınızı girin.",
+        "lastName": "Lütfen soyadınızı girin.",
+        "validEmail": "Lütfen geçerli bir e-posta adresi girin."
       },
       "walletFailed": "Wallet payment could not be completed. Please try again.",
-      "weekly": "HaftalÄ±k"
+      "weekly": "Haftalık"
     },
     "fundDonations": {
       "addMore": "Daha Ekle",
@@ -101,12 +101,12 @@
       }
     },
     "paymentMethods": {
-      "addBank": "Banka HesabÄ± Ekle",
+      "addBank": "Banka Hesabı Ekle",
       "addCard": "Kart Ekle",
-      "confirmDelete": "Bu Ã¶deme yÃ¶ntemini silmek istediÄŸinizden emin misiniz?",
-      "deleted": "Ã–deme yÃ¶ntemi silindi.",
+      "confirmDelete": "Bu ödeme yöntemini silmek istediğinizden emin misiniz?",
+      "deleted": "Ödeme yöntemi silindi.",
       "noMethod": "No Method",
-      "verify": "HesabÄ± DoÄŸrula"
+      "verify": "Hesabı Doğrula"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -115,33 +115,33 @@
       "saveOnlyWithGift": "Payment methods are saved when you give — check \"Save this card\" while making a gift."
     },
     "preview": {
-      "date": "BaÄŸÄ±ÅŸ Tarihi",
-      "donate": "BaÄŸÄ±ÅŸ Yap",
+      "date": "Bağış Tarihi",
+      "donate": "Bağış Yap",
       "every": "Her",
-      "fee": "Ä°ÅŸlem Ãœcreti",
+      "fee": "İşlem Ücreti",
       "funds": "Fonlar",
-      "method": "BaÄŸÄ±ÅŸ YÃ¶ntemi",
+      "method": "Bağış Yöntemi",
       "notes": "Notlar",
-      "startingOn": "BaÅŸlangÄ±Ã§",
+      "startingOn": "Başlangıç",
       "total": "Toplam",
-      "type": "BaÄŸÄ±ÅŸ TÃ¼rÃ¼"
+      "type": "Bağış Türü"
     },
     "recurring": {
       "amount": "Tutar",
-      "confirmPause": "Bu tekrarlayan baÄŸÄ±ÅŸÄ± duraklatmak istediÄŸinizden emin misiniz?",
+      "confirmPause": "Bu tekrarlayan bağışı duraklatmak istediğinizden emin misiniz?",
       "every": "Her",
-      "interval": "AralÄ±k",
+      "interval": "Aralık",
       "noSubscriptions": "No Subscriptions",
-      "notFound": "Ã–deme yÃ¶ntemi bulunamadÄ±.",
-      "pauseFailed": "Tekrarlayan baÄŸÄ±ÅŸ duraklatÄ±lamadÄ±. LÃ¼tfen tekrar deneyin.",
-      "pauseTooltip": "Tekrarlayan baÄŸÄ±ÅŸÄ± duraklat",
-      "paused": "DuraklatÄ±ldÄ±",
-      "pausedMessage": "Tekrarlayan baÄŸÄ±ÅŸ duraklatÄ±ldÄ±.",
-      "paymentMethod": "Ã–deme YÃ¶ntemi",
-      "resumeFailed": "Tekrarlayan baÄŸÄ±ÅŸ devam ettirilemedi. LÃ¼tfen tekrar deneyin.",
-      "resumeTooltip": "Tekrarlayan baÄŸÄ±ÅŸÄ± devam ettir",
-      "resumedMessage": "Tekrarlayan baÄŸÄ±ÅŸ devam ettirildi.",
-      "startDate": "BaÅŸlangÄ±Ã§ Tarihi"
+      "notFound": "Ödeme yöntemi bulunamadı.",
+      "pauseFailed": "Tekrarlayan bağış duraklatılamadı. Lütfen tekrar deneyin.",
+      "pauseTooltip": "Tekrarlayan bağışı duraklat",
+      "paused": "Duraklatıldı",
+      "pausedMessage": "Tekrarlayan bağış duraklatıldı.",
+      "paymentMethod": "Ödeme Yöntemi",
+      "resumeFailed": "Tekrarlayan bağış devam ettirilemedi. Lütfen tekrar deneyin.",
+      "resumeTooltip": "Tekrarlayan bağışı devam ettir",
+      "resumedMessage": "Tekrarlayan bağış devam ettirildi.",
+      "startDate": "Başlangıç Tarihi"
     }
   },
   "eventCalendar": {
@@ -151,38 +151,38 @@
         "monday": "Pazartesi",
         "saturday": "Cumartesi",
         "sunday": "Pazar",
-        "thursday": "PerÅŸembe",
-        "tuesday": "SalÄ±",
-        "wednesday": "Ã‡arÅŸamba"
+        "thursday": "Perşembe",
+        "tuesday": "Salı",
+        "wednesday": "Çarşamba"
       },
-      "endDate": "BitiÅŸ Tarihi",
-      "endDateAria": "Tekrarlama bitiÅŸ tarihi",
+      "endDate": "Bitiş Tarihi",
+      "endDateAria": "Tekrarlama bitiş tarihi",
       "ends": "Biter",
       "endsAfter": "Sonra",
-      "endsAria": "TekrarlamanÄ±n ne zaman biteceÄŸini seÃ§in",
+      "endsAria": "Tekrarlamanın ne zaman biteceğini seçin",
       "endsOn": "Tarihte",
-      "freqDay": "GÃ¼n",
+      "freqDay": "Gün",
       "freqMonth": "Ay",
       "freqWeek": "Hafta",
-      "frequency": "SÄ±klÄ±k",
-      "frequencyAria": "Tekrarlama sÄ±klÄ±ÄŸÄ±nÄ± seÃ§in",
-      "interval": "AralÄ±k",
-      "intervalAria": "Tekrarlama aralÄ±ÄŸÄ±",
-      "monthlyOnDay": "Her ayÄ±n {} gÃ¼nÃ¼nde",
-      "monthlyOnNth": "Her ayÄ±n {ordinal} {day} gÃ¼nÃ¼",
-      "monthlyOptionAria": "AylÄ±k tekrarlama seÃ§eneÄŸini seÃ§in",
-      "never": "HiÃ§bir zaman",
-      "occurrences": "Tekrar SayÄ±sÄ±",
-      "occurrencesAria": "Tekrarlama sayÄ±sÄ±",
+      "frequency": "Sıklık",
+      "frequencyAria": "Tekrarlama sıklığını seçin",
+      "interval": "Aralık",
+      "intervalAria": "Tekrarlama aralığı",
+      "monthlyOnDay": "Her ayın {} gününde",
+      "monthlyOnNth": "Her ayın {ordinal} {day} günü",
+      "monthlyOptionAria": "Aylık tekrarlama seçeneğini seçin",
+      "never": "Hiçbir zaman",
+      "occurrences": "Tekrar Sayısı",
+      "occurrencesAria": "Tekrarlama sayısı",
       "on": "Tarihte",
       "ordinal": {
         "first": "ilk",
-        "fourth": "dÃ¶rdÃ¼ncÃ¼",
+        "fourth": "dördüncü",
         "last": "son",
         "second": "ikinci",
-        "third": "Ã¼Ã§Ã¼ncÃ¼"
+        "third": "üçüncü"
       },
-      "toggleWeekday": "HaftalÄ±k tekrarlama iÃ§in {} gÃ¼nÃ¼nÃ¼ deÄŸiÅŸtir"
+      "toggleWeekday": "Haftalık tekrarlama için {} gününü değiştir"
     }
   },
   "fileUpload": {
@@ -192,60 +192,60 @@
   },
   "formSubmissionEdit": {
     "back": "Geri",
-    "confirmDelete": "Bu form verilerini silmek istediÄŸinizden emin misiniz?",
+    "confirmDelete": "Bu form verilerini silmek istediğinizden emin misiniz?",
     "continue": "Devam",
-    "editForm": "Formu DÃ¼zenle",
+    "editForm": "Formu Düzenle",
     "isRequired": "gereklidir",
     "stepProgress": "{current} / {total}",
-    "submit": "GÃ¶nder"
+    "submit": "Gönder"
   },
   "gallery": {
-    "aspectRatio": "En Boy OranÄ±",
-    "confirmDelete": "Bu resmi galeriden silmek istediÄŸinizden emin misiniz?",
+    "aspectRatio": "En Boy Oranı",
+    "confirmDelete": "Bu resmi galeriden silmek istediğinizden emin misiniz?",
     "freeForm": "Serbest Form"
   },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "email": "Email",
-    "enterCode": "DoÄŸrulama Kodunu Girin",
-    "enterCodeInstructions": "Size az Ã¶nce e-postayla gÃ¶nderdiÄŸimiz 6 haneli kodu girin.",
-    "expiredLink": "Mevcut baÄŸlantÄ± sÃ¼resi dolmuÅŸ.",
-    "forgot": "Åžifremi Unuttum",
-    "login": "GiriÅŸ Yap",
-    "noAcc": "HesabÄ±nÄ±z yok mu?",
-    "noAccountFound": "Bu e-posta ile hesap bulunamadÄ±. Devam etmek iÃ§in lÃ¼tfen kayÄ±t olun.",
+    "enterCode": "Doğrulama Kodunu Girin",
+    "enterCodeInstructions": "Size az önce e-postayla gönderdiğimiz 6 haneli kodu girin.",
+    "expiredLink": "Mevcut bağlantı süresi dolmuş.",
+    "forgot": "Şifremi Unuttum",
+    "login": "Giriş Yap",
+    "noAcc": "Hesabınız yok mu?",
+    "noAccountFound": "Bu e-posta ile hesap bulunamadı. Devam etmek için lütfen kayıt olun.",
     "or": "or",
-    "password": "Åžifre",
+    "password": "Şifre",
     "register": "Kaydol",
-    "registerThankYou": "KaydolduÄŸunuz iÃ§in teÅŸekkÃ¼r ederiz! HesabÄ±nÄ±zÄ± doÄŸrulamak iÃ§in lÃ¼tfen e-postanÄ±zÄ± kontrol edin.",
-    "requestLink": "Yeni bir sÄ±fÄ±rlama baÄŸlantÄ±sÄ± iste",
-    "resendCode": "Kodu yeniden gÃ¶nder",
-    "reset": "SÄ±fÄ±rla",
-    "resetInstructions": "Åžifre sÄ±fÄ±rlamasÄ± istemek iÃ§in e-posta adresinizi girin.",
-    "resetPassword": "Åžifreyi SÄ±fÄ±rla",
-    "setPassword": "Åžifre Belirle",
-    "signIn": "GiriÅŸ Yap",
-    "signInTitle": "LÃ¼tfen GiriÅŸ YapÄ±n",
+    "registerThankYou": "Kaydolduğunuz için teşekkür ederiz! Hesabınızı doğrulamak için lütfen e-postanızı kontrol edin.",
+    "requestLink": "Yeni bir sıfırlama bağlantısı iste",
+    "resendCode": "Kodu yeniden gönder",
+    "reset": "Sıfırla",
+    "resetInstructions": "Şifre sıfırlaması istemek için e-posta adresinizi girin.",
+    "resetPassword": "Şifreyi Sıfırla",
+    "setPassword": "Şifre Belirle",
+    "signIn": "Giriş Yap",
+    "signInTitle": "Lütfen Giriş Yapın",
     "validate": {
       "code": "6 haneli kodu girin.",
-      "email": "LÃ¼tfen geÃ§erli bir e-posta adresi girin.",
-      "firstName": "LÃ¼tfen adÄ±nÄ±zÄ± girin.",
-      "invalid": "GeÃ§ersiz giriÅŸ. LÃ¼tfen e-postanÄ±z veya ÅŸifrenizi kontrol edin.",
-      "lastName": "LÃ¼tfen soyadÄ±nÄ±zÄ± girin.",
-      "password": "LÃ¼tfen bir ÅŸifre girin.",
-      "passwordLength": "Åžifre en az 8 karakter uzunluÄŸunda olmalÄ±dÄ±r.",
-      "passwordMatch": "Åžifreler eÅŸleÅŸmiyor.",
-      "selectingChurch": "Kilise seÃ§erken hata oluÅŸtu. LÃ¼tfen doÄŸrulayÄ±n ve tekrar deneyin"
+      "email": "Lütfen geçerli bir e-posta adresi girin.",
+      "firstName": "Lütfen adınızı girin.",
+      "invalid": "Geçersiz giriş. Lütfen e-postanız veya şifrenizi kontrol edin.",
+      "lastName": "Lütfen soyadınızı girin.",
+      "password": "Lütfen bir şifre girin.",
+      "passwordLength": "Şifre en az 8 karakter uzunluğunda olmalıdır.",
+      "passwordMatch": "Şifreler eşleşmiyor.",
+      "selectingChurch": "Kilise seçerken hata oluştu. Lütfen doğrulayın ve tekrar deneyin"
     },
-    "verifyCode": "Kodu DoÄŸrula",
-    "verifyPassword": "Åžifreyi DoÄŸrula",
-    "welcomeBack": "HoÅŸ geldiniz",
-    "welcomeName": "HoÅŸ geldiniz, <b>{}</b>! Verilerinizi yÃ¼klerken lÃ¼tfen bekleyin."
+    "verifyCode": "Kodu Doğrula",
+    "verifyPassword": "Şifreyi Doğrula",
+    "welcomeBack": "Hoş geldiniz",
+    "welcomeName": "Hoş geldiniz, <b>{}</b>! Verilerinizi yüklerken lütfen bekleyin."
   },
   "markdownEditor": {
-    "content": "Ä°Ã§erik",
-    "markdownGuide": "Markdown KÄ±lavuzu"
+    "content": "İçerik",
+    "markdownGuide": "Markdown Kılavuzu"
   },
   "notes": {
     "comment": "yorum",
@@ -255,49 +255,49 @@
     "notifyOn": "Notify On",
     "openFile": "Open file",
     "validate": {
-      "content": "LÃ¼tfen bir not girin."
+      "content": "Lütfen bir not girin."
     }
   },
   "person": {
     "email": "Email",
     "firstName": "Ad",
-    "lastName": "SoyadÄ±",
+    "lastName": "Soyadı",
     "name": "Ad"
   },
   "selectChurch": {
-    "address1": "Adres SatÄ±rÄ± 1",
-    "address2": "Adres SatÄ±rÄ± 2",
-    "another": "BaÅŸka bir kilise seÃ§in",
-    "city": "Åžehir",
-    "confirmRegister": "Yeni bir kiliseyi kaydetmek istediÄŸinizden emin misiniz?",
-    "country": "Ãœlke",
-    "name": "Kilise AdÄ±",
-    "noMatches": "EÅŸleÅŸme bulunamadÄ±.",
+    "address1": "Adres Satırı 1",
+    "address2": "Adres Satırı 2",
+    "another": "Başka bir kilise seçin",
+    "city": "Şehir",
+    "confirmRegister": "Yeni bir kiliseyi kaydetmek istediğinizden emin misiniz?",
+    "country": "Ülke",
+    "name": "Kilise Adı",
+    "noMatches": "Eşleşme bulunamadı.",
     "register": "Yeni Kiliseyi Kaydet",
-    "selectChurch": "Kilise SeÃ§in",
-    "state": "Eyalet / Ä°l",
+    "selectChurch": "Kilise Seçin",
+    "state": "Eyalet / İl",
     "validate": {
-      "address": "Adres boÅŸ olamaz.",
-      "city": "Åžehir boÅŸ olamaz.",
-      "country": "Ãœlke boÅŸ olamaz.",
-      "name": "Kilise adÄ± boÅŸ olamaz.",
-      "state": "Eyalet/Ä°l boÅŸ olamaz.",
-      "zip": "Posta Kodu/Posta Kodu boÅŸ olamaz."
+      "address": "Adres boş olamaz.",
+      "city": "Şehir boş olamaz.",
+      "country": "Ülke boş olamaz.",
+      "name": "Kilise adı boş olamaz.",
+      "state": "Eyalet/İl boş olamaz.",
+      "zip": "Posta Kodu/Posta Kodu boş olamaz."
     },
     "zip": "Posta Kodu / Posta Kodu"
   },
   "stockPhotos": {
-    "photoBy": "FotoÄŸraf:",
-    "providedBy": "Stok fotoÄŸraflar tarafÄ±ndan saÄŸlanmÄ±ÅŸtÄ±r"
+    "photoBy": "Fotoğraf:",
+    "providedBy": "Stok fotoğraflar tarafından sağlanmıştır"
   },
   "support": {
     "discussions": "Destek Forumu",
-    "documentation": "DokÃ¼mantasyon"
+    "documentation": "Dokümantasyon"
   },
   "wrapper": {
-    "newPrivateMessage": "Yeni Ã–zel Mesaj",
+    "newPrivateMessage": "Yeni Özel Mesaj",
     "privateConversation": "Private Conversation",
-    "privateMessage": "Ã–zel Mesaj",
-    "searchForPerson": "KiÅŸi Ara"
+    "privateMessage": "Özel Mesaj",
+    "searchForPerson": "Kişi Ara"
   }
 }

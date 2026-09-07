@@ -165,7 +165,6 @@
     "upload": "Nahrát",
     "uploadedFiles": "Nahrané soubory",
     "usedSpace": "Využité místo: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Zadejte prosím platný text",
       "linkUrl": "Zadejte prosím odkaz",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Nahrávání {}… {}%",
       "url": "URL",
       "usedStorage": "Využito {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Viditelnost",
       "weekly": "Týdně",
       "yearly": "Ročně"
@@ -665,6 +663,7 @@
       "giving": "Dary",
       "keep": "Ponechat",
       "lastNameRegister": "Příjmení",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Načítání...",
       "loadingForm": "Načítání formuláře pro dary...",
       "membersOnly": "Pouze členové",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Pro přihlášení se prosím přihlaste",
       "signInToCheckInCta": "Přihlásit se",
       "signInToCheckInMessage": "Přihlaste se, abyste se mohli přihlásit na bohoslužbu.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Účet",
       "tabDonate": "Darovat",
       "tabHistory": "Historie",

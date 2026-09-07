@@ -165,7 +165,6 @@
     "upload": "Layisha",
     "uploadedFiles": "Emafayela Lalayishiwe",
     "usedSpace": "Indzawo lesetjentisiwe: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Sicela ufake umbhalo losebentako",
       "linkUrl": "Sicela ufake sixhumanisi",
@@ -529,7 +528,6 @@
       "uploadingProgress": "Kulayishwa {}… {}%",
       "url": "I-URL",
       "usedStorage": "Kusetjentisiwe {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Kubonakala",
       "weekly": "Ngeviki",
       "yearly": "Ngemnyaka"
@@ -665,6 +663,7 @@
       "giving": "Kunikela",
       "keep": "Gcina",
       "lastNameRegister": "Sibongo",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Kuyalayisha...",
       "loadingForm": "Kulayishwa ifomu lekunikela...",
       "membersOnly": "Emalunga Kuphela",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Sicela ungene kute ungene esikhontweni",
       "signInToCheckInCta": "Ngena",
       "signInToCheckInMessage": "Ngena kute ungene esikhontweni.",
+      "staffOnly": "Staff Only",
       "tabAccount": "I-akhawunti",
       "tabDonate": "Nikela",
       "tabHistory": "Umlandvo",

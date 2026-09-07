@@ -1,38 +1,38 @@
 {
   "common": {
-    "cancel": "AtÅ¡aukti",
-    "close": "UÅ¾daryti",
-    "delete": "IÅ¡trinti",
-    "pleaseWait": "PraÅ¡ome palaukti...",
-    "save": "IÅ¡saugoti",
-    "search": "PaieÅ¡ka",
+    "cancel": "Atšaukti",
+    "close": "Uždaryti",
+    "delete": "Ištrinti",
+    "pleaseWait": "Prašome palaukti...",
+    "save": "Išsaugoti",
+    "search": "Paieška",
     "update": "Atnaujinti"
   },
   "donation": {
     "bankForm": {
-      "accountNumber": "SÄ…skaitos numeris",
-      "added": "Banko sÄ…skaita pridÄ—ta. Patvirtinkite banko sÄ…skaitÄ…, kad atliktumÄ—te aukÄ….",
-      "company": "Ä®monÄ—",
-      "firstDeposit": "Pirmas indÄ—lis",
+      "accountNumber": "Sąskaitos numeris",
+      "added": "Banko sąskaita pridėta. Patvirtinkite banko sąskaitą, kad atliktumėte auką.",
+      "company": "Įmonė",
+      "firstDeposit": "Pirmas indėlis",
       "individual": "Asmeninis",
-      "name": "SÄ…skaitos savininko vardas",
-      "needVerified": "Banko sÄ…skaitos turi bÅ«ti patvirtintos prieÅ¡ atliekant aukas. JÅ«sÅ³ sÄ…skaita per maÅ¾daug 1-3 darbo dienas gaus du maÅ¾us indÄ—lius. TurÄ—site Ä¯vesti Å¡ias indÄ—lio sumas, kad baigtusite sÄ…skaitos patvirtinimÄ…, pasirinkdami patvirtinimo saitÄ… Å¡alia banko sÄ…skaitos mokÄ—jimo bÅ«dÅ³ skyriuje.",
+      "name": "Sąskaitos savininko vardas",
+      "needVerified": "Banko sąskaitos turi būti patvirtintos prieš atliekant aukas. Jūsų sąskaita per maždaug 1-3 darbo dienas gaus du mažus indėlius. Turėsite įvesti šias indėlio sumas, kad baigtusite sąskaitos patvirtinimą, pasirinkdami patvirtinimo saitą šalia banko sąskaitos mokėjimo būdų skyriuje.",
       "routingNumber": "Marsruterizavimo numeris",
-      "secondDeposit": "Antrasis indÄ—lis",
-      "twoDeposits": "Ä®veskite du indÄ—lius, kuriuos gavote savo sÄ…skaitoje, kad baigtumÄ—te banko sÄ…skaitos patvirtinimÄ….",
-      "updated": "Banko sÄ…skaita atnaujinta.",
+      "secondDeposit": "Antrasis indėlis",
+      "twoDeposits": "Įveskite du indėlius, kuriuos gavote savo sąskaitoje, kad baigtumėte banko sąskaitos patvirtinimą.",
+      "updated": "Banko sąskaita atnaujinta.",
       "validate": {
-        "accountNumber": "Reikalingas marsruterizavimo ir sÄ…skaitos numeris.",
-        "holderName": "Reikalingas sÄ…skaitos savininko vardas."
+        "accountNumber": "Reikalingas marsruterizavimo ir sąskaitos numeris.",
+        "holderName": "Reikalingas sąskaitos savininko vardas."
       },
-      "verified": "Banko sÄ…skaita patvirtinta."
+      "verified": "Banko sąskaita patvirtinta."
     },
     "cardForm": {
-      "addNew": "PridÄ—ti naujÄ… kortelÄ™",
-      "added": "KortelÄ— sÄ—kmingai pridÄ—ta.",
-      "expirationMonth": "Galiojimo pabaiga (mÄ—nuo):",
+      "addNew": "Pridėti naują kortelę",
+      "added": "Kortelė sėkmingai pridėta.",
+      "expirationMonth": "Galiojimo pabaiga (mėnuo):",
       "expirationYear": "Galiojimo pabaiga (metai):",
-      "updated": "KortelÄ— sÄ—kmingai atnaujinta."
+      "updated": "Kortelė sėkmingai atnaujinta."
     },
     "common": {
       "cancel": "Cancel",
@@ -42,39 +42,39 @@
       "annually": "Kasmet",
       "anonymous": "Give anonymously (one-time gifts only)",
       "biWeekly": "Kas dvi savaites",
-      "cancelled": "Pasikartojanti auka atÅ¡aukta.",
-      "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iÄ… pasikartojanÄiÄ… aukÄ…?",
-      "cover": "Su malonumi pridÄ—siu {} operacijos mokesÄiams padengti, kad galÄ—tumÄ—te iÅ¡saugoti 100% mano aukos.",
+      "cancelled": "Pasikartojanti auka atšaukta.",
+      "confirmDelete": "Ar tikrai norite ištrinti šią pasikartojančią auką?",
+      "cover": "Su malonumi pridėsiu {} operacijos mokesčiams padengti, kad galėtumėte išsaugoti 100% mano aukos.",
       "donate": "Aukoti",
-      "editRecurring": "Redaguoti pasikartojanÄiÄ… aukÄ…",
-      "fees": "Taikomos operacijos mokesÄiai {}.",
-      "frequency": "DaÅ¾numas",
+      "editRecurring": "Redaguoti pasikartojančią auką",
+      "fees": "Taikomos operacijos mokesčiai {}.",
+      "frequency": "Dažnumas",
       "fund": "Fondas",
       "funds": "Fondai",
-      "make": "Padaryk aukÄ…",
-      "makeRecurring": "Padaryk pasikartojanÄiÄ… aukÄ…",
+      "make": "Padaryk auką",
+      "makeRecurring": "Padaryk pasikartojančią auką",
       "method": "Metodas",
-      "monthly": "Kas mÄ—nesÄ¯",
+      "monthly": "Kas mėnesį",
       "orPayWith": "Or pay with",
-      "preview": "PerÅ¾iÅ«rÄ—ti aukÄ…",
-      "quarterly": "Kas ketvirtÄ¯",
+      "preview": "Peržiūrėti auką",
+      "quarterly": "Kas ketvirtį",
       "recurringUpdated": "Pasikartojanti auka atnaujinta.",
-      "startDate": "PradÅ¾ios data",
-      "thankYou": "AÄiÅ« uÅ¾ aukÄ…!",
-      "tooLow": "Aukos suma turi bÅ«ti didesnÄ— nei 0,50 USD",
+      "startDate": "Pradžios data",
+      "thankYou": "Ačiū už auką!",
+      "tooLow": "Aukos suma turi būti didesnė nei 0,50 USD",
       "total": "Bendra aukos suma",
       "validate": {
-        "amount": "Suma negali bÅ«ti $0.",
-        "email": "PraÅ¡ome Ä¯vesti savo el. paÅ¡to adresÄ….",
-        "firstName": "PraÅ¡ome Ä¯vesti savo vardÄ….",
-        "lastName": "PraÅ¡ome Ä¯vesti savo pavardÄ™.",
-        "validEmail": "PraÅ¡ome Ä¯vesti galiojantÄ¯ el. paÅ¡to adresÄ…."
+        "amount": "Suma negali būti $0.",
+        "email": "Prašome įvesti savo el. pašto adresą.",
+        "firstName": "Prašome įvesti savo vardą.",
+        "lastName": "Prašome įvesti savo pavardę.",
+        "validEmail": "Prašome įvesti galiojantį el. pašto adresą."
       },
       "walletFailed": "Wallet payment could not be completed. Please try again.",
-      "weekly": "Kas savaitÄ™"
+      "weekly": "Kas savaitę"
     },
     "fundDonations": {
-      "addMore": "PridÄ—ti daugiau",
+      "addMore": "Pridėti daugiau",
       "amount": "Suma",
       "fund": "Fondas"
     },
@@ -101,12 +101,12 @@
       }
     },
     "paymentMethods": {
-      "addBank": "PridÄ—ti banko sÄ…skaitÄ…",
-      "addCard": "PridÄ—ti kortelÄ™",
-      "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡Ä¯ mokÄ—jimo bÅ«dÄ…?",
-      "deleted": "MokÄ—jimo bÅ«das iÅ¡trintas.",
+      "addBank": "Pridėti banko sąskaitą",
+      "addCard": "Pridėti kortelę",
+      "confirmDelete": "Ar tikrai norite ištrinti šį mokėjimo būdą?",
+      "deleted": "Mokėjimo būdas ištrintas.",
       "noMethod": "No Method",
-      "verify": "Patvirtinti sÄ…skaitÄ…"
+      "verify": "Patvirtinti sąskaitą"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -117,31 +117,31 @@
     "preview": {
       "date": "Aukos data",
       "donate": "Aukoti",
-      "every": "Kartoti kiekvienÄ…",
+      "every": "Kartoti kiekvieną",
       "fee": "Operacijos mokestis",
       "funds": "Fondai",
       "method": "Aukos metodas",
       "notes": "Pastabos",
       "startingOn": "Pradedant nuo",
-      "total": "IÅ¡ viso",
+      "total": "Iš viso",
       "type": "Aukos tipas"
     },
     "recurring": {
       "amount": "Suma",
-      "confirmPause": "Ar tikrai norite pristabdyti Å¡iÄ… pasikartojanÄiÄ… aukÄ…?",
+      "confirmPause": "Ar tikrai norite pristabdyti šią pasikartojančią auką?",
       "every": "Kiekvienas",
       "interval": "Intervalas",
       "noSubscriptions": "No Subscriptions",
-      "notFound": "MokÄ—jimo bÅ«das nerastas.",
-      "pauseFailed": "Nepavyko pristabdyti pasikartojanÄios aukos. Bandykite dar kartÄ….",
-      "pauseTooltip": "Pristabdyti pasikartojanÄiÄ… aukÄ…",
+      "notFound": "Mokėjimo būdas nerastas.",
+      "pauseFailed": "Nepavyko pristabdyti pasikartojančios aukos. Bandykite dar kartą.",
+      "pauseTooltip": "Pristabdyti pasikartojančią auką",
       "paused": "Pristabdyta",
       "pausedMessage": "Pasikartojanti auka pristabdyta.",
-      "paymentMethod": "MokÄ—jimo bÅ«das",
-      "resumeFailed": "Nepavyko atnaujinti pasikartojanÄios aukos. Bandykite dar kartÄ….",
-      "resumeTooltip": "Atnaujinti pasikartojanÄiÄ… aukÄ…",
+      "paymentMethod": "Mokėjimo būdas",
+      "resumeFailed": "Nepavyko atnaujinti pasikartojančios aukos. Bandykite dar kartą.",
+      "resumeTooltip": "Atnaujinti pasikartojančią auką",
       "resumedMessage": "Pasikartojanti auka atnaujinta.",
-      "startDate": "PradÅ¾ios data"
+      "startDate": "Pradžios data"
     }
   },
   "eventCalendar": {
@@ -149,38 +149,38 @@
       "day": {
         "friday": "Penktadienis",
         "monday": "Pirmadienis",
-        "saturday": "Å eÅ¡tadienis",
+        "saturday": "Šeštadienis",
         "sunday": "Sekmadienis",
         "thursday": "Ketvirtadienis",
         "tuesday": "Antradienis",
-        "wednesday": "TreÄiadienis"
+        "wednesday": "Trečiadienis"
       },
       "endDate": "Pabaigos data",
       "endDateAria": "Pasikartojimo pabaigos data",
       "ends": "Baigiasi",
       "endsAfter": "Po",
       "endsAria": "Pasirinkite, kada baigsis pasikartojimas",
-      "endsOn": "DatÄ…",
+      "endsOn": "Datą",
       "freqDay": "Diena",
-      "freqMonth": "MÄ—nuo",
-      "freqWeek": "SavaitÄ—",
-      "frequency": "DaÅ¾numas",
-      "frequencyAria": "Pasirinkite pasikartojimo daÅ¾numÄ…",
+      "freqMonth": "Mėnuo",
+      "freqWeek": "Savaitė",
+      "frequency": "Dažnumas",
+      "frequencyAria": "Pasirinkite pasikartojimo dažnumą",
       "interval": "Intervalas",
       "intervalAria": "Pasikartojimo intervalas",
-      "monthlyOnDay": "Kas mÄ—nesÄ¯ {} dienÄ…",
-      "monthlyOnNth": "Kas mÄ—nesÄ¯ {ordinal} {day}",
-      "monthlyOptionAria": "Pasirinkite mÄ—nesinio pasikartojimo parinktÄ¯",
+      "monthlyOnDay": "Kas mėnesį {} dieną",
+      "monthlyOnNth": "Kas mėnesį {ordinal} {day}",
+      "monthlyOptionAria": "Pasirinkite mėnesinio pasikartojimo parinktį",
       "never": "Niekada",
       "occurrences": "Pasikartojimai",
-      "occurrencesAria": "PasikartojimÅ³ skaiÄius",
-      "on": "DatÄ…",
+      "occurrencesAria": "Pasikartojimų skaičius",
+      "on": "Datą",
       "ordinal": {
-        "first": "pirmÄ…",
-        "fourth": "ketvirtÄ…",
-        "last": "paskutinÄ¯",
-        "second": "antrÄ…",
-        "third": "treÄiÄ…"
+        "first": "pirmą",
+        "fourth": "ketvirtą",
+        "last": "paskutinį",
+        "second": "antrą",
+        "third": "trečią"
       },
       "toggleWeekday": "Perjungti {} savaitiniam pasikartojimui"
     }
@@ -192,56 +192,56 @@
   },
   "formSubmissionEdit": {
     "back": "Atgal",
-    "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iuos formos duomenis?",
-    "continue": "TÄ™sti",
-    "editForm": "Redaguoti formÄ…",
+    "confirmDelete": "Ar tikrai norite ištrinti šiuos formos duomenis?",
+    "continue": "Tęsti",
+    "editForm": "Redaguoti formą",
     "isRequired": "reikalinga",
-    "stepProgress": "{current} iÅ¡ {total}",
+    "stepProgress": "{current} iš {total}",
     "submit": "Pateikti"
   },
   "gallery": {
     "aspectRatio": "Vaizdo santykis",
-    "confirmDelete": "Ar tikrai norite iÅ¡trinti Å¡iÄ… nuotraukÄ… iÅ¡ galerijos?",
+    "confirmDelete": "Ar tikrai norite ištrinti šią nuotrauką iš galerijos?",
     "freeForm": "Laisva forma"
   },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
-    "email": "El. paÅ¡tas",
+    "email": "El. paštas",
     "enterCode": "Enter Verification Code",
     "enterCodeInstructions": "Enter the 6-digit code we just emailed you.",
-    "expiredLink": "DabartinÄ— nuoroda yra pasibaigusi.",
-    "forgot": "PamirÅ¡ote slaptaÅ¾odÄ¯",
+    "expiredLink": "Dabartinė nuoroda yra pasibaigusi.",
+    "forgot": "Pamiršote slaptažodį",
     "login": "Prisijungti",
-    "noAcc": "Neturite sÄ…skaitos?",
+    "noAcc": "Neturite sąskaitos?",
     "noAccountFound": "No account was found with that email. Please register to continue.",
     "or": "or",
-    "password": "SlaptaÅ¾odis",
+    "password": "Slaptažodis",
     "register": "Registruotis",
-    "registerThankYou": "AÄiÅ«, kad uÅ¾siregistravote! Patikrinkite savo el. paÅ¡tÄ…, kad patvirtintumÄ—te savo sÄ…skaitÄ….",
-    "requestLink": "PapraÅ¡yti naujo nustatymo ryÅ¡io",
+    "registerThankYou": "Ačiū, kad užsiregistravote! Patikrinkite savo el. paštą, kad patvirtintumėte savo sąskaitą.",
+    "requestLink": "Paprašyti naujo nustatymo ryšio",
     "resendCode": "Resend code",
-    "reset": "IÅ¡ naujo nustatyti",
-    "resetInstructions": "Ä®veskite savo el. paÅ¡to adresÄ…, norÄ—dami papraÅ¡yti slaptaÅ¾odÅ¾io atstatymo.",
-    "resetPassword": "IÅ¡ naujo nustatyti slaptaÅ¾odÄ¯",
-    "setPassword": "Nustatyti slaptaÅ¾odÄ¯",
+    "reset": "Iš naujo nustatyti",
+    "resetInstructions": "Įveskite savo el. pašto adresą, norėdami paprašyti slaptažodžio atstatymo.",
+    "resetPassword": "Iš naujo nustatyti slaptažodį",
+    "setPassword": "Nustatyti slaptažodį",
     "signIn": "Prisijungti",
-    "signInTitle": "PraÅ¡ome prisijungti",
+    "signInTitle": "Prašome prisijungti",
     "validate": {
       "code": "Please enter the 6-digit code.",
-      "email": "PraÅ¡ome Ä¯vesti galiojantÄ¯ el. paÅ¡to adresÄ….",
-      "firstName": "PraÅ¡ome Ä¯vesti savo vardÄ….",
-      "invalid": "Negaliojantis prisijungimas. Patikrinkite savo el. paÅ¡to adresÄ… arba slaptaÅ¾odÄ¯.",
-      "lastName": "PraÅ¡ome Ä¯vesti savo pavardÄ™.",
-      "password": "PraÅ¡ome Ä¯vesti slaptaÅ¾odÄ¯.",
-      "passwordLength": "SlaptaÅ¾odis turi bÅ«ti maÅ¾iausiai 8 simboliai.",
-      "passwordMatch": "SlaptaÅ¾odÅ¾iai nesutampa.",
-      "selectingChurch": "Klaida pasirenkant baÅ¾nyÄiÄ…. Patikrinkite ir bandykite iÅ¡ naujo"
+      "email": "Prašome įvesti galiojantį el. pašto adresą.",
+      "firstName": "Prašome įvesti savo vardą.",
+      "invalid": "Negaliojantis prisijungimas. Patikrinkite savo el. pašto adresą arba slaptažodį.",
+      "lastName": "Prašome įvesti savo pavardę.",
+      "password": "Prašome įvesti slaptažodį.",
+      "passwordLength": "Slaptažodis turi būti mažiausiai 8 simboliai.",
+      "passwordMatch": "Slaptažodžiai nesutampa.",
+      "selectingChurch": "Klaida pasirenkant bažnyčią. Patikrinkite ir bandykite iš naujo"
     },
     "verifyCode": "Verify Code",
-    "verifyPassword": "Patvirtinti slaptaÅ¾odÄ¯",
-    "welcomeBack": "Sveiki sugrÄ¯Å¾Ä™",
-    "welcomeName": "Sveiki sugrÄ¯Å¾Ä™, <b>{}</b>! PraÅ¡ome palaukti, kol kraupiame jÅ«sÅ³ duomenis."
+    "verifyPassword": "Patvirtinti slaptažodį",
+    "welcomeBack": "Sveiki sugrįžę",
+    "welcomeName": "Sveiki sugrįžę, <b>{}</b>! Prašome palaukti, kol kraupiame jūsų duomenis."
   },
   "markdownEditor": {
     "content": "Turinys",
@@ -255,49 +255,49 @@
     "notifyOn": "Notify On",
     "openFile": "Open file",
     "validate": {
-      "content": "PraÅ¡ome Ä¯vesti pastabÄ…."
+      "content": "Prašome įvesti pastabą."
     }
   },
   "person": {
-    "email": "El. paÅ¡tas",
+    "email": "El. paštas",
     "firstName": "Vardas",
-    "lastName": "PavardÄ—",
+    "lastName": "Pavardė",
     "name": "Vardas"
   },
   "selectChurch": {
     "address1": "Adresas 1",
     "address2": "Adresas 2",
-    "another": "Pasirinkti kitÄ… baÅ¾nyÄiÄ…",
+    "another": "Pasirinkti kitą bažnyčią",
     "city": "Miestas",
-    "confirmRegister": "Ar tikrai norite registruoti naujÄ… baÅ¾nyÄiÄ…?",
-    "country": "Å alis",
-    "name": "BaÅ¾nyÄios pavadinimas",
-    "noMatches": "Nenustatyta atitikÄiÅ³.",
-    "register": "Registruoti naujÄ… baÅ¾nyÄiÄ…",
-    "selectChurch": "Pasirinkti baÅ¾nyÄiÄ…",
+    "confirmRegister": "Ar tikrai norite registruoti naują bažnyčią?",
+    "country": "Šalis",
+    "name": "Bažnyčios pavadinimas",
+    "noMatches": "Nenustatyta atitikčių.",
+    "register": "Registruoti naują bažnyčią",
+    "selectChurch": "Pasirinkti bažnyčią",
     "state": "Valstija / provincija",
     "validate": {
-      "address": "Adresas negali bÅ«ti tuÅ¡Äias.",
-      "city": "Miestas negali bÅ«ti tuÅ¡Äias.",
-      "country": "Å alis negali bÅ«ti tuÅ¡Äia.",
-      "name": "BaÅ¾nyÄios pavadinimas negali bÅ«ti tuÅ¡Äias.",
-      "state": "Valstija/provincija negali bÅ«ti tuÅ¡Äia.",
-      "zip": "PaÅ¡to kodas negali bÅ«ti tuÅ¡Äias."
+      "address": "Adresas negali būti tuščias.",
+      "city": "Miestas negali būti tuščias.",
+      "country": "Šalis negali būti tuščia.",
+      "name": "Bažnyčios pavadinimas negali būti tuščias.",
+      "state": "Valstija/provincija negali būti tuščia.",
+      "zip": "Pašto kodas negali būti tuščias."
     },
-    "zip": "PaÅ¡to kodas"
+    "zip": "Pašto kodas"
   },
   "stockPhotos": {
-    "photoBy": "Nuotrauka iÅ¡:",
-    "providedBy": "AkcijÅ³ nuotraukos teikia"
+    "photoBy": "Nuotrauka iš:",
+    "providedBy": "Akcijų nuotraukos teikia"
   },
   "support": {
     "discussions": "Palaikymo forumas",
     "documentation": "Dokumentacija"
   },
   "wrapper": {
-    "newPrivateMessage": "Nauja privati Å¾inutÄ—",
+    "newPrivateMessage": "Nauja privati žinutė",
     "privateConversation": "Private Conversation",
-    "privateMessage": "Privati Å¾inutÄ—",
-    "searchForPerson": "IeÅ¡koti asmens"
+    "privateMessage": "Privati žinutė",
+    "searchForPerson": "Ieškoti asmens"
   }
 }

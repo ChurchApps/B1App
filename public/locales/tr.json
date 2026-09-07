@@ -165,7 +165,6 @@
     "upload": "Yükle",
     "uploadedFiles": "Yüklenen Dosyalar",
     "usedSpace": "Kullanılan alan: {} / 100MB",
-    "usedSpaceUnlimited": "Used space: {}",
     "validate": {
       "linkText": "Lütfen geçerli bir metin girin",
       "linkUrl": "Lütfen bağlantı girin",
@@ -529,7 +528,6 @@
       "uploadingProgress": "{} yükleniyor… %{}",
       "url": "URL",
       "usedStorage": "Kullanılan: {} / 100MB",
-      "usedStorageUnlimited": "Used {}",
       "visibility": "Görünürlük",
       "weekly": "Haftalık",
       "yearly": "Yıllık"
@@ -665,6 +663,7 @@
       "giving": "Bağış",
       "keep": "Tut",
       "lastNameRegister": "Soyad",
+      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Yükleniyor...",
       "loadingForm": "Bağış formu yükleniyor...",
       "membersOnly": "Sadece Üyeler",
@@ -705,6 +704,7 @@
       "signInToCheckIn": "Giriş yapmak için lütfen oturum açın",
       "signInToCheckInCta": "Giriş Yap",
       "signInToCheckInMessage": "İbadete giriş yapmak için oturum açın.",
+      "staffOnly": "Staff Only",
       "tabAccount": "Hesap",
       "tabDonate": "Bağış Yap",
       "tabHistory": "Geçmiş",
