@@ -1,6 +1,6 @@
 import { test, expect, request } from "@playwright/test";
 
-const API_BASE = "http://localhost:8084";
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 const GROUP_ID = "GRP00000030"; // VBS group — already used by EVT00000015, known-good churchId scope.
 const NO_FORM_TITLE = "Web Wizard Test Event (No Form)";

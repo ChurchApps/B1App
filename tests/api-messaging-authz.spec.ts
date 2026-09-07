@@ -5,7 +5,7 @@ import { test, expect, request, type APIRequestContext } from "@playwright/test"
  * No browser UI - every case is a raw HTTP status assertion against the local demo stack.
  */
 
-const MESSAGING = "http://localhost:8084/messaging";
+const MESSAGING = (process.env.API_BASE || "http://localhost:8084") + "/messaging";
 const CHURCH_ID = "CHU00000001";
 const OTHER_GROUP = "GRP00000016"; // Men's Bible Study - volunteer is not a member
 const OWN_GROUP = "GRP00000025"; // Greeters Ministry - volunteer is a member
@@ -15,7 +15,7 @@ type Identity = { ctx: APIRequestContext; jwt: string };
 
 async function login(email: string): Promise<Identity> {
   const ctx = await request.newContext();
-  const res = await ctx.post("http://localhost:8084/membership/users/login", {
+  const res = await ctx.post((process.env.API_BASE || "http://localhost:8084") + "/membership/users/login", {
     data: { email, password: "password" },
     headers: { "Content-Type": "application/json" }
   });
@@ -98,7 +98,7 @@ test.describe("Messaging API authorization", () => {
 test.describe("Group chat feed toggles (API)", () => {
   test.describe.configure({ mode: "serial" });
 
-  const MEMBERSHIP = "http://localhost:8084/membership";
+  const MEMBERSHIP = (process.env.API_BASE || "http://localhost:8084") + "/membership";
   let volunteer: Identity;
   let demo: Identity;
   let demoMembership: Identity;

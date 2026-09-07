@@ -1,6 +1,6 @@
 import { test, expect, request, type Page, type APIRequestContext } from "@playwright/test";
 
-const MAIN_API = "http://localhost:8084";
+const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 // volunteer@b1.church (Rachel Martin) leads GRP00000029 (Financial Peace); demo@b1.church (Demo User) is not a member of it.
 const LEADER_GROUP_ID = "GRP00000029";

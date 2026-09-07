@@ -67,10 +67,10 @@ async function deleteAllCards(page: Page) {
 // Browser-side delete can report "Failed to fetch" while the Api is still detaching at NMI; clean up server-side instead.
 async function deleteAllCardsViaApi() {
   const api = await getApi("demo");
-  const res = await apiCall(api, "get", "http://localhost:8084/giving/paymentmethods/personid/PER00000082");
+  const res = await apiCall(api, "get", (process.env.API_BASE || "http://localhost:8084") + "/giving/paymentmethods/personid/PER00000082");
   const pms: any[] = await res.json();
   for (const pm of pms) {
-    const del = await apiCall(api, "delete", `http://localhost:8084/giving/paymentmethods/${pm.id}/${pm.customerId}?provider=${pm.provider}`);
+    const del = await apiCall(api, "delete", `${process.env.API_BASE || "http://localhost:8084"}/giving/paymentmethods/${pm.id}/${pm.customerId}?provider=${pm.provider}`);
     expect(del.ok(), `delete ${pm.id}: ${del.status()}`).toBe(true);
   }
 }
@@ -144,7 +144,7 @@ test.describe.serial("Kingdom Funding member donations (live NMI test gateway)",
     }).toPass({ timeout: 60000 }).catch(() => { console.log("DIAG:\n" + diag.join("\n")); throw new Error("recurring gift not listed on History tab"); });
 
     const api = await getApi("demo");
-    const del = await apiCall(api, "delete", `http://localhost:8084/giving/subscriptions/${subId}`);
+    const del = await apiCall(api, "delete", `${process.env.API_BASE || "http://localhost:8084"}/giving/subscriptions/${subId}`);
     expect(del.ok(), `cancel subscription ${subId}: ${del.status()}`).toBe(true);
   });
 

@@ -1,5 +1,5 @@
 const DEFAULT_BASE_URL = "http://grace.localtest.me:3301";
-const API_BASE = "http://localhost:8084";
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
 // Tests work against either ENVIRONMENT=demo (stage demo deployments) or
 // ENVIRONMENT=dev pointed at localhost — same set reset-demo accepts.
 const ALLOWED_ENVIRONMENTS = ["demo", "dev"];
