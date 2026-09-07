@@ -13,8 +13,6 @@ import MobileGoogleAnalytics from "./MobileGoogleAnalytics";
 import { useHydrateSession } from "./hooks/useHydrateSession";
 import { useHashScroll } from "@/hooks/useHashScroll";
 
-if (typeof window !== "undefined") EnvironmentHelper.init();
-
 const mobileMuiTheme = createTheme({
   palette: { primary: { main: "#0D47A1" }, secondary: { main: "#444444" } },
   shape: { borderRadius: 14 },
@@ -52,6 +50,7 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
   const [localeReady, setLocaleReady] = React.useState(false);
 
   useEffect(() => {
+    EnvironmentHelper.init();
     EnvironmentHelper.initLocale().then(() => setLocaleReady(true));
     ErrorHelper.init(
       (): ErrorAppDataInterface => ({

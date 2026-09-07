@@ -6,8 +6,10 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   Chip,
   CircularProgress,
+  FormControlLabel,
   Icon,
   IconButton,
   LinearProgress,
@@ -102,7 +104,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     eventId,
     event: event || {},
     isLoggedIn,
-    person: { id: personId, email: person?.contactInfo?.email, firstName: person?.name?.first, lastName: person?.name?.last }
+    person: { id: personId, email: person?.contactInfo?.email, firstName: person?.name?.first, lastName: person?.name?.last, householdId: userContext?.person?.householdId }
   });
 
   const [loadErrorAlerted, setLoadErrorAlerted] = useState(false);
@@ -348,11 +350,36 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
             <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 0.5 }}>{Locale.label("registration.additionalMembers")}</Typography>
             <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 2 }}>{Locale.label("registration.additionalMembersInfo")}</Typography>
 
-            {reg.members.length === 0 && (
+            {reg.householdMembers.length > 0 && (
+              <Box sx={{ mb: 2 }} data-testid="household-members">
+                <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 0.5 }}>{Locale.label("registration.yourHousehold")}</Typography>
+                <FormControlLabel control={<Checkbox checked disabled />} label={`${reg.primaryFirstName} ${reg.primaryLastName} (${Locale.label("registration.you")})`} />
+                {reg.householdMembers.map((hm) => {
+                  const checked = reg.isHouseholdMemberSelected(hm.id);
+                  const selected = reg.members.find((m) => m.personId === hm.id);
+                  return (
+                    <Box key={hm.id}>
+                      <FormControlLabel
+                        control={<Checkbox checked={checked} onChange={() => reg.toggleHouseholdMember(hm)} data-testid={`household-member-${hm.id}`} />}
+                        label={`${hm.firstName} ${hm.lastName}`.trim()}
+                      />
+                      {checked && reg.hasTypes && (
+                        <Select fullWidth size="small" displayEmpty value={selected?.registrationTypeId || ""} onChange={(e) => reg.updateMember(reg.members.indexOf(selected!), "registrationTypeId", e.target.value)} data-testid={`household-type-${hm.id}`} sx={{ mb: 1 }}>
+                          <MenuItem value="" disabled>{Locale.label("registration.selectType")}</MenuItem>
+                          {reg.types.map((t) => (<MenuItem key={t.id} value={t.id} disabled={typeDisabled(t)}>{typeLabel(t)}</MenuItem>))}
+                        </Select>
+                      )}
+                    </Box>
+                  );
+                })}
+              </Box>
+            )}
+
+            {reg.members.length === 0 && reg.householdMembers.length === 0 && (
               <Typography sx={{ fontSize: 13, color: tc.textMuted, textAlign: "center", mb: 2 }}>{Locale.label("registration.noAdditional")}</Typography>
             )}
 
-            {reg.members.map((member, idx) => (
+            {reg.members.map((member, idx) => (member.personId ? null : (
               <Box key={idx} sx={{ mb: 1.5 }}>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Box sx={{ flex: 1, display: "flex", gap: 1 }}>
@@ -368,7 +395,7 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
                   </Select>
                 )}
               </Box>
-            ))}
+            )))}
 
             <Button variant="outlined" startIcon={<Icon>person_add</Icon>} onClick={reg.addMember} disabled={reg.members.length >= 10} sx={{ textTransform: "none", borderColor: tc.primary, color: tc.primary, borderRadius: `${mobileTheme.radius.md}px`, fontWeight: 600 }}>
               {Locale.label("registration.addMember")}

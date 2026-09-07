@@ -134,3 +134,105 @@ test.describe.serial("Public event registration wizard (web /register/<eventId>)
     await expect(main.getByText(WITH_FORM_TITLE).first()).toBeVisible();
   });
 });
+
+const HOUSEHOLD_TITLE = "Household Wizard Test Event";
+const DEMO_PERSON_ID = "PER00000082"; // Demo User, head of the seeded "User Family" household
+const ALEX_PERSON_ID = "PER00000084"; // Alex User, child born 2015
+
+test.describe.serial("Household registration pre-fill (logged-in member)", () => {
+  let staffJwt: string;
+  let eventId: string;
+  let adultTypeId: string;
+  let childTypeId: string;
+  let regId: string;
+
+  test.beforeAll(async () => {
+    const ctx = await request.newContext();
+    const loginRes = await ctx.post(`${API_BASE}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
+    expect(loginRes.ok()).toBeTruthy();
+    const loginBody = await loginRes.json();
+    const uc = (loginBody.userChurches || []).find((c: any) => c.church?.id === CHURCH_ID) || loginBody.userChurches?.[0];
+    staffJwt = uc?.jwt as string;
+    const auth = { headers: { Authorization: "Bearer " + staffJwt } };
+
+    const window = futureWindow(12);
+    const eventsRes = await ctx.post(`${API_BASE}/content/events`, {
+      ...auth,
+      data: [{ groupId: GROUP_ID, title: HOUSEHOLD_TITLE, start: window.start, end: window.end, allDay: false, visibility: "public", registrationEnabled: true, capacity: 20 }]
+    });
+    expect(eventsRes.ok()).toBeTruthy();
+    eventId = (await eventsRes.json())[0]?.id;
+    expect(eventId, "household event id").toBeTruthy();
+
+    const typesRes = await ctx.post(`${API_BASE}/content/registrations/types`, {
+      ...auth,
+      data: [
+        { eventId, name: "Household Adult", price: null, minAgeYears: 18, sort: 1 },
+        { eventId, name: "Household Child", price: null, maxAgeYears: 17, sort: 2 }
+      ]
+    });
+    expect(typesRes.ok()).toBeTruthy();
+    const types = await typesRes.json();
+    adultTypeId = types[0]?.id;
+    childTypeId = types[1]?.id;
+    expect(childTypeId, "child type id").toBeTruthy();
+    await ctx.dispose();
+  });
+
+  test.afterAll(async () => {
+    try {
+      const ctx = await request.newContext();
+      const auth = { headers: { Authorization: "Bearer " + staffJwt } };
+      if (regId) await ctx.delete(`${API_BASE}/content/registrations/${regId}`, auth).catch(() => { });
+      for (const id of [adultTypeId, childTypeId]) {
+        if (id) await ctx.delete(`${API_BASE}/content/registrations/types/${id}`, auth).catch(() => { });
+      }
+      if (eventId) await ctx.delete(`${API_BASE}/content/events/${eventId}`, auth).catch(() => { });
+      await ctx.dispose();
+    } catch { /* ignore */ }
+  });
+
+  test("household members are listed and register in one call with the age-fit type", async ({ page }) => {
+    // The wizard reads the person from UserContext, which only the in-app login populates on public pages.
+    await page.goto(`/login?returnUrl=${encodeURIComponent("/register/" + eventId)}`);
+    await page.fill('input[type="email"]', "demo@b1.church");
+    await page.fill('input[type="password"]', "password");
+    await page.click('button[type="submit"]');
+    await page.waitForURL(new RegExp(`/register/${eventId}`), { timeout: 60000 });
+    const main = page.locator("main");
+    await expect(main.getByText(HOUSEHOLD_TITLE).first()).toBeVisible({ timeout: 30000 });
+    await expect(main.getByText("Demo User")).toBeVisible({ timeout: 15000 });
+
+    await page.getByTestId("primary-type").click();
+    await page.getByRole("option", { name: /Household Adult/i }).click();
+    await main.getByRole("button", { name: /^Continue$/i }).click();
+    await expect(main.getByText("Additional Members")).toBeVisible({ timeout: 15000 });
+
+    const household = page.getByTestId("household-members");
+    await expect(household).toContainText("Jane User");
+    await expect(household).toContainText("Alex User");
+    await expect(household).toContainText("Emma User");
+
+    const alex = household.getByTestId(`household-member-${ALEX_PERSON_ID}`).locator("input");
+    await alex.check();
+    await expect(alex).toBeChecked();
+    await expect(page.getByTestId(`household-type-${ALEX_PERSON_ID}`)).toContainText("Household Child");
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(page.getByTestId("household-members")).toBeInViewport();
+    await page.screenshot({ path: ".pr-screenshots/household-registration-after.png", fullPage: true });
+
+    const registerPost = page.waitForResponse((r) => r.url().includes("/registrations/register") && r.request().method() === "POST", { timeout: 20000 });
+    await main.getByRole("button", { name: /Complete Registration/i }).click();
+    const regResp = await registerPost;
+    expect(regResp.ok(), "register response ok").toBeTruthy();
+    const body = await regResp.json();
+    regId = body?.id;
+
+    expect(body.members).toHaveLength(2);
+    expect(body.members.map((m: any) => m.personId).sort()).toEqual([DEMO_PERSON_ID, ALEX_PERSON_ID].sort());
+    const alexMember = body.members.find((m: any) => m.personId === ALEX_PERSON_ID);
+    expect(alexMember.registrationTypeId).toBe(childTypeId);
+
+    await expect(main.getByText("Registration Confirmed!")).toBeVisible({ timeout: 20000 });
+  });
+});
