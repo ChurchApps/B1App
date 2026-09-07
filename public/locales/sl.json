@@ -20,10 +20,6 @@
     "navigateTo": "Pojdi na {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Vaša prisotnost je bila shranjena. Hvala!",
-      "title": "Prijava zaključena"
-    },
     "groups": {
       "chooseGroupFor": "Izberite skupino za {}",
       "generalGroups": "Splošne skupine",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Za vsakega člana sta obvezna ime in priimek."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Že prijavljen",
-      "alreadyCheckedInTitle": "Že prijavljen",
-      "change": "Spremeni",
-      "checkInAgain": "Ponovno prijavi",
-      "completeCheckin": "Dokončaj prijavo",
-      "duplicateMessage": "{} je že prijavljen za to bogoslužje. Ponovno prijavite za posodobitev skupin.",
-      "loginPrompt": "Prepričajte se, da ste prijavljeni in imate registrirane člane gospodinjstva.",
-      "member": "Član",
-      "memberAvatar": "Avatar osebe {}",
-      "noGroupSelected": "Skupina ni izbrana",
-      "noMembersFound": "Člani gospodinjstva niso najdeni",
-      "none": "Brez",
-      "noneLower": "brez",
-      "subtitle": "Izberite skupine za vsakega družinskega člana",
-      "tapToSelect": "Tapnite za izbiro skupin",
-      "title": "Člani gospodinjstva",
-      "unknown": "Neznano"
-    },
-    "services": {
-      "checkBackLater": "Preverite kasneje ali se obrnite na skrbnika cerkve",
-      "noServicesAvailable": "Bogoslužja niso na voljo",
-      "subtitle": "Izberite, za katero bogoslužje se prijavljate",
-      "title": "Izberi bogoslužje"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Shrani",
     "search": "Iskanje",
     "update": "Posodobi"
-  },
-  "donate": {
-    "authLanding": "To je s preverjanjem pristnosti",
-    "currentYearCsv": "Tekoče leto (CSV)",
-    "currentYearPrint": "TEKOČE LETO (TISK)",
-    "donations": "Darovi",
-    "downloadRecords": "Prenesi zapise o darovih",
-    "exportCurrentYearCsv": "Izvozi darove tekočega leta kot CSV",
-    "exportLastYearCsv": "Izvozi darove preteklega leta kot CSV",
-    "lastYearCsv": "Preteklo leto (CSV)",
-    "lastYearPrint": "PRETEKLO LETO (TISK)",
-    "pending": "V obdelavi",
-    "printCurrentYear": "Natisni darove tekočega leta",
-    "printLastYear": "Natisni darove preteklega leta"
-  },
-  "donation": {
-    "page": {
-      "amount": "Znesek",
-      "batch": "Serija",
-      "date": "Datum",
-      "fund": "Sklad",
-      "method": "Način",
-      "willAppear": "Bo prikazano"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Moj dar"
   },
   "element": {
     "offlinePlaceholder": "Ograda za nepovezan video"

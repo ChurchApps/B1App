@@ -20,10 +20,6 @@
     "navigateTo": "Navigate to {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Your attendance has been saved. Thank you!",
-      "title": "Check-in Complete"
-    },
     "groups": {
       "chooseGroupFor": "Choose a group for {}",
       "generalGroups": "General Groups",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "First name and last name are required for each member."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Already checked in",
-      "alreadyCheckedInTitle": "Already Checked In",
-      "change": "Change",
-      "checkInAgain": "Check In Again",
-      "completeCheckin": "Complete Check-in",
-      "duplicateMessage": "{} already checked in for this service. Check in again to update their groups.",
-      "loginPrompt": "Please ensure you are logged in and have household members registered.",
-      "member": "Member",
-      "memberAvatar": "{} avatar",
-      "noGroupSelected": "No group selected",
-      "noMembersFound": "No Household Members Found",
-      "none": "None",
-      "noneLower": "none",
-      "subtitle": "Select groups for each family member",
-      "tapToSelect": "Tap to select groups",
-      "title": "Household Members",
-      "unknown": "Unknown"
-    },
-    "services": {
-      "checkBackLater": "Please check back later or contact your church administrator",
-      "noServicesAvailable": "No Services Available",
-      "subtitle": "Choose which service you're checking in for",
-      "title": "Select Service"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Save",
     "search": "Search",
     "update": "Update"
-  },
-  "donate": {
-    "authLanding": "This is with Auth",
-    "currentYearCsv": "Current Year (CSV)",
-    "currentYearPrint": "CURRENT YEAR (PRINT)",
-    "donations": "Donations",
-    "downloadRecords": "Download donation records",
-    "exportCurrentYearCsv": "Export current year donations as CSV",
-    "exportLastYearCsv": "Export last year donations as CSV",
-    "lastYearCsv": "Last Year (CSV)",
-    "lastYearPrint": "LAST YEAR (PRINT)",
-    "pending": "Pending",
-    "printCurrentYear": "Print current year donations",
-    "printLastYear": "Print last year donations"
-  },
-  "donation": {
-    "page": {
-      "amount": "Amount",
-      "batch": "Batch",
-      "date": "Date",
-      "fund": "Fund",
-      "method": "Method",
-      "willAppear": "Will Appear"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "My Donation"
   },
   "element": {
     "offlinePlaceholder": "Offline Video Placeholder"
@@ -130,6 +74,10 @@
       "thisAndFollowing": "This and all following dates"
     },
     "registerForEvent": "Register for this Event"
+  },
+  "footer": {
+    "give": "Give",
+    "nav": "Footer"
   },
   "groups": {
     "add": "Add",
