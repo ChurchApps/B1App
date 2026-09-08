@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { ApiHelper, Loading } from "@churchapps/apphelper";
+import { ApiHelper, Loading, Locale } from "@churchapps/apphelper";
 import type { GroupInterface } from "@churchapps/helpers";
 import GroupCard from "./GroupCard";
 
@@ -71,11 +71,9 @@ export const GroupsBrowser = (props: Props) => {
 
   return (
     <Box data-testid="groups-browser">
-      {props.title && (
-        <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
-          {props.title}
-        </Typography>
-      )}
+      <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
+        {props.title || Locale.label("groupsPage.findAGroup")}
+      </Typography>
       {(showSearch || showCategory || showCampus) && (
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {showSearch && (

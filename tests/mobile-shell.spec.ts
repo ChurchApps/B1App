@@ -15,9 +15,25 @@ test.describe("Mobile shell", () => {
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
-  test("unknown mobile slug renders placeholder, not 404", async ({ page }) => {
+  test("unknown mobile slug renders a not-found card with a way home", async ({ page }) => {
     await page.goto("/mobile/this-screen-does-not-exist");
-    await expect(page.locator("body")).toContainText(/not yet implemented/i);
+    await expect(page.locator("main")).toContainText(/Page not found/i, { timeout: 15000 });
+    await expect(page.locator("main")).not.toContainText(/coming soon|not yet implemented/i);
+    await page.locator("main").getByRole("link", { name: /Back to home/i }).click();
+    await expect(page).toHaveURL(/\/mobile\/dashboard/, { timeout: 15000 });
+  });
+
+  test("drawer footer shows the church name, not a product name", async ({ page }) => {
+    await page.goto("/mobile/dashboard");
+    const nav = page.getByRole("navigation", { name: /Main navigation/i });
+    await expect(nav).toContainText(DEMO_CHURCH.NAME, { timeout: 15000 });
+    await expect(nav).not.toContainText(/B1 Mobile Web/i);
+  });
+
+  test("app bar titles the Me screen", async ({ page }) => {
+    await page.goto("/mobile/me");
+    const header = page.locator("header, [role='banner']").first();
+    await expect(header.getByText("Me", { exact: true })).toBeVisible({ timeout: 15000 });
   });
 
   test("app bar shows the church name", async ({ page }) => {

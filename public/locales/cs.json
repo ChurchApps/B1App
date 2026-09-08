@@ -166,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Brzy dostupné v mobilní PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Zpět",
       "backToDashboard": "Zpět na nástěnku",
       "close": "Zavřít",
@@ -194,7 +192,6 @@
       "playSermon": "Přehrát kázání",
       "privacyPolicy": "Zásady ochrany osobních údajů",
       "profile": "Profil",
-      "screenNotImplemented": "Obrazovka '{}' zatím není implementována.",
       "signIn": "Přihlásit se",
       "switchToDark": "Přepnout na tmavý režim",
       "switchToLight": "Přepnout na světlý režim",
@@ -383,7 +380,6 @@
       "deleteEvent": "Smazat událost",
       "deleteFile": "Smazat soubor",
       "deleteLink": "Smazat odkaz",
-      "deleteLinkConfirm": "Smazat odkaz \"{}\"?",
       "discussions": "Diskuze",
       "edit": "Upravit",
       "editEvent": "Upravit událost",

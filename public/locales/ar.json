@@ -166,9 +166,7 @@
     "demoTitle": "تجريبي:"
   },
   "mobile": {
-    "comingSoon": "قريبًا في تطبيق PWA للجوال.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "رجوع",
       "backToDashboard": "العودة إلى لوحة التحكم",
       "close": "إغلاق",
@@ -194,7 +192,6 @@
       "playSermon": "تشغيل العظة",
       "privacyPolicy": "سياسة الخصوصية",
       "profile": "الملف الشخصي",
-      "screenNotImplemented": "شاشة '{}' لم تُنفّذ بعد.",
       "signIn": "تسجيل الدخول",
       "switchToDark": "التبديل إلى الوضع الداكن",
       "switchToLight": "التبديل إلى الوضع الفاتح",
@@ -383,7 +380,6 @@
       "deleteEvent": "حذف الحدث",
       "deleteFile": "حذف الملف",
       "deleteLink": "حذف الرابط",
-      "deleteLinkConfirm": "حذف الرابط \"{}\"؟",
       "discussions": "النقاشات",
       "edit": "تعديل",
       "editEvent": "تعديل الحدث",

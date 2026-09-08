@@ -22,7 +22,7 @@ test.describe("Realtime — private messages", () => {
   });
 });
 
-const MAIN_API = "http://localhost:8084";
+const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 const TESTER_PERSON_ID = "PER00000083";
 const DEMO_PERSON_ID = "PER00000082";

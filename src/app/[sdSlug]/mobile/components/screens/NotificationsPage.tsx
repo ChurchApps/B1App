@@ -2,7 +2,7 @@
 
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Chip, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import UserContext from "@/context/UserContext";
@@ -22,6 +22,7 @@ interface NotificationItem {
   linkUrl?: string;
   contentType?: string;
   contentId?: string;
+  triggeredByPersonId?: string;
 }
 
 interface Props {
@@ -35,6 +36,7 @@ export const NotificationsPage = ({ config }: Props) => {
   const queryClient = useQueryClient();
   const loggedIn = !!context?.user?.firstName;
   const [pushBusy, setPushBusy] = React.useState(false);
+  const [clearAllOpen, setClearAllOpen] = React.useState(false);
   const { diagnostics, refresh: refreshPushStatus } = useNotificationDiagnostics(loggedIn);
 
   const handleTogglePush = async () => {
@@ -101,8 +103,8 @@ export const NotificationsPage = ({ config }: Props) => {
   };
 
   const handleClearAll = async () => {
+    setClearAllOpen(false);
     if (!notifications || notifications.length === 0) return;
-    if (typeof window !== "undefined" && !window.confirm("Clear all notifications?")) return;
     queryClient.setQueryData<NotificationItem[]>(queryKey, []);
     try {
       await ApiHelper.delete("/notifications/my", "MessagingApi");
@@ -246,7 +248,7 @@ export const NotificationsPage = ({ config }: Props) => {
           mb: "8px"
         }}
       >
-        No notifications yet
+        {Locale.label("mobile.screens.noNotificationsTitle")}
       </Typography>
       <Typography
         sx={{
@@ -255,7 +257,7 @@ export const NotificationsPage = ({ config }: Props) => {
           lineHeight: "20px"
         }}
       >
-        We&apos;ll notify you when something new arrives.
+        {Locale.label("mobile.screens.noNotificationsBody")}
       </Typography>
     </Box>
   );
@@ -278,7 +280,7 @@ export const NotificationsPage = ({ config }: Props) => {
       }}
     >
       <Icon sx={{ color: tc.primary }}>tune</Icon>
-      <Typography sx={{ flex: 1, fontSize: 14, fontWeight: 600, color: tc.text }}>Notification Preferences</Typography>
+      <Typography sx={{ flex: 1, fontSize: 14, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screenTitles.notificationPrefs")}</Typography>
       <Icon sx={{ color: tc.disabled, fontSize: 20 }}>chevron_right</Icon>
     </Box>
   );
@@ -306,23 +308,23 @@ export const NotificationsPage = ({ config }: Props) => {
         </Icon>
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-            Push notifications
+            {Locale.label("mobile.screens.pushNotifications")}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
             {blocked
-              ? `Blocked. ${WebPushHelper.getUnblockInstructions()}`
+              ? Locale.label("mobile.screens.pushBlocked").replace("{}", WebPushHelper.getUnblockInstructions())
               : installRequired
-                ? (diagnostics.statusReason || "Install this app to finish notification setup on this device")
+                ? (diagnostics.statusReason || Locale.label("mobile.screens.pushInstallRequired"))
                 : pendingRegistration
-                  ? (diagnostics.statusReason || "Permission is granted, but this device still needs registration")
+                  ? (diagnostics.statusReason || Locale.label("mobile.screens.pushPendingRegistration"))
                   : on
-                    ? "You'll get alerts on this device"
-                    : "Turn on to get alerts on this device"}
+                    ? Locale.label("mobile.screens.pushOn")
+                    : Locale.label("mobile.screens.pushOff")}
           </Typography>
         </Box>
         {!blocked && (
           <Button size="small" variant={on ? "outlined" : "contained"} disabled={pushBusy} onClick={handleTogglePush}>
-            {on ? "Turn off" : installRequired ? "Install App" : pendingRegistration ? "Retry" : "Turn on"}
+            {on ? Locale.label("mobile.screens.turnOff") : installRequired ? Locale.label("mobile.screenTitles.installApp") : pendingRegistration ? Locale.label("mobile.details.retry") : Locale.label("mobile.screens.turnOn")}
           </Button>
         )}
       </Box>
@@ -340,10 +342,10 @@ export const NotificationsPage = ({ config }: Props) => {
               data-testid="notifications-clear-all"
               size="small"
               startIcon={<Icon>clear_all</Icon>}
-              onClick={handleClearAll}
+              onClick={() => setClearAllOpen(true)}
               sx={{ color: tc.primary, textTransform: "none" }}
             >
-              Clear All
+              {Locale.label("mobile.screens.clearAll")}
             </Button>
           </Box>
         )}
@@ -351,6 +353,16 @@ export const NotificationsPage = ({ config }: Props) => {
         {notifications !== null && notifications.length === 0 && renderEmpty()}
         {notifications !== null && notifications.length > 0 && notifications.map(renderRow)}
       </Box>
+      <Dialog open={clearAllOpen} onClose={() => setClearAllOpen(false)}>
+        <DialogTitle>{Locale.label("mobile.screens.clearAllTitle")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{Locale.label("mobile.screens.clearAllBody")}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setClearAllOpen(false)}>{Locale.label("common.cancel")}</Button>
+          <Button color="error" onClick={handleClearAll} data-testid="confirm-clear-notifications">{Locale.label("mobile.screens.clearAll")}</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

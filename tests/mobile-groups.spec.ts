@@ -1,7 +1,7 @@
 import { test, expect, request, type APIRequestContext } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
-const MAIN_API = "http://localhost:8084";
+const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 
 async function membershipHeaders(ctx: APIRequestContext) {
@@ -69,6 +69,20 @@ test.describe("Mobile groups", () => {
     await expect(page.getByRole("tab", { name: /About/i })).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="group-contact-first-name-input"]')).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="group-contact-submit-button"]')).toBeVisible();
+  });
+
+  test("leaving a group asks for confirmation first", async ({ page }) => {
+    await page.goto("/mobile/groups/GRP00000004");
+    await page.getByRole("tab", { name: /^About$/i }).click();
+    const leave = page.getByTestId("leave-group-button");
+    await expect(leave).toBeVisible({ timeout: 15000 });
+    await leave.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible({ timeout: 5000 });
+    await expect(dialog).toContainText(/Leave this group/i);
+    await dialog.getByRole("button", { name: /^Cancel$/i }).click();
+    await expect(dialog).toBeHidden({ timeout: 5000 });
+    await expect(leave).toBeVisible();
   });
 
   test("authed member does not see contact form on their own group", async ({ page }) => {

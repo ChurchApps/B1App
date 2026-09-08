@@ -29,7 +29,7 @@ async function seedTakeHome(unique: string) {
     const planRes = await apiCall(demo, "post", doingUrl("/plans"), [{ ministryId: "GRP0000000a", planTypeId: "PLT00000001", name: `Take-home ${unique}`, serviceDate: daysAgoYmd(1), notes: "", serviceOrder: true, providerId: "lessonschurch", providerPlanId: PROVIDER_PATH, providerPlanName: unique, contentType: "provider", contentId: "VEN00000002" }]);
     const body = await planRes.text();
     expect(planRes.status(), `plan POST: ${body.slice(0, 300)}`).toBe(200);
-    const listed = await apiCall(demo, "get", "http://localhost:8084/membership/groups/GRP00000004/plans");
+    const listed = await apiCall(demo, "get", (process.env.API_BASE || "http://localhost:8084") + "/membership/groups/GRP00000004/plans");
     const plans = await listed.json();
     expect(Array.isArray(plans) && plans.some((p: any) => p.providerPlanId === PROVIDER_PATH), `group plans: ${JSON.stringify(plans).slice(0, 400)}`).toBeTruthy();
   } finally {
@@ -44,7 +44,7 @@ test.describe("Group take-home card", () => {
 
     await page.route(/\/lessons\/public\/ids/, async (route) => {
       const ids = new URL(route.request().url()).searchParams.get("ids") || "";
-      const res = await page.request.get(`http://localhost:8090/lessons/public/ids?ids=${ids}`);
+      const res = await page.request.get(`${process.env.LESSONS_API_BASE || "http://localhost:8090"}/lessons/public/ids?ids=${ids}`);
       await route.fulfill({ status: res.status(), contentType: "application/json", body: await res.text() });
     });
 

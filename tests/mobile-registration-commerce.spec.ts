@@ -3,7 +3,7 @@ import { test, expect, type Page } from "@playwright/test";
 // Serial: tests share demo@b1.church's registrations + Stripe customer.
 test.describe.configure({ mode: "serial" });
 
-const API = "http://localhost:8084";
+const API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH = "CHU00000001";
 const GROUP = "GRP00000030";
 const VBS = "EVT00000015";

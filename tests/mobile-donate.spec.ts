@@ -55,7 +55,7 @@ test.describe("Mobile donate", () => {
 // Country receipt formats: the donor-facing statement mirrors the B1Admin legal block,
 // driven by the church's statement-format settings.
 test.describe.serial("Mobile donate statement receipt formats", () => {
-  const MAIN_API = "http://localhost:8084";
+  const MAIN_API = process.env.API_BASE || "http://localhost:8084";
   const REG_NUMBER = "119288945RR0001";
 
   // /membership/settings inserts a new row when no id is sent, so reuse existing ids

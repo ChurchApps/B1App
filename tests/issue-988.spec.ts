@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 
 // Issue #988: the member-facing plan view shows the volunteer assigned to each
 // order-of-service item, gated by the plan's showVolunteerNames toggle.
-const API = "http://localhost:8084";
+const API = process.env.API_BASE || "http://localhost:8084";
 const PERSON_ID = "PER00000001";
 const PERSON_NAME = "John Smith";
 

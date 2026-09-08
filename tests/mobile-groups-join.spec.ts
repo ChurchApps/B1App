@@ -1,6 +1,6 @@
 import { test, expect, request, type Page, type APIRequestContext } from "@playwright/test";
 
-const MAIN_API = "http://localhost:8084";
+const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 // volunteer@b1.church (Rachel Martin) leads GRP00000029 (Financial Peace); demo@b1.church (Demo User) is not a member of it.
 const LEADER_GROUP_ID = "GRP00000029";
@@ -25,6 +25,26 @@ async function membershipHeaders(ctx: APIRequestContext, email: string) {
   const jwt = uc.apis.find((a: any) => a.keyName === "MembershipApi").jwt;
   return { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
 }
+
+test.describe("Mobile groups — signed out", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("my-groups empty state offers Sign In and a public group browser", async ({ page }) => {
+    await page.goto("/mobile/groups");
+    const main = page.locator("main");
+    await expect(main.getByTestId("groups-sign-in")).toBeVisible({ timeout: 20000 });
+    await expect(main).not.toContainText(/Explore Community/i);
+    await main.getByTestId("groups-browse").click();
+    await expect(page).toHaveURL(/\/groups$/, { timeout: 20000 });
+  });
+
+  test("anonymous group page offers Sign in to join with a return url", async ({ page }) => {
+    await page.goto("/mobile/groups/youth-group");
+    const cta = page.getByTestId("anonymous-group-sign-in");
+    await expect(cta).toBeVisible({ timeout: 20000 });
+    await expect(cta).toHaveAttribute("href", /\/mobile\/login\?returnUrl=.*mobile.*groups.*youth-group/);
+  });
+});
 
 test.describe("Mobile groups — request-to-join UX", () => {
   const NON_MEMBER_GROUP_ID = "GRP00000005";

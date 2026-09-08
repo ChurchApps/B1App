@@ -166,9 +166,7 @@
     "demoTitle": "演示："
   },
   "mobile": {
-    "comingSoon": "即将推出移动 PWA 版本。",
     "components": {
-      "b1MobileWeb": "B1 移动网页版",
       "back": "返回",
       "backToDashboard": "返回仪表板",
       "close": "关闭",
@@ -194,7 +192,6 @@
       "playSermon": "播放讲道",
       "privacyPolicy": "隐私政策",
       "profile": "个人资料",
-      "screenNotImplemented": "“{}”页面尚未实现。",
       "signIn": "登录",
       "switchToDark": "切换到深色模式",
       "switchToLight": "切换到浅色模式",
@@ -383,7 +380,6 @@
       "deleteEvent": "删除活动",
       "deleteFile": "删除文件",
       "deleteLink": "删除链接",
-      "deleteLinkConfirm": "删除链接“{}”吗？",
       "discussions": "讨论",
       "edit": "编辑",
       "editEvent": "编辑活动",

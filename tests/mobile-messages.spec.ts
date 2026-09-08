@@ -7,6 +7,19 @@ test.describe("Mobile messages", () => {
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
+  test("deleting a conversation asks for confirmation first", async ({ page }) => {
+    await page.goto("/mobile/messages");
+    const deleteBtn = page.locator('[data-testid^="conversation-delete-"]').first();
+    await expect(deleteBtn).toBeVisible({ timeout: 30000 });
+    await deleteBtn.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible({ timeout: 5000 });
+    await expect(dialog).toContainText(/Delete conversation/i);
+    await dialog.getByRole("button", { name: /^Cancel$/i }).click();
+    await expect(dialog).toBeHidden({ timeout: 5000 });
+    await expect(deleteBtn).toBeVisible();
+  });
+
   test("compose message screen loads", async ({ page }) => {
     await page.goto("/mobile/messagesNew");
     await expect(mobileLogoutButton(page)).toBeVisible();

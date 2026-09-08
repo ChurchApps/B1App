@@ -166,9 +166,7 @@
     "demoTitle": "Demó:"
   },
   "mobile": {
-    "comingSoon": "Hamarosan elérhető a mobil PWA-ban.",
     "components": {
-      "b1MobileWeb": "B1 Mobil Web",
       "back": "Vissza",
       "backToDashboard": "Vissza az irányítópultra",
       "close": "Bezárás",
@@ -194,7 +192,6 @@
       "playSermon": "Prédikáció lejátszása",
       "privacyPolicy": "Adatvédelmi szabályzat",
       "profile": "Profil",
-      "screenNotImplemented": "A(z) '{}' képernyő még nincs megvalósítva.",
       "signIn": "Bejelentkezés",
       "switchToDark": "Váltás sötét módra",
       "switchToLight": "Váltás világos módra",
@@ -383,7 +380,6 @@
       "deleteEvent": "Esemény törlése",
       "deleteFile": "Fájl törlése",
       "deleteLink": "Link törlése",
-      "deleteLinkConfirm": "\"{}\" link törlése?",
       "discussions": "Beszélgetések",
       "edit": "Szerkesztés",
       "editEvent": "Esemény szerkesztése",
