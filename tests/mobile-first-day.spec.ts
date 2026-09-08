@@ -4,7 +4,7 @@ import { mobileLogoutButton } from "./helpers/mobile";
 // ChurchAppsSupport #985: church.firstDayOfWeek (0=Sun..6=Sat) drives the group
 // calendar week grid. Mutates the seeded church's setting, so runs serially and
 // restores the original value when done.
-const API_BASE = "http://localhost:8084";
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 const GROUP_ID = "GRP00000004";
 const SUBDOMAIN = "grace";

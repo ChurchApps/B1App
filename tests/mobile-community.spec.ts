@@ -7,7 +7,7 @@ test.describe.configure({ mode: "serial" });
 
 async function setDirectoryVisibility(value: string) {
   const ctx = await request.newContext();
-  const login = await ctx.post("http://localhost:8084/membership/users/login", {
+  const login = await ctx.post((process.env.API_BASE || "http://localhost:8084") + "/membership/users/login", {
     data: { email: "demo@b1.church", password: "password" },
     headers: { "Content-Type": "application/json" }
   });
@@ -17,11 +17,11 @@ async function setDirectoryVisibility(value: string) {
   const jwt = uc?.apis?.find((a: any) => a.keyName === "MembershipApi")?.jwt;
   if (!jwt) throw new Error("MembershipApi JWT not present");
   const headers = { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
-  const settings = await (await ctx.get("http://localhost:8084/membership/settings", { headers })).json();
+  const settings = await (await ctx.get((process.env.API_BASE || "http://localhost:8084") + "/membership/settings", { headers })).json();
   const setting = (settings || []).find((x: any) => x.keyName === "directoryVisibility")
     || { churchId: DEMO_CHURCH.ID, public: 1, keyName: "directoryVisibility" };
   setting.value = value;
-  const res = await ctx.post("http://localhost:8084/membership/settings", { headers, data: [setting] });
+  const res = await ctx.post((process.env.API_BASE || "http://localhost:8084") + "/membership/settings", { headers, data: [setting] });
   if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
   await ctx.dispose();
 }

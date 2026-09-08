@@ -7,6 +7,10 @@ const STORAGE_STATE_PATH = path.join(__dirname, "tests", ".auth-state.json");
 
 // Windows doesn't resolve *.localhost; use localtest.me instead
 const baseURL = process.env.BASE_URL || "http://grace.localtest.me:3301";
+const appPort = new URL(baseURL).port || "3301";
+const apiBase = process.env.API_BASE || "http://localhost:8084";
+const lessonsApiBase = process.env.LESSONS_API_BASE || "http://localhost:8090";
+const messagingSocket = process.env.NEXT_PUBLIC_MESSAGING_API_SOCKET || "ws://localhost:8087";
 
 export default defineConfig({
   testDir: "./tests",
@@ -37,7 +41,7 @@ export default defineConfig({
   webServer: [
     {
       command: "npm --prefix ../Api run dev",
-      url: "http://localhost:8084/health",
+      url: `${apiBase}/health`,
       reuseExistingServer: true,
       timeout: 60 * 1000,
       stdout: "pipe",
@@ -45,7 +49,7 @@ export default defineConfig({
     },
     {
       command: "npm --prefix ../LessonsApi run dev",
-      url: "http://localhost:8090/health",
+      url: `${lessonsApiBase}/health`,
       reuseExistingServer: true,
       timeout: 90 * 1000,
       stdout: "pipe",
@@ -53,14 +57,15 @@ export default defineConfig({
     },
     {
       // Force dev so EnvironmentHelper uses localhost API URLs from .env
-      command: "npm run dev",
+      command: `npm run dev -- -p ${appPort}`,
       env: {
         NEXT_PUBLIC_STAGE: "dev",
-        NEXT_PUBLIC_LESSONS_API: "http://localhost:8090",
+        NEXT_PUBLIC_API_BASE: apiBase,
+        NEXT_PUBLIC_LESSONS_API: lessonsApiBase,
         // Localhost socket for consolidated subscription stack and cross-user realtime tests
-        NEXT_PUBLIC_MESSAGING_API_SOCKET: "ws://localhost:8087"
+        NEXT_PUBLIC_MESSAGING_API_SOCKET: messagingSocket
       },
-      url: "http://localhost:3301",
+      url: `http://localhost:${appPort}`,
       reuseExistingServer: true,
       timeout: 120 * 1000
     }

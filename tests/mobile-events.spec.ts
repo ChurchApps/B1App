@@ -1,7 +1,7 @@
 import { test, expect, request } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
-const API_BASE = "http://localhost:8084";
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 
 test.describe("Mobile event registration", () => {

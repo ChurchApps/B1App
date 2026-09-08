@@ -1,6 +1,6 @@
 import { test, expect, request, type APIRequestContext, type BrowserContext, type Page } from "@playwright/test";
 
-const API = "http://localhost:8084";
+const API = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 // Rachel Martin (volunteer@b1.church) leads GRP00000029 and is a plain member of GRP00000025.
 const LED_GROUP = "GRP00000029";
