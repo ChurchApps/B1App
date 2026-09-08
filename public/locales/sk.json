@@ -166,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Čoskoro v mobilnej PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Späť",
       "backToDashboard": "Späť na nástenku",
       "close": "Zatvoriť",
@@ -194,7 +192,6 @@
       "playSermon": "Prehrať kázeň",
       "privacyPolicy": "Zásady ochrany osobných údajov",
       "profile": "Profil",
-      "screenNotImplemented": "Obrazovka '{}' ešte nie je implementovaná.",
       "signIn": "Prihlásiť sa",
       "switchToDark": "Prepnúť na tmavý režim",
       "switchToLight": "Prepnúť na svetlý režim",
@@ -383,7 +380,6 @@
       "deleteEvent": "Odstrániť udalosť",
       "deleteFile": "Odstrániť súbor",
       "deleteLink": "Odstrániť odkaz",
-      "deleteLinkConfirm": "Odstrániť odkaz \"{}\"?",
       "discussions": "Diskusie",
       "edit": "Upraviť",
       "editEvent": "Upraviť udalosť",

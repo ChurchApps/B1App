@@ -35,6 +35,7 @@ interface NotificationItem {
   linkUrl?: string;
   contentType?: string;
   contentId?: string;
+  triggeredByPersonId?: string;
 }
 
 export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {

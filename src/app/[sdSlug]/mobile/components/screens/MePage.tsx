@@ -2,7 +2,7 @@
 
 import React, { useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Chip, Icon, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Chip, Icon, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, ArrayHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { AssignmentInterface, PlanInterface, PositionInterface, RegistrationInterface } from "@churchapps/helpers";
@@ -34,6 +34,7 @@ interface NotificationItem {
   timeSent?: string | Date;
   contentType?: string;
   contentId?: string;
+  triggeredByPersonId?: string;
 }
 
 const kindMeta: Record<ItemKind, { icon: string; label: string }> = {
@@ -49,7 +50,7 @@ export const MePage = ({ config: _config }: Props) => {
   const loggedIn = !!context?.user?.firstName;
   const personId = context?.person?.id || context?.userChurch?.person?.id;
 
-  const { data: assignments = [] } = useQuery<AssignmentInterface[]>({
+  const { data: assignments = [], isLoading: assignmentsLoading } = useQuery<AssignmentInterface[]>({
     queryKey: ["/assignments/my", "DoingApi", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/assignments/my", "DoingApi");
@@ -85,7 +86,7 @@ export const MePage = ({ config: _config }: Props) => {
     staleTime: 10 * 60 * 1000
   });
 
-  const { data: registrations = [] } = useQuery<RegistrationInterface[]>({
+  const { data: registrations = [], isLoading: registrationsLoading } = useQuery<RegistrationInterface[]>({
     queryKey: ["/registrations/person", personId],
     queryFn: async () => {
       const data = await ApiHelper.get("/registrations/person/" + personId, "ContentApi");
@@ -95,7 +96,7 @@ export const MePage = ({ config: _config }: Props) => {
     staleTime: 60 * 1000
   });
 
-  const { data: timeline = [] } = useQuery<EventRow[]>({
+  const { data: timeline = [], isLoading: timelineLoading } = useQuery<EventRow[]>({
     queryKey: ["/events/timeline"],
     queryFn: async () => {
       const data = await ApiHelper.get("/events/timeline", "ContentApi");
@@ -172,7 +173,7 @@ export const MePage = ({ config: _config }: Props) => {
 
   const recentNotifications = useMemo(() => (notifications || []).slice(0, 5), [notifications]);
 
-  const stillLoading = loggedIn && assignments.length === 0 && registrations.length === 0 && timeline.length === 0;
+  const stillLoading = assignmentsLoading || registrationsLoading || timelineLoading;
 
   const renderItem = (item: UpcomingItem) => {
     const meta = kindMeta[item.kind];
@@ -206,6 +207,7 @@ export const MePage = ({ config: _config }: Props) => {
       tabIndex={0}
       onClick={() => router.push(href)}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); router.push(href); } }}
+      data-testid={`me-shortcut-${href.split("/").pop()}`}
       sx={{ display: "flex", alignItems: "center", gap: "12px", bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: "12px", p: "12px 16px", cursor: "pointer" }}
     >
       <Icon sx={{ color: tc.primary }}>{icon}</Icon>
@@ -218,12 +220,37 @@ export const MePage = ({ config: _config }: Props) => {
     <Typography sx={{ fontSize: 11.5, fontWeight: 700, color: tc.textSecondary, textTransform: "uppercase", letterSpacing: "0.12em", mt: 1 }}>{label}</Typography>
   );
 
+  if (!loggedIn) {
+    const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
+    return (
+      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+        <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.xl}px`, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
+          <Icon sx={{ fontSize: 48, color: tc.disabled }}>account_circle</Icon>
+          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mt: 1 }}>{Locale.label("mobile.me.signInTitle")}</Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, mt: 0.5, mb: 2 }}>{Locale.label("mobile.me.signInBody")}</Typography>
+          <Button
+            variant="contained"
+            href={returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login"}
+            sx={{ bgcolor: tc.primary, color: tc.onPrimary, textTransform: "none", fontWeight: 600, borderRadius: `${mobileTheme.radius.md}px`, "&:hover": { bgcolor: tc.primary } }}
+          >
+            {Locale.label("mobile.components.signIn")}
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {sectionHeader(Locale.label("mobile.me.shortcuts"))}
+        {renderShortcut("person", Locale.label("mobile.components.editProfile"), "/mobile/profileEdit")}
+        {renderShortcut("tune", Locale.label("mobile.screenTitles.notificationPrefs"), "/mobile/notificationPrefs")}
+        {renderShortcut("forum", Locale.label("mobile.screenTitles.messages"), "/mobile/messages")}
+        {renderShortcut("volunteer_activism", Locale.label("mobile.screenTitles.donation"), "/mobile/donate")}
+        {renderShortcut("how_to_reg", Locale.label("mobile.screenTitles.registrations"), "/mobile/registrations")}
         {hasBookingCatalog && (
           <>
-            {sectionHeader(Locale.label("mobile.me.shortcuts"))}
             {renderShortcut("event_note", Locale.label("mobile.me.myRequests"), "/mobile/myRequests")}
             {renderShortcut("add_circle", Locale.label("mobile.me.requestEvent"), "/mobile/requestEvent")}
           </>

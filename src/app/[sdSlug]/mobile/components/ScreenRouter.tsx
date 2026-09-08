@@ -85,6 +85,16 @@ export function ScreenRouter({ pageSlug, config }: Props) {
     case "websiteUrl":
     case "page": return <WebsiteUrlPage config={config} />;
     case "login": return <MobileLoginScreen config={config} />;
-    default: return <PlaceholderPage title={pageSlug} icon="apps" description={Locale.label("mobile.components.screenNotImplemented").replace("{}", pageSlug)} />;
+    default:
+      console.warn("[mobile] unknown screen slug:", pageSlug);
+      return (
+        <PlaceholderPage
+          title={Locale.label("mobile.notFound.title")}
+          icon="error_outline"
+          description={Locale.label("mobile.notFound.body")}
+          actionLabel={Locale.label("mobile.notFound.backToHome")}
+          actionHref="/mobile/dashboard"
+        />
+      );
   }
 }

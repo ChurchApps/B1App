@@ -166,9 +166,7 @@
     "demoTitle": "Demonstracija:"
   },
   "mobile": {
-    "comingSoon": "Netrukus pasieks mobiliojoje PWA programėlėje.",
     "components": {
-      "b1MobileWeb": "B1 mobilioji svetainė",
       "back": "Atgal",
       "backToDashboard": "Atgal į skydelį",
       "close": "Uždaryti",
@@ -194,7 +192,6 @@
       "playSermon": "Leisti pamokslą",
       "privacyPolicy": "Privatumo politika",
       "profile": "Profilis",
-      "screenNotImplemented": "'{}' ekranas dar neįgyvendintas.",
       "signIn": "Prisijungti",
       "switchToDark": "Perjungti į tamsų režimą",
       "switchToLight": "Perjungti į šviesų režimą",
@@ -383,7 +380,6 @@
       "deleteEvent": "Ištrinti įvykį",
       "deleteFile": "Ištrinti failą",
       "deleteLink": "Ištrinti nuorodą",
-      "deleteLinkConfirm": "Ištrinti nuorodą \"{}\"?",
       "discussions": "Diskusijos",
       "edit": "Redaguoti",
       "editEvent": "Redaguoti įvykį",

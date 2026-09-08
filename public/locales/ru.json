@@ -166,9 +166,7 @@
     "demoTitle": "Демо:"
   },
   "mobile": {
-    "comingSoon": "Скоро в мобильном PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Назад",
       "backToDashboard": "Назад на главную",
       "close": "Закрыть",
@@ -194,7 +192,6 @@
       "playSermon": "Воспроизвести проповедь",
       "privacyPolicy": "Политика конфиденциальности",
       "profile": "Профиль",
-      "screenNotImplemented": "Экран '{}' ещё не реализован.",
       "signIn": "Войти",
       "switchToDark": "Переключиться на тёмную тему",
       "switchToLight": "Переключиться на светлую тему",
@@ -383,7 +380,6 @@
       "deleteEvent": "Удалить событие",
       "deleteFile": "Удалить файл",
       "deleteLink": "Удалить ссылку",
-      "deleteLinkConfirm": "Удалить ссылку \"{}\"?",
       "discussions": "Обсуждения",
       "edit": "Редактировать",
       "editEvent": "Редактировать событие",

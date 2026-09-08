@@ -166,9 +166,7 @@
     "demoTitle": "데모:"
   },
   "mobile": {
-    "comingSoon": "모바일 PWA에서 곧 제공됩니다.",
     "components": {
-      "b1MobileWeb": "B1 모바일 웹",
       "back": "뒤로",
       "backToDashboard": "대시보드로 돌아가기",
       "close": "닫기",
@@ -194,7 +192,6 @@
       "playSermon": "설교 재생",
       "privacyPolicy": "개인정보 처리방침",
       "profile": "프로필",
-      "screenNotImplemented": "'{}' 화면은 아직 구현되지 않았습니다.",
       "signIn": "로그인",
       "switchToDark": "다크 모드로 전환",
       "switchToLight": "라이트 모드로 전환",
@@ -383,7 +380,6 @@
       "deleteEvent": "이벤트 삭제",
       "deleteFile": "파일 삭제",
       "deleteLink": "링크 삭제",
-      "deleteLinkConfirm": "링크 \"{}\"를 삭제하시겠습니까?",
       "discussions": "토론",
       "edit": "편집",
       "editEvent": "이벤트 편집",

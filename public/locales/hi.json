@@ -166,9 +166,7 @@
     "demoTitle": "डेमो:"
   },
   "mobile": {
-    "comingSoon": "मोबाइल PWA पर जल्द ही आ रहा है।",
     "components": {
-      "b1MobileWeb": "B1 मोबाइल वेब",
       "back": "वापस",
       "backToDashboard": "डैशबोर्ड पर वापस",
       "close": "बंद करें",
@@ -194,7 +192,6 @@
       "playSermon": "उपदेश चलाएं",
       "privacyPolicy": "गोपनीयता नीति",
       "profile": "प्रोफ़ाइल",
-      "screenNotImplemented": "'{}' स्क्रीन अभी तक लागू नहीं की गई है।",
       "signIn": "साइन इन",
       "switchToDark": "डार्क मोड पर स्विच करें",
       "switchToLight": "लाइट मोड पर स्विच करें",
@@ -383,7 +380,6 @@
       "deleteEvent": "कार्यक्रम हटाएं",
       "deleteFile": "फ़ाइल हटाएं",
       "deleteLink": "लिंक हटाएं",
-      "deleteLinkConfirm": "लिंक \"{}\" हटाएं?",
       "discussions": "चर्चाएँ",
       "edit": "संपादित करें",
       "editEvent": "कार्यक्रम संपादित करें",

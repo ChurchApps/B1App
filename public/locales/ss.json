@@ -166,9 +166,7 @@
     "demoTitle": "Kubonisa:"
   },
   "mobile": {
-    "comingSoon": "Kuyeta maduze ku-mobile PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Emuva",
       "backToDashboard": "Buyela kubhodi lekulawula",
       "close": "Vala",
@@ -194,7 +192,6 @@
       "playSermon": "Dlala intshumayelo",
       "privacyPolicy": "Umtsetfo Wemfihlo",
       "profile": "Iprofayela",
-      "screenNotImplemented": "Sikrini se-'{}' asikakenteki.",
       "signIn": "Ngena",
       "switchToDark": "Shintjela esimeni lesimnyama",
       "switchToLight": "Shintjela esimeni lesikhanyako",
@@ -383,7 +380,6 @@
       "deleteEvent": "Susa umcimbi",
       "deleteFile": "Susa lifayela",
       "deleteLink": "Susa sixhumanisi",
-      "deleteLinkConfirm": "Susa sixhumanisi \"{}\"?",
       "discussions": "Tingcubungulo",
       "edit": "Hlela",
       "editEvent": "Hlela umcimbi",
