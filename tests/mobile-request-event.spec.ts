@@ -2,7 +2,7 @@ import { test, expect, request, type Page } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 // CA-1: Sanctuary/Fellowship Hall (auto-approved), Youth Room (approval-gated, demo pending)
-const API_BASE = "http://localhost:8084";
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 
 async function demoJwt(): Promise<string> {

@@ -20,10 +20,6 @@
     "navigateTo": "{} पर जाएं"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "आपकी उपस्थिति सहेज ली गई है। धन्यवाद!",
-      "title": "चेक-इन पूर्ण"
-    },
     "groups": {
       "chooseGroupFor": "{} के लिए एक समूह चुनें",
       "generalGroups": "सामान्य समूह",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "प्रत्येक सदस्य के लिए पहला और अंतिम नाम आवश्यक है।"
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "पहले से चेक-इन है",
-      "alreadyCheckedInTitle": "पहले से चेक-इन है",
-      "change": "बदलें",
-      "checkInAgain": "फिर से चेक-इन करें",
-      "completeCheckin": "चेक-इन पूर्ण करें",
-      "duplicateMessage": "{} इस सेवा के लिए पहले से चेक-इन है। उनके समूह अपडेट करने के लिए फिर से चेक-इन करें।",
-      "loginPrompt": "कृपया सुनिश्चित करें कि आप लॉग इन हैं और परिवार के सदस्य पंजीकृत हैं।",
-      "member": "सदस्य",
-      "memberAvatar": "{} अवतार",
-      "noGroupSelected": "कोई समूह नहीं चुना गया",
-      "noMembersFound": "कोई परिवार सदस्य नहीं मिला",
-      "none": "कोई नहीं",
-      "noneLower": "कोई नहीं",
-      "subtitle": "प्रत्येक परिवार सदस्य के लिए समूह चुनें",
-      "tapToSelect": "समूह चुनने के लिए टैप करें",
-      "title": "परिवार के सदस्य",
-      "unknown": "अज्ञात"
-    },
-    "services": {
-      "checkBackLater": "कृपया बाद में जांचें या अपने चर्च प्रशासक से संपर्क करें",
-      "noServicesAvailable": "कोई सेवा उपलब्ध नहीं",
-      "subtitle": "चुनें कि आप किस सेवा के लिए चेक-इन कर रहे हैं",
-      "title": "सेवा चुनें"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "सहेजें",
     "search": "खोजें",
     "update": "अपडेट करें"
-  },
-  "donate": {
-    "authLanding": "यह प्रमाणीकरण के साथ है",
-    "currentYearCsv": "वर्तमान वर्ष (CSV)",
-    "currentYearPrint": "वर्तमान वर्ष (प्रिंट)",
-    "donations": "दान",
-    "downloadRecords": "दान रिकॉर्ड डाउनलोड करें",
-    "exportCurrentYearCsv": "वर्तमान वर्ष के दान को CSV के रूप में निर्यात करें",
-    "exportLastYearCsv": "पिछले वर्ष के दान को CSV के रूप में निर्यात करें",
-    "lastYearCsv": "पिछला वर्ष (CSV)",
-    "lastYearPrint": "पिछला वर्ष (प्रिंट)",
-    "pending": "लंबित",
-    "printCurrentYear": "वर्तमान वर्ष के दान प्रिंट करें",
-    "printLastYear": "पिछले वर्ष के दान प्रिंट करें"
-  },
-  "donation": {
-    "page": {
-      "amount": "राशि",
-      "batch": "बैच",
-      "date": "तारीख",
-      "fund": "फंड",
-      "method": "तरीका",
-      "willAppear": "दिखाई देगा"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "मेरा दान"
   },
   "element": {
     "offlinePlaceholder": "ऑफ़लाइन वीडियो प्लेसहोल्डर"
@@ -222,9 +166,7 @@
     "demoTitle": "डेमो:"
   },
   "mobile": {
-    "comingSoon": "मोबाइल PWA पर जल्द ही आ रहा है।",
     "components": {
-      "b1MobileWeb": "B1 मोबाइल वेब",
       "back": "वापस",
       "backToDashboard": "डैशबोर्ड पर वापस",
       "close": "बंद करें",
@@ -250,7 +192,6 @@
       "playSermon": "उपदेश चलाएं",
       "privacyPolicy": "गोपनीयता नीति",
       "profile": "प्रोफ़ाइल",
-      "screenNotImplemented": "'{}' स्क्रीन अभी तक लागू नहीं की गई है।",
       "signIn": "साइन इन",
       "switchToDark": "डार्क मोड पर स्विच करें",
       "switchToLight": "लाइट मोड पर स्विच करें",
@@ -439,7 +380,6 @@
       "deleteEvent": "कार्यक्रम हटाएं",
       "deleteFile": "फ़ाइल हटाएं",
       "deleteLink": "लिंक हटाएं",
-      "deleteLinkConfirm": "लिंक \"{}\" हटाएं?",
       "discussions": "चर्चाएँ",
       "edit": "संपादित करें",
       "editEvent": "कार्यक्रम संपादित करें",

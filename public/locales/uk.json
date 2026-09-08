@@ -20,10 +20,6 @@
     "navigateTo": "Перейти до {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Вашу відвідуваність збережено. Дякуємо!",
-      "title": "Реєстрацію завершено"
-    },
     "groups": {
       "chooseGroupFor": "Оберіть групу для {}",
       "generalGroups": "Загальні групи",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Ім'я та прізвище обов'язкові для кожного учасника."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Вже зареєстрований",
-      "alreadyCheckedInTitle": "Вже зареєстрований",
-      "change": "Змінити",
-      "checkInAgain": "Зареєструватися знову",
-      "completeCheckin": "Завершити реєстрацію",
-      "duplicateMessage": "{} вже зареєстрований на це служіння. Зареєструйтеся знову, щоб оновити групи.",
-      "loginPrompt": "Будь ласка, переконайтеся, що ви увійшли в обліковий запис і маєте зареєстрованих членів сім'ї.",
-      "member": "Учасник",
-      "memberAvatar": "аватар {}",
-      "noGroupSelected": "Групу не обрано",
-      "noMembersFound": "Членів сім'ї не знайдено",
-      "none": "Немає",
-      "noneLower": "немає",
-      "subtitle": "Оберіть групи для кожного члена сім'ї",
-      "tapToSelect": "Натисніть, щоб обрати групи",
-      "title": "Члени сім'ї",
-      "unknown": "Невідомо"
-    },
-    "services": {
-      "checkBackLater": "Зайдіть пізніше або зверніться до адміністратора церкви",
-      "noServicesAvailable": "Немає доступних служінь",
-      "subtitle": "Оберіть служіння, на яке ви реєструєтеся",
-      "title": "Оберіть служіння"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Зберегти",
     "search": "Пошук",
     "update": "Оновити"
-  },
-  "donate": {
-    "authLanding": "Це з авторизацією",
-    "currentYearCsv": "Поточний рік (CSV)",
-    "currentYearPrint": "ПОТОЧНИЙ РІК (ДРУК)",
-    "donations": "Пожертви",
-    "downloadRecords": "Завантажити записи про пожертви",
-    "exportCurrentYearCsv": "Експортувати пожертви за поточний рік як CSV",
-    "exportLastYearCsv": "Експортувати пожертви за минулий рік як CSV",
-    "lastYearCsv": "Минулий рік (CSV)",
-    "lastYearPrint": "МИНУЛИЙ РІК (ДРУК)",
-    "pending": "В очікуванні",
-    "printCurrentYear": "Роздрукувати пожертви за поточний рік",
-    "printLastYear": "Роздрукувати пожертви за минулий рік"
-  },
-  "donation": {
-    "page": {
-      "amount": "Сума",
-      "batch": "Пакет",
-      "date": "Дата",
-      "fund": "Фонд",
-      "method": "Спосіб",
-      "willAppear": "Відображатиметься"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Моя пожертва"
   },
   "element": {
     "offlinePlaceholder": "Заповнювач офлайн-відео"
@@ -222,9 +166,7 @@
     "demoTitle": "Демо:"
   },
   "mobile": {
-    "comingSoon": "Незабаром у мобільному PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Назад",
       "backToDashboard": "Назад до панелі",
       "close": "Закрити",
@@ -250,7 +192,6 @@
       "playSermon": "Відтворити проповідь",
       "privacyPolicy": "Політика конфіденційності",
       "profile": "Профіль",
-      "screenNotImplemented": "Екран '{}' ще не реалізовано.",
       "signIn": "Увійти",
       "switchToDark": "Перемкнути на темний режим",
       "switchToLight": "Перемкнути на світлий режим",
@@ -439,7 +380,6 @@
       "deleteEvent": "Видалити подію",
       "deleteFile": "Видалити файл",
       "deleteLink": "Видалити посилання",
-      "deleteLinkConfirm": "Видалити посилання \"{}\"?",
       "discussions": "Обговорення",
       "edit": "Редагувати",
       "editEvent": "Редагувати подію",

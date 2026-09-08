@@ -1,17 +1,19 @@
 "use client";
 
 import React from "react";
-import { Box, Icon, Typography } from "@mui/material";
-import { Locale } from "@churchapps/apphelper";
+import Link from "next/link";
+import { Box, Button, Icon, Typography } from "@mui/material";
 import { mobileTheme } from "./mobileTheme";
 
 interface Props {
   title: string;
   icon?: string;
   description?: string;
+  actionLabel?: string;
+  actionHref?: string;
 }
 
-export const PlaceholderPage = ({ title, icon = "construction", description }: Props) => {
+export const PlaceholderPage = ({ title, icon = "construction", description, actionLabel, actionHref }: Props) => {
   const tc = mobileTheme.colors;
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, minHeight: "100%", bgcolor: tc.background }}>
@@ -38,8 +40,18 @@ export const PlaceholderPage = ({ title, icon = "construction", description }: P
           {title}
         </Typography>
         <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-          {description || Locale.label("mobile.comingSoon")}
+          {description}
         </Typography>
+        {actionLabel && actionHref && (
+          <Button
+            component={Link}
+            href={actionHref}
+            variant="outlined"
+            sx={{ mt: 2, borderColor: tc.primary, color: tc.primary, textTransform: "none", borderRadius: `${mobileTheme.radius.md}px` }}
+          >
+            {actionLabel}
+          </Button>
+        )}
       </Box>
     </Box>
   );

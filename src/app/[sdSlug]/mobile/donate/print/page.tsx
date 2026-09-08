@@ -180,7 +180,9 @@ export default function PrintPage({ params }: { params: Params }) {
     );
   };
 
-  useEffect(loadData, []);
+  // Anonymous visitors are bounced to /mobile/login by AuthGuard; don't fire the
+  // giving requests or the print/router.back() timer while that redirect is in flight.
+  useEffect(() => { if (context?.user) loadData(); }, [context?.user]);
 
   return (
     <AuthGuard sdSlug={sdSlug}>

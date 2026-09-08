@@ -57,4 +57,10 @@ test.describe("Authentication", () => {
     await page.goto("/mobile/dashboard");
     await expect(page.locator('a[href*="/mobile/login"]').first()).toBeVisible({ timeout: 15000 });
   });
+
+  test("anonymous member-portal route returns to the mobile login", async ({ page }) => {
+    await page.context().clearCookies();
+    await page.goto("/mobile/donate/print");
+    await page.waitForURL(/\/mobile\/login\?returnUrl=%2Fmobile%2Fdonate%2Fprint/, { timeout: 30000 });
+  });
 });

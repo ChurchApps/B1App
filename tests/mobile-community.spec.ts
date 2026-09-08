@@ -1,6 +1,30 @@
-import { test, expect } from "@playwright/test";
-import { SEED_PEOPLE } from "./helpers/fixtures";
+import { test, expect, request } from "@playwright/test";
+import { SEED_PEOPLE, DEMO_CHURCH } from "./helpers/fixtures";
 import { mobileLogoutButton } from "./helpers/mobile";
+
+// setDirectoryVisibility mutates a church-wide setting the other blocks read.
+test.describe.configure({ mode: "serial" });
+
+async function setDirectoryVisibility(value: string) {
+  const ctx = await request.newContext();
+  const login = await ctx.post((process.env.API_BASE || "http://localhost:8084") + "/membership/users/login", {
+    data: { email: "demo@b1.church", password: "password" },
+    headers: { "Content-Type": "application/json" }
+  });
+  if (!login.ok()) throw new Error(`login failed: ${login.status()}`);
+  const body = await login.json();
+  const uc = (body.userChurches || []).find((c: any) => c.church?.id === DEMO_CHURCH.ID);
+  const jwt = uc?.apis?.find((a: any) => a.keyName === "MembershipApi")?.jwt;
+  if (!jwt) throw new Error("MembershipApi JWT not present");
+  const headers = { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
+  const settings = await (await ctx.get((process.env.API_BASE || "http://localhost:8084") + "/membership/settings", { headers })).json();
+  const setting = (settings || []).find((x: any) => x.keyName === "directoryVisibility")
+    || { churchId: DEMO_CHURCH.ID, public: 1, keyName: "directoryVisibility" };
+  setting.value = value;
+  const res = await ctx.post((process.env.API_BASE || "http://localhost:8084") + "/membership/settings", { headers, data: [setting] });
+  if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
+  await ctx.dispose();
+}
 
 test.describe("Mobile community", () => {
   test("community page renders Search Members input", async ({ page }) => {
@@ -61,5 +85,22 @@ test.describe("Mobile community", () => {
     await expect(main).toContainText(/Noah/, { timeout: 30000 });
     // Call/text/email actions may also be absent (data-gated); the adult test above guards against a false pass.
     await expect(main.getByRole("button", { name: /Send message/i })).toHaveCount(0);
+  });
+
+  test("Show in Directory of Staff hides the directory from a member", async ({ page }) => {
+    await setDirectoryVisibility("Staff");
+    try {
+      await page.goto("/mobile/community");
+      await expect(page.getByText("Members Only")).toBeVisible({ timeout: 30000 });
+      await expect(page.getByRole("textbox", { name: /Search Members/i })).toHaveCount(0);
+    } finally {
+      await setDirectoryVisibility("Members");
+    }
+  });
+
+  test("Show in Directory of Members keeps the directory open to a member", async ({ page }) => {
+    await setDirectoryVisibility("Members");
+    await page.goto("/mobile/community");
+    await expect(page.getByRole("textbox", { name: /Search Members/i })).toBeVisible({ timeout: 30000 });
   });
 });

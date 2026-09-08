@@ -14,11 +14,11 @@ async function gotoOverview(page: import("@playwright/test").Page) {
 
 test.describe.serial("Mobile donate — CampaignProgress", () => {
   test.beforeAll(async ({ request }) => {
-    const loginRes = await request.post("http://localhost:8084/membership/users/login", { data: { email: "demo@b1.church", password: "password" } });
+    const loginRes = await request.post((process.env.API_BASE || "http://localhost:8084") + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } });
     const loginBody = await loginRes.json();
     jwt = loginBody.userChurches[0].jwt;
 
-    const campaignRes = await request.post("http://localhost:8084/giving/campaigns", {
+    const campaignRes = await request.post((process.env.API_BASE || "http://localhost:8084") + "/giving/campaigns", {
       headers: { Authorization: "Bearer " + jwt },
       data: [{ name: "PW Test Campaign", goalAmount: 10000, startDate: "2026-01-01", endDate: "2026-12-31", showPublic: true, allowSelfPledge: true }]
     });
@@ -27,7 +27,7 @@ test.describe.serial("Mobile donate — CampaignProgress", () => {
   });
 
   test.afterAll(async ({ request }) => {
-    const pledgesRes = await request.get("http://localhost:8084/giving/pledges/my", { headers: { Authorization: "Bearer " + jwt } });
+    const pledgesRes = await request.get((process.env.API_BASE || "http://localhost:8084") + "/giving/pledges/my", { headers: { Authorization: "Bearer " + jwt } });
     if (pledgesRes.ok()) {
       const pledges = await pledgesRes.json();
       if (Array.isArray(pledges)) {
@@ -35,13 +35,13 @@ test.describe.serial("Mobile donate — CampaignProgress", () => {
           if (p.pledge?.campaignId === campaignId || p.campaignId === campaignId) {
             const pledgeId = p.pledge?.id || p.id;
             if (pledgeId) {
-              await request.delete("http://localhost:8084/giving/pledges/my/" + pledgeId, { headers: { Authorization: "Bearer " + jwt } });
+              await request.delete((process.env.API_BASE || "http://localhost:8084") + "/giving/pledges/my/" + pledgeId, { headers: { Authorization: "Bearer " + jwt } });
             }
           }
         }
       }
     }
-    await request.delete("http://localhost:8084/giving/campaigns/" + campaignId, { headers: { Authorization: "Bearer " + jwt } });
+    await request.delete((process.env.API_BASE || "http://localhost:8084") + "/giving/campaigns/" + campaignId, { headers: { Authorization: "Bearer " + jwt } });
   });
 
   test("donate page shows the campaign with progress", async ({ page }) => {

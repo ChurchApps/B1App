@@ -20,10 +20,6 @@
     "navigateTo": "Hamba uye ku-{}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Kubakhona kwakho kugciniwe. Siyabonga!",
-      "title": "Kungena Kuphelile"
-    },
     "groups": {
       "chooseGroupFor": "Khetsa licembu le-{}",
       "generalGroups": "Emacembu Lavamile",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Libito lekucala nesibongo kuyadzingeka kulo lonkhe lilunga."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Sesingenile kadze",
-      "alreadyCheckedInTitle": "Sesingenile Kadze",
-      "change": "Shintja",
-      "checkInAgain": "Ngena Futsi",
-      "completeCheckin": "Cedza Kungena",
-      "duplicateMessage": "{} sekavele wangena kulesi sikhonzo. Ngena futsi kuze kubuyekete emacembu akhe.",
-      "loginPrompt": "Sicela ucinisekise kutsi ungenile futsi unemalunga emndeni lababhalisiwe.",
-      "member": "Lilunga",
-      "memberAvatar": "Sitfombe se-{}",
-      "noGroupSelected": "Akukho licembu lelikhetsiwe",
-      "noMembersFound": "Akukho Emalunga Emndeni Latfolakele",
-      "none": "Kute",
-      "noneLower": "kute",
-      "subtitle": "Khetsa emacembu ekulo lonkhe lilunga lemndeni",
-      "tapToSelect": "Cindzetela kute ukhetse emacembu",
-      "title": "Emalunga Emndeni",
-      "unknown": "Akwatiwa"
-    },
-    "services": {
-      "checkBackLater": "Sicela ubuye emumva noma utsintane nemphatsi webandla lakho",
-      "noServicesAvailable": "Akukho Tinsita Letitfolakalako",
-      "subtitle": "Khetsa kutsi ungenela liphi insita",
-      "title": "Khetsa Insita"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Gcina",
     "search": "Sesha",
     "update": "Buyeketa"
-  },
-  "donate": {
-    "authLanding": "Loku kuhambisana nekucinisekiswa",
-    "currentYearCsv": "Lomnyaka Wamanje (CSV)",
-    "currentYearPrint": "LOMNYAKA WAMANJE (PHRINTA)",
-    "donations": "Iminikelo",
-    "downloadRecords": "Dawunlodela emarekhodi eminikelo",
-    "exportCurrentYearCsv": "Khipha iminikelo yalomnyaka njenge-CSV",
-    "exportLastYearCsv": "Khipha iminikelo yanyalo lendlulile njenge-CSV",
-    "lastYearCsv": "Nyalo Lendlulile (CSV)",
-    "lastYearPrint": "NYALO LENDLULILE (PHRINTA)",
-    "pending": "Kusalindzile",
-    "printCurrentYear": "Phrinta iminikelo yalomnyaka",
-    "printLastYear": "Phrinta iminikelo yanyalo lendlulile"
-  },
-  "donation": {
-    "page": {
-      "amount": "Linani",
-      "batch": "Sigaba",
-      "date": "Lusuku",
-      "fund": "Sikhwama",
-      "method": "Indlela",
-      "willAppear": "Kutawuvela"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Umnikelo Wami"
   },
   "element": {
     "offlinePlaceholder": "Indzawo Yevidiyo Lengekho Ku-inthanethi"
@@ -222,9 +166,7 @@
     "demoTitle": "Kubonisa:"
   },
   "mobile": {
-    "comingSoon": "Kuyeta maduze ku-mobile PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Emuva",
       "backToDashboard": "Buyela kubhodi lekulawula",
       "close": "Vala",
@@ -250,7 +192,6 @@
       "playSermon": "Dlala intshumayelo",
       "privacyPolicy": "Umtsetfo Wemfihlo",
       "profile": "Iprofayela",
-      "screenNotImplemented": "Sikrini se-'{}' asikakenteki.",
       "signIn": "Ngena",
       "switchToDark": "Shintjela esimeni lesimnyama",
       "switchToLight": "Shintjela esimeni lesikhanyako",
@@ -439,7 +380,6 @@
       "deleteEvent": "Susa umcimbi",
       "deleteFile": "Susa lifayela",
       "deleteLink": "Susa sixhumanisi",
-      "deleteLinkConfirm": "Susa sixhumanisi \"{}\"?",
       "discussions": "Tingcubungulo",
       "edit": "Hlela",
       "editEvent": "Hlela umcimbi",

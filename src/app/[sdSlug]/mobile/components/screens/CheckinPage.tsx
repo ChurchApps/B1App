@@ -344,11 +344,11 @@ const GroupsStep = ({
           <Icon sx={{ fontSize: 40, color: tc.primary }}>groups</Icon>
         </IconCircle>
         <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 0.5 }}>
-          Choose a group for {member.name?.display}
+          {Locale.label("mobile.screens.chooseGroupFor").replace("{}", member.name?.display || "")}
         </Typography>
         {time?.name && (
           <Typography sx={{ fontSize: 14, color: tc.primary, fontWeight: 600 }}>
-            Service: {time.name}
+            {Locale.label("mobile.screens.serviceLabel").replace("{}", time.name)}
           </Typography>
         )}
       </Box>
@@ -375,7 +375,7 @@ const GroupsStep = ({
                   <Typography
                     sx={{ flex: 1, fontSize: 16, fontWeight: 600, color: tc.text }}
                   >
-                    {cat.name || "General Groups"}
+                    {cat.name || Locale.label("mobile.screens.generalGroups")}
                   </Typography>
                   <Icon sx={{ color: tc.textSecondary }}>
                     {isOpen ? "expand_less" : "expand_more"}
@@ -442,7 +442,7 @@ const GroupsStep = ({
             textTransform: "none"
           }}
         >
-          Back
+          {Locale.label("mobile.components.back")}
         </Button>
         <Button
           variant="outlined"
@@ -459,7 +459,7 @@ const GroupsStep = ({
             textTransform: "none"
           }}
         >
-          No Group
+          {Locale.label("mobile.screens.noGroup")}
         </Button>
       </Box>
     </>
@@ -496,13 +496,13 @@ const HouseholdStep = ({
     visitSessions: VisitSessionInterface[]
   ) => {
     const stSessions = ArrayHelper.getAll(visitSessions, "session.serviceTimeId", st.id);
-    let selectedGroupName = "No group selected";
+    let selectedGroupName = Locale.label("mobile.screens.noGroupSelected");
     let hasSelection = false;
     if (stSessions.length > 0) {
       const groupId = stSessions[0].session?.groupId || "";
       const validGroups = (st.groups || []).filter((g) => g != null);
       const group: GroupInterface = ArrayHelper.getOne(validGroups, "id", groupId);
-      selectedGroupName = group?.name || "None";
+      selectedGroupName = group?.name || Locale.label("mobile.screens.none");
       hasSelection = true;
     }
 
@@ -565,7 +565,7 @@ const HouseholdStep = ({
               })
           }}
         >
-          {hasSelection ? "Change" : "Select Group"}
+          {hasSelection ? Locale.label("mobile.screens.change") : Locale.label("mobile.screens.selectGroup")}
         </Button>
       </Box>
     );
@@ -630,14 +630,14 @@ const HouseholdStep = ({
                   }}
                 >
                   <Icon sx={{ fontSize: 14 }}>check_circle</Icon>
-                  Already checked in
+                  {Locale.label("mobile.screens.alreadyCheckedIn")}
                 </Box>
               )}
               {!isExpanded && (
                 <>
                   {visitSessions.length === 0 ? (
                     <Typography sx={{ fontSize: 13, color: tc.textMuted, fontStyle: "italic" }}>
-                      Tap to select groups
+                      {Locale.label("mobile.screens.tapToSelectGroups")}
                     </Typography>
                   ) : (
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -652,7 +652,7 @@ const HouseholdStep = ({
                           "id",
                           vs.session?.groupId || ""
                         );
-                        const name = group?.name || "none";
+                        const name = group?.name || Locale.label("mobile.screens.none");
                         return (
                           <Box
                             key={
@@ -769,7 +769,7 @@ const HouseholdStep = ({
             textTransform: "none"
           }}
         >
-          Show check-in code
+          {Locale.label("mobile.screens.showCheckinCode")}
         </Button>
       )}
 
@@ -797,7 +797,7 @@ const HouseholdStep = ({
             textTransform: "none"
           }}
         >
-          Back
+          {Locale.label("mobile.components.back")}
         </Button>
         <Button
           fullWidth
@@ -817,7 +817,7 @@ const HouseholdStep = ({
             "&:hover": { bgcolor: tc.primary, opacity: 0.92 }
           }}
         >
-          Complete Check-in
+          {Locale.label("mobile.screens.completeCheckin")}
         </Button>
       </Box>
 
@@ -825,8 +825,7 @@ const HouseholdStep = ({
         <DialogTitle>{Locale.label("mobile.screens.alreadyCheckedIn")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {duplicateNames.join(", ")} already checked in for this service. Check in again to
-            update their groups.
+            {Locale.label("mobile.screens.alreadyCheckedInBody").replace("{}", duplicateNames.join(", "))}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -840,7 +839,7 @@ const HouseholdStep = ({
               "&:hover": { bgcolor: tc.primary, opacity: 0.92 }
             }}
           >
-            Check In Again
+            {Locale.label("mobile.screens.checkInAgain")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -879,7 +878,7 @@ const CompleteStep = ({ securityCode, onDone }: { securityCode?: string; onDone:
               textShadow: "0 2px 4px rgba(0,0,0,0.25)"
             }}
           >
-            You&apos;re checked in!
+            {Locale.label("mobile.screens.youreCheckedIn")}
           </Typography>
           <Box
             sx={{
@@ -904,7 +903,7 @@ const CompleteStep = ({ securityCode, onDone }: { securityCode?: string; onDone:
               textShadow: "0 1px 2px rgba(0,0,0,0.2)"
             }}
           >
-            Show this code at a check-in station to print your name tags.
+            {Locale.label("mobile.screens.showCodeAtStation")}
           </Typography>
           <Button
             variant="contained"
@@ -921,7 +920,7 @@ const CompleteStep = ({ securityCode, onDone }: { securityCode?: string; onDone:
               "&:hover": { bgcolor: "#FFFFFF" }
             }}
           >
-            Done
+            {Locale.label("mobile.screens.done")}
           </Button>
         </Box>
       </Box>
@@ -966,7 +965,7 @@ const CompleteStep = ({ securityCode, onDone }: { securityCode?: string; onDone:
             textShadow: "0 2px 4px rgba(0,0,0,0.25)"
           }}
         >
-          Check-in Complete
+          {Locale.label("mobile.screens.checkinComplete")}
         </Typography>
         <Typography
           sx={{
@@ -976,7 +975,7 @@ const CompleteStep = ({ securityCode, onDone }: { securityCode?: string; onDone:
             textShadow: "0 1px 2px rgba(0,0,0,0.2)"
           }}
         >
-          Your attendance has been saved. Thank you!
+          {Locale.label("mobile.screens.attendanceSaved")}
         </Typography>
       </Box>
     </Box>
@@ -1036,7 +1035,7 @@ export const CheckinPage = ({ config: _config }: Props) => {
           action={
             <Button
               variant="contained"
-              href="/mobile/login"
+              href="/mobile/login?returnUrl=/mobile/checkin"
               sx={{
                 bgcolor: tc.primary,
                 color: tc.onPrimary,
@@ -1053,6 +1052,11 @@ export const CheckinPage = ({ config: _config }: Props) => {
       </Box>
     );
   }
+
+  const stepNumber = step === "services" ? 1 : step === "household" ? 2 : 3;
+  const stepName = Locale.label(
+    step === "services" ? "mobile.screens.stepService" : step === "household" ? "mobile.screens.stepHousehold" : "mobile.screens.stepGroups"
+  );
 
   let content: React.ReactNode = null;
   if (step === "services") {
@@ -1087,6 +1091,14 @@ export const CheckinPage = ({ config: _config }: Props) => {
 
   return (
     <Box sx={{ p: `${spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+      {step !== "complete" && (
+        <Typography
+          data-testid="checkin-step-indicator"
+          sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary, textAlign: "center", mb: `${spacing.sm}px` }}
+        >
+          {Locale.label("mobile.screens.checkinStep").replace("{}", String(stepNumber)).replace("{}", stepName)}
+        </Typography>
+      )}
       {content}
     </Box>
   );

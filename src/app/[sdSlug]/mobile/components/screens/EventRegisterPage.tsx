@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   Alert,
@@ -106,14 +106,6 @@ export const EventRegisterPage = ({ eventId, config }: Props) => {
     isLoggedIn,
     person: { id: personId, email: person?.contactInfo?.email, firstName: person?.name?.first, lastName: person?.name?.last, householdId: userContext?.person?.householdId }
   });
-
-  const [loadErrorAlerted, setLoadErrorAlerted] = useState(false);
-  useEffect(() => {
-    if (loadError && !loadErrorAlerted) {
-      setLoadErrorAlerted(true);
-      if (typeof window !== "undefined") window.alert("Could not load event details.");
-    }
-  }, [loadError, loadErrorAlerted]);
 
   const handleBack = () => navigateBack(router, "/mobile/dashboard");
 

@@ -20,10 +20,6 @@
     "navigateTo": "导航至 {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "您的签到已保存。谢谢！",
-      "title": "签到完成"
-    },
     "groups": {
       "chooseGroupFor": "为 {} 选择小组",
       "generalGroups": "常规小组",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "每位成员都必须填写名字和姓氏。"
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "已签到",
-      "alreadyCheckedInTitle": "已签到",
-      "change": "更改",
-      "checkInAgain": "再次签到",
-      "completeCheckin": "完成签到",
-      "duplicateMessage": "{} 已为本次聚会签到。再次签到可更新其小组。",
-      "loginPrompt": "请确保您已登录并已注册家庭成员。",
-      "member": "成员",
-      "memberAvatar": "{} 头像",
-      "noGroupSelected": "未选择小组",
-      "noMembersFound": "未找到家庭成员",
-      "none": "无",
-      "noneLower": "无",
-      "subtitle": "为每位家庭成员选择小组",
-      "tapToSelect": "点击选择小组",
-      "title": "家庭成员",
-      "unknown": "未知"
-    },
-    "services": {
-      "checkBackLater": "请稍后再试或联系您的教会管理员",
-      "noServicesAvailable": "无可用聚会",
-      "subtitle": "选择您要签到的聚会",
-      "title": "选择聚会"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "保存",
     "search": "搜索",
     "update": "更新"
-  },
-  "donate": {
-    "authLanding": "这是已认证页面",
-    "currentYearCsv": "本年度（CSV）",
-    "currentYearPrint": "本年度（打印）",
-    "donations": "奉献",
-    "downloadRecords": "下载奉献记录",
-    "exportCurrentYearCsv": "将本年度奉献导出为 CSV",
-    "exportLastYearCsv": "将上年度奉献导出为 CSV",
-    "lastYearCsv": "上年度（CSV）",
-    "lastYearPrint": "上年度（打印）",
-    "pending": "待处理",
-    "printCurrentYear": "打印本年度奉献",
-    "printLastYear": "打印上年度奉献"
-  },
-  "donation": {
-    "page": {
-      "amount": "金额",
-      "batch": "批次",
-      "date": "日期",
-      "fund": "基金",
-      "method": "方式",
-      "willAppear": "将显示"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "我的奉献"
   },
   "element": {
     "offlinePlaceholder": "离线视频占位符"
@@ -222,9 +166,7 @@
     "demoTitle": "演示："
   },
   "mobile": {
-    "comingSoon": "即将推出移动 PWA 版本。",
     "components": {
-      "b1MobileWeb": "B1 移动网页版",
       "back": "返回",
       "backToDashboard": "返回仪表板",
       "close": "关闭",
@@ -250,7 +192,6 @@
       "playSermon": "播放讲道",
       "privacyPolicy": "隐私政策",
       "profile": "个人资料",
-      "screenNotImplemented": "“{}”页面尚未实现。",
       "signIn": "登录",
       "switchToDark": "切换到深色模式",
       "switchToLight": "切换到浅色模式",
@@ -439,7 +380,6 @@
       "deleteEvent": "删除活动",
       "deleteFile": "删除文件",
       "deleteLink": "删除链接",
-      "deleteLinkConfirm": "删除链接“{}”吗？",
       "discussions": "讨论",
       "edit": "编辑",
       "editEvent": "编辑活动",

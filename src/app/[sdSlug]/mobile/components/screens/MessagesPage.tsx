@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, Locale, PersonHelper, SocketHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
@@ -112,10 +112,12 @@ export const MessagesPage = ({ config }: Props) => {
     staleTime: 0
   });
 
-  const handleDelete = async (c: Conversation, e: React.MouseEvent | React.KeyboardEvent) => {
-    e.stopPropagation();
-    if (!c.pmId) return;
-    if (typeof window !== "undefined" && !window.confirm("Delete this conversation?")) return;
+  const [pendingDelete, setPendingDelete] = React.useState<Conversation | null>(null);
+
+  const handleDelete = async () => {
+    const c = pendingDelete;
+    setPendingDelete(null);
+    if (!c?.pmId) return;
     queryClient.setQueryData<Conversation[]>(["conversations", myPersonId], (prev) => (prev || []).filter((x) => x.pmId !== c.pmId));
     try {
       await ApiHelper.delete(`/privateMessages/${c.pmId}`, "MessagingApi");
@@ -231,7 +233,7 @@ export const MessagesPage = ({ config }: Props) => {
         aria-label={Locale.label("mobile.screens.deleteConversation")}
         data-testid={`conversation-delete-${c.pmId}`}
         size="small"
-        onClick={(e) => handleDelete(c, e)}
+        onClick={(e) => { e.stopPropagation(); setPendingDelete(c); }}
         sx={{ color: tc.disabled, flexShrink: 0 }}
       >
         <Icon sx={{ fontSize: 20 }}>delete_outline</Icon>
@@ -328,6 +330,16 @@ export const MessagesPage = ({ config }: Props) => {
         {conversations !== null && conversations.length === 0 && renderEmpty()}
         {conversations !== null && conversations.length > 0 && conversations.map(renderRow)}
       </Box>
+      <Dialog open={!!pendingDelete} onClose={() => setPendingDelete(null)}>
+        <DialogTitle>{Locale.label("mobile.screens.deleteConversationTitle")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{Locale.label("mobile.screens.deleteConversationBody")}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPendingDelete(null)}>{Locale.label("common.cancel")}</Button>
+          <Button color="error" onClick={handleDelete} data-testid="confirm-delete-conversation">{Locale.label("mobile.details.delete")}</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

@@ -20,10 +20,6 @@
     "navigateTo": "Přejít na {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Vaše účast byla uložena. Děkujeme!",
-      "title": "Přihlášení dokončeno"
-    },
     "groups": {
       "chooseGroupFor": "Vyberte skupinu pro {}",
       "generalGroups": "Obecné skupiny",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Pro každého člena je vyžadováno jméno a příjmení."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Již přihlášen",
-      "alreadyCheckedInTitle": "Již přihlášen",
-      "change": "Změnit",
-      "checkInAgain": "Přihlásit znovu",
-      "completeCheckin": "Dokončit přihlášení",
-      "duplicateMessage": "{} je již přihlášen na tuto bohoslužbu. Přihlaste se znovu pro aktualizaci skupin.",
-      "loginPrompt": "Ujistěte se prosím, že jste přihlášeni a máte zaregistrované členy domácnosti.",
-      "member": "Člen",
-      "memberAvatar": "Avatar {}",
-      "noGroupSelected": "Není vybrána žádná skupina",
-      "noMembersFound": "Nenalezeni žádní členové domácnosti",
-      "none": "Žádný",
-      "noneLower": "žádný",
-      "subtitle": "Vyberte skupiny pro každého člena rodiny",
-      "tapToSelect": "Klepnutím vyberte skupiny",
-      "title": "Členové domácnosti",
-      "unknown": "Neznámý"
-    },
-    "services": {
-      "checkBackLater": "Zkuste to prosím později nebo kontaktujte správce vašeho sboru",
-      "noServicesAvailable": "Žádné bohoslužby nejsou k dispozici",
-      "subtitle": "Vyberte, na kterou bohoslužbu se přihlašujete",
-      "title": "Vybrat bohoslužbu"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Uložit",
     "search": "Hledat",
     "update": "Aktualizovat"
-  },
-  "donate": {
-    "authLanding": "Toto je s ověřením",
-    "currentYearCsv": "Aktuální rok (CSV)",
-    "currentYearPrint": "AKTUÁLNÍ ROK (TISK)",
-    "donations": "Dary",
-    "downloadRecords": "Stáhnout záznamy o darech",
-    "exportCurrentYearCsv": "Exportovat dary za aktuální rok jako CSV",
-    "exportLastYearCsv": "Exportovat dary za minulý rok jako CSV",
-    "lastYearCsv": "Minulý rok (CSV)",
-    "lastYearPrint": "MINULÝ ROK (TISK)",
-    "pending": "Čeká na vyřízení",
-    "printCurrentYear": "Tisk darů za aktuální rok",
-    "printLastYear": "Tisk darů za minulý rok"
-  },
-  "donation": {
-    "page": {
-      "amount": "Částka",
-      "batch": "Dávka",
-      "date": "Datum",
-      "fund": "Fond",
-      "method": "Metoda",
-      "willAppear": "Zobrazí se"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Můj dar"
   },
   "element": {
     "offlinePlaceholder": "Zástupný symbol offline videa"
@@ -222,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Brzy dostupné v mobilní PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Zpět",
       "backToDashboard": "Zpět na nástěnku",
       "close": "Zavřít",
@@ -250,7 +192,6 @@
       "playSermon": "Přehrát kázání",
       "privacyPolicy": "Zásady ochrany osobních údajů",
       "profile": "Profil",
-      "screenNotImplemented": "Obrazovka '{}' zatím není implementována.",
       "signIn": "Přihlásit se",
       "switchToDark": "Přepnout na tmavý režim",
       "switchToLight": "Přepnout na světlý režim",
@@ -439,7 +380,6 @@
       "deleteEvent": "Smazat událost",
       "deleteFile": "Smazat soubor",
       "deleteLink": "Smazat odkaz",
-      "deleteLinkConfirm": "Smazat odkaz \"{}\"?",
       "discussions": "Diskuze",
       "edit": "Upravit",
       "editEvent": "Upravit událost",

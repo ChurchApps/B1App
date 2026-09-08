@@ -20,10 +20,6 @@
     "navigateTo": "Navigeren naar {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Uw aanwezigheid is opgeslagen. Bedankt!",
-      "title": "Inchecken voltooid"
-    },
     "groups": {
       "chooseGroupFor": "Kies een groep voor {}",
       "generalGroups": "Algemene groepen",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Voornaam en achternaam zijn verplicht voor elk lid."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Al ingecheckt",
-      "alreadyCheckedInTitle": "Al ingecheckt",
-      "change": "Wijzigen",
-      "checkInAgain": "Opnieuw inchecken",
-      "completeCheckin": "Inchecken voltooien",
-      "duplicateMessage": "{} is al ingecheckt voor deze dienst. Check opnieuw in om hun groepen bij te werken.",
-      "loginPrompt": "Zorg ervoor dat u bent ingelogd en dat er gezinsleden zijn geregistreerd.",
-      "member": "Lid",
-      "memberAvatar": "Avatar van {}",
-      "noGroupSelected": "Geen groep geselecteerd",
-      "noMembersFound": "Geen gezinsleden gevonden",
-      "none": "Geen",
-      "noneLower": "geen",
-      "subtitle": "Selecteer groepen voor elk gezinslid",
-      "tapToSelect": "Tik om groepen te selecteren",
-      "title": "Gezinsleden",
-      "unknown": "Onbekend"
-    },
-    "services": {
-      "checkBackLater": "Kom later terug of neem contact op met uw kerkbeheerder",
-      "noServicesAvailable": "Geen diensten beschikbaar",
-      "subtitle": "Kies voor welke dienst u incheckt",
-      "title": "Selecteer dienst"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Opslaan",
     "search": "Zoeken",
     "update": "Bijwerken"
-  },
-  "donate": {
-    "authLanding": "Dit is met authenticatie",
-    "currentYearCsv": "Huidig jaar (CSV)",
-    "currentYearPrint": "HUIDIG JAAR (AFDRUKKEN)",
-    "donations": "Giften",
-    "downloadRecords": "Giftgegevens downloaden",
-    "exportCurrentYearCsv": "Giften van het huidige jaar exporteren als CSV",
-    "exportLastYearCsv": "Giften van vorig jaar exporteren als CSV",
-    "lastYearCsv": "Vorig jaar (CSV)",
-    "lastYearPrint": "VORIG JAAR (AFDRUKKEN)",
-    "pending": "In behandeling",
-    "printCurrentYear": "Giften van het huidige jaar afdrukken",
-    "printLastYear": "Giften van vorig jaar afdrukken"
-  },
-  "donation": {
-    "page": {
-      "amount": "Bedrag",
-      "batch": "Batch",
-      "date": "Datum",
-      "fund": "Fonds",
-      "method": "Betaalmethode",
-      "willAppear": "Verschijnt als"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Mijn gift"
   },
   "element": {
     "offlinePlaceholder": "Plaatsaanduiding offline video"
@@ -222,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Binnenkort beschikbaar in de mobiele PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Terug",
       "backToDashboard": "Terug naar dashboard",
       "close": "Sluiten",
@@ -250,7 +192,6 @@
       "playSermon": "Preek afspelen",
       "privacyPolicy": "Privacybeleid",
       "profile": "Profiel",
-      "screenNotImplemented": "Het scherm '{}' is nog niet geïmplementeerd.",
       "signIn": "Inloggen",
       "switchToDark": "Overschakelen naar donkere modus",
       "switchToLight": "Overschakelen naar lichte modus",
@@ -439,7 +380,6 @@
       "deleteEvent": "Evenement verwijderen",
       "deleteFile": "Bestand verwijderen",
       "deleteLink": "Link verwijderen",
-      "deleteLinkConfirm": "Link \"{}\" verwijderen?",
       "discussions": "Discussies",
       "edit": "Bewerken",
       "editEvent": "Evenement bewerken",

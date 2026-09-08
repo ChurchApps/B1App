@@ -20,10 +20,6 @@
     "navigateTo": "Naviger til {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Ditt oppmøte er lagret. Takk!",
-      "title": "Innsjekking fullført"
-    },
     "groups": {
       "chooseGroupFor": "Velg en gruppe for {}",
       "generalGroups": "Generelle grupper",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Fornavn og etternavn er påkrevd for hvert medlem."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Allerede sjekket inn",
-      "alreadyCheckedInTitle": "Allerede sjekket inn",
-      "change": "Endre",
-      "checkInAgain": "Sjekk inn igjen",
-      "completeCheckin": "Fullfør innsjekking",
-      "duplicateMessage": "{} er allerede sjekket inn for denne gudstjenesten. Sjekk inn igjen for å oppdatere gruppene.",
-      "loginPrompt": "Sørg for at du er logget inn og har husstandsmedlemmer registrert.",
-      "member": "Medlem",
-      "memberAvatar": "Avatar for {}",
-      "noGroupSelected": "Ingen gruppe valgt",
-      "noMembersFound": "Ingen husstandsmedlemmer funnet",
-      "none": "Ingen",
-      "noneLower": "ingen",
-      "subtitle": "Velg grupper for hvert familiemedlem",
-      "tapToSelect": "Trykk for å velge grupper",
-      "title": "Husstandsmedlemmer",
-      "unknown": "Ukjent"
-    },
-    "services": {
-      "checkBackLater": "Vennligst kom tilbake senere eller kontakt menighetsadministratoren",
-      "noServicesAvailable": "Ingen gudstjenester tilgjengelig",
-      "subtitle": "Velg hvilken gudstjeneste du sjekker inn for",
-      "title": "Velg gudstjeneste"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Lagre",
     "search": "Søk",
     "update": "Oppdater"
-  },
-  "donate": {
-    "authLanding": "Dette er med autentisering",
-    "currentYearCsv": "Inneværende år (CSV)",
-    "currentYearPrint": "INNEVÆRENDE ÅR (UTSKRIFT)",
-    "donations": "Gaver",
-    "downloadRecords": "Last ned giverhistorikk",
-    "exportCurrentYearCsv": "Eksporter gaver for inneværende år som CSV",
-    "exportLastYearCsv": "Eksporter gaver for fjoråret som CSV",
-    "lastYearCsv": "Fjoråret (CSV)",
-    "lastYearPrint": "FJORÅRET (UTSKRIFT)",
-    "pending": "Avventer",
-    "printCurrentYear": "Skriv ut gaver for inneværende år",
-    "printLastYear": "Skriv ut gaver for fjoråret"
-  },
-  "donation": {
-    "page": {
-      "amount": "Beløp",
-      "batch": "Batch",
-      "date": "Dato",
-      "fund": "Fond",
-      "method": "Metode",
-      "willAppear": "Vil vises"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Min gave"
   },
   "element": {
     "offlinePlaceholder": "Plassholder for offline-video"
@@ -222,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Kommer snart til mobil-PWA-en.",
     "components": {
-      "b1MobileWeb": "B1 Mobil Web",
       "back": "Tilbake",
       "backToDashboard": "Tilbake til dashbord",
       "close": "Lukk",
@@ -250,7 +192,6 @@
       "playSermon": "Spill av preken",
       "privacyPolicy": "Personvernerklæring",
       "profile": "Profil",
-      "screenNotImplemented": "Skjermen '{}' er ikke implementert ennå.",
       "signIn": "Logg inn",
       "switchToDark": "Bytt til mørk modus",
       "switchToLight": "Bytt til lys modus",
@@ -439,7 +380,6 @@
       "deleteEvent": "Slett arrangement",
       "deleteFile": "Slett fil",
       "deleteLink": "Slett lenke",
-      "deleteLinkConfirm": "Slette lenken \"{}\"?",
       "discussions": "Diskusjoner",
       "edit": "Rediger",
       "editEvent": "Rediger arrangement",

@@ -30,6 +30,7 @@ const resolveInternalPath = (rawUrl: string): string | null => {
 
     if (typeof window !== "undefined" && parsed.origin !== window.location.origin) return null;
     const path = parsed.pathname;
+    if (path.startsWith("/mobile/")) return path;
     for (const entry of INTERNAL_PATH_MAP) {
       const m = path.match(entry.match);
       if (m) return entry.build(m[1]);
@@ -51,7 +52,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
   const isPage = (pathname || "").includes("/mobile/page");
   const rawUrl = params?.get("url") || "";
   const rawId = params?.get("id") || "";
-  const title = params?.get("title") || "Website";
+  const title = params?.get("title") || Locale.label("mobile.screens.website");
 
   const resolvedUrl = useMemo(() => {
     if (isPage) {
@@ -199,10 +200,10 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             }}
           >
             <Icon sx={{ fontSize: 18 }}>open_in_new</Icon>
-            Open Website
+            {Locale.label("mobile.screens.openWebsite")}
           </Box>
           <Typography sx={{ fontSize: 12, color: tc.textHint, mt: `${mobileTheme.spacing.sm}px` }}>
-            This site can&apos;t be shown inside the app.
+            {Locale.label("mobile.screens.cantShowInApp")}
           </Typography>
         </Box>
       </Box>
@@ -328,10 +329,10 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
             >
               <Icon sx={{ fontSize: 32, color: tc.error, mb: 1 }}>error_outline</Icon>
               <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-                Unable to load page
+                {Locale.label("mobile.screens.unableToLoadPage")}
               </Typography>
               <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-                The page took too long to respond or could not be displayed.
+                {Locale.label("mobile.screens.unableToLoadPageBody")}
               </Typography>
               <Box
                 component="button"
@@ -348,7 +349,7 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
                   cursor: "pointer"
                 }}
               >
-                Retry
+                {Locale.label("mobile.screens.retry")}
               </Box>
             </Box>
           </Box>

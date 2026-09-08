@@ -20,10 +20,6 @@
     "navigateTo": "Navegar para {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Sua presença foi registrada. Obrigado!",
-      "title": "Check-in Concluído"
-    },
     "groups": {
       "chooseGroupFor": "Escolha um grupo para {}",
       "generalGroups": "Grupos Gerais",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Nome e sobrenome são obrigatórios para cada membro."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Check-in já realizado",
-      "alreadyCheckedInTitle": "Check-in Já Realizado",
-      "change": "Alterar",
-      "checkInAgain": "Fazer Check-in Novamente",
-      "completeCheckin": "Concluir Check-in",
-      "duplicateMessage": "{} já fez check-in para este culto. Faça check-in novamente para atualizar os grupos.",
-      "loginPrompt": "Verifique se você está logado e se há membros da família cadastrados.",
-      "member": "Membro",
-      "memberAvatar": "avatar de {}",
-      "noGroupSelected": "Nenhum grupo selecionado",
-      "noMembersFound": "Nenhum Membro da Família Encontrado",
-      "none": "Nenhum",
-      "noneLower": "nenhum",
-      "subtitle": "Selecione grupos para cada membro da família",
-      "tapToSelect": "Toque para selecionar grupos",
-      "title": "Membros da Família",
-      "unknown": "Desconhecido"
-    },
-    "services": {
-      "checkBackLater": "Por favor, volte mais tarde ou entre em contato com o administrador da sua igreja",
-      "noServicesAvailable": "Nenhum Culto Disponível",
-      "subtitle": "Escolha para qual culto você está fazendo check-in",
-      "title": "Selecionar Culto"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Salvar",
     "search": "Pesquisar",
     "update": "Atualizar"
-  },
-  "donate": {
-    "authLanding": "Isto é com Autenticação",
-    "currentYearCsv": "Ano Atual (CSV)",
-    "currentYearPrint": "ANO ATUAL (IMPRIMIR)",
-    "donations": "Doações",
-    "downloadRecords": "Baixar registros de doações",
-    "exportCurrentYearCsv": "Exportar doações do ano atual em CSV",
-    "exportLastYearCsv": "Exportar doações do ano passado em CSV",
-    "lastYearCsv": "Ano Passado (CSV)",
-    "lastYearPrint": "ANO PASSADO (IMPRIMIR)",
-    "pending": "Pendente",
-    "printCurrentYear": "Imprimir doações do ano atual",
-    "printLastYear": "Imprimir doações do ano passado"
-  },
-  "donation": {
-    "page": {
-      "amount": "Valor",
-      "batch": "Lote",
-      "date": "Data",
-      "fund": "Fundo",
-      "method": "Método",
-      "willAppear": "Aparecerá Como"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Minha Doação"
   },
   "element": {
     "offlinePlaceholder": "Espaço Reservado para Vídeo Offline"
@@ -222,9 +166,7 @@
     "demoTitle": "Demonstração:"
   },
   "mobile": {
-    "comingSoon": "Em breve no PWA móvel.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Voltar",
       "backToDashboard": "Voltar ao painel",
       "close": "Fechar",
@@ -250,7 +192,6 @@
       "playSermon": "Reproduzir sermão",
       "privacyPolicy": "Política de Privacidade",
       "profile": "Perfil",
-      "screenNotImplemented": "A tela '{}' ainda não foi implementada.",
       "signIn": "Entrar",
       "switchToDark": "Mudar para modo escuro",
       "switchToLight": "Mudar para modo claro",
@@ -439,7 +380,6 @@
       "deleteEvent": "Excluir evento",
       "deleteFile": "Excluir arquivo",
       "deleteLink": "Excluir link",
-      "deleteLinkConfirm": "Excluir link \"{}\"?",
       "discussions": "Discussões",
       "edit": "Editar",
       "editEvent": "Editar evento",

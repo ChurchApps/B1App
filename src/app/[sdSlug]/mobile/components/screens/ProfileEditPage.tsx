@@ -8,6 +8,11 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   Icon,
   IconButton,
@@ -36,22 +41,22 @@ interface Props {
 type TabKey = "profile" | "household" | "account" | "visibility";
 type VisibilityScope = "everyone" | "members" | "groups" | "leaders" | "staff";
 
-const fieldDefinitions: { key: string; label: string }[] = [
-  { key: "name.first", label: "First Name" },
-  { key: "name.middle", label: "Middle Name" },
-  { key: "name.last", label: "Last Name" },
-  { key: "photo", label: "Photo" },
-  { key: "birthDate", label: "Birth Date" },
-  { key: "contactInfo.email", label: "Email" },
-  { key: "contactInfo.address1", label: "Address Line 1" },
-  { key: "contactInfo.address2", label: "Address Line 2" },
-  { key: "contactInfo.city", label: "City" },
-  { key: "contactInfo.state", label: "State" },
-  { key: "contactInfo.zip", label: "Zip" },
-  { key: "contactInfo.homePhone", label: "Home Phone" },
-  { key: "contactInfo.mobilePhone", label: "Mobile Phone" },
-  { key: "contactInfo.workPhone", label: "Work Phone" }
-];
+const fieldLabelKeys: Record<string, string> = {
+  "name.first": "person.firstName",
+  "name.middle": "mobile.profileEdit.middleName",
+  "name.last": "person.lastName",
+  photo: "mobile.profileEdit.photo",
+  birthDate: "mobile.profileEdit.birthDate",
+  "contactInfo.email": "person.email",
+  "contactInfo.address1": "mobile.profileEdit.address1",
+  "contactInfo.address2": "mobile.profileEdit.address2",
+  "contactInfo.city": "mobile.profileEdit.city",
+  "contactInfo.state": "mobile.profileEdit.state",
+  "contactInfo.zip": "mobile.profileEdit.zip",
+  "contactInfo.homePhone": "mobile.profileEdit.homePhone",
+  "contactInfo.mobilePhone": "mobile.details.mobilePhone",
+  "contactInfo.workPhone": "mobile.profileEdit.workPhone"
+};
 
 const emptyPerson: PersonInterface = {
   name: { first: "", middle: "", last: "", display: "" },
@@ -107,12 +112,12 @@ const writeField = (obj: any, key: string, value: string): any => {
 
 const resizePhotoToDataUrl = async (file: File): Promise<string> => new Promise((resolve, reject) => {
   const reader = new FileReader();
-  reader.onerror = () => reject(new Error("Unable to read image file."));
+  reader.onerror = () => reject(new Error(Locale.label("mobile.profileEdit.unableToReadImage")));
   reader.onload = () => {
     const src = typeof reader.result === "string" ? reader.result : "";
-    if (!src) { reject(new Error("Unable to read image file.")); return; }
+    if (!src) { reject(new Error(Locale.label("mobile.profileEdit.unableToReadImage"))); return; }
     const img = new Image();
-    img.onerror = () => reject(new Error("Unable to decode image."));
+    img.onerror = () => reject(new Error(Locale.label("mobile.profileEdit.unableToDecodeImage")));
     img.onload = () => {
       const targetH = 300;
       const targetW = Math.round((targetH * 4) / 3);
@@ -120,7 +125,7 @@ const resizePhotoToDataUrl = async (file: File): Promise<string> => new Promise(
       canvas.width = targetW;
       canvas.height = targetH;
       const ctx = canvas.getContext("2d");
-      if (!ctx) { reject(new Error("Canvas not available.")); return; }
+      if (!ctx) { reject(new Error(Locale.label("mobile.profileEdit.canvasNotAvailable"))); return; }
 
       const srcAspect = img.width / img.height;
       const dstAspect = targetW / targetH;
@@ -279,7 +284,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     e.target.value = "";
     if (!file || !person) return;
     if (!file.type.startsWith("image/")) {
-      setPhotoError("Please select an image file.");
+      setPhotoError(Locale.label("mobile.profileEdit.selectImageFile"));
       return;
     }
     try {
@@ -299,13 +304,13 @@ export const ProfileEditPage = ({ config }: Props) => {
     if (!person) return [];
     const changes: { field: string; label: string; value: string }[] = [];
     modifiedFields.forEach((key) => {
-      const def = fieldDefinitions.find((f) => f.key === key);
-      if (!def) return;
+      const labelKey = fieldLabelKeys[key];
+      if (!labelKey) return;
       const value = key === "photo" ? person.photo || "" : readField(person, key);
-      changes.push({ field: key, label: def.label, value });
+      changes.push({ field: key, label: Locale.label(labelKey), value });
     });
     pendingFamilyMembers.forEach((name) => {
-      changes.push({ field: "familyMember", label: "Add Family Member", value: name });
+      changes.push({ field: "familyMember", label: Locale.label("mobile.profileEdit.addFamilyMember"), value: name });
     });
     return changes;
   }, [person, modifiedFields, pendingFamilyMembers]);
@@ -398,8 +403,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   };
 
   const handleCancel = () => {
-    if (!hasChanges) return;
-    if (!window.confirm("Discard your pending changes?")) return;
+    setDiscardOpen(false);
     if (initial) setPerson(JSON.parse(JSON.stringify(initial)));
     setModifiedFields(new Set());
     setPendingFamilyMembers([]);
@@ -416,6 +420,7 @@ export const ProfileEditPage = ({ config }: Props) => {
     setPendingFamilyMembers((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const [discardOpen, setDiscardOpen] = useState(false);
   const [optedOutLocal, setOptedOutLocal] = useState<boolean>(false);
   const [initialOptedOut, setInitialOptedOut] = useState<boolean>(false);
   useEffect(() => {
@@ -428,7 +433,7 @@ export const ProfileEditPage = ({ config }: Props) => {
   const handleSaveDisplayName = async () => {
     setAcctNameError(null);
     if (!acctFirstName.trim() || !acctLastName.trim()) {
-      setAcctNameError("First and last name are required.");
+      setAcctNameError(Locale.label("mobile.profileEdit.nameRequired"));
       return;
     }
     setSavingAcctName(true);
@@ -453,8 +458,8 @@ export const ProfileEditPage = ({ config }: Props) => {
   const handleSaveEmail = async () => {
     setEmailError(null);
     const trimmed = newEmail.trim();
-    if (!trimmed) { setEmailError("Enter a new email address."); return; }
-    if (!emailRegex.test(trimmed)) { setEmailError("Please enter a valid email address."); return; }
+    if (!trimmed) { setEmailError(Locale.label("mobile.profileEdit.enterNewEmail")); return; }
+    if (!emailRegex.test(trimmed)) { setEmailError(Locale.label("mobile.profileEdit.invalidEmail")); return; }
     setSavingEmail(true);
     try {
       const resp: any = await ApiHelper.post("/users/updateEmail", { email: trimmed }, "MembershipApi");
@@ -475,15 +480,15 @@ export const ProfileEditPage = ({ config }: Props) => {
   const handleSavePassword = async () => {
     setPasswordError(null);
     if (!currentPassword) {
-      setPasswordError("Current password is required.");
+      setPasswordError(Locale.label("mobile.profileEdit.currentPasswordRequired"));
       return;
     }
     if (!newPassword || newPassword.length < 8) {
-      setPasswordError("Password must be at least 8 characters.");
+      setPasswordError(Locale.label("mobile.profileEdit.passwordMinLength"));
       return;
     }
     if (newPassword !== confirmPassword) {
-      setPasswordError("Passwords do not match.");
+      setPasswordError(Locale.label("mobile.profileEdit.passwordsDoNotMatch"));
       return;
     }
     setSavingPassword(true);
@@ -657,10 +662,10 @@ export const ProfileEditPage = ({ config }: Props) => {
         </Avatar>
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-            {[person.name?.first, person.name?.last].filter(Boolean).join(" ") || "Your Photo"}
+            {[person.name?.first, person.name?.last].filter(Boolean).join(" ") || Locale.label("mobile.profileEdit.yourPhoto")}
           </Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: "2px" }}>
-            PNG or JPG. Images are cropped to 4:3 and resized automatically.
+            {Locale.label("mobile.profileEdit.photoHint")}
           </Typography>
           <Button
             variant="outlined"
@@ -674,7 +679,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               borderRadius: `${mobileTheme.radius.md}px`
             }}
           >
-            Change Photo
+            {Locale.label("mobile.profileEdit.changePhoto")}
           </Button>
           {photoError && (
             <Typography sx={{ fontSize: 12, color: tc.error, mt: "6px" }}>{photoError}</Typography>
@@ -698,11 +703,11 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Name")}
+        {sectionHeader(Locale.label("mobile.profileEdit.sectionName"))}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("name.first", "First Name", { autoComplete: "given-name" })}
-          {renderField("name.middle", "Middle Name", { autoComplete: "additional-name" })}
-          {renderField("name.last", "Last Name", { autoComplete: "family-name" })}
+          {renderField("name.first", Locale.label("person.firstName"), { autoComplete: "given-name" })}
+          {renderField("name.middle", Locale.label("mobile.profileEdit.middleName"), { autoComplete: "additional-name" })}
+          {renderField("name.last", Locale.label("person.lastName"), { autoComplete: "family-name" })}
         </Box>
       </Box>
 
@@ -715,10 +720,10 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Contact")}
+        {sectionHeader(Locale.label("mobile.profileEdit.sectionContact"))}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("contactInfo.email", "Email", { type: "email", inputMode: "email", autoComplete: "email" })}
-          {renderField("birthDate", "Birth Date", { type: "date" })}
+          {renderField("contactInfo.email", Locale.label("person.email"), { type: "email", inputMode: "email", autoComplete: "email" })}
+          {renderField("birthDate", Locale.label("mobile.profileEdit.birthDate"), { type: "date" })}
         </Box>
       </Box>
 
@@ -731,14 +736,14 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Address")}
+        {sectionHeader(Locale.label("mobile.profileEdit.sectionAddress"))}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("contactInfo.address1", "Address Line 1", { autoComplete: "address-line1" })}
-          {renderField("contactInfo.address2", "Address Line 2", { autoComplete: "address-line2" })}
-          {renderField("contactInfo.city", "City", { autoComplete: "address-level2" })}
+          {renderField("contactInfo.address1", Locale.label("mobile.profileEdit.address1"), { autoComplete: "address-line1" })}
+          {renderField("contactInfo.address2", Locale.label("mobile.profileEdit.address2"), { autoComplete: "address-line2" })}
+          {renderField("contactInfo.city", Locale.label("mobile.profileEdit.city"), { autoComplete: "address-level2" })}
           <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px` }}>
-            <Box sx={{ flex: 1 }}>{renderField("contactInfo.state", "State", { autoComplete: "address-level1" })}</Box>
-            <Box sx={{ flex: 1 }}>{renderField("contactInfo.zip", "Zip", { inputMode: "numeric", autoComplete: "postal-code" })}</Box>
+            <Box sx={{ flex: 1 }}>{renderField("contactInfo.state", Locale.label("mobile.profileEdit.state"), { autoComplete: "address-level1" })}</Box>
+            <Box sx={{ flex: 1 }}>{renderField("contactInfo.zip", Locale.label("mobile.profileEdit.zip"), { inputMode: "numeric", autoComplete: "postal-code" })}</Box>
           </Box>
         </Box>
       </Box>
@@ -752,11 +757,11 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Phone")}
+        {sectionHeader(Locale.label("mobile.profileEdit.sectionPhone"))}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
-          {renderField("contactInfo.mobilePhone", "Mobile Phone", { type: "tel", inputMode: "tel", autoComplete: "tel" })}
-          {renderField("contactInfo.homePhone", "Home Phone", { type: "tel", inputMode: "tel" })}
-          {renderField("contactInfo.workPhone", "Work Phone", { type: "tel", inputMode: "tel" })}
+          {renderField("contactInfo.mobilePhone", Locale.label("mobile.details.mobilePhone"), { type: "tel", inputMode: "tel", autoComplete: "tel" })}
+          {renderField("contactInfo.homePhone", Locale.label("mobile.profileEdit.homePhone"), { type: "tel", inputMode: "tel" })}
+          {renderField("contactInfo.workPhone", Locale.label("mobile.profileEdit.workPhone"), { type: "tel", inputMode: "tel" })}
         </Box>
       </Box>
 
@@ -774,21 +779,21 @@ export const ProfileEditPage = ({ config }: Props) => {
           p: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Current Household", "people")}
+        {sectionHeader(Locale.label("mobile.profileEdit.currentHousehold"), "people")}
         {householdLoading && householdId && <CircularProgress sx={{ color: tc.primary }} size={24} />}
         {!householdLoading && !householdId && (
           <Typography sx={{ fontSize: 14, color: tc.textMuted, fontStyle: "italic", textAlign: "center", py: 2 }}>
-            No household is linked to this profile.
+            {Locale.label("mobile.profileEdit.noHouseholdLinked")}
           </Typography>
         )}
         {!householdLoading && householdIsError && householdId && (
           <Typography sx={{ fontSize: 14, color: tc.error, fontStyle: "italic", textAlign: "center", py: 2 }}>
-            Could not load household members.
+            {Locale.label("mobile.profileEdit.couldNotLoadHousehold")}
           </Typography>
         )}
         {!householdLoading && !householdIsError && !!householdId && household.filter((h) => h.id !== person.id).length === 0 && (
           <Typography sx={{ fontSize: 14, color: tc.textMuted, fontStyle: "italic", textAlign: "center", py: 2 }}>
-            No other members in your household.
+            {Locale.label("mobile.profileEdit.noOtherHouseholdMembers")}
           </Typography>
         )}
         {!householdLoading &&
@@ -825,10 +830,10 @@ export const ProfileEditPage = ({ config }: Props) => {
                 </Avatar>
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                    {h.name?.display || "Unknown"}
+                    {h.name?.display || Locale.label("mobile.components.unknown")}
                   </Typography>
                   <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
-                    {h.householdRole || "Household Member"}
+                    {h.householdRole || Locale.label("mobile.details.householdMember")}
                   </Typography>
                 </Box>
                 <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
@@ -845,9 +850,9 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Add Family Member", "person_add")}
+        {sectionHeader(Locale.label("mobile.profileEdit.addFamilyMember"), "person_add")}
         <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-          New members will be reviewed along with your other profile changes.
+          {Locale.label("mobile.profileEdit.familyMemberHint")}
         </Typography>
         <Box sx={{ display: "flex", gap: `${mobileTheme.spacing.sm}px`, alignItems: "flex-start" }}>
           <TextField
@@ -874,14 +879,14 @@ export const ProfileEditPage = ({ config }: Props) => {
               "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
-            Add
+            {Locale.label("mobile.group.add")}
           </Button>
         </Box>
 
         {pendingFamilyMembers.length > 0 && (
           <Box sx={{ mt: 2, pt: 2, borderTop: `1px solid ${tc.warning}44` }}>
             <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text, mb: 1.5 }}>
-              Pending Family Members
+              {Locale.label("mobile.profileEdit.pendingFamilyMembers")}
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               {pendingFamilyMembers.map((name, idx) => (
@@ -906,7 +911,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               ))}
             </Box>
             <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: 1, fontStyle: "italic" }}>
-              These will be submitted with your profile changes for approval.
+              {Locale.label("mobile.profileEdit.pendingFamilyMembersHint")}
             </Typography>
           </Box>
         )}
@@ -927,7 +932,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           p: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Display Name", "person")}
+        {sectionHeader(Locale.label("mobile.profileEdit.displayName"), "person")}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
             label={Locale.label("person.firstName")}
@@ -964,7 +969,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
               }}
             >
-              {savingAcctName ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
+              {savingAcctName ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("common.save")}
             </Button>
           )}
         </Box>
@@ -979,9 +984,9 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Change Email", "email")}
+        {sectionHeader(Locale.label("mobile.profileEdit.changeEmail"), "email")}
         <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 2 }}>
-          Email: {accountUser?.email || "—"}
+          {Locale.label("person.email")}: {accountUser?.email || "—"}
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
@@ -1011,7 +1016,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
-            {savingEmail ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
+            {savingEmail ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("common.save")}
           </Button>
         </Box>
       </Box>
@@ -1025,7 +1030,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           mt: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Change Password", "lock")}
+        {sectionHeader(Locale.label("mobile.profileEdit.changePassword"), "lock")}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm + 4}px` }}>
           <TextField
             label={Locale.label("mobile.screens.currentPassword")}
@@ -1061,7 +1066,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             sx={inputSx}
           />
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            Password must be at least 8 characters.
+            {Locale.label("mobile.profileEdit.passwordMinLength")}
           </Typography>
           {passwordError && (
             <Typography sx={{ fontSize: 12, color: tc.error }}>{passwordError}</Typography>
@@ -1079,7 +1084,7 @@ export const ProfileEditPage = ({ config }: Props) => {
               "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
             }}
           >
-            {savingPassword ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : "Save"}
+            {savingPassword ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label("common.save")}
           </Button>
         </Box>
       </Box>
@@ -1122,9 +1127,9 @@ export const ProfileEditPage = ({ config }: Props) => {
           p: `${mobileTheme.spacing.md}px`
         }}
       >
-        {sectionHeader("Visibility Preferences", "visibility")}
+        {sectionHeader(Locale.label("mobile.profileEdit.visibilityPreferences"), "visibility")}
         <Typography sx={{ fontSize: 13, color: tc.textMuted, mb: 2 }}>
-          Choose who can see each type of contact information.
+          {Locale.label("mobile.profileEdit.visibilityIntro")}
         </Typography>
 
         <Box
@@ -1138,7 +1143,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           }}
         >
           <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>
-            Hide me from the member directory
+            {Locale.label("mobile.profileEdit.hideFromDirectory")}
           </Typography>
           <Switch
             checked={optedOutLocal}
@@ -1146,9 +1151,9 @@ export const ProfileEditPage = ({ config }: Props) => {
           />
         </Box>
 
-        {renderVisDropdown("Address Visibility", addressVis, setAddressVis, "vis-address")}
-        {renderVisDropdown("Phone Visibility", phoneVis, setPhoneVis, "vis-phone")}
-        {renderVisDropdown("Email Visibility", emailVis, setEmailVis, "vis-email")}
+        {renderVisDropdown(Locale.label("mobile.profileEdit.addressVisibility"), addressVis, setAddressVis, "vis-address")}
+        {renderVisDropdown(Locale.label("mobile.profileEdit.phoneVisibility"), phoneVis, setPhoneVis, "vis-phone")}
+        {renderVisDropdown(Locale.label("mobile.profileEdit.emailVisibility"), emailVis, setEmailVis, "vis-email")}
 
         {visChanged && (
           <Button
@@ -1182,37 +1187,37 @@ export const ProfileEditPage = ({ config }: Props) => {
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
           <Icon sx={{ color: tc.primary, fontSize: 20 }}>info</Icon>
           <Typography sx={{ fontSize: 14, fontWeight: 700, color: tc.primary }}>
-            Visibility Levels
+            {Locale.label("mobile.profileEdit.visibilityLevels")}
           </Typography>
         </Box>
         <Box sx={{ mb: 1 }}>
           <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.everyone")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            Visible to anyone who can view the directory.
+            {Locale.label("mobile.profileEdit.everyoneDesc")}
           </Typography>
         </Box>
         <Box sx={{ mb: 1 }}>
           <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.membersOnly")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            Visible to other signed-in church members.
+            {Locale.label("mobile.profileEdit.membersDesc")}
           </Typography>
         </Box>
         <Box sx={{ mb: 1 }}>
           <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.myGroupsOnly")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            Visible only to members of groups you belong to.
+            {Locale.label("mobile.profileEdit.groupsDesc")}
           </Typography>
         </Box>
         <Box sx={{ mb: 1 }}>
           <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.leadersOnly")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            Visible only to church staff and the leaders of groups you belong to.
+            {Locale.label("mobile.profileEdit.leadersDesc")}
           </Typography>
         </Box>
         <Box>
           <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.staffOnly")}</Typography>
           <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            Visible only to church staff.
+            {Locale.label("mobile.profileEdit.staffDesc")}
           </Typography>
         </Box>
       </Box>
@@ -1257,7 +1262,7 @@ export const ProfileEditPage = ({ config }: Props) => {
             value="profile"
             label={
               <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
-                Profile
+                {Locale.label("mobile.profileEdit.tabProfile")}
                 {hasChanges && (
                   <Box sx={{ width: 8, height: 8, bgcolor: tc.warning, borderRadius: "50%" }} aria-hidden />
                 )}
@@ -1288,11 +1293,11 @@ export const ProfileEditPage = ({ config }: Props) => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
             <Icon sx={{ color: tc.warning, fontSize: 24 }}>pending_actions</Icon>
             <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-              {requiresApproval ? "Pending Changes" : "Unsaved Changes"}
+              {Locale.label(requiresApproval ? "mobile.profileEdit.pendingChanges" : "mobile.profileEdit.unsavedChanges")}
             </Typography>
           </Box>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-            {requiresApproval ? "Review your changes before submitting for approval." : "Review your changes before saving."}
+            {Locale.label(requiresApproval ? "mobile.profileEdit.reviewBeforeSubmitting" : "mobile.profileEdit.reviewBeforeSaving")}
           </Typography>
           <Box sx={{ maxHeight: 240, overflowY: "auto", mb: 2 }}>
             {profileChanges.map((c, i) => (
@@ -1307,12 +1312,12 @@ export const ProfileEditPage = ({ config }: Props) => {
                   <Box
                     component="img"
                     src={c.value}
-                    alt="Pending photo"
+                    alt={Locale.label("mobile.profileEdit.pendingPhoto")}
                     sx={{ width: 60, height: 45, borderRadius: `${mobileTheme.radius.sm}px`, objectFit: "cover" }}
                   />
                 ) : (
                   <Typography sx={{ fontSize: 14, color: tc.text, wordBreak: "break-word" }}>
-                    {c.value || "(empty)"}
+                    {c.value || Locale.label("mobile.profileEdit.emptyValue")}
                   </Typography>
                 )}
               </Box>
@@ -1321,7 +1326,7 @@ export const ProfileEditPage = ({ config }: Props) => {
           <Box sx={{ display: "flex", gap: 1.5 }}>
             <Button
               variant="outlined"
-              onClick={handleCancel}
+              onClick={() => setDiscardOpen(true)}
               disabled={saving}
               sx={{
                 flex: 1,
@@ -1331,7 +1336,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 borderRadius: `${mobileTheme.radius.md}px`
               }}
             >
-              Cancel
+              {Locale.label("common.cancel")}
             </Button>
             <Button
               variant="contained"
@@ -1347,11 +1352,22 @@ export const ProfileEditPage = ({ config }: Props) => {
                 "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
               }}
             >
-              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : requiresApproval ? "Submit for Approval" : "Save Changes"}
+              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label(requiresApproval ? "mobile.profileEdit.submitForApproval" : "mobile.profileEdit.saveChanges")}
             </Button>
           </Box>
         </Box>
       )}
+
+      <Dialog open={discardOpen} onClose={() => setDiscardOpen(false)}>
+        <DialogTitle>{Locale.label("mobile.profileEdit.discardChangesTitle")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{Locale.label("mobile.profileEdit.discardChangesBody")}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDiscardOpen(false)}>{Locale.label("mobile.screens.keep")}</Button>
+          <Button color="error" onClick={handleCancel} data-testid="confirm-discard-changes">{Locale.label("mobile.profileEdit.discard")}</Button>
+        </DialogActions>
+      </Dialog>
 
       <Snackbar
         open={snack.open}

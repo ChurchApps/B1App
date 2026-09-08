@@ -20,10 +20,6 @@
     "navigateTo": "Điều hướng đến {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Việc điểm danh của bạn đã được lưu. Cảm ơn bạn!",
-      "title": "Hoàn tất điểm danh"
-    },
     "groups": {
       "chooseGroupFor": "Chọn nhóm cho {}",
       "generalGroups": "Nhóm chung",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Bắt buộc nhập họ và tên cho mỗi thành viên."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Đã điểm danh",
-      "alreadyCheckedInTitle": "Đã điểm danh",
-      "change": "Thay đổi",
-      "checkInAgain": "Điểm danh lại",
-      "completeCheckin": "Hoàn tất điểm danh",
-      "duplicateMessage": "{} đã điểm danh cho buổi nhóm này. Điểm danh lại để cập nhật nhóm.",
-      "loginPrompt": "Vui lòng đảm bảo bạn đã đăng nhập và có thành viên gia đình được đăng ký.",
-      "member": "Thành viên",
-      "memberAvatar": "Ảnh đại diện của {}",
-      "noGroupSelected": "Chưa chọn nhóm",
-      "noMembersFound": "Không tìm thấy thành viên gia đình",
-      "none": "Không",
-      "noneLower": "không",
-      "subtitle": "Chọn nhóm cho từng thành viên gia đình",
-      "tapToSelect": "Nhấn để chọn nhóm",
-      "title": "Thành viên gia đình",
-      "unknown": "Không rõ"
-    },
-    "services": {
-      "checkBackLater": "Vui lòng quay lại sau hoặc liên hệ quản trị viên hội thánh",
-      "noServicesAvailable": "Không có buổi nhóm nào",
-      "subtitle": "Chọn buổi nhóm bạn muốn điểm danh",
-      "title": "Chọn buổi nhóm"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Lưu",
     "search": "Tìm kiếm",
     "update": "Cập nhật"
-  },
-  "donate": {
-    "authLanding": "Đây là trang có xác thực",
-    "currentYearCsv": "Năm hiện tại (CSV)",
-    "currentYearPrint": "NĂM HIỆN TẠI (IN)",
-    "donations": "Dâng hiến",
-    "downloadRecords": "Tải xuống hồ sơ dâng hiến",
-    "exportCurrentYearCsv": "Xuất dâng hiến năm hiện tại dưới dạng CSV",
-    "exportLastYearCsv": "Xuất dâng hiến năm trước dưới dạng CSV",
-    "lastYearCsv": "Năm trước (CSV)",
-    "lastYearPrint": "NĂM TRƯỚC (IN)",
-    "pending": "Đang chờ xử lý",
-    "printCurrentYear": "In dâng hiến năm hiện tại",
-    "printLastYear": "In dâng hiến năm trước"
-  },
-  "donation": {
-    "page": {
-      "amount": "Số tiền",
-      "batch": "Lô",
-      "date": "Ngày",
-      "fund": "Quỹ",
-      "method": "Phương thức",
-      "willAppear": "Sẽ xuất hiện"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Dâng hiến của tôi"
   },
   "element": {
     "offlinePlaceholder": "Trình giữ chỗ video ngoại tuyến"
@@ -222,9 +166,7 @@
     "demoTitle": "Bản dùng thử:"
   },
   "mobile": {
-    "comingSoon": "Sắp ra mắt trên ứng dụng di động PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Quay lại",
       "backToDashboard": "Quay lại bảng điều khiển",
       "close": "Đóng",
@@ -250,7 +192,6 @@
       "playSermon": "Phát bài giảng",
       "privacyPolicy": "Chính sách bảo mật",
       "profile": "Hồ sơ",
-      "screenNotImplemented": "Màn hình '{}' chưa được triển khai.",
       "signIn": "Đăng nhập",
       "switchToDark": "Chuyển sang chế độ tối",
       "switchToLight": "Chuyển sang chế độ sáng",
@@ -439,7 +380,6 @@
       "deleteEvent": "Xóa sự kiện",
       "deleteFile": "Xóa tệp",
       "deleteLink": "Xóa liên kết",
-      "deleteLinkConfirm": "Xóa liên kết \"{}\"?",
       "discussions": "Thảo luận",
       "edit": "Chỉnh sửa",
       "editEvent": "Chỉnh sửa sự kiện",

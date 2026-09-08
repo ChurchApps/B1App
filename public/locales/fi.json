@@ -20,10 +20,6 @@
     "navigateTo": "Siirry kohteeseen {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Osallistumisesi on tallennettu. Kiitos!",
-      "title": "Sisäänkirjautuminen valmis"
-    },
     "groups": {
       "chooseGroupFor": "Valitse ryhmä henkilölle {}",
       "generalGroups": "Yleiset ryhmät",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Etunimi ja sukunimi vaaditaan jokaiselta jäseneltä."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Jo sisäänkirjautunut",
-      "alreadyCheckedInTitle": "Jo sisäänkirjautunut",
-      "change": "Muuta",
-      "checkInAgain": "Kirjaudu uudelleen sisään",
-      "completeCheckin": "Viimeistele sisäänkirjautuminen",
-      "duplicateMessage": "{} on jo kirjautunut sisään tähän palvelukseen. Kirjaudu uudelleen päivittääksesi ryhmät.",
-      "loginPrompt": "Varmista, että olet kirjautunut sisään ja että kotitaloutesi jäsenet on rekisteröity.",
-      "member": "Jäsen",
-      "memberAvatar": "Henkilön {} avatar",
-      "noGroupSelected": "Ryhmää ei ole valittu",
-      "noMembersFound": "Kotitalouden jäseniä ei löytynyt",
-      "none": "Ei mitään",
-      "noneLower": "ei mitään",
-      "subtitle": "Valitse ryhmät jokaiselle perheenjäsenelle",
-      "tapToSelect": "Napauta valitaksesi ryhmät",
-      "title": "Kotitalouden jäsenet",
-      "unknown": "Tuntematon"
-    },
-    "services": {
-      "checkBackLater": "Tarkista myöhemmin uudelleen tai ota yhteyttä seurakunnan ylläpitäjään",
-      "noServicesAvailable": "Ei saatavilla olevia palveluksia",
-      "subtitle": "Valitse, mihin palvelukseen kirjaudut sisään",
-      "title": "Valitse palvelus"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Tallenna",
     "search": "Hae",
     "update": "Päivitä"
-  },
-  "donate": {
-    "authLanding": "Tämä on kirjautumisen kanssa",
-    "currentYearCsv": "Kuluva vuosi (CSV)",
-    "currentYearPrint": "KULUVA VUOSI (TULOSTUS)",
-    "donations": "Lahjoitukset",
-    "downloadRecords": "Lataa lahjoitustiedot",
-    "exportCurrentYearCsv": "Vie kuluvan vuoden lahjoitukset CSV-muodossa",
-    "exportLastYearCsv": "Vie viime vuoden lahjoitukset CSV-muodossa",
-    "lastYearCsv": "Viime vuosi (CSV)",
-    "lastYearPrint": "VIIME VUOSI (TULOSTUS)",
-    "pending": "Odottaa",
-    "printCurrentYear": "Tulosta kuluvan vuoden lahjoitukset",
-    "printLastYear": "Tulosta viime vuoden lahjoitukset"
-  },
-  "donation": {
-    "page": {
-      "amount": "Summa",
-      "batch": "Erä",
-      "date": "Päivämäärä",
-      "fund": "Rahasto",
-      "method": "Maksutapa",
-      "willAppear": "Näkyy tiliotteella"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Oma lahjoitukseni"
   },
   "element": {
     "offlinePlaceholder": "Offline-videon paikkamerkki"
@@ -222,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Tulossa pian mobiilisovellukseen.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Takaisin",
       "backToDashboard": "Takaisin kojelautaan",
       "close": "Sulje",
@@ -250,7 +192,6 @@
       "playSermon": "Toista saarna",
       "privacyPolicy": "Tietosuojakäytäntö",
       "profile": "Profiili",
-      "screenNotImplemented": "Näkymää '{}' ei ole vielä toteutettu.",
       "signIn": "Kirjaudu sisään",
       "switchToDark": "Vaihda tummaan tilaan",
       "switchToLight": "Vaihda vaaleaan tilaan",
@@ -439,7 +380,6 @@
       "deleteEvent": "Poista tapahtuma",
       "deleteFile": "Poista tiedosto",
       "deleteLink": "Poista linkki",
-      "deleteLinkConfirm": "Poistetaanko linkki \"{}\"?",
       "discussions": "Keskustelut",
       "edit": "Muokkaa",
       "editEvent": "Muokkaa tapahtumaa",

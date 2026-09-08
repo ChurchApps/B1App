@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 /** Contract test for POST /messaging/webpush/subscribe device enrollment (server-side, not browser PushManager). */
 
-const API_BASE = "http://localhost:8084";
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
 
 async function loginAndGetMessagingJwt() {
   const res = await fetch(`${API_BASE}/membership/users/login`, {

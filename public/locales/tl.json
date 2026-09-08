@@ -20,10 +20,6 @@
     "navigateTo": "Pumunta sa {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Na-save na ang iyong attendance. Salamat!",
-      "title": "Tapos na ang Check-in"
-    },
     "groups": {
       "chooseGroupFor": "Pumili ng grupo para kay {}",
       "generalGroups": "Mga Pangkalahatang Grupo",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Kailangan ang first name at last name para sa bawat miyembro."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Naka-check-in na",
-      "alreadyCheckedInTitle": "Naka-check-in Na",
-      "change": "Palitan",
-      "checkInAgain": "Mag-check-in Muli",
-      "completeCheckin": "Kumpletuhin ang Check-in",
-      "duplicateMessage": "Naka-check-in na si {} para sa serbisyong ito. Mag-check-in muli upang i-update ang kanilang mga grupo.",
-      "loginPrompt": "Pakisiguro na naka-login ka at may mga miyembro ng sambahayan na nakarehistro.",
-      "member": "Miyembro",
-      "memberAvatar": "avatar ni {}",
-      "noGroupSelected": "Walang napiling grupo",
-      "noMembersFound": "Walang Nakitang Miyembro ng Sambahayan",
-      "none": "Wala",
-      "noneLower": "wala",
-      "subtitle": "Pumili ng mga grupo para sa bawat miyembro ng pamilya",
-      "tapToSelect": "I-tap para pumili ng mga grupo",
-      "title": "Mga Miyembro ng Sambahayan",
-      "unknown": "Hindi alam"
-    },
-    "services": {
-      "checkBackLater": "Pakitingnan muli mamaya o makipag-ugnayan sa administrator ng iyong simbahan",
-      "noServicesAvailable": "Walang Available na Serbisyo",
-      "subtitle": "Pumili kung aling serbisyo ang iyong che-check-in",
-      "title": "Pumili ng Serbisyo"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "I-save",
     "search": "Maghanap",
     "update": "I-update"
-  },
-  "donate": {
-    "authLanding": "Ito ay may Auth",
-    "currentYearCsv": "Kasalukuyang Taon (CSV)",
-    "currentYearPrint": "KASALUKUYANG TAON (PRINT)",
-    "donations": "Mga Donasyon",
-    "downloadRecords": "I-download ang mga record ng donasyon",
-    "exportCurrentYearCsv": "I-export ang mga donasyon ng kasalukuyang taon bilang CSV",
-    "exportLastYearCsv": "I-export ang mga donasyon ng nakaraang taon bilang CSV",
-    "lastYearCsv": "Nakaraang Taon (CSV)",
-    "lastYearPrint": "NAKARAANG TAON (PRINT)",
-    "pending": "Nakabinbin",
-    "printCurrentYear": "I-print ang mga donasyon ng kasalukuyang taon",
-    "printLastYear": "I-print ang mga donasyon ng nakaraang taon"
-  },
-  "donation": {
-    "page": {
-      "amount": "Halaga",
-      "batch": "Batch",
-      "date": "Petsa",
-      "fund": "Pondo",
-      "method": "Paraan",
-      "willAppear": "Lilitaw"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Aking Donasyon"
   },
   "element": {
     "offlinePlaceholder": "Offline Video Placeholder"
@@ -222,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Malapit nang available sa mobile PWA.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Bumalik",
       "backToDashboard": "Bumalik sa dashboard",
       "close": "Isara",
@@ -250,7 +192,6 @@
       "playSermon": "I-play ang sermon",
       "privacyPolicy": "Privacy Policy",
       "profile": "Profile",
-      "screenNotImplemented": "Hindi pa naipapatupad ang '{}' screen.",
       "signIn": "Mag-sign In",
       "switchToDark": "Lumipat sa dark mode",
       "switchToLight": "Lumipat sa light mode",
@@ -439,7 +380,6 @@
       "deleteEvent": "Burahin ang event",
       "deleteFile": "Burahin ang file",
       "deleteLink": "Burahin ang link",
-      "deleteLinkConfirm": "Burahin ang link na \"{}\"?",
       "discussions": "Mga Talakayan",
       "edit": "I-edit",
       "editEvent": "I-edit ang event",

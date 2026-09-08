@@ -134,7 +134,7 @@ test.describe("Live stream chat — cross-user realtime", () => {
   });
 });
 
-const MESSAGING_API = "http://localhost:8084/messaging";
+const MESSAGING_API = (process.env.API_BASE || "http://localhost:8084") + "/messaging";
 const CHURCH_ID = "CHU00000001";
 const DEMO_SERVICE_ID = "STR00000002";
 const DEMO_PERSON_ID = "PER00000082";

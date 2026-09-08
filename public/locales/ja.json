@@ -20,10 +20,6 @@
     "navigateTo": "{}へ移動"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "出席が保存されました。ありがとうございました!",
-      "title": "チェックイン完了"
-    },
     "groups": {
       "chooseGroupFor": "{}のグループを選択してください",
       "generalGroups": "一般グループ",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "各メンバーの姓名が必要です。"
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "すでにチェックイン済み",
-      "alreadyCheckedInTitle": "すでにチェックイン済み",
-      "change": "変更",
-      "checkInAgain": "再度チェックイン",
-      "completeCheckin": "チェックインを完了",
-      "duplicateMessage": "{}はこの礼拝にすでにチェックイン済みです。グループを更新するには再度チェックインしてください。",
-      "loginPrompt": "ログインしており、家族メンバーが登録されていることをご確認ください。",
-      "member": "メンバー",
-      "memberAvatar": "{}のアバター",
-      "noGroupSelected": "グループが選択されていません",
-      "noMembersFound": "家族メンバーが見つかりません",
-      "none": "なし",
-      "noneLower": "なし",
-      "subtitle": "各家族メンバーのグループを選択してください",
-      "tapToSelect": "タップしてグループを選択",
-      "title": "家族メンバー",
-      "unknown": "不明"
-    },
-    "services": {
-      "checkBackLater": "後でもう一度ご確認いただくか、教会管理者にお問い合わせください",
-      "noServicesAvailable": "利用可能な礼拝がありません",
-      "subtitle": "チェックインする礼拝を選択してください",
-      "title": "礼拝を選択"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "保存",
     "search": "検索",
     "update": "更新"
-  },
-  "donate": {
-    "authLanding": "認証付きです",
-    "currentYearCsv": "今年(CSV)",
-    "currentYearPrint": "今年(印刷)",
-    "donations": "献金",
-    "downloadRecords": "献金記録をダウンロード",
-    "exportCurrentYearCsv": "今年の献金をCSVとしてエクスポート",
-    "exportLastYearCsv": "昨年の献金をCSVとしてエクスポート",
-    "lastYearCsv": "昨年(CSV)",
-    "lastYearPrint": "昨年(印刷)",
-    "pending": "保留中",
-    "printCurrentYear": "今年の献金を印刷",
-    "printLastYear": "昨年の献金を印刷"
-  },
-  "donation": {
-    "page": {
-      "amount": "金額",
-      "batch": "バッチ",
-      "date": "日付",
-      "fund": "献金基金",
-      "method": "方法",
-      "willAppear": "明細に表示されます"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "マイ献金"
   },
   "element": {
     "offlinePlaceholder": "オフライン動画プレースホルダー"
@@ -222,9 +166,7 @@
     "demoTitle": "デモ:"
   },
   "mobile": {
-    "comingSoon": "モバイルPWAに近日公開予定。",
     "components": {
-      "b1MobileWeb": "B1 モバイルウェブ",
       "back": "戻る",
       "backToDashboard": "ダッシュボードに戻る",
       "close": "閉じる",
@@ -250,7 +192,6 @@
       "playSermon": "説教を再生",
       "privacyPolicy": "プライバシーポリシー",
       "profile": "プロフィール",
-      "screenNotImplemented": "'{}' 画面はまだ実装されていません。",
       "signIn": "サインイン",
       "switchToDark": "ダークモードに切り替え",
       "switchToLight": "ライトモードに切り替え",
@@ -439,7 +380,6 @@
       "deleteEvent": "イベントを削除",
       "deleteFile": "ファイルを削除",
       "deleteLink": "リンクを削除",
-      "deleteLinkConfirm": "リンク \"{}\" を削除しますか?",
       "discussions": "ディスカッション",
       "edit": "編集",
       "editEvent": "イベントを編集",

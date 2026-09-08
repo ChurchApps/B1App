@@ -2,7 +2,7 @@ import { test, expect, request, type Page } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 // GR-1: EVT00000018 (Midweek Small Group) weekly recurring on GRP00000004 (demo + tester members)
-const API_BASE = "http://localhost:8084";
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
 const CHURCH_ID = "CHU00000001";
 const GROUP_ID = "GRP00000004";
 const EVENT_ID = "EVT00000018";

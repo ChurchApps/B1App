@@ -6,8 +6,8 @@ import crypto from "crypto";
 // Test instruments: mobile money 0551234987/MTN (no OTP); card = Paystack's built-in "Success" test card.
 test.describe.configure({ mode: "serial" });
 
-const API = "http://localhost:8084";
-const BASE_URL = "http://accra.localtest.me:3301";
+const API = process.env.API_BASE || "http://localhost:8084";
+const BASE_URL = (process.env.BASE_URL || "http://grace.localtest.me:3301").replace("grace.", "accra.");
 const CHURCH_ID = "CHU00000002";
 const PERSON_ID = "PER00000098";
 // Same test secret that giving/demo.sql seeds (encrypted) for GAT00000002 — needed to sign webhook payloads.

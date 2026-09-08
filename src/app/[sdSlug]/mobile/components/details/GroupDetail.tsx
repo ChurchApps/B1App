@@ -5,6 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   Skeleton,
   Tab,
@@ -81,6 +86,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const churchId = config.church.id;
   const [joining, setJoining] = React.useState(false);
   const [requestDialogOpen, setRequestDialogOpen] = React.useState(false);
+  const [leaveDialogOpen, setLeaveDialogOpen] = React.useState(false);
   // Initially show the Members tab to avoid the messaging screen popup caused by a mounting bug.
   const [tab, setTab] = React.useState<TabKey>("members");
   const [chatOpen, setChatOpen] = React.useState(false);
@@ -211,6 +217,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   };
 
   const handleLeave = async () => {
+    setLeaveDialogOpen(false);
     if (!currentPersonId || !members) return;
     const mine = members.find((m) => (m.personId || m.person?.id) === currentPersonId);
     if (!mine?.id) return;
@@ -499,7 +506,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           color="error"
           fullWidth
           disabled={joining}
-          onClick={handleLeave}
+          onClick={() => setLeaveDialogOpen(true)}
+          data-testid="leave-group-button"
           sx={{
             textTransform: "none",
             fontWeight: 600,
@@ -532,7 +540,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
             "&:hover": { bgcolor: tc.primary }
           }}
         >
-          {alreadyRequested ? "Request Pending" : "Request to Join"}
+          {Locale.label(alreadyRequested ? "mobile.details.requestPending" : "mobile.group.requestToJoin")}
         </Button>
       );
     }
@@ -780,6 +788,16 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           }}
         />
       )}
+      <Dialog open={leaveDialogOpen} onClose={() => setLeaveDialogOpen(false)}>
+        <DialogTitle>{Locale.label("mobile.details.leaveGroupTitle")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{Locale.label("mobile.details.leaveGroupBody")}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLeaveDialogOpen(false)}>{Locale.label("common.cancel")}</Button>
+          <Button color="error" onClick={handleLeave} data-testid="confirm-leave-group">{Locale.label("mobile.details.leaveGroup")}</Button>
+        </DialogActions>
+      </Dialog>
       {groupId && (
         <RequestToJoinDialog
           open={requestDialogOpen}

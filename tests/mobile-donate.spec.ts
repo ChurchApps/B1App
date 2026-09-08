@@ -55,7 +55,7 @@ test.describe("Mobile donate", () => {
 // Country receipt formats: the donor-facing statement mirrors the B1Admin legal block,
 // driven by the church's statement-format settings.
 test.describe.serial("Mobile donate statement receipt formats", () => {
-  const MAIN_API = "http://localhost:8084";
+  const MAIN_API = process.env.API_BASE || "http://localhost:8084";
   const REG_NUMBER = "119288945RR0001";
 
   // /membership/settings inserts a new row when no id is sent, so reuse existing ids
@@ -112,5 +112,16 @@ test.describe.serial("Mobile donate statement receipt formats", () => {
     await page.goto("/mobile/donate/print");
     await expect(page.getByText("Statement Summary:")).toBeVisible({ timeout: 20000 });
     await expect(page.locator('[data-testid="statement-legal-block"]')).toHaveCount(0);
+  });
+});
+
+test.describe("Public donate page links", () => {
+  test("login button and help link point at current destinations", async ({ page }) => {
+    await page.context().clearCookies();
+    await page.goto("/donate");
+    const login = page.getByTestId("donate-login-button");
+    await expect(login).toBeVisible({ timeout: 30000 });
+    await expect(page.locator('a[href="/mobile/login?returnUrl=/mobile/donate"]')).toBeVisible();
+    await expect(page.getByTestId("donate-instructions-link")).toHaveAttribute("href", /b1-church\/giving\/making-donations/);
   });
 });

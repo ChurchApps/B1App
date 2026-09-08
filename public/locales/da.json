@@ -20,10 +20,6 @@
     "navigateTo": "Naviger til {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "Dit fremmøde er blevet gemt. Tak!",
-      "title": "Check-in fuldført"
-    },
     "groups": {
       "chooseGroupFor": "Vælg en gruppe til {}",
       "generalGroups": "Generelle grupper",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Fornavn og efternavn er påkrævet for hvert medlem."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Allerede checket ind",
-      "alreadyCheckedInTitle": "Allerede checket ind",
-      "change": "Skift",
-      "checkInAgain": "Check ind igen",
-      "completeCheckin": "Fuldfør check-in",
-      "duplicateMessage": "{} er allerede checket ind til denne gudstjeneste. Check ind igen for at opdatere deres grupper.",
-      "loginPrompt": "Sørg venligst for, at du er logget ind og har husstandsmedlemmer registreret.",
-      "member": "Medlem",
-      "memberAvatar": "{} avatar",
-      "noGroupSelected": "Ingen gruppe valgt",
-      "noMembersFound": "Ingen husstandsmedlemmer fundet",
-      "none": "Ingen",
-      "noneLower": "ingen",
-      "subtitle": "Vælg grupper for hvert familiemedlem",
-      "tapToSelect": "Tryk for at vælge grupper",
-      "title": "Husstandsmedlemmer",
-      "unknown": "Ukendt"
-    },
-    "services": {
-      "checkBackLater": "Vend venligst tilbage senere eller kontakt din kirkeadministrator",
-      "noServicesAvailable": "Ingen gudstjenester tilgængelige",
-      "subtitle": "Vælg hvilken gudstjeneste du checker ind til",
-      "title": "Vælg gudstjeneste"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Gem",
     "search": "Søg",
     "update": "Opdater"
-  },
-  "donate": {
-    "authLanding": "Dette er med godkendelse",
-    "currentYearCsv": "Indeværende år (CSV)",
-    "currentYearPrint": "INDEVÆRENDE ÅR (UDSKRIV)",
-    "donations": "Donationer",
-    "downloadRecords": "Download donationsregistre",
-    "exportCurrentYearCsv": "Eksporter indeværende års donationer som CSV",
-    "exportLastYearCsv": "Eksporter sidste års donationer som CSV",
-    "lastYearCsv": "Sidste år (CSV)",
-    "lastYearPrint": "SIDSTE ÅR (UDSKRIV)",
-    "pending": "Afventer",
-    "printCurrentYear": "Udskriv indeværende års donationer",
-    "printLastYear": "Udskriv sidste års donationer"
-  },
-  "donation": {
-    "page": {
-      "amount": "Beløb",
-      "batch": "Batch",
-      "date": "Dato",
-      "fund": "Fond",
-      "method": "Metode",
-      "willAppear": "Vil fremgå"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Min donation"
   },
   "element": {
     "offlinePlaceholder": "Offline video pladsholder"
@@ -222,9 +166,7 @@
     "demoTitle": "Demo:"
   },
   "mobile": {
-    "comingSoon": "Kommer snart til mobil-PWA'en.",
     "components": {
-      "b1MobileWeb": "B1 Mobile Web",
       "back": "Tilbage",
       "backToDashboard": "Tilbage til dashboard",
       "close": "Luk",
@@ -250,7 +192,6 @@
       "playSermon": "Afspil prædiken",
       "privacyPolicy": "Privatlivspolitik",
       "profile": "Profil",
-      "screenNotImplemented": "Skærmen '{}' er endnu ikke implementeret.",
       "signIn": "Log ind",
       "switchToDark": "Skift til mørk tilstand",
       "switchToLight": "Skift til lys tilstand",
@@ -439,7 +380,6 @@
       "deleteEvent": "Slet begivenhed",
       "deleteFile": "Slet fil",
       "deleteLink": "Slet link",
-      "deleteLinkConfirm": "Slet link \"{}\"?",
       "discussions": "Diskussioner",
       "edit": "Rediger",
       "editEvent": "Rediger begivenhed",

@@ -211,10 +211,10 @@ function DonatePageInner({ config }: Props) {
             <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>
           </Box>
           <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-            Giving is not yet set up for this church
+            {Locale.label("mobile.screens.givingNotSetUp")}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-            Please check back later once online giving has been configured.
+            {Locale.label("mobile.screens.givingNotSetUpBody")}
           </Typography>
         </Box>
       </Box>
@@ -242,26 +242,25 @@ function DonatePageInner({ config }: Props) {
           {isAuthenticated ? (
             <>
               <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
-                Your Giving Impact
+                {Locale.label("mobile.screens.yourGivingImpact")}
               </Typography>
               <Typography sx={{ fontSize: 36, fontWeight: 800, mb: 1, fontVariantNumeric: "tabular-nums" }}>
                 {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)}
               </Typography>
               <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
-                Total this year • {givingStats.totalGifts}{" "}
-                {givingStats.totalGifts === 1 ? "gift" : "gifts"}
+                {Locale.label(givingStats.totalGifts === 1 ? "mobile.screens.totalThisYearGift" : "mobile.screens.totalThisYearGifts").replace("{}", String(givingStats.totalGifts))}
               </Typography>
             </>
           ) : (
             <>
               <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
-                Make a Difference Today
+                {Locale.label("mobile.screens.makeADifference")}
               </Typography>
               <Typography sx={{ fontSize: 20, fontWeight: 700, mb: 1 }}>
-                Support {church?.name || "our church"}
+                {Locale.label("mobile.screens.supportChurch").replace("{}", church?.name || Locale.label("mobile.screens.ourChurch"))}
               </Typography>
               <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
-                Give securely as a guest — no account required.
+                {Locale.label("mobile.screens.giveAsGuest")}
               </Typography>
             </>
           )}
@@ -284,7 +283,7 @@ function DonatePageInner({ config }: Props) {
               }}
             >
               <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary }}>
-                Recent Activity
+                {Locale.label("mobile.screens.recentActivity")}
               </Typography>
               <Button
                 onClick={() => setTab("history")}
@@ -295,7 +294,7 @@ function DonatePageInner({ config }: Props) {
                   minWidth: 0
                 }}
               >
-                View All
+                {Locale.label("mobile.screens.viewAll")}
               </Button>
             </Box>
 
@@ -326,7 +325,7 @@ function DonatePageInner({ config }: Props) {
               </Box>
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-                  Last Gift
+                  {Locale.label("mobile.screens.lastGift")}
                 </Typography>
                 <Typography sx={{ fontSize: 15, fontWeight: 700, color: tc.primary }}>
                   {givingStats.lastGift
@@ -341,7 +340,7 @@ function DonatePageInner({ config }: Props) {
                 <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
                   {givingStats.lastGift
                     ? DateHelper.prettyDate(DateHelper.toDate(givingStats.lastGift.donationDate))
-                    : "No recent gift"}
+                    : Locale.label("mobile.screens.noRecentGift")}
                 </Typography>
               </Box>
               {givingStats.lastGift && (
@@ -358,7 +357,7 @@ function DonatePageInner({ config }: Props) {
                     "&:hover": { bgcolor: tc.iconBackground, opacity: 0.85 }
                   }}
                 >
-                  Repeat
+                  {Locale.label("mobile.screens.repeat")}
                 </Button>
               )}
             </Box>
@@ -378,10 +377,10 @@ function DonatePageInner({ config }: Props) {
             volunteer_activism
           </Icon>
           <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 1 }}>
-            Make a Difference Today
+            {Locale.label("mobile.screens.makeADifference")}
           </Typography>
           <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.lg}px`, px: 2 }}>
-            Your generosity helps us continue our mission and support our community.
+            {Locale.label("mobile.screens.generosityHelps")}
           </Typography>
           <Button
             variant="contained"
@@ -398,7 +397,7 @@ function DonatePageInner({ config }: Props) {
               "&:hover": { bgcolor: tc.primary, opacity: 0.9 }
             }}
           >
-            Give Now
+            {Locale.label("mobile.screens.giveNow")}
           </Button>
         </Box>
       </Box>
@@ -497,10 +496,10 @@ function DonatePageInner({ config }: Props) {
   };
 
   const periodLabels: Record<PeriodKey, string> = {
-    ytd: "Year to Date",
-    "30d": "Last 30 Days",
-    "90d": "Last 90 Days",
-    all: "All Time"
+    ytd: Locale.label("mobile.screens.periodYtd"),
+    "30d": Locale.label("mobile.screens.period30d"),
+    "90d": Locale.label("mobile.screens.period90d"),
+    all: Locale.label("mobile.screens.periodAll")
   };
 
   const filteredDonations = useMemo(() => {
@@ -526,7 +525,7 @@ function DonatePageInner({ config }: Props) {
     const pm = (paymentMethods || []).find(
       (p) => (p as any).id === (sub.default_payment_method || sub.default_source)
     );
-    if (!pm) return "Payment method not found";
+    if (!pm) return Locale.label("mobile.screens.paymentMethodNotFound");
     return `${(pm as any).name} ****${(pm as any).last4 || ""}`;
   };
 
@@ -611,7 +610,7 @@ function DonatePageInner({ config }: Props) {
             onClick={handlePrintStatement}
             sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
           >
-            Print Statement
+            {Locale.label("mobile.screens.printStatement")}
           </Button>
         </Box>
       )}
@@ -619,7 +618,7 @@ function DonatePageInner({ config }: Props) {
       {subscriptions.length > 0 && (
         <Box>
           <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}>
-            Recurring
+            {Locale.label("mobile.screens.recurring")}
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
             {subscriptions.map((sub) => {
@@ -665,9 +664,9 @@ function DonatePageInner({ config }: Props) {
                       </Typography>
                     ))}
                     <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.primary }}>
-                      Total: {CurrencyHelper.formatCurrencyWithLocale(total, subCurrency)}
+                      {Locale.label("mobile.screens.totalAmount").replace("{}", CurrencyHelper.formatCurrencyWithLocale(total, subCurrency))}
                     </Typography>
-                    <Typography sx={{ fontSize: 13, color: tc.text }}>Every {interval}</Typography>
+                    <Typography sx={{ fontSize: 13, color: tc.text }}>{Locale.label("mobile.screens.everyInterval").replace("{}", interval)}</Typography>
                     <Typography sx={{ fontSize: 13, color: tc.text }}>
                       {getSubPaymentMethod(sub)}
                     </Typography>
@@ -695,7 +694,7 @@ function DonatePageInner({ config }: Props) {
         <Typography
           sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}
         >
-          Recent Activity
+          {Locale.label("mobile.screens.recentActivity")}
         </Typography>
         <Box
           sx={{
@@ -711,10 +710,10 @@ function DonatePageInner({ config }: Props) {
           {!donationsLoading && filteredDonations.length === 0 && (
             <Box sx={{ py: 5, textAlign: "center", px: 2 }}>
               <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
-                No recent transactions
+                {Locale.label("mobile.screens.noRecentTransactions")}
               </Typography>
               <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: 0.5 }}>
-                Your donations will appear here once you make your first gift.
+                {Locale.label("mobile.screens.donationsWillAppear")}
               </Typography>
             </Box>
           )}
@@ -755,7 +754,7 @@ function DonatePageInner({ config }: Props) {
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
                       {fundName}
-                      {isPending && " (Pending)"}
+                      {isPending && ` (${Locale.label("mobile.screens.pending")})`}
                     </Typography>
                     <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
                       {DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}
@@ -830,11 +829,10 @@ function DonatePageInner({ config }: Props) {
         {!isAuthenticated && tab === "donate" && (
           <Box sx={{ mt: 2, textAlign: "center" }}>
             <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-              Already have an account?{" "}
+              {Locale.label("mobile.screens.alreadyHaveAccount")}{" "}
               <a href="/mobile/login?returnUrl=/mobile/donate" style={{ color: tc.primary, fontWeight: 600 }}>
-                Sign in
-              </a>{" "}
-              to manage recurring gifts and view history.
+                {Locale.label("mobile.screens.signInToManageGifts")}
+              </a>
             </Typography>
           </Box>
         )}

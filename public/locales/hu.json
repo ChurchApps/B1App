@@ -20,10 +20,6 @@
     "navigateTo": "Navigálás ide: {}"
   },
   "checkin": {
-    "complete": {
-      "attendanceSaved": "A jelenléted mentve. Köszönjük!",
-      "title": "Bejelentkezés befejezve"
-    },
     "groups": {
       "chooseGroupFor": "Válassz csoportot {} számára",
       "generalGroups": "Általános csoportok",
@@ -48,31 +44,6 @@
       "validate": {
         "namesRequired": "Minden tag esetében kötelező a vezeték- és keresztnév."
       }
-    },
-    "household": {
-      "alreadyCheckedIn": "Már bejelentkezett",
-      "alreadyCheckedInTitle": "Már bejelentkezett",
-      "change": "Módosítás",
-      "checkInAgain": "Újra bejelentkezés",
-      "completeCheckin": "Bejelentkezés befejezése",
-      "duplicateMessage": "{} már bejelentkezett erre az alkalomra. Jelentkezz be újra a csoportok frissítéséhez.",
-      "loginPrompt": "Kérjük, győződj meg róla, hogy be vagy jelentkezve, és vannak regisztrált háztartástagok.",
-      "member": "Tag",
-      "memberAvatar": "{} profilképe",
-      "noGroupSelected": "Nincs csoport kiválasztva",
-      "noMembersFound": "Nem találhatók háztartástagok",
-      "none": "Nincs",
-      "noneLower": "nincs",
-      "subtitle": "Válassz csoportot minden családtagnak",
-      "tapToSelect": "Koppints a csoportok kiválasztásához",
-      "title": "Háztartástagok",
-      "unknown": "Ismeretlen"
-    },
-    "services": {
-      "checkBackLater": "Kérjük, nézz vissza később, vagy lépj kapcsolatba a gyülekezet adminisztrátorával",
-      "noServicesAvailable": "Nincsenek elérhető alkalmak",
-      "subtitle": "Válaszd ki, melyik alkalomra jelentkezel be",
-      "title": "Alkalom kiválasztása"
     }
   },
   "common": {
@@ -84,33 +55,6 @@
     "save": "Mentés",
     "search": "Keresés",
     "update": "Frissítés"
-  },
-  "donate": {
-    "authLanding": "Ez hitelesítéssel működik",
-    "currentYearCsv": "Idei év (CSV)",
-    "currentYearPrint": "IDEI ÉV (NYOMTATÁS)",
-    "donations": "Adományok",
-    "downloadRecords": "Adományozási nyilvántartások letöltése",
-    "exportCurrentYearCsv": "Idei évi adományok exportálása CSV-ként",
-    "exportLastYearCsv": "Tavalyi évi adományok exportálása CSV-ként",
-    "lastYearCsv": "Tavalyi év (CSV)",
-    "lastYearPrint": "TAVALYI ÉV (NYOMTATÁS)",
-    "pending": "Függőben",
-    "printCurrentYear": "Idei évi adományok nyomtatása",
-    "printLastYear": "Tavalyi évi adományok nyomtatása"
-  },
-  "donation": {
-    "page": {
-      "amount": "Összeg",
-      "batch": "Köteg",
-      "date": "Dátum",
-      "fund": "Alap",
-      "method": "Fizetési mód",
-      "willAppear": "Megjelenési forma"
-    }
-  },
-  "donationLanding": {
-    "myDonation": "Saját adományom"
   },
   "element": {
     "offlinePlaceholder": "Offline videó helyőrző"
@@ -222,9 +166,7 @@
     "demoTitle": "Demó:"
   },
   "mobile": {
-    "comingSoon": "Hamarosan elérhető a mobil PWA-ban.",
     "components": {
-      "b1MobileWeb": "B1 Mobil Web",
       "back": "Vissza",
       "backToDashboard": "Vissza az irányítópultra",
       "close": "Bezárás",
@@ -250,7 +192,6 @@
       "playSermon": "Prédikáció lejátszása",
       "privacyPolicy": "Adatvédelmi szabályzat",
       "profile": "Profil",
-      "screenNotImplemented": "A(z) '{}' képernyő még nincs megvalósítva.",
       "signIn": "Bejelentkezés",
       "switchToDark": "Váltás sötét módra",
       "switchToLight": "Váltás világos módra",
@@ -439,7 +380,6 @@
       "deleteEvent": "Esemény törlése",
       "deleteFile": "Fájl törlése",
       "deleteLink": "Link törlése",
-      "deleteLinkConfirm": "\"{}\" link törlése?",
       "discussions": "Beszélgetések",
       "edit": "Szerkesztés",
       "editEvent": "Esemény szerkesztése",

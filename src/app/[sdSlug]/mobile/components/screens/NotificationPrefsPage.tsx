@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Box,
@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 import type { SelectChangeEvent } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
-import { ApiHelper } from "@churchapps/apphelper";
+import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
@@ -34,7 +34,6 @@ interface CategoryChannels {
   push: boolean;
   email: boolean;
   in_app: boolean;
-  sms: boolean;
 }
 
 interface NotificationCategory {
@@ -53,7 +52,6 @@ interface NotificationPrefs {
   quietHoursStart: string | null;
   quietHoursEnd: string | null;
   timeZone: string | null;
-  allowSms: boolean;
   maxPushPerDay: number | null;
   categories: NotificationCategory[];
 }
@@ -66,26 +64,37 @@ interface Override {
   optedIn: boolean;
 }
 
-const DISPLAY_CHANNELS: { key: ChannelKey; label: string }[] = [
-  { key: "push", label: "Push" },
-  { key: "email", label: "Email" },
-  { key: "in_app", label: "In-App" }
-];
+const PUSH_CAP_OPTIONS = [3, 5, 10, 20];
 
 export const NotificationPrefsPage = () => {
   const tc = mobileTheme.colors;
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
 
+  const deviceZone = useMemo(() => {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch {
+      return "";
+    }
+  }, []);
+
   const [masterMute, setMasterMute] = useState(false);
   const [quietStart, setQuietStart] = useState("");
   const [quietEnd, setQuietEnd] = useState("");
   const [timeZone, setTimeZone] = useState("");
   const [allowPush, setAllowPush] = useState(true);
+  const [maxPushPerDay, setMaxPushPerDay] = useState<number | null>(null);
   const [emailFrequency, setEmailFrequency] = useState<"never" | "individual" | "daily">("individual");
   const [overrides, setOverrides] = useState<Map<string, boolean>>(new Map());
   const [saving, setSaving] = useState(false);
   const [snack, setSnack] = useState<{ open: boolean; msg: string; severity: "success" | "error" }>({ open: false, msg: "", severity: "success" });
+
+  const displayChannels: { key: ChannelKey; label: string }[] = [
+    { key: "push", label: Locale.label("mobile.notificationPrefs.channelPush") },
+    { key: "email", label: Locale.label("mobile.notificationPrefs.channelEmail") },
+    { key: "in_app", label: Locale.label("mobile.notificationPrefs.channelInApp") }
+  ];
 
   const { data: prefs, isLoading } = useQuery<NotificationPrefs>({
     queryKey: ["notificationPrefs", context?.user?.id],
@@ -93,16 +102,29 @@ export const NotificationPrefsPage = () => {
     enabled: loggedIn
   });
 
-  useEffect(() => {
-    if (!prefs) return;
-    setMasterMute(!!prefs.masterMute);
-    setQuietStart(prefs.quietHoursStart || "");
-    setQuietEnd(prefs.quietHoursEnd || "");
-    setTimeZone(prefs.timeZone || "");
-    setAllowPush(!!prefs.allowPush);
-    setEmailFrequency(prefs.emailFrequency || "individual");
+  const applyPrefs = React.useCallback((p: NotificationPrefs) => {
+    setMasterMute(!!p.masterMute);
+    setQuietStart(p.quietHoursStart || "");
+    setQuietEnd(p.quietHoursEnd || "");
+    setTimeZone(p.timeZone || deviceZone);
+    setAllowPush(!!p.allowPush);
+    setMaxPushPerDay(p.maxPushPerDay ?? null);
+    setEmailFrequency(p.emailFrequency || "individual");
     setOverrides(new Map());
-  }, [prefs]);
+  }, [deviceZone]);
+
+  useEffect(() => {
+    if (prefs) applyPrefs(prefs);
+  }, [prefs, applyPrefs]);
+
+  const timeZones = useMemo(() => {
+    const supported: string[] = typeof (Intl as any).supportedValuesOf === "function"
+      ? (Intl as any).supportedValuesOf("timeZone")
+      : [];
+    const all = supported.length ? [...supported] : [deviceZone].filter(Boolean);
+    if (timeZone && !all.includes(timeZone)) all.unshift(timeZone);
+    return all;
+  }, [deviceZone, timeZone]);
 
   const overrideKey = (categoryKey: string, channel: ChannelKey) => `${categoryKey}::${channel}`;
 
@@ -135,18 +157,30 @@ export const NotificationPrefsPage = () => {
       quietHoursStart: quietStart || null,
       quietHoursEnd: quietEnd || null,
       timeZone: timeZone || null,
+      maxPushPerDay,
       overrides: overrideList
     };
   };
+
+  const isDirty = !!prefs && (
+    masterMute !== !!prefs.masterMute
+    || allowPush !== !!prefs.allowPush
+    || maxPushPerDay !== (prefs.maxPushPerDay ?? null)
+    || emailFrequency !== (prefs.emailFrequency || "individual")
+    || quietStart !== (prefs.quietHoursStart || "")
+    || quietEnd !== (prefs.quietHoursEnd || "")
+    || timeZone !== (prefs.timeZone || deviceZone)
+    || overrides.size > 0
+  );
 
   const handleSave = async () => {
     setSaving(true);
     try {
       await ApiHelper.post("/notificationpreferences/", buildSavePayload(), "MessagingApi");
       setOverrides(new Map());
-      setSnack({ open: true, msg: "Preferences saved.", severity: "success" });
+      setSnack({ open: true, msg: Locale.label("mobile.notificationPrefs.saved"), severity: "success" });
     } catch (err: any) {
-      setSnack({ open: true, msg: err?.message || "Could not save preferences.", severity: "error" });
+      setSnack({ open: true, msg: err?.message || Locale.label("mobile.notificationPrefs.saveFailed"), severity: "error" });
     } finally {
       setSaving(false);
     }
@@ -171,8 +205,36 @@ export const NotificationPrefsPage = () => {
 
   if (!loggedIn) {
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Typography sx={{ color: tc.textMuted }}>Sign in to manage notification preferences.</Typography>
+      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
+        <Box sx={{ ...cardSx, textAlign: "center", p: `${mobileTheme.spacing.lg}px` }}>
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: "11px",
+              bgcolor: tc.iconBackground,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              mb: `${mobileTheme.spacing.md}px`
+            }}
+          >
+            <Icon sx={{ fontSize: 32, color: tc.primary }}>notifications</Icon>
+          </Box>
+          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>
+            {Locale.label("mobile.notificationPrefs.signedOutTitle")}
+          </Typography>
+          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
+            {Locale.label("mobile.notificationPrefs.signedOutBody")}
+          </Typography>
+          <Button
+            variant="contained"
+            href="/mobile/login?returnUrl=/mobile/notificationPrefs"
+            sx={{ bgcolor: tc.primary, color: tc.onPrimary, borderRadius: `${mobileTheme.radius.md}px`, textTransform: "none", fontWeight: 600, "&:hover": { bgcolor: tc.primary } }}
+          >
+            {Locale.label("mobile.screens.signIn")}
+          </Button>
+        </Box>
       </Box>
     );
   }
@@ -191,48 +253,64 @@ export const NotificationPrefsPage = () => {
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
 
       <Box sx={cardSx}>
-        {sectionHeader("Global Controls", "tune")}
+        {sectionHeader(Locale.label("mobile.notificationPrefs.globalControls"), "tune")}
 
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 1, borderBottom: `1px solid ${tc.border}` }}>
           <Box>
-            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>Mute all notifications</Typography>
-            <Typography sx={{ fontSize: 12, color: tc.textMuted }}>Silences every channel temporarily</Typography>
+            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.notificationPrefs.muteAll")}</Typography>
+            <Typography sx={{ fontSize: 12, color: tc.textMuted }}>{Locale.label("mobile.notificationPrefs.muteAllHelp")}</Typography>
           </Box>
           <Switch checked={masterMute} onChange={(e) => setMasterMute(e.target.checked)} />
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 1, borderBottom: `1px solid ${tc.border}` }}>
           <Box>
-            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>Push notifications</Typography>
-            <Typography sx={{ fontSize: 12, color: tc.textMuted }}>Allow push alerts on this account</Typography>
+            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.notificationPrefs.pushNotifications")}</Typography>
+            <Typography sx={{ fontSize: 12, color: tc.textMuted }}>{Locale.label("mobile.notificationPrefs.pushHelp")}</Typography>
           </Box>
           <Switch checked={allowPush} onChange={(e) => setAllowPush(e.target.checked)} />
         </Box>
 
         <FormControl fullWidth sx={{ mt: 2, mb: 2, ...inputSx }}>
-          <InputLabel id="email-freq-label">Email frequency</InputLabel>
+          <InputLabel id="email-freq-label">{Locale.label("mobile.notificationPrefs.emailFrequency")}</InputLabel>
           <Select
             labelId="email-freq-label"
-            label="Email frequency"
+            label={Locale.label("mobile.notificationPrefs.emailFrequency")}
             value={emailFrequency}
             onChange={(e: SelectChangeEvent<string>) => setEmailFrequency(e.target.value as typeof emailFrequency)}
             sx={{ borderRadius: `${mobileTheme.radius.md}px` }}
           >
-            <MenuItem value="never">Never</MenuItem>
-            <MenuItem value="individual">Per notification</MenuItem>
-            <MenuItem value="daily">Daily digest</MenuItem>
+            <MenuItem value="never">{Locale.label("mobile.notificationPrefs.freqNever")}</MenuItem>
+            <MenuItem value="individual">{Locale.label("mobile.notificationPrefs.freqIndividual")}</MenuItem>
+            <MenuItem value="daily">{Locale.label("mobile.notificationPrefs.freqDaily")}</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth sx={{ mb: 1, ...inputSx }}>
+          <InputLabel id="max-push-label">{Locale.label("mobile.notificationPrefs.maxPushPerDay")}</InputLabel>
+          <Select
+            labelId="max-push-label"
+            label={Locale.label("mobile.notificationPrefs.maxPushPerDay")}
+            value={maxPushPerDay === null ? "none" : String(maxPushPerDay)}
+            onChange={(e: SelectChangeEvent<string>) => setMaxPushPerDay(e.target.value === "none" ? null : Number(e.target.value))}
+            sx={{ borderRadius: `${mobileTheme.radius.md}px` }}
+          >
+            <MenuItem value="none">{Locale.label("mobile.notificationPrefs.unlimited")}</MenuItem>
+            {PUSH_CAP_OPTIONS.map((n) => (
+              <MenuItem key={n} value={String(n)}>{n}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
 
       <Box sx={cardSx}>
-        {sectionHeader("Quiet Hours", "bedtime")}
+        {sectionHeader(Locale.label("mobile.notificationPrefs.quietHours"), "bedtime")}
         <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-          Leave blank to disable quiet hours. Times use 24-hour format (HH:MM).
+          {Locale.label("mobile.notificationPrefs.quietHoursHelp")}
         </Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
           <TextField
-            label="Start (HH:MM)"
+            label={Locale.label("mobile.notificationPrefs.quietStart")}
             value={quietStart}
             onChange={(e) => setQuietStart(e.target.value)}
             placeholder="22:00"
@@ -243,7 +321,7 @@ export const NotificationPrefsPage = () => {
             sx={inputSx}
           />
           <TextField
-            label="End (HH:MM)"
+            label={Locale.label("mobile.notificationPrefs.quietEnd")}
             value={quietEnd}
             onChange={(e) => setQuietEnd(e.target.value)}
             placeholder="07:00"
@@ -254,30 +332,44 @@ export const NotificationPrefsPage = () => {
             sx={inputSx}
           />
         </Box>
-        <TextField
-          label="Time zone"
-          value={timeZone}
-          onChange={(e) => setTimeZone(e.target.value)}
-          placeholder="America/Chicago"
-          variant="outlined"
-          size="medium"
-          fullWidth
-          sx={{ mt: 2, ...inputSx }}
-        />
+        <FormControl fullWidth sx={{ mt: 2, ...inputSx }}>
+          <InputLabel id="time-zone-label">{Locale.label("mobile.notificationPrefs.timeZone")}</InputLabel>
+          <Select
+            labelId="time-zone-label"
+            label={Locale.label("mobile.notificationPrefs.timeZone")}
+            value={timeZone}
+            onChange={(e: SelectChangeEvent<string>) => setTimeZone(e.target.value)}
+            MenuProps={{ PaperProps: { sx: { maxHeight: 320 } } }}
+            sx={{ borderRadius: `${mobileTheme.radius.md}px` }}
+          >
+            {timeZones.map((tz) => (
+              <MenuItem key={tz} value={tz}>{tz}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
       {categories.length > 0 && (
         <Box sx={cardSx}>
-          {sectionHeader("Notification Categories", "category")}
+          {sectionHeader(Locale.label("mobile.notificationPrefs.categories"), "category")}
           <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-            Choose which channels to use per category.
+            {Locale.label("mobile.notificationPrefs.categoriesHelp")}
           </Typography>
           <Box sx={{ overflowX: "auto" }}>
-            <Table size="small" sx={{ minWidth: 320 }}>
+            <Table
+              size="small"
+              sx={{
+                minWidth: { sm: 320 },
+                "& thead": { display: { xs: "none", sm: "table-header-group" } },
+                "& tbody tr": { display: { xs: "block", sm: "table-row" }, py: { xs: 1, sm: 0 }, borderBottom: { xs: `1px solid ${tc.border}`, sm: 0 } },
+                "& tbody td": { display: { xs: "flex", sm: "table-cell" }, alignItems: "center", justifyContent: "space-between", borderBottom: { xs: 0, sm: `1px solid ${tc.border}` } },
+                "& tbody td[data-label]::before": { content: "attr(data-label)", display: { xs: "block", sm: "none" }, fontSize: 13, color: tc.textMuted }
+              }}
+            >
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 600, color: tc.text, pl: 0, fontSize: 13 }}>Category</TableCell>
-                  {DISPLAY_CHANNELS.map((ch) => (
+                  <TableCell sx={{ fontWeight: 600, color: tc.text, pl: 0, fontSize: 13 }}>{Locale.label("mobile.notificationPrefs.category")}</TableCell>
+                  {displayChannels.map((ch) => (
                     <TableCell key={ch.key} align="center" sx={{ fontWeight: 600, color: tc.text, fontSize: 13, whiteSpace: "nowrap" }}>
                       {ch.label}
                     </TableCell>
@@ -290,24 +382,25 @@ export const NotificationPrefsPage = () => {
                     <TableCell sx={{ pl: 0, py: 1 }}>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                         {cat.locked && (
-                          <Tooltip title="Required for safety/legal reasons." arrow>
+                          <Tooltip title={Locale.label("mobile.notificationPrefs.lockedTooltip")} arrow>
                             <LockIcon sx={{ fontSize: 14, color: tc.disabled }} />
                           </Tooltip>
                         )}
                         <Typography sx={{ fontSize: 13, color: tc.text }}>{cat.displayName}</Typography>
                       </Box>
                     </TableCell>
-                    {DISPLAY_CHANNELS.map((ch) => {
+                    {displayChannels.map((ch) => {
                       const allowed = cat.allowedChannels.includes(ch.key);
                       const checked = resolvedChannel(cat, ch.key);
                       return (
-                        <TableCell key={ch.key} align="center" sx={{ py: 1 }}>
+                        <TableCell key={ch.key} align="center" data-label={ch.label} sx={{ py: 1 }}>
                           {allowed ? (
                             <Checkbox
                               checked={checked}
                               disabled={cat.locked}
                               onChange={() => handleChannelToggle(cat, ch.key)}
                               size="small"
+                              inputProps={{ "aria-label": `${cat.displayName} ${ch.label}` }}
                               sx={{ p: "2px", color: tc.primary, "&.Mui-checked": { color: tc.primary } }}
                             />
                           ) : (
@@ -324,25 +417,36 @@ export const NotificationPrefsPage = () => {
         </Box>
       )}
 
-      <Button
-        variant="contained"
-        fullWidth
-        onClick={handleSave}
-        disabled={saving}
-        sx={{
-          bgcolor: tc.primary,
-          borderRadius: `${mobileTheme.radius.md}px`,
-          textTransform: "none",
-          fontWeight: 600,
-          py: 1.4,
-          fontSize: 15,
-          "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-          "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint },
-          mb: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {saving ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Save Preferences"}
-      </Button>
+      <Box sx={{ display: "flex", gap: 1, mb: `${mobileTheme.spacing.md}px` }}>
+        {isDirty && (
+          <Button
+            variant="outlined"
+            onClick={() => prefs && applyPrefs(prefs)}
+            disabled={saving}
+            sx={{ borderColor: tc.border, color: tc.textSecondary, borderRadius: `${mobileTheme.radius.md}px`, textTransform: "none", fontWeight: 600, py: 1.4 }}
+          >
+            {Locale.label("mobile.notificationPrefs.discard")}
+          </Button>
+        )}
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={handleSave}
+          disabled={saving || !isDirty}
+          sx={{
+            bgcolor: tc.primary,
+            borderRadius: `${mobileTheme.radius.md}px`,
+            textTransform: "none",
+            fontWeight: 600,
+            py: 1.4,
+            fontSize: 15,
+            "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
+            "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
+          }}
+        >
+          {saving ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : Locale.label("mobile.notificationPrefs.savePreferences")}
+        </Button>
+      </Box>
 
       <Snackbar
         open={snack.open}
