@@ -114,3 +114,14 @@ test.describe.serial("Mobile donate statement receipt formats", () => {
     await expect(page.locator('[data-testid="statement-legal-block"]')).toHaveCount(0);
   });
 });
+
+test.describe("Public donate page links", () => {
+  test("login button and help link point at current destinations", async ({ page }) => {
+    await page.context().clearCookies();
+    await page.goto("/donate");
+    const login = page.getByTestId("donate-login-button");
+    await expect(login).toBeVisible({ timeout: 30000 });
+    await expect(page.locator('a[href="/mobile/login?returnUrl=/mobile/donate"]')).toBeVisible();
+    await expect(page.getByTestId("donate-instructions-link")).toHaveAttribute("href", /b1-church\/giving\/making-donations/);
+  });
+});

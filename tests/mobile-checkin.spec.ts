@@ -33,3 +33,18 @@ test.describe("Mobile checkin", () => {
     ).toBeVisible();
   });
 });
+
+test.describe("Mobile checkin wayfinding", () => {
+  test("step indicator names the current step", async ({ page }) => {
+    await page.goto("/mobile/checkin");
+    await expect(page.getByTestId("checkin-step-indicator")).toHaveText(/Step 1 of 3 · Service/i, { timeout: 30000 });
+  });
+
+  test("signed-out Sign In returns to check-in after login", async ({ page }) => {
+    await page.context().clearCookies();
+    await page.goto("/mobile/checkin");
+    const cta = page.locator("main").getByRole("link", { name: /Sign In/i }).first();
+    await expect(cta).toBeVisible({ timeout: 30000 });
+    await expect(cta).toHaveAttribute("href", "/mobile/login?returnUrl=/mobile/checkin");
+  });
+});

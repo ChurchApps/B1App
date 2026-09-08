@@ -55,6 +55,29 @@ test.describe("Mobile notification preferences", () => {
     }
   });
 
+  test("time zone is a picker and the daily push cap is offered", async ({ page }) => {
+    const main = await gotoPrefs(page);
+    const tz = main.getByRole("combobox", { name: "Time zone" });
+    await expect(tz).toBeVisible();
+    await expect(tz).toHaveText(/\//);
+    await expect(main.getByRole("combobox", { name: "Push notifications per day" })).toHaveText("No limit");
+  });
+
+  test("Save stays disabled until something changes, and Discard reverts it", async ({ page }) => {
+    const main = await gotoPrefs(page);
+    const save = main.getByRole("button", { name: "Save Preferences" });
+    await expect(save).toBeDisabled();
+
+    const box = main.getByRole("checkbox", { name: "Church Announcements Push" });
+    const wasChecked = await box.isChecked();
+    await box.click();
+    await expect(save).toBeEnabled();
+
+    await main.getByRole("button", { name: "Discard" }).click();
+    await expect(box).toBeChecked({ checked: wasChecked });
+    await expect(save).toBeDisabled();
+  });
+
   // Mutating test; reset-demo wipes changes.
   test.describe.serial("save round-trips category and global changes", () => {
     test("turning off Church Announcements email + email frequency persists after reload", async ({ page }) => {

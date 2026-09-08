@@ -18,8 +18,9 @@ export function AuthGuard({ children, sdSlug }: Props) {
   useEffect(() => {
     if (context && !context.user) {
       // Encode the current URL as a return URL parameter, removing sdSlug to avoid double inclusion
-      const returnUrl = encodeURIComponent(UrlHelper.getReturnUrl(pathname, sdSlug));
-      router.push(`/login?returnUrl=${returnUrl}`);
+      const target = UrlHelper.getReturnUrl(pathname, sdSlug);
+      const returnUrl = encodeURIComponent(target);
+      router.push(target.startsWith("/mobile/") ? `/mobile/login?returnUrl=${returnUrl}` : `/login?returnUrl=${returnUrl}`);
     }
   }, [context, router, sdSlug, pathname]);
 
