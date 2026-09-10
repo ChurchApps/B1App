@@ -141,7 +141,6 @@
     "goHomepage": "Ana sayfaya git",
     "goMemberPortal": "Üye portalına git",
     "loginAccount": "Hesabınıza giriş yapın",
-    "mainNav": "Main navigation",
     "memberPortal": "Üye Portalı",
     "openNav": "Gezinme menüsünü aç",
     "userMenu": "Kullanıcı menüsü"
@@ -153,17 +152,13 @@
     "searchAriaLabel": "simge ara",
     "selectIcon": "{} simgesini seç"
   },
-  "loadingPage": {
-    "logoAlt": "logo"
-  },
   "login": {
     "login": "Giriş Yap",
     "register": "Kayıt Ol"
   },
   "loginClient": {
     "demoBody": "Burası demo ortamıdır. Tüm veriler her gece silinir.",
-    "demoCredentials": "Test kilisesine demo@b1.church / password kimlik bilgileriyle giriş yapabilirsiniz.",
-    "demoTitle": "Demo:"
+    "demoCredentials": "Test kilisesine demo@b1.church / password kimlik bilgileriyle giriş yapabilirsiniz."
   },
   "mobile": {
     "components": {
@@ -219,7 +214,6 @@
       "backToGroups": "Gruplara Dön",
       "backToPlans": "Planlara Dön",
       "backToSermons": "Vaazlara Dön",
-      "bottomLine": "Bottom line",
       "call": "Ara",
       "cancel": "İptal",
       "checkConnection": "Lütfen bağlantınızı kontrol edin ve tekrar deneyin.",
@@ -264,9 +258,7 @@
       "membersTab": "Üyeler",
       "message": "Mesaj",
       "messageActions": "Mesaj işlemleri",
-      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
       "messageFailed": "Mesaj gönderilemedi.",
-      "messagingNotAvailable": "Messaging isn't available for this profile.",
       "mobilePhone": "Cep Telefonu",
       "mustBeSignedIn": "Mesaj göndermek için giriş yapmalısınız.",
       "myAssignments": "Görevlerim",
@@ -283,7 +275,6 @@
       "noTeamsAssigned": "Henüz atanmış takım yok.",
       "openEmojiPicker": "Emoji seçiciyi aç",
       "openLink": "Bağlantıyı Aç",
-      "parentQuestion": "Question",
       "pendingResponse": "Yanıt Bekleniyor",
       "personNotFound": "Kişi Bulunamadı",
       "personNotFoundDescription": "Bu profil bulunamadı.",
@@ -336,14 +327,12 @@
       "tabTeams": "Takımlar",
       "team": "Takım",
       "text": "Mesaj",
-      "thisWeeksLesson": "This week's lesson",
       "typeMessage": "Bir mesaj yazın…",
       "unableToLoadMessages": "Mesajlar yüklenemedi.",
       "unableToLoadPlaylist": "Oynatma Listesi Yüklenemedi",
       "unableToRespond": "Görev {} işlemi yapılamadı. Lütfen tekrar deneyin.",
       "unableToShare": "Bu cihazda paylaşılamıyor",
       "untitledSeries": "Başlıksız Seri",
-      "verse": "Verse",
       "viewTeach": "Öğret",
       "watchSermon": "Vaazı İzle"
     },
@@ -358,10 +347,8 @@
       "add": "Ekle",
       "addEvent": "Etkinlik Ekle",
       "addLink": "Bağlantı Ekle",
-      "addReaction": "Add reaction",
       "added": "Eklendi",
       "allDay": "Tüm gün",
-      "allowRsvps": "Allow RSVPs",
       "announcements": "Duyurular",
       "attendanceSaved": "Katılım kaydedildi.",
       "beFirstToShare": "Grupla bir şey paylaşan ilk kişi olun.",
@@ -401,7 +388,6 @@
       "fileFallback": "Dosya",
       "files": "Dosyalar",
       "groupChat": "Grup Sohbeti",
-      "groupChatTitle": "{} {}",
       "guest": "(Misafir)",
       "leadersCanPost": "Liderler buraya duyuru yazabilir.",
       "linkFallback": "Bağlantı",
@@ -439,13 +425,6 @@
       "reserveUntil": "Şu tarihe kadar rezerve et",
       "resources": "Kaynaklar",
       "rooms": "Odalar",
-      "rsvpGoing": "Going",
-      "rsvpMaybe": "Maybe",
-      "rsvpNoResponses": "No responses yet",
-      "rsvpNotGoing": "Can't go",
-      "rsvpQuestion": "Will you attend?",
-      "rsvpResponses": "Responses",
-      "rsvpViewResponses": "View responses",
       "save": "Kaydet",
       "saveAttendance": "Katılımı Kaydet",
       "saveChanges": "Değişiklikleri Kaydet",
@@ -466,7 +445,6 @@
       "upload": "Yükle",
       "uploadFailed": "Yükleme başarısız.",
       "uploadingProgress": "{} yükleniyor… %{}",
-      "url": "URL",
       "usedStorage": "Kullanılan: {} / 100MB",
       "visibility": "Görünürlük",
       "weekly": "Haftalık",
@@ -518,33 +496,6 @@
       "releaseDate": "Yayın Tarihi",
       "startDate": "Başlangıç tarihi"
     },
-    "requests": {
-      "allDay": "All day",
-      "approved": "Approved",
-      "cancelConfirm": "Cancel this request? This cannot be undone.",
-      "cancelRequest": "Cancel request",
-      "description": "Description",
-      "emptyBody": "Your event and room requests will appear here.",
-      "emptyTitle": "No requests yet",
-      "end": "End",
-      "enterTitle": "Please enter a title.",
-      "eventTitle": "Event title",
-      "failedToSubmit": "Could not submit your request. Please try again.",
-      "keep": "Keep",
-      "myRequests": "My Requests",
-      "noBookingItems": "No rooms or resources selected.",
-      "outcomeBody": "Here is the status of each room and resource you requested.",
-      "outcomeTitle": "Request submitted",
-      "pending": "Pending approval",
-      "recurring": "Repeats",
-      "start": "Start",
-      "statusApproved": "Approved",
-      "statusPending": "Pending",
-      "statusRejected": "Rejected",
-      "submit": "Submit Request",
-      "submitting": "Submitting…",
-      "title": "Request an Event"
-    },
     "screenTitles": {
       "bible": "İncil",
       "checkin": "Giriş",
@@ -558,7 +509,6 @@
       "myGroups": "Gruplarım",
       "newMessage": "Yeni Mesaj",
       "notifications": "Bildirimler",
-      "planDetails": "Plan",
       "plans": "Planlar",
       "playlist": "Oynatma Listesi",
       "profileEdit": "Profili Düzenle",
@@ -584,12 +534,10 @@
       "couldNotUpdateDisplayName": "Görünen ad güncellenemedi.",
       "couldNotUpdateEmail": "E-posta güncellenemedi.",
       "couldNotUpdatePassword": "Parola güncellenemedi.",
-      "currentPassword": "Current password",
       "deleteConversation": "Sohbeti sil",
       "deleteNotification": "Bildirimi sil",
       "detectingDevice": "Cihazınız tespit ediliyor…",
       "displayNameUpdated": "Görünen ad güncellendi.",
-      "done": "Done",
       "emailLabel": "E-posta",
       "emailPlaceholder": "siz@ornek.com",
       "emailUpdated": "E-posta güncellendi.",
@@ -603,7 +551,6 @@
       "giving": "Bağış",
       "keep": "Tut",
       "lastNameRegister": "Soyad",
-      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Yükleniyor...",
       "loadingForm": "Bağış formu yükleniyor...",
       "membersOnly": "Sadece Üyeler",
@@ -644,7 +591,6 @@
       "signInToCheckIn": "Giriş yapmak için lütfen oturum açın",
       "signInToCheckInCta": "Giriş Yap",
       "signInToCheckInMessage": "İbadete giriş yapmak için oturum açın.",
-      "staffOnly": "Staff Only",
       "tabAccount": "Hesap",
       "tabDonate": "Bağış Yap",
       "tabHistory": "Geçmiş",
@@ -745,13 +691,9 @@
       "unconfirmed": "Onaylanmamış"
     },
     "servingTimes": {
-      "plan": "Plan",
       "role": "Rol",
       "serviceDate": "Hizmet Tarihi",
       "title": "Hizmet Saatleri"
-    },
-    "team": {
-      "avatar": "avatar"
     },
     "upcomingDates": {
       "event": "Etkinlik",
@@ -774,74 +716,25 @@
     "completeRegistration": "Kaydı Tamamla",
     "confirmed": "Kayıt Onaylandı!",
     "continue": "Devam Et",
-    "coupon": {
-      "applied": "Code {} applied",
-      "apply": "Apply",
-      "invalid": "This code is not valid.",
-      "label": "Discount code",
-      "remove": "Remove"
-    },
     "errors": {
       "emailRequired": "Misafir kaydı için e-posta gereklidir.",
       "memberNamesRequired": "Her ek üye için ad ve soyad gereklidir.",
       "namesRequired": "Ad ve soyad gereklidir.",
-      "registrationFailed": "Kayıt başarısız oldu. Etkinlik dolu olabilir veya kayıtlar kapanmış olabilir.",
-      "selectionFull": "A selected option is sold out. Please adjust quantities.",
-      "typeFull": "That attendee type is sold out. Please choose another.",
-      "typeRequired": "Please select a registration type for each attendee."
+      "registrationFailed": "Kayıt başarısız oldu. Etkinlik dolu olabilir veya kayıtlar kapanmış olabilir."
     },
     "event": "Etkinlik",
     "eventFull": "Etkinlik Dolu",
-    "free": "Free",
-    "mine": {
-      "balanceDue": "Balance due: {}",
-      "balanceLabel": "Balance due",
-      "cancel": "Cancel Registration",
-      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
-      "completePayment": "Complete payment",
-      "edit": "Edit",
-      "editTitle": "Edit Registration",
-      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
-      "emptyTitle": "No registrations yet",
-      "registered": "Registered"
-    },
-    "noAdditional": "No additional members added",
     "notOpen": "Kayıt Açık Değil",
     "opensOn": "Kayıtlar {} tarihinde açılır",
-    "payment": {
-      "authFailed": "Card authentication failed. Please try another card.",
-      "cardNotReady": "Card form is not ready. Please wait and try again.",
-      "discount": "Discount",
-      "newCard": "Use a new card",
-      "noGateway": "Online payment is not available for this event.",
-      "orderSummary": "Order Summary",
-      "payAndRegister": "Pay {} & Register",
-      "subtotalNote": "subtotal before discounts",
-      "title": "Payment",
-      "total": "Total"
-    },
     "phone": "Telefon",
     "questions": "Sorular",
     "registeredMembers": "Kayıtlı Üyeler",
     "registering": "Kayıt yapılıyor...",
     "registeringAs": "Şu olarak kaydoluyor:",
-    "remaining": "{} remaining",
-    "selectType": "Select a type",
-    "selections": {
-      "title": "Options & Selections"
-    },
-    "soldOut": "Sold out",
     "spotsFilled": "{0} / {1} yer doldu",
-    "spotsWord": "spots filled",
     "status": "Durum",
-    "waitlist": {
-      "confirmedBody": "We will email you if a spot opens for",
-      "confirmedTitle": "You are on the waitlist",
-      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
-    },
     "youAreRegistered": "Şuna kaydoldunuz:",
-    "yourInformation": "Bilgileriniz",
-    "yourType": "Your registration type"
+    "yourInformation": "Bilgileriniz"
   },
   "serving": {
     "allSlotsFilled": "Tüm {} yer doldu",
@@ -883,7 +776,6 @@
     "chat": {
       "attendees": "{} katılımcı",
       "changeName": "İsmi Değiştir",
-      "emoji": "emoji",
       "enterFullName": "Lütfen tam adınızı girin",
       "message": "Mesaj",
       "namePlaceholder": "Ahmet Yılmaz",
@@ -895,7 +787,6 @@
       "typeMessage": "Mesajınızı yazın",
       "updateName": "İsmi Güncelle"
     },
-    "logo": "logo",
     "nextServiceTime": "Sonraki Hizmet Saati",
     "sermonVideo": "Vaaz Videosu",
     "serviceEnded": "Mevcut hizmet sona erdi."

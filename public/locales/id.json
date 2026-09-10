@@ -50,7 +50,6 @@
     "cancel": "Batal",
     "close": "Tutup",
     "date": "Tanggal",
-    "edit": "Edit",
     "pleaseWait": "Harap Tunggu",
     "save": "Simpan",
     "search": "Cari",
@@ -85,7 +84,6 @@
     "contactGroupLeader": "Hubungi Pemimpin Grup:",
     "deleteFileLabel": "Hapus berkas {}",
     "deleteLinkLabel": "Hapus tautan {}",
-    "email": "Email",
     "emailLabel": "Alamat email Anda",
     "files": "Berkas",
     "firstName": "Nama Depan",
@@ -141,7 +139,6 @@
     "goHomepage": "Buka halaman utama",
     "goMemberPortal": "Buka portal anggota",
     "loginAccount": "Login ke akun Anda",
-    "mainNav": "Main navigation",
     "memberPortal": "Portal Anggota",
     "openNav": "Buka menu navigasi",
     "userMenu": "Menu pengguna"
@@ -153,17 +150,13 @@
     "searchAriaLabel": "cari ikon",
     "selectIcon": "Pilih ikon {}"
   },
-  "loadingPage": {
-    "logoAlt": "logo"
-  },
   "login": {
     "login": "Masuk",
     "register": "Daftar"
   },
   "loginClient": {
     "demoBody": "Ini adalah lingkungan demo. Semua data dihapus setiap malam.",
-    "demoCredentials": "Anda dapat login ke gereja uji coba dengan kredensial demo@b1.church / password .",
-    "demoTitle": "Demo:"
+    "demoCredentials": "Anda dapat login ke gereja uji coba dengan kredensial demo@b1.church / password ."
   },
   "mobile": {
     "components": {
@@ -219,7 +212,6 @@
       "backToGroups": "Kembali ke Grup",
       "backToPlans": "Kembali ke Rencana",
       "backToSermons": "Kembali ke Khotbah",
-      "bottomLine": "Bottom line",
       "call": "Telepon",
       "cancel": "Batal",
       "checkConnection": "Silakan periksa koneksi Anda dan coba lagi.",
@@ -242,10 +234,8 @@
       "delete": "Hapus",
       "deleteFailed": "Tidak dapat menghapus pesan.",
       "downloads": "Unduhan",
-      "edit": "Edit",
       "editProfile": "Edit profil",
       "editingMessage": "Mengedit pesan",
-      "email": "Email",
       "emailAddress": "Alamat Email",
       "full": "Penuh",
       "general": "Umum",
@@ -264,9 +254,7 @@
       "membersTab": "Anggota",
       "message": "Pesan",
       "messageActions": "Tindakan pesan",
-      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
       "messageFailed": "Pesan gagal terkirim.",
-      "messagingNotAvailable": "Messaging isn't available for this profile.",
       "mobilePhone": "Telepon Seluler",
       "mustBeSignedIn": "Anda harus login untuk mengirim pesan.",
       "myAssignments": "Tugas Saya",
@@ -283,7 +271,6 @@
       "noTeamsAssigned": "Belum ada tim yang ditugaskan.",
       "openEmojiPicker": "Buka pemilih emoji",
       "openLink": "Buka Tautan",
-      "parentQuestion": "Question",
       "pendingResponse": "Menunggu Respons",
       "personNotFound": "Orang Tidak Ditemukan",
       "personNotFoundDescription": "Profil ini tidak dapat ditemukan.",
@@ -336,14 +323,12 @@
       "tabTeams": "Tim",
       "team": "Tim",
       "text": "Teks",
-      "thisWeeksLesson": "This week's lesson",
       "typeMessage": "Ketik pesan…",
       "unableToLoadMessages": "Tidak dapat memuat pesan.",
       "unableToLoadPlaylist": "Tidak Dapat Memuat Playlist",
       "unableToRespond": "Tidak dapat {} tugas. Silakan coba lagi.",
       "unableToShare": "Tidak dapat berbagi pada perangkat ini",
       "untitledSeries": "Seri Tanpa Judul",
-      "verse": "Verse",
       "viewTeach": "Ajar",
       "watchSermon": "Tonton Khotbah"
     },
@@ -358,10 +343,8 @@
       "add": "Tambah",
       "addEvent": "Tambah Acara",
       "addLink": "Tambah Tautan",
-      "addReaction": "Add reaction",
       "added": "Ditambahkan",
       "allDay": "Sepanjang hari",
-      "allowRsvps": "Allow RSVPs",
       "announcements": "Pengumuman",
       "attendanceSaved": "Kehadiran disimpan.",
       "beFirstToShare": "Jadilah yang pertama berbagi sesuatu dengan grup.",
@@ -381,7 +364,6 @@
       "deleteFile": "Hapus berkas",
       "deleteLink": "Hapus tautan",
       "discussions": "Diskusi",
-      "edit": "Edit",
       "editEvent": "Edit acara",
       "editingMessage": "Mengedit pesan",
       "end": "Selesai",
@@ -401,7 +383,6 @@
       "fileFallback": "Berkas",
       "files": "Berkas",
       "groupChat": "Obrolan Grup",
-      "groupChatTitle": "{} {}",
       "guest": "(Tamu)",
       "leadersCanPost": "Pemimpin dapat memposting pengumuman di sini.",
       "linkFallback": "Tautan",
@@ -439,13 +420,6 @@
       "reserveUntil": "Reservasi hingga",
       "resources": "Sumber Daya",
       "rooms": "Ruangan",
-      "rsvpGoing": "Going",
-      "rsvpMaybe": "Maybe",
-      "rsvpNoResponses": "No responses yet",
-      "rsvpNotGoing": "Can't go",
-      "rsvpQuestion": "Will you attend?",
-      "rsvpResponses": "Responses",
-      "rsvpViewResponses": "View responses",
       "save": "Simpan",
       "saveAttendance": "Simpan Kehadiran",
       "saveChanges": "Simpan Perubahan",
@@ -466,7 +440,6 @@
       "upload": "Unggah",
       "uploadFailed": "Unggah gagal.",
       "uploadingProgress": "Mengunggah {}… {}%",
-      "url": "URL",
       "usedStorage": "Terpakai {} / 100MB",
       "visibility": "Visibilitas",
       "weekly": "Mingguan",
@@ -488,13 +461,11 @@
       "title": "Saya",
       "upcoming": "Mendatang"
     },
-    "mobileApp": "Mobile",
     "more": {
       "allOnDashboard": "Semuanya ada di dasbor Anda"
     },
     "now": "sekarang",
     "plans": {
-      "album": "Album",
       "artist": "Artis",
       "audioTracks": "Trek audio",
       "audioUnsupported": "Browser Anda tidak mendukung pemutaran audio.",
@@ -518,36 +489,8 @@
       "releaseDate": "Tanggal Rilis",
       "startDate": "Tanggal mulai"
     },
-    "requests": {
-      "allDay": "All day",
-      "approved": "Approved",
-      "cancelConfirm": "Cancel this request? This cannot be undone.",
-      "cancelRequest": "Cancel request",
-      "description": "Description",
-      "emptyBody": "Your event and room requests will appear here.",
-      "emptyTitle": "No requests yet",
-      "end": "End",
-      "enterTitle": "Please enter a title.",
-      "eventTitle": "Event title",
-      "failedToSubmit": "Could not submit your request. Please try again.",
-      "keep": "Keep",
-      "myRequests": "My Requests",
-      "noBookingItems": "No rooms or resources selected.",
-      "outcomeBody": "Here is the status of each room and resource you requested.",
-      "outcomeTitle": "Request submitted",
-      "pending": "Pending approval",
-      "recurring": "Repeats",
-      "start": "Start",
-      "statusApproved": "Approved",
-      "statusPending": "Pending",
-      "statusRejected": "Rejected",
-      "submit": "Submit Request",
-      "submitting": "Submitting…",
-      "title": "Request an Event"
-    },
     "screenTitles": {
       "bible": "Alkitab",
-      "checkin": "Check-in",
       "directory": "Direktori",
       "donation": "Persembahan",
       "groupDetails": "Grup",
@@ -560,7 +503,6 @@
       "notifications": "Notifikasi",
       "planDetails": "Rencana",
       "plans": "Rencana",
-      "playlist": "Playlist",
       "profileEdit": "Edit Profil",
       "register": "Daftar",
       "registrations": "Pendaftaran",
@@ -584,13 +526,10 @@
       "couldNotUpdateDisplayName": "Tidak dapat memperbarui nama tampilan.",
       "couldNotUpdateEmail": "Tidak dapat memperbarui email.",
       "couldNotUpdatePassword": "Tidak dapat memperbarui kata sandi.",
-      "currentPassword": "Current password",
       "deleteConversation": "Hapus percakapan",
       "deleteNotification": "Hapus notifikasi",
       "detectingDevice": "Mendeteksi perangkat Anda…",
       "displayNameUpdated": "Nama tampilan diperbarui.",
-      "done": "Done",
-      "emailLabel": "Email",
       "emailPlaceholder": "anda@contoh.com",
       "emailUpdated": "Email diperbarui.",
       "enterName": "Masukkan nama",
@@ -603,7 +542,6 @@
       "giving": "Persembahan",
       "keep": "Pertahankan",
       "lastNameRegister": "Nama belakang",
-      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Memuat...",
       "loadingForm": "Memuat formulir persembahan...",
       "membersOnly": "Hanya Anggota",
@@ -644,7 +582,6 @@
       "signInToCheckIn": "Silakan masuk untuk check-in",
       "signInToCheckInCta": "Masuk",
       "signInToCheckInMessage": "Masuk untuk check-in ke ibadah.",
-      "staffOnly": "Staff Only",
       "tabAccount": "Akun",
       "tabDonate": "Beri Persembahan",
       "tabHistory": "Riwayat",
@@ -717,7 +654,6 @@
     "verseOfTheDay": "Ayat Hari Ini"
   },
   "person": {
-    "email": "Email",
     "firstName": "Nama Depan",
     "lastName": "Nama Belakang",
     "name": "Nama"
@@ -741,7 +677,6 @@
       "declined": "Ditolak",
       "headerPrefix": "Posisi",
       "neededTimes": "Waktu yang Dibutuhkan",
-      "status": "Status",
       "unconfirmed": "Belum Dikonfirmasi"
     },
     "servingTimes": {
@@ -749,9 +684,6 @@
       "role": "Peran",
       "serviceDate": "Tanggal Ibadah",
       "title": "Waktu Pelayanan"
-    },
-    "team": {
-      "avatar": "avatar"
     },
     "upcomingDates": {
       "event": "Acara",
@@ -774,74 +706,24 @@
     "completeRegistration": "Selesaikan Pendaftaran",
     "confirmed": "Pendaftaran Dikonfirmasi!",
     "continue": "Lanjutkan",
-    "coupon": {
-      "applied": "Code {} applied",
-      "apply": "Apply",
-      "invalid": "This code is not valid.",
-      "label": "Discount code",
-      "remove": "Remove"
-    },
     "errors": {
       "emailRequired": "Email wajib diisi untuk pendaftaran tamu.",
       "memberNamesRequired": "Nama depan dan nama belakang wajib diisi untuk setiap anggota tambahan.",
       "namesRequired": "Nama depan dan nama belakang wajib diisi.",
-      "registrationFailed": "Pendaftaran gagal. Acara mungkin sudah penuh atau pendaftaran telah ditutup.",
-      "selectionFull": "A selected option is sold out. Please adjust quantities.",
-      "typeFull": "That attendee type is sold out. Please choose another.",
-      "typeRequired": "Please select a registration type for each attendee."
+      "registrationFailed": "Pendaftaran gagal. Acara mungkin sudah penuh atau pendaftaran telah ditutup."
     },
     "event": "Acara",
     "eventFull": "Acara Penuh",
-    "free": "Free",
-    "mine": {
-      "balanceDue": "Balance due: {}",
-      "balanceLabel": "Balance due",
-      "cancel": "Cancel Registration",
-      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
-      "completePayment": "Complete payment",
-      "edit": "Edit",
-      "editTitle": "Edit Registration",
-      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
-      "emptyTitle": "No registrations yet",
-      "registered": "Registered"
-    },
-    "noAdditional": "No additional members added",
     "notOpen": "Pendaftaran Belum Dibuka",
     "opensOn": "Pendaftaran dibuka {}",
-    "payment": {
-      "authFailed": "Card authentication failed. Please try another card.",
-      "cardNotReady": "Card form is not ready. Please wait and try again.",
-      "discount": "Discount",
-      "newCard": "Use a new card",
-      "noGateway": "Online payment is not available for this event.",
-      "orderSummary": "Order Summary",
-      "payAndRegister": "Pay {} & Register",
-      "subtotalNote": "subtotal before discounts",
-      "title": "Payment",
-      "total": "Total"
-    },
     "phone": "Telepon",
     "questions": "Pertanyaan",
     "registeredMembers": "Anggota Terdaftar",
     "registering": "Mendaftarkan...",
     "registeringAs": "Mendaftar sebagai",
-    "remaining": "{} remaining",
-    "selectType": "Select a type",
-    "selections": {
-      "title": "Options & Selections"
-    },
-    "soldOut": "Sold out",
     "spotsFilled": "{0} / {1} tempat terisi",
-    "spotsWord": "spots filled",
-    "status": "Status",
-    "waitlist": {
-      "confirmedBody": "We will email you if a spot opens for",
-      "confirmedTitle": "You are on the waitlist",
-      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
-    },
     "youAreRegistered": "Anda terdaftar untuk",
-    "yourInformation": "Informasi Anda",
-    "yourType": "Your registration type"
+    "yourInformation": "Informasi Anda"
   },
   "serving": {
     "allSlotsFilled": "Semua {} slot terisi",
@@ -883,10 +765,8 @@
     "chat": {
       "attendees": "{} peserta",
       "changeName": "Ubah Nama",
-      "emoji": "emoji",
       "enterFullName": "Silakan masukkan nama lengkap",
       "message": "Pesan",
-      "namePlaceholder": "John Smith",
       "oneAttendee": "1 peserta",
       "openEmojiPicker": "Buka pemilih emoji",
       "send": "Kirim",
@@ -895,7 +775,6 @@
       "typeMessage": "Ketik pesan Anda",
       "updateName": "Perbarui Nama"
     },
-    "logo": "logo",
     "nextServiceTime": "Waktu Ibadah Berikutnya",
     "sermonVideo": "Video Khotbah",
     "serviceEnded": "Ibadah saat ini telah selesai."

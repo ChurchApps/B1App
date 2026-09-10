@@ -141,7 +141,6 @@
     "goHomepage": "Přejít na domovskou stránku",
     "goMemberPortal": "Přejít na členský portál",
     "loginAccount": "Přihlásit se k účtu",
-    "mainNav": "Main navigation",
     "memberPortal": "Členský portál",
     "openNav": "Otevřít navigační nabídku",
     "userMenu": "Uživatelská nabídka"
@@ -153,17 +152,13 @@
     "searchAriaLabel": "hledat ikony",
     "selectIcon": "Vybrat ikonu {}"
   },
-  "loadingPage": {
-    "logoAlt": "logo"
-  },
   "login": {
     "login": "Přihlásit se",
     "register": "Registrovat"
   },
   "loginClient": {
     "demoBody": "Toto je demo prostředí. Všechna data jsou každou noc vymazána.",
-    "demoCredentials": "Můžete se přihlásit do testovacího sboru pomocí přihlašovacích údajů demo@b1.church / password .",
-    "demoTitle": "Demo:"
+    "demoCredentials": "Můžete se přihlásit do testovacího sboru pomocí přihlašovacích údajů demo@b1.church / password ."
   },
   "mobile": {
     "components": {
@@ -219,7 +214,6 @@
       "backToGroups": "Zpět ke skupinám",
       "backToPlans": "Zpět k plánům",
       "backToSermons": "Zpět ke kázáním",
-      "bottomLine": "Bottom line",
       "call": "Volat",
       "cancel": "Zrušit",
       "checkConnection": "Zkontrolujte prosím své připojení a zkuste to znovu.",
@@ -264,9 +258,7 @@
       "membersTab": "Členové",
       "message": "Zpráva",
       "messageActions": "Akce zprávy",
-      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
       "messageFailed": "Odeslání zprávy se nezdařilo.",
-      "messagingNotAvailable": "Messaging isn't available for this profile.",
       "mobilePhone": "Mobilní telefon",
       "mustBeSignedIn": "Pro odesílání zpráv musíte být přihlášeni.",
       "myAssignments": "Moje přiřazení",
@@ -283,7 +275,6 @@
       "noTeamsAssigned": "Zatím nejsou přiřazeny žádné týmy.",
       "openEmojiPicker": "Otevřít výběr emodži",
       "openLink": "Otevřít odkaz",
-      "parentQuestion": "Question",
       "pendingResponse": "Čeká na odpověď",
       "personNotFound": "Osoba nenalezena",
       "personNotFoundDescription": "Tento profil nelze najít.",
@@ -335,15 +326,12 @@
       "tabServiceOrder": "Pořad bohoslužby",
       "tabTeams": "Týmy",
       "team": "Tým",
-      "text": "Text",
-      "thisWeeksLesson": "This week's lesson",
       "typeMessage": "Napište zprávu…",
       "unableToLoadMessages": "Nelze načíst zprávy.",
       "unableToLoadPlaylist": "Nelze načíst playlist",
       "unableToRespond": "Nelze {} přiřazení. Zkuste to prosím znovu.",
       "unableToShare": "Na tomto zařízení nelze sdílet",
       "untitledSeries": "Série bez názvu",
-      "verse": "Verse",
       "viewTeach": "Učit",
       "watchSermon": "Sledovat kázání"
     },
@@ -358,10 +346,8 @@
       "add": "Přidat",
       "addEvent": "Přidat událost",
       "addLink": "Přidat odkaz",
-      "addReaction": "Add reaction",
       "added": "Přidáno",
       "allDay": "Celý den",
-      "allowRsvps": "Allow RSVPs",
       "announcements": "Oznámení",
       "attendanceSaved": "Účast uložena.",
       "beFirstToShare": "Buďte první, kdo se se skupinou o něco podělí.",
@@ -369,7 +355,6 @@
       "bookingPending": "Váš požadavek na místnost/prostředek byl odeslán a čeká na schválení.",
       "cancel": "Zrušit",
       "capacity": "Kapacita",
-      "chat": "Chat",
       "clear": "Vymazat",
       "confirmDeleteEvent": "Opravdu chcete smazat tuto událost?",
       "confirmDeleteMessage": "Tato zpráva bude odstraněna pro všechny v konverzaci.",
@@ -401,7 +386,6 @@
       "fileFallback": "Soubor",
       "files": "Soubory",
       "groupChat": "Chat skupiny",
-      "groupChatTitle": "{} {}",
       "guest": "(Host)",
       "leadersCanPost": "Vedoucí zde mohou zveřejňovat oznámení.",
       "linkFallback": "Odkaz",
@@ -439,13 +423,6 @@
       "reserveUntil": "Rezervovat do",
       "resources": "Prostředky",
       "rooms": "Místnosti",
-      "rsvpGoing": "Going",
-      "rsvpMaybe": "Maybe",
-      "rsvpNoResponses": "No responses yet",
-      "rsvpNotGoing": "Can't go",
-      "rsvpQuestion": "Will you attend?",
-      "rsvpResponses": "Responses",
-      "rsvpViewResponses": "View responses",
       "save": "Uložit",
       "saveAttendance": "Uložit účast",
       "saveChanges": "Uložit změny",
@@ -466,7 +443,6 @@
       "upload": "Nahrát",
       "uploadFailed": "Nahrávání se nezdařilo.",
       "uploadingProgress": "Nahrávání {}… {}%",
-      "url": "URL",
       "usedStorage": "Využito {} / 100MB",
       "visibility": "Viditelnost",
       "weekly": "Týdně",
@@ -494,7 +470,6 @@
     },
     "now": "nyní",
     "plans": {
-      "album": "Album",
       "artist": "Interpret",
       "audioTracks": "Zvukové stopy",
       "audioUnsupported": "Váš prohlížeč nepodporuje přehrávání zvuku.",
@@ -518,35 +493,7 @@
       "releaseDate": "Datum vydání",
       "startDate": "Datum začátku"
     },
-    "requests": {
-      "allDay": "All day",
-      "approved": "Approved",
-      "cancelConfirm": "Cancel this request? This cannot be undone.",
-      "cancelRequest": "Cancel request",
-      "description": "Description",
-      "emptyBody": "Your event and room requests will appear here.",
-      "emptyTitle": "No requests yet",
-      "end": "End",
-      "enterTitle": "Please enter a title.",
-      "eventTitle": "Event title",
-      "failedToSubmit": "Could not submit your request. Please try again.",
-      "keep": "Keep",
-      "myRequests": "My Requests",
-      "noBookingItems": "No rooms or resources selected.",
-      "outcomeBody": "Here is the status of each room and resource you requested.",
-      "outcomeTitle": "Request submitted",
-      "pending": "Pending approval",
-      "recurring": "Repeats",
-      "start": "Start",
-      "statusApproved": "Approved",
-      "statusPending": "Pending",
-      "statusRejected": "Rejected",
-      "submit": "Submit Request",
-      "submitting": "Submitting…",
-      "title": "Request an Event"
-    },
     "screenTitles": {
-      "bible": "Bible",
       "checkin": "Přihlášení",
       "directory": "Adresář",
       "donation": "Dary",
@@ -560,7 +507,6 @@
       "notifications": "Oznámení",
       "planDetails": "Plán",
       "plans": "Plány",
-      "playlist": "Playlist",
       "profileEdit": "Upravit profil",
       "register": "Zaregistrovat",
       "registrations": "Registrace",
@@ -584,12 +530,10 @@
       "couldNotUpdateDisplayName": "Zobrazované jméno se nepodařilo aktualizovat.",
       "couldNotUpdateEmail": "E-mail se nepodařilo aktualizovat.",
       "couldNotUpdatePassword": "Heslo se nepodařilo aktualizovat.",
-      "currentPassword": "Current password",
       "deleteConversation": "Smazat konverzaci",
       "deleteNotification": "Smazat oznámení",
       "detectingDevice": "Rozpoznávání vašeho zařízení…",
       "displayNameUpdated": "Zobrazované jméno aktualizováno.",
-      "done": "Done",
       "emailLabel": "E-mail",
       "emailPlaceholder": "vy@example.com",
       "emailUpdated": "E-mail aktualizován.",
@@ -603,7 +547,6 @@
       "giving": "Dary",
       "keep": "Ponechat",
       "lastNameRegister": "Příjmení",
-      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Načítání...",
       "loadingForm": "Načítání formuláře pro dary...",
       "membersOnly": "Pouze členové",
@@ -644,7 +587,6 @@
       "signInToCheckIn": "Pro přihlášení se prosím přihlaste",
       "signInToCheckInCta": "Přihlásit se",
       "signInToCheckInMessage": "Přihlaste se, abyste se mohli přihlásit na bohoslužbu.",
-      "staffOnly": "Staff Only",
       "tabAccount": "Účet",
       "tabDonate": "Darovat",
       "tabHistory": "Historie",
@@ -701,7 +643,6 @@
   },
   "pageSlug": {
     "achInstructions": "Pokyny pro platbu ACH",
-    "bible": "Bible",
     "donate": "Darovat",
     "formClosedOn": "Tento formulář byl uzavřen {}",
     "formNotAvailableUntil": "Tento formulář je k dispozici až od {}",
@@ -746,12 +687,8 @@
     },
     "servingTimes": {
       "plan": "Plán",
-      "role": "Role",
       "serviceDate": "Datum bohoslužby",
       "title": "Časy služby"
-    },
-    "team": {
-      "avatar": "avatar"
     },
     "upcomingDates": {
       "event": "Událost",
@@ -774,74 +711,25 @@
     "completeRegistration": "Dokončit registraci",
     "confirmed": "Registrace potvrzena!",
     "continue": "Pokračovat",
-    "coupon": {
-      "applied": "Code {} applied",
-      "apply": "Apply",
-      "invalid": "This code is not valid.",
-      "label": "Discount code",
-      "remove": "Remove"
-    },
     "errors": {
       "emailRequired": "E-mail je vyžadován pro registraci hosta.",
       "memberNamesRequired": "Pro každého dalšího člena je vyžadováno jméno a příjmení.",
       "namesRequired": "Jméno a příjmení jsou vyžadovány.",
-      "registrationFailed": "Registrace se nezdařila. Událost může být plná nebo registrace mohla být uzavřena.",
-      "selectionFull": "A selected option is sold out. Please adjust quantities.",
-      "typeFull": "That attendee type is sold out. Please choose another.",
-      "typeRequired": "Please select a registration type for each attendee."
+      "registrationFailed": "Registrace se nezdařila. Událost může být plná nebo registrace mohla být uzavřena."
     },
     "event": "Událost",
     "eventFull": "Událost je plná",
-    "free": "Free",
-    "mine": {
-      "balanceDue": "Balance due: {}",
-      "balanceLabel": "Balance due",
-      "cancel": "Cancel Registration",
-      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
-      "completePayment": "Complete payment",
-      "edit": "Edit",
-      "editTitle": "Edit Registration",
-      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
-      "emptyTitle": "No registrations yet",
-      "registered": "Registered"
-    },
-    "noAdditional": "No additional members added",
     "notOpen": "Registrace není otevřená",
     "opensOn": "Registrace začíná {}",
-    "payment": {
-      "authFailed": "Card authentication failed. Please try another card.",
-      "cardNotReady": "Card form is not ready. Please wait and try again.",
-      "discount": "Discount",
-      "newCard": "Use a new card",
-      "noGateway": "Online payment is not available for this event.",
-      "orderSummary": "Order Summary",
-      "payAndRegister": "Pay {} & Register",
-      "subtotalNote": "subtotal before discounts",
-      "title": "Payment",
-      "total": "Total"
-    },
     "phone": "Telefon",
     "questions": "Otázky",
     "registeredMembers": "Zaregistrovaní členové",
     "registering": "Registrace...",
     "registeringAs": "Registrace jako",
-    "remaining": "{} remaining",
-    "selectType": "Select a type",
-    "selections": {
-      "title": "Options & Selections"
-    },
-    "soldOut": "Sold out",
     "spotsFilled": "{0} / {1} míst obsazeno",
-    "spotsWord": "spots filled",
     "status": "Stav",
-    "waitlist": {
-      "confirmedBody": "We will email you if a spot opens for",
-      "confirmedTitle": "You are on the waitlist",
-      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
-    },
     "youAreRegistered": "Jste zaregistrováni na",
-    "yourInformation": "Vaše informace",
-    "yourType": "Your registration type"
+    "yourInformation": "Vaše informace"
   },
   "serving": {
     "allSlotsFilled": "Všechna {} místa obsazena",
@@ -883,7 +771,6 @@
     "chat": {
       "attendees": "{} účastníků",
       "changeName": "Změnit jméno",
-      "emoji": "emoji",
       "enterFullName": "Zadejte prosím celé jméno",
       "message": "Zpráva",
       "namePlaceholder": "Jan Novák",
@@ -895,7 +782,6 @@
       "typeMessage": "Napište svou zprávu",
       "updateName": "Aktualizovat jméno"
     },
-    "logo": "logo",
     "nextServiceTime": "Čas další bohoslužby",
     "sermonVideo": "Video kázání",
     "serviceEnded": "Aktuální bohoslužba skončila."

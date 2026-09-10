@@ -85,7 +85,6 @@
     "contactGroupLeader": "Contatta il Responsabile del Gruppo:",
     "deleteFileLabel": "Elimina file {}",
     "deleteLinkLabel": "Elimina link {}",
-    "email": "Email",
     "emailLabel": "Il tuo indirizzo email",
     "files": "File",
     "firstName": "Nome",
@@ -141,7 +140,6 @@
     "goHomepage": "Vai alla homepage",
     "goMemberPortal": "Vai al portale membri",
     "loginAccount": "Accedi al tuo account",
-    "mainNav": "Main navigation",
     "memberPortal": "Portale Membri",
     "openNav": "Apri menu di navigazione",
     "userMenu": "Menu utente"
@@ -153,17 +151,13 @@
     "searchAriaLabel": "cerca icone",
     "selectIcon": "Seleziona icona {}"
   },
-  "loadingPage": {
-    "logoAlt": "logo"
-  },
   "login": {
     "login": "Accedi",
     "register": "Registrati"
   },
   "loginClient": {
     "demoBody": "Questo è l'ambiente demo. Tutti i dati vengono cancellati ogni notte.",
-    "demoCredentials": "Puoi accedere a una chiesa di prova con le credenziali demo@b1.church / password .",
-    "demoTitle": "Demo:"
+    "demoCredentials": "Puoi accedere a una chiesa di prova con le credenziali demo@b1.church / password ."
   },
   "mobile": {
     "components": {
@@ -176,7 +170,6 @@
       "editProfile": "Modifica Profilo",
       "explore": "Esplora",
       "group": "Gruppo",
-      "home": "Home",
       "lightMode": "Modalità Chiara",
       "logout": "Esci",
       "member": "Membro",
@@ -219,7 +212,6 @@
       "backToGroups": "Torna ai Gruppi",
       "backToPlans": "Torna ai Piani",
       "backToSermons": "Torna ai Sermoni",
-      "bottomLine": "Bottom line",
       "call": "Chiama",
       "cancel": "Annulla",
       "checkConnection": "Controlla la tua connessione e riprova.",
@@ -245,7 +237,6 @@
       "edit": "Modifica",
       "editProfile": "Modifica profilo",
       "editingMessage": "Modifica del messaggio",
-      "email": "Email",
       "emailAddress": "Indirizzo Email",
       "full": "Completo",
       "general": "Generale",
@@ -264,9 +255,7 @@
       "membersTab": "Membri",
       "message": "Messaggio",
       "messageActions": "Azioni del messaggio",
-      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
       "messageFailed": "Invio del messaggio fallito.",
-      "messagingNotAvailable": "Messaging isn't available for this profile.",
       "mobilePhone": "Telefono Cellulare",
       "mustBeSignedIn": "Devi aver effettuato l'accesso per inviare messaggi.",
       "myAssignments": "I Miei Incarichi",
@@ -283,7 +272,6 @@
       "noTeamsAssigned": "Nessuna squadra ancora assegnata.",
       "openEmojiPicker": "Apri selettore emoji",
       "openLink": "Apri Link",
-      "parentQuestion": "Question",
       "pendingResponse": "In Attesa di Risposta",
       "personNotFound": "Persona Non Trovata",
       "personNotFoundDescription": "Questo profilo non è stato trovato.",
@@ -336,14 +324,12 @@
       "tabTeams": "Squadre",
       "team": "Squadra",
       "text": "Testo",
-      "thisWeeksLesson": "This week's lesson",
       "typeMessage": "Scrivi un messaggio…",
       "unableToLoadMessages": "Impossibile caricare i messaggi.",
       "unableToLoadPlaylist": "Impossibile Caricare la Playlist",
       "unableToRespond": "Impossibile {} l'incarico. Riprova.",
       "unableToShare": "Impossibile condividere su questo dispositivo",
       "untitledSeries": "Serie Senza Titolo",
-      "verse": "Verse",
       "viewTeach": "Insegna",
       "watchSermon": "Guarda Sermone"
     },
@@ -358,10 +344,8 @@
       "add": "Aggiungi",
       "addEvent": "Aggiungi Evento",
       "addLink": "Aggiungi Link",
-      "addReaction": "Add reaction",
       "added": "Aggiunto",
       "allDay": "Tutto il giorno",
-      "allowRsvps": "Allow RSVPs",
       "announcements": "Annunci",
       "attendanceSaved": "Presenze salvate.",
       "beFirstToShare": "Sii il primo a condividere qualcosa con il gruppo.",
@@ -369,7 +353,6 @@
       "bookingPending": "La richiesta di sala/risorsa è stata inviata ed è in attesa di approvazione.",
       "cancel": "Annulla",
       "capacity": "Capienza",
-      "chat": "Chat",
       "clear": "Cancella",
       "confirmDeleteEvent": "Sei sicuro di voler eliminare questo evento?",
       "confirmDeleteMessage": "Questo messaggio verrà rimosso per tutti nella conversazione.",
@@ -398,13 +381,10 @@
       "failedToDeleteEvent": "Eliminazione dell'evento fallita.",
       "failedToSaveEvent": "Salvataggio dell'evento fallito.",
       "failedToSubmitRequest": "Invio della richiesta non riuscito",
-      "fileFallback": "File",
       "files": "File",
       "groupChat": "Chat di Gruppo",
-      "groupChatTitle": "{} {}",
       "guest": "(Ospite)",
       "leadersCanPost": "I responsabili possono pubblicare annunci qui.",
-      "linkFallback": "Link",
       "linkText": "Testo del link",
       "links": "Link",
       "membersOnly": "Solo membri",
@@ -439,13 +419,6 @@
       "reserveUntil": "Prenota fino a",
       "resources": "Risorse",
       "rooms": "Sale",
-      "rsvpGoing": "Going",
-      "rsvpMaybe": "Maybe",
-      "rsvpNoResponses": "No responses yet",
-      "rsvpNotGoing": "Can't go",
-      "rsvpQuestion": "Will you attend?",
-      "rsvpResponses": "Responses",
-      "rsvpViewResponses": "View responses",
       "save": "Salva",
       "saveAttendance": "Salva Presenze",
       "saveChanges": "Salva Modifiche",
@@ -466,7 +439,6 @@
       "upload": "Carica",
       "uploadFailed": "Caricamento fallito.",
       "uploadingProgress": "Caricamento {}… {}%",
-      "url": "URL",
       "usedStorage": "Utilizzato {} / 100MB",
       "visibility": "Visibilità",
       "weekly": "Settimanale",
@@ -488,13 +460,11 @@
       "title": "Io",
       "upcoming": "In arrivo"
     },
-    "mobileApp": "Mobile",
     "more": {
       "allOnDashboard": "Tutto è nel tuo dashboard"
     },
     "now": "ora",
     "plans": {
-      "album": "Album",
       "artist": "Artista",
       "audioTracks": "Tracce audio",
       "audioUnsupported": "Il tuo browser non supporta la riproduzione audio.",
@@ -518,36 +488,8 @@
       "releaseDate": "Data di Pubblicazione",
       "startDate": "Data di inizio"
     },
-    "requests": {
-      "allDay": "All day",
-      "approved": "Approved",
-      "cancelConfirm": "Cancel this request? This cannot be undone.",
-      "cancelRequest": "Cancel request",
-      "description": "Description",
-      "emptyBody": "Your event and room requests will appear here.",
-      "emptyTitle": "No requests yet",
-      "end": "End",
-      "enterTitle": "Please enter a title.",
-      "eventTitle": "Event title",
-      "failedToSubmit": "Could not submit your request. Please try again.",
-      "keep": "Keep",
-      "myRequests": "My Requests",
-      "noBookingItems": "No rooms or resources selected.",
-      "outcomeBody": "Here is the status of each room and resource you requested.",
-      "outcomeTitle": "Request submitted",
-      "pending": "Pending approval",
-      "recurring": "Repeats",
-      "start": "Start",
-      "statusApproved": "Approved",
-      "statusPending": "Pending",
-      "statusRejected": "Rejected",
-      "submit": "Submit Request",
-      "submitting": "Submitting…",
-      "title": "Request an Event"
-    },
     "screenTitles": {
       "bible": "Bibbia",
-      "checkin": "Check-in",
       "directory": "Elenco",
       "donation": "Donazioni",
       "groupDetails": "Gruppo",
@@ -560,7 +502,6 @@
       "notifications": "Notifiche",
       "planDetails": "Piano",
       "plans": "Piani",
-      "playlist": "Playlist",
       "profileEdit": "Modifica Profilo",
       "register": "Registrati",
       "registrations": "Registrazioni",
@@ -584,13 +525,10 @@
       "couldNotUpdateDisplayName": "Impossibile aggiornare il nome visualizzato.",
       "couldNotUpdateEmail": "Impossibile aggiornare l'email.",
       "couldNotUpdatePassword": "Impossibile aggiornare la password.",
-      "currentPassword": "Current password",
       "deleteConversation": "Elimina conversazione",
       "deleteNotification": "Elimina notifica",
       "detectingDevice": "Rilevamento del dispositivo…",
       "displayNameUpdated": "Nome visualizzato aggiornato.",
-      "done": "Done",
-      "emailLabel": "Email",
       "emailPlaceholder": "tu@esempio.com",
       "emailUpdated": "Email aggiornata.",
       "enterName": "Inserisci nome",
@@ -603,7 +541,6 @@
       "giving": "Donazioni",
       "keep": "Mantieni",
       "lastNameRegister": "Cognome",
-      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Caricamento...",
       "loadingForm": "Caricamento modulo di donazione...",
       "membersOnly": "Solo Membri",
@@ -621,7 +558,6 @@
       "noServicesMessage": "Torna più tardi o contatta l'amministratore della tua chiesa.",
       "noUrlProvided": "Nessun URL fornito",
       "openInNewTab": "Apri in una nuova scheda",
-      "passwordLabel": "Password",
       "passwordPlaceholder": "La tua password",
       "passwordUpdated": "Password aggiornata.",
       "phoneOptional": "Telefono (opzionale)",
@@ -644,15 +580,12 @@
       "signInToCheckIn": "Accedi per effettuare il check-in",
       "signInToCheckInCta": "Accedi",
       "signInToCheckInMessage": "Accedi per effettuare il check-in a un servizio.",
-      "staffOnly": "Staff Only",
-      "tabAccount": "Account",
       "tabDonate": "Dona",
       "tabHistory": "Cronologia",
       "tabHousehold": "Nucleo Familiare",
       "tabManage": "Gestisci",
       "tabOverview": "Panoramica",
       "tabPast": "Passati",
-      "tabPrivacy": "Privacy",
       "tabRecent": "Recenti",
       "tabSeries": "Serie",
       "tabUpcoming": "In Programma",
@@ -717,7 +650,6 @@
     "verseOfTheDay": "Versetto del Giorno"
   },
   "person": {
-    "email": "Email",
     "firstName": "Nome",
     "lastName": "Cognome",
     "name": "Nome"
@@ -750,9 +682,6 @@
       "serviceDate": "Data del Servizio",
       "title": "Orari di Servizio"
     },
-    "team": {
-      "avatar": "avatar"
-    },
     "upcomingDates": {
       "event": "Evento",
       "startTime": "Ora di Inizio",
@@ -774,74 +703,25 @@
     "completeRegistration": "Completa Registrazione",
     "confirmed": "Registrazione Confermata!",
     "continue": "Continua",
-    "coupon": {
-      "applied": "Code {} applied",
-      "apply": "Apply",
-      "invalid": "This code is not valid.",
-      "label": "Discount code",
-      "remove": "Remove"
-    },
     "errors": {
       "emailRequired": "L'email è obbligatoria per la registrazione degli ospiti.",
       "memberNamesRequired": "Nome e cognome sono obbligatori per ogni membro aggiuntivo.",
       "namesRequired": "Nome e cognome sono obbligatori.",
-      "registrationFailed": "Registrazione fallita. L'evento potrebbe essere al completo o le registrazioni potrebbero essere chiuse.",
-      "selectionFull": "A selected option is sold out. Please adjust quantities.",
-      "typeFull": "That attendee type is sold out. Please choose another.",
-      "typeRequired": "Please select a registration type for each attendee."
+      "registrationFailed": "Registrazione fallita. L'evento potrebbe essere al completo o le registrazioni potrebbero essere chiuse."
     },
     "event": "Evento",
     "eventFull": "Evento al Completo",
-    "free": "Free",
-    "mine": {
-      "balanceDue": "Balance due: {}",
-      "balanceLabel": "Balance due",
-      "cancel": "Cancel Registration",
-      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
-      "completePayment": "Complete payment",
-      "edit": "Edit",
-      "editTitle": "Edit Registration",
-      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
-      "emptyTitle": "No registrations yet",
-      "registered": "Registered"
-    },
-    "noAdditional": "No additional members added",
     "notOpen": "Registrazioni Non Aperte",
     "opensOn": "Le registrazioni aprono il {}",
-    "payment": {
-      "authFailed": "Card authentication failed. Please try another card.",
-      "cardNotReady": "Card form is not ready. Please wait and try again.",
-      "discount": "Discount",
-      "newCard": "Use a new card",
-      "noGateway": "Online payment is not available for this event.",
-      "orderSummary": "Order Summary",
-      "payAndRegister": "Pay {} & Register",
-      "subtotalNote": "subtotal before discounts",
-      "title": "Payment",
-      "total": "Total"
-    },
     "phone": "Telefono",
     "questions": "Domande",
     "registeredMembers": "Membri Registrati",
     "registering": "Registrazione in corso...",
     "registeringAs": "Registrazione come",
-    "remaining": "{} remaining",
-    "selectType": "Select a type",
-    "selections": {
-      "title": "Options & Selections"
-    },
-    "soldOut": "Sold out",
     "spotsFilled": "{0} / {1} posti occupati",
-    "spotsWord": "spots filled",
     "status": "Stato",
-    "waitlist": {
-      "confirmedBody": "We will email you if a spot opens for",
-      "confirmedTitle": "You are on the waitlist",
-      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
-    },
     "youAreRegistered": "Sei registrato per",
-    "yourInformation": "Le Tue Informazioni",
-    "yourType": "Your registration type"
+    "yourInformation": "Le Tue Informazioni"
   },
   "serving": {
     "allSlotsFilled": "Tutti i {} posti occupati",
@@ -883,7 +763,6 @@
     "chat": {
       "attendees": "{} partecipanti",
       "changeName": "Cambia Nome",
-      "emoji": "emoji",
       "enterFullName": "Inserisci un nome completo",
       "message": "Messaggio",
       "namePlaceholder": "Mario Rossi",
@@ -895,7 +774,6 @@
       "typeMessage": "Scrivi il tuo messaggio",
       "updateName": "Aggiorna Nome"
     },
-    "logo": "logo",
     "nextServiceTime": "Orario del Prossimo Servizio",
     "sermonVideo": "Video del Sermone",
     "serviceEnded": "Il servizio attuale è terminato."

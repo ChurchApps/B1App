@@ -56,9 +56,6 @@
     "search": "Maghanap",
     "update": "I-update"
   },
-  "element": {
-    "offlinePlaceholder": "Offline Video Placeholder"
-  },
   "elements": {
     "fillAgain": "Punan Muli",
     "formSubmitted": "Matagumpay na naisumite ang iyong form."
@@ -81,21 +78,16 @@
     "addLinksInfo": "Ang link ay maaaring mula sa Google Drive, Hosted Lesson PDF, atbp.",
     "addedLinks": "Naidagdag na mga Link",
     "confirmDelete": "Sigurado ka bang gusto mong burahin ang '{}'?",
-    "contact": "Contact",
     "contactGroupLeader": "Makipag-ugnayan sa Group Leader:",
     "deleteFileLabel": "Burahin ang file na {}",
     "deleteLinkLabel": "Burahin ang link na {}",
-    "email": "Email",
     "emailLabel": "Iyong email address",
     "files": "Mga File",
     "firstName": "Pangalan",
     "firstNameLabel": "Iyong pangalan",
     "lastName": "Apelyido",
     "lastNameLabel": "Iyong apelyido",
-    "linkText": "Link Text",
-    "linkTextLabel": "Link display text",
     "linkUrl": "Link URL",
-    "linkUrlLabel": "Link URL",
     "message": "Mensahe",
     "messageLabel": "Iyong mensahe sa group leader",
     "messageSent": "Naipadala na ang iyong mensahe!",
@@ -133,7 +125,6 @@
     "notEnabled": "Hindi pinapagana ang guest registration para sa simbahang ito."
   },
   "header": {
-    "adminPortal": "Admin Portal",
     "closeNav": "Isara ang navigation menu",
     "editAccountSettings": "I-edit ang account settings",
     "editProfileOptions": "I-edit ang profile options",
@@ -141,10 +132,7 @@
     "goHomepage": "Pumunta sa homepage",
     "goMemberPortal": "Pumunta sa member portal",
     "loginAccount": "Mag-login sa iyong account",
-    "mainNav": "Main navigation",
-    "memberPortal": "Member Portal",
-    "openNav": "Buksan ang navigation menu",
-    "userMenu": "User menu"
+    "openNav": "Buksan ang navigation menu"
   },
   "iconPicker": {
     "iconsAvailable": "Mga Available na Icon",
@@ -153,31 +141,25 @@
     "searchAriaLabel": "maghanap ng mga icon",
     "selectIcon": "Pumili ng {} icon"
   },
-  "loadingPage": {
-    "logoAlt": "logo"
-  },
   "login": {
     "login": "Mag-login",
     "register": "Mag-rehistro"
   },
   "loginClient": {
     "demoBody": "Ito ang demo environment. Lahat ng data ay binubura tuwing gabi.",
-    "demoCredentials": "Maaari kang mag-login sa isang test church gamit ang credentials na demo@b1.church / password .",
-    "demoTitle": "Demo:"
+    "demoCredentials": "Maaari kang mag-login sa isang test church gamit ang credentials na demo@b1.church / password ."
   },
   "mobile": {
     "components": {
       "back": "Bumalik",
       "backToDashboard": "Bumalik sa dashboard",
       "close": "Isara",
-      "darkMode": "Dark Mode",
       "detailViewDescription": "Hindi pa available ang detail view para sa '{}'.",
       "detailViewTitle": "Detalye ng {}",
       "editProfile": "I-edit ang Profile",
       "explore": "Tuklasin",
       "group": "Grupo",
       "home": "Tahanan",
-      "lightMode": "Light Mode",
       "logout": "Mag-logout",
       "member": "Miyembro",
       "messages": "Mga Mensahe",
@@ -190,8 +172,6 @@
       "notificationsAndMessages": "Mga notification at mensahe",
       "openMenu": "Buksan ang navigation menu",
       "playSermon": "I-play ang sermon",
-      "privacyPolicy": "Privacy Policy",
-      "profile": "Profile",
       "signIn": "Mag-sign In",
       "switchToDark": "Lumipat sa dark mode",
       "switchToLight": "Lumipat sa light mode",
@@ -212,14 +192,12 @@
       "about": "Tungkol Sa",
       "accept": "Tanggapin",
       "accepted": "Tinanggap",
-      "address": "Address",
       "allSlotsFilled": "Lahat ng {} slots ay puno na",
       "alreadySignedUp": "Naka-sign up ka na.",
       "backToCommunity": "Bumalik sa Community",
       "backToGroups": "Bumalik sa Mga Grupo",
       "backToPlans": "Bumalik sa Mga Plan",
       "backToSermons": "Bumalik sa Mga Sermon",
-      "bottomLine": "Bottom line",
       "call": "Tumawag",
       "cancel": "Kanselahin",
       "checkConnection": "Pakitingnan ang iyong koneksyon at subukan muli.",
@@ -245,8 +223,6 @@
       "edit": "I-edit",
       "editProfile": "I-edit ang profile",
       "editingMessage": "Ine-edit ang mensahe",
-      "email": "Email",
-      "emailAddress": "Email Address",
       "full": "Puno",
       "general": "Pangkalahatan",
       "groupNotFound": "Hindi Nahanap ang Grupo",
@@ -264,10 +240,7 @@
       "membersTab": "Mga Miyembro",
       "message": "Mensahe",
       "messageActions": "Mga aksyon sa mensahe",
-      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
       "messageFailed": "Nabigong maipadala ang mensahe.",
-      "messagingNotAvailable": "Messaging isn't available for this profile.",
-      "mobilePhone": "Mobile Phone",
       "mustBeSignedIn": "Kailangan kang naka-sign in upang magpadala ng mensahe.",
       "myAssignments": "Aking mga Assignment",
       "newConversation": "Bagong pag-uusap",
@@ -283,7 +256,6 @@
       "noTeamsAssigned": "Wala pang naka-assign na team.",
       "openEmojiPicker": "Buksan ang emoji picker",
       "openLink": "Buksan ang Link",
-      "parentQuestion": "Question",
       "pendingResponse": "Naghihintay ng Tugon",
       "personNotFound": "Hindi Nahanap ang Tao",
       "personNotFoundDescription": "Hindi mahanap ang profile na ito.",
@@ -307,8 +279,6 @@
       "sendMessage": "Magpadala ng mensahe",
       "sendText": "Magpadala ng text message",
       "sermonPlural": "mga sermon",
-      "sermonSeries": "Sermon Series",
-      "sermonSingular": "sermon",
       "sermons": "Mga Sermon",
       "service": "Serbisyo",
       "serviceTimes": "Mga Oras ng Serbisyo",
@@ -327,23 +297,18 @@
       "slotsRemaining": "{} sa {} slots ang natitira",
       "startConversationWith": "Simulan ang pag-uusap kay {}",
       "tabAbout": "Tungkol Sa",
-      "tabAttendance": "Attendance",
       "tabEvents": "Mga Event",
       "tabMessages": "Mga Mensahe",
       "tabOverview": "Pangkalahatang-tanaw",
       "tabResources": "Mga Resource",
-      "tabServiceOrder": "Service Order",
       "tabTeams": "Mga Team",
       "team": "Team",
-      "text": "Text",
-      "thisWeeksLesson": "This week's lesson",
       "typeMessage": "Mag-type ng mensahe…",
       "unableToLoadMessages": "Hindi ma-load ang mga mensahe.",
       "unableToLoadPlaylist": "Hindi Ma-load ang Playlist",
       "unableToRespond": "Hindi ma-{} ang assignment. Pakisubukan muli.",
       "unableToShare": "Hindi makapag-share sa device na ito",
       "untitledSeries": "Walang Pamagat na Series",
-      "verse": "Verse",
       "viewTeach": "Magturo",
       "watchSermon": "Panoorin ang Sermon"
     },
@@ -358,10 +323,8 @@
       "add": "Idagdag",
       "addEvent": "Magdagdag ng Event",
       "addLink": "Magdagdag ng Link",
-      "addReaction": "Add reaction",
       "added": "Naidagdag",
       "allDay": "Buong araw",
-      "allowRsvps": "Allow RSVPs",
       "announcements": "Mga Anunsyo",
       "attendanceSaved": "Na-save ang attendance.",
       "beFirstToShare": "Maging una sa pagbabahagi ng isang bagay sa grupo.",
@@ -369,12 +332,10 @@
       "bookingPending": "Ang iyong kahilingan sa silid/mapagkukunan ay naisumite at naghihintay ng aprubasyon.",
       "cancel": "Kanselahin",
       "capacity": "Kapasidad",
-      "chat": "Chat",
       "clear": "I-clear",
       "confirmDeleteEvent": "Sigurado ka bang gusto mong burahin ang event na ito?",
       "confirmDeleteMessage": "Aalisin ang mensaheng ito para sa lahat sa usapan.",
       "confirmDeleteTitle": "Burahin ang mensahe?",
-      "customWindow": "Custom reservation window",
       "daily": "Araw-araw",
       "delete": "Burahin",
       "deleteEvent": "Burahin ang event",
@@ -388,7 +349,6 @@
       "enterLinkText": "Pakilagay ang link text.",
       "enterTitle": "Pakilagay ang pamagat.",
       "enterUrl": "Pakilagay ang URL.",
-      "event": "Event",
       "everyNDays": "Tuwing {} araw",
       "everyNMonths": "Tuwing {} buwan",
       "everyNWeeks": "Tuwing {} linggo",
@@ -398,14 +358,9 @@
       "failedToDeleteEvent": "Nabigong burahin ang event.",
       "failedToSaveEvent": "Nabigong i-save ang event.",
       "failedToSubmitRequest": "Nabigo ang pagsumite ng kahilingan",
-      "fileFallback": "File",
       "files": "Mga File",
-      "groupChat": "Group Chat",
-      "groupChatTitle": "{} {}",
       "guest": "(Bisita)",
       "leadersCanPost": "Maaaring mag-post ng anunsyo ang mga lider dito.",
-      "linkFallback": "Link",
-      "linkText": "Link text",
       "links": "Mga Link",
       "membersOnly": "Para sa mga miyembro lamang",
       "messageActions": "Mga aksyon sa mensahe",
@@ -439,13 +394,6 @@
       "reserveUntil": "Mag-reserve hanggang",
       "resources": "Mga Mapagkukunan",
       "rooms": "Mga Silid",
-      "rsvpGoing": "Going",
-      "rsvpMaybe": "Maybe",
-      "rsvpNoResponses": "No responses yet",
-      "rsvpNotGoing": "Can't go",
-      "rsvpQuestion": "Will you attend?",
-      "rsvpResponses": "Responses",
-      "rsvpViewResponses": "View responses",
       "save": "I-save",
       "saveAttendance": "I-save ang Attendance",
       "saveChanges": "I-save ang mga Pagbabago",
@@ -466,9 +414,7 @@
       "upload": "Mag-upload",
       "uploadFailed": "Nabigo ang pag-upload.",
       "uploadingProgress": "Ina-upload ang {}… {}%",
-      "url": "URL",
       "usedStorage": "Nagamit na {} / 100MB",
-      "visibility": "Visibility",
       "weekly": "Lingguhan",
       "yearly": "Taunan"
     },
@@ -488,14 +434,11 @@
       "title": "Ako",
       "upcoming": "Paparating"
     },
-    "mobileApp": "Mobile",
     "more": {
       "allOnDashboard": "Lahat ay nasa iyong dashboard"
     },
     "now": "ngayon",
     "plans": {
-      "album": "Album",
-      "artist": "Artist",
       "audioTracks": "Mga audio track",
       "audioUnsupported": "Hindi suportado ng iyong browser ang pag-play ng audio.",
       "close": "Isara",
@@ -503,13 +446,10 @@
       "deleteBlockoutTitle": "Burahin ang blockout date?",
       "endDate": "Petsa ng pagtatapos",
       "files": "Mga File",
-      "keySignature": "Key Signature",
-      "keys": "Keys",
       "language": "Wika",
       "length": "Haba",
       "links": "Mga Link",
       "lyrics": "Liriko",
-      "meter": "Meter",
       "noContent": "Walang content na ipakita.",
       "noPreviewItem": "Walang available na preview para sa item na ito.",
       "noTextContent": "Walang text content na ipakita.",
@@ -518,37 +458,8 @@
       "releaseDate": "Petsa ng Release",
       "startDate": "Petsa ng simula"
     },
-    "requests": {
-      "allDay": "All day",
-      "approved": "Approved",
-      "cancelConfirm": "Cancel this request? This cannot be undone.",
-      "cancelRequest": "Cancel request",
-      "description": "Description",
-      "emptyBody": "Your event and room requests will appear here.",
-      "emptyTitle": "No requests yet",
-      "end": "End",
-      "enterTitle": "Please enter a title.",
-      "eventTitle": "Event title",
-      "failedToSubmit": "Could not submit your request. Please try again.",
-      "keep": "Keep",
-      "myRequests": "My Requests",
-      "noBookingItems": "No rooms or resources selected.",
-      "outcomeBody": "Here is the status of each room and resource you requested.",
-      "outcomeTitle": "Request submitted",
-      "pending": "Pending approval",
-      "recurring": "Repeats",
-      "start": "Start",
-      "statusApproved": "Approved",
-      "statusPending": "Pending",
-      "statusRejected": "Rejected",
-      "submit": "Submit Request",
-      "submitting": "Submitting…",
-      "title": "Request an Event"
-    },
     "screenTitles": {
       "bible": "Bibliya",
-      "checkin": "Check-in",
-      "directory": "Directory",
       "donation": "Pagbibigay",
       "groupDetails": "Grupo",
       "installApp": "I-install ang App",
@@ -560,15 +471,11 @@
       "notifications": "Mga Notification",
       "planDetails": "Plano",
       "plans": "Mga Plano",
-      "playlist": "Playlist",
       "profileEdit": "I-edit ang Profile",
       "register": "Magrehistro",
       "registrations": "Mga Pagpaparehistro",
-      "sermonDetails": "Sermon",
       "sermons": "Mga Sermon",
       "signIn": "Mag-sign In",
-      "stream": "Stream",
-      "volunteer": "Volunteer",
       "volunteerOpportunities": "Mga Volunteer Opportunity",
       "votd": "Talata ng Araw"
     },
@@ -584,13 +491,10 @@
       "couldNotUpdateDisplayName": "Hindi ma-update ang display name.",
       "couldNotUpdateEmail": "Hindi ma-update ang email.",
       "couldNotUpdatePassword": "Hindi ma-update ang password.",
-      "currentPassword": "Current password",
       "deleteConversation": "Burahin ang usapan",
       "deleteNotification": "Burahin ang notipikasyon",
       "detectingDevice": "Tinutukoy ang iyong device…",
       "displayNameUpdated": "Na-update ang display name.",
-      "done": "Done",
-      "emailLabel": "Email",
       "emailPlaceholder": "ikaw@example.com",
       "emailUpdated": "Na-update ang email.",
       "enterName": "Ilagay ang pangalan",
@@ -603,7 +507,6 @@
       "giving": "Pagbibigay",
       "keep": "Panatilihin",
       "lastNameRegister": "Apelyido",
-      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Naglo-load...",
       "loadingForm": "Naglo-load ng donation form...",
       "membersOnly": "Mga Miyembro Lamang",
@@ -621,7 +524,6 @@
       "noServicesMessage": "Pakibalik mamaya o makipag-ugnayan sa administrator ng iyong simbahan.",
       "noUrlProvided": "Walang ibinigay na URL",
       "openInNewTab": "Buksan sa bagong tab",
-      "passwordLabel": "Password",
       "passwordPlaceholder": "Iyong password",
       "passwordUpdated": "Na-update ang password.",
       "phoneOptional": "Telepono (opsyonal)",
@@ -644,17 +546,13 @@
       "signInToCheckIn": "Mag-sign in upang mag-check in",
       "signInToCheckInCta": "Mag-sign In",
       "signInToCheckInMessage": "Mag-log in upang mag-check in sa isang serbisyo.",
-      "staffOnly": "Staff Only",
-      "tabAccount": "Account",
       "tabDonate": "Mag-donate",
       "tabHistory": "Kasaysayan",
       "tabHousehold": "Sambahayan",
       "tabManage": "Pamahalaan",
       "tabOverview": "Pangkalahatang-tanaw",
       "tabPast": "Nakaraan",
-      "tabPrivacy": "Privacy",
       "tabRecent": "Pinakabago",
-      "tabSeries": "Series",
       "tabUpcoming": "Paparating",
       "unableToLoadChurch": "Hindi ma-load ang church configuration.",
       "visibilityPreferencesSaved": "Na-save ang mga kagustuhan sa visibility.",
@@ -690,8 +588,7 @@
       "loadMore": "Mag-load ng Higit Pa",
       "loading": "Naglo-load...",
       "showAll": "Ipakita Lahat",
-      "typeMessage": "Mag-type ng mensahe...",
-      "userAlt": "user"
+      "typeMessage": "Mag-type ng mensahe..."
     },
     "startConversation": "Magsimula ng Usapan",
     "validate": {
@@ -706,7 +603,6 @@
     "formClosedOn": "Nagsara ang form na ito noong {}",
     "formNotAvailableUntil": "Hindi available ang form na ito hanggang {}",
     "formSubmitted": "Matagumpay na naisumite ang iyong form.",
-    "liveStream": "Live Stream",
     "loginToManageDonations": "Mag-login upang pamahalaan ang mga donasyon",
     "manageDonations": "Pamahalaan ang mga Donasyon",
     "metaForms": "Mga Form",
@@ -717,7 +613,6 @@
     "verseOfTheDay": "Talata ng Araw"
   },
   "person": {
-    "email": "Email",
     "firstName": "Pangalan",
     "lastName": "Apelyido",
     "name": "Pangalan"
@@ -741,20 +636,14 @@
       "declined": "Tinanggihan",
       "headerPrefix": "Posisyon",
       "neededTimes": "Mga Kailangang Oras",
-      "status": "Status",
       "unconfirmed": "Hindi pa kumpirmado"
     },
     "servingTimes": {
-      "plan": "Plan",
       "role": "Tungkulin",
       "serviceDate": "Petsa ng Serbisyo",
       "title": "Mga Oras ng Paglilingkod"
     },
-    "team": {
-      "avatar": "avatar"
-    },
     "upcomingDates": {
-      "event": "Event",
       "startTime": "Oras ng Simula",
       "title": "Mga Paparating na Petsa"
     }
@@ -774,74 +663,23 @@
     "completeRegistration": "Kumpletuhin ang Pagpaparehistro",
     "confirmed": "Kumpirmado ang Pagpaparehistro!",
     "continue": "Magpatuloy",
-    "coupon": {
-      "applied": "Code {} applied",
-      "apply": "Apply",
-      "invalid": "This code is not valid.",
-      "label": "Discount code",
-      "remove": "Remove"
-    },
     "errors": {
       "emailRequired": "Kailangan ang email para sa guest registration.",
       "memberNamesRequired": "Kailangan ang pangalan at apelyido para sa bawat karagdagang miyembro.",
       "namesRequired": "Kailangan ang pangalan at apelyido.",
-      "registrationFailed": "Nabigo ang pagpaparehistro. Maaaring puno na ang event o sarado na ang pagpaparehistro.",
-      "selectionFull": "A selected option is sold out. Please adjust quantities.",
-      "typeFull": "That attendee type is sold out. Please choose another.",
-      "typeRequired": "Please select a registration type for each attendee."
+      "registrationFailed": "Nabigo ang pagpaparehistro. Maaaring puno na ang event o sarado na ang pagpaparehistro."
     },
-    "event": "Event",
     "eventFull": "Puno na ang Event",
-    "free": "Free",
-    "mine": {
-      "balanceDue": "Balance due: {}",
-      "balanceLabel": "Balance due",
-      "cancel": "Cancel Registration",
-      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
-      "completePayment": "Complete payment",
-      "edit": "Edit",
-      "editTitle": "Edit Registration",
-      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
-      "emptyTitle": "No registrations yet",
-      "registered": "Registered"
-    },
-    "noAdditional": "No additional members added",
     "notOpen": "Hindi pa Bukas ang Pagpaparehistro",
     "opensOn": "Magbubukas ang pagpaparehistro sa {}",
-    "payment": {
-      "authFailed": "Card authentication failed. Please try another card.",
-      "cardNotReady": "Card form is not ready. Please wait and try again.",
-      "discount": "Discount",
-      "newCard": "Use a new card",
-      "noGateway": "Online payment is not available for this event.",
-      "orderSummary": "Order Summary",
-      "payAndRegister": "Pay {} & Register",
-      "subtotalNote": "subtotal before discounts",
-      "title": "Payment",
-      "total": "Total"
-    },
     "phone": "Telepono",
     "questions": "Mga Katanungan",
     "registeredMembers": "Mga Naka-rehistrong Miyembro",
     "registering": "Nagrerehistro...",
     "registeringAs": "Nagrerehistro bilang",
-    "remaining": "{} remaining",
-    "selectType": "Select a type",
-    "selections": {
-      "title": "Options & Selections"
-    },
-    "soldOut": "Sold out",
     "spotsFilled": "{0} / {1} na puwesto ang napuno",
-    "spotsWord": "spots filled",
-    "status": "Status",
-    "waitlist": {
-      "confirmedBody": "We will email you if a spot opens for",
-      "confirmedTitle": "You are on the waitlist",
-      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
-    },
     "youAreRegistered": "Naka-rehistro ka para sa",
-    "yourInformation": "Iyong Impormasyon",
-    "yourType": "Your registration type"
+    "yourInformation": "Iyong Impormasyon"
   },
   "serving": {
     "allSlotsFilled": "Lahat ng {} slots ay puno na",
@@ -878,16 +716,11 @@
     "viewAndSignUp": "Tingnan at Mag-sign Up"
   },
   "video": {
-    "adminDashboard": "Admin Dashboard",
-    "anonymous": "Anonymous",
     "chat": {
-      "attendees": "{} attendees",
       "changeName": "Palitan ang Pangalan",
-      "emoji": "emoji",
       "enterFullName": "Pakilagay ang buong pangalan",
       "message": "Mensahe",
       "namePlaceholder": "Juan Dela Cruz",
-      "oneAttendee": "1 attendee",
       "openEmojiPicker": "Buksan ang emoji picker",
       "send": "Ipadala",
       "sendMessage": "Magpadala ng Mensahe",
@@ -895,23 +728,19 @@
       "typeMessage": "I-type ang iyong mensahe",
       "updateName": "I-update ang Pangalan"
     },
-    "logo": "logo",
     "nextServiceTime": "Susunod na Oras ng Serbisyo",
-    "sermonVideo": "Sermon Video",
     "serviceEnded": "Natapos na ang kasalukuyang serbisyo."
   },
   "volunteer": {
     "metaDescription": "I-browse ang mga bukas na volunteer position",
     "metaPlanDescription": "Mag-sign up upang magboluntaryo",
     "metaTitle": "Mga Volunteer Opportunity",
-    "noPositions": "Walang available na volunteer position sa kasalukuyan para sa plan na ito.",
-    "volunteer": "Volunteer"
+    "noPositions": "Walang available na volunteer position sa kasalukuyan para sa plan na ito."
   },
   "wrapper": {
     "editAccount": "I-edit ang Account",
     "editChurchProfile": "I-edit ang Profile ng Simbahan",
     "editProfile": "I-edit ang Profile",
-    "logout": "Mag-logout",
-    "profile": "Profile"
+    "logout": "Mag-logout"
   }
 }
