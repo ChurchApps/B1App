@@ -141,7 +141,6 @@
     "goHomepage": "Siirry etusivulle",
     "goMemberPortal": "Siirry jäsenportaaliin",
     "loginAccount": "Kirjaudu tilillesi",
-    "mainNav": "Main navigation",
     "memberPortal": "Jäsenportaali",
     "openNav": "Avaa navigointivalikko",
     "userMenu": "Käyttäjävalikko"
@@ -153,17 +152,13 @@
     "searchAriaLabel": "etsi kuvakkeita",
     "selectIcon": "Valitse kuvake {}"
   },
-  "loadingPage": {
-    "logoAlt": "logo"
-  },
   "login": {
     "login": "Kirjaudu sisään",
     "register": "Rekisteröidy"
   },
   "loginClient": {
     "demoBody": "Tämä on demoympäristö. Kaikki tiedot poistetaan öisin.",
-    "demoCredentials": "Voit kirjautua testiseurakuntaan tunnuksilla demo@b1.church / password .",
-    "demoTitle": "Demo:"
+    "demoCredentials": "Voit kirjautua testiseurakuntaan tunnuksilla demo@b1.church / password ."
   },
   "mobile": {
     "components": {
@@ -219,7 +214,6 @@
       "backToGroups": "Takaisin ryhmiin",
       "backToPlans": "Takaisin suunnitelmiin",
       "backToSermons": "Takaisin saarnoihin",
-      "bottomLine": "Bottom line",
       "call": "Soita",
       "cancel": "Peruuta",
       "checkConnection": "Tarkista yhteytesi ja yritä uudelleen.",
@@ -264,9 +258,7 @@
       "membersTab": "Jäsenet",
       "message": "Viesti",
       "messageActions": "Viestin toiminnot",
-      "messageBlockedAge": "New messages can't be sent to this person because of the church's minimum-age messaging policy.",
       "messageFailed": "Viestin lähetys epäonnistui.",
-      "messagingNotAvailable": "Messaging isn't available for this profile.",
       "mobilePhone": "Matkapuhelin",
       "mustBeSignedIn": "Sinun on oltava kirjautunut sisään lähettääksesi viestejä.",
       "myAssignments": "Omat tehtäväni",
@@ -283,7 +275,6 @@
       "noTeamsAssigned": "Ei vielä määritettyjä tiimejä.",
       "openEmojiPicker": "Avaa emojivalitsin",
       "openLink": "Avaa linkki",
-      "parentQuestion": "Question",
       "pendingResponse": "Odottaa vastausta",
       "personNotFound": "Henkilöä ei löytynyt",
       "personNotFoundDescription": "Tätä profiilia ei löytynyt.",
@@ -336,14 +327,12 @@
       "tabTeams": "Tiimit",
       "team": "Tiimi",
       "text": "Teksti",
-      "thisWeeksLesson": "This week's lesson",
       "typeMessage": "Kirjoita viesti…",
       "unableToLoadMessages": "Viestejä ei voitu ladata.",
       "unableToLoadPlaylist": "Soittolistaa ei voitu ladata",
       "unableToRespond": "Tehtävää ei voitu {}. Yritä uudelleen.",
       "unableToShare": "Ei voida jakaa tällä laitteella",
       "untitledSeries": "Nimetön sarja",
-      "verse": "Verse",
       "viewTeach": "Opeta",
       "watchSermon": "Katso saarna"
     },
@@ -358,10 +347,8 @@
       "add": "Lisää",
       "addEvent": "Lisää tapahtuma",
       "addLink": "Lisää linkki",
-      "addReaction": "Add reaction",
       "added": "Lisätty",
       "allDay": "Koko päivä",
-      "allowRsvps": "Allow RSVPs",
       "announcements": "Ilmoitukset",
       "attendanceSaved": "Osallistuminen tallennettu.",
       "beFirstToShare": "Ole ensimmäinen, joka jakaa jotain ryhmän kanssa.",
@@ -401,7 +388,6 @@
       "fileFallback": "Tiedosto",
       "files": "Tiedostot",
       "groupChat": "Ryhmäkeskustelu",
-      "groupChatTitle": "{} {}",
       "guest": "(Vieras)",
       "leadersCanPost": "Johtajat voivat julkaista ilmoituksia täällä.",
       "linkFallback": "Linkki",
@@ -439,13 +425,6 @@
       "reserveUntil": "Varaa asti",
       "resources": "Resurssit",
       "rooms": "Tilat",
-      "rsvpGoing": "Going",
-      "rsvpMaybe": "Maybe",
-      "rsvpNoResponses": "No responses yet",
-      "rsvpNotGoing": "Can't go",
-      "rsvpQuestion": "Will you attend?",
-      "rsvpResponses": "Responses",
-      "rsvpViewResponses": "View responses",
       "save": "Tallenna",
       "saveAttendance": "Tallenna osallistuminen",
       "saveChanges": "Tallenna muutokset",
@@ -466,7 +445,6 @@
       "upload": "Lataa",
       "uploadFailed": "Lataus epäonnistui.",
       "uploadingProgress": "Ladataan {}… {}%",
-      "url": "URL",
       "usedStorage": "Käytetty {} / 100MB",
       "visibility": "Näkyvyys",
       "weekly": "Viikoittain",
@@ -518,33 +496,6 @@
       "releaseDate": "Julkaisupäivä",
       "startDate": "Alkamispäivä"
     },
-    "requests": {
-      "allDay": "All day",
-      "approved": "Approved",
-      "cancelConfirm": "Cancel this request? This cannot be undone.",
-      "cancelRequest": "Cancel request",
-      "description": "Description",
-      "emptyBody": "Your event and room requests will appear here.",
-      "emptyTitle": "No requests yet",
-      "end": "End",
-      "enterTitle": "Please enter a title.",
-      "eventTitle": "Event title",
-      "failedToSubmit": "Could not submit your request. Please try again.",
-      "keep": "Keep",
-      "myRequests": "My Requests",
-      "noBookingItems": "No rooms or resources selected.",
-      "outcomeBody": "Here is the status of each room and resource you requested.",
-      "outcomeTitle": "Request submitted",
-      "pending": "Pending approval",
-      "recurring": "Repeats",
-      "start": "Start",
-      "statusApproved": "Approved",
-      "statusPending": "Pending",
-      "statusRejected": "Rejected",
-      "submit": "Submit Request",
-      "submitting": "Submitting…",
-      "title": "Request an Event"
-    },
     "screenTitles": {
       "bible": "Raamattu",
       "checkin": "Sisäänkirjautuminen",
@@ -584,12 +535,10 @@
       "couldNotUpdateDisplayName": "Näyttönimeä ei voitu päivittää.",
       "couldNotUpdateEmail": "Sähköpostia ei voitu päivittää.",
       "couldNotUpdatePassword": "Salasanaa ei voitu päivittää.",
-      "currentPassword": "Current password",
       "deleteConversation": "Poista keskustelu",
       "deleteNotification": "Poista ilmoitus",
       "detectingDevice": "Tunnistetaan laitettasi…",
       "displayNameUpdated": "Näyttönimi päivitetty.",
-      "done": "Done",
       "emailLabel": "Sähköposti",
       "emailPlaceholder": "sina@esimerkki.com",
       "emailUpdated": "Sähköposti päivitetty.",
@@ -603,7 +552,6 @@
       "giving": "Lahjoittaminen",
       "keep": "Säilytä",
       "lastNameRegister": "Sukunimi",
-      "leadersOnly": "My Group Leaders and Staff",
       "loading": "Ladataan...",
       "loadingForm": "Ladataan lahjoituslomaketta...",
       "membersOnly": "Vain jäsenet",
@@ -644,7 +592,6 @@
       "signInToCheckIn": "Kirjaudu sisään kirjautuaksesi paikalle",
       "signInToCheckInCta": "Kirjaudu sisään",
       "signInToCheckInMessage": "Kirjaudu sisään kirjautuaksesi jumalanpalvelukseen.",
-      "staffOnly": "Staff Only",
       "tabAccount": "Tili",
       "tabDonate": "Lahjoita",
       "tabHistory": "Historia",
@@ -750,9 +697,6 @@
       "serviceDate": "Palveluspäivä",
       "title": "Palveluajat"
     },
-    "team": {
-      "avatar": "avatar"
-    },
     "upcomingDates": {
       "event": "Tapahtuma",
       "startTime": "Alkamisaika",
@@ -774,74 +718,25 @@
     "completeRegistration": "Viimeistele ilmoittautuminen",
     "confirmed": "Ilmoittautuminen vahvistettu!",
     "continue": "Jatka",
-    "coupon": {
-      "applied": "Code {} applied",
-      "apply": "Apply",
-      "invalid": "This code is not valid.",
-      "label": "Discount code",
-      "remove": "Remove"
-    },
     "errors": {
       "emailRequired": "Sähköposti vaaditaan vieraan rekisteröintiin.",
       "memberNamesRequired": "Etu- ja sukunimi vaaditaan jokaiselta lisäjäseneltä.",
       "namesRequired": "Etunimi ja sukunimi vaaditaan.",
-      "registrationFailed": "Rekisteröinti epäonnistui. Tapahtuma voi olla täynnä tai ilmoittautuminen suljettu.",
-      "selectionFull": "A selected option is sold out. Please adjust quantities.",
-      "typeFull": "That attendee type is sold out. Please choose another.",
-      "typeRequired": "Please select a registration type for each attendee."
+      "registrationFailed": "Rekisteröinti epäonnistui. Tapahtuma voi olla täynnä tai ilmoittautuminen suljettu."
     },
     "event": "Tapahtuma",
     "eventFull": "Tapahtuma täynnä",
-    "free": "Free",
-    "mine": {
-      "balanceDue": "Balance due: {}",
-      "balanceLabel": "Balance due",
-      "cancel": "Cancel Registration",
-      "cancelConfirm": "Are you sure you want to cancel this registration? This action cannot be undone.",
-      "completePayment": "Complete payment",
-      "edit": "Edit",
-      "editTitle": "Edit Registration",
-      "emptyBody": "You haven't registered for any events. Check back soon for upcoming events.",
-      "emptyTitle": "No registrations yet",
-      "registered": "Registered"
-    },
-    "noAdditional": "No additional members added",
     "notOpen": "Ilmoittautuminen ei avoinna",
     "opensOn": "Ilmoittautuminen avautuu {}",
-    "payment": {
-      "authFailed": "Card authentication failed. Please try another card.",
-      "cardNotReady": "Card form is not ready. Please wait and try again.",
-      "discount": "Discount",
-      "newCard": "Use a new card",
-      "noGateway": "Online payment is not available for this event.",
-      "orderSummary": "Order Summary",
-      "payAndRegister": "Pay {} & Register",
-      "subtotalNote": "subtotal before discounts",
-      "title": "Payment",
-      "total": "Total"
-    },
     "phone": "Puhelin",
     "questions": "Kysymykset",
     "registeredMembers": "Rekisteröidyt jäsenet",
     "registering": "Rekisteröidään...",
     "registeringAs": "Rekisteröidytään nimellä",
-    "remaining": "{} remaining",
-    "selectType": "Select a type",
-    "selections": {
-      "title": "Options & Selections"
-    },
-    "soldOut": "Sold out",
     "spotsFilled": "{0} / {1} paikkaa täytetty",
-    "spotsWord": "spots filled",
     "status": "Tila",
-    "waitlist": {
-      "confirmedBody": "We will email you if a spot opens for",
-      "confirmedTitle": "You are on the waitlist",
-      "eventFullJoin": "This event is full. You can join the waitlist and we will notify you if a spot opens."
-    },
     "youAreRegistered": "Olet ilmoittautunut tapahtumaan",
-    "yourInformation": "Sinun tietosi",
-    "yourType": "Your registration type"
+    "yourInformation": "Sinun tietosi"
   },
   "serving": {
     "allSlotsFilled": "Kaikki {} paikkaa täytetty",
@@ -883,7 +778,6 @@
     "chat": {
       "attendees": "{} osallistujaa",
       "changeName": "Vaihda nimi",
-      "emoji": "emoji",
       "enterFullName": "Anna koko nimi",
       "message": "Viesti",
       "namePlaceholder": "Matti Meikäläinen",
@@ -895,7 +789,6 @@
       "typeMessage": "Kirjoita viestisi",
       "updateName": "Päivitä nimi"
     },
-    "logo": "logo",
     "nextServiceTime": "Seuraavan palveluksen aika",
     "sermonVideo": "Saarnavideo",
     "serviceEnded": "Nykyinen palvelus on päättynyt."
