@@ -60,6 +60,8 @@ export const CONNECT_SRC_HOSTS = [
   "https://*.gstatic.com",
   "wss://*.churchapps.org",
   "wss://*.b1.church",
+  // Gallery and file uploads POST straight to the presigned S3 bucket URL.
+  "https://*.amazonaws.com",
   NMI_HOST
 ] as const;
 
