@@ -57,7 +57,14 @@ export const mobileTheme = {
   },
   drawerWidth: 280,
   headerHeight: 56,
-  tabBarHeight: 64
+  tabBarHeight: 64,
+  // Content safe zone. :root sets --safe-* from env(safe-area-inset-*).
+  safe: {
+    top: "var(--safe-top, env(safe-area-inset-top, 0px))",
+    bottom: "var(--safe-bottom, env(safe-area-inset-bottom, 0px))",
+    left: "var(--safe-left, env(safe-area-inset-left, 0px))",
+    right: "var(--safe-right, env(safe-area-inset-right, 0px))"
+  }
 };
 
 export const SCREEN_TITLES: Record<string, string> = new Proxy({} as Record<string, string>, {

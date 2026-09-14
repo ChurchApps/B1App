@@ -237,7 +237,13 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?:
   const mobileThemeGlobalStyles = (
     <GlobalStyles
       styles={{
-        ":root": vars,
+        ":root": {
+          ...vars,
+          "--safe-top": "env(safe-area-inset-top, 0px)",
+          "--safe-bottom": "env(safe-area-inset-bottom, 0px)",
+          "--safe-left": "env(safe-area-inset-left, 0px)",
+          "--safe-right": "env(safe-area-inset-right, 0px)"
+        },
         'html[data-mobile-theme="dark"]': { colorScheme: "dark" },
         'html[data-mobile-theme="light"]': { colorScheme: "light" },
 

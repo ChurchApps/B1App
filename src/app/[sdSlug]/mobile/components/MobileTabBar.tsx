@@ -64,7 +64,7 @@ export const MobileTabBar = ({ links, onMore }: Props) => {
         alignItems: "stretch",
         bgcolor: tc.surface,
         borderTop: `1px solid ${tc.border}`,
-        pb: "env(safe-area-inset-bottom)",
+        pb: mobileTheme.safe.bottom,
         minHeight: `${mobileTheme.tabBarHeight}px`,
         zIndex: (theme) => theme.zIndex.appBar
       }}
