@@ -29,7 +29,7 @@ function MobileHydrationGate({ children }: { children: React.ReactNode }) {
       <Box
         role="status"
         aria-live="polite"
-        aria-label={Locale.label("mobile.loading")}
+        aria-label={Locale.label("mobile.screens.loading")}
         sx={{
           minHeight: "100vh",
           display: "flex",
@@ -46,24 +46,40 @@ function MobileHydrationGate({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+const mobileShellFallback = (
+  <div
+    role="status"
+    aria-live="polite"
+    style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#FFFFFF" }}
+  />
+);
+
 export function MobileClientLayout({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = React.useState(false);
   const [localeReady, setLocaleReady] = React.useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     EnvironmentHelper.init();
     EnvironmentHelper.initLocale().then(() => setLocaleReady(true));
     ErrorHelper.init(
       (): ErrorAppDataInterface => ({
         churchId: UserHelper.currentUserChurch?.church?.id || "",
         userId: UserHelper.user?.id || "",
-        originUrl: typeof window !== "undefined" ? window.location.toString() : "",
+        originUrl: window.location.toString(),
         application: "B1Mobile"
       }),
       () => {}
     );
-  }, []);
+  }, [mounted]);
 
   useHashScroll(localeReady);
+
+  if (!mounted) return mobileShellFallback;
 
   return (
     <CookieProviderWrapper>

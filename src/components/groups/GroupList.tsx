@@ -16,14 +16,13 @@ interface Props {
 
 export const GroupList = (props: Props) => {
   const [groups, setGroups] = useState<GroupInterface[] | null>(null);
-  EnvironmentHelper.init();
 
   useEffect(() => {
     EnvironmentHelper.init();
     ApiHelper.getAnonymous("/groups/public/" + props.churchId + "/label?label=" + encodeURIComponent(props.label), "MembershipApi").then((data: GroupInterface[]) => {
       setGroups(data);
     });
-  }, []);
+  }, [props.churchId, props.label]);
 
 
   if (!groups) return <Loading />;
@@ -32,7 +31,7 @@ export const GroupList = (props: Props) => {
       <Grid container spacing={3}>
         {
           groups?.length > 0
-            ? (groups.map((group) => (<Grid size={{ xs: 4 }}><GroupCard group={group} /></Grid>)))
+            ? (groups.map((group) => (<Grid key={group.id} size={{ xs: 4 }}><GroupCard group={group} /></Grid>)))
             : (<p>{Locale.label("groups.noGroups")}</p>)
         }
       </Grid>
