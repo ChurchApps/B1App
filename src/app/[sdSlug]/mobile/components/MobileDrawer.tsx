@@ -69,7 +69,7 @@ export const MobileDrawer = ({ links, churchName, onNavigate }: Props) => {
   };
 
   return (
-    <Box role="navigation" aria-label={Locale.label("mobile.components.navigation")} sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: tc.surface }}>
+    <Box role="navigation" aria-label={Locale.label("mobile.components.navigation")} sx={{ height: "100%", display: "flex", flexDirection: "column", bgcolor: tc.surface, pt: mobileTheme.safe.top, pb: mobileTheme.safe.bottom }}>
 
       <Box sx={{
         p: `${mobileTheme.spacing.md}px`,

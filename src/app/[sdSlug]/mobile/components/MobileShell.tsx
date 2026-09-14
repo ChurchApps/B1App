@@ -99,11 +99,11 @@ const MobileShellInner = ({ config, children }: Props) => {
         minWidth: 0,
         width: { md: `calc(100% - ${drawerWidth}px)` },
         bgcolor: mobileTheme.colors.background,
-        pb: { xs: `calc(${mobileTheme.tabBarHeight}px + env(safe-area-inset-bottom))`, md: 0 }
+        pb: { xs: `calc(${mobileTheme.tabBarHeight}px + ${mobileTheme.safe.bottom})`, md: 0 }
       }}>
         {isDashboard
-          ? <Box sx={{ height: "env(safe-area-inset-top)" }} />
-          : <Toolbar sx={{ minHeight: `calc(${mobileTheme.headerHeight}px + env(safe-area-inset-top)) !important` }} />}
+          ? <Box sx={{ height: mobileTheme.safe.top }} />
+          : <Toolbar sx={{ minHeight: `calc(${mobileTheme.headerHeight}px + ${mobileTheme.safe.top}) !important` }} />}
         <Box sx={{ maxWidth: 760, mx: "auto", width: "100%" }}>
           {children}
         </Box>
