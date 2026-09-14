@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Peruuta",
     "close": "Sulje",
+    "date": "Date",
     "delete": "Poista",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Odota...",
     "save": "Tallenna",
     "search": "Haku",
+    "submit": "Submit",
     "update": "Päivitä"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Pankkitili lisätty. Vahvista pankkitilisi lahjoituksen tekemiseksi.",
       "company": "Yritys",
       "firstDeposit": "Ensimmäinen talletuskerroin",
+      "holderName": "Account holder name is required.",
       "individual": "Yksityishenkilö",
       "name": "Tilinomistajan nimi",
       "needVerified": "Pankkitilit on vahvistettava ennen lahjoitusten tekemistä. Tilillesi saapuu kaksi pientä talletusta noin 1–3 arkipäivän kuluessa. Sinun on syötettävä nämä talletussummat tilisi vahvistuksen suorittamiseksi valitsemalla vahvistuslinkin pankkitilisi vierestä maksutapakohdan alla.",
@@ -55,6 +80,7 @@
       "makeRecurring": "Tee toistuva lahjoitus",
       "method": "Menetelmä",
       "monthly": "Kuukausittain",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Esikatsele lahjoitus",
       "quarterly": "Neljännesvuosittain",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Lisää pankkitili",
       "addCard": "Lisää kortti",
@@ -107,6 +141,10 @@
       "deleted": "Maksutapa poistettu.",
       "noMethod": "No Method",
       "verify": "Vahvista tili"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Muistiinpanot",
       "startingOn": "Alkaen",
       "total": "Yhteensä",
-      "type": "Lahjoitustyyppi"
+      "type": "Lahjoitustyyppi",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Summa",
@@ -204,14 +243,21 @@
     "confirmDelete": "Haluatko varmasti poistaa tämän kuvan galleriasta?",
     "freeForm": "Vapaa muoto"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "Sähköposti",
     "enterCode": "Syötä vahvistuskoodi",
     "enterCodeInstructions": "Syötä 6-numeroinen koodi, jonka lähetimme juuri sähköpostiisi.",
     "expiredLink": "Nykyinen linkki on vanhentunut.",
     "forgot": "Unohditko salasanan",
+    "goLogin": "Go to Login",
     "login": "Kirjaudu sisään",
     "noAcc": "Eikö sinulla ole tiliä?",
     "noAccountFound": "Tällä sähköpostilla ei löytynyt tiliä. Jatka rekisteröitymällä.",
@@ -224,6 +270,7 @@
     "reset": "Nollaa",
     "resetInstructions": "Kirjoita sähköpostiosoitteesi pyytääksesi salasanan nollausta.",
     "resetPassword": "Nollaa salasana",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Aseta salasana",
     "signIn": "Kirjaudu",
     "signInTitle": "Kirjaudu sisään",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Sisältö",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Markdown-opas"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "kommentti",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Kirjoita muistiinpano."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "Sähköposti",
     "firstName": "Etunimi",
     "lastName": "Sukunimi",
-    "name": "Nimi"
+    "name": "Nimi",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Osoite 1",
@@ -295,9 +371,19 @@
     "documentation": "Dokumentaatio"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Uusi yksityinen viesti",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Yksityinen viesti",
-    "searchForPerson": "Etsi henkilöä"
+    "profile": "Profile",
+    "searchForPerson": "Etsi henkilöä",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }

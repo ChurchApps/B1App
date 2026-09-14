@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "キャンセル",
     "close": "閉じる",
+    "date": "Date",
     "delete": "削除",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "お待ちください...",
     "save": "保存",
     "search": "検索",
+    "submit": "Submit",
     "update": "更新"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "銀行口座が追加されました。寄付をするために銀行口座を確認してください。",
       "company": "会社",
       "firstDeposit": "最初の預金",
+      "holderName": "Account holder name is required.",
       "individual": "個人",
       "name": "口座所有者の名前",
       "needVerified": "寄付をする前に銀行口座を確認する必要があります。口座は約1~3営業日以内に2つの小額の預金を受け取ります。支払い方法セクションの銀行口座の横にある確認リンクを選択して、口座の確認を完了するために、これらの預金額を入力する必要があります。",
@@ -55,6 +80,7 @@
       "makeRecurring": "定期的な寄付をする",
       "method": "方法",
       "monthly": "毎月",
+      "notes": "Notes",
       "orPayWith": "または次の方法で支払う",
       "preview": "寄付をプレビュー",
       "quarterly": "四半期ごと",
@@ -100,6 +126,14 @@
         "captchaRequired": "reCAPTCHA の確認を完了してください"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "銀行口座を追加",
       "addCard": "カードを追加",
@@ -128,7 +162,8 @@
       "notes": "ノート",
       "startingOn": "開始日",
       "total": "合計",
-      "type": "寄付の種類"
+      "type": "寄付の種類",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "量",
@@ -208,14 +243,21 @@
     "confirmDelete": "ギャラリーからこの画像を削除してもよろしいですか?",
     "freeForm": "自由形式"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Google で続行",
     "continueMicrosoft": "Microsoft で続行",
+    "createAccount": "Create an Account",
     "email": "メール",
     "enterCode": "認証コードを入力",
     "enterCodeInstructions": "メールでお送りした6桁のコードを入力してください。",
     "expiredLink": "現在のリンクは期限切れです。",
     "forgot": "パスワードをお忘れですか",
+    "goLogin": "Go to Login",
     "login": "ログイン",
     "noAcc": "アカウントがありませんか?",
     "noAccountFound": "そのメールアドレスのアカウントが見つかりませんでした。続行するには登録してください。",
@@ -228,6 +270,7 @@
     "reset": "リセット",
     "resetInstructions": "メール アドレスを入力して、パスワードのリセットをリクエストしてください。",
     "resetPassword": "パスワードをリセット",
+    "resetSent": "Password reset email sent!",
     "setPassword": "パスワードを設定",
     "signIn": "ログイン",
     "signInTitle": "ログインしてください",
@@ -249,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "コンテンツ",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Markdown ガイド"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "コメント",
@@ -258,15 +316,29 @@
     "notifyOff": "通知オフ",
     "notifyOn": "通知オン",
     "openFile": "ファイルを開く",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "ノートを入力してください。"
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "メール",
     "firstName": "名",
     "lastName": "姓",
-    "name": "名前"
+    "name": "名前",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "住所 1",
@@ -299,9 +371,19 @@
     "documentation": "ドキュメント"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "新しいプライベート メッセージ",
+    "notifications": "Notifications",
     "privateConversation": "プライベートな会話",
     "privateMessage": "プライベート メッセージ",
-    "searchForPerson": "人を検索"
+    "profile": "Profile",
+    "searchForPerson": "人を検索",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }

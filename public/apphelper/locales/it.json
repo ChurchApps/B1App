@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Annulla",
     "close": "Vicino",
+    "date": "Date",
     "delete": "Eliminare",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Attendere prego...",
     "save": "Salva",
     "search": "Ricerca",
+    "submit": "Submit",
     "update": "Aggiornamento"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Conto bancario aggiunto. ",
       "company": "Azienda",
       "firstDeposit": "Primo deposito",
+      "holderName": "Account holder name is required.",
       "individual": "Individuale",
       "name": "Nome del titolare",
       "needVerified": "I conti bancari dovranno essere verificati prima di effettuare qualsiasi donazione. ",
@@ -55,6 +80,7 @@
       "makeRecurring": "Fai una donazione ricorrente",
       "method": "Metodo",
       "monthly": "Mensile",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Anteprima della donazione",
       "quarterly": "Trimestrale",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Aggiungi conto bancario",
       "addCard": "Aggiungi carta",
@@ -107,6 +141,10 @@
       "deleted": "Metodo di pagamento eliminato.",
       "noMethod": "No Method",
       "verify": "Verifica Account"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Appunti",
       "startingOn": "A partire",
       "total": "Totale",
-      "type": "Tipo di donazione"
+      "type": "Tipo di donazione",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Quantità",
@@ -204,14 +243,21 @@
     "confirmDelete": "Sei sicuro di voler eliminare questa immagine dalla galleria?",
     "freeForm": "Forma libera"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "E-mail",
     "enterCode": "Inserisci il codice di verifica",
     "enterCodeInstructions": "Inserisci il codice a 6 cifre che ti abbiamo appena inviato via e-mail.",
     "expiredLink": "Il link attuale è scaduto.",
     "forgot": "Ha dimenticato la password",
+    "goLogin": "Go to Login",
     "login": "Login",
     "noAcc": "Non hai un account?",
     "noAccountFound": "Nessun account trovato con questa e-mail. Registrati per continuare.",
@@ -224,6 +270,7 @@
     "reset": "Ripristina",
     "resetInstructions": "Inserisci il tuo indirizzo email per richiedere la reimpostazione della password.",
     "resetPassword": "Resetta la password",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Impostare la password",
     "signIn": "Registrazione",
     "signInTitle": "Per favore accedi",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Contenuto",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Guida al ribasso"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "commento",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Inserisci una nota."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "E-mail",
     "firstName": "Nome di battesimo",
     "lastName": "Cognome",
-    "name": "Nome"
+    "name": "Nome",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Indirizzo Linea 1",
@@ -295,9 +371,19 @@
     "documentation": "Documentazione"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Nuovo messaggio privato",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Messaggio privato",
-    "searchForPerson": "Cerca una persona"
+    "profile": "Profile",
+    "searchForPerson": "Cerca una persona",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }

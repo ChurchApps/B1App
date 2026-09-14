@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Cancelar",
     "close": "Fechar",
+    "date": "Date",
     "delete": "Excluir",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Por favor, aguarde...",
     "save": "Salvar",
     "search": "Procurar",
+    "submit": "Submit",
     "update": "Atualizar"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Conta bancária adicionada. ",
       "company": "Empresa",
       "firstDeposit": "Primeiro Depósito",
+      "holderName": "Account holder name is required.",
       "individual": "Individual",
       "name": "nome do titular da conta",
       "needVerified": "As contas bancárias precisarão ser verificadas antes de fazer qualquer doação. ",
@@ -55,6 +80,7 @@
       "makeRecurring": "Faça uma doação recorrente",
       "method": "Método",
       "monthly": "Por mês",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Visualizar doação",
       "quarterly": "Trimestral",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Adicionar conta bancária",
       "addCard": "Adicionar cartão",
@@ -107,6 +141,10 @@
       "deleted": "Forma de pagamento excluída.",
       "noMethod": "No Method",
       "verify": "Verificar conta"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Notas",
       "startingOn": "Começando",
       "total": "Total",
-      "type": "Tipo de doação"
+      "type": "Tipo de doação",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Quantia",
@@ -204,14 +243,21 @@
     "confirmDelete": "Tem certeza de que deseja excluir esta imagem da galeria?",
     "freeForm": "Forma livre"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "E-mail",
     "enterCode": "Digite o código de verificação",
     "enterCodeInstructions": "Digite o código de 6 dígitos que acabamos de enviar por e-mail.",
     "expiredLink": "O link atual expirou.",
     "forgot": "Esqueceu sua senha",
+    "goLogin": "Go to Login",
     "login": "Conecte-se",
     "noAcc": "Não tem uma conta?",
     "noAccountFound": "Nenhuma conta foi encontrada com esse e-mail. Por favor, registre-se para continuar.",
@@ -224,6 +270,7 @@
     "reset": "Reiniciar",
     "resetInstructions": "Digite seu endereço de e-mail para solicitar uma redefinição de senha.",
     "resetPassword": "Redefinir senha",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Configurar senha",
     "signIn": "Entrar",
     "signInTitle": "Por favor, inscreva-se",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Contente",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Guia de redução"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "Comente",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Por favor, insira uma observação."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "E-mail",
     "firstName": "Primeiro nome",
     "lastName": "Sobrenome",
-    "name": "Nome"
+    "name": "Nome",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Endereço Linha 1",
@@ -295,9 +371,19 @@
     "documentation": "Documentação"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Nova Mensagem Privada",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Mensagem privada",
-    "searchForPerson": "Procure uma pessoa"
+    "profile": "Profile",
+    "searchForPerson": "Procure uma pessoa",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }

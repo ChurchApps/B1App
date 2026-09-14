@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Prekliči",
     "close": "Zapri",
+    "date": "Date",
     "delete": "Izbriši",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Prosim čakajte...",
     "save": "Shrani",
     "search": "Iskanje",
+    "submit": "Submit",
     "update": "Posodobi"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Bančni račun dodan. Preverite svoj bančni račun, da lahko darujete.",
       "company": "Podjetje",
       "firstDeposit": "Prva pologu",
+      "holderName": "Account holder name is required.",
       "individual": "Oseba",
       "name": "Ime imetnika računa",
       "needVerified": "Bančni računi se morajo preveriti pred darovanjem. Vaš račun bo prejel dve majhni vplati v približno 1-3 delovnih dneh. Vnesti morate zneska teh vlog, da dokončate preverjanje računa z izbiro povezave za preverjanje računa ob vašem bančnem računu v razdelku način plačila.",
@@ -55,6 +80,7 @@
       "makeRecurring": "Naredi ponavljajočo se donacijo",
       "method": "Metoda",
       "monthly": "Mesečno",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Predogled donacije",
       "quarterly": "Četrtletno",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Dodaj bančni račun",
       "addCard": "Dodaj kartico",
@@ -107,6 +141,10 @@
       "deleted": "Način plačila izbrisan.",
       "noMethod": "No Method",
       "verify": "Preveri račun"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Opombe",
       "startingOn": "Začenši od",
       "total": "Skupaj",
-      "type": "Vrsta donacije"
+      "type": "Vrsta donacije",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Znesek",
@@ -204,14 +243,21 @@
     "confirmDelete": "Ali ste prepričani, da želite izbrisati to sliko iz galerije?",
     "freeForm": "Prosta oblika"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "Email",
     "enterCode": "Vnesite potrditveno kodo",
     "enterCodeInstructions": "Vnesite 6-mestno kodo, ki smo vam jo pravkar poslali po e-pošti.",
     "expiredLink": "Trenutna povezava je potekla.",
     "forgot": "Ste pozabili geslo",
+    "goLogin": "Go to Login",
     "login": "Prijava",
     "noAcc": "Nimate računa?",
     "noAccountFound": "Račun s tem e-poštnim naslovom ni bil najden. Registrirajte se za nadaljevanje.",
@@ -224,6 +270,7 @@
     "reset": "Ponastaviti",
     "resetInstructions": "Vnesite svoj e-naslov, da zahtevate ponastavitev gesla.",
     "resetPassword": "Ponastaviti geslo",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Nastavi geslo",
     "signIn": "Prijava",
     "signInTitle": "Prosim prijavite se",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Vsebina",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Vodnik Markdown"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "komentar",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Prosim vnesite opombo."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "Email",
     "firstName": "Ime",
     "lastName": "Priimek",
-    "name": "Ime"
+    "name": "Ime",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Naslov - vrstica 1",
@@ -295,9 +371,19 @@
     "documentation": "Dokumentacija"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Novo zasebno sporočilo",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Zasebno sporočilo",
-    "searchForPerson": "Iskanje osebe"
+    "profile": "Profile",
+    "searchForPerson": "Iskanje osebe",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }
