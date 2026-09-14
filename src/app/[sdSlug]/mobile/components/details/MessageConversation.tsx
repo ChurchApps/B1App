@@ -642,7 +642,7 @@ export const MessageConversation = ({ id, config }: Props) => {
             borderTop: `1px solid ${tc.border}`,
             px: `${mobileTheme.spacing.md}px`,
             pt: "14px",
-            pb: "calc(14px + env(safe-area-inset-bottom))",
+            pb: `calc(14px + ${mobileTheme.safe.bottom})`,
             textAlign: "center"
           }}
         >
@@ -661,7 +661,7 @@ export const MessageConversation = ({ id, config }: Props) => {
             borderTop: `1px solid ${tc.border}`,
             px: "10px",
             pt: "10px",
-            pb: "calc(10px + env(safe-area-inset-bottom))",
+            pb: `calc(10px + ${mobileTheme.safe.bottom})`,
             display: "flex",
             alignItems: "center",
             gap: "8px"

@@ -97,7 +97,7 @@ export const MobileAppBar = ({ drawerWidth, onAvatarClick }: Props) => {
         borderBottom: `1px solid ${tc.border}`,
         width: { md: `calc(100% - ${drawerWidth}px)` },
         ml: { md: `${drawerWidth}px` },
-        pt: "env(safe-area-inset-top)",
+        pt: mobileTheme.safe.top,
         zIndex: (theme) => theme.zIndex.drawer - 1
       }}
     >
