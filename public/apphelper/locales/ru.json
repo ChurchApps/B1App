@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Отмена",
     "close": "Закрывать",
+    "date": "Date",
     "delete": "Удалить",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Пожалуйста, подождите...",
     "save": "Сохранять",
     "search": "Поиск",
+    "submit": "Submit",
     "update": "Обновлять"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Добавлен банковский счет. ",
       "company": "Компания",
       "firstDeposit": "Первый депозит",
+      "holderName": "Account holder name is required.",
       "individual": "Индивидуальный",
       "name": "имя владельца счета",
       "needVerified": "Банковские счета необходимо будет подтвердить, прежде чем делать какие-либо пожертвования. ",
@@ -55,6 +80,7 @@
       "makeRecurring": "Сделайте регулярное пожертвование",
       "method": "Метод",
       "monthly": "Ежемесячно",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Предварительный просмотр пожертвования",
       "quarterly": "Ежеквартальный",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Добавить банковский счет",
       "addCard": "Добавить карту",
@@ -107,6 +141,10 @@
       "deleted": "Способ оплаты удален.",
       "noMethod": "No Method",
       "verify": "подтвердить учетную запись"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Примечания",
       "startingOn": "Начиная с",
       "total": "Общий",
-      "type": "Тип пожертвования"
+      "type": "Тип пожертвования",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Количество",
@@ -204,14 +243,21 @@
     "confirmDelete": "Вы уверены, что хотите удалить это изображение из галереи?",
     "freeForm": "Свободная форма"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "Электронная почта",
     "enterCode": "Введите код подтверждения",
     "enterCodeInstructions": "Введите 6-значный код, который мы только что отправили вам по электронной почте.",
     "expiredLink": "Текущая ссылка устарела.",
     "forgot": "Забыли пароль",
+    "goLogin": "Go to Login",
     "login": "Авторизоваться",
     "noAcc": "Нет учетной записи?",
     "noAccountFound": "Учетная запись с таким адресом электронной почты не найдена. Пожалуйста, зарегистрируйтесь, чтобы продолжить.",
@@ -224,6 +270,7 @@
     "reset": "Перезагрузить",
     "resetInstructions": "Введите свой адрес электронной почты, чтобы запросить сброс пароля.",
     "resetPassword": "Сброс пароля",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Установка пароля",
     "signIn": "Войти",
     "signInTitle": "Пожалуйста войдите",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Содержание",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Руководство по уценке"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "комментарий",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Пожалуйста, введите примечание."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "Электронная почта",
     "firstName": "Имя",
     "lastName": "Фамилия",
-    "name": "Имя"
+    "name": "Имя",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Адресная строка 1",
@@ -295,9 +371,19 @@
     "documentation": "Документация"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Новое личное сообщение",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Личное сообщение",
-    "searchForPerson": "Поиск человека"
+    "profile": "Profile",
+    "searchForPerson": "Поиск человека",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }

@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "रद्द करना",
     "close": "बंद करना",
+    "date": "Date",
     "delete": "मिटाना",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "कृपया प्रतीक्षा करें...",
     "save": "बचाना",
     "search": "खोज",
+    "submit": "Submit",
     "update": "अद्यतन"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "बैंक खाता जोड़ा गया. ",
       "company": "कंपनी",
       "firstDeposit": "पहला जमा",
+      "holderName": "Account holder name is required.",
       "individual": "व्यक्ति",
       "name": "खाता धारक का नाम",
       "needVerified": "कोई भी दान देने से पहले बैंक खातों को सत्यापित करना होगा। ",
@@ -55,6 +80,7 @@
       "makeRecurring": "आवर्ती दान करें",
       "method": "तरीका",
       "monthly": "महीने के",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "दान का पूर्वावलोकन करें",
       "quarterly": "त्रैमासिक",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "बैंक खाता जोड़ें",
       "addCard": "कार्ड जोड़ें",
@@ -107,6 +141,10 @@
       "deleted": "भुगतान विधि हटा दी गई.",
       "noMethod": "No Method",
       "verify": "खाता सत्यापित करें"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "टिप्पणियाँ",
       "startingOn": "शुरू",
       "total": "कुल",
-      "type": "दान का प्रकार"
+      "type": "दान का प्रकार",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "मात्रा",
@@ -204,14 +243,21 @@
     "confirmDelete": "क्या आप वाकई इस छवि को गैलरी से हटाना चाहते हैं?",
     "freeForm": "मुफ्त फॉर्म"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "ईमेल",
     "enterCode": "सत्यापन कोड दर्ज करें",
     "enterCodeInstructions": "6 अंकों का वह कोड दर्ज करें जो हमने आपको अभी ईमेल किया है।",
     "expiredLink": "वर्तमान लिंक की समय सीमा समाप्त हो गई है।",
     "forgot": "पासवर्ड भूल गए",
+    "goLogin": "Go to Login",
     "login": "लॉग इन करें",
     "noAcc": "खाता नहीं है?",
     "noAccountFound": "उस ईमेल से कोई खाता नहीं मिला। जारी रखने के लिए कृपया पंजीकरण करें।",
@@ -224,6 +270,7 @@
     "reset": "रीसेट",
     "resetInstructions": "पासवर्ड रीसेट का अनुरोध करने के लिए अपना ईमेल पता दर्ज करें।",
     "resetPassword": "पासवर्ड रीसेट",
+    "resetSent": "Password reset email sent!",
     "setPassword": "सांकेतिक शब्द लगना",
     "signIn": "दाखिल करना",
     "signInTitle": "साइन इन करें",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "सामग्री",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "मार्कडाउन गाइड"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "टिप्पणी",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "कृपया एक नोट दर्ज करें."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "ईमेल",
     "firstName": "पहला नाम",
     "lastName": "उपनाम",
-    "name": "नाम"
+    "name": "नाम",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "पता पंक्ति 1",
@@ -295,9 +371,19 @@
     "documentation": "दस्तावेज़ीकरण"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "नया निजी संदेश",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "निजी संदेश",
-    "searchForPerson": "किसी व्यक्ति को खोजें"
+    "profile": "Profile",
+    "searchForPerson": "किसी व्यक्ति को खोजें",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }

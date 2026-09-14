@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Kanselahin",
     "close": "Isara",
+    "date": "Date",
     "delete": "Tanggalin",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Mangyaring maghintay...",
     "save": "I-save",
     "search": "Maghanap",
+    "submit": "Submit",
     "update": "Update"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Idinagdag ang bank account. ",
       "company": "kumpanya",
       "firstDeposit": "Unang Deposito",
+      "holderName": "Account holder name is required.",
       "individual": "Indibidwal",
       "name": "Pangalan ng May-ari ng Account",
       "needVerified": "Ang mga bank account ay kailangang ma-verify bago gumawa ng anumang mga donasyon. ",
@@ -55,6 +80,7 @@
       "makeRecurring": "Gumawa ng Paulit-ulit na Donasyon",
       "method": "Pamamaraan",
       "monthly": "Buwan-buwan",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Silipin ang Donasyon",
       "quarterly": "quarterly",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Magdagdag ng Bank Account",
       "addCard": "Magdagdag ng Card",
@@ -107,6 +141,10 @@
       "deleted": "Ang paraan ng pagbabayad ay tinanggal.",
       "noMethod": "No Method",
       "verify": "I-verify ang Account"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Mga Tala",
       "startingOn": "Simula Sa",
       "total": "Kabuuan",
-      "type": "Uri ng Donasyon"
+      "type": "Uri ng Donasyon",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Halaga",
@@ -204,14 +243,21 @@
     "confirmDelete": "Sigurado ka bang gusto mong tanggalin ang larawang ito mula sa gallery?",
     "freeForm": "Libreng Form"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "Email",
     "enterCode": "Ipasok ang Verification Code",
     "enterCodeInstructions": "Ipasok ang 6-digit na code na kaka-email lang namin sa iyo.",
     "expiredLink": "Ang kasalukuyang link ay nag-expire na.",
     "forgot": "Nakalimutan ang password",
+    "goLogin": "Go to Login",
     "login": "Mag log in",
     "noAcc": "Wala ka pang account?",
     "noAccountFound": "Walang account na natagpuan sa email na iyon. Mangyaring magparehistro upang magpatuloy.",
@@ -224,6 +270,7 @@
     "reset": "I-reset",
     "resetInstructions": "Ilagay ang iyong email address upang humiling ng pag-reset ng password.",
     "resetPassword": "I-reset ang Password",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Itakda ang Password",
     "signIn": "Mag-sign In",
     "signInTitle": "Mangyaring Mag-sign In",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Nilalaman",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Gabay sa Markdown"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "komento",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Mangyaring maglagay ng tala."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "Email",
     "firstName": "Pangalan",
     "lastName": "Huling pangalan",
-    "name": "Pangalan"
+    "name": "Pangalan",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Linya ng Address 1",
@@ -295,9 +371,19 @@
     "documentation": "Dokumentasyon"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Bagong Pribadong Mensahe",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Pribadong Mensahe",
-    "searchForPerson": "Maghanap ng isang tao"
+    "profile": "Profile",
+    "searchForPerson": "Maghanap ng isang tao",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }
