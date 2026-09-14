@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import withSerwistInit from '@serwist/next';
+import { splitChunks } from './webpackSplitChunks.mjs';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -59,42 +60,7 @@ const nextConfig = {
       if (!isServer) {
         config.optimization = {
           ...config.optimization,
-          splitChunks: {
-            chunks: 'all',
-            cacheGroups: {
-              default: false,
-              vendors: false,
-              // Vendor code splitting
-              vendor: {
-                name: 'vendor',
-                chunks: 'all',
-                test: /node_modules/,
-                priority: 20
-              },
-              // MUI components
-              mui: {
-                name: 'mui',
-                test: /[\\/]node_modules[\\/]@mui[\\/]/,
-                chunks: 'all',
-                priority: 30
-              },
-              // ChurchApps packages
-              churchapps: {
-                name: 'churchapps',
-                test: /[\\/]node_modules[\\/]@churchapps[\\/]/,
-                chunks: 'all',
-                priority: 25
-              },
-              // Common components
-              common: {
-                name: 'common',
-                minChunks: 2,
-                priority: 10,
-                reuseExistingChunk: true,
-                enforce: true
-              }
-            }
-          }
+          splitChunks
         };
       }
 
