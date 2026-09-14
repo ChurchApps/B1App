@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Отказ",
     "close": "Затвори",
+    "date": "Date",
     "delete": "Избриши",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Молим сачекајте...",
     "save": "Сачувај",
     "search": "Претрага",
+    "submit": "Submit",
     "update": "Ажурирај"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Банкарски рачун је додан. Потврдите свој банкарски рачун да бисте направили донацију.",
       "company": "Компанија",
       "firstDeposit": "Прва уплата",
+      "holderName": "Account holder name is required.",
       "individual": "Физичко лице",
       "name": "Име власника рачуна",
       "needVerified": "Банкарски рачуни мораће бити потврђени пре него што направите донацију. Ваш рачун ће добити две мале уплате за приблизно 1-3 радна дана. Мораћете унети износе тих уплата да бисте довршили верификацију рачуна кликом на везу за верификацију рачуна поред вашег банкарског рачуна у одељку начин плаћања.",
@@ -55,6 +80,7 @@
       "makeRecurring": "Направи периодичну донацију",
       "method": "Метод",
       "monthly": "Месечно",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Преглед донације",
       "quarterly": "Тромесечно",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Додај банкарски рачун",
       "addCard": "Додај картицу",
@@ -107,6 +141,10 @@
       "deleted": "Начин плаћања је избрисан.",
       "noMethod": "No Method",
       "verify": "Потврди рачун"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Напомене",
       "startingOn": "Почињући од",
       "total": "Укупно",
-      "type": "Врста донације"
+      "type": "Врста донације",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Износ",
@@ -204,14 +243,21 @@
     "confirmDelete": "Да ли сте сигурни да желите избрисати ову слику из галерије?",
     "freeForm": "Слободна форма"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "Email",
     "enterCode": "Унесите верификациони код",
     "enterCodeInstructions": "Унесите 6-цифрени код који смо вам управо послали е-поштом.",
     "expiredLink": "Тренутна веза је истекла.",
     "forgot": "Заборављена лозинка",
+    "goLogin": "Go to Login",
     "login": "Пријава",
     "noAcc": "Немате налог?",
     "noAccountFound": "Налог са том е-поштом није пронађен. Региструјте се за наставак.",
@@ -224,6 +270,7 @@
     "reset": "Ресетуј",
     "resetInstructions": "Унесите своју имејл адресу да бисте затражили ресетовање лозинке.",
     "resetPassword": "Ресетуј лозинку",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Постави лозинку",
     "signIn": "Пријава",
     "signInTitle": "Молим пријавите се",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Садржај",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Markdown водич"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "коментар",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Молим унесите напомену."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "Email",
     "firstName": "Име",
     "lastName": "Презиме",
-    "name": "Име"
+    "name": "Име",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Адреса - линија 1",
@@ -295,9 +371,19 @@
     "documentation": "Документација"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Нова приватна порука",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Приватна порука",
-    "searchForPerson": "Претрага особе"
+    "profile": "Profile",
+    "searchForPerson": "Претрага особе",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }

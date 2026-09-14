@@ -1,12 +1,36 @@
 {
+  "b1Share": {
+    "comment": "Comment",
+    "commentPlaceholder": "Include a comment with your post.",
+    "contentShared": "Content Shared",
+    "group": "Group",
+    "sharingToGroup": "Sharing {} to B1 Group",
+    "validate": {
+      "addComment": "Please add a comment.",
+      "loginFirst": "Please login first.",
+      "notMember": "You are not currently a member of any groups on B1.",
+      "selectGroup": "Please select a group."
+    }
+  },
   "common": {
+    "add": "Add",
     "cancel": "Zrušiť",
     "close": "Zatvoriť",
+    "date": "Date",
     "delete": "Odstrániť",
+    "edit": "Edit",
+    "error": "Error",
     "pleaseWait": "Prosím čakajte...",
     "save": "Uložiť",
     "search": "Hľadať",
+    "submit": "Submit",
     "update": "Aktualizovať"
+  },
+  "createPerson": {
+    "addNewPerson": "Add a New Person",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name"
   },
   "donation": {
     "bankForm": {
@@ -14,6 +38,7 @@
       "added": "Bankový účet pridaný. Overte si bankový účet, aby ste mohli darovať.",
       "company": "Spoločnosť",
       "firstDeposit": "Prvý vklad",
+      "holderName": "Account holder name is required.",
       "individual": "Jednotlivec",
       "name": "Meno majiteľa účtu",
       "needVerified": "Bankové účty budú musieť byť overené predtým, ako budete môcť darovať. Váš účet dostane dva malé vklady približne 1-3 pracovné dni. Budete musieť zadať sumy týchto vkladov, aby ste dokončili overenie vášho účtu výberom odkazu na overenie účtu vedľa vášho bankového účtu v časti spôsob platby.",
@@ -55,6 +80,7 @@
       "makeRecurring": "Urobiť pravideľnú donáciu",
       "method": "Metóda",
       "monthly": "Mesačne",
+      "notes": "Notes",
       "orPayWith": "Or pay with",
       "preview": "Náhľad donácie",
       "quarterly": "Štvrťročne",
@@ -100,6 +126,14 @@
         "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
+    "page": {
+      "amount": "Amount",
+      "batch": "Batch",
+      "date": "Date",
+      "fund": "Fund",
+      "method": "Method",
+      "willAppear": "Donations will appear once a donation has been entered."
+    },
     "paymentMethods": {
       "addBank": "Pridať bankový účet",
       "addCard": "Pridať kartu",
@@ -107,6 +141,10 @@
       "deleted": "Spôsob platby odstránený.",
       "noMethod": "No Method",
       "verify": "Overiť účet"
+    },
+    "paypal": {
+      "approved": "PayPal payment approved. Choose Donate to finish your gift.",
+      "captchaRequired": "Please complete the reCAPTCHA verification"
     },
     "paystack": {
       "emailRequired": "An email address is required to pay with Paystack.",
@@ -124,7 +162,8 @@
       "notes": "Poznámky",
       "startingOn": "Začína dňa",
       "total": "Celkom",
-      "type": "Typ donácie"
+      "type": "Typ donácie",
+      "weekly": "Weekly"
     },
     "recurring": {
       "amount": "Suma",
@@ -204,14 +243,21 @@
     "confirmDelete": "Ste si istí, že chcete odstrániť tento obrázok z galérie?",
     "freeForm": "Voľná forma"
   },
+  "iconPicker": {
+    "iconsAvailable": "icons available",
+    "matchingResults": "matching results",
+    "search": "Search icons..."
+  },
   "login": {
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
+    "createAccount": "Create an Account",
     "email": "Email",
     "enterCode": "Zadajte overovací kód",
     "enterCodeInstructions": "Zadajte 6-miestny kód, ktorý sme vám práve poslali e-mailom.",
     "expiredLink": "Aktuálny odkaz vypršal.",
     "forgot": "Zabudli ste heslo",
+    "goLogin": "Go to Login",
     "login": "Prihlásiť sa",
     "noAcc": "Nemáte účet?",
     "noAccountFound": "Pre tento e-mail sa nenašiel žiadny účet. Pokračujte registráciou.",
@@ -224,6 +270,7 @@
     "reset": "Resetovať",
     "resetInstructions": "Zadajte svoju e-mailovú adresu a požiadajte o resetovanie hesla.",
     "resetPassword": "Resetovať heslo",
+    "resetSent": "Password reset email sent!",
     "setPassword": "Nastaviť heslo",
     "signIn": "Prihlásiť sa",
     "signInTitle": "Prosím prihláste sa",
@@ -245,7 +292,22 @@
   },
   "markdownEditor": {
     "content": "Obsah",
+    "markdownEditor": "Markdown Editor",
     "markdownGuide": "Sprievodca Markdown"
+  },
+  "month": {
+    "april": "April",
+    "august": "August",
+    "december": "December",
+    "february": "February",
+    "january": "January",
+    "july": "July",
+    "june": "June",
+    "march": "March",
+    "may": "May",
+    "november": "November",
+    "october": "October",
+    "september": "September"
   },
   "notes": {
     "comment": "komentár",
@@ -254,15 +316,29 @@
     "notifyOff": "Notify Off",
     "notifyOn": "Notify On",
     "openFile": "Open file",
+    "startConversation": "Start a conversation",
     "validate": {
       "content": "Prosím zadajte poznámku."
-    }
+    },
+    "viewAll": "View all"
   },
   "person": {
     "email": "Email",
     "firstName": "Krstné meno",
     "lastName": "Priezvisko",
-    "name": "Meno"
+    "name": "Meno",
+    "noRec": "Don't have a person record?",
+    "person": "Person",
+    "years": "years"
+  },
+  "reporting": {
+    "detailed": "Detailed Report",
+    "downloadOptions": "Download Options",
+    "noData": "There is no data to display.",
+    "runReport": "Run Report",
+    "sampleTemplate": "Sample Word Template",
+    "summary": "Summary",
+    "useFilter": "Use the filter to run the report."
   },
   "selectChurch": {
     "address1": "Adresa - riadok 1",
@@ -295,9 +371,19 @@
     "documentation": "Dokumentácia"
   },
   "wrapper": {
+    "chatWith": "Chat with",
+    "deleteChurch": "Delete",
+    "logout": "Logout",
+    "messages": "Messages",
     "newPrivateMessage": "Nová súkromná správa",
+    "notifications": "Notifications",
     "privateConversation": "Private Conversation",
     "privateMessage": "Súkromná správa",
-    "searchForPerson": "Hľadať osobu"
+    "profile": "Profile",
+    "searchForPerson": "Hľadať osobu",
+    "support": "Support",
+    "sureRemoveChurch": "Are you sure you wish to delete this church? You no longer will be a member of {}.",
+    "switchApp": "Switch App",
+    "switchChurch": "Switch Church"
   }
 }
