@@ -36,34 +36,9 @@ export const STYLE_SRC_HOSTS = ["https://fonts.googleapis.com", "https://cdnjs.c
 // Font Awesome CSS loads its webfonts from the same CDN origins.
 export const FONT_SRC_HOSTS = ["https://fonts.gstatic.com", "https://storage.googleapis.com", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com"] as const;
 
-export const CONNECT_SRC_HOSTS = [
-  "https://*.churchapps.org",
-  "https://*.b1.church",
-  "https://*.lessons.church",
-  "https://lessons.church",
-  "https://www.google-analytics.com",
-  "https://*.google-analytics.com",
-  "https://analytics.google.com",
-  "https://*.analytics.google.com",
-  "https://www.googletagmanager.com",
-  "https://*.googletagmanager.com",
-  "https://*.ingest.us.sentry.io",
-  "https://*.sentry.io",
-  "https://*.stripe.com",
-  "https://api.youversion.com",
-  "https://*.youversion.com",
-  "https://www.google.com",
-  "https://www.gstatic.com",
-  "https://maps.googleapis.com",
-  "https://maps.gstatic.com",
-  "https://*.googleapis.com",
-  "https://*.gstatic.com",
-  "wss://*.churchapps.org",
-  "wss://*.b1.church",
-  // Gallery and file uploads POST straight to the presigned S3 bucket URL.
-  "https://*.amazonaws.com",
-  NMI_HOST
-] as const;
+// Church customJS may run any third-party widget (giving launchers, chat), and those
+// call home over fetch/XHR; a host allowlist just breaks them one vendor at a time.
+export const CONNECT_SRC_HOSTS = ["https:", "wss:"] as const;
 
 export const FRAME_ANCESTORS = [
   "'self'",
