@@ -52,6 +52,86 @@ test.describe("Mobile donate", () => {
   });
 });
 
+// Mixed-currency giving: each gift keeps its own currency in the history list, but the Year-to-Date and
+// period totals are converted into the church currency (USD on Grace) with the Api's own exchange rates.
+// The expected figures are rebuilt from the Api's gifts + read-only rate table, so they follow the live rate.
+test.describe.serial("Mobile donate mixed-currency totals", () => {
+  const MAIN_API = process.env.API_BASE || "http://localhost:8084";
+  const DEMO_PERSON_ID = "PER00000082";
+  const CONVERTED_NOTE = "Converted at current exchange rates";
+  let batchId: string;
+  let expectedYtd: string;
+  let expectedAllTime: string;
+  let rawYtd: string;
+
+  const apiAuth = async (ctx: Awaited<ReturnType<typeof request.newContext>>) => {
+    const res = await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
+    const body = await res.json();
+    const uc = (body.userChurches || []).find((c: any) => c.church?.id === "CHU00000001");
+    return { headers: { Authorization: `Bearer ${uc.jwt}` } };
+  };
+
+  const usd = (value: number) => "$ " + value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  test.beforeAll(async () => {
+    const ctx = await request.newContext();
+    const auth = await apiAuth(ctx);
+    // Local calendar date, so the gift lands in the same year the page's year-to-date filter uses.
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    const batchRes = await ctx.post(`${MAIN_API}/giving/donationbatches`, { ...auth, data: [{ name: "Zacchaeus Euro Gift", batchDate: today }] });
+    batchId = (await batchRes.json())[0].id;
+    const donationRes = await ctx.post(`${MAIN_API}/giving/donations`, {
+      ...auth,
+      data: [{ batchId, personId: DEMO_PERSON_ID, donationDate: today, amount: 100, currency: "eur", method: "Card", status: "complete" }]
+    });
+    const donationId = (await donationRes.json())[0].id;
+    await ctx.post(`${MAIN_API}/giving/funddonations`, { ...auth, data: [{ donationId, fundId: "FUN00000001", amount: 100 }] });
+
+    const table = await (await ctx.get(`${MAIN_API}/giving/donations/exchange-rates`, auth)).json();
+    expect(table.base).toBe("usd");
+    expect(table.rates?.EUR, "Api could not load EUR rates from frankfurter").toBeGreaterThan(0);
+
+    const gifts: any[] = await (await ctx.get(`${MAIN_API}/giving/donations/my`, auth)).json();
+    const year = new Date().getFullYear();
+    const amountOf = (d: any) => Number(d.fund?.amount ?? d.amount ?? 0);
+    const converted = (d: any) => ((d.currency || "usd").toLowerCase() === "usd" ? amountOf(d) : Number((amountOf(d) / table.rates[d.currency.toUpperCase()]).toFixed(2)));
+    const thisYear = gifts.filter((d) => new Date(d.donationDate).getFullYear() === year);
+    expectedYtd = usd(thisYear.reduce((sum, d) => sum + converted(d), 0));
+    rawYtd = usd(thisYear.reduce((sum, d) => sum + amountOf(d), 0));
+    expectedAllTime = usd(gifts.reduce((sum, d) => sum + converted(d), 0));
+    expect(expectedYtd).not.toBe(rawYtd);
+    await ctx.dispose();
+  });
+
+  test.afterAll(async () => {
+    if (!batchId) return;
+    const ctx = await request.newContext();
+    const auth = await apiAuth(ctx);
+    await ctx.delete(`${MAIN_API}/giving/donationbatches/${batchId}`, auth);
+    await ctx.dispose();
+  });
+
+  test("Overview year-to-date total converts the euro gift and says so", async ({ page }) => {
+    await page.goto("/mobile/donate");
+    const overviewTab = page.getByRole("tab", { name: /Overview/i });
+    await overviewTab.waitFor({ state: "visible", timeout: 15000 });
+    await overviewTab.click();
+    await expect(page.getByTestId("giving-ytd-total")).toHaveText(expectedYtd, { timeout: 30000 });
+    await expect(page.getByTestId("giving-ytd-converted-note")).toHaveText(CONVERTED_NOTE);
+  });
+
+  test("History period total is converted while the gift row stays in euros", async ({ page }) => {
+    await page.goto("/mobile/donate");
+    const historyTab = page.getByRole("tab", { name: /History/i });
+    await historyTab.waitFor({ state: "visible", timeout: 15000 });
+    await historyTab.click();
+    await expect(page.getByTestId("giving-period-total")).toHaveText(expectedAllTime, { timeout: 30000 });
+    await expect(page.getByTestId("giving-period-converted-note")).toHaveText(CONVERTED_NOTE);
+    await expect(page.locator("main")).toContainText("€ 100.00");
+  });
+});
+
 // Country receipt formats: the donor-facing statement mirrors the B1Admin legal block,
 // driven by the church's statement-format settings.
 test.describe.serial("Mobile donate statement receipt formats", () => {
