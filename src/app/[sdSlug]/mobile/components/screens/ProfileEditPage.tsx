@@ -383,7 +383,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       setPendingFamilyMembers([]);
       setSnack({
         open: true,
-        msg: Locale.label(saveWithApproval ? "mobile.screens.changesSubmittedForApproval" : "mobile.screens.changesSaved"),
+        msg: saveWithApproval ? Locale.label("mobile.screens.changesSubmittedForApproval") : Locale.label("mobile.screens.changesSaved"),
         severity: "success"
       });
 
@@ -394,7 +394,7 @@ export const ProfileEditPage = ({ config }: Props) => {
       console.error("Profile save error", err);
       setSnack({
         open: true,
-        msg: err?.message || Locale.label(saveWithApproval ? "mobile.screens.unableToSubmitChanges" : "mobile.screens.unableToSaveChanges"),
+        msg: err?.message || (saveWithApproval ? Locale.label("mobile.screens.unableToSubmitChanges") : Locale.label("mobile.screens.unableToSaveChanges")),
         severity: "error"
       });
     } finally {
@@ -1293,11 +1293,11 @@ export const ProfileEditPage = ({ config }: Props) => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
             <Icon sx={{ color: tc.warning, fontSize: 24 }}>pending_actions</Icon>
             <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-              {Locale.label(requiresApproval ? "mobile.profileEdit.pendingChanges" : "mobile.profileEdit.unsavedChanges")}
+              {requiresApproval ? Locale.label("mobile.profileEdit.pendingChanges") : Locale.label("mobile.profileEdit.unsavedChanges")}
             </Typography>
           </Box>
           <Typography sx={{ fontSize: 12, color: tc.textMuted, mb: 2 }}>
-            {Locale.label(requiresApproval ? "mobile.profileEdit.reviewBeforeSubmitting" : "mobile.profileEdit.reviewBeforeSaving")}
+            {requiresApproval ? Locale.label("mobile.profileEdit.reviewBeforeSubmitting") : Locale.label("mobile.profileEdit.reviewBeforeSaving")}
           </Typography>
           <Box sx={{ maxHeight: 240, overflowY: "auto", mb: 2 }}>
             {profileChanges.map((c, i) => (
@@ -1352,7 +1352,7 @@ export const ProfileEditPage = ({ config }: Props) => {
                 "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
               }}
             >
-              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : Locale.label(requiresApproval ? "mobile.profileEdit.submitForApproval" : "mobile.profileEdit.saveChanges")}
+              {saving ? <CircularProgress size={20} sx={{ color: "#FFF" }} /> : requiresApproval ? Locale.label("mobile.profileEdit.submitForApproval") : Locale.label("mobile.profileEdit.saveChanges")}
             </Button>
           </Box>
         </Box>

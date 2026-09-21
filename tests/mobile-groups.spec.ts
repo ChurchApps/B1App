@@ -110,7 +110,7 @@ test.describe("Mobile group event registration (leader)", () => {
     await expect(dialog.getByText(/^New Event$/i)).toBeVisible();
 
     const titleMarker = `Reg Test ${Date.now()}`;
-    await dialog.getByLabel(/^Title$/).fill(titleMarker);
+    await dialog.locator('[data-testid="event-title-input"]').fill(titleMarker);
 
     // MUI <Switch> uses role="switch", not "checkbox".
     await expect(dialog.getByLabel(/^Capacity$/)).toHaveCount(0);

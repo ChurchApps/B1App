@@ -268,7 +268,7 @@ function DonatePageInner({ config }: Props) {
                 {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)}
               </Typography>
               <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
-                {Locale.label(givingStats.totalGifts === 1 ? "mobile.screens.totalThisYearGift" : "mobile.screens.totalThisYearGifts").replace("{}", String(givingStats.totalGifts))}
+                {(givingStats.totalGifts === 1 ? Locale.label("mobile.screens.totalThisYearGift") : Locale.label("mobile.screens.totalThisYearGifts")).replace("{}", String(givingStats.totalGifts))}
               </Typography>
               {givingStats.isConverted && (
                 <Typography data-testid="giving-ytd-converted-note" sx={{ fontSize: 12, opacity: 0.85, mt: 0.5 }}>

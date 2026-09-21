@@ -115,27 +115,27 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   const [notice, setNotice] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    if (open) {
-      const d = computeDefaults();
-      setTitle(d.title);
-      setDescription(d.description);
-      setStart(d.start);
-      setEnd(d.end);
-      setAllDay(d.allDay);
-      setVisibility(d.visibility);
-      setRecurrenceModalType("");
-      setError(null);
-      const hasRule = (d.recurrenceRule?.length ?? 0) > 0;
-      setRecurring(hasRule);
-      setRRule(d.recurrenceRule || "");
-      setRegistrationEnabled(d.registrationEnabled);
-      setCapacity(d.capacity);
-      setRegistrationOpenDate(d.registrationOpenDate);
-      setRegistrationCloseDate(d.registrationCloseDate);
-      setTags(d.tags);
-      setAllowRsvps(!((eventProp as any)?.rsvpDisabled ?? false));
-    }
-  }, [open, computeDefaults, eventProp]);
+    if (!open) return;
+    const d = computeDefaults();
+    setTitle(d.title);
+    setDescription(d.description);
+    setStart(d.start);
+    setEnd(d.end);
+    setAllDay(d.allDay);
+    setVisibility(d.visibility);
+    setRecurrenceModalType("");
+    setError(null);
+    const hasRule = (d.recurrenceRule?.length ?? 0) > 0;
+    setRecurring(hasRule);
+    setRRule(d.recurrenceRule || "");
+    setRegistrationEnabled(d.registrationEnabled);
+    setCapacity(d.capacity);
+    setRegistrationOpenDate(d.registrationOpenDate);
+    setRegistrationCloseDate(d.registrationCloseDate);
+    setTags(d.tags);
+    setAllowRsvps(!((eventProp as any)?.rsvpDisabled ?? false));
+    // Re-init when the dialog opens or the edited event changes, not on every parent render.
+  }, [open, eventProp?.id]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -401,6 +401,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             autoFocus
+            inputProps={{ "data-testid": "event-title-input" }}
           />
           <MarkdownEditor
             value={description}
