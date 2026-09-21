@@ -1054,9 +1054,11 @@ export const CheckinPage = ({ config: _config }: Props) => {
   }
 
   const stepNumber = step === "services" ? 1 : step === "household" ? 2 : 3;
-  const stepName = Locale.label(
-    step === "services" ? "mobile.screens.stepService" : step === "household" ? "mobile.screens.stepHousehold" : "mobile.screens.stepGroups"
-  );
+  const stepName = step === "services"
+    ? Locale.label("mobile.screens.stepService")
+    : step === "household"
+      ? Locale.label("mobile.screens.stepHousehold")
+      : Locale.label("mobile.screens.stepGroups");
 
   let content: React.ReactNode = null;
   if (step === "services") {
