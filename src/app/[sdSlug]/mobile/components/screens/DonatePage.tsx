@@ -116,6 +116,17 @@ function DonatePageInner({ config }: Props) {
     staleTime: 0
   });
 
+  // Exchange rates for the church currency, fetched and cached by the Api. Gifts keep their own currency in the
+  // list; only the YTD / period totals are converted, and the rates are never supplied by the browser.
+  const { data: exchangeRates = {} } = useQuery<Record<string, number>>({
+    queryKey: ["donate-exchange-rates", personId],
+    queryFn: async () => {
+      const table = await ApiHelper.get("/donations/exchange-rates", "GivingApi");
+      return table?.rates || {};
+    },
+    enabled: donationsEnabled
+  });
+
   const paymentMethods = paymentData?.paymentMethods ?? null;
   const customerId = paymentData?.customerId ?? null;
   const person = paymentData?.person ?? null;
@@ -160,10 +171,18 @@ function DonatePageInner({ config }: Props) {
     return () => window.clearTimeout(id);
   }, [message]);
 
+  const toChurchCurrency = (d: DonationInterface) =>
+    CurrencyHelper.convertAmount((((d as any).fund?.amount ?? (d as any).amount ?? 0) as number), (d as any).currency || pageCurrency, pageCurrency, exchangeRates);
+  const isConvertedGift = (d: DonationInterface) => {
+    const giftCurrency = ((d as any).currency || pageCurrency).toUpperCase();
+    return giftCurrency !== pageCurrency.toUpperCase() && !!exchangeRates[giftCurrency];
+  };
+
   const givingStats = useMemo(() => {
     const currentYear = new Date().getFullYear();
     let ytd = 0;
     let totalGifts = 0;
+    let isConverted = false;
     let lastGift: DonationInterface | null = null;
     const sorted = [...donations].sort(
       (a, b) => DateHelper.toDate(b.donationDate).getTime() - DateHelper.toDate(a.donationDate).getTime()
@@ -172,12 +191,13 @@ function DonatePageInner({ config }: Props) {
     for (const d of donations) {
       const dt = DateHelper.toDate(d.donationDate);
       if (dt.getFullYear() === currentYear) {
-        ytd += ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
+        ytd += toChurchCurrency(d);
+        if (isConvertedGift(d)) isConverted = true;
         totalGifts += 1;
       }
     }
-    return { ytd, totalGifts, lastGift };
-  }, [donations]);
+    return { ytd, totalGifts, lastGift, isConverted };
+  }, [donations, pageCurrency, exchangeRates]);
 
   const handleRepeatGift = () => {
 
@@ -244,12 +264,17 @@ function DonatePageInner({ config }: Props) {
               <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
                 {Locale.label("mobile.screens.yourGivingImpact")}
               </Typography>
-              <Typography sx={{ fontSize: 36, fontWeight: 800, mb: 1, fontVariantNumeric: "tabular-nums" }}>
+              <Typography data-testid="giving-ytd-total" sx={{ fontSize: 36, fontWeight: 800, mb: 1, fontVariantNumeric: "tabular-nums" }}>
                 {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)}
               </Typography>
               <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
                 {Locale.label(givingStats.totalGifts === 1 ? "mobile.screens.totalThisYearGift" : "mobile.screens.totalThisYearGifts").replace("{}", String(givingStats.totalGifts))}
               </Typography>
+              {givingStats.isConverted && (
+                <Typography data-testid="giving-ytd-converted-note" sx={{ fontSize: 12, opacity: 0.85, mt: 0.5 }}>
+                  {Locale.label("mobile.screens.convertedAtCurrentRates")}
+                </Typography>
+              )}
             </>
           ) : (
             <>
@@ -513,12 +538,12 @@ function DonatePageInner({ config }: Props) {
   }, [donations, period]);
 
   const filteredTotal = useMemo(
-    () =>
-      filteredDonations.reduce(
-        (sum, d) => sum + (((d as any).fund?.amount ?? (d as any).amount ?? 0) as number),
-        0
-      ),
-    [filteredDonations]
+    () => filteredDonations.reduce((sum, d) => sum + toChurchCurrency(d), 0),
+    [filteredDonations, pageCurrency, exchangeRates]
+  );
+  const filteredIsConverted = useMemo(
+    () => filteredDonations.some((d) => isConvertedGift(d)),
+    [filteredDonations, pageCurrency, exchangeRates]
   );
 
   const getSubPaymentMethod = (sub: SubscriptionRow) => {
@@ -592,12 +617,17 @@ function DonatePageInner({ config }: Props) {
           <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 3 }}>{Locale.label("mobile.screens.loading")}</Typography>
         ) : (
           <Box sx={{ textAlign: "center", py: 1 }}>
-            <Typography sx={{ fontSize: 32, fontWeight: 800, color: tc.primary, fontVariantNumeric: "tabular-nums" }}>
+            <Typography data-testid="giving-period-total" sx={{ fontSize: 32, fontWeight: 800, color: tc.primary, fontVariantNumeric: "tabular-nums" }}>
               {CurrencyHelper.formatCurrencyWithLocale(filteredTotal, pageCurrency)}
             </Typography>
             <Typography sx={{ fontSize: 14, color: tc.textMuted, fontWeight: 500 }}>
               {periodLabels[period]}
             </Typography>
+            {filteredIsConverted && (
+              <Typography data-testid="giving-period-converted-note" sx={{ fontSize: 12, color: tc.textMuted, mt: 0.5 }}>
+                {Locale.label("mobile.screens.convertedAtCurrentRates")}
+              </Typography>
+            )}
           </Box>
         )}
       </Box>
