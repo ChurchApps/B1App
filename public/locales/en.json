@@ -246,6 +246,7 @@
       "memberLabel": "Member",
       "members": "Members ({})",
       "membersLowercase": "members",
+      "membersPrivate": "Members are only visible to people in this group.",
       "membersTab": "Members",
       "message": "Message",
       "messageActions": "Message actions",
