@@ -6,3 +6,7 @@ export function isNoindexHost(hostHeader: string | null | undefined): boolean {
   const host = (hostHeader || "").split(",")[0].split(":")[0].trim().toLowerCase();
   return NOINDEX_SUFFIXES.some((suffix) => host.endsWith(suffix));
 }
+
+export function isNoindexStage(stage = process.env.NEXT_PUBLIC_STAGE || process.env.NEXT_STAGE) {
+  return Boolean(stage) && stage !== "prod";
+}

@@ -19,6 +19,8 @@ const serifFont = Newsreader({
   display: "swap"
 });
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export async function generateViewport({ params }: { params: LayoutParams }): Promise<Viewport> {

@@ -1,6 +1,5 @@
 import React, { cache } from "react";
 import Link from "next/link";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Box, Chip, Container, Typography } from "@mui/material";
 import { Metadata } from "next";
@@ -9,6 +8,7 @@ import { DefaultPageWrapper } from "@/app/[sdSlug]/(public)/[pageSlug]/component
 import { Theme } from "@/components/Theme";
 import { BlogPostingJsonLd } from "@/components/seo/BlogPostingJsonLd";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
+import { publicOrigin } from "@/helpers/siteOrigin";
 import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
 import type { PostInterface } from "@/helpers/interfaces";
 import { MetaHelper } from "@/helpers/MetaHelper";
@@ -38,12 +38,7 @@ const loadData = async (sdSlug: string, postSlug: string) => {
 
 const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
 
-const getBaseUrl = async (sdSlug: string) => {
-  const h = await headers();
-  const host = h.get("x-forwarded-host") || h.get("host") || sdSlug + ".b1.church";
-  const proto = h.get("x-forwarded-proto") || "https";
-  return proto + "://" + host;
-};
+const getBaseUrl = (sdSlug: string) => publicOrigin(sdSlug);
 
 const formatDate = (value?: string) => {
   if (!value) return "";
@@ -70,7 +65,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
     parsedTags = post.tags.split(",").map((t) => t.trim()).filter(Boolean);
   }
 
-  const base = await getBaseUrl(sdSlug);
+  const base = getBaseUrl(sdSlug);
   const url = base + "/blog/" + postSlug;
 
   return (

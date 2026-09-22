@@ -13,17 +13,17 @@ import { SiteWidgets } from "@/components/SiteWidgets";
 import { ChurchAnalytics } from "@/components/ChurchAnalytics";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { fetchCached } from "@/helpers/ConfigHelper";
-import { isNoindexHost } from "@/helpers/noindexHost";
-import { headers } from "next/headers";
+import { isNoindexStage } from "@/helpers/noindexHost";
 import type { Metadata } from "next";
 
 type LayoutParams = Promise<{ sdSlug: string }>;
 
+export const revalidate = 300;
+
 export const viewport = { themeColor: "#ffffff" };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const headerList = await headers();
-  if (isNoindexHost(headerList.get("x-forwarded-host") || headerList.get("host"))) return { robots: { index: false, follow: false } };
+  if (isNoindexStage()) return { robots: { index: false, follow: false } };
   return {};
 }
 
