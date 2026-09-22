@@ -14,6 +14,8 @@ import { DefaultPageWrapper } from "../components/DefaultPageWrapper";
 
 type PageParams = Promise<{ sdSlug: string; pageSlug: string; id:string; }>
 
+export const dynamic = "force-dynamic";
+
 const loadSharedData = (sdSlug:string, pageSlug:string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug, pageSlug);

@@ -9,6 +9,8 @@ import { Metadata } from "next";
 
 type PageParams = Promise<{ sdSlug: string }>;
 
+export const dynamic = "force-dynamic";
+
 const loadSharedData = (sdSlug: string) => {
   EnvironmentHelper.init();
   return loadData(sdSlug);

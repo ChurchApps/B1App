@@ -3,6 +3,7 @@ import { ConfigHelper, EnvironmentHelper } from "@/helpers";
 
 type Params = Promise<{ sdSlug: string }>;
 
+export const dynamic = "force-dynamic";
 
 export default async function LoginPage({ params }: { params: Params}) {
   await EnvironmentHelper.initServerSide();

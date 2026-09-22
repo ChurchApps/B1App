@@ -9,6 +9,8 @@ import { VolunteerBrowse } from "@/components/serving/VolunteerBrowse";
 
 type PageParams = Promise<{ sdSlug: string }>;
 
+export const dynamic = "force-dynamic";
+
 const loadSharedData = async (sdSlug: string) => {
   EnvironmentHelper.init();
   const config = await ConfigHelper.load(sdSlug);

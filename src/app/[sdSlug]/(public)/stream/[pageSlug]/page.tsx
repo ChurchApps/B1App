@@ -4,6 +4,8 @@ import { ConfigHelper, EnvironmentHelper, PageInterface } from "@/helpers";
 
 type Params = Promise<{ sdSlug: string; pageSlug: string }>;
 
+export const dynamic = "force-dynamic";
+
 export default async function Home({ params }: { params: Params }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, pageSlug } = await params;

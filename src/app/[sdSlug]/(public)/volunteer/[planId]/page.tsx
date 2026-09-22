@@ -9,6 +9,8 @@ import { VolunteerSignup } from "@/components/serving/VolunteerSignup";
 
 type PageParams = Promise<{ sdSlug: string; planId: string }>;
 
+export const dynamic = "force-dynamic";
+
 const loadSharedData = async (sdSlug: string, planId: string) => {
   EnvironmentHelper.init();
   const config = await ConfigHelper.load(sdSlug);
