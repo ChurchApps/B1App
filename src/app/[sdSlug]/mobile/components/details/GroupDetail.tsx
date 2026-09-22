@@ -144,7 +144,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   const groupId = groupData?.id;
 
-  const { data: membersData = null } = useQuery<GroupMember[]>({
+  const { data: membersData = null, isError: membersUnavailable } = useQuery<GroupMember[]>({
     queryKey: ["group-members", groupId],
     queryFn: async () => {
       const data = await ApiHelper.get(`/groupmembers?groupId=${groupId}`, "MembershipApi");
@@ -336,12 +336,14 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
             {group?.name}
           </Typography>
           <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <Box sx={chipSx}>
-              <Icon sx={{ fontSize: 14 }}>group</Icon>
-              <span>
-                {memberCount} {memberCount === 1 ? Locale.label("mobile.details.memberSingular") : Locale.label("mobile.details.membersLowercase")}
-              </span>
-            </Box>
+            {!membersUnavailable && (
+              <Box sx={chipSx}>
+                <Icon sx={{ fontSize: 14 }}>group</Icon>
+                <span>
+                  {memberCount} {memberCount === 1 ? Locale.label("mobile.details.memberSingular") : Locale.label("mobile.details.membersLowercase")}
+                </span>
+              </Box>
+            )}
             {isLeader && (
               <Box sx={leaderChipSx}>
                 <Icon sx={{ fontSize: 14 }}>workspace_premium</Icon>
@@ -434,9 +436,17 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       }}
     >
       <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-        {Locale.label("mobile.details.members").replace("{}", String(members?.length ?? 0))}
+        {membersUnavailable
+          ? Locale.label("mobile.details.membersTab")
+          : Locale.label("mobile.details.members").replace("{}", String(members?.length ?? 0))}
       </Typography>
+      {membersUnavailable && (
+        <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
+          {Locale.label("mobile.details.membersPrivate")}
+        </Typography>
+      )}
       {members === null &&
+        !membersUnavailable &&
         [0, 1, 2].map((k) => (
           <Box
             key={`msk-${k}`}
