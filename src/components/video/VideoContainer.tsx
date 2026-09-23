@@ -35,7 +35,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
   }, []);
 
   const getCountdownTime = (serviceTime: Date) => {
-    let remainingSeconds = Math.floor((serviceTime.getTime() - currentTime) / 1000);
+    let remainingSeconds = Math.max(0, Math.floor((serviceTime.getTime() - currentTime) / 1000));
     if (remainingSeconds > 86400) return serviceTime.toDateString() + " - " + serviceTime.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
     else {
       const hours = Math.floor(remainingSeconds / 3600);
@@ -104,7 +104,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
     if (!isClient) return "logo";
 
     const cs = props.currentService;
-    const now = new Date();
+    const now = new Date(currentTime);
 
     if (cs === undefined || cs === null || cs.localEndTime === undefined) {
       return "logo";
@@ -115,7 +115,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
     } else {
       return "video";
     }
-  }, [props.currentService, isClient]);
+  }, [props.currentService, isClient, currentTime]);
 
   const getContents = () => {
     const logoUrl = getLogo();

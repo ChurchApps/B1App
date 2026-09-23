@@ -121,6 +121,15 @@ test.describe("Live stream chat — cross-user realtime", () => {
     await expect(viewerB.page.locator("#chatReceive")).toContainText(stamp, { timeout: 15000 });
   });
 
+  test("a link with a malformed escape does not crash chat for other viewers", async () => {
+    const stamp = `pct-${Date.now()} https://x.com/100%`;
+    await sendChat(viewerA.page, stamp);
+
+    await expect(viewerB.page.locator("#chatReceive")).toContainText(stamp, { timeout: 15000 });
+    await expect(viewerA.page.locator("#chatReceive")).toContainText(stamp, { timeout: 15000 });
+    await expect(viewerB.page.locator("#sendChatText")).toBeVisible();
+  });
+
   test("attendance reflects both viewers", async () => {
     const countLinkA = viewerA.page.locator("#attendanceCount");
     await expect(countLinkA).toBeVisible({ timeout: 15000 });
