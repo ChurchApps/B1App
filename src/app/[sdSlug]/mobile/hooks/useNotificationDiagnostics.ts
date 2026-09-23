@@ -31,6 +31,9 @@ export const useNotificationDiagnostics = (enabled: boolean) => {
       const next = await WebPushHelper.getDiagnostics();
       setDiagnostics(next);
       return next;
+    } catch (e) {
+      console.error("Failed to load notification diagnostics", e);
+      return undefined;
     } finally {
       setLoading(false);
     }

@@ -11,7 +11,7 @@ import { loadChurchAppearance } from "../../loadChurchAppearance";
 
 type Params = Promise<{ sdSlug: string; }>;
 
-const DEFAULT_ACCENT = "var(--print-accent)";
+const DEFAULT_ACCENT = "#1565C0";
 
 export default function PrintPage({ params }: { params: Params }) {
   const router = useRouter();
@@ -40,31 +40,39 @@ export default function PrintPage({ params }: { params: Params }) {
   const [donations, setDonations] = useState<DonationInterface[]>([]);
   const [currency, setCurrency] = useState<string>("usd");
   const [churchSettings, setChurchSettings] = useState<Record<string, string>>({});
+  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
 
 
-  const loadData = () => {
-    ApiHelper.get("/funds", "GivingApi").then((f: FundInterface[]) => { setFunds(f); });
-    ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: FundDonationInterface[]) => { setFundDonations(fd); });
-    ApiHelper.get("/gateways", "GivingApi").then((gws: { currency?: string }[]) => {
-      if (Array.isArray(gws) && gws[0]?.currency) setCurrency(gws[0].currency);
-    });
-    ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
-      const result: DonationInterface[] = [];
-      d.forEach((don: DonationInterface) => {
-        const donDate = DateHelper.toDate(don.donationDate);
-        if (donDate.getFullYear() === currYear) {
-          result.push(don);
-        }
-      });
-      setDonations(result);
-    });
-
+  const loadData = async () => {
+    const requests = [
+      ApiHelper.get("/funds", "GivingApi").then((f: FundInterface[]) => { setFunds(f); }),
+      ApiHelper.get("/fundDonations/my", "GivingApi").then((fd: FundDonationInterface[]) => { setFundDonations(fd); }),
+      ApiHelper.get("/gateways", "GivingApi").then((gws: { currency?: string }[]) => {
+        if (Array.isArray(gws) && gws[0]?.currency) setCurrency(gws[0].currency);
+      }),
+      ApiHelper.get("/donations/exchange-rates", "GivingApi").then((table: { rates?: Record<string, number> }) => { setExchangeRates(table?.rates || {}); }).catch(() => {}),
+      ApiHelper.get("/donations/my", "GivingApi").then((d: DonationInterface[]) => {
+        const result: DonationInterface[] = [];
+        d.forEach((don: DonationInterface) => {
+          const donDate = DateHelper.toDate(don.donationDate);
+          if (donDate.getFullYear() === currYear) {
+            result.push(don);
+          }
+        });
+        setDonations(result);
+      })
+    ];
+    await Promise.allSettled(requests);
 
     setTimeout(() => {
       window.print();
-      router.back();
-    }, 1000);
+      if (window.history.length > 1) router.back();
+      else window.close();
+    }, 300);
   };
+
+  const toStatementCurrency = (amount: number, donation: DonationInterface) =>
+    CurrencyHelper.convertAmount(amount, donation?.currency || currency, currency, exchangeRates);
 
   const getDate = () => {
     const date = DateHelper.prettyDate(new Date());
@@ -78,7 +86,7 @@ export default function PrintPage({ params }: { params: Params }) {
     fundDonations.forEach((d) => {
       const donation = ArrayHelper.getOne(donations, "id", d.donationId);
       if (donation) {
-        result += d.amount || 0;
+        result += toStatementCurrency(d.amount || 0, donation);
       }
     });
     return CurrencyHelper.formatCurrencyWithLocale(result, currency);
@@ -91,7 +99,7 @@ export default function PrintPage({ params }: { params: Params }) {
       const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
       if (donation) {
 
-        result.push({ fund: fund?.name || "", amount: fd.amount || 0 });
+        result.push({ fund: fund?.name || "", amount: toStatementCurrency(fd.amount || 0, donation) });
       }
     });
     return result;
@@ -150,10 +158,12 @@ export default function PrintPage({ params }: { params: Params }) {
     let eligible = 0;
     let nonEligible = 0;
     fundDonations.forEach((fd) => {
-      if (!ArrayHelper.getOne(donations, "id", fd.donationId)) return;
+      const donation = ArrayHelper.getOne(donations, "id", fd.donationId);
+      if (!donation) return;
       const fund: FundInterface = ArrayHelper.getOne(funds, "id", fd.fundId);
-      if (fund?.taxDeductible === false) nonEligible += fd.amount || 0;
-      else eligible += fd.amount || 0;
+      const amount = toStatementCurrency(fd.amount || 0, donation);
+      if (fund?.taxDeductible === false) nonEligible += amount;
+      else eligible += amount;
     });
     const church = context?.userChurch?.church;
     const orgAddress = churchSettings.statementOrgAddress || [church?.address1, church?.address2, church?.city, church?.country, church?.zip].filter(Boolean).join(", ");

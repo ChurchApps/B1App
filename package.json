@@ -18,7 +18,7 @@
     "lint": "eslint --fix src/",
     "pretest": "node tests/setup/pretest.mjs",
     "test": "playwright test",
-    "test:unit": "node --experimental-strip-types --test tests/unit/contentSecurityPolicy.test.ts tests/unit/customContentSecurity.test.ts tests/unit/isAudioUrl.test.ts tests/unit/firstDayOfWeek.test.ts tests/unit/webpackSplitChunks.test.ts tests/unit/swCaching.test.ts tests/unit/noindexHost.test.ts tests/unit/siteOrigin.test.ts",
+    "test:unit": "node --experimental-strip-types --test tests/unit/contentSecurityPolicy.test.ts tests/unit/customContentSecurity.test.ts tests/unit/isAudioUrl.test.ts tests/unit/firstDayOfWeek.test.ts tests/unit/webpackSplitChunks.test.ts tests/unit/swCaching.test.ts tests/unit/noindexHost.test.ts tests/unit/siteOrigin.test.ts tests/unit/mobileDailyVerses.test.ts",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",

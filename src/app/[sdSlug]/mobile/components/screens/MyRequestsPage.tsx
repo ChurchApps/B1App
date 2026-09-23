@@ -2,12 +2,13 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { navigateBack } from "../util";
+import { LoadErrorAlert } from "../LoadErrorAlert";
 
 interface Props {
   config: ConfigurationInterface;
@@ -28,8 +29,9 @@ export const MyRequestsPage = ({ config: _config }: Props) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [cancelId, setCancelId] = React.useState<string | null>(null);
+  const [cancelError, setCancelError] = React.useState("");
 
-  const { data: requests = null } = useQuery<RequestRow[]>({
+  const { data: requests = null, isError: requestsError, refetch: refetchRequests } = useQuery<RequestRow[]>({
     queryKey: ["event-requests-mine"],
     queryFn: async () => {
       const data = await ApiHelper.get("/events/requests/mine", "ContentApi");
@@ -61,11 +63,13 @@ export const MyRequestsPage = ({ config: _config }: Props) => {
 
   const handleCancel = async () => {
     if (!cancelId) return;
+    setCancelError("");
     try {
       await ApiHelper.delete("/events/" + cancelId, "ContentApi");
-    } finally {
       setCancelId(null);
       refetch();
+    } catch {
+      setCancelError(Locale.label("mobile.screens.unableToSaveChanges"));
     }
   };
 
@@ -162,18 +166,20 @@ export const MyRequestsPage = ({ config: _config }: Props) => {
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       {renderBack()}
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {requests === null && [0, 1].map(renderSkeleton)}
+        {requests === null && requestsError && <LoadErrorAlert onRetry={() => refetchRequests()} />}
+        {requests === null && !requestsError && [0, 1].map(renderSkeleton)}
         {requests !== null && requests.length === 0 && renderEmpty()}
         {requests !== null && requests.length > 0 && requests.map(renderCard)}
       </Box>
 
-      <Dialog open={!!cancelId} onClose={() => setCancelId(null)}>
+      <Dialog open={!!cancelId} onClose={() => { setCancelId(null); setCancelError(""); }}>
         <DialogTitle>{Locale.label("mobile.requests.cancelRequest")}</DialogTitle>
         <DialogContent>
+          {cancelError && <Alert severity="error" sx={{ mb: 2 }}>{cancelError}</Alert>}
           <DialogContentText>{Locale.label("mobile.requests.cancelConfirm")}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCancelId(null)}>{Locale.label("mobile.requests.keep")}</Button>
+          <Button onClick={() => { setCancelId(null); setCancelError(""); }}>{Locale.label("mobile.requests.keep")}</Button>
           <Button onClick={handleCancel} variant="contained" data-testid="request-cancel-confirm" sx={{ bgcolor: tc.error, color: tc.onPrimary, textTransform: "none", "&:hover": { bgcolor: tc.error } }}>
             {Locale.label("mobile.requests.cancelRequest")}
           </Button>

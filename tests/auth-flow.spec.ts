@@ -119,3 +119,16 @@ test.describe("Mobile login register link", () => {
     expect(probe.covered, `register link is covered by "${probe.hitId}"`).toBe(false);
   });
 });
+
+test.describe("Mobile login returnUrl", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("a backslash returnUrl cannot send the user to another site", async ({ page, baseURL }) => {
+    await page.goto("/mobile/login?returnUrl=" + encodeURIComponent("/\\example.com"));
+    await page.locator('input[type="email"]').first().fill("demo@b1.church");
+    await page.locator('input[type="password"]').first().fill("password");
+    await page.locator('button[type="submit"]').first().click();
+    await page.waitForURL(/\/mobile\/dashboard/, { timeout: 30000 });
+    expect(new URL(page.url()).host).toBe(new URL(baseURL!).host);
+  });
+});

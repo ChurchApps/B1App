@@ -20,6 +20,7 @@ import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { LoadErrorAlert } from "../LoadErrorAlert";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -55,7 +56,7 @@ export const CommunityPage = ({ config }: Props) => {
   const canViewDirectory = loggedIn && (STATUS_RANK[membershipStatus] || 0) >= (REQUIRED_RANK[publicSettings?.directoryVisibility] ?? REQUIRED_RANK.Members);
   const settingsSettled = !loggedIn || !churchId || settingsFetched;
 
-  const { data: serverPeople = null, isFetching } = useQuery<PersonInterface[]>({
+  const { data: serverPeople = null, isFetching, isError: peopleError, refetch: refetchPeople } = useQuery<PersonInterface[]>({
     queryKey: ["/people", "MembershipApi"],
     queryFn: async () => {
       const data = await ApiHelper.get("/people", "MembershipApi");
@@ -422,7 +423,8 @@ export const CommunityPage = ({ config }: Props) => {
         />
       </Box>
 
-      {filteredPeople === null && (
+      {filteredPeople === null && peopleError && <Box sx={{ p: "16px" }}><LoadErrorAlert onRetry={() => refetchPeople()} /></Box>}
+      {filteredPeople === null && !peopleError && (
         <Box sx={{ p: "16px" }}>
           {[0, 1, 2, 3].map(renderSkeleton)}
         </Box>

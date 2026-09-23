@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 import { loadChurchAppearance } from "../../loadChurchAppearance";
 
 type Params = Promise<{ sdSlug: string; type: string }>;
@@ -7,6 +8,20 @@ const SIZES: Record<string, { width: number; height: number }> = {
   wide: { width: 1280, height: 720 },
   narrow: { width: 720, height: 1280 }
 };
+
+async function loadIconDataUrl(url: string, size: number): Promise<string | null> {
+  try {
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) return null;
+    const png = await sharp(Buffer.from(await res.arrayBuffer()))
+      .resize(size, size, { fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 1 } })
+      .png()
+      .toBuffer();
+    return `data:image/png;base64,${png.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
 
 export async function GET(_req: Request, { params }: { params: Params }) {
   const { sdSlug, type } = await params;
@@ -19,6 +34,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
 
   const iconSize = type === "wide" ? 200 : 240;
   const titleSize = type === "wide" ? 72 : 56;
+  const icon = favicon ? await loadIconDataUrl(favicon, iconSize) : null;
 
   return new ImageResponse(
     (
@@ -36,10 +52,10 @@ export async function GET(_req: Request, { params }: { params: Params }) {
           padding: 40
         }}
       >
-        {favicon ? (
+        {icon ? (
 
           <img
-            src={favicon}
+            src={icon}
             width={iconSize}
             height={iconSize}
             style={{ borderRadius: iconSize / 5, marginBottom: 32, objectFit: "contain", background: "white" }}

@@ -140,7 +140,7 @@ export const MePage = ({ config: _config }: Props) => {
       const plan = plans.find((p) => p.id === position.planId);
       if (!plan?.serviceDate) return;
       const date = DateHelper.toDate(plan.serviceDate);
-      if (date < now) return;
+      if (date < new Date(now.getFullYear(), now.getMonth(), now.getDate())) return;
       items.push({ kind: "serving", date, title: plan.name || Locale.label("mobile.me.serving"), subtitle: position.name, href: `/mobile/plans/${plan.id}`, key: `serv-${a.id}` });
     });
 

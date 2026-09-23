@@ -3,6 +3,7 @@ import { RRule } from "rrule";
 
 const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
 const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
+const toFloatingUtc = (d: Date) => new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds()));
 
 export class EventProcessor {
   static updateTime(data: any): EventInterface[] {
@@ -19,9 +20,9 @@ export class EventProcessor {
     try {
       const start = new Date(event.start!);
       const options = RRule.parseString(event.recurrenceRule!);
-      options.dtstart = new Date(start);
+      options.dtstart = toFloatingUtc(start);
       const rule = new RRule(options);
-      const dates = rule.between(startDate, endDate, true);
+      const dates = rule.between(toFloatingUtc(startDate), toFloatingUtc(endDate), true);
       return dates.map((d: Date) => new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), start.getHours(), start.getMinutes(), start.getSeconds()));
     } catch (e) {
       console.error("Error in getRange:", e);
@@ -34,8 +35,6 @@ export class EventProcessor {
 
     const startRange = startOfMonth(month);
     const endRange = endOfMonth(month);
-    const targetMonth = month.getMonth();
-    const targetYear = month.getFullYear();
 
     const relevantEvents = allEvents.filter((event) => {
       if (!event.start) return false;
@@ -53,14 +52,6 @@ export class EventProcessor {
             if (untilDate < startRange) return false;
           }
         }
-        if (rule.includes("FREQ=WEEKLY")) {
-          const monthsBack = (targetYear - eventStart.getFullYear()) * 12 + (targetMonth - eventStart.getMonth());
-          if (monthsBack > 12) return false;
-        }
-        if (rule.includes("FREQ=DAILY")) {
-          const daysBack = Math.floor((startRange.getTime() - eventStart.getTime()) / (24 * 60 * 60 * 1000));
-          if (daysBack > 365) return false;
-        }
         return true;
       }
       return eventStart >= startRange && eventStart <= endRange;
@@ -71,28 +62,7 @@ export class EventProcessor {
     for (const event of relevantEvents) {
       try {
         if (event.recurrenceRule) {
-          const rule = event.recurrenceRule.toUpperCase();
-          let dates: Date[] = [];
-
-          if (rule.includes("BYSETPOS=") && rule.includes("BYDAY=")) {
-            const eventDate = new Date(event.start!);
-            if (eventDate.getMonth() === targetMonth && eventDate.getFullYear() === targetYear) {
-              dates = [eventDate];
-            } else if (eventDate < startRange) {
-              const dayOfWeek = eventDate.getDay();
-              const weekNumber = parseInt(rule.match(/BYSETPOS=(\d+)/)?.[1] || "1", 10);
-              const targetDay = new Date(targetYear, targetMonth, 1, eventDate.getHours(), eventDate.getMinutes(), eventDate.getSeconds(), eventDate.getMilliseconds());
-              while (targetDay.getDay() !== dayOfWeek) targetDay.setDate(targetDay.getDate() + 1);
-              targetDay.setDate(targetDay.getDate() + (weekNumber - 1) * 7);
-              if (targetDay.getMonth() === targetMonth) dates = [targetDay];
-            }
-          } else {
-            try {
-              dates = this.getRange(event, startRange, endRange) || [];
-            } catch {
-              dates = [];
-            }
-          }
+          const dates = this.getRange(event, startRange, endRange);
 
           const limitedDates = dates.slice(0, 31);
           const eventDuration = new Date(event.end!).getTime() - new Date(event.start!).getTime();

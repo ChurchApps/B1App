@@ -24,6 +24,7 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
   const churchId = _config?.church?.id || "";
   const queryClient = useQueryClient();
   const [cancelId, setCancelId] = useState<string | null>(null);
+  const [cancelError, setCancelError] = useState("");
   const [payReg, setPayReg] = useState<RegistrationInterface | null>(null);
   const [editReg, setEditReg] = useState<RegistrationInterface | null>(null);
 
@@ -42,9 +43,14 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
 
   const handleCancel = async () => {
     if (!cancelId) return;
-    await ApiHelper.post("/registrations/" + cancelId + "/cancel", {}, "ContentApi");
-    setCancelId(null);
-    refetch();
+    setCancelError("");
+    try {
+      await ApiHelper.post("/registrations/" + cancelId + "/cancel", {}, "ContentApi");
+      setCancelId(null);
+      refetch();
+    } catch {
+      setCancelError(Locale.label("mobile.screens.unableToSaveChanges"));
+    }
   };
 
   const getStatusColor = (status?: string) => {
@@ -154,13 +160,14 @@ export const RegistrationsPage = ({ config: _config }: Props) => {
         {sortedRegistrations !== null && sortedRegistrations.length > 0 && sortedRegistrations.map(renderCard)}
       </Box>
 
-      <Dialog open={!!cancelId} onClose={() => setCancelId(null)}>
+      <Dialog open={!!cancelId} onClose={() => { setCancelId(null); setCancelError(""); }}>
         <DialogTitle>{Locale.label("mobile.screens.cancelRegistration")}</DialogTitle>
         <DialogContent>
+          {cancelError && <Alert severity="error" sx={{ mb: 2 }}>{cancelError}</Alert>}
           <DialogContentText>{Locale.label("registration.mine.cancelConfirm")}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCancelId(null)}>{Locale.label("mobile.screens.keep")}</Button>
+          <Button onClick={() => { setCancelId(null); setCancelError(""); }}>{Locale.label("mobile.screens.keep")}</Button>
           <Button onClick={handleCancel} variant="contained" sx={{ bgcolor: tc.error, color: tc.onPrimary, textTransform: "none", "&:hover": { bgcolor: tc.error } }}>
             {Locale.label("registration.mine.cancel")}
           </Button>
