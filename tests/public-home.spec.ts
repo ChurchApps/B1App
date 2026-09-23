@@ -6,6 +6,16 @@ test.describe("Public home page", () => {
     await page.context().clearCookies();
   });
 
+  test("a malformed hash in the URL does not crash the page", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(e.stack || e.message));
+    await page.goto("/#%E0");
+    await expect(page.locator("h1").filter({ hasText: /Welcome.*Grace Community Church/i }).first()).toBeVisible({ timeout: 30000 });
+    await page.waitForTimeout(1000);
+    // Stripe and Google Maps throw on the same hash in their own scripts; only our code matters here.
+    expect(errors.filter((m) => /URI/i.test(m) && !/stripe\.com|googleapis\.com/.test(m))).toEqual([]);
+  });
+
   test("renders hero with welcome heading", async ({ page }) => {
     await page.goto("/");
     await expect(

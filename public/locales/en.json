@@ -445,6 +445,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Save",
       "saveAttendance": "Save Attendance",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
       "search": "Search",
       "searchForPerson": "Search for a person",
       "selectAll": "All",
