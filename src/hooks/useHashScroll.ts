@@ -5,7 +5,9 @@ import { useEffect } from "react";
 export function useHashScroll(ready: boolean) {
   useEffect(() => {
     if (!ready || typeof window === "undefined") return;
-    const id = decodeURIComponent(window.location.hash.slice(1));
+    const raw = window.location.hash.slice(1);
+    let id = raw;
+    try { id = decodeURIComponent(raw); } catch { }
     if (!id) return;
 
     let timer = 0;

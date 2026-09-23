@@ -20,6 +20,22 @@ test.describe("Mobile messages", () => {
     await expect(deleteBtn).toBeVisible();
   });
 
+  test("a link with a malformed escape does not crash the conversation", async ({ page }) => {
+    await page.goto("/mobile/messages");
+    const row = page.locator('[data-testid^="conversation-row-"]').first();
+    await expect(row).toBeVisible({ timeout: 30000 });
+    await row.click();
+    const composer = page.getByPlaceholder(/Type a message/i);
+    await expect(composer).toBeVisible({ timeout: 15000 });
+    const text = `pct ${Date.now()} https://x.com/100%`;
+    await composer.fill(text);
+    await page.getByRole("button", { name: /^Send$/i }).click();
+    await expect(page.locator("main")).toContainText(text, { timeout: 15000 });
+    await page.reload();
+    await expect(page.locator("main")).toContainText(text, { timeout: 30000 });
+    await expect(page.getByPlaceholder(/Type a message/i)).toBeVisible();
+  });
+
   test("compose message screen loads", async ({ page }) => {
     await page.goto("/mobile/messagesNew");
     await expect(mobileLogoutButton(page)).toBeVisible();

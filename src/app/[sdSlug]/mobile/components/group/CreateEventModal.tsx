@@ -54,6 +54,12 @@ const localToIsoString = (localValue: string) => {
   return isNaN(d.getTime()) ? "" : d.toISOString();
 };
 
+// UNTIL is inclusive, so end the series at the close of the day before the clicked occurrence.
+const endBefore = (occurrence: Date | string) => {
+  const d = new Date(occurrence);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, -1);
+};
+
 export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventProp, onClose, onSaved }: Props) => {
   const tc = mobileTheme.colors;
   const isEdit = !!eventProp?.id;
@@ -280,14 +286,24 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           const newEvent: EventInterface = { ...ev, id: undefined as any, recurrenceRule: recurring ? rRule : "" };
           const originalEv: EventInterface = await ApiHelper.get("/events/" + eventProp.id, "ContentApi");
           const rrule = EventHelper.getFullRRule(originalEv);
-          rrule.options.until = newEvent.start ? new Date(newEvent.start as any) : new Date();
+          rrule.options.until = endBefore(eventProp.start as any);
           EventHelper.cleanRule(rrule.options);
           originalEv.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);
           await ApiHelper.post("/events", [originalEv, newEvent], "ContentApi");
           break;
         }
         case "all": {
-          const allEv: EventInterface = { ...ev, recurrenceRule: recurring ? rRule : "" };
+          const originalEv: EventInterface = await ApiHelper.get("/events/" + eventProp.id, "ContentApi");
+          const formStart = new Date(ev.start as any).getTime();
+          const shift = formStart - new Date(eventProp.start as any).getTime();
+          const seriesStart = new Date(new Date(originalEv.start as any).getTime() + shift);
+          const seriesEnd = new Date(seriesStart.getTime() + new Date(ev.end as any).getTime() - formStart);
+          const allEv: EventInterface = {
+            ...ev,
+            start: seriesStart.toISOString() as unknown as Date,
+            end: seriesEnd.toISOString() as unknown as Date,
+            recurrenceRule: recurring ? rRule : ""
+          };
           await ApiHelper.post("/events", [allEv], "ContentApi");
           await syncBookings(eventProp.id);
           break;
@@ -319,12 +335,17 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           break;
         }
         case "future": {
-          const ev: EventInterface = { ...eventProp };
-          const rrule = EventHelper.getFullRRule(ev);
-          rrule.options.until = ev.start ? new Date(ev.start as any) : new Date();
-          ev.start = eventProp.start;
-          ev.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);
-          await ApiHelper.post("/events", [ev], "ContentApi");
+          const originalEv: EventInterface = await ApiHelper.get("/events/" + eventProp.id, "ContentApi");
+          const until = endBefore(eventProp.start as any);
+          if (until < new Date(originalEv.start as any)) {
+            await ApiHelper.delete("/events/" + eventProp.id, "ContentApi");
+            break;
+          }
+          const rrule = EventHelper.getFullRRule(originalEv);
+          rrule.options.until = until;
+          EventHelper.cleanRule(rrule.options);
+          originalEv.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);
+          await ApiHelper.post("/events", [originalEv], "ContentApi");
           break;
         }
         case "all": {
