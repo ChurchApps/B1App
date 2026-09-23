@@ -69,6 +69,24 @@ test.describe("Mobile groups", () => {
     await expect(page.getByRole("tab", { name: /About/i })).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="group-contact-first-name-input"]')).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="group-contact-submit-button"]')).toBeVisible();
+
+    // Issue #1119: the fields were labelled with the raw keys "groups.firstName" etc.,
+    // which do not exist in the locale files, so Locale.label() echoed the key back.
+    const names: [string, string][] = [
+      ["group-contact-first-name-input", "Your first name"],
+      ["group-contact-last-name-input", "Your last name"],
+      ["group-contact-email-input", "Your email address"],
+      ["group-contact-phone-input", "Your phone number"],
+      ["group-contact-message-input", "Your message to the group leader"]
+    ];
+    for (const [testId, name] of names) {
+      await expect(page.getByTestId(testId)).toHaveAccessibleName(name);
+    }
+
+    const main = page.locator("main");
+    for (const key of ["groups.firstName", "groups.lastName", "groups.email", "groups.phone", "groups.message"]) {
+      await expect(main, `"${key}" must never render as literal text`).not.toContainText(key);
+    }
   });
 
   test("leaving a group asks for confirmation first", async ({ page }) => {
