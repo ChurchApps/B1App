@@ -111,6 +111,27 @@ test.describe("Mobile shell", () => {
   });
 });
 
+// Issue #1119: in dark mode the drawer's theme toggle rendered the raw key
+// "mobile.components.lightMode". Light mode hid the bug — "darkMode" already existed.
+test.describe("Mobile shell dark mode", () => {
+  test.use({ colorScheme: "dark" });
+
+  test("the drawer theme toggle offers a translated switch back to light mode", async ({ page }) => {
+    // MobileThemeProvider prefers a stored mode over prefers-color-scheme, so clear it.
+    await page.addInitScript(() => { try { window.localStorage.removeItem("b1mobile.theme"); } catch { } });
+    await page.goto("/mobile/dashboard");
+
+    const nav = page.getByRole("navigation", { name: /Main navigation/i }).first();
+    await expect(nav).toBeVisible({ timeout: 15000 });
+
+    const toggle = nav.getByRole("button").filter({ hasText: /Mode|mobile\.components\./i }).first();
+    await expect(toggle).toBeVisible({ timeout: 15000 });
+    await expect(toggle).toContainText("Light Mode");
+    await expect(toggle).toHaveAccessibleName("Switch to light mode");
+    await expect(toggle, '"mobile.components.lightMode" must never render as literal text').not.toContainText("mobile.components.");
+  });
+});
+
 async function applySafeTop(page: Page) {
   await page.addStyleTag({ content: `:root, .mobileAppRoot { --safe-top: ${SAFE_TOP}px !important; --safe-bottom: 34px !important; }` });
 }
