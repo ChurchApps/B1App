@@ -3,6 +3,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Alert,
   Box,
   Button,
   CardActionArea,
@@ -155,6 +156,7 @@ const EmptyState = ({
 
 const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   const [selectingId, setSelectingId] = useState<string>("");
+  const [error, setError] = useState("");
 
   const { data: services = [], isLoading } = useQuery<ServiceInterface[]>({
     queryKey: ["/services", "AttendanceApi"],
@@ -179,6 +181,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
 
   const selectService = async (serviceId: string) => {
     setSelectingId(serviceId);
+    setError("");
     try {
       const householdId = PersonHelper.person?.householdId;
       await Promise.all([
@@ -237,6 +240,8 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
       });
 
       onSelected();
+    } catch {
+      setError(Locale.label("mobile.details.checkConnection"));
     } finally {
       setSelectingId("");
     }
@@ -245,6 +250,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   return (
     <>
       <ScreenSubhead iconName="event" subtitle={Locale.label("mobile.screens.chooseServiceSubtitle")} />
+      {error && <Alert severity="error" sx={{ mb: `${spacing.md}px` }}>{error}</Alert>}
 
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
@@ -478,6 +484,7 @@ const HouseholdStep = ({
   const [selectedMember, setSelectedMember] = useState<PersonInterface | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [error, setError] = useState("");
   const [duplicateNames, setDuplicateNames] = useState<string[]>([]);
 
   const isCheckedIn = (personId: string): boolean => {
@@ -722,6 +729,7 @@ const HouseholdStep = ({
   const doCheckin = () => {
     setShowDuplicateDialog(false);
     setIsLoading(true);
+    setError("");
     const peopleIds: number[] = ArrayHelper.getUniqueValues(
       CheckinHelper.householdMembers,
       "id"
@@ -733,6 +741,7 @@ const HouseholdStep = ({
       encodeURIComponent(peopleIds.join(","));
     ApiHelper.post(url, CheckinHelper.pendingVisits, "AttendanceApi")
       .then((data) => onComplete(typeof data?.securityCode === "string" ? data.securityCode : undefined))
+      .catch(() => setError(Locale.label("mobile.details.checkConnection")))
       .finally(() => setIsLoading(false));
   };
 
@@ -751,6 +760,7 @@ const HouseholdStep = ({
   return (
     <>
       <ScreenSubhead iconName="people" subtitle={Locale.label("mobile.screens.selectGroupsSubtitle")} />
+      {error && <Alert severity="error" sx={{ mb: `${spacing.md}px` }}>{error}</Alert>}
 
       {existingCode && (
         <Button

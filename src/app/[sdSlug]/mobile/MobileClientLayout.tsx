@@ -65,7 +65,10 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     if (!mounted) return;
     EnvironmentHelper.init();
-    EnvironmentHelper.initLocale().then(() => setLocaleReady(true));
+    const localeTimeout = new Promise((resolve) => setTimeout(resolve, 8000));
+    Promise.race([EnvironmentHelper.initLocale(), localeTimeout])
+      .catch((e) => console.error("Locale init failed", e))
+      .finally(() => setLocaleReady(true));
     ErrorHelper.init(
       (): ErrorAppDataInterface => ({
         churchId: UserHelper.currentUserChurch?.church?.id || "",

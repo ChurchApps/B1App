@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import { ApiHelper, ArrayHelper, DateHelper, Locale } from "@churchapps/apphelper";
@@ -40,6 +40,12 @@ const getStatusMeta = (status: string, tc: typeof mobileTheme.colors) => {
   if (s === "pending") return { color: tc.warning, label: "Pending Response" };
   if (!s || s === "unconfirmed") return { color: tc.disabled, label: "Unconfirmed" };
   return { color: tc.disabled, label: status };
+};
+
+const getStartOfToday = () => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
 };
 
 export const PlansPage = ({ config: _config }: Props) => {
@@ -98,10 +104,16 @@ export const PlansPage = ({ config: _config }: Props) => {
 
   const isLoading = loggedIn && (assignmentsLoading || positionsLoading || plansLoading);
 
-  const startOfToday = useMemo(() => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
+  const [startOfToday, setStartOfToday] = useState(getStartOfToday);
+
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      const next = getStartOfToday();
+      setStartOfToday((prev) => (prev.getTime() === next.getTime() ? prev : next));
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
   }, []);
 
   const { upcomingRows, pastRows, upcomingAssignments } = useMemo(() => {

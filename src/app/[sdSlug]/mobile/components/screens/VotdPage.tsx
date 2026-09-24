@@ -4,13 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Box, Icon, Typography } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
-import { loadDailyVerse, type DailyVerse } from "../../helpers/dailyVerses";
-
-const getDayOfYear = () => {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  return Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-};
+import { getDayOfYear, loadDailyVerse, type DailyVerse } from "../../helpers/dailyVerses";
 
 const getShape = () => {
   if (typeof window === "undefined") return "9x16";
@@ -35,16 +29,22 @@ export const VotdPage = () => {
   useEffect(() => {
     setDay(getDayOfYear());
     const onResize = () => setShape(getShape());
+    const onVisible = () => { if (document.visibilityState === "visible") setDay(getDayOfYear()); };
     onResize();
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, []);
 
   useEffect(() => {
+    if (day === null) return;
     let cancelled = false;
     loadDailyVerse().then((v) => { if (!cancelled) setVerse(v); });
     return () => { cancelled = true; };
-  }, []);
+  }, [day]);
 
   const imageUrl = useMemo(() => (day === null ? "" : `https://votd.org/v1/${day}/${shape}.jpg`), [day, shape]);
   const showImage = !!imageUrl && !imageError;
@@ -61,8 +61,8 @@ export const VotdPage = () => {
         await (navigator as any).share(shareData);
         return;
       }
-    } catch {
-
+    } catch (e) {
+      if ((e as Error)?.name === "AbortError") return;
     }
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {

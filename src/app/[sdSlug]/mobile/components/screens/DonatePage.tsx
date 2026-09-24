@@ -69,7 +69,8 @@ function DonatePageInner({ config }: Props) {
 
   const [message, setMessage] = useState<string | null>(null);
 
-  const [tab, setTab] = useState<TabKey>(isAuthenticated ? "overview" : "donate");
+  const [selectedTab, setTab] = useState<TabKey>(isAuthenticated ? "overview" : "donate");
+  const tab: TabKey = isAuthenticated || selectedTab === "donate" ? selectedTab : "donate";
   const [period, setPeriod] = useState<PeriodKey>("all");
   const [periodAnchor, setPeriodAnchor] = useState<HTMLElement | null>(null);
 
@@ -203,6 +204,25 @@ function DonatePageInner({ config }: Props) {
 
     setTab("donate");
   };
+
+  const filteredDonations = useMemo(() => {
+    const now = new Date();
+    let cutoff: Date | null = null;
+    if (period === "30d") cutoff = new Date(now.getTime() - 30 * 86400000);
+    else if (period === "90d") cutoff = new Date(now.getTime() - 90 * 86400000);
+    else if (period === "ytd") cutoff = new Date(now.getFullYear(), 0, 1);
+    if (!cutoff) return donations;
+    return donations.filter((d) => DateHelper.toDate(d.donationDate) >= cutoff!);
+  }, [donations, period]);
+
+  const filteredTotal = useMemo(
+    () => filteredDonations.reduce((sum, d) => sum + toChurchCurrency(d), 0),
+    [filteredDonations, pageCurrency, exchangeRates]
+  );
+  const filteredIsConverted = useMemo(
+    () => filteredDonations.some((d) => isConvertedGift(d)),
+    [filteredDonations, pageCurrency, exchangeRates]
+  );
 
   if (config?.allowDonations === false) {
     return (
@@ -526,25 +546,6 @@ function DonatePageInner({ config }: Props) {
     "90d": Locale.label("mobile.screens.period90d"),
     all: Locale.label("mobile.screens.periodAll")
   };
-
-  const filteredDonations = useMemo(() => {
-    const now = new Date();
-    let cutoff: Date | null = null;
-    if (period === "30d") cutoff = new Date(now.getTime() - 30 * 86400000);
-    else if (period === "90d") cutoff = new Date(now.getTime() - 90 * 86400000);
-    else if (period === "ytd") cutoff = new Date(now.getFullYear(), 0, 1);
-    if (!cutoff) return donations;
-    return donations.filter((d) => DateHelper.toDate(d.donationDate) >= cutoff!);
-  }, [donations, period]);
-
-  const filteredTotal = useMemo(
-    () => filteredDonations.reduce((sum, d) => sum + toChurchCurrency(d), 0),
-    [filteredDonations, pageCurrency, exchangeRates]
-  );
-  const filteredIsConverted = useMemo(
-    () => filteredDonations.some((d) => isConvertedGift(d)),
-    [filteredDonations, pageCurrency, exchangeRates]
-  );
 
   const getSubPaymentMethod = (sub: SubscriptionRow) => {
     const pm = (paymentMethods || []).find(

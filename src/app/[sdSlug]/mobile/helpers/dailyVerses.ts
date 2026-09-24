@@ -22,10 +22,8 @@ const FALLBACK: DailyVerse[] = [
 
 let catalog: CatalogVerse[] | null = null;
 
-const getDayOfYear = (date: Date): number => {
-  const start = new Date(date.getFullYear(), 0, 0);
-  return Math.floor((date.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-};
+export const getDayOfYear = (date: Date = new Date()): number =>
+  Math.round((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
 
 export const loadDailyVerse = async (date: Date = new Date()): Promise<DailyVerse> => {
   const day = getDayOfYear(date);

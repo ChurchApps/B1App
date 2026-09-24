@@ -2,7 +2,7 @@
 
 import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Icon, Skeleton, Typography, Button } from "@mui/material";
+import { Alert, Box, Icon, Skeleton, Typography, Button } from "@mui/material";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { useEngagementSort } from "../../hooks/useEngagementSort";
+import { LoadErrorAlert } from "../LoadErrorAlert";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -31,7 +32,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
 
-  const { data: groups = null } = useQuery<GroupInterface[]>({
+  const { data: groups = null, isError: groupsError, refetch: refetchGroups } = useQuery<GroupInterface[]>({
     queryKey: ["my-groups", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/groups/my", "MembershipApi");
@@ -53,9 +54,16 @@ export const GroupsPage = ({ config: _config }: Props) => {
     gcTime: 15 * 60 * 1000
   });
 
+  const [cancelRequestError, setCancelRequestError] = React.useState("");
+
   const handleCancelRequest = async (id: string) => {
-    await ApiHelper.delete(`/groupjoinrequests/${id}`, "MembershipApi");
-    refetchPending();
+    setCancelRequestError("");
+    try {
+      await ApiHelper.delete(`/groupjoinrequests/${id}`, "MembershipApi");
+      refetchPending();
+    } catch {
+      setCancelRequestError(Locale.label("mobile.screens.unableToSaveChanges"));
+    }
   };
 
   const { data: upcomingEvents = [] } = useQuery<EventInterface[]>({
@@ -416,6 +424,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
         <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
           {Locale.label("mobile.screens.pendingRequests")}
         </Typography>
+        {cancelRequestError && <Alert severity="error" sx={{ mb: `${mobileTheme.spacing.sm}px` }}>{cancelRequestError}</Alert>}
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
           {pendingRequests.map((req) => (
             <Box
@@ -457,7 +466,8 @@ export const GroupsPage = ({ config: _config }: Props) => {
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       {renderPendingRequests()}
-      {effectiveGroups === null && (
+      {effectiveGroups === null && groupsError && <LoadErrorAlert onRetry={() => refetchGroups()} />}
+      {effectiveGroups === null && !groupsError && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
           {[0, 1, 2].map(renderSkeleton)}
         </Box>

@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { LoadErrorAlert } from "../LoadErrorAlert";
 
 interface Props {
   config: ConfigurationInterface;
@@ -24,7 +25,7 @@ export const VolunteerPage = ({ config }: Props) => {
   const router = useRouter();
   const churchId = config?.church?.id;
 
-  const { data: signupPlans = null } = useQuery<SignupPlanData[]>({
+  const { data: signupPlans = null, isError: signupPlansError, refetch: refetchSignupPlans } = useQuery<SignupPlanData[]>({
     queryKey: ["/plans/public/signup/" + churchId, "DoingApi-anon"],
     queryFn: async () => {
       const data = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
@@ -206,7 +207,8 @@ export const VolunteerPage = ({ config }: Props) => {
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {signupPlans === null && [0, 1].map(renderSkeleton)}
+        {signupPlans === null && signupPlansError && <LoadErrorAlert onRetry={() => refetchSignupPlans()} />}
+        {signupPlans === null && !signupPlansError && [0, 1].map(renderSkeleton)}
         {signupPlans !== null && signupPlans.length === 0 && renderEmpty()}
         {signupPlans !== null && signupPlans.length > 0 && signupPlans.map(renderCard)}
       </Box>

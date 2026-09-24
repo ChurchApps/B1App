@@ -10,6 +10,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
 import { formatRelative, getInitials } from "../util";
+import { LoadErrorAlert } from "../LoadErrorAlert";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -48,7 +49,7 @@ export const MessagesPage = ({ config }: Props) => {
     };
   }, [loggedIn, myPersonId, queryClient]);
 
-  const { data: conversations = null } = useQuery<Conversation[]>({
+  const { data: conversations = null, isError: conversationsError, refetch: refetchConversations } = useQuery<Conversation[]>({
     queryKey: ["conversations", myPersonId],
     queryFn: async () => {
       const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
@@ -326,7 +327,8 @@ export const MessagesPage = ({ config }: Props) => {
         </IconButton>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {conversations === null && [0, 1, 2].map(renderSkeleton)}
+        {conversations === null && conversationsError && <LoadErrorAlert onRetry={() => refetchConversations()} />}
+        {conversations === null && !conversationsError && [0, 1, 2].map(renderSkeleton)}
         {conversations !== null && conversations.length === 0 && renderEmpty()}
         {conversations !== null && conversations.length > 0 && conversations.map(renderRow)}
       </Box>

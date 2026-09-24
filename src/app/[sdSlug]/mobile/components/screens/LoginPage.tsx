@@ -41,6 +41,15 @@ interface Props {
   config?: ConfigurationInterface;
 }
 
+const isSameOriginPath = (url: string) => {
+  if (!url.startsWith("/")) return false;
+  try {
+    return new URL(url, window.location.origin).origin === window.location.origin;
+  } catch {
+    return false;
+  }
+};
+
 export const MobileLoginScreen = ({ config }: Props) => {
   const tc = mobileTheme.colors;
   const { spacing, radius, shadows } = mobileTheme;
@@ -181,7 +190,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
       const data: LoginResponseInterface = await ApiHelper.postAnonymous("/users/login", payload, "MembershipApi");
       if (data?.user != null) {
         await hydrateFromLoginResponse(data);
-        const safeUrl = returnUrl.startsWith("/") && !returnUrl.startsWith("//") ? returnUrl : "/mobile/dashboard";
+        const safeUrl = isSameOriginPath(returnUrl) ? returnUrl : "/mobile/dashboard";
         router.push(safeUrl);
         return true;
       }

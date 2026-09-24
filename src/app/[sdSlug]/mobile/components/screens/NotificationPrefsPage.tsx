@@ -96,7 +96,7 @@ export const NotificationPrefsPage = () => {
     { key: "in_app", label: Locale.label("mobile.notificationPrefs.channelInApp") }
   ];
 
-  const { data: prefs, isLoading } = useQuery<NotificationPrefs>({
+  const { data: prefs, isLoading, refetch } = useQuery<NotificationPrefs>({
     queryKey: ["notificationPrefs", context?.user?.id],
     queryFn: () => ApiHelper.get("/notificationpreferences/my", "MessagingApi"),
     enabled: loggedIn
@@ -177,6 +177,7 @@ export const NotificationPrefsPage = () => {
     setSaving(true);
     try {
       await ApiHelper.post("/notificationpreferences/", buildSavePayload(), "MessagingApi");
+      await refetch();
       setOverrides(new Map());
       setSnack({ open: true, msg: Locale.label("mobile.notificationPrefs.saved"), severity: "success" });
     } catch (err: any) {
