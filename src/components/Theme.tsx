@@ -25,7 +25,8 @@ export const Theme: React.FC<Props> = (props) => {
 
   let paletteExtras: Record<string, any> = {};
   if (props.config.globalStyles?.palette) {
-    const palette = JSON.parse(props.config.globalStyles?.palette);
+    let palette: Record<string, any> = {};
+    try { palette = JSON.parse(props.config.globalStyles.palette) || {}; } catch { /* malformed JSON */ }
     pushKV(lines, "--light", palette.light);
     pushKV(lines, "--lightAccent", palette.lightAccent);
     pushKV(lines, "--accent", palette.accent);
@@ -35,9 +36,10 @@ export const Theme: React.FC<Props> = (props) => {
   }
 
   if (props.config.globalStyles?.fonts) {
-    const fonts = JSON.parse(props.config.globalStyles?.fonts);
-    pushKV(lines, "--headingFont", `'${fonts.heading}'`);
-    pushKV(lines, "--bodyFont", `'${fonts.body}'`);
+    let fonts: Record<string, any> = {};
+    try { fonts = JSON.parse(props.config.globalStyles.fonts) || {}; } catch { /* malformed JSON */ }
+    if (fonts.heading) pushKV(lines, "--headingFont", `'${fonts.heading}'`);
+    if (fonts.body) pushKV(lines, "--bodyFont", `'${fonts.body}'`);
     if (fonts.heading && fonts.heading !== "Roboto") googleFonts.push(fonts.heading);
     if (fonts.body && fonts.body !== "Roboto" && fonts.body !== fonts.heading) googleFonts.push(fonts.body);
   }
@@ -95,10 +97,11 @@ export const Theme: React.FC<Props> = (props) => {
     } catch { /* malformed JSON */ }
   }
 
-  const customCss = sanitizeCustomCss(props.config.globalStyles?.customCss || "");
-  if (customCss) lines.push(customCss);
+  const cssImports: string[] = [];
+  const customCss = sanitizeCustomCss(props.config.globalStyles?.customCss || "").replace(/@import[^;]*;?/gi, (stmt) => { cssImports.push(stmt); return ""; });
+  if (customCss.trim()) lines.push(customCss);
 
-  const css = ":root { " + lines.join("\n") + " } " + navRules.join("\n");
+  const css = cssImports.map(i => i.endsWith(";") ? i : i + ";").join(" ") + ":root { " + lines.join("\n") + " } " + navRules.join("\n");
 
   // Rendered as a hoisted <link> below so fonts ship in the initial HTML (no FOUT/CLS).
   let googleFontsUrl = "";

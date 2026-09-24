@@ -59,7 +59,8 @@ export const FormElement = (props: Props) => {
 
   const handleUpdate = () => setIsFormSubmitted(true);
 
-  if (isLoading || !(props.church && formId)) {
+  if (!formId) return null;
+  if (isLoading || !props.church) {
     return <Loading />;
   }
 

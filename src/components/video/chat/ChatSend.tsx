@@ -24,10 +24,14 @@ export const ChatSend: React.FC<Props> = (props) => {
   };
 
   const sendMessage = () => {
+    if (!message.trim()) {
+      setMessage("");
+      return;
+    }
     const { firstName, lastName } = ChatHelper.current.user;
     const msg: MessageInterface = { churchId: ChatConfigHelper.current.churchId, content: message.trim(), conversationId: props.conversation.id, displayName: `${firstName} ${lastName}`, messageType: "message" };
-    if (ApiHelper.isAuthenticated && UserHelper.user) ApiHelper.post("/messages", [msg], "MessagingApi");
-    else ApiHelper.postAnonymous("/messages/send", [msg], "MessagingApi");
+    const send = (ApiHelper.isAuthenticated && UserHelper.user) ? ApiHelper.post("/messages", [msg], "MessagingApi") : ApiHelper.postAnonymous("/messages/send", [msg], "MessagingApi");
+    Promise.resolve(send).catch((error) => console.error("Failed to send chat message:", error));
     setMessage("");
   };
 

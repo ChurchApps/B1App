@@ -5,7 +5,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { NonAuthDonationWrapper } from "@churchapps/apphelper/website";
 import { UserHelper, Locale } from "@churchapps/apphelper";
 import { Button, Container, Grid, Icon, Link, Typography } from "@mui/material";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { CampaignProgress } from "@/components/donate/CampaignProgress";
 
 type Props = { config?: ConfigurationInterface; };
@@ -15,9 +15,12 @@ export function DonatePage(props: Props) {
   // Stripe Elements + reCAPTCHA inside NonAuthDonationWrapper read browser-only
   // state during render, mismatching the SSR snapshot. Defer until mount.
   const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => { setMounted(true); }, []);
+  const router = useRouter();
+  React.useEffect(() => {
+    if (UserHelper.currentUserChurch?.person?.id) router.replace("/mobile/donate");
+    setMounted(true);
+  }, []);
 
-  if (UserHelper.currentUserChurch?.person?.id) redirect("/mobile/donate");
   return <>
     <Container>
       <h1>{Locale.label("pageSlug.donate", "Donate")}</h1>

@@ -17,7 +17,7 @@ import type { LinkInterface } from "@churchapps/helpers";
 import CascadingHoverMenus from "./CascadingMenus/CascadingHoverMenus";
 import CascadingListMenu from "./CascadingMenus/CascadingListMenu";
 import { PersonHelper, SectionInterface, UrlHelper } from "@/helpers";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { StyleHelper } from "@churchapps/apphelper/website";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
@@ -57,6 +57,7 @@ export function Header(props: Props) {
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [logoError, setLogoError] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const context = useContext(UserContext);
 
 
@@ -70,7 +71,7 @@ export function Header(props: Props) {
         if (data.showLogin) {
           setShowLogin(data.showLogin === "true");
         }
-      });
+      }).catch(() => { /* keep default login visibility */ });
     }
     if (typeof window === "undefined") return;
     const handleScroll = () => {
@@ -91,7 +92,7 @@ export function Header(props: Props) {
     setLogoError(false);
   }, [props.config?.appearance?.logoLight, props.config?.appearance?.logoDark, transparent]);
 
-  const memberPortal = <MenuItem onClick={() => { redirect("/mobile"); }} dense data-testid="member-portal-menu-item" aria-label={Locale.label("header.goMemberPortal")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> {Locale.label("header.memberPortal")}</MenuItem>;
+  const memberPortal = <MenuItem onClick={() => { router.push("/mobile"); }} dense data-testid="member-portal-menu-item" aria-label={Locale.label("header.goMemberPortal")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> {Locale.label("header.memberPortal")}</MenuItem>;
   const adminPortal = (UserHelper.currentUserChurch && UserHelper.checkAccess(Permissions.contentApi.content.edit)) && (
     <MenuItem onClick={() => { window.location.href = `https://admin.b1.church/login?churchId=${context?.userChurch?.church?.id}&returnUrl=/#jwt=${encodeURIComponent(context?.userChurch?.jwt || "")}`; }} dense data-testid="admin-portal-menu-item" aria-label={Locale.label("header.goAdminPortal")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> {Locale.label("header.adminPortal")}</MenuItem>
   );
@@ -116,7 +117,7 @@ export function Header(props: Props) {
       <Box component="div" sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, ":hover #userMenuLink": { backgroundColor: "var(--app-primary, #36547e)", color: "white" }, ":hover #userIcon": { color: "white !important" }, fontSize: "14px" }}>
         <Chip
           id="userMenuLink"
-          label={`${context?.person?.name?.first ?? UserHelper.user.firstName} ${context?.person?.name?.last ?? UserHelper.user.lastName}`}
+          label={`${context?.person?.name?.first ?? UserHelper.user?.firstName ?? ""} ${context?.person?.name?.last ?? UserHelper.user?.lastName ?? ""}`}
           icon={<Icon id="userIcon" sx={{ color: "var(--app-primary, #36547e) !important" }}>account_circle</Icon>}
           sx={{ borderColor: "var(--app-primary, #36547e)", color: "var(--app-primary, #36547e)", minWidth: "100%" }}
           onClick={(e) => { e.preventDefault(); setMenuAnchor((Boolean(menuAnchor)) ? null : e.currentTarget); }}
@@ -130,7 +131,7 @@ export function Header(props: Props) {
             <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>person</Icon> {Locale.label("wrapper.editProfile")}
             <Icon sx={{ marginLeft: "auto", fontSize: "18px !important" }}>chevron_right</Icon>
           </MenuItem>
-          <MenuItem onClick={() => { redirect("/logout"); }} sx={{ color: "#d32f2f" }} dense data-testid="logout-menu-item" aria-label={Locale.label("wrapper.logout")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> {Locale.label("wrapper.logout")}</MenuItem>
+          <MenuItem onClick={() => { router.push("/logout"); }} sx={{ color: "#d32f2f" }} dense data-testid="logout-menu-item" aria-label={Locale.label("wrapper.logout")}><Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>logout</Icon> {Locale.label("wrapper.logout")}</MenuItem>
         </Menu>
         <Menu
           id="editSubMenu"
@@ -143,7 +144,7 @@ export function Header(props: Props) {
           <MenuItem onClick={() => { handleCloseAllMenus(); window.location.href = getAccountUrl(); }} dense data-testid="account-menu-item" aria-label={Locale.label("header.editAccountSettings")}>
             <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>settings</Icon> {Locale.label("wrapper.editAccount")}
           </MenuItem>
-          <MenuItem onClick={() => { handleCloseAllMenus(); redirect(`/mobile/community/${PersonHelper?.person?.id}`); }} dense data-testid="church-profile-menu-item" aria-label={Locale.label("wrapper.editChurchProfile")}>
+          <MenuItem onClick={() => { handleCloseAllMenus(); router.push(`/mobile/community/${PersonHelper?.person?.id}`); }} dense data-testid="church-profile-menu-item" aria-label={Locale.label("wrapper.editChurchProfile")}>
             <Icon sx={{ marginRight: "10px", fontSize: "20px !important" }}>church</Icon> {Locale.label("wrapper.editChurchProfile")}
           </MenuItem>
         </Menu>
@@ -168,7 +169,7 @@ export function Header(props: Props) {
 
   const userActionList = ApiHelper.isAuthenticated && (<>
     <ListItem disablePadding>
-      <ListItemButton onClick={() => { redirect("/mobile"); }} data-testid="member-portal-list-item" aria-label={Locale.label("header.goMemberPortal")}>
+      <ListItemButton onClick={() => { router.push("/mobile"); }} data-testid="member-portal-list-item" aria-label={Locale.label("header.goMemberPortal")}>
         <ListItemIcon><Icon color="secondary">person</Icon></ListItemIcon>
         <ListItemText primary={Locale.label("header.memberPortal")} />
       </ListItemButton>
@@ -197,7 +198,7 @@ export function Header(props: Props) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton sx={{ pl: 4 }} onClick={() => { redirect(`/mobile/community/${PersonHelper?.person?.id}`); }} data-testid="church-profile-list-item" aria-label={Locale.label("wrapper.editChurchProfile")}>
+          <ListItemButton sx={{ pl: 4 }} onClick={() => { router.push(`/mobile/community/${PersonHelper?.person?.id}`); }} data-testid="church-profile-list-item" aria-label={Locale.label("wrapper.editChurchProfile")}>
             <ListItemIcon><Icon color="secondary">church</Icon></ListItemIcon>
             <ListItemText primary={Locale.label("wrapper.editChurchProfile")} />
           </ListItemButton>
@@ -236,7 +237,7 @@ export function Header(props: Props) {
     {structuredData.map((item) => <CascadingListMenu key={item.id} link={item} handleClose={() => toggleDrawer()} />)}
     {ApiHelper.isAuthenticated && (
       <ListItem disablePadding sx={{ color: "#d32f2f" }}>
-        <ListItemButton onClick={() => { redirect("/logout"); }} data-testid="logout-list-item" aria-label={Locale.label("wrapper.logout")}>
+        <ListItemButton onClick={() => { router.push("/logout"); }} data-testid="logout-list-item" aria-label={Locale.label("wrapper.logout")}>
           <ListItemIcon><Icon sx={{ color: "#d32f2f" }}>logout</Icon></ListItemIcon>
           <ListItemText primary={Locale.label("wrapper.logout")} />
         </ListItemButton>

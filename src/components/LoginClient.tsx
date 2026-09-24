@@ -37,7 +37,9 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
 
   const handleRedirect = (url: string) => {
     PersonHelper.person = context!.person;
-    redirect(url);
+    let target = "/";
+    try { if (new URL(url, window.location.origin).origin === window.location.origin) target = url; } catch { /* invalid URL */ }
+    redirect(target);
   };
 
   const [hashJwt, setHashJwt] = useState("");

@@ -375,7 +375,7 @@ export function EventRegister({ churchId, eventId, event }: Props) {
           </Alert>
         )}
 
-        {event.capacity && (
+        {!!event.capacity && (
           <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="text.secondary">
               {Locale.label("registration.spotsFilled").replace("{0}", String(activeCount)).replace("{1}", String(event.capacity))}
