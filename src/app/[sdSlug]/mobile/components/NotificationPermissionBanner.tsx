@@ -37,7 +37,7 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
       setErrorMessage((error as Error)?.message || Locale.label("mobile.components.notificationEnableFailed"));
     } finally {
       setBusy(false);
-      await refresh();
+      await refresh().catch(() => { /* ignore */ });
     }
   };
 

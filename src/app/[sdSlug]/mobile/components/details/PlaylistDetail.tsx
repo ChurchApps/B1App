@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { formatDate } from "../util";
+import { cssUrl, formatDate } from "../util";
 import { SermonCard } from "../SermonCard";
 
 interface Props {
@@ -79,7 +79,7 @@ export const PlaylistDetail = ({ id, config }: Props) => {
           borderRadius: `${mobileTheme.radius.xl}px`,
           overflow: "hidden",
           background: hasImage
-            ? `url(${playlist!.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}`
+            ? `${cssUrl(playlist!.thumbnail)} center / cover no-repeat, ${mobileTheme.colorWash}`
             : mobileTheme.colorWash
         }}
       >

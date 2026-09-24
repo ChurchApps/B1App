@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface, GroupMemberInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { cssUrl } from "../util";
 import { GroupContact } from "@/components/groups/GroupContact";
 
 interface Props {
@@ -86,7 +87,7 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
           height: 220,
           borderRadius: "20px",
           overflow: "hidden",
-          background: hasPhoto ? `url(${group!.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
+          background: hasPhoto ? `${cssUrl(group!.photoUrl)} center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
         }}
       >
         <Box

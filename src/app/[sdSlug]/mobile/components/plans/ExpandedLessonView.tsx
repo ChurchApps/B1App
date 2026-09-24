@@ -90,12 +90,15 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
     }
   }, [open, sectionList]);
 
+  const offsetInContainer = (container: HTMLElement, el: HTMLElement) =>
+    el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+
   const handleTabChange = (_: any, value: string) => {
     setActiveSection(value);
     const container = scrollContainerRef.current;
     const target = document.getElementById(value);
     if (container && target) {
-      const offset = target.offsetTop - 8;
+      const offset = offsetInContainer(container, target) - 8;
       container.scrollTo({ top: offset, behavior: "smooth" });
     }
   };
@@ -108,7 +111,7 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
     for (const { domId } of sectionList) {
       const el = document.getElementById(domId);
       if (!el) continue;
-      if (el.offsetTop <= scrollPos) current = domId;
+      if (offsetInContainer(container, el) <= scrollPos) current = domId;
       else break;
     }
     if (current !== activeSection) setActiveSection(current);

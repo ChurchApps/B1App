@@ -15,6 +15,7 @@ import {
   InputAdornment,
   Menu,
   MenuItem,
+  Snackbar,
   Tab,
   Tabs,
   TextField,
@@ -94,6 +95,9 @@ export const GroupChatModal = ({
   const [menuAnchor, setMenuAnchor] = React.useState<{ el: HTMLElement; message: Message } | null>(null);
   const [reactAnchor, setReactAnchor] = React.useState<{ el: HTMLElement; message: Message } | null>(null);
   const [confirmDelete, setConfirmDelete] = React.useState<Message | null>(null);
+  const [actionError, setActionError] = React.useState<string | null>(null);
+  const [loadedType, setLoadedType] = React.useState<string | null>(null);
+  const loadSeqRef = React.useRef(0);
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
 
   // isMine flips only the caller's own highlight; inbound echoes don't change status.
@@ -146,14 +150,17 @@ export const GroupChatModal = ({
 
   const loadConversations = React.useCallback(async () => {
     if (!groupId) return;
+    const seq = ++loadSeqRef.current;
     setLoading(true);
     try {
       const data: Conversation[] = await ApiHelper.get(
         `/conversations/messages/${currentContentType}/${groupId}?page=1&limit=50`,
         "MessagingApi"
       );
+      if (seq !== loadSeqRef.current) return;
       const list = Array.isArray(data) ? data : [];
       setConversations(list);
+      setLoadedType(currentContentType);
 
       const ids = new Set<string>();
       list.forEach((c) =>
@@ -177,9 +184,11 @@ export const GroupChatModal = ({
         }
       }
     } catch {
+      if (seq !== loadSeqRef.current) return;
       setConversations([]);
+      setLoadedType(null);
     } finally {
-      setLoading(false);
+      if (seq === loadSeqRef.current) setLoading(false);
     }
   }, [groupId, currentContentType]);
 
@@ -248,7 +257,7 @@ export const GroupChatModal = ({
   const handleSend = async () => {
     const text = draft.trim();
     if (!text) return;
-    if (!canPost) return;
+    if (!canPost || loadedType !== currentContentType) return;
     setSending(true);
     try {
 
@@ -305,7 +314,7 @@ export const GroupChatModal = ({
       setDraft("");
       await loadConversations();
     } catch {
-
+      setActionError(Locale.label("mobile.details.messageFailed"));
     } finally {
       setSending(false);
     }
@@ -339,7 +348,7 @@ export const GroupChatModal = ({
       }
       await loadConversations();
     } catch {
-
+      setActionError(Locale.label("mobile.details.deleteFailed"));
     }
   };
 
@@ -391,7 +400,7 @@ export const GroupChatModal = ({
           />
         ))}
         {urlMatches
-          ?.filter((url) => !imageRegex.test(url))
+          ?.filter((url) => !new RegExp(imageRegex.source, "i").test(url))
           .map((url, i) => (
             <Box
               key={i}
@@ -824,6 +833,7 @@ export const GroupChatModal = ({
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={!!actionError} autoHideDuration={4000} onClose={() => setActionError(null)} message={actionError} />
     </Dialog>
   );
 };

@@ -43,6 +43,7 @@ interface Props {
 }
 
 const STORAGE_CAP = 100_000_000;
+const isHttpUrl = (url?: string) => !!url && /^https?:\/\//i.test(url);
 
 const formatSize = (bytes: number) => {
   if (bytes > 1_000_000) return `${(Math.round(bytes / 10_000) / 100).toFixed(2)}MB`;
@@ -130,11 +131,17 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       setLinkError(Locale.label("mobile.group.enterUrl"));
       return;
     }
+    let url = linkUrl.trim();
+    if (!/^[a-z][a-z0-9+.-]*:/i.test(url)) url = "https://" + url;
+    if (!isHttpUrl(url)) {
+      setLinkError(Locale.label("mobile.group.invalidUrl"));
+      return;
+    }
     setLinkSaving(true);
     try {
       const payload = {
         category: "groupLink",
-        url: linkUrl.trim(),
+        url,
         linkType: "url",
         text: linkText.trim(),
         linkData: groupId,
@@ -185,6 +192,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
     } catch (e: any) {
       setUploadError(e?.message || Locale.label("mobile.group.uploadFailed"));
       setUploadProgress(-1);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -298,7 +306,7 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       </Box>
       <Box
         component="a"
-        href={l.url}
+        href={isHttpUrl(l.url) ? l.url : undefined}
         target="_blank"
         rel="noopener noreferrer"
         sx={{ flex: 1, minWidth: 0, textDecoration: "none", color: "inherit" }}

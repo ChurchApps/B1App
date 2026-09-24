@@ -59,7 +59,7 @@ export const LessonPreview: React.FC<Props> = (props) => {
               alignItems: "center",
               justifyContent: "space-between",
               p: 1,
-              backgroundColor: `${tc.primary}14`,
+              backgroundColor: `color-mix(in srgb, ${tc.primary} 8%, transparent)`,
               borderRadius: 1
             }}
           >

@@ -46,7 +46,8 @@ export const LessonDialog: React.FC<Props> = (props) => {
     providerPath: hasProviderData ? props.providerPath : undefined,
     providerContentPath: hasProviderData ? props.providerContentPath : undefined,
     relatedId: hasProviderData ? props.sectionId : undefined,
-    fallbackUrl: hasProviderData ? props.downloadUrl : undefined
+    fallbackUrl: hasProviderData ? props.downloadUrl : undefined,
+    ministryId: props.ministryId
   });
 
   // Legacy iframe URL
