@@ -5,6 +5,9 @@ import { isNoindexHost } from "@/helpers/noindexHost";
 const INTERNAL_HOSTS = ["localhost", "b1.church", "localtest.me"];
 const INTERNAL_SUFFIXES = [".b1.church", ".localtest.me", ".localhost", ".up.railway.app", ".vercel.app"];
 const CACHE_TTL = 10 * 60_000;
+const CACHE_MAX = 5000;
+// Subdomains are [a-z0-9] only, so this never resolves to a church (vs. the host rewrite guessing one).
+const UNKNOWN_SITE = "_unknown.invalid";
 const cache = new Map<string, { site: string | null; exp: number }>();
 
 export const config = { matcher: ["/((?!_next/|api/|.*\\..*).*)", "/sitemap.xml", "/robots.txt", "/manifest.webmanifest"] };
@@ -38,11 +41,12 @@ export async function middleware(req: NextRequest) {
           const data = await res.json().catch((): null => null);
           if (data?.subDomain) entry.site = data.subDomain + ".b1.church";
           entry.exp = Date.now() + CACHE_TTL; // cache hits and confirmed misses; 5xx blips and errors are never cached
+          if (cache.size >= CACHE_MAX) cache.clear();
           cache.set(host, entry);
         }
       } catch { /* lookup unreachable — fall through with no x-site */ }
     }
-    if (entry.site) headers.set("x-site", entry.site);
+    headers.set("x-site", entry.site || UNKNOWN_SITE);
   }
   const res = NextResponse.next({ request: { headers } });
   res.headers.set("Content-Security-Policy", csp);

@@ -6,6 +6,8 @@ import { StreamingTabInterface, EnvironmentHelper, StreamConfigInterface, ChatSt
 import { HostChat } from "./chat/host";
 import { Chat } from "./chat/Chat";
 
+const TAB_SANDBOX = "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox";
+
 interface Props {
   config: StreamConfigInterface,
   chatState: ChatStateInterface,
@@ -37,7 +39,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
   const getIframe = (tab: StreamingTabInterface, i: number, visible: boolean) => (
     <div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-      <iframe src={tab.url} frameBorder="0" title={"frame" + i.toString()} sandbox="" /> :
+      {/^https?:\/\//i.test(tab.url || "") ? <iframe src={tab.url} frameBorder="0" title={"frame" + i.toString()} sandbox={TAB_SANDBOX} /> : null}
     </div>);
 
   const getPage = (tab: StreamingTabInterface, i: number, visible: boolean) => {
@@ -48,7 +50,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
     const isHttp = /^https?:\/\//i.test(url);
     const src = url.startsWith("/stream") || isHttp ? url : "";
     return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
-      {src ? <iframe src={src} frameBorder="0" title={"frame" + i.toString()} sandbox="" /> : null}
+      {src ? <iframe src={src} frameBorder="0" title={"frame" + i.toString()} sandbox={TAB_SANDBOX} /> : null}
     </div>);
   };
 
