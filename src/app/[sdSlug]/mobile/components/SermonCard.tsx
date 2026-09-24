@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import type { SermonInterface } from "@churchapps/helpers";
 import { mobileTheme } from "./mobileTheme";
-import { formatDate, formatDuration } from "./util";
+import { cssUrl, formatDate, formatDuration } from "./util";
 
 interface Props {
   sermon: SermonInterface;
@@ -29,7 +29,7 @@ export const SermonCard = ({ sermon, onClick }: Props) => {
         borderRadius: `${mobileTheme.radius.xl}px`,
         overflow: "hidden",
         cursor: "pointer",
-        background: hasImage ? `url(${sermon.thumbnail}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
+        background: hasImage ? `${cssUrl(sermon.thumbnail)} center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
         "&:active": { transform: "scale(0.985)" },
         transition: "transform 120ms ease"
       }}

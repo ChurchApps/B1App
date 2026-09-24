@@ -13,12 +13,14 @@ import { useQuery } from "@tanstack/react-query";
 import type { PlaylistInterface, SermonInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { formatDate, formatDuration } from "../util";
+import { cssUrl, formatDate, formatDuration } from "../util";
 
 interface Props {
   id: string;
   config: ConfigurationInterface;
 }
+
+const safeHttpUrl = (url?: string) => (url && /^https?:\/\//i.test(url) ? url : null);
 
 const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
   if (!sermon) return null;
@@ -32,12 +34,11 @@ const buildEmbedUrl = (sermon: SermonInterface | null): string | null => {
       case "youtube_channel": return `https://www.youtube.com/embed/live_stream?channel=${videoData}&autoplay=1`;
       case "vimeo": return `https://player.vimeo.com/video/${videoData}?autoplay=1`;
       case "facebook": return `https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvideo.php%3Fv%3D${videoData}&show_text=0&autoplay=1&allowFullScreen=1`;
-      default: return videoData;
+      default: return safeHttpUrl(videoData);
     }
   }
 
-  if (videoUrl) return videoUrl;
-  return null;
+  return safeHttpUrl(videoUrl);
 };
 
 const buildExternalUrl = (sermon: SermonInterface | null): string | null => {
@@ -52,12 +53,11 @@ const buildExternalUrl = (sermon: SermonInterface | null): string | null => {
       case "youtube_channel": return `https://www.youtube.com/channel/${videoData}/live`;
       case "vimeo": return `https://vimeo.com/${videoData}`;
       case "facebook": return `https://www.facebook.com/video.php?v=${videoData}`;
-      default: return videoData;
+      default: return safeHttpUrl(videoData);
     }
   }
 
-  if (videoUrl) return videoUrl;
-  return null;
+  return safeHttpUrl(videoUrl);
 };
 
 export const SermonDetail = ({ id, config }: Props) => {
@@ -211,7 +211,7 @@ export const SermonDetail = ({ id, config }: Props) => {
           bgcolor: tc.primary,
           mb: `${mobileTheme.spacing.md}px`,
           backgroundImage:
-            sermon.thumbnail && !showPlayer ? `url(${sermon.thumbnail})` : undefined,
+            sermon.thumbnail && !showPlayer ? cssUrl(sermon.thumbnail) : undefined,
           backgroundSize: "cover",
           backgroundPosition: "center",
           cursor: !showPlayer && canPlay ? "pointer" : "default"

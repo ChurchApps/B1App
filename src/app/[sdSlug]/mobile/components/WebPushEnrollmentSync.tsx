@@ -10,6 +10,7 @@ export const WebPushEnrollmentSync = (): null => {
   const churchId = context?.userChurch?.church?.id;
   const jwt = context?.userChurch?.jwt;
   const lastEnrollmentKeyRef = useRef<string>("");
+  const inFlightRef = useRef(false);
 
   useEffect(() => {
     const syncEnrollment = async () => {
@@ -19,8 +20,9 @@ export const WebPushEnrollmentSync = (): null => {
       if (permission !== "granted") return;
 
       const enrollmentKey = `${userId}:${churchId}:${permission}:${WebPushHelper.isServerRegistrationEnabled() ? "server" : "local"}`;
-      if (lastEnrollmentKeyRef.current === enrollmentKey) return;
+      if (lastEnrollmentKeyRef.current === enrollmentKey || inFlightRef.current) return;
 
+      inFlightRef.current = true;
       try {
         const existing = await WebPushHelper.getExistingSubscription();
         if (existing && WebPushHelper.isServerRegistrationEnabled()) {
@@ -31,6 +33,8 @@ export const WebPushEnrollmentSync = (): null => {
         lastEnrollmentKeyRef.current = enrollmentKey;
       } catch (error) {
         console.error("[webpush] background enrollment sync failed:", error);
+      } finally {
+        inFlightRef.current = false;
       }
     };
 

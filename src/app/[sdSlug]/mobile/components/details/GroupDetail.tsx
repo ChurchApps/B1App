@@ -12,6 +12,7 @@ import {
   DialogTitle,
   Icon,
   Skeleton,
+  Snackbar,
   Tab,
   Tabs,
   Typography
@@ -23,7 +24,7 @@ import { Permissions, type GroupInterface, type PlanInterface } from "@churchapp
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { getFirstDayOfWeek } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
-import { getInitials } from "../util";
+import { cssUrl, getInitials } from "../util";
 import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
 import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
 import { GroupResourcesTab } from "../group/GroupResourcesTab";
@@ -87,6 +88,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const [joining, setJoining] = React.useState(false);
   const [requestDialogOpen, setRequestDialogOpen] = React.useState(false);
   const [leaveDialogOpen, setLeaveDialogOpen] = React.useState(false);
+  const [actionError, setActionError] = React.useState<string | null>(null);
   // Initially show the Members tab to avoid the messaging screen popup caused by a mounting bug.
   const [tab, setTab] = React.useState<TabKey>("members");
   const [chatOpen, setChatOpen] = React.useState(false);
@@ -124,9 +126,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     queryFn: async () => {
       // `id` may be a real group id (shortIds can contain '-' or '_') or a slug, so
       // we can't tell them apart by shape — try id forms first, then the slug lookup.
-      const authData = await ApiHelper.get(`/groups/${id}`, "MembershipApi");
-      if (isValidGroup(authData)) return authData;
-      const tryPublic = async (url: string) => {
+      const tryGet = async (url: string) => {
         try {
           const d = await ApiHelper.get(url, "MembershipApi");
           return isValidGroup(d) ? d : null;
@@ -135,8 +135,9 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
         }
       };
       return (
-        (await tryPublic(`/groups/public/${churchId}/${id}`)) ||
-        (await tryPublic(`/groups/public/${churchId}/slug/${id}`))
+        (await tryGet(`/groups/${id}`)) ||
+        (await tryGet(`/groups/public/${churchId}/${id}`)) ||
+        (await tryGet(`/groups/public/${churchId}/slug/${id}`))
       );
     },
     enabled: !!id && !!churchId
@@ -225,6 +226,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     try {
       await ApiHelper.delete(`/groupmembers/${mine.id}`, "MembershipApi");
       refreshMembers();
+    } catch {
+      setActionError(Locale.label("mobile.details.groupActionFailed"));
     } finally {
       setJoining(false);
     }
@@ -244,6 +247,8 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
       } else {
         refreshMembers();
       }
+    } catch {
+      setActionError(Locale.label("mobile.details.groupActionFailed"));
     } finally {
       setJoining(false);
     }
@@ -320,7 +325,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           height: 220,
           borderRadius: "20px",
           overflow: "hidden",
-          background: hasPhoto ? `url(${group!.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
+          background: hasPhoto ? `${cssUrl(group!.photoUrl)} center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
         }}
       >
         <Box sx={overlaySx}>
@@ -808,6 +813,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           <Button color="error" onClick={handleLeave} data-testid="confirm-leave-group">{Locale.label("mobile.details.leaveGroup")}</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={!!actionError} autoHideDuration={4000} onClose={() => setActionError(null)} message={actionError} />
       {groupId && (
         <RequestToJoinDialog
           open={requestDialogOpen}

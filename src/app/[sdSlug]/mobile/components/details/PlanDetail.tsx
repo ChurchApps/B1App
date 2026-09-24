@@ -13,7 +13,7 @@ import {
   Tabs,
   Typography
 } from "@mui/material";
-import { ApiHelper, ArrayHelper, Locale } from "@churchapps/apphelper";
+import { ApiHelper, ArrayHelper, DateHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import type {
   AssignmentInterface,
   PersonInterface,
@@ -40,7 +40,7 @@ interface Props {
 const formatServiceDate = (date?: Date | string) => {
   if (!date) return "";
   try {
-    const d = typeof date === "string" ? new Date(date) : date;
+    const d = typeof date === "string" ? DateHelper.toDate(date) : date;
     if (isNaN(d.getTime())) return "";
     return d.toLocaleDateString(undefined, {
       weekday: "short",
@@ -300,7 +300,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
             {Locale.label("mobile.details.signInToViewPlan")}
           </Typography>
           <Link
-            href={`/login/?returnUrl=/mobile/plans/${id}`}
+            href={`/mobile/login?returnUrl=${encodeURIComponent(`/mobile/plans/${id}`)}`}
             style={{ color: tc.primary, fontWeight: 600, textDecoration: "none" }}
           >
             {Locale.label("mobile.details.signIn")}
@@ -436,7 +436,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                 px: `${mobileTheme.spacing.md}px`,
                 py: `${mobileTheme.spacing.md}px`,
                 borderRadius: `${mobileTheme.radius.lg}px`,
-                bgcolor: `${tc.primary}14`,
+                bgcolor: `color-mix(in srgb, ${tc.primary} 8%, transparent)`,
                 mb: `${mobileTheme.spacing.md}px`
               }}
             >
@@ -554,7 +554,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
                   gap: 1,
                   p: 1,
                   borderRadius: `${mobileTheme.radius.md}px`,
-                  bgcolor: `${tc.primary}0D`,
+                  bgcolor: `color-mix(in srgb, ${tc.primary} 5%, transparent)`,
                   textDecoration: "none"
                 }}
               >
@@ -769,7 +769,7 @@ const PositionDetailsCard = ({
                   gap: 1,
                   p: 1,
                   borderRadius: `${mobileTheme.radius.md}px`,
-                  bgcolor: `${tc.primary}0D`
+                  bgcolor: `color-mix(in srgb, ${tc.primary} 5%, transparent)`
                 }}
               >
                 <Icon sx={{ color: tc.primary, fontSize: 18, mt: 0.25 }}>access_time</Icon>
@@ -854,7 +854,7 @@ const TeamGroupCard = ({
         personId: person.id,
         name: displayName,
         position: position.name || Locale.label("mobile.details.position"),
-        photo: person.photo
+        photo: person.photo ? PersonHelper.getPhotoUrl(person) : undefined
       });
     });
   });
@@ -867,7 +867,7 @@ const TeamGroupCard = ({
           alignItems: "center",
           px: `${mobileTheme.spacing.md}px`,
           py: `${mobileTheme.spacing.sm}px`,
-          bgcolor: `${tc.primary}0D`,
+          bgcolor: `color-mix(in srgb, ${tc.primary} 5%, transparent)`,
           borderRadius: `${mobileTheme.radius.lg}px`,
           mb: `${mobileTheme.spacing.sm}px`
         }}

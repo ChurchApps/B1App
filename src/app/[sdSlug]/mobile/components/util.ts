@@ -83,6 +83,8 @@ export const navigateBack = (
   else router.push(fallback);
 };
 
+export const cssUrl = (url?: string): string => `url(${JSON.stringify(url || "")})`;
+
 export const shadePrimary = (cssColor: string, percent: number): string => {
   const mixer = percent < 0 ? "black" : "white";
   return `color-mix(in srgb, ${cssColor} ${100 - Math.abs(percent)}%, ${mixer})`;

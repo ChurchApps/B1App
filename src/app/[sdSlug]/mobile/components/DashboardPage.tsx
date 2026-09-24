@@ -8,6 +8,7 @@ import { Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme, linkTypeToIcon, linkTypeToRoute, linkTypeToTagline } from "./mobileTheme";
+import { cssUrl } from "./util";
 import { NotificationPermissionBanner } from "./NotificationPermissionBanner";
 import { MobileHeaderActions } from "./MobileAppBar";
 import { filterVisibleLinks, useChurchLinks } from "../hooks/useConfig";
@@ -61,7 +62,7 @@ const MediaCard = ({ link, height, titleSize, chip, onClick, onKeyDown }: {
         overflow: "hidden",
         cursor: "pointer",
         flex: 1,
-        background: photo ? `url(${photo}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
+        background: photo ? `${cssUrl(photo)} center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
         "&:active": { transform: "scale(0.985)" },
         transition: "transform 120ms ease"
       }}

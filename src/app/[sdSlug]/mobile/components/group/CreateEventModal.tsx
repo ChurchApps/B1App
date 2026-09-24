@@ -55,9 +55,10 @@ const localToIsoString = (localValue: string) => {
 };
 
 // UNTIL is inclusive, so end the series at the close of the day before the clicked occurrence.
+// EventHelper.getFullRRule feeds dtstart as local wall-clock labelled UTC, so UNTIL must use the same frame.
 const endBefore = (occurrence: Date | string) => {
   const d = new Date(occurrence);
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, -1);
+  return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, -1));
 };
 
 export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventProp, onClose, onSaved }: Props) => {
@@ -118,11 +119,13 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   const [error, setError] = React.useState<string | null>(null);
   const [recurrenceModalType, setRecurrenceModalType] = React.useState<"save" | "delete" | "">("");
   const [booking, setBooking] = React.useState<BookingSelection>(emptyBookingSelection());
+  const createdIdRef = React.useRef<string | undefined>(undefined);
   const [notice, setNotice] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (!open) return;
     const d = computeDefaults();
+    createdIdRef.current = undefined;
     setTitle(d.title);
     setDescription(d.description);
     setStart(d.start);
@@ -162,7 +165,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   // Diff selected rooms/resources against existing bookings: POST new, DELETE removed.
   const syncBookings = async (eventId: string): Promise<any[]> => {
     if (!eventId) return [];
-    const existing: any[] = eventProp?.id ? await ApiHelper.get("/eventBookings/event/" + eventId, "ContentApi").catch((): any[] => []) : [];
+    const existing: any[] = eventProp?.id || createdIdRef.current ? await ApiHelper.get("/eventBookings/event/" + eventId, "ContentApi").catch((): any[] => []) : [];
     const { toAdd, toRemove } = diffBookings(eventId, booking, existing);
     let saved: any[] = [];
     if (toAdd.length) saved = await ApiHelper.post("/eventBookings", toAdd, "ContentApi");
@@ -212,7 +215,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
     setSaving(true);
     setError(null);
     try {
-      const saved = await ApiHelper.post("/events", [buildPayload()], "ContentApi");
+      const saved = await ApiHelper.post("/events", [{ ...buildPayload(), id: createdIdRef.current }], "ContentApi");
+      createdIdRef.current = saved?.[0]?.id;
       const bookings = await syncBookings(saved?.[0]?.id);
       finishBookings(bookings);
     } catch (e: any) {
@@ -337,11 +341,11 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
         case "future": {
           const originalEv: EventInterface = await ApiHelper.get("/events/" + eventProp.id, "ContentApi");
           const until = endBefore(eventProp.start as any);
-          if (until < new Date(originalEv.start as any)) {
+          const rrule = EventHelper.getFullRRule(originalEv);
+          if (until < rrule.options.dtstart) {
             await ApiHelper.delete("/events/" + eventProp.id, "ContentApi");
             break;
           }
-          const rrule = EventHelper.getFullRRule(originalEv);
           rrule.options.until = until;
           EventHelper.cleanRule(rrule.options);
           originalEv.recurrenceRule = EventHelper.getPartialRRuleString(rrule.options);

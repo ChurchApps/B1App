@@ -76,7 +76,7 @@ const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
 const isoDate = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
 const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
-const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0);
+const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
 
 const formatMonth = (d: Date) =>
   d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
@@ -301,7 +301,7 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                         color: active ? "#fff" : opt.color,
                         borderColor: opt.color
                       },
-                      "&:hover": { bgcolor: active ? opt.color : `${opt.color}1A`, borderColor: opt.color }
+                      "&:hover": { bgcolor: active ? opt.color : `color-mix(in srgb, ${opt.color} 10%, transparent)`, borderColor: opt.color }
                     }}
                   >
                     {isThisButtonLoading ? (

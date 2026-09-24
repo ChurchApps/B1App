@@ -46,6 +46,7 @@ export interface UseProviderContentParams {
   /** Stable content id; preferred over the index-based providerContentPath */
   relatedId?: string;
   fallbackUrl?: string;
+  ministryId?: string;
 }
 
 // Fallback media-type detection for URLs whose source didn't supply an explicit type.
@@ -63,7 +64,7 @@ function detectMediaType(url: string): "video" | "image" | "audio" | "iframe" {
 }
 
 export function useProviderContent(params: UseProviderContentParams): UseProviderContentResult {
-  const { providerId, providerPath, providerContentPath, relatedId, fallbackUrl } = params;
+  const { providerId, providerPath, providerContentPath, relatedId, fallbackUrl, ministryId } = params;
   const [content, setContent] = useState<ProviderContent | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,6 +85,7 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
       return;
     }
 
+    let cancelled = false;
     const fetchContent = async () => {
       setLoading(true);
       setError(null);
@@ -100,7 +102,11 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
 
         // Try client-side first (for providers that don't require auth)
         if (!provider.requiresAuth && provider.capabilities.instructions && provider.getInstructions) {
-          instructions = await provider.getInstructions(providerPath);
+          try {
+            instructions = await provider.getInstructions(providerPath);
+          } catch (clientError) {
+            console.warn("Client-side provider fetch failed:", clientError);
+          }
         }
 
         // Fall back to API proxy for authenticated providers
@@ -108,7 +114,7 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
           try {
             instructions = await ApiHelper.post(
               "/providerProxy/getInstructions",
-              { providerId, path: providerPath },
+              { ministryId, providerId, path: providerPath },
               "DoingApi"
             );
           } catch (proxyError) {
@@ -116,6 +122,7 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
           }
         }
 
+        if (cancelled) return;
         if (!instructions) {
           setError("Could not load content from provider");
           setLoading(false);
@@ -172,15 +179,17 @@ export function useProviderContent(params: UseProviderContentParams): UseProvide
           setError("Content not found at specified path");
         }
       } catch (err) {
+        if (cancelled) return;
         console.error("Error fetching provider content:", err);
         setError(err instanceof Error ? err.message : "Failed to load content");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchContent();
-  }, [providerId, providerPath, providerContentPath, relatedId, fallbackUrl, hasFallback]);
+    return () => { cancelled = true; };
+  }, [providerId, providerPath, providerContentPath, relatedId, fallbackUrl, hasFallback, ministryId]);
 
   return { content, loading, error };
 }

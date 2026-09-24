@@ -51,7 +51,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
     if (open) refresh();
   }, [open, refresh]);
 
-  const { data: conversations = null } = useQuery<Conversation[]>({
+  const { data: conversationsData, isError: conversationsFailed } = useQuery<Conversation[]>({
     queryKey: ["conversations", myPersonId],
     queryFn: async () => {
       const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
@@ -110,7 +110,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
     enabled: loggedIn && open
   });
 
-  const { data: notifications = null } = useQuery<NotificationItem[]>({
+  const { data: notificationsData, isError: notificationsFailed } = useQuery<NotificationItem[]>({
     queryKey: ["notifications", userContext?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/notifications/my", "MessagingApi");
@@ -118,6 +118,9 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
     },
     enabled: loggedIn && open
   });
+
+  const conversations = conversationsData ?? (conversationsFailed ? [] : null);
+  const notifications = notificationsData ?? (notificationsFailed ? [] : null);
 
   const handleConversationClick = (c: Conversation) => {
     onClose();

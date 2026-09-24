@@ -31,7 +31,8 @@ export const ActionDialog: React.FC<Props> = (props) => {
     providerPath: hasProviderData ? props.providerPath : undefined,
     providerContentPath: hasProviderData ? props.providerContentPath : undefined,
     relatedId: hasProviderData ? props.actionId : undefined,
-    fallbackUrl: props.downloadUrl
+    fallbackUrl: props.downloadUrl,
+    ministryId: props.ministryId
   });
 
   // Legacy iframe URL (only when no provider data and no fallback URL)
