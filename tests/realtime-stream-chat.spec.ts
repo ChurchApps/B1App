@@ -2,6 +2,7 @@ import { test, expect, type BrowserContext, type Page } from "@playwright/test";
 import { waitForRoomJoin } from "./helpers/realtime";
 
 const STREAM_URL = "/stream";
+const SOCKET_PORT = new URL(process.env.NEXT_PUBLIC_MESSAGING_API_SOCKET || "ws://localhost:8087").port;
 
 async function openAnonymous(page: Page) {
   await page.context().clearCookies();
@@ -71,7 +72,7 @@ test.describe("Live stream chat — unified delivery migration smoke", () => {
     await openAnonymous(page);
     await page.waitForTimeout(3000);
 
-    const messagingSockets = sockets.filter((s) => /:8087|messaging/i.test(s.url));
+    const messagingSockets = sockets.filter((s) => s.url.includes(":" + SOCKET_PORT) || /messaging/i.test(s.url));
     expect(messagingSockets.length, `Expected a MessagingApi WebSocket; saw: ${sockets.map((s) => s.url).join(", ")}`).toBeGreaterThan(0);
     expect(messagingSockets.some((s) => s.sentGetId), "Expected the client to send 'getId' over the socket").toBe(true);
   });
