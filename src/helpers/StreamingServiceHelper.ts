@@ -3,9 +3,9 @@ import { StreamConfigInterface, StreamingServiceExtendedInterface } from "./inte
 
 
 export class StreamingServiceHelper {
-  static currentServiceChangedCallback: (currentService: StreamingServiceExtendedInterface | null) => void;
+  static listeners = new Set<(currentService: StreamingServiceExtendedInterface | null) => void>();
   static currentService: StreamingServiceExtendedInterface | null;
-  static timer: NodeJS.Timeout;
+  static timer: NodeJS.Timeout | undefined;
 
   static checkService() {
     let cs: StreamingServiceExtendedInterface | null = null;
@@ -14,14 +14,21 @@ export class StreamingServiceHelper {
     }
     if (JSON.stringify(cs) !== JSON.stringify(StreamingServiceHelper.currentService)) {
       StreamingServiceHelper.currentService = cs;
-      if (StreamingServiceHelper.currentServiceChangedCallback !== undefined) StreamingServiceHelper.currentServiceChangedCallback(cs);
+      StreamingServiceHelper.listeners.forEach((listener) => listener(cs));
     }
   }
 
   static initTimer(callback: (currentService: StreamingServiceExtendedInterface | null) => void) {
-    StreamingServiceHelper.currentServiceChangedCallback = callback;
-    if (StreamingServiceHelper.timer !== undefined) clearInterval(StreamingServiceHelper.timer);
-    StreamingServiceHelper.timer = setInterval(StreamingServiceHelper.checkService, 1000);
+    StreamingServiceHelper.listeners.add(callback);
+    if (StreamingServiceHelper.currentService !== undefined) callback(StreamingServiceHelper.currentService);
+    if (StreamingServiceHelper.timer === undefined) StreamingServiceHelper.timer = setInterval(StreamingServiceHelper.checkService, 1000);
+    return () => {
+      StreamingServiceHelper.listeners.delete(callback);
+      if (StreamingServiceHelper.listeners.size === 0 && StreamingServiceHelper.timer !== undefined) {
+        clearInterval(StreamingServiceHelper.timer);
+        StreamingServiceHelper.timer = undefined;
+      }
+    };
   }
 
   static updateServiceTimes(config: StreamConfigInterface) {
@@ -44,8 +51,8 @@ export class StreamingServiceHelper {
   static getSeconds(displayTime: string) {
     try {
       const parts = displayTime.split(":");
-      const seconds = parseInt(parts[0]) * 60 + parseInt(parts[1]);
-      return seconds;
+      const seconds = parseInt(parts[0]) * 60 + (parseInt(parts[1]) || 0);
+      return isNaN(seconds) ? 0 : seconds;
     } catch (ex) { return 0; }
   }
 

@@ -32,7 +32,9 @@ export const LiveStream: React.FC<Props> = (props) => {
   const joinedServiceIdRef = React.useRef<string | null>(null);
 
   const loadData = async (keyName: string) => {
-    const result: StreamConfigInterface = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`).then((response: Response) => response.json());
+    const response = await fetch(`${EnvironmentHelper.Common.ContentApi}/preview/data/${keyName}`);
+    if (!response.ok) throw new Error("Stream config request failed: " + response.status);
+    const result: StreamConfigInterface = await response.json();
     StreamingServiceHelper.updateServiceTimes(result);
     result.keyName = keyName;
     ChatConfigHelper.current = result;
@@ -59,9 +61,10 @@ export const LiveStream: React.FC<Props> = (props) => {
       StreamChatManager.initUser();
       setChatState({ ...ChatHelper.current });
     }
-    StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs); });
-    loadData(props.keyName);
+    const stopTimer = StreamingServiceHelper.initTimer((cs) => { setCurrentService(cs); });
+    loadData(props.keyName).catch((error) => console.error("Failed to load stream config:", error));
     return () => {
+      stopTimer();
       const main = ChatHelper.current.mainConversation;
       const host = ChatHelper.current.hostConversation;
       if (main) StreamChatManager.leaveRoom(main);

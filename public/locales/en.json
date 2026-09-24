@@ -923,6 +923,7 @@
     "donate": "Donate",
     "formClosedOn": "This form closed on {}",
     "formNotAvailableUntil": "This form isn't available until {}",
+    "formNotFound": "This form could not be loaded.",
     "formSubmitted": "Your form has been successfully submitted.",
     "liveStream": "Live Stream",
     "loginToManageDonations": "Please login to manage donations",

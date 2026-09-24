@@ -14,38 +14,42 @@ interface Props {
 }
 
 const RecursiveList = ({ links, handleClose }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [openIds, setOpenIds] = useState<Record<string, boolean>>({});
 
-  const handleClick = () => { setOpen(!open); };
   return (
     <>
-      {links?.map((item: LinkInterface) => (
-        <Box key={item.id}>
-          {item?.children
-            ? (
-              <Box>
-                <ListItem disablePadding secondaryAction={<IconButton sx={{ color: "black !important" }} onClick={handleClick} data-testid={`expand-submenu-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label(open ? "cascadingMenus.collapseSubmenu" : "cascadingMenus.expandSubmenu").replace("{}", item.text || "")}>{open ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>}>
+      {links?.map((item: LinkInterface, index: number) => {
+        const itemKey = item.id || String(index);
+        const open = !!openIds[itemKey];
+        const handleClick = () => { setOpenIds((prev) => ({ ...prev, [itemKey]: !prev[itemKey] })); };
+        return (
+          <Box key={item.id}>
+            {item?.children
+              ? (
+                <Box>
+                  <ListItem disablePadding secondaryAction={<IconButton sx={{ color: "black !important" }} onClick={handleClick} data-testid={`expand-submenu-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label(open ? "cascadingMenus.collapseSubmenu" : "cascadingMenus.expandSubmenu").replace("{}", item.text || "")}>{open ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>}>
+                    <ListItemButton href={item.url || ""} onClick={handleClose} sx={{ pl: 2 }} data-testid={`nav-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", item.text || "")}>
+                      <ListItemText primary={item.text} />
+                    </ListItemButton>
+                  </ListItem>
+                  <Collapse in={open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      <RecursiveList key={item.id} links={item?.children} handleClose={handleClose} />
+                    </List>
+                  </Collapse>
+                </Box>
+              )
+              : (
+                <ListItem disablePadding>
                   <ListItemButton href={item.url || ""} onClick={handleClose} sx={{ pl: 2 }} data-testid={`nav-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", item.text || "")}>
                     <ListItemText primary={item.text} />
                   </ListItemButton>
                 </ListItem>
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    <RecursiveList key={item.id} links={item?.children} handleClose={handleClose} />
-                  </List>
-                </Collapse>
-              </Box>
-            )
-            : (
-              <ListItem disablePadding>
-                <ListItemButton href={item.url || ""} onClick={handleClose} sx={{ pl: 2 }} data-testid={`nav-item-${item.text?.toLowerCase().replace(/\s+/g, "-")}`} aria-label={Locale.label("cascadingMenus.navigateTo").replace("{}", item.text || "")}>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            )
-          }
-        </Box>
-      ))}
+              )
+            }
+          </Box>
+        );
+      })}
     </>
   );
 };

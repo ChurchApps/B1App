@@ -26,10 +26,10 @@ export const GroupsBrowser = (props: Props) => {
     if (!props.churchId) return;
     ApiHelper.getAnonymous(`/groups/public/${props.churchId}/list`, "MembershipApi").then((data: any) => {
       setGroups(Array.isArray(data) ? data : []);
-    });
+    }).catch(() => setGroups([]));
     ApiHelper.getAnonymous(`/campuses/public/${props.churchId}`, "MembershipApi").then((data: any) => {
       setCampuses(Array.isArray(data) ? data : []);
-    });
+    }).catch(() => setCampuses([]));
   }, [props.churchId]);
 
   const filtered = useMemo(() => {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { PersonHelper, WrapperPageProps } from "@/helpers";
 import { Loading } from "@churchapps/apphelper";
 import { FormSubmissionEdit } from "@churchapps/apphelper/forms";
@@ -26,22 +26,30 @@ export function FormPage(props: Props) {
   const [addFormId, setAddFormId] = useState<string>("");
   const [unRestrictedFormId, setUnRestrictedFormId] = useState<string>("");
   const [form, setForm] = useState<StandaloneFormInterface | null>(null);
+  const [loadFailed, setLoadFailed] = useState<boolean>(false);
+  const router = useRouter();
 
   const loadData = async () => {
     setIsLoading(true);
+    setLoadFailed(false);
+    try {
+      const data = await ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi") as StandaloneFormInterface;
+      if (!data) throw new Error("Form not found");
+      const now = new Date().setHours(0, 0, 0, 0);
+      const start = data.accessStartTime ? new Date(data.accessStartTime) : null;
+      const end = data.accessEndTime ? new Date(data.accessEndTime) : null;
 
-    const data = await ApiHelper.get("/forms/standalone/" + props.formId + "?churchId=" + props.config.church.id, "MembershipApi") as StandaloneFormInterface;
-    const now = new Date().setHours(0, 0, 0, 0);
-    const start = data.accessStartTime ? new Date(data.accessStartTime) : null;
-    const end = data.accessEndTime ? new Date(data.accessEndTime) : null;
-
-    if (start && start.setHours(0, 0, 0, 0) > now) setEarly(start);
-    if (end && end.setHours(0, 0, 0, 0) < now) setLate(end);
-    setRestrictedForm(!!data.restricted);
-    if (data.restricted) setAddFormId(props.formId);
-    else setUnRestrictedFormId(props.formId);
-    setIsLoading(false);
-    setForm(data);
+      if (start && new Date(start).setHours(0, 0, 0, 0) > now) setEarly(start);
+      if (end && new Date(end).setHours(0, 0, 0, 0) < now) setLate(end);
+      setRestrictedForm(!!data.restricted);
+      if (data.restricted) setAddFormId(props.formId);
+      else setUnRestrictedFormId(props.formId);
+      setForm(data);
+    } catch {
+      setLoadFailed(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleUpdate = () => setIsFormSubmitted(true);
@@ -57,12 +65,13 @@ export function FormPage(props: Props) {
       personId={PersonHelper?.person?.id}
       displayMode={form?.displayMode}
       updatedFunction={handleUpdate}
-      cancelFunction={() => redirect("/")}
+      cancelFunction={() => router.push("/")}
     />
   );
 
   const getForm = () => {
     if (isLoading) return <Loading />;
+    if (loadFailed) return <h3 className="text-center">{Locale.label("pageSlug.formNotFound")}</h3>;
     if (early) return <h3 className="text-center">{Locale.label("pageSlug.formNotAvailableUntil").replace("{}", DateHelper.prettyDateTime(early))}</h3>;
     if (late) return <h3 className="text-center">{Locale.label("pageSlug.formClosedOn").replace("{}", DateHelper.prettyDateTime(late))}</h3>;
     if (!restrictedForm || PersonHelper?.person?.id) return showForm();

@@ -15,7 +15,7 @@ const loadSharedData = async (sdSlug: string, planId: string) => {
   EnvironmentHelper.init();
   const config = await ConfigHelper.load(sdSlug);
   const signupPlans = await ApiHelper.getAnonymous("/plans/public/signup/" + config.church.id, "DoingApi");
-  const planData = (signupPlans || []).find((sp: any) => sp.plan.id === planId);
+  const planData = (signupPlans || []).find((sp: any) => sp?.plan?.id === planId);
   return { config, planData };
 };
 

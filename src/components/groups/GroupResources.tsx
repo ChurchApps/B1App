@@ -97,7 +97,7 @@ export const GroupResources: React.FC<Props> = (props) => {
   }, [props.groupId]);
 
   let isLeader = false;
-  UserHelper.currentUserChurch.groups?.forEach((g) => {
+  UserHelper.currentUserChurch?.groups?.forEach((g) => {
     if (g.id === props.groupId && g.leader) isLeader = true;
   });
 
