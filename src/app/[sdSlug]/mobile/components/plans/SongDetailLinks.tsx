@@ -13,8 +13,8 @@ export const SongDetailLinks = (props: Props) => {
   useEffect(() => {
     if (props.songDetail?.id) {
       ApiHelper.get("/songDetailLinks/songDetail/" + props.songDetail?.id, "ContentApi").then((data: SongDetailLinkInterface[]) => {
-        setSongDetailLinks(data);
-      });
+        setSongDetailLinks(data || []);
+      }).catch(() => setSongDetailLinks([]));
     }
   }, [props.songDetail]);
 
@@ -36,7 +36,7 @@ export const SongDetailLinks = (props: Props) => {
     return result;
   };
 
-  if (!songDetailLinks || songDetailLinks.length === 0) return null;
+  if (!songDetailLinks?.length && !props.songDetail?.praiseChartsId) return null;
   else {
     return <>
       <hr />

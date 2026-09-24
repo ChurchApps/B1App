@@ -43,19 +43,23 @@ export function GroupContact({ leaders, group, config }: Props) {
     setFormData(fd);
   };
 
+  const canSubmit = !!(formData.personId && formData.firstName?.trim() && formData.email?.trim() && formData.message?.trim());
+
   const handleSubmit = async (e: React.MouseEvent) => {
     if (e !== null) e.preventDefault();
+    if (!canSubmit) return;
     const email = {
       churchId: formData.churchId,
       personId: formData.personId,
+      groupId: group.id,
       appName: "B1",
       subject: "Contact Request For " + group.name,
       body:
-        "First Name: " + formData.firstName + "<br />"
-        + "Last Name: " + formData.lastName + "<br />"
-        + "Email Address: " + formData.email + "<br />"
-        + "Phone Number: " + formData.phone + "<br />"
-        + "Message: " + formData.message
+        "First Name: " + (formData.firstName || "").trim() + "<br />"
+        + "Last Name: " + (formData.lastName || "").trim() + "<br />"
+        + "Email Address: " + (formData.email || "").trim() + "<br />"
+        + "Phone Number: " + (formData.phone || "").trim() + "<br />"
+        + "Message: " + (formData.message || "").trim()
     };
 
     try {
@@ -127,6 +131,7 @@ export function GroupContact({ leaders, group, config }: Props) {
           <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
             <Button
               onClick={handleSubmit}
+              disabled={!canSubmit}
               variant="contained"
               id="conbtn"
               style={{ height: "50px", fontWeight: "bold", width: "200px" }}

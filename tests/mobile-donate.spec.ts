@@ -166,6 +166,7 @@ test.describe.serial("Mobile donate statement receipt formats", () => {
     // The print page auto-prints then routes back; keep it on screen to assert.
     await page.addInitScript(() => {
       window.print = () => {};
+      window.close = () => {};
       window.history.back = () => {};
       window.history.go = () => {};
     });

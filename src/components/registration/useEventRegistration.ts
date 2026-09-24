@@ -75,7 +75,15 @@ interface Params {
   person?: WizardPerson;
 }
 
-export const formatMoney = (n: number): string => "$" + (Number(n) || 0).toFixed(2);
+export const formatMoney = (n: number, currency?: string): string => {
+  const amount = Number(n) || 0;
+  if (currency) {
+    try {
+      return new Intl.NumberFormat("en-US", { style: "currency", currency: currency.toUpperCase(), currencyDisplay: "narrowSymbol" }).format(amount);
+    } catch { /* unknown currency code */ }
+  }
+  return "$" + amount.toFixed(2);
+};
 
 // ApiHelper exposes no PUT; compose one from its config + fetch wrapper.
 export const apiPut = (path: string, data: any, apiName: string): Promise<any> => {

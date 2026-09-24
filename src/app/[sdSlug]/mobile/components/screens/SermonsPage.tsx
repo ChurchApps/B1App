@@ -449,10 +449,10 @@ export const SermonsPage = ({ config }: Props) => {
   const keyName = config?.church?.subDomain;
   const [activeTab, setActiveTab] = useState<"series" | "recent">("series");
 
-  const [, setTick] = useState(0);
+  const [nowMs, setNowMs] = useState(() => Date.now());
 
   useEffect(() => {
-    const interval = setInterval(() => setTick((t) => t + 1), 30 * 1000);
+    const interval = setInterval(() => setNowMs(Date.now()), 30 * 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -505,7 +505,7 @@ export const SermonsPage = ({ config }: Props) => {
   const upcomingStream = useMemo<UpcomingStream | null>(() => {
     const services = streamConfig?.services;
     if (!services || services.length === 0) return null;
-    const now = new Date();
+    const now = new Date(nowMs);
     let best: { service: StreamService; start: Date; end: Date } | null = null;
     for (const s of services) {
       if (!s.serviceTime) continue;
@@ -517,7 +517,7 @@ export const SermonsPage = ({ config }: Props) => {
       const runSeconds = s.sermon?.duration || 5400;
       const end = new Date(start.getTime() + runSeconds * 1000);
       if (end <= now) continue;
-      if (!best || liveStart < new Date(best.start.getTime() - getSecondsFromDisplay(best.service.earlyStart) * 1000)) {
+      if (!best || liveStart < best.start) {
         best = { service: s, start: liveStart, end };
       }
     }
@@ -532,7 +532,7 @@ export const SermonsPage = ({ config }: Props) => {
       description: best.service.sermon?.description || "",
       isLive
     };
-  }, [streamConfig]);
+  }, [streamConfig, nowMs]);
 
   const featuredSermon = useMemo<SermonInterface | null>(() => {
     if (!sermons || sermons.length === 0) return null;

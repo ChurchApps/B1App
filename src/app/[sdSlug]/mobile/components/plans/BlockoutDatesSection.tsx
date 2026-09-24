@@ -253,7 +253,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
                 sx={{
                   display: "flex",
                   alignItems: "flex-start",
-                  bgcolor: `${tc.disabled}14`,
+                  bgcolor: `color-mix(in srgb, ${tc.disabled} 8%, transparent)`,
                   borderRadius: `${mobileTheme.radius.md}px`,
                   p: 1.5,
                   mt: 1

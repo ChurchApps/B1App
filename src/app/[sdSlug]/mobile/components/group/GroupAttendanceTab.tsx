@@ -108,6 +108,8 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
     };
   }, [groupId]);
 
+  const memberIdsKey = members.map((m) => m.person.id).join(",");
+
   React.useEffect(() => {
     let cancelled = false;
     const loadForDate = async () => {
@@ -135,7 +137,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
               personIds.push(v.visit.personId);
             }
           });
-          const memberIds = members.map((m) => m.person.id);
+          const memberIds = memberIdsKey.split(",");
           const nonMemberIds = personIds.filter((id) => !memberIds.includes(id));
           if (nonMemberIds.length > 0) {
             try {
@@ -172,7 +174,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
     return () => {
       cancelled = true;
     };
-  }, [selectedDate, sessions, members]);
+  }, [selectedDate, sessions, memberIdsKey]);
 
   const toggle = (personId: string) => {
     setAttendance((prev) => ({ ...prev, [personId]: !prev[personId] }));
@@ -216,6 +218,7 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
   const handleSave = async () => {
     setSaving(true);
     setMessage(null);
+    let createdSession: Session | null = null;
     try {
       let sessionId = currentSession?.id;
       if (!sessionId) {
@@ -223,8 +226,8 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
         const created = await ApiHelper.post("/sessions", [payload], "AttendanceApi");
         if (created && created.length > 0) {
           sessionId = created[0].id;
+          createdSession = created[0];
           setCurrentSession(created[0]);
-          setSessions((prev) => [...prev, created[0]]);
         }
       }
       if (!sessionId) throw new Error("Session creation failed");
@@ -244,18 +247,21 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
           { checkinTime: new Date(), personId, visitSessions: [{ sessionId }] },
           "AttendanceApi"
         );
+        setOriginalAttendance((prev) => ({ ...prev, [personId]: true }));
       }
       for (const personId of toRemove) {
         await ApiHelper.delete(`/visitsessions?sessionId=${sessionId}&personId=${personId}`, "AttendanceApi");
+        setOriginalAttendance((prev) => ({ ...prev, [personId]: false }));
       }
 
-      setOriginalAttendance({ ...attendance });
       setMessage({ type: "success", text: Locale.label("mobile.group.attendanceSaved") });
       setTimeout(() => setMessage(null), 3000);
     } catch {
       setMessage({ type: "error", text: Locale.label("mobile.group.failedAttendanceSave") });
     } finally {
       setSaving(false);
+      // Deferred: adding to sessions re-runs the load effect, which would reset attendance mid-save.
+      if (createdSession) setSessions((prev) => [...prev, createdSession!]);
     }
   };
 

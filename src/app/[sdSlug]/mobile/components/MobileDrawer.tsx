@@ -332,11 +332,7 @@ export const MobileDrawer = ({ links, churchName, onNavigate }: Props) => {
             disableElevation
             startIcon={<LoginIcon sx={{ fontSize: 24 }} />}
             component="a"
-            href={(() => {
-
-              const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
-              return returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
-            })()}
+            href={pathname ? `/mobile/login?returnUrl=${encodeURIComponent(pathname)}` : "/mobile/login"}
             sx={{
               bgcolor: tc.primary,
               color: tc.onPrimary,

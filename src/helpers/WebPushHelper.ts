@@ -71,7 +71,10 @@ const getStoredServerEnrollment = (): StoredServerEnrollment | null => {
     return {
       endpoint: parsed.endpoint,
       userId: parsed.userId,
-      churchId: parsed.churchId
+      churchId: parsed.churchId,
+      publicKeyFingerprint: parsed.publicKeyFingerprint,
+      serviceWorkerVersion: parsed.serviceWorkerVersion,
+      serviceWorkerScriptUrl: parsed.serviceWorkerScriptUrl
     };
   } catch {
     return null;

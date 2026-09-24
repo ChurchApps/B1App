@@ -77,7 +77,7 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
     const past: PlanWithType[] = [];
     filtered.forEach((p) => {
       if (!p.serviceDate) return;
-      const d = new Date(p.serviceDate as any);
+      const d = DateHelper.toDate(p.serviceDate as any);
       if (d >= startOfToday) upcoming.push(p);
       else past.push(p);
     });
@@ -184,7 +184,7 @@ export const GroupPlansTab: React.FC<Props> = ({ groupId }) => {
               </Typography>
               {plan.serviceDate && (
                 <Typography variant="body2" sx={{ color: tc.textSecondary }}>
-                  {DateHelper.formatHtml5Date(new Date(plan.serviceDate as any))}
+                  {DateHelper.formatHtml5Date(DateHelper.toDate(plan.serviceDate as any))}
                 </Typography>
               )}
             </Box>

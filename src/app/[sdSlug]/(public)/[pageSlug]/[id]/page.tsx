@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: {params:PageParams}): Promise
   const props = await loadSharedData(sdSlug, pageSlug);
 
   const title = Locale.label("pageSlug.metaForms");
-  return MetaHelper.getMetaData(title + " - " + props.config.church.name, "My", undefined, props.config.appearance);
+  return MetaHelper.getMetaData(title + " - " + props.config.church.name, title + " - " + props.config.church.name, undefined, props.config.appearance);
 }
 
 const loadData = async (sdSlug:string, pageSlug:string) => {

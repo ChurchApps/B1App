@@ -42,6 +42,7 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
   const [channels, setChannels] = React.useState<string[]>(["push", "email"]);
   const [saving, setSaving] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
+  const [saveFailed, setSaveFailed] = React.useState(false);
 
   React.useEffect(() => {
     if (!eventId) return;
@@ -68,6 +69,7 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
   const handleSave = async () => {
     setSaving(true);
     setSaved(false);
+    setSaveFailed(false);
     try {
       if (!enabled && defId) {
         await ApiHelper.delete("/reminders/" + defId, "MessagingApi");
@@ -78,6 +80,8 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
         if (savedDef?.id) setDefId(savedDef.id);
       }
       setSaved(true);
+    } catch {
+      setSaveFailed(true);
     } finally {
       setSaving(false);
     }
@@ -172,12 +176,13 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
           variant="outlined"
           size="small"
           onClick={handleSave}
-          disabled={saving || (enabled && offsets.length === 0)}
+          disabled={saving || (enabled && (offsets.length === 0 || channels.length === 0))}
           sx={{ textTransform: "none", borderColor: tc.primary, color: tc.primary }}
         >
           {saving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.reminders.saveReminder")}
         </Button>
         {saved && <Typography sx={{ fontSize: 13, color: tc.success }}>{Locale.label("mobile.group.reminders.saved")}</Typography>}
+        {saveFailed && <Typography sx={{ fontSize: 13, color: tc.error }}>{Locale.label("mobile.group.reminders.saveFailed")}</Typography>}
       </Box>
     </Box>
   );

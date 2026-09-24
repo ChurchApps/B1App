@@ -149,7 +149,7 @@ const PaymentEntry: React.FC<{
         data-testid="reg-pay-button"
         startIcon={processing ? <CircularProgress size={18} color="inherit" /> : <Icon>lock</Icon>}
       >
-        {processing ? Locale.label("registration.registering") : Locale.label("registration.payment.payAndRegister").replace("{}", formatMoney(amount))}
+        {processing ? Locale.label("registration.registering") : Locale.label("registration.payment.payAndRegister").replace("{}", formatMoney(amount, gateway?.currency || currency))}
       </Button>
     </Box>
   );
@@ -161,6 +161,7 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
   const [savedMethods, setSavedMethods] = useState<SavedMethod[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const displayCurrency = gateway?.currency || props.currency;
 
   useEffect(() => {
     let active = true;
@@ -198,19 +199,19 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
         {summaryLines.map((l, i) => (
           <Box key={i} sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="body2">{l.label}</Typography>
-            <Typography variant="body2">{formatMoney(l.amount)}</Typography>
+            <Typography variant="body2">{formatMoney(l.amount, displayCurrency)}</Typography>
           </Box>
         ))}
         {appliedCoupon && (
           <Box sx={{ display: "flex", justifyContent: "space-between", color: "success.main" }}>
             <Typography variant="body2">{Locale.label("registration.payment.discount")} ({appliedCoupon.code})</Typography>
-            <Typography variant="body2">-{formatMoney(discountAmount)}</Typography>
+            <Typography variant="body2">-{formatMoney(discountAmount, displayCurrency)}</Typography>
           </Box>
         )}
         <Divider sx={{ my: 0.5 }} />
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="body1" sx={{ fontWeight: 700 }}>{Locale.label("registration.payment.total")}</Typography>
-          <Typography variant="body1" sx={{ fontWeight: 700 }} data-testid="reg-total">{formatMoney(amount)}</Typography>
+          <Typography variant="body1" sx={{ fontWeight: 700 }} data-testid="reg-total">{formatMoney(amount, displayCurrency)}</Typography>
         </Box>
       </Stack>
     </Box>
@@ -284,7 +285,7 @@ export const RegistrationPaymentForm: React.FC<Props> = (props) => {
       )}
       <Button sx={{ mt: 2 }} onClick={props.onBack}>{Locale.label("registration.back")}</Button>
       <Typography variant="caption" sx={{ display: "block", mt: 1, color: "text.secondary" }}>
-        {formatMoney(subtotal)} {Locale.label("registration.payment.subtotalNote")}
+        {formatMoney(subtotal, displayCurrency)} {Locale.label("registration.payment.subtotalNote")}
       </Typography>
     </Box>
   );

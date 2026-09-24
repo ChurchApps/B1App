@@ -18,6 +18,7 @@ const detectPlatform = (): Platform => {
   if (typeof navigator === "undefined") return "desktop";
   const ua = navigator.userAgent || "";
   if (/iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream) return "ios";
+  if (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) return "ios";
   if (/android/i.test(ua)) return "android";
   return "desktop";
 };
@@ -104,7 +105,7 @@ export const InstallPage = ({ config }: Props) => {
     const refresh = () => {
       const nextPlatform = detectPlatform();
       setPlatform(nextPlatform);
-      setInstalled(detectStandalone(nextPlatform));
+      setInstalled(detectStandalone(nextPlatform) || InstallPromptHelper.getState().installed);
     };
     window.addEventListener("focus", refresh);
     window.addEventListener("pageshow", refresh);

@@ -26,6 +26,11 @@ function createIdbPersister(): Persister {
   };
 }
 
+export async function clearMobileQueryCache(queryClient: QueryClient) {
+  queryClient.clear();
+  await idbDel(CACHE_KEY);
+}
+
 function buildQueryClient() {
   return new QueryClient({
     defaultOptions: {

@@ -30,16 +30,18 @@ export const SongDialog: React.FC<Props> = (props) => {
   const [keyOffset, setKeyOffset] = React.useState(0);
 
   const loadData = async () => {
-    const ak = await ApiHelper.get("/arrangementKeys/" + props.arrangementKeyId, "ContentApi");
-    setArrangementKey(ak);
-    const arr = await ApiHelper.get("/arrangements/" + ak.arrangementId, "ContentApi");
-    setArrangement(arr);
-    const s = await ApiHelper.get("/songs/" + arr.songId, "ContentApi");
-    setSong(s);
-    const sd = await ApiHelper.get("/songDetails/" + arr.songDetailId, "ContentApi");
-    setSongDetail(sd);
-    const files = await ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi");
-    setAudioFiles(files || []);
+    try {
+      const ak = await ApiHelper.get("/arrangementKeys/" + props.arrangementKeyId, "ContentApi");
+      setArrangementKey(ak);
+      const arr = await ApiHelper.get("/arrangements/" + ak.arrangementId, "ContentApi");
+      setArrangement(arr);
+      ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi").then((files: any[]) => setAudioFiles(files || [])).catch(() => setAudioFiles([]));
+      const s = await ApiHelper.get("/songs/" + arr.songId, "ContentApi");
+      setSong(s);
+      if (arr.songDetailId) setSongDetail(await ApiHelper.get("/songDetails/" + arr.songDetailId, "ContentApi"));
+    } catch (e) {
+      console.error("Failed to load song:", e);
+    }
   };
 
   useEffect(() => {
@@ -91,15 +93,14 @@ export const SongDialog: React.FC<Props> = (props) => {
   };
 
   const loadLinks = () => {
-    if (arrangementKey) ApiHelper.get("/links?category=arrangementKey_" + arrangementKey.id, "ContentApi").then((data: LinkInterface[]) => { setLinks(data); });
+    if (arrangementKey) ApiHelper.get("/links?category=arrangementKey_" + arrangementKey.id, "ContentApi").then((data: LinkInterface[]) => { setLinks(data || []); }).catch(() => setLinks([]));
   };
 
-  useEffect(() => { loadData(); }, [props.arrangementKeyId]);
   useEffect(() => {
-    if (songDetail && arrangementKey) {
-      loadPraiseCharts();
-      loadLinks();
-    }
+    loadLinks();
+  }, [arrangementKey]);
+  useEffect(() => {
+    loadPraiseCharts().catch(() => setProducts([]));
   }, [arrangementKey, songDetail]);
 
   const getKeyOptions = (originalIndex: number) =>

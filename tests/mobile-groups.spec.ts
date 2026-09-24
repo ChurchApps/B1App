@@ -215,6 +215,17 @@ test.describe.serial("Mobile group event reminders", () => {
     await expect(dialog).not.toContainText("mobile.group.reminders.");
     await expect(dialog.getByText("Send reminders", { exact: true })).toBeVisible({ timeout: 10000 });
   });
+
+  test("leader cannot save a javascript: link as a group resource", async ({ page }) => {
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await page.getByRole("tab", { name: /Resources/i }).click();
+    await page.getByRole("button", { name: /^Add Link$/i }).click();
+    await page.getByLabel("Link text").fill("Bad link");
+    await page.getByLabel("URL").fill("javascript:alert(1)");
+    await page.getByRole("button", { name: /^Add$/ }).click();
+    await expect(page.getByText(/starts with http:\/\/ or https:\/\//i)).toBeVisible({ timeout: 5000 });
+    await expect(page.locator("main")).not.toContainText("Bad link");
+  });
 });
 
 test.describe.serial("Mobile recurring group event edits", () => {

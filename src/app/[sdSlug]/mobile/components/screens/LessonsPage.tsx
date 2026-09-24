@@ -15,7 +15,7 @@ const INTERNAL_ROUTE_MAP: Array<{ match: RegExp; to: (m: RegExpMatchArray) => st
   { match: /\/my\/plans(?:\/|$|\?)/, to: () => "/mobile/plans" },
   { match: /\/my\/community(?:\/|$|\?)/, to: () => "/mobile/community" },
   { match: /\/my\/checkin(?:\/|$|\?)/, to: () => "/mobile/checkin" },
-  { match: /\/groups\/details\/([\w-]+)/, to: (m) => `/mobile/groups?groupId=${m[1]}` },
+  { match: /\/groups\/details\/([\w-]+)/, to: (m) => `/mobile/groups/${m[1]}` },
   { match: /\/votd(?:\/|$|\?)/, to: () => "/mobile/votd" },
   { match: /\/donate(?:\/|$|\?)/, to: () => "/mobile/donate" }
 ];
