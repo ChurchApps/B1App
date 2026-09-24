@@ -57,7 +57,7 @@ export async function hydrateUserSession(
     }
   }
 
-  const target = matched || UserHelper.userChurches?.[0];
+  const target = matched || (churchId || sdSlug ? null : UserHelper.userChurches?.[0]);
   if (target) {
     UserHelper.currentUserChurch = target;
     UserHelper.setupApiHelper(target);
