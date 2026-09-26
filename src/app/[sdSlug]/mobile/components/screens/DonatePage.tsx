@@ -710,7 +710,17 @@ function DonatePageInner({ config }: Props) {
             })}
           </Box>
 
-          <Box sx={{ mt: `${mobileTheme.spacing.md}px` }}>
+          <Box
+            sx={{
+              mt: `${mobileTheme.spacing.md}px`,
+              "& #display-box-content": {
+                overflowX: "auto !important",
+              },
+              "& .MuiTable-root": {
+                minWidth: 600
+              }
+            }}
+          >
             <RecurringDonations
               customerId={customerId!}
               paymentMethods={paymentMethods || []}
