@@ -149,6 +149,56 @@ test.describe.serial("Stripe member donations (real test-mode charges)", () => {
     expect(ok, "No success Alert after recurring donation").toBe(true);
   });
 
+  // #1120: on an iPhone-portrait viewport the recurring-donation edit pencil sits in the
+  // last column of a 5-column table and was clipped by DisplayBox's overflowX:hidden.
+  // Note: overflow:hidden still honours a programmatic scrollLeft, so the gesture below is a
+  // real wheel event -- that is the only thing a phone user actually has.
+  test("recurring donation edit pencil is reachable at phone width", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await openHistoryTab(page);
+
+    const recurringBox = page.locator('[data-testid="recurring-donations"]');
+    await expect(recurringBox).toBeVisible({ timeout: 20000 });
+    const editBtn = recurringBox.locator('button[aria-label="edit-button"]').first();
+    await expect(editBtn).toBeVisible({ timeout: 20000 });
+
+    const scrollPort = recurringBox.locator("#display-box-content");
+    const port = await scrollPort.evaluate((el) => ({
+      clientWidth: (el as HTMLElement).clientWidth,
+      scrollWidth: (el as HTMLElement).scrollWidth
+    }));
+
+    // The table must be confined to a scrollport inside the phone, not widen the page.
+    expect(port.clientWidth, "scrollport is wider than the phone").toBeLessThanOrEqual(390);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth),
+      "the table widened the whole page instead of scrolling").toBeLessThanOrEqual(390);
+
+    if (port.scrollWidth > port.clientWidth) {
+      await scrollPort.hover();
+      await page.mouse.wheel(port.scrollWidth, 0);
+      await expect
+        .poll(() => scrollPort.evaluate((el) => (el as HTMLElement).scrollLeft),
+          { message: "the overflowing table does not scroll for a phone user", timeout: 5000 })
+        .toBeGreaterThan(0);
+    }
+
+    const metrics = await editBtn.evaluate((btn) => {
+      const r = btn.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return {
+        left: r.left,
+        right: r.right,
+        width: r.width,
+        innerWidth: window.innerWidth,
+        hitIsButton: !!hit && (hit === btn || btn.contains(hit))
+      };
+    });
+    expect(metrics.width).toBeGreaterThan(0);
+    expect(metrics.left, "edit pencil is off the left edge").toBeGreaterThanOrEqual(0);
+    expect(metrics.right, "edit pencil is off the right edge").toBeLessThanOrEqual(metrics.innerWidth);
+    expect(metrics.hitIsButton, "edit pencil is covered by a clipping ancestor").toBe(true);
+  });
+
   test("pause and resume the recurring donation, then cancel it (RecurringDonations)", async ({ page }) => {
     const diag = captureDiagnostics(page);
     page.on("dialog", (d) => d.accept()); // window.confirm on pause + cancel
