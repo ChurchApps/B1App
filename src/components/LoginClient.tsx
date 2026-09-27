@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Alert, type PaperProps } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import { Layout } from "@/components";
@@ -42,6 +42,15 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
     redirect(target);
   };
 
+  const [queryJwt] = useState(() => searchParams.get("jwt") || "");
+  useLayoutEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("jwt")) return;
+    params.delete("jwt");
+    const qs = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : "") + window.location.hash);
+  }, []);
+
   const [hashJwt, setHashJwt] = useState("");
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
@@ -52,7 +61,7 @@ export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssPro
       window.history.replaceState(null, "", clean);
     }
   }, []);
-  const jwt = hashJwt || searchParams.get("jwt") || cookies.jwt;
+  const jwt = hashJwt || queryJwt || cookies.jwt;
 
   return (
     <Layout withoutNavbar>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   Alert,
@@ -364,10 +364,20 @@ export const MobileLoginScreen = ({ config }: Props) => {
     }
   };
 
+  const urlJwtRef = useRef("");
+  useLayoutEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("jwt")) return;
+    urlJwtRef.current = params.get("jwt") || "";
+    params.delete("jwt");
+    const qs = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : "") + window.location.hash);
+  }, []);
+
   useEffect(() => {
     if (attemptedAutoLoginRef.current) return;
     attemptedAutoLoginRef.current = true;
-    const urlJwt = searchParams?.get("jwt");
+    const urlJwt = urlJwtRef.current || searchParams?.get("jwt");
     const cookieJwt = (() => {
       if (typeof document === "undefined") return "";
       const m = document.cookie.split(";").map((c) => c.trim().split("="));
