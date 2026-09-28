@@ -12,6 +12,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { useEngagementSort } from "../../hooks/useEngagementSort";
 import { LoadErrorAlert } from "../LoadErrorAlert";
+import { DateHelper } from "@churchapps/helpers";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -97,10 +98,10 @@ export const GroupsPage = ({ config: _config }: Props) => {
     const start = new Date(event.start);
     if (isNaN(start.getTime())) return "";
     if (event.allDay) {
-      return `${start.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })} (${Locale.label("mobile.group.allDay")})`;
+      return `${start.toLocaleDateString(DateHelper.locale, { month: "short", day: "numeric", year: "numeric" })} (${Locale.label("mobile.group.allDay")})`;
     }
-    const fmtDate = (d: Date) => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-    const fmtTime = (d: Date) => d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    const fmtDate = (d: Date) => d.toLocaleDateString(DateHelper.locale, { month: "short", day: "numeric" });
+    const fmtTime = (d: Date) => d.toLocaleTimeString(DateHelper.locale, { hour: "numeric", minute: "2-digit" });
     if (!event.end) return `${fmtDate(start)} ${fmtTime(start)}`;
     const end = new Date(event.end);
     if (isNaN(end.getTime())) return `${fmtDate(start)} ${fmtTime(start)}`;
@@ -445,7 +446,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
                 </Typography>
                 {req.requestDate && (
                   <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-                    {Locale.label("mobile.screens.requestedOn").replace("{}", new Date(req.requestDate).toLocaleDateString())}
+                    {Locale.label("mobile.screens.requestedOn").replace("{}", new Date(req.requestDate).toLocaleDateString(DateHelper.locale))}
                   </Typography>
                 )}
               </Box>

@@ -6,6 +6,7 @@ export interface ChurchAppearance {
   primaryColor?: string;
   favicon?: string;
   pwaShortName?: string;
+  region?: string;
 }
 
 export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppearance> {
@@ -44,7 +45,8 @@ export async function loadChurchAppearance(sdSlug: string): Promise<ChurchAppear
       churchName: church.name,
       primaryColor: appThemePrimary || appearance?.primaryColor,
       favicon: appearance?.favicon_400x400 || appearance?.favicon_16x16,
-      pwaShortName: appearance?.pwaShortName
+      pwaShortName: appearance?.pwaShortName,
+      region: appearance?.region
     };
   } catch {
     return {};

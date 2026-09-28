@@ -11,6 +11,7 @@ import { publicOrigin } from "@/helpers/siteOrigin";
 import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
 import type { PostInterface } from "@/helpers/interfaces";
 import { MetaHelper } from "@/helpers/MetaHelper";
+import { DateHelper } from "@churchapps/helpers";
 
 type PageParams = Promise<{ sdSlug: string }>;
 type SearchParams = Promise<{ page?: string; category?: string; tag?: string }>;
@@ -19,10 +20,10 @@ const PAGE_SIZE = 10;
 
 const getBaseUrl = (sdSlug: string) => publicOrigin(sdSlug);
 
-const formatDate = (value?: string) => {
+const formatDate = (value: string | undefined, region?: string) => {
   if (!value) return "";
   const d = new Date(value);
-  return isNaN(d.getTime()) ? "" : d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  return isNaN(d.getTime()) ? "" : d.toLocaleDateString(DateHelper.normalizeLocale(region), { year: "numeric", month: "long", day: "numeric" });
 };
 
 const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").replace(/!\[[^\]]*\]\([^)]*\)/g, "").replace(/\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#>*_`~]/g, "").replace(/\s+/g, " ").trim().slice(0, 160);
@@ -72,6 +73,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
   const { page: pageParam, category, tag } = await searchParams;
   const page = Math.max(1, parseInt(pageParam || "1", 10) || 1);
   const { config, posts, categories } = await loadData(sdSlug, page, category, tag);
+  const region = (config.appearance as { region?: string })?.region;
 
   const activeFilter = category || tag;
 
@@ -133,7 +135,7 @@ export default async function BlogListPage({ params, searchParams }: { params: P
                       </Typography>
                       {(post.authorName || post.publishDate) && (
                         <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
-                          {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate)].filter(Boolean).join(" · ")}
+                          {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate, region)].filter(Boolean).join(" · ")}
                         </Typography>
                       )}
                       {excerptOf(post) && <Typography variant="body2" color="text.secondary" sx={{ mt: 1, lineHeight: 1.6 }}>{excerptOf(post)}</Typography>}

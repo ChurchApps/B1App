@@ -1,4 +1,4 @@
-import { test, expect, Page } from "@playwright/test";
+import { test, expect, Page, request } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { getApi, apiCall, doingUrl } from "./helpers/api";
 
@@ -150,5 +150,41 @@ test.describe("Plan downloads (lesson printables)", () => {
     await page.goto(`/mobile/plans/${planId}`);
     await expect(page.locator("main")).toContainText(/Warm Up/i, { timeout: 20000 });
     await expect(page.getByTestId("plan-downloads")).toHaveCount(0);
+  });
+});
+
+const MAIN_API = process.env.API_BASE || "http://localhost:8084";
+
+async function setChurchRegion(region: string) {
+  const ctx = await request.newContext();
+  try {
+    const login = await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
+    const body = await login.json();
+    const uc = (body.userChurches || []).find((c: any) => c.church?.id === "CHU00000001");
+    const jwt = uc?.apis?.find((a: any) => a.keyName === "MembershipApi")?.jwt;
+    const headers = { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
+    const settings: any[] = await (await ctx.get(`${MAIN_API}/membership/settings`, { headers })).json();
+    const existing = settings.find((s) => s.keyName === "region");
+    const res = await ctx.post(`${MAIN_API}/membership/settings`, { headers, data: [{ ...(existing || {}), keyName: "region", value: region, public: 1 }] });
+    if (!res.ok()) throw new Error(`save region failed: ${res.status()}`);
+  } finally {
+    await ctx.dispose();
+  }
+}
+
+test.describe.serial("Mobile plans — church region dates", () => {
+  const MONTH = "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)";
+  const nextServiceDate = (page: Page) => page.getByText("Next service", { exact: true }).locator("xpath=following-sibling::*[1]");
+
+  test("next service date follows the church region (UK day-first, US month-first)", async ({ page }) => {
+    try {
+      await setChurchRegion("en-GB");
+      await page.goto("/mobile/plans");
+      await expect(nextServiceDate(page)).toHaveText(new RegExp(`^\\d{1,2} ${MONTH} \\d{4}$`), { timeout: 30000 });
+    } finally {
+      await setChurchRegion("en-US");
+    }
+    await page.goto("/mobile/plans");
+    await expect(nextServiceDate(page)).toHaveText(new RegExp(`^${MONTH} \\d{1,2}, \\d{4}$`), { timeout: 30000 });
   });
 });

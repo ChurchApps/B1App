@@ -11,6 +11,8 @@ import { PwaRegister } from "../mobile/PwaRegister";
 import { loadChurchAppearance } from "../mobile/loadChurchAppearance";
 import { SiteWidgets } from "@/components/SiteWidgets";
 import { ChurchAnalytics } from "@/components/ChurchAnalytics";
+import { ChurchDateLocale } from "@/components/ChurchDateLocale";
+import { DateHelper } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { fetchCached } from "@/helpers/ConfigHelper";
 import { isNoindexStage } from "@/helpers/noindexHost";
@@ -46,7 +48,8 @@ export default async function PublicLayout({
   params: LayoutParams;
 }) {
   const { sdSlug } = await params;
-  const { churchId, churchName } = await loadChurchAppearance(sdSlug);
+  const { churchId, churchName, region } = await loadChurchAppearance(sdSlug);
+  DateHelper.setLocale(region);
   const { announcementRaw, launcherRaw, ga4MeasurementId } = await loadSiteSettings(sdSlug, churchId);
 
   const appTitle = (churchName && churchName.trim()) || sdSlug || "Church";
@@ -69,7 +72,7 @@ export default async function PublicLayout({
       <link rel="preconnect" href="https://content.churchapps.org" />
       <link rel="preconnect" href="https://content.lessons.church" />
       <PwaRegister />
-      <ClientLayout>{children}</ClientLayout>
+      <ChurchDateLocale region={region}><ClientLayout>{children}</ClientLayout></ChurchDateLocale>
     </>
   );
 }
