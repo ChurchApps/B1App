@@ -43,6 +43,8 @@ export default async function Home({ params }: { params: Promise<PageParams> }) 
   const { sdSlug } = await params;
   const props = await loadSharedData(sdSlug);
 
+  if (props.config.hidePublicSite) redirect("/login");
+
   if ((props.pageData as any)?.restricted) {
     return (<>
       <Theme config={props.config} />

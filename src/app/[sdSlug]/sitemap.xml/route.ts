@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { ApiHelper } from "@churchapps/apphelper";
 import { EnvironmentHelper } from "@/helpers";
+import { loadPublicSiteHidden } from "@/helpers/publicSiteServer";
 
 interface SitemapPage { url?: string; title?: string; }
 interface SitemapPost { slug?: string; }
@@ -18,6 +19,9 @@ export async function GET(request: NextRequest, context: { params: Promise<{ sdS
   const { sdSlug } = await context.params;
   EnvironmentHelper.init();
   const base = getBaseUrl(request, sdSlug);
+  if (await loadPublicSiteHidden(sdSlug)) {
+    return new Response("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n</urlset>", { headers: { "Content-Type": "application/xml", "X-Robots-Tag": "noindex, nofollow" } });
+  }
   const urls = new Set<string>(["/"]);
 
   try {

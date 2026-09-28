@@ -152,7 +152,7 @@ export function Header(props: Props) {
     )
     : (
       <>
-        {showLogin
+        {showLogin || props.config?.hidePublicSite
           ? (
             <Box sx={{ marginRight: "15px", marginLeft: { xs: "15px", md: 0 }, fontSize: "14px", ":hover #loginButton": { backgroundColor: "var(--app-primary, #36547e)", color: "white" }, ":hover #loginIcon": { color: "white" } }}>
               <Chip component="a" href={"/login?returnUrl=" + encodeURIComponent(UrlHelper.getReturnUrl(pathname, props.config?.keyName)) } clickable id="loginButton" label={Locale.label("login.login")}
@@ -229,7 +229,8 @@ export function Header(props: Props) {
   };
 
   //structured navLinks based on their parentId
-  const structuredData = props.config?.navLinks && getNestedChildren(props.config?.navLinks, undefined);
+  // A disabled public website shows no navigation into the rest of the site, only the login chip.
+  const structuredData = props.config?.navLinks && !props.config?.hidePublicSite && getNestedChildren(props.config?.navLinks, undefined);
 
   const getLinks = () => structuredData && structuredData.map((item) => <CascadingHoverMenus key={item.id} link={item} />);
   const getListMenu = () => structuredData && <List component="nav" id="long-menu">

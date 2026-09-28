@@ -4,6 +4,7 @@ import type { AppearanceInterface } from "@churchapps/apphelper";
 import { GlobalStyleInterface, PageInterface } from "./interfaces";
 import { cache, startTransition } from "react";
 import { revalidate } from "@/app/actions";
+import { isPublicSiteHidden } from "./publicSite";
 
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
@@ -11,7 +12,7 @@ export interface ButtonInterface { text: string, url: string }
 export interface ServiceInterface { videoUrl: string, serviceTime: string, duration: string, earlyStart: string, chatBefore: string, chatAfter: string, provider: string, providerKey: string, localCountdownTime?: Date, localStartTime?: Date, localEndTime?: Date, localChatStart?: Date, localChatEnd?: Date, label: string }
 export interface AppThemeModeColors { background: string, surface: string, primary: string, primaryContrast: string, secondary: string, textColor: string }
 export interface AppThemeConfig { light: AppThemeModeColors, dark: AppThemeModeColors }
-export interface ConfigurationInterface { keyName?: string, siteId?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface, appTheme?: AppThemeConfig }
+export interface ConfigurationInterface { keyName?: string, siteId?: string, navLinks?: LinkInterface[], church: ChurchInterface, appearance: AppearanceInterface, allowDonations:boolean, hasWebsite:boolean, globalStyles:GlobalStyleInterface, homePage?: PageInterface, appTheme?: AppThemeConfig, hidePublicSite?: boolean }
 
 // Prod caches config for 5 min; dev/test fetch fresh so content/style edits show immediately.
 const CONFIG_REVALIDATE_SECONDS = process.env.NODE_ENV === "production" ? 300 : 0;
@@ -51,12 +52,13 @@ export class ConfigHelper {
     if (!keyName) throw new Error("ConfigHelper.load called without a church subdomain");
     const church: ChurchInterface = await fetchCached("/churches/lookup/?subDomain=" + keyName, "MembershipApi", keyName);
     const siteId = (church as any).siteId || "";
-    const [appearance, tabs, homePage, gatewayConfigured, globalStyles] = await Promise.all([
+    const [appearance, tabs, homePage, gatewayConfigured, globalStyles, contentSettings] = await Promise.all([
       fetchCached<AppearanceInterface>("/settings/public/" + church.id, "MembershipApi", keyName),
       fetchCachedOrNull<LinkInterface[]>("/links/church/" + church.id + "?category=" + navCategory + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
       fetchCachedOrNull<PageInterface>("/pages/" + church.id + "/tree?url=/" + (siteId ? "&siteId=" + siteId : ""), "ContentApi", keyName),
       fetchCachedOrNull<{ configured?: boolean }>("/gateways/configured/" + church.id, "GivingApi", keyName),
-      fetchCachedOrNull<GlobalStyleInterface>("/globalStyles/church/" + church.id + (siteId ? "?siteId=" + siteId : ""), "ContentApi", keyName)
+      fetchCachedOrNull<GlobalStyleInterface>("/globalStyles/church/" + church.id + (siteId ? "?siteId=" + siteId : ""), "ContentApi", keyName),
+      fetchCachedOrNull<{ hidePublicSite?: string }>("/settings/public/" + church.id, "ContentApi", keyName).catch((): null => null)
     ]);
     let appTheme: AppThemeConfig | undefined;
     try {
@@ -71,6 +73,7 @@ export class ConfigHelper {
     const allowDonations = gatewayConfigured?.configured === true;
 
     const result: ConfigurationInterface = { appearance: appearance, church: church, navLinks: tabs || [], allowDonations, hasWebsite: Boolean(homePage?.url), globalStyles: globalStyles || {}, homePage: homePage || undefined, appTheme };
+    result.hidePublicSite = isPublicSiteHidden(contentSettings);
     result.keyName = keyName;
     result.siteId = siteId;
     return result;

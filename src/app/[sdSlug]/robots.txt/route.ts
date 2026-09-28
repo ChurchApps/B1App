@@ -1,10 +1,11 @@
 import { NextRequest } from "next/server";
 import { isNoindexHost } from "@/helpers/noindexHost";
+import { loadPublicSiteHidden } from "@/helpers/publicSiteServer";
 
 export async function GET(request: NextRequest, context: { params: Promise<{ sdSlug: string }> }) {
   const { sdSlug } = await context.params;
   const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || sdSlug + ".b1.church";
-  if (isNoindexHost(host)) {
+  if (isNoindexHost(host) || await loadPublicSiteHidden(sdSlug)) {
     return new Response("User-agent: *\nDisallow: /\n", { headers: { "Content-Type": "text/plain", "X-Robots-Tag": "noindex, nofollow" } });
   }
   const proto = request.headers.get("x-forwarded-proto") || "https";
