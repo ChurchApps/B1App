@@ -1,4 +1,5 @@
 import { Locale } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/helpers";
 
 interface NamedLike {
   name?: {
@@ -52,7 +53,7 @@ export const formatDate = (
 ): string => {
   const d = toDate(value);
   if (!d) return "";
-  return d.toLocaleDateString(undefined, {
+  return d.toLocaleDateString(DateHelper.locale, {
     month: style === "short" ? "short" : "long",
     day: "numeric",
     year: "numeric"
@@ -72,7 +73,7 @@ export const formatRelative = (value?: Date | string | number | null): string =>
   }
   if (diffDays === 1) return Locale.label("mobile.yesterday");
   if (diffDays < 7) return `${diffDays}d`;
-  return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  return d.toLocaleDateString(DateHelper.locale, { month: "short", day: "numeric", year: "numeric" });
 };
 
 export const navigateBack = (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { SectionInterface, StreamingServiceExtendedInterface } from "@/helpers";
-import { AppearanceHelper, Locale } from "@churchapps/apphelper";
+import { AppearanceHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useMountedState } from "@churchapps/apphelper";
 import { StyleHelper } from "@churchapps/apphelper/website";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -37,7 +37,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getCountdownTime = (serviceTime: Date) => {
     let remainingSeconds = Math.max(0, Math.floor((serviceTime.getTime() - currentTime) / 1000));
-    if (remainingSeconds > 86400) return serviceTime.toDateString() + " - " + serviceTime.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
+    if (remainingSeconds > 86400) return serviceTime.toDateString() + " - " + serviceTime.toLocaleString(DateHelper.locale, { hour: "numeric", minute: "numeric" });
     else {
       const hours = Math.floor(remainingSeconds / 3600);
       remainingSeconds = remainingSeconds - (hours * 3600);

@@ -18,6 +18,11 @@ const pushKV = (lines: string[], key: string, value: string | undefined) => {
   if (value !== undefined && value !== null && value !== "") lines.push(`${key}: ${value};`);
 };
 
+// <Theme> mounts again on every client-side navigation. Snippets that set globals
+// (RefTagger's `var refTagger = { settings }`) would wipe the library they loaded the
+// first time, so each custom JS string only runs once per document.
+const executedCustomJS = new Set<string>();
+
 export const Theme: React.FC<Props> = (props) => {
 
   const googleFonts: string[] = [];
@@ -121,14 +126,19 @@ export const Theme: React.FC<Props> = (props) => {
     const template = document.createElement("template");
     template.innerHTML = customJS;
     root.append(template.content);
+    const alreadyRan = executedCustomJS.has(customJS);
+    executedCustomJS.add(customJS);
     // innerHTML-inserted scripts never execute; recreate them so they do.
     // CSP script-src 'strict-dynamic' trusts these non-parser-inserted nodes.
     root.querySelectorAll("script").forEach((old) => {
+      if (alreadyRan) { old.remove(); return; }
       const script = document.createElement("script");
       Array.from(old.attributes).forEach((attr) => script.setAttribute(attr.name, attr.value));
       script.text = old.text;
       old.replaceWith(script);
     });
+    // RefTagger only scans the page it loaded on; tag the new page's verses.
+    if (alreadyRan) (window as any).refTagger?.tag?.();
   }, [props?.config?.globalStyles?.customJS]);
 
   return (<>

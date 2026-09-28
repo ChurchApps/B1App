@@ -11,6 +11,7 @@ import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { mobileTheme } from "../mobileTheme";
 import { formatDate as formatDateShared, formatDuration } from "../util";
 import { SermonCard } from "../SermonCard";
+import { DateHelper } from "@churchapps/helpers";
 
 const formatDate = (date?: Date | string) => formatDateShared(date, "short");
 
@@ -39,8 +40,8 @@ interface UpcomingStream {
 
 const formatPrettyDateTime = (date: Date) => {
   try {
-    const d = date.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
-    const t = date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    const d = date.toLocaleDateString(DateHelper.locale, { weekday: "long", month: "short", day: "numeric" });
+    const t = date.toLocaleTimeString(DateHelper.locale, { hour: "numeric", minute: "2-digit" });
     return `${d} at ${t}`;
   } catch {
     return date.toString();

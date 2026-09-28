@@ -3,7 +3,7 @@
 import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Box, Icon, Typography } from "@mui/material";
-import { type LinkInterface } from "@churchapps/helpers";
+import { type LinkInterface, DateHelper } from "@churchapps/helpers";
 import { Locale } from "@churchapps/apphelper";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
@@ -182,7 +182,7 @@ export const DashboardPage = ({ config }: Props) => {
     setFirstName(first);
 
     const now = new Date();
-    setDateLine(now.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }));
+    setDateLine(now.toLocaleDateString(DateHelper.locale, { weekday: "long", month: "long", day: "numeric" }));
 
     const hour = now.getHours();
     if (hour < 12) setGreetingWord(Locale.label("mobile.dashboard.goodMorning"));
