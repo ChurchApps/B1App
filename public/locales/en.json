@@ -903,6 +903,12 @@
       "volunteer": "Sign up to serve",
       "votd": "Today's verse"
     },
+    "votd": {
+      "copied": "Copied to clipboard",
+      "share": "Share",
+      "shareImage": "Share image",
+      "unableToShare": "Unable to share"
+    },
     "yesterday": "yesterday"
   },
   "notes": {

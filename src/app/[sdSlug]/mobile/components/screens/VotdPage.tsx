@@ -48,9 +48,14 @@ export const VotdPage = () => {
 
   const imageUrl = useMemo(() => (day === null ? "" : `https://votd.org/v1/${day}/${shape}.jpg`), [day, shape]);
   const showImage = !!imageUrl && !imageError;
+  const shareText = verse ? `"${verse.text}" — ${verse.reference}` : "Verse of the Day";
+
+  const flashMessage = (message: string) => {
+    setShareMessage(message);
+    setTimeout(() => setShareMessage(null), 2500);
+  };
 
   const handleShare = async () => {
-    const shareText = verse ? `"${verse.text}" — ${verse.reference}` : "Verse of the Day";
     const shareData = {
       title: "Verse of the Day",
       text: shareText,
@@ -67,13 +72,52 @@ export const VotdPage = () => {
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {
         await navigator.clipboard.writeText(`${shareText}\n${shareData.url}`);
-        setShareMessage("Copied to clipboard");
-        setTimeout(() => setShareMessage(null), 2500);
+        flashMessage(Locale.label("mobile.votd.copied"));
       }
     } catch {
-      setShareMessage("Unable to share");
-      setTimeout(() => setShareMessage(null), 2500);
+      flashMessage(Locale.label("mobile.votd.unableToShare"));
     }
+  };
+
+  // Shares the picture itself (same-origin copy, since votd.org has no CORS); downloads it where file sharing isn't supported.
+  const handleShareImage = async () => {
+    if (day === null) return;
+    try {
+      const res = await fetch(`/mobile/votd-image/${day}/${shape}`);
+      if (!res.ok) throw new Error("Image unavailable");
+      const blob = await res.blob();
+      const file = new File([blob], "verse-of-the-day.jpg", { type: "image/jpeg" });
+      const nav = navigator as any;
+      if (nav.canShare?.({ files: [file] }) && nav.share) {
+        await nav.share({ files: [file], text: shareText });
+        return;
+      }
+      const objectUrl = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = file.name;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+    } catch (e) {
+      if ((e as Error)?.name === "AbortError") return;
+      flashMessage(Locale.label("mobile.votd.unableToShare"));
+    }
+  };
+
+  const pillSx = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 1,
+    px: "14px",
+    py: "8px",
+    borderRadius: "999px",
+    bgcolor: tc.primary,
+    color: tc.onPrimary,
+    cursor: "pointer",
+    transition: "opacity 150ms ease",
+    "&:hover": { opacity: 0.9 }
   };
 
   return (
@@ -148,29 +192,32 @@ export const VotdPage = () => {
             {shareMessage}
           </Typography>
         )}
+        {showImage && (
+          <Box
+            role="button"
+            tabIndex={0}
+            onClick={handleShareImage}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleShareImage(); }}
+            data-testid="votd-share-image"
+            sx={pillSx}
+          >
+            <Icon sx={{ fontSize: 18, color: tc.onPrimary }}>image</Icon>
+            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.onPrimary }}>
+              {Locale.label("mobile.votd.shareImage")}
+            </Typography>
+          </Box>
+        )}
         <Box
           role="button"
           tabIndex={0}
           onClick={handleShare}
           onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleShare(); }}
           aria-label={Locale.label("mobile.screens.shareVotd")}
-          sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 1,
-            px: "14px",
-            py: "8px",
-            borderRadius: "999px",
-            bgcolor: tc.primary,
-            color: tc.onPrimary,
-            cursor: "pointer",
-            transition: "opacity 150ms ease",
-            "&:hover": { opacity: 0.9 }
-          }}
+          sx={pillSx}
         >
           <Icon sx={{ fontSize: 18, color: tc.onPrimary }}>share</Icon>
           <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.onPrimary }}>
-            Share
+            {Locale.label("mobile.votd.share")}
           </Typography>
         </Box>
       </Box>
