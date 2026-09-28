@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
 
-// Issue 1143: the 2026-09-21 locale sync pruned mobile.install.* keys that the
-// install page still uses, so the desktop view printed raw keys such as
-// "mobile.install.desktopTitle" and "mobile.install.mockupSermon".
-test.describe("Issue 1143 — install page labels", () => {
+// The desktop install page must render its mobile.install.* labels, not raw keys
+// such as "mobile.install.desktopTitle" or "mobile.install.mockupSermon".
+test.describe("Mobile install page", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
   test("desktop install page shows translated text, not raw keys", async ({ page }) => {
     await page.goto("/mobile/install");
     await expect(page.getByText("Scan with your phone camera")).toBeVisible({ timeout: 30000 });
