@@ -1,7 +1,7 @@
 import { test, expect, request, type APIRequestContext } from "@playwright/test";
 
-// Issue 1138: a church pasted the RefTagger snippet into Appearance > CSS & JavaScript.
-// Scripture links show on a directly loaded blog post, but not after clicking into the
+// Public blog with the RefTagger snippet saved in Appearance > CSS & JavaScript.
+// Scripture links must show on a directly loaded blog post and after clicking into the
 // post from /blog. <Theme> is rendered per page, so client navigation mounts it again and
 // re-runs the snippet. The snippet starts with `var refTagger = { settings }`, which wipes
 // the loaded library, and RefTagger.js only attaches when `refTaggerCallback` is unset
@@ -11,7 +11,7 @@ import { test, expect, request, type APIRequestContext } from "@playwright/test"
 // third-party CDN.
 
 const MAIN_API = process.env.API_BASE || "http://localhost:8084";
-const SLUG = "issue-1138-baptism";
+const SLUG = "public-blog-baptism";
 
 const REFTAGGER_SNIPPET = `<script>
 var refTagger = {
@@ -71,7 +71,7 @@ async function setup(): Promise<Ctx> {
   return { api, headers, styleBackup, postId: posts?.[0]?.id };
 }
 
-test.describe("Issue 1138 — custom JS after client-side navigation", () => {
+test.describe("Public blog — custom JS after client-side navigation", () => {
   // Both tests share one post and one customJS override.
   test.describe.configure({ mode: "serial" });
   let ctx: Ctx;
