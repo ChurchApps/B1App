@@ -5,6 +5,7 @@ import { AppearanceHelper, Locale } from "@churchapps/apphelper";
 import { useMountedState } from "@churchapps/apphelper";
 import { StyleHelper } from "@churchapps/apphelper/website";
 import { ConfigHelper, ConfigurationInterface } from "@/helpers/ConfigHelper";
+import { getSermonEmbed } from "@/helpers/sermonEmbed";
 import { useParams } from "next/navigation";
 
 interface Props {
@@ -47,7 +48,11 @@ export const VideoContainer: React.FC<Props> = (props) => {
   };
 
   const getVideo = (cs: StreamingServiceExtendedInterface) => {
-    let videoUrl = cs?.sermon?.videoUrl || "";
+    // Watch and channel pages refuse to be framed. Embed the player URL instead.
+    const sermon = cs?.sermon;
+    let videoUrl = (sermon?.videoType && sermon.videoData)
+      ? (getSermonEmbed(sermon).embedUrl || "")
+      : (sermon?.videoUrl || cs.videoUrl || "");
     if (!videoUrl || videoUrl === "") {
       const logoUrl = getLogo();
       const style: React.CSSProperties = {
@@ -70,7 +75,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
         if (cs?.sermon?.videoType === "vimeo") videoUrl += "#t=0m0s";
       }
     }
-    return (<iframe id="videoFrame" src={videoUrl} frameBorder={0} allow="autoplay; fullscreen" allowFullScreen title={Locale.label("video.sermonVideo")}></iframe>);
+    return (<iframe id="videoFrame" src={videoUrl} frameBorder={0} allow="autoplay; fullscreen" title={Locale.label("video.sermonVideo")}></iframe>);
   };
 
   const getCountdown = (cs: StreamingServiceExtendedInterface) => {

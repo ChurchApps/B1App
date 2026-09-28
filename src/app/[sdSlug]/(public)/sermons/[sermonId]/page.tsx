@@ -69,7 +69,7 @@ export default async function SermonPage({ params }: { params: PageParams }) {
       <DefaultPageWrapper config={config}>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           {embedUrl
-            ? <div className="videoWrapper"><iframe src={embedUrl} title={sermon.title} allowFullScreen style={{ border: 0 }} allow="autoplay; fullscreen; picture-in-picture" /></div>
+            ? <div className="videoWrapper"><iframe src={embedUrl} title={sermon.title} style={{ border: 0 }} allow="autoplay; fullscreen; picture-in-picture" /></div>
             : (sermon.thumbnail && <img src={sermon.thumbnail} alt={sermon.title} style={{ width: "100%", height: "auto" }} />)}
           {playlistTitle && <div style={{ marginTop: 16, textTransform: "uppercase", letterSpacing: 1, fontSize: 13, fontWeight: 600, color: "#666" }}>{playlistTitle}</div>}
           <h1 style={{ marginTop: 8 }}>{sermon.title}</h1>

@@ -235,7 +235,6 @@ export const SermonDetail = ({ id, config }: Props) => {
             title={sermon.title || Locale.label("mobile.screenTitles.sermonDetails")}
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
             allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
           />
         ) : (
           <Box
