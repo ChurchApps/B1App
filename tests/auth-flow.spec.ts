@@ -132,3 +132,35 @@ test.describe("Mobile login returnUrl", () => {
     expect(new URL(page.url()).host).toBe(new URL(baseURL!).host);
   });
 });
+
+// Mobile login writes a `jwt` cookie; the church website restores the session from it
+// so a member signed in on /mobile is not shown as logged out on the website. Logging
+// out must not race that restore and sign the member back in.
+test.describe("Mobile session on the church website", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("a member signed in on /mobile stays signed in on the website and back, and logout sticks", async ({ page }) => {
+    await page.goto("/mobile/login");
+    await page.locator('input[type="email"]').first().fill("demo@b1.church");
+    await page.locator('input[type="password"]').first().fill("password");
+    await page.locator('button[type="submit"]').first().click();
+    await page.waitForURL(/\/mobile\/dashboard/, { timeout: 30000 });
+
+    await page.reload();
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 20000 });
+
+    await page.goto("/");
+    await expect(page.getByTestId("user-menu-chip")).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("login-chip")).toHaveCount(0);
+
+    await page.goto("/mobile/dashboard");
+    await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 20000 });
+
+    await page.goto("/mobile/logout");
+    await page.waitForURL(url => !url.pathname.includes("/logout"), { timeout: 20000 });
+    await expect(mobileLogoutButton(page)).toHaveCount(0, { timeout: 5000 });
+    await page.goto("/");
+    await expect(page.getByTestId("login-chip")).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId("user-menu-chip")).toHaveCount(0);
+  });
+});

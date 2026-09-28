@@ -28,7 +28,7 @@ function WebsiteSessionRestore() {
   const [cookies] = useCookies(["jwt"]);
 
   useEffect(() => {
-    if (/^\/(login|logout)(\/|$)/.test(pathname)) return;
+    if (pathname.split("/").some(segment => segment === "login" || segment === "logout")) return;
     if (UserHelper.user?.id || !cookies.jwt) return;
     ApiHelper.postAnonymous("/users/login", { jwt: cookies.jwt }, "MembershipApi")
       .then((resp: LoginResponseInterface) => { if (resp?.user) return hydrateUserSession(resp, context, { sdSlug: params?.sdSlug }); })
