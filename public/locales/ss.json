@@ -232,6 +232,7 @@
       "editingMessage": "Kuhlelwa umlayeto",
       "email": "I-imeyili",
       "emailAddress": "Likheli Le-imeyili",
+      "full": "Kugcwele",
       "general": "Lokuvamile",
       "groupNotFound": "Licembu Alitfolakalanga",
       "groupNotFoundDescription": "Lelicembu alitfolakalanga noma awunayo imvume yekulibuka.",
@@ -355,8 +356,10 @@
       "confirmDeleteMessage": "Lomlayeto utawususwa kubo bonkhe lasengcubungulweni.",
       "confirmDeleteTitle": "Susa umlayeto?",
       "customWindow": "Sikhatsi lesikhethiwe sekukhomela",
+      "daily": "Onkhe malanga",
       "delete": "Susa",
       "deleteEvent": "Susa umcimbi",
+      "deleteFile": "Susa lifayela",
       "deleteResourceConfirm": "Delete \"{}\"?",
       "deleteResourceTitle": "Delete this item?",
       "discussions": "Tingcubungulo",
@@ -389,6 +392,7 @@
       "membersOnly": "Emalunga kuphela",
       "messageActions": "Timphumela temlayeto",
       "messageOptional": "Umlayeto (akudzingeki)",
+      "monthly": "Onkhe tinyanga",
       "newEvent": "Umcimbi Lomusha",
       "nextMonth": "Inyanga Lelandzelako",
       "noEventsToday": "Akukho imicimbi ngalelilanga.",
@@ -398,6 +402,7 @@
       "noResults": "Akukho imiphumela leyatfolakele.",
       "onlyLeadersPost": "Only group leaders can post announcements.",
       "postAnnouncementBelow": "Tfumela sitiso ngentasi.",
+      "present": "Ukhona",
       "presentOf": "{} kwa-{} bakhona",
       "previousMonth": "Inyanga Lendlulile",
       "private": "Yimfihlo",
@@ -442,6 +447,8 @@
       "rsvpViewResponses": "Buka timphendvulo",
       "save": "Gcina",
       "saveAttendance": "Gcina Kubakhona",
+      "saveChanges": "Gcina tingucuko",
+      "saving": "Iyagcina...",
       "search": "Sesha",
       "searchForPerson": "Sesha umuntfu",
       "selectAll": "Konkhe",
@@ -462,7 +469,9 @@
       "url": "I-URL",
       "usedStorage": "Kusetjentisiwe {} / 100MB",
       "usedStorageUnlimited": "Used {}",
-      "visibility": "Kubonakala"
+      "visibility": "Kubonakala",
+      "weekly": "Onkhe emaviki",
+      "yearly": "Onkhe iminyaka"
     },
     "install": {
       "allSetBody": "The {} app is installed on this device.",
@@ -651,6 +660,7 @@
     },
     "requests": {
       "allDay": "Lilanga lonkhe",
+      "approved": "Kuvunyiwe",
       "cancelConfirm": "Khansela lesicelo? Loku akukhonakali kubuyiswa emuva.",
       "cancelRequest": "Khansela sicelo",
       "description": "Sichachiso",
@@ -713,6 +723,7 @@
       "cancel": "Khansela",
       "cancelRegistration": "Khansela Kubhalisa?",
       "cantShowInApp": "This site can't be shown inside the app.",
+      "change": "Shintja",
       "changesSaved": "Your changes have been saved.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
@@ -947,6 +958,7 @@
       "title": "Emalanga Lacalekile"
     },
     "position": {
+      "accept": "Yemukela",
       "accepted": "Yemukelwe",
       "decline": "Ala",
       "declined": "Aliwe",
