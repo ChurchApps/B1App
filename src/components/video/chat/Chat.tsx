@@ -7,6 +7,7 @@ import { EmbeddedChatName } from "./EmbeddedChatName";
 import { StreamingServiceHelper } from "@/helpers/StreamingServiceHelper";
 import { Locale } from "@churchapps/apphelper";
 import type { ConversationInterface } from "@churchapps/helpers";
+import { DateHelper } from "@churchapps/helpers";
 
 interface Props {
     conversation: ConversationInterface,
@@ -44,7 +45,7 @@ export const Chat: React.FC<Props> = (props) => {
       {props.embedded ? <EmbeddedChatName user={props.user} /> : null}
       {chatWindow.enabled
         ? <ChatSend conversation={props.conversation} />
-        : <div id="chatClosed">{Locale.label("video.chat.chatOpensAt").replace("{}", chatWindow.start?.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) || "")}</div>}
+        : <div id="chatClosed">{Locale.label("video.chat.chatOpensAt").replace("{}", chatWindow.start?.toLocaleTimeString(DateHelper.locale, { hour: "numeric", minute: "2-digit" }) || "")}</div>}
     </div>
   );
 };

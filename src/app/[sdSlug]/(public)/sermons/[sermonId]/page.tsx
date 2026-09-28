@@ -12,6 +12,7 @@ import { SermonJsonLd } from "@/components/seo/SermonJsonLd";
 import { DefaultPageWrapper } from "../../[pageSlug]/components/DefaultPageWrapper";
 import { Animate } from "@churchapps/apphelper/website";
 import "@/styles/vendor/animations.css";
+import { DateHelper } from "@churchapps/helpers";
 
 type PageParams = Promise<{ sdSlug: string; sermonId: string; }>;
 
@@ -59,7 +60,7 @@ export default async function SermonPage({ params }: { params: PageParams }) {
   const { embedUrl } = getSermonEmbed(sermon);
   const publishDate = sermon.publishDate ? new Date(sermon.publishDate) : null;
   const dateLabel = publishDate && !isNaN(publishDate.getTime())
-    ? publishDate.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })
+    ? publishDate.toLocaleDateString(DateHelper.normalizeLocale((config.appearance as { region?: string })?.region), { year: "numeric", month: "long", day: "numeric" })
     : null;
 
   return (

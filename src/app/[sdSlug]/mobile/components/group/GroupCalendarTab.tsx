@@ -11,6 +11,7 @@ import { rotateWeekdays, weekdayColumn } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
 import { EventProcessor } from "../../helpers/eventProcessor";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
+import { DateHelper } from "@churchapps/helpers";
 
 interface Props {
   groupId: string;
@@ -79,14 +80,14 @@ const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
 const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
 
 const formatMonth = (d: Date) =>
-  d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  d.toLocaleDateString(DateHelper.locale, { month: "long", year: "numeric" });
 
 const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: boolean) => {
   if (!start) return "";
   if (allDay) return Locale.label("mobile.group.allDay");
   const s = new Date(start);
   if (isNaN(s.getTime())) return "";
-  const fmt = (d: Date) => d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  const fmt = (d: Date) => d.toLocaleTimeString(DateHelper.locale, { hour: "numeric", minute: "2-digit" });
   if (!end) return fmt(s);
   const e = new Date(end);
   if (isNaN(e.getTime())) return fmt(s);
@@ -498,7 +499,7 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
 
       <Box>
         <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-          {new Date(selected + "T00:00:00").toLocaleDateString(undefined, {
+          {new Date(selected + "T00:00:00").toLocaleDateString(DateHelper.locale, {
             weekday: "long",
             month: "long",
             day: "numeric"

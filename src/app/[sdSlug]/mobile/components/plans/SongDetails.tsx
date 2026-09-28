@@ -24,7 +24,7 @@ export const SongDetails = (props: Props) => {
     if (props.songDetail.artist) result.push(<TableRow><TableCell><strong>{Locale.label("mobile.plans.artist")}</strong></TableCell><TableCell>{props.songDetail.artist}</TableCell></TableRow>);
     if (props.songDetail.releaseDate) {
       const d = DateHelper.toDate(props.songDetail.releaseDate);
-      result.push(<TableRow key="releaseDate"><TableCell><strong>{Locale.label("mobile.plans.releaseDate")}</strong></TableCell><TableCell>{d.toLocaleDateString()}</TableCell></TableRow>);
+      result.push(<TableRow key="releaseDate"><TableCell><strong>{Locale.label("mobile.plans.releaseDate")}</strong></TableCell><TableCell>{d.toLocaleDateString(DateHelper.locale)}</TableCell></TableRow>);
     }
     if (props.songDetail.album) result.push(<TableRow key="album"><TableCell><strong>{Locale.label("mobile.plans.album")}</strong></TableCell><TableCell>{props.songDetail.album}</TableCell></TableRow>);
     if (props.songDetail.language) result.push(<TableRow key="language"><TableCell><strong>{Locale.label("mobile.plans.language")}</strong></TableCell><TableCell>{props.songDetail.language}</TableCell></TableRow>);

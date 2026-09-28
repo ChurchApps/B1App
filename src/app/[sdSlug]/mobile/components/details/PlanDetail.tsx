@@ -42,7 +42,7 @@ const formatServiceDate = (date?: Date | string) => {
   try {
     const d = typeof date === "string" ? DateHelper.toDate(date) : date;
     if (isNaN(d.getTime())) return "";
-    return d.toLocaleDateString(undefined, {
+    return d.toLocaleDateString(DateHelper.locale, {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -58,7 +58,7 @@ const formatDateTime = (date?: Date | string) => {
   try {
     const d = typeof date === "string" ? new Date(date) : date;
     if (isNaN(d.getTime())) return "";
-    return d.toLocaleString(undefined, {
+    return d.toLocaleString(DateHelper.locale, {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -75,7 +75,7 @@ const formatTimeShort = (date?: Date | string) => {
   try {
     const d = typeof date === "string" ? new Date(date) : date;
     if (isNaN(d.getTime())) return "";
-    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    return d.toLocaleTimeString(DateHelper.locale, { hour: "numeric", minute: "2-digit" });
   } catch {
     return "";
   }

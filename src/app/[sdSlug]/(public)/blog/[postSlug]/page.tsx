@@ -12,6 +12,7 @@ import { publicOrigin } from "@/helpers/siteOrigin";
 import { ConfigurationInterface, fetchCached } from "@/helpers/ConfigHelper";
 import type { PostInterface } from "@/helpers/interfaces";
 import { MetaHelper } from "@/helpers/MetaHelper";
+import { DateHelper } from "@churchapps/helpers";
 
 type PageParams = Promise<{ sdSlug: string; postSlug: string }>;
 
@@ -40,10 +41,10 @@ const excerptOf = (post: PostInterface) => post.excerpt || (post.content || "").
 
 const getBaseUrl = (sdSlug: string) => publicOrigin(sdSlug);
 
-const formatDate = (value?: string) => {
+const formatDate = (value: string | undefined, region?: string) => {
   if (!value) return "";
   const d = new Date(value);
-  return isNaN(d.getTime()) ? "" : d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  return isNaN(d.getTime()) ? "" : d.toLocaleDateString(DateHelper.normalizeLocale(region), { year: "numeric", month: "long", day: "numeric" });
 };
 
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
@@ -58,6 +59,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, postSlug } = await params;
   const { config, post, related } = await loadSharedData(sdSlug, postSlug);
+  const region = (config.appearance as { region?: string })?.region;
   if (!post?.id) return notFound();
 
   let parsedTags: string[] = [];
@@ -86,7 +88,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
                 </Typography>
                 {(post.authorName || post.publishDate) && (
                     <Typography sx={{ mt: 2, color: "text.secondary", fontSize: "0.95rem" }}>
-                      {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate)].filter(Boolean).join(" · ")}
+                      {[post.authorName ? "By " + post.authorName : "", formatDate(post.publishDate, region)].filter(Boolean).join(" · ")}
                     </Typography>
                 )}
                 <Box sx={{ width: 40, height: 3, borderRadius: 2, backgroundColor: "primary.main", mx: "auto", mt: 3 }} />
@@ -141,7 +143,7 @@ export default async function BlogPostPage({ params }: { params: PageParams }) {
                             <Typography variant="subtitle1" sx={{ mt: 1.5, fontWeight: 600, lineHeight: 1.3 }}>
                               <Link href={"/blog/" + r.slug} style={{ textDecoration: "none", color: "inherit" }}>{r.title}</Link>
                             </Typography>
-                            {r.publishDate && <Typography variant="caption" color="text.secondary">{formatDate(r.publishDate)}</Typography>}
+                            {r.publishDate && <Typography variant="caption" color="text.secondary">{formatDate(r.publishDate, region)}</Typography>}
                           </Box>
                       ))}
                     </Box>

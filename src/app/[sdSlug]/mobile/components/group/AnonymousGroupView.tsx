@@ -11,6 +11,7 @@ import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { cssUrl } from "../util";
 import { GroupContact } from "@/components/groups/GroupContact";
+import { DateHelper } from "@churchapps/helpers";
 
 interface Props {
   idOrSlug: string;
@@ -252,8 +253,8 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
           {upcomingEvents.map((e) => {
             const start = new Date(e.start!);
-            const monthAbb = start.toLocaleString(undefined, { month: "short" });
-            const dayShort = start.toLocaleString(undefined, { day: "2-digit" });
+            const monthAbb = start.toLocaleString(DateHelper.locale, { month: "short" });
+            const dayShort = start.toLocaleString(DateHelper.locale, { day: "2-digit" });
             return (
               <Box key={e.id} sx={{ display: "flex", alignItems: "center", gap: `${mobileTheme.spacing.md}px` }}>
                 <Box
