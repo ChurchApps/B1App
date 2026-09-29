@@ -255,6 +255,8 @@
       "householdMember": "Household Member",
       "householdMembers": "Household Members",
       "joinGroup": "Join Group",
+      "requestPending": "Request Pending",
+      "requestPendingNote": "Your request to join has been sent. A group leader will review it.",
       "leader": "Leader",
       "leaveGroup": "Leave Group",
       "leaveGroupBody": "You will lose access to this group's messages, events, and resources.",

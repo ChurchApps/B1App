@@ -144,7 +144,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
 
   const groupId = groupData?.id;
 
-  const { data: membersData = null, isError: membersUnavailable } = useQuery<GroupMember[]>({
+  const { data: membersData = null, isError: membersUnavailable, isFetched: membersSettled } = useQuery<GroupMember[]>({
     queryKey: ["group-members", groupId],
     queryFn: async () => {
       const data = await ApiHelper.get(`/groupmembers?groupId=${groupId}`, "MembershipApi");
@@ -163,7 +163,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     placeholderData: []
   });
 
-  const { data: myJoinRequests = [], refetch: refetchMyRequests } = useQuery<GroupJoinRequestInterface[]>({
+  const { data: myJoinRequests = [], refetch: refetchMyRequests, isFetched: requestsSettled } = useQuery<GroupJoinRequestInterface[]>({
     queryKey: ["my-join-requests"],
     queryFn: async () => {
       const data = await ApiHelper.get("/groupjoinrequests/my", "MembershipApi");
@@ -248,6 +248,21 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     () => myJoinRequests.find((r) => r.groupId === groupId && r.status === "pending"),
     [myJoinRequests, groupId]
   );
+
+  // Non-members only get the details and the join action; the tabs are for members and staff.
+  const isOutsider = !isMember && !canManageGroup;
+
+  // "Sign in to join" returns here with ?join=1 so the visitor lands in the join step, not on a bare page.
+  const autoJoinHandled = React.useRef(false);
+  React.useEffect(() => {
+    if (autoJoinHandled.current || searchParams?.get("join") !== "1") return;
+    if (!group || !currentPersonId || !membersSettled || !requestsSettled) return;
+    autoJoinHandled.current = true;
+    if (isMember || myPendingForGroup) return;
+    const policy = group.joinPolicy ?? "open";
+    if (policy === "request") setRequestDialogOpen(true);
+    else if (policy === "open") handleJoin();
+  }, [group, currentPersonId, membersSettled, requestsSettled, isMember, myPendingForGroup]);
 
   const renderMemberAvatar = (m: GroupMember) => {
     const common = { width: 40, height: 40, borderRadius: "20px", flexShrink: 0, overflow: "hidden" } as const;
@@ -513,12 +528,32 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     const policy = group?.joinPolicy ?? "open";
     if (policy === "closed") return null;
     if (policy === "request") {
-      const alreadyRequested = !!myPendingForGroup;
+      if (myPendingForGroup) {
+        return (
+          <Box
+            data-testid="request-pending-notice"
+            sx={{
+              bgcolor: tc.surface,
+              border: `1px solid ${tc.border}`,
+              borderRadius: `${mobileTheme.radius.lg}px`,
+              p: `${mobileTheme.spacing.md}px`,
+              display: "flex",
+              gap: `${mobileTheme.spacing.sm}px`
+            }}
+          >
+            <Icon sx={{ fontSize: 22, color: tc.primary }}>hourglass_top</Icon>
+            <Box>
+              <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.details.requestPending")}</Typography>
+              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.details.requestPendingNote")}</Typography>
+            </Box>
+          </Box>
+        );
+      }
       return (
         <Button
           variant="contained"
           fullWidth
-          disabled={joining || alreadyRequested}
+          disabled={joining}
           onClick={handleRequest}
           data-testid="request-to-join-button"
           sx={{
@@ -531,7 +566,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
             "&:hover": { bgcolor: tc.primary }
           }}
         >
-          {Locale.label(alreadyRequested ? "mobile.details.requestPending" : "mobile.group.requestToJoin")}
+          {Locale.label("mobile.group.requestToJoin")}
         </Button>
       );
     }
@@ -651,7 +686,13 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
       {group === undefined && renderSkeleton()}
       {group === null && renderNotFound()}
-      {group && (
+      {group && isOutsider && (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }} data-testid="group-outsider-view">
+          {renderHero()}
+          {renderAbout()}
+        </Box>
+      )}
+      {group && !isOutsider && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
           {renderHero()}
 
