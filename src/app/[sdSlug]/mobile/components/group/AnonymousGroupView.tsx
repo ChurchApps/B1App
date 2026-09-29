@@ -344,7 +344,7 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
     </Box>
   );
 
-  const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : `/mobile/groups/${idOrSlug}`;
+  const returnUrl = encodeURIComponent((typeof window !== "undefined" ? window.location.pathname : `/mobile/groups/${idOrSlug}`) + "?join=1");
 
   return (
     <Box sx={{ p: `${mobileTheme.spacing.md}px`, pb: group ? "88px" : `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
