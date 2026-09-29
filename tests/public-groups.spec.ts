@@ -42,14 +42,11 @@ test.describe("Public groups listing", () => {
     await expect(page.locator("body")).not.toContainText(/404|not found/i);
   });
 
-  test("anonymous visitor sees contact form on group with a leader", async ({ page }) => {
-    // GRP00000004 (adult-bible-class) has leader seeded, renders GroupContact form.
+  test("anonymous visitor must sign in to join, with no contact form", async ({ page }) => {
     await page.goto("/mobile/groups/adult-bible-class");
-    await expect(page.locator('[data-testid="group-contact-first-name-input"]')).toBeVisible({ timeout: 15000 });
-    await expect(page.locator('[data-testid="group-contact-last-name-input"]')).toBeVisible();
-    await expect(page.locator('[data-testid="group-contact-email-input"]')).toBeVisible();
-    await expect(page.locator('[data-testid="group-contact-message-input"]')).toBeVisible();
-    await expect(page.locator('[data-testid="group-contact-submit-button"]')).toBeVisible();
+    await expect(page.getByTestId("anonymous-group-sign-in")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByTestId("anonymous-group-sign-in")).toHaveAttribute("href", /\/mobile\/login\?returnUrl=/);
+    await expect(page.locator('[data-testid^="group-contact-"]')).toHaveCount(0);
   });
 
   test("anonymous view does not show authed tabs", async ({ page }) => {
