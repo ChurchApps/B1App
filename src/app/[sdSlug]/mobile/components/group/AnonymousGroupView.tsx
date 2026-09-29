@@ -10,7 +10,6 @@ import type { EventInterface, GroupInterface, GroupMemberInterface } from "@chur
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { cssUrl } from "../util";
-import { GroupContact } from "@/components/groups/GroupContact";
 import { DateHelper } from "@churchapps/helpers";
 
 interface Props {
@@ -305,22 +304,6 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
     );
   };
 
-  const renderContact = () => {
-    if (!leaders?.length) return null;
-    return (
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <GroupContact group={group!} leaders={leaders} config={config} />
-      </Box>
-    );
-  };
-
   const renderNotFound = () => (
     <Box
       sx={{
@@ -373,7 +356,6 @@ export const AnonymousGroupView = ({ idOrSlug, config }: Props) => {
           {renderAbout()}
           {renderLeaders()}
           {renderUpcomingEvents()}
-          {renderContact()}
         </Box>
       )}
       {group && (

@@ -33,9 +33,8 @@ import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
 import { GroupLessonTakeHome } from "../group/GroupLessonTakeHome";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
-import { GroupContact } from "@/components/groups/GroupContact";
 import { RequestToJoinDialog } from "./RequestToJoinDialog";
-import type { GroupJoinRequestInterface, GroupMemberInterface } from "@churchapps/helpers";
+import type { GroupJoinRequestInterface } from "@churchapps/helpers";
 
 interface Props {
   id: string;
@@ -173,17 +172,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     enabled: !!UserHelper.user?.id
   });
 
-  const { data: publicLeaders = [] } = useQuery<GroupMemberInterface[]>({
-    queryKey: ["group-leaders-public", churchId, groupId],
-    queryFn: async () => {
-      const data = await ApiHelper.getAnonymous(
-        `/groupMembers/public/leaders/${churchId}/${groupId}`,
-        "MembershipApi"
-      );
-      return Array.isArray(data) ? data : [];
-    },
-    enabled: !!groupId && !!churchId
-  });
   const hasPlans = (groupPlans?.length || 0) > 0;
 
   const group: GroupWithExtras | null | undefined = groupLoading ? undefined : (groupData ?? null);
@@ -415,18 +403,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           </Typography>
         )}
         {renderActions()}
-        {!isMember && !isLeader && publicLeaders.length > 0 && group && (
-          <Box
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              p: `${mobileTheme.spacing.md}px`
-            }}
-          >
-            <GroupContact group={group} leaders={publicLeaders} config={config} />
-          </Box>
-        )}
       </Box>
     );
   };
