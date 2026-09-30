@@ -15,7 +15,7 @@ interface Props extends WrapperPageProps {
   formId: string;
 }
 
-type StandaloneFormInterface = FormInterface & { description?: string; displayMode?: "standard" | "conversational" };
+type StandaloneFormInterface = FormInterface & { description?: string; displayMode?: "standard" | "conversational"; thankYouMessage?: string };
 
 export function FormPage(props: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -98,7 +98,7 @@ export function FormPage(props: Props) {
         )}
         {isFormSubmitted
           ? (
-            <h3 className="text-center">{Locale.label("pageSlug.formSubmitted")}</h3>
+            <h3 className="text-center" style={{ whiteSpace: "pre-wrap" }}>{form?.thankYouMessage || Locale.label("pageSlug.formSubmitted")}</h3>
           )
           : (
             getForm()
