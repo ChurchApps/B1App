@@ -197,7 +197,9 @@
       "untitledSermon": "Predigt ohne Titel",
       "verseOfTheDay": "Vers des Tages",
       "viewAllMessages": "Alle Nachrichten anzeigen",
-      "viewAllNotifications": "Alle Benachrichtigungen anzeigen"
+      "viewAllNotifications": "Alle Benachrichtigungen anzeigen",
+      "lightMode": "Light Mode",
+      "switchToLight": "Switch to light mode"
     },
     "dashboard": {
       "goodAfternoon": "Guten Nachmittag",
@@ -345,7 +347,11 @@
       "untitledSeries": "Reihe ohne Titel",
       "verse": "Verse",
       "viewTeach": "Lehren",
-      "watchSermon": "Predigt ansehen"
+      "watchSermon": "Predigt ansehen",
+      "groupActionFailed": "Something went wrong. Please try again.",
+      "membersPrivate": "Members are only visible to people in this group.",
+      "requestPending": "Request Pending",
+      "requestPendingNote": "Your request to join has been sent. A group leader will review it."
     },
     "empty": {
       "dashboardAdminBody": "Es sind anscheinend noch keine Tabs konfiguriert. Öffnen Sie die Verwaltung, um den Startbildschirm Ihrer Mitglieder einzurichten.",
@@ -451,7 +457,8 @@
         "saved": "Saved",
         "timeOfDay": "Time of Day",
         "when": "When should reminders go out?",
-        "who": "Who should be reminded?"
+        "who": "Who should be reminded?",
+        "saveFailed": "Could not save reminders."
       },
       "repeats": "Wiederholt sich",
       "requestNote": "Sie können dem Gruppenleiter optional eine kurze Nachricht hinzufügen.",
@@ -492,7 +499,10 @@
       "usedStorageUnlimited": "Used {}",
       "visibility": "Sichtbarkeit",
       "weekly": "Wöchentlich",
-      "yearly": "Jährlich"
+      "yearly": "Jährlich",
+      "invalidUrl": "Enter a web address that starts with http:// or https://",
+      "saveChanges": "Save Changes",
+      "saving": "Saving..."
     },
     "install": {
       "allSetBody": "The {} app is installed on this device.",
@@ -690,7 +700,10 @@
       "visibilityPreferences": "Visibility Preferences",
       "workPhone": "Work Phone",
       "yourPhoto": "Your Photo",
-      "zip": "Zip"
+      "zip": "Zip",
+      "pendingChanges": "Pending Changes",
+      "reviewBeforeSubmitting": "Review your changes before submitting for approval.",
+      "submitForApproval": "Submit for Approval"
     },
     "requests": {
       "allDay": "Ganztägig",
@@ -931,7 +944,10 @@
       "watchLive": "Live ansehen",
       "website": "Website",
       "yourGivingImpact": "Your Giving Impact",
-      "youreCheckedIn": "You're checked in!"
+      "youreCheckedIn": "You're checked in!",
+      "changesSubmittedForApproval": "Your changes have been submitted for approval.",
+      "totalThisYearGift": "Total this year • {} gift",
+      "unableToSubmitChanges": "Unable to submit changes."
     },
     "taglines": {
       "bible": "Heilige Schrift lesen",
@@ -947,7 +963,13 @@
       "volunteer": "Zum Dienen anmelden",
       "votd": "Heutiger Vers"
     },
-    "yesterday": "gestern"
+    "yesterday": "gestern",
+    "votd": {
+      "copied": "Copied to clipboard",
+      "share": "Share",
+      "shareImage": "Share image",
+      "unableToShare": "Unable to share"
+    }
   },
   "notes": {
     "comment": "Kommentar",
@@ -980,7 +1002,8 @@
     "previousChapter": "Vorheriges Kapitel",
     "sermons": "Predigten",
     "toViewForm": "um dieses Formular anzuzeigen.",
-    "verseOfTheDay": "Vers des Tages"
+    "verseOfTheDay": "Vers des Tages",
+    "formNotFound": "This form could not be loaded."
   },
   "person": {
     "email": "E-Mail",
