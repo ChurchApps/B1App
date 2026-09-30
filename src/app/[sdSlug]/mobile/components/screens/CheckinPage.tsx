@@ -746,7 +746,7 @@ const HouseholdStep = ({
   };
 
   const existingCode = (CheckinHelper.existingVisits as VisitWithCode[])?.find(
-    (v) => v.id && v.securityCode
+    (v) => !!v.securityCode
   )?.securityCode;
 
   if (isLoading) {
