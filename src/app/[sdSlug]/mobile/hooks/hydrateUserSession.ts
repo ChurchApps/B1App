@@ -94,7 +94,8 @@ export async function hydrateUserSession(
   if (person) context?.setPerson(person);
 
   if (writeCookies && typeof document !== "undefined") {
-    const maxAge = 2 * 24 * 60 * 60;
+    // Outlive the 2-day jwt plus the Api's 30-day refresh window, so an expired jwt can still be traded for a new one.
+    const maxAge = 32 * 24 * 60 * 60;
     const secure = window.location.protocol === "https:" ? "; Secure" : "";
     document.cookie = `jwt=${resp.user.jwt}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
     document.cookie = `name=${encodeURIComponent(`${resp.user.firstName || ""} ${resp.user.lastName || ""}`.trim())}; path=/; max-age=${maxAge}; SameSite=Lax${secure}`;
