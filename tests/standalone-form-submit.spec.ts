@@ -25,7 +25,7 @@ test.describe("Standalone form submission (anonymous)", () => {
 
     await page.locator("#formSubmissionBox").getByRole("button", { name: /submit|save/i }).click();
 
-    await expect(page.locator("body")).toContainText(/thank|submitted/i, { timeout: 15000 });
+    await expect(page.locator("body")).toContainText("Your child is registered for Vacation Bible School! See you there.", { timeout: 15000 });
     expect(denied, "no access-denied error should appear").toHaveLength(0);
     expect(submitStatus, "POST /formsubmissions should be 200").toBe(200);
   });
