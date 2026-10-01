@@ -20,7 +20,10 @@
     "delete": "Usuń",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Opcjonalne",
     "pleaseWait": "Proszę czekaj...",
+    "remove": "Usuń",
+    "required": "Wymagane",
     "save": "Zapisz",
     "search": "Szukaj",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Dostawca płatności",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Wprowadź prawidłowy numer konta",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Wprowadź prawidłowy numer rozliczeniowy banku"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Masz już konto ChurchApps. Zaloguj się za jego pomocą.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Pole wyboru",
+    "currency": "Waluta",
+    "date": "Data",
+    "email": "E-mail",
+    "file": "Przesyłanie pliku",
+    "multiple": "Wielokrotny wybór",
+    "number": "Liczba",
+    "phone": "Telefon",
+    "textarea": "Obszar tekstowy",
+    "textbox": "Pole tekstowe"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Forum wsparcia",
     "documentation": "Dokumentacja"
+  },
+  "validation": {
+    "date": "Wprowadź prawidłową datę",
+    "email": "Wprowadź prawidłowy adres e-mail",
+    "fileSize": "Rozmiar pliku musi być mniejszy niż {} MB",
+    "fileType": "Nieprawidłowy typ pliku",
+    "maxLength": "Może mieć maksymalnie {} znaków",
+    "minLength": "Musi mieć co najmniej {} znaków",
+    "number": "Wprowadź prawidłową liczbę",
+    "phone": "Wprowadź prawidłowy numer telefonu",
+    "required": "To pole jest wymagane"
   },
   "wrapper": {
     "chatWith": "Chat with",

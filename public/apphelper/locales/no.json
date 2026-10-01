@@ -20,7 +20,10 @@
     "delete": "Slett",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Valgfritt",
     "pleaseWait": "Vennligst vent...",
+    "remove": "Fjern",
+    "required": "Påkrevd",
     "save": "Lagre",
     "search": "Søk",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Betalingsleverandør",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Skriv inn et gyldig kontonummer",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Skriv inn et gyldig bankregistreringsnummer"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Du har allerede en ChurchApps-konto. Logg inn med den i stedet.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Avmerkingsboks",
+    "currency": "Valuta",
+    "date": "Dato",
+    "email": "E-post",
+    "file": "Filopplasting",
+    "multiple": "Flervalg",
+    "number": "Tall",
+    "phone": "Telefon",
+    "textarea": "Tekstområde",
+    "textbox": "Tekstfelt"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Brukerstøtteforum",
     "documentation": "Dokumentasjon"
+  },
+  "validation": {
+    "date": "Skriv inn en gyldig dato",
+    "email": "Skriv inn en gyldig e-postadresse",
+    "fileSize": "Filstørrelsen må være mindre enn {} MB",
+    "fileType": "Ugyldig filtype",
+    "maxLength": "Kan ikke være mer enn {} tegn",
+    "minLength": "Må være minst {} tegn",
+    "number": "Skriv inn et gyldig tall",
+    "phone": "Skriv inn et gyldig telefonnummer",
+    "required": "Dette feltet er påkrevd"
   },
   "wrapper": {
     "chatWith": "Chat with",

@@ -20,7 +20,10 @@
     "delete": "削除",
     "edit": "Edit",
     "error": "Error",
+    "optional": "任意",
     "pleaseWait": "お待ちください...",
+    "remove": "削除",
+    "required": "必須",
     "save": "保存",
     "search": "検索",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "カード",
       "paymentFormNotAvailable": "支払いフォームを利用できません",
       "paymentFormNotInitialized": "支払いフォームが初期化されていません",
+      "paymentProvider": "決済プロバイダー",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "予期しないエラーが発生しました。もう一度お試しください。",
       "validate": {
+        "accountNumber": "有効な口座番号を入力してください",
         "captchaFailed": "reCAPTCHA の確認に失敗しました。もう一度お試しください。",
-        "captchaRequired": "reCAPTCHA の確認を完了してください"
+        "captchaRequired": "reCAPTCHA の確認を完了してください",
+        "routingNumber": "有効な銀行ルーティング番号を入力してください"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "ChurchApps アカウントをすでにお持ちです。そのアカウントでサインインしてください。",
     "continueGoogle": "Google で続行",
     "continueMicrosoft": "Microsoft で続行",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "チェックボックス",
+    "currency": "通貨",
+    "date": "日付",
+    "email": "メール",
+    "file": "ファイルのアップロード",
+    "multiple": "多肢選択",
+    "number": "数値",
+    "phone": "電話",
+    "textarea": "テキストエリア",
+    "textbox": "テキストボックス"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "サポート フォーラム",
     "documentation": "ドキュメント"
+  },
+  "validation": {
+    "date": "有効な日付を入力してください",
+    "email": "有効なメールアドレスを入力してください",
+    "fileSize": "ファイルサイズは {} MB 未満にしてください",
+    "fileType": "無効なファイル形式です",
+    "maxLength": "{} 文字以内で入力してください",
+    "minLength": "{} 文字以上で入力してください",
+    "number": "有効な数値を入力してください",
+    "phone": "有効な電話番号を入力してください",
+    "required": "この項目は必須です"
   },
   "wrapper": {
     "chatWith": "Chat with",

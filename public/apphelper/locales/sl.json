@@ -20,7 +20,10 @@
     "delete": "Izbriši",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Neobvezno",
     "pleaseWait": "Prosim čakajte...",
+    "remove": "Odstrani",
+    "required": "Obvezno",
     "save": "Shrani",
     "search": "Iskanje",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Ponudnik plačil",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Vnesite veljavno številko računa",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Vnesite veljavno usmerjevalno številko banke"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Že imate račun ChurchApps. Prijavite se z njim.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Potrditveno polje",
+    "currency": "Valuta",
+    "date": "Datum",
+    "email": "E-pošta",
+    "file": "Nalaganje datoteke",
+    "multiple": "Več možnih odgovorov",
+    "number": "Število",
+    "phone": "Telefon",
+    "textarea": "Besedilno območje",
+    "textbox": "Besedilno polje"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Forum za podporo",
     "documentation": "Dokumentacija"
+  },
+  "validation": {
+    "date": "Vnesite veljaven datum",
+    "email": "Vnesite veljaven e-poštni naslov",
+    "fileSize": "Velikost datoteke mora biti manjša od {} MB",
+    "fileType": "Neveljavna vrsta datoteke",
+    "maxLength": "Ne sme biti daljše od {} znakov",
+    "minLength": "Mora imeti vsaj {} znakov",
+    "number": "Vnesite veljavno število",
+    "phone": "Vnesite veljavno telefonsko številko",
+    "required": "To polje je obvezno"
   },
   "wrapper": {
     "chatWith": "Chat with",

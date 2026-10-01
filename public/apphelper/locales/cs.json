@@ -20,7 +20,10 @@
     "delete": "Smazat",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Volitelné",
     "pleaseWait": "Prosím čekejte...",
+    "remove": "Odebrat",
+    "required": "Povinné",
     "save": "Uložit",
     "search": "Hledat",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Poskytovatel plateb",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Zadejte platné číslo účtu",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Zadejte platný směrovací kód banky"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Již máte účet ChurchApps. Přihlaste se prosím pomocí něj.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Zaškrtávací políčko",
+    "currency": "Měna",
+    "date": "Datum",
+    "email": "E-mail",
+    "file": "Nahrání souboru",
+    "multiple": "Výběr z více možností",
+    "number": "Číslo",
+    "phone": "Telefon",
+    "textarea": "Textová oblast",
+    "textbox": "Textové pole"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Fórum podpory",
     "documentation": "Dokumentace"
+  },
+  "validation": {
+    "date": "Zadejte platné datum",
+    "email": "Zadejte platnou e-mailovou adresu",
+    "fileSize": "Velikost souboru musí být menší než {} MB",
+    "fileType": "Neplatný typ souboru",
+    "maxLength": "Může mít nejvýše {} znaků",
+    "minLength": "Musí mít alespoň {} znaků",
+    "number": "Zadejte platné číslo",
+    "phone": "Zadejte platné telefonní číslo",
+    "required": "Toto pole je povinné"
   },
   "wrapper": {
     "chatWith": "Chat with",

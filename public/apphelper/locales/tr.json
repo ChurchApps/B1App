@@ -20,7 +20,10 @@
     "delete": "Sil",
     "edit": "Edit",
     "error": "Error",
+    "optional": "İsteğe bağlı",
     "pleaseWait": "Lütfen bekleyin...",
+    "remove": "Kaldır",
+    "required": "Zorunlu",
     "save": "Kaydet",
     "search": "Ara",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Ödeme sağlayıcısı",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Lütfen geçerli bir hesap numarası girin",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Lütfen geçerli bir banka yönlendirme numarası girin"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Zaten bir ChurchApps hesabınız var. Lütfen bunun yerine onunla giriş yapın.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Onay kutusu",
+    "currency": "Para birimi",
+    "date": "Tarih",
+    "email": "E-posta",
+    "file": "Dosya yükleme",
+    "multiple": "Çoktan seçmeli",
+    "number": "Sayı",
+    "phone": "Telefon",
+    "textarea": "Metin alanı",
+    "textbox": "Metin kutusu"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Destek Forumu",
     "documentation": "Dokümantasyon"
+  },
+  "validation": {
+    "date": "Lütfen geçerli bir tarih girin",
+    "email": "Lütfen geçerli bir e-posta adresi girin",
+    "fileSize": "Dosya boyutu {} MB'tan küçük olmalıdır",
+    "fileType": "Geçersiz dosya türü",
+    "maxLength": "En fazla {} karakter olmalıdır",
+    "minLength": "En az {} karakter olmalıdır",
+    "number": "Lütfen geçerli bir sayı girin",
+    "phone": "Lütfen geçerli bir telefon numarası girin",
+    "required": "Bu alan zorunludur"
   },
   "wrapper": {
     "chatWith": "Chat with",

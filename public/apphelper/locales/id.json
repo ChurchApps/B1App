@@ -20,7 +20,10 @@
     "delete": "Hapus",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Opsional",
     "pleaseWait": "Silakan tunggu...",
+    "remove": "Hapus",
+    "required": "Wajib",
     "save": "Simpan",
     "search": "Cari",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Penyedia Pembayaran",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Masukkan nomor rekening yang valid",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Masukkan nomor routing bank yang valid"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Anda sudah memiliki akun ChurchApps. Silakan masuk menggunakan akun tersebut.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Kotak centang",
+    "currency": "Mata uang",
+    "date": "Tanggal",
+    "email": "Email",
+    "file": "Unggah File",
+    "multiple": "Pilihan Ganda",
+    "number": "Angka",
+    "phone": "Telepon",
+    "textarea": "Area Teks",
+    "textbox": "Kotak Teks"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Forum Dukungan",
     "documentation": "Dokumentasi"
+  },
+  "validation": {
+    "date": "Masukkan tanggal yang valid",
+    "email": "Masukkan alamat email yang valid",
+    "fileSize": "Ukuran file harus kurang dari {} MB",
+    "fileType": "Jenis file tidak valid",
+    "maxLength": "Tidak boleh lebih dari {} karakter",
+    "minLength": "Minimal {} karakter",
+    "number": "Masukkan angka yang valid",
+    "phone": "Masukkan nomor telepon yang valid",
+    "required": "Kolom ini wajib diisi"
   },
   "wrapper": {
     "chatWith": "Chat with",

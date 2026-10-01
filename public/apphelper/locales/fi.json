@@ -20,7 +20,10 @@
     "delete": "Poista",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Valinnainen",
     "pleaseWait": "Odota...",
+    "remove": "Poista",
+    "required": "Pakollinen",
     "save": "Tallenna",
     "search": "Haku",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Maksupalveluntarjoaja",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Anna kelvollinen tilinumero",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Anna kelvollinen pankin reititysnumero"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Sinulla on jo ChurchApps-tili. Kirjaudu sisään sillä.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Valintaruutu",
+    "currency": "Valuutta",
+    "date": "Päivämäärä",
+    "email": "Sähköposti",
+    "file": "Tiedoston lataus",
+    "multiple": "Monivalinta",
+    "number": "Numero",
+    "phone": "Puhelin",
+    "textarea": "Tekstialue",
+    "textbox": "Tekstikenttä"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Tukifoorumi",
     "documentation": "Dokumentaatio"
+  },
+  "validation": {
+    "date": "Anna kelvollinen päivämäärä",
+    "email": "Anna kelvollinen sähköpostiosoite",
+    "fileSize": "Tiedoston koon on oltava alle {} Mt",
+    "fileType": "Virheellinen tiedostotyyppi",
+    "maxLength": "Saa olla enintään {} merkkiä pitkä",
+    "minLength": "On oltava vähintään {} merkkiä pitkä",
+    "number": "Anna kelvollinen numero",
+    "phone": "Anna kelvollinen puhelinnumero",
+    "required": "Tämä kenttä on pakollinen"
   },
   "wrapper": {
     "chatWith": "Chat with",

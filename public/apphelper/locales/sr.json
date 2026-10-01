@@ -20,7 +20,10 @@
     "delete": "Избриши",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Opciono",
     "pleaseWait": "Молим сачекајте...",
+    "remove": "Ukloni",
+    "required": "Obavezno",
     "save": "Сачувај",
     "search": "Претрага",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Pružalac plaćanja",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Unesite važeći broj računa",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Unesite važeći bankovni routing broj"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Već imate ChurchApps nalog. Prijavite se pomoću njega.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Polje za potvrdu",
+    "currency": "Valuta",
+    "date": "Datum",
+    "email": "E-pošta",
+    "file": "Otpremanje datoteke",
+    "multiple": "Višestruki izbor",
+    "number": "Broj",
+    "phone": "Telefon",
+    "textarea": "Tekstualna oblast",
+    "textbox": "Tekstualno polje"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Форум подршке",
     "documentation": "Документација"
+  },
+  "validation": {
+    "date": "Unesite važeći datum",
+    "email": "Unesite važeću adresu e-pošte",
+    "fileSize": "Veličina datoteke mora biti manja od {} MB",
+    "fileType": "Nevažeći tip datoteke",
+    "maxLength": "Ne sme imati više od {} znakova",
+    "minLength": "Mora imati najmanje {} znakova",
+    "number": "Unesite važeći broj",
+    "phone": "Unesite važeći broj telefona",
+    "required": "Ovo polje je obavezno"
   },
   "wrapper": {
     "chatWith": "Chat with",

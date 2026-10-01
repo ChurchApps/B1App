@@ -20,7 +20,10 @@
     "delete": "Tanggalin",
     "edit": "Edit",
     "error": "Error",
+    "optional": "Opsyonal",
     "pleaseWait": "Mangyaring maghintay...",
+    "remove": "Alisin",
+    "required": "Kinakailangan",
     "save": "I-save",
     "search": "Maghanap",
     "submit": "Submit",
@@ -120,10 +123,14 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
+      "paymentProvider": "Tagapagbigay ng Bayad",
+      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
+        "accountNumber": "Mangyaring maglagay ng wastong numero ng account",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification"
+        "captchaRequired": "Please complete the reCAPTCHA verification",
+        "routingNumber": "Mangyaring maglagay ng wastong routing number ng bangko"
       }
     },
     "page": {
@@ -249,6 +256,7 @@
     "search": "Search icons..."
   },
   "login": {
+    "accountExists": "Mayroon ka nang ChurchApps account. Mangyaring mag-sign in gamit iyon.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -331,6 +339,18 @@
     "person": "Person",
     "years": "years"
   },
+  "question": {
+    "checkbox": "Checkbox",
+    "currency": "Pera",
+    "date": "Petsa",
+    "email": "Email",
+    "file": "Pag-upload ng File",
+    "multiple": "Maramihang Pagpipilian",
+    "number": "Numero",
+    "phone": "Telepono",
+    "textarea": "Text Area",
+    "textbox": "Text Box"
+  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -369,6 +389,17 @@
   "support": {
     "discussions": "Forum ng Suporta",
     "documentation": "Dokumentasyon"
+  },
+  "validation": {
+    "date": "Mangyaring maglagay ng wastong petsa",
+    "email": "Mangyaring maglagay ng wastong email address",
+    "fileSize": "Ang laki ng file ay dapat mas mababa sa {} MB",
+    "fileType": "Hindi wastong uri ng file",
+    "maxLength": "Hindi dapat lumampas sa {} na character",
+    "minLength": "Dapat ay hindi bababa sa {} na character",
+    "number": "Mangyaring maglagay ng wastong numero",
+    "phone": "Mangyaring maglagay ng wastong numero ng telepono",
+    "required": "Kinakailangan ang field na ito"
   },
   "wrapper": {
     "chatWith": "Chat with",
