@@ -20,20 +20,17 @@ interface Props {
 export function LoginClient({ showLogo, redirectAfterLogin, loginContainerCssProps, keyName }: Props) {
   const searchParams = useSearchParams();
   const context = useContext(UserContext);
-  const [cookies, setCookies] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    // Get cookies manually to avoid react-cookie SSR issues
-    const cookieString = document.cookie;
+  // Read synchronously (this component is ssr:false) so LoginPage's mount-time init sees an existing session's jwt.
+  const [cookies] = useState<Record<string, string>>(() => {
     const cookieObj: Record<string, string> = {};
-    cookieString.split(";").forEach(cookie => {
+    document.cookie.split(";").forEach(cookie => {
       const [key, value] = cookie.trim().split("=");
       if (key && value) {
         cookieObj[key] = value;
       }
     });
-    setCookies(cookieObj);
-  }, []);
+    return cookieObj;
+  });
 
   const handleRedirect = (url: string) => {
     PersonHelper.person = context!.person;

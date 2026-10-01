@@ -8,7 +8,6 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { Locale } from "@churchapps/apphelper";
 import { Container } from "@mui/material";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 type PageParams = Promise<{ sdSlug: string; label: string; }>
 
@@ -33,7 +32,6 @@ export default async function GroupPage({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, label } = await params;
   const { config } = await loadSharedData(sdSlug);
-  if (config.hidePublicSite) notFound();
 
   const getTitleCase = (words: string) => words
     .toLowerCase()
