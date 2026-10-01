@@ -129,7 +129,8 @@ const nextConfig = {
     ];
   },
 
-  // Rewrites for subdomain routing
+  // Rewrites for subdomain routing. /api/* is left alone so routes like
+  // /api/revalidate/{sdSlug} are reachable on church subdomains.
   async rewrites() {
     const railwaySlug = process.env.DEFAULT_CHURCH_SLUG || "church";
     const railwayRules = [
@@ -139,9 +140,9 @@ const nextConfig = {
         destination: `/${railwaySlug}`
       },
       {
-        source: "/:path*",
+        source: "/:path((?!api/).*)",
         has: [{ type: "host", value: ".*\\.up\\.railway\\.app" }],
-        destination: `/${railwaySlug}/:path*`
+        destination: `/${railwaySlug}/:path`
       }
     ];
 
@@ -153,9 +154,9 @@ const nextConfig = {
         destination: "/:subdomain"
       },
       {
-        source: "/:path*",
+        source: "/:path((?!api/).*)",
         has: [{ type: "header", key: "x-site", value: "(?<subdomain>.*?)\\..*" }],
-        destination: "/:subdomain/:path*"
+        destination: "/:subdomain/:path"
       },
       {
         source: "/",
@@ -168,9 +169,9 @@ const nextConfig = {
         destination: "/:subdomain"
       },
       {
-        source: "/:path*",
+        source: "/:path((?!api/).*)",
         has: [{ type: "host", value: "(?<subdomain>.*?)\\..*" }],
-        destination: "/:subdomain/:path*"
+        destination: "/:subdomain/:path"
       }
     ];
   },
