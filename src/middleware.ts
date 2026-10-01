@@ -11,8 +11,8 @@ const CACHE_MAX = 5000;
 // Subdomains are [a-z0-9] only, so this never resolves to a church (vs. the host rewrite guessing one).
 const UNKNOWN_SITE = "_unknown.invalid";
 const cache = new Map<string, { site: string | null; exp: number }>();
-// hidePublicSite per subdomain. Dev/test read it fresh so the admin toggle shows immediately (same as ConfigHelper).
-const HIDDEN_TTL = process.env.NODE_ENV === "production" ? CACHE_TTL : 0;
+// hidePublicSite per subdomain. Kept short because the admin's revalidate call can't clear this per-instance map; dev/test read it fresh.
+const HIDDEN_TTL = process.env.NODE_ENV === "production" ? 60_000 : 0;
 const hiddenCache = new Map<string, { hidden: boolean; exp: number }>();
 
 export const config = { matcher: ["/((?!_next/|api/|.*\\..*).*)", "/sitemap.xml", "/robots.txt", "/manifest.webmanifest"] };
@@ -55,6 +55,16 @@ const isHiddenSite = async (subDomain: string) => {
   } catch { return false; }
 };
 
+// Signed-in members (unexpired jwt cookie set by LoginPage) see the site; this is a soft gate, so the payload is not verified.
+const hasSession = (req: NextRequest) => {
+  const payload = req.cookies.get("jwt")?.value?.split(".")[1];
+  if (!payload) return false;
+  try {
+    const { exp } = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
+    return typeof exp === "number" && exp * 1000 > Date.now();
+  } catch { return false; }
+};
+
 export async function middleware(req: NextRequest) {
   const host = (req.headers.get("x-forwarded-host") || req.headers.get("host") || "").split(",")[0].split(":")[0].trim().toLowerCase();
   const isInternal = !host || INTERNAL_HOSTS.includes(host) || INTERNAL_SUFFIXES.some((s) => host.endsWith(s));
@@ -89,10 +99,13 @@ export async function middleware(req: NextRequest) {
   }
 
   const pathname = req.nextUrl.pathname;
-  if (!isAllowedWhenPublicSiteHidden(pathname)) {
+  if (!isAllowedWhenPublicSiteHidden(pathname) && !hasSession(req)) {
     const subDomain = getSubDomain(host, isInternal, site);
-    // No returnUrl: the gated page stays gated after login, so members land in the portal (LoginClient's default).
-    if (subDomain && await isHiddenSite(subDomain)) return NextResponse.redirect(new URL("/login", req.url));
+    if (subDomain && await isHiddenSite(subDomain)) {
+      const loginUrl = new URL("/login", req.url);
+      loginUrl.searchParams.set("returnUrl", pathname + req.nextUrl.search);
+      return NextResponse.redirect(loginUrl);
+    }
   }
   const res = NextResponse.next({ request: { headers } });
   res.headers.set("Content-Security-Policy", csp);
