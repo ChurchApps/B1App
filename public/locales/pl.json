@@ -15,17 +15,15 @@
     "post": "Opublikuj"
   },
   "cascadingMenus": {
+    "collapseMenu": "Zwiń menu {}",
+    "collapseSubmenu": "Zwiń podmenu {}",
+    "expandMenu": "Rozwiń menu {}",
     "expandSubmenu": "Rozwiń podmenu {}",
     "navigateTo": "Przejdź do {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Wybierz grupę dla {}",
-      "generalGroups": "Grupy ogólne",
-      "noGroup": "Brak grupy",
-      "noGroupsAvailable": "Brak dostępnych grup",
-      "noGroupsConfigured": "Dla tego nabożeństwa nie skonfigurowano żadnych grup",
-      "selectGroup": "Wybierz grupę"
+      "chooseGroupFor": "Wybierz grupę dla {}"
     },
     "guestRegister": {
       "addFamilyMember": "Dodaj członka rodziny",
@@ -49,10 +47,8 @@
     "cancel": "Anuluj",
     "close": "Zamknij",
     "date": "Data",
-    "edit": "Edytuj",
     "pleaseWait": "Proszę czekać",
     "save": "Zapisz",
-    "search": "Szukaj",
     "update": "Aktualizuj"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Twój formularz został pomyślnie wysłany."
   },
   "eventCalendar": {
-    "discussion": "Dyskusja",
-    "editEvent": "Edytuj wydarzenie",
     "recurring": {
       "allDates": "Wszystkie daty",
       "deleteTitle": "Usuń wydarzenie cykliczne",
       "editTitle": "Edytuj wydarzenie cykliczne",
       "justThisDate": "Tylko ta data",
       "thisAndFollowing": "Ta i wszystkie następne daty"
-    },
-    "registerForEvent": "Zarejestruj się na to wydarzenie"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Link może prowadzić do Dysku Google, hostowanego pliku PDF z lekcją itp.",
     "addedLinks": "Dodane linki",
     "confirmDelete": "Czy na pewno chcesz usunąć '{}'?",
-    "contact": "Kontakt",
-    "contactGroupLeader": "Skontaktuj się z liderem grupy:",
     "deleteFileLabel": "Usuń plik {}",
     "deleteLinkLabel": "Usuń link {}",
-    "emailLabel": "Twój adres e-mail",
     "files": "Pliki",
-    "firstNameLabel": "Twoje imię",
-    "lastNameLabel": "Twoje nazwisko",
     "linkText": "Tekst linku",
     "linkTextLabel": "Tekst wyświetlany linku",
     "linkUrl": "Adres URL linku",
     "linkUrlLabel": "Adres URL linku",
-    "messageLabel": "Twoja wiadomość do lidera grupy",
-    "messageSent": "Twoja wiadomość została wysłana!",
     "noDescription": "Nie podano opisu.",
     "noGroups": "Nie znaleziono grup",
-    "phoneLabel": "Twój numer telefonu",
     "storageInfo": "Bezpłatnie udostępniane jest 100 MB miejsca na przechowywanie plików PDF i innych powszechnie potrzebnych dokumentów. Sugerujemy korzystanie z Dysku Google lub Dropbox, jeśli potrzebne jest dodatkowe miejsce.",
-    "submit": "Wyślij",
-    "submitLabel": "Wyślij wiadomość do lidera grupy",
     "upload": "Prześlij",
     "uploadedFiles": "Przesłane pliki",
     "usedSpace": "Wykorzystane miejsce: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Menu użytkownika"
   },
   "iconPicker": {
-    "iconsAvailable": "Dostępne ikony",
-    "matchingResults": "Pasujące wyniki",
-    "searchAriaLabel": "wyszukaj ikony",
     "selectIcon": "Wybierz ikonę {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Zaloguj się",
@@ -176,6 +153,7 @@
       "explore": "Odkryj",
       "group": "Grupa",
       "home": "Strona główna",
+      "lightMode": "Tryb jasny",
       "logout": "Wyloguj",
       "member": "Członek",
       "messages": "Wiadomości",
@@ -193,6 +171,7 @@
       "profile": "Profil",
       "signIn": "Zaloguj się",
       "switchToDark": "Przełącz na tryb ciemny",
+      "switchToLight": "Przełącz na tryb jasny",
       "unknown": "Nieznany",
       "untitledSermon": "Kazanie bez tytułu",
       "verseOfTheDay": "Werset dnia",
@@ -247,6 +226,7 @@
       "emailAddress": "Adres e-mail",
       "full": "Pełne",
       "general": "Ogólne",
+      "groupActionFailed": "Coś poszło nie tak. Spróbuj ponownie.",
       "groupNotFound": "Nie znaleziono grupy",
       "groupNotFoundDescription": "Nie można znaleźć tej grupy lub nie masz uprawnień do jej wyświetlenia.",
       "householdMember": "Członek gospodarstwa domowego",
@@ -261,6 +241,7 @@
       "memberSingular": "członek",
       "members": "Członkowie ({})",
       "membersLowercase": "członkowie",
+      "membersPrivate": "Członkowie są widoczni tylko dla osób z tej grupy.",
       "membersTab": "Członkowie",
       "message": "Wiadomość",
       "messageActions": "Akcje wiadomości",
@@ -301,6 +282,8 @@
       "remove": "Usuń",
       "removeSignup": "Usunąć zapis?",
       "removing": "Usuwanie...",
+      "requestPending": "Prośba oczekuje",
+      "requestPendingNote": "Twoja prośba o dołączenie została wysłana. Lider grupy ją rozpatrzy.",
       "retry": "Spróbuj ponownie",
       "send": "Wyślij",
       "sendEmail": "Wyślij e-mail",
@@ -405,6 +388,7 @@
       "groupChat": "Czat grupowy",
       "groupChatTitle": "{} {}",
       "guest": "(Gość)",
+      "invalidUrl": "Wpisz adres internetowy zaczynający się od http:// lub https://",
       "leadersCanPost": "Liderzy mogą tutaj publikować ogłoszenia.",
       "linkFallback": "Link",
       "linkText": "Tekst linku",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Nie udało się zapisać przypomnień.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Zapisz",
       "saveAttendance": "Zapisz obecność",
+      "saveChanges": "Zapisz zmiany",
+      "saving": "Zapisywanie...",
       "search": "Szukaj",
       "searchForPerson": "Szukaj osoby",
       "selectAll": "Wszyscy",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Oczekujące zmiany",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Przejrzyj zmiany przed przesłaniem ich do zatwierdzenia.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Prześlij do zatwierdzenia",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Werset dnia"
     },
     "screens": {
+      "adjustSearch": "Spróbuj innego imienia lub pisowni.",
       "alreadyCheckedIn": "Już zarejestrowany",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Twoje zmiany zostały przesłane do zatwierdzenia.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Usuń powiadomienie",
       "detectingDevice": "Wykrywanie urządzenia…",
+      "directoryMembersBody": "Katalog kościoła jest udostępniany tylko członkom.",
+      "directorySignInBody": "Zaloguj się, aby przeglądać katalog kościoła.",
       "displayNameUpdated": "Nazwa wyświetlana zaktualizowana.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Zaloguj się, aby zobaczyć grupy, do których należysz, i dołączyć do nowych.",
+      "groupsSignInTitle": "Zaloguj się, aby zobaczyć swoje grupy",
       "keep": "Zachowaj",
       "lastGift": "Last Gift",
       "lastNameRegister": "Nazwisko",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Brak dostępnych grup",
+      "noGroupsBody": "Nie należysz jeszcze do żadnej grupy. Przejrzyj grupy oferowane przez Twój kościół, aby znaleźć jedną dla siebie.",
       "noGroupsMessage": "Dla tego nabożeństwa nie skonfigurowano żadnych grup.",
+      "noGroupsTitle": "Brak grup",
       "noHouseholdMembers": "Nie znaleziono członków gospodarstwa domowego",
       "noHouseholdMessage": "Upewnij się, że jesteś zalogowany i masz zarejestrowanych członków gospodarstwa domowego.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Zapisz",
       "scanWithPhone": "Zeskanuj aparatem telefonu",
+      "searchDirectoryBody": "Wyszukaj osobę po imieniu, aby zobaczyć jej dane kontaktowe.",
       "searchForMessage": "Wyszukaj osobę do wysłania wiadomości",
       "searchMembers": "Szukaj członków",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Łącznie w tym roku • {} dar",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Nie udało się przesłać zmian.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Zapisz się do służby",
       "votd": "Werset dnia"
     },
+    "votd": {
+      "copied": "Skopiowano do schowka",
+      "share": "Udostępnij",
+      "shareImage": "Udostępnij obraz",
+      "unableToShare": "Nie udało się udostępnić"
+    },
     "yesterday": "wczoraj"
-  },
-  "notes": {
-    "comment": "Komentarz",
-    "comments": "Komentarze",
-    "list": {
-      "loadMore": "Załaduj więcej",
-      "loading": "Ładowanie...",
-      "showAll": "Pokaż wszystkie",
-      "typeMessage": "Wpisz wiadomość...",
-      "userAlt": "użytkownik"
-    },
-    "startConversation": "Rozpocznij rozmowę",
-    "validate": {
-      "content": "Treść"
-    },
-    "viewAll": "Zobacz wszystkie"
   },
   "pageSlug": {
     "achInstructions": "Instrukcje dotyczące płatności ACH",
@@ -971,6 +962,7 @@
     "donate": "Ofiaruj",
     "formClosedOn": "Ten formularz został zamknięty {}",
     "formNotAvailableUntil": "Ten formularz nie jest dostępny do {}",
+    "formNotFound": "Nie udało się załadować tego formularza.",
     "formSubmitted": "Twój formularz został pomyślnie wysłany.",
     "liveStream": "Transmisja na żywo",
     "loginToManageDonations": "Zaloguj się, aby zarządzać darowiznami",
@@ -987,43 +979,6 @@
     "firstName": "Imię",
     "lastName": "Nazwisko",
     "name": "Imię i nazwisko"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Data zakończenia",
-      "endRequired": "Data zakończenia jest wymagana.",
-      "startBeforeEnd": "Data rozpoczęcia musi być wcześniejsza niż data zakończenia.",
-      "startDate": "Data rozpoczęcia",
-      "startRequired": "Data rozpoczęcia jest wymagana."
-    },
-    "blockoutDates": {
-      "none": "Brak dat blokady.",
-      "title": "Daty blokady"
-    },
-    "position": {
-      "accept": "Akceptuj",
-      "accepted": "Zaakceptowano",
-      "decline": "Odrzuć",
-      "declined": "Odrzucono",
-      "headerPrefix": "Stanowisko",
-      "neededTimes": "Potrzebne terminy",
-      "status": "Status",
-      "unconfirmed": "Niepotwierdzone"
-    },
-    "servingTimes": {
-      "plan": "Plan",
-      "role": "Rola",
-      "serviceDate": "Data nabożeństwa",
-      "title": "Godziny służby"
-    },
-    "team": {
-      "avatar": "awatar"
-    },
-    "upcomingDates": {
-      "event": "Wydarzenie",
-      "startTime": "Czas rozpoczęcia",
-      "title": "Nadchodzące daty"
-    }
   },
   "register": {
     "metaEventRegistration": "Rejestracja na wydarzenie",

@@ -15,17 +15,15 @@
     "post": "Julkaise"
   },
   "cascadingMenus": {
+    "collapseMenu": "Tiivistä valikko {}",
+    "collapseSubmenu": "Tiivistä alavalikko {}",
+    "expandMenu": "Laajenna valikko {}",
     "expandSubmenu": "Laajenna alavalikko {}",
     "navigateTo": "Siirry kohteeseen {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Valitse ryhmä henkilölle {}",
-      "generalGroups": "Yleiset ryhmät",
-      "noGroup": "Ei ryhmää",
-      "noGroupsAvailable": "Ei saatavilla olevia ryhmiä",
-      "noGroupsConfigured": "Tälle palvelulle ei ole määritetty ryhmiä",
-      "selectGroup": "Valitse ryhmä"
+      "chooseGroupFor": "Valitse ryhmä henkilölle {}"
     },
     "guestRegister": {
       "addFamilyMember": "Lisää perheenjäsen",
@@ -49,10 +47,8 @@
     "cancel": "Peruuta",
     "close": "Sulje",
     "date": "Päivämäärä",
-    "edit": "Muokkaa",
     "pleaseWait": "Odota hetki",
     "save": "Tallenna",
-    "search": "Hae",
     "update": "Päivitä"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Lomakkeesi on lähetetty onnistuneesti."
   },
   "eventCalendar": {
-    "discussion": "Keskustelu",
-    "editEvent": "Muokkaa tapahtumaa",
     "recurring": {
       "allDates": "Kaikki päivämäärät",
       "deleteTitle": "Poista toistuva tapahtuma",
       "editTitle": "Muokkaa toistuvaa tapahtumaa",
       "justThisDate": "Vain tämä päivämäärä",
       "thisAndFollowing": "Tämä ja kaikki seuraavat päivämäärät"
-    },
-    "registerForEvent": "Ilmoittaudu tähän tapahtumaan"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Linkki voi olla Google Drivesta, isännöidystä oppituntipalvelusta (PDF) jne.",
     "addedLinks": "Lisätyt linkit",
     "confirmDelete": "Haluatko varmasti poistaa kohteen '{}'?",
-    "contact": "Yhteystiedot",
-    "contactGroupLeader": "Ota yhteyttä ryhmänjohtajaan:",
     "deleteFileLabel": "Poista tiedosto {}",
     "deleteLinkLabel": "Poista linkki {}",
-    "emailLabel": "Sähköpostiosoitteesi",
     "files": "Tiedostot",
-    "firstNameLabel": "Etunimesi",
-    "lastNameLabel": "Sukunimesi",
     "linkText": "Linkin teksti",
     "linkTextLabel": "Linkin näyttöteksti",
     "linkUrl": "Linkin URL",
     "linkUrlLabel": "Linkin URL-osoite",
-    "messageLabel": "Viestisi ryhmänjohtajalle",
-    "messageSent": "Viestisi on lähetetty!",
     "noDescription": "Kuvausta ei ole annettu.",
     "noGroups": "Ryhmiä ei löytynyt",
-    "phoneLabel": "Puhelinnumerosi",
     "storageInfo": "100 MB tallennustilaa tarjotaan ilmaiseksi PDF-tiedostojen ja muiden yleisesti tarvittavien asiakirjojen tallentamiseen. Suosittelemme käyttämään Google Drivea tai Dropboxia tiedostojen tallentamiseen, jos tarvitaan lisää tilaa.",
-    "submit": "Lähetä",
-    "submitLabel": "Lähetä viesti ryhmänjohtajalle",
     "upload": "Lataa",
     "uploadedFiles": "Ladatut tiedostot",
     "usedSpace": "Käytetty tila: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Käyttäjävalikko"
   },
   "iconPicker": {
-    "iconsAvailable": "Saatavilla olevat kuvakkeet",
-    "matchingResults": "Hakutulokset",
-    "searchAriaLabel": "etsi kuvakkeita",
     "selectIcon": "Valitse kuvake {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Kirjaudu sisään",
@@ -176,6 +153,7 @@
       "explore": "Tutustu",
       "group": "Ryhmä",
       "home": "Koti",
+      "lightMode": "Vaalea tila",
       "logout": "Kirjaudu ulos",
       "member": "Jäsen",
       "messages": "Viestit",
@@ -193,6 +171,7 @@
       "profile": "Profiili",
       "signIn": "Kirjaudu sisään",
       "switchToDark": "Vaihda tummaan tilaan",
+      "switchToLight": "Vaihda vaaleaan tilaan",
       "unknown": "Tuntematon",
       "untitledSermon": "Nimetön saarna",
       "verseOfTheDay": "Päivän jae",
@@ -247,6 +226,7 @@
       "emailAddress": "Sähköpostiosoite",
       "full": "Täynnä",
       "general": "Yleinen",
+      "groupActionFailed": "Jokin meni pieleen. Yritä uudelleen.",
       "groupNotFound": "Ryhmää ei löytynyt",
       "groupNotFoundDescription": "Tätä ryhmää ei löytynyt tai sinulla ei ole oikeutta nähdä sitä.",
       "householdMember": "Kotitalouden jäsen",
@@ -261,6 +241,7 @@
       "memberSingular": "jäsen",
       "members": "Jäsenet ({})",
       "membersLowercase": "jäsentä",
+      "membersPrivate": "Jäsenet näkyvät vain tämän ryhmän jäsenille.",
       "membersTab": "Jäsenet",
       "message": "Viesti",
       "messageActions": "Viestin toiminnot",
@@ -301,6 +282,8 @@
       "remove": "Poista",
       "removeSignup": "Poistetaanko ilmoittautuminen?",
       "removing": "Poistetaan...",
+      "requestPending": "Pyyntö odottaa",
+      "requestPendingNote": "Liittymispyyntösi on lähetetty. Ryhmän johtaja käsittelee sen.",
       "retry": "Yritä uudelleen",
       "send": "Lähetä",
       "sendEmail": "Lähetä sähköpostia",
@@ -405,6 +388,7 @@
       "groupChat": "Ryhmäkeskustelu",
       "groupChatTitle": "{} {}",
       "guest": "(Vieras)",
+      "invalidUrl": "Anna verkko-osoite, joka alkaa http:// tai https://",
       "leadersCanPost": "Johtajat voivat julkaista ilmoituksia täällä.",
       "linkFallback": "Linkki",
       "linkText": "Linkin teksti",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Muistutuksia ei voitu tallentaa.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Tallenna",
       "saveAttendance": "Tallenna osallistuminen",
+      "saveChanges": "Tallenna muutokset",
+      "saving": "Tallennetaan...",
       "search": "Etsi",
       "searchForPerson": "Etsi henkilöä",
       "selectAll": "Kaikki",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Odottavat muutokset",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Tarkista muutoksesi ennen kuin lähetät ne hyväksyttäviksi.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Lähetä hyväksyttäväksi",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Päivän raamatunjae"
     },
     "screens": {
+      "adjustSearch": "Kokeile toista nimeä tai kirjoitusasua.",
       "alreadyCheckedIn": "Jo sisäänkirjautunut",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Muutoksesi on lähetetty hyväksyttäviksi.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Poista ilmoitus",
       "detectingDevice": "Tunnistetaan laitettasi…",
+      "directoryMembersBody": "Seurakunnan jäsenhakemisto on vain jäsenten nähtävissä.",
+      "directorySignInBody": "Kirjaudu sisään selataksesi seurakunnan jäsenhakemistoa.",
       "displayNameUpdated": "Näyttönimi päivitetty.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Kirjaudu sisään nähdäksesi ryhmät, joihin kuulut, ja liittyäksesi uusiin.",
+      "groupsSignInTitle": "Kirjaudu sisään nähdäksesi ryhmäsi",
       "keep": "Säilytä",
       "lastGift": "Last Gift",
       "lastNameRegister": "Sukunimi",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Ei ryhmiä saatavilla",
+      "noGroupsBody": "Et ole vielä missään ryhmässä. Selaa seurakuntasi ryhmiä löytääksesi sinulle sopivan.",
       "noGroupsMessage": "Tälle jumalanpalvelukselle ei ole määritetty ryhmiä.",
+      "noGroupsTitle": "Ei vielä ryhmiä",
       "noHouseholdMembers": "Talouden jäseniä ei löytynyt",
       "noHouseholdMessage": "Varmista, että olet kirjautunut sisään ja että taloutesi jäsenet on rekisteröity.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Tallenna",
       "scanWithPhone": "Skannaa puhelimesi kameralla",
+      "searchDirectoryBody": "Hae henkilöä nimellä nähdäksesi hänen yhteystietonsa.",
       "searchForMessage": "Etsi henkilöä viestin lähettämiseksi",
       "searchMembers": "Etsi jäseniä",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Yhteensä tänä vuonna • {} lahjoitus",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Muutosten lähettäminen epäonnistui.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Ilmoittaudu palvelemaan",
       "votd": "Päivän jae"
     },
+    "votd": {
+      "copied": "Kopioitu leikepöydälle",
+      "share": "Jaa",
+      "shareImage": "Jaa kuva",
+      "unableToShare": "Jakaminen epäonnistui"
+    },
     "yesterday": "eilen"
-  },
-  "notes": {
-    "comment": "Kommentti",
-    "comments": "Kommentit",
-    "list": {
-      "loadMore": "Lataa lisää",
-      "loading": "Ladataan...",
-      "showAll": "Näytä kaikki",
-      "typeMessage": "Kirjoita viesti...",
-      "userAlt": "käyttäjä"
-    },
-    "startConversation": "Aloita keskustelu",
-    "validate": {
-      "content": "Sisältö"
-    },
-    "viewAll": "Näytä kaikki"
   },
   "pageSlug": {
     "achInstructions": "Ohjeet ACH-maksua varten",
@@ -971,6 +962,7 @@
     "donate": "Lahjoita",
     "formClosedOn": "Tämä lomake suljettiin {}",
     "formNotAvailableUntil": "Tämä lomake ei ole saatavilla ennen kuin {}",
+    "formNotFound": "Tätä lomaketta ei voitu ladata.",
     "formSubmitted": "Lomakkeesi on lähetetty onnistuneesti.",
     "liveStream": "Suora lähetys",
     "loginToManageDonations": "Kirjaudu sisään hallitaksesi lahjoituksia",
@@ -987,43 +979,6 @@
     "firstName": "Etunimi",
     "lastName": "Sukunimi",
     "name": "Nimi"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Päättymispäivä",
-      "endRequired": "Päättymispäivä vaaditaan.",
-      "startBeforeEnd": "Alkamispäivän on oltava ennen päättymispäivää.",
-      "startDate": "Alkamispäivä",
-      "startRequired": "Alkamispäivä vaaditaan."
-    },
-    "blockoutDates": {
-      "none": "Ei estopäiviä.",
-      "title": "Estopäivät"
-    },
-    "position": {
-      "accept": "Hyväksy",
-      "accepted": "Hyväksytty",
-      "decline": "Hylkää",
-      "declined": "Hylätty",
-      "headerPrefix": "Tehtävä",
-      "neededTimes": "Tarvittavat ajat",
-      "status": "Tila",
-      "unconfirmed": "Vahvistamaton"
-    },
-    "servingTimes": {
-      "plan": "Suunnitelma",
-      "role": "Rooli",
-      "serviceDate": "Palveluspäivä",
-      "title": "Palveluajat"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Tapahtuma",
-      "startTime": "Alkamisaika",
-      "title": "Tulevat päivämäärät"
-    }
   },
   "register": {
     "metaEventRegistration": "Tapahtumailmoittautuminen",

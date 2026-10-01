@@ -7,7 +7,6 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { GroupsBrowser } from "@/components/groups/GroupsBrowser";
 import { Container } from "@mui/material";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 type PageParams = Promise<{ sdSlug: string }>;
 
@@ -31,7 +30,6 @@ export default async function GroupsBrowsePage({ params }: { params: PageParams 
   await EnvironmentHelper.initServerSide();
   const { sdSlug } = await params;
   const { config } = await loadSharedData(sdSlug);
-  if (config.hidePublicSite) notFound();
 
   return (
     <>

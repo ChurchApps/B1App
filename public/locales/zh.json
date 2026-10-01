@@ -15,17 +15,15 @@
     "post": "发布"
   },
   "cascadingMenus": {
+    "collapseMenu": "折叠 {} 菜单",
+    "collapseSubmenu": "折叠 {} 子菜单",
+    "expandMenu": "展开 {} 菜单",
     "expandSubmenu": "展开 {} 子菜单",
     "navigateTo": "导航至 {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "为 {} 选择小组",
-      "generalGroups": "常规小组",
-      "noGroup": "无小组",
-      "noGroupsAvailable": "无可用小组",
-      "noGroupsConfigured": "此聚会未配置小组",
-      "selectGroup": "选择小组"
+      "chooseGroupFor": "为 {} 选择小组"
     },
     "guestRegister": {
       "addFamilyMember": "添加家庭成员",
@@ -49,10 +47,8 @@
     "cancel": "取消",
     "close": "关闭",
     "date": "日期",
-    "edit": "编辑",
     "pleaseWait": "请稍候",
     "save": "保存",
-    "search": "搜索",
     "update": "更新"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "您的表单已成功提交。"
   },
   "eventCalendar": {
-    "discussion": "讨论",
-    "editEvent": "编辑活动",
     "recurring": {
       "allDates": "所有日期",
       "deleteTitle": "删除重复活动",
       "editTitle": "编辑重复活动",
       "justThisDate": "仅此日期",
       "thisAndFollowing": "此日期及之后所有日期"
-    },
-    "registerForEvent": "报名参加此活动"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "链接可以是 Google Drive、托管课程 PDF 等。",
     "addedLinks": "已添加链接",
     "confirmDelete": "您确定要删除“{}”吗？",
-    "contact": "联系",
-    "contactGroupLeader": "联系小组长：",
     "deleteFileLabel": "删除文件 {}",
     "deleteLinkLabel": "删除链接 {}",
-    "emailLabel": "您的邮箱地址",
     "files": "文件",
-    "firstNameLabel": "您的名字",
-    "lastNameLabel": "您的姓氏",
     "linkText": "链接文本",
     "linkTextLabel": "链接显示文本",
     "linkUrl": "链接 URL",
     "linkUrlLabel": "链接 URL",
-    "messageLabel": "您给小组长的消息",
-    "messageSent": "您的消息已发送！",
     "noDescription": "未提供描述。",
     "noGroups": "未找到小组",
-    "phoneLabel": "您的电话号码",
     "storageInfo": "免费提供 100 MB 存储空间，用于存储常用的 PDF 和其他文档。如需更多空间，建议使用 Google Drive 或 Dropbox 存储文件。",
-    "submit": "提交",
-    "submitLabel": "向小组长发送消息",
     "upload": "上传",
     "uploadedFiles": "已上传文件",
     "usedSpace": "已用空间：{} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "用户菜单"
   },
   "iconPicker": {
-    "iconsAvailable": "可用图标",
-    "matchingResults": "匹配结果",
-    "searchAriaLabel": "搜索图标",
     "selectIcon": "选择 {} 图标"
-  },
-  "loadingPage": {
-    "logoAlt": "标志"
   },
   "login": {
     "login": "登录",
@@ -176,6 +153,7 @@
       "explore": "探索",
       "group": "小组",
       "home": "家",
+      "lightMode": "浅色模式",
       "logout": "退出登录",
       "member": "成员",
       "messages": "消息",
@@ -193,6 +171,7 @@
       "profile": "个人资料",
       "signIn": "登录",
       "switchToDark": "切换到深色模式",
+      "switchToLight": "切换到浅色模式",
       "unknown": "未知",
       "untitledSermon": "未命名讲道",
       "verseOfTheDay": "今日经文",
@@ -247,6 +226,7 @@
       "emailAddress": "邮箱地址",
       "full": "已满",
       "general": "常规",
+      "groupActionFailed": "出了点问题，请重试。",
       "groupNotFound": "未找到小组",
       "groupNotFoundDescription": "找不到此小组，或您没有查看权限。",
       "householdMember": "家庭成员",
@@ -261,6 +241,7 @@
       "memberSingular": "成员",
       "members": "成员（{}）",
       "membersLowercase": "成员",
+      "membersPrivate": "成员仅对本小组中的人可见。",
       "membersTab": "成员",
       "message": "消息",
       "messageActions": "消息操作",
@@ -301,6 +282,8 @@
       "remove": "移除",
       "removeSignup": "取消报名？",
       "removing": "正在移除...",
+      "requestPending": "请求待处理",
+      "requestPendingNote": "您的加入请求已发送，小组负责人将进行审核。",
       "retry": "重试",
       "send": "发送",
       "sendEmail": "发送邮件",
@@ -405,6 +388,7 @@
       "groupChat": "小组聊天",
       "groupChatTitle": "{} {}",
       "guest": "（访客）",
+      "invalidUrl": "请输入以 http:// 或 https:// 开头的网址",
       "leadersCanPost": "组长可在此发布公告。",
       "linkFallback": "链接",
       "linkText": "链接文本",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "无法保存提醒。",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "保存",
       "saveAttendance": "保存出席记录",
+      "saveChanges": "保存更改",
+      "saving": "正在保存...",
       "search": "搜索",
       "searchForPerson": "搜索成员",
       "selectAll": "全选",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "待处理的更改",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "提交审批前请检查您的更改。",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "提交审批",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "每日金句"
     },
     "screens": {
+      "adjustSearch": "请尝试其他名称或拼写。",
       "alreadyCheckedIn": "已签到",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "您的更改已提交审批。",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "删除通知",
       "detectingDevice": "正在检测您的设备…",
+      "directoryMembersBody": "教会通讯录仅对成员开放。",
+      "directorySignInBody": "登录以浏览教会通讯录。",
       "displayNameUpdated": "显示名称已更新。",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "登录以查看您所在的小组并加入新小组。",
+      "groupsSignInTitle": "登录以查看您的小组",
       "keep": "保留",
       "lastGift": "Last Gift",
       "lastNameRegister": "姓氏",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "暂无可用小组",
+      "noGroupsBody": "您还没有加入任何小组。浏览教会提供的小组，找到一个加入吧。",
       "noGroupsMessage": "此聚会未配置任何小组。",
+      "noGroupsTitle": "暂无小组",
       "noHouseholdMembers": "未找到家庭成员",
       "noHouseholdMessage": "请确保您已登录并已注册家庭成员。",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "保存",
       "scanWithPhone": "用手机摄像头扫描",
+      "searchDirectoryBody": "按姓名搜索某人以查看其联系方式。",
       "searchForMessage": "搜索要发消息的人",
       "searchMembers": "搜索成员",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "今年总计 • {} 笔奉献",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "无法提交更改。",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "报名服事",
       "votd": "今日经文"
     },
+    "votd": {
+      "copied": "已复制到剪贴板",
+      "share": "分享",
+      "shareImage": "分享图片",
+      "unableToShare": "无法分享"
+    },
     "yesterday": "昨天"
-  },
-  "notes": {
-    "comment": "评论",
-    "comments": "评论",
-    "list": {
-      "loadMore": "加载更多",
-      "loading": "加载中...",
-      "showAll": "显示全部",
-      "typeMessage": "输入消息...",
-      "userAlt": "用户"
-    },
-    "startConversation": "开始对话",
-    "validate": {
-      "content": "内容"
-    },
-    "viewAll": "查看全部"
   },
   "pageSlug": {
     "achInstructions": "ACH 付款说明",
@@ -971,6 +962,7 @@
     "donate": "奉献",
     "formClosedOn": "此表单已于 {} 关闭",
     "formNotAvailableUntil": "此表单在 {} 之前不可用",
+    "formNotFound": "无法加载此表单。",
     "formSubmitted": "您的表单已成功提交。",
     "liveStream": "直播",
     "loginToManageDonations": "请登录以管理奉献",
@@ -987,43 +979,6 @@
     "firstName": "名",
     "lastName": "姓",
     "name": "姓名"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "结束日期",
-      "endRequired": "结束日期是必填项。",
-      "startBeforeEnd": "开始日期必须早于结束日期。",
-      "startDate": "开始日期",
-      "startRequired": "开始日期是必填项。"
-    },
-    "blockoutDates": {
-      "none": "无不可服事日期。",
-      "title": "不可服事日期"
-    },
-    "position": {
-      "accept": "接受",
-      "accepted": "已接受",
-      "decline": "拒绝",
-      "declined": "已拒绝",
-      "headerPrefix": "岗位",
-      "neededTimes": "所需时间",
-      "status": "状态",
-      "unconfirmed": "未确认"
-    },
-    "servingTimes": {
-      "plan": "计划",
-      "role": "角色",
-      "serviceDate": "聚会日期",
-      "title": "服事时间"
-    },
-    "team": {
-      "avatar": "头像"
-    },
-    "upcomingDates": {
-      "event": "活动",
-      "startTime": "开始时间",
-      "title": "即将到来的日期"
-    }
   },
   "register": {
     "metaEventRegistration": "活动报名",

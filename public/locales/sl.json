@@ -15,17 +15,15 @@
     "post": "Objavi"
   },
   "cascadingMenus": {
+    "collapseMenu": "Strni meni {}",
+    "collapseSubmenu": "Strni podmeni {}",
+    "expandMenu": "Razširi meni {}",
     "expandSubmenu": "Razširi podmeni {}",
     "navigateTo": "Pojdi na {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Izberite skupino za {}",
-      "generalGroups": "Splošne skupine",
-      "noGroup": "Brez skupine",
-      "noGroupsAvailable": "Skupine niso na voljo",
-      "noGroupsConfigured": "Za to bogoslužje ni nastavljenih skupin",
-      "selectGroup": "Izberi skupino"
+      "chooseGroupFor": "Izberite skupino za {}"
     },
     "guestRegister": {
       "addFamilyMember": "Dodaj družinskega člana",
@@ -49,10 +47,8 @@
     "cancel": "Prekliči",
     "close": "Zapri",
     "date": "Datum",
-    "edit": "Uredi",
     "pleaseWait": "Počakajte",
     "save": "Shrani",
-    "search": "Iskanje",
     "update": "Posodobi"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Vaš obrazec je bil uspešno oddan."
   },
   "eventCalendar": {
-    "discussion": "Razprava",
-    "editEvent": "Uredi dogodek",
     "recurring": {
       "allDates": "Vsi datumi",
       "deleteTitle": "Izbriši ponavljajoči se dogodek",
       "editTitle": "Uredi ponavljajoči se dogodek",
       "justThisDate": "Samo ta datum",
       "thisAndFollowing": "Ta in vsi naslednji datumi"
-    },
-    "registerForEvent": "Prijavi se na ta dogodek"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Povezava je lahko do Google Drive, gostujočega PDF-ja lekcije itd.",
     "addedLinks": "Dodane povezave",
     "confirmDelete": "Ali ste prepričani, da želite izbrisati '{}'?",
-    "contact": "Stik",
-    "contactGroupLeader": "Stopite v stik z vodjo skupine:",
     "deleteFileLabel": "Izbriši datoteko {}",
     "deleteLinkLabel": "Izbriši povezavo {}",
-    "emailLabel": "Vaš e-poštni naslov",
     "files": "Datoteke",
-    "firstNameLabel": "Vaše ime",
-    "lastNameLabel": "Vaš priimek",
     "linkText": "Besedilo povezave",
     "linkTextLabel": "Prikazno besedilo povezave",
     "linkUrl": "URL povezave",
     "linkUrlLabel": "URL povezave",
-    "messageLabel": "Vaše sporočilo vodji skupine",
-    "messageSent": "Vaše sporočilo je bilo poslano!",
     "noDescription": "Opis ni naveden.",
     "noGroups": "Skupine niso najdene",
-    "phoneLabel": "Vaša telefonska številka",
     "storageInfo": "Brezplačno je na voljo 100 MB prostora za shranjevanje PDF-jev in drugih dokumentov, ki jih običajno potrebujete. Če potrebujete dodaten prostor, priporočamo uporabo Google Drive ali Dropbox.",
-    "submit": "Pošlji",
-    "submitLabel": "Pošlji sporočilo vodji skupine",
     "upload": "Naloži",
     "uploadedFiles": "Naložene datoteke",
     "usedSpace": "Porabljen prostor: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Uporabniški meni"
   },
   "iconPicker": {
-    "iconsAvailable": "Razpoložljive ikone",
-    "matchingResults": "Ujemajoči se rezultati",
-    "searchAriaLabel": "iskanje ikon",
     "selectIcon": "Izberi ikono {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logotip"
   },
   "login": {
     "login": "Prijava",
@@ -176,6 +153,7 @@
       "explore": "Raziskuj",
       "group": "Skupina",
       "home": "Domov",
+      "lightMode": "Svetli način",
       "logout": "Odjava",
       "member": "Član",
       "messages": "Sporočila",
@@ -193,6 +171,7 @@
       "profile": "Profil",
       "signIn": "Prijava",
       "switchToDark": "Preklopi na temni način",
+      "switchToLight": "Preklopi na svetli način",
       "unknown": "Neznano",
       "untitledSermon": "Pridiga brez naslova",
       "verseOfTheDay": "Versikl dneva",
@@ -247,6 +226,7 @@
       "emailAddress": "E-poštni naslov",
       "full": "Polno",
       "general": "Splošno",
+      "groupActionFailed": "Nekaj je šlo narobe. Poskusite znova.",
       "groupNotFound": "Skupina ni najdena",
       "groupNotFoundDescription": "Te skupine ni mogoče najti ali pa nimate dovoljenja za ogled.",
       "householdMember": "Član gospodinjstva",
@@ -261,6 +241,7 @@
       "memberSingular": "član",
       "members": "Člani ({})",
       "membersLowercase": "člani",
+      "membersPrivate": "Člani so vidni samo osebam v tej skupini.",
       "membersTab": "Člani",
       "message": "Sporočilo",
       "messageActions": "Dejanja sporočila",
@@ -301,6 +282,8 @@
       "remove": "Odstrani",
       "removeSignup": "Odstrani prijavo?",
       "removing": "Odstranjevanje...",
+      "requestPending": "Zahteva v obdelavi",
+      "requestPendingNote": "Vaša zahteva za pridružitev je bila poslana. Vodja skupine jo bo pregledal.",
       "retry": "Poskusi znova",
       "send": "Pošlji",
       "sendEmail": "Pošlji e-pošto",
@@ -405,6 +388,7 @@
       "groupChat": "Klepet skupine",
       "groupChatTitle": "{} {}",
       "guest": "(Gost)",
+      "invalidUrl": "Vnesite spletni naslov, ki se začne s http:// ali https://",
       "leadersCanPost": "Vodje lahko tukaj objavljajo obvestila.",
       "linkFallback": "Povezava",
       "linkText": "Besedilo povezave",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Opomnikov ni bilo mogoče shraniti.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Shrani",
       "saveAttendance": "Shrani prisotnost",
+      "saveChanges": "Shrani spremembe",
+      "saving": "Shranjevanje...",
       "search": "Iskanje",
       "searchForPerson": "Iskanje osebe",
       "selectAll": "Vse",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Spremembe v obdelavi",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Preglejte spremembe, preden jih pošljete v odobritev.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Pošlji v odobritev",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Verz dneva"
     },
     "screens": {
+      "adjustSearch": "Poskusite z drugim imenom ali črkovanjem.",
       "alreadyCheckedIn": "Že prijavljen",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Vaše spremembe so bile poslane v odobritev.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Izbriši obvestilo",
       "detectingDevice": "Zaznavanje vaše naprave…",
+      "directoryMembersBody": "Imenik cerkve je na voljo samo članom.",
+      "directorySignInBody": "Prijavite se za brskanje po imeniku cerkve.",
       "displayNameUpdated": "Prikazno ime je posodobljeno.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Prijavite se, da vidite skupine, v katere ste vključeni, in se pridružite novim.",
+      "groupsSignInTitle": "Prijavite se za ogled svojih skupin",
       "keep": "Obdrži",
       "lastGift": "Last Gift",
       "lastNameRegister": "Priimek",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Ni razpoložljivih skupin",
+      "noGroupsBody": "Še niste v nobeni skupini. Prebrskajte skupine, ki jih ponuja vaša cerkev, in poiščite tisto, ki vam ustreza.",
       "noGroupsMessage": "Za to bogoslužje ni nastavljenih nobenih skupin.",
+      "noGroupsTitle": "Še ni skupin",
       "noHouseholdMembers": "Ni najdenih članov gospodinjstva",
       "noHouseholdMessage": "Prepričajte se, da ste prijavljeni in imate registrirane člane gospodinjstva.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Shrani",
       "scanWithPhone": "Skenirajte s kamero telefona",
+      "searchDirectoryBody": "Poiščite osebo po imenu, da vidite njene kontaktne podatke.",
       "searchForMessage": "Iskanje osebe za sporočilo",
       "searchMembers": "Iskanje članov",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Skupaj letos • {} dar",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Sprememb ni bilo mogoče poslati.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Prijavi se za služenje",
       "votd": "Današnji verz"
     },
+    "votd": {
+      "copied": "Kopirano v odložišče",
+      "share": "Deli",
+      "shareImage": "Deli sliko",
+      "unableToShare": "Deljenje ni uspelo"
+    },
     "yesterday": "včeraj"
-  },
-  "notes": {
-    "comment": "Komentar",
-    "comments": "Komentarji",
-    "list": {
-      "loadMore": "Naloži več",
-      "loading": "Nalaganje...",
-      "showAll": "Prikaži vse",
-      "typeMessage": "Vnesite sporočilo...",
-      "userAlt": "uporabnik"
-    },
-    "startConversation": "Začni pogovor",
-    "validate": {
-      "content": "Vsebina"
-    },
-    "viewAll": "Prikaži vse"
   },
   "pageSlug": {
     "achInstructions": "Navodila za plačilo ACH",
@@ -971,6 +962,7 @@
     "donate": "Daruj",
     "formClosedOn": "Ta obrazec je bil zaprt {}",
     "formNotAvailableUntil": "Ta obrazec ni na voljo do {}",
+    "formNotFound": "Tega obrazca ni bilo mogoče naložiti.",
     "formSubmitted": "Vaš obrazec je bil uspešno oddan.",
     "liveStream": "Prenos v živo",
     "loginToManageDonations": "Prijavite se za upravljanje darov",
@@ -987,43 +979,6 @@
     "firstName": "Ime",
     "lastName": "Priimek",
     "name": "Ime"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Končni datum",
-      "endRequired": "Končni datum je obvezen.",
-      "startBeforeEnd": "Začetni datum mora biti pred končnim datumom.",
-      "startDate": "Začetni datum",
-      "startRequired": "Začetni datum je obvezen."
-    },
-    "blockoutDates": {
-      "none": "Ni blokiranih datumov.",
-      "title": "Blokirani datumi"
-    },
-    "position": {
-      "accept": "Sprejmi",
-      "accepted": "Sprejeto",
-      "decline": "Zavrni",
-      "declined": "Zavrnjeno",
-      "headerPrefix": "Mesto",
-      "neededTimes": "Potrebni časi",
-      "status": "Stanje",
-      "unconfirmed": "Nepotrjeno"
-    },
-    "servingTimes": {
-      "plan": "Načrt",
-      "role": "Vloga",
-      "serviceDate": "Datum bogoslužja",
-      "title": "Časi služenja"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Dogodek",
-      "startTime": "Čas začetka",
-      "title": "Prihajajoči datumi"
-    }
   },
   "register": {
     "metaEventRegistration": "Registracija na dogodek",

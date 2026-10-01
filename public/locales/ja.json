@@ -15,17 +15,15 @@
     "post": "投稿"
   },
   "cascadingMenus": {
+    "collapseMenu": "{}メニューを折りたたむ",
+    "collapseSubmenu": "{}サブメニューを折りたたむ",
+    "expandMenu": "{}メニューを展開",
     "expandSubmenu": "{}サブメニューを展開",
     "navigateTo": "{}へ移動"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "{}のグループを選択してください",
-      "generalGroups": "一般グループ",
-      "noGroup": "グループなし",
-      "noGroupsAvailable": "利用可能なグループがありません",
-      "noGroupsConfigured": "この礼拝には設定されたグループがありません",
-      "selectGroup": "グループを選択"
+      "chooseGroupFor": "{}のグループを選択してください"
     },
     "guestRegister": {
       "addFamilyMember": "家族を追加",
@@ -49,10 +47,8 @@
     "cancel": "キャンセル",
     "close": "閉じる",
     "date": "日付",
-    "edit": "編集",
     "pleaseWait": "お待ちください",
     "save": "保存",
-    "search": "検索",
     "update": "更新"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "フォームが正常に送信されました。"
   },
   "eventCalendar": {
-    "discussion": "ディスカッション",
-    "editEvent": "イベントを編集",
     "recurring": {
       "allDates": "すべての日付",
       "deleteTitle": "繰り返しイベントを削除",
       "editTitle": "繰り返しイベントを編集",
       "justThisDate": "この日付のみ",
       "thisAndFollowing": "この日付以降すべて"
-    },
-    "registerForEvent": "このイベントに登録"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "リンクはGoogleドライブ、ホスト済みレッスンPDFなどが利用できます。",
     "addedLinks": "追加されたリンク",
     "confirmDelete": "'{}' を削除してもよろしいですか?",
-    "contact": "連絡",
-    "contactGroupLeader": "グループリーダーに連絡:",
     "deleteFileLabel": "ファイル {} を削除",
     "deleteLinkLabel": "リンク {} を削除",
-    "emailLabel": "あなたのメールアドレス",
     "files": "ファイル",
-    "firstNameLabel": "あなたの名",
-    "lastNameLabel": "あなたの姓",
     "linkText": "リンクテキスト",
     "linkTextLabel": "リンク表示テキスト",
     "linkUrl": "リンクURL",
     "linkUrlLabel": "リンクURL",
-    "messageLabel": "グループリーダーへのメッセージ",
-    "messageSent": "メッセージを送信しました!",
     "noDescription": "説明はありません。",
     "noGroups": "グループが見つかりません",
-    "phoneLabel": "あなたの電話番号",
     "storageInfo": "PDFやその他よく必要となる文書の保存用に、無料で100MBのストレージが提供されます。追加の容量が必要な場合は、GoogleドライブまたはDropboxの利用をお勧めします。",
-    "submit": "送信",
-    "submitLabel": "グループリーダーにメッセージを送信",
     "upload": "アップロード",
     "uploadedFiles": "アップロード済みファイル",
     "usedSpace": "使用容量: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "ユーザーメニュー"
   },
   "iconPicker": {
-    "iconsAvailable": "利用可能なアイコン",
-    "matchingResults": "一致する結果",
-    "searchAriaLabel": "アイコンを検索",
     "selectIcon": "{}アイコンを選択"
-  },
-  "loadingPage": {
-    "logoAlt": "ロゴ"
   },
   "login": {
     "login": "ログイン",
@@ -176,6 +153,7 @@
       "explore": "探索",
       "group": "グループ",
       "home": "ホーム",
+      "lightMode": "ライトモード",
       "logout": "ログアウト",
       "member": "メンバー",
       "messages": "メッセージ",
@@ -193,6 +171,7 @@
       "profile": "プロフィール",
       "signIn": "サインイン",
       "switchToDark": "ダークモードに切り替え",
+      "switchToLight": "ライトモードに切り替え",
       "unknown": "不明",
       "untitledSermon": "無題の説教",
       "verseOfTheDay": "本日の聖句",
@@ -247,6 +226,7 @@
       "emailAddress": "メールアドレス",
       "full": "満員",
       "general": "一般",
+      "groupActionFailed": "問題が発生しました。もう一度お試しください。",
       "groupNotFound": "グループが見つかりません",
       "groupNotFoundDescription": "このグループが見つからないか、表示する権限がありません。",
       "householdMember": "世帯メンバー",
@@ -261,6 +241,7 @@
       "memberSingular": "メンバー",
       "members": "メンバー ({})",
       "membersLowercase": "メンバー",
+      "membersPrivate": "メンバーはこのグループの人だけに表示されます。",
       "membersTab": "メンバー",
       "message": "メッセージ",
       "messageActions": "メッセージの操作",
@@ -301,6 +282,8 @@
       "remove": "削除",
       "removeSignup": "申し込みを取り消しますか?",
       "removing": "削除中...",
+      "requestPending": "リクエスト保留中",
+      "requestPendingNote": "参加リクエストを送信しました。グループリーダーが確認します。",
       "retry": "再試行",
       "send": "送信",
       "sendEmail": "メールを送信",
@@ -405,6 +388,7 @@
       "groupChat": "グループチャット",
       "groupChatTitle": "{} {}",
       "guest": "(ゲスト)",
+      "invalidUrl": "http:// または https:// で始まるウェブアドレスを入力してください",
       "leadersCanPost": "リーダーはここにお知らせを投稿できます。",
       "linkFallback": "リンク",
       "linkText": "リンクテキスト",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "リマインダーを保存できませんでした。",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "回答を見る",
       "save": "保存",
       "saveAttendance": "出席を保存",
+      "saveChanges": "変更を保存",
+      "saving": "保存中...",
       "search": "検索",
       "searchForPerson": "人物を検索",
       "selectAll": "すべて",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "保留中の変更",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "承認のために送信する前に変更内容を確認してください。",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "承認のために送信",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "今日の聖句"
     },
     "screens": {
+      "adjustSearch": "別の名前やつづりでお試しください。",
       "alreadyCheckedIn": "すでにチェックイン済み",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "変更内容を承認のために送信しました。",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "通知を削除",
       "detectingDevice": "デバイスを検出しています…",
+      "directoryMembersBody": "教会の名簿はメンバーにのみ公開されています。",
+      "directorySignInBody": "教会の名簿を見るにはサインインしてください。",
       "displayNameUpdated": "表示名を更新しました。",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "完了",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "サインインすると、参加しているグループの確認や新しいグループへの参加ができます。",
+      "groupsSignInTitle": "サインインしてグループを表示",
       "keep": "維持",
       "lastGift": "Last Gift",
       "lastNameRegister": "姓",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "利用可能なグループがありません",
+      "noGroupsBody": "まだどのグループにも参加していません。教会のグループを見て、参加するグループを探しましょう。",
       "noGroupsMessage": "この礼拝に設定されているグループはありません。",
+      "noGroupsTitle": "まだグループがありません",
       "noHouseholdMembers": "世帯のメンバーが見つかりません",
       "noHouseholdMessage": "サインインしているか、世帯のメンバーが登録されているかをご確認ください。",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "保存",
       "scanWithPhone": "スマートフォンのカメラでスキャン",
+      "searchDirectoryBody": "名前で検索して連絡先の詳細を表示します。",
       "searchForMessage": "メッセージを送る人を検索",
       "searchMembers": "メンバーを検索",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "今年の合計 • {}件の献金",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "変更を送信できませんでした。",
       "unread": "未読",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "奉仕に申し込む",
       "votd": "今日の聖句"
     },
+    "votd": {
+      "copied": "クリップボードにコピーしました",
+      "share": "共有",
+      "shareImage": "画像を共有",
+      "unableToShare": "共有できませんでした"
+    },
     "yesterday": "昨日"
-  },
-  "notes": {
-    "comment": "コメント",
-    "comments": "コメント一覧",
-    "list": {
-      "loadMore": "さらに読み込む",
-      "loading": "読み込み中...",
-      "showAll": "すべて表示",
-      "typeMessage": "メッセージを入力...",
-      "userAlt": "ユーザー"
-    },
-    "startConversation": "会話を始める",
-    "validate": {
-      "content": "内容"
-    },
-    "viewAll": "すべて表示"
   },
   "pageSlug": {
     "achInstructions": "ACH支払いの手順",
@@ -971,6 +962,7 @@
     "donate": "献金",
     "formClosedOn": "このフォームは {} に終了しました",
     "formNotAvailableUntil": "このフォームは {} まで利用できません",
+    "formNotFound": "このフォームを読み込めませんでした。",
     "formSubmitted": "フォームが正常に送信されました。",
     "liveStream": "ライブストリーム",
     "loginToManageDonations": "献金を管理するにはログインしてください",
@@ -987,43 +979,6 @@
     "firstName": "名",
     "lastName": "姓",
     "name": "名前"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "終了日",
-      "endRequired": "終了日が必要です。",
-      "startBeforeEnd": "開始日は終了日より前である必要があります。",
-      "startDate": "開始日",
-      "startRequired": "開始日が必要です。"
-    },
-    "blockoutDates": {
-      "none": "ブロックアウト日はありません。",
-      "title": "ブロックアウト日"
-    },
-    "position": {
-      "accept": "承諾",
-      "accepted": "承諾済み",
-      "decline": "辞退",
-      "declined": "辞退済み",
-      "headerPrefix": "ポジション",
-      "neededTimes": "必要時間",
-      "status": "ステータス",
-      "unconfirmed": "未確認"
-    },
-    "servingTimes": {
-      "plan": "予定",
-      "role": "役割",
-      "serviceDate": "礼拝日",
-      "title": "奉仕時間"
-    },
-    "team": {
-      "avatar": "アバター"
-    },
-    "upcomingDates": {
-      "event": "イベント",
-      "startTime": "開始時刻",
-      "title": "今後の日程"
-    }
   },
   "register": {
     "metaEventRegistration": "イベント登録",

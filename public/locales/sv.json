@@ -15,17 +15,15 @@
     "post": "Publicera"
   },
   "cascadingMenus": {
+    "collapseMenu": "Fäll ihop menyn {}",
+    "collapseSubmenu": "Fäll ihop undermenyn {}",
+    "expandMenu": "Expandera menyn {}",
     "expandSubmenu": "Expandera undermenyn {}",
     "navigateTo": "Navigera till {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Välj en grupp för {}",
-      "generalGroups": "Allmänna grupper",
-      "noGroup": "Ingen grupp",
-      "noGroupsAvailable": "Inga grupper tillgängliga",
-      "noGroupsConfigured": "Det finns inga grupper konfigurerade för denna gudstjänst",
-      "selectGroup": "Välj grupp"
+      "chooseGroupFor": "Välj en grupp för {}"
     },
     "guestRegister": {
       "addFamilyMember": "Lägg till familjemedlem",
@@ -49,10 +47,8 @@
     "cancel": "Avbryt",
     "close": "Stäng",
     "date": "Datum",
-    "edit": "Redigera",
     "pleaseWait": "Vänta",
     "save": "Spara",
-    "search": "Sök",
     "update": "Uppdatera"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Ditt formulär har skickats in."
   },
   "eventCalendar": {
-    "discussion": "Diskussion",
-    "editEvent": "Redigera händelse",
     "recurring": {
       "allDates": "Alla datum",
       "deleteTitle": "Ta bort återkommande händelse",
       "editTitle": "Redigera återkommande händelse",
       "justThisDate": "Endast detta datum",
       "thisAndFollowing": "Detta och alla följande datum"
-    },
-    "registerForEvent": "Anmäl dig till denna händelse"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Länkar kan vara till Google Drive, värd-PDF för lektion, etc.",
     "addedLinks": "Tillagda länkar",
     "confirmDelete": "Är du säker på att du vill ta bort '{}'?",
-    "contact": "Kontakt",
-    "contactGroupLeader": "Kontakta gruppledare:",
     "deleteFileLabel": "Ta bort filen {}",
     "deleteLinkLabel": "Ta bort länken {}",
-    "emailLabel": "Din e-postadress",
     "files": "Filer",
-    "firstNameLabel": "Ditt förnamn",
-    "lastNameLabel": "Ditt efternamn",
     "linkText": "Länktext",
     "linkTextLabel": "Visningstext för länk",
     "linkUrl": "Länk-URL",
     "linkUrlLabel": "URL för länk",
-    "messageLabel": "Ditt meddelande till gruppledaren",
-    "messageSent": "Ditt meddelande har skickats!",
     "noDescription": "Ingen beskrivning angiven.",
     "noGroups": "Inga grupper hittades",
-    "phoneLabel": "Ditt telefonnummer",
     "storageInfo": "100 MB lagringsutrymme tillhandahålls gratis för att lagra PDF-filer och andra dokument som ofta behövs. Vi rekommenderar att använda Google Drive eller Dropbox för att lagra filer om mer utrymme behövs.",
-    "submit": "Skicka",
-    "submitLabel": "Skicka meddelande till gruppledaren",
     "upload": "Ladda upp",
     "uploadedFiles": "Uppladdade filer",
     "usedSpace": "Använt utrymme: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Användarmeny"
   },
   "iconPicker": {
-    "iconsAvailable": "Tillgängliga ikoner",
-    "matchingResults": "Matchande resultat",
-    "searchAriaLabel": "sök ikoner",
     "selectIcon": "Välj {} ikon"
-  },
-  "loadingPage": {
-    "logoAlt": "logotyp"
   },
   "login": {
     "login": "Logga in",
@@ -176,6 +153,7 @@
       "explore": "Utforska",
       "group": "Grupp",
       "home": "Hem",
+      "lightMode": "Ljust läge",
       "logout": "Logga ut",
       "member": "Medlem",
       "messages": "Meddelanden",
@@ -193,6 +171,7 @@
       "profile": "Profil",
       "signIn": "Logga in",
       "switchToDark": "Byt till mörkt läge",
+      "switchToLight": "Byt till ljust läge",
       "unknown": "Okänd",
       "untitledSermon": "Predikan utan titel",
       "verseOfTheDay": "Dagens vers",
@@ -247,6 +226,7 @@
       "emailAddress": "E-postadress",
       "full": "Fullt",
       "general": "Allmänt",
+      "groupActionFailed": "Något gick fel. Försök igen.",
       "groupNotFound": "Grupp hittades inte",
       "groupNotFoundDescription": "Denna grupp kunde inte hittas eller så har du inte behörighet att visa den.",
       "householdMember": "Hushållsmedlem",
@@ -261,6 +241,7 @@
       "memberSingular": "medlem",
       "members": "Medlemmar ({})",
       "membersLowercase": "medlemmar",
+      "membersPrivate": "Medlemmar är bara synliga för personer i den här gruppen.",
       "membersTab": "Medlemmar",
       "message": "Meddelande",
       "messageActions": "Meddelandeåtgärder",
@@ -301,6 +282,8 @@
       "remove": "Ta bort",
       "removeSignup": "Ta bort anmälan?",
       "removing": "Tar bort...",
+      "requestPending": "Förfrågan väntar",
+      "requestPendingNote": "Din förfrågan om att gå med har skickats. En gruppledare kommer att granska den.",
       "retry": "Försök igen",
       "send": "Skicka",
       "sendEmail": "Skicka e-post",
@@ -405,6 +388,7 @@
       "groupChat": "Gruppchatt",
       "groupChatTitle": "{} {}",
       "guest": "(Gäst)",
+      "invalidUrl": "Ange en webbadress som börjar med http:// eller https://",
       "leadersCanPost": "Ledare kan publicera tillkännagivanden här.",
       "linkFallback": "Länk",
       "linkText": "Länktext",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Det gick inte att spara påminnelserna.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Spara",
       "saveAttendance": "Spara närvaro",
+      "saveChanges": "Spara ändringar",
+      "saving": "Sparar...",
       "search": "Sök",
       "searchForPerson": "Sök efter en person",
       "selectAll": "Alla",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Väntande ändringar",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Granska dina ändringar innan du skickar dem för godkännande.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Skicka för godkännande",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Dagens vers"
     },
     "screens": {
+      "adjustSearch": "Prova ett annat namn eller en annan stavning.",
       "alreadyCheckedIn": "Redan incheckad",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Dina ändringar har skickats för godkännande.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Ta bort avisering",
       "detectingDevice": "Identifierar din enhet…",
+      "directoryMembersBody": "Församlingens katalog delas bara med medlemmar.",
+      "directorySignInBody": "Logga in för att bläddra i församlingens katalog.",
       "displayNameUpdated": "Visningsnamnet har uppdaterats.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Logga in för att se grupperna du tillhör och gå med i nya.",
+      "groupsSignInTitle": "Logga in för att se dina grupper",
       "keep": "Behåll",
       "lastGift": "Last Gift",
       "lastNameRegister": "Efternamn",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Inga grupper tillgängliga",
+      "noGroupsBody": "Du är inte med i några grupper än. Bläddra bland grupperna som din församling erbjuder för att hitta en att gå med i.",
       "noGroupsMessage": "Det finns inga grupper konfigurerade för den här gudstjänsten.",
+      "noGroupsTitle": "Inga grupper än",
       "noHouseholdMembers": "Inga hushållsmedlemmar hittades",
       "noHouseholdMessage": "Se till att du är inloggad och har hushållsmedlemmar registrerade.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Spara",
       "scanWithPhone": "Skanna med telefonens kamera",
+      "searchDirectoryBody": "Sök efter någon med namn för att se deras kontaktuppgifter.",
       "searchForMessage": "Sök efter en person att meddela",
       "searchMembers": "Sök medlemmar",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Totalt i år • {} gåva",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Det gick inte att skicka ändringarna.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Anmäl dig för att tjäna",
       "votd": "Dagens vers"
     },
+    "votd": {
+      "copied": "Kopierat till urklipp",
+      "share": "Dela",
+      "shareImage": "Dela bild",
+      "unableToShare": "Det gick inte att dela"
+    },
     "yesterday": "igår"
-  },
-  "notes": {
-    "comment": "Kommentar",
-    "comments": "Kommentarer",
-    "list": {
-      "loadMore": "Ladda mer",
-      "loading": "Laddar...",
-      "showAll": "Visa alla",
-      "typeMessage": "Skriv ett meddelande...",
-      "userAlt": "användare"
-    },
-    "startConversation": "Starta konversation",
-    "validate": {
-      "content": "Innehåll"
-    },
-    "viewAll": "Visa alla"
   },
   "pageSlug": {
     "achInstructions": "Instruktioner för ACH-betalning",
@@ -971,6 +962,7 @@
     "donate": "Ge",
     "formClosedOn": "Detta formulär stängde {}",
     "formNotAvailableUntil": "Detta formulär är inte tillgängligt förrän {}",
+    "formNotFound": "Det gick inte att läsa in formuläret.",
     "formSubmitted": "Ditt formulär har skickats in.",
     "liveStream": "Direktsändning",
     "loginToManageDonations": "Vänligen logga in för att hantera gåvor",
@@ -987,43 +979,6 @@
     "firstName": "Förnamn",
     "lastName": "Efternamn",
     "name": "Namn"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Slutdatum",
-      "endRequired": "Slutdatum krävs.",
-      "startBeforeEnd": "Startdatum måste vara före slutdatum.",
-      "startDate": "Startdatum",
-      "startRequired": "Startdatum krävs."
-    },
-    "blockoutDates": {
-      "none": "Inga spärrdatum.",
-      "title": "Spärrdatum"
-    },
-    "position": {
-      "accept": "Acceptera",
-      "accepted": "Accepterad",
-      "decline": "Avböj",
-      "declined": "Avböjd",
-      "headerPrefix": "Position",
-      "neededTimes": "Behövda tider",
-      "status": "Status",
-      "unconfirmed": "Obekräftad"
-    },
-    "servingTimes": {
-      "plan": "Plan",
-      "role": "Roll",
-      "serviceDate": "Gudstjänstdatum",
-      "title": "Tjänandetider"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Händelse",
-      "startTime": "Starttid",
-      "title": "Kommande datum"
-    }
   },
   "register": {
     "metaEventRegistration": "Händelseanmälan",

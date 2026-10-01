@@ -15,17 +15,15 @@
     "post": "Příspěvek"
   },
   "cascadingMenus": {
+    "collapseMenu": "Sbalit nabídku {}",
+    "collapseSubmenu": "Sbalit podnabídku {}",
+    "expandMenu": "Rozbalit nabídku {}",
     "expandSubmenu": "Rozbalit podnabídku {}",
     "navigateTo": "Přejít na {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Vyberte skupinu pro {}",
-      "generalGroups": "Obecné skupiny",
-      "noGroup": "Žádná skupina",
-      "noGroupsAvailable": "Žádné skupiny nejsou k dispozici",
-      "noGroupsConfigured": "Pro tuto bohoslužbu nejsou nakonfigurovány žádné skupiny",
-      "selectGroup": "Vybrat skupinu"
+      "chooseGroupFor": "Vyberte skupinu pro {}"
     },
     "guestRegister": {
       "addFamilyMember": "Přidat člena rodiny",
@@ -49,10 +47,8 @@
     "cancel": "Zrušit",
     "close": "Zavřít",
     "date": "Datum",
-    "edit": "Upravit",
     "pleaseWait": "Prosím čekejte",
     "save": "Uložit",
-    "search": "Hledat",
     "update": "Aktualizovat"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Váš formulář byl úspěšně odeslán."
   },
   "eventCalendar": {
-    "discussion": "Diskuze",
-    "editEvent": "Upravit událost",
     "recurring": {
       "allDates": "Všechna data",
       "deleteTitle": "Smazat opakující se událost",
       "editTitle": "Upravit opakující se událost",
       "justThisDate": "Pouze toto datum",
       "thisAndFollowing": "Toto a všechna následující data"
-    },
-    "registerForEvent": "Zaregistrovat se na tuto událost"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Odkaz může být na Google Drive, hostované PDF lekce atd.",
     "addedLinks": "Přidané odkazy",
     "confirmDelete": "Opravdu chcete smazat '{}'?",
-    "contact": "Kontakt",
-    "contactGroupLeader": "Kontaktovat vedoucího skupiny:",
     "deleteFileLabel": "Smazat soubor {}",
     "deleteLinkLabel": "Smazat odkaz {}",
-    "emailLabel": "Vaše e-mailová adresa",
     "files": "Soubory",
-    "firstNameLabel": "Vaše jméno",
-    "lastNameLabel": "Vaše příjmení",
     "linkText": "Text odkazu",
     "linkTextLabel": "Zobrazený text odkazu",
     "linkUrl": "URL odkazu",
     "linkUrlLabel": "URL odkazu",
-    "messageLabel": "Vaše zpráva pro vedoucího skupiny",
-    "messageSent": "Vaše zpráva byla odeslána!",
     "noDescription": "Není uveden žádný popis.",
     "noGroups": "Nebyly nalezeny žádné skupiny",
-    "phoneLabel": "Vaše telefonní číslo",
     "storageInfo": "Pro ukládání PDF a dalších běžně potřebných dokumentů je zdarma poskytnuto 100 MB úložného prostoru. Pokud potřebujete další prostor, doporučujeme použít Google Drive nebo Dropbox.",
-    "submit": "Odeslat",
-    "submitLabel": "Odeslat zprávu vedoucímu skupiny",
     "upload": "Nahrát",
     "uploadedFiles": "Nahrané soubory",
     "usedSpace": "Využité místo: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Uživatelská nabídka"
   },
   "iconPicker": {
-    "iconsAvailable": "Dostupné ikony",
-    "matchingResults": "Odpovídající výsledky",
-    "searchAriaLabel": "hledat ikony",
     "selectIcon": "Vybrat ikonu {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Přihlásit se",
@@ -176,6 +153,7 @@
       "explore": "Prozkoumat",
       "group": "Skupina",
       "home": "Domů",
+      "lightMode": "Světlý režim",
       "logout": "Odhlásit se",
       "member": "Člen",
       "messages": "Zprávy",
@@ -193,6 +171,7 @@
       "profile": "Profil",
       "signIn": "Přihlásit se",
       "switchToDark": "Přepnout na tmavý režim",
+      "switchToLight": "Přepnout na světlý režim",
       "unknown": "Neznámý",
       "untitledSermon": "Kázání bez názvu",
       "verseOfTheDay": "Verš dne",
@@ -247,6 +226,7 @@
       "emailAddress": "E-mailová adresa",
       "full": "Plno",
       "general": "Obecné",
+      "groupActionFailed": "Něco se pokazilo. Zkuste to prosím znovu.",
       "groupNotFound": "Skupina nenalezena",
       "groupNotFoundDescription": "Tuto skupinu nelze najít nebo nemáte oprávnění ji zobrazit.",
       "householdMember": "Člen domácnosti",
@@ -261,6 +241,7 @@
       "memberSingular": "člen",
       "members": "Členové ({})",
       "membersLowercase": "členů",
+      "membersPrivate": "Členové jsou viditelní pouze pro lidi v této skupině.",
       "membersTab": "Členové",
       "message": "Zpráva",
       "messageActions": "Akce zprávy",
@@ -301,6 +282,8 @@
       "remove": "Odebrat",
       "removeSignup": "Odebrat přihlášení?",
       "removing": "Odebírání...",
+      "requestPending": "Žádost čeká na vyřízení",
+      "requestPendingNote": "Vaše žádost o připojení byla odeslána. Vedoucí skupiny ji posoudí.",
       "retry": "Zkusit znovu",
       "send": "Odeslat",
       "sendEmail": "Odeslat e-mail",
@@ -405,6 +388,7 @@
       "groupChat": "Chat skupiny",
       "groupChatTitle": "{} {}",
       "guest": "(Host)",
+      "invalidUrl": "Zadejte webovou adresu začínající na http:// nebo https://",
       "leadersCanPost": "Vedoucí zde mohou zveřejňovat oznámení.",
       "linkFallback": "Odkaz",
       "linkText": "Text odkazu",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Připomenutí se nepodařilo uložit.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Uložit",
       "saveAttendance": "Uložit účast",
+      "saveChanges": "Uložit změny",
+      "saving": "Ukládání...",
       "search": "Hledat",
       "searchForPerson": "Hledat osobu",
       "selectAll": "Všichni",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Čekající změny",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Před odesláním ke schválení si změny zkontrolujte.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Odeslat ke schválení",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Verš dne"
     },
     "screens": {
+      "adjustSearch": "Zkuste jiné jméno nebo pravopis.",
       "alreadyCheckedIn": "Již přihlášen",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Vaše změny byly odeslány ke schválení.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Smazat oznámení",
       "detectingDevice": "Rozpoznávání vašeho zařízení…",
+      "directoryMembersBody": "Adresář církve je sdílen pouze se členy.",
+      "directorySignInBody": "Přihlaste se a prohlédněte si adresář církve.",
       "displayNameUpdated": "Zobrazované jméno aktualizováno.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Přihlaste se, abyste viděli skupiny, do kterých patříte, a mohli se připojit k novým.",
+      "groupsSignInTitle": "Přihlaste se a zobrazte své skupiny",
       "keep": "Ponechat",
       "lastGift": "Last Gift",
       "lastNameRegister": "Příjmení",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Žádné skupiny k dispozici",
+      "noGroupsBody": "Zatím nejste v žádné skupině. Projděte si skupiny, které vaše církev nabízí, a najděte si tu svou.",
       "noGroupsMessage": "Pro tuto bohoslužbu nejsou nakonfigurovány žádné skupiny.",
+      "noGroupsTitle": "Zatím žádné skupiny",
       "noHouseholdMembers": "Nenalezeni žádní členové domácnosti",
       "noHouseholdMessage": "Ujistěte se, že jste přihlášeni a máte zaregistrované členy domácnosti.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Uložit",
       "scanWithPhone": "Naskenujte kamerou telefonu",
+      "searchDirectoryBody": "Vyhledejte někoho podle jména a zobrazte jeho kontaktní údaje.",
       "searchForMessage": "Hledat osobu, které chcete poslat zprávu",
       "searchMembers": "Hledat členy",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Celkem letos • {} dar",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Změny se nepodařilo odeslat.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Přihlaste se ke službě",
       "votd": "Dnešní verš"
     },
+    "votd": {
+      "copied": "Zkopírováno do schránky",
+      "share": "Sdílet",
+      "shareImage": "Sdílet obrázek",
+      "unableToShare": "Sdílení se nezdařilo"
+    },
     "yesterday": "včera"
-  },
-  "notes": {
-    "comment": "Komentář",
-    "comments": "Komentáře",
-    "list": {
-      "loadMore": "Načíst další",
-      "loading": "Načítání...",
-      "showAll": "Zobrazit vše",
-      "typeMessage": "Napište zprávu...",
-      "userAlt": "uživatel"
-    },
-    "startConversation": "Zahájit konverzaci",
-    "validate": {
-      "content": "Obsah"
-    },
-    "viewAll": "Zobrazit vše"
   },
   "pageSlug": {
     "achInstructions": "Pokyny pro platbu ACH",
@@ -971,6 +962,7 @@
     "donate": "Darovat",
     "formClosedOn": "Tento formulář byl uzavřen {}",
     "formNotAvailableUntil": "Tento formulář je k dispozici až od {}",
+    "formNotFound": "Tento formulář se nepodařilo načíst.",
     "formSubmitted": "Váš formulář byl úspěšně odeslán.",
     "liveStream": "Živé vysílání",
     "loginToManageDonations": "Pro správu darů se prosím přihlaste",
@@ -987,43 +979,6 @@
     "firstName": "Křestní jméno",
     "lastName": "Příjmení",
     "name": "Jméno"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Datum konce",
-      "endRequired": "Datum konce je vyžadováno.",
-      "startBeforeEnd": "Datum začátku musí být před datem konce.",
-      "startDate": "Datum začátku",
-      "startRequired": "Datum začátku je vyžadováno."
-    },
-    "blockoutDates": {
-      "none": "Žádná data blokace.",
-      "title": "Data blokace"
-    },
-    "position": {
-      "accept": "Přijmout",
-      "accepted": "Přijato",
-      "decline": "Odmítnout",
-      "declined": "Odmítnuto",
-      "headerPrefix": "Pozice",
-      "neededTimes": "Potřebné časy",
-      "status": "Stav",
-      "unconfirmed": "Nepotvrzeno"
-    },
-    "servingTimes": {
-      "plan": "Plán",
-      "role": "Role",
-      "serviceDate": "Datum bohoslužby",
-      "title": "Časy služby"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Událost",
-      "startTime": "Čas začátku",
-      "title": "Nadcházející data"
-    }
   },
   "register": {
     "metaEventRegistration": "Registrace na událost",

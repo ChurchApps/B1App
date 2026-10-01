@@ -59,8 +59,7 @@ export default async function Home({ params }: { params: PageParams }) {
   const { sdSlug, pageSlug } = await params;
   const { pageData, config } = await loadSharedData(sdSlug, pageSlug);
 
-  // Built-in pages are part of the public website; a church that disabled it gets a 404 here (middleware normally redirects first).
-  const virtualPage = !config.hidePublicSite && VIRTUAL_PAGE_SLUGS.includes(pageSlug);
+  const virtualPage = VIRTUAL_PAGE_SLUGS.includes(pageSlug);
   if (!pageData?.url && !virtualPage) {
     const to = await resolveRedirect(config.church.id || "", sdSlug, "/" + pageSlug);
     if (to) permanentRedirect(to);

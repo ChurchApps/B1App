@@ -15,17 +15,15 @@
     "post": "Skelbti"
   },
   "cascadingMenus": {
+    "collapseMenu": "Sutraukti {} meniu",
+    "collapseSubmenu": "Sutraukti {} submeniu",
+    "expandMenu": "Išskleisti {} meniu",
     "expandSubmenu": "Išskleisti {} submeniu",
     "navigateTo": "Pereiti į {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Pasirinkite grupę {}",
-      "generalGroups": "Bendrosios grupės",
-      "noGroup": "Be grupės",
-      "noGroupsAvailable": "Grupių nėra",
-      "noGroupsConfigured": "Šiai pamaldai nėra sukonfigūruotų grupių",
-      "selectGroup": "Pasirinkite grupę"
+      "chooseGroupFor": "Pasirinkite grupę {}"
     },
     "guestRegister": {
       "addFamilyMember": "Pridėti šeimos narį",
@@ -49,10 +47,8 @@
     "cancel": "Atšaukti",
     "close": "Uždaryti",
     "date": "Data",
-    "edit": "Redaguoti",
     "pleaseWait": "Palaukite",
     "save": "Išsaugoti",
-    "search": "Ieškoti",
     "update": "Atnaujinti"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Jūsų forma sėkmingai pateikta."
   },
   "eventCalendar": {
-    "discussion": "Diskusija",
-    "editEvent": "Redaguoti įvykį",
     "recurring": {
       "allDates": "Visas datas",
       "deleteTitle": "Ištrinti pasikartojantį įvykį",
       "editTitle": "Redaguoti pasikartojantį įvykį",
       "justThisDate": "Tik šią datą",
       "thisAndFollowing": "Šią ir visas vėlesnes datas"
-    },
-    "registerForEvent": "Registruotis į šį įvykį"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Nuoroda gali būti į Google Drive, talpinamą pamokos PDF ir pan.",
     "addedLinks": "Pridėtos nuorodos",
     "confirmDelete": "Ar tikrai norite ištrinti '{}'?",
-    "contact": "Kontaktas",
-    "contactGroupLeader": "Susisiekti su grupės vadovu:",
     "deleteFileLabel": "Ištrinti failą {}",
     "deleteLinkLabel": "Ištrinti nuorodą {}",
-    "emailLabel": "Jūsų el. pašto adresas",
     "files": "Failai",
-    "firstNameLabel": "Jūsų vardas",
-    "lastNameLabel": "Jūsų pavardė",
     "linkText": "Nuorodos tekstas",
     "linkTextLabel": "Rodomas nuorodos tekstas",
     "linkUrl": "Nuorodos URL",
     "linkUrlLabel": "Nuorodos URL",
-    "messageLabel": "Jūsų žinutė grupės vadovui",
-    "messageSent": "Jūsų žinutė išsiųsta!",
     "noDescription": "Aprašymas nepateiktas.",
     "noGroups": "Grupių nerasta",
-    "phoneLabel": "Jūsų telefono numeris",
     "storageInfo": "100 MB saugyklos vietos suteikiama nemokamai PDF ir kitiems dažnai reikalingiems dokumentams saugoti. Jei reikia daugiau vietos, siūlome failus saugoti Google Drive arba Dropbox.",
-    "submit": "Pateikti",
-    "submitLabel": "Siųsti žinutę grupės vadovui",
     "upload": "Įkelti",
     "uploadedFiles": "Įkelti failai",
     "usedSpace": "Užimta vieta: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Vartotojo meniu"
   },
   "iconPicker": {
-    "iconsAvailable": "Galimos piktogramos",
-    "matchingResults": "Atitikimo rezultatai",
-    "searchAriaLabel": "ieškoti piktogramų",
     "selectIcon": "Pasirinkti {} piktogramą"
-  },
-  "loadingPage": {
-    "logoAlt": "logotipas"
   },
   "login": {
     "login": "Prisijungti",
@@ -176,6 +153,7 @@
       "explore": "Tyrinėti",
       "group": "Grupė",
       "home": "Pradžia",
+      "lightMode": "Šviesus režimas",
       "logout": "Atsijungti",
       "member": "Narys",
       "messages": "Žinutės",
@@ -193,6 +171,7 @@
       "profile": "Profilis",
       "signIn": "Prisijungti",
       "switchToDark": "Perjungti į tamsų režimą",
+      "switchToLight": "Perjungti į šviesų režimą",
       "unknown": "Nežinoma",
       "untitledSermon": "Be pavadinimo pamokslas",
       "verseOfTheDay": "Šio dne eilutė",
@@ -247,6 +226,7 @@
       "emailAddress": "El. pašto adresas",
       "full": "Vietos užimtos",
       "general": "Bendros",
+      "groupActionFailed": "Kažkas nepavyko. Bandykite dar kartą.",
       "groupNotFound": "Grupė nerasta",
       "groupNotFoundDescription": "Šios grupės rasti nepavyko arba neturite teisės jos peržiūrėti.",
       "householdMember": "Šeimos narys",
@@ -261,6 +241,7 @@
       "memberSingular": "narys",
       "members": "Nariai ({})",
       "membersLowercase": "nariai",
+      "membersPrivate": "Narius mato tik šios grupės žmonės.",
       "membersTab": "Nariai",
       "message": "Žinutė",
       "messageActions": "Pranešimo veiksmai",
@@ -301,6 +282,8 @@
       "remove": "Pašalinti",
       "removeSignup": "Pašalinti registraciją?",
       "removing": "Šalinama...",
+      "requestPending": "Prašymas laukia",
+      "requestPendingNote": "Jūsų prašymas prisijungti išsiųstas. Grupės vadovas jį peržiūrės.",
       "retry": "Bandyti dar kartą",
       "send": "Siųsti",
       "sendEmail": "Siųsti el. laišką",
@@ -405,6 +388,7 @@
       "groupChat": "Grupės pokalbiai",
       "groupChatTitle": "{} {}",
       "guest": "(Svečias)",
+      "invalidUrl": "Įveskite interneto adresą, prasidedantį http:// arba https://",
       "leadersCanPost": "Vadovai gali skelbti pranešimus čia.",
       "linkFallback": "Nuoroda",
       "linkText": "Nuorodos tekstas",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Nepavyko išsaugoti priminimų.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Išsaugoti",
       "saveAttendance": "Išsaugoti lankomumą",
+      "saveChanges": "Išsaugoti pakeitimus",
+      "saving": "Išsaugoma...",
       "search": "Ieškoti",
       "searchForPerson": "Ieškoti asmens",
       "selectAll": "Visi",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Laukiantys pakeitimai",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Peržiūrėkite pakeitimus prieš pateikdami juos patvirtinti.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Pateikti patvirtinti",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Dienos eilutė"
     },
     "screens": {
+      "adjustSearch": "Pabandykite kitą vardą arba rašybą.",
       "alreadyCheckedIn": "Jau užregistruotas",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Jūsų pakeitimai pateikti patvirtinti.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Ištrinti pranešimą",
       "detectingDevice": "Aptinkamas jūsų įrenginys…",
+      "directoryMembersBody": "Bažnyčios katalogas prieinamas tik nariams.",
+      "directorySignInBody": "Prisijunkite, kad galėtumėte naršyti bažnyčios katalogą.",
       "displayNameUpdated": "Rodomas vardas atnaujintas.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Prisijunkite, kad matytumėte savo grupes ir prisijungtumėte prie naujų.",
+      "groupsSignInTitle": "Prisijunkite, kad matytumėte savo grupes",
       "keep": "Palikti",
       "lastGift": "Last Gift",
       "lastNameRegister": "Pavardė",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Nėra prieinamų grupių",
+      "noGroupsBody": "Dar nesate jokioje grupėje. Peržiūrėkite savo bažnyčios siūlomas grupes ir raskite, prie kurios prisijungti.",
       "noGroupsMessage": "Šioms pamaldoms nesukonfigūruota jokių grupių.",
+      "noGroupsTitle": "Grupių dar nėra",
       "noHouseholdMembers": "Namų ūkio narių nerasta",
       "noHouseholdMessage": "Įsitikinkite, kad esate prisijungę ir turite užregistruotų namų ūkio narių.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Išsaugoti",
       "scanWithPhone": "Nuskaitykite telefono kamera",
+      "searchDirectoryBody": "Ieškokite asmens pagal vardą, kad pamatytumėte jo kontaktinius duomenis.",
       "searchForMessage": "Ieškoti asmens, kuriam siųsti žinutę",
       "searchMembers": "Ieškoti narių",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Iš viso šiais metais • {} auka",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Nepavyko pateikti pakeitimų.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Užsiregistruokite tarnauti",
       "votd": "Šios dienos eilutė"
     },
+    "votd": {
+      "copied": "Nukopijuota į iškarpinę",
+      "share": "Bendrinti",
+      "shareImage": "Bendrinti paveikslėlį",
+      "unableToShare": "Nepavyko bendrinti"
+    },
     "yesterday": "vakar"
-  },
-  "notes": {
-    "comment": "Komentaras",
-    "comments": "Komentarai",
-    "list": {
-      "loadMore": "Įkelti daugiau",
-      "loading": "Įkeliama...",
-      "showAll": "Rodyti visus",
-      "typeMessage": "Rašykite žinutę...",
-      "userAlt": "vartotojas"
-    },
-    "startConversation": "Pradėti pokalbį",
-    "validate": {
-      "content": "Turinys"
-    },
-    "viewAll": "Žiūrėti viską"
   },
   "pageSlug": {
     "achInstructions": "ACH mokėjimo instrukcijos",
@@ -971,6 +962,7 @@
     "donate": "Aukoti",
     "formClosedOn": "Ši forma buvo uždaryta {}",
     "formNotAvailableUntil": "Ši forma nepasiekiama iki {}",
+    "formNotFound": "Šios formos nepavyko įkelti.",
     "formSubmitted": "Jūsų forma sėkmingai pateikta.",
     "liveStream": "Tiesioginė transliacija",
     "loginToManageDonations": "Prisijunkite, kad galėtumėte valdyti aukas",
@@ -987,43 +979,6 @@
     "firstName": "Vardas",
     "lastName": "Pavardė",
     "name": "Vardas"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Pabaigos data",
-      "endRequired": "Pabaigos data privaloma.",
-      "startBeforeEnd": "Pradžios data turi būti ankstesnė už pabaigos datą.",
-      "startDate": "Pradžios data",
-      "startRequired": "Pradžios data privaloma."
-    },
-    "blockoutDates": {
-      "none": "Nepasiekiamumo datų nėra.",
-      "title": "Nepasiekiamumo datos"
-    },
-    "position": {
-      "accept": "Priimti",
-      "accepted": "Priimta",
-      "decline": "Atmesti",
-      "declined": "Atmesta",
-      "headerPrefix": "Pareigos",
-      "neededTimes": "Reikalingi laikai",
-      "status": "Būsena",
-      "unconfirmed": "Nepatvirtinta"
-    },
-    "servingTimes": {
-      "plan": "Planas",
-      "role": "Vaidmuo",
-      "serviceDate": "Pamaldų data",
-      "title": "Tarnystės laikai"
-    },
-    "team": {
-      "avatar": "avataras"
-    },
-    "upcomingDates": {
-      "event": "Įvykis",
-      "startTime": "Pradžios laikas",
-      "title": "Artėjančios datos"
-    }
   },
   "register": {
     "metaEventRegistration": "Įvykio registracija",

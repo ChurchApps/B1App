@@ -15,17 +15,15 @@
     "post": "Publiser"
   },
   "cascadingMenus": {
+    "collapseMenu": "Skjul menyen {}",
+    "collapseSubmenu": "Skjul undermenyen {}",
+    "expandMenu": "Utvid menyen {}",
     "expandSubmenu": "Utvid undermeny {}",
     "navigateTo": "Naviger til {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Velg en gruppe for {}",
-      "generalGroups": "Generelle grupper",
-      "noGroup": "Ingen gruppe",
-      "noGroupsAvailable": "Ingen grupper tilgjengelig",
-      "noGroupsConfigured": "Det er ikke satt opp noen grupper for denne gudstjenesten",
-      "selectGroup": "Velg gruppe"
+      "chooseGroupFor": "Velg en gruppe for {}"
     },
     "guestRegister": {
       "addFamilyMember": "Legg til familiemedlem",
@@ -49,10 +47,8 @@
     "cancel": "Avbryt",
     "close": "Lukk",
     "date": "Dato",
-    "edit": "Rediger",
     "pleaseWait": "Vennligst vent",
     "save": "Lagre",
-    "search": "Søk",
     "update": "Oppdater"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Skjemaet ditt er sendt inn."
   },
   "eventCalendar": {
-    "discussion": "Diskusjon",
-    "editEvent": "Rediger arrangement",
     "recurring": {
       "allDates": "Alle datoer",
       "deleteTitle": "Slett gjentakende arrangement",
       "editTitle": "Rediger gjentakende arrangement",
       "justThisDate": "Bare denne datoen",
       "thisAndFollowing": "Denne og alle følgende datoer"
-    },
-    "registerForEvent": "Meld deg på dette arrangementet"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Lenken kan være til Google Drive, en hostet PDF-leksjon, osv.",
     "addedLinks": "Lagt til lenker",
     "confirmDelete": "Er du sikker på at du vil slette '{}'?",
-    "contact": "Kontakt",
-    "contactGroupLeader": "Kontakt gruppeleder:",
     "deleteFileLabel": "Slett fil {}",
     "deleteLinkLabel": "Slett lenke {}",
-    "emailLabel": "E-postadressen din",
     "files": "Filer",
-    "firstNameLabel": "Ditt fornavn",
-    "lastNameLabel": "Ditt etternavn",
     "linkText": "Lenketekst",
     "linkTextLabel": "Visningstekst for lenke",
     "linkUrl": "Lenke-URL",
     "linkUrlLabel": "URL for lenke",
-    "messageLabel": "Din melding til gruppelederen",
-    "messageSent": "Meldingen din er sendt!",
     "noDescription": "Ingen beskrivelse oppgitt.",
     "noGroups": "Ingen grupper funnet",
-    "phoneLabel": "Ditt telefonnummer",
     "storageInfo": "100 MB lagringsplass tilbys gratis for lagring av PDF-er og andre vanlige dokumenter. Vi anbefaler å bruke Google Drive eller Dropbox for å lagre filer hvis det trengs mer plass.",
-    "submit": "Send",
-    "submitLabel": "Send melding til gruppeleder",
     "upload": "Last opp",
     "uploadedFiles": "Opplastede filer",
     "usedSpace": "Brukt plass: {} / 100 MB",
@@ -147,13 +130,7 @@
     "userMenu": "Brukermeny"
   },
   "iconPicker": {
-    "iconsAvailable": "Tilgjengelige ikoner",
-    "matchingResults": "Samsvarende resultater",
-    "searchAriaLabel": "søk etter ikoner",
     "selectIcon": "Velg ikon for {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Logg inn",
@@ -176,6 +153,7 @@
       "explore": "Utforsk",
       "group": "Gruppe",
       "home": "Hjem",
+      "lightMode": "Lys modus",
       "logout": "Logg ut",
       "member": "Medlem",
       "messages": "Meldinger",
@@ -193,6 +171,7 @@
       "profile": "Profil",
       "signIn": "Logg inn",
       "switchToDark": "Bytt til mørk modus",
+      "switchToLight": "Bytt til lys modus",
       "unknown": "Ukjent",
       "untitledSermon": "Preken uten tittel",
       "verseOfTheDay": "Vers av dagen",
@@ -247,6 +226,7 @@
       "emailAddress": "E-postadresse",
       "full": "Fullt",
       "general": "Generelt",
+      "groupActionFailed": "Noe gikk galt. Vennligst prøv igjen.",
       "groupNotFound": "Gruppe ikke funnet",
       "groupNotFoundDescription": "Denne gruppen ble ikke funnet, eller du har ikke tillatelse til å se den.",
       "householdMember": "Husstandsmedlem",
@@ -261,6 +241,7 @@
       "memberSingular": "medlem",
       "members": "Medlemmer ({})",
       "membersLowercase": "medlemmer",
+      "membersPrivate": "Medlemmer er bare synlige for personer i denne gruppen.",
       "membersTab": "Medlemmer",
       "message": "Melding",
       "messageActions": "Meldingshandlinger",
@@ -301,6 +282,8 @@
       "remove": "Fjern",
       "removeSignup": "Fjerne påmelding?",
       "removing": "Fjerner...",
+      "requestPending": "Forespørsel venter",
+      "requestPendingNote": "Forespørselen din om å bli med er sendt. En gruppeleder vil se gjennom den.",
       "retry": "Prøv igjen",
       "send": "Send",
       "sendEmail": "Send e-post",
@@ -405,6 +388,7 @@
       "groupChat": "Gruppechat",
       "groupChatTitle": "{} {}",
       "guest": "(Gjest)",
+      "invalidUrl": "Skriv inn en nettadresse som starter med http:// eller https://",
       "leadersCanPost": "Ledere kan publisere kunngjøringer her.",
       "linkFallback": "Lenke",
       "linkText": "Lenketekst",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Kunne ikke lagre påminnelser.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Lagre",
       "saveAttendance": "Lagre oppmøte",
+      "saveChanges": "Lagre endringer",
+      "saving": "Lagrer...",
       "search": "Søk",
       "searchForPerson": "Søk etter en person",
       "selectAll": "Alle",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Ventende endringer",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Se gjennom endringene dine før du sender dem til godkjenning.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Send til godkjenning",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Dagens vers"
     },
     "screens": {
+      "adjustSearch": "Prøv et annet navn eller en annen stavemåte.",
       "alreadyCheckedIn": "Allerede sjekket inn",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Endringene dine er sendt til godkjenning.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Slett varsel",
       "detectingDevice": "Oppdager enheten din…",
+      "directoryMembersBody": "Menighetskatalogen deles bare med medlemmer.",
+      "directorySignInBody": "Logg inn for å bla gjennom menighetskatalogen.",
       "displayNameUpdated": "Visningsnavn oppdatert.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Logg inn for å se gruppene du er med i og bli med i nye.",
+      "groupsSignInTitle": "Logg inn for å se gruppene dine",
       "keep": "Behold",
       "lastGift": "Last Gift",
       "lastNameRegister": "Etternavn",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Ingen grupper tilgjengelig",
+      "noGroupsBody": "Du er ikke med i noen grupper ennå. Bla gjennom gruppene menigheten din tilbyr for å finne en å bli med i.",
       "noGroupsMessage": "Det er ingen grupper konfigurert for denne gudstjenesten.",
+      "noGroupsTitle": "Ingen grupper ennå",
       "noHouseholdMembers": "Ingen husstandsmedlemmer funnet",
       "noHouseholdMessage": "Kontroller at du er logget inn og har husstandsmedlemmer registrert.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Lagre",
       "scanWithPhone": "Skann med telefonens kamera",
+      "searchDirectoryBody": "Søk etter en person ved navn for å se kontaktinformasjonen deres.",
       "searchForMessage": "Søk etter en person å sende melding til",
       "searchMembers": "Søk medlemmer",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Totalt i år • {} gave",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Kunne ikke sende endringene.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Meld deg til tjeneste",
       "votd": "Dagens vers"
     },
+    "votd": {
+      "copied": "Kopiert til utklippstavlen",
+      "share": "Del",
+      "shareImage": "Del bilde",
+      "unableToShare": "Kunne ikke dele"
+    },
     "yesterday": "i går"
-  },
-  "notes": {
-    "comment": "Kommentar",
-    "comments": "Kommentarer",
-    "list": {
-      "loadMore": "Last inn mer",
-      "loading": "Laster...",
-      "showAll": "Vis alle",
-      "typeMessage": "Skriv en melding...",
-      "userAlt": "bruker"
-    },
-    "startConversation": "Start samtale",
-    "validate": {
-      "content": "Innhold"
-    },
-    "viewAll": "Vis alle"
   },
   "pageSlug": {
     "achInstructions": "Instruksjoner for ACH-betaling",
@@ -971,6 +962,7 @@
     "donate": "Gi",
     "formClosedOn": "Dette skjemaet ble stengt {}",
     "formNotAvailableUntil": "Dette skjemaet er ikke tilgjengelig før {}",
+    "formNotFound": "Dette skjemaet kunne ikke lastes inn.",
     "formSubmitted": "Skjemaet ditt er sendt inn.",
     "liveStream": "Direktesending",
     "loginToManageDonations": "Vennligst logg inn for å administrere gaver",
@@ -987,43 +979,6 @@
     "firstName": "Fornavn",
     "lastName": "Etternavn",
     "name": "Navn"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Sluttdato",
-      "endRequired": "Sluttdato er påkrevd.",
-      "startBeforeEnd": "Startdato må være før sluttdato.",
-      "startDate": "Startdato",
-      "startRequired": "Startdato er påkrevd."
-    },
-    "blockoutDates": {
-      "none": "Ingen sperredatoer.",
-      "title": "Sperredatoer"
-    },
-    "position": {
-      "accept": "Aksepter",
-      "accepted": "Akseptert",
-      "decline": "Avslå",
-      "declined": "Avslått",
-      "headerPrefix": "Posisjon",
-      "neededTimes": "Nødvendige tidspunkter",
-      "status": "Status",
-      "unconfirmed": "Ubekreftet"
-    },
-    "servingTimes": {
-      "plan": "Plan",
-      "role": "Rolle",
-      "serviceDate": "Gudstjenestedato",
-      "title": "Tjenestetider"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Arrangement",
-      "startTime": "Starttidspunkt",
-      "title": "Kommende datoer"
-    }
   },
   "register": {
     "metaEventRegistration": "Påmelding til arrangement",
