@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildContentSecurityPolicy, generateNonce } from "@/helpers/contentSecurityPolicy";
+import { canonicalLink } from "@/helpers/canonicalLink";
 import { isNoindexHost } from "@/helpers/noindexHost";
 import { isAllowedWhenPublicSiteHidden, isPublicSiteHidden } from "@/helpers/publicSite";
 
@@ -96,5 +97,10 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next({ request: { headers } });
   res.headers.set("Content-Security-Policy", csp);
   if (isNoindexHost(host)) res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  else {
+    const proto = (req.headers.get("x-forwarded-proto") || req.nextUrl.protocol.replace(":", "")).split(",")[0].trim();
+    const link = canonicalLink(req.headers.get("x-forwarded-host") || req.headers.get("host"), proto, pathname);
+    if (link) res.headers.append("Link", link);
+  }
   return res;
 }
