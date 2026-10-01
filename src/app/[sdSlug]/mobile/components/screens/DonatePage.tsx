@@ -713,12 +713,8 @@ function DonatePageInner({ config }: Props) {
           <Box
             sx={{
               mt: `${mobileTheme.spacing.md}px`,
-              "& #display-box-content": {
-                overflowX: "auto !important",
-              },
-              "& .MuiTable-root": {
-                minWidth: 600
-              }
+              "& #display-box-content": { overflowX: "auto !important" },
+              "& .MuiTable-root": { minWidth: 600 }
             }}
           >
             <RecurringDonations
