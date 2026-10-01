@@ -40,8 +40,3 @@ export const clearAppBadge = async () => {
     // Badging is best-effort.
   }
 };
-
-export const AppBadgeHelper = {
-  setAppBadge,
-  clearAppBadge
-};
