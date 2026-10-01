@@ -15,17 +15,15 @@
     "post": "Đăng"
   },
   "cascadingMenus": {
+    "collapseMenu": "Thu gọn menu {}",
+    "collapseSubmenu": "Thu gọn menu phụ {}",
+    "expandMenu": "Mở rộng menu {}",
     "expandSubmenu": "Mở rộng menu phụ {}",
     "navigateTo": "Điều hướng đến {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Chọn nhóm cho {}",
-      "generalGroups": "Nhóm chung",
-      "noGroup": "Không có nhóm",
-      "noGroupsAvailable": "Không có nhóm nào",
-      "noGroupsConfigured": "Chưa có nhóm nào được thiết lập cho buổi nhóm này",
-      "selectGroup": "Chọn nhóm"
+      "chooseGroupFor": "Chọn nhóm cho {}"
     },
     "guestRegister": {
       "addFamilyMember": "Thêm thành viên gia đình",
@@ -49,10 +47,8 @@
     "cancel": "Hủy",
     "close": "Đóng",
     "date": "Ngày",
-    "edit": "Chỉnh sửa",
     "pleaseWait": "Vui lòng chờ",
     "save": "Lưu",
-    "search": "Tìm kiếm",
     "update": "Cập nhật"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Biểu mẫu của bạn đã được gửi thành công."
   },
   "eventCalendar": {
-    "discussion": "Thảo luận",
-    "editEvent": "Chỉnh sửa sự kiện",
     "recurring": {
       "allDates": "Tất cả các ngày",
       "deleteTitle": "Xóa sự kiện định kỳ",
       "editTitle": "Chỉnh sửa sự kiện định kỳ",
       "justThisDate": "Chỉ ngày này",
       "thisAndFollowing": "Ngày này và tất cả các ngày sau"
-    },
-    "registerForEvent": "Đăng ký tham gia sự kiện này"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Liên kết có thể là Google Drive, PDF bài học được lưu trữ, v.v.",
     "addedLinks": "Liên kết đã thêm",
     "confirmDelete": "Bạn có chắc chắn muốn xóa '{}' không?",
-    "contact": "Liên hệ",
-    "contactGroupLeader": "Liên hệ trưởng nhóm:",
     "deleteFileLabel": "Xóa tệp {}",
     "deleteLinkLabel": "Xóa liên kết {}",
-    "emailLabel": "Địa chỉ email của bạn",
     "files": "Tệp",
-    "firstNameLabel": "Tên của bạn",
-    "lastNameLabel": "Họ của bạn",
     "linkText": "Văn bản liên kết",
     "linkTextLabel": "Văn bản hiển thị của liên kết",
     "linkUrl": "URL liên kết",
     "linkUrlLabel": "URL liên kết",
-    "messageLabel": "Tin nhắn của bạn gửi đến trưởng nhóm",
-    "messageSent": "Tin nhắn của bạn đã được gửi!",
     "noDescription": "Không có mô tả.",
     "noGroups": "Không tìm thấy nhóm nào",
-    "phoneLabel": "Số điện thoại của bạn",
     "storageInfo": "Cung cấp miễn phí 100 MB dung lượng lưu trữ để lưu PDF và các tài liệu thường dùng. Chúng tôi khuyên bạn dùng Google Drive hoặc Dropbox nếu cần thêm dung lượng.",
-    "submit": "Gửi",
-    "submitLabel": "Gửi tin nhắn đến trưởng nhóm",
     "upload": "Tải lên",
     "uploadedFiles": "Tệp đã tải lên",
     "usedSpace": "Dung lượng đã dùng: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Menu người dùng"
   },
   "iconPicker": {
-    "iconsAvailable": "Biểu tượng có sẵn",
-    "matchingResults": "Kết quả khớp",
-    "searchAriaLabel": "tìm kiếm biểu tượng",
     "selectIcon": "Chọn biểu tượng {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Đăng nhập",
@@ -176,6 +153,7 @@
       "explore": "Khám phá",
       "group": "Nhóm",
       "home": "Trang chủ",
+      "lightMode": "Chế độ sáng",
       "logout": "Đăng xuất",
       "member": "Thành viên",
       "messages": "Tin nhắn",
@@ -193,6 +171,7 @@
       "profile": "Hồ sơ",
       "signIn": "Đăng nhập",
       "switchToDark": "Chuyển sang chế độ tối",
+      "switchToLight": "Chuyển sang chế độ sáng",
       "unknown": "Không rõ",
       "untitledSermon": "Bài giảng không có tiêu đề",
       "verseOfTheDay": "Câu Kinh Thánh Hôm Nay",
@@ -247,6 +226,7 @@
       "emailAddress": "Địa chỉ email",
       "full": "Đã đầy",
       "general": "Chung",
+      "groupActionFailed": "Đã xảy ra lỗi. Vui lòng thử lại.",
       "groupNotFound": "Không tìm thấy nhóm",
       "groupNotFoundDescription": "Không thể tìm thấy nhóm này hoặc bạn không có quyền xem.",
       "householdMember": "Thành viên gia đình",
@@ -261,6 +241,7 @@
       "memberSingular": "thành viên",
       "members": "Thành viên ({})",
       "membersLowercase": "thành viên",
+      "membersPrivate": "Thành viên chỉ hiển thị với những người trong nhóm này.",
       "membersTab": "Thành viên",
       "message": "Tin nhắn",
       "messageActions": "Thao tác tin nhắn",
@@ -301,6 +282,8 @@
       "remove": "Xóa",
       "removeSignup": "Xóa đăng ký?",
       "removing": "Đang xóa...",
+      "requestPending": "Yêu cầu đang chờ",
+      "requestPendingNote": "Yêu cầu tham gia của bạn đã được gửi. Trưởng nhóm sẽ xem xét.",
       "retry": "Thử lại",
       "send": "Gửi",
       "sendEmail": "Gửi email",
@@ -405,6 +388,7 @@
       "groupChat": "Trò chuyện nhóm",
       "groupChatTitle": "{} {}",
       "guest": "(Khách)",
+      "invalidUrl": "Nhập địa chỉ web bắt đầu bằng http:// hoặc https://",
       "leadersCanPost": "Trưởng nhóm có thể đăng thông báo tại đây.",
       "linkFallback": "Liên kết",
       "linkText": "Văn bản liên kết",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Không thể lưu lời nhắc.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Lưu",
       "saveAttendance": "Lưu điểm danh",
+      "saveChanges": "Lưu thay đổi",
+      "saving": "Đang lưu...",
       "search": "Tìm kiếm",
       "searchForPerson": "Tìm kiếm một người",
       "selectAll": "Tất cả",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Thay đổi đang chờ",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Xem lại các thay đổi của bạn trước khi gửi phê duyệt.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Gửi phê duyệt",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Câu Kinh Thánh trong ngày"
     },
     "screens": {
+      "adjustSearch": "Hãy thử tên hoặc cách viết khác.",
       "alreadyCheckedIn": "Đã điểm danh",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Các thay đổi của bạn đã được gửi để phê duyệt.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Xóa thông báo",
       "detectingDevice": "Đang phát hiện thiết bị của bạn…",
+      "directoryMembersBody": "Danh bạ hội thánh chỉ được chia sẻ với thành viên.",
+      "directorySignInBody": "Đăng nhập để duyệt danh bạ hội thánh.",
       "displayNameUpdated": "Đã cập nhật tên hiển thị.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Đăng nhập để xem các nhóm bạn tham gia và tham gia nhóm mới.",
+      "groupsSignInTitle": "Đăng nhập để xem các nhóm của bạn",
       "keep": "Giữ lại",
       "lastGift": "Last Gift",
       "lastNameRegister": "Họ",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Không có nhóm nào",
+      "noGroupsBody": "Bạn chưa tham gia nhóm nào. Hãy duyệt các nhóm mà hội thánh của bạn cung cấp để tìm một nhóm tham gia.",
       "noGroupsMessage": "Không có nhóm nào được thiết lập cho buổi lễ này.",
+      "noGroupsTitle": "Chưa có nhóm nào",
       "noHouseholdMembers": "Không tìm thấy thành viên gia đình",
       "noHouseholdMessage": "Vui lòng đảm bảo bạn đã đăng nhập và có thành viên gia đình đã đăng ký.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Lưu",
       "scanWithPhone": "Quét bằng camera điện thoại của bạn",
+      "searchDirectoryBody": "Tìm kiếm ai đó theo tên để xem thông tin liên hệ của họ.",
       "searchForMessage": "Tìm kiếm người để gửi tin nhắn",
       "searchMembers": "Tìm kiếm thành viên",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Tổng năm nay • {} lần dâng",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Không thể gửi các thay đổi.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Đăng ký phục vụ",
       "votd": "Câu hôm nay"
     },
+    "votd": {
+      "copied": "Đã sao chép vào bảng nhớ tạm",
+      "share": "Chia sẻ",
+      "shareImage": "Chia sẻ hình ảnh",
+      "unableToShare": "Không thể chia sẻ"
+    },
     "yesterday": "hôm qua"
-  },
-  "notes": {
-    "comment": "Bình luận",
-    "comments": "Bình luận",
-    "list": {
-      "loadMore": "Tải thêm",
-      "loading": "Đang tải...",
-      "showAll": "Hiển thị tất cả",
-      "typeMessage": "Nhập tin nhắn...",
-      "userAlt": "người dùng"
-    },
-    "startConversation": "Bắt đầu cuộc trò chuyện",
-    "validate": {
-      "content": "Nội dung"
-    },
-    "viewAll": "Xem tất cả"
   },
   "pageSlug": {
     "achInstructions": "Hướng dẫn thanh toán ACH",
@@ -971,6 +962,7 @@
     "donate": "Dâng hiến",
     "formClosedOn": "Biểu mẫu này đã đóng vào {}",
     "formNotAvailableUntil": "Biểu mẫu này chưa khả dụng cho đến {}",
+    "formNotFound": "Không thể tải biểu mẫu này.",
     "formSubmitted": "Biểu mẫu của bạn đã được gửi thành công.",
     "liveStream": "Phát trực tiếp",
     "loginToManageDonations": "Vui lòng đăng nhập để quản lý dâng hiến",
@@ -987,43 +979,6 @@
     "firstName": "Tên",
     "lastName": "Họ",
     "name": "Họ và tên"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Ngày kết thúc",
-      "endRequired": "Bắt buộc nhập ngày kết thúc.",
-      "startBeforeEnd": "Ngày bắt đầu phải trước ngày kết thúc.",
-      "startDate": "Ngày bắt đầu",
-      "startRequired": "Bắt buộc nhập ngày bắt đầu."
-    },
-    "blockoutDates": {
-      "none": "Không có ngày bận.",
-      "title": "Ngày bận"
-    },
-    "position": {
-      "accept": "Chấp nhận",
-      "accepted": "Đã chấp nhận",
-      "decline": "Từ chối",
-      "declined": "Đã từ chối",
-      "headerPrefix": "Vị trí",
-      "neededTimes": "Thời gian cần",
-      "status": "Trạng thái",
-      "unconfirmed": "Chưa xác nhận"
-    },
-    "servingTimes": {
-      "plan": "Kế hoạch",
-      "role": "Vai trò",
-      "serviceDate": "Ngày buổi nhóm",
-      "title": "Thời gian phục vụ"
-    },
-    "team": {
-      "avatar": "ảnh đại diện"
-    },
-    "upcomingDates": {
-      "event": "Sự kiện",
-      "startTime": "Thời gian bắt đầu",
-      "title": "Ngày sắp tới"
-    }
   },
   "register": {
     "metaEventRegistration": "Đăng ký sự kiện",

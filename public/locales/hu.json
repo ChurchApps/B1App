@@ -15,17 +15,15 @@
     "post": "Közzététel"
   },
   "cascadingMenus": {
+    "collapseMenu": "{} menü összecsukása",
+    "collapseSubmenu": "{} almenü összecsukása",
+    "expandMenu": "{} menü kibontása",
     "expandSubmenu": "{} almenü kibontása",
     "navigateTo": "Navigálás ide: {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Válassz csoportot {} számára",
-      "generalGroups": "Általános csoportok",
-      "noGroup": "Nincs csoport",
-      "noGroupsAvailable": "Nincsenek elérhető csoportok",
-      "noGroupsConfigured": "Ehhez az alkalomhoz nincsenek csoportok beállítva",
-      "selectGroup": "Csoport kiválasztása"
+      "chooseGroupFor": "Válassz csoportot {} számára"
     },
     "guestRegister": {
       "addFamilyMember": "Családtag hozzáadása",
@@ -49,10 +47,8 @@
     "cancel": "Mégse",
     "close": "Bezárás",
     "date": "Dátum",
-    "edit": "Szerkesztés",
     "pleaseWait": "Kérjük, várjon",
     "save": "Mentés",
-    "search": "Keresés",
     "update": "Frissítés"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Az űrlapod sikeresen elküldve."
   },
   "eventCalendar": {
-    "discussion": "Beszélgetés",
-    "editEvent": "Esemény szerkesztése",
     "recurring": {
       "allDates": "Minden dátum",
       "deleteTitle": "Ismétlődő esemény törlése",
       "editTitle": "Ismétlődő esemény szerkesztése",
       "justThisDate": "Csak ez a dátum",
       "thisAndFollowing": "Ez és az összes következő dátum"
-    },
-    "registerForEvent": "Regisztráció erre az eseményre"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "A link lehet Google Drive, tárolt lecke PDF stb.",
     "addedLinks": "Hozzáadott linkek",
     "confirmDelete": "Biztosan törölni szeretnéd a(z) '{}' elemet?",
-    "contact": "Kapcsolat",
-    "contactGroupLeader": "Csoportvezető elérése:",
     "deleteFileLabel": "{} fájl törlése",
     "deleteLinkLabel": "{} link törlése",
-    "emailLabel": "E-mail címed",
     "files": "Fájlok",
-    "firstNameLabel": "Keresztneved",
-    "lastNameLabel": "Vezetékneved",
     "linkText": "Link szövege",
     "linkTextLabel": "Link megjelenítendő szövege",
     "linkUrl": "Link URL",
     "linkUrlLabel": "Link URL-je",
-    "messageLabel": "Üzeneted a csoportvezetőnek",
-    "messageSent": "Az üzeneted elküldve!",
     "noDescription": "Nincs leírás megadva.",
     "noGroups": "Nem található csoport",
-    "phoneLabel": "Telefonszámod",
     "storageInfo": "100 MB tárhely áll ingyenesen rendelkezésre PDF-ek és más gyakran használt dokumentumok tárolására. Javasoljuk a Google Drive vagy Dropbox használatát, ha további tárhelyre van szükség.",
-    "submit": "Küldés",
-    "submitLabel": "Üzenet küldése a csoportvezetőnek",
     "upload": "Feltöltés",
     "uploadedFiles": "Feltöltött fájlok",
     "usedSpace": "Használt tárhely: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Felhasználói menü"
   },
   "iconPicker": {
-    "iconsAvailable": "Elérhető ikonok",
-    "matchingResults": "Egyező találatok",
-    "searchAriaLabel": "ikonok keresése",
     "selectIcon": "{} ikon kiválasztása"
-  },
-  "loadingPage": {
-    "logoAlt": "logó"
   },
   "login": {
     "login": "Bejelentkezés",
@@ -176,6 +153,7 @@
       "explore": "Felfedezheti",
       "group": "Csoport",
       "home": "Otthon",
+      "lightMode": "Világos mód",
       "logout": "Kijelentkezés",
       "member": "Tag",
       "messages": "Üzenetek",
@@ -193,6 +171,7 @@
       "profile": "Profil",
       "signIn": "Bejelentkezés",
       "switchToDark": "Váltás sötét módra",
+      "switchToLight": "Váltás világos módra",
       "unknown": "Ismeretlen",
       "untitledSermon": "Cím nélküli prédikáció",
       "verseOfTheDay": "A nap verse",
@@ -247,6 +226,7 @@
       "emailAddress": "E-mail cím",
       "full": "Megtelt",
       "general": "Általános",
+      "groupActionFailed": "Hiba történt. Kérjük, próbálja újra.",
       "groupNotFound": "Csoport nem található",
       "groupNotFoundDescription": "Ez a csoport nem található, vagy nincs jogosultságod a megtekintéséhez.",
       "householdMember": "Háztartástag",
@@ -261,6 +241,7 @@
       "memberSingular": "tag",
       "members": "Tagok ({})",
       "membersLowercase": "tagok",
+      "membersPrivate": "A tagokat csak a csoport tagjai láthatják.",
       "membersTab": "Tagok",
       "message": "Üzenet",
       "messageActions": "Üzenetműveletek",
@@ -301,6 +282,8 @@
       "remove": "Eltávolítás",
       "removeSignup": "Feliratkozás eltávolítása?",
       "removing": "Eltávolítás...",
+      "requestPending": "Kérelem függőben",
+      "requestPendingNote": "A csatlakozási kérelmét elküldtük. Egy csoportvezető hamarosan elbírálja.",
       "retry": "Újra",
       "send": "Küldés",
       "sendEmail": "E-mail küldése",
@@ -405,6 +388,7 @@
       "groupChat": "Csoportos csevegés",
       "groupChatTitle": "{} {}",
       "guest": "(Vendég)",
+      "invalidUrl": "Adjon meg egy http:// vagy https:// kezdetű webcímet",
       "leadersCanPost": "A vezetők itt tehetnek közzé hirdetményeket.",
       "linkFallback": "Link",
       "linkText": "Link szövege",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Nem sikerült menteni az emlékeztetőket.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Mentés",
       "saveAttendance": "Jelenlét mentése",
+      "saveChanges": "Változtatások mentése",
+      "saving": "Mentés...",
       "search": "Keresés",
       "searchForPerson": "Személy keresése",
       "selectAll": "Összes",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Függőben lévő változtatások",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Tekintse át a változtatásokat, mielőtt jóváhagyásra küldi őket.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Küldés jóváhagyásra",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Nap igéje"
     },
     "screens": {
+      "adjustSearch": "Próbáljon meg egy másik nevet vagy írásmódot.",
       "alreadyCheckedIn": "Már bejelentkezett",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "A változtatásokat jóváhagyásra elküldtük.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Értesítés törlése",
       "detectingDevice": "Eszköz észlelése…",
+      "directoryMembersBody": "A gyülekezeti névjegyzék csak a tagok számára érhető el.",
+      "directorySignInBody": "Jelentkezzen be a gyülekezeti névjegyzék böngészéséhez.",
       "displayNameUpdated": "A megjelenítendő név frissítve.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Jelentkezzen be, hogy lássa a csoportjait, és újakhoz csatlakozzon.",
+      "groupsSignInTitle": "Jelentkezzen be a csoportjai megtekintéséhez",
       "keep": "Megtartás",
       "lastGift": "Last Gift",
       "lastNameRegister": "Vezetéknév",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Nincs elérhető csoport",
+      "noGroupsBody": "Még nem tagja egyetlen csoportnak sem. Böngéssze a gyülekezete csoportjait, és találjon egyet, amelyhez csatlakozhat.",
       "noGroupsMessage": "Ehhez az istentisztelethez nincs beállított csoport.",
+      "noGroupsTitle": "Még nincsenek csoportok",
       "noHouseholdMembers": "Nem találhatók háztartási tagok",
       "noHouseholdMessage": "Győződjön meg róla, hogy be van jelentkezve, és vannak regisztrált háztartási tagjai.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Mentés",
       "scanWithPhone": "Beolvasás telefon kamerájával",
+      "searchDirectoryBody": "Keressen rá valakire név szerint az elérhetőségei megtekintéséhez.",
       "searchForMessage": "Keress egy személyt üzenetküldéshez",
       "searchMembers": "Tagok keresése",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Összesen idén • {} adomány",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Nem sikerült elküldeni a változtatásokat.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Jelentkezz szolgálatra",
       "votd": "Mai ige"
     },
+    "votd": {
+      "copied": "Vágólapra másolva",
+      "share": "Megosztás",
+      "shareImage": "Kép megosztása",
+      "unableToShare": "A megosztás nem sikerült"
+    },
     "yesterday": "tegnap"
-  },
-  "notes": {
-    "comment": "Megjegyzés",
-    "comments": "Megjegyzések",
-    "list": {
-      "loadMore": "Több betöltése",
-      "loading": "Betöltés...",
-      "showAll": "Összes megjelenítése",
-      "typeMessage": "Írj egy üzenetet...",
-      "userAlt": "felhasználó"
-    },
-    "startConversation": "Beszélgetés indítása",
-    "validate": {
-      "content": "Tartalom"
-    },
-    "viewAll": "Összes megtekintése"
   },
   "pageSlug": {
     "achInstructions": "ACH fizetési útmutató",
@@ -971,6 +962,7 @@
     "donate": "Adományozás",
     "formClosedOn": "Ez az űrlap lezárult ekkor: {}",
     "formNotAvailableUntil": "Ez az űrlap {} időpontig nem érhető el",
+    "formNotFound": "Ezt az űrlapot nem sikerült betölteni.",
     "formSubmitted": "Az űrlapod sikeresen elküldve.",
     "liveStream": "Élő közvetítés",
     "loginToManageDonations": "Kérjük, jelentkezz be az adományok kezeléséhez",
@@ -987,43 +979,6 @@
     "firstName": "Keresztnév",
     "lastName": "Vezetéknév",
     "name": "Név"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Befejező dátum",
-      "endRequired": "A befejező dátum kötelező.",
-      "startBeforeEnd": "A kezdő dátumnak meg kell előznie a befejező dátumot.",
-      "startDate": "Kezdő dátum",
-      "startRequired": "A kezdő dátum kötelező."
-    },
-    "blockoutDates": {
-      "none": "Nincsenek letiltott dátumok.",
-      "title": "Letiltott dátumok"
-    },
-    "position": {
-      "accept": "Elfogadás",
-      "accepted": "Elfogadva",
-      "decline": "Elutasítás",
-      "declined": "Elutasítva",
-      "headerPrefix": "Pozíció",
-      "neededTimes": "Szükséges időpontok",
-      "status": "Állapot",
-      "unconfirmed": "Megerősítetlen"
-    },
-    "servingTimes": {
-      "plan": "Terv",
-      "role": "Szerep",
-      "serviceDate": "Alkalom dátuma",
-      "title": "Szolgálati időpontok"
-    },
-    "team": {
-      "avatar": "profilkép"
-    },
-    "upcomingDates": {
-      "event": "Esemény",
-      "startTime": "Kezdési idő",
-      "title": "Közelgő dátumok"
-    }
   },
   "register": {
     "metaEventRegistration": "Esemény regisztráció",

@@ -15,17 +15,15 @@
     "post": "نشر"
   },
   "cascadingMenus": {
+    "collapseMenu": "طي القائمة {}",
+    "collapseSubmenu": "طي القائمة الفرعية {}",
+    "expandMenu": "توسيع القائمة {}",
     "expandSubmenu": "توسيع القائمة الفرعية {}",
     "navigateTo": "الانتقال إلى {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "اختر مجموعة لـ {}",
-      "generalGroups": "المجموعات العامة",
-      "noGroup": "لا توجد مجموعة",
-      "noGroupsAvailable": "لا توجد مجموعات متاحة",
-      "noGroupsConfigured": "لا توجد مجموعات مُعدّة لهذه الخدمة",
-      "selectGroup": "اختر المجموعة"
+      "chooseGroupFor": "اختر مجموعة لـ {}"
     },
     "guestRegister": {
       "addFamilyMember": "إضافة فرد من العائلة",
@@ -49,10 +47,8 @@
     "cancel": "إلغاء",
     "close": "إغلاق",
     "date": "التاريخ",
-    "edit": "تعديل",
     "pleaseWait": "يرجى الانتظار",
     "save": "حفظ",
-    "search": "بحث",
     "update": "تحديث"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "تم إرسال نموذجك بنجاح."
   },
   "eventCalendar": {
-    "discussion": "نقاش",
-    "editEvent": "تعديل الحدث",
     "recurring": {
       "allDates": "جميع التواريخ",
       "deleteTitle": "حذف الحدث المتكرر",
       "editTitle": "تعديل الحدث المتكرر",
       "justThisDate": "هذا التاريخ فقط",
       "thisAndFollowing": "هذا التاريخ وجميع التواريخ التالية"
-    },
-    "registerForEvent": "سجّل في هذا الحدث"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "يمكن أن يكون الرابط لـ Google Drive أو ملف PDF لدرس مستضاف، إلخ.",
     "addedLinks": "الروابط المُضافة",
     "confirmDelete": "هل أنت متأكد أنك تريد حذف '{}'؟",
-    "contact": "تواصل",
-    "contactGroupLeader": "تواصل مع قائد المجموعة:",
     "deleteFileLabel": "حذف الملف {}",
     "deleteLinkLabel": "حذف الرابط {}",
-    "emailLabel": "عنوان بريدك الإلكتروني",
     "files": "الملفات",
-    "firstNameLabel": "اسمك الأول",
-    "lastNameLabel": "اسم عائلتك",
     "linkText": "نص الرابط",
     "linkTextLabel": "نص عرض الرابط",
     "linkUrl": "عنوان الرابط",
     "linkUrlLabel": "عنوان URL للرابط",
-    "messageLabel": "رسالتك إلى قائد المجموعة",
-    "messageSent": "تم إرسال رسالتك!",
     "noDescription": "لم يتم تقديم وصف.",
     "noGroups": "لم يتم العثور على مجموعات",
-    "phoneLabel": "رقم هاتفك",
     "storageInfo": "تتوفر مساحة تخزين بحجم 100 ميجابايت مجانًا لتخزين ملفات PDF والمستندات الأخرى الشائعة. نقترح استخدام Google Drive أو Dropbox لتخزين الملفات إذا كنت بحاجة إلى مساحة إضافية.",
-    "submit": "إرسال",
-    "submitLabel": "إرسال رسالة إلى قائد المجموعة",
     "upload": "رفع",
     "uploadedFiles": "الملفات المرفوعة",
     "usedSpace": "المساحة المستخدمة: {} / 100 ميجابايت",
@@ -147,13 +130,7 @@
     "userMenu": "قائمة المستخدم"
   },
   "iconPicker": {
-    "iconsAvailable": "الأيقونات المتاحة",
-    "matchingResults": "النتائج المطابقة",
-    "searchAriaLabel": "البحث في الأيقونات",
     "selectIcon": "اختر أيقونة {}"
-  },
-  "loadingPage": {
-    "logoAlt": "الشعار"
   },
   "login": {
     "login": "تسجيل الدخول",
@@ -176,6 +153,7 @@
       "explore": "استكشف",
       "group": "مجموعة",
       "home": "الصفحة الرئيسية",
+      "lightMode": "الوضع الفاتح",
       "logout": "تسجيل الخروج",
       "member": "عضو",
       "messages": "الرسائل",
@@ -193,6 +171,7 @@
       "profile": "الملف الشخصي",
       "signIn": "تسجيل الدخول",
       "switchToDark": "التبديل إلى الوضع الداكن",
+      "switchToLight": "التبديل إلى الوضع الفاتح",
       "unknown": "غير معروف",
       "untitledSermon": "عظة بدون عنوان",
       "verseOfTheDay": "آية اليوم",
@@ -247,6 +226,7 @@
       "emailAddress": "عنوان البريد الإلكتروني",
       "full": "مكتمل",
       "general": "عام",
+      "groupActionFailed": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
       "groupNotFound": "المجموعة غير موجودة",
       "groupNotFoundDescription": "تعذّر العثور على هذه المجموعة أو ليس لديك صلاحية لعرضها.",
       "householdMember": "فرد الأسرة",
@@ -261,6 +241,7 @@
       "memberSingular": "عضو",
       "members": "الأعضاء ({})",
       "membersLowercase": "أعضاء",
+      "membersPrivate": "الأعضاء مرئيون فقط للأشخاص في هذه المجموعة.",
       "membersTab": "الأعضاء",
       "message": "رسالة",
       "messageActions": "إجراءات الرسالة",
@@ -301,6 +282,8 @@
       "remove": "إزالة",
       "removeSignup": "إزالة التسجيل؟",
       "removing": "جارٍ الإزالة...",
+      "requestPending": "الطلب قيد الانتظار",
+      "requestPendingNote": "تم إرسال طلب الانضمام الخاص بك. سيقوم أحد قادة المجموعة بمراجعته.",
       "retry": "إعادة المحاولة",
       "send": "إرسال",
       "sendEmail": "إرسال بريد إلكتروني",
@@ -405,6 +388,7 @@
       "groupChat": "محادثة المجموعة",
       "groupChatTitle": "{} {}",
       "guest": "(ضيف)",
+      "invalidUrl": "أدخل عنوان ويب يبدأ بـ http:// أو https://",
       "leadersCanPost": "يمكن للقادة نشر الإعلانات هنا.",
       "linkFallback": "رابط",
       "linkText": "نص الرابط",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "تعذر حفظ التذكيرات.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "حفظ",
       "saveAttendance": "حفظ الحضور",
+      "saveChanges": "حفظ التغييرات",
+      "saving": "جارٍ الحفظ...",
       "search": "بحث",
       "searchForPerson": "ابحث عن شخص",
       "selectAll": "الكل",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "تغييرات قيد الانتظار",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "راجع تغييراتك قبل إرسالها للموافقة.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "إرسال للموافقة",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "آية اليوم"
     },
     "screens": {
+      "adjustSearch": "جرّب اسمًا أو تهجئة مختلفة.",
       "alreadyCheckedIn": "تم تسجيل الحضور بالفعل",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "تم إرسال تغييراتك للموافقة.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "حذف الإشعار",
       "detectingDevice": "جارٍ اكتشاف جهازك…",
+      "directoryMembersBody": "دليل الكنيسة متاح للأعضاء فقط.",
+      "directorySignInBody": "سجّل الدخول لتصفح دليل الكنيسة.",
       "displayNameUpdated": "تم تحديث الاسم المعروض.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "سجّل الدخول لرؤية المجموعات التي تنتمي إليها والانضمام إلى مجموعات جديدة.",
+      "groupsSignInTitle": "سجّل الدخول لرؤية مجموعاتك",
       "keep": "احتفظ",
       "lastGift": "Last Gift",
       "lastNameRegister": "اسم العائلة",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "لا توجد مجموعات متاحة",
+      "noGroupsBody": "لست في أي مجموعة بعد. تصفح المجموعات التي تقدمها كنيستك للعثور على مجموعة تنضم إليها.",
       "noGroupsMessage": "لا توجد مجموعات مُعدّة لهذه الخدمة.",
+      "noGroupsTitle": "لا توجد مجموعات بعد",
       "noHouseholdMembers": "لم يتم العثور على أفراد الأسرة",
       "noHouseholdMessage": "يرجى التأكد من تسجيل دخولك ووجود أفراد أسرة مسجّلين.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "حفظ",
       "scanWithPhone": "امسح بكاميرا هاتفك",
+      "searchDirectoryBody": "ابحث عن شخص بالاسم لرؤية بيانات الاتصال الخاصة به.",
       "searchForMessage": "ابحث عن شخص لمراسلته",
       "searchMembers": "البحث عن الأعضاء",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "إجمالي هذا العام • {} تبرع",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "تعذر إرسال التغييرات.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "سجّل للخدمة",
       "votd": "آية اليوم"
     },
+    "votd": {
+      "copied": "تم النسخ إلى الحافظة",
+      "share": "مشاركة",
+      "shareImage": "مشاركة الصورة",
+      "unableToShare": "تعذرت المشاركة"
+    },
     "yesterday": "أمس"
-  },
-  "notes": {
-    "comment": "تعليق",
-    "comments": "التعليقات",
-    "list": {
-      "loadMore": "تحميل المزيد",
-      "loading": "جارٍ التحميل...",
-      "showAll": "عرض الكل",
-      "typeMessage": "اكتب رسالة...",
-      "userAlt": "المستخدم"
-    },
-    "startConversation": "ابدأ محادثة",
-    "validate": {
-      "content": "المحتوى"
-    },
-    "viewAll": "عرض الكل"
   },
   "pageSlug": {
     "achInstructions": "تعليمات الدفع عبر ACH",
@@ -971,6 +962,7 @@
     "donate": "تبرع",
     "formClosedOn": "أُغلق هذا النموذج في {}",
     "formNotAvailableUntil": "هذا النموذج غير متاح حتى {}",
+    "formNotFound": "تعذر تحميل هذا النموذج.",
     "formSubmitted": "تم إرسال نموذجك بنجاح.",
     "liveStream": "البث المباشر",
     "loginToManageDonations": "يرجى تسجيل الدخول لإدارة التبرعات",
@@ -987,43 +979,6 @@
     "firstName": "الاسم الأول",
     "lastName": "اسم العائلة",
     "name": "الاسم"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "تاريخ الانتهاء",
-      "endRequired": "تاريخ الانتهاء مطلوب.",
-      "startBeforeEnd": "يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء.",
-      "startDate": "تاريخ البدء",
-      "startRequired": "تاريخ البدء مطلوب."
-    },
-    "blockoutDates": {
-      "none": "لا توجد تواريخ حجب.",
-      "title": "تواريخ الحجب"
-    },
-    "position": {
-      "accept": "قبول",
-      "accepted": "مقبول",
-      "decline": "رفض",
-      "declined": "مرفوض",
-      "headerPrefix": "المنصب",
-      "neededTimes": "الأوقات المطلوبة",
-      "status": "الحالة",
-      "unconfirmed": "غير مؤكد"
-    },
-    "servingTimes": {
-      "plan": "الخطة",
-      "role": "الدور",
-      "serviceDate": "تاريخ الخدمة",
-      "title": "أوقات الخدمة"
-    },
-    "team": {
-      "avatar": "الصورة الرمزية"
-    },
-    "upcomingDates": {
-      "event": "الحدث",
-      "startTime": "وقت البدء",
-      "title": "التواريخ القادمة"
-    }
   },
   "register": {
     "metaEventRegistration": "تسجيل الحدث",

@@ -15,17 +15,15 @@
     "post": "पोस्ट करें"
   },
   "cascadingMenus": {
+    "collapseMenu": "{} मेनू संकुचित करें",
+    "collapseSubmenu": "{} सबमेनू संकुचित करें",
+    "expandMenu": "{} मेनू का विस्तार करें",
     "expandSubmenu": "{} सबमेनू का विस्तार करें",
     "navigateTo": "{} पर जाएं"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "{} के लिए एक समूह चुनें",
-      "generalGroups": "सामान्य समूह",
-      "noGroup": "कोई समूह नहीं",
-      "noGroupsAvailable": "कोई समूह उपलब्ध नहीं",
-      "noGroupsConfigured": "इस सेवा के लिए कोई समूह कॉन्फ़िगर नहीं किया गया है",
-      "selectGroup": "समूह चुनें"
+      "chooseGroupFor": "{} के लिए एक समूह चुनें"
     },
     "guestRegister": {
       "addFamilyMember": "परिवार के सदस्य जोड़ें",
@@ -49,10 +47,8 @@
     "cancel": "रद्द करें",
     "close": "बंद करें",
     "date": "तारीख",
-    "edit": "संपादित करें",
     "pleaseWait": "कृपया प्रतीक्षा करें",
     "save": "सहेजें",
-    "search": "खोजें",
     "update": "अपडेट करें"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "आपका फ़ॉर्म सफलतापूर्वक जमा कर दिया गया है।"
   },
   "eventCalendar": {
-    "discussion": "चर्चा",
-    "editEvent": "कार्यक्रम संपादित करें",
     "recurring": {
       "allDates": "सभी तिथियाँ",
       "deleteTitle": "आवर्ती कार्यक्रम हटाएं",
       "editTitle": "आवर्ती कार्यक्रम संपादित करें",
       "justThisDate": "केवल यह तिथि",
       "thisAndFollowing": "यह और सभी अगली तिथियाँ"
-    },
-    "registerForEvent": "इस कार्यक्रम के लिए पंजीकरण करें"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "लिंक Google Drive, होस्टेड पाठ PDF, इत्यादि का हो सकता है।",
     "addedLinks": "जोड़े गए लिंक",
     "confirmDelete": "क्या आप वाकई '{}' को हटाना चाहते हैं?",
-    "contact": "संपर्क",
-    "contactGroupLeader": "समूह नेता से संपर्क करें:",
     "deleteFileLabel": "फ़ाइल {} हटाएं",
     "deleteLinkLabel": "लिंक {} हटाएं",
-    "emailLabel": "आपका ईमेल पता",
     "files": "फ़ाइलें",
-    "firstNameLabel": "आपका पहला नाम",
-    "lastNameLabel": "आपका अंतिम नाम",
     "linkText": "लिंक पाठ",
     "linkTextLabel": "लिंक प्रदर्शन पाठ",
     "linkUrl": "लिंक URL",
     "linkUrlLabel": "लिंक URL",
-    "messageLabel": "समूह नेता को आपका संदेश",
-    "messageSent": "आपका संदेश भेज दिया गया है!",
     "noDescription": "कोई विवरण प्रदान नहीं किया गया।",
     "noGroups": "कोई समूह नहीं मिला",
-    "phoneLabel": "आपका फ़ोन नंबर",
     "storageInfo": "PDFs और अन्य आमतौर पर आवश्यक दस्तावेज़ों को संग्रहित करने के लिए 100 MB संग्रहण स्थान मुफ़्त प्रदान किया जाता है। यदि अतिरिक्त स्थान की आवश्यकता हो, तो हम फ़ाइलों को संग्रहित करने के लिए Google Drive या Dropbox का उपयोग करने का सुझाव देते हैं।",
-    "submit": "जमा करें",
-    "submitLabel": "समूह नेता को संदेश भेजें",
     "upload": "अपलोड करें",
     "uploadedFiles": "अपलोड की गई फ़ाइलें",
     "usedSpace": "उपयोग किया गया स्थान: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "उपयोगकर्ता मेनू"
   },
   "iconPicker": {
-    "iconsAvailable": "उपलब्ध आइकन",
-    "matchingResults": "मिलान परिणाम",
-    "searchAriaLabel": "आइकन खोजें",
     "selectIcon": "{} आइकन चुनें"
-  },
-  "loadingPage": {
-    "logoAlt": "लोगो"
   },
   "login": {
     "login": "लॉगिन",
@@ -176,6 +153,7 @@
       "explore": "अन्वेषण करें",
       "group": "समूह",
       "home": "होम",
+      "lightMode": "लाइट मोड",
       "logout": "लॉगआउट",
       "member": "सदस्य",
       "messages": "संदेश",
@@ -193,6 +171,7 @@
       "profile": "प्रोफ़ाइल",
       "signIn": "साइन इन",
       "switchToDark": "डार्क मोड पर स्विच करें",
+      "switchToLight": "लाइट मोड पर स्विच करें",
       "unknown": "अज्ञात",
       "untitledSermon": "बिना शीर्षक उपदेश",
       "verseOfTheDay": "आज का पद",
@@ -247,6 +226,7 @@
       "emailAddress": "ईमेल पता",
       "full": "पूर्ण",
       "general": "सामान्य",
+      "groupActionFailed": "कुछ गलत हो गया। कृपया फिर से प्रयास करें।",
       "groupNotFound": "समूह नहीं मिला",
       "groupNotFoundDescription": "यह समूह नहीं मिल सका या आपके पास इसे देखने की अनुमति नहीं है।",
       "householdMember": "परिवार सदस्य",
@@ -261,6 +241,7 @@
       "memberSingular": "सदस्य",
       "members": "सदस्य ({})",
       "membersLowercase": "सदस्य",
+      "membersPrivate": "सदस्य केवल इस समूह के लोगों को दिखाई देते हैं।",
       "membersTab": "सदस्य",
       "message": "संदेश",
       "messageActions": "संदेश क्रियाएं",
@@ -301,6 +282,8 @@
       "remove": "हटाएं",
       "removeSignup": "साइन अप हटाएं?",
       "removing": "हटाया जा रहा है...",
+      "requestPending": "अनुरोध लंबित",
+      "requestPendingNote": "शामिल होने का आपका अनुरोध भेज दिया गया है। एक समूह लीडर इसकी समीक्षा करेगा।",
       "retry": "पुनः प्रयास करें",
       "send": "भेजें",
       "sendEmail": "ईमेल भेजें",
@@ -405,6 +388,7 @@
       "groupChat": "समूह चैट",
       "groupChatTitle": "{} {}",
       "guest": "(अतिथि)",
+      "invalidUrl": "http:// या https:// से शुरू होने वाला वेब पता दर्ज करें",
       "leadersCanPost": "नेता यहाँ घोषणाएँ पोस्ट कर सकते हैं।",
       "linkFallback": "लिंक",
       "linkText": "लिंक पाठ",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "रिमाइंडर सहेजे नहीं जा सके।",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "सहेजें",
       "saveAttendance": "उपस्थिति सहेजें",
+      "saveChanges": "परिवर्तन सहेजें",
+      "saving": "सहेजा जा रहा है...",
       "search": "खोजें",
       "searchForPerson": "व्यक्ति खोजें",
       "selectAll": "सभी",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "लंबित परिवर्तन",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "अनुमोदन के लिए भेजने से पहले अपने परिवर्तनों की समीक्षा करें।",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "अनुमोदन के लिए भेजें",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "आज का वचन"
     },
     "screens": {
+      "adjustSearch": "कोई दूसरा नाम या वर्तनी आज़माएँ।",
       "alreadyCheckedIn": "पहले से चेक-इन है",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "आपके परिवर्तन अनुमोदन के लिए भेज दिए गए हैं।",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "सूचना हटाएं",
       "detectingDevice": "आपका डिवाइस पहचाना जा रहा है…",
+      "directoryMembersBody": "चर्च निर्देशिका केवल सदस्यों के साथ साझा की जाती है।",
+      "directorySignInBody": "चर्च निर्देशिका देखने के लिए साइन इन करें।",
       "displayNameUpdated": "प्रदर्शित नाम अपडेट किया गया।",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "जिन समूहों से आप जुड़े हैं उन्हें देखने और नए समूहों में शामिल होने के लिए साइन इन करें।",
+      "groupsSignInTitle": "अपने समूह देखने के लिए साइन इन करें",
       "keep": "रखें",
       "lastGift": "Last Gift",
       "lastNameRegister": "अंतिम नाम",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "कोई समूह उपलब्ध नहीं",
+      "noGroupsBody": "आप अभी किसी भी समूह में नहीं हैं। शामिल होने के लिए कोई समूह खोजने हेतु अपने चर्च के समूह देखें।",
       "noGroupsMessage": "इस सेवा के लिए कोई समूह कॉन्फ़िगर नहीं किया गया है।",
+      "noGroupsTitle": "अभी कोई समूह नहीं",
       "noHouseholdMembers": "कोई परिवार सदस्य नहीं मिला",
       "noHouseholdMessage": "कृपया सुनिश्चित करें कि आप साइन इन हैं और आपके परिवार के सदस्य पंजीकृत हैं।",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "सहेजें",
       "scanWithPhone": "अपने फ़ोन कैमरा से स्कैन करें",
+      "searchDirectoryBody": "संपर्क विवरण देखने के लिए किसी व्यक्ति को नाम से खोजें।",
       "searchForMessage": "संदेश भेजने के लिए व्यक्ति खोजें",
       "searchMembers": "सदस्य खोजें",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "इस वर्ष कुल • {} दान",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "परिवर्तन भेजे नहीं जा सके।",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "सेवा के लिए साइन अप करें",
       "votd": "आज का वचन"
     },
+    "votd": {
+      "copied": "क्लिपबोर्ड पर कॉपी किया गया",
+      "share": "साझा करें",
+      "shareImage": "छवि साझा करें",
+      "unableToShare": "साझा नहीं किया जा सका"
+    },
     "yesterday": "कल"
-  },
-  "notes": {
-    "comment": "टिप्पणी",
-    "comments": "टिप्पणियां",
-    "list": {
-      "loadMore": "और लोड करें",
-      "loading": "लोड हो रहा है...",
-      "showAll": "सभी दिखाएं",
-      "typeMessage": "संदेश लिखें...",
-      "userAlt": "उपयोगकर्ता"
-    },
-    "startConversation": "बातचीत शुरू करें",
-    "validate": {
-      "content": "सामग्री"
-    },
-    "viewAll": "सभी देखें"
   },
   "pageSlug": {
     "achInstructions": "ACH भुगतान के लिए निर्देश",
@@ -971,6 +962,7 @@
     "donate": "दान करें",
     "formClosedOn": "यह फ़ॉर्म {} को बंद हो गया",
     "formNotAvailableUntil": "यह फ़ॉर्म {} तक उपलब्ध नहीं है",
+    "formNotFound": "यह फ़ॉर्म लोड नहीं हो सका।",
     "formSubmitted": "आपका फ़ॉर्म सफलतापूर्वक जमा कर दिया गया है।",
     "liveStream": "लाइव स्ट्रीम",
     "loginToManageDonations": "दान प्रबंधित करने के लिए कृपया लॉगिन करें",
@@ -987,43 +979,6 @@
     "firstName": "प्रथम नाम",
     "lastName": "उपनाम",
     "name": "नाम"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "समाप्ति तिथि",
-      "endRequired": "समाप्ति तिथि आवश्यक है।",
-      "startBeforeEnd": "प्रारंभ तिथि समाप्ति तिथि से पहले होनी चाहिए।",
-      "startDate": "प्रारंभ तिथि",
-      "startRequired": "प्रारंभ तिथि आवश्यक है।"
-    },
-    "blockoutDates": {
-      "none": "कोई ब्लॉकआउट तिथियाँ नहीं।",
-      "title": "ब्लॉकआउट तिथियाँ"
-    },
-    "position": {
-      "accept": "स्वीकार करें",
-      "accepted": "स्वीकृत",
-      "decline": "अस्वीकार करें",
-      "declined": "अस्वीकृत",
-      "headerPrefix": "पद",
-      "neededTimes": "आवश्यक समय",
-      "status": "स्थिति",
-      "unconfirmed": "अपुष्ट"
-    },
-    "servingTimes": {
-      "plan": "योजना",
-      "role": "भूमिका",
-      "serviceDate": "सेवा तिथि",
-      "title": "सेवा समय"
-    },
-    "team": {
-      "avatar": "अवतार"
-    },
-    "upcomingDates": {
-      "event": "कार्यक्रम",
-      "startTime": "प्रारंभ समय",
-      "title": "आगामी तिथियाँ"
-    }
   },
   "register": {
     "metaEventRegistration": "कार्यक्रम पंजीकरण",

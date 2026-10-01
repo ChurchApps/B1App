@@ -15,17 +15,15 @@
     "post": "Опублікувати"
   },
   "cascadingMenus": {
+    "collapseMenu": "Згорнути меню {}",
+    "collapseSubmenu": "Згорнути підменю {}",
+    "expandMenu": "Розгорнути меню {}",
     "expandSubmenu": "Розгорнути підменю {}",
     "navigateTo": "Перейти до {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Оберіть групу для {}",
-      "generalGroups": "Загальні групи",
-      "noGroup": "Без групи",
-      "noGroupsAvailable": "Немає доступних груп",
-      "noGroupsConfigured": "Для цього служіння не налаштовано груп",
-      "selectGroup": "Обрати групу"
+      "chooseGroupFor": "Оберіть групу для {}"
     },
     "guestRegister": {
       "addFamilyMember": "Додати члена сім'ї",
@@ -49,10 +47,8 @@
     "cancel": "Скасувати",
     "close": "Закрити",
     "date": "Дата",
-    "edit": "Редагувати",
     "pleaseWait": "Будь ласка, зачекайте",
     "save": "Зберегти",
-    "search": "Пошук",
     "update": "Оновити"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Вашу форму успішно надіслано."
   },
   "eventCalendar": {
-    "discussion": "Обговорення",
-    "editEvent": "Редагувати подію",
     "recurring": {
       "allDates": "Усі дати",
       "deleteTitle": "Видалити повторювану подію",
       "editTitle": "Редагувати повторювану подію",
       "justThisDate": "Лише цю дату",
       "thisAndFollowing": "Цю та всі наступні дати"
-    },
-    "registerForEvent": "Зареєструватися на цю подію"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Це може бути посилання на Google Drive, розміщений PDF уроку тощо.",
     "addedLinks": "Додані посилання",
     "confirmDelete": "Ви впевнені, що бажаєте видалити '{}'?",
-    "contact": "Контакт",
-    "contactGroupLeader": "Зв'язатися з лідером групи:",
     "deleteFileLabel": "Видалити файл {}",
     "deleteLinkLabel": "Видалити посилання {}",
-    "emailLabel": "Ваша адреса електронної пошти",
     "files": "Файли",
-    "firstNameLabel": "Ваше ім'я",
-    "lastNameLabel": "Ваше прізвище",
     "linkText": "Текст посилання",
     "linkTextLabel": "Текст для відображення посилання",
     "linkUrl": "URL посилання",
     "linkUrlLabel": "URL посилання",
-    "messageLabel": "Ваше повідомлення лідеру групи",
-    "messageSent": "Ваше повідомлення надіслано!",
     "noDescription": "Опис не надано.",
     "noGroups": "Груп не знайдено",
-    "phoneLabel": "Ваш номер телефону",
     "storageInfo": "Безкоштовно надається 100 МБ дискового простору для зберігання PDF та інших документів. Якщо потрібно більше місця, рекомендуємо використовувати Google Drive або Dropbox.",
-    "submit": "Надіслати",
-    "submitLabel": "Надіслати повідомлення лідеру групи",
     "upload": "Завантажити",
     "uploadedFiles": "Завантажені файли",
     "usedSpace": "Використано: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Меню користувача"
   },
   "iconPicker": {
-    "iconsAvailable": "Доступні іконки",
-    "matchingResults": "Відповідні результати",
-    "searchAriaLabel": "пошук іконок",
     "selectIcon": "Обрати іконку {}"
-  },
-  "loadingPage": {
-    "logoAlt": "логотип"
   },
   "login": {
     "login": "Увійти",
@@ -176,6 +153,7 @@
       "explore": "Дослідити",
       "group": "Група",
       "home": "Дім",
+      "lightMode": "Світлий режим",
       "logout": "Вийти",
       "member": "Учасник",
       "messages": "Повідомлення",
@@ -193,6 +171,7 @@
       "profile": "Профіль",
       "signIn": "Увійти",
       "switchToDark": "Перемкнути на темний режим",
+      "switchToLight": "Перемкнути на світлий режим",
       "unknown": "Невідомо",
       "untitledSermon": "Проповідь без назви",
       "verseOfTheDay": "Вірш дня",
@@ -247,6 +226,7 @@
       "emailAddress": "Адреса електронної пошти",
       "full": "Заповнено",
       "general": "Загальні",
+      "groupActionFailed": "Щось пішло не так. Будь ласка, спробуйте ще раз.",
       "groupNotFound": "Групу не знайдено",
       "groupNotFoundDescription": "Цю групу не вдалося знайти, або у вас немає прав для її перегляду.",
       "householdMember": "Член сім'ї",
@@ -261,6 +241,7 @@
       "memberSingular": "учасник",
       "members": "Учасники ({})",
       "membersLowercase": "учасників",
+      "membersPrivate": "Учасників бачать лише люди з цієї групи.",
       "membersTab": "Учасники",
       "message": "Повідомлення",
       "messageActions": "Дії з повідомленням",
@@ -301,6 +282,8 @@
       "remove": "Видалити",
       "removeSignup": "Скасувати реєстрацію?",
       "removing": "Видалення...",
+      "requestPending": "Запит на розгляді",
+      "requestPendingNote": "Ваш запит на приєднання надіслано. Керівник групи розгляне його.",
       "retry": "Спробувати ще раз",
       "send": "Надіслати",
       "sendEmail": "Надіслати електронний лист",
@@ -405,6 +388,7 @@
       "groupChat": "Чат групи",
       "groupChatTitle": "{} {}",
       "guest": "(Гість)",
+      "invalidUrl": "Введіть веб-адресу, що починається з http:// або https://",
       "leadersCanPost": "Лідери можуть публікувати оголошення тут.",
       "linkFallback": "Посилання",
       "linkText": "Текст посилання",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Не вдалося зберегти нагадування.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Зберегти",
       "saveAttendance": "Зберегти відвідуваність",
+      "saveChanges": "Зберегти зміни",
+      "saving": "Збереження...",
       "search": "Пошук",
       "searchForPerson": "Шукати особу",
       "selectAll": "Усі",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Зміни на розгляді",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Перегляньте зміни перед надсиланням на затвердження.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Надіслати на затвердження",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Вірш дня"
     },
     "screens": {
+      "adjustSearch": "Спробуйте інше ім'я або написання.",
       "alreadyCheckedIn": "Вже зареєстрований",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Ваші зміни надіслано на затвердження.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Видалити сповіщення",
       "detectingDevice": "Виявлення вашого пристрою…",
+      "directoryMembersBody": "Довідник церкви доступний лише учасникам.",
+      "directorySignInBody": "Увійдіть, щоб переглядати довідник церкви.",
       "displayNameUpdated": "Відображуване ім'я оновлено.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Увійдіть, щоб побачити свої групи та приєднатися до нових.",
+      "groupsSignInTitle": "Увійдіть, щоб побачити свої групи",
       "keep": "Залишити",
       "lastGift": "Last Gift",
       "lastNameRegister": "Прізвище",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Немає доступних груп",
+      "noGroupsBody": "Ви ще не входите до жодної групи. Перегляньте групи вашої церкви, щоб знайти ту, до якої можна приєднатися.",
       "noGroupsMessage": "Для цього служіння не налаштовано жодної групи.",
+      "noGroupsTitle": "Груп поки немає",
       "noHouseholdMembers": "Членів родини не знайдено",
       "noHouseholdMessage": "Переконайтеся, що ви ввійшли в систему та маєте зареєстрованих членів родини.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Зберегти",
       "scanWithPhone": "Скануйте камерою телефону",
+      "searchDirectoryBody": "Знайдіть людину за іменем, щоб побачити її контактні дані.",
       "searchForMessage": "Шукати особу для повідомлення",
       "searchMembers": "Пошук учасників",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Усього цього року • пожертв: {}",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Не вдалося надіслати зміни.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Запишіться на служіння",
       "votd": "Вірш на сьогодні"
     },
+    "votd": {
+      "copied": "Скопійовано в буфер обміну",
+      "share": "Поділитися",
+      "shareImage": "Поділитися зображенням",
+      "unableToShare": "Не вдалося поділитися"
+    },
     "yesterday": "вчора"
-  },
-  "notes": {
-    "comment": "Коментар",
-    "comments": "Коментарі",
-    "list": {
-      "loadMore": "Завантажити ще",
-      "loading": "Завантаження...",
-      "showAll": "Показати все",
-      "typeMessage": "Введіть повідомлення...",
-      "userAlt": "користувач"
-    },
-    "startConversation": "Розпочати розмову",
-    "validate": {
-      "content": "Вміст"
-    },
-    "viewAll": "Переглянути все"
   },
   "pageSlug": {
     "achInstructions": "Інструкції для оплати ACH",
@@ -971,6 +962,7 @@
     "donate": "Пожертвувати",
     "formClosedOn": "Ця форма закрилася {}",
     "formNotAvailableUntil": "Ця форма недоступна до {}",
+    "formNotFound": "Не вдалося завантажити цю форму.",
     "formSubmitted": "Вашу форму успішно надіслано.",
     "liveStream": "Пряма трансляція",
     "loginToManageDonations": "Будь ласка, увійдіть, щоб керувати пожертвами",
@@ -987,43 +979,6 @@
     "firstName": "Ім'я",
     "lastName": "Прізвище",
     "name": "Ім'я"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Дата завершення",
-      "endRequired": "Дата завершення обов'язкова.",
-      "startBeforeEnd": "Дата початку повинна бути раніше дати завершення.",
-      "startDate": "Дата початку",
-      "startRequired": "Дата початку обов'язкова."
-    },
-    "blockoutDates": {
-      "none": "Немає дат блокування.",
-      "title": "Дати блокування"
-    },
-    "position": {
-      "accept": "Прийняти",
-      "accepted": "Прийнято",
-      "decline": "Відхилити",
-      "declined": "Відхилено",
-      "headerPrefix": "Позиція",
-      "neededTimes": "Необхідні часи",
-      "status": "Статус",
-      "unconfirmed": "Не підтверджено"
-    },
-    "servingTimes": {
-      "plan": "План",
-      "role": "Роль",
-      "serviceDate": "Дата служіння",
-      "title": "Час служіння"
-    },
-    "team": {
-      "avatar": "аватар"
-    },
-    "upcomingDates": {
-      "event": "Подія",
-      "startTime": "Час початку",
-      "title": "Майбутні дати"
-    }
   },
   "register": {
     "metaEventRegistration": "Реєстрація на подію",
