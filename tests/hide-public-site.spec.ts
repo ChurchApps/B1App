@@ -43,6 +43,12 @@ test.describe("Disabled public website", () => {
     await expect(page).toHaveURL(/\/login/);
   });
 
+  test("passes the requested page to login as returnUrl", async ({ page }) => {
+    await page.goto("/donate");
+    await expect(page).toHaveURL(/\/login/);
+    expect(new URL(page.url()).searchParams.get("returnUrl")).toBe("/donate");
+  });
+
   for (const path of ["/about", "/donate", "/sermons", "/bible", "/votd", "/stream", "/groups"]) {
     test(`sends ${path} to the login screen`, async ({ page }) => {
       await page.goto(path);
@@ -71,5 +77,24 @@ test.describe("Disabled public website", () => {
     const sitemap = await (await req.get("/sitemap.xml")).text();
     expect(sitemap).toContain("<urlset");
     expect(sitemap).not.toContain("<url>");
+  });
+});
+
+// Uses the signed-in demo member from tests/global-setup.ts, so cookies are kept.
+test.describe("Disabled public website — signed-in member", () => {
+  test.beforeAll(async () => { await setHidePublicSite(true); });
+  test.afterAll(async () => { await setHidePublicSite(false); });
+
+  for (const path of ["/", "/donate", "/groups"]) {
+    test(`opens ${path} without being sent to login`, async ({ page }) => {
+      const res = await page.goto(path);
+      await expect(page).not.toHaveURL(/\/login/);
+      expect(res?.status()).toBeLessThan(400);
+    });
+  }
+
+  test("the login page sends an existing session on to returnUrl", async ({ page }) => {
+    await page.goto("/login?returnUrl=%2Fsermons");
+    await expect(page).toHaveURL(/\/sermons$/, { timeout: 30000 });
   });
 });
