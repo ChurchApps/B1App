@@ -15,17 +15,15 @@
     "post": "Post"
   },
   "cascadingMenus": {
+    "collapseMenu": "Collapse {} menu",
+    "collapseSubmenu": "Collapse {} submenu",
+    "expandMenu": "Expand {} menu",
     "expandSubmenu": "Expand {} submenu",
     "navigateTo": "Navigate to {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Choose a group for {}",
-      "generalGroups": "General Groups",
-      "noGroup": "No Group",
-      "noGroupsAvailable": "No Groups Available",
-      "noGroupsConfigured": "There are no groups configured for this service",
-      "selectGroup": "Select Group"
+      "chooseGroupFor": "Choose a group for {}"
     },
     "guestRegister": {
       "addFamilyMember": "Add Family Member",
@@ -49,10 +47,8 @@
     "cancel": "Cancel",
     "close": "Close",
     "date": "Date",
-    "edit": "Edit",
     "pleaseWait": "Please Wait",
     "save": "Save",
-    "search": "Search",
     "update": "Update"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Your form has been successfully submitted."
   },
   "eventCalendar": {
-    "discussion": "Discussion",
-    "editEvent": "Edit Event",
     "recurring": {
       "allDates": "All dates",
       "deleteTitle": "Delete Recurring Event",
       "editTitle": "Edit Recurring Event",
       "justThisDate": "Just this date",
       "thisAndFollowing": "This and all following dates"
-    },
-    "registerForEvent": "Register for this Event"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Link could be of Google Drive, Hosted Lesson PDF, etc.",
     "addedLinks": "Added Links",
     "confirmDelete": "Are you sure you wish to delete '{}'?",
-    "contact": "Contact",
-    "contactGroupLeader": "Contact Group Leader:",
     "deleteFileLabel": "Delete file {}",
     "deleteLinkLabel": "Delete link {}",
-    "emailLabel": "Your email address",
     "files": "Files",
-    "firstNameLabel": "Your first name",
-    "lastNameLabel": "Your last name",
     "linkText": "Link Text",
     "linkTextLabel": "Link display text",
     "linkUrl": "Link Url",
     "linkUrlLabel": "Link URL",
-    "messageLabel": "Your message to the group leader",
-    "messageSent": "Your message has been sent!",
     "noDescription": "No Description Provided.",
     "noGroups": "No groups found",
-    "phoneLabel": "Your phone number",
     "storageInfo": "100 MB of storage space is provided for free for storing PDFs and other documents commonly needed. A church admin can link Google Drive, Dropbox, OneDrive or an S3 bucket for more space.",
-    "submit": "Submit",
-    "submitLabel": "Send message to group leader",
     "upload": "Upload",
     "uploadedFiles": "Uploaded Files",
     "usedSpace": "Used space: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "User menu"
   },
   "iconPicker": {
-    "iconsAvailable": "Icons Available",
-    "matchingResults": "Matching Results",
-    "searchAriaLabel": "search icons",
     "selectIcon": "Select {} icon"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Login",
@@ -255,8 +232,6 @@
       "householdMember": "Household Member",
       "householdMembers": "Household Members",
       "joinGroup": "Join Group",
-      "requestPending": "Request Pending",
-      "requestPendingNote": "Your request to join has been sent. A group leader will review it.",
       "leader": "Leader",
       "leaveGroup": "Leave Group",
       "leaveGroupBody": "You will lose access to this group's messages, events, and resources.",
@@ -307,6 +282,8 @@
       "remove": "Remove",
       "removeSignup": "Remove signup?",
       "removing": "Removing...",
+      "requestPending": "Request Pending",
+      "requestPendingNote": "Your request to join has been sent. A group leader will review it.",
       "retry": "Retry",
       "send": "Send",
       "sendEmail": "Send email",
@@ -763,6 +740,7 @@
       "votd": "Verse of the Day"
     },
     "screens": {
+      "adjustSearch": "Try a different name or spelling.",
       "alreadyCheckedIn": "Already Checked In",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -797,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Delete notification",
       "detectingDevice": "Detecting your device…",
+      "directoryMembersBody": "The church directory is only shared with members.",
+      "directorySignInBody": "Sign in to browse the church directory.",
       "displayNameUpdated": "Display name updated.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -820,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Sign in to see the groups you belong to and join new ones.",
+      "groupsSignInTitle": "Sign in to see your groups",
       "keep": "Keep",
       "lastGift": "Last Gift",
       "lastNameRegister": "Last name",
@@ -838,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "No Groups Available",
+      "noGroupsBody": "You aren't in any groups yet. Browse the groups your church offers to find one to join.",
       "noGroupsMessage": "There are no groups configured for this service.",
+      "noGroupsTitle": "No groups yet",
       "noHouseholdMembers": "No Household Members Found",
       "noHouseholdMessage": "Please ensure you are signed in and have household members registered.",
       "noMembersFound": "No members found",
@@ -887,6 +871,7 @@
       "retry": "Retry",
       "save": "Save",
       "scanWithPhone": "Scan with your phone camera",
+      "searchDirectoryBody": "Search for someone by name to see their contact details.",
       "searchForMessage": "Search for a person to message",
       "searchMembers": "Search Members",
       "selectGroup": "Select Group",
@@ -971,22 +956,6 @@
     },
     "yesterday": "yesterday"
   },
-  "notes": {
-    "comment": "Comment",
-    "comments": "Comments",
-    "list": {
-      "loadMore": "Load More",
-      "loading": "Loading...",
-      "showAll": "Show All",
-      "typeMessage": "Type a message...",
-      "userAlt": "user"
-    },
-    "startConversation": "Start Conversation",
-    "validate": {
-      "content": "Content"
-    },
-    "viewAll": "View All"
-  },
   "pageSlug": {
     "achInstructions": "Instructions for ACH Payment",
     "bible": "Bible",
@@ -1010,43 +979,6 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "name": "Name"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "End Date",
-      "endRequired": "End date is required.",
-      "startBeforeEnd": "Start date must be before end date.",
-      "startDate": "Start Date",
-      "startRequired": "Start date is required."
-    },
-    "blockoutDates": {
-      "none": "No blockout dates.",
-      "title": "Blockout Dates"
-    },
-    "position": {
-      "accept": "Accept",
-      "accepted": "Accepted",
-      "decline": "Decline",
-      "declined": "Declined",
-      "headerPrefix": "Position",
-      "neededTimes": "Needed Times",
-      "status": "Status",
-      "unconfirmed": "Unconfirmed"
-    },
-    "servingTimes": {
-      "plan": "Plan",
-      "role": "Role",
-      "serviceDate": "Service Date",
-      "title": "Serving Times"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Event",
-      "startTime": "Start Time",
-      "title": "Upcoming Dates"
-    }
   },
   "register": {
     "metaEventRegistration": "Event Registration",

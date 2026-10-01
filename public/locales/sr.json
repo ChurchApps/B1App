@@ -15,17 +15,15 @@
     "post": "Објави"
   },
   "cascadingMenus": {
+    "collapseMenu": "Скупи мени {}",
+    "collapseSubmenu": "Скупи подмени {}",
+    "expandMenu": "Прошири мени {}",
     "expandSubmenu": "Прошири подмени {}",
     "navigateTo": "Иди на {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Изаберите групу за {}",
-      "generalGroups": "Опште групе",
-      "noGroup": "Без групе",
-      "noGroupsAvailable": "Нема доступних група",
-      "noGroupsConfigured": "Нема конфигурисаних група за ову службу",
-      "selectGroup": "Изаберите групу"
+      "chooseGroupFor": "Изаберите групу за {}"
     },
     "guestRegister": {
       "addFamilyMember": "Додај члана породице",
@@ -49,10 +47,8 @@
     "cancel": "Откажи",
     "close": "Затвори",
     "date": "Датум",
-    "edit": "Измени",
     "pleaseWait": "Молимо сачекајте",
     "save": "Сачувај",
-    "search": "Тражи",
     "update": "Ажурирај"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Ваш формулар је успешно послат."
   },
   "eventCalendar": {
-    "discussion": "Дискусија",
-    "editEvent": "Измени догађај",
     "recurring": {
       "allDates": "Сви датуми",
       "deleteTitle": "Обриши понављајући догађај",
       "editTitle": "Измени понављајући догађај",
       "justThisDate": "Само овај датум",
       "thisAndFollowing": "Овај и сви следећи датуми"
-    },
-    "registerForEvent": "Региструјте се за овај догађај"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Веза може бити Google Drive, хостована PDF лекција, итд.",
     "addedLinks": "Додате везе",
     "confirmDelete": "Да ли сте сигурни да желите да обришете '{}'?",
-    "contact": "Контакт",
-    "contactGroupLeader": "Контактирајте вођу групе:",
     "deleteFileLabel": "Обриши датотеку {}",
     "deleteLinkLabel": "Обриши везу {}",
-    "emailLabel": "Ваша имејл адреса",
     "files": "Датотеке",
-    "firstNameLabel": "Ваше име",
-    "lastNameLabel": "Ваше презиме",
     "linkText": "Текст везе",
     "linkTextLabel": "Приказни текст везе",
     "linkUrl": "URL везе",
     "linkUrlLabel": "URL везе",
-    "messageLabel": "Ваша порука вођи групе",
-    "messageSent": "Ваша порука је послата!",
     "noDescription": "Опис није наведен.",
     "noGroups": "Нема пронађених група",
-    "phoneLabel": "Ваш број телефона",
     "storageInfo": "100 MB простора за складиштење је бесплатно обезбеђено за чување PDF-ова и других докумената који су често потребни. Препоручујемо коришћење Google Drive-а или Dropbox-а за чување датотека уколико је потребан додатни простор.",
-    "submit": "Пошаљи",
-    "submitLabel": "Пошаљи поруку вођи групе",
     "upload": "Отпреми",
     "uploadedFiles": "Отпремљене датотеке",
     "usedSpace": "Искоришћен простор: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Кориснички мени"
   },
   "iconPicker": {
-    "iconsAvailable": "Доступне иконе",
-    "matchingResults": "Резултати претраге",
-    "searchAriaLabel": "тражи иконе",
     "selectIcon": "Изабери {} икону"
-  },
-  "loadingPage": {
-    "logoAlt": "лого"
   },
   "login": {
     "login": "Пријава",
@@ -176,6 +153,7 @@
       "explore": "Истраживати",
       "group": "Група",
       "home": "Дом",
+      "lightMode": "Светли режим",
       "logout": "Одјава",
       "member": "Члан",
       "messages": "Поруке",
@@ -193,6 +171,7 @@
       "profile": "Профил",
       "signIn": "Пријава",
       "switchToDark": "Пребаци на тамни режим",
+      "switchToLight": "Пребаци на светли режим",
       "unknown": "Непознато",
       "untitledSermon": "Безимена проповед",
       "verseOfTheDay": "Стих дана",
@@ -247,6 +226,7 @@
       "emailAddress": "Имејл адреса",
       "full": "Попуњено",
       "general": "Опште",
+      "groupActionFailed": "Нешто није у реду. Покушајте поново.",
       "groupNotFound": "Група није пронађена",
       "groupNotFoundDescription": "Ова група није могла бити пронађена или немате дозволу да је видите.",
       "householdMember": "Члан домаћинства",
@@ -261,6 +241,7 @@
       "memberSingular": "члан",
       "members": "Чланови ({})",
       "membersLowercase": "чланова",
+      "membersPrivate": "Чланови су видљиви само особама у овој групи.",
       "membersTab": "Чланови",
       "message": "Порука",
       "messageActions": "Radnje sa porukom",
@@ -301,6 +282,8 @@
       "remove": "Уклони",
       "removeSignup": "Уклонити пријаву?",
       "removing": "Уклањање...",
+      "requestPending": "Захтев на чекању",
+      "requestPendingNote": "Ваш захтев за придруживање је послат. Вођа групе ће га прегледати.",
       "retry": "Покушај поново",
       "send": "Пошаљи",
       "sendEmail": "Пошаљи имејл",
@@ -405,6 +388,7 @@
       "groupChat": "Чет групе",
       "groupChatTitle": "{} {}",
       "guest": "(Гост)",
+      "invalidUrl": "Унесите веб адресу која почиње са http:// или https://",
       "leadersCanPost": "Вође могу овде да објављују обавештења.",
       "linkFallback": "Веза",
       "linkText": "Текст везе",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Није могуће сачувати подсетнике.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Сачувај",
       "saveAttendance": "Сачувај присуство",
+      "saveChanges": "Сачувај измене",
+      "saving": "Чување...",
       "search": "Тражи",
       "searchForPerson": "Тражи особу",
       "selectAll": "Сви",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Измене на чекању",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Прегледајте измене пре него што их пошаљете на одобрење.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Пошаљи на одобрење",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Стих дана"
     },
     "screens": {
+      "adjustSearch": "Покушајте са другим именом или правописом.",
       "alreadyCheckedIn": "Већ пријављен",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Ваше измене су послате на одобрење.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Obriši obaveštenje",
       "detectingDevice": "Препознавање вашег уређаја…",
+      "directoryMembersBody": "Именик цркве је доступан само члановима.",
+      "directorySignInBody": "Пријавите се да бисте прегледали именик цркве.",
       "displayNameUpdated": "Prikazano ime je ažurirano.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Пријавите се да бисте видели групе којима припадате и придружили се новим.",
+      "groupsSignInTitle": "Пријавите се да бисте видели своје групе",
       "keep": "Задржи",
       "lastGift": "Last Gift",
       "lastNameRegister": "Презиме",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Nema dostupnih grupa",
+      "noGroupsBody": "Још нисте ни у једној групи. Прегледајте групе које нуди ваша црква и пронађите једну којој ћете се придружити.",
       "noGroupsMessage": "Za ovo bogosluženje nije podešena nijedna grupa.",
+      "noGroupsTitle": "Још нема група",
       "noHouseholdMembers": "Nisu pronađeni članovi domaćinstva",
       "noHouseholdMessage": "Uverite se da ste prijavljeni i da imate registrovane članove domaćinstva.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Sačuvaj",
       "scanWithPhone": "Скенирајте камером телефона",
+      "searchDirectoryBody": "Потражите особу по имену да бисте видели њене контакт податке.",
       "searchForMessage": "Тражи особу за слање поруке",
       "searchMembers": "Претражи чланове",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Укупно ове године • {} прилог",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Није могуће послати измене.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Пријавите се да служите",
       "votd": "Данашњи стих"
     },
+    "votd": {
+      "copied": "Копирано у оставу",
+      "share": "Подели",
+      "shareImage": "Подели слику",
+      "unableToShare": "Дељење није успело"
+    },
     "yesterday": "јуче"
-  },
-  "notes": {
-    "comment": "Коментар",
-    "comments": "Коментари",
-    "list": {
-      "loadMore": "Учитај још",
-      "loading": "Учитавање...",
-      "showAll": "Прикажи све",
-      "typeMessage": "Откуцајте поруку...",
-      "userAlt": "корисник"
-    },
-    "startConversation": "Започни разговор",
-    "validate": {
-      "content": "Садржај"
-    },
-    "viewAll": "Прикажи све"
   },
   "pageSlug": {
     "achInstructions": "Упутства за ACH плаћање",
@@ -971,6 +962,7 @@
     "donate": "Приложи",
     "formClosedOn": "Овај формулар је затворен {}",
     "formNotAvailableUntil": "Овај формулар није доступан до {}",
+    "formNotFound": "Овај образац није могуће учитати.",
     "formSubmitted": "Ваш формулар је успешно послат.",
     "liveStream": "Пренос уживо",
     "loginToManageDonations": "Молимо пријавите се да управљате прилозима",
@@ -987,43 +979,6 @@
     "firstName": "Име",
     "lastName": "Презиме",
     "name": "Назив"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Датум завршетка",
-      "endRequired": "Датум завршетка је обавезан.",
-      "startBeforeEnd": "Датум почетка мора бити пре датума завршетка.",
-      "startDate": "Датум почетка",
-      "startRequired": "Датум почетка је обавезан."
-    },
-    "blockoutDates": {
-      "none": "Нема блокираних датума.",
-      "title": "Блокирани датуми"
-    },
-    "position": {
-      "accept": "Прихвати",
-      "accepted": "Прихваћено",
-      "decline": "Одбиј",
-      "declined": "Одбијено",
-      "headerPrefix": "Позиција",
-      "neededTimes": "Потребна времена",
-      "status": "Статус",
-      "unconfirmed": "Непотврђено"
-    },
-    "servingTimes": {
-      "plan": "План",
-      "role": "Улога",
-      "serviceDate": "Датум службе",
-      "title": "Времена служења"
-    },
-    "team": {
-      "avatar": "аватар"
-    },
-    "upcomingDates": {
-      "event": "Догађај",
-      "startTime": "Време почетка",
-      "title": "Предстојећи датуми"
-    }
   },
   "register": {
     "metaEventRegistration": "Регистрација за догађај",

@@ -15,17 +15,15 @@
     "post": "Plaatsen"
   },
   "cascadingMenus": {
+    "collapseMenu": "Menu {} samenvouwen",
+    "collapseSubmenu": "Submenu {} samenvouwen",
+    "expandMenu": "Menu {} uitvouwen",
     "expandSubmenu": "Submenu {} uitvouwen",
     "navigateTo": "Navigeren naar {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Kies een groep voor {}",
-      "generalGroups": "Algemene groepen",
-      "noGroup": "Geen groep",
-      "noGroupsAvailable": "Geen groepen beschikbaar",
-      "noGroupsConfigured": "Er zijn geen groepen geconfigureerd voor deze dienst",
-      "selectGroup": "Selecteer groep"
+      "chooseGroupFor": "Kies een groep voor {}"
     },
     "guestRegister": {
       "addFamilyMember": "Gezinslid toevoegen",
@@ -49,10 +47,8 @@
     "cancel": "Annuleren",
     "close": "Sluiten",
     "date": "Datum",
-    "edit": "Bewerken",
     "pleaseWait": "Een moment geduld",
     "save": "Opslaan",
-    "search": "Zoeken",
     "update": "Bijwerken"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Uw formulier is succesvol verzonden."
   },
   "eventCalendar": {
-    "discussion": "Discussie",
-    "editEvent": "Evenement bewerken",
     "recurring": {
       "allDates": "Alle data",
       "deleteTitle": "Terugkerend evenement verwijderen",
       "editTitle": "Terugkerend evenement bewerken",
       "justThisDate": "Alleen deze datum",
       "thisAndFollowing": "Deze en alle volgende data"
-    },
-    "registerForEvent": "Registreren voor dit evenement"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Link kan zijn van Google Drive, gehoste les-PDF, enz.",
     "addedLinks": "Toegevoegde links",
     "confirmDelete": "Weet u zeker dat u '{}' wilt verwijderen?",
-    "contact": "Contact",
-    "contactGroupLeader": "Contact opnemen met groepsleider:",
     "deleteFileLabel": "Bestand {} verwijderen",
     "deleteLinkLabel": "Link {} verwijderen",
-    "emailLabel": "Uw e-mailadres",
     "files": "Bestanden",
-    "firstNameLabel": "Uw voornaam",
-    "lastNameLabel": "Uw achternaam",
     "linkText": "Linktekst",
     "linkTextLabel": "Weergavetekst van link",
     "linkUrl": "Link-URL",
     "linkUrlLabel": "URL van link",
-    "messageLabel": "Uw bericht aan de groepsleider",
-    "messageSent": "Uw bericht is verzonden!",
     "noDescription": "Geen beschrijving opgegeven.",
     "noGroups": "Geen groepen gevonden",
-    "phoneLabel": "Uw telefoonnummer",
     "storageInfo": "Er is gratis 100 MB opslagruimte beschikbaar voor het opslaan van PDF's en andere veelgebruikte documenten. Wij raden aan om Google Drive of Dropbox te gebruiken om bestanden op te slaan als er meer ruimte nodig is.",
-    "submit": "Verzenden",
-    "submitLabel": "Bericht naar groepsleider verzenden",
     "upload": "Uploaden",
     "uploadedFiles": "Geüploade bestanden",
     "usedSpace": "Gebruikte ruimte: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Gebruikersmenu"
   },
   "iconPicker": {
-    "iconsAvailable": "Beschikbare pictogrammen",
-    "matchingResults": "Overeenkomende resultaten",
-    "searchAriaLabel": "pictogrammen zoeken",
     "selectIcon": "Selecteer pictogram {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Aanmelden",
@@ -176,6 +153,7 @@
       "explore": "Verkennen",
       "group": "Groep",
       "home": "Thuis",
+      "lightMode": "Lichte modus",
       "logout": "Uitloggen",
       "member": "Lid",
       "messages": "Berichten",
@@ -193,6 +171,7 @@
       "profile": "Profiel",
       "signIn": "Inloggen",
       "switchToDark": "Overschakelen naar donkere modus",
+      "switchToLight": "Overschakelen naar lichte modus",
       "unknown": "Onbekend",
       "untitledSermon": "Preek zonder titel",
       "verseOfTheDay": "Vers van de dag",
@@ -247,6 +226,7 @@
       "emailAddress": "E-mailadres",
       "full": "Vol",
       "general": "Algemeen",
+      "groupActionFailed": "Er is iets misgegaan. Probeer het opnieuw.",
       "groupNotFound": "Groep niet gevonden",
       "groupNotFoundDescription": "Deze groep kon niet worden gevonden of u heeft geen toestemming om deze te bekijken.",
       "householdMember": "Gezinslid",
@@ -261,6 +241,7 @@
       "memberSingular": "lid",
       "members": "Leden ({})",
       "membersLowercase": "leden",
+      "membersPrivate": "Leden zijn alleen zichtbaar voor mensen in deze groep.",
       "membersTab": "Leden",
       "message": "Bericht",
       "messageActions": "Berichtacties",
@@ -301,6 +282,8 @@
       "remove": "Verwijderen",
       "removeSignup": "Aanmelding verwijderen?",
       "removing": "Bezig met verwijderen...",
+      "requestPending": "Verzoek in behandeling",
+      "requestPendingNote": "Je verzoek om lid te worden is verzonden. Een groepsleider zal het beoordelen.",
       "retry": "Opnieuw proberen",
       "send": "Verzenden",
       "sendEmail": "E-mail verzenden",
@@ -405,6 +388,7 @@
       "groupChat": "Groepschat",
       "groupChatTitle": "{} {}",
       "guest": "(Gast)",
+      "invalidUrl": "Voer een webadres in dat begint met http:// of https://",
       "leadersCanPost": "Leiders kunnen hier aankondigingen plaatsen.",
       "linkFallback": "Link",
       "linkText": "Linktekst",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Herinneringen konden niet worden opgeslagen.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Opslaan",
       "saveAttendance": "Aanwezigheid opslaan",
+      "saveChanges": "Wijzigingen opslaan",
+      "saving": "Opslaan...",
       "search": "Zoeken",
       "searchForPerson": "Zoek naar een persoon",
       "selectAll": "Alle",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Wijzigingen in behandeling",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Controleer je wijzigingen voordat je ze ter goedkeuring indient.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Ter goedkeuring indienen",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Vers van de dag"
     },
     "screens": {
+      "adjustSearch": "Probeer een andere naam of spelling.",
       "alreadyCheckedIn": "Al ingecheckt",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Je wijzigingen zijn ter goedkeuring ingediend.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Melding verwijderen",
       "detectingDevice": "Uw apparaat wordt gedetecteerd…",
+      "directoryMembersBody": "De kerkgids wordt alleen gedeeld met leden.",
+      "directorySignInBody": "Log in om de kerkgids te bekijken.",
       "displayNameUpdated": "Weergavenaam bijgewerkt.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Log in om de groepen te zien waar je lid van bent en nieuwe groepen te joinen.",
+      "groupsSignInTitle": "Log in om je groepen te zien",
       "keep": "Behouden",
       "lastGift": "Last Gift",
       "lastNameRegister": "Achternaam",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Geen groepen beschikbaar",
+      "noGroupsBody": "Je zit nog in geen enkele groep. Bekijk de groepen die je kerk aanbiedt om er een te vinden.",
       "noGroupsMessage": "Er zijn geen groepen ingesteld voor deze dienst.",
+      "noGroupsTitle": "Nog geen groepen",
       "noHouseholdMembers": "Geen gezinsleden gevonden",
       "noHouseholdMessage": "Zorg ervoor dat je bent ingelogd en gezinsleden hebt geregistreerd.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Opslaan",
       "scanWithPhone": "Scannen met uw telefooncamera",
+      "searchDirectoryBody": "Zoek iemand op naam om de contactgegevens te zien.",
       "searchForMessage": "Zoek een persoon om een bericht te sturen",
       "searchMembers": "Leden zoeken",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Totaal dit jaar • {} gift",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Wijzigingen konden niet worden ingediend.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Meld u aan om te dienen",
       "votd": "Het vers van vandaag"
     },
+    "votd": {
+      "copied": "Gekopieerd naar klembord",
+      "share": "Delen",
+      "shareImage": "Afbeelding delen",
+      "unableToShare": "Delen is niet gelukt"
+    },
     "yesterday": "gisteren"
-  },
-  "notes": {
-    "comment": "Opmerking",
-    "comments": "Opmerkingen",
-    "list": {
-      "loadMore": "Meer laden",
-      "loading": "Laden...",
-      "showAll": "Alles tonen",
-      "typeMessage": "Typ een bericht...",
-      "userAlt": "gebruiker"
-    },
-    "startConversation": "Gesprek starten",
-    "validate": {
-      "content": "Inhoud"
-    },
-    "viewAll": "Alles bekijken"
   },
   "pageSlug": {
     "achInstructions": "Instructies voor ACH-betaling",
@@ -971,6 +962,7 @@
     "donate": "Geven",
     "formClosedOn": "Dit formulier is gesloten op {}",
     "formNotAvailableUntil": "Dit formulier is pas beschikbaar vanaf {}",
+    "formNotFound": "Dit formulier kon niet worden geladen.",
     "formSubmitted": "Uw formulier is succesvol verzonden.",
     "liveStream": "Livestream",
     "loginToManageDonations": "Log in om giften te beheren",
@@ -987,43 +979,6 @@
     "firstName": "Voornaam",
     "lastName": "Achternaam",
     "name": "Naam"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Einddatum",
-      "endRequired": "Einddatum is verplicht.",
-      "startBeforeEnd": "Startdatum moet voor de einddatum liggen.",
-      "startDate": "Startdatum",
-      "startRequired": "Startdatum is verplicht."
-    },
-    "blockoutDates": {
-      "none": "Geen geblokkeerde data.",
-      "title": "Geblokkeerde data"
-    },
-    "position": {
-      "accept": "Accepteren",
-      "accepted": "Geaccepteerd",
-      "decline": "Afwijzen",
-      "declined": "Afgewezen",
-      "headerPrefix": "Positie",
-      "neededTimes": "Benodigde tijden",
-      "status": "Status",
-      "unconfirmed": "Niet bevestigd"
-    },
-    "servingTimes": {
-      "plan": "Plan",
-      "role": "Rol",
-      "serviceDate": "Dienstdatum",
-      "title": "Diensttijden"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Evenement",
-      "startTime": "Starttijd",
-      "title": "Aankomende data"
-    }
   },
   "register": {
     "metaEventRegistration": "Evenementregistratie",

@@ -15,17 +15,15 @@
     "post": "Posting"
   },
   "cascadingMenus": {
+    "collapseMenu": "Ciutkan menu {}",
+    "collapseSubmenu": "Ciutkan submenu {}",
+    "expandMenu": "Perluas menu {}",
     "expandSubmenu": "Perluas submenu {}",
     "navigateTo": "Navigasi ke {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Pilih grup untuk {}",
-      "generalGroups": "Grup Umum",
-      "noGroup": "Tidak Ada Grup",
-      "noGroupsAvailable": "Tidak Ada Grup Tersedia",
-      "noGroupsConfigured": "Tidak ada grup yang dikonfigurasi untuk ibadah ini",
-      "selectGroup": "Pilih Grup"
+      "chooseGroupFor": "Pilih grup untuk {}"
     },
     "guestRegister": {
       "addFamilyMember": "Tambah Anggota Keluarga",
@@ -49,10 +47,8 @@
     "cancel": "Batal",
     "close": "Tutup",
     "date": "Tanggal",
-    "edit": "Edit",
     "pleaseWait": "Harap Tunggu",
     "save": "Simpan",
-    "search": "Cari",
     "update": "Perbarui"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Formulir Anda telah berhasil dikirim."
   },
   "eventCalendar": {
-    "discussion": "Diskusi",
-    "editEvent": "Edit Acara",
     "recurring": {
       "allDates": "Semua tanggal",
       "deleteTitle": "Hapus Acara Berulang",
       "editTitle": "Edit Acara Berulang",
       "justThisDate": "Hanya tanggal ini",
       "thisAndFollowing": "Tanggal ini dan semua tanggal berikutnya"
-    },
-    "registerForEvent": "Daftar untuk Acara Ini"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Tautan dapat berupa Google Drive, Pelajaran PDF yang di-host, dll.",
     "addedLinks": "Tautan Ditambahkan",
     "confirmDelete": "Apakah Anda yakin ingin menghapus '{}'?",
-    "contact": "Kontak",
-    "contactGroupLeader": "Hubungi Pemimpin Grup:",
     "deleteFileLabel": "Hapus berkas {}",
     "deleteLinkLabel": "Hapus tautan {}",
-    "emailLabel": "Alamat email Anda",
     "files": "Berkas",
-    "firstNameLabel": "Nama depan Anda",
-    "lastNameLabel": "Nama belakang Anda",
     "linkText": "Teks Tautan",
     "linkTextLabel": "Teks tampilan tautan",
     "linkUrl": "URL Tautan",
     "linkUrlLabel": "URL tautan",
-    "messageLabel": "Pesan Anda untuk pemimpin grup",
-    "messageSent": "Pesan Anda telah terkirim!",
     "noDescription": "Tidak Ada Deskripsi.",
     "noGroups": "Tidak ada grup ditemukan",
-    "phoneLabel": "Nomor telepon Anda",
     "storageInfo": "Disediakan ruang penyimpanan 100 MB secara gratis untuk menyimpan PDF dan dokumen lain yang umum dibutuhkan. Kami menyarankan menggunakan Google Drive atau Dropbox untuk menyimpan berkas jika diperlukan ruang tambahan.",
-    "submit": "Kirim",
-    "submitLabel": "Kirim pesan ke pemimpin grup",
     "upload": "Unggah",
     "uploadedFiles": "Berkas yang Diunggah",
     "usedSpace": "Ruang terpakai: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "Menu pengguna"
   },
   "iconPicker": {
-    "iconsAvailable": "Ikon Tersedia",
-    "matchingResults": "Hasil yang Cocok",
-    "searchAriaLabel": "cari ikon",
     "selectIcon": "Pilih ikon {}"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Masuk",
@@ -176,6 +153,7 @@
       "explore": "Jelajahi",
       "group": "Grup",
       "home": "Beranda",
+      "lightMode": "Mode Terang",
       "logout": "Keluar",
       "member": "Anggota",
       "messages": "Pesan",
@@ -193,6 +171,7 @@
       "profile": "Profil",
       "signIn": "Masuk",
       "switchToDark": "Beralih ke mode gelap",
+      "switchToLight": "Beralih ke mode terang",
       "unknown": "Tidak Diketahui",
       "untitledSermon": "Khotbah Tanpa Judul",
       "verseOfTheDay": "Ayat Hari Ini",
@@ -247,6 +226,7 @@
       "emailAddress": "Alamat Email",
       "full": "Penuh",
       "general": "Umum",
+      "groupActionFailed": "Terjadi kesalahan. Silakan coba lagi.",
       "groupNotFound": "Grup Tidak Ditemukan",
       "groupNotFoundDescription": "Grup ini tidak dapat ditemukan atau Anda tidak memiliki izin untuk melihatnya.",
       "householdMember": "Anggota Rumah Tangga",
@@ -261,6 +241,7 @@
       "memberSingular": "anggota",
       "members": "Anggota ({})",
       "membersLowercase": "anggota",
+      "membersPrivate": "Anggota hanya dapat dilihat oleh orang-orang di grup ini.",
       "membersTab": "Anggota",
       "message": "Pesan",
       "messageActions": "Tindakan pesan",
@@ -301,6 +282,8 @@
       "remove": "Hapus",
       "removeSignup": "Hapus pendaftaran?",
       "removing": "Menghapus...",
+      "requestPending": "Permintaan Tertunda",
+      "requestPendingNote": "Permintaan Anda untuk bergabung telah dikirim. Pemimpin grup akan meninjaunya.",
       "retry": "Coba Lagi",
       "send": "Kirim",
       "sendEmail": "Kirim email",
@@ -405,6 +388,7 @@
       "groupChat": "Obrolan Grup",
       "groupChatTitle": "{} {}",
       "guest": "(Tamu)",
+      "invalidUrl": "Masukkan alamat web yang diawali dengan http:// atau https://",
       "leadersCanPost": "Pemimpin dapat memposting pengumuman di sini.",
       "linkFallback": "Tautan",
       "linkText": "Teks tautan",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Tidak dapat menyimpan pengingat.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Simpan",
       "saveAttendance": "Simpan Kehadiran",
+      "saveChanges": "Simpan Perubahan",
+      "saving": "Menyimpan...",
       "search": "Cari",
       "searchForPerson": "Cari orang",
       "selectAll": "Semua",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Perubahan Tertunda",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Tinjau perubahan Anda sebelum mengirimkannya untuk persetujuan.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Kirim untuk Persetujuan",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Ayat Hari Ini"
     },
     "screens": {
+      "adjustSearch": "Coba nama atau ejaan lain.",
       "alreadyCheckedIn": "Sudah Check-in",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Perubahan Anda telah dikirim untuk persetujuan.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Hapus notifikasi",
       "detectingDevice": "Mendeteksi perangkat Anda…",
+      "directoryMembersBody": "Direktori gereja hanya dibagikan kepada anggota.",
+      "directorySignInBody": "Masuk untuk menelusuri direktori gereja.",
       "displayNameUpdated": "Nama tampilan diperbarui.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Masuk untuk melihat grup yang Anda ikuti dan bergabung dengan grup baru.",
+      "groupsSignInTitle": "Masuk untuk melihat grup Anda",
       "keep": "Pertahankan",
       "lastGift": "Last Gift",
       "lastNameRegister": "Nama belakang",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Tidak Ada Grup yang Tersedia",
+      "noGroupsBody": "Anda belum bergabung dengan grup mana pun. Telusuri grup yang ditawarkan gereja Anda untuk menemukan grup yang ingin Anda ikuti.",
       "noGroupsMessage": "Tidak ada grup yang dikonfigurasi untuk ibadah ini.",
+      "noGroupsTitle": "Belum ada grup",
       "noHouseholdMembers": "Tidak Ada Anggota Keluarga yang Ditemukan",
       "noHouseholdMessage": "Pastikan Anda telah masuk dan memiliki anggota keluarga yang terdaftar.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Simpan",
       "scanWithPhone": "Scan dengan kamera ponsel Anda",
+      "searchDirectoryBody": "Cari seseorang berdasarkan nama untuk melihat detail kontaknya.",
       "searchForMessage": "Cari orang untuk dikirimi pesan",
       "searchMembers": "Cari Anggota",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Total tahun ini • {} persembahan",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Tidak dapat mengirim perubahan.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Daftar untuk melayani",
       "votd": "Ayat hari ini"
     },
+    "votd": {
+      "copied": "Disalin ke papan klip",
+      "share": "Bagikan",
+      "shareImage": "Bagikan gambar",
+      "unableToShare": "Tidak dapat membagikan"
+    },
     "yesterday": "kemarin"
-  },
-  "notes": {
-    "comment": "Komentar",
-    "comments": "Komentar",
-    "list": {
-      "loadMore": "Muat Lebih Banyak",
-      "loading": "Memuat...",
-      "showAll": "Tampilkan Semua",
-      "typeMessage": "Ketik pesan...",
-      "userAlt": "pengguna"
-    },
-    "startConversation": "Mulai Percakapan",
-    "validate": {
-      "content": "Konten"
-    },
-    "viewAll": "Lihat Semua"
   },
   "pageSlug": {
     "achInstructions": "Petunjuk untuk Pembayaran ACH",
@@ -971,6 +962,7 @@
     "donate": "Beri Persembahan",
     "formClosedOn": "Formulir ini ditutup pada {}",
     "formNotAvailableUntil": "Formulir ini belum tersedia hingga {}",
+    "formNotFound": "Formulir ini tidak dapat dimuat.",
     "formSubmitted": "Formulir Anda telah berhasil dikirim.",
     "liveStream": "Siaran Langsung",
     "loginToManageDonations": "Silakan login untuk mengelola persembahan",
@@ -987,43 +979,6 @@
     "firstName": "Nama Depan",
     "lastName": "Nama Belakang",
     "name": "Nama"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Tanggal Selesai",
-      "endRequired": "Tanggal selesai wajib diisi.",
-      "startBeforeEnd": "Tanggal mulai harus sebelum tanggal selesai.",
-      "startDate": "Tanggal Mulai",
-      "startRequired": "Tanggal mulai wajib diisi."
-    },
-    "blockoutDates": {
-      "none": "Tidak ada tanggal blockout.",
-      "title": "Tanggal Blockout"
-    },
-    "position": {
-      "accept": "Terima",
-      "accepted": "Diterima",
-      "decline": "Tolak",
-      "declined": "Ditolak",
-      "headerPrefix": "Posisi",
-      "neededTimes": "Waktu yang Dibutuhkan",
-      "status": "Status",
-      "unconfirmed": "Belum Dikonfirmasi"
-    },
-    "servingTimes": {
-      "plan": "Rencana",
-      "role": "Peran",
-      "serviceDate": "Tanggal Ibadah",
-      "title": "Waktu Pelayanan"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Acara",
-      "startTime": "Waktu Mulai",
-      "title": "Tanggal Mendatang"
-    }
   },
   "register": {
     "metaEventRegistration": "Pendaftaran Acara",

@@ -15,17 +15,15 @@
     "post": "Опубликовать"
   },
   "cascadingMenus": {
+    "collapseMenu": "Свернуть меню {}",
+    "collapseSubmenu": "Свернуть подменю {}",
+    "expandMenu": "Развернуть меню {}",
     "expandSubmenu": "Развернуть подменю {}",
     "navigateTo": "Перейти к {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Выберите группу для {}",
-      "generalGroups": "Общие группы",
-      "noGroup": "Без группы",
-      "noGroupsAvailable": "Нет доступных групп",
-      "noGroupsConfigured": "Для этого служения не настроено ни одной группы",
-      "selectGroup": "Выбрать группу"
+      "chooseGroupFor": "Выберите группу для {}"
     },
     "guestRegister": {
       "addFamilyMember": "Добавить члена семьи",
@@ -49,10 +47,8 @@
     "cancel": "Отмена",
     "close": "Закрыть",
     "date": "Дата",
-    "edit": "Редактировать",
     "pleaseWait": "Пожалуйста, подождите",
     "save": "Сохранить",
-    "search": "Поиск",
     "update": "Обновить"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Ваша форма успешно отправлена."
   },
   "eventCalendar": {
-    "discussion": "Обсуждение",
-    "editEvent": "Редактировать событие",
     "recurring": {
       "allDates": "Все даты",
       "deleteTitle": "Удалить повторяющееся событие",
       "editTitle": "Редактировать повторяющееся событие",
       "justThisDate": "Только эту дату",
       "thisAndFollowing": "Эту и все следующие даты"
-    },
-    "registerForEvent": "Зарегистрироваться на это событие"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Ссылка может быть на Google Drive, размещённый PDF урока и т.д.",
     "addedLinks": "Добавленные ссылки",
     "confirmDelete": "Вы уверены, что хотите удалить '{}'?",
-    "contact": "Контакт",
-    "contactGroupLeader": "Связаться с руководителем группы:",
     "deleteFileLabel": "Удалить файл {}",
     "deleteLinkLabel": "Удалить ссылку {}",
-    "emailLabel": "Ваш адрес электронной почты",
     "files": "Файлы",
-    "firstNameLabel": "Ваше имя",
-    "lastNameLabel": "Ваша фамилия",
     "linkText": "Текст ссылки",
     "linkTextLabel": "Отображаемый текст ссылки",
     "linkUrl": "URL ссылки",
     "linkUrlLabel": "URL ссылки",
-    "messageLabel": "Ваше сообщение руководителю группы",
-    "messageSent": "Ваше сообщение отправлено!",
     "noDescription": "Описание не указано.",
     "noGroups": "Группы не найдены",
-    "phoneLabel": "Ваш номер телефона",
     "storageInfo": "Бесплатно предоставляется 100 МБ дискового пространства для хранения PDF и других часто необходимых документов. Если требуется дополнительное место, мы рекомендуем использовать Google Drive или Dropbox.",
-    "submit": "Отправить",
-    "submitLabel": "Отправить сообщение руководителю группы",
     "upload": "Загрузить",
     "uploadedFiles": "Загруженные файлы",
     "usedSpace": "Использовано: {} / 100МБ",
@@ -147,13 +130,7 @@
     "userMenu": "Меню пользователя"
   },
   "iconPicker": {
-    "iconsAvailable": "Доступные иконки",
-    "matchingResults": "Результаты поиска",
-    "searchAriaLabel": "поиск иконок",
     "selectIcon": "Выбрать иконку {}"
-  },
-  "loadingPage": {
-    "logoAlt": "логотип"
   },
   "login": {
     "login": "Войти",
@@ -176,6 +153,7 @@
       "explore": "Исследовать",
       "group": "Группа",
       "home": "Дом",
+      "lightMode": "Светлая тема",
       "logout": "Выйти",
       "member": "Участник",
       "messages": "Сообщения",
@@ -193,6 +171,7 @@
       "profile": "Профиль",
       "signIn": "Войти",
       "switchToDark": "Переключиться на тёмную тему",
+      "switchToLight": "Переключиться на светлую тему",
       "unknown": "Неизвестно",
       "untitledSermon": "Проповедь без названия",
       "verseOfTheDay": "Стих дня",
@@ -247,6 +226,7 @@
       "emailAddress": "Адрес электронной почты",
       "full": "Заполнено",
       "general": "Общее",
+      "groupActionFailed": "Что-то пошло не так. Пожалуйста, попробуйте ещё раз.",
       "groupNotFound": "Группа не найдена",
       "groupNotFoundDescription": "Эта группа не найдена или у вас нет прав для её просмотра.",
       "householdMember": "Член семьи",
@@ -261,6 +241,7 @@
       "memberSingular": "участник",
       "members": "Участники ({})",
       "membersLowercase": "участники",
+      "membersPrivate": "Участники видны только людям из этой группы.",
       "membersTab": "Участники",
       "message": "Сообщение",
       "messageActions": "Действия с сообщением",
@@ -301,6 +282,8 @@
       "remove": "Удалить",
       "removeSignup": "Удалить запись?",
       "removing": "Удаление...",
+      "requestPending": "Запрос на рассмотрении",
+      "requestPendingNote": "Ваш запрос на вступление отправлен. Руководитель группы рассмотрит его.",
       "retry": "Повторить",
       "send": "Отправить",
       "sendEmail": "Отправить email",
@@ -405,6 +388,7 @@
       "groupChat": "Чат группы",
       "groupChatTitle": "{} {}",
       "guest": "(Гость)",
+      "invalidUrl": "Введите веб-адрес, начинающийся с http:// или https://",
       "leadersCanPost": "Руководители могут публиковать объявления здесь.",
       "linkFallback": "Ссылка",
       "linkText": "Текст ссылки",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Не удалось сохранить напоминания.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "Сохранить",
       "saveAttendance": "Сохранить посещаемость",
+      "saveChanges": "Сохранить изменения",
+      "saving": "Сохранение...",
       "search": "Поиск",
       "searchForPerson": "Поиск человека",
       "selectAll": "Все",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Ожидающие изменения",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Проверьте изменения перед отправкой на утверждение.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Отправить на утверждение",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Стих дня"
     },
     "screens": {
+      "adjustSearch": "Попробуйте другое имя или написание.",
       "alreadyCheckedIn": "Уже зарегистрирован",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Ваши изменения отправлены на утверждение.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Удалить уведомление",
       "detectingDevice": "Определение вашего устройства…",
+      "directoryMembersBody": "Справочник церкви доступен только участникам.",
+      "directorySignInBody": "Войдите, чтобы просматривать справочник церкви.",
       "displayNameUpdated": "Отображаемое имя обновлено.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Войдите, чтобы увидеть свои группы и вступить в новые.",
+      "groupsSignInTitle": "Войдите, чтобы увидеть свои группы",
       "keep": "Оставить",
       "lastGift": "Last Gift",
       "lastNameRegister": "Фамилия",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Нет доступных групп",
+      "noGroupsBody": "Вы пока не состоите ни в одной группе. Просмотрите группы вашей церкви, чтобы найти подходящую.",
       "noGroupsMessage": "Для этого служения не настроено ни одной группы.",
+      "noGroupsTitle": "Пока нет групп",
       "noHouseholdMembers": "Члены семьи не найдены",
       "noHouseholdMessage": "Убедитесь, что вы вошли в систему и у вас зарегистрированы члены семьи.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "Сохранить",
       "scanWithPhone": "Сканировать камерой телефона",
+      "searchDirectoryBody": "Найдите человека по имени, чтобы увидеть его контактные данные.",
       "searchForMessage": "Найдите человека, которому хотите написать",
       "searchMembers": "Поиск участников",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Всего за этот год • пожертвований: {}",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Не удалось отправить изменения.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Запишитесь служить",
       "votd": "Стих сегодняшнего дня"
     },
+    "votd": {
+      "copied": "Скопировано в буфер обмена",
+      "share": "Поделиться",
+      "shareImage": "Поделиться изображением",
+      "unableToShare": "Не удалось поделиться"
+    },
     "yesterday": "вчера"
-  },
-  "notes": {
-    "comment": "Комментарий",
-    "comments": "Комментарии",
-    "list": {
-      "loadMore": "Загрузить ещё",
-      "loading": "Загрузка...",
-      "showAll": "Показать все",
-      "typeMessage": "Введите сообщение...",
-      "userAlt": "пользователь"
-    },
-    "startConversation": "Начать беседу",
-    "validate": {
-      "content": "Содержимое"
-    },
-    "viewAll": "Посмотреть все"
   },
   "pageSlug": {
     "achInstructions": "Инструкции для платежа ACH",
@@ -971,6 +962,7 @@
     "donate": "Пожертвовать",
     "formClosedOn": "Эта форма закрылась {}",
     "formNotAvailableUntil": "Эта форма будет доступна не раньше {}",
+    "formNotFound": "Не удалось загрузить эту форму.",
     "formSubmitted": "Ваша форма успешно отправлена.",
     "liveStream": "Прямая трансляция",
     "loginToManageDonations": "Пожалуйста, войдите для управления пожертвованиями",
@@ -987,43 +979,6 @@
     "firstName": "Имя",
     "lastName": "Фамилия",
     "name": "Имя"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Дата окончания",
-      "endRequired": "Дата окончания обязательна.",
-      "startBeforeEnd": "Дата начала должна быть раньше даты окончания.",
-      "startDate": "Дата начала",
-      "startRequired": "Дата начала обязательна."
-    },
-    "blockoutDates": {
-      "none": "Нет недоступных дат.",
-      "title": "Недоступные даты"
-    },
-    "position": {
-      "accept": "Принять",
-      "accepted": "Принято",
-      "decline": "Отклонить",
-      "declined": "Отклонено",
-      "headerPrefix": "Позиция",
-      "neededTimes": "Необходимое время",
-      "status": "Статус",
-      "unconfirmed": "Не подтверждено"
-    },
-    "servingTimes": {
-      "plan": "План",
-      "role": "Роль",
-      "serviceDate": "Дата служения",
-      "title": "Время служения"
-    },
-    "team": {
-      "avatar": "аватар"
-    },
-    "upcomingDates": {
-      "event": "Событие",
-      "startTime": "Время начала",
-      "title": "Предстоящие даты"
-    }
   },
   "register": {
     "metaEventRegistration": "Регистрация на событие",

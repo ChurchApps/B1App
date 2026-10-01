@@ -15,17 +15,15 @@
     "post": "I-post"
   },
   "cascadingMenus": {
+    "collapseMenu": "Isara ang {} menu",
+    "collapseSubmenu": "Isara ang {} submenu",
+    "expandMenu": "Buksan ang {} menu",
     "expandSubmenu": "Buksan ang {} submenu",
     "navigateTo": "Pumunta sa {}"
   },
   "checkin": {
     "groups": {
-      "chooseGroupFor": "Pumili ng grupo para kay {}",
-      "generalGroups": "Mga Pangkalahatang Grupo",
-      "noGroup": "Walang Grupo",
-      "noGroupsAvailable": "Walang Available na Grupo",
-      "noGroupsConfigured": "Walang grupong naka-configure para sa serbisyong ito",
-      "selectGroup": "Pumili ng Grupo"
+      "chooseGroupFor": "Pumili ng grupo para kay {}"
     },
     "guestRegister": {
       "addFamilyMember": "Magdagdag ng Miyembro ng Pamilya",
@@ -49,10 +47,8 @@
     "cancel": "Kanselahin",
     "close": "Isara",
     "date": "Petsa",
-    "edit": "I-edit",
     "pleaseWait": "Mangyaring Maghintay",
     "save": "I-save",
-    "search": "Maghanap",
     "update": "I-update"
   },
   "element": {
@@ -63,16 +59,13 @@
     "formSubmitted": "Matagumpay na naisumite ang iyong form."
   },
   "eventCalendar": {
-    "discussion": "Talakayan",
-    "editEvent": "I-edit ang Event",
     "recurring": {
       "allDates": "Lahat ng petsa",
       "deleteTitle": "Burahin ang Recurring Event",
       "editTitle": "I-edit ang Recurring Event",
       "justThisDate": "Sa petsang ito lamang",
       "thisAndFollowing": "Ito at lahat ng sumusunod na petsa"
-    },
-    "registerForEvent": "Magrehistro para sa Event na ito"
+    }
   },
   "footer": {
     "give": "Give",
@@ -84,26 +77,16 @@
     "addLinksInfo": "Ang link ay maaaring mula sa Google Drive, Hosted Lesson PDF, atbp.",
     "addedLinks": "Naidagdag na mga Link",
     "confirmDelete": "Sigurado ka bang gusto mong burahin ang '{}'?",
-    "contact": "Contact",
-    "contactGroupLeader": "Makipag-ugnayan sa Group Leader:",
     "deleteFileLabel": "Burahin ang file na {}",
     "deleteLinkLabel": "Burahin ang link na {}",
-    "emailLabel": "Iyong email address",
     "files": "Mga File",
-    "firstNameLabel": "Iyong pangalan",
-    "lastNameLabel": "Iyong apelyido",
     "linkText": "Link Text",
     "linkTextLabel": "Link display text",
     "linkUrl": "Link URL",
     "linkUrlLabel": "Link URL",
-    "messageLabel": "Iyong mensahe sa group leader",
-    "messageSent": "Naipadala na ang iyong mensahe!",
     "noDescription": "Walang Ibinigay na Paglalarawan.",
     "noGroups": "Walang nakitang grupo",
-    "phoneLabel": "Iyong numero ng telepono",
     "storageInfo": "Ang 100 MB ng storage space ay ibinibigay nang libre para sa pag-iimbak ng mga PDF at iba pang dokumentong karaniwang kailangan. Iminumungkahi naming gamitin ang Google Drive o Dropbox para mag-store ng mga file kung kailangan ng dagdag na espasyo.",
-    "submit": "Isumite",
-    "submitLabel": "Magpadala ng mensahe sa group leader",
     "upload": "Mag-upload",
     "uploadedFiles": "Mga Na-upload na File",
     "usedSpace": "Nagamit na espasyo: {} / 100MB",
@@ -147,13 +130,7 @@
     "userMenu": "User menu"
   },
   "iconPicker": {
-    "iconsAvailable": "Mga Available na Icon",
-    "matchingResults": "Mga Katugmang Resulta",
-    "searchAriaLabel": "maghanap ng mga icon",
     "selectIcon": "Pumili ng {} icon"
-  },
-  "loadingPage": {
-    "logoAlt": "logo"
   },
   "login": {
     "login": "Mag-login",
@@ -176,6 +153,7 @@
       "explore": "Tuklasin",
       "group": "Grupo",
       "home": "Tahanan",
+      "lightMode": "Light Mode",
       "logout": "Mag-logout",
       "member": "Miyembro",
       "messages": "Mga Mensahe",
@@ -193,6 +171,7 @@
       "profile": "Profile",
       "signIn": "Mag-sign In",
       "switchToDark": "Lumipat sa dark mode",
+      "switchToLight": "Lumipat sa light mode",
       "unknown": "Hindi alam",
       "untitledSermon": "Walang Pamagat na Sermon",
       "verseOfTheDay": "Araw ng Bersikulo",
@@ -247,6 +226,7 @@
       "emailAddress": "Email Address",
       "full": "Puno",
       "general": "Pangkalahatan",
+      "groupActionFailed": "May nangyaring mali. Pakisubukang muli.",
       "groupNotFound": "Hindi Nahanap ang Grupo",
       "groupNotFoundDescription": "Hindi mahanap ang grupong ito o wala kang permiso na tingnan ito.",
       "householdMember": "Miyembro ng Sambahayan",
@@ -261,6 +241,7 @@
       "memberSingular": "miyembro",
       "members": "Mga Miyembro ({})",
       "membersLowercase": "mga miyembro",
+      "membersPrivate": "Ang mga miyembro ay nakikita lamang ng mga tao sa grupong ito.",
       "membersTab": "Mga Miyembro",
       "message": "Mensahe",
       "messageActions": "Mga aksyon sa mensahe",
@@ -301,6 +282,8 @@
       "remove": "Alisin",
       "removeSignup": "Alisin ang signup?",
       "removing": "Inaalis...",
+      "requestPending": "Nakabinbing Kahilingan",
+      "requestPendingNote": "Naipadala na ang iyong kahilingang sumali. Susuriin ito ng isang lider ng grupo.",
       "retry": "Subukang Muli",
       "send": "Ipadala",
       "sendEmail": "Magpadala ng email",
@@ -405,6 +388,7 @@
       "groupChat": "Group Chat",
       "groupChatTitle": "{} {}",
       "guest": "(Bisita)",
+      "invalidUrl": "Maglagay ng web address na nagsisimula sa http:// o https://",
       "leadersCanPost": "Maaaring mag-post ng anunsyo ang mga lider dito.",
       "linkFallback": "Link",
       "linkText": "Link text",
@@ -447,6 +431,7 @@
         "modeGroup": "Everyone in the group",
         "modeRegistrants": "Everyone registered",
         "modeRegistrantsHoh": "One per household",
+        "saveFailed": "Hindi ma-save ang mga paalala.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
         "timeOfDay": "Time of Day",
@@ -470,6 +455,8 @@
       "rsvpViewResponses": "View responses",
       "save": "I-save",
       "saveAttendance": "I-save ang Attendance",
+      "saveChanges": "I-save ang mga Pagbabago",
+      "saving": "Sine-save...",
       "search": "Maghanap",
       "searchForPerson": "Maghanap ng tao",
       "selectAll": "Lahat",
@@ -667,12 +654,14 @@
       "noOtherHouseholdMembers": "No other members in your household.",
       "passwordMinLength": "Password must be at least 8 characters.",
       "passwordsDoNotMatch": "Passwords do not match.",
+      "pendingChanges": "Mga Nakabinbing Pagbabago",
       "pendingFamilyMembers": "Pending Family Members",
       "pendingFamilyMembersHint": "These will be submitted with your profile changes for approval.",
       "pendingPhoto": "Pending photo",
       "phoneVisibility": "Phone Visibility",
       "photoHint": "PNG or JPG. Images are cropped to 4:3 and resized automatically.",
       "reviewBeforeSaving": "Review your changes before saving.",
+      "reviewBeforeSubmitting": "Suriin ang iyong mga pagbabago bago isumite para sa pag-apruba.",
       "saveChanges": "Save Changes",
       "sectionAddress": "Address",
       "sectionContact": "Contact",
@@ -681,6 +670,7 @@
       "selectImageFile": "Please select an image file.",
       "staffDesc": "Visible only to church staff.",
       "state": "State",
+      "submitForApproval": "Isumite para sa Pag-apruba",
       "tabProfile": "Profile",
       "unableToDecodeImage": "Unable to decode image.",
       "unableToReadImage": "Unable to read image file.",
@@ -750,6 +740,7 @@
       "votd": "Talata ng Araw"
     },
     "screens": {
+      "adjustSearch": "Subukan ang ibang pangalan o baybay.",
       "alreadyCheckedIn": "Naka-check In Na",
       "alreadyCheckedInBody": "{} already checked in for this service. Check in again to update their groups.",
       "alreadyHaveAccount": "Already have an account?",
@@ -760,6 +751,7 @@
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
+      "changesSubmittedForApproval": "Naisumite na ang iyong mga pagbabago para sa pag-apruba.",
       "checkInAgain": "Check In Again",
       "checkinComplete": "Check-in Complete",
       "checkinStep": "Step {} of 3 · {}",
@@ -783,6 +775,8 @@
       "deleteConversationTitle": "Delete conversation?",
       "deleteNotification": "Burahin ang notipikasyon",
       "detectingDevice": "Tinutukoy ang iyong device…",
+      "directoryMembersBody": "Ang direktoryo ng simbahan ay ibinabahagi lamang sa mga miyembro.",
+      "directorySignInBody": "Mag-sign in para i-browse ang direktoryo ng simbahan.",
       "displayNameUpdated": "Na-update ang display name.",
       "donationsWillAppear": "Your donations will appear here once you make your first gift.",
       "done": "Done",
@@ -806,6 +800,8 @@
       "givingNotSetUp": "Giving is not yet set up for this church",
       "givingNotSetUpBody": "Please check back later once online giving has been configured.",
       "groupFallback": "Group",
+      "groupsSignInBody": "Mag-sign in para makita ang mga grupong kinabibilangan mo at sumali sa mga bago.",
+      "groupsSignInTitle": "Mag-sign in para makita ang iyong mga grupo",
       "keep": "Panatilihin",
       "lastGift": "Last Gift",
       "lastNameRegister": "Apelyido",
@@ -824,7 +820,9 @@
       "noGroup": "No Group",
       "noGroupSelected": "No group selected",
       "noGroupsAvailable": "Walang Available na Grupo",
+      "noGroupsBody": "Wala ka pang kinabibilangang grupo. I-browse ang mga grupong inaalok ng iyong simbahan para makahanap ng masasalihan.",
       "noGroupsMessage": "Walang naka-configure na grupo para sa serbisyong ito.",
+      "noGroupsTitle": "Wala pang mga grupo",
       "noHouseholdMembers": "Walang Natagpuang Miyembro ng Sambahayan",
       "noHouseholdMessage": "Pakitiyak na naka-sign in ka at may mga nakarehistrong miyembro ng sambahayan.",
       "noMembersFound": "No members found",
@@ -873,6 +871,7 @@
       "retry": "Retry",
       "save": "I-save",
       "scanWithPhone": "I-scan gamit ang camera ng iyong telepono",
+      "searchDirectoryBody": "Maghanap ng tao ayon sa pangalan para makita ang kanilang contact details.",
       "searchForMessage": "Maghanap ng tao na pagpapadalhan ng mensahe",
       "searchMembers": "Maghanap ng Miyembro",
       "selectGroup": "Select Group",
@@ -910,6 +909,7 @@
       "tapToExplore": "Tap to explore",
       "tapToSelectGroups": "Tap to select groups",
       "totalAmount": "Total: {}",
+      "totalThisYearGift": "Kabuuan ngayong taon • {} handog",
       "totalThisYearGifts": "Total this year • {} gifts",
       "turnOff": "Turn off",
       "turnOn": "Turn on",
@@ -917,6 +917,7 @@
       "unableToLoadPage": "Unable to load page",
       "unableToLoadPageBody": "The page took too long to respond or could not be displayed.",
       "unableToSaveChanges": "Unable to save changes.",
+      "unableToSubmitChanges": "Hindi maisumite ang mga pagbabago.",
       "unread": "Unread",
       "upcomingEvents": "Upcoming Events",
       "viewAll": "View All",
@@ -947,23 +948,13 @@
       "volunteer": "Mag-sign up upang maglingkod",
       "votd": "Talata ngayon"
     },
+    "votd": {
+      "copied": "Nakopya sa clipboard",
+      "share": "Ibahagi",
+      "shareImage": "Ibahagi ang larawan",
+      "unableToShare": "Hindi maibahagi"
+    },
     "yesterday": "kahapon"
-  },
-  "notes": {
-    "comment": "Komento",
-    "comments": "Mga Komento",
-    "list": {
-      "loadMore": "Mag-load ng Higit Pa",
-      "loading": "Naglo-load...",
-      "showAll": "Ipakita Lahat",
-      "typeMessage": "Mag-type ng mensahe...",
-      "userAlt": "user"
-    },
-    "startConversation": "Magsimula ng Usapan",
-    "validate": {
-      "content": "Nilalaman"
-    },
-    "viewAll": "Tingnan Lahat"
   },
   "pageSlug": {
     "achInstructions": "Mga Tagubilin para sa ACH Payment",
@@ -971,6 +962,7 @@
     "donate": "Mag-donate",
     "formClosedOn": "Nagsara ang form na ito noong {}",
     "formNotAvailableUntil": "Hindi available ang form na ito hanggang {}",
+    "formNotFound": "Hindi ma-load ang form na ito.",
     "formSubmitted": "Matagumpay na naisumite ang iyong form.",
     "liveStream": "Live Stream",
     "loginToManageDonations": "Mag-login upang pamahalaan ang mga donasyon",
@@ -987,43 +979,6 @@
     "firstName": "Pangalan",
     "lastName": "Apelyido",
     "name": "Pangalan"
-  },
-  "plans": {
-    "blockoutDate": {
-      "endDate": "Petsa ng Pagtatapos",
-      "endRequired": "Kailangan ang petsa ng pagtatapos.",
-      "startBeforeEnd": "Ang petsa ng simula ay dapat bago ang petsa ng pagtatapos.",
-      "startDate": "Petsa ng Simula",
-      "startRequired": "Kailangan ang petsa ng simula."
-    },
-    "blockoutDates": {
-      "none": "Walang blockout dates.",
-      "title": "Mga Blockout Date"
-    },
-    "position": {
-      "accept": "Tanggapin",
-      "accepted": "Tinanggap",
-      "decline": "Tanggihan",
-      "declined": "Tinanggihan",
-      "headerPrefix": "Posisyon",
-      "neededTimes": "Mga Kailangang Oras",
-      "status": "Status",
-      "unconfirmed": "Hindi pa kumpirmado"
-    },
-    "servingTimes": {
-      "plan": "Plan",
-      "role": "Tungkulin",
-      "serviceDate": "Petsa ng Serbisyo",
-      "title": "Mga Oras ng Paglilingkod"
-    },
-    "team": {
-      "avatar": "avatar"
-    },
-    "upcomingDates": {
-      "event": "Event",
-      "startTime": "Oras ng Simula",
-      "title": "Mga Paparating na Petsa"
-    }
   },
   "register": {
     "metaEventRegistration": "Pagpaparehistro sa Event",
