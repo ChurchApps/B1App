@@ -20,10 +20,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "error": "Error",
-    "optional": "Optional",
     "pleaseWait": "Please wait...",
-    "remove": "Remove",
-    "required": "Required",
     "save": "Save",
     "search": "Search",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "Payment Provider",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "Please enter a valid account number",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "Please enter a valid routing number"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "You already have a ChurchApps account. Please sign in with it instead.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "Checkbox",
-    "currency": "Currency",
-    "date": "Date",
-    "email": "Email",
-    "file": "File Upload",
-    "multiple": "Multiple Choice",
-    "number": "Number",
-    "phone": "Phone",
-    "textarea": "Text Area",
-    "textbox": "Text Box"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "Support Forum",
     "documentation": "Documentation"
-  },
-  "validation": {
-    "date": "Please enter a valid date",
-    "email": "Please enter a valid email address",
-    "fileSize": "File size must be less than {} MB",
-    "fileType": "Invalid file type",
-    "maxLength": "Must be no more than {} characters long",
-    "minLength": "Must be at least {} characters long",
-    "number": "Please enter a valid number",
-    "phone": "Please enter a valid phone number",
-    "required": "This field is required"
   },
   "wrapper": {
     "chatWith": "Chat with",

@@ -20,10 +20,7 @@
     "delete": "Eliminar",
     "edit": "Edit",
     "error": "Error",
-    "optional": "Opcional",
     "pleaseWait": "Por favor espere...",
-    "remove": "Eliminar",
-    "required": "Obligatorio",
     "save": "Guardar",
     "search": "Buscar",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "Proveedor de pagos",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "Ingrese un número de cuenta válido",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "Ingrese un número de ruta bancaria válido"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "Ya tiene una cuenta de ChurchApps. Inicie sesión con ella.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "Casilla de verificación",
-    "currency": "Moneda",
-    "date": "Fecha",
-    "email": "Correo electrónico",
-    "file": "Carga de archivo",
-    "multiple": "Opción múltiple",
-    "number": "Número",
-    "phone": "Teléfono",
-    "textarea": "Área de texto",
-    "textbox": "Cuadro de texto"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "Foro de soporte",
     "documentation": "Documentación"
-  },
-  "validation": {
-    "date": "Ingrese una fecha válida",
-    "email": "Ingrese una dirección de correo electrónico válida",
-    "fileSize": "El tamaño del archivo debe ser inferior a {} MB",
-    "fileType": "Tipo de archivo no válido",
-    "maxLength": "No debe tener más de {} caracteres",
-    "minLength": "Debe tener al menos {} caracteres",
-    "number": "Ingrese un número válido",
-    "phone": "Ingrese un número de teléfono válido",
-    "required": "Este campo es obligatorio"
   },
   "wrapper": {
     "chatWith": "Chat with",

@@ -20,10 +20,7 @@
     "delete": "删除",
     "edit": "Edit",
     "error": "Error",
-    "optional": "可选",
     "pleaseWait": "请稍等...",
-    "remove": "移除",
-    "required": "必填",
     "save": "节省",
     "search": "搜索",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "支付提供商",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "请输入有效的账号",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "请输入有效的银行路由号码"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "您已拥有 ChurchApps 账户。请改用该账户登录。",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "复选框",
-    "currency": "货币",
-    "date": "日期",
-    "email": "电子邮件",
-    "file": "文件上传",
-    "multiple": "多项选择",
-    "number": "数字",
-    "phone": "电话",
-    "textarea": "文本区域",
-    "textbox": "文本框"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "支持论坛",
     "documentation": "文档"
-  },
-  "validation": {
-    "date": "请输入有效的日期",
-    "email": "请输入有效的电子邮件地址",
-    "fileSize": "文件大小必须小于 {} MB",
-    "fileType": "文件类型无效",
-    "maxLength": "长度不能超过 {} 个字符",
-    "minLength": "长度至少为 {} 个字符",
-    "number": "请输入有效的数字",
-    "phone": "请输入有效的电话号码",
-    "required": "此字段为必填项"
   },
   "wrapper": {
     "chatWith": "Chat with",

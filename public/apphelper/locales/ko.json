@@ -20,10 +20,7 @@
     "delete": "삭제",
     "edit": "Edit",
     "error": "Error",
-    "optional": "선택 사항",
     "pleaseWait": "기다리세요...",
-    "remove": "제거",
-    "required": "필수",
     "save": "구하다",
     "search": "찾다",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "결제 제공업체",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "유효한 계좌 번호를 입력하세요",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "유효한 은행 라우팅 번호를 입력하세요"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "이미 ChurchApps 계정이 있습니다. 해당 계정으로 로그인하세요.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "체크박스",
-    "currency": "통화",
-    "date": "날짜",
-    "email": "이메일",
-    "file": "파일 업로드",
-    "multiple": "객관식",
-    "number": "숫자",
-    "phone": "전화",
-    "textarea": "텍스트 영역",
-    "textbox": "텍스트 상자"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "지원 포럼",
     "documentation": "문서"
-  },
-  "validation": {
-    "date": "유효한 날짜를 입력하세요",
-    "email": "유효한 이메일 주소를 입력하세요",
-    "fileSize": "파일 크기는 {}MB 미만이어야 합니다",
-    "fileType": "잘못된 파일 형식입니다",
-    "maxLength": "{}자 이하로 입력해야 합니다",
-    "minLength": "{}자 이상 입력해야 합니다",
-    "number": "유효한 숫자를 입력하세요",
-    "phone": "유효한 전화번호를 입력하세요",
-    "required": "이 필드는 필수입니다"
   },
   "wrapper": {
     "chatWith": "Chat with",

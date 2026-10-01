@@ -20,10 +20,7 @@
     "delete": "मिटाना",
     "edit": "Edit",
     "error": "Error",
-    "optional": "वैकल्पिक",
     "pleaseWait": "कृपया प्रतीक्षा करें...",
-    "remove": "हटाएं",
-    "required": "आवश्यक",
     "save": "बचाना",
     "search": "खोज",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "भुगतान प्रदाता",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "कृपया एक मान्य खाता संख्या दर्ज करें",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "कृपया एक मान्य बैंक रूटिंग नंबर दर्ज करें"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "आपके पास पहले से ही एक ChurchApps खाता है। कृपया इसके बजाय उससे साइन इन करें।",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "चेकबॉक्स",
-    "currency": "मुद्रा",
-    "date": "तारीख",
-    "email": "ईमेल",
-    "file": "फ़ाइल अपलोड",
-    "multiple": "बहुविकल्पी",
-    "number": "संख्या",
-    "phone": "फ़ोन",
-    "textarea": "टेक्स्ट क्षेत्र",
-    "textbox": "टेक्स्ट बॉक्स"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "सहायता फोरम",
     "documentation": "दस्तावेज़ीकरण"
-  },
-  "validation": {
-    "date": "कृपया एक मान्य तारीख दर्ज करें",
-    "email": "कृपया एक मान्य ईमेल पता दर्ज करें",
-    "fileSize": "फ़ाइल का आकार {} MB से कम होना चाहिए",
-    "fileType": "अमान्य फ़ाइल प्रकार",
-    "maxLength": "{} वर्णों से अधिक नहीं होना चाहिए",
-    "minLength": "कम से कम {} वर्ण लंबा होना चाहिए",
-    "number": "कृपया एक मान्य संख्या दर्ज करें",
-    "phone": "कृपया एक मान्य फ़ोन नंबर दर्ज करें",
-    "required": "यह फ़ील्ड आवश्यक है"
   },
   "wrapper": {
     "chatWith": "Chat with",

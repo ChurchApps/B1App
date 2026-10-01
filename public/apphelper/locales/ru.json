@@ -20,10 +20,7 @@
     "delete": "Удалить",
     "edit": "Edit",
     "error": "Error",
-    "optional": "Необязательно",
     "pleaseWait": "Пожалуйста, подождите...",
-    "remove": "Удалить",
-    "required": "Обязательно",
     "save": "Сохранять",
     "search": "Поиск",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "Платёжный провайдер",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "Введите действительный номер счёта",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "Введите действительный банковский маршрутный номер"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "У вас уже есть учётная запись ChurchApps. Войдите с её помощью.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "Флажок",
-    "currency": "Валюта",
-    "date": "Дата",
-    "email": "Электронная почта",
-    "file": "Загрузка файла",
-    "multiple": "Множественный выбор",
-    "number": "Число",
-    "phone": "Телефон",
-    "textarea": "Текстовая область",
-    "textbox": "Текстовое поле"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "Форум поддержки",
     "documentation": "Документация"
-  },
-  "validation": {
-    "date": "Введите действительную дату",
-    "email": "Введите действительный адрес электронной почты",
-    "fileSize": "Размер файла должен быть меньше {} МБ",
-    "fileType": "Недопустимый тип файла",
-    "maxLength": "Должно содержать не более {} символов",
-    "minLength": "Должно содержать не менее {} символов",
-    "number": "Введите действительное число",
-    "phone": "Введите действительный номер телефона",
-    "required": "Это поле обязательно для заполнения"
   },
   "wrapper": {
     "chatWith": "Chat with",

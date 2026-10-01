@@ -20,10 +20,7 @@
     "delete": "حذف",
     "edit": "Edit",
     "error": "Error",
-    "optional": "اختياري",
     "pleaseWait": "يرجى الانتظار...",
-    "remove": "إزالة",
-    "required": "مطلوب",
     "save": "حفظ",
     "search": "بحث",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "مزود الدفع",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "يرجى إدخال رقم حساب صالح",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "يرجى إدخال رقم توجيه مصرفي صالح"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "لديك بالفعل حساب ChurchApps. يرجى تسجيل الدخول به بدلاً من ذلك.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "خانة اختيار",
-    "currency": "العملة",
-    "date": "التاريخ",
-    "email": "البريد الإلكتروني",
-    "file": "تحميل ملف",
-    "multiple": "اختيار من متعدد",
-    "number": "رقم",
-    "phone": "الهاتف",
-    "textarea": "منطقة نص",
-    "textbox": "مربع نص"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "منتدى الدعم",
     "documentation": "التوثيق"
-  },
-  "validation": {
-    "date": "يرجى إدخال تاريخ صالح",
-    "email": "يرجى إدخال عنوان بريد إلكتروني صالح",
-    "fileSize": "يجب أن يكون حجم الملف أقل من {} ميغابايت",
-    "fileType": "نوع ملف غير صالح",
-    "maxLength": "يجب ألا يزيد عن {} حرفًا",
-    "minLength": "يجب ألا يقل عن {} أحرف",
-    "number": "يرجى إدخال رقم صالح",
-    "phone": "يرجى إدخال رقم هاتف صالح",
-    "required": "هذا الحقل مطلوب"
   },
   "wrapper": {
     "chatWith": "Chat with",

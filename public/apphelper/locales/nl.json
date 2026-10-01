@@ -20,10 +20,7 @@
     "delete": "Verwijderen",
     "edit": "Edit",
     "error": "Error",
-    "optional": "Optioneel",
     "pleaseWait": "Even geduld...",
-    "remove": "Verwijderen",
-    "required": "Verplicht",
     "save": "Opslaan",
     "search": "Zoeken",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "Betalingsprovider",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "Voer een geldig rekeningnummer in",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "Voer een geldig bankroutenummer in"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "U hebt al een ChurchApps-account. Log in plaats daarvan daarmee in.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "Selectievakje",
-    "currency": "Valuta",
-    "date": "Datum",
-    "email": "E-mail",
-    "file": "Bestand uploaden",
-    "multiple": "Meerkeuze",
-    "number": "Getal",
-    "phone": "Telefoon",
-    "textarea": "Tekstgebied",
-    "textbox": "Tekstvak"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "Ondersteuningsforum",
     "documentation": "Documentatie"
-  },
-  "validation": {
-    "date": "Voer een geldige datum in",
-    "email": "Voer een geldig e-mailadres in",
-    "fileSize": "Bestandsgrootte moet kleiner zijn dan {} MB",
-    "fileType": "Ongeldig bestandstype",
-    "maxLength": "Mag niet langer zijn dan {} tekens",
-    "minLength": "Moet minstens {} tekens lang zijn",
-    "number": "Voer een geldig getal in",
-    "phone": "Voer een geldig telefoonnummer in",
-    "required": "Dit veld is verplicht"
   },
   "wrapper": {
     "chatWith": "Chat with",

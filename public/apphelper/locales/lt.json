@@ -20,10 +20,7 @@
     "delete": "Ištrinti",
     "edit": "Edit",
     "error": "Error",
-    "optional": "Neprivaloma",
     "pleaseWait": "Prašome palaukti...",
-    "remove": "Pašalinti",
-    "required": "Privaloma",
     "save": "Išsaugoti",
     "search": "Paieška",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "Mokėjimų teikėjas",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "Įveskite galiojantį sąskaitos numerį",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "Įveskite galiojantį banko maršruto numerį"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "Jūs jau turite ChurchApps paskyrą. Prisijunkite su ja.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "Žymimasis laukelis",
-    "currency": "Valiuta",
-    "date": "Data",
-    "email": "El. paštas",
-    "file": "Failo įkėlimas",
-    "multiple": "Keli pasirinkimai",
-    "number": "Skaičius",
-    "phone": "Telefonas",
-    "textarea": "Teksto sritis",
-    "textbox": "Teksto laukas"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "Palaikymo forumas",
     "documentation": "Dokumentacija"
-  },
-  "validation": {
-    "date": "Įveskite galiojančią datą",
-    "email": "Įveskite galiojantį el. pašto adresą",
-    "fileSize": "Failo dydis turi būti mažesnis nei {} MB",
-    "fileType": "Netinkamas failo tipas",
-    "maxLength": "Negali būti ilgesnis nei {} simbolių",
-    "minLength": "Turi būti bent {} simbolių",
-    "number": "Įveskite galiojantį skaičių",
-    "phone": "Įveskite galiojantį telefono numerį",
-    "required": "Šis laukas yra privalomas"
   },
   "wrapper": {
     "chatWith": "Chat with",

@@ -20,10 +20,7 @@
     "delete": "Xóa",
     "edit": "Edit",
     "error": "Error",
-    "optional": "Tùy chọn",
     "pleaseWait": "Vui lòng đợi...",
-    "remove": "Xóa",
-    "required": "Bắt buộc",
     "save": "Lưu",
     "search": "Tìm kiếm",
     "submit": "Submit",
@@ -123,14 +120,10 @@
       "payWithCard": "Card",
       "paymentFormNotAvailable": "Payment form not available",
       "paymentFormNotInitialized": "Payment form not initialized",
-      "paymentProvider": "Nhà cung cấp thanh toán",
-      "providerName": "Kingdom Funding",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "validate": {
-        "accountNumber": "Vui lòng nhập số tài khoản hợp lệ",
         "captchaFailed": "reCAPTCHA verification failed. Please try again.",
-        "captchaRequired": "Please complete the reCAPTCHA verification",
-        "routingNumber": "Vui lòng nhập số định tuyến ngân hàng hợp lệ"
+        "captchaRequired": "Please complete the reCAPTCHA verification"
       }
     },
     "page": {
@@ -256,7 +249,6 @@
     "search": "Search icons..."
   },
   "login": {
-    "accountExists": "Bạn đã có tài khoản ChurchApps. Vui lòng đăng nhập bằng tài khoản đó.",
     "continueGoogle": "Continue with Google",
     "continueMicrosoft": "Continue with Microsoft",
     "createAccount": "Create an Account",
@@ -339,18 +331,6 @@
     "person": "Person",
     "years": "years"
   },
-  "question": {
-    "checkbox": "Hộp kiểm",
-    "currency": "Tiền tệ",
-    "date": "Ngày",
-    "email": "Email",
-    "file": "Tải tệp lên",
-    "multiple": "Nhiều lựa chọn",
-    "number": "Số",
-    "phone": "Điện thoại",
-    "textarea": "Vùng văn bản",
-    "textbox": "Hộp văn bản"
-  },
   "reporting": {
     "detailed": "Detailed Report",
     "downloadOptions": "Download Options",
@@ -389,17 +369,6 @@
   "support": {
     "discussions": "Diễn đàn hỗ trợ",
     "documentation": "Tài liệu"
-  },
-  "validation": {
-    "date": "Vui lòng nhập ngày hợp lệ",
-    "email": "Vui lòng nhập địa chỉ email hợp lệ",
-    "fileSize": "Kích thước tệp phải nhỏ hơn {} MB",
-    "fileType": "Loại tệp không hợp lệ",
-    "maxLength": "Không được dài quá {} ký tự",
-    "minLength": "Phải dài ít nhất {} ký tự",
-    "number": "Vui lòng nhập số hợp lệ",
-    "phone": "Vui lòng nhập số điện thoại hợp lệ",
-    "required": "Trường này là bắt buộc"
   },
   "wrapper": {
     "chatWith": "Chat with",
