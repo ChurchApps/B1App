@@ -16,10 +16,18 @@ const loadSharedData = (sdSlug: string) => {
   return loadData(sdSlug);
 };
 
+const getTitleCase = (words: string) => words
+  .toLowerCase()
+  .split(" ")
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+
+const getDisplayLabel = (label: string) => getTitleCase(label.replace(/-/g, " "));
+
 export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
-  const { sdSlug } = await params;
+  const { sdSlug, label } = await params;
   const props = await loadSharedData(sdSlug);
-  return MetaHelper.getMetaData(props.config.church.name, "", undefined, props.config.appearance);
+  return MetaHelper.getMetaData(getDisplayLabel(label) + " " + Locale.label("groupsPage.groupsHeading") + " - " + props.config.church.name, "", undefined, props.config.appearance);
 }
 
 const loadData = async (sdSlug:string) => {
@@ -33,14 +41,8 @@ export default async function GroupPage({ params }: { params: PageParams }) {
   const { sdSlug, label } = await params;
   const { config } = await loadSharedData(sdSlug);
 
-  const getTitleCase = (words: string) => words
-    .toLowerCase()
-    .split(" ")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-
   const searchLabel = label.replace(/-/g, " ");
-  const displayLabel = getTitleCase(searchLabel);
+  const displayLabel = getDisplayLabel(label);
 
 
   return (
