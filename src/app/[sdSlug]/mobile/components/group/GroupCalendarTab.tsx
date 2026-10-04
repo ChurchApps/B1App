@@ -613,20 +613,6 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
                   )}
                 </Box>
                 {e.description && (
-                  // <Typography
-                  //   sx={{
-                  //     fontSize: 13,
-                  //     color: tc.textMuted,
-                  //     mt: "6px",
-                  //     whiteSpace: "pre-wrap",
-                  //     display: "-webkit-box",
-                  //     WebkitLineClamp: 3,
-                  //     WebkitBoxOrient: "vertical",
-                  //     overflow: "hidden"
-                  //   }}
-                  // >
-                  //   {e.description}
-                  // </Typography>
                   <MarkdownPreviewLight value={e.description} />
                 )}
                 {e.registrationEnabled && e.id && (
