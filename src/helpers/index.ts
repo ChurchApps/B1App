@@ -7,7 +7,6 @@ export { WebPushHelper } from "./WebPushHelper";
 export { setAppBadge, clearAppBadge } from "./AppBadgeHelper";
 export { InstallPromptHelper } from "./InstallPromptHelper";
 export { formatNotificationError, getSocketDiagnostics } from "./NotificationRuntimeHelper";
-export { isLinkVisible, filterVisibleLinks } from "./VisibilityHelper";
 export { sanitizeCustomCss } from "./customContentSecurity";
 export { normalizeFirstDayOfWeek, getFirstDayOfWeek, weekdayColumn, rotateWeekdays } from "./firstDayOfWeek";
 export { PlanHelper } from "@churchapps/helpers";
