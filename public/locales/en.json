@@ -959,6 +959,7 @@
   "pageSlug": {
     "achInstructions": "Instructions for ACH Payment",
     "bible": "Bible",
+    "bibleUnavailable": "The Bible reader isn't available right now.",
     "donate": "Donate",
     "formClosedOn": "This form closed on {}",
     "formNotAvailableUntil": "This form isn't available until {}",
@@ -969,6 +970,7 @@
     "manageDonations": "Manage Donations",
     "metaForms": "Forms",
     "nextChapter": "Next Chapter",
+    "openBibleCom": "Open Bible.com",
     "previousChapter": "Previous Chapter",
     "sermons": "Sermons",
     "toViewForm": "to view this form.",
