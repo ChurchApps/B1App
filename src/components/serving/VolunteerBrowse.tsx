@@ -21,7 +21,7 @@ export function VolunteerBrowse({ signupPlans }: Props) {
   if (signupPlans.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 8 }}>
-        <Typography variant="h5" gutterBottom>{Locale.label("serving.opportunities")}</Typography>
+        <Typography variant="h5" component="h1" gutterBottom>{Locale.label("serving.opportunities")}</Typography>
         <Typography color="text.secondary">{Locale.label("serving.noOpportunities")}</Typography>
       </Box>
     );
@@ -35,7 +35,7 @@ export function VolunteerBrowse({ signupPlans }: Props) {
 
   return (
     <>
-      <Typography variant="h4" sx={{ mb: 3, fontWeight: 600 }}>{Locale.label("serving.opportunities")}</Typography>
+      <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 600 }}>{Locale.label("serving.opportunities")}</Typography>
       <Stack spacing={3}>
         {signupPlans.map(({ plan, positions, times }) => {
           const { total, filled, remaining } = getTotalSlots(positions);
