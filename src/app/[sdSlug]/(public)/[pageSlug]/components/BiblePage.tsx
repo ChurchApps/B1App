@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Container, Box, Button, ButtonGroup } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Container, Box, Button, ButtonGroup, Typography } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import { YouVersionProvider, BibleReader } from "@youversion/platform-react-ui";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -37,11 +37,24 @@ export function BiblePage() {
   const [chapter, setChapter] = useState("1");
   const [book, setBook] = useState("GEN");
   const [versionId, setVersionId] = useState(12);
+  // The YouVersion reader throws without an app key and only runs in the browser; either way the page used to 500.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  if (!apiKey) {
+    return (
+      <Container sx={{ textAlign: "center" }}>
+        <h1>{Locale.label("pageSlug.bible", "Bible")}</h1>
+        <Typography sx={{ mb: 2 }}>{Locale.label("pageSlug.bibleUnavailable")}</Typography>
+        <Button variant="contained" href="https://www.bible.com" target="_blank" rel="noopener noreferrer">{Locale.label("pageSlug.openBibleCom")}</Button>
+      </Container>
+    );
+  }
 
   return (
     <Container>
       <h1 style={{ textAlign: "center" }}>{Locale.label("pageSlug.bible", "Bible")}</h1>
-      <YouVersionProvider appKey={apiKey}>
+      {mounted && <YouVersionProvider appKey={apiKey}>
         <div style={{ marginTop: "20px" }}>
           <BibleReader.Root versionId={versionId} onVersionChange={setVersionId} book={book} onBookChange={setBook} chapter={chapter} onChapterChange={setChapter}>
             <BibleReader.Toolbar border="bottom" />
@@ -51,7 +64,7 @@ export function BiblePage() {
             </Box>
           </BibleReader.Root>
         </div>
-      </YouVersionProvider>
+      </YouVersionProvider>}
     </Container>
   );
 }
