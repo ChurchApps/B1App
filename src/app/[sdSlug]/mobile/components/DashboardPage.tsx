@@ -271,6 +271,10 @@ export const DashboardPage = ({ config }: Props) => {
   }
 
   const signedIn = !!(context?.user);
+  // Churches can hide the anonymous sign-in prompt or reword it (B1Admin > B1 Mobile).
+  const appearance = config?.appearance as Record<string, string> | undefined;
+  const hideSignInPrompt = appearance?.mobileHideSignInPrompt === "true";
+  const signInPrompt = (appearance?.mobileSignInPromptText || "").trim() || Locale.label("mobile.dashboard.signInPrompt");
 
   return (
     <Box sx={{ minHeight: "100%", px: `${mobileTheme.spacing.md}px`, pt: 1.5, pb: 3 }}>
@@ -301,27 +305,31 @@ export const DashboardPage = ({ config }: Props) => {
             <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontSize: 30, fontWeight: 600, color: tc.text, lineHeight: 1.1 }}>
               {Locale.label("mobile.dashboard.welcome")}
             </Typography>
-            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, mt: "4px" }}>
-              {Locale.label("mobile.dashboard.signInPrompt")}
-            </Typography>
+            {!hideSignInPrompt && (
+              <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, mt: "4px" }}>
+                {signInPrompt}
+              </Typography>
+            )}
           </Box>
-          <Box
-            component="a"
-            href="/mobile/login?returnUrl=%2Fmobile%2Fdashboard"
-            sx={{
-              flex: "none",
-              px: "18px",
-              py: "9px",
-              borderRadius: "999px",
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              fontSize: 14,
-              fontWeight: 600,
-              textDecoration: "none"
-            }}
-          >
-            {Locale.label("mobile.components.signIn")}
-          </Box>
+          {!hideSignInPrompt && (
+            <Box
+              component="a"
+              href="/mobile/login?returnUrl=%2Fmobile%2Fdashboard"
+              sx={{
+                flex: "none",
+                px: "18px",
+                py: "9px",
+                borderRadius: "999px",
+                bgcolor: tc.primary,
+                color: tc.onPrimary,
+                fontSize: 14,
+                fontWeight: 600,
+                textDecoration: "none"
+              }}
+            >
+              {Locale.label("mobile.components.signIn")}
+            </Box>
+          )}
         </Box>
       ) : null}
 
