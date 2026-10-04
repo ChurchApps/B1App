@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, request, type Page } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 import { DEMO_CHURCH, SEED_PEOPLE } from "./helpers/fixtures";
 
@@ -129,6 +129,62 @@ test.describe("Mobile shell dark mode", () => {
     await expect(toggle).toContainText("Light Mode");
     await expect(toggle).toHaveAccessibleName("Switch to light mode");
     await expect(toggle, '"mobile.components.lightMode" must never render as literal text').not.toContainText("mobile.components.");
+  });
+});
+
+// Issue #1189: a church can hide the anonymous home-screen sign-in prompt or change its wording
+// from B1Admin's B1 Mobile page. Both are public Membership settings read through config.appearance.
+const API_BASE = process.env.API_BASE || "http://localhost:8084";
+const BASE_URL = process.env.BASE_URL || "http://grace.localtest.me:3301";
+const DEFAULT_PROMPT = "Sign in to see your groups, giving, and more.";
+
+async function setSignInPrompt(hide: boolean, text: string) {
+  const ctx = await request.newContext();
+  const login = await ctx.post(API_BASE + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } });
+  if (!login.ok()) throw new Error(`login failed: ${login.status()}`);
+  const body = await login.json();
+  const uc = (body.userChurches || []).find((c: any) => c.church?.id === DEMO_CHURCH.ID);
+  const headers = { Authorization: `Bearer ${uc?.jwt}` };
+  const all = await (await ctx.get(API_BASE + "/membership/settings", { headers })).json();
+  const row = (keyName: string, value: string) => ({ ...((all as any[]).find(s => s.keyName === keyName) || { churchId: DEMO_CHURCH.ID, keyName }), public: 1, value });
+  const res = await ctx.post(API_BASE + "/membership/settings", { headers, data: [row("mobileHideSignInPrompt", `${hide}`), row("mobileSignInPromptText", text)] });
+  if (!res.ok()) throw new Error(`settings save failed: ${res.status()}`);
+  await ctx.post(BASE_URL + "/api/revalidate/" + DEMO_CHURCH.SUBDOMAIN);
+  await ctx.dispose();
+}
+
+test.describe("Mobile dashboard sign-in prompt", () => {
+  // These change a church-wide setting the anonymous dashboard reads.
+  test.describe.configure({ mode: "serial" });
+  test.use({ storageState: { cookies: [], origins: [] }, viewport: { width: 390, height: 844 } });
+  test.afterAll(async () => { await setSignInPrompt(false, ""); });
+
+  // The pill sits beside the welcome title; the drawer and Me tab have their own Sign In links.
+  const signInPill = (page: Page) => page.getByText("Welcome", { exact: true }).locator("xpath=../..").getByRole("link", { name: /^Sign in$/i });
+
+  test("shows the default prompt and Sign in button to visitors", async ({ page }) => {
+    await setSignInPrompt(false, "");
+    await page.goto("/mobile/dashboard");
+    await expect(page.getByText("Welcome", { exact: true })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByText(DEFAULT_PROMPT, { exact: true })).toBeVisible();
+    await expect(signInPill(page)).toBeVisible();
+  });
+
+  test("shows the church's own prompt wording", async ({ page }) => {
+    await setSignInPrompt(false, "Sign in to get conference alerts");
+    await page.goto("/mobile/dashboard");
+    await expect(page.getByText("Sign in to get conference alerts", { exact: true })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByText(DEFAULT_PROMPT, { exact: true })).toHaveCount(0);
+    await expect(signInPill(page)).toBeVisible();
+  });
+
+  test("hides the prompt but keeps the welcome title when the church turns it off", async ({ page }) => {
+    await setSignInPrompt(true, "Sign in to get conference alerts");
+    await page.goto("/mobile/dashboard");
+    await expect(page.getByText("Welcome", { exact: true })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByText(DEFAULT_PROMPT, { exact: true })).toHaveCount(0);
+    await expect(page.getByText("Sign in to get conference alerts", { exact: true })).toHaveCount(0);
+    await expect(signInPill(page)).toHaveCount(0);
   });
 });
 
