@@ -1,6 +1,6 @@
 import { fetchCached } from "./ConfigHelper";
 
-export interface RedirectInterface { id?: string; fromPath: string; toPath: string; createdDate?: string; }
+interface RedirectInterface { id?: string; fromPath: string; toPath: string; createdDate?: string; }
 
 const normalizePath = (path: string): string => {
   if (!path) return path;
