@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "댓글",
     "commentPlaceholder": "댓글을 입력하세요",
     "contentShared": "콘텐츠 공유됨",
     "group": "그룹",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "ACH 결제 안내",
     "bible": "성경",
+    "bibleUnavailable": "지금은 성경 읽기를 사용할 수 없습니다.",
     "donate": "헌금하기",
     "formClosedOn": "이 양식은 {}에 마감되었습니다",
     "formNotAvailableUntil": "이 양식은 {}까지 사용할 수 없습니다",
@@ -969,6 +971,7 @@
     "manageDonations": "헌금 관리",
     "metaForms": "양식",
     "nextChapter": "다음 장",
+    "openBibleCom": "Bible.com 열기",
     "previousChapter": "이전 장",
     "sermons": "설교",
     "toViewForm": "이 양식을 보려면",

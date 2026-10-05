@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Megjegyzés",
     "commentPlaceholder": "Megjegyzés helykitöltője",
     "contentShared": "Tartalom megosztva",
     "group": "Csoport",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "ACH fizetési útmutató",
     "bible": "Biblia",
+    "bibleUnavailable": "A Biblia-olvasó jelenleg nem érhető el.",
     "donate": "Adományozás",
     "formClosedOn": "Ez az űrlap lezárult ekkor: {}",
     "formNotAvailableUntil": "Ez az űrlap {} időpontig nem érhető el",
@@ -969,6 +971,7 @@
     "manageDonations": "Adományok kezelése",
     "metaForms": "Űrlapok",
     "nextChapter": "Következő fejezet",
+    "openBibleCom": "Bible.com megnyitása",
     "previousChapter": "Előző fejezet",
     "sermons": "Prédikációk",
     "toViewForm": "az űrlap megtekintéséhez.",

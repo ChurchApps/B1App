@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Opmerking",
     "commentPlaceholder": "Voeg een opmerking toe...",
     "contentShared": "Inhoud gedeeld",
     "group": "Groep",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Instructies voor ACH-betaling",
     "bible": "Bijbel",
+    "bibleUnavailable": "De Bijbellezer is op dit moment niet beschikbaar.",
     "donate": "Geven",
     "formClosedOn": "Dit formulier is gesloten op {}",
     "formNotAvailableUntil": "Dit formulier is pas beschikbaar vanaf {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Giften beheren",
     "metaForms": "Formulieren",
     "nextChapter": "Volgend hoofdstuk",
+    "openBibleCom": "Bible.com openen",
     "previousChapter": "Vorig hoofdstuk",
     "sermons": "Preken",
     "toViewForm": "om dit formulier te bekijken.",

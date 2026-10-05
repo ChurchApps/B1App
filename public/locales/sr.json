@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Коментар",
     "commentPlaceholder": "Унесите коментар",
     "contentShared": "Садржај је подељен",
     "group": "Група",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Упутства за ACH плаћање",
     "bible": "Библија",
+    "bibleUnavailable": "Читач Библије тренутно није доступан.",
     "donate": "Приложи",
     "formClosedOn": "Овај формулар је затворен {}",
     "formNotAvailableUntil": "Овај формулар није доступан до {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Управљај прилозима",
     "metaForms": "Формулари",
     "nextChapter": "Следеће поглавље",
+    "openBibleCom": "Отвори Bible.com",
     "previousChapter": "Претходно поглавље",
     "sermons": "Проповеди",
     "toViewForm": "да видите овај формулар.",

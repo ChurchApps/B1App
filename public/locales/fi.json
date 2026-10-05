@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Kommentti",
     "commentPlaceholder": "Kirjoita kommentti",
     "contentShared": "Sisältö jaettu",
     "group": "Ryhmä",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Ohjeet ACH-maksua varten",
     "bible": "Raamattu",
+    "bibleUnavailable": "Raamatunlukija ei ole juuri nyt käytettävissä.",
     "donate": "Lahjoita",
     "formClosedOn": "Tämä lomake suljettiin {}",
     "formNotAvailableUntil": "Tämä lomake ei ole saatavilla ennen kuin {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Hallitse lahjoituksia",
     "metaForms": "Lomakkeet",
     "nextChapter": "Seuraava luku",
+    "openBibleCom": "Avaa Bible.com",
     "previousChapter": "Edellinen luku",
     "sermons": "Saarnat",
     "toViewForm": "nähdäksesi tämän lomakkeen.",

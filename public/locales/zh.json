@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "评论",
     "commentPlaceholder": "请输入评论",
     "contentShared": "内容已分享",
     "group": "团体",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "ACH 付款说明",
     "bible": "圣经",
+    "bibleUnavailable": "圣经阅读器暂时不可用。",
     "donate": "奉献",
     "formClosedOn": "此表单已于 {} 关闭",
     "formNotAvailableUntil": "此表单在 {} 之前不可用",
@@ -969,6 +971,7 @@
     "manageDonations": "管理奉献",
     "metaForms": "表单",
     "nextChapter": "下一章",
+    "openBibleCom": "打开 Bible.com",
     "previousChapter": "上一章",
     "sermons": "讲道",
     "toViewForm": "以查看此表单。",

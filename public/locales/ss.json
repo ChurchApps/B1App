@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Umbono",
     "commentPlaceholder": "Indzawo Yembono",
     "contentShared": "Lokucuketfwe Lokwabelwene",
     "group": "Licembu",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Imiyalo Yekukhokha nge-ACH",
     "bible": "Libhayibheli",
+    "bibleUnavailable": "Sifundzi seliBhayibheli asitfolakali nyalo.",
     "donate": "Nikela",
     "formClosedOn": "Lelifomu livaliwe nga-{}",
     "formNotAvailableUntil": "Lelifomu alikatfolakali kuze kube nga-{}",
@@ -969,6 +971,7 @@
     "manageDonations": "Phatsa Iminikelo",
     "metaForms": "Emafomu",
     "nextChapter": "Sehluko Lesilandzelako",
+    "openBibleCom": "Vula Bible.com",
     "previousChapter": "Sehluko Lesendlulile",
     "sermons": "Tintshumayelo",
     "toViewForm": "kute ubone lelifomu.",

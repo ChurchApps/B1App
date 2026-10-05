@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Kommentar",
     "commentPlaceholder": "Kommentarsplatshållare",
     "contentShared": "Innehåll delat",
     "group": "Grupp",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Instruktioner för ACH-betalning",
     "bible": "Bibeln",
+    "bibleUnavailable": "Bibelläsaren är inte tillgänglig just nu.",
     "donate": "Ge",
     "formClosedOn": "Detta formulär stängde {}",
     "formNotAvailableUntil": "Detta formulär är inte tillgängligt förrän {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Hantera gåvor",
     "metaForms": "Formulär",
     "nextChapter": "Nästa kapitel",
+    "openBibleCom": "Öppna Bible.com",
     "previousChapter": "Föregående kapitel",
     "sermons": "Predikningar",
     "toViewForm": "för att visa detta formulär.",

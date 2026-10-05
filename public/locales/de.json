@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Kommentar",
     "commentPlaceholder": "Kommentar-Platzhalter",
     "contentShared": "Inhalt geteilt",
     "group": "Gruppe",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Anleitung zur ACH-Zahlung",
     "bible": "Bibel",
+    "bibleUnavailable": "Der Bibelleser ist derzeit nicht verfügbar.",
     "donate": "Spenden",
     "formClosedOn": "Dieses Formular wurde am {} geschlossen",
     "formNotAvailableUntil": "Dieses Formular ist erst ab {} verfügbar",
@@ -969,6 +971,7 @@
     "manageDonations": "Spenden verwalten",
     "metaForms": "Formulare",
     "nextChapter": "Nächstes Kapitel",
+    "openBibleCom": "Bible.com öffnen",
     "previousChapter": "Vorheriges Kapitel",
     "sermons": "Predigten",
     "toViewForm": "um dieses Formular anzuzeigen.",

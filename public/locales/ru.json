@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Комментарий",
     "commentPlaceholder": "Введите комментарий",
     "contentShared": "Контент опубликован",
     "group": "Группа",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Инструкции для платежа ACH",
     "bible": "Библия",
+    "bibleUnavailable": "Чтение Библии сейчас недоступно.",
     "donate": "Пожертвовать",
     "formClosedOn": "Эта форма закрылась {}",
     "formNotAvailableUntil": "Эта форма будет доступна не раньше {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Управление пожертвованиями",
     "metaForms": "Формы",
     "nextChapter": "Следующая глава",
+    "openBibleCom": "Открыть Bible.com",
     "previousChapter": "Предыдущая глава",
     "sermons": "Проповеди",
     "toViewForm": "чтобы просмотреть эту форму.",
