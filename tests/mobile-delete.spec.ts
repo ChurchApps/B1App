@@ -165,6 +165,7 @@ test.describe("Issue #837 — mobile delete UI", () => {
 
     const requestPromise = page.waitForRequest((req) => req.method() === "DELETE" && /\/notifications\/my$/.test(req.url()), { timeout: 15000 });
     await page.locator('[data-testid="notifications-clear-all"]').click();
+    await page.locator('[data-testid="confirm-clear-notifications"]').click();
     await requestPromise;
 
     await expect(page.locator('[data-testid^="notification-delete-"]')).toHaveCount(0);
@@ -181,6 +182,7 @@ test.describe("Issue #837 — mobile delete UI", () => {
 
     const requestPromise = page.waitForRequest((req) => req.method() === "DELETE" && /\/privatemessages\/TEST_PM_1$/i.test(req.url()), { timeout: 15000 });
     await page.locator('[data-testid="conversation-delete-TEST_PM_1"]').click();
+    await page.locator('[data-testid="confirm-delete-conversation"]').click();
     await requestPromise;
 
     await expect(page.locator('[data-testid="conversation-delete-TEST_PM_1"]')).toHaveCount(0);

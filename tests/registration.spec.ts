@@ -34,6 +34,8 @@ async function fillGuestInfo(main: import("@playwright/test").Locator, firstName
 }
 
 test.describe.serial("Public event registration wizard (web /register/<eventId>)", () => {
+  // Guest fields unmount once the shared storageState session hydrates.
+  test.use({ storageState: { cookies: [], origins: [] } });
   let staffJwt: string;
   let noFormEventId: string;
   let withFormEventId: string;
@@ -140,6 +142,9 @@ const DEMO_PERSON_ID = "PER00000082"; // Demo User, head of the seeded "User Fam
 const ALEX_PERSON_ID = "PER00000084"; // Alex User, child born 2015
 
 test.describe.serial("Household registration pre-fill (logged-in member)", () => {
+  // Global storageState is already demo@, so /login redirects and never shows the form.
+  // This flow needs the in-app login that fills UserContext on the public wizard.
+  test.use({ storageState: { cookies: [], origins: [] } });
   let staffJwt: string;
   let eventId: string;
   let adultTypeId: string;
