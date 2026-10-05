@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Komento",
     "commentPlaceholder": "Placeholder ng Komento",
     "contentShared": "Naibahagi ang Nilalaman",
     "group": "Grupo",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Mga Tagubilin para sa ACH Payment",
     "bible": "Bibliya",
+    "bibleUnavailable": "Hindi available ang Bible reader sa ngayon.",
     "donate": "Mag-donate",
     "formClosedOn": "Nagsara ang form na ito noong {}",
     "formNotAvailableUntil": "Hindi available ang form na ito hanggang {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Pamahalaan ang mga Donasyon",
     "metaForms": "Mga Form",
     "nextChapter": "Susunod na Kabanata",
+    "openBibleCom": "Buksan ang Bible.com",
     "previousChapter": "Nakaraang Kabanata",
     "sermons": "Mga Sermon",
     "toViewForm": "upang makita ang form na ito.",

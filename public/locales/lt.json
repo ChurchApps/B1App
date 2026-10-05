@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Komentaras",
     "commentPlaceholder": "Komentaro vietos žymė",
     "contentShared": "Turinys pasidalintas",
     "group": "Grupė",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "ACH mokėjimo instrukcijos",
     "bible": "Biblija",
+    "bibleUnavailable": "Biblijos skaityklė šiuo metu nepasiekiama.",
     "donate": "Aukoti",
     "formClosedOn": "Ši forma buvo uždaryta {}",
     "formNotAvailableUntil": "Ši forma nepasiekiama iki {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Valdyti aukas",
     "metaForms": "Formos",
     "nextChapter": "Kitas skyrius",
+    "openBibleCom": "Atidaryti Bible.com",
     "previousChapter": "Ankstesnis skyrius",
     "sermons": "Pamokslai",
     "toViewForm": "kad peržiūrėtumėte šią formą.",

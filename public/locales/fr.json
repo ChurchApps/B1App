@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Commentaire",
     "commentPlaceholder": "Rédigez un commentaire",
     "contentShared": "Contenu partagé",
     "group": "Groupe",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Instructions pour le paiement ACH",
     "bible": "Bible",
+    "bibleUnavailable": "Le lecteur de la Bible n'est pas disponible pour le moment.",
     "donate": "Faire un don",
     "formClosedOn": "Ce formulaire a été fermé le {}",
     "formNotAvailableUntil": "Ce formulaire n'est pas disponible avant le {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Gérer les dons",
     "metaForms": "Formulaires",
     "nextChapter": "Chapitre suivant",
+    "openBibleCom": "Ouvrir Bible.com",
     "previousChapter": "Chapitre précédent",
     "sermons": "Sermons",
     "toViewForm": "pour consulter ce formulaire.",

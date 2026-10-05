@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "コメント",
     "commentPlaceholder": "コメントを入力してください",
     "contentShared": "コンテンツが共有されました",
     "group": "グループ",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "ACH支払いの手順",
     "bible": "聖書",
+    "bibleUnavailable": "現在、聖書リーダーはご利用いただけません。",
     "donate": "献金",
     "formClosedOn": "このフォームは {} に終了しました",
     "formNotAvailableUntil": "このフォームは {} まで利用できません",
@@ -969,6 +971,7 @@
     "manageDonations": "献金を管理",
     "metaForms": "フォーム",
     "nextChapter": "次の章",
+    "openBibleCom": "Bible.com を開く",
     "previousChapter": "前の章",
     "sermons": "説教",
     "toViewForm": "このフォームを表示するために。",

@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Komentář",
     "commentPlaceholder": "Zástupný text komentáře",
     "contentShared": "Obsah sdílen",
     "group": "Skupina",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Pokyny pro platbu ACH",
     "bible": "Bible",
+    "bibleUnavailable": "Čtečka Bible teď není k dispozici.",
     "donate": "Darovat",
     "formClosedOn": "Tento formulář byl uzavřen {}",
     "formNotAvailableUntil": "Tento formulář je k dispozici až od {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Spravovat dary",
     "metaForms": "Formuláře",
     "nextChapter": "Následující kapitola",
+    "openBibleCom": "Otevřít Bible.com",
     "previousChapter": "Předchozí kapitola",
     "sermons": "Kázání",
     "toViewForm": "pro zobrazení tohoto formuláře.",

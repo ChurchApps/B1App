@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Kommentar",
     "commentPlaceholder": "Skriv en kommentar...",
     "contentShared": "Indhold delt",
     "group": "Gruppe",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Instruktioner til ACH-betaling",
     "bible": "Bibel",
+    "bibleUnavailable": "Bibellæseren er ikke tilgængelig lige nu.",
     "donate": "Doner",
     "formClosedOn": "Denne formular lukkede den {}",
     "formNotAvailableUntil": "Denne formular er ikke tilgængelig før {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Administrer donationer",
     "metaForms": "Formularer",
     "nextChapter": "Næste kapitel",
+    "openBibleCom": "Åbn Bible.com",
     "previousChapter": "Forrige kapitel",
     "sermons": "Prædikener",
     "toViewForm": "for at se denne formular.",

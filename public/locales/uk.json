@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Коментар",
     "commentPlaceholder": "Заповнювач коментаря",
     "contentShared": "Вміст опубліковано",
     "group": "Група",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Інструкції для оплати ACH",
     "bible": "Біблія",
+    "bibleUnavailable": "Читання Біблії зараз недоступне.",
     "donate": "Пожертвувати",
     "formClosedOn": "Ця форма закрилася {}",
     "formNotAvailableUntil": "Ця форма недоступна до {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Керувати пожертвами",
     "metaForms": "Форми",
     "nextChapter": "Наступний розділ",
+    "openBibleCom": "Відкрити Bible.com",
     "previousChapter": "Попередній розділ",
     "sermons": "Проповіді",
     "toViewForm": "щоб переглянути цю форму.",

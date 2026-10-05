@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Komentár",
     "commentPlaceholder": "Zadajte komentár",
     "contentShared": "Obsah zdieľaný",
     "group": "Skupina",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Pokyny pre platbu ACH",
     "bible": "Biblia",
+    "bibleUnavailable": "Čítačka Biblie momentálne nie je dostupná.",
     "donate": "Darovať",
     "formClosedOn": "Tento formulár bol uzavretý {}",
     "formNotAvailableUntil": "Tento formulár nie je dostupný do {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Spravovať dary",
     "metaForms": "Formuláre",
     "nextChapter": "Nasledujúca kapitola",
+    "openBibleCom": "Otvoriť Bible.com",
     "previousChapter": "Predchádzajúca kapitola",
     "sermons": "Kázne",
     "toViewForm": "pre zobrazenie tohto formulára.",

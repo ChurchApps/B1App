@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Komentar",
     "commentPlaceholder": "Tulis komentar...",
     "contentShared": "Konten Dibagikan",
     "group": "Grup",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Petunjuk untuk Pembayaran ACH",
     "bible": "Alkitab",
+    "bibleUnavailable": "Pembaca Alkitab tidak tersedia saat ini.",
     "donate": "Beri Persembahan",
     "formClosedOn": "Formulir ini ditutup pada {}",
     "formNotAvailableUntil": "Formulir ini belum tersedia hingga {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Kelola Persembahan",
     "metaForms": "Formulir",
     "nextChapter": "Pasal Berikutnya",
+    "openBibleCom": "Buka Bible.com",
     "previousChapter": "Pasal Sebelumnya",
     "sermons": "Khotbah",
     "toViewForm": "untuk melihat formulir ini.",

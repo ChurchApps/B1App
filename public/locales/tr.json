@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Yorum",
     "commentPlaceholder": "Yorum Yaz",
     "contentShared": "İçerik Paylaşıldı",
     "group": "Grup",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "ACH Ödeme Talimatları",
     "bible": "İncil",
+    "bibleUnavailable": "Kutsal Kitap okuyucusu şu anda kullanılamıyor.",
     "donate": "Bağış Yap",
     "formClosedOn": "Bu form {} tarihinde kapatıldı",
     "formNotAvailableUntil": "Bu form {} tarihine kadar mevcut değil",
@@ -969,6 +971,7 @@
     "manageDonations": "Bağışları Yönet",
     "metaForms": "Formlar",
     "nextChapter": "Sonraki Bölüm",
+    "openBibleCom": "Bible.com'u aç",
     "previousChapter": "Önceki Bölüm",
     "sermons": "Vaazlar",
     "toViewForm": "bu formu görüntülemek için.",

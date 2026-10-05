@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Komentar",
     "commentPlaceholder": "Placeholder komentarja",
     "contentShared": "Vsebina deljena",
     "group": "Skupina",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Navodila za plačilo ACH",
     "bible": "Sveto pismo",
+    "bibleUnavailable": "Bralnik Svetega pisma trenutno ni na voljo.",
     "donate": "Daruj",
     "formClosedOn": "Ta obrazec je bil zaprt {}",
     "formNotAvailableUntil": "Ta obrazec ni na voljo do {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Upravljanje darov",
     "metaForms": "Obrazci",
     "nextChapter": "Naslednje poglavje",
+    "openBibleCom": "Odpri Bible.com",
     "previousChapter": "Prejšnje poglavje",
     "sermons": "Pridige",
     "toViewForm": "za ogled tega obrazca.",

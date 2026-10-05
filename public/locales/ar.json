@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "تعليق",
     "commentPlaceholder": "أضف تعليقًا",
     "contentShared": "تمت مشاركة المحتوى",
     "group": "المجموعة",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "تعليمات الدفع عبر ACH",
     "bible": "الكتاب المقدس",
+    "bibleUnavailable": "قارئ الكتاب المقدس غير متاح حاليًا.",
     "donate": "تبرع",
     "formClosedOn": "أُغلق هذا النموذج في {}",
     "formNotAvailableUntil": "هذا النموذج غير متاح حتى {}",
@@ -969,6 +971,7 @@
     "manageDonations": "إدارة التبرعات",
     "metaForms": "النماذج",
     "nextChapter": "الإصحاح التالي",
+    "openBibleCom": "افتح Bible.com",
     "previousChapter": "الإصحاح السابق",
     "sermons": "العظات",
     "toViewForm": "لعرض هذا النموذج.",

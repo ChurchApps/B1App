@@ -1,5 +1,6 @@
 {
   "b1Share": {
+    "comment": "Bình luận",
     "commentPlaceholder": "Thêm bình luận",
     "contentShared": "Nội dung đã chia sẻ",
     "group": "Nhóm",
@@ -959,6 +960,7 @@
   "pageSlug": {
     "achInstructions": "Hướng dẫn thanh toán ACH",
     "bible": "Kinh Thánh",
+    "bibleUnavailable": "Trình đọc Kinh Thánh hiện không khả dụng.",
     "donate": "Dâng hiến",
     "formClosedOn": "Biểu mẫu này đã đóng vào {}",
     "formNotAvailableUntil": "Biểu mẫu này chưa khả dụng cho đến {}",
@@ -969,6 +971,7 @@
     "manageDonations": "Quản lý dâng hiến",
     "metaForms": "Biểu mẫu",
     "nextChapter": "Chương tiếp theo",
+    "openBibleCom": "Mở Bible.com",
     "previousChapter": "Chương trước",
     "sermons": "Bài giảng",
     "toViewForm": "để xem biểu mẫu này.",
