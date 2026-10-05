@@ -31,27 +31,16 @@ test.describe("Issue 1117 — group page for a logged-in non-member", () => {
   // demo-user storage state (demo@b1.church is a Domain Admin).
   test.use({ storageState: { cookies: [], origins: [] } });
 
-  test("Members tab settles instead of showing placeholders forever", async ({ page }) => {
+  test("signed-in non-member lands on the join step instead of a members spinner", async ({ page }) => {
     await loginAs(page, "volunteer@b1.church");
 
     await page.goto(`/mobile/groups/${NON_MEMBER_GROUP_ID}`, { timeout: 60000 });
 
-    // Open the Members tab the same way the reporter landed on it.
-    await page.getByRole("tab", { name: /^Members$/ }).click();
-
-    // The group itself loads fine - it is only the roster request that 401s.
+    // #581 replaced the Members tab for non-members with the join step. The group
+    // loads, and the roster skeletons from #562 must not sit on this screen.
     await expect(page.getByText("Young Adults Class").first()).toBeVisible({ timeout: 30000 });
-
-    // The bug: these never go away, because the errored query is indistinguishable
-    // from "still fetching".
-    await expect(page.locator(ROSTER_PLACEHOLDER)).toHaveCount(0, { timeout: 20000 });
-
-    // ...and the roster area says why it is empty rather than claiming the group
-    // has no members.
-    await expect(page.getByText(/only visible to people in this group/i)).toBeVisible();
-
-    // The page is usable again, so the reporter can get to the join action.
-    await page.getByRole("tab", { name: /^About$/ }).click();
+    await expect(page.getByTestId("group-outsider-view")).toBeVisible({ timeout: 15000 });
+    await expect(page.locator(ROSTER_PLACEHOLDER)).toHaveCount(0);
     await expect(page.getByTestId("join-group-button")).toBeVisible({ timeout: 15000 });
   });
 });
