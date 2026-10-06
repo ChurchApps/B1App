@@ -1,4 +1,4 @@
-import { test, expect, request, type APIRequestContext } from "@playwright/test";
+import { test, expect, request, type APIRequestContext, type Page } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 const MAIN_API = process.env.API_BASE || "http://localhost:8084";
@@ -122,6 +122,28 @@ test.describe("Mobile volunteer", () => {
       await signUpBtn.click();
 
       await expect(main.getByRole("button", { name: /^Remove$/i }).first()).toBeVisible({ timeout: 15000 });
+    });
+  });
+
+  // Demo plan PLA00000001 has "Show volunteer names" on, and Emily Davis holds Coffee Host (ASS00000010).
+  test.describe("volunteer names on the signup page", () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+
+    async function loginAsVolunteer(page: Page) {
+      await page.goto("/login", { timeout: 60000 });
+      await page.locator('input[type="email"]').waitFor({ state: "visible", timeout: 30000 });
+      await page.fill('input[type="email"]', "volunteer@b1.church");
+      await page.fill('input[type="password"]', "password");
+      await page.click('button[type="submit"]');
+      await page.waitForURL((url) => !url.pathname.includes("/login"), { timeout: 30000 });
+    }
+
+    test("a signed-in member sees who already signed up for a position", async ({ page }) => {
+      await loginAsVolunteer(page);
+      await page.goto("/mobile/volunteer/PLA00000001", { timeout: 60000 });
+
+      await expect(page.getByText("Coffee Host", { exact: true })).toBeVisible({ timeout: 30000 });
+      await expect(page.getByText("Signed up: Emily Davis")).toBeVisible({ timeout: 15000 });
     });
   });
 

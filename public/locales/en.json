@@ -303,6 +303,7 @@
       "signInToViewPlan": "Please sign in to view your plan details.",
       "signUp": "Sign Up",
       "signedUp": "Signed up",
+      "signedUpNames": "Signed up: {}",
       "signedUpSuccess": "You've been signed up!",
       "signingUp": "Signing Up...",
       "signupDeadlinePassed": "Signup deadline has passed.",
