@@ -34,7 +34,7 @@ interface Props {
 }
 
 interface SignupPlanData {
-  plan: PlanInterface & { signupDeadlineHours?: number; notes?: string };
+  plan: PlanInterface & { signupDeadlineHours?: number; notes?: string; showVolunteerNames?: boolean };
   positions: (PositionInterface & { filledCount: number })[];
   times: TimeInterface[];
 }
@@ -58,6 +58,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     positions: (PositionInterface & { filledCount: number })[];
     times: TimeInterface[];
     myAssignments: AssignmentInterface[];
+    volunteerNames: Record<string, string[]>;
   }
 
   const { data: bundle, isLoading: loading } = useQuery<SignupBundle>({
@@ -65,8 +66,9 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     queryFn: async () => {
       const data: SignupPlanData[] = await ApiHelper.getAnonymous("/plans/public/signup/" + churchId, "DoingApi");
       const match = Array.isArray(data) ? data.find((d) => d?.plan?.id === id) : null;
-      if (!match) return { plan: null, positions: [], times: [], myAssignments: [] };
+      if (!match) return { plan: null, positions: [], times: [], myAssignments: [], volunteerNames: {} };
       let myAssignments: AssignmentInterface[] = [];
+      const volunteerNames: Record<string, string[]> = {};
       if (signedIn) {
         try {
           const mine: AssignmentInterface[] = await ApiHelper.get("/assignments/my", "DoingApi");
@@ -77,12 +79,21 @@ export const VolunteerDetail = ({ id, config }: Props) => {
         } catch {
           myAssignments = [];
         }
+        if (match.plan?.showVolunteerNames) {
+          try {
+            const rows: { positionId: string; names: string[] }[] = await ApiHelper.get(`/plans/signup/${id}/volunteers`, "DoingApi");
+            if (Array.isArray(rows)) rows.forEach((r) => { volunteerNames[r.positionId] = r.names || []; });
+          } catch {
+            // names are optional
+          }
+        }
       }
       return {
         plan: match.plan,
         positions: match.positions || [],
         times: match.times || [],
-        myAssignments
+        myAssignments,
+        volunteerNames
       };
     },
     enabled: !!churchId && !!id
@@ -92,6 +103,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
   const positions = bundle?.positions ?? [];
   const times = bundle?.times ?? [];
   const myAssignments = bundle?.myAssignments ?? [];
+  const volunteerNames = bundle?.volunteerNames ?? {};
   const notFound = !loading && bundle !== undefined && !plan;
 
   const load = () => queryClient.invalidateQueries({ queryKey: ["volunteer-detail", churchId, id, signedIn] });
@@ -213,6 +225,7 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     const isFull = remaining === 0 && needed > 0;
     const mine = getMyAssignment(p.id);
     const busy = actionId === p.id || (mine?.id ? actionId === mine.id : false);
+    const names = (p.id && volunteerNames[p.id]) || [];
 
     return (
       <Box
@@ -246,6 +259,11 @@ export const VolunteerDetail = ({ id, config }: Props) => {
             </Box>
             {p.description && (
               <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: "4px" }}>{p.description}</Typography>
+            )}
+            {names.length > 0 && (
+              <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: "4px" }}>
+                {Locale.label("mobile.details.signedUpNames").replace("{}", names.join(", "))}
+              </Typography>
             )}
           </Box>
           {mine ? (
