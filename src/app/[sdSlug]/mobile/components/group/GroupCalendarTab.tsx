@@ -73,6 +73,9 @@ export interface EventRow {
   rsvpDisabled?: boolean;
 }
 
+type ViewMode = "month" | "list";
+const VIEW_MODE_KEY = "b1-group-events-view";
+
 const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
 const isoDate = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
@@ -103,6 +106,19 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [rosterFor, setRosterFor] = React.useState<{ eventId: string; occurrenceStart: string; title: string } | null>(null);
   const [rsvpLoading, setRsvpLoading] = React.useState<string | null>(null);
+  const [viewMode, setViewMode] = React.useState<ViewMode>("month");
+
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem(VIEW_MODE_KEY);
+      if (saved === "month" || saved === "list") setViewMode(saved);
+    } catch { /* storage blocked — keep month view */ }
+  }, []);
+
+  const changeViewMode = (mode: ViewMode) => {
+    setViewMode(mode);
+    try { localStorage.setItem(VIEW_MODE_KEY, mode); } catch { /* storage blocked */ }
+  };
 
   const { data: rawEvents, isLoading } = useQuery<EventRow[]>({
     queryKey: ["group-events", groupId],
@@ -202,6 +218,29 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
   }, [filteredEvents]);
 
   const selectedEvents = eventsByDate[selected] || [];
+
+  // List view: this month's occurrences in date order, from today onward when viewing the current month.
+  const listGroups = React.useMemo(() => {
+    const now = new Date();
+    const isCurrentMonth = currentMonth.getFullYear() === now.getFullYear() && currentMonth.getMonth() === now.getMonth();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const rows = filteredEvents
+      .filter((e) => {
+        if (!e.start) return false;
+        const d = new Date(e.start);
+        if (isNaN(d.getTime())) return false;
+        return !isCurrentMonth || d >= startOfToday;
+      })
+      .sort((a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime());
+    const groups: { key: string; events: EventRow[] }[] = [];
+    rows.forEach((e) => {
+      const key = isoDate(new Date(e.start!));
+      const last = groups[groups.length - 1];
+      if (last && last.key === key) last.events.push(e);
+      else groups.push({ key, events: [e] });
+    });
+    return groups;
+  }, [filteredEvents, currentMonth]);
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
@@ -335,6 +374,118 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
     );
   };
 
+  const renderEventCard = (e: EventRow, i: number) => (
+    <Box
+      key={e.id || `ev-${i}`}
+      sx={{
+        bgcolor: tc.surface,
+        border: `1px solid ${tc.border}`,
+        borderRadius: `${mobileTheme.radius.lg}px`,
+        p: `${mobileTheme.spacing.md}px`,
+        borderLeft: `4px solid ${tc.primary}`,
+        position: "relative"
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
+            {e.title || Locale.label("mobile.group.event")}
+          </Typography>
+          <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
+            {formatTimeRange(e.start, e.end, e.allDay)}
+          </Typography>
+          {(e.visibility === "private" || e.recurrenceRule || e.allDay) && (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: "6px" }}>
+              {e.visibility === "private" && (
+                <Chip
+                  size="small"
+                  icon={<Icon sx={{ fontSize: 14 }}>lock</Icon>}
+                  label={Locale.label("mobile.group.private")}
+                  sx={{
+                    height: 22,
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    borderRadius: "999px",
+                    bgcolor: tc.iconBackground,
+                    color: tc.textSecondary,
+                    "& .MuiChip-icon": { color: tc.textSecondary, ml: "4px" }
+                  }}
+                />
+              )}
+              {e.allDay && (
+                <Chip
+                  size="small"
+                  label={Locale.label("mobile.group.allDay")}
+                  sx={{
+                    height: 22,
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    borderRadius: "999px",
+                    bgcolor: tc.primaryLight,
+                    color: tc.primary
+                  }}
+                />
+              )}
+              {e.recurrenceRule && (
+                <Chip
+                  size="small"
+                  icon={<Icon sx={{ fontSize: 14 }}>autorenew</Icon>}
+                  label={describeRecurrence(e.recurrenceRule)}
+                  sx={{
+                    height: 22,
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    borderRadius: "999px",
+                    bgcolor: tc.iconBackground,
+                    color: tc.text,
+                    "& .MuiChip-icon": { color: tc.primary, ml: "4px" }
+                  }}
+                />
+              )}
+            </Box>
+          )}
+        </Box>
+        {canManage && onEditEvent && (
+          <IconButton
+            size="small"
+            aria-label={Locale.label("mobile.group.editEvent")}
+            onClick={(ev) => {
+              ev.stopPropagation();
+              onEditEvent(e);
+            }}
+            sx={{ color: tc.primary, ml: "auto", mt: "-4px" }}
+          >
+            <Icon sx={{ fontSize: 18 }}>edit</Icon>
+          </IconButton>
+        )}
+      </Box>
+      {e.description && (
+        <MarkdownPreviewLight value={e.description} />
+      )}
+      {e.registrationEnabled && e.id && (
+        <Box sx={{ mt: 1.25, display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={(ev) => { ev.stopPropagation(); router.push(`/mobile/register/${e.id}`); }}
+            sx={{
+              bgcolor: tc.success,
+              color: "#000",
+              textTransform: "none",
+              fontWeight: 600,
+              borderRadius: `${mobileTheme.radius.md}px`,
+              px: 2,
+              "&:hover": { bgcolor: tc.success }
+            }}
+          >
+            {Locale.label("mobile.group.register")}
+          </Button>
+        </Box>
+      )}
+      {renderRsvp(e)}
+    </Box>
+  );
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
       <Box
@@ -431,216 +582,171 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
             <Icon>chevron_right</Icon>
           </IconButton>
         </Box>
-        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px" }}>
-          {weekdayLabels.map((w, i) => (
-            <Box
-              key={`wd-${i}`}
-              data-testid={`weekday-${i}`}
-              sx={{ textAlign: "center", fontSize: 12, fontWeight: 600, color: tc.primary, py: "4px" }}
-            >
-              {w}
-            </Box>
-          ))}
-          {days.map((d, i) => {
-            if (!d) return <Box key={`e-${i}`} />;
-            const key = isoDate(d);
-            const isSelected = key === selected;
-            const hasEvents = !!eventsByDate[key]?.length;
-            const isToday = key === isoDate(new Date());
-            return (
-              <Box
-                key={key}
-                role="button"
-                tabIndex={0}
-                data-testid={`day-${key}`}
-                onClick={() => setSelected(key)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelected(key);
-                  }
-                }}
-                sx={{
-                  position: "relative",
-                  width: "100%",
-                  maxWidth: 66,
-                  aspectRatio: "1 / 1",
-                  justifySelf: "center",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  bgcolor: isSelected ? tc.primary : "transparent",
-                  color: isSelected ? tc.onPrimary : isToday ? tc.primary : tc.text,
-                  fontSize: 14,
-                  fontWeight: isToday || isSelected ? 700 : 500,
-                  "&:hover": { bgcolor: isSelected ? tc.primary : tc.iconBackground }
-                }}
-              >
-                {d.getDate()}
-                {hasEvents && !isSelected && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      bottom: 4,
-                      width: 4,
-                      height: 4,
-                      borderRadius: "2px",
-                      bgcolor: tc.primary
-                    }}
-                  />
-                )}
-              </Box>
-            );
-          })}
-        </Box>
-      </Box>
-
-      <Box>
-        <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-          {new Date(selected + "T00:00:00").toLocaleDateString(DateHelper.locale, {
-            weekday: "long",
-            month: "long",
-            day: "numeric"
-          })}
-        </Typography>
-        {isLoading && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            {[0, 1].map((i) => (
-              <Skeleton key={`es-${i}`} variant="rounded" height={60} sx={{ borderRadius: `${mobileTheme.radius.lg}px` }} />
-            ))}
-          </Box>
-        )}
-        {!isLoading && selectedEvents.length === 0 && (
-          <Box
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              p: `${mobileTheme.spacing.md}px`,
-              textAlign: "center"
-            }}
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 0.5, mb: viewMode === "month" ? 1 : 0 }}>
+          <IconButton
+            onClick={() => changeViewMode("month")}
+            aria-label={Locale.label("mobile.group.monthView")}
+            aria-pressed={viewMode === "month"}
+            size="small"
+            sx={{ color: viewMode === "month" ? tc.primary : tc.textMuted }}
           >
-            <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.noEventsToday")}</Typography>
-          </Box>
-        )}
-        {!isLoading && selectedEvents.length > 0 && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-            {selectedEvents.map((e, i) => (
+            <Icon>calendar_month</Icon>
+          </IconButton>
+          <IconButton
+            onClick={() => changeViewMode("list")}
+            aria-label={Locale.label("mobile.group.listView")}
+            aria-pressed={viewMode === "list"}
+            size="small"
+            sx={{ color: viewMode === "list" ? tc.primary : tc.textMuted }}
+          >
+            <Icon>view_list</Icon>
+          </IconButton>
+        </Box>
+        {viewMode === "month" && (
+          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px" }}>
+            {weekdayLabels.map((w, i) => (
               <Box
-                key={e.id || `ev-${i}`}
-                sx={{
-                  bgcolor: tc.surface,
-                  border: `1px solid ${tc.border}`,
-                  borderRadius: `${mobileTheme.radius.lg}px`,
-                  p: `${mobileTheme.spacing.md}px`,
-                  borderLeft: `4px solid ${tc.primary}`,
-                  position: "relative"
-                }}
+                key={`wd-${i}`}
+                data-testid={`weekday-${i}`}
+                sx={{ textAlign: "center", fontSize: 12, fontWeight: 600, color: tc.primary, py: "4px" }}
               >
-                <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                      {e.title || Locale.label("mobile.group.event")}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
-                      {formatTimeRange(e.start, e.end, e.allDay)}
-                    </Typography>
-                    {(e.visibility === "private" || e.recurrenceRule || e.allDay) && (
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: "6px" }}>
-                        {e.visibility === "private" && (
-                          <Chip
-                            size="small"
-                            icon={<Icon sx={{ fontSize: 14 }}>lock</Icon>}
-                            label={Locale.label("mobile.group.private")}
-                            sx={{
-                              height: 22,
-                              fontSize: 10.5,
-                              fontWeight: 700,
-                              borderRadius: "999px",
-                              bgcolor: tc.iconBackground,
-                              color: tc.textSecondary,
-                              "& .MuiChip-icon": { color: tc.textSecondary, ml: "4px" }
-                            }}
-                          />
-                        )}
-                        {e.allDay && (
-                          <Chip
-                            size="small"
-                            label={Locale.label("mobile.group.allDay")}
-                            sx={{
-                              height: 22,
-                              fontSize: 10.5,
-                              fontWeight: 700,
-                              borderRadius: "999px",
-                              bgcolor: tc.primaryLight,
-                              color: tc.primary
-                            }}
-                          />
-                        )}
-                        {e.recurrenceRule && (
-                          <Chip
-                            size="small"
-                            icon={<Icon sx={{ fontSize: 14 }}>autorenew</Icon>}
-                            label={describeRecurrence(e.recurrenceRule)}
-                            sx={{
-                              height: 22,
-                              fontSize: 10.5,
-                              fontWeight: 700,
-                              borderRadius: "999px",
-                              bgcolor: tc.iconBackground,
-                              color: tc.text,
-                              "& .MuiChip-icon": { color: tc.primary, ml: "4px" }
-                            }}
-                          />
-                        )}
-                      </Box>
-                    )}
-                  </Box>
-                  {canManage && onEditEvent && (
-                    <IconButton
-                      size="small"
-                      aria-label={Locale.label("mobile.group.editEvent")}
-                      onClick={(ev) => {
-                        ev.stopPropagation();
-                        onEditEvent(e);
+                {w}
+              </Box>
+            ))}
+            {days.map((d, i) => {
+              if (!d) return <Box key={`e-${i}`} />;
+              const key = isoDate(d);
+              const isSelected = key === selected;
+              const hasEvents = !!eventsByDate[key]?.length;
+              const isToday = key === isoDate(new Date());
+              return (
+                <Box
+                  key={key}
+                  role="button"
+                  tabIndex={0}
+                  data-testid={`day-${key}`}
+                  onClick={() => setSelected(key)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelected(key);
+                    }
+                  }}
+                  sx={{
+                    position: "relative",
+                    width: "100%",
+                    maxWidth: 66,
+                    aspectRatio: "1 / 1",
+                    justifySelf: "center",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    bgcolor: isSelected ? tc.primary : "transparent",
+                    color: isSelected ? tc.onPrimary : isToday ? tc.primary : tc.text,
+                    fontSize: 14,
+                    fontWeight: isToday || isSelected ? 700 : 500,
+                    "&:hover": { bgcolor: isSelected ? tc.primary : tc.iconBackground }
+                  }}
+                >
+                  {d.getDate()}
+                  {hasEvents && !isSelected && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 4,
+                        width: 4,
+                        height: 4,
+                        borderRadius: "2px",
+                        bgcolor: tc.primary
                       }}
-                      sx={{ color: tc.primary, ml: "auto", mt: "-4px" }}
-                    >
-                      <Icon sx={{ fontSize: 18 }}>edit</Icon>
-                    </IconButton>
+                    />
                   )}
                 </Box>
-                {e.description && (
-                  <MarkdownPreviewLight value={e.description} />
-                )}
-                {e.registrationEnabled && e.id && (
-                  <Box sx={{ mt: 1.25, display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onClick={(ev) => { ev.stopPropagation(); router.push(`/mobile/register/${e.id}`); }}
-                      sx={{
-                        bgcolor: tc.success,
-                        color: "#000",
-                        textTransform: "none",
-                        fontWeight: 600,
-                        borderRadius: `${mobileTheme.radius.md}px`,
-                        px: 2,
-                        "&:hover": { bgcolor: tc.success }
-                      }}
-                    >
-                      {Locale.label("mobile.group.register")}
-                    </Button>
-                  </Box>
-                )}
-                {renderRsvp(e)}
-              </Box>
-            ))}
+              );
+            })}
           </Box>
         )}
       </Box>
+
+      {viewMode === "month" ? (
+        <Box>
+          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
+            {new Date(selected + "T00:00:00").toLocaleDateString(DateHelper.locale, {
+              weekday: "long",
+              month: "long",
+              day: "numeric"
+            })}
+          </Typography>
+          {isLoading && (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              {[0, 1].map((i) => (
+                <Skeleton key={`es-${i}`} variant="rounded" height={60} sx={{ borderRadius: `${mobileTheme.radius.lg}px` }} />
+              ))}
+            </Box>
+          )}
+          {!isLoading && selectedEvents.length === 0 && (
+            <Box
+              sx={{
+                bgcolor: tc.surface,
+                border: `1px solid ${tc.border}`,
+                borderRadius: `${mobileTheme.radius.lg}px`,
+                p: `${mobileTheme.spacing.md}px`,
+                textAlign: "center"
+              }}
+            >
+              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.noEventsToday")}</Typography>
+            </Box>
+          )}
+          {!isLoading && selectedEvents.length > 0 && (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+              {selectedEvents.map(renderEventCard)}
+            </Box>
+          )}
+        </Box>
+      ) : (
+        <Box data-testid="group-events-list">
+          {isLoading && (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              {[0, 1].map((i) => (
+                <Skeleton key={`ls-${i}`} variant="rounded" height={60} sx={{ borderRadius: `${mobileTheme.radius.lg}px` }} />
+              ))}
+            </Box>
+          )}
+          {!isLoading && listGroups.length === 0 && (
+            <Box
+              sx={{
+                bgcolor: tc.surface,
+                border: `1px solid ${tc.border}`,
+                borderRadius: `${mobileTheme.radius.lg}px`,
+                p: `${mobileTheme.spacing.md}px`,
+                textAlign: "center"
+              }}
+            >
+              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.noUpcomingEventsMonth")}</Typography>
+            </Box>
+          )}
+          {!isLoading && listGroups.length > 0 && (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
+              {listGroups.map((g) => (
+                <Box key={g.key} data-testid={`list-day-${g.key}`}>
+                  <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
+                    {new Date(g.key + "T00:00:00").toLocaleDateString(DateHelper.locale, {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric"
+                    })}
+                  </Typography>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
+                    {g.events.map(renderEventCard)}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Box>
+      )}
       <RsvpRosterDialog
         target={rosterFor}
         onClose={() => setRosterFor(null)}
