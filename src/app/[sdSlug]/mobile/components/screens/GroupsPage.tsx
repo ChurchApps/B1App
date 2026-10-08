@@ -67,7 +67,7 @@ export const GroupsPage = ({ config: _config }: Props) => {
     }
   };
 
-  const { data: upcomingEvents = [] } = useQuery<EventInterface[]>({
+  const { data: registerableEvents = [] } = useQuery<EventInterface[]>({
     queryKey: ["events-registerable", context?.user?.id],
     queryFn: async () => {
       const data = await ApiHelper.get("/events/registerable", "ContentApi");
@@ -77,6 +77,16 @@ export const GroupsPage = ({ config: _config }: Props) => {
     staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000
   });
+
+  // /events/registerable returns every registration-enabled event; only show ones that haven't ended (or recur).
+  const upcomingEvents = useMemo(() => {
+    const now = Date.now();
+    return registerableEvents.filter((event) => {
+      if (event.recurrenceRule) return true;
+      const endTime = new Date(event.end || event.start || "").getTime();
+      return isNaN(endTime) || endTime >= now;
+    });
+  }, [registerableEvents]);
 
   const effectiveGroups = loggedIn ? groups : [];
 
