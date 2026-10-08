@@ -1,7 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { DEMO_CHURCH, SEED_PLAYLISTS, SEED_SERMONS } from "./helpers/fixtures";
+import { getApi, apiCall } from "./helpers/api";
+
+const MAIN_API = process.env.API_BASE || "http://localhost:8084";
 
 test.describe("Public sermons page", () => {
+  // The redirect test briefly takes over /sermons, so keep this file's tests in order on one worker.
+  test.describe.configure({ mode: "default" });
+
   test.beforeEach(async ({ page }) => {
     await page.context().clearCookies();
   });
@@ -9,6 +15,22 @@ test.describe("Public sermons page", () => {
   test("renders sermons heading", async ({ page }) => {
     await page.goto("/sermons");
     await expect(page.locator("h1").filter({ hasText: /^Sermons$/i }).first()).toBeVisible();
+  });
+
+  test("a saved redirect for /sermons wins over the built-in Sermons page", async ({ page }) => {
+    const api = await getApi("demo");
+    const target = "https://www.youtube.com/@gracecommunity-sermons";
+    const saved = await apiCall(api, "post", `${MAIN_API}/content/redirects`, [{ fromPath: "/sermons", toPath: target }]);
+    expect(saved.ok()).toBeTruthy();
+    const [redirect] = await saved.json();
+
+    try {
+      const res = await page.request.get("/sermons", { maxRedirects: 0 });
+      expect(res.status()).toBe(308);
+      expect(res.headers()["location"]).toBe(target);
+    } finally {
+      await apiCall(api, "delete", `${MAIN_API}/content/redirects/${redirect.id}`);
+    }
   });
 
   test("shows seeded playlists in the default view", async ({ page }) => {

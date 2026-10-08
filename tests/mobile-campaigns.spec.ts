@@ -16,7 +16,9 @@ test.describe.serial("Mobile donate — CampaignProgress", () => {
   test.beforeAll(async ({ request }) => {
     const loginRes = await request.post((process.env.API_BASE || "http://localhost:8084") + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } });
     const loginBody = await loginRes.json();
-    jwt = loginBody.userChurches[0].jwt;
+    // userChurches[0] is Accra. The browser session and this page are Grace.
+    const uc = (loginBody.userChurches || []).find((c: any) => c.church?.id === "CHU00000001") || loginBody.userChurches?.[0];
+    jwt = uc?.jwt;
 
     const campaignRes = await request.post((process.env.API_BASE || "http://localhost:8084") + "/giving/campaigns", {
       headers: { Authorization: "Bearer " + jwt },

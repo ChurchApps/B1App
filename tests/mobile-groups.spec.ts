@@ -86,6 +86,53 @@ test.describe("Mobile groups", () => {
   });
 });
 
+// Issue #1208: the mobile Groups "Upcoming Events" section listed registration-enabled events that already ended.
+test.describe.serial("Mobile groups upcoming events", () => {
+  const PAST_TITLE = "Issue 1208 Past Registration Event";
+  let staffJwt: string;
+  let eventId: string;
+
+  test.beforeAll(async () => {
+    const ctx = await request.newContext();
+    const loginRes = await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } });
+    expect(loginRes.ok()).toBeTruthy();
+    const loginBody = await loginRes.json();
+    const uc = (loginBody.userChurches || []).find((c: any) => c.church?.id === CHURCH_ID) || loginBody.userChurches?.[0];
+    staffJwt = uc?.jwt as string;
+    expect(staffJwt, "staff jwt").toBeTruthy();
+
+    const start = new Date();
+    start.setDate(start.getDate() - 30);
+    start.setHours(9, 0, 0, 0);
+    const end = new Date(start);
+    end.setHours(12, 0, 0, 0);
+
+    const res = await ctx.post(`${MAIN_API}/content/events`, {
+      headers: { Authorization: "Bearer " + staffJwt },
+      data: [{ groupId: "GRP00000030", title: PAST_TITLE, start, end, allDay: false, visibility: "public", registrationEnabled: true, capacity: 20 }]
+    });
+    expect(res.ok()).toBeTruthy();
+    eventId = (await res.json())[0]?.id;
+    expect(eventId, "created event id").toBeTruthy();
+    await ctx.dispose();
+  });
+
+  test.afterAll(async () => {
+    if (!eventId) return;
+    const ctx = await request.newContext();
+    await ctx.delete(`${MAIN_API}/content/events/${eventId}`, { headers: { Authorization: "Bearer " + staffJwt } }).catch(() => { });
+    await ctx.dispose();
+  });
+
+  test("past registration events are not listed under Upcoming Events", async ({ page }) => {
+    await page.goto("/mobile/groups");
+    const main = page.locator("main");
+    await expect(main.getByText("Upcoming Events")).toBeVisible({ timeout: 15000 });
+    await expect(main.getByText(/Vacation Bible School/i).first()).toBeVisible();
+    await expect(main.getByText(PAST_TITLE)).toHaveCount(0);
+  });
+});
+
 test.describe("Mobile group event registration (leader)", () => {
   test.describe.configure({ mode: "serial" });
   const GROUP_ID = "GRP00000023";
@@ -284,6 +331,81 @@ test.describe.serial("Mobile recurring group event edits", () => {
     today.setHours(0, 0, 0, 0);
     expect(untilDate.getTime()).toBeLessThan(today.getTime());
     expect(untilDate.getTime()).toBeGreaterThan(seriesStart.getTime() + 20 * 86400000);
+  });
+});
+
+test.describe.serial("Mobile group events list view", () => {
+  const GROUP_ID = "GRP00000023";
+  const stamp = Date.now();
+  const titles = { past: `List Past ${stamp}`, today: `List Today ${stamp}`, early: `List Early ${stamp}`, late: `List Late ${stamp}` };
+  const eventIds: string[] = [];
+  let auth: { headers: { Authorization: string } };
+
+  const at = (d: Date, hour: number) => { const x = new Date(d); x.setHours(hour, 0, 0, 0); return x; };
+
+  test.beforeAll(async () => {
+    const ctx = await request.newContext();
+    const login = await (await ctx.post(`${MAIN_API}/membership/users/login`, { data: { email: "demo@b1.church", password: "password" } })).json();
+    const uc = (login.userChurches || []).find((c: any) => c.church?.id === CHURCH_ID) || login.userChurches?.[0];
+    auth = { headers: { Authorization: "Bearer " + (uc?.jwt as string) } };
+
+    const today = new Date();
+    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+    const nextMonth = (day: number) => new Date(today.getFullYear(), today.getMonth() + 1, day);
+    // Late is created before Early so the list has to sort by date, not insertion order.
+    const rows = [
+      { title: titles.past, start: at(yesterday, 18) },
+      { title: titles.today, start: at(today, 18) },
+      { title: titles.late, start: at(nextMonth(20), 18) },
+      { title: titles.early, start: at(nextMonth(5), 18) }
+    ];
+    for (const r of rows) {
+      const end = new Date(r.start);
+      end.setHours(19, 0, 0, 0);
+      const created = await (await ctx.post(`${MAIN_API}/content/events`, {
+        ...auth,
+        data: [{ groupId: GROUP_ID, title: r.title, start: r.start, end, allDay: false, visibility: "public" }]
+      })).json();
+      const id = (Array.isArray(created) ? created[0] : created)?.id;
+      expect(id, `created ${r.title}`).toBeTruthy();
+      eventIds.push(id);
+    }
+    await ctx.dispose();
+  });
+
+  test.afterAll(async () => {
+    const ctx = await request.newContext();
+    for (const id of eventIds) await ctx.delete(`${MAIN_API}/content/events/${id}`, auth);
+    await ctx.dispose();
+  });
+
+  test("list view shows upcoming events in date order and is remembered", async ({ page }) => {
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await page.getByRole("tab", { name: /Events/i }).click();
+    await page.getByRole("button", { name: /^List view$/i }).click();
+
+    const list = page.getByTestId("group-events-list");
+    await expect(list).toContainText(titles.today, { timeout: 15000 });
+    await expect(list).not.toContainText(titles.past);
+    await expect(page.locator('[data-testid^="day-"]')).toHaveCount(0);
+
+    await page.getByRole("button", { name: /^Next month$/i }).click();
+    await expect(list).toContainText(titles.late, { timeout: 15000 });
+    const text = await list.innerText();
+    expect(text.indexOf(titles.early)).toBeGreaterThan(-1);
+    expect(text.indexOf(titles.early)).toBeLessThan(text.indexOf(titles.late));
+
+    await page.reload();
+    await page.getByRole("tab", { name: /Events/i }).click();
+    await expect(page.getByTestId("group-events-list")).toContainText(titles.today, { timeout: 15000 });
+  });
+
+  test("month view brings the day grid back", async ({ page }) => {
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await page.getByRole("tab", { name: /Events/i }).click();
+    await page.getByRole("button", { name: /^Month view$/i }).click();
+    await expect(page.locator('[data-testid^="day-"]').first()).toBeVisible({ timeout: 15000 });
+    await expect(page.getByTestId("group-events-list")).toHaveCount(0);
   });
 });
 

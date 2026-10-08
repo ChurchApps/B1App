@@ -61,7 +61,14 @@ export const GroupsBrowser = (props: Props) => {
     return [...new Set(groups.map((g) => g.categoryName).filter(Boolean))] as string[];
   }, [groups]);
 
-  if (!groups) return <Loading />;
+  // The heading renders before the groups load so the page has its h1 in the server HTML.
+  const heading = (
+    <Typography variant="h4" component="h1" sx={{ mb: 2, fontWeight: 600 }}>
+      {props.title || Locale.label("groupsPage.findAGroup")}
+    </Typography>
+  );
+
+  if (!groups) return <Box>{heading}<Loading /></Box>;
 
   const showSearch = props.showSearch !== false;
   const showCategory = props.showCategory !== false && !props.category && categories.length > 1;
@@ -71,9 +78,7 @@ export const GroupsBrowser = (props: Props) => {
 
   return (
     <Box data-testid="groups-browser">
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
-        {props.title || Locale.label("groupsPage.findAGroup")}
-      </Typography>
+      {heading}
       {(showSearch || showCategory || showCampus) && (
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {showSearch && (

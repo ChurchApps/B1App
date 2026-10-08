@@ -3,7 +3,7 @@ import { type LinkInterface } from "@churchapps/helpers";
 // Dashboard shows hero + 2 featured (church-configured order) and an Explore grid
 // (engagement-sorted); everything past HOME_TABS_COUNT lives on the More page.
 // Both pages must partition the same way or links appear twice or not at all.
-export const HOME_TABS_COUNT = 7;
+const HOME_TABS_COUNT = 7;
 export const FEATURED_COUNT = 3;
 
 export const hasVotdLink = (links: LinkInterface[]): boolean => links.some((l) => l.linkType === "votd");
