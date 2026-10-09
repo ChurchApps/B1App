@@ -90,6 +90,9 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const [regLastName, setRegLastName] = useState("");
   const [matchedChurchName, setMatchedChurchName] = useState("");
   const [matchedChurchId, setMatchedChurchId] = useState<string | undefined>(undefined);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const registerShownAtRef = useRef(0);
+  useEffect(() => { if (mode === "register") registerShownAtRef.current = Date.now(); }, [mode]);
 
   const [codeDigits, setCodeDigits] = useState<string[]>(Array(CODE_LENGTH).fill(""));
   const [resendCooldown, setResendCooldown] = useState(0);
@@ -217,7 +220,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
     if (!regLastName.trim()) { showError("Please enter your last name."); return; }
     setLoading(true);
     try {
-      const body: any = { email, firstName: regFirstName, lastName: regLastName, appName: "B1", appUrl: typeof window !== "undefined" ? window.location.origin : undefined };
+      const body: any = { email, firstName: regFirstName, lastName: regLastName, appName: "B1", appUrl: typeof window !== "undefined" ? window.location.origin : undefined, website: honeypotRef.current?.value || "", fillMs: Date.now() - registerShownAtRef.current };
       if (matchedChurchId) body.churchId = matchedChurchId;
       const resp: any = await ApiHelper.postAnonymous("/users/register", body, "MembershipApi");
       if (resp?.errors?.length) {
@@ -519,6 +522,7 @@ export const MobileLoginScreen = ({ config }: Props) => {
         InputProps={{ startAdornment: (<InputAdornment position="start"><Icon sx={{ color: tc.textMuted }}>email</Icon></InputAdornment>) }}
         disabled={loading}
       />
+      <input ref={honeypotRef} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: "1px", height: "1px", overflow: "hidden" }} />
       <Button type="submit" variant="contained" fullWidth disabled={loading} sx={primaryBtnSx}>
         {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Create account"}
       </Button>
