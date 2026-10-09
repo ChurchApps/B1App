@@ -302,7 +302,7 @@
       "serviceTimes": "Gottesdienstzeiten",
       "share": "Teilen",
       "signedUp": "Angemeldet",
-      "signedUpNames": "Angemeldet: {}"
+      "signedUpNames": "Angemeldet: {}",
       "signedUpSuccess": "Sie wurden angemeldet!",
       "signIn": "Anmelden",
       "signingUp": "Wird angemeldet...",
@@ -668,7 +668,7 @@
       "pendingFamilyMembersHint": "Diese werden zusammen mit Ihren Profiländerungen zur Genehmigung eingereicht.",
       "pendingPhoto": "Ausstehendes Foto",
       "phoneVisibility": "Sichtbarkeit des Telefons",
-      "photo": "Foto"
+      "photo": "Foto",
       "photoHint": "PNG oder JPG. Bilder werden auf das Seitenverhältnis 4:3 zugeschnitten und automatisch in der Größe angepasst.",
       "reviewBeforeSaving": "Überprüfen Sie Ihre Änderungen, bevor Sie sie speichern.",
       "reviewBeforeSubmitting": "Überprüfen Sie Ihre Änderungen, bevor Sie sie zur Genehmigung einreichen.",
