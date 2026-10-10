@@ -34,6 +34,7 @@ interface CategoryChannels {
   push: boolean;
   email: boolean;
   in_app: boolean;
+  sms: boolean;
 }
 
 interface NotificationCategory {
@@ -47,6 +48,7 @@ interface NotificationCategory {
 
 interface NotificationPrefs {
   allowPush: boolean;
+  allowSms: boolean;
   emailFrequency: "never" | "individual" | "daily";
   masterMute: boolean;
   quietHoursStart: string | null;
@@ -56,7 +58,7 @@ interface NotificationPrefs {
   categories: NotificationCategory[];
 }
 
-type ChannelKey = "push" | "email" | "in_app";
+type ChannelKey = "push" | "email" | "in_app" | "sms";
 
 interface Override {
   categoryKey: string;
@@ -84,6 +86,7 @@ export const NotificationPrefsPage = () => {
   const [quietEnd, setQuietEnd] = useState("");
   const [timeZone, setTimeZone] = useState("");
   const [allowPush, setAllowPush] = useState(true);
+  const [allowSms, setAllowSms] = useState(false);
   const [maxPushPerDay, setMaxPushPerDay] = useState<number | null>(null);
   const [emailFrequency, setEmailFrequency] = useState<"never" | "individual" | "daily">("individual");
   const [overrides, setOverrides] = useState<Map<string, boolean>>(new Map());
@@ -95,6 +98,15 @@ export const NotificationPrefsPage = () => {
     { key: "email", label: Locale.label("mobile.notificationPrefs.channelEmail") },
     { key: "in_app", label: Locale.label("mobile.notificationPrefs.channelInApp") }
   ];
+
+  // Texts only exist when the church has a texting provider.
+  const { data: textingStatus } = useQuery<{ enabled?: boolean }>({
+    queryKey: ["textingStatus", context?.userChurch?.church?.id],
+    queryFn: () => ApiHelper.get("/texting/status", "MessagingApi"),
+    enabled: loggedIn
+  });
+  const textingEnabled = !!textingStatus?.enabled;
+  if (textingEnabled) displayChannels.push({ key: "sms", label: Locale.label("mobile.notificationPrefs.channelSms") });
 
   const { data: prefs, isLoading, refetch } = useQuery<NotificationPrefs>({
     queryKey: ["notificationPrefs", context?.user?.id],
@@ -108,6 +120,7 @@ export const NotificationPrefsPage = () => {
     setQuietEnd(p.quietHoursEnd || "");
     setTimeZone(p.timeZone || deviceZone);
     setAllowPush(!!p.allowPush);
+    setAllowSms(!!p.allowSms);
     setMaxPushPerDay(p.maxPushPerDay ?? null);
     setEmailFrequency(p.emailFrequency || "individual");
     setOverrides(new Map());
@@ -152,6 +165,7 @@ export const NotificationPrefsPage = () => {
     });
     return {
       allowPush,
+      ...(textingEnabled ? { allowSms } : {}),
       emailFrequency,
       masterMute,
       quietHoursStart: quietStart || null,
@@ -165,6 +179,7 @@ export const NotificationPrefsPage = () => {
   const isDirty = !!prefs && (
     masterMute !== !!prefs.masterMute
     || allowPush !== !!prefs.allowPush
+    || allowSms !== !!prefs.allowSms
     || maxPushPerDay !== (prefs.maxPushPerDay ?? null)
     || emailFrequency !== (prefs.emailFrequency || "individual")
     || quietStart !== (prefs.quietHoursStart || "")
@@ -271,6 +286,16 @@ export const NotificationPrefsPage = () => {
           </Box>
           <Switch checked={allowPush} onChange={(e) => setAllowPush(e.target.checked)} />
         </Box>
+
+        {textingEnabled && (
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 1, borderBottom: `1px solid ${tc.border}` }}>
+            <Box>
+              <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.notificationPrefs.textMessages")}</Typography>
+              <Typography sx={{ fontSize: 12, color: tc.textMuted }}>{Locale.label("mobile.notificationPrefs.textHelp")}</Typography>
+            </Box>
+            <Switch checked={allowSms} onChange={(e) => setAllowSms(e.target.checked)} slotProps={{ input: { "aria-label": Locale.label("mobile.notificationPrefs.textMessages") } }} data-testid="notification-prefs-allow-sms" />
+          </Box>
+        )}
 
         <FormControl fullWidth sx={{ mt: 2, mb: 2, ...inputSx }}>
           <InputLabel id="email-freq-label">{Locale.label("mobile.notificationPrefs.emailFrequency")}</InputLabel>

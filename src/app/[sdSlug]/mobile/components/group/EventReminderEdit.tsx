@@ -43,6 +43,11 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
   const [saving, setSaving] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
   const [saveFailed, setSaveFailed] = React.useState(false);
+  const [textingEnabled, setTextingEnabled] = React.useState(false);
+
+  React.useEffect(() => {
+    ApiHelper.get("/texting/status", "MessagingApi").then((d: { enabled?: boolean }) => setTextingEnabled(!!d?.enabled)).catch(() => setTextingEnabled(false));
+  }, []);
 
   React.useEffect(() => {
     if (!eventId) return;
@@ -166,7 +171,16 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
                 control={<Checkbox size="small" checked={channels.includes("email")} onChange={() => toggleChannel("email")} />}
                 label="Email"
               />
+              {textingEnabled && (
+                <FormControlLabel
+                  control={<Checkbox size="small" checked={channels.includes("sms")} onChange={() => toggleChannel("sms")} data-testid="group-reminder-channel-sms" />}
+                  label={Locale.label("mobile.group.reminders.text")}
+                />
+              )}
             </Box>
+            {textingEnabled && channels.includes("sms") && (
+              <Typography sx={{ fontSize: 12, color: tc.textMuted }}>{Locale.label("mobile.group.reminders.textHint")}</Typography>
+            )}
           </Box>
         </>
       )}
