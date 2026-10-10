@@ -763,6 +763,8 @@
       "browseGroups": "Browse groups",
       "cancel": "Cancel",
       "cancelRegistration": "Cancel Registration?",
+      "checkinFull": "A room you picked is full or closed for check-in. Please see a volunteer.",
+      "checkinNotOpen": "Check-in isn't open for this service right now.",
       "cantShowInApp": "This site can't be shown inside the app.",
       "change": "Change",
       "changesSaved": "Your changes have been saved.",
