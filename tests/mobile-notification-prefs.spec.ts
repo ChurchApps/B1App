@@ -78,6 +78,30 @@ test.describe("Mobile notification preferences", () => {
     await expect(save).toBeDisabled();
   });
 
+  // Demo church has a seeded texting provider, so members can opt in to text reminders.
+  test("members can turn on text reminders, with a Text column for reminder categories", async ({ page }) => {
+    const main = await gotoPrefs(page);
+    await expect(main.getByText("Text messages", { exact: true })).toBeVisible();
+    await expect(main.getByRole("columnheader", { name: "Text" })).toBeVisible();
+    await expect(main.getByRole("checkbox", { name: "Serving & Schedule Text" })).toBeVisible();
+    await expect(main.getByRole("checkbox", { name: "Group Chat Text" })).toHaveCount(0); // chat never texts
+
+    const sms = main.getByTestId("notification-prefs-allow-sms").locator("input");
+    await expect(sms).not.toBeChecked();
+    await sms.check();
+    const saved = page.waitForResponse((r) => r.url().includes("/notificationpreferences") && r.request().method() === "POST", { timeout: 15000 });
+    await main.getByRole("button", { name: "Save Preferences" }).click();
+    const body = await (await saved).json();
+    expect(Boolean(body.allowSms)).toBe(true);
+    await expect(page.getByText("Preferences saved.")).toBeVisible({ timeout: 15000 });
+
+    // Put it back so other specs see the default.
+    await sms.uncheck();
+    const restored = page.waitForResponse((r) => r.url().includes("/notificationpreferences") && r.request().method() === "POST", { timeout: 15000 });
+    await main.getByRole("button", { name: "Save Preferences" }).click();
+    expect(Boolean((await (await restored).json()).allowSms)).toBe(false);
+  });
+
   // Mutating test; reset-demo wipes changes.
   test.describe.serial("save round-trips category and global changes", () => {
     test("turning off Church Announcements email + email frequency persists after reload", async ({ page }) => {

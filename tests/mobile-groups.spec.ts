@@ -239,6 +239,27 @@ test.describe.serial("Mobile group event reminders", () => {
     await expect(dialog.getByText("Send reminders", { exact: true })).toBeVisible({ timeout: 10000 });
   });
 
+  test("a leader can send event reminders by text", async ({ page }) => {
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await page.getByRole("tab", { name: /Events/i }).click();
+    const editEvent = page.getByRole("button", { name: /^Edit event$/i });
+    const card = page.locator("main div").filter({ hasText: title }).filter({ has: editEvent }).last();
+    await expect(card).toBeVisible({ timeout: 15000 });
+    await card.getByRole("button", { name: /^Edit event$/i }).click();
+
+    const dialog = page.getByRole("dialog");
+    await dialog.getByText("Send reminders", { exact: true }).click();
+    const text = dialog.getByTestId("group-reminder-channel-sms").locator("input");
+    await expect(text).toBeVisible({ timeout: 10000 });
+    await text.check();
+    await expect(dialog.getByText("Texts go out through your church's texting provider", { exact: false })).toBeVisible();
+
+    const saved = page.waitForResponse((r) => r.url().includes(`/reminders/event/${eventId}`) && r.request().method() === "POST", { timeout: 15000 });
+    await dialog.getByRole("button", { name: "Save Reminders" }).click();
+    const body = (await saved).request().postDataJSON();
+    expect(body.channels).toEqual(["push", "email", "sms"]);
+  });
+
   test("leader cannot save a javascript: link as a group resource", async ({ page }) => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
     await page.getByRole("tab", { name: /Resources/i }).click();
