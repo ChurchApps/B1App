@@ -88,3 +88,37 @@ test.describe("Mobile checkin pickup code", () => {
     await expect(page.locator("main")).toContainText(securityCode);
   });
 });
+
+test.describe("Mobile checkin schedule", () => {
+  const API = process.env.API_BASE || "http://localhost:8084";
+  let serviceId = "";
+
+  const auth = async (request: APIRequestContext) => {
+    const res = await request.post(API + "/membership/users/login", { data: { email: "demo@b1.church", password: "password" } });
+    const church = (await res.json()).userChurches.find((c: any) => c.church.id === "CHU00000001");
+    return { Authorization: "Bearer " + church.apis.find((a: any) => a.keyName === "AttendanceApi").jwt };
+  };
+
+  test.beforeAll(async ({ request }) => {
+    const headers = await auth(request);
+    const services = await (await request.post(API + "/attendance/services", { headers, data: [{ campusId: "CAM00000001", name: "Zacchaeus Scheduled Service" }] })).json();
+    serviceId = services[0].id;
+    // A day three days from now, so its 9:00-10:00 check-in window is never open while this runs.
+    const closedDay = (new Date().getDay() + 3) % 7;
+    await request.post(API + "/attendance/servicetimes", { headers, data: [{ serviceId, name: "Zacchaeus Closed Time", dayOfWeek: closedDay, startTime: "09:00", endTime: "10:00", checkinOpenMinutes: 0, checkinCloseMinutes: 0 }] });
+  });
+
+  test.afterAll(async ({ request }) => {
+    const headers = await auth(request);
+    const times = await (await request.get(API + "/attendance/servicetimes?serviceId=" + serviceId, { headers })).json();
+    for (const t of times) await request.delete(API + "/attendance/servicetimes/" + t.id, { headers });
+    await request.delete(API + "/attendance/services/" + serviceId, { headers });
+  });
+
+  test("a service whose check-in window is closed says so instead of listing its times", async ({ page }) => {
+    await page.goto("/mobile/checkin");
+    await page.getByTestId("select-service-" + serviceId + "-button").click({ timeout: 30000 });
+    await expect(page.getByTestId("checkin-not-open")).toHaveText("Check-in isn't open for this service right now.", { timeout: 30000 });
+    await expect(page.locator("main")).not.toContainText("Zacchaeus Closed Time");
+  });
+});
