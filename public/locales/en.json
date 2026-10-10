@@ -443,6 +443,8 @@
         "saveFailed": "Could not save reminders.",
         "saveReminder": "Save Reminders",
         "saved": "Saved",
+        "text": "Text",
+        "textHint": "Texts go out through your church's texting provider, only to people who turned on text reminders.",
         "timeOfDay": "Time of Day",
         "when": "When should reminders go out?",
         "who": "Who should be reminded?"
@@ -578,6 +580,7 @@
       "channelEmail": "Email",
       "channelInApp": "In-App",
       "channelPush": "Push",
+      "channelSms": "Text",
       "discard": "Discard",
       "emailFrequency": "Email frequency",
       "freqDaily": "Daily digest",
@@ -599,6 +602,8 @@
       "saved": "Preferences saved.",
       "signedOutBody": "Notification preferences are tied to your account.",
       "signedOutTitle": "Sign in to manage notifications",
+      "textHelp": "Get serving and event reminders by text at the mobile number on your profile. Reply STOP to any text to opt out.",
+      "textMessages": "Text messages",
       "timeZone": "Time zone",
       "unlimited": "No limit"
     },

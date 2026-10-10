@@ -239,6 +239,27 @@ test.describe.serial("Mobile group event reminders", () => {
     await expect(dialog.getByText("Send reminders", { exact: true })).toBeVisible({ timeout: 10000 });
   });
 
+  test("a leader can send event reminders by text", async ({ page }) => {
+    await page.goto(`/mobile/groups/${GROUP_ID}`);
+    await page.getByRole("tab", { name: /Events/i }).click();
+    const editEvent = page.getByRole("button", { name: /^Edit event$/i });
+    const card = page.locator("main div").filter({ hasText: title }).filter({ has: editEvent }).last();
+    await expect(card).toBeVisible({ timeout: 15000 });
+    await card.getByRole("button", { name: /^Edit event$/i }).click();
+
+    const dialog = page.getByRole("dialog");
+    await dialog.getByText("Send reminders", { exact: true }).click();
+    const text = dialog.getByTestId("group-reminder-channel-sms").locator("input");
+    await expect(text).toBeVisible({ timeout: 10000 });
+    await text.check();
+    await expect(dialog.getByText("Texts go out through your church's texting provider", { exact: false })).toBeVisible();
+
+    const saved = page.waitForResponse((r) => r.url().includes(`/reminders/event/${eventId}`) && r.request().method() === "POST", { timeout: 15000 });
+    await dialog.getByRole("button", { name: "Save Reminders" }).click();
+    const body = (await saved).request().postDataJSON();
+    expect(body.channels).toEqual(["push", "email", "sms"]);
+  });
+
   test("leader cannot save a javascript: link as a group resource", async ({ page }) => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
     await page.getByRole("tab", { name: /Resources/i }).click();
@@ -265,13 +286,16 @@ test.describe.serial("Mobile recurring group event edits", () => {
     return ev;
   };
 
-  const openTodaysOccurrence = async (page: any, name: string) => {
+  const openTodaysOccurrence = async (page: any, name: string, scope: "this" | "future" | "all") => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
     await page.getByRole("tab", { name: /Events/i }).click();
     const editEvent = page.getByRole("button", { name: /^Edit event$/i });
     const card = page.locator("main div").filter({ hasText: name }).filter({ has: editEvent }).last();
     await expect(card).toBeVisible({ timeout: 15000 });
     await card.getByRole("button", { name: /^Edit event$/i }).click();
+    await expect(page.getByTestId(`edit-recurring-${scope}-radio`)).toBeVisible({ timeout: 10000 });
+    await page.getByTestId(`edit-recurring-${scope}-radio`).click();
+    await page.getByTestId("edit-recurring-save-button").click();
     const dialog = page.getByRole("dialog");
     await expect(dialog.getByText(/^Edit event$/i)).toBeVisible({ timeout: 5000 });
     return dialog;
@@ -303,11 +327,12 @@ test.describe.serial("Mobile recurring group event edits", () => {
   });
 
   test("editing all occurrences from a later date keeps the series start", async ({ page }) => {
-    const dialog = await openTodaysOccurrence(page, title);
-    await dialog.locator('[data-testid="event-title-input"]').fill(title + " All");
+    const dialog = await openTodaysOccurrence(page, title, "all");
+    const titleInput = dialog.getByRole("textbox", { name: "Title" });
+    await expect(dialog.locator("#markdown-editor-wrapper")).toBeVisible();
+    await titleInput.click();
+    await titleInput.fill(title + " All");
     await dialog.getByRole("button", { name: /^Save Changes$/ }).click();
-    await page.getByTestId("edit-recurring-all-radio").click();
-    await page.getByTestId("edit-recurring-save-button").click();
     await expect(dialog).toBeHidden({ timeout: 10000 });
 
     const ev = await getEvent();
@@ -316,10 +341,9 @@ test.describe.serial("Mobile recurring group event edits", () => {
   });
 
   test("deleting this and future occurrences keeps the earlier ones", async ({ page }) => {
-    const dialog = await openTodaysOccurrence(page, title + " All");
+    const dialog = await openTodaysOccurrence(page, title + " All", "future");
+    page.once("dialog", (d) => d.accept());
     await dialog.getByRole("button", { name: /^Delete event$/i }).click();
-    await page.getByTestId("edit-recurring-future-radio").click();
-    await page.getByTestId("edit-recurring-save-button").click();
     await expect(dialog).toBeHidden({ timeout: 10000 });
 
     const ev = await getEvent();
@@ -331,6 +355,62 @@ test.describe.serial("Mobile recurring group event edits", () => {
     today.setHours(0, 0, 0, 0);
     expect(untilDate.getTime()).toBeLessThan(today.getTime());
     expect(untilDate.getTime()).toBeGreaterThan(seriesStart.getTime() + 20 * 86400000);
+  });
+
+  test("editing just this date asks before opening the editor and leaves the series alone", async ({ page }) => {
+    const oneDateTitle = `One Date ${Date.now()}`;
+    const onceTitle = `${oneDateTitle} Once`;
+    const ctx = await request.newContext();
+    const end = new Date(seriesStart);
+    end.setHours(19, 0, 0, 0);
+    const created = await (await ctx.post(`${MAIN_API}/content/events`, {
+      ...auth,
+      data: [{ groupId: GROUP_ID, title: oneDateTitle, start: seriesStart, end, allDay: false, visibility: "public", recurrenceRule: "FREQ=WEEKLY;INTERVAL=1" }]
+    })).json();
+    const seriesId = (Array.isArray(created) ? created[0] : created)?.id as string;
+    expect(seriesId, "created event id").toBeTruthy();
+    let oneOffId: string | undefined;
+
+    try {
+      await page.goto(`/mobile/groups/${GROUP_ID}`);
+      await page.getByRole("tab", { name: /Events/i }).click();
+      const editEvent = page.getByRole("button", { name: /^Edit event$/i });
+      const card = page.locator("main div").filter({ hasText: oneDateTitle }).filter({ has: editEvent }).last();
+      await expect(card).toBeVisible({ timeout: 15000 });
+      await card.getByRole("button", { name: /^Edit event$/i }).click();
+
+      await expect(page.getByTestId("edit-recurring-this-radio")).toBeVisible({ timeout: 10000 });
+      await expect(page.getByText("Edit event", { exact: true })).toHaveCount(0);
+
+      await page.getByTestId("edit-recurring-this-radio").click();
+      await page.getByTestId("edit-recurring-save-button").click();
+
+      const dialog = page.getByRole("dialog");
+      await expect(dialog.getByText("Edit event", { exact: true })).toBeVisible({ timeout: 5000 });
+      await expect(dialog.getByText("Recurring", { exact: true })).toHaveCount(0);
+
+      const titleInput = dialog.getByRole("textbox", { name: "Title" });
+      await expect(dialog.locator("#markdown-editor-wrapper")).toBeVisible();
+      await titleInput.click();
+      await titleInput.fill(onceTitle);
+      await dialog.getByRole("button", { name: /^Save Changes$/ }).click();
+      await expect(page.getByRole("dialog")).toHaveCount(0, { timeout: 10000 });
+
+      const list = await (await ctx.get(`${MAIN_API}/content/events/group/${GROUP_ID}`, auth)).json();
+      const rows = Array.isArray(list) ? list : [];
+      const original = rows.find((e: any) => e.id === seriesId);
+      const oneOff = rows.find((e: any) => e.title === onceTitle);
+      oneOffId = oneOff?.id;
+      expect(original?.title).toBe(oneDateTitle);
+      expect(original?.recurrenceRule || "").toContain("FREQ=WEEKLY");
+      expect(oneOff, "standalone copy of this date").toBeTruthy();
+      expect(oneOff.recurrenceRule || "").toBe("");
+      expect(oneOff.id).not.toBe(seriesId);
+    } finally {
+      if (oneOffId) await ctx.delete(`${MAIN_API}/content/events/${oneOffId}`, auth);
+      await ctx.delete(`${MAIN_API}/content/events/${seriesId}`, auth);
+      await ctx.dispose();
+    }
   });
 });
 
