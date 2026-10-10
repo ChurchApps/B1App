@@ -154,9 +154,20 @@ const EmptyState = ({
   </Box>
 );
 
+// The Api answers a blocked check-in with 409 and a JSON body; ApiHelper rethrows that body as the message.
+const checkinErrorLabel = (e: any) => {
+  try {
+    const reason = JSON.parse(e?.message || "")?.error;
+    if (reason === "notOpen") return Locale.label("mobile.screens.checkinNotOpen");
+    if (reason === "capacity") return Locale.label("mobile.screens.checkinFull");
+  } catch { /* not a gate response */ }
+  return Locale.label("mobile.details.checkConnection");
+};
+
 const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   const [selectingId, setSelectingId] = useState<string>("");
   const [error, setError] = useState("");
+  const [notOpen, setNotOpen] = useState(false);
 
   const { data: services = [], isLoading } = useQuery<ServiceInterface[]>({
     queryKey: ["/services", "AttendanceApi"],
@@ -182,13 +193,17 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
   const selectService = async (serviceId: string) => {
     setSelectingId(serviceId);
     setError("");
+    setNotOpen(false);
+    let allClosed = false;
     try {
       const householdId = PersonHelper.person?.householdId;
       await Promise.all([
         ApiHelper.get("/servicetimes?serviceId=" + serviceId, "AttendanceApi").then(
           (times: ServiceTimeInterface[]) => {
             CheckinHelper.serviceId = serviceId;
-            CheckinHelper.serviceTimes = times;
+            // Service times outside their scheduled check-in window can't be checked into.
+            CheckinHelper.serviceTimes = (times || []).filter((t) => (t as ServiceTimeInterface & { checkinOpen?: boolean }).checkinOpen !== false);
+            allClosed = times?.length > 0 && CheckinHelper.serviceTimes.length === 0;
           }
         ),
         ApiHelper.get("/groupservicetimes", "AttendanceApi").then(
@@ -211,6 +226,10 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
             CheckinHelper.householdMembers = PersonHelper.person ? [PersonHelper.person] : [];
           })
       ]);
+      if (allClosed) {
+        setNotOpen(true);
+        return;
+      }
 
       const peopleIds: number[] = ArrayHelper.getUniqueValues(
         CheckinHelper.householdMembers,
@@ -251,6 +270,7 @@ const ServicesStep = ({ onSelected }: { onSelected: () => void }) => {
     <>
       <ScreenSubhead iconName="event" subtitle={Locale.label("mobile.screens.chooseServiceSubtitle")} />
       {error && <Alert severity="error" sx={{ mb: `${spacing.md}px` }}>{error}</Alert>}
+      {notOpen && <Alert severity="info" data-testid="checkin-not-open" sx={{ mb: `${spacing.md}px` }}>{Locale.label("mobile.screens.checkinNotOpen")}</Alert>}
 
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
@@ -741,7 +761,7 @@ const HouseholdStep = ({
       encodeURIComponent(peopleIds.join(","));
     ApiHelper.post(url, CheckinHelper.pendingVisits, "AttendanceApi")
       .then((data) => onComplete(typeof data?.securityCode === "string" ? data.securityCode : undefined))
-      .catch(() => setError(Locale.label("mobile.details.checkConnection")))
+      .catch((e) => setError(checkinErrorLabel(e)))
       .finally(() => setIsLoading(false));
   };
 
