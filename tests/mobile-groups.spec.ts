@@ -265,13 +265,16 @@ test.describe.serial("Mobile recurring group event edits", () => {
     return ev;
   };
 
-  const openTodaysOccurrence = async (page: any, name: string) => {
+  const openTodaysOccurrence = async (page: any, name: string, scope: "this" | "future" | "all") => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
     await page.getByRole("tab", { name: /Events/i }).click();
     const editEvent = page.getByRole("button", { name: /^Edit event$/i });
     const card = page.locator("main div").filter({ hasText: name }).filter({ has: editEvent }).last();
     await expect(card).toBeVisible({ timeout: 15000 });
     await card.getByRole("button", { name: /^Edit event$/i }).click();
+    await expect(page.getByTestId(`edit-recurring-${scope}-radio`)).toBeVisible({ timeout: 10000 });
+    await page.getByTestId(`edit-recurring-${scope}-radio`).click();
+    await page.getByTestId("edit-recurring-save-button").click();
     const dialog = page.getByRole("dialog");
     await expect(dialog.getByText(/^Edit event$/i)).toBeVisible({ timeout: 5000 });
     return dialog;
@@ -303,11 +306,12 @@ test.describe.serial("Mobile recurring group event edits", () => {
   });
 
   test("editing all occurrences from a later date keeps the series start", async ({ page }) => {
-    const dialog = await openTodaysOccurrence(page, title);
-    await dialog.locator('[data-testid="event-title-input"]').fill(title + " All");
+    const dialog = await openTodaysOccurrence(page, title, "all");
+    const titleInput = dialog.getByRole("textbox", { name: "Title" });
+    await expect(dialog.locator("#markdown-editor-wrapper")).toBeVisible();
+    await titleInput.click();
+    await titleInput.fill(title + " All");
     await dialog.getByRole("button", { name: /^Save Changes$/ }).click();
-    await page.getByTestId("edit-recurring-all-radio").click();
-    await page.getByTestId("edit-recurring-save-button").click();
     await expect(dialog).toBeHidden({ timeout: 10000 });
 
     const ev = await getEvent();
@@ -316,10 +320,9 @@ test.describe.serial("Mobile recurring group event edits", () => {
   });
 
   test("deleting this and future occurrences keeps the earlier ones", async ({ page }) => {
-    const dialog = await openTodaysOccurrence(page, title + " All");
+    const dialog = await openTodaysOccurrence(page, title + " All", "future");
+    page.once("dialog", (d) => d.accept());
     await dialog.getByRole("button", { name: /^Delete event$/i }).click();
-    await page.getByTestId("edit-recurring-future-radio").click();
-    await page.getByTestId("edit-recurring-save-button").click();
     await expect(dialog).toBeHidden({ timeout: 10000 });
 
     const ev = await getEvent();
