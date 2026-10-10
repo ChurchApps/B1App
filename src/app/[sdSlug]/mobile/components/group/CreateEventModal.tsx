@@ -118,33 +118,39 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   const [saving, setSaving] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [recurrenceModalType, setRecurrenceModalType] = React.useState<"save" | "delete" | "">("");
+  const [editScope, setEditScope] = React.useState<"" | "this" | "future" | "all">("");
   const [booking, setBooking] = React.useState<BookingSelection>(emptyBookingSelection());
   const createdIdRef = React.useRef<string | undefined>(undefined);
   const [notice, setNotice] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    if (!open) return;
-    const d = computeDefaults();
-    createdIdRef.current = undefined;
-    setTitle(d.title);
-    setDescription(d.description);
-    setStart(d.start);
-    setEnd(d.end);
-    setAllDay(d.allDay);
-    setVisibility(d.visibility);
-    setRecurrenceModalType("");
-    setError(null);
-    const hasRule = (d.recurrenceRule?.length ?? 0) > 0;
-    setRecurring(hasRule);
-    setRRule(d.recurrenceRule || "");
-    setRegistrationEnabled(d.registrationEnabled);
-    setCapacity(d.capacity);
-    setRegistrationOpenDate(d.registrationOpenDate);
-    setRegistrationCloseDate(d.registrationCloseDate);
-    setTags(d.tags);
-    setAllowRsvps(!((eventProp as any)?.rsvpDisabled ?? false));
-    // Re-init when the dialog opens or the edited event changes, not on every parent render.
-  }, [open, eventProp?.id]);
+  // Apply defaults while rendering so a fast edit cannot land before the effect and then be wiped.
+  const openKey = open ? `${eventProp?.id || "new"}:${initialDateIso || ""}` : "";
+  const [formKey, setFormKey] = React.useState("");
+  if (formKey !== openKey) {
+    setFormKey(openKey);
+    if (open) {
+      const d = computeDefaults();
+      createdIdRef.current = undefined;
+      setTitle(d.title);
+      setDescription(d.description);
+      setStart(d.start);
+      setEnd(d.end);
+      setAllDay(d.allDay);
+      setVisibility(d.visibility);
+      setRecurrenceModalType("");
+      setEditScope("");
+      setError(null);
+      const hasRule = (d.recurrenceRule?.length ?? 0) > 0;
+      setRecurring(hasRule);
+      setRRule(d.recurrenceRule || "");
+      setRegistrationEnabled(d.registrationEnabled);
+      setCapacity(d.capacity);
+      setRegistrationOpenDate(d.registrationOpenDate);
+      setRegistrationCloseDate(d.registrationCloseDate);
+      setTags(d.tags);
+      setAllowRsvps(!((eventProp as any)?.rsvpDisabled ?? false));
+    }
+  }
 
   React.useEffect(() => {
     if (!open) return;
@@ -191,7 +197,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
       end: localToIsoString(allDay ? `${end.slice(0, 10)}T23:59` : end) as unknown as Date,
       allDay,
       visibility,
-      recurrenceRule: recurring ? rRule : "",
+      recurrenceRule: editScope === "this" ? "" : (recurring ? rRule : ""),
       registrationEnabled,
       capacity: registrationEnabled ? (Number.isNaN(parsedCapacity as number) ? undefined : parsedCapacity) : undefined,
       registrationOpenDate: registrationEnabled && registrationOpenDate ? (localToIsoString(registrationOpenDate) as unknown as Date) : undefined,
@@ -243,7 +249,10 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   const handleSave = () => {
     if (!validate()) return;
     if (isEdit && eventProp?.recurrenceRule) {
-
+      if (editScope) {
+        handleRecurringSave(editScope);
+        return;
+      }
       setRecurrenceModalType("save");
       return;
     }
@@ -254,10 +263,23 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
     }
   };
 
+  const acceptScope = (editType: string) => {
+    if (editType === "this" || editType === "future" || editType === "all") {
+      setEditScope(editType);
+      return;
+    }
+    onClose();
+  };
+
   const handleDelete = async () => {
     if (!eventProp?.id) return;
     if (eventProp.recurrenceRule) {
-      setRecurrenceModalType("delete");
+      if (!editScope) {
+        setRecurrenceModalType("delete");
+        return;
+      }
+      if (!confirm(Locale.label("mobile.group.confirmDeleteEvent"))) return;
+      await handleRecurringDelete(editScope);
       return;
     }
     if (!confirm(Locale.label("mobile.group.confirmDeleteEvent"))) return;
@@ -385,7 +407,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
   return (
     <>
       <Dialog
-        open={open}
+        open={open && !(isEdit && eventProp?.recurrenceRule && !editScope)}
         onClose={onClose}
         fullWidth
         maxWidth="sm"
@@ -472,7 +494,7 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             onChange={setBooking}
             start={start}
             end={end}
-            recurring={recurring}
+            recurring={editScope === "this" ? false : recurring}
             rRule={rRule}
             eventId={eventProp?.id}
           />
@@ -481,11 +503,13 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             control={<Switch checked={allowRsvps} onChange={(e) => setAllowRsvps(e.target.checked)} />}
             label={Locale.label("mobile.group.allowRsvps")}
           />
-          <FormControlLabel
-            control={<Switch checked={recurring} onChange={(e) => handleToggleRecurring(e.target.checked)} />}
-            label={Locale.label("mobile.group.recurring")}
-          />
-          {recurring && (
+          {editScope !== "this" && (
+            <FormControlLabel
+              control={<Switch checked={recurring} onChange={(e) => handleToggleRecurring(e.target.checked)} />}
+              label={Locale.label("mobile.group.recurring")}
+            />
+          )}
+          {editScope !== "this" && recurring && (
             <Grid container spacing={1} sx={{ pt: 1 }}>
               <RRuleEditor
                 start={rruleStartDate}
@@ -564,6 +588,9 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
           </Button>
         </DialogActions>
       </Dialog>
+      {open && isEdit && eventProp?.recurrenceRule && !editScope && (
+        <EditRecurringModal action="save" onDone={acceptScope} />
+      )}
       {recurrenceModalType && (
         <EditRecurringModal
           action={recurrenceModalType}
