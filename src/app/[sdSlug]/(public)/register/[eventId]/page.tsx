@@ -7,6 +7,7 @@ import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { EventInterface } from "@churchapps/helpers";
 import { Container, Typography } from "@mui/material";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 type PageParams = Promise<{ sdSlug: string; eventId: string }>;
 
@@ -30,6 +31,7 @@ export default async function RegisterPage({ params }: { params: PageParams }) {
   await EnvironmentHelper.initServerSide();
   const { sdSlug, eventId } = await params;
   const { config, event } = await loadSharedData(sdSlug, eventId);
+  if (!event?.id) return notFound();
 
   return (
     <>
