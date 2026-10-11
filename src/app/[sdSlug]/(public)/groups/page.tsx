@@ -7,6 +7,7 @@ import { MetaHelper } from "@/helpers/MetaHelper";
 import { GroupsBrowser } from "@/components/groups/GroupsBrowser";
 import { Container } from "@mui/material";
 import { Metadata } from "next";
+import { Locale } from "@churchapps/apphelper";
 
 type PageParams = Promise<{ sdSlug: string }>;
 
@@ -37,7 +38,7 @@ export default async function GroupsBrowsePage({ params }: { params: PageParams 
       <DefaultPageWrapper config={config}>
         <Container sx={{ py: 4 }}>
           <div id="mainContent">
-            <GroupsBrowser churchId={config.church.id || ""} />
+            <GroupsBrowser churchId={config.church.id || ""} defaultTitle={Locale.label("groupsPage.findAGroup")} />
           </div>
         </Container>
       </DefaultPageWrapper>

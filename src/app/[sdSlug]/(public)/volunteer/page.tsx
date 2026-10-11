@@ -34,7 +34,7 @@ export default async function VolunteerPage({ params }: { params: PageParams }) 
       <Theme config={config} />
       <DefaultPageWrapper config={config}>
         <Container maxWidth="md" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-          <VolunteerBrowse signupPlans={signupPlans || []} />
+          <VolunteerBrowse signupPlans={signupPlans || []} defaultTitle={Locale.label("serving.opportunities")} />
         </Container>
       </DefaultPageWrapper>
     </>

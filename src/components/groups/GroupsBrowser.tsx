@@ -11,6 +11,8 @@ interface Props {
   category?: string;
   label?: string;
   title?: string;
+  // English heading resolved on the server, shown until the browser's Locale has loaded.
+  defaultTitle?: string;
   showSearch?: boolean;
   showCategory?: boolean;
 }
@@ -62,9 +64,10 @@ export const GroupsBrowser = (props: Props) => {
   }, [groups]);
 
   // The heading renders before the groups load so the page has its h1 in the server HTML.
+  // Locale isn't loaded during server rendering or hydration, so use the server's label until it is.
   const heading = (
     <Typography variant="h4" component="h1" sx={{ mb: 2, fontWeight: 600 }}>
-      {props.title || Locale.label("groupsPage.findAGroup")}
+      {props.title || (!Locale.isInitialized() && props.defaultTitle) || Locale.label("groupsPage.findAGroup")}
     </Typography>
   );
 
