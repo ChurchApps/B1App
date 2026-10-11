@@ -71,7 +71,7 @@ export default async function MobileLayout({ children, params }: { children: Rea
       />
       <div className={serifFont.variable}>
         <ChurchDateLocale region={region}>
-          <MobileClientLayout>
+          <MobileClientLayout churchGaId={config.ga4MeasurementId}>
             <PwaRegister />
             <MobileKeepAlive sdSlug={sdSlug} config={config}>{children}</MobileKeepAlive>
           </MobileClientLayout>
