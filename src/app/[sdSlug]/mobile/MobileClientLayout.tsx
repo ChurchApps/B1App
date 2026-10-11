@@ -54,7 +54,7 @@ const mobileShellFallback = (
   />
 );
 
-export function MobileClientLayout({ children }: { children: React.ReactNode }) {
+export function MobileClientLayout({ children, churchGaId }: { children: React.ReactNode; churchGaId?: string }) {
   const [mounted, setMounted] = React.useState(false);
   const [localeReady, setLocaleReady] = React.useState(false);
 
@@ -93,7 +93,7 @@ export function MobileClientLayout({ children }: { children: React.ReactNode }) 
         }} />
         <UserProvider>
           <MobileQueryProvider>
-            <MobileGoogleAnalytics />
+            <MobileGoogleAnalytics churchGaId={churchGaId} />
             <MobileHydrationGate>
               {localeReady ? children : (
                 <Box role="status" aria-live="polite" sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", bgcolor: "#FFFFFF" }}>

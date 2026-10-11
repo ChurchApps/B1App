@@ -3,28 +3,33 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
+import { appDisplayMode, mobileAnalyticsIds, mobileAnalyticsInitScript } from "@/helpers/mobileAnalytics";
 
-export default function MobileGoogleAnalytics() {
+// Page views go to ChurchApps' tag and, when set, the church's own GA4 id,
+// tagged with whether the app was opened installed or in a browser.
+export default function MobileGoogleAnalytics({ churchGaId }: { churchGaId?: string }) {
   const pathname = usePathname();
-  const gaId = EnvironmentHelper.Common.GoogleAnalyticsTag;
+  const ids = mobileAnalyticsIds(EnvironmentHelper.Common.GoogleAnalyticsTag, churchGaId);
+  const idsKey = ids.join(",");
 
   useEffect(() => {
-    if (!gaId || !pathname) return;
+    if (!idsKey || !pathname) return;
     const url = pathname + (typeof window !== "undefined" ? window.location.search : "");
     if (typeof window.gtag !== "undefined") {
-      window.gtag("config", gaId, { page_path: url });
+      const displayMode = appDisplayMode(window);
+      idsKey.split(",").forEach((id) => window.gtag("config", id, { page_path: url, display_mode: displayMode }));
     }
-  }, [pathname, gaId]);
+  }, [pathname, idsKey]);
 
-  if (!gaId) return null;
+  if (ids.length === 0) return null;
 
   return (
     <>
-      <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+      <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${ids[0]}`} />
       <Script
         id="mobile-google-analytics"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');` }}
+        dangerouslySetInnerHTML={{ __html: mobileAnalyticsInitScript(ids) }}
       />
     </>
   );
