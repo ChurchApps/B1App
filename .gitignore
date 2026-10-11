@@ -31,6 +31,9 @@ package-lock.json
 # next.js
 /.next/
 /out/
+# `next dev` writes these agent-rules files into the project root
+/AGENTS.md
+/CLAUDE.md
 
 # production
 /build
