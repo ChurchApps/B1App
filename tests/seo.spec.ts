@@ -4,6 +4,7 @@ import { test, expect } from "@playwright/test";
 const metaContent = (html: string, name: string) => html.match(new RegExp(`<meta[^>]*name="${name}"[^>]*content="([^"]*)"`))?.[1];
 const titleOf = (html: string) => html.match(/<title>([^<]*)<\/title>/)?.[1];
 const h1Count = (html: string) => (html.match(/<h1[\s>]/g) || []).length;
+const h1Text = (html: string) => html.match(/<h1[^>]*>([^<]*)</)?.[1];
 
 // Church sites send their canonical as a Link header from middleware, on whatever host the church is served from.
 test.describe("SEO", () => {
@@ -49,4 +50,25 @@ test.describe("SEO", () => {
       expect(h1Count(await response.text())).toBe(1);
     });
   }
+
+  // Client components render before the browser loads its labels, so the server HTML used to carry the raw key.
+  for (const [path, heading] of [["/groups", "Find a Group"], ["/volunteer", "Volunteer Opportunities"]]) {
+    test(`${path} h1 is a real heading, not a locale key`, async ({ request }) => {
+      expect(h1Text(await (await request.get(path)).text())).toBe(heading);
+    });
+  }
+
+  test("an unknown registration event is a real 404", async ({ request }) => {
+    const response = await request.get("/register/missing-" + Date.now());
+    expect(response.status()).toBe(404);
+  });
+
+  test("the sitemap lists the built-in listing pages and sermon dates", async ({ request, baseURL }) => {
+    const xml = await (await request.get("/sitemap.xml")).text();
+    const entries = [...xml.matchAll(/<url><loc>([^<]*)<\/loc>(?:<lastmod>([^<]*)<\/lastmod>)?<\/url>/g)].map((m) => ({ loc: m[1], lastmod: m[2] }));
+    const locs = entries.map((e) => e.loc);
+    for (const path of ["/sermons", "/groups", "/volunteer"]) expect(locs, path).toContain(new URL(path, baseURL).href);
+    const sermon = entries.find((e) => e.loc.includes("/sermons/SER"));
+    expect(sermon?.lastmod).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
 });
