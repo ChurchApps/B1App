@@ -110,7 +110,6 @@
   background-color: var(--darkAccent);
 }
 
-/*#tabs > *:not(:first-child) {border-left:1px solid var(--darkAccent);}*/
 .frame {
   flex: 1;
   display: flex;

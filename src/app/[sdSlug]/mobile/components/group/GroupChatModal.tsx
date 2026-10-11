@@ -543,9 +543,6 @@ export const GroupChatModal = ({
                   {name}
                 </Typography>
               )}
-              {/* <Typography sx={{ fontSize: 15, lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
-                {m.content}
-              </Typography> */}
               {renderMessageContent(m.content || "")}
               <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1, mt: "2px" }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
