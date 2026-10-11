@@ -15,13 +15,17 @@ interface SignupPlanData {
 
 interface Props {
   signupPlans: SignupPlanData[];
+  // English heading resolved on the server, shown until the browser's Locale has loaded.
+  defaultTitle?: string;
 }
 
-export function VolunteerBrowse({ signupPlans }: Props) {
+export function VolunteerBrowse({ signupPlans, defaultTitle }: Props) {
+  // Locale isn't loaded during server rendering or hydration, so use the server's label until it is.
+  const title = (!Locale.isInitialized() && defaultTitle) || Locale.label("serving.opportunities");
   if (signupPlans.length === 0) {
     return (
       <Box sx={{ textAlign: "center", py: 8 }}>
-        <Typography variant="h5" component="h1" gutterBottom>{Locale.label("serving.opportunities")}</Typography>
+        <Typography variant="h5" component="h1" gutterBottom>{title}</Typography>
         <Typography color="text.secondary">{Locale.label("serving.noOpportunities")}</Typography>
       </Box>
     );
@@ -35,7 +39,7 @@ export function VolunteerBrowse({ signupPlans }: Props) {
 
   return (
     <>
-      <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 600 }}>{Locale.label("serving.opportunities")}</Typography>
+      <Typography variant="h4" component="h1" sx={{ mb: 3, fontWeight: 600 }}>{title}</Typography>
       <Stack spacing={3}>
         {signupPlans.map(({ plan, positions, times }) => {
           const { total, filled, remaining } = getTotalSlots(positions);
