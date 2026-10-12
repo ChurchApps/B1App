@@ -73,13 +73,25 @@ export default defineConfig({
 
   projects: [
     {
-      // Use test.describe.serial(...) for dependent test chains
+      // Use test.describe.serial(...) for dependent test chains.
+      // hide-public-site turns the church site off for the whole file; keep it out of this project.
       name: "chromium",
+      testIgnore: /hide-public-site\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         headless: true
       },
       fullyParallel: true
+    },
+    {
+      // Runs after the other specs so a hidden public site cannot blank their pages or sitemap.
+      name: "hidden-site",
+      dependencies: ["chromium"],
+      testMatch: /hide-public-site\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        headless: true
+      }
     }
   ]
 });
