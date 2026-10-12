@@ -3,6 +3,9 @@ import { mobileLogoutButton } from "./helpers/mobile";
 import { getApi, apiCall, doingUrl } from "./helpers/api";
 
 test.describe("Mobile plans", () => {
+  // The decline test below flips the seeded Sound Tech assignment; run in order so the Upcoming tests see it Accepted first.
+  test.describe.configure({ mode: "serial" });
+
   test("plans page renders with tabs", async ({ page }) => {
     await page.goto("/mobile/plans");
     await expect(mobileLogoutButton(page)).toBeVisible();
@@ -49,6 +52,21 @@ test.describe("Mobile plans", () => {
     const main = page.locator("main");
     await expect(main).toContainText(/Projection Tech/i, { timeout: 30000 });
     await expect(main).toContainText(/Accept|Respond|Pending Response|Unconfirmed/i);
+  });
+
+  test("accepted assignment can be declined from the plan page", async ({ page }) => {
+    await page.goto("/mobile/plans/PLA00000001");
+    await page.getByRole("tab", { name: "Overview" }).click();
+    const card = page.locator("div")
+      .filter({ has: page.getByText("Sound Tech", { exact: true }) })
+      .filter({ has: page.getByText("Service Times", { exact: true }) })
+      .filter({ hasNot: page.getByText("Projection Tech", { exact: true }) })
+      .last();
+    await expect(card.getByText("Accepted", { exact: true })).toBeVisible({ timeout: 30000 });
+
+    await card.getByRole("button", { name: "Decline" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Decline" }).click();
+    await expect(card.getByText("Declined", { exact: true })).toBeVisible({ timeout: 15000 });
   });
 });
 
