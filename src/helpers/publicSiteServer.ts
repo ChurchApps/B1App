@@ -6,7 +6,10 @@ import { isPublicSiteHidden } from "./publicSite";
 export const loadPublicSiteHidden = async (sdSlug: string): Promise<boolean> => {
   EnvironmentHelper.init();
   try {
-    const opts = { next: { revalidate: 3600, tags: [sdSlug] } } as RequestInit;
+    // Dev Playwright flips hidePublicSite on and off. A 3600s cache would keep serving an empty sitemap after the flag is cleared.
+    const opts = (process.env.NODE_ENV === "production"
+      ? { next: { revalidate: 3600, tags: [sdSlug] } }
+      : { cache: "no-store" }) as RequestInit;
     const churchResponse = await fetch(ApiHelper.getConfig("MembershipApi")?.url + "/churches/lookup/?subDomain=" + sdSlug, opts);
     const church = churchResponse.ok ? await churchResponse.json() : null;
     if (!church?.id) return false;
