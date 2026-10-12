@@ -8,6 +8,11 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   Tab,
   Tabs,
@@ -687,6 +692,7 @@ const PositionDetailsCard = ({
   const tc = mobileTheme.colors;
   const [busy, setBusy] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [confirmDecline, setConfirmDecline] = useState(false);
 
   useEffect(() => { setErrorMessage(null); }, [assignment?.status]);
 
@@ -704,7 +710,9 @@ const PositionDetailsCard = ({
     if (isNaN(boundary.getTime())) return;
     if (!latestBoundary || boundary > latestBoundary) latestBoundary = boundary;
   });
-  const canRespond = assignment.status === "Unconfirmed" && (!latestBoundary || new Date() < (latestBoundary as Date));
+  const beforeService = !latestBoundary || new Date() < (latestBoundary as Date);
+  const canRespond = assignment.status === "Unconfirmed" && beforeService;
+  const canWithdraw = assignment.status === "Accepted" && beforeService;
 
   const handleRespond = async (action: "accept" | "decline") => {
     if (!assignment.id || busy) return;
@@ -816,6 +824,32 @@ const PositionDetailsCard = ({
           </Button>
         </Box>
       )}
+
+      {canWithdraw && (
+        <Box sx={{ display: "flex", mt: `${mobileTheme.spacing.md}px` }}>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<Icon>close</Icon>}
+            onClick={() => setConfirmDecline(true)}
+            disabled={busy}
+            sx={{ flex: 1, textTransform: "none", fontWeight: 600 }}
+          >
+            {Locale.label("mobile.details.decline")}
+          </Button>
+        </Box>
+      )}
+
+      <Dialog open={confirmDecline} onClose={() => setConfirmDecline(false)}>
+        <DialogTitle>{Locale.label("mobile.details.declineAcceptedTitle")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{Locale.label("mobile.details.declineAcceptedMessage")}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDecline(false)}>{Locale.label("mobile.details.cancel")}</Button>
+          <Button onClick={() => { setConfirmDecline(false); handleRespond("decline"); }} color="error" variant="contained">{Locale.label("mobile.details.decline")}</Button>
+        </DialogActions>
+      </Dialog>
 
       {errorMessage && (
         <Typography sx={{ fontSize: 12, color: tc.error, mt: 1 }}>
