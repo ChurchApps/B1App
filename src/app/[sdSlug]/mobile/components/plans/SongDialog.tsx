@@ -1,12 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, Grid, InputLabel, MenuItem, Select, type SelectChangeEvent } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import type { LinkInterface } from "@churchapps/helpers";
-import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface, SongInterface } from "@/helpers";
+import { ArrangementInterface, ArrangementKeyInterface, SongDetailInterface } from "@/helpers";
 import { SongDetails } from "./SongDetails";
 import { isAudioUrl } from "./ContentRenderer";
 import { ChordProHelper } from "@/helpers/ChordProHelper";
 import { PraiseChartsHelper } from "@/helpers/PraiseChartsHelper";
+import { mobileTheme } from "../mobileTheme";
+import { Eyebrow, FilterPills, Sheet, TextLink } from "../kit";
+
+const tc = mobileTheme.colors;
 
 interface PraiseChartsProduct {
   name: string;
@@ -22,7 +26,6 @@ interface Props {
 export const SongDialog: React.FC<Props> = (props) => {
   const [arrangementKey, setArrangementKey] = React.useState<ArrangementKeyInterface | null>(null);
   const [arrangement, setArrangement] = React.useState<ArrangementInterface | null>(null);
-  const [song, setSong] = React.useState<SongInterface | null>(null);
   const [songDetail, setSongDetail] = React.useState<SongDetailInterface | null>(null);
   const [products, setProducts] = React.useState<PraiseChartsProduct[]>([]);
   const [links, setLinks] = React.useState<LinkInterface[]>([]);
@@ -36,8 +39,6 @@ export const SongDialog: React.FC<Props> = (props) => {
       const arr = await ApiHelper.get("/arrangements/" + ak.arrangementId, "ContentApi");
       setArrangement(arr);
       ApiHelper.get("/files/arrangement/" + arr.id, "ContentApi").then((files: any[]) => setAudioFiles(files || [])).catch(() => setAudioFiles([]));
-      const s = await ApiHelper.get("/songs/" + arr.songId, "ContentApi");
-      setSong(s);
       if (arr.songDetailId) setSongDetail(await ApiHelper.get("/songDetails/" + arr.songDetailId, "ContentApi"));
     } catch (e) {
       console.error("Failed to load song:", e);
@@ -57,31 +58,27 @@ export const SongDialog: React.FC<Props> = (props) => {
     window.open(url, "_blank");
   };
 
-  const listProducts = () => (<ul>
-    {products.map((p, i) => (<li key={i}>
-      <a href="about:blank" data-testid={`song-download-${i}-link`} onClick={(e) => { e.preventDefault(); download(p); }}>
-        {p.name}
-      </a>
-    </li>))}
-  </ul>);
+  const listProducts = () => products.map((p, i) => (
+    <TextLink key={i} data-testid={`song-download-${i}-link`} onClick={() => download(p)} sx={{ whiteSpace: "normal" }}>{p.name}</TextLink>
+  ));
 
-  const listLinks = () => (<ul>
-    {links.map((l, i) => (<li key={l.id}>
-      <a href={l.url} target="_blank" rel="noreferrer" data-testid={`song-external-${i}-link`}>{l.text}</a>
+  const listLinks = () => links.map((l, i) => (
+    <Box key={l.id}>
+      <TextLink href={l.url} data-testid={`song-external-${i}-link`} sx={{ whiteSpace: "normal" }}>{l.text}</TextLink>
       {l.url && isAudioUrl(l.url) && (
         <audio controls preload="metadata" style={{ width: "100%", display: "block", marginTop: 4 }} src={l.url} data-testid={`song-external-${i}-audio`} />
       )}
-    </li>))}
-  </ul>);
+    </Box>
+  ));
 
-  const listAudioFiles = () => (<ul>
-    {audioFiles.map((f, i) => (<li key={f.id}>
-      {f.fileName}
+  const listAudioFiles = () => audioFiles.map((f, i) => (
+    <Box key={f.id}>
+      <Typography sx={{ fontSize: 14 }}>{f.fileName}</Typography>
       <audio controls preload="metadata" style={{ width: "100%", display: "block", marginTop: 4 }} src={f.contentPath} data-testid={`song-audio-${i}-audio`}>
         {Locale.label("mobile.plans.audioUnsupported")}
       </audio>
-    </li>))}
-  </ul>);
+    </Box>
+  ));
 
   const loadPraiseCharts = async () => {
     if (arrangementKey && songDetail?.praiseChartsId) {
@@ -103,63 +100,54 @@ export const SongDialog: React.FC<Props> = (props) => {
     loadPraiseCharts().catch(() => setProducts([]));
   }, [arrangementKey, songDetail]);
 
-  const getKeyOptions = (originalIndex: number) =>
-    ChordProHelper.noteNames.map((note, index) => (
-      <MenuItem key={note} value={(index - originalIndex).toString()}>{note}</MenuItem>
-    ));
-
-  const handleKeyChange = (e: SelectChangeEvent) => { setKeyOffset(parseInt(e.target.value)); };
-
   const getKeySelect = () => {
     const originalKey = songDetail?.keySignature;
     if (!originalKey) return null;
     const originalIndex = ChordProHelper.noteMap[originalKey];
     if (originalIndex === undefined) return null;
     return (
-      <FormControl size="small" sx={{ minWidth: 120, mb: 1 }}>
-        <InputLabel id="keySignature">{Locale.label("mobile.plans.keySignature")}</InputLabel>
-        <Select name="keySignature" labelId="keySignature" label={Locale.label("mobile.plans.keySignature")} value={keyOffset.toString()} onChange={handleKeyChange}>
-          {getKeyOptions(originalIndex)}
-        </Select>
-      </FormControl>
+      <Box sx={{ mb: "12px" }}>
+        <FilterPills
+          label={Locale.label("mobile.plans.keySignature")}
+          value={keyOffset}
+          onChange={setKeyOffset}
+          options={ChordProHelper.noteNames.map((note: string, index: number) => ({ value: index - originalIndex, label: note }))}
+        />
+      </Box>
     );
   };
 
+  const hasFiles = products?.length > 0 || links.length > 0 || audioFiles.length > 0;
 
-  return (<>
-    <Dialog open={true} onClose={props.onClose} fullWidth maxWidth="xl">
-      <DialogTitle>{songDetail?.title || "Song Details"}</DialogTitle>
-      <DialogContent>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, md: 9 }}>
-            {(products?.length > 0 || links.length > 0 || audioFiles.length > 0) && <>
-              <h3>{Locale.label("mobile.plans.files")}</h3>
-              {listProducts()}
-              {listLinks()}
-              {audioFiles.length > 0 && <>
-                <h4>{Locale.label("mobile.plans.audioTracks")}</h4>
-                {listAudioFiles()}
-              </>}
-            </>}
-
-
-            {arrangement?.lyrics && <>
-              <h3>{Locale.label("mobile.plans.lyrics")}</h3>
-              {getKeySelect()}
-              <div className="chordPro" dangerouslySetInnerHTML={{ __html: ChordProHelper.formatLyrics(arrangement?.lyrics, keyOffset) }}></div>
-            </>}
-
-
-          </Grid>
-          <Grid size={{ xs: 12, md: 3 }}>
-            <SongDetails songDetail={songDetail as SongDetailInterface} reload={() => { }} />
-          </Grid>
-        </Grid>
-
-      </DialogContent>
-      <DialogActions>
-        <Button variant="outlined" onClick={props.onClose} data-testid="song-dialog-close-button">{Locale.label("mobile.plans.close")}</Button>
-      </DialogActions>
-    </Dialog>
-  </>);
+  return (
+    <Sheet
+      open={true}
+      onClose={props.onClose}
+      title={songDetail?.title || "Song Details"}
+      maxWidth="md"
+      actions={<Button variant="outlined" onClick={props.onClose} data-testid="song-dialog-close-button">{Locale.label("mobile.plans.close")}</Button>}
+    >
+      {songDetail?.artist && <Typography sx={{ color: tc.textSecondary, fontSize: 14, mt: "-6px", mb: "12px" }}>{songDetail.artist}</Typography>}
+      {arrangement?.lyrics && <>
+        <Box sx={{ mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.keySignature")}</Eyebrow></Box>
+        {getKeySelect()}
+        <Box sx={{ mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.lyrics")}</Eyebrow></Box>
+        <div className="chordPro" dangerouslySetInnerHTML={{ __html: ChordProHelper.formatLyrics(arrangement?.lyrics, keyOffset) }}></div>
+      </>}
+      {hasFiles && (
+        <Box sx={{ mt: "18px" }}>
+          <Box sx={{ mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.files")}</Eyebrow></Box>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: "8px", alignItems: "flex-start" }}>
+            {listProducts()}
+            {listLinks()}
+          </Box>
+          {audioFiles.length > 0 && <>
+            <Box sx={{ mt: "14px", mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.audioTracks")}</Eyebrow></Box>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>{listAudioFiles()}</Box>
+          </>}
+        </Box>
+      )}
+      {songDetail && <Box sx={{ mt: "18px" }}><SongDetails songDetail={songDetail} reload={() => { }} /></Box>}
+    </Sheet>
+  );
 };

@@ -2,7 +2,7 @@ import "material-icons/iconfont/filled.css";
 import type { Metadata, Viewport } from "next";
 import { Newsreader } from "next/font/google";
 import { ConfigHelper, EnvironmentHelper } from "@/helpers";
-import { isValidHex, shade, tint } from "@/helpers/colorTints";
+import { isValidHex, mix } from "@/helpers/colorTints";
 import Script from "next/script";
 import { PwaRegister } from "./PwaRegister";
 import { MobileClientLayout } from "./MobileClientLayout";
@@ -29,11 +29,11 @@ export async function generateViewport({ params }: { params: LayoutParams }): Pr
   const { sdSlug } = await params;
   const { primaryColor } = await loadChurchAppearance(sdSlug);
   // Status bar matches the app background (derived from the brand hue), not the raw primary.
-  const brand = isValidHex(primaryColor) ? primaryColor : "#0D47A1";
+  const brand = isValidHex(primaryColor) ? primaryColor : "#1765C1";
   return {
     themeColor: [
-      { media: "(prefers-color-scheme: light)", color: tint(brand, 0.94) },
-      { media: "(prefers-color-scheme: dark)", color: shade(brand, 0.90) }
+      { media: "(prefers-color-scheme: light)", color: mix(brand, "#FFFFFF", 0.955) },
+      { media: "(prefers-color-scheme: dark)", color: mix(brand, "#0b0f15", 0.9) }
     ],
     width: "device-width",
     initialScale: 1,

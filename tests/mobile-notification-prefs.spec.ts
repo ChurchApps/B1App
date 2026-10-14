@@ -2,7 +2,8 @@ import { test, expect, type Page, type Locator } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 // Taxonomy in Api/src/modules/messaging/helpers/NotificationCategoryHelper.ts (all tier 1).
-// Grid paints after GET /my; anchor on known category before interacting.
+// Category rows paint after GET /my; anchor on known category before interacting.
+// Each category row carries one checkbox chip per channel, named "<Category> <Channel>".
 async function gotoPrefs(page: Page) {
   await page.goto("/mobile/notificationPrefs");
   await expect(mobileLogoutButton(page)).toBeVisible();
@@ -12,7 +13,7 @@ async function gotoPrefs(page: Page) {
 }
 
 function categoryRow(main: Locator, displayName: string): Locator {
-  return main.locator("tr").filter({ hasText: displayName });
+  return main.getByTestId("notification-category").filter({ hasText: displayName });
 }
 
 test.describe("Mobile notification preferences", () => {
@@ -27,18 +28,18 @@ test.describe("Mobile notification preferences", () => {
     await expect(main.getByText("Church Announcements", { exact: true })).toBeVisible({ timeout: 30000 });
   });
 
-  test("prefs screen renders global controls and the category grid", async ({ page }) => {
+  test("prefs screen renders delivery controls and the category rows", async ({ page }) => {
     const main = await gotoPrefs(page);
-    await expect(main.getByText("Global Controls", { exact: true })).toBeVisible();
+    await expect(main.getByRole("heading", { name: "Delivery", exact: true })).toBeVisible();
     await expect(main.getByText("Mute all notifications", { exact: true })).toBeVisible();
     await expect(main.getByText("Push notifications", { exact: true })).toBeVisible();
     await expect(main.getByText("Quiet Hours", { exact: true })).toBeVisible();
     await expect(main.getByText("Notification Categories", { exact: true })).toBeVisible();
     // Email-frequency Select uses labelId="email-freq-label".
     await expect(main.getByLabel("Email frequency")).toBeVisible();
-    await expect(main.getByRole("columnheader", { name: "Push" })).toBeVisible();
-    await expect(main.getByRole("columnheader", { name: "Email" })).toBeVisible();
-    await expect(main.getByRole("columnheader", { name: "In-App" })).toBeVisible();
+    await expect(main.getByRole("checkbox", { name: "Church Announcements Push" })).toBeVisible();
+    await expect(main.getByRole("checkbox", { name: "Church Announcements Email" })).toBeVisible();
+    await expect(main.getByRole("checkbox", { name: "Church Announcements In-App" })).toBeVisible();
     await expect(main.getByText("Tasks & Follow-Ups", { exact: true })).toBeVisible();
     await expect(main.getByRole("button", { name: "Save Preferences" })).toBeVisible();
   });
@@ -47,7 +48,7 @@ test.describe("Mobile notification preferences", () => {
     const main = await gotoPrefs(page);
     await expect(main.locator('svg[data-testid="LockIcon"]')).toHaveCount(0);
     const row = categoryRow(main, "Tasks & Follow-Ups");
-    const boxes = row.locator('input[type="checkbox"]');
+    const boxes = row.getByRole("checkbox");
     const count = await boxes.count();
     expect(count).toBeGreaterThan(0);
     for (let i = 0; i < count; i++) {
@@ -57,9 +58,11 @@ test.describe("Mobile notification preferences", () => {
 
   test("time zone is a picker and the daily push cap is offered", async ({ page }) => {
     const main = await gotoPrefs(page);
-    const tz = main.getByRole("combobox", { name: "Time zone" });
+    await main.getByTestId("notification-prefs-quiet-change").click();
+    const tz = page.getByRole("dialog").getByRole("combobox", { name: "Time zone" });
     await expect(tz).toBeVisible();
     await expect(tz).toHaveText(/\//);
+    await page.getByRole("dialog").getByRole("button", { name: "Cancel" }).click();
     await expect(main.getByRole("combobox", { name: "Push notifications per day" })).toHaveText("No limit");
   });
 
@@ -79,10 +82,9 @@ test.describe("Mobile notification preferences", () => {
   });
 
   // Demo church has a seeded texting provider, so members can opt in to text reminders.
-  test("members can turn on text reminders, with a Text column for reminder categories", async ({ page }) => {
+  test("members can turn on text reminders, with a Text chip for reminder categories", async ({ page }) => {
     const main = await gotoPrefs(page);
     await expect(main.getByText("Text messages", { exact: true })).toBeVisible();
-    await expect(main.getByRole("columnheader", { name: "Text" })).toBeVisible();
     await expect(main.getByRole("checkbox", { name: "Serving & Schedule Text" })).toBeVisible();
     await expect(main.getByRole("checkbox", { name: "Group Chat Text" })).toHaveCount(0); // chat never texts
 
@@ -107,8 +109,7 @@ test.describe("Mobile notification preferences", () => {
     test("turning off Church Announcements email + email frequency persists after reload", async ({ page }) => {
       const main = await gotoPrefs(page);
 
-      const annRow = categoryRow(main, "Church Announcements");
-      const annEmail = annRow.locator('input[type="checkbox"]').nth(1);
+      const annEmail = main.getByRole("checkbox", { name: "Church Announcements Email" });
       await expect(annEmail).toBeEnabled();
       await expect(annEmail).toBeChecked();
       await annEmail.uncheck();
@@ -128,7 +129,7 @@ test.describe("Mobile notification preferences", () => {
       });
 
       const reloaded = await gotoPrefs(page);
-      const annEmail2 = categoryRow(reloaded, "Church Announcements").locator('input[type="checkbox"]').nth(1);
+      const annEmail2 = reloaded.getByRole("checkbox", { name: "Church Announcements Email" });
       await expect(annEmail2).not.toBeChecked();
       await expect(reloaded.getByLabel("Email frequency")).toContainText("Daily digest");
     });

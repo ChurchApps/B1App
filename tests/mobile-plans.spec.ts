@@ -6,21 +6,23 @@ test.describe("Mobile plans", () => {
   // The decline test below flips the seeded Sound Tech assignment; run in order so the Upcoming tests see it Accepted first.
   test.describe.configure({ mode: "serial" });
 
-  test("plans page renders with tabs", async ({ page }) => {
+  test("plans page renders Upcoming and Past sections", async ({ page }) => {
     await page.goto("/mobile/plans");
     await expect(mobileLogoutButton(page)).toBeVisible();
-    const tabs = page.locator('[role="tab"]');
-    await tabs.first().waitFor({ state: "visible", timeout: 15000 });
-    await expect(page.locator('[role="tab"]').filter({ hasText: /Upcoming/i })).toBeVisible();
-    await expect(page.locator('[role="tab"]').filter({ hasText: /Past/i })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Plans" })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("heading", { name: /^Upcoming$/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^Past$/i })).toBeVisible();
   });
 
-  test("can switch between Upcoming and Past tabs", async ({ page }) => {
+  test("Past assignments slice opens and returns to Plans", async ({ page }) => {
     await page.goto("/mobile/plans");
-    const pastTab = page.locator('[role="tab"]').filter({ hasText: /Past/i });
-    await pastTab.waitFor({ state: "visible", timeout: 15000 });
-    await pastTab.click();
-    await expect(pastTab).toHaveAttribute("aria-selected", "true");
+    const pastLink = page.getByRole("button", { name: /Past assignments/i });
+    await pastLink.waitFor({ state: "visible", timeout: 15000 });
+    await pastLink.click();
+    await expect(page).toHaveURL(/view=past/);
+    await expect(page.getByRole("heading", { level: 1, name: /Past assignments/i })).toBeVisible();
+    await page.getByRole("button", { name: /Back to Plans/i }).click();
+    await expect(page).not.toHaveURL(/view=past/);
   });
 
   test("Upcoming tab lists demo user's seeded Sound Tech assignment", async ({ page }) => {
@@ -29,15 +31,18 @@ test.describe("Mobile plans", () => {
     await expect(main).toContainText(/Sound Tech|Upcoming Worship Schedule/i, { timeout: 30000 });
   });
 
-  test("clicking the assignment opens the plan detail (Service Order / Teams tabs)", async ({ page }) => {
+  test("clicking the assignment opens the plan detail (Service Order / Teams sections)", async ({ page }) => {
     await page.goto("/mobile/plans");
     const main = page.locator("main");
     await expect(main).toContainText(/Sound Tech|Upcoming Worship Schedule/i, { timeout: 30000 });
     const card = main.getByText(/Upcoming Worship Schedule|Sound Tech/i).first();
     await card.click();
     await expect(page).toHaveURL(/\/mobile\/plans\/PLA\d+/, { timeout: 15000 });
-    await expect(page.getByRole("tab", { name: /Service Order/i })).toBeVisible({ timeout: 15000 });
-    await expect(page.getByRole("tab", { name: /Teams/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Service Order/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("heading", { name: /Teams/i })).toBeVisible();
+    await page.getByRole("button", { name: /All teams/i }).click();
+    await expect(page).toHaveURL(/view=teams/);
+    await expect(page.getByRole("heading", { level: 1, name: /Teams/i })).toBeVisible();
   });
 
   test("Upcoming tab surfaces both demo user assignments (Sound Tech + Projection Tech)", async ({ page }) => {
@@ -56,7 +61,6 @@ test.describe("Mobile plans", () => {
 
   test("accepted assignment can be declined from the plan page", async ({ page }) => {
     await page.goto("/mobile/plans/PLA00000001");
-    await page.getByRole("tab", { name: "Overview" }).click();
     const card = page.locator("div")
       .filter({ has: page.getByText("Sound Tech", { exact: true }) })
       .filter({ has: page.getByText("Service Times", { exact: true }) })
@@ -192,7 +196,7 @@ async function setChurchRegion(region: string) {
 
 test.describe.serial("Mobile plans — church region dates", () => {
   const MONTH = "(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sept?|Oct|Nov|Dec)";
-  const nextServiceDate = (page: Page) => page.getByText("Next service", { exact: true }).locator("xpath=following-sibling::*[1]");
+  const nextServiceDate = (page: Page) => page.getByTestId("serving-date").first();
 
   test("next service date follows the church region (UK day-first, US month-first)", async ({ page }) => {
     try {

@@ -1,19 +1,14 @@
 "use client";
 
 import React from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  CircularProgress,
-  Icon,
-  InputAdornment,
-  TextField,
-  Typography
-} from "@mui/material";
+import { Box, Button, CircularProgress, InputAdornment, TextField, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/AddCircleOutline";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import SearchIcon from "@mui/icons-material/Search";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
-import { getInitials } from "../util";
+import { PersonAvatar, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink } from "../kit";
 
 interface Person {
   id: string;
@@ -55,11 +50,6 @@ const toHtmlDate = (d: Date) => {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
-};
-
-const fromHtmlDate = (s: string) => {
-  const [y, m, day] = s.split("-").map(Number);
-  return new Date(y, m - 1, day);
 };
 
 export const GroupAttendanceTab = ({ groupId, members }: Props) => {
@@ -266,263 +256,98 @@ export const GroupAttendanceTab = ({ groupId, members }: Props) => {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.sm}px`
-        }}
-      >
-        <Icon sx={{ color: tc.primary }}>calendar_today</Icon>
+    <>
+      <PlateSection>
         <TextField
           type="date"
-          size="small"
+          label={Locale.label("common.date")}
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          inputProps={{ max: toHtmlDate(new Date()) }}
-          sx={{ flex: 1 }}
+          slotProps={{ htmlInput: { max: toHtmlDate(new Date()) }, inputLabel: { shrink: true } }}
+          sx={{ minWidth: 200 }}
         />
-      </Box>
-
-      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Typography sx={{ fontSize: 14, fontWeight: 500, color: tc.textMuted }}>
-          {Locale.label("mobile.group.presentOf").replace("{}", String(presentCount)).replace("{}", String(allPeople.length))}
-        </Typography>
-        <Box sx={{ display: "flex", gap: 0.5 }}>
-          <Button
-            size="small"
-            onClick={selectAll}
-            disabled={loading || saving}
-            sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
-          >
-            {Locale.label("mobile.group.selectAll")}
-          </Button>
-          <Button
-            size="small"
-            onClick={deselectAll}
-            disabled={loading || saving}
-            sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
-          >
-            {Locale.label("mobile.group.selectNone")}
-          </Button>
-          <Button
-            size="small"
-            startIcon={<Icon>person_add</Icon>}
-            onClick={() => setShowSearch(!showSearch)}
-            disabled={loading || saving}
-            sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
-          >
-            {Locale.label("mobile.group.add")}
-          </Button>
-        </Box>
-      </Box>
-
-      {showSearch && (
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`,
-            display: "flex",
-            flexDirection: "column",
-            gap: 1
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <TextField
-              size="small"
-              placeholder={Locale.label("mobile.group.searchForPerson")}
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSearch();
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Icon>search</Icon>
-                  </InputAdornment>
-                )
-              }}
-              sx={{ flex: 1 }}
-            />
-            <Button
-              variant="contained"
-              onClick={handleSearch}
-              disabled={searching || !searchText.trim()}
-              sx={{
-                bgcolor: tc.primary,
-                color: tc.onPrimary,
-                textTransform: "none",
-                "&:hover": { bgcolor: tc.primary }
-              }}
-            >
-              {searching ? "…" : Locale.label("mobile.group.search")}
-            </Button>
-          </Box>
-          {searchResults.map((r) => {
-            const already = allPeople.some((p) => p.id === r.id);
-            return (
-              <Box
-                key={r.id}
-                onClick={() => !already && addPerson(r)}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  p: "8px",
-                  borderRadius: `${mobileTheme.radius.md}px`,
-                  cursor: already ? "default" : "pointer",
-                  opacity: already ? 0.5 : 1,
-                  "&:hover": already ? undefined : { bgcolor: tc.iconBackground }
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: "18px",
-                    bgcolor: tc.primaryLight,
-                    color: tc.primary,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 700,
-                    fontSize: 12
-                  }}
-                >
-                  {getInitials(r)}
-                </Box>
-                <Typography sx={{ flex: 1, fontSize: 14, color: tc.text }}>
-                  {r.name?.display || Locale.label("mobile.components.unknown")}
-                </Typography>
-                {already ? (
-                  <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>{Locale.label("mobile.group.added")}</Typography>
-                ) : (
-                  <Icon sx={{ color: tc.primary }}>add_circle</Icon>
-                )}
-              </Box>
-            );
-          })}
-          {searchText && !searching && searchResults.length === 0 && (
-            <Typography sx={{ textAlign: "center", color: tc.textMuted, fontSize: 13 }}>
-              {Locale.label("mobile.group.noResults")}
-            </Typography>
-          )}
-        </Box>
-      )}
-
-      {loading && (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-          <CircularProgress sx={{ color: tc.primary }} />
-        </Box>
-      )}
-      {!loading && allPeople.length === 0 && (
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center"
-          }}
-        >
-          <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-            {Locale.label("mobile.group.noMembersGuests")}
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", mt: "14px" }}>
+          <Typography sx={{ fontSize: 15, color: tc.textSecondary }}>
+            {Locale.label("mobile.group.presentOf").replace("{}", String(presentCount)).replace("{}", String(allPeople.length))}
           </Typography>
+          <Box sx={{ display: "flex", gap: "16px" }}>
+            <TextLink onClick={selectAll} disabled={loading || saving}>{Locale.label("mobile.group.selectAll")}</TextLink>
+            <TextLink onClick={deselectAll} disabled={loading || saving}>{Locale.label("mobile.group.selectNone")}</TextLink>
+            <TextLink onClick={() => setShowSearch(!showSearch)} disabled={loading || saving}>{Locale.label("mobile.group.add")}</TextLink>
+          </Box>
         </Box>
-      )}
-      {!loading && allPeople.length > 0 && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-          {allPeople.map((p) => {
-            const present = !!attendance[p.id];
-            return (
-              <Box
-                key={p.id}
-                onClick={() => toggle(p.id)}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: `${mobileTheme.spacing.md}px`,
-                  bgcolor: tc.surface,
-                  border: `1px solid ${tc.border}`,
-                  borderRadius: `${mobileTheme.radius.md}px`,
-                  p: `${mobileTheme.spacing.sm}px`,
-                  cursor: "pointer",
-                  "&:hover": { bgcolor: tc.iconBackground }
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "22px",
-                    bgcolor: tc.primaryLight,
-                    color: tc.primary,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 700,
-                    fontSize: 14
-                  }}
-                >
-                  {getInitials(p)}
-                </Box>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography sx={{ fontSize: 15, fontWeight: 500, color: tc.text }}>
-                    {p.name?.display || Locale.label("mobile.components.unknown")}
-                  </Typography>
-                  <Typography sx={{ fontSize: 12, color: present ? tc.success : tc.textHint }}>
-                    {present ? Locale.label("mobile.group.present") : Locale.label("mobile.group.absent")}
-                    {!p.isMember && " " + Locale.label("mobile.group.guest")}
-                  </Typography>
-                </Box>
-                <Checkbox checked={present} sx={{ color: tc.primary, "&.Mui-checked": { color: tc.primary } }} />
-              </Box>
-            );
-          })}
-        </Box>
-      )}
 
-      {message && (
-        <Box
-          sx={{
-            bgcolor: message.type === "success" ? "rgba(112,220,135,0.15)" : "rgba(176,18,12,0.15)",
-            color: message.type === "success" ? tc.success : tc.error,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            p: `${mobileTheme.spacing.sm}px`,
-            textAlign: "center",
-            fontSize: 14
-          }}
-        >
-          {message.text}
-        </Box>
-      )}
+        {showSearch && (
+          <Box sx={{ mt: "12px" }}>
+            <Box sx={{ display: "flex", gap: "8px" }}>
+              <TextField
+                size="small"
+                placeholder={Locale.label("mobile.group.searchForPerson")}
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
+                slotProps={{ input: { startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: tc.textSecondary }} /></InputAdornment> } }}
+                sx={{ flex: 1 }}
+              />
+              <Button variant="outlined" onClick={handleSearch} disabled={searching || !searchText.trim()}>
+                {searching ? "…" : Locale.label("mobile.group.search")}
+              </Button>
+            </Box>
+            <RowList>
+              {searchResults.map((r) => {
+                const already = allPeople.some((p) => p.id === r.id);
+                return (
+                  <Row
+                    key={r.id}
+                    onClick={already ? undefined : () => addPerson(r)}
+                    leading={<PersonAvatar name={r.name?.display} size={36} />}
+                    title={r.name?.display || Locale.label("mobile.components.unknown")}
+                    trailing={already ? <StatusBadge>{Locale.label("mobile.group.added")}</StatusBadge> : <AddIcon sx={{ color: tc.link }} />}
+                  />
+                );
+              })}
+            </RowList>
+            {searchText && !searching && searchResults.length === 0 && <QuietEmpty sx={{ mt: "8px" }}>{Locale.label("mobile.group.noResults")}</QuietEmpty>}
+          </Box>
+        )}
+      </PlateSection>
 
-      <Button
-        variant="contained"
-        onClick={handleSave}
-        disabled={loading || saving}
-        sx={{
-          bgcolor: tc.primary,
-          color: tc.onPrimary,
-          textTransform: "none",
-          fontWeight: 600,
-          borderRadius: `${mobileTheme.radius.md}px`,
-          py: "10px",
-          "&:hover": { bgcolor: tc.primary }
-        }}
-      >
-        {saving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.saveAttendance")}
-      </Button>
-    </Box>
+      <PlateSection>
+        {loading && (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+            <CircularProgress size={28} sx={{ color: tc.primary }} />
+          </Box>
+        )}
+        {!loading && allPeople.length === 0 && <QuietEmpty>{Locale.label("mobile.group.noMembersGuests")}</QuietEmpty>}
+        {!loading && allPeople.length > 0 && (
+          <RowList>
+            {allPeople.map((p) => {
+              const present = !!attendance[p.id];
+              return (
+                <Row
+                  key={p.id}
+                  onClick={() => toggle(p.id)}
+                  aria-pressed={present}
+                  leading={<PersonAvatar name={p.name?.display} />}
+                  title={p.name?.display || Locale.label("mobile.components.unknown")}
+                  subtitle={(present ? Locale.label("mobile.group.present") : Locale.label("mobile.group.absent")) + (!p.isMember ? " " + Locale.label("mobile.group.guest") : "")}
+                  trailing={present ? <CheckBoxIcon sx={{ color: tc.primary }} /> : <CheckBoxOutlineBlankIcon sx={{ color: tc.control }} />}
+                />
+              );
+            })}
+          </RowList>
+        )}
+      </PlateSection>
+
+      <PlateSection>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+          <Button variant="contained" onClick={handleSave} disabled={loading || saving}>
+            {saving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.saveAttendance")}
+          </Button>
+          {message && <StatusBadge tone={message.type === "success" ? "ok" : "bad"}>{message.text}</StatusBadge>}
+        </Box>
+      </PlateSection>
+    </>
   );
 };
 

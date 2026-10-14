@@ -15,6 +15,8 @@ import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { RRuleEditor } from "@churchapps/apphelper/website";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { navigateBack } from "../util";
+import { PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge } from "../kit";
 import { BookingPicker, emptyBookingSelection, type BookingSelection } from "../group/BookingPicker";
 
 interface Props {
@@ -44,8 +46,9 @@ interface Outcome {
   status?: string;
 }
 
+const tc = mobileTheme.colors;
+
 export const RequestEventPage = ({ config: _config }: Props) => {
-  const tc = mobileTheme.colors;
   const router = useRouter();
 
   const [title, setTitle] = React.useState("");
@@ -110,31 +113,30 @@ export const RequestEventPage = ({ config: _config }: Props) => {
 
   if (outcome) {
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }} data-testid="request-outcome">
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 0.5 }}>{Locale.label("mobile.requests.outcomeTitle")}</Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>{Locale.label("mobile.requests.outcomeBody")}</Typography>
-          {outcome.length === 0 && (
-            <Typography sx={{ fontSize: 14, color: tc.textSecondary }}>{Locale.label("mobile.requests.noBookingItems")}</Typography>
-          )}
-          {outcome.map((b, i) => {
-            const approved = b.status === "approved";
-            return (
-              <Box key={i} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 1, borderBottom: i < outcome.length - 1 ? `1px solid ${tc.border}` : "none" }}>
-                <Typography sx={{ fontSize: 14, color: tc.text }}>{nameFor(b)}</Typography>
-                <Box sx={{ px: 1, py: 0.25, borderRadius: "999px", bgcolor: `${approved ? tc.success : tc.warning}1A`, color: approved ? tc.success : tc.warning, fontSize: 10.5, fontWeight: 700 }}>
-                  {approved ? Locale.label("mobile.requests.approved") : Locale.label("mobile.requests.pending")}
-                </Box>
-              </Box>
-            );
-          })}
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={() => router.push("/mobile/myRequests")}
-            data-testid="request-done"
-            sx={{ mt: 2, bgcolor: tc.primary, color: tc.onPrimary, textTransform: "none", fontWeight: 600, borderRadius: `${mobileTheme.radius.md}px`, "&:hover": { bgcolor: tc.primary } }}
-          >
+      <Box>
+        <PageHead title={Locale.label("mobile.requests.outcomeTitle")} lede={Locale.label("mobile.requests.outcomeBody")} />
+        <Plate data-testid="request-outcome">
+          <PlateSection>
+            {outcome.length === 0
+              ? <QuietEmpty>{Locale.label("mobile.requests.noBookingItems")}</QuietEmpty>
+              : (
+                <RowList>
+                  {outcome.map((b, i) => {
+                    const approved = b.status === "approved";
+                    return (
+                      <Row
+                        key={i}
+                        title={nameFor(b)}
+                        trailing={<StatusBadge tone={approved ? "ok" : "warn"} dot={approved}>{approved ? Locale.label("mobile.requests.approved") : Locale.label("mobile.requests.pending")}</StatusBadge>}
+                      />
+                    );
+                  })}
+                </RowList>
+              )}
+          </PlateSection>
+        </Plate>
+        <Box sx={{ px: { xs: "12px", md: 0 }, pt: "20px" }}>
+          <Button fullWidth variant="contained" onClick={() => router.push("/mobile/myRequests")} data-testid="request-done">
             {Locale.label("mobile.requests.myRequests")}
           </Button>
         </Box>
@@ -142,80 +144,75 @@ export const RequestEventPage = ({ config: _config }: Props) => {
     );
   }
 
+  const switchRow = (label: string, checked: boolean, onChange: (v: boolean) => void) => (
+    <FormControlLabel
+      control={<Switch checked={checked} onChange={(e) => onChange(e.target.checked)} />}
+      label={label}
+      labelPlacement="start"
+      sx={{ mx: 0, minHeight: 44, justifyContent: "space-between", "& .MuiFormControlLabel-label": { color: tc.text } }}
+    />
+  );
+
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px`, display: "flex", flexDirection: "column", gap: 2 }}>
-        <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.requests.title")}</Typography>
-        <TextField
-          fullWidth
-          size="small"
-          label={Locale.label("mobile.requests.eventTitle")}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          data-testid="request-title"
-        />
-        <TextField
-          fullWidth
-          size="small"
-          multiline
-          minRows={2}
-          label={Locale.label("mobile.requests.description")}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <FormControlLabel
-          control={<Switch checked={allDay} onChange={(e) => setAllDay(e.target.checked)} />}
-          label={Locale.label("mobile.requests.allDay")}
-        />
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+    <Box>
+      <PageHead title={Locale.label("mobile.requests.title")} lede={Locale.label("mobile.requests.formLede")} />
+      <Plate>
+        <PlateSection sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <TextField
-            size="small"
-            label={Locale.label("mobile.requests.start")}
-            type={allDay ? "date" : "datetime-local"}
-            InputLabelProps={{ shrink: true }}
-            value={allDay ? start.slice(0, 10) : start}
-            onChange={(e) => setStart(allDay ? `${e.target.value}T00:00` : e.target.value)}
-            sx={{ flex: 1, minWidth: 160 }}
+            fullWidth
+            label={Locale.label("mobile.requests.eventTitle")}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            data-testid="request-title"
           />
           <TextField
-            size="small"
-            label={Locale.label("mobile.requests.end")}
-            type={allDay ? "date" : "datetime-local"}
-            InputLabelProps={{ shrink: true }}
-            value={allDay ? end.slice(0, 10) : end}
-            onChange={(e) => setEnd(allDay ? `${e.target.value}T23:59` : e.target.value)}
-            sx={{ flex: 1, minWidth: 160 }}
+            fullWidth
+            multiline
+            minRows={3}
+            label={Locale.label("mobile.requests.description")}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
-        </Box>
-        <BookingPicker
-          value={booking}
-          onChange={setBooking}
-          start={start}
-          end={end}
-          recurring={recurring}
-          rRule={rRule}
-          onData={handleData}
-        />
-        <FormControlLabel
-          control={<Switch checked={recurring} onChange={(e) => toggleRecurring(e.target.checked)} />}
-          label={Locale.label("mobile.requests.recurring")}
-        />
-        {recurring && (
-          <Grid container spacing={1} sx={{ pt: 1 }}>
-            <RRuleEditor start={rruleStartDate} rRule={rRule || ""} onChange={(next: string) => setRRule(next)} />
-          </Grid>
-        )}
-        {error && <Typography sx={{ color: tc.error, fontSize: 13 }}>{error}</Typography>}
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={submit}
-          disabled={saving || !title.trim()}
-          data-testid="request-submit"
-          sx={{ bgcolor: tc.primary, color: tc.onPrimary, textTransform: "none", fontWeight: 600, borderRadius: `${mobileTheme.radius.md}px`, "&:hover": { bgcolor: tc.primary } }}
-        >
+          <Box sx={{ display: "grid", gridTemplateColumns: { xs: allDay ? "1fr 1fr" : "1fr", sm: "1fr 1fr" }, gap: "12px" }}>
+            <TextField
+              label={Locale.label("mobile.requests.start")}
+              type={allDay ? "date" : "datetime-local"}
+              slotProps={{ inputLabel: { shrink: true } }}
+              value={allDay ? start.slice(0, 10) : start}
+              onChange={(e) => setStart(allDay ? `${e.target.value}T00:00` : e.target.value)}
+            />
+            <TextField
+              label={Locale.label("mobile.requests.end")}
+              type={allDay ? "date" : "datetime-local"}
+              slotProps={{ inputLabel: { shrink: true } }}
+              value={allDay ? end.slice(0, 10) : end}
+              onChange={(e) => setEnd(allDay ? `${e.target.value}T23:59` : e.target.value)}
+            />
+          </Box>
+          {switchRow(Locale.label("mobile.requests.allDay"), allDay, setAllDay)}
+          <BookingPicker
+            value={booking}
+            onChange={setBooking}
+            start={start}
+            end={end}
+            recurring={recurring}
+            rRule={rRule}
+            onData={handleData}
+          />
+          {switchRow(Locale.label("mobile.requests.recurring"), recurring, toggleRecurring)}
+          {recurring && (
+            <Grid container spacing={1}>
+              <RRuleEditor start={rruleStartDate} rRule={rRule || ""} onChange={(next: string) => setRRule(next)} />
+            </Grid>
+          )}
+          {error && <Typography sx={{ color: tc.error, fontSize: 14 }}>{error}</Typography>}
+        </PlateSection>
+      </Plate>
+      <Box sx={{ px: { xs: "12px", md: 0 }, pt: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
+        <Button fullWidth variant="contained" onClick={submit} disabled={saving || !title.trim()} data-testid="request-submit">
           {saving ? Locale.label("mobile.requests.submitting") : Locale.label("mobile.requests.submit")}
         </Button>
+        <Button fullWidth variant="outlined" onClick={() => navigateBack(router, "/mobile/myRequests")}>{Locale.label("common.cancel")}</Button>
       </Box>
     </Box>
   );

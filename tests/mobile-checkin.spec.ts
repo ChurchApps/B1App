@@ -5,6 +5,7 @@ test.describe("Mobile checkin", () => {
   test("checkin page loads with logged-in chrome", async ({ page }) => {
     await page.goto("/mobile/checkin");
     await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Check-in" })).toBeVisible({ timeout: 30000 });
   });
 
   test("legacy /mobile/service slug routes to checkin", async ({ page }) => {
@@ -85,6 +86,7 @@ test.describe("Mobile checkin pickup code", () => {
     await page.getByTestId("select-service-" + SERVICE + "-button").click({ timeout: 30000 });
     await page.getByTestId("checkin-show-code-button").click({ timeout: 30000 });
     await expect(page.getByTestId("checkin-qr-code")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /You're checked in/i })).toBeVisible();
     await expect(page.locator("main")).toContainText(securityCode);
   });
 });

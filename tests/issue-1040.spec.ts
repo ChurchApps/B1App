@@ -8,6 +8,7 @@ test.describe("Issue 1040 — profile edit with no approval group", () => {
     const middleName = "Quinlan";
 
     await page.goto("/mobile/profileEdit");
+    await page.getByTestId("profile-edit-name").click({ timeout: 30000 });
     const middle = page.getByRole("textbox", { name: /Middle Name/i }).first();
     await expect(middle).toBeVisible({ timeout: 30000 });
 
@@ -40,6 +41,7 @@ test.describe("Issue 1040 — profile edit with no approval group", () => {
       for (const db of await indexedDB.databases()) if (db.name) indexedDB.deleteDatabase(db.name);
     });
     await page.reload();
+    await page.getByTestId("profile-edit-name").click({ timeout: 30000 });
 
     const reloaded = page.getByRole("textbox", { name: /Middle Name/i }).first();
     await expect(reloaded).toBeVisible({ timeout: 30000 });

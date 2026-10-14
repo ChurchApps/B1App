@@ -93,7 +93,7 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
   };
 
   return (
-    <Box sx={{ borderTop: `1px solid ${tc.iconBackground}`, pt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+    <Box sx={{ borderTop: `1px solid ${tc.border}`, pt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
       <FormControlLabel
         control={<Switch checked={enabled} onChange={(e) => { setEnabled(e.target.checked); setSaved(false); }} />}
         label={<Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.group.reminders.enable")}</Typography>}
@@ -113,12 +113,13 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
                     onClick={() => toggleOffset(p.minutes)}
                     disabled={!on && offsets.length >= MAX_OFFSETS}
                     sx={{
-                      bgcolor: on ? tc.primary : tc.iconBackground,
-                      color: on ? tc.onPrimary : tc.text,
-                      fontSize: 10.5,
-                      fontWeight: 700,
+                      bgcolor: on ? tc.selected : "transparent",
+                      color: on ? tc.onSelected : tc.text,
+                      border: `1px solid ${on ? "transparent" : tc.control}`,
+                      fontSize: 13.5,
+                      fontWeight: on ? 600 : 500,
                       borderRadius: "999px",
-                      "&:hover": { bgcolor: on ? tc.primary : tc.iconBackground }
+                      "&:hover": { bgcolor: on ? tc.selected : tc.background }
                     }}
                     size="small"
                   />
@@ -191,7 +192,6 @@ export const EventReminderEdit = ({ eventId, hasRegistration }: Props) => {
           size="small"
           onClick={handleSave}
           disabled={saving || (enabled && (offsets.length === 0 || channels.length === 0))}
-          sx={{ textTransform: "none", borderColor: tc.primary, color: tc.primary }}
         >
           {saving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.reminders.saveReminder")}
         </Button>

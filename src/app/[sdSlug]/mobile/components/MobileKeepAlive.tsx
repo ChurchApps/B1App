@@ -29,12 +29,19 @@ export function MobileKeepAlive({ sdSlug, config, children }: Props) {
   useIsoLayoutEffect(() => {
     if (!tab) return;
     const saved = scrollPositions.current[tab] ?? 0;
-    const onScroll = () => { scrollPositions.current[tab] = window.scrollY; };
+    // Next resets scroll as soon as a navigation starts, while this tab is still mounted; don't save that reset.
+    let navigatingAt = -Infinity;
+    const onNavigate = (e: Event) => { if (e.type === "popstate" || (e.target as Element)?.closest?.("a[href]")) navigatingAt = performance.now(); };
+    const onScroll = () => { if (performance.now() - navigatingAt > 1000) scrollPositions.current[tab] = window.scrollY; };
+    document.addEventListener("click", onNavigate, true);
+    window.addEventListener("popstate", onNavigate);
     window.addEventListener("scroll", onScroll, { passive: true });
     // Restore after Next's own scroll-to-top; double rAF outlasts its reset.
     const raf1 = requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, saved)));
     return () => {
       window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("click", onNavigate, true);
+      window.removeEventListener("popstate", onNavigate);
       cancelAnimationFrame(raf1);
     };
   }, [tab]);

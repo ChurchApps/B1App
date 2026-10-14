@@ -36,25 +36,19 @@ function captureDiagnostics(page: Page) {
   return log;
 }
 
-async function openDonateTab(page: Page) {
-  await page.goto("/mobile/donate");
-  const tab = page.getByRole("tab", { name: /^Donate$/i });
-  await tab.waitFor({ state: "visible", timeout: 20000 });
-  await tab.click();
-  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 15000 });
+async function openGiveSlice(page: Page) {
+  await page.goto("/mobile/donate?view=give");
+  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 20000 });
 }
 
-async function openManageTab(page: Page) {
-  await page.goto("/mobile/donate");
-  const tab = page.getByRole("tab", { name: /Manage/i });
-  await tab.waitFor({ state: "visible", timeout: 20000 });
-  await tab.click();
-  await page.getByRole("heading", { name: "Payment Methods" }).waitFor({ state: "visible", timeout: 20000 });
+async function openManageSlice(page: Page) {
+  await page.goto("/mobile/donate?view=manage");
+  await page.getByRole("heading", { name: "Payment Methods", exact: true }).waitFor({ state: "visible", timeout: 20000 });
 }
 
 async function deleteAllCards(page: Page) {
   page.on("dialog", (d) => d.accept());
-  await openManageTab(page);
+  await openManageSlice(page);
   for (let i = 0; i < 8; i++) {
     const count = await page.getByLabel("edit-button").count();
     if (count === 0) break;
@@ -95,7 +89,7 @@ test.describe.serial("Kingdom Funding member donations (live NMI test gateway)",
   test("one-time donation with a new card (Collect.js from new host)", async ({ page }) => {
     const diag = captureDiagnostics(page);
     await deleteAllCardsViaApi();
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });
     await page.locator('input[name="amount"]').first().fill(uniqueAmount(5));
     await page.getByLabel(/Save this card/i).check();
@@ -110,14 +104,14 @@ test.describe.serial("Kingdom Funding member donations (live NMI test gateway)",
     expect(ok, "No success Alert after one-time donation").toBe(true);
   });
 
-  test("saved card appears on Manage tab", async ({ page }) => {
-    await openManageTab(page);
+  test("saved card appears on Manage slice", async ({ page }) => {
+    await openManageSlice(page);
     await expect(page.getByText(/\*{2,4}1111/).first()).toBeVisible({ timeout: 20000 });
   });
 
   test("recurring donation with the saved card, then cancel it", async ({ page }) => {
     const diag = captureDiagnostics(page);
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await page.locator("#recurring-donation-button").click();
     await page.locator("#frequency-select").waitFor({ state: "visible", timeout: 15000 });
     await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });
@@ -136,12 +130,11 @@ test.describe.serial("Kingdom Funding member donations (live NMI test gateway)",
     const subId = diag.map((l) => l.match(/subscribe.*"subscription_id":"(\d+)"/)?.[1]).find(Boolean);
     expect(subId, "subscription_id missing from /donate/subscribe response").toBeTruthy();
 
-    // Mobile History lists recurring gifts read-only; payment data can lag one load behind.
+    // The giving plate lists recurring gifts read-only; payment data can lag one load behind.
     await expect(async () => {
       await page.goto("/mobile/donate");
-      await page.getByRole("tab", { name: /History/i }).click();
       await expect(page.getByText(/Every 1 month/i).first()).toBeVisible({ timeout: 10000 });
-    }).toPass({ timeout: 60000 }).catch(() => { console.log("DIAG:\n" + diag.join("\n")); throw new Error("recurring gift not listed on History tab"); });
+    }).toPass({ timeout: 60000 }).catch(() => { console.log("DIAG:\n" + diag.join("\n")); throw new Error("recurring gift not listed on the giving plate"); });
 
     const api = await getApi("demo");
     const del = await apiCall(api, "delete", `${process.env.API_BASE || "http://localhost:8084"}/giving/subscriptions/${subId}`);

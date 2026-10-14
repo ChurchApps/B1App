@@ -1,4 +1,4 @@
-import { test, expect, request, type APIRequestContext } from "@playwright/test";
+import { test, expect, request, type APIRequestContext, type Page } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 const MAIN_API = process.env.API_BASE || "http://localhost:8084";
@@ -13,6 +13,13 @@ async function membershipHeaders(ctx: APIRequestContext) {
   const uc = (await login.json()).userChurches.find((c: any) => c.church?.id === CHURCH_ID);
   const jwt = uc.apis.find((a: any) => a.keyName === "MembershipApi").jwt;
   return { Authorization: `Bearer ${jwt}`, "Content-Type": "application/json" };
+}
+
+// The Events tab became the ?view=events slice behind the plate's "All events" link.
+async function openEvents(page: Page, groupId: string) {
+  await page.goto(`/mobile/groups/${groupId}`);
+  await page.getByRole("button", { name: /^All events$/i }).click();
+  await expect(page).toHaveURL(/view=events/, { timeout: 15000 });
 }
 
 test.describe("Mobile groups", () => {
@@ -41,39 +48,48 @@ test.describe("Mobile groups", () => {
     await expect(page).toHaveURL(/\/mobile\/groups\/GRP\d+/, { timeout: 15000 });
   });
 
-  test("group detail page loads About tab and member-visible Messages tab", async ({ page }) => {
+  test("group detail plate shows About and the member-visible Messages section", async ({ page }) => {
     await page.goto("/mobile/groups/GRP00000004");
     await expect(mobileLogoutButton(page)).toBeVisible();
-    await expect(page.getByRole("tab", { name: /About/i })).toBeVisible({ timeout: 15000 });
-    await expect(page.getByRole("tab", { name: /Messages/i })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Members/i })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Events/i })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Resources/i })).toBeVisible();
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { name: /^About$/i })).toBeVisible({ timeout: 15000 });
+    await expect(main.getByRole("heading", { name: /^Messages$/i })).toBeVisible();
+    await expect(main.getByRole("heading", { name: /^Members$/i })).toBeVisible();
+    await expect(main.getByRole("button", { name: /^All events$/i })).toBeVisible();
+    await expect(main.getByRole("button", { name: /^All resources$/i })).toBeVisible();
+    await expect(page.getByRole("tab")).toHaveCount(0);
   });
 
-  test("group detail About tab shows the group description", async ({ page }) => {
+  test("group detail About section shows the group description", async ({ page }) => {
     await page.goto("/mobile/groups/GRP00000004");
-    // GroupDetail auto-switches to Plans tab; click About to avoid race.
-    await page.getByRole("tab", { name: /^About$/i }).click();
     await expect(page.locator("main")).toContainText(/Bible study for adults/i, { timeout: 15000 });
+  });
+
+  test("All members opens the members slice and Back returns to the plate", async ({ page }) => {
+    await page.goto("/mobile/groups/GRP00000004");
+    await page.getByRole("button", { name: /^All members$/i }).click();
+    await expect(page).toHaveURL(/view=members/, { timeout: 15000 });
+    await expect(page.locator("main h1")).toHaveText(/^Members$/i);
+    await page.getByRole("button", { name: /^Back to / }).click();
+    await expect(page).not.toHaveURL(/view=/, { timeout: 15000 });
+    await expect(page.locator("main").getByRole("heading", { name: /^About$/i })).toBeVisible();
   });
 
   test("group detail page resolves a slug as well as an id", async ({ page }) => {
     await page.goto("/mobile/groups/adult-bible-class");
     await expect(page.locator("main")).toContainText(/Adult Bible Class|Bible study for adults/i, { timeout: 15000 });
-    await expect(page.getByRole("tab", { name: /About/i })).toBeVisible();
+    await expect(page.locator("main").getByRole("heading", { name: /^About$/i })).toBeVisible();
   });
 
   test("authed non-member gets a join action and no contact form", async ({ page }) => {
     await page.goto("/mobile/groups/GRP00000005");
-    await expect(page.getByRole("tab", { name: /About/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.locator("main h1")).toBeVisible({ timeout: 15000 });
     await expect(page.getByTestId("join-group-button").or(page.getByTestId("request-to-join-button"))).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid^="group-contact-"]')).toHaveCount(0);
   });
 
   test("leaving a group asks for confirmation first", async ({ page }) => {
     await page.goto("/mobile/groups/GRP00000004");
-    await page.getByRole("tab", { name: /^About$/i }).click();
     const leave = page.getByTestId("leave-group-button");
     await expect(leave).toBeVisible({ timeout: 15000 });
     await leave.click();
@@ -138,9 +154,7 @@ test.describe("Mobile group event registration (leader)", () => {
   const GROUP_ID = "GRP00000023";
 
   test("leader can toggle registration on a new event and the fields round-trip", async ({ page }) => {
-    await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await expect(page.getByRole("tab", { name: /Events/i })).toBeVisible({ timeout: 15000 });
-    await page.getByRole("tab", { name: /Events/i }).click();
+    await openEvents(page, GROUP_ID);
 
     const addBtn = page.getByRole("button", { name: /^Add Event$/i });
     await addBtn.waitFor({ state: "visible", timeout: 15000 });
@@ -218,9 +232,7 @@ test.describe.serial("Mobile group event reminders", () => {
   });
 
   test("the reminder controls in the Edit event dialog are localized", async ({ page }) => {
-    await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await expect(page.getByRole("tab", { name: /Events/i })).toBeVisible({ timeout: 15000 });
-    await page.getByRole("tab", { name: /Events/i }).click();
+    await openEvents(page, GROUP_ID);
 
     const editEvent = page.getByRole("button", { name: /^Edit event$/i });
     const card = page
@@ -240,8 +252,7 @@ test.describe.serial("Mobile group event reminders", () => {
   });
 
   test("a leader can send event reminders by text", async ({ page }) => {
-    await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await page.getByRole("tab", { name: /Events/i }).click();
+    await openEvents(page, GROUP_ID);
     const editEvent = page.getByRole("button", { name: /^Edit event$/i });
     const card = page.locator("main div").filter({ hasText: title }).filter({ has: editEvent }).last();
     await expect(card).toBeVisible({ timeout: 15000 });
@@ -262,7 +273,7 @@ test.describe.serial("Mobile group event reminders", () => {
 
   test("leader cannot save a javascript: link as a group resource", async ({ page }) => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await page.getByRole("tab", { name: /Resources/i }).click();
+    await page.getByRole("button", { name: /^All resources$/i }).click();
     await page.getByRole("button", { name: /^Add Link$/i }).click();
     await page.getByLabel("Link text").fill("Bad link");
     await page.getByLabel("URL").fill("javascript:alert(1)");
@@ -287,8 +298,7 @@ test.describe.serial("Mobile recurring group event edits", () => {
   };
 
   const openTodaysOccurrence = async (page: any, name: string, scope: "this" | "future" | "all") => {
-    await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await page.getByRole("tab", { name: /Events/i }).click();
+    await openEvents(page, GROUP_ID);
     const editEvent = page.getByRole("button", { name: /^Edit event$/i });
     const card = page.locator("main div").filter({ hasText: name }).filter({ has: editEvent }).last();
     await expect(card).toBeVisible({ timeout: 15000 });
@@ -372,8 +382,7 @@ test.describe.serial("Mobile recurring group event edits", () => {
     let oneOffId: string | undefined;
 
     try {
-      await page.goto(`/mobile/groups/${GROUP_ID}`);
-      await page.getByRole("tab", { name: /Events/i }).click();
+      await openEvents(page, GROUP_ID);
       const editEvent = page.getByRole("button", { name: /^Edit event$/i });
       const card = page.locator("main div").filter({ hasText: oneDateTitle }).filter({ has: editEvent }).last();
       await expect(card).toBeVisible({ timeout: 15000 });
@@ -460,9 +469,8 @@ test.describe.serial("Mobile group events list view", () => {
   });
 
   test("list view shows upcoming events in date order and is remembered", async ({ page }) => {
-    await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await page.getByRole("tab", { name: /Events/i }).click();
-    await page.getByRole("button", { name: /^List view$/i }).click();
+    await openEvents(page, GROUP_ID);
+    await page.getByRole("button", { name: /^List$/i }).click();
 
     const list = page.getByTestId("group-events-list");
     await expect(list).toContainText(titles.today, { timeout: 15000 });
@@ -476,14 +484,12 @@ test.describe.serial("Mobile group events list view", () => {
     expect(text.indexOf(titles.early)).toBeLessThan(text.indexOf(titles.late));
 
     await page.reload();
-    await page.getByRole("tab", { name: /Events/i }).click();
     await expect(page.getByTestId("group-events-list")).toContainText(titles.today, { timeout: 15000 });
   });
 
   test("month view brings the day grid back", async ({ page }) => {
-    await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await page.getByRole("tab", { name: /Events/i }).click();
-    await page.getByRole("button", { name: /^Month view$/i }).click();
+    await openEvents(page, GROUP_ID);
+    await page.getByRole("button", { name: /^Calendar$/i }).click();
     await expect(page.locator('[data-testid^="day-"]').first()).toBeVisible({ timeout: 15000 });
     await expect(page.getByTestId("group-events-list")).toHaveCount(0);
   });
@@ -517,28 +523,31 @@ test.describe("Mobile group chat feed toggles", () => {
   test("with discussions off, the chat opens straight to the announcements feed", async ({ page }) => {
     await saveGroup({ discussionsEnabled: false, announcementsEnabled: true });
     await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await page.getByRole("tab", { name: /Messages/i }).click();
+    await page.getByTestId("group-open-chat").click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible({ timeout: 15000 });
     await expect(dialog.getByTestId("group-chat-feed-label")).toHaveText(/Announcements/i);
-    await expect(dialog.getByRole("tab", { name: /Discussions/i })).toHaveCount(0);
+    await expect(dialog.getByRole("button", { name: /^Back to chat$/i })).toHaveCount(0);
     await expect(dialog.getByText(/Only group leaders can post announcements/i)).toBeVisible();
     await expect(dialog.getByPlaceholder(/Send a message/i)).toHaveCount(0);
   });
 
-  test("with both feeds off, the Messages tab is gone", async ({ page }) => {
+  test("with both feeds off, the Messages section and Open chat are gone", async ({ page }) => {
     await saveGroup({ discussionsEnabled: false, announcementsEnabled: false });
     await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await expect(page.getByRole("tab", { name: /Members/i })).toBeVisible({ timeout: 15000 });
-    await expect(page.getByRole("tab", { name: /Messages/i })).toHaveCount(0);
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { name: /^Members$/i })).toBeVisible({ timeout: 15000 });
+    await expect(main.getByRole("heading", { name: /^Messages$/i })).toHaveCount(0);
+    await expect(page.getByTestId("group-open-chat")).toHaveCount(0);
   });
 
   test("with both feeds back on, the chat opens to discussions again", async ({ page }) => {
     await saveGroup({ discussionsEnabled: true, announcementsEnabled: true });
     await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await page.getByRole("tab", { name: /Messages/i }).click();
+    await page.getByTestId("group-open-chat").click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible({ timeout: 15000 });
+    await expect(dialog.getByTestId("group-chat-feed-label")).toHaveText(/Chat/i);
     await expect(dialog.getByPlaceholder(/Send a message/i)).toBeVisible();
   });
 });

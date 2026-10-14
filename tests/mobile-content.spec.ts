@@ -8,9 +8,31 @@ test.describe("Mobile content screens", () => {
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
-  test("sermons screen lists seeded playlist titles", async ({ page }) => {
+  test("sermons screen shows Recent and Series sections instead of tabs", async ({ page }) => {
     await page.goto("/mobile/sermons");
-    await expect(page.locator("body")).toContainText(SEED_PLAYLISTS.SUNDAY_SERMONS.title, { timeout: 15000 });
+    await expect(page.getByRole("heading", { level: 1, name: "Sermons" })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("region", { name: "Recent" })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("region", { name: "Series" })).toBeVisible();
+    await expect(page.getByRole("tab")).toHaveCount(0);
+  });
+
+  test("sermons screen lists seeded playlist titles in All series", async ({ page }) => {
+    await page.goto("/mobile/sermons");
+    await page.getByRole("region", { name: "Series" }).getByRole("button", { name: "All series" }).click({ timeout: 15000 });
+    await expect(page).toHaveURL(/view=series/);
+    await expect(page.getByRole("heading", { level: 1, name: "All series" })).toBeVisible();
+    await expect(page.locator("main")).toContainText(SEED_PLAYLISTS.SUNDAY_SERMONS.title, { timeout: 15000 });
+    await page.getByRole("button", { name: /Back to Sermons/ }).click();
+    await expect(page).not.toHaveURL(/view=series/);
+  });
+
+  test("All sermons slice searches across years", async ({ page }) => {
+    await page.goto("/mobile/sermons");
+    await page.getByRole("button", { name: "All sermons" }).click({ timeout: 15000 });
+    await expect(page).toHaveURL(/view=all/);
+    const search = page.getByRole("textbox", { name: /Search sermons/i });
+    await search.fill("Power of Faith");
+    await expect(page.locator("main").getByRole("link", { name: /The Power of Faith/i })).toBeVisible({ timeout: 15000 });
   });
 
   test("bible screen renders", async ({ page }) => {
@@ -21,6 +43,8 @@ test.describe("Mobile content screens", () => {
   test("stream screen renders", async ({ page }) => {
     await page.goto("/mobile/stream");
     await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Stream/ })).toContainText(/Live|Offline/, { timeout: 15000 });
+    await expect(page.locator("#streamingAltTabs")).toHaveCount(0);
   });
 
   test("lessons screen renders", async ({ page }) => {
@@ -31,6 +55,8 @@ test.describe("Mobile content screens", () => {
   test("votd screen renders", async ({ page }) => {
     await page.goto("/mobile/votd");
     await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Verse of the Day" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Share Verse of the Day" })).toBeVisible();
   });
 
   test("votd share image hands the day's picture to the share sheet as a file", async ({ page }) => {
@@ -71,11 +97,20 @@ test.describe("Mobile content screens", () => {
   test("clicking a sermon playlist on /mobile/sermons drills into its sermons", async ({ page }) => {
     // Per b1-mobile/content/sermons.md, sermons screen lets you drill into a
     // playlist. SermonsPage routes to /mobile/playlist/<id> on click.
-    await page.goto("/mobile/sermons");
-    const card = page.locator("main").getByText(/Sunday Sermons 2025-2026/i).first();
-    await card.waitFor({ state: "visible", timeout: 15000 });
-    await card.click();
+    await page.goto("/mobile/sermons?view=series");
+    const row = page.locator("main").getByRole("link", { name: /Sunday Sermons 2025-2026/i });
+    await row.waitFor({ state: "visible", timeout: 15000 });
+    await row.click();
     await expect(page).toHaveURL(/\/mobile\/playlist\/PLY\d+/, { timeout: 15000 });
+    await expect(page.getByRole("heading", { level: 1, name: SEED_PLAYLISTS.SUNDAY_SERMONS.title })).toBeVisible({ timeout: 15000 });
     await expect(page.locator("main")).toContainText(/The Power of Faith/i, { timeout: 15000 });
+  });
+
+  test("sermon detail puts the player first with text-link verbs", async ({ page }) => {
+    await page.goto("/mobile/sermons/SER00000001");
+    await expect(page.getByRole("heading", { level: 1, name: /The Power of Faith/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("button", { name: /Watch Sermon/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Share$/ })).toBeVisible();
+    await expect(page.getByRole("region", { name: "In this series" }).getByRole("link", { name: "All in series" })).toHaveAttribute("href", /\/mobile\/playlist\/PLY00000001/);
   });
 });

@@ -1,27 +1,17 @@
 "use client";
 
 import React from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FileHelper } from "@churchapps/helpers";
-import {
-  Box,
-  Button,
-  Collapse,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Icon,
-  IconButton,
-  LinearProgress,
-  Skeleton,
-  TextField,
-  Typography
-} from "@mui/material";
+import { Box, Button, IconButton, LinearProgress, Skeleton, TextField, Typography } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import LinkIcon from "@mui/icons-material/Link";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
+import { PlateSection, QuietEmpty, RowList, Sheet, TextLink } from "../kit";
 
-interface FileRow {
+export interface FileRow {
   id?: string;
   fileName?: string;
   size?: number;
@@ -29,7 +19,7 @@ interface FileRow {
   contentType?: string;
 }
 
-interface LinkRow {
+export interface LinkRow {
   id?: string;
   text?: string;
   url?: string;
@@ -42,10 +32,11 @@ interface Props {
   canEdit: boolean;
 }
 
+const tc = mobileTheme.colors;
 const STORAGE_CAP = 100_000_000;
-const isHttpUrl = (url?: string) => !!url && /^https?:\/\//i.test(url);
+export const isHttpUrl = (url?: string) => !!url && /^https?:\/\//i.test(url);
 
-const formatSize = (bytes: number) => {
+export const formatSize = (bytes: number) => {
   if (bytes > 1_000_000) return `${(Math.round(bytes / 10_000) / 100).toFixed(2)}MB`;
   if (bytes > 1000) return `${(Math.round(bytes / 10) / 100).toFixed(2)}KB`;
   return `${bytes}b`;
@@ -65,10 +56,56 @@ interface PresignedResponse {
   fields: Record<string, string>;
 }
 
+// Opens in a new tab; the delete button sits beside the link, not inside it.
+export const ResourceRow = ({ href, icon, title, subtitle, trailing }: { href?: string; icon: React.ReactNode; title: React.ReactNode; subtitle?: React.ReactNode; trailing?: React.ReactNode }) => (
+  <Box className="kit-row" sx={{ display: "flex", alignItems: "center", gap: "12px", minHeight: 56, py: "8px" }}>
+    <Box
+      component={href ? "a" : "div"}
+      href={href}
+      target={href ? "_blank" : undefined}
+      rel={href ? "noopener noreferrer" : undefined}
+      sx={{ flex: 1, minWidth: 0, display: "flex", alignItems: "center", gap: "12px", textDecoration: "none", color: "inherit" }}
+    >
+      {icon}
+      <Box sx={{ minWidth: 0 }}>
+        <Typography sx={{ fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title}</Typography>
+        {subtitle && <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{subtitle}</Typography>}
+      </Box>
+    </Box>
+    {trailing}
+  </Box>
+);
+
+// Shared by the plate teaser and the resources slice.
+export const useGroupResources = (groupId: string) => useQuery<{ files: FileRow[]; links: LinkRow[] }>({
+  queryKey: ["group-resources", groupId],
+  queryFn: async () => {
+    let files: FileRow[] = [];
+    let links: LinkRow[] = [];
+    try {
+      const f = await ApiHelper.get(`/files/group/${groupId}`, "ContentApi");
+      files = Array.isArray(f) ? f : [];
+    } catch { /* empty list */ }
+    try {
+      const l = await ApiHelper.get("/links?category=groupLink", "ContentApi");
+      links = Array.isArray(l) ? l.filter((x: LinkRow) => x.linkData === groupId) : [];
+    } catch { /* empty list */ }
+    return { files, links };
+  },
+  enabled: !!groupId
+});
+
 export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
-  const tc = mobileTheme.colors;
-  const [files, setFiles] = React.useState<FileRow[] | null>(null);
-  const [links, setLinks] = React.useState<LinkRow[] | null>(null);
+  const queryClient = useQueryClient();
+  const { data } = useGroupResources(groupId);
+  const files = data?.files ?? null;
+  const links = data?.links ?? null;
+  const { data: storageStatus = null } = useQuery<{ provider?: string; quotaBytes?: number } | null>({
+    queryKey: ["storage-status"],
+    queryFn: async () => {
+      try { return await ApiHelper.get("/storage/status", "ContentApi"); } catch { return null; }
+    }
+  });
   const [showAddLink, setShowAddLink] = React.useState(false);
   const [linkText, setLinkText] = React.useState("");
   const [linkUrl, setLinkUrl] = React.useState("");
@@ -77,37 +114,10 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
   const [pendingFile, setPendingFile] = React.useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = React.useState<number>(-1);
   const [uploadError, setUploadError] = React.useState<string | null>(null);
-  const [storageStatus, setStorageStatus] = React.useState<{ provider?: string; quotaBytes?: number } | null>(null);
+  const [pendingDelete, setPendingDelete] = React.useState<{ kind: "file" | "link"; id: string; name: string } | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const load = React.useCallback(async () => {
-    setFiles(null);
-    setLinks(null);
-    try {
-      const f: FileRow[] = await ApiHelper.get(`/files/group/${groupId}`, "ContentApi");
-      setFiles(Array.isArray(f) ? f : []);
-    } catch {
-      setFiles([]);
-    }
-    try {
-      const l: LinkRow[] = await ApiHelper.get("/links?category=groupLink", "ContentApi");
-      const matches = Array.isArray(l) ? l.filter((x) => x.linkData === groupId) : [];
-      setLinks(matches);
-    } catch {
-      setLinks([]);
-    }
-    try {
-      setStorageStatus(await ApiHelper.get("/storage/status", "ContentApi"));
-    } catch {
-      setStorageStatus(null);
-    }
-  }, [groupId]);
-
-  React.useEffect(() => {
-    load();
-  }, [load]);
-
-  const [pendingDelete, setPendingDelete] = React.useState<{ kind: "file" | "link"; id: string; name: string } | null>(null);
+  const load = () => queryClient.invalidateQueries({ queryKey: ["group-resources", groupId] });
 
   const handleConfirmDelete = async () => {
     const target = pendingDelete;
@@ -119,6 +129,13 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
     } catch {
 
     }
+  };
+
+  const closeAddLink = () => {
+    setShowAddLink(false);
+    setLinkError(null);
+    setLinkText("");
+    setLinkUrl("");
   };
 
   const handleAddLink = async () => {
@@ -139,18 +156,9 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
     }
     setLinkSaving(true);
     try {
-      const payload = {
-        category: "groupLink",
-        url,
-        linkType: "url",
-        text: linkText.trim(),
-        linkData: groupId,
-        icon: ""
-      };
+      const payload = { category: "groupLink", url, linkType: "url", text: linkText.trim(), linkData: groupId, icon: "" };
       await ApiHelper.post("/links", [payload], "ContentApi");
-      setLinkText("");
-      setLinkUrl("");
-      setShowAddLink(false);
+      closeAddLink();
       load();
     } catch (e: any) {
       setLinkError(e?.message || Locale.label("mobile.group.failedAddLink"));
@@ -170,19 +178,12 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
       } catch {
         presigned = null;
       }
-      const record: any = {
-        fileName: file.name,
-        fileType: file.type,
-        size: file.size,
-        contentType: "group",
-        contentId: groupId
-      };
+      const record: any = { fileName: file.name, fileType: file.type, size: file.size, contentType: "group", contentId: groupId };
       if (presigned && presigned.key) {
         const uploaded = await FileHelper.uploadPresignedFile(presigned, file, setUploadProgress);
         if (uploaded.externalId) record.externalId = uploaded.externalId;
       } else {
-        const base64 = await convertBase64(file);
-        record.fileContents = base64;
+        record.fileContents = await convertBase64(file);
       }
       await ApiHelper.post("/files", [record], "ContentApi");
       setPendingFile(null);
@@ -209,401 +210,120 @@ export const GroupResourcesTab = ({ groupId, canEdit }: Props) => {
   const percent = unlimited ? 0 : Math.min(100, (used / STORAGE_CAP) * 100);
   const storageFull = !unlimited && used >= STORAGE_CAP;
 
-  const renderFileRow = (f: FileRow) => {
-    const href = f.contentPath
-      ? f.contentPath.startsWith("http")
-        ? f.contentPath
-        : f.contentPath
-      : undefined;
-    return (
-      <Box
-        key={f.id}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.sm}px`,
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Box
-          sx={{
-            width: 40,
-            height: 40,
-            borderRadius: "11px",
-            bgcolor: tc.iconBackground,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0
-          }}
-        >
-          <Icon sx={{ color: tc.primary }}>description</Icon>
-        </Box>
-        <Box
-          component={href ? "a" : "div"}
-          href={href}
-          target={href ? "_blank" : undefined}
-          rel={href ? "noopener noreferrer" : undefined}
-          sx={{
-            flex: 1,
-            minWidth: 0,
-            textDecoration: "none",
-            color: "inherit"
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: 14,
-              fontWeight: 600,
-              color: tc.text,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
-            }}
-          >
-            {f.fileName || Locale.label("mobile.group.fileFallback")}
-          </Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>{formatSize(f.size || 0)}</Typography>
-        </Box>
-        {canEdit && (
-          <IconButton aria-label={Locale.label("mobile.group.deleteFile")} onClick={() => f.id && setPendingDelete({ kind: "file", id: f.id, name: f.fileName || Locale.label("mobile.group.fileFallback") })} sx={{ color: tc.error }}>
-            <Icon>delete_outline</Icon>
-          </IconButton>
-        )}
-      </Box>
-    );
-  };
-
-  const renderLinkRow = (l: LinkRow) => (
-    <Box
-      key={l.id}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: `${mobileTheme.spacing.sm}px`,
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        p: `${mobileTheme.spacing.md}px`
-      }}
-    >
-      <Box
-        sx={{
-          width: 40,
-          height: 40,
-          borderRadius: "11px",
-          bgcolor: tc.iconBackground,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0
-        }}
-      >
-        <Icon sx={{ color: tc.primary }}>link</Icon>
-      </Box>
-      <Box
-        component="a"
-        href={isHttpUrl(l.url) ? l.url : undefined}
-        target="_blank"
-        rel="noopener noreferrer"
-        sx={{ flex: 1, minWidth: 0, textDecoration: "none", color: "inherit" }}
-      >
-        <Typography
-          sx={{
-            fontSize: 14,
-            fontWeight: 600,
-            color: tc.text,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {l.text || Locale.label("mobile.group.linkFallback")}
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: 12,
-            color: tc.textSecondary,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {l.url}
-        </Typography>
-      </Box>
-      {canEdit && (
-        <IconButton aria-label={Locale.label("mobile.group.deleteLink")} onClick={() => l.id && setPendingDelete({ kind: "link", id: l.id, name: l.text || Locale.label("mobile.group.linkFallback") })} sx={{ color: tc.error }}>
-          <Icon>delete_outline</Icon>
-        </IconButton>
-      )}
-    </Box>
+  const deleteButton = (label: string, onClick: () => void) => (
+    <IconButton aria-label={label} onClick={onClick} sx={{ color: tc.textSecondary }}><DeleteOutlineIcon /></IconButton>
   );
 
+  const skeleton = <Box>{[0, 1].map((i) => <Skeleton key={i} variant="rounded" height={48} sx={{ mb: "8px" }} />)}</Box>;
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-
-      <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: `${mobileTheme.spacing.sm}px`
-          }}
-        >
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.group.links")}</Typography>
-          {canEdit && (
-            <Button
-              size="small"
-              variant="outlined"
-              startIcon={<Icon>add_link</Icon>}
-              onClick={() => setShowAddLink((v) => !v)}
-              sx={{
-                textTransform: "none",
-                fontWeight: 600,
-                borderColor: tc.primary,
-                color: tc.primary,
-                borderRadius: `${mobileTheme.radius.md}px`
-              }}
-            >
-              {showAddLink ? Locale.label("mobile.group.cancel") : Locale.label("mobile.group.addLink")}
-            </Button>
-          )}
-        </Box>
-
-        {canEdit && (
-          <Collapse in={showAddLink} unmountOnExit>
-            <Box
-              sx={{
-                bgcolor: tc.surface,
-                border: `1px solid ${tc.border}`,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                p: `${mobileTheme.spacing.md}px`,
-                mb: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: 1
-              }}
-            >
-              <TextField
-                size="small"
-                label={Locale.label("mobile.group.linkText")}
-                value={linkText}
-                onChange={(e) => setLinkText(e.target.value)}
-                fullWidth
-              />
-              <TextField
-                size="small"
-                label={Locale.label("mobile.group.url")}
-                value={linkUrl}
-                onChange={(e) => setLinkUrl(e.target.value)}
-                placeholder="https://…"
-                fullWidth
-              />
-              {linkError && (
-                <Typography sx={{ color: tc.error, fontSize: 12 }}>{linkError}</Typography>
-              )}
-              <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
-                <Button
-                  size="small"
-                  onClick={() => {
-                    setShowAddLink(false);
-                    setLinkError(null);
-                    setLinkText("");
-                    setLinkUrl("");
-                  }}
-                  sx={{ textTransform: "none", color: tc.text }}
-                >
-                  {Locale.label("mobile.group.cancel")}
-                </Button>
-                <Button
-                  size="small"
-                  variant="contained"
-                  disabled={linkSaving}
-                  onClick={handleAddLink}
-                  sx={{
-                    bgcolor: tc.primary,
-                    color: tc.onPrimary,
-                    textTransform: "none",
-                    fontWeight: 600,
-                    "&:hover": { bgcolor: tc.primary }
-                  }}
-                >
-                  {linkSaving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.add")}
-                </Button>
-              </Box>
-            </Box>
-          </Collapse>
-        )}
-
-        {links === null && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            {[0, 1].map((i) => (
-              <Skeleton
-                key={`ls-${i}`}
-                variant="rounded"
-                height={64}
-                sx={{ borderRadius: `${mobileTheme.radius.lg}px` }}
+    <>
+      <PlateSection
+        title={Locale.label("mobile.group.links")}
+        action={canEdit && <TextLink onClick={() => setShowAddLink(true)}>{Locale.label("mobile.group.addLink")}</TextLink>}
+      >
+        {links === null && skeleton}
+        {links !== null && links.length === 0 && <QuietEmpty>{Locale.label("mobile.group.noLinks")}</QuietEmpty>}
+        {links !== null && links.length > 0 && (
+          <RowList>
+            {links.map((l) => (
+              <ResourceRow
+                key={l.id}
+                href={isHttpUrl(l.url) ? l.url : undefined}
+                icon={<LinkIcon sx={{ color: tc.textSecondary }} />}
+                title={l.text || Locale.label("mobile.group.linkFallback")}
+                subtitle={l.url}
+                trailing={canEdit && deleteButton(Locale.label("mobile.group.deleteLink"), () => l.id && setPendingDelete({ kind: "link", id: l.id, name: l.text || Locale.label("mobile.group.linkFallback") }))}
               />
             ))}
-          </Box>
+          </RowList>
         )}
-        {links !== null && links.length === 0 && (
-          <Box
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              p: `${mobileTheme.spacing.md}px`,
-              textAlign: "center"
-            }}
-          >
-            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>{Locale.label("mobile.group.noLinks")}</Typography>
-          </Box>
-        )}
-        {links !== null && links.length > 0 && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>{links.map(renderLinkRow)}</Box>
-        )}
-      </Box>
+      </PlateSection>
 
-      <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: `${mobileTheme.spacing.sm}px`
-          }}
-        >
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.group.files")}</Typography>
-          {canEdit && !storageFull && (
-            <Button
-              size="small"
-              variant="outlined"
-              startIcon={<Icon>upload_file</Icon>}
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadProgress >= 0}
-              sx={{
-                textTransform: "none",
-                fontWeight: 600,
-                borderColor: tc.primary,
-                color: tc.primary,
-                borderRadius: `${mobileTheme.radius.md}px`
-              }}
-            >
-              {Locale.label("mobile.group.upload")}
-            </Button>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          />
-        </Box>
+      <PlateSection
+        title={Locale.label("mobile.group.files")}
+        action={canEdit && !storageFull && (
+          <TextLink onClick={() => fileInputRef.current?.click()} disabled={uploadProgress >= 0}>{Locale.label("mobile.group.upload")}</TextLink>
+        )}
+      >
+        <input ref={fileInputRef} type="file" style={{ display: "none" }} onChange={handleFileChange} />
         {uploadProgress >= 0 && (
-          <Box sx={{ mb: 1 }}>
-            <Typography sx={{ fontSize: 12, color: tc.textSecondary, mb: 0.5 }}>
+          <Box sx={{ mb: "10px" }}>
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary, mb: "4px" }}>
               {Locale.label("mobile.group.uploadingProgress").replace("{}", pendingFile?.name || "").replace("{}", String(uploadProgress))}
             </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={uploadProgress}
-              sx={{
-                height: 6,
-                borderRadius: 3,
-                bgcolor: tc.border,
-                "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 3 }
-              }}
-            />
+            <LinearProgress variant="determinate" value={uploadProgress} sx={{ height: 6, borderRadius: 3, bgcolor: tc.border, "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 3 } }} />
           </Box>
         )}
-        {uploadError && (
-          <Typography sx={{ color: tc.error, fontSize: 12, mb: 1 }}>{uploadError}</Typography>
-        )}
-
-        {files === null && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            {[0, 1].map((i) => (
-              <Skeleton
-                key={`fs-${i}`}
-                variant="rounded"
-                height={64}
-                sx={{ borderRadius: `${mobileTheme.radius.lg}px` }}
+        {uploadError && <Typography sx={{ color: tc.error, fontSize: 13.5, mb: "8px" }}>{uploadError}</Typography>}
+        {files === null && skeleton}
+        {files !== null && files.length === 0 && <QuietEmpty>{Locale.label("mobile.group.noFiles")}</QuietEmpty>}
+        {files !== null && files.length > 0 && (
+          <RowList>
+            {files.map((f) => (
+              <ResourceRow
+                key={f.id}
+                href={f.contentPath || undefined}
+                icon={<DescriptionOutlinedIcon sx={{ color: tc.textSecondary }} />}
+                title={f.fileName || Locale.label("mobile.group.fileFallback")}
+                subtitle={formatSize(f.size || 0)}
+                trailing={canEdit && deleteButton(Locale.label("mobile.group.deleteFile"), () => f.id && setPendingDelete({ kind: "file", id: f.id, name: f.fileName || Locale.label("mobile.group.fileFallback") }))}
               />
             ))}
-          </Box>
+          </RowList>
         )}
-        {files !== null && files.length === 0 && (
-          <Box
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              p: `${mobileTheme.spacing.md}px`,
-              textAlign: "center"
-            }}
-          >
-            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>{Locale.label("mobile.group.noFiles")}</Typography>
-          </Box>
-        )}
-        {files !== null && files.length > 0 && (
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>{files.map(renderFileRow)}</Box>
-        )}
-      </Box>
-
-      {files !== null && (
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`
-          }}
-        >
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: unlimited ? 0 : 1 }}>
-            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
-              {unlimited
-                ? Locale.label("mobile.group.usedStorageUnlimited", "Used {}").replace("{}", formatSize(used))
-                : Locale.label("mobile.group.usedStorage").replace("{}", formatSize(used))}
-            </Typography>
-            {!unlimited && (
-              <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-                {Math.round(percent)}%
+        {files !== null && (
+          <Box sx={{ mt: "14px" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: unlimited ? 0 : "6px" }}>
+              <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
+                {unlimited
+                  ? Locale.label("mobile.group.usedStorageUnlimited", "Used {}").replace("{}", formatSize(used))
+                  : Locale.label("mobile.group.usedStorage").replace("{}", formatSize(used))}
               </Typography>
+              {!unlimited && <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Math.round(percent)}%</Typography>}
+            </Box>
+            {!unlimited && (
+              <LinearProgress variant="determinate" value={percent} sx={{ height: 6, borderRadius: 3, bgcolor: tc.border, "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 3 } }} />
             )}
           </Box>
-          {!unlimited && (
-            <LinearProgress
-              variant="determinate"
-              value={percent}
-              sx={{
-                height: 8,
-                borderRadius: 4,
-                bgcolor: tc.border,
-                "& .MuiLinearProgress-bar": { bgcolor: tc.primary, borderRadius: 4 }
-              }}
-            />
-          )}
+        )}
+      </PlateSection>
+
+      <Sheet
+        open={showAddLink && canEdit}
+        onClose={closeAddLink}
+        title={Locale.label("mobile.group.addLink")}
+        actions={(
+          <>
+            <Button variant="outlined" onClick={closeAddLink}>{Locale.label("mobile.group.cancel")}</Button>
+            <Button variant="contained" disabled={linkSaving} onClick={handleAddLink}>
+              {linkSaving ? Locale.label("mobile.group.saving") : Locale.label("mobile.group.add")}
+            </Button>
+          </>
+        )}
+      >
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "12px", pt: "6px" }}>
+          <TextField label={Locale.label("mobile.group.linkText")} value={linkText} onChange={(e) => setLinkText(e.target.value)} fullWidth autoFocus />
+          <TextField label={Locale.label("mobile.group.url")} value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="https://…" fullWidth />
+          {linkError && <Typography sx={{ color: tc.error, fontSize: 13.5 }}>{linkError}</Typography>}
         </Box>
-      )}
-      <Dialog open={!!pendingDelete} onClose={() => setPendingDelete(null)}>
-        <DialogTitle>{Locale.label("mobile.group.deleteResourceTitle")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {Locale.label("mobile.group.deleteResourceConfirm").replace("{}", pendingDelete?.name || "")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPendingDelete(null)}>{Locale.label("mobile.group.cancel")}</Button>
-          <Button color="error" onClick={handleConfirmDelete} data-testid="confirm-delete-resource">{Locale.label("mobile.group.delete")}</Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+      </Sheet>
+
+      <Sheet
+        open={!!pendingDelete}
+        onClose={() => setPendingDelete(null)}
+        title={Locale.label("mobile.group.deleteResourceTitle")}
+        maxWidth="xs"
+        actions={(
+          <>
+            <Button variant="outlined" onClick={() => setPendingDelete(null)}>{Locale.label("mobile.group.cancel")}</Button>
+            <Button variant="contained" color="error" onClick={handleConfirmDelete} data-testid="confirm-delete-resource">{Locale.label("mobile.group.delete")}</Button>
+          </>
+        )}
+      >
+        <Typography sx={{ color: tc.textSecondary }}>{Locale.label("mobile.group.deleteResourceConfirm").replace("{}", pendingDelete?.name || "")}</Typography>
+      </Sheet>
+    </>
   );
 };
 

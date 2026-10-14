@@ -2,13 +2,14 @@
 
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Icon, Typography, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import type { LinkInterface, LoginResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
 import { useChurchLinks } from "../../hooks/useConfig";
 import { mobileTheme } from "../mobileTheme";
+import { PageHead, Plate, PlateSection, QuietEmpty } from "../kit";
 
 const INTERNAL_ROUTE_MAP: Array<{ match: RegExp; to: (m: RegExpMatchArray) => string }> = [
   { match: /\/my\/groups(?:\/|$|\?)/, to: () => "/mobile/groups" },
@@ -180,127 +181,74 @@ export const LessonsPage = () => {
     }, 15000);
   };
 
+  const head = <PageHead title={title} sx={{ pb: { xs: "12px", md: "16px" } }} />;
+
   if (!jwt || !churchId) {
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box sx={{
-          bgcolor: tc.surface,
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          p: 4,
-          textAlign: "center",
-          boxShadow: mobileTheme.shadows.md
-        }}>
-          <Box sx={{
-            width: 72,
-            height: 72,
-            borderRadius: "36px",
-            bgcolor: tc.iconBackground,
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 2
-          }}>
-            <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            {Locale.label("mobile.screens.signInToView").replace("{}", title.toLowerCase())}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            {Locale.label("mobile.screens.signInToViewBody").replace("{}", title)}
-          </Typography>
-          <Button variant="contained" href="/mobile/login?returnUrl=/mobile/lessons" data-testid="lessons-signin-button">
-            {Locale.label("mobile.screens.signIn")}
-          </Button>
-        </Box>
+      <Box>
+        {head}
+        <Plate>
+          <PlateSection>
+            <Typography component="h2" sx={{ fontSize: 17, fontWeight: 650, color: tc.text }}>
+              {Locale.label("mobile.screens.signInToView").replace("{}", title.toLowerCase())}
+            </Typography>
+            <QuietEmpty sx={{ mt: "4px", mb: "16px" }}>
+              {Locale.label("mobile.screens.signInToViewBody").replace("{}", title)}
+            </QuietEmpty>
+            <Button variant="contained" href="/mobile/login?returnUrl=/mobile/lessons" data-testid="lessons-signin-button">
+              {Locale.label("mobile.screens.signIn")}
+            </Button>
+          </PlateSection>
+        </Plate>
       </Box>
     );
   }
 
   if (iframeError) {
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box sx={{
-          bgcolor: tc.surface,
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          p: 4,
-          textAlign: "center",
-          boxShadow: mobileTheme.shadows.md
-        }}>
-          <Box sx={{
-            width: 72,
-            height: 72,
-            borderRadius: "36px",
-            bgcolor: tc.iconBackground,
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 2
-          }}>
-            <Icon sx={{ fontSize: 36, color: tc.primary }}>error_outline</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            Unable to load {title.toLowerCase()}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            Check your connection and try again.
-          </Typography>
-          <Button variant="contained" onClick={handleRetry} data-testid="lessons-retry-button">
-            Retry
-          </Button>
-        </Box>
+      <Box>
+        {head}
+        <Plate>
+          <PlateSection>
+            <Typography component="h2" sx={{ fontSize: 17, fontWeight: 650, color: tc.text }}>
+              {Locale.label("mobile.lessons.unableToLoad").replace("{}", title.toLowerCase())}
+            </Typography>
+            <QuietEmpty sx={{ mt: "4px", mb: "16px" }}>{Locale.label("mobile.details.checkConnection")}</QuietEmpty>
+            <Button variant="contained" onClick={handleRetry} data-testid="lessons-retry-button">
+              {Locale.label("mobile.screens.retry")}
+            </Button>
+          </PlateSection>
+        </Plate>
       </Box>
     );
   }
 
   return (
-    <Box sx={{
-      bgcolor: tc.surface,
-      minHeight: "100%",
-      display: "flex",
-      flexDirection: "column"
-    }}>
-      {isClient && iframeSrc ? (
-        <Box
-          component="iframe"
-          ref={iframeRef}
-          title={title}
-          src={iframeSrc}
-          onLoad={handleIframeLoad}
-          onError={handleIframeError}
-          sx={{
-            width: "100%",
-            flex: 1,
-            minHeight: `calc(100vh - ${mobileTheme.headerHeight}px)`,
-            border: 0,
-            bgcolor: tc.surface
-          }}
-        />
-      ) : (
-        <Box sx={{
-          p: `${mobileTheme.spacing.md}px`,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1
-        }}>
-          <Box sx={{
-            width: 72,
-            height: 72,
-            borderRadius: "36px",
-            bgcolor: tc.iconBackground,
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 2
-          }}>
-            <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 16, color: tc.textMuted }}>
-            Loading {title.toLowerCase()}...
-          </Typography>
-        </Box>
-      )}
+    <Box>
+      {head}
+      <Plate sx={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
+        {isClient && iframeSrc ? (
+          <Box
+            component="iframe"
+            ref={iframeRef}
+            title={title}
+            src={iframeSrc}
+            onLoad={handleIframeLoad}
+            onError={handleIframeError}
+            sx={{
+              width: "100%",
+              display: "block",
+              minHeight: { xs: "calc(100dvh - 220px)", md: "calc(100dvh - 200px)" },
+              border: 0,
+              bgcolor: tc.surface
+            }}
+          />
+        ) : (
+          <PlateSection>
+            <QuietEmpty>{Locale.label("mobile.lessons.loading").replace("{}", title.toLowerCase())}</QuietEmpty>
+          </PlateSection>
+        )}
+      </Plate>
     </Box>
   );
 };

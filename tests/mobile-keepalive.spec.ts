@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
-import { mobileLogoutButton } from "./helpers/mobile";
+import { mobileSignedInChrome } from "./helpers/mobile";
 
 // Activity keeps components mounted with display:none; use getByRole/visible locators.
 
 test.describe("Mobile keep-alive", () => {
   test("community search input keeps its value across a tab switch", async ({ page }) => {
     await page.goto("/mobile/community");
-    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(mobileSignedInChrome(page)).toBeVisible();
 
     const search = page.getByRole("textbox", { name: /Search Members/i });
     await search.waitFor({ state: "visible", timeout: 15000 });
@@ -26,7 +26,7 @@ test.describe("Mobile keep-alive", () => {
 
   test("sermons scroll position is restored after a tab switch", async ({ page }) => {
     await page.goto("/mobile/sermons");
-    await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(mobileSignedInChrome(page)).toBeVisible();
     await expect(page.locator("main")).toContainText(/Sermons|Playlists|Sunday/i, { timeout: 20000 });
 
     await page.evaluate(() => window.scrollTo(0, 800));

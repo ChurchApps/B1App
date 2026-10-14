@@ -1,17 +1,11 @@
 "use client";
 
 import React, { Suspense, useContext, useEffect, useMemo, useState } from "react";
-import {
-  Box,
-  Button,
-  Icon,
-  Menu,
-  MenuItem,
-  Tab,
-  Tabs,
-  Typography,
-  Alert
-} from "@mui/material";
+import { usePathname } from "next/navigation";
+import { Alert, Box, Button, Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ApiHelper,
@@ -40,13 +34,11 @@ import { CampaignProgress } from "@/components/donate/CampaignProgress";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { BackVerb, BigNumber, FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink, useSliceView } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
 }
-
-type TabKey = "overview" | "donate" | "manage" | "history";
-type PeriodKey = "ytd" | "30d" | "90d" | "all";
 
 interface SubscriptionRow {
   id: string;
@@ -57,8 +49,31 @@ interface SubscriptionRow {
   funds?: { id: string; name: string; amount: number }[];
 }
 
+const tc = mobileTheme.colors;
+
+// apphelper's InputBox/DisplayBox are Papers with their own padding + shadow; inside a plate section they read as nested cards.
+const flatBoxes = {
+  "& #donation-form, & #input-box, & #display-box": { boxShadow: "none", backgroundImage: "none", bgcolor: "transparent", p: 0, mb: 0 },
+  "& #input-box-icon, & #display-box-icon": { display: "none" },
+  "& #input-box-title, & #display-box-title": { ml: 0, fontSize: 12, lineHeight: "18px", fontWeight: 650, letterSpacing: "0.07em", textTransform: "uppercase", color: tc.eyebrow }
+} satisfies SxProps<Theme>;
+
+const campaignSx: SxProps<Theme> = {
+  "&:empty": { display: "none" },
+  "& [data-testid^='campaign-card-']": { border: 0, borderRadius: 0, p: 0, mb: 0, bgcolor: "transparent" },
+  "& [data-testid^='campaign-card-'] + [data-testid^='campaign-card-']": { borderTop: `1px solid ${tc.border}`, mt: "18px", pt: "18px" }
+};
+
+const amountOf = (d: DonationInterface) => ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
+
+const Amount = ({ value, pending }: { value: string; pending?: boolean }) => (
+  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px", flex: "none" }}>
+    <Typography component="span" sx={{ fontSize: 15, fontWeight: 600, color: tc.text, fontVariantNumeric: "tabular-nums" }}>{value}</Typography>
+    {pending && <StatusBadge tone="warn">{Locale.label("mobile.screens.pending")}</StatusBadge>}
+  </Box>
+);
+
 function DonatePageInner({ config }: Props) {
-  const tc = mobileTheme.colors;
   const context = useContext(UserContext);
   const personId = context?.userChurch?.person?.id || UserHelper.currentUserChurch?.person?.id;
   const church: ChurchInterface | undefined = config?.church;
@@ -66,13 +81,12 @@ function DonatePageInner({ config }: Props) {
   const queryClient = useQueryClient();
   const isAuthenticated = !!context?.user?.firstName && !UniqueIdHelper.isMissing(personId);
   const donationsEnabled = config?.allowDonations !== false && isAuthenticated;
+  const pathname = usePathname() || "/mobile/donate";
+  const [view, setView] = useSliceView();
+  const currentYear = new Date().getFullYear();
 
   const [message, setMessage] = useState<string | null>(null);
-
-  const [selectedTab, setTab] = useState<TabKey>(isAuthenticated ? "overview" : "donate");
-  const tab: TabKey = isAuthenticated || selectedTab === "donate" ? selectedTab : "donate";
-  const [period, setPeriod] = useState<PeriodKey>("all");
-  const [periodAnchor, setPeriodAnchor] = useState<HTMLElement | null>(null);
+  const [historyYear, setHistoryYear] = useState<string>(String(currentYear));
 
   const { data: donations = [], isLoading: donationsLoading } = useQuery<DonationInterface[]>({
     queryKey: ["donations", personId],
@@ -118,7 +132,7 @@ function DonatePageInner({ config }: Props) {
   });
 
   // Exchange rates for the church currency, fetched and cached by the Api. Gifts keep their own currency in the
-  // list; only the YTD / period totals are converted, and the rates are never supplied by the browser.
+  // list; only the year totals are converted, and the rates are never supplied by the browser.
   const { data: exchangeRates = {} } = useQuery<Record<string, number>>({
     queryKey: ["donate-exchange-rates", personId],
     queryFn: async () => {
@@ -173,379 +187,43 @@ function DonatePageInner({ config }: Props) {
   }, [message]);
 
   const toChurchCurrency = (d: DonationInterface) =>
-    CurrencyHelper.convertAmount((((d as any).fund?.amount ?? (d as any).amount ?? 0) as number), (d as any).currency || pageCurrency, pageCurrency, exchangeRates);
+    CurrencyHelper.convertAmount(amountOf(d), (d as any).currency || pageCurrency, pageCurrency, exchangeRates);
   const isConvertedGift = (d: DonationInterface) => {
     const giftCurrency = ((d as any).currency || pageCurrency).toUpperCase();
     return giftCurrency !== pageCurrency.toUpperCase() && !!exchangeRates[giftCurrency];
   };
+  const giftYear = (d: DonationInterface) => DateHelper.toDate(d.donationDate).getFullYear();
 
-  const givingStats = useMemo(() => {
-    const currentYear = new Date().getFullYear();
-    let ytd = 0;
-    let totalGifts = 0;
-    let isConverted = false;
-    let lastGift: DonationInterface | null = null;
-    const sorted = [...donations].sort(
-      (a, b) => DateHelper.toDate(b.donationDate).getTime() - DateHelper.toDate(a.donationDate).getTime()
-    );
-    if (sorted.length > 0) lastGift = sorted[0];
-    for (const d of donations) {
-      const dt = DateHelper.toDate(d.donationDate);
-      if (dt.getFullYear() === currentYear) {
-        ytd += toChurchCurrency(d);
-        if (isConvertedGift(d)) isConverted = true;
-        totalGifts += 1;
-      }
-    }
-    return { ytd, totalGifts, lastGift, isConverted };
-  }, [donations, pageCurrency, exchangeRates]);
-
-  const handleRepeatGift = () => {
-
-    setTab("donate");
-  };
-
-  const filteredDonations = useMemo(() => {
-    const now = new Date();
-    let cutoff: Date | null = null;
-    if (period === "30d") cutoff = new Date(now.getTime() - 30 * 86400000);
-    else if (period === "90d") cutoff = new Date(now.getTime() - 90 * 86400000);
-    else if (period === "ytd") cutoff = new Date(now.getFullYear(), 0, 1);
-    if (!cutoff) return donations;
-    return donations.filter((d) => DateHelper.toDate(d.donationDate) >= cutoff!);
-  }, [donations, period]);
-
-  const filteredTotal = useMemo(
-    () => filteredDonations.reduce((sum, d) => sum + toChurchCurrency(d), 0),
-    [filteredDonations, pageCurrency, exchangeRates]
-  );
-  const filteredIsConverted = useMemo(
-    () => filteredDonations.some((d) => isConvertedGift(d)),
-    [filteredDonations, pageCurrency, exchangeRates]
+  const sortedDonations = useMemo(
+    () => [...donations].sort((a, b) => DateHelper.toDate(b.donationDate).getTime() - DateHelper.toDate(a.donationDate).getTime()),
+    [donations]
   );
 
-  if (config?.allowDonations === false) {
-    return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.xl}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center"
-          }}
-        >
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: "11px",
-              bgcolor: tc.iconBackground,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mb: `${mobileTheme.spacing.md}px`
-            }}
-          >
-            <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-            {Locale.label("mobile.screens.givingNotSetUp")}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-            {Locale.label("mobile.screens.givingNotSetUpBody")}
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
+  const summarize = (list: DonationInterface[]) => ({
+    total: list.reduce((sum, d) => sum + toChurchCurrency(d), 0),
+    count: list.length,
+    pending: list.filter((d) => (d as any).status === "pending").length,
+    isConverted: list.some(isConvertedGift)
+  });
 
-  const renderOverview = () => {
-    return (
-      <Box>
+  const ytd = useMemo(
+    () => summarize(donations.filter((d) => giftYear(d) === currentYear)),
+    [donations, pageCurrency, exchangeRates, currentYear]
+  );
 
-        <Box
-          sx={{
-            borderRadius: `${mobileTheme.radius.xl}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            background: mobileTheme.verseGradient,
-            color: tc.onPrimary,
-            textAlign: "center",
-            mb: `${mobileTheme.spacing.lg}px`,
-            minHeight: 160,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center"
-          }}
-        >
-          {isAuthenticated ? (
-            <>
-              <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
-                {Locale.label("mobile.screens.yourGivingImpact")}
-              </Typography>
-              <Typography data-testid="giving-ytd-total" sx={{ fontSize: 36, fontWeight: 800, mb: 1, fontVariantNumeric: "tabular-nums" }}>
-                {CurrencyHelper.formatCurrencyWithLocale(givingStats.ytd || 0, pageCurrency)}
-              </Typography>
-              <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
-                {(givingStats.totalGifts === 1 ? Locale.label("mobile.screens.totalThisYearGift") : Locale.label("mobile.screens.totalThisYearGifts")).replace("{}", String(givingStats.totalGifts))}
-              </Typography>
-              {givingStats.isConverted && (
-                <Typography data-testid="giving-ytd-converted-note" sx={{ fontSize: 12, opacity: 0.85, mt: 0.5 }}>
-                  {Locale.label("mobile.screens.convertedAtCurrentRates")}
-                </Typography>
-              )}
-            </>
-          ) : (
-            <>
-              <Typography sx={{ fontSize: 18, fontWeight: 600, opacity: 0.95, mb: 1 }}>
-                {Locale.label("mobile.screens.makeADifference")}
-              </Typography>
-              <Typography sx={{ fontSize: 20, fontWeight: 700, mb: 1 }}>
-                {Locale.label("mobile.screens.supportChurch").replace("{}", church?.name || Locale.label("mobile.screens.ourChurch"))}
-              </Typography>
-              <Typography sx={{ fontSize: 14, opacity: 0.9 }}>
-                {Locale.label("mobile.screens.giveAsGuest")}
-              </Typography>
-            </>
-          )}
-        </Box>
+  const years = useMemo(() => {
+    const set = new Set<number>([currentYear]);
+    donations.forEach((d) => set.add(giftYear(d)));
+    return [...set].sort((a, b) => b - a);
+  }, [donations, currentYear]);
 
-        {church?.id && (
-          <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>
-            <CampaignProgress churchId={church.id} isAuthenticated={isAuthenticated} currency={pageCurrency} />
-          </Box>
-        )}
+  const historyDonations = useMemo(
+    () => (historyYear === "all" ? sortedDonations : sortedDonations.filter((d) => String(giftYear(d)) === historyYear)),
+    [sortedDonations, historyYear]
+  );
+  const history = useMemo(() => summarize(historyDonations), [historyDonations, pageCurrency, exchangeRates]);
 
-        {isAuthenticated && (
-          <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                mb: `${mobileTheme.spacing.md}px`
-              }}
-            >
-              <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary }}>
-                {Locale.label("mobile.screens.recentActivity")}
-              </Typography>
-              <Button
-                onClick={() => setTab("history")}
-                sx={{
-                  textTransform: "none",
-                  color: tc.primary,
-                  fontWeight: 600,
-                  minWidth: 0
-                }}
-              >
-                {Locale.label("mobile.screens.viewAll")}
-              </Button>
-            </Box>
-
-            <Box
-              sx={{
-                bgcolor: tc.surface,
-                border: `1px solid ${tc.border}`,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                p: `${mobileTheme.spacing.md}px`,
-                display: "flex",
-                alignItems: "center",
-                gap: `${mobileTheme.spacing.md}px`
-              }}
-            >
-              <Box
-                sx={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: "11px",
-                  bgcolor: tc.iconBackground,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0
-                }}
-              >
-                <Icon sx={{ color: tc.success }}>favorite</Icon>
-              </Box>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-                  {Locale.label("mobile.screens.lastGift")}
-                </Typography>
-                <Typography sx={{ fontSize: 15, fontWeight: 700, color: tc.primary }}>
-                  {givingStats.lastGift
-                    ? CurrencyHelper.formatCurrencyWithLocale(
-                        ((givingStats.lastGift as any).fund?.amount
-                          ?? (givingStats.lastGift as any).amount
-                          ?? 0) as number,
-                        givingStats.lastGift.currency || pageCurrency
-                    )
-                    : CurrencyHelper.formatCurrencyWithLocale(0, pageCurrency)}
-                </Typography>
-                <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-                  {givingStats.lastGift
-                    ? DateHelper.prettyDate(DateHelper.toDate(givingStats.lastGift.donationDate))
-                    : Locale.label("mobile.screens.noRecentGift")}
-                </Typography>
-              </Box>
-              {givingStats.lastGift && (
-                <Button
-                  onClick={handleRepeatGift}
-                  sx={{
-                    textTransform: "none",
-                    color: tc.primary,
-                    bgcolor: tc.iconBackground,
-                    borderRadius: "20px",
-                    fontWeight: 600,
-                    fontSize: 13,
-                    px: 2,
-                    "&:hover": { bgcolor: tc.iconBackground, opacity: 0.85 }
-                  }}
-                >
-                  {Locale.label("mobile.screens.repeat")}
-                </Button>
-              )}
-            </Box>
-          </Box>
-        )}
-
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            borderRadius: `${mobileTheme.radius.xl}px`,
-            border: `1px solid ${tc.border}`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center"
-          }}
-        >
-          <Icon sx={{ fontSize: 48, color: tc.primary, mb: `${mobileTheme.spacing.md}px` }}>
-            volunteer_activism
-          </Icon>
-          <Typography sx={{ fontSize: 20, fontWeight: 700, color: tc.text, mb: 1 }}>
-            {Locale.label("mobile.screens.makeADifference")}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.lg}px`, px: 2 }}>
-            {Locale.label("mobile.screens.generosityHelps")}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => setTab("donate")}
-            sx={{
-              textTransform: "none",
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              fontWeight: 700,
-              fontSize: 16,
-              px: 4,
-              py: 1,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              "&:hover": { bgcolor: tc.primary, opacity: 0.9 }
-            }}
-          >
-            {Locale.label("mobile.screens.giveNow")}
-          </Button>
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderGive = () => {
-
-    if (!isAuthenticated) {
-      if (!church?.id) {
-        return (
-          <Box sx={{ p: 3, textAlign: "center" }}>
-            <Typography sx={{ color: tc.textMuted }}>{Locale.label("mobile.screens.unableToLoadChurch")}</Typography>
-          </Box>
-        );
-      }
-      return (
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`
-          }}
-        >
-          <NonAuthDonationWrapper
-            churchId={church.id}
-            showHeader={false}
-            churchLogo={churchLogo}
-            mainContainerCssProps={{ sx: { boxShadow: "none", padding: 0 } }}
-          />
-        </Box>
-      );
-    }
-
-    if (isMethodsLoading) {
-      return (
-        <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography sx={{ color: tc.textMuted }}>{Locale.label("mobile.screens.loadingForm")}</Typography>
-        </Box>
-      );
-    }
-    return (
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <MultiGatewayDonationForm
-          person={person!}
-          customerId={customerId!}
-          paymentMethods={paymentMethods || []}
-          paymentGateways={paymentGateways}
-          donationSuccess={handleDataUpdate}
-          church={church!}
-          churchLogo={churchLogo}
-        />
-      </Box>
-    );
-  };
-
-  const renderManage = () => {
-    if (isMethodsLoading) {
-      return (
-        <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography sx={{ color: tc.textMuted }}>{Locale.label("mobile.screens.loading")}</Typography>
-        </Box>
-      );
-    }
-    return (
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <PaymentMethods
-          person={person!}
-          customerId={customerId!}
-          paymentMethods={paymentMethods || []}
-          appName="B1App"
-          dataUpdate={handleDataUpdate}
-        />
-      </Box>
-    );
-  };
-
-  const handlePrintStatement = () => {
-    if (typeof window === "undefined") return;
-    window.open("/mobile/donate/print", "_blank", "noopener,noreferrer");
-  };
-
-  const periodLabels: Record<PeriodKey, string> = {
-    ytd: Locale.label("mobile.screens.periodYtd"),
-    "30d": Locale.label("mobile.screens.period30d"),
-    "90d": Locale.label("mobile.screens.period90d"),
-    all: Locale.label("mobile.screens.periodAll")
-  };
+  const giftsLabel = (n: number) => (n === 1 ? Locale.label("mobile.giving.giftCountOne") : Locale.label("mobile.giving.giftCount")).replace("{}", String(n));
 
   const getSubPaymentMethod = (sub: SubscriptionRow) => {
     const pm = (paymentMethods || []).find(
@@ -555,325 +233,251 @@ function DonatePageInner({ config }: Props) {
     return `${(pm as any).name} ****${(pm as any).last4 || ""}`;
   };
 
-  const renderHistory = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
+  const handlePrintStatement = (year?: string) => {
+    if (typeof window === "undefined") return;
+    window.open("/mobile/donate/print" + (year ? "?year=" + year : ""), "_blank", "noopener,noreferrer");
+  };
 
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            mb: `${mobileTheme.spacing.md}px`,
-            gap: 1
-          }}
-        >
-          <Typography sx={{ fontSize: 11.5, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: tc.textSecondary }}>{Locale.label("mobile.screens.giving")}</Typography>
-          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            <Button
-              size="small"
-              endIcon={<Icon>expand_more</Icon>}
-              onClick={(e) => setPeriodAnchor(e.currentTarget)}
-              sx={{
-                textTransform: "none",
-                bgcolor: tc.iconBackground,
-                color: tc.primary,
-                fontWeight: 600,
-                borderRadius: "20px",
-                px: 2,
-                "&:hover": { bgcolor: tc.iconBackground, opacity: 0.9 }
-              }}
-            >
-              {periodLabels[period]}
-            </Button>
-            <Menu
-              anchorEl={periodAnchor}
-              open={!!periodAnchor}
-              onClose={() => setPeriodAnchor(null)}
-            >
-              {(Object.keys(periodLabels) as PeriodKey[]).map((k) => (
-                <MenuItem
-                  key={k}
-                  selected={period === k}
-                  onClick={() => {
-                    setPeriod(k);
-                    setPeriodAnchor(null);
-                  }}
-                >
-                  {periodLabels[k]}
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        </Box>
-
-        {donationsLoading ? (
-          <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 3 }}>{Locale.label("mobile.screens.loading")}</Typography>
-        ) : (
-          <Box sx={{ textAlign: "center", py: 1 }}>
-            <Typography data-testid="giving-period-total" sx={{ fontSize: 32, fontWeight: 800, color: tc.primary, fontVariantNumeric: "tabular-nums" }}>
-              {CurrencyHelper.formatCurrencyWithLocale(filteredTotal, pageCurrency)}
-            </Typography>
-            <Typography sx={{ fontSize: 14, color: tc.textMuted, fontWeight: 500 }}>
-              {periodLabels[period]}
-            </Typography>
-            {filteredIsConverted && (
-              <Typography data-testid="giving-period-converted-note" sx={{ fontSize: 12, color: tc.textMuted, mt: 0.5 }}>
-                {Locale.label("mobile.screens.convertedAtCurrentRates")}
-              </Typography>
-            )}
-          </Box>
-        )}
-      </Box>
-
-      {!donationsLoading && donations.length > 0 && (
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            size="small"
-            startIcon={<Icon>print</Icon>}
-            onClick={handlePrintStatement}
-            sx={{ textTransform: "none", color: tc.primary, fontWeight: 600 }}
-          >
-            {Locale.label("mobile.screens.printStatement")}
-          </Button>
-        </Box>
-      )}
-
-      {subscriptions.length > 0 && (
-        <Box>
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}>
-            {Locale.label("mobile.screens.recurring")}
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-            {subscriptions.map((sub) => {
-              const interval = `${sub.plan?.interval_count || 1} ${sub.plan?.interval || "month"}${
-                (sub.plan?.interval_count || 1) > 1 ? "s" : ""
-              }`;
-              const total = (sub.plan?.amount || 0) / 100;
-              const subCurrency = sub.plan?.currency || pageCurrency;
-              const startDate = sub.billing_cycle_anchor
-                ? DateHelper.prettyDate(new Date(sub.billing_cycle_anchor * 1000))
-                : "";
-              return (
-                <Box
-                  key={sub.id}
-                  sx={{
-                    bgcolor: tc.surface,
-                    border: `1px solid ${tc.border}`,
-                    borderRadius: `${mobileTheme.radius.lg}px`,
-                    p: `${mobileTheme.spacing.md}px`,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: `${mobileTheme.spacing.md}px`
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: "11px",
-                      bgcolor: tc.iconBackground,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0
-                    }}
-                  >
-                    <Icon sx={{ color: tc.primary, fontSize: 22 }}>autorenew</Icon>
-                  </Box>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    {sub.funds?.map((f) => (
-                      <Typography key={f.id} sx={{ fontSize: 14, fontWeight: 500, color: tc.text }}>
-                        {f.name} — {CurrencyHelper.formatCurrencyWithLocale(f.amount, subCurrency)}
-                      </Typography>
-                    ))}
-                    <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.primary }}>
-                      {Locale.label("mobile.screens.totalAmount").replace("{}", CurrencyHelper.formatCurrencyWithLocale(total, subCurrency))}
-                    </Typography>
-                    <Typography sx={{ fontSize: 13, color: tc.text }}>{Locale.label("mobile.screens.everyInterval").replace("{}", interval)}</Typography>
-                    <Typography sx={{ fontSize: 13, color: tc.text }}>
-                      {getSubPaymentMethod(sub)}
-                    </Typography>
-                    {startDate && (
-                      <Typography sx={{ fontSize: 12, color: tc.textMuted }}>{startDate}</Typography>
-                    )}
-                  </Box>
-                </Box>
-              );
-            })}
-          </Box>
-
-          <Box
-            sx={{
-              mt: `${mobileTheme.spacing.md}px`,
-              "& #display-box-content": { overflowX: "auto !important" },
-              "& .MuiTable-root": { minWidth: 600 }
-            }}
-          >
-            <RecurringDonations
-              customerId={customerId!}
-              paymentMethods={paymentMethods || []}
-              appName="B1App"
-              dataUpdate={handleDataUpdate}
-            />
-          </Box>
-        </Box>
-      )}
-
-      <Box>
-        <Typography
-          sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: `${mobileTheme.spacing.sm}px`, ml: 0.5 }}
-        >
-          {Locale.label("mobile.screens.recentActivity")}
-        </Typography>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            overflow: "hidden"
-          }}
-        >
-          {donationsLoading && (
-            <Typography sx={{ color: tc.textMuted, textAlign: "center", py: 4 }}>{Locale.label("mobile.screens.loading")}</Typography>
-          )}
-          {!donationsLoading && filteredDonations.length === 0 && (
-            <Box sx={{ py: 5, textAlign: "center", px: 2 }}>
-              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
-                {Locale.label("mobile.screens.noRecentTransactions")}
-              </Typography>
-              <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: 0.5 }}>
-                {Locale.label("mobile.screens.donationsWillAppear")}
-              </Typography>
-            </Box>
-          )}
-          {!donationsLoading &&
-            filteredDonations.map((d, i) => {
-              const isPending = (d as any).status === "pending";
-              const amount = ((d as any).fund?.amount ?? (d as any).amount ?? 0) as number;
-              const fundName = (d as any).fund?.name || "—";
-              const method = (d as any).method;
-              const methodDetails = (d as any).methodDetails;
-              return (
-                <Box
-                  key={i}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: `${mobileTheme.spacing.md}px`,
-                    p: `${mobileTheme.spacing.md}px`,
-                    borderBottom:
-                      i < filteredDonations.length - 1 ? `1px solid ${tc.divider}` : "none",
-                    opacity: isPending ? 0.85 : 1
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: "11px",
-                      bgcolor: tc.iconBackground,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0
-                    }}
-                  >
-                    <Icon sx={{ color: tc.primary }}>favorite</Icon>
-                  </Box>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                      {fundName}
-                      {isPending && ` (${Locale.label("mobile.screens.pending")})`}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-                      {DateHelper.prettyDate(DateHelper.toDate(d.donationDate))}
-                      {method ? ` • ${method}${methodDetails ? ` - ${methodDetails}` : ""}` : ""}
-                    </Typography>
-                  </Box>
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: isPending ? tc.warning : tc.text,
-                      flexShrink: 0,
-                      fontVariantNumeric: "tabular-nums"
-                    }}
-                  >
-                    {CurrencyHelper.formatCurrencyWithLocale(amount, (d as any).currency || pageCurrency)}
-                  </Typography>
-                </Box>
-              );
-            })}
-        </Box>
-      </Box>
-    </Box>
+  const sliceHref = (slice: string) => `${pathname}?view=${slice}`;
+  const backToGiving = <BackVerb label={Locale.label("mobile.giving.backToGiving")} href={pathname} />;
+  const messageAlert = message && (
+    <Alert severity="success" sx={{ mx: { xs: "12px", md: 0 }, mb: "12px", borderRadius: "10px" }}>{message}</Alert>
   );
 
-  return (
-    <Box sx={{ bgcolor: tc.background, minHeight: "100%" }}>
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`
-        }}
-      >
-        <Tabs
-          value={tab}
-          onChange={(_, v) => setTab(v)}
-          variant="fullWidth"
-          textColor="primary"
-          indicatorColor="primary"
-          sx={{
-            minHeight: 52,
-            "& .MuiTab-root": {
-              textTransform: "none",
-              fontWeight: 500,
-              fontSize: 14,
-              minHeight: 52,
-              color: tc.textSecondary
-            },
-            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 },
-            "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 }
-          }}
-        >
-          {isAuthenticated && <Tab value="overview" label={Locale.label("mobile.screens.tabOverview")} />}
-          <Tab value="donate" label={Locale.label("mobile.screens.tabDonate")} />
-          {isAuthenticated && <Tab value="manage" label={Locale.label("mobile.screens.tabManage")} />}
-          {isAuthenticated && <Tab value="history" label={Locale.label("mobile.screens.tabHistory")} />}
-        </Tabs>
+  if (config?.allowDonations === false) {
+    return (
+      <Box>
+        <PageHead title={Locale.label("mobile.screenTitles.donation")} />
+        <Plate>
+          <PlateSection>
+            <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.givingNotSetUp")}</Typography>
+            <QuietEmpty>{Locale.label("mobile.screens.givingNotSetUpBody")}</QuietEmpty>
+          </PlateSection>
+        </Plate>
       </Box>
+    );
+  }
 
-      <Box sx={{ p: `${mobileTheme.spacing.md}px` }}>
-        {message && (
-          <Alert severity="success" sx={{ mb: 2, borderRadius: `${mobileTheme.radius.md}px` }}>
-            {message}
-          </Alert>
-        )}
+  const donationRow = (d: DonationInterface, i: number) => {
+    const method = (d as any).method;
+    const methodDetails = (d as any).methodDetails;
+    const subtitle = DateHelper.prettyDate(DateHelper.toDate(d.donationDate)) + (method ? ` · ${method}${methodDetails ? ` - ${methodDetails}` : ""}` : "");
+    return (
+      <Row
+        key={(d as any).id || i}
+        title={(d as any).fund?.name || "—"}
+        subtitle={subtitle}
+        trailing={<Amount value={CurrencyHelper.formatCurrencyWithLocale(amountOf(d), (d as any).currency || pageCurrency)} pending={(d as any).status === "pending"} />}
+      />
+    );
+  };
 
-        {tab === "overview" && isAuthenticated && renderOverview()}
-        {tab === "donate" && renderGive()}
-        {tab === "manage" && isAuthenticated && renderManage()}
-        {tab === "history" && isAuthenticated && renderHistory()}
-
-        {!isAuthenticated && tab === "donate" && (
-          <Box sx={{ mt: 2, textAlign: "center" }}>
-            <Typography sx={{ fontSize: 13, color: tc.textMuted }}>
+  if (!isAuthenticated) {
+    return (
+      <Box>
+        <PageHead
+          title={Locale.label("mobile.screenTitles.donation")}
+          lede={Locale.label("mobile.screens.supportChurch").replace("{}", church?.name || Locale.label("mobile.screens.ourChurch"))}
+        />
+        {messageAlert}
+        <Plate>
+          <PlateSection sx={flatBoxes}>
+            {church?.id
+              ? <NonAuthDonationWrapper churchId={church.id} showHeader={false} churchLogo={churchLogo} mainContainerCssProps={{ sx: { boxShadow: "none", padding: 0 } }} />
+              : <QuietEmpty>{Locale.label("mobile.screens.unableToLoadChurch")}</QuietEmpty>}
+          </PlateSection>
+          <PlateSection>
+            <Typography sx={{ fontSize: 14, color: tc.textSecondary }}>
               {Locale.label("mobile.screens.alreadyHaveAccount")}{" "}
-              <a href="/mobile/login?returnUrl=/mobile/donate" style={{ color: tc.primary, fontWeight: 600 }}>
-                {Locale.label("mobile.screens.signInToManageGifts")}
-              </a>
+              <TextLink href="/mobile/login?returnUrl=/mobile/donate">{Locale.label("mobile.screens.signInToManageGifts")}</TextLink>
             </Typography>
-          </Box>
-        )}
+          </PlateSection>
+        </Plate>
       </Box>
+    );
+  }
+
+  if (view === "give") {
+    return (
+      <Box>
+        {backToGiving}
+        <PageHead title={Locale.label("mobile.giving.give")} />
+        {messageAlert}
+        <Plate>
+          <PlateSection sx={flatBoxes}>
+            {isMethodsLoading
+              ? <QuietEmpty>{Locale.label("mobile.screens.loadingForm")}</QuietEmpty>
+              : (
+                // The slice can open on cached methods; remount when the refetch changes them so the form picks its default again.
+                <MultiGatewayDonationForm
+                  key={(paymentMethods || []).map((pm) => pm.id).join(",")}
+                  person={person!}
+                  customerId={customerId!}
+                  paymentMethods={paymentMethods || []}
+                  paymentGateways={paymentGateways}
+                  donationSuccess={handleDataUpdate}
+                  church={church!}
+                  churchLogo={churchLogo}
+                />
+              )}
+          </PlateSection>
+        </Plate>
+      </Box>
+    );
+  }
+
+  if (view === "manage") {
+    return (
+      <Box>
+        {backToGiving}
+        <PageHead title={Locale.label("mobile.giving.manageTitle")} />
+        {messageAlert}
+        <Plate>
+          {isMethodsLoading
+            ? <PlateSection><QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty></PlateSection>
+            : (
+              <>
+                {subscriptions.length > 0 && (
+                  <PlateSection sx={{ ...flatBoxes, "& #display-box-content": { overflowX: "auto !important" }, "& .MuiTable-root": { minWidth: 600 } }}>
+                    <RecurringDonations customerId={customerId!} paymentMethods={paymentMethods || []} appName="B1App" dataUpdate={handleDataUpdate} />
+                  </PlateSection>
+                )}
+                <PlateSection sx={flatBoxes}>
+                  <PaymentMethods person={person!} customerId={customerId!} paymentMethods={paymentMethods || []} appName="B1App" dataUpdate={handleDataUpdate} />
+                </PlateSection>
+              </>
+            )}
+        </Plate>
+      </Box>
+    );
+  }
+
+  if (view === "history") {
+    const months: { key: string; label: string; items: DonationInterface[] }[] = [];
+    historyDonations.forEach((d) => {
+      const dt = DateHelper.toDate(d.donationDate);
+      const key = `${dt.getFullYear()}-${dt.getMonth()}`;
+      let group = months[months.length - 1];
+      if (!group || group.key !== key) {
+        group = { key, label: dt.toLocaleDateString(undefined, historyYear === "all" ? { month: "long", year: "numeric" } : { month: "long" }), items: [] };
+        months.push(group);
+      }
+      group.items.push(d);
+    });
+    const yearOptions = [...years.map((y) => ({ value: String(y), label: String(y) })), { value: "all", label: Locale.label("mobile.giving.allYears") }];
+    return (
+      <Box>
+        {backToGiving}
+        <PageHead title={Locale.label("mobile.screens.tabHistory")} />
+        <Plate>
+          <PlateSection>
+            <FilterPills options={yearOptions} value={historyYear} onChange={setHistoryYear} label={Locale.label("mobile.giving.years")} />
+            {donationsLoading
+              ? <QuietEmpty sx={{ mt: "14px" }}>{Locale.label("mobile.screens.loading")}</QuietEmpty>
+              : (
+                <Box sx={{ mt: "14px", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
+                  <Box>
+                    <Box data-testid="giving-period-total"><BigNumber>{CurrencyHelper.formatCurrencyWithLocale(history.total, pageCurrency)}</BigNumber></Box>
+                    <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
+                      {giftsLabel(history.count)}{history.pending > 0 && ` · ${Locale.label("mobile.giving.pendingCount").replace("{}", String(history.pending))}`}
+                    </Typography>
+                    {history.isConverted && (
+                      <Typography data-testid="giving-period-converted-note" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.screens.convertedAtCurrentRates")}</Typography>
+                    )}
+                  </Box>
+                  {historyYear !== "all" && history.count > 0 && (
+                    <TextLink onClick={() => handlePrintStatement(historyYear)}>{Locale.label("mobile.screens.printStatement")}</TextLink>
+                  )}
+                </Box>
+              )}
+          </PlateSection>
+          {!donationsLoading && historyDonations.length === 0 && (
+            <PlateSection><QuietEmpty>{Locale.label("mobile.screens.noRecentTransactions")}</QuietEmpty></PlateSection>
+          )}
+          {months.map((m) => (
+            <PlateSection key={m.key} title={m.label}>
+              <RowList>{m.items.map(donationRow)}</RowList>
+            </PlateSection>
+          ))}
+        </Plate>
+      </Box>
+    );
+  }
+
+  const recent = sortedDonations.slice(0, 3);
+
+  return (
+    <Box>
+      <PageHead title={Locale.label("mobile.screenTitles.donation")} lede={church?.name}>
+        <Button variant="contained" onClick={() => setView("give")}>{Locale.label("mobile.giving.give")}</Button>
+        {donations.length > 0 && <Button variant="outlined" onClick={() => handlePrintStatement()}>{Locale.label("mobile.screens.printStatement")}</Button>}
+      </PageHead>
+      {messageAlert}
+      <Plate>
+        <PlateSection title={String(currentYear)} action={<TextLink href={sliceHref("history")}>{Locale.label("mobile.giving.allHistory")}</TextLink>}>
+          <Box data-testid="giving-ytd-total"><BigNumber>{CurrencyHelper.formatCurrencyWithLocale(ytd.total || 0, pageCurrency)}</BigNumber></Box>
+          <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
+            {(ytd.count === 1 ? Locale.label("mobile.screens.totalThisYearGift") : Locale.label("mobile.screens.totalThisYearGifts")).replace("{}", String(ytd.count))}
+          </Typography>
+          {ytd.isConverted && (
+            <Typography data-testid="giving-ytd-converted-note" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{Locale.label("mobile.screens.convertedAtCurrentRates")}</Typography>
+          )}
+        </PlateSection>
+
+        <PlateSection title={Locale.label("mobile.screens.recurring")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
+          {subscriptions.length === 0
+            ? <QuietEmpty>{Locale.label("mobile.giving.noRecurring")}</QuietEmpty>
+            : (
+              <RowList>
+                {subscriptions.map((sub) => {
+                  const intervalCount = sub.plan?.interval_count || 1;
+                  const interval = `${intervalCount} ${sub.plan?.interval || "month"}${intervalCount > 1 ? "s" : ""}`;
+                  const subCurrency = sub.plan?.currency || pageCurrency;
+                  const funds = (sub.funds || []).map((f) => f.name).join(", ");
+                  return (
+                    <Row
+                      key={sub.id}
+                      title={CurrencyHelper.formatCurrencyWithLocale((sub.plan?.amount || 0) / 100, subCurrency) + (funds ? ` · ${funds}` : "")}
+                      subtitle={`${Locale.label("mobile.screens.everyInterval").replace("{}", interval)} · ${getSubPaymentMethod(sub)}`}
+                    />
+                  );
+                })}
+              </RowList>
+            )}
+        </PlateSection>
+
+        <PlateSection
+          title={Locale.label("mobile.screens.recentActivity")}
+          action={recent.length > 0 && <TextLink onClick={() => setView("give")}>{Locale.label("mobile.giving.repeatLastGift")}</TextLink>}
+        >
+          {donationsLoading && <QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty>}
+          {!donationsLoading && recent.length === 0 && <QuietEmpty>{Locale.label("mobile.screens.donationsWillAppear")}</QuietEmpty>}
+          {recent.length > 0 && <RowList>{recent.map(donationRow)}</RowList>}
+        </PlateSection>
+
+        <PlateSection title={Locale.label("mobile.giving.paymentMethods")} action={<TextLink href={sliceHref("manage")}>{Locale.label("mobile.screens.tabManage")}</TextLink>}>
+          {isMethodsLoading && <QuietEmpty>{Locale.label("mobile.screens.loading")}</QuietEmpty>}
+          {!isMethodsLoading && !paymentMethods?.length && <QuietEmpty>{Locale.label("mobile.giving.noPaymentMethods")}</QuietEmpty>}
+          {!!paymentMethods?.length && (
+            <RowList>
+              {paymentMethods.map((pm) => (
+                <Row
+                  key={pm.id}
+                  leading={pm.type === "bank" ? <AccountBalanceIcon sx={{ color: tc.textSecondary }} /> : <CreditCardIcon sx={{ color: tc.textSecondary }} />}
+                  title={pm.type === "paypal" ? (pm.email || pm.name) : `${pm.name || ""} ****${pm.last4 || ""}`}
+                  subtitle={pm.exp_month && pm.exp_year ? `${String(pm.exp_month).padStart(2, "0")}/${String(pm.exp_year).slice(-2)}` : undefined}
+                />
+              ))}
+            </RowList>
+          )}
+        </PlateSection>
+
+        {church?.id && (
+          <PlateSection sx={campaignSx}>
+            <CampaignProgress churchId={church.id} isAuthenticated={isAuthenticated} currency={pageCurrency} />
+          </PlateSection>
+        )}
+      </Plate>
     </Box>
   );
 }

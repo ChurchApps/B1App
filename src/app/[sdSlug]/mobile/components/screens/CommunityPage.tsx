@@ -1,26 +1,15 @@
 "use client";
 
 import React, { useContext } from "react";
-import { useRouter } from "next/navigation";
-import {
-  Avatar,
-  Box,
-  Button,
-  Icon,
-  IconButton,
-  InputAdornment,
-  Skeleton,
-  TextField,
-  Typography
-} from "@mui/material";
-import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
-import { getInitials } from "../util";
+import { Box, Button, Skeleton, Typography } from "@mui/material";
+import { ApiHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { LoadErrorAlert } from "../LoadErrorAlert";
+import { Eyebrow, Highlight, PageHead, PersonAvatar, Plate, QuietEmpty, Row, RowList, SearchField } from "../kit";
 
 interface Props {
   config?: ConfigurationInterface;
@@ -34,13 +23,8 @@ interface PeopleSection {
 const STATUS_RANK: Record<string, number> = { staff: 3, member: 2, "regular attendee": 1 };
 const REQUIRED_RANK: Record<string, number> = { Staff: 3, Members: 2, "Regular Attendees": 1, Everyone: 0 };
 
-const escapeRegExp = (string: string) => {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-};
-
 export const CommunityPage = ({ config }: Props) => {
   const tc = mobileTheme.colors;
-  const router = useRouter();
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
   const membershipStatus = (context?.userChurch?.person as any)?.membershipStatus?.toLowerCase();
@@ -128,320 +112,77 @@ export const CommunityPage = ({ config }: Props) => {
     return letters.map((letter) => ({ title: letter, people: groups[letter] }));
   }, [filteredPeople]);
 
-  const getPhoto = (p: PersonInterface): string => {
-    try {
-      return PersonHelper.getPhotoUrl(p) || "";
-    } catch {
-      return (p as any).photo || "";
-    }
-  };
-
-  const handleCardClick = (p: PersonInterface) => {
-    router.push(`/mobile/community/${p.id}`);
-  };
-
-  const renderAvatar = (p: PersonInterface) => (
-    <Avatar
-      src={getPhoto(p) || undefined}
-      alt={p.name?.display || Locale.label("mobile.components.member")}
-      sx={{
-        width: 48,
-        height: 48,
-        flexShrink: 0,
-        mr: "16px",
-        bgcolor: tc.primaryLight,
-        color: tc.primary,
-        fontWeight: 700,
-        fontSize: 16
-      }}
-    >
-      {getInitials(p)}
-    </Avatar>
-  );
-
-  const renderCard = (p: PersonInterface) => {
-    const first = p.name?.first || "";
-    const last = p.name?.last || "";
-
-    return (
-      <Box
-        key={p.id}
-        onClick={() => handleCardClick(p)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleCardClick(p);
-          }
-        }}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: "12px",
-          px: "16px",
-          py: "12px",
-          cursor: "pointer",
-          transition: "transform 150ms ease",
-          "&:active": { transform: "scale(0.995)" }
-        }}
-      >
-        {renderAvatar(p)}
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "baseline" }}>
-            {searchText ? (
-              <Typography
-                component="span"
-                sx={{ fontSize: 16, color: tc.text, lineHeight: 1.3 }}
-              >
-                {(() => {
-                  const fullName = [first, last].filter(Boolean).join(" ");
-                  const escaped = escapeRegExp(searchText);
-                  const regex = new RegExp(`(${escaped})`, "gi");
-                  const parts = fullName.split(regex);
-                  return parts.map((part, index) => {
-                    const isMatch = part.toLowerCase() === searchText.toLowerCase();
-                    return (
-                      <span
-                        key={index}
-                        style={{ fontWeight: isMatch ? 800 : 400 }}
-                      >
-                        {part}
-                      </span>
-                    );
-                  });
-                })()}
-              </Typography>
-            ) : (
-              <>
-                <Typography
-                  component="span"
-                  sx={{ fontSize: 16, fontWeight: 600, color: tc.text, lineHeight: 1.3, mr: last ? "4px" : 0 }}
-                >
-                  {first}
-                </Typography>
-                {last && (
-                  <Typography
-                    component="span"
-                    sx={{ fontSize: 16, fontWeight: 800, color: tc.text, lineHeight: 1.3 }}
-                  >
-                    {last}
-                  </Typography>
-                )}
-              </>
-            )}
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            width: 36,
-            height: 36,
-            borderRadius: "11px",
-            bgcolor: tc.iconBackground,
-            color: tc.textSecondary,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0
-          }}
-        >
-          <Icon sx={{ fontSize: 20 }}>chevron_right</Icon>
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderSectionHeader = (title: string, isFirst: boolean) => (
-    <Box
-      sx={{
-        mt: isFirst ? 0 : "24px",
-        mb: "12px",
-        display: "flex",
-        alignItems: "center"
-      }}
-    >
-      <Typography
-        sx={{
-          fontSize: 18,
-          fontWeight: 700,
-          color: tc.primary,
-          minWidth: 32
-        }}
-      >
-        {title}
-      </Typography>
-      <Box sx={{ flex: 1, height: "1px", bgcolor: tc.border, ml: "16px" }} />
-    </Box>
-  );
-
-  const renderSkeleton = (key: number) => (
-    <Box
-      key={`skeleton-${key}`}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: "12px",
-        px: "16px",
-        py: "12px",
-        mb: "8px"
-      }}
-    >
-      <Skeleton variant="circular" width={48} height={48} sx={{ mr: "16px" }} />
-      <Box sx={{ flex: 1 }}>
-        <Skeleton variant="text" width="50%" height={18} />
-        <Skeleton variant="text" width="30%" height={14} />
-      </Box>
-    </Box>
-  );
-
-  const renderEmpty = () => (
-    <Box
-      sx={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        px: `${mobileTheme.spacing.lg}px`,
-        py: `${mobileTheme.spacing.xl}px`,
-        textAlign: "center"
-      }}
-    >
-      <Icon sx={{ fontSize: 64, color: tc.textSecondary }}>people_outline</Icon>
-      <Typography
-        sx={{
-          fontSize: 22,
-          fontWeight: 600,
-          color: tc.text,
-          mt: `${mobileTheme.spacing.md}px`,
-          mb: `${mobileTheme.spacing.xs}px`
-        }}
-      >
-        {searchText ? Locale.label("mobile.screens.noMembersFound") : Locale.label("mobile.screenTitles.directory")}
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textSecondary, lineHeight: "20px" }}>
-        {Locale.label(searchText ? "mobile.screens.adjustSearch" : "mobile.screens.searchDirectoryBody")}
-      </Typography>
-    </Box>
-  );
+  const title = Locale.label("mobile.screenTitles.directory");
 
   if (settingsSettled && !canViewDirectory) {
-
     const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
     const loginHref = returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login";
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.xl}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center"
-          }}
-        >
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: "19px",
-              bgcolor: tc.iconBackground,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mb: `${mobileTheme.spacing.md}px`
-            }}
-          >
-            <Icon sx={{ fontSize: 32, color: tc.primary }}>lock</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+      <Box>
+        <PageHead title={title} />
+        <Plate sx={{ px: { xs: "16px", md: "24px" }, py: "22px" }}>
+          <Typography component="h2" sx={{ fontSize: 17, fontWeight: 650, color: tc.text }}>
             {Locale.label(loggedIn ? "mobile.screens.membersOnly" : "mobile.details.signInRequired")}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
+          <QuietEmpty sx={{ mt: "4px" }}>
             {Locale.label(loggedIn ? "mobile.screens.directoryMembersBody" : "mobile.screens.directorySignInBody")}
-          </Typography>
+          </QuietEmpty>
           {!loggedIn && (
-            <Button
-              variant="contained"
-              onClick={() => { window.location.href = loginHref; }}
-              sx={{
-                bgcolor: tc.primary,
-                color: tc.onPrimary,
-                textTransform: "none",
-                fontWeight: 500,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                "&:hover": { bgcolor: tc.primary }
-              }}
-            >
+            <Button variant="contained" sx={{ mt: "16px" }} onClick={() => { window.location.href = loginHref; }}>
               {Locale.label("mobile.components.signIn")}
             </Button>
           )}
-        </Box>
+        </Plate>
       </Box>
     );
   }
 
-  return (
-    <Box sx={{ bgcolor: tc.background, minHeight: "100%", display: "flex", flexDirection: "column" }}>
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`,
-          px: "16px",
-          py: "16px"
-        }}
-      >
-        <TextField
-          fullWidth
-          variant="outlined"
-          label={Locale.label("mobile.screens.searchMembers")}
-          placeholder={Locale.label("mobile.screens.enterName")}
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>search</Icon>
-              </InputAdornment>
-            ),
-            endAdornment: searchText ? (
-              <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setSearchText("")} aria-label={Locale.label("mobile.screens.clear")}>
-                  <Icon sx={{ fontSize: 18 }}>close</Icon>
-                </IconButton>
-              </InputAdornment>
-            ) : undefined,
-            sx: {
-              bgcolor: tc.surface,
-              borderRadius: `${mobileTheme.radius.md}px`
-            }
-          }}
-        />
-      </Box>
+  const renderRow = (p: PersonInterface) => {
+    const display = p.name?.display || [p.name?.first, p.name?.last].filter(Boolean).join(" ") || Locale.label("mobile.components.unknown");
+    return (
+      <Row
+        key={p.id}
+        href={`/mobile/community/${p.id}`}
+        leading={<PersonAvatar person={p} />}
+        title={<Highlight text={display} term={searchText} />}
+        subtitle={(p as { membershipStatus?: string }).membershipStatus || undefined}
+        chevron
+      />
+    );
+  };
 
-      {filteredPeople === null && peopleError && <Box sx={{ p: "16px" }}><LoadErrorAlert onRetry={() => refetchPeople()} /></Box>}
-      {filteredPeople === null && !peopleError && (
-        <Box sx={{ p: "16px" }}>
-          {[0, 1, 2, 3].map(renderSkeleton)}
+  return (
+    <Box>
+      <PageHead
+        title={title}
+        lede={people && people.length > 0 ? Locale.label("mobile.community.peopleCount").replace("{}", String(people.length)) : undefined}
+      />
+      <Plate>
+        <Box sx={{ px: { xs: "16px", md: "24px" }, pt: { xs: "16px", md: "22px" }, pb: "4px" }}>
+          <SearchField
+            value={searchText}
+            onChange={setSearchText}
+            label={Locale.label("mobile.screens.searchMembers")}
+            placeholder={Locale.label("mobile.community.searchByName")}
+          />
         </Box>
-      )}
-      {filteredPeople !== null && sections.length === 0 && renderEmpty()}
-      {filteredPeople !== null && sections.length > 0 && (
-        <Box sx={{ p: "16px", pb: "32px" }}>
-          {sections.map((section, idx) => (
-            <Box key={section.title}>
-              {renderSectionHeader(section.title, idx === 0)}
-              <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {section.people.map(renderCard)}
-              </Box>
+        <Box sx={{ px: { xs: "16px", md: "24px" }, pt: "8px", pb: "16px" }}>
+          {filteredPeople === null && peopleError && <LoadErrorAlert onRetry={() => refetchPeople()} />}
+          {filteredPeople === null && !peopleError && [0, 1, 2, 3].map((i) => (
+            <Box key={i} sx={{ display: "flex", alignItems: "center", gap: "12px", minHeight: 56 }}>
+              <Skeleton variant="rounded" width={40} height={40} sx={{ borderRadius: "10px" }} />
+              <Skeleton variant="text" width="45%" height={20} />
+            </Box>
+          ))}
+          {filteredPeople !== null && sections.length === 0 && <QuietEmpty sx={{ py: "12px" }}>{Locale.label("mobile.screens.noMembersFound")}</QuietEmpty>}
+          {sections.map((section) => (
+            <Box key={section.title} component="section" aria-label={section.title} sx={{ mt: "10px" }}>
+              <Eyebrow component="h3">{section.title}</Eyebrow>
+              <RowList>{section.people.map(renderRow)}</RowList>
             </Box>
           ))}
         </Box>
-      )}
+      </Plate>
     </Box>
   );
 };

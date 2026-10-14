@@ -2,9 +2,10 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Icon, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "./mobileTheme";
+import { PlateSection } from "./kit";
 import { useNotificationDiagnostics } from "../hooks/useNotificationDiagnostics";
 import { WebPushHelper } from "@/helpers";
 
@@ -44,24 +45,12 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
   if (!enabled || loading || diagnostics.permission === "unsupported") return null;
 
   const installRequired = WebPushHelper.requiresInstallForPush();
-  let tone = {
-    background: "rgba(13, 71, 161, 0.08)",
-    border: "rgba(13, 71, 161, 0.22)",
-    icon: tc.primary
-  };
-  let iconName = "notifications_active";
   let title = "";
   let body = "";
   let primaryLabel = "";
   let primaryAction: (() => void | Promise<void>) | null = null;
 
   if (diagnostics.permission === "denied") {
-    tone = {
-      background: "rgba(239, 68, 68, 0.10)",
-      border: "rgba(239, 68, 68, 0.28)",
-      icon: "#dc2626"
-    };
-    iconName = "notifications_off";
     title = "Enable notifications in your browser";
     body = `Notifications are currently blocked. ${WebPushHelper.getUnblockInstructions()}`;
     primaryLabel = "View Notification Settings";
@@ -93,38 +82,21 @@ export const NotificationPermissionBanner = ({ enabled }: Props) => {
   }
 
   return (
-    <Box
-      sx={{
-        mx: `${mobileTheme.spacing.md}px`,
-        mb: 2.5,
-        p: "14px 16px",
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        bgcolor: tone.background,
-        border: `1px solid ${tone.border}`,
-        display: "flex",
-        gap: 1.5,
-        alignItems: "flex-start"
-      }}
-    >
-      <Icon sx={{ color: tone.icon, fontSize: 22, mt: "2px" }}>{iconName}</Icon>
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontSize: 14, fontWeight: 700, color: tc.text, mb: 0.5 }}>
-          {title}
-        </Typography>
-        <Typography sx={{ fontSize: 13, lineHeight: "18px", color: tc.textMuted }}>
-          {body}
-        </Typography>
-        <Box sx={{ display: "flex", gap: 1, mt: 1.5, flexWrap: "wrap" }}>
-          {primaryAction && (
-            <Button size="small" variant="contained" onClick={() => { void primaryAction(); }} disabled={busy}>
-              {primaryLabel}
-            </Button>
-          )}
-        </Box>
-        {errorMessage && (
-          <Typography sx={{ fontSize: 12, color: "#dc2626", mt: 1 }}>{errorMessage}</Typography>
-        )}
-      </Box>
-    </Box>
+    <PlateSection title={Locale.label("mobile.components.notifications")}>
+      <Typography sx={{ fontSize: 15, lineHeight: "21px", fontWeight: 600, color: tc.text }}>{title}</Typography>
+      <Typography sx={{ mt: "2px", fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{body}</Typography>
+      {primaryAction && (
+        <Button
+          variant={diagnostics.permission === "denied" ? "outlined" : "contained"}
+          size="small"
+          onClick={() => { void primaryAction(); }}
+          disabled={busy}
+          sx={{ mt: "12px" }}
+        >
+          {primaryLabel}
+        </Button>
+      )}
+      {errorMessage && <Typography sx={{ fontSize: 13, color: tc.error, mt: 1 }}>{errorMessage}</Typography>}
+    </PlateSection>
   );
 };

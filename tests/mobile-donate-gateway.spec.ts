@@ -7,8 +7,7 @@ test.describe("Donor never sees a payment-gateway selector", () => {
   test("anonymous donate form renders with no processor picker", async ({ page }) => {
     await page.goto("/mobile/donate");
 
-    const donateTab = page.getByRole("tab", { name: /^Donate$/i });
-    await expect(donateTab).toBeVisible({ timeout: 30000 });
+    await expect(page.locator("main").getByRole("heading", { name: "Giving", level: 1 })).toBeVisible({ timeout: 30000 });
 
     await expect(page.getByRole("textbox").first()).toBeVisible({ timeout: 30000 });
 

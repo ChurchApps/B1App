@@ -1,23 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Icon,
-  IconButton,
-  Skeleton,
-  TextField,
-  Typography
-} from "@mui/material";
+import { Box, Button, Skeleton, TextField, Typography } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { mobileTheme } from "../mobileTheme";
+import { PlateSection, QuietEmpty, Row, RowList, Sheet, TextLink } from "../kit";
 
 interface BlockoutDate {
   id: string;
@@ -41,7 +28,6 @@ const todayHtml5 = () => {
 };
 
 export const BlockoutDatesSection = ({ enabled }: Props) => {
-  const tc = mobileTheme.colors;
   const queryClient = useQueryClient();
 
   const [showForm, setShowForm] = useState(false);
@@ -64,10 +50,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const upcoming = (blockoutDates || []).filter((b) => {
-    const end = DateHelper.toDate(b.endDate);
-    return end >= today;
-  });
+  const upcoming = (blockoutDates || []).filter((b) => DateHelper.toDate(b.endDate) >= today);
 
   const refresh = () => {
     queryClient.invalidateQueries({ queryKey: ["/blockoutdates/my", "DoingApi"] });
@@ -77,11 +60,7 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
     if (!startDate || !endDate) return;
     setSaving(true);
     try {
-      await ApiHelper.post(
-        "/blockoutDates",
-        [{ startDate, endDate }],
-        "DoingApi"
-      );
+      await ApiHelper.post("/blockoutDates", [{ startDate, endDate }], "DoingApi");
       setShowForm(false);
       setStartDate(todayHtml5());
       setEndDate(todayHtml5());
@@ -107,217 +86,64 @@ export const BlockoutDatesSection = ({ enabled }: Props) => {
     }
   };
 
-  const renderHeader = () => (
-    <Box sx={{ display: "flex", alignItems: "center", mb: `${mobileTheme.spacing.md}px`, pl: 0.5 }}>
-      <Icon sx={{ color: tc.primary, mr: 1, fontSize: 24 }}>event_busy</Icon>
-      <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-        Blockout Dates
-      </Typography>
-    </Box>
-  );
-
-  const renderEmpty = () => (
-    <Box sx={{ textAlign: "center", p: `${mobileTheme.spacing.lg}px` }}>
-      <Icon sx={{ fontSize: 48, color: tc.disabled }}>event_busy</Icon>
-      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mt: 2 }}>
-        No blockout dates set
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.disabled, mt: 1, mb: 3 }}>
-        Block dates when you&apos;re unavailable to serve.
-      </Typography>
-      <Button
-        variant="contained"
-        startIcon={<Icon>add</Icon>}
-        onClick={() => setShowForm(true)}
-        sx={{
-          bgcolor: tc.primary,
-          color: tc.onPrimary,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          textTransform: "none",
-          fontWeight: 600,
-          px: 2,
-          "&:hover": { bgcolor: tc.primary }
-        }}
-      >
-        Add blockout date
-      </Button>
-    </Box>
-  );
-
-  const renderSkeleton = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-      {[0, 1].map((i) => (
-        <Skeleton key={i} variant="rounded" height={56} />
-      ))}
-    </Box>
-  );
-
-  const renderForm = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-      <TextField
-        label={Locale.label("mobile.plans.startDate")}
-        type="date"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-        InputLabelProps={{ shrink: true }}
-        size="small"
-        fullWidth
-      />
-      <TextField
-        label={Locale.label("mobile.plans.endDate")}
-        type="date"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-        InputLabelProps={{ shrink: true }}
-        size="small"
-        fullWidth
-      />
-      <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end", mt: 0.5 }}>
-        <Button
-          variant="outlined"
-          onClick={() => setShowForm(false)}
-          sx={{ textTransform: "none", borderRadius: `${mobileTheme.radius.md}px` }}
-          disabled={saving}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleSave}
-          disabled={saving || !startDate || !endDate}
-          sx={{
-            bgcolor: tc.primary,
-            color: tc.onPrimary,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            textTransform: "none",
-            fontWeight: 600,
-            "&:hover": { bgcolor: tc.primary }
-          }}
-        >
-          {saving ? "Saving..." : "Save"}
-        </Button>
-      </Box>
-    </Box>
-  );
-
-  const renderList = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}
-      >
-        <Typography sx={{ fontSize: 14, color: tc.disabled, fontWeight: 500 }}>
-          {upcoming.length} upcoming
-        </Typography>
-        <Button
-          size="small"
-          startIcon={<Icon>add</Icon>}
-          onClick={() => setShowForm(true)}
-          sx={{
-            color: tc.primary,
-            textTransform: "none",
-            fontWeight: 600
-          }}
-        >
-          Add new
-        </Button>
-      </Box>
-
-      {upcoming.map((b) => (
-        <Box
-          key={b.id}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`
-          }}
-        >
-          <Box sx={{ flex: 1, minWidth: 0, mr: 1.5 }}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Icon sx={{ color: tc.error, fontSize: 20, mr: 1 }}>event_busy</Icon>
-              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
-                {DateHelper.prettyDate(DateHelper.toDate(b.startDate))}
-                {b.endDate && b.endDate !== b.startDate
-                  ? ` - ${DateHelper.prettyDate(DateHelper.toDate(b.endDate))}`
-                  : ""}
-              </Typography>
-            </Box>
-            {b.notes && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  bgcolor: `color-mix(in srgb, ${tc.disabled} 8%, transparent)`,
-                  borderRadius: `${mobileTheme.radius.md}px`,
-                  p: 1.5,
-                  mt: 1
-                }}
-              >
-                <Icon sx={{ color: tc.disabled, fontSize: 16, mr: 1, mt: 0.25 }}>note</Icon>
-                <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-                  {b.notes}
-                </Typography>
-              </Box>
-            )}
-          </Box>
-          <IconButton
-            onClick={() => setDeleteId(b.id)}
-            aria-label={Locale.label("mobile.plans.deleteBlockout")}
-            sx={{ color: tc.error }}
-          >
-            <Icon>delete_outline</Icon>
-          </IconButton>
-        </Box>
-      ))}
-    </Box>
-  );
+  const formatRange = (b: BlockoutDate) => {
+    const start = DateHelper.prettyDate(DateHelper.toDate(b.startDate));
+    return b.endDate && b.endDate !== b.startDate ? `${start} – ${DateHelper.prettyDate(DateHelper.toDate(b.endDate))}` : start;
+  };
 
   return (
-    <Box sx={{ mb: `${mobileTheme.spacing.lg}px` }}>
-      {renderHeader()}
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        {isLoading && blockoutDates === null
-          ? renderSkeleton()
-          : showForm
-            ? renderForm()
-            : upcoming.length === 0
-              ? renderEmpty()
-              : renderList()}
-      </Box>
+    <PlateSection
+      title={Locale.label("mobile.serving.blockoutDates")}
+      action={<TextLink onClick={() => setShowForm(true)}>{Locale.label("mobile.serving.addDates")}</TextLink>}
+    >
+      {isLoading && blockoutDates === null ? (
+        <Box>{[0, 1].map((i) => <Skeleton key={i} variant="text" width="50%" height={24} />)}</Box>
+      ) : upcoming.length === 0 ? (
+        <QuietEmpty>{Locale.label("mobile.serving.noBlockouts")}</QuietEmpty>
+      ) : (
+        <RowList>
+          {upcoming.map((b) => (
+            <Row
+              key={b.id}
+              title={formatRange(b)}
+              subtitle={b.notes}
+              trailing={<TextLink danger onClick={() => setDeleteId(b.id)} aria-label={Locale.label("mobile.plans.deleteBlockout")}>{Locale.label("mobile.details.remove")}</TextLink>}
+            />
+          ))}
+        </RowList>
+      )}
 
-      <Dialog open={!!deleteId} onClose={() => !deleting && setDeleteId(null)}>
-        <DialogTitle>{Locale.label("mobile.plans.deleteBlockoutTitle")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this blockout date? This cannot be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteId(null)} disabled={deleting} sx={{ textTransform: "none" }}>
-            Cancel
+      <Sheet
+        open={showForm}
+        onClose={() => !saving && setShowForm(false)}
+        title={Locale.label("mobile.serving.addBlockoutTitle")}
+        actions={<>
+          <Button variant="outlined" onClick={() => setShowForm(false)} disabled={saving}>{Locale.label("mobile.screens.cancel")}</Button>
+          <Button variant="contained" onClick={handleSave} disabled={saving || !startDate || !endDate}>
+            {saving ? Locale.label("mobile.serving.saving") : Locale.label("mobile.screens.save")}
           </Button>
-          <Button
-            onClick={handleDelete}
-            disabled={deleting}
-            sx={{ color: tc.error, textTransform: "none", fontWeight: 600 }}
-          >
-            {deleting ? "Deleting..." : "Delete"}
+        </>}
+      >
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "14px", pt: "6px" }}>
+          <TextField label={Locale.label("mobile.plans.startDate")} type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} slotProps={{ inputLabel: { shrink: true } }} fullWidth />
+          <TextField label={Locale.label("mobile.plans.endDate")} type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} slotProps={{ inputLabel: { shrink: true } }} fullWidth />
+        </Box>
+      </Sheet>
+
+      <Sheet
+        open={!!deleteId}
+        onClose={() => !deleting && setDeleteId(null)}
+        title={Locale.label("mobile.plans.deleteBlockoutTitle")}
+        maxWidth="xs"
+        actions={<>
+          <Button variant="outlined" onClick={() => setDeleteId(null)} disabled={deleting}>{Locale.label("mobile.screens.cancel")}</Button>
+          <Button variant="contained" color="error" onClick={handleDelete} disabled={deleting}>
+            {deleting ? Locale.label("mobile.serving.deleting") : Locale.label("mobile.details.delete")}
           </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+        </>}
+      >
+        <Typography>{Locale.label("mobile.serving.deleteBlockoutBody")}</Typography>
+      </Sheet>
+    </PlateSection>
   );
 };

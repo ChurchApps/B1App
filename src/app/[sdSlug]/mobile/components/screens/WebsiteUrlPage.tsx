@@ -2,11 +2,12 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Box, CircularProgress, Icon, IconButton, Typography } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Locale } from "@churchapps/apphelper";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { navigateBack } from "../util";
+import { PageHead, Plate, PlateSection, QuietEmpty, TextLink } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -94,8 +95,6 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleBack = () => navigateBack(router, "/mobile/dashboard");
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     const handler = (event: MessageEvent) => {
@@ -148,132 +147,42 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
 
   if (resolvedUrl && isCrossOrigin) {
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.xl}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center"
-          }}
-        >
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: "18px",
-              bgcolor: tc.iconBackground,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              mb: `${mobileTheme.spacing.md}px`
-            }}
-          >
-            <Icon sx={{ fontSize: 32, color: tc.primary }}>public</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-            {title}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px`, wordBreak: "break-all" }}>
-            {externalHost}
-          </Typography>
-          <Box
-            component="a"
-            href={resolvedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 1,
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              textDecoration: "none",
-              borderRadius: `${mobileTheme.radius.md}px`,
-              px: 2,
-              py: 1,
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-              "&:hover": { opacity: 0.9 }
-            }}
-          >
-            <Icon sx={{ fontSize: 18 }}>open_in_new</Icon>
+      <Box>
+        <PageHead title={title} lede={<Box component="span" sx={{ overflowWrap: "anywhere" }}>{externalHost}</Box>}>
+          <Button variant="contained" href={resolvedUrl} target="_blank" rel="noopener noreferrer" startIcon={<OpenInNewIcon />}>
             {Locale.label("mobile.screens.openWebsite")}
-          </Box>
-          <Typography sx={{ fontSize: 12, color: tc.textHint, mt: `${mobileTheme.spacing.sm}px` }}>
-            {Locale.label("mobile.screens.cantShowInApp")}
-          </Typography>
-        </Box>
+          </Button>
+        </PageHead>
+        <Plate>
+          <PlateSection>
+            <QuietEmpty>{Locale.label("mobile.screens.cantShowInApp")}</QuietEmpty>
+          </PlateSection>
+        </Plate>
       </Box>
     );
   }
 
   if (!resolvedUrl) {
     return (
-      <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.xl}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center"
-          }}
-        >
-          <Icon sx={{ fontSize: 32, color: tc.primary, mb: 1 }}>link_off</Icon>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.noUrlProvided")}</Typography>
-        </Box>
+      <Box>
+        <PageHead title={title} />
+        <Plate>
+          <PlateSection>
+            <QuietEmpty>{Locale.label("mobile.screens.noUrlProvided")}</QuietEmpty>
+          </PlateSection>
+        </Plate>
       </Box>
     );
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100dvh",
-        bgcolor: tc.background
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.sm}px`,
-          px: `${mobileTheme.spacing.md}px`,
-          py: `${mobileTheme.spacing.sm}px`,
-          bgcolor: tc.surface,
-          borderBottom: `1px solid ${tc.border}`
-        }}
-      >
-        <IconButton aria-label={Locale.label("mobile.components.back")} onClick={handleBack} sx={{ color: tc.text }}>
-          <Icon>arrow_back</Icon>
-        </IconButton>
-        <Typography
-          sx={{
-            flex: 1,
-            fontSize: 16,
-            fontWeight: 600,
-            color: tc.text,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {title}
-        </Typography>
-        <IconButton
-          aria-label={Locale.label("mobile.screens.openInNewTab")}
-          onClick={() => window.open(resolvedUrl, "_blank", "noopener,noreferrer")}
-          sx={{ color: tc.text }}
-        >
-          <Icon>open_in_new</Icon>
-        </IconButton>
-      </Box>
-      <Box sx={{ position: "relative", flex: 1, bgcolor: tc.surface }}>
+    <Box>
+      <PageHead title={title} sx={{ pb: { xs: "12px", md: "16px" } }}>
+        <TextLink aria-label={Locale.label("mobile.screens.openInNewTab")} onClick={() => window.open(resolvedUrl, "_blank", "noopener,noreferrer")}>
+          <OpenInNewIcon sx={{ fontSize: 18 }} />{Locale.label("mobile.screens.openInNewTab")}
+        </TextLink>
+      </PageHead>
+      <Plate sx={{ overflow: "hidden", position: "relative", height: { xs: "calc(100dvh - 220px)", md: "calc(100dvh - 200px)" }, minHeight: 360 }}>
         <Box
           key={iframeKey}
           component="iframe"
@@ -290,71 +199,18 @@ export const WebsiteUrlPage = ({ config: _config }: Props) => {
           }}
         />
         {status === "loading" && (
-          <Box
-            sx={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              bgcolor: tc.surface,
-              pointerEvents: "none"
-            }}
-          >
+          <Box sx={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", bgcolor: tc.surface, pointerEvents: "none" }}>
             <CircularProgress size={32} sx={{ color: tc.primary }} />
           </Box>
         )}
         {status === "error" && (
-          <Box
-            sx={{
-              position: "absolute",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              p: `${mobileTheme.spacing.md}px`,
-              bgcolor: tc.background
-            }}
-          >
-            <Box
-              sx={{
-                bgcolor: tc.surface,
-                border: `1px solid ${tc.border}`,
-                borderRadius: `${mobileTheme.radius.xl}px`,
-                p: `${mobileTheme.spacing.lg}px`,
-                textAlign: "center",
-                maxWidth: 320,
-                width: "100%"
-              }}
-            >
-              <Icon sx={{ fontSize: 32, color: tc.error, mb: 1 }}>error_outline</Icon>
-              <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-                {Locale.label("mobile.screens.unableToLoadPage")}
-              </Typography>
-              <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-                {Locale.label("mobile.screens.unableToLoadPageBody")}
-              </Typography>
-              <Box
-                component="button"
-                onClick={handleRetry}
-                sx={{
-                  bgcolor: tc.primary,
-                  color: tc.onPrimary,
-                  border: "none",
-                  borderRadius: `${mobileTheme.radius.md}px`,
-                  px: 2,
-                  py: 1,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  cursor: "pointer"
-                }}
-              >
-                {Locale.label("mobile.screens.retry")}
-              </Box>
-            </Box>
-          </Box>
+          <PlateSection>
+            <QuietEmpty sx={{ fontWeight: 600, color: tc.text }}>{Locale.label("mobile.screens.unableToLoadPage")}</QuietEmpty>
+            <QuietEmpty sx={{ mb: "16px" }}>{Locale.label("mobile.screens.unableToLoadPageBody")}</QuietEmpty>
+            <Button variant="contained" onClick={handleRetry}>{Locale.label("mobile.screens.retry")}</Button>
+          </PlateSection>
         )}
-      </Box>
+      </Plate>
     </Box>
   );
 };

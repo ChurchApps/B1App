@@ -30,6 +30,7 @@ test.describe("Mobile community", () => {
   test("community page renders Search Members input", async ({ page }) => {
     await page.goto("/mobile/community");
     await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Directory" })).toBeVisible({ timeout: 15000 });
     await expect(
       page.getByRole("textbox", { name: /Search Members/i })
     ).toBeVisible({ timeout: 15000 });
@@ -67,8 +68,9 @@ test.describe("Mobile community", () => {
     await page.goto("/mobile/community/PER00000080");
     await expect(mobileLogoutButton(page)).toBeVisible();
     const main = page.locator("main");
-    await expect(main).toContainText(/Donald/, { timeout: 30000 });
-    await expect(main).toContainText(/Carol/);
+    await expect(main.getByRole("heading", { level: 1, name: /Donald/ })).toBeVisible({ timeout: 30000 });
+    const household = main.getByRole("region", { name: /Household Members/i });
+    await expect(household).toContainText(/Carol/);
   });
 
   test("adult profile shows the Message quick action", async ({ page }) => {

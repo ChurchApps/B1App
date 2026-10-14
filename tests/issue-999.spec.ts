@@ -62,7 +62,7 @@ async function loginAs(page: Page, email: string) {
 
 async function openChat(page: Page, groupId: string) {
   await page.goto(`/mobile/groups/${groupId}`, { timeout: 60000 });
-  await page.getByRole("tab", { name: /Messages/i }).click();
+  await page.getByTestId("group-open-chat").click();
   await page.locator('[data-testid^="react-add-"]').first().waitFor({ state: "visible", timeout: 30000 });
 }
 

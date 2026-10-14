@@ -2,63 +2,67 @@ import { test, expect } from "@playwright/test";
 import { mobileLogoutButton } from "./helpers/mobile";
 
 test.describe("Mobile profile edit", () => {
-  test("profile screen renders with all four tabs", async ({ page }) => {
+  // The old Profile/Household/Account/Privacy tabs are sections of one plate; each edits in a sheet.
+  test("profile screen renders every section", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
     await expect(mobileLogoutButton(page)).toBeVisible();
-    await expect(page.getByRole("tab", { name: /^Profile$/i })).toBeVisible({ timeout: 15000 });
-    await expect(page.getByRole("tab", { name: /^Household$/i })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /^Account$/i })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /^Privacy$/i })).toBeVisible();
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { name: "Photo & name", exact: true })).toBeVisible({ timeout: 15000 });
+    await expect(main.getByRole("heading", { name: "Contact", exact: true })).toBeVisible();
+    await expect(main.getByRole("heading", { name: "Household", exact: true })).toBeVisible();
+    await expect(main.getByRole("heading", { name: "Account", exact: true })).toBeVisible();
+    await expect(main.getByRole("heading", { name: "Privacy", exact: true })).toBeVisible();
   });
 
-  test("profile tab shows demo user content", async ({ page }) => {
+  test("profile section shows demo user content", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
     await expect(mobileLogoutButton(page)).toBeVisible();
     await expect(page.locator("body")).toContainText("Demo", { timeout: 15000 });
   });
 
-  test("can switch to Household tab", async ({ page }) => {
+  test("Household section opens the add-family-member sheet", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
-    const householdTab = page.getByRole("tab", { name: /^Household$/i });
-    await householdTab.waitFor({ state: "visible", timeout: 15000 });
-    await householdTab.click();
-    await expect(householdTab).toHaveAttribute("aria-selected", "true");
+    const add = page.getByTestId("profile-edit-household");
+    await add.waitFor({ state: "visible", timeout: 15000 });
+    await add.click();
+    const sheet = page.getByRole("dialog");
+    await expect(sheet).toContainText(/Add Family Member/i);
+    await expect(sheet.getByRole("textbox", { name: /First Name/i })).toBeVisible();
+    await sheet.getByRole("button", { name: /^Cancel$/i }).click();
+    await expect(sheet).toBeHidden({ timeout: 5000 });
   });
 
-  test("Privacy tab exposes visibility controls", async ({ page }) => {
+  test("Privacy section exposes visibility controls", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
-    const privacyTab = page.getByRole("tab", { name: /^Privacy$/i });
-    await privacyTab.waitFor({ state: "visible", timeout: 15000 });
-    await privacyTab.click();
-    await expect(privacyTab).toHaveAttribute("aria-selected", "true");
     const main = page.locator("main");
-    await expect(main).toContainText(/Visibility Preferences/i, { timeout: 15000 });
-    await expect(main).toContainText(/Address Visibility/i);
-    await expect(main).toContainText(/Phone Visibility/i);
-    await expect(main).toContainText(/Email Visibility/i);
+    await expect(main).toContainText(/Address Visibility/i, { timeout: 15000 });
+    await page.getByTestId("profile-edit-privacy").click();
+    const sheet = page.getByRole("dialog");
+    await expect(sheet).toContainText(/Visibility Preferences/i, { timeout: 15000 });
+    await expect(sheet).toContainText(/Address Visibility/i);
+    await expect(sheet).toContainText(/Phone Visibility/i);
+    await expect(sheet).toContainText(/Email Visibility/i);
   });
 
-  test("Account tab shows email field", async ({ page }) => {
+  test("Account section shows the sign-in email", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
-    const accountTab = page.getByRole("tab", { name: /^Account$/i });
-    await accountTab.waitFor({ state: "visible", timeout: 15000 });
-    await accountTab.click();
-    await expect(accountTab).toHaveAttribute("aria-selected", "true");
-    await expect(page.locator("body")).toContainText(/demo@b1\.church/i, { timeout: 15000 });
+    await expect(page.locator("main")).toContainText(/demo@b1\.church/i, { timeout: 15000 });
+    await page.getByTestId("profile-edit-account").click();
+    await expect(page.getByRole("dialog")).toContainText(/Change Email/i);
   });
 
-  test("Profile tab pre-fills First Name with demo user's name", async ({ page }) => {
+  test("Photo & name sheet pre-fills First Name with demo user's name", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
-    const firstNameInput = page.getByRole("textbox", { name: /First Name/i }).first();
+    const edit = page.getByTestId("profile-edit-name");
+    await edit.waitFor({ state: "visible", timeout: 15000 });
+    await edit.click();
+    const firstNameInput = page.getByRole("dialog").getByRole("textbox", { name: /First Name/i }).first();
     await expect(firstNameInput).toBeVisible({ timeout: 15000 });
     await expect(firstNameInput).toHaveValue("Demo");
   });
 
-  test("Household tab lists family members from seed", async ({ page }) => {
+  test("Household section lists family members from seed", async ({ page }) => {
     await page.goto("/mobile/profileEdit");
-    const householdTab = page.getByRole("tab", { name: /^Household$/i });
-    await householdTab.waitFor({ state: "visible", timeout: 15000 });
-    await householdTab.click();
     const main = page.locator("main");
     await expect(main).toContainText(/Jane/, { timeout: 30000 });
     await expect(main).toContainText(/Alex|Emma/);
@@ -72,9 +76,9 @@ test.describe("Mobile profile privacy levels", () => {
 
   async function openPrivacyTab(page: import("@playwright/test").Page) {
     await page.goto("/mobile/profileEdit");
-    const privacyTab = page.getByRole("tab", { name: /^Privacy$/i });
-    await privacyTab.waitFor({ state: "visible", timeout: 15000 });
-    await privacyTab.click();
+    const change = page.getByTestId("profile-edit-privacy");
+    await change.waitFor({ state: "visible", timeout: 15000 });
+    await change.click();
     await page.getByLabel("Email Visibility", { exact: true }).waitFor({ state: "visible", timeout: 15000 });
   }
 
@@ -86,7 +90,7 @@ test.describe("Mobile profile privacy levels", () => {
 
   async function savePrivacy(page: import("@playwright/test").Page) {
     const saved = page.waitForResponse((r) => r.url().includes("/visibilityPreferences") && r.request().method() === "POST" && r.status() === 200, { timeout: 15000 });
-    await page.getByRole("button", { name: /^Save$/ }).click();
+    await page.getByRole("dialog").getByRole("button", { name: /^Save$/ }).click();
     await saved;
   }
 
@@ -101,9 +105,9 @@ test.describe("Mobile profile privacy levels", () => {
       await page.keyboard.press("Escape");
       await listbox.waitFor({ state: "hidden", timeout: 5000 });
     }
-    const main = page.locator("main");
-    await expect(main).toContainText(/Visible only to church staff and the leaders of groups you belong to/i);
-    await expect(main).toContainText(/Visible only to church staff/i);
+    const sheet = page.getByRole("dialog");
+    await expect(sheet).toContainText(/Visible only to church staff and the leaders of groups you belong to/i);
+    await expect(sheet).toContainText(/Visible only to church staff/i);
   });
 
   test("choosing Staff Only for email saves and survives a reload", async ({ page }) => {

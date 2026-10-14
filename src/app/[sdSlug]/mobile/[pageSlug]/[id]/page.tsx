@@ -28,7 +28,7 @@ export default async function MobileDetailPage({ params }: { params: PageParams 
   const { config } = await loadData(sdSlug);
 
   if (!id || id === "undefined" || id.trim() === "") {
-    return <PlaceholderPage title={Locale.label("mobile.invalidLink")} icon="error_outline" description={Locale.label("mobile.invalidLinkDescription")} />;
+    return <PlaceholderPage title={Locale.label("mobile.invalidLink")} description={Locale.label("mobile.invalidLinkDescription")} />;
   }
 
   return <DetailRouter pageSlug={pageSlug} id={id} config={config} />;

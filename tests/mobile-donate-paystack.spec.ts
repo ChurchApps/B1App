@@ -21,12 +21,9 @@ const myDonations = async (): Promise<any[]> => (await api.get(`${API}/giving/do
 // Two checkout iframes coexist (a hidden preload + the live one); drive the visible one.
 const checkout = (page: Page) => page.locator('iframe[src*="checkout.paystack.com"]').filter({ visible: true }).last().contentFrame();
 
-async function openDonateTab(page: Page) {
-  await page.goto("/mobile/donate");
-  const tab = page.getByRole("tab", { name: /^Donate$/i });
-  await tab.waitFor({ state: "visible", timeout: 20000 });
-  await tab.click();
-  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 15000 });
+async function openGiveSlice(page: Page) {
+  await page.goto("/mobile/donate?view=give");
+  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 20000 });
   await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });
 }
 
@@ -81,7 +78,7 @@ test.describe("Paystack member donations (Accra)", () => {
   });
 
   test("mobile money gift through the real checkout is recorded as Mobile Money in GHS", async ({ page }) => {
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await expect(page.getByTestId("paystack-entry")).toBeVisible();
     await page.locator('input[name="amount"]').first().fill("10");
     await expect(page.getByText(/GH₵/).first()).toBeVisible();
@@ -92,7 +89,7 @@ test.describe("Paystack member donations (Accra)", () => {
   });
 
   test("card gift with 'save this card' keeps the authorization and charges it again without the popup", async ({ page }) => {
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await page.locator('input[name="amount"]').first().fill("12");
     await page.getByLabel(/Save this card/i).check();
     await submitDonation(page);
@@ -103,7 +100,7 @@ test.describe("Paystack member donations (Accra)", () => {
     const methods = await (await api.get(`${API}/giving/paymentmethods/personid/${PERSON_ID}`, auth())).json();
     expect(methods.find((m: any) => m.provider === "paystack")?.id).toMatch(/^AUTH_/);
 
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await expect(page.locator("#payment-method-select")).toBeVisible({ timeout: 15000 });
     await page.locator('input[name="amount"]').first().fill("3");
     await submitDonation(page);
@@ -113,7 +110,7 @@ test.describe("Paystack member donations (Accra)", () => {
 
   test("monthly recurring gift on the saved card creates a plan + subscription; cancel disables it", async ({ page }) => {
     page.on("dialog", (d) => d.accept());
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await page.locator("#recurring-donation-button").click();
     await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });
     await page.locator('input[name="amount"]').first().fill("20");
@@ -123,7 +120,8 @@ test.describe("Paystack member donations (Accra)", () => {
 
     // The persisted query cache only refreshes via the page's own post-gift invalidation; stay in-page for it.
     await page.waitForResponse((r) => /\/customers\/.+\/subscriptions/.test(r.url()) && r.ok(), { timeout: 30000 });
-    await page.getByRole("tab", { name: /History/i }).click();
+    await page.getByRole("link", { name: /Back to Giving/i }).click();
+    await page.locator("main").getByRole("link", { name: /^Manage$/ }).first().click();
     const recurringBox = page.locator('[data-testid="recurring-donations"]');
     await expect(recurringBox).toBeVisible({ timeout: 20000 });
     await expect(recurringBox.locator('button[aria-label="pause-subscription"]')).toHaveCount(0);
@@ -134,9 +132,8 @@ test.describe("Paystack member donations (Accra)", () => {
 
   test("deleting the saved card deactivates the authorization at Paystack", async ({ page }) => {
     page.on("dialog", (d) => d.accept());
-    await page.goto("/mobile/donate");
-    await page.getByRole("tab", { name: /Manage/i }).click();
-    await page.getByRole("heading", { name: "Payment Methods" }).waitFor({ state: "visible", timeout: 20000 });
+    await page.goto("/mobile/donate?view=manage");
+    await page.getByRole("heading", { name: "Payment Methods", exact: true }).waitFor({ state: "visible", timeout: 20000 });
     const before = await page.getByLabel("edit-button").count();
     expect(before).toBeGreaterThan(0);
     await page.getByLabel("edit-button").first().click();

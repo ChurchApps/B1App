@@ -1,14 +1,15 @@
 "use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import React, { Suspense } from "react";
+import Link from "next/link";
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Skeleton, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
-import { navigateBack } from "../util";
 import { LoadErrorAlert } from "../LoadErrorAlert";
+import { BackVerb, PageHead, Plate, PlateSection, QuietEmpty, Row, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -24,10 +25,22 @@ interface RequestRow {
   bookings?: Booking[];
 }
 
-export const MyRequestsPage = ({ config: _config }: Props) => {
-  const tc = mobileTheme.colors;
-  const router = useRouter();
+const tc = mobileTheme.colors;
+
+const statusTone = (status?: string): BadgeTone => (status === "approved" ? "ok" : status === "rejected" ? "bad" : "warn");
+
+const statusLabel = (status?: string) => {
+  switch (status) {
+    case "approved": return Locale.label("mobile.requests.statusApproved");
+    case "rejected": return Locale.label("mobile.requests.statusRejected");
+    case "pending":
+    default: return Locale.label("mobile.requests.statusPending");
+  }
+};
+
+const MyRequestsPageInner = (_props: Props) => {
   const queryClient = useQueryClient();
+  const [view] = useSliceView();
   const [cancelId, setCancelId] = React.useState<string | null>(null);
   const [cancelError, setCancelError] = React.useState("");
 
@@ -73,120 +86,109 @@ export const MyRequestsPage = ({ config: _config }: Props) => {
     }
   };
 
-  const statusColor = (status?: string) => {
-    switch (status) {
-      case "approved": return tc.success;
-      case "rejected": return tc.error;
-      case "pending":
-      default: return tc.warning;
-    }
-  };
-
-  const statusLabel = (status?: string) => {
-    switch (status) {
-      case "approved": return Locale.label("mobile.requests.statusApproved");
-      case "rejected": return Locale.label("mobile.requests.statusRejected");
-      case "pending":
-      default: return Locale.label("mobile.requests.statusPending");
-    }
-  };
-
   const bookingName = (b: Booking) => {
     if (b.roomId) return rooms.find((r) => r.id === b.roomId)?.name || Locale.label("mobile.group.rooms");
     if (b.resourceId) return resources.find((r) => r.id === b.resourceId)?.name || Locale.label("mobile.group.resources");
     return "";
   };
 
-  const renderBack = () => (
-    <IconButton
-      aria-label={Locale.label("mobile.components.back")}
-      onClick={() => navigateBack(router, "/mobile/me")}
-      sx={{ width: 40, height: 40, bgcolor: tc.surface, color: tc.text, boxShadow: mobileTheme.shadows.sm, mb: `${mobileTheme.spacing.md}px`, "&:hover": { bgcolor: tc.surface } }}
-    >
-      <Icon>arrow_back</Icon>
-    </IconButton>
-  );
-
-  const renderSkeleton = (i: number) => (
-    <Box key={`sk-${i}`} sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }}>
-      <Skeleton variant="text" width="60%" height={22} />
-      <Skeleton variant="text" width="40%" height={14} />
-    </Box>
-  );
-
-  const renderEmpty = () => (
-    <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.xl}px`, p: `${mobileTheme.spacing.lg}px`, textAlign: "center" }}>
-      <Box sx={{ width: 64, height: 64, borderRadius: "11px", bgcolor: tc.iconBackground, display: "inline-flex", alignItems: "center", justifyContent: "center", mb: `${mobileTheme.spacing.md}px` }}>
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>event_note</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>{Locale.label("mobile.requests.emptyTitle")}</Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.requests.emptyBody")}</Typography>
-    </Box>
-  );
-
-  const renderCard = (req: RequestRow) => (
-    <Box key={req.id} sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }} data-testid={`request-card-${req.id}`}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.25 }}>{req.title || Locale.label("mobile.group.event")}</Typography>
-          {req.start && (
-            <Typography sx={{ fontSize: 13, color: tc.textSecondary, display: "flex", alignItems: "center", gap: 0.5 }}>
-              <Icon sx={{ fontSize: 14 }}>schedule</Icon>
-              {DateHelper.prettyDateTime(new Date(req.start))}
+  const renderItem = (req: RequestRow) => (
+    <Box key={req.id} className="req-item" sx={{ py: "6px" }} data-testid={`request-card-${req.id}`}>
+      <Row
+        title={req.title || Locale.label("mobile.group.event")}
+        subtitle={req.start ? DateHelper.prettyDateTime(new Date(req.start)) : undefined}
+        trailing={<span data-testid={`request-status-${req.id}`}><StatusBadge tone={statusTone(req.approvalStatus)} dot={req.approvalStatus === "approved"}>{statusLabel(req.approvalStatus)}</StatusBadge></span>}
+      />
+      {((req.bookings || []).length > 0 || req.approvalStatus === "pending") && (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "6px", pb: "10px" }}>
+          {(req.bookings || []).length > 0 && (
+            <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>
+              {(req.bookings || []).map((b) => `${bookingName(b)} ${statusLabel(b.status).toLowerCase()}`).join(" · ")}
             </Typography>
           )}
-        </Box>
-        <Box sx={{ px: 1, py: 0.25, borderRadius: "999px", bgcolor: `${statusColor(req.approvalStatus)}1A`, color: statusColor(req.approvalStatus), fontSize: 10.5, fontWeight: 700, whiteSpace: "nowrap" }} data-testid={`request-status-${req.id}`}>
-          {statusLabel(req.approvalStatus)}
-        </Box>
-      </Box>
-
-      {(req.bookings || []).length > 0 && (
-        <Box sx={{ mt: 1 }}>
-          {(req.bookings || []).map((b, i) => (
-            <Box key={b.id || i} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 0.25 }}>
-              <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>{bookingName(b)}</Typography>
-              <Typography sx={{ fontSize: 12, fontWeight: 600, color: statusColor(b.status) }}>{statusLabel(b.status)}</Typography>
-            </Box>
-          ))}
-        </Box>
-      )}
-
-      {req.approvalStatus === "pending" && (
-        <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end" }}>
-          <Button size="small" onClick={() => setCancelId(req.id || null)} startIcon={<Icon>cancel</Icon>} data-testid={`request-cancel-${req.id}`} sx={{ color: tc.error, textTransform: "none", fontWeight: 500 }}>
-            {Locale.label("mobile.requests.cancelRequest")}
-          </Button>
+          {req.approvalStatus === "pending" && (
+            <Box><TextLink danger onClick={() => setCancelId(req.id || null)} data-testid={`request-cancel-${req.id}`}>{Locale.label("mobile.requests.cancelRequest")}</TextLink></Box>
+          )}
         </Box>
       )}
     </Box>
   );
 
-  return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderBack()}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {requests === null && requestsError && <LoadErrorAlert onRetry={() => refetchRequests()} />}
-        {requests === null && !requestsError && [0, 1].map(renderSkeleton)}
-        {requests !== null && requests.length === 0 && renderEmpty()}
-        {requests !== null && requests.length > 0 && requests.map(renderCard)}
-      </Box>
+  const list = (items: RequestRow[]) => (
+    <Box sx={{ "& > .req-item + .req-item": { borderTop: `1px solid ${tc.border}` } }}>{items.map(renderItem)}</Box>
+  );
 
-      <Dialog open={!!cancelId} onClose={() => { setCancelId(null); setCancelError(""); }}>
-        <DialogTitle>{Locale.label("mobile.requests.cancelRequest")}</DialogTitle>
-        <DialogContent>
-          {cancelError && <Alert severity="error" sx={{ mb: 2 }}>{cancelError}</Alert>}
-          <DialogContentText>{Locale.label("mobile.requests.cancelConfirm")}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { setCancelId(null); setCancelError(""); }}>{Locale.label("mobile.requests.keep")}</Button>
-          <Button onClick={handleCancel} variant="contained" data-testid="request-cancel-confirm" sx={{ bgcolor: tc.error, color: tc.onPrimary, textTransform: "none", "&:hover": { bgcolor: tc.error } }}>
-            {Locale.label("mobile.requests.cancelRequest")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+  const now = Date.now();
+  const isPast = (r: RequestRow) => !!r.start && new Date(r.start).getTime() < now;
+  const upcoming = requests ? requests.filter((r) => !isPast(r)) : null;
+  const past = requests ? requests.filter(isPast) : [];
+
+  const cancelDialog = (
+    <Dialog open={!!cancelId} onClose={() => { setCancelId(null); setCancelError(""); }}>
+      <DialogTitle>{Locale.label("mobile.requests.cancelRequest")}</DialogTitle>
+      <DialogContent>
+        {cancelError && <Alert severity="error" sx={{ mb: 2 }}>{cancelError}</Alert>}
+        <DialogContentText>{Locale.label("mobile.requests.cancelConfirm")}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="outlined" onClick={() => { setCancelId(null); setCancelError(""); }}>{Locale.label("mobile.requests.keep")}</Button>
+        <Button onClick={handleCancel} variant="contained" color="error" data-testid="request-cancel-confirm">
+          {Locale.label("mobile.requests.cancelRequest")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
+  if (view === "past") {
+    return (
+      <Box>
+        <BackVerb label={Locale.label("mobile.requests.backToRequests")} href="/mobile/myRequests" />
+        <PageHead title={Locale.label("mobile.screens.tabPast")} />
+        <Plate>
+          <PlateSection>{past.length === 0 ? <QuietEmpty>{Locale.label("mobile.requests.noPast")}</QuietEmpty> : list(past)}</PlateSection>
+        </Plate>
+        {cancelDialog}
+      </Box>
+    );
+  }
+
+  return (
+    <Box>
+      <PageHead title={Locale.label("mobile.requests.myRequests")} lede={Locale.label("mobile.requests.lede")}>
+        <Button variant="contained" component={Link} href="/mobile/requestEvent" startIcon={<AddIcon />}>{Locale.label("mobile.requests.title")}</Button>
+      </PageHead>
+      {requests === null && requestsError && <Box sx={{ mx: { xs: "12px", md: 0 }, mb: "12px" }}><LoadErrorAlert onRetry={() => refetchRequests()} /></Box>}
+      <Plate>
+        <PlateSection title={Locale.label("mobile.screens.tabUpcoming")}>
+          {upcoming === null && !requestsError && [0, 1].map((i) => (
+            <Box key={i} sx={{ py: "8px" }}>
+              <Skeleton variant="text" width="60%" height={22} />
+              <Skeleton variant="text" width="40%" height={16} />
+            </Box>
+          ))}
+          {upcoming !== null && upcoming.length === 0 && (
+            <QuietEmpty>{requests?.length ? Locale.label("mobile.requests.noUpcoming") : Locale.label("mobile.requests.emptyBody")}</QuietEmpty>
+          )}
+          {upcoming !== null && upcoming.length > 0 && list(upcoming)}
+        </PlateSection>
+        {past.length > 0 && (
+          <PlateSection
+            title={Locale.label("mobile.screens.tabPast")}
+            action={past.length > 3 && <TextLink href="/mobile/myRequests?view=past">{Locale.label("mobile.requests.allPast")}</TextLink>}
+          >
+            {list(past.slice(0, 3))}
+          </PlateSection>
+        )}
+      </Plate>
+      {cancelDialog}
     </Box>
   );
 };
+
+export const MyRequestsPage = (props: Props) => (
+  <Suspense>
+    <MyRequestsPageInner {...props} />
+  </Suspense>
+);
 
 export default MyRequestsPage;

@@ -33,7 +33,7 @@ async function setFirstDayOfWeek(value: number | undefined): Promise<void> {
 async function readWeekdayHeaders(page: Page): Promise<string[]> {
   await page.goto(`/mobile/groups/${GROUP_ID}`);
   await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
-  await page.getByRole("tab", { name: /Events/i }).click();
+  await page.getByRole("button", { name: /^All events$/i }).click();
   await expect(page.getByTestId("weekday-0")).toBeVisible({ timeout: 15000 });
   const labels: string[] = [];
   for (let i = 0; i < 7; i++) labels.push((await page.getByTestId(`weekday-${i}`).innerText()).trim());

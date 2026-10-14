@@ -5,6 +5,8 @@ test.describe("Mobile messages", () => {
   test("messages page loads with logged-in chrome", async ({ page }) => {
     await page.goto("/mobile/messages");
     await expect(mobileLogoutButton(page)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Messages" })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("button", { name: /New message/i })).toBeVisible();
   });
 
   test("deleting a conversation asks for confirmation first", async ({ page }) => {
@@ -43,12 +45,13 @@ test.describe("Mobile messages", () => {
 
   test("compose page renders search-for-a-person prompt", async ({ page }) => {
     await page.goto("/mobile/messagesNew");
-    await expect(page.locator("main")).toContainText(/Search for a person/i, { timeout: 30000 });
+    await expect(page.getByRole("heading", { level: 1, name: /New Message/i })).toBeVisible({ timeout: 30000 });
+    await expect(page.getByRole("textbox", { name: /Search for a person/i })).toBeVisible();
   });
 
   test("compose page search input accepts a name", async ({ page }) => {
     await page.goto("/mobile/messagesNew");
-    const searchBox = page.getByRole("textbox").first();
+    const searchBox = page.getByRole("textbox", { name: /Search for a person/i });
     await searchBox.waitFor({ state: "visible", timeout: 15000 });
     await searchBox.fill("Donald");
     // Doesn't submit (would mutate); just verifies the input accepts input.
@@ -58,7 +61,7 @@ test.describe("Mobile messages", () => {
   test("compose search filters out people under the messaging minimum age", async ({ page }) => {
     // Noah Davis (b. 2020) is under the default-18 minimum; search must not offer him.
     await page.goto("/mobile/messagesNew");
-    const searchBox = page.getByRole("textbox").first();
+    const searchBox = page.getByRole("textbox", { name: /Search for a person/i });
     await searchBox.waitFor({ state: "visible", timeout: 15000 });
     await searchBox.fill("Noah");
     await searchBox.press("Enter");
@@ -67,7 +70,7 @@ test.describe("Mobile messages", () => {
 
   test("compose search still offers adults", async ({ page }) => {
     await page.goto("/mobile/messagesNew");
-    const searchBox = page.getByRole("textbox").first();
+    const searchBox = page.getByRole("textbox", { name: /Search for a person/i });
     await searchBox.waitFor({ state: "visible", timeout: 15000 });
     await searchBox.fill("Donald");
     await searchBox.press("Enter");
