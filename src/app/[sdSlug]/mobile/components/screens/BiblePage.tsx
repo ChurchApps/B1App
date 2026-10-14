@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box, Button, Icon, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { Locale } from "@churchapps/apphelper";
 import { mobileTheme } from "../mobileTheme";
+import { PageHead, Plate, PlateSection, QuietEmpty } from "../kit";
 import { useMobileThemeMode } from "../MobileThemeProvider";
 
 const STORAGE_KEY = "b1.mobile.bible.selection";
@@ -76,60 +78,21 @@ class BibleErrorBoundary extends React.Component<
   }
 }
 
-const FallbackCard = () => {
-  const tc = mobileTheme.colors;
-  return (
-    <Box sx={{
-      p: `${mobileTheme.spacing.lg}px`,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      flex: 1,
-      textAlign: "center"
-    }}>
-      <Box sx={{
-        width: 72,
-        height: 72,
-        borderRadius: "36px",
-        bgcolor: tc.iconBackground,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        mb: 2
-      }}>
-        <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-        Bible reader unavailable
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 3, maxWidth: 320 }}>
-        The in-app reader failed to load. You can still open the Bible in your browser.
-      </Typography>
-      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", justifyContent: "center" }}>
-        <Button
-          variant="contained"
-          href="https://www.bible.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open Bible.com
-        </Button>
-        <Button
-          variant="outlined"
-          href="https://biblia.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open Biblia.com
-        </Button>
-      </Box>
+const FallbackCard = () => (
+  <PlateSection>
+    <QuietEmpty sx={{ mb: "16px" }}>{Locale.label("mobile.bible.unavailable")}</QuietEmpty>
+    <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+      <Button variant="contained" href="https://www.bible.com" target="_blank" rel="noopener noreferrer">
+        Open Bible.com
+      </Button>
+      <Button variant="outlined" href="https://biblia.com" target="_blank" rel="noopener noreferrer">
+        Open Biblia.com
+      </Button>
     </Box>
-  );
-};
+  </PlateSection>
+);
 
 export const BiblePage = () => {
-  const tc = mobileTheme.colors;
   const [isClient, setIsClient] = useState(false);
   const [selection, setSelection] = useState<Selection>(DEFAULT_SELECTION);
   const [yv, setYv] = useState<YouVersionModule | null>(null);
@@ -173,78 +136,45 @@ export const BiblePage = () => {
   const apiKey = process.env.NEXT_PUBLIC_YOUVERSION_API_KEY || "";
 
   return (
-    <Box sx={{
-      bgcolor: tc.surface,
-      minHeight: "100%",
-      display: "flex",
-      flexDirection: "column"
-    }}>
-      {!isClient && (
-        <Box sx={{
-          p: `${mobileTheme.spacing.md}px`,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          flex: 1
-        }}>
-          <Box sx={{
-            width: 72,
-            height: 72,
-            borderRadius: "36px",
-            bgcolor: tc.iconBackground,
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 2
-          }}>
-            <Icon sx={{ fontSize: 36, color: tc.primary }}>menu_book</Icon>
-          </Box>
-          <Typography sx={{ fontSize: 16, color: tc.textMuted }}>
-            Loading Bible...
-          </Typography>
-        </Box>
-      )}
+    <Box>
+      <PageHead title={Locale.label("mobile.screenTitles.bible")} sx={{ pb: { xs: "12px", md: "16px" } }} />
+      <Plate sx={{ overflow: "hidden", display: "flex", flexDirection: "column", minHeight: { xs: "calc(100dvh - 220px)", md: "calc(100dvh - 200px)" } }}>
+        {!isClient && <PlateSection><QuietEmpty>{Locale.label("mobile.bible.loading")}</QuietEmpty></PlateSection>}
 
-      {isClient && !yv && <FallbackCard />}
+        {isClient && !yv && <FallbackCard />}
 
-      {isClient && yv && (
-        <BibleErrorBoundary fallback={<FallbackCard />}>
-          <Box sx={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            minHeight: `calc(100vh - ${mobileTheme.headerHeight}px)`,
-            bgcolor: tc.surface
-          }}>
-            <yv.YouVersionProvider appKey={apiKey} theme={mode}>
-              <yv.BibleReader.Root
-                versionId={selection.versionId}
-                onVersionChange={(v: number) =>
-                  setSelection((s) => ({ ...s, versionId: v }))
-                }
-                book={selection.book}
-                onBookChange={(b: string) =>
-                  setSelection((s) => ({ ...s, book: b, chapter: "1" }))
-                }
-                chapter={selection.chapter}
-                onChapterChange={(c: string) =>
-                  setSelection((s) => ({ ...s, chapter: c }))
-                }
-              >
-                <yv.BibleReader.Toolbar border="bottom" />
-                <Box sx={{
-                  flex: 1,
-                  overflowY: "auto",
-                  p: `${mobileTheme.spacing.md}px`
-                }}>
-                  <yv.BibleReader.Content />
-                </Box>
-              </yv.BibleReader.Root>
-            </yv.YouVersionProvider>
-          </Box>
-        </BibleErrorBoundary>
-      )}
+        {isClient && yv && (
+          <BibleErrorBoundary fallback={<FallbackCard />}>
+            <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <yv.YouVersionProvider appKey={apiKey} theme={mode}>
+                <yv.BibleReader.Root
+                  versionId={selection.versionId}
+                  onVersionChange={(v: number) =>
+                    setSelection((s) => ({ ...s, versionId: v }))
+                  }
+                  book={selection.book}
+                  onBookChange={(b: string) =>
+                    setSelection((s) => ({ ...s, book: b, chapter: "1" }))
+                  }
+                  chapter={selection.chapter}
+                  onChapterChange={(c: string) =>
+                    setSelection((s) => ({ ...s, chapter: c }))
+                  }
+                >
+                  <yv.BibleReader.Toolbar border="bottom" />
+                  <Box sx={{
+                    flex: 1,
+                    overflowY: "auto",
+                    p: `${mobileTheme.spacing.md}px`
+                  }}>
+                    <yv.BibleReader.Content />
+                  </Box>
+                </yv.BibleReader.Root>
+              </yv.YouVersionProvider>
+            </Box>
+          </BibleErrorBoundary>
+        )}
+      </Plate>
     </Box>
   );
 };

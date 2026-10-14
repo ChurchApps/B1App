@@ -13,8 +13,7 @@ test.describe("Issue 993 - link editor Appearance dropdown", () => {
   // getByRole goes blind there. Query the role attribute via CSS instead.
   test("Appearance options render above the floating link editor", async ({ page }) => {
     await page.goto(`/mobile/groups/${GROUP_ID}`);
-    await expect(page.getByRole("tab", { name: /Events/i })).toBeVisible({ timeout: 15000 });
-    await page.getByRole("tab", { name: /Events/i }).click();
+    await page.getByRole("button", { name: /^All events$/i }).click();
 
     const addBtn = page.getByRole("button", { name: /^Add Event$/i });
     await addBtn.waitFor({ state: "visible", timeout: 15000 });

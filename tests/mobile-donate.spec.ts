@@ -13,39 +13,39 @@ test.describe("Mobile donate", () => {
     await expect(mobileLogoutButton(page)).toBeVisible();
   });
 
-  test("authenticated user sees all four giving tabs", async ({ page }) => {
+  test("authenticated user sees the giving plate with a link to every former tab", async ({ page }) => {
     await page.goto("/mobile/donate");
     await expect(mobileLogoutButton(page)).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Overview/i })).toBeVisible({ timeout: 15000 });
-    await expect(page.getByRole("tab", { name: /^Donate$/i })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /Manage/i })).toBeVisible();
-    await expect(page.getByRole("tab", { name: /History/i })).toBeVisible();
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { name: "Giving", level: 1 })).toBeVisible({ timeout: 15000 });
+    await expect(main.getByRole("button", { name: /^Give$/ })).toBeVisible();
+    await expect(main.getByRole("link", { name: /All history/i })).toBeVisible();
+    await expect(main.getByRole("link", { name: /^Manage$/ }).first()).toBeVisible();
+    await expect(main.getByRole("heading", { name: /Recent Activity/i })).toBeVisible();
   });
 
-  test("can switch between tabs without crashing", async ({ page }) => {
+  test("can open the give and history slices without crashing", async ({ page }) => {
     await page.goto("/mobile/donate");
-    const donateTab = page.getByRole("tab", { name: /^Donate$/i });
-    await donateTab.waitFor({ state: "visible", timeout: 15000 });
-    await donateTab.click();
-    await expect(donateTab).toHaveAttribute("aria-selected", "true");
-    const historyTab = page.getByRole("tab", { name: /History/i });
-    await historyTab.click();
-    await expect(historyTab).toHaveAttribute("aria-selected", "true");
+    const give = page.locator("main").getByRole("button", { name: /^Give$/ });
+    await give.waitFor({ state: "visible", timeout: 15000 });
+    await give.click();
+    await expect(page).toHaveURL(/view=give/);
+    await page.getByRole("link", { name: /Back to Giving/i }).click();
+    await page.getByRole("link", { name: /All history/i }).click();
+    await expect(page).toHaveURL(/view=history/);
+    await expect(page.getByRole("group", { name: "Years" })).toBeVisible({ timeout: 15000 });
   });
 
-  test("History tab shows seeded demo-user donations", async ({ page }) => {
-    await page.goto("/mobile/donate");
-    const historyTab = page.getByRole("tab", { name: /History/i });
-    await historyTab.waitFor({ state: "visible", timeout: 15000 });
-    await historyTab.click();
+  test("History slice shows seeded demo-user donations", async ({ page }) => {
+    await page.goto("/mobile/donate?view=history");
+    const allYears = page.getByRole("group", { name: "Years" }).getByRole("button", { name: "All", exact: true });
+    await allYears.waitFor({ state: "visible", timeout: 15000 });
+    await allYears.click();
     await expect(page.locator("main")).toContainText(/General Fund/i, { timeout: 15000 });
   });
 
-  test("Overview tab shows year-to-date total and a Repeat affordance", async ({ page }) => {
+  test("giving plate shows year-to-date total and a Repeat affordance", async ({ page }) => {
     await page.goto("/mobile/donate");
-    const overviewTab = page.getByRole("tab", { name: /Overview/i });
-    await overviewTab.waitFor({ state: "visible", timeout: 15000 });
-    await overviewTab.click();
     const main = page.locator("main");
     await expect(main).toContainText(/Total this year/i, { timeout: 30000 });
     await expect(main.getByRole("button", { name: /Repeat/i })).toBeVisible();
@@ -53,7 +53,7 @@ test.describe("Mobile donate", () => {
 });
 
 // Mixed-currency giving: each gift keeps its own currency in the history list, but the Year-to-Date and
-// period totals are converted into the church currency (USD on Grace) with the Api's own exchange rates.
+// history totals are converted into the church currency (USD on Grace) with the Api's own exchange rates.
 // The expected figures are rebuilt from the Api's gifts + read-only rate table, so they follow the live rate.
 test.describe.serial("Mobile donate mixed-currency totals", () => {
   const MAIN_API = process.env.API_BASE || "http://localhost:8084";
@@ -112,20 +112,17 @@ test.describe.serial("Mobile donate mixed-currency totals", () => {
     await ctx.dispose();
   });
 
-  test("Overview year-to-date total converts the euro gift and says so", async ({ page }) => {
+  test("Giving plate year-to-date total converts the euro gift and says so", async ({ page }) => {
     await page.goto("/mobile/donate");
-    const overviewTab = page.getByRole("tab", { name: /Overview/i });
-    await overviewTab.waitFor({ state: "visible", timeout: 15000 });
-    await overviewTab.click();
     await expect(page.getByTestId("giving-ytd-total")).toHaveText(expectedYtd, { timeout: 30000 });
     await expect(page.getByTestId("giving-ytd-converted-note")).toHaveText(CONVERTED_NOTE);
   });
 
-  test("History period total is converted while the gift row stays in euros", async ({ page }) => {
-    await page.goto("/mobile/donate");
-    const historyTab = page.getByRole("tab", { name: /History/i });
-    await historyTab.waitFor({ state: "visible", timeout: 15000 });
-    await historyTab.click();
+  test("History all-years total is converted while the gift row stays in euros", async ({ page }) => {
+    await page.goto("/mobile/donate?view=history");
+    const allYears = page.getByRole("group", { name: "Years" }).getByRole("button", { name: "All", exact: true });
+    await allYears.waitFor({ state: "visible", timeout: 15000 });
+    await allYears.click();
     await expect(page.getByTestId("giving-period-total")).toHaveText(expectedAllTime, { timeout: 30000 });
     await expect(page.getByTestId("giving-period-converted-note")).toHaveText(CONVERTED_NOTE);
     await expect(page.locator("main")).toContainText("€ 100.00");

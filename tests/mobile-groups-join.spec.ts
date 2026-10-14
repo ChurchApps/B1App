@@ -51,7 +51,7 @@ test.describe("Mobile groups — request-to-join UX", () => {
 
   test("non-member sees join button on an open-policy group", async ({ page }) => {
     await page.goto(`/mobile/groups/${NON_MEMBER_GROUP_ID}`);
-    await expect(page.getByRole("tab", { name: /About/i })).toBeVisible({ timeout: 15000 });
+    await expect(page.locator("main h1")).toBeVisible({ timeout: 15000 });
     const joinBtn = page.locator('[data-testid="join-group-button"]');
     await expect(joinBtn).toBeVisible({ timeout: 10000 });
     await expect(joinBtn).toHaveText(/Join Group/i);

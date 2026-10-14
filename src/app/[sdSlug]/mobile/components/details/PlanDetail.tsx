@@ -3,21 +3,9 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import {
-  Avatar,
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Icon,
-  Tab,
-  Tabs,
-  Typography
-} from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Typography } from "@mui/material";
+import SchoolIcon from "@mui/icons-material/School";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { ApiHelper, ArrayHelper, DateHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import type {
   AssignmentInterface,
@@ -28,7 +16,7 @@ import type {
   TimeInterface,
   VenuePlanItemsResponseInterface
 } from "@churchapps/helpers";
-import { LessonsContentProvider } from "@churchapps/helpers";
+import { LessonsContentProvider, PlanHelper } from "@churchapps/helpers";
 import { getProvider, type ContentDownload, type InstructionItem, type IProvider, type Instructions } from "@churchapps/content-providers";
 import { PlanItem as PlanItemRow } from "@/app/[sdSlug]/mobile/components/plans/PlanItem";
 import { LessonPreview } from "@/app/[sdSlug]/mobile/components/plans/LessonPreview";
@@ -36,6 +24,7 @@ import { ExpandedLessonView } from "@/app/[sdSlug]/mobile/components/plans/Expan
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
+import { BackVerb, PageHead, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, Sheet, StatusBadge, TextLink, useSliceView, type BadgeTone } from "../kit";
 
 interface Props {
   id: string;
@@ -125,8 +114,7 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const userContext = useContext(UserContext);
   const queryClient = useQueryClient();
 
-  type TabKey = "overview" | "order" | "team";
-  const [tab, setTab] = useState<TabKey>("order");
+  const [view, setView] = useSliceView();
   const [orderView, setOrderView] = useState<"summary" | "teach">("summary");
 
   interface LessonPreviewResult extends VenuePlanItemsResponseInterface {
@@ -274,411 +262,276 @@ export const PlanDetail = ({ id, config: _config }: Props) => {
   const showPreviewMode = hasAssociatedContent && planItems.length === 0 && (lessonPreview?.items?.length ?? 0) > 0;
   const downloads: ContentDownload[] = lessonPreview?.instructions?.downloads ?? [];
 
+
   const refreshAssignments = () => {
     queryClient.invalidateQueries({ queryKey });
   };
 
-  const OuterShell = ({ children }: { children: React.ReactNode }) => (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {children}
-    </Box>
-  );
-
   if (!isLoggedIn) {
     return (
-      <OuterShell>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
-            mt: 4
-          }}
-        >
-          <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>lock</Icon>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            {Locale.label("mobile.details.signInRequired")}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            {Locale.label("mobile.details.signInToViewPlan")}
-          </Typography>
-          <Link
-            href={`/mobile/login?returnUrl=${encodeURIComponent(`/mobile/plans/${id}`)}`}
-            style={{ color: tc.primary, fontWeight: 600, textDecoration: "none" }}
-          >
+      <Box>
+        <PageHead title={Locale.label("mobile.details.signInRequired")} lede={Locale.label("mobile.details.signInToViewPlan")}>
+          <Button variant="contained" component={Link} href={`/mobile/login?returnUrl=${encodeURIComponent(`/mobile/plans/${id}`)}`}>
             {Locale.label("mobile.details.signIn")}
-          </Link>
-        </Box>
-      </OuterShell>
+          </Button>
+        </PageHead>
+      </Box>
     );
   }
 
   if (loading) {
     return (
-      <OuterShell>
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
-          <CircularProgress sx={{ color: tc.primary }} />
-        </Box>
-      </OuterShell>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300 }}>
+        <CircularProgress />
+      </Box>
     );
   }
 
   if (notFound || !plan) {
     return (
-      <OuterShell>
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.lg}px`,
-            textAlign: "center",
-            mt: 4
-          }}
-        >
-          <Icon sx={{ fontSize: 56, color: tc.textSecondary, mb: 1 }}>event_busy</Icon>
-          <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 1 }}>
-            {Locale.label("mobile.details.planNotAvailable")}
-          </Typography>
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: 2 }}>
-            {Locale.label("mobile.details.planRemoved")}
-          </Typography>
-          <Link href="/mobile/plans" style={{ color: tc.primary, fontWeight: 600, textDecoration: "none" }}>
-            {Locale.label("mobile.details.backToPlans")}
-          </Link>
-        </Box>
-      </OuterShell>
+      <Box>
+        <PageHead title={Locale.label("mobile.details.planNotAvailable")} lede={Locale.label("mobile.details.planRemoved")}>
+          <TextLink href="/mobile/plans">{Locale.label("mobile.details.backToPlans")}</TextLink>
+        </PageHead>
+      </Box>
     );
   }
 
-  const headerCard = (
-    <Box
-      sx={{
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        p: `${mobileTheme.spacing.lg}px`,
-        mb: `${mobileTheme.spacing.lg}px`,
-        background: mobileTheme.colorWash,
-        color: "#FFFFFF",
-        textAlign: "center",
-        minHeight: 140,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }}
-    >
-      <Box sx={{ width: "100%" }}>
-        <Icon sx={{ fontSize: 48, color: "#FFFFFF", mb: 1.5 }}>assignment</Icon>
-        <Typography sx={{ fontSize: 24, fontWeight: 700, color: "#FFFFFF", textAlign: "center", mb: 1 }}>
-          {plan.name}
-        </Typography>
-        {plan.serviceDate ? (
-          <Typography sx={{ fontSize: 16, fontWeight: 500, color: "#FFFFFF", opacity: 0.9 }}>
-            {formatServiceDate(plan.serviceDate)}
-          </Typography>
-        ) : null}
-      </Box>
-    </Box>
-  );
-
-  const planItemsWithStartTime = (() => {
-    let cumulativeTime = 0;
-    return planItems.map((pi) => {
-      const startTime = cumulativeTime;
-      cumulativeTime += pi.seconds || 0;
+  const withStartTimes = (items: PlanItemInterface[]) => {
+    let cumulative = 0;
+    return items.map((pi) => {
+      const startTime = cumulative;
+      cumulative += pi.itemType === "header" ? PlanHelper.getSectionDuration(pi) : (pi.seconds || 0);
       return { pi, startTime };
     });
-  })();
+  };
+
+  const leafItems: PlanItemInterface[] = [];
+  const collectLeaves = (items: PlanItemInterface[]) => items.forEach((pi) => {
+    if (pi.itemType === "header") collectLeaves(pi.children || []);
+    else leafItems.push(pi);
+  });
+  collectLeaves(planItems);
+
+  const renderPlanItems = (items: { pi: PlanItemInterface; startTime: number }[]) => items.map(({ pi, startTime }) => (
+    <PlanItemRow
+      key={pi.id}
+      planItem={pi}
+      startTime={startTime}
+      associatedProviderId={plan.providerId}
+      associatedVenueId={plan.providerPlanId}
+      ministryId={plan.ministryId}
+      positionLabels={positionLabels}
+    />
+  ));
+
+  const renderLessonPreview = (items: PlanItemInterface[]) => (
+    <LessonPreview
+      lessonItems={items}
+      venueName={lessonPreview?.venueName || ""}
+      externalRef={externalRef}
+      associatedProviderId={plan.providerId}
+      associatedVenueId={plan.providerPlanId}
+      ministryId={plan.ministryId}
+    />
+  );
+
+  const members: { id?: string; positionId?: string; name: string; position: string; photo?: string }[] = [];
+  teamGroups.forEach((g) => g.positions.forEach((position) => {
+    ArrayHelper.getAll(assignments, "positionId", position.id).forEach((a: AssignmentInterface) => {
+      const person = ArrayHelper.getOne(people, "id", a.personId) as PersonInterface | null;
+      if (!person) return;
+      members.push({
+        id: a.id,
+        positionId: position.id,
+        name: person.name?.display || [person.name?.first, person.name?.last].filter(Boolean).join(" ") || Locale.label("mobile.components.unknown"),
+        position: position.name || Locale.label("mobile.details.position"),
+        photo: person.photo ? PersonHelper.getPhotoUrl(person) : undefined
+      });
+    });
+  }));
+
+  const backToPlan = <BackVerb label={Locale.label("mobile.serving.backTo").replace("{}", plan.name || "")} onClick={() => setView("")} />;
+
+  const teach = lessonPreview?.instructions && (
+    <ExpandedLessonView
+      open={orderView === "teach"}
+      onClose={() => setOrderView("summary")}
+      instructions={lessonPreview.instructions}
+      lessonName={lessonPreview.venueName || ""}
+    />
+  );
+
+  if (view === "order") {
+    return (
+      <Box>
+        {backToPlan}
+        <PageHead title={Locale.label("mobile.details.tabServiceOrder")} lede={formatServiceDate(plan.serviceDate)} />
+        <Plate>
+          <PlateSection>
+            {planItems.length > 0
+              ? renderPlanItems(withStartTimes(planItems))
+              : showPreviewMode && lessonPreview?.items
+                ? renderLessonPreview(lessonPreview.items)
+                : <QuietEmpty>{Locale.label("mobile.details.noOrderItems")}</QuietEmpty>}
+          </PlateSection>
+        </Plate>
+        {teach}
+      </Box>
+    );
+  }
+
+  if (view === "teams") {
+    return (
+      <Box>
+        {backToPlan}
+        <PageHead title={Locale.label("mobile.details.tabTeams")} lede={formatServiceDate(plan.serviceDate)} />
+        <Plate>
+          {teamGroups.length === 0 ? (
+            <PlateSection><QuietEmpty>{Locale.label("mobile.details.noTeamsAssigned")}</QuietEmpty></PlateSection>
+          ) : teamGroups.map((group) => {
+            const groupMembers = members.filter((m) => group.positions.some((p) => p.id === m.positionId));
+            return (
+              <PlateSection key={group.category} title={group.category} action={<StatusBadge tone="neu">{groupMembers.length}</StatusBadge>}>
+                {groupMembers.length === 0 ? (
+                  <QuietEmpty>{Locale.label("mobile.details.noAssignedMembers")}</QuietEmpty>
+                ) : (
+                  <RowList>
+                    {groupMembers.map((m) => (
+                      <Row
+                        key={m.id || `${m.name}-${m.position}`}
+                        leading={<Avatar src={m.photo} alt="" sx={{ width: 40, height: 40, fontSize: 15, bgcolor: tc.chip, color: tc.onChip }}>{m.name[0]?.toUpperCase() || "?"}</Avatar>}
+                        title={m.name}
+                        subtitle={m.position}
+                      />
+                    ))}
+                  </RowList>
+                )}
+              </PlateSection>
+            );
+          })}
+        </Plate>
+      </Box>
+    );
+  }
+
+  const orderTeaser = planItems.length > 0
+    ? renderPlanItems(withStartTimes(leafItems).slice(0, 5))
+    : showPreviewMode && lessonPreview?.items
+      ? renderLessonPreview(lessonPreview.items.slice(0, 3))
+      : null;
+  const orderCount = planItems.length > 0 ? leafItems.length : (lessonPreview?.items?.length ?? 0);
+
+  const identity = (
+    <PageHead title={plan.name} lede={formatServiceDate(plan.serviceDate)}>
+      {showPreviewMode && lessonPreview?.instructions && (
+        <Button variant="contained" startIcon={<SchoolIcon />} onClick={() => setOrderView("teach")}>
+          {Locale.label("mobile.details.viewTeach")}
+        </Button>
+      )}
+    </PageHead>
+  );
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {headerCard}
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          mb: `${mobileTheme.spacing.md}px`,
-          overflow: "hidden"
-        }}
-      >
-        <Tabs
-          value={tab}
-          onChange={(_e, v) => setTab(v)}
-          variant="fullWidth"
-          textColor="primary"
-          indicatorColor="primary"
-          TabIndicatorProps={{ sx: { backgroundColor: tc.primary, height: 2 } }}
-          sx={{
-            minHeight: 52,
-            "& .MuiTab-root": {
-              textTransform: "none",
-              fontWeight: 500,
-              fontSize: 14,
-              color: tc.textSecondary,
-              minHeight: 52
-            },
-            "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
-          }}
-        >
-          <Tab value="order" label={Locale.label("mobile.details.tabServiceOrder")} />
-          <Tab value="overview" label={Locale.label("mobile.details.tabOverview")} />
-          <Tab value="team" label={Locale.label("mobile.details.tabTeams")} />
-        </Tabs>
-      </Box>
-
-      {tab === "overview" && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-
-          <Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                px: `${mobileTheme.spacing.md}px`,
-                py: `${mobileTheme.spacing.md}px`,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                bgcolor: `color-mix(in srgb, ${tc.primary} 8%, transparent)`,
-                mb: `${mobileTheme.spacing.md}px`
-              }}
-            >
-              <Icon sx={{ color: tc.primary, fontSize: 24 }}>assignment_ind</Icon>
-              <Typography sx={{ flex: 1, fontSize: 18, fontWeight: 700, color: tc.primary, ml: 0.5 }}>
-                {Locale.label("mobile.details.myAssignments")}
-              </Typography>
-              <Box
-                sx={{
-                  bgcolor: tc.primary,
-                  color: "#FFFFFF",
-                  borderRadius: "16px",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  px: 1.5,
-                  py: 0.75,
-                  minWidth: 32,
-                  textAlign: "center"
-                }}
-              >
-                {myAssignments.length}
-              </Box>
-            </Box>
-
+    <Box>
+      <RecordLayout identity={identity}>
+        <Plate>
+          <PlateSection title={Locale.label("mobile.serving.yourAssignment")}>
             {myAssignments.length === 0 ? (
-              <Box
-                sx={{
-                  bgcolor: tc.surface,
-                  border: `1px solid ${tc.border}`,
-                  borderRadius: `${mobileTheme.radius.lg}px`,
-                  p: `${mobileTheme.spacing.lg}px`,
-                  textAlign: "center"
-                }}
-              >
-                <Icon sx={{ fontSize: 48, color: tc.textSecondary, mb: 1 }}>assignment_late</Icon>
-                <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-                  {Locale.label("mobile.details.noAssignmentsForPlan")}
-                </Typography>
-                <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: 0.5 }}>
-                  {Locale.label("mobile.details.checkWithLeader")}
-                </Typography>
-              </Box>
-            ) : (
-              <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-                {myAssignments.map((assignment) => {
-                  const position = ArrayHelper.getOne(positions, "id", assignment.positionId) as PositionInterface | null;
-                  const posTimes = (times || []).filter(
-                    (t: any) => position?.categoryName && typeof t?.teams === "string" && t.teams.indexOf(position.categoryName) > -1
-                  );
-                  return (
-                    <PositionDetailsCard
-                      key={assignment.id}
-                      position={position}
-                      assignment={assignment}
-                      times={posTimes}
-                      onUpdate={refreshAssignments}
-                    />
-                  );
-                })}
-              </Box>
-            )}
-          </Box>
-
-          <Box
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              p: `${mobileTheme.spacing.md}px`
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-              <Icon sx={{ color: tc.primary }}>note</Icon>
-              <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.details.planNotes")}</Typography>
-            </Box>
-            {plan.notes ? (
-              <Typography sx={{ fontSize: 14, color: tc.textSecondary, lineHeight: 1.5 }}>
-                {plan.notes.replace(/\n/g, " ")}
-              </Typography>
-            ) : (
-              <Typography sx={{ fontSize: 13, color: tc.textSecondary, fontStyle: "italic" }}>
-                {Locale.label("mobile.details.noNotes")}
-              </Typography>
-            )}
-          </Box>
-        </Box>
-      )}
-
-      {tab === "order" && downloads.length > 0 && (
-        <Box
-          data-testid="plan-downloads"
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`,
-            mb: `${mobileTheme.spacing.md}px`
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-            <Icon sx={{ color: tc.primary }}>download</Icon>
-            <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>{Locale.label("mobile.details.downloads")}</Typography>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            {downloads.map((d, idx) => (
-              <Box
-                key={d.id || `${d.url}-${idx}`}
-                component="a"
-                href={d.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  p: 1,
-                  borderRadius: `${mobileTheme.radius.md}px`,
-                  bgcolor: `color-mix(in srgb, ${tc.primary} 5%, transparent)`,
-                  textDecoration: "none"
-                }}
-              >
-                <Icon sx={{ color: tc.primary, fontSize: 18 }}>description</Icon>
-                <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.primary }}>{d.title}</Typography>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      )}
-
-      {tab === "order" && (
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            border: `1px solid ${tc.border}`,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            p: `${mobileTheme.spacing.md}px`
-          }}
-        >
-          {planItems.length === 0 && showPreviewMode && lessonPreview?.items ? (
-            <>
-              {lessonPreview.instructions && (
-                <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1.5 }}>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    startIcon={<Icon>school</Icon>}
-                    onClick={() => setOrderView("teach")}
-                    sx={{ textTransform: "none", fontWeight: 600 }}
-                  >
-                    {Locale.label("mobile.details.viewTeach")}
-                  </Button>
-                </Box>
-              )}
-              <LessonPreview
-                lessonItems={lessonPreview.items}
-                venueName={lessonPreview.venueName || ""}
-                externalRef={externalRef}
-                associatedProviderId={plan.providerId}
-                associatedVenueId={plan.providerPlanId}
-                ministryId={plan.ministryId}
-              />
-            </>
-          ) : planItems.length === 0 ? (
-            <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", py: 2 }}>
-              {Locale.label("mobile.details.noOrderItems")}
-            </Typography>
-          ) : (
-            <Box>
-              {planItemsWithStartTime.map(({ pi, startTime }) => (
-                <PlanItemRow
-                  key={pi.id}
-                  planItem={pi}
-                  startTime={startTime}
-                  associatedProviderId={plan.providerId}
-                  associatedVenueId={plan.providerPlanId}
-                  ministryId={plan.ministryId}
-                  positionLabels={positionLabels}
+              <QuietEmpty>{Locale.label("mobile.details.noAssignmentsForPlan")}</QuietEmpty>
+            ) : myAssignments.map((assignment) => {
+              const position = ArrayHelper.getOne(positions, "id", assignment.positionId) as PositionInterface | null;
+              const posTimes = (times || []).filter(
+                (t: any) => position?.categoryName && typeof t?.teams === "string" && t.teams.indexOf(position.categoryName) > -1
+              );
+              return (
+                <AssignmentBlock
+                  key={assignment.id}
+                  position={position}
+                  assignment={assignment}
+                  times={posTimes}
+                  onUpdate={refreshAssignments}
                 />
-              ))}
-            </Box>
-          )}
-        </Box>
-      )}
+              );
+            })}
+          </PlateSection>
 
-      {tab === "team" && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-          {teamGroups.length === 0 ? (
-            <Box
-              sx={{
-                bgcolor: tc.surface,
-                border: `1px solid ${tc.border}`,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                p: `${mobileTheme.spacing.lg}px`,
-                textAlign: "center"
-              }}
-            >
-              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-                {Locale.label("mobile.details.noTeamsAssigned")}
+          <PlateSection
+            title={Locale.label("mobile.details.tabServiceOrder")}
+            action={orderTeaser ? <TextLink onClick={() => setView("order")}>{Locale.label("mobile.serving.fullServiceOrder")}</TextLink> : undefined}
+          >
+            {orderTeaser || <QuietEmpty>{Locale.label("mobile.details.noOrderItems")}</QuietEmpty>}
+            {orderTeaser && orderCount > 0 && (
+              <Typography sx={{ mt: "6px", fontSize: 13.5, color: tc.textSecondary }}>
+                {Locale.label("mobile.serving.itemsCount").replace("{}", String(orderCount))}
               </Typography>
-            </Box>
-          ) : (
-            teamGroups.map((group) => (
-              <TeamGroupCard
-                key={group.category}
-                category={group.category}
-                positions={group.positions}
-                assignments={assignments}
-                people={people}
-              />
-            ))
+            )}
+          </PlateSection>
+
+          <PlateSection
+            title={Locale.label("mobile.details.tabTeams")}
+            action={teamGroups.length > 0 ? <TextLink onClick={() => setView("teams")}>{Locale.label("mobile.serving.allTeams")}</TextLink> : undefined}
+          >
+            {members.length === 0 ? (
+              <QuietEmpty>{Locale.label("mobile.details.noTeamsAssigned")}</QuietEmpty>
+            ) : (
+              <>
+                <PillRow>
+                  {members.slice(0, 8).map((m) => <Pill key={m.id || `${m.name}-${m.position}`} qualifier={`· ${m.position}`}>{m.name}</Pill>)}
+                </PillRow>
+                <Typography sx={{ mt: "10px", fontSize: 13.5, color: tc.textSecondary }}>
+                  {Locale.label("mobile.serving.servingCount").replace("{}", String(members.length))}
+                  {" · "}
+                  {Locale.label("mobile.serving.teamsCount").replace("{}", String(teamGroups.length))}
+                </Typography>
+              </>
+            )}
+          </PlateSection>
+
+          {plan.notes && (
+            <PlateSection title={Locale.label("mobile.details.planNotes")}>
+              <Typography sx={{ fontSize: 15, lineHeight: "22px", color: tc.text, whiteSpace: "pre-line" }}>{plan.notes}</Typography>
+            </PlateSection>
           )}
-        </Box>
-      )}
 
-      {lessonPreview?.instructions && (
-        <ExpandedLessonView
-          open={orderView === "teach"}
-          onClose={() => setOrderView("summary")}
-          instructions={lessonPreview.instructions}
-          lessonName={lessonPreview.venueName || ""}
-        />
-      )}
-
+          {downloads.length > 0 && (
+            <PlateSection title={Locale.label("mobile.details.downloads")}>
+              <Box data-testid="plan-downloads">
+                {downloads.map((d, idx) => (
+                  <Box
+                    key={d.id || `${d.url}-${idx}`}
+                    component="a"
+                    href={d.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ display: "flex", alignItems: "center", gap: "12px", minHeight: 48, color: tc.link, fontWeight: 600, fontSize: 15, textDecoration: "none", "& + a": { borderTop: `1px solid ${tc.border}` }, "&:hover": { textDecoration: "underline" } }}
+                  >
+                    <DescriptionOutlinedIcon sx={{ fontSize: 20, color: tc.textSecondary }} />
+                    {d.title}
+                  </Box>
+                ))}
+              </Box>
+            </PlateSection>
+          )}
+        </Plate>
+      </RecordLayout>
+      {teach}
     </Box>
   );
 };
 
-const statusMeta = (status?: string) => {
+const statusMeta = (status?: string): { label: string; tone: BadgeTone } => {
   switch ((status || "").toLowerCase()) {
-    case "accepted": return { label: Locale.label("mobile.details.accepted"), color: mobileTheme.colors.success, icon: "check_circle" };
-    case "confirmed": return { label: Locale.label("mobile.details.confirmed"), color: mobileTheme.colors.success, icon: "check_circle" };
-    case "declined": return { label: Locale.label("mobile.details.declined"), color: mobileTheme.colors.error, icon: "cancel" };
-    default: return { label: Locale.label("mobile.details.pendingResponse"), color: mobileTheme.colors.warning, icon: "schedule" };
+    case "accepted": return { label: Locale.label("mobile.details.accepted"), tone: "ok" };
+    case "confirmed": return { label: Locale.label("mobile.details.confirmed"), tone: "ok" };
+    case "declined": return { label: Locale.label("mobile.details.declined"), tone: "bad" };
+    case "":
+    case "unconfirmed": return { label: Locale.label("mobile.serving.needsReplyBadge"), tone: "warn" };
+    default: return { label: Locale.label("mobile.details.pendingResponse"), tone: "warn" };
   }
 };
 
-const PositionDetailsCard = ({
+const AssignmentBlock = ({
   position,
   assignment,
   times,
@@ -730,251 +583,58 @@ const PositionDetailsCard = ({
   };
 
   return (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        p: `${mobileTheme.spacing.md}px`
-      }}
-    >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <Icon sx={{ color: tc.primary }}>assignment_ind</Icon>
-        <Typography sx={{ flex: 1, fontSize: 16, fontWeight: 700, color: tc.text }}>
-          {position.name || Locale.label("mobile.details.position")}
-        </Typography>
-        <Box
-          sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 0.5,
-            bgcolor: meta.color,
-            color: "#FFFFFF",
-            borderRadius: "999px",
-            px: 1.25,
-            py: 0.25,
-            fontSize: 10.5,
-            fontWeight: 700
-          }}
-        >
-          <Icon sx={{ fontSize: 14, color: "#FFFFFF" }}>{meta.icon}</Icon>
-          <span>{meta.label}</span>
+    <Box sx={{ "& + &": { borderTop: `1px solid ${tc.border}`, pt: "16px", mt: "16px" } }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "flex-start" }}>
+        <Box sx={{ minWidth: 0 }}>
+          <Typography component="h3" sx={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, color: tc.text }}>
+            {position.name || Locale.label("mobile.details.position")}
+          </Typography>
+          {position.categoryName && <Typography sx={{ fontSize: 13.5, color: tc.textSecondary }}>{position.categoryName}</Typography>}
         </Box>
+        <StatusBadge tone={meta.tone} dot={meta.tone === "ok"}>{meta.label}</StatusBadge>
       </Box>
 
       {sortedTimes.length > 0 && (
-        <Box sx={{ mt: 1.25 }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.textMuted, mb: 0.75 }}>
-            {Locale.label("mobile.details.serviceTimes")}
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-            {sortedTimes.map((time) => (
-              <Box
-                key={time.id}
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 1,
-                  p: 1,
-                  borderRadius: `${mobileTheme.radius.md}px`,
-                  bgcolor: `color-mix(in srgb, ${tc.primary} 5%, transparent)`
-                }}
-              >
-                <Icon sx={{ color: tc.primary, fontSize: 18, mt: 0.25 }}>access_time</Icon>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-                    {time.displayName || Locale.label("mobile.details.service")}
-                  </Typography>
-                  <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-                    {formatDateTime(time.startTime)}{time.endTime ? ` - ${formatTimeShort(time.endTime)}` : ""}
-                  </Typography>
-                </Box>
+        <Box sx={{ mt: "10px" }}>
+          <Typography sx={{ fontSize: 13, fontWeight: 600, color: tc.textSecondary }}>{Locale.label("mobile.details.serviceTimes")}</Typography>
+          {sortedTimes.map((time) => (
+            <Typography key={time.id} sx={{ fontSize: 14, color: tc.text, mt: "2px" }}>
+              {time.displayName || Locale.label("mobile.details.service")}
+              <Box component="span" sx={{ color: tc.textSecondary }}>
+                {" · "}{formatDateTime(time.startTime)}{time.endTime ? ` – ${formatTimeShort(time.endTime)}` : ""}
               </Box>
-            ))}
-          </Box>
+            </Typography>
+          ))}
         </Box>
       )}
 
       {canRespond && (
-        <Box sx={{ display: "flex", gap: 1, mt: `${mobileTheme.spacing.md}px` }}>
-          <Button
-            variant="outlined"
-            color="error"
-            startIcon={<Icon>close</Icon>}
-            onClick={() => handleRespond("decline")}
-            disabled={busy}
-            sx={{ flex: 1, textTransform: "none", fontWeight: 600 }}
-          >
-            {Locale.label("mobile.details.decline")}
-          </Button>
-          <Button
-            variant="contained"
-            startIcon={<Icon>check</Icon>}
-            onClick={() => handleRespond("accept")}
-            disabled={busy}
-            sx={{
-              flex: 1,
-              textTransform: "none",
-              fontWeight: 600,
-              bgcolor: tc.success,
-              "&:hover": { bgcolor: tc.success, filter: "brightness(0.95)" }
-            }}
-          >
-            {Locale.label("mobile.details.accept")}
-          </Button>
+        <Box sx={{ display: "flex", gap: "8px", mt: "14px" }}>
+          <Button variant="contained" size="small" onClick={() => handleRespond("accept")} disabled={busy}>{Locale.label("mobile.details.accept")}</Button>
+          <Button variant="outlined" size="small" onClick={() => handleRespond("decline")} disabled={busy}>{Locale.label("mobile.details.decline")}</Button>
         </Box>
       )}
 
       {canWithdraw && (
-        <Box sx={{ display: "flex", mt: `${mobileTheme.spacing.md}px` }}>
-          <Button
-            variant="outlined"
-            color="error"
-            startIcon={<Icon>close</Icon>}
-            onClick={() => setConfirmDecline(true)}
-            disabled={busy}
-            sx={{ flex: 1, textTransform: "none", fontWeight: 600 }}
-          >
-            {Locale.label("mobile.details.decline")}
-          </Button>
+        <Box sx={{ mt: "12px" }}>
+          <TextLink danger onClick={() => setConfirmDecline(true)} disabled={busy}>{Locale.label("mobile.details.decline")}</TextLink>
         </Box>
       )}
 
-      <Dialog open={confirmDecline} onClose={() => setConfirmDecline(false)}>
-        <DialogTitle>{Locale.label("mobile.details.declineAcceptedTitle")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{Locale.label("mobile.details.declineAcceptedMessage")}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmDecline(false)}>{Locale.label("mobile.details.cancel")}</Button>
-          <Button onClick={() => { setConfirmDecline(false); handleRespond("decline"); }} color="error" variant="contained">{Locale.label("mobile.details.decline")}</Button>
-        </DialogActions>
-      </Dialog>
-
-      {errorMessage && (
-        <Typography sx={{ fontSize: 12, color: tc.error, mt: 1 }}>
-          {errorMessage}
-        </Typography>
-      )}
-    </Box>
-  );
-};
-
-const TeamGroupCard = ({
-  category,
-  positions,
-  assignments,
-  people
-}: {
-  category: string;
-  positions: PositionInterface[];
-  assignments: AssignmentInterface[];
-  people: PersonInterface[];
-}) => {
-  const tc = mobileTheme.colors;
-
-  const members: { id?: string; personId?: string; name: string; position: string; photo?: string }[] = [];
-  positions.forEach((position) => {
-    const posAssignments = ArrayHelper.getAll(assignments, "positionId", position.id);
-    posAssignments.forEach((a: AssignmentInterface) => {
-      const person = ArrayHelper.getOne(people, "id", a.personId) as PersonInterface | null;
-      if (!person) return;
-      const displayName =
-        person.name?.display ||
-        [person.name?.first, person.name?.last].filter(Boolean).join(" ") ||
-        Locale.label("mobile.components.unknown");
-      members.push({
-        id: a.id,
-        personId: person.id,
-        name: displayName,
-        position: position.name || Locale.label("mobile.details.position"),
-        photo: person.photo ? PersonHelper.getPhotoUrl(person) : undefined
-      });
-    });
-  });
-
-  return (
-    <Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          px: `${mobileTheme.spacing.md}px`,
-          py: `${mobileTheme.spacing.sm}px`,
-          bgcolor: `color-mix(in srgb, ${tc.primary} 5%, transparent)`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          mb: `${mobileTheme.spacing.sm}px`
-        }}
+      <Sheet
+        open={confirmDecline}
+        onClose={() => setConfirmDecline(false)}
+        title={Locale.label("mobile.details.declineAcceptedTitle")}
+        maxWidth="xs"
+        actions={<>
+          <Button variant="outlined" onClick={() => setConfirmDecline(false)}>{Locale.label("mobile.details.cancel")}</Button>
+          <Button variant="contained" color="error" onClick={() => { setConfirmDecline(false); handleRespond("decline"); }}>{Locale.label("mobile.details.decline")}</Button>
+        </>}
       >
-        <Icon sx={{ color: tc.primary, fontSize: 24, mr: 1 }}>group</Icon>
-        <Typography sx={{ flex: 1, fontSize: 16, fontWeight: 700, color: tc.primary }}>
-          {category}
-        </Typography>
-        <Box
-          sx={{
-            bgcolor: tc.primary,
-            color: "#FFFFFF",
-            borderRadius: "12px",
-            px: 1,
-            py: 0.5,
-            fontSize: 12,
-            fontWeight: 600,
-            minWidth: 24,
-            textAlign: "center"
-          }}
-        >
-          {members.length}
-        </Box>
-      </Box>
+        <Typography>{Locale.label("mobile.details.declineAcceptedMessage")}</Typography>
+      </Sheet>
 
-      {members.length === 0 ? (
-        <Box
-          sx={{
-            bgcolor: tc.surface,
-            borderRadius: `${mobileTheme.radius.lg}px`,
-            border: `1px solid ${tc.border}`,
-            p: `${mobileTheme.spacing.md}px`,
-            textAlign: "center"
-          }}
-        >
-          <Typography sx={{ fontSize: 13, color: tc.textMuted, fontStyle: "italic" }}>
-            {Locale.label("mobile.details.noAssignedMembers")}
-          </Typography>
-        </Box>
-      ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-          {members.map((m) => (
-            <Box
-              key={m.id || `${m.personId}-${m.position}`}
-              sx={{
-                bgcolor: tc.surface,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                border: `1px solid ${tc.border}`,
-                px: `${mobileTheme.spacing.md}px`,
-                py: `${mobileTheme.spacing.sm}px`,
-                display: "flex",
-                alignItems: "center"
-              }}
-            >
-              <Avatar
-                src={m.photo || undefined}
-                sx={{ width: 48, height: 48, fontSize: 16, bgcolor: tc.primaryLight, color: tc.primary, mr: 1.5 }}
-              >
-                {m.name[0]?.toUpperCase() || "?"}
-              </Avatar>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>
-                  {m.name}
-                </Typography>
-                <Typography sx={{ fontSize: 14, fontWeight: 500, color: tc.textMuted, mt: 0.25 }}>
-                  {m.position}
-                </Typography>
-              </Box>
-              <Icon sx={{ color: tc.disabled, fontSize: 24 }}>chevron_right</Icon>
-            </Box>
-          ))}
-        </Box>
-      )}
+      {errorMessage && <Typography role="alert" sx={{ fontSize: 13, color: tc.error, mt: "8px" }}>{errorMessage}</Typography>}
     </Box>
   );
 };

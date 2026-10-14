@@ -5,11 +5,6 @@ let jwt: string;
 
 async function gotoOverview(page: import("@playwright/test").Page) {
   await page.goto("/mobile/donate");
-  const overviewTab = page.getByRole("tab", { name: /Overview/i });
-  if (await overviewTab.count() > 0) {
-    await overviewTab.waitFor({ state: "visible", timeout: 15000 });
-    await overviewTab.click();
-  }
 }
 
 test.describe.serial("Mobile donate — CampaignProgress", () => {

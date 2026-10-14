@@ -1,9 +1,14 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Box, Button, Chip, CircularProgress, Dialog, DialogContent, DialogTitle, Icon, IconButton, Skeleton, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Skeleton, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import ViewListIcon from "@mui/icons-material/ViewList";
 import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
 import type { PersonInterface } from "@churchapps/helpers";
 import { EnvironmentHelper } from "@/helpers/EnvironmentHelper";
@@ -12,6 +17,7 @@ import { mobileTheme } from "../mobileTheme";
 import { EventProcessor } from "../../helpers/eventProcessor";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { DateHelper } from "@churchapps/helpers";
+import { Eyebrow, FilterPills, PersonAvatar, PlateSection, QuietEmpty, Sheet, StatusBadge, TextLink, type BadgeTone, ViewToggle } from "../kit";
 
 interface Props {
   groupId: string;
@@ -32,6 +38,31 @@ interface RsvpBatchEntry {
   maybe: number;
   mine: RsvpResponse | null;
 }
+
+export interface EventRow {
+  id?: string;
+  groupId?: string;
+  title?: string;
+  description?: string;
+  start?: string | Date;
+  end?: string | Date;
+  allDay?: boolean;
+  visibility?: string;
+  recurrenceRule?: string;
+  tags?: string;
+  registrationEnabled?: boolean;
+  rsvpDisabled?: boolean;
+}
+
+type ViewMode = "month" | "list";
+const VIEW_MODE_KEY = "b1-group-events-view";
+
+const tc = mobileTheme.colors;
+
+const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+const isoDate = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
+const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
 
 // Local-time key for RSVP matching regardless of server datetime format.
 const occKey = (d: Date) => {
@@ -58,32 +89,8 @@ const describeRecurrence = (rule?: string) => {
   return map[freq] || Locale.label("mobile.group.repeats");
 };
 
-export interface EventRow {
-  id?: string;
-  groupId?: string;
-  title?: string;
-  description?: string;
-  start?: string | Date;
-  end?: string | Date;
-  allDay?: boolean;
-  visibility?: string;
-  recurrenceRule?: string;
-  tags?: string;
-  registrationEnabled?: boolean;
-  rsvpDisabled?: boolean;
-}
-
-type ViewMode = "month" | "list";
-const VIEW_MODE_KEY = "b1-group-events-view";
-
-const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
-const isoDate = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-
-const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
-const endOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59, 999);
-
-const formatMonth = (d: Date) =>
-  d.toLocaleDateString(DateHelper.locale, { month: "long", year: "numeric" });
+const formatMonth = (d: Date) => d.toLocaleDateString(DateHelper.locale, { month: "long", year: "numeric" });
+const formatDay = (d: Date) => d.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" });
 
 const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: boolean) => {
   if (!start) return "";
@@ -97,15 +104,147 @@ const formatTimeRange = (start?: string | Date, end?: string | Date, allDay?: bo
   return `${fmt(s)} – ${fmt(e)}`;
 };
 
-export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onEditEvent, firstDayOfWeek = 0 }: Props) => {
-  const tc = mobileTheme.colors;
-  const router = useRouter();
+const rsvpOptions = (): { value: RsvpResponse; label: string; tone: BadgeTone }[] => [
+  { value: "yes", label: Locale.label("mobile.group.rsvpGoing"), tone: "ok" },
+  { value: "maybe", label: Locale.label("mobile.group.rsvpMaybe"), tone: "warn" },
+  { value: "no", label: Locale.label("mobile.group.rsvpNotGoing"), tone: "bad" }
+];
+
+const useGroupEvents = (groupId: string) => useQuery<EventRow[]>({
+  queryKey: ["group-events", groupId],
+  queryFn: async () => {
+    const data = await ApiHelper.get(`/events/group/${groupId}`, "ContentApi");
+    return Array.isArray(data) ? data : [];
+  },
+  enabled: !!groupId,
+  placeholderData: []
+});
+
+const useGroupRsvps = (groupId: string, isMember: boolean, from: Date, to: Date) => {
   const queryClient = useQueryClient();
+  const [loadingKey, setLoadingKey] = React.useState<string | null>(null);
+  const fromIso = from.toISOString();
+  const toIso = to.toISOString();
+
+  const { data: batch = [] } = useQuery<RsvpBatchEntry[]>({
+    queryKey: ["group-rsvps", groupId, fromIso, toIso],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/events/rsvps/group/${groupId}?from=${encodeURIComponent(fromIso)}&to=${encodeURIComponent(toIso)}`, "ContentApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!groupId && isMember,
+    placeholderData: []
+  });
+
+  const byOccurrence = React.useMemo(() => {
+    const map: Record<string, RsvpBatchEntry> = {};
+    batch.forEach((r) => { map[`${r.eventId}|${occKey(new Date(r.occurrenceStart))}`] = r; });
+    return map;
+  }, [batch]);
+
+  const setRsvp = async (event: EventRow, occurrenceStart: Date, response: RsvpResponse | null) => {
+    if (!event.id) return;
+    const iso = occurrenceStart.toISOString();
+    setLoadingKey(`${event.id}|${occKey(occurrenceStart)}|${response ?? "remove"}`);
+    try {
+      if (response === null) await ApiHelper.delete(`/events/${event.id}/rsvp?occurrenceStart=${encodeURIComponent(iso)}`, "ContentApi");
+      else await ApiHelper.post(`/events/${event.id}/rsvp`, { occurrenceStart: iso, response }, "ContentApi");
+      await queryClient.invalidateQueries({ queryKey: ["group-rsvps", groupId] });
+    } catch {
+      /* ignore — control reflects server on next refetch */
+    } finally {
+      setLoadingKey(null);
+    }
+  };
+
+  const entryFor = (e: EventRow) => {
+    const occ = e.start ? new Date(e.start) : null;
+    if (!e.id || !occ || isNaN(occ.getTime())) return { occ: null, entry: undefined };
+    return { occ, entry: byOccurrence[`${e.id}|${occKey(occ)}`] };
+  };
+
+  return { entryFor, loadingKey, setRsvp };
+};
+
+type RsvpState = ReturnType<typeof useGroupRsvps>;
+
+const canRsvp = (e: EventRow) => !!e.groupId && !e.rsvpDisabled && !!e.id;
+
+const MyRsvpBadge = ({ entry }: { entry?: RsvpBatchEntry }) => {
+  const opt = rsvpOptions().find((o) => o.value === entry?.mine);
+  return opt ? <StatusBadge tone={opt.tone} dot={opt.value === "yes"}>{opt.label}</StatusBadge> : null;
+};
+
+const RsvpButtons = ({ e, rsvp }: { e: EventRow; rsvp: RsvpState }) => {
+  const { occ, entry } = rsvp.entryFor(e);
+  if (!occ) return null;
+  const thisOccKey = `${e.id}|${occKey(occ)}`;
+  const isAnyLoading = !!rsvp.loadingKey?.startsWith(thisOccKey);
+  return (
+    <Box role="group" aria-label={Locale.label("mobile.group.rsvpQuestion")} sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+      {rsvpOptions().map((opt) => {
+        const active = entry?.mine === opt.value;
+        const count = entry ? entry[opt.value] : 0;
+        const isThisLoading = rsvp.loadingKey === `${thisOccKey}|${active ? "remove" : opt.value}`;
+        return (
+          <Button
+            key={opt.value}
+            size="small"
+            variant="outlined"
+            aria-pressed={active}
+            disabled={isAnyLoading}
+            onClick={() => rsvp.setRsvp(e, occ, active ? null : opt.value)}
+            data-testid={`rsvp-${e.id}-${opt.value}`}
+            sx={{ minHeight: 34, ...(active ? { bgcolor: tc.selected, color: tc.onSelected, borderColor: "transparent", "&:hover": { bgcolor: tc.selected, borderColor: "transparent" } } : {}) }}
+          >
+            {isThisLoading ? <CircularProgress size={14} thickness={5} color="inherit" /> : <>{opt.label}{count > 0 ? ` ${count}` : ""}</>}
+          </Button>
+        );
+      })}
+    </Box>
+  );
+};
+
+// Plate teaser: the next occurrence with inline RSVP.
+export const GroupNextEvent = ({ groupId, isMember }: { groupId: string; isMember: boolean }) => {
+  const { data: rawEvents, isLoading } = useGroupEvents(groupId);
+  const [now] = React.useState(() => new Date());
+  const range = React.useMemo(() => ({ from: startOfMonth(now), to: endOfMonth(new Date(now.getFullYear(), now.getMonth() + 2, 1)) }), [now]);
+  const rsvp = useGroupRsvps(groupId, isMember, range.from, range.to);
+
+  const next = React.useMemo(() => {
+    const normalized = EventProcessor.updateTime(rawEvents || []);
+    for (let i = 0; i < 3; i++) {
+      const month = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      const upcoming = (EventProcessor.expandEventsForMonth(normalized, month) as unknown as EventRow[])
+        .filter((e) => e.start && new Date(e.end || e.start) >= now)
+        .sort((a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime());
+      if (upcoming.length) return upcoming[0];
+    }
+    return null;
+  }, [rawEvents, now]);
+
+  if (isLoading) return <Skeleton variant="text" width="60%" height={28} />;
+  if (!next) return <QuietEmpty>{Locale.label("mobile.group.noUpcomingEvents")}</QuietEmpty>;
+
+  const { entry } = rsvp.entryFor(next);
+  const start = new Date(next.start!);
+  const meta = [formatDay(start), formatTimeRange(next.start, next.end, next.allDay), entry?.yes ? Locale.label("mobile.group.nGoing").replace("{}", String(entry.yes)) : ""].filter(Boolean).join(" · ");
+  return (
+    <Box data-testid="group-next-event">
+      <Typography sx={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, color: tc.text }}>{next.title || Locale.label("mobile.group.event")}</Typography>
+      <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{meta}</Typography>
+      {(next.registrationEnabled && next.id) && <Box sx={{ mt: "10px" }}><TextLink href={`/mobile/register/${next.id}`}>{Locale.label("mobile.group.register")}</TextLink></Box>}
+      {isMember && canRsvp(next) && <Box sx={{ mt: "12px" }}><RsvpButtons e={next} rsvp={rsvp} /></Box>}
+    </Box>
+  );
+};
+
+export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onEditEvent, firstDayOfWeek = 0 }: Props) => {
   const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date());
   const [selected, setSelected] = React.useState<string>(isoDate(new Date()));
-  const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
+  const [selectedTag, setSelectedTag] = React.useState<string>("");
   const [rosterFor, setRosterFor] = React.useState<{ eventId: string; occurrenceStart: string; title: string } | null>(null);
-  const [rsvpLoading, setRsvpLoading] = React.useState<string | null>(null);
   const [viewMode, setViewMode] = React.useState<ViewMode>("month");
 
   React.useEffect(() => {
@@ -120,89 +259,24 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
     try { localStorage.setItem(VIEW_MODE_KEY, mode); } catch { /* storage blocked */ }
   };
 
-  const { data: rawEvents, isLoading } = useQuery<EventRow[]>({
-    queryKey: ["group-events", groupId],
-    queryFn: async () => {
-      const data = await ApiHelper.get(`/events/group/${groupId}`, "ContentApi");
-      return Array.isArray(data) ? data : [];
-    },
-    enabled: !!groupId,
-    placeholderData: []
-  });
-
-  const rsvpWindow = React.useMemo(() => ({
-    from: startOfMonth(currentMonth).toISOString(),
-    to: endOfMonth(currentMonth).toISOString()
-  }), [currentMonth]);
-
-  const { data: rsvpBatch = [] } = useQuery<RsvpBatchEntry[]>({
-    queryKey: ["group-rsvps", groupId, rsvpWindow.from, rsvpWindow.to],
-    queryFn: async () => {
-      const data = await ApiHelper.get(`/events/rsvps/group/${groupId}?from=${encodeURIComponent(rsvpWindow.from)}&to=${encodeURIComponent(rsvpWindow.to)}`, "ContentApi");
-      return Array.isArray(data) ? data : [];
-    },
-    enabled: !!groupId && !!isMember,
-    placeholderData: []
-  });
-
-  const rsvpByOccurrence = React.useMemo(() => {
-    const map: Record<string, RsvpBatchEntry> = {};
-    rsvpBatch.forEach((r) => {
-      const key = `${r.eventId}|${occKey(new Date(r.occurrenceStart))}`;
-      map[key] = r;
-    });
-    return map;
-  }, [rsvpBatch]);
-
-  const refreshRsvps = () => queryClient.invalidateQueries({ queryKey: ["group-rsvps", groupId] });
-
-  const setRsvp = async (event: EventRow, occurrenceStart: Date, response: RsvpResponse | null) => {
-    if (!event.id) return;
-    const iso = occurrenceStart.toISOString();
-    // Include the response value so we track which specific button was clicked
-    const loadingKey = `${event.id}|${occKey(occurrenceStart)}|${response ?? "remove"}`;
-    setRsvpLoading(loadingKey);
-    try {
-      if (response === null) {
-        await ApiHelper.delete(`/events/${event.id}/rsvp?occurrenceStart=${encodeURIComponent(iso)}`, "ContentApi");
-      } else {
-        await ApiHelper.post(`/events/${event.id}/rsvp`, { occurrenceStart: iso, response }, "ContentApi");
-      }
-      await refreshRsvps();
-    } catch {
-      /* ignore — control reflects server on next refetch */
-    } finally {
-      setRsvpLoading(null);
-    }
-  };
+  const { data: rawEvents, isLoading } = useGroupEvents(groupId);
+  const rsvp = useGroupRsvps(groupId, !!isMember, startOfMonth(currentMonth), endOfMonth(currentMonth));
 
   const events = React.useMemo(() => {
     const normalized = EventProcessor.updateTime(rawEvents || []);
-    const expanded = EventProcessor.expandEventsForMonth(normalized, currentMonth);
-    return expanded as unknown as EventRow[];
+    return EventProcessor.expandEventsForMonth(normalized, currentMonth) as unknown as EventRow[];
   }, [rawEvents, currentMonth]);
 
   const allTags = React.useMemo(() => {
     const tags = new Set<string>();
-    events.forEach((e) => {
-      if (e.tags) {
-        e.tags
-          .split(",")
-          .map((t) => t.trim())
-          .filter(Boolean)
-          .forEach((t) => tags.add(t));
-      }
-    });
+    events.forEach((e) => (e.tags || "").split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => tags.add(t)));
     return Array.from(tags).sort();
   }, [events]);
 
   const filteredEvents = React.useMemo(() => {
-    if (selectedTags.length === 0) return events;
-    return events.filter((e) => {
-      const tags = (e.tags || "").split(",").map((t) => t.trim());
-      return selectedTags.some((st) => tags.includes(st));
-    });
-  }, [events, selectedTags]);
+    if (!selectedTag) return events;
+    return events.filter((e) => (e.tags || "").split(",").map((t) => t.trim()).includes(selectedTag));
+  }, [events, selectedTag]);
 
   const eventsByDate = React.useMemo(() => {
     const map: Record<string, EventRow[]> = {};
@@ -243,26 +317,15 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
   }, [filteredEvents, currentMonth]);
 
   const monthStart = startOfMonth(currentMonth);
-  const monthEnd = endOfMonth(currentMonth);
   const firstWeekday = weekdayColumn(monthStart.getDay(), firstDayOfWeek);
-  const daysInMonth = monthEnd.getDate();
-
+  const daysInMonth = endOfMonth(currentMonth).getDate();
   const days: (Date | null)[] = [];
   for (let i = 0; i < firstWeekday; i++) days.push(null);
   for (let d = 1; d <= daysInMonth; d++) days.push(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), d));
-
   const weekdayLabels = rotateWeekdays(["S", "M", "T", "W", "T", "F", "S"], firstDayOfWeek);
+  const todayKey = isoDate(new Date());
 
-  const goPrev = () => {
-    const d = new Date(currentMonth);
-    d.setMonth(d.getMonth() - 1);
-    setCurrentMonth(d);
-  };
-  const goNext = () => {
-    const d = new Date(currentMonth);
-    d.setMonth(d.getMonth() + 1);
-    setCurrentMonth(d);
-  };
+  const shiftMonth = (delta: number) => setCurrentMonth((m) => new Date(m.getFullYear(), m.getMonth() + delta, 1));
 
   const handleAddEvent = () => {
     // Append T00:00:00 to parse as local time, not UTC (timezone gotcha).
@@ -272,17 +335,12 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
     onAddEvent(base.toISOString());
   };
 
-  const toggleTag = (t: string) => {
-    setSelectedTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]));
-  };
-
   const handleSubscribe = () => {
     const churchId = UserHelper.currentUserChurch?.church?.id;
     const contentApi = EnvironmentHelper.Common?.ContentApi || "";
     if (!contentApi) return;
     const httpsUrl = `${contentApi}/events/subscribe?groupId=${groupId}${churchId ? `&churchId=${churchId}` : ""}`;
     const webcalUrl = httpsUrl.replace(/^https?:\/\//, "webcal://");
-
     if (typeof window !== "undefined") {
       try {
         window.location.href = webcalUrl;
@@ -292,324 +350,92 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
     }
   };
 
-  const renderRsvp = (e: EventRow) => {
-    if (!e.groupId || e.rsvpDisabled || !e.id) return null;
+  const renderEvent = (e: EventRow, i: number) => {
+    const meta = [
+      formatTimeRange(e.start, e.end, e.allDay),
+      e.recurrenceRule ? describeRecurrence(e.recurrenceRule) : "",
+      e.visibility === "private" ? Locale.label("mobile.group.private") : ""
+    ].filter(Boolean).join(" · ");
     const occ = e.start ? new Date(e.start) : null;
-    if (!occ || isNaN(occ.getTime())) return null;
-    const entry = rsvpByOccurrence[`${e.id}|${occKey(occ)}`];
-    const mine = entry?.mine ?? null;
-    const thisOccKey = `${e.id}|${occKey(occ)}`;
-    const isAnyLoading = rsvpLoading !== null && rsvpLoading.startsWith(thisOccKey);
-    const options: { value: RsvpResponse; label: string; color: string }[] = [
-      { value: "yes", label: Locale.label("mobile.group.rsvpGoing"), color: tc.success },
-      { value: "maybe", label: Locale.label("mobile.group.rsvpMaybe"), color: tc.warning },
-      { value: "no", label: Locale.label("mobile.group.rsvpNotGoing"), color: tc.error }
-    ];
+    const showRsvp = canRsvp(e) && !!occ && !isNaN(occ.getTime());
     return (
-      <Box sx={{ mt: 1.25, borderTop: `1px solid ${tc.border}`, pt: 1.25 }} data-testid={`rsvp-${e.id}`}>
-        {isMember && (
-          <>
-            <Typography sx={{ fontSize: 12, color: tc.textSecondary, mb: 0.75 }}>{Locale.label("mobile.group.rsvpQuestion")}</Typography>
-            <Box sx={{ display: "flex", gap: 0.75 }}>
-              {options.map((opt) => {
-                const active = mine === opt.value;
-                const count = entry ? entry[opt.value] : 0;
-                // The clicked button key includes the response being submitted
-                const clickedValue = active ? "remove" : opt.value;
-                const isThisButtonLoading = rsvpLoading === `${thisOccKey}|${clickedValue}`;
-                return (
-                  <Button
-                    key={opt.value}
-                    size="small"
-                    variant={active ? "contained" : "outlined"}
-                    disabled={isAnyLoading}
-                    onClick={() => setRsvp(e, occ, active ? null : opt.value)}
-                    data-testid={`rsvp-${e.id}-${opt.value}`}
-                    sx={{
-                      flex: 1,
-                      textTransform: "none",
-                      fontWeight: 600,
-                      fontSize: 12,
-                      minHeight: 32,
-                      borderRadius: `${mobileTheme.radius.md}px`,
-                      bgcolor: active ? opt.color : "transparent",
-                      color: active ? "#fff" : opt.color,
-                      borderColor: opt.color,
-                      opacity: isAnyLoading && !isThisButtonLoading ? 0.5 : 1,
-                      "&.Mui-disabled": {
-                        bgcolor: active ? opt.color : "transparent",
-                        color: active ? "#fff" : opt.color,
-                        borderColor: opt.color
-                      },
-                      "&:hover": { bgcolor: active ? opt.color : `color-mix(in srgb, ${opt.color} 10%, transparent)`, borderColor: opt.color }
-                    }}
-                  >
-                    {isThisButtonLoading ? (
-                      <CircularProgress
-                        size={14}
-                        thickness={5}
-                        sx={{ color: active ? "#fff" : opt.color }}
-                      />
-                    ) : (
-                      <>{opt.label}{count > 0 ? ` ${count}` : ""}</>
-                    )}
-                  </Button>
-                );
-              })}
-            </Box>
-          </>
+      <Box key={`${e.id || "ev"}-${i}`} sx={{ py: "12px", "& + &": { borderTop: `1px solid ${tc.border}` } }}>
+        <Box sx={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography sx={{ fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text, overflowWrap: "anywhere" }}>{e.title || Locale.label("mobile.group.event")}</Typography>
+            <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{meta}</Typography>
+          </Box>
+          {isMember && showRsvp && <MyRsvpBadge entry={rsvp.entryFor(e).entry} />}
+          {canManage && onEditEvent && (
+            <IconButton size="small" aria-label={Locale.label("mobile.group.editEvent")} onClick={() => onEditEvent(e)} sx={{ color: tc.textSecondary, mt: "-6px" }}>
+              <EditOutlinedIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          )}
+        </Box>
+        {e.description && (
+          <Box sx={{ mt: "6px", fontSize: 14, lineHeight: "20px", color: tc.textSecondary, "& p": { m: 0 } }}>
+            <MarkdownPreviewLight value={e.description} />
+          </Box>
         )}
-        {canManage && (
-          <Button
-            size="small"
-            onClick={() => setRosterFor({ eventId: e.id!, occurrenceStart: occ.toISOString(), title: e.title || Locale.label("mobile.group.event") })}
-            startIcon={<Icon sx={{ fontSize: 16 }}>groups</Icon>}
-            data-testid={`rsvp-roster-${e.id}`}
-            sx={{ mt: 0.75, textTransform: "none", fontSize: 12, color: tc.primary }}
-          >
-            {Locale.label("mobile.group.rsvpViewResponses")}
-          </Button>
+        {e.registrationEnabled && e.id && (
+          <Box sx={{ mt: "8px" }}><TextLink href={`/mobile/register/${e.id}`}>{Locale.label("mobile.group.register")}</TextLink></Box>
+        )}
+        {showRsvp && (isMember || canManage) && (
+          <Box sx={{ mt: "10px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "8px" }} data-testid={`rsvp-${e.id}`}>
+            {isMember && <RsvpButtons e={e} rsvp={rsvp} />}
+            {canManage && (
+              <TextLink onClick={() => setRosterFor({ eventId: e.id!, occurrenceStart: occ!.toISOString(), title: e.title || Locale.label("mobile.group.event") })} data-testid={`rsvp-roster-${e.id}`}>
+                {Locale.label("mobile.group.rsvpViewResponses")}
+              </TextLink>
+            )}
+          </Box>
         )}
       </Box>
     );
   };
 
-  const renderEventCard = (e: EventRow, i: number) => (
-    <Box
-      key={e.id || `ev-${i}`}
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        p: `${mobileTheme.spacing.md}px`,
-        borderLeft: `4px solid ${tc.primary}`,
-        position: "relative"
-      }}
-    >
-      <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>
-            {e.title || Locale.label("mobile.group.event")}
-          </Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: "2px" }}>
-            {formatTimeRange(e.start, e.end, e.allDay)}
-          </Typography>
-          {(e.visibility === "private" || e.recurrenceRule || e.allDay) && (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: "6px" }}>
-              {e.visibility === "private" && (
-                <Chip
-                  size="small"
-                  icon={<Icon sx={{ fontSize: 14 }}>lock</Icon>}
-                  label={Locale.label("mobile.group.private")}
-                  sx={{
-                    height: 22,
-                    fontSize: 10.5,
-                    fontWeight: 700,
-                    borderRadius: "999px",
-                    bgcolor: tc.iconBackground,
-                    color: tc.textSecondary,
-                    "& .MuiChip-icon": { color: tc.textSecondary, ml: "4px" }
-                  }}
-                />
-              )}
-              {e.allDay && (
-                <Chip
-                  size="small"
-                  label={Locale.label("mobile.group.allDay")}
-                  sx={{
-                    height: 22,
-                    fontSize: 10.5,
-                    fontWeight: 700,
-                    borderRadius: "999px",
-                    bgcolor: tc.primaryLight,
-                    color: tc.primary
-                  }}
-                />
-              )}
-              {e.recurrenceRule && (
-                <Chip
-                  size="small"
-                  icon={<Icon sx={{ fontSize: 14 }}>autorenew</Icon>}
-                  label={describeRecurrence(e.recurrenceRule)}
-                  sx={{
-                    height: 22,
-                    fontSize: 10.5,
-                    fontWeight: 700,
-                    borderRadius: "999px",
-                    bgcolor: tc.iconBackground,
-                    color: tc.text,
-                    "& .MuiChip-icon": { color: tc.primary, ml: "4px" }
-                  }}
-                />
-              )}
-            </Box>
-          )}
-        </Box>
-        {canManage && onEditEvent && (
-          <IconButton
-            size="small"
-            aria-label={Locale.label("mobile.group.editEvent")}
-            onClick={(ev) => {
-              ev.stopPropagation();
-              onEditEvent(e);
-            }}
-            sx={{ color: tc.primary, ml: "auto", mt: "-4px" }}
-          >
-            <Icon sx={{ fontSize: 18 }}>edit</Icon>
-          </IconButton>
-        )}
-      </Box>
-      {e.description && (
-        <MarkdownPreviewLight value={e.description} />
-      )}
-      {e.registrationEnabled && e.id && (
-        <Box sx={{ mt: 1.25, display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={(ev) => { ev.stopPropagation(); router.push(`/mobile/register/${e.id}`); }}
-            sx={{
-              bgcolor: tc.success,
-              color: "#000",
-              textTransform: "none",
-              fontWeight: 600,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              px: 2,
-              "&:hover": { bgcolor: tc.success }
-            }}
-          >
-            {Locale.label("mobile.group.register")}
-          </Button>
-        </Box>
-      )}
-      {renderRsvp(e)}
+  const loadingRows = (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      {[0, 1].map((i) => <Skeleton key={i} variant="rounded" height={52} />)}
     </Box>
   );
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: `${mobileTheme.spacing.sm}px`
-        }}
-      >
-        {canManage && (
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={handleAddEvent}
-            startIcon={<Icon>event</Icon>}
-            sx={{
-              bgcolor: tc.success,
-              color: "#000",
-              textTransform: "none",
-              fontWeight: 600,
-              borderRadius: `${mobileTheme.radius.md}px`,
-              py: "10px",
-              "&:hover": { bgcolor: tc.success }
-            }}
-          >
-            {Locale.label("mobile.group.addEvent")}
-          </Button>
+    <>
+      <PlateSection>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
+          {canManage ? <Button variant="contained" onClick={handleAddEvent} startIcon={<AddIcon />}>{Locale.label("mobile.group.addEvent")}</Button> : <span />}
+          <ViewToggle
+            label={Locale.label("mobile.details.tabEvents")}
+            value={viewMode}
+            onChange={changeViewMode}
+            options={[
+              { value: "list", label: Locale.label("mobile.group.list"), icon: <ViewListIcon /> },
+              { value: "month", label: Locale.label("mobile.group.calendar"), icon: <CalendarMonthIcon /> }
+            ]}
+          />
+        </Box>
+        {allTags.length > 0 && (
+          <Box sx={{ mt: "14px" }}>
+            <FilterPills
+              label={Locale.label("mobile.group.tags")}
+              value={selectedTag}
+              onChange={setSelectedTag}
+              options={[{ value: "", label: Locale.label("mobile.group.selectAll") }, ...allTags.map((t) => ({ value: t, label: t }))]}
+            />
+          </Box>
         )}
-        <Button
-          variant="outlined"
-          fullWidth
-          onClick={handleSubscribe}
-          startIcon={<Icon>calendar_month</Icon>}
-          sx={{
-            borderColor: tc.primary,
-            color: tc.primary,
-            textTransform: "none",
-            fontWeight: 600,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            py: "10px"
-          }}
-        >
-          {Locale.label("mobile.group.subscribe")}
-        </Button>
-      </Box>
-
-      {allTags.length > 0 && (
-        <Box sx={{ display: "flex", gap: 1, overflowX: "auto", pb: 0.5 }}>
-          {allTags.map((t) => (
-            <Chip
-              key={t}
-              label={t}
-              onClick={() => toggleTag(t)}
-              variant={selectedTags.includes(t) ? "filled" : "outlined"}
-              sx={{
-                bgcolor: selectedTags.includes(t) ? tc.primaryLight : undefined,
-                color: selectedTags.includes(t) ? tc.primary : tc.text,
-                borderColor: tc.primary,
-                fontSize: 10.5,
-                fontWeight: 700,
-                borderRadius: "999px"
-              }}
-              size="small"
-            />
-          ))}
-          {selectedTags.length > 0 && (
-            <Chip
-              label={Locale.label("mobile.group.clear")}
-              onDelete={() => setSelectedTags([])}
-              onClick={() => setSelectedTags([])}
-              sx={{ fontSize: 10.5, fontWeight: 700, borderRadius: "999px" }}
-              size="small"
-            />
-          )}
-        </Box>
-      )}
-
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 1 }}>
-          <IconButton onClick={goPrev} aria-label={Locale.label("mobile.group.previousMonth")} size="small" sx={{ color: tc.primary }}>
-            <Icon>chevron_left</Icon>
-          </IconButton>
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text }}>
-            {formatMonth(currentMonth)}
-          </Typography>
-          <IconButton onClick={goNext} aria-label={Locale.label("mobile.group.nextMonth")} size="small" sx={{ color: tc.primary }}>
-            <Icon>chevron_right</Icon>
-          </IconButton>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 0.5, mb: viewMode === "month" ? 1 : 0 }}>
-          <IconButton
-            onClick={() => changeViewMode("month")}
-            aria-label={Locale.label("mobile.group.monthView")}
-            aria-pressed={viewMode === "month"}
-            size="small"
-            sx={{ color: viewMode === "month" ? tc.primary : tc.textMuted }}
-          >
-            <Icon>calendar_month</Icon>
-          </IconButton>
-          <IconButton
-            onClick={() => changeViewMode("list")}
-            aria-label={Locale.label("mobile.group.listView")}
-            aria-pressed={viewMode === "list"}
-            size="small"
-            sx={{ color: viewMode === "list" ? tc.primary : tc.textMuted }}
-          >
-            <Icon>view_list</Icon>
-          </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: "16px" }}>
+          <Typography component="h2" sx={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, color: tc.text }}>{formatMonth(currentMonth)}</Typography>
+          <Box sx={{ display: "flex", mr: "-8px" }}>
+            <IconButton onClick={() => shiftMonth(-1)} aria-label={Locale.label("mobile.group.previousMonth")} sx={{ color: tc.text }}><ChevronLeftIcon /></IconButton>
+            <IconButton onClick={() => shiftMonth(1)} aria-label={Locale.label("mobile.group.nextMonth")} sx={{ color: tc.text }}><ChevronRightIcon /></IconButton>
+          </Box>
         </Box>
         {viewMode === "month" && (
-          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px" }}>
+          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "4px", mt: "6px", textAlign: "center" }}>
             {weekdayLabels.map((w, i) => (
-              <Box
-                key={`wd-${i}`}
-                data-testid={`weekday-${i}`}
-                sx={{ textAlign: "center", fontSize: 12, fontWeight: 600, color: tc.primary, py: "4px" }}
-              >
+              <Box key={`wd-${i}`} data-testid={`weekday-${i}`} sx={{ height: 24, fontSize: 11.5, fontWeight: 600, letterSpacing: "0.04em", color: tc.textSecondary, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {w}
               </Box>
             ))}
@@ -618,147 +444,75 @@ export const GroupCalendarTab = ({ groupId, canManage, isMember, onAddEvent, onE
               const key = isoDate(d);
               const isSelected = key === selected;
               const hasEvents = !!eventsByDate[key]?.length;
-              const isToday = key === isoDate(new Date());
               return (
                 <Box
                   key={key}
-                  role="button"
-                  tabIndex={0}
+                  component="button"
+                  type="button"
+                  aria-pressed={isSelected}
                   data-testid={`day-${key}`}
                   onClick={() => setSelected(key)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      setSelected(key);
-                    }
-                  }}
                   sx={{
-                    position: "relative",
-                    width: "100%",
-                    maxWidth: 66,
-                    aspectRatio: "1 / 1",
-                    justifySelf: "center",
-                    borderRadius: "50%",
+                    height: 42,
+                    border: 0,
+                    borderRadius: "8px",
+                    font: "inherit",
+                    fontSize: 14,
+                    fontWeight: isSelected ? 650 : 400,
+                    cursor: "pointer",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    cursor: "pointer",
-                    bgcolor: isSelected ? tc.primary : "transparent",
-                    color: isSelected ? tc.onPrimary : isToday ? tc.primary : tc.text,
-                    fontSize: 14,
-                    fontWeight: isToday || isSelected ? 700 : 500,
-                    "&:hover": { bgcolor: isSelected ? tc.primary : tc.iconBackground }
+                    gap: "3px",
+                    bgcolor: isSelected ? tc.selected : "transparent",
+                    color: isSelected ? tc.onSelected : tc.text,
+                    boxShadow: key === todayKey && !isSelected ? `inset 0 0 0 1px ${tc.control}` : "none"
                   }}
                 >
                   {d.getDate()}
-                  {hasEvents && !isSelected && (
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        bottom: 4,
-                        width: 4,
-                        height: 4,
-                        borderRadius: "2px",
-                        bgcolor: tc.primary
-                      }}
-                    />
-                  )}
+                  {hasEvents && <Box component="i" sx={{ width: 5, height: 5, borderRadius: "50%", bgcolor: tc.primary }} />}
                 </Box>
               );
             })}
           </Box>
         )}
-      </Box>
+      </PlateSection>
 
-      {viewMode === "month" ? (
-        <Box>
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-            {new Date(selected + "T00:00:00").toLocaleDateString(DateHelper.locale, {
-              weekday: "long",
-              month: "long",
-              day: "numeric"
-            })}
-          </Typography>
-          {isLoading && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              {[0, 1].map((i) => (
-                <Skeleton key={`es-${i}`} variant="rounded" height={60} sx={{ borderRadius: `${mobileTheme.radius.lg}px` }} />
-              ))}
-            </Box>
-          )}
-          {!isLoading && selectedEvents.length === 0 && (
-            <Box
-              sx={{
-                bgcolor: tc.surface,
-                border: `1px solid ${tc.border}`,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                p: `${mobileTheme.spacing.md}px`,
-                textAlign: "center"
-              }}
-            >
-              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.noEventsToday")}</Typography>
-            </Box>
-          )}
-          {!isLoading && selectedEvents.length > 0 && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-              {selectedEvents.map(renderEventCard)}
-            </Box>
-          )}
-        </Box>
-      ) : (
-        <Box data-testid="group-events-list">
-          {isLoading && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              {[0, 1].map((i) => (
-                <Skeleton key={`ls-${i}`} variant="rounded" height={60} sx={{ borderRadius: `${mobileTheme.radius.lg}px` }} />
-              ))}
-            </Box>
-          )}
-          {!isLoading && listGroups.length === 0 && (
-            <Box
-              sx={{
-                bgcolor: tc.surface,
-                border: `1px solid ${tc.border}`,
-                borderRadius: `${mobileTheme.radius.lg}px`,
-                p: `${mobileTheme.spacing.md}px`,
-                textAlign: "center"
-              }}
-            >
-              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.noUpcomingEventsMonth")}</Typography>
-            </Box>
-          )}
-          {!isLoading && listGroups.length > 0 && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-              {listGroups.map((g) => (
-                <Box key={g.key} data-testid={`list-day-${g.key}`}>
-                  <Typography sx={{ fontSize: 16, fontWeight: 700, color: tc.text, mb: 1 }}>
-                    {new Date(g.key + "T00:00:00").toLocaleDateString(DateHelper.locale, {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric"
-                    })}
-                  </Typography>
-                  <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-                    {g.events.map(renderEventCard)}
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          )}
-        </Box>
-      )}
-      <RsvpRosterDialog
-        target={rosterFor}
-        onClose={() => setRosterFor(null)}
-      />
-    </Box>
+      <PlateSection>
+        {viewMode === "month" ? (
+          <>
+            <Eyebrow component="h3">{formatDay(new Date(selected + "T00:00:00"))}</Eyebrow>
+            {isLoading && loadingRows}
+            {!isLoading && selectedEvents.length === 0 && <QuietEmpty sx={{ mt: "8px" }}>{Locale.label("mobile.group.noEventsToday")}</QuietEmpty>}
+            {!isLoading && selectedEvents.length > 0 && <Box>{selectedEvents.map(renderEvent)}</Box>}
+          </>
+        ) : (
+          <Box data-testid="group-events-list">
+            {isLoading && loadingRows}
+            {!isLoading && listGroups.length === 0 && <QuietEmpty>{Locale.label("mobile.group.noUpcomingEventsMonth")}</QuietEmpty>}
+            {!isLoading && listGroups.map((g, gi) => (
+              <Box key={g.key} data-testid={`list-day-${g.key}`} sx={{ mt: gi ? "14px" : 0 }}>
+                <Eyebrow component="h3">{formatDay(new Date(g.key + "T00:00:00"))}</Eyebrow>
+                <Box>{g.events.map(renderEvent)}</Box>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </PlateSection>
+
+      <PlateSection>
+        <TextLink onClick={handleSubscribe}>{Locale.label("mobile.group.subscribe")}</TextLink>
+      </PlateSection>
+
+      <RsvpRosterSheet target={rosterFor} onClose={() => setRosterFor(null)} />
+    </>
   );
 };
 
 interface RosterTarget { eventId: string; occurrenceStart: string; title: string }
 
-const RsvpRosterDialog = ({ target, onClose }: { target: RosterTarget | null; onClose: () => void }) => {
-  const tc = mobileTheme.colors;
+const RsvpRosterSheet = ({ target, onClose }: { target: RosterTarget | null; onClose: () => void }) => {
   const { data: roster = [], isLoading } = useQuery<{ personId: string; response: RsvpResponse }[]>({
     queryKey: ["rsvp-roster", target?.eventId, target?.occurrenceStart],
     queryFn: async () => {
@@ -782,52 +536,31 @@ const RsvpRosterDialog = ({ target, onClose }: { target: RosterTarget | null; on
       .catch(() => { /* names fall back to Unknown */ });
   }, [roster]);
 
-  const groups: { key: RsvpResponse; label: string; color: string }[] = [
-    { key: "yes", label: Locale.label("mobile.group.rsvpGoing"), color: tc.success },
-    { key: "maybe", label: Locale.label("mobile.group.rsvpMaybe"), color: tc.warning },
-    { key: "no", label: Locale.label("mobile.group.rsvpNotGoing"), color: tc.error }
-  ];
-
   return (
-    <Dialog open={!!target} onClose={onClose} fullWidth maxWidth="xs" PaperProps={{ sx: { borderRadius: `${mobileTheme.radius.xl}px` } }}>
-      <DialogTitle sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-        {Locale.label("mobile.group.rsvpResponses")}
-      </DialogTitle>
-      <DialogContent>
-        {isLoading && <Skeleton variant="rounded" height={80} />}
-        {!isLoading && roster.length === 0 && (
-          <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.group.rsvpNoResponses")}</Typography>
-        )}
-        {!isLoading && groups.map((g) => {
-          const rows = roster.filter((r) => r.response === g.key);
-          if (rows.length === 0) return null;
-          return (
-            <Box key={g.key} sx={{ mb: 2 }}>
-              <Typography sx={{ fontSize: 13, fontWeight: 700, color: g.color, mb: 0.5 }}>
-                {g.label} · {rows.length}
-              </Typography>
-              {rows.map((r) => {
-                const p = people[r.personId];
-                const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
-                const name = p?.name?.display || Locale.label("mobile.components.unknown");
-                return (
-                  <Box key={r.personId} sx={{ display: "flex", alignItems: "center", gap: 1, py: "4px" }}>
-                    {photo ? (
-                      <Box component="img" src={photo} alt={name} sx={{ width: 32, height: 32, borderRadius: "16px", objectFit: "cover" }} />
-                    ) : (
-                      <Box sx={{ width: 32, height: 32, borderRadius: "16px", bgcolor: tc.primaryLight, color: tc.primary, fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        {(name[0] || "?").toUpperCase()}
-                      </Box>
-                    )}
-                    <Typography sx={{ fontSize: 14, color: tc.text }}>{name}</Typography>
-                  </Box>
-                );
-              })}
-            </Box>
-          );
-        })}
-      </DialogContent>
-    </Dialog>
+    <Sheet open={!!target} onClose={onClose} title={Locale.label("mobile.group.rsvpResponses")} maxWidth="xs">
+      {isLoading && <Skeleton variant="rounded" height={80} />}
+      {!isLoading && roster.length === 0 && <QuietEmpty>{Locale.label("mobile.group.rsvpNoResponses")}</QuietEmpty>}
+      {!isLoading && rsvpOptions().map((g) => {
+        const rows = roster.filter((r) => r.response === g.value);
+        if (rows.length === 0) return null;
+        return (
+          <Box key={g.value} sx={{ mb: "16px" }}>
+            <StatusBadge tone={g.tone}>{g.label} · {rows.length}</StatusBadge>
+            {rows.map((r) => {
+              const p = people[r.personId];
+              const photo = p ? (() => { try { return PersonHelper.getPhotoUrl(p); } catch { return ""; } })() : "";
+              const name = p?.name?.display || Locale.label("mobile.components.unknown");
+              return (
+                <Box key={r.personId} sx={{ display: "flex", alignItems: "center", gap: "10px", py: "6px" }}>
+                  <PersonAvatar name={name} src={photo || undefined} size={32} />
+                  <Typography sx={{ fontSize: 15, color: tc.text }}>{name}</Typography>
+                </Box>
+              );
+            })}
+          </Box>
+        );
+      })}
+    </Sheet>
   );
 };
 

@@ -4,7 +4,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { GlobalStyles } from "@mui/material";
 import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/styles";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
-import { accent as deriveAccent, isValidHex as isValidHexColor, shade, tint } from "@/helpers/colorTints";
+import { isValidHex as isValidHexColor, mix } from "@/helpers/colorTints";
 
 export type MobileThemeMode = "light" | "dark";
 
@@ -24,49 +24,7 @@ const MobileThemeContext = createContext<MobileThemeContextValue>({
 
 export const useMobileThemeMode = () => useContext(MobileThemeContext);
 
-const lightDefaults = {
-  "--mb-primary": "#0D47A1",
-  "--mb-primary-light": "#E3F2FD",
-  "--mb-secondary": "#568BDA",
-  "--mb-background": "#F0F4F9",
-  "--mb-surface": "#FFFFFF",
-  "--mb-surface-variant": "#F0F4F9",
-  "--mb-text": "#101E38",
-  "--mb-text-secondary": "#5F6C82",
-  "--mb-text-muted": "#5F6C82",
-  "--mb-text-hint": "#93A0B4",
-  "--mb-on-primary": "#FFFFFF",
-  "--mb-success": "#2E9E52",
-  "--mb-warning": "#B97E14",
-  "--mb-error": "#B0120C",
-  "--mb-border": "#E2E9F4",
-  "--mb-border-light": "#EAEFF7",
-  "--mb-divider": "#E2E9F4",
-  "--mb-icon-background": "#E6EDF7",
-  "--mb-disabled": "#A9B4C6"
-};
-
-const darkDefaults = {
-  "--mb-primary": "#6FA0E8",
-  "--mb-primary-light": "#12294D",
-  "--mb-secondary": "#6BA4E8",
-  "--mb-background": "#070E1B",
-  "--mb-surface": "#0E1930",
-  "--mb-surface-variant": "#15223E",
-  "--mb-text": "#E7ECF5",
-  "--mb-text-secondary": "#A2AFC6",
-  "--mb-text-muted": "#8D9BB4",
-  "--mb-text-hint": "#6E7C96",
-  "--mb-on-primary": "#FFFFFF",
-  "--mb-success": "#6FCB8B",
-  "--mb-warning": "#E4A94E",
-  "--mb-error": "#E57373",
-  "--mb-border": "#1D2C4C",
-  "--mb-border-light": "#16233F",
-  "--mb-divider": "#1D2C4C",
-  "--mb-icon-background": "#15223E",
-  "--mb-disabled": "#4C5A74"
-};
+const DEFAULT_PRIMARY = "#1765C1";
 
 const darkInputStyles = {
   "html[data-mobile-theme=\"dark\"] .MuiInputBase-input": { color: "var(--mb-text)" },
@@ -98,81 +56,89 @@ const getChurchColors = (mode: MobileThemeMode, config?: ConfigurationInterface)
   return appTheme;
 };
 
+const lum = (hex: string) => {
+  const h = hex.replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
+  const [r, g, b] = [0, 2, 4].map((i) => {
+    const v = parseInt(full.slice(i, i + 2), 16) / 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+
+// Soft Blue (B1Admin default theme) with the church primary standing in for B1 blue: every surface,
+// hairline, chip and the desktop header are mixed from that one color; status colors stay fixed.
 const buildThemeVars = (mode: MobileThemeMode, config?: ConfigurationInterface) => {
-  const defaults = mode === "dark" ? darkDefaults : lightDefaults;
+  const dark = mode === "dark";
   const churchColors = getChurchColors(mode, config);
-  // In dark mode, derive primary from light theme to avoid generic fallback.
-  const lightChurchColors = mode === "dark" ? getChurchColors("light", config) : null;
-  const appearance = config?.appearance as {
-    primaryColor?: string;
-    secondaryColor?: string;
-    primaryContrast?: string;
-  } | undefined;
+  const lightChurchColors = dark ? getChurchColors("light", config) : null;
+  const appearance = config?.appearance as { primaryColor?: string; primaryContrast?: string } | undefined;
+  const brand = pickColor(lightChurchColors?.primary, dark ? undefined : churchColors?.primary, appearance?.primaryColor, DEFAULT_PRIMARY) || DEFAULT_PRIMARY;
+  const W = "#FFFFFF", K = "#000000";
 
-  // Resolve primary with dark-mode lightening fallback.
-  let primary: string;
-  if (isValidHexColor(churchColors?.primary)) {
-    primary = churchColors!.primary as string;
-  } else if (mode === "dark") {
-    const lightPrimary = pickColor(lightChurchColors?.primary, appearance?.primaryColor);
-    primary = isValidHexColor(lightPrimary) ? tint(lightPrimary, 0.3) : defaults["--mb-primary"];
-  } else {
-    primary = pickColor(churchColors?.primary, appearance?.primaryColor, defaults["--mb-primary"]) || defaults["--mb-primary"];
-  }
-
-  const secondary = pickColor(churchColors?.secondary, appearance?.secondaryColor, defaults["--mb-secondary"]) || defaults["--mb-secondary"];
-
-  // Brand hue for derived surfaces/washes — always the light-mode primary, not the lightened dark variant.
-  const brandBase = pickColor(lightChurchColors?.primary, mode === "light" ? churchColors?.primary : undefined, appearance?.primaryColor, "#0D47A1") || "#0D47A1";
-
-  const derivedBackground = mode === "dark" ? shade(brandBase, 0.90) : tint(brandBase, 0.94);
-  const derivedSurface = mode === "dark" ? shade(brandBase, 0.80) : "#FFFFFF";
-  const derivedText = mode === "dark" ? defaults["--mb-text"] : shade(brandBase, 0.72);
-
-  const background = pickColor(churchColors?.background, derivedBackground) || derivedBackground;
-  const surface = pickColor(churchColors?.surface, derivedSurface) || derivedSurface;
-  const text = pickColor(churchColors?.textColor, derivedText) || derivedText;
-  const onPrimary = pickColor(churchColors?.primaryContrast, appearance?.primaryContrast, defaults["--mb-on-primary"]) || defaults["--mb-on-primary"];
-
-  const primaryLight = isValidHexColor(primary)
-    ? (mode === "dark" ? shade(primary, 0.75) : tint(primary, 0.87))
-    : defaults["--mb-primary-light"];
-  const accentColor = isValidHexColor(secondary) ? secondary : (isValidHexColor(primary) ? deriveAccent(primary) : secondary);
-
-  // Color-wash stops for photo-less media cards: brand hue drifting warm across the gradient.
-  const wash1 = shade(brandBase, 0.45);
-  const wash2 = shade(deriveAccent(brandBase), 0.40);
-  const wash3 = shade(deriveAccent(deriveAccent(brandBase)), 0.30);
+  const primary = pickColor(churchColors?.primary, dark ? mix(brand, W, 0.4) : brand) as string;
+  const onPrimary = pickColor(churchColors?.primaryContrast, dark ? undefined : appearance?.primaryContrast) || (lum(primary) > 0.42 ? "#121820" : "#FFFFFF");
+  const background = pickColor(churchColors?.background, dark ? mix(brand, "#0b0f15", 0.9) : mix(brand, W, 0.955)) as string;
+  const surface = pickColor(churchColors?.surface, dark ? mix(brand, "#141a22", 0.88) : W) as string;
+  const text = pickColor(churchColors?.textColor, dark ? "#E6EBF1" : mix(brand, "#141b24", 0.9)) as string;
+  const muted = dark ? "#A7B1BD" : mix(brand, "#566170", 0.88);
+  const border = dark ? mix(brand, "#2a323d", 0.85) : mix(brand, "#dfe4ea", 0.9);
+  const control = dark ? mix(brand, "#6d7785", 0.85) : mix(brand, "#7b8592", 0.88);
+  const chip = dark ? mix(brand, "#141a22", 0.65) : mix(brand, W, 0.87);
+  const deep = mix(brand, K, dark ? 0.45 : 0.4);
+  const status = dark
+    ? { ok: "#80D0A0", okBg: "#16301F", warn: "#F2C063", warnBg: "#3A2C0E", bad: "#F2939B", badBg: "#3D1A1E", neu: "#B4C2D2", neuBg: "#243142" }
+    : { ok: "#236A43", okBg: "#E8F4EC", warn: "#805000", warnBg: "#FFF3D6", bad: "#AC2834", badBg: "#FDEDEF", neu: "#465A71", neuBg: "#EDF1F6" };
 
   return {
-    ...defaults,
     "--mb-primary": primary,
-    "--mb-primary-light": primaryLight,
-    "--mb-secondary": secondary,
-    "--mb-accent": accentColor,
+    "--mb-primary-light": chip,
+    "--mb-primary-deep": deep,
+    "--mb-secondary": primary,
+    "--mb-accent": primary,
     "--mb-background": background,
     "--mb-surface": surface,
-    "--mb-surface-variant": mode === "dark" ? shade(brandBase, 0.72) : tint(brandBase, 0.90),
+    "--mb-surface-variant": background,
     "--mb-text": text,
+    "--mb-text-secondary": muted,
+    "--mb-text-muted": muted,
+    "--mb-text-hint": control,
     "--mb-on-primary": onPrimary,
-    "--mb-border": mode === "dark" ? shade(brandBase, 0.62) : tint(brandBase, 0.88),
-    "--mb-border-light": mode === "dark" ? shade(brandBase, 0.70) : tint(brandBase, 0.91),
-    "--mb-divider": mode === "dark" ? shade(brandBase, 0.62) : tint(brandBase, 0.88),
-    "--mb-icon-background": mode === "dark" ? shade(brandBase, 0.72) : tint(brandBase, 0.90),
-    "--mb-wash-1": wash1,
-    "--mb-wash-2": wash2,
-    "--mb-wash-3": wash3,
-    "--mb-verse-1": shade(brandBase, 0.10),
-    "--mb-verse-2": shade(brandBase, 0.55),
-    "--mb-font-sans": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-    // Surface tokens — exposed so downstream components can drop hardcoded values.
+    "--mb-success": status.ok,
+    "--mb-success-bg": status.okBg,
+    "--mb-warning": status.warn,
+    "--mb-warning-bg": status.warnBg,
+    "--mb-error": status.bad,
+    "--mb-error-bg": status.badBg,
+    "--mb-neutral": status.neu,
+    "--mb-neutral-bg": status.neuBg,
+    "--mb-border": border,
+    "--mb-border-light": border,
+    "--mb-divider": border,
+    "--mb-control": control,
+    "--mb-link": dark ? mix(brand, W, 0.5) : mix(brand, K, 0.08),
+    "--mb-eyebrow": dark ? mix(brand, W, 0.5) : mix(brand, K, 0.05),
+    "--mb-selected": dark ? mix(brand, "#141a22", 0.6) : mix(brand, W, 0.85),
+    "--mb-on-selected": dark ? mix(brand, W, 0.8) : mix(brand, K, 0.45),
+    "--mb-chip": chip,
+    "--mb-on-chip": dark ? mix(brand, W, 0.78) : mix(brand, K, 0.45),
+    "--mb-icon-background": chip,
+    "--mb-header": mix(brand, K, dark ? 0.72 : 0.58),
+    "--mb-disabled": control,
+    // Legacy art tokens resolve flat so any leftover wash/verse background reads as a plain deep panel.
+    "--mb-wash-1": deep,
+    "--mb-wash-2": deep,
+    "--mb-wash-3": deep,
+    "--mb-verse-1": deep,
+    "--mb-verse-2": deep,
+    "--mb-font-sans": "inherit",
     "--mb-radius-sm": "6px",
     "--mb-radius-md": "10px",
-    "--mb-radius-lg": "16px",
-    "--mb-radius-xl": "22px",
-    "--mb-shadow-sm": "0 1px 2px rgba(16,30,56,0.04)",
-    "--mb-shadow-md": "0 4px 14px rgba(16,30,56,0.08)",
-    "--mb-shadow-lg": "0 10px 30px rgba(16,30,56,0.14)"
+    "--mb-radius-lg": "10px",
+    "--mb-radius-xl": "16px",
+    "--mb-shadow-sm": "none",
+    "--mb-shadow-md": "none",
+    "--mb-shadow-lg": "0 12px 40px rgba(8,12,20,0.22)"
   };
 };
 
@@ -229,9 +195,21 @@ export const MobileThemeProvider: React.FC<{ children: React.ReactNode; config?:
       background: { default: vars["--mb-background"], paper: vars["--mb-surface"] },
       text: { primary: vars["--mb-text"], secondary: vars["--mb-text-secondary"] }
     },
-    shape: { borderRadius: 14 },
-    typography: { fontFamily: vars["--mb-font-sans"] },
-    components: { MuiButton: { styleOverrides: { root: { textTransform: "none", borderRadius: 999, fontWeight: 600, boxShadow: "none" } } } }
+    shape: { borderRadius: 6 },
+    typography: { fontFamily: "inherit", button: { fontWeight: 600, textTransform: "none" } },
+    components: {
+      MuiButton: {
+        defaultProps: { disableElevation: true },
+        styleOverrides: {
+          root: { borderRadius: 6, minHeight: 40, paddingLeft: 16, paddingRight: 16, boxShadow: "none" },
+          outlined: { borderColor: vars["--mb-control"], color: vars["--mb-text"], "&:hover": { borderColor: vars["--mb-control"], backgroundColor: vars["--mb-background"] } },
+          sizeLarge: { minHeight: 48, fontSize: 15 }
+        }
+      },
+      MuiPaper: { styleOverrides: { root: { backgroundImage: "none" } } },
+      MuiDialog: { styleOverrides: { paper: { borderRadius: 10 } } },
+      MuiCard: { defaultProps: { elevation: 0 }, styleOverrides: { root: { border: `1px solid ${vars["--mb-border"]}`, borderRadius: 10 } } }
+    }
   }), [mode, vars]);
 
   const mobileThemeGlobalStyles = (

@@ -1,28 +1,21 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  AppBar,
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Icon,
-  IconButton,
-  Tab,
-  Tabs,
-  Toolbar,
-  Typography,
-  useMediaQuery
-} from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useTheme } from "@mui/material/styles";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import StickyNote2OutlinedIcon from "@mui/icons-material/StickyNote2Outlined";
 import type { InstructionItem, Instructions } from "@churchapps/content-providers";
 import { Locale } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { PlanHelper } from "@/helpers";
 import { ContentRenderer } from "./ContentRenderer";
+import { mobileTheme } from "../mobileTheme";
+import { PageHead, Plate, PlateSection, Sheet, TextLink } from "../kit";
+
+const tc = mobileTheme.colors;
 
 interface Props {
   instructions: Instructions;
@@ -57,11 +50,15 @@ const findDownloadable = (item: InstructionItem): { url?: string; mediaType?: "v
 
 const sectionDomId = (item: InstructionItem, fallbackKey: string) => `teach-section-${item.id || fallbackKey}`;
 
+const sectionSeconds = (item: InstructionItem): number =>
+  item.seconds || (item.children || []).reduce((sum, c) => sum + (c.seconds || 0), 0);
+
+const markdownSx = { "& p": { m: 0, mb: 1, "&:last-child": { mb: 0 } }, "& ul, & ol": { pl: 2.5, my: 0.5 } };
+
 export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, open, onClose }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [media, setMedia] = useState<MediaState | null>(null);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [showSections, setShowSections] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const sectionList = useMemo(() => {
@@ -83,23 +80,19 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
 
   useEffect(() => {
     if (!open) return;
-    if (sectionList.length > 0) {
-      setActiveSection(sectionList[0].domId);
-    } else {
-      setActiveSection("");
-    }
+    setActiveSection(sectionList.length > 0 ? sectionList[0].domId : "");
   }, [open, sectionList]);
 
   const offsetInContainer = (container: HTMLElement, el: HTMLElement) =>
     el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
 
-  const handleTabChange = (_: any, value: string) => {
-    setActiveSection(value);
+  const goToSection = (domId: string) => {
+    setActiveSection(domId);
+    setShowSections(false);
     const container = scrollContainerRef.current;
-    const target = document.getElementById(value);
+    const target = document.getElementById(domId);
     if (container && target) {
-      const offset = offsetInContainer(container, target) - 8;
-      container.scrollTo({ top: offset, behavior: "smooth" });
+      container.scrollTo({ top: offsetInContainer(container, target) - 8, behavior: "smooth" });
     }
   };
 
@@ -120,12 +113,7 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
   const openMedia = (item: InstructionItem) => {
     const { url, mediaType } = findDownloadable(item);
     if (!url && !item.content) return;
-    setMedia({
-      url,
-      mediaType,
-      label: item.label,
-      description: item.content
-    });
+    setMedia({ url, mediaType, label: item.label, description: item.content });
   };
 
   const renderPlay = (item: InstructionItem, key: string) => {
@@ -139,61 +127,33 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
     return (
       <Box
         key={key}
+        component={clickable ? "button" : "div"}
+        type={clickable ? "button" : undefined}
         onClick={clickable ? () => openMedia(item) : undefined}
         sx={{
           display: "flex",
           alignItems: "center",
+          width: "100%",
           height: 72,
-          border: "1px solid #ccc",
+          p: 0,
+          my: "16px",
+          border: `1px solid ${tc.border}`,
           borderRadius: "10px",
-          backgroundColor: "#fff",
-          mb: 2.5,
-          mt: 2.5,
+          bgcolor: tc.surface,
           overflow: "hidden",
+          font: "inherit",
+          textAlign: "left",
           cursor: clickable ? "pointer" : "default",
-          transition: "box-shadow 0.15s",
-          "&:hover": clickable ? { boxShadow: "0 2px 6px rgba(0,0,0,0.12)" } : undefined
+          "&:focus-visible": { outline: `2px solid ${tc.primary}`, outlineOffset: 2 }
         }}
       >
-        {thumb ? (
-          <Box
-            component="img"
-            src={thumb}
-            alt={title}
-            sx={{
-              width: 128,
-              height: 72,
-              objectFit: "cover",
-              borderTopLeftRadius: "10px",
-              borderBottomLeftRadius: "10px",
-              flexShrink: 0
-            }}
-          />
-        ) : (
-          <Box
-            sx={{
-              width: 128,
-              height: 72,
-              borderTopLeftRadius: "10px",
-              borderBottomLeftRadius: "10px",
-              backgroundColor: "#eff8fd",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0
-            }}
-          >
-            <Icon sx={{ color: "#1d6fb8", fontSize: 32 }}>play_circle</Icon>
-          </Box>
-        )}
-        <Box sx={{ flex: 1, px: 2.5, fontWeight: 700, fontSize: 18, color: "#1d6fb8" }}>
-          {title}
+        <Box sx={{ width: 128, height: 72, flex: "none", bgcolor: tc.primaryDeep, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {thumb
+            ? <Box component="img" src={thumb} alt="" sx={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+            : <PlayCircleOutlineIcon sx={{ color: tc.onPrimary, fontSize: 32 }} />}
         </Box>
-        {seconds > 0 && (
-          <Box sx={{ pr: 2.5, fontSize: 14, color: "#666", whiteSpace: "nowrap" }}>
-            {PlanHelper.formatTime(seconds)}
-          </Box>
-        )}
+        <Box sx={{ flex: 1, minWidth: 0, px: "16px", fontWeight: 600, fontSize: 16, color: tc.link }}>{title}</Box>
+        {seconds > 0 && <Box sx={{ pr: "16px", fontSize: 13.5, color: tc.textSecondary, whiteSpace: "nowrap" }}>{PlanHelper.formatTime(seconds)}</Box>}
       </Box>
     );
   };
@@ -208,40 +168,16 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
 
     if (actionType === "note") {
       return (
-        <Box
-          key={key}
-          sx={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 1.5,
-            p: 2,
-            mb: 2,
-            backgroundColor: "#fffbe6",
-            borderLeft: "4px solid #f5c518",
-            borderRadius: "6px",
-            "& p": { m: 0, mb: 1, "&:last-child": { mb: 0 } },
-            "& ul, & ol": { pl: 2.5, my: 0.5 }
-          }}
-        >
-          <Icon sx={{ color: "#b88600", fontSize: 24, mt: 0.25 }}>sticky_note_2</Icon>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <MarkdownPreviewLight value={text} />
-          </Box>
+        <Box key={key} sx={{ display: "flex", alignItems: "flex-start", gap: "12px", p: "14px 16px", mb: 2, bgcolor: tc.warningBg, borderRadius: "6px", ...markdownSx }}>
+          <StickyNote2OutlinedIcon sx={{ color: tc.warning, fontSize: 22, mt: "2px" }} />
+          <Box sx={{ flex: 1, minWidth: 0 }}><MarkdownPreviewLight value={text} /></Box>
         </Box>
       );
     }
 
     if (actionType === "do") {
       return (
-        <Box
-          key={key}
-          sx={{
-            mb: 2,
-            "& p": { fontWeight: 700, fontSize: 16, m: 0, mb: 1, "&:last-child": { mb: 0 } },
-            "& ul, & ol": { pl: 2.5, my: 0.5 },
-            "& li": { fontSize: 16, fontWeight: 700, mb: 0.5 }
-          }}
-        >
+        <Box key={key} sx={{ mb: 2, ...markdownSx, "& p, & li": { fontWeight: 600, fontSize: 16 } }}>
           <MarkdownPreviewLight value={text} />
         </Box>
       );
@@ -254,18 +190,8 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
           sx={{
             mb: 2,
             "&::after": { content: '""', display: "block", clear: "both" },
-            "& p": {
-              backgroundColor: "#ebf7ff",
-              borderRadius: "10px",
-              padding: "8px 16px",
-              maxWidth: { xs: "85%", sm: "70%", md: "55%" },
-              clear: "both",
-              mb: 1
-            },
-            "& p:nth-of-type(even)": {
-              backgroundColor: "#edfeff",
-              float: "right"
-            }
+            "& p": { bgcolor: tc.chip, color: tc.text, borderRadius: "10px", padding: "8px 16px", maxWidth: { xs: "85%", sm: "70%" }, clear: "both", mb: 1 },
+            "& p:nth-of-type(even)": { bgcolor: tc.neutralBg, float: "right" }
           }}
         >
           <MarkdownPreviewLight value={text} />
@@ -274,58 +200,12 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
     }
 
     if (actionType === "add-on" || actionType === "addon") {
-      const { url } = findDownloadable(item);
-      if (url) return renderPlay(item, key);
-      return (
-        <Box key={key} sx={{ mb: 2 }}>
-          <Typography sx={{ fontSize: 15 }}>{text}</Typography>
-        </Box>
-      );
+      if (findDownloadable(item).url) return renderPlay(item, key);
+      return <Typography key={key} sx={{ fontSize: 15, mb: 2 }}>{text}</Typography>;
     }
 
     if (!text) return null;
-    return (
-      <Box key={key} sx={{ mb: 2 }}>
-        <MarkdownPreviewLight value={text} />
-      </Box>
-    );
-  };
-
-  const renderSection = (item: InstructionItem, key: string, domId: string) => (
-    <Box key={key} id={domId} sx={{ scrollMarginTop: 8, mb: 3 }}>
-      {item.children?.map((child, idx) => renderAction(child, `${key}-${child.id || idx}`))}
-    </Box>
-  );
-
-  const renderTopLevel = (item: InstructionItem, key: string, sectionMap: Map<InstructionItem, string>): React.ReactNode => {
-    const itemType = item.itemType || "";
-
-    if (SECTION_TYPES.has(itemType)) {
-      const domId = sectionMap.get(item) || sectionDomId(item, key);
-      return renderSection(item, key, domId);
-    }
-
-    if (itemType === "header") {
-      return (
-        <Box key={key}>
-          {item.children?.map((child, idx) => renderTopLevel(child, `${key}-${child.id || idx}`, sectionMap))}
-        </Box>
-      );
-    }
-
-    if (ACTION_TYPES.has(itemType) || FILE_TYPES.has(itemType)) {
-      return renderAction(item, key);
-    }
-
-    if (item.children?.length) {
-      return (
-        <Box key={key}>
-          {item.children.map((child, idx) => renderTopLevel(child, `${key}-${child.id || idx}`, sectionMap))}
-        </Box>
-      );
-    }
-
-    return renderAction(item, key);
+    return <Box key={key} sx={{ mb: 2, ...markdownSx }}><MarkdownPreviewLight value={text} /></Box>;
   };
 
   const sectionDomMap = useMemo(() => {
@@ -334,113 +214,113 @@ export const ExpandedLessonView: React.FC<Props> = ({ instructions, lessonName, 
     return map;
   }, [sectionList]);
 
-  return (
-    <Dialog
-      fullScreen
-      open={open}
-      onClose={onClose}
-      sx={{
-        "& .MuiDialog-paper": {
-          backgroundColor: "#ffffff",
-          color: "#212121",
-          margin: 0,
-          maxWidth: "100%",
-          width: "100%",
-          colorScheme: "light"
-        }
-      }}
-    >
-      <AppBar
-        position="sticky"
-        elevation={0}
-        sx={{
-          backgroundColor: "#28235d",
-          zIndex: (t) => t.zIndex.drawer + 1
-        }}
-      >
-        <Toolbar variant="dense" sx={{ minHeight: isMobile ? 48 : 56, px: { xs: 1, sm: 2 } }}>
-          <Typography sx={{ flex: 1, color: "#fff", fontWeight: 600, fontSize: isMobile ? 14 : 16 }} noWrap>
-            {lessonName || ""}
-          </Typography>
-          <IconButton edge="end" onClick={onClose} aria-label={Locale.label("mobile.plans.close")} sx={{ color: "#fff" }}>
-            <CloseIcon />
-          </IconButton>
-        </Toolbar>
-        {sectionList.length > 0 && (
-          <Tabs
-            value={activeSection || sectionList[0].domId}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            allowScrollButtonsMobile
-            sx={{
-              minHeight: isMobile ? 36 : 42,
-              backgroundColor: "#28235d",
-              "& .MuiTab-root": {
-                minHeight: isMobile ? 36 : 42,
-                textTransform: "none",
-                fontSize: isMobile ? "0.8125rem" : "0.875rem",
-                color: "#fff",
-                opacity: 0.85,
-                px: isMobile ? 1.5 : 2,
-                "&.Mui-selected": { backgroundColor: "#fff", color: "#1c75bc", opacity: 1, fontWeight: 700 }
-              },
-              "& .MuiTabs-indicator": { display: "none" },
-              "& .MuiTabs-scrollButtons": { color: "#fff", "&.Mui-disabled": { opacity: 0.3 } }
-            }}
-          >
-            {sectionList.map(({ item, domId }, idx) => (
-              <Tab key={domId} value={domId} label={item.label || `Section ${idx + 1}`} />
-            ))}
-          </Tabs>
-        )}
-      </AppBar>
+  // Flattened so every section is a direct child of the plate (hairlines between them).
+  const renderTopLevel = (item: InstructionItem, key: string): React.ReactNode[] => {
+    const itemType = item.itemType || "";
+    if (SECTION_TYPES.has(itemType)) {
+      const domId = sectionDomMap.get(item) || sectionDomId(item, key);
+      return [
+        <PlateSection key={key} id={domId} title={item.label} sx={{ scrollMarginTop: 8 }}>
+          {item.children?.map((child, idx) => renderAction(child, `${key}-${child.id || idx}`))}
+        </PlateSection>
+      ];
+    }
+    if (itemType === "header" || (!ACTION_TYPES.has(itemType) && !FILE_TYPES.has(itemType) && item.children?.length)) {
+      return (item.children || []).flatMap((child, idx) => renderTopLevel(child, `${key}-${child.id || idx}`));
+    }
+    const node = renderAction(item, key);
+    return node ? [<PlateSection key={key}>{node}</PlateSection>] : [];
+  };
 
-      <Box
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-        sx={{
-          flex: 1,
-          overflowY: "auto",
-          backgroundColor: "#ffffff",
-          color: "#212121",
-          px: { xs: 1, sm: 2 },
-          py: { xs: 1.5, sm: 2 },
-          "& .MuiTypography-root": { color: "inherit" },
-          "& a": { color: "#1d6fb8" }
-        }}
-      >
-        {!!instructions.downloads?.length && (
-          <Box data-testid="teach-downloads" sx={{ mb: 3, p: 2, border: "1px solid #ccc", borderRadius: "10px", backgroundColor: "#fff" }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-              <Icon sx={{ color: "#1d6fb8" }}>download</Icon>
-              <Typography sx={{ fontSize: 16, fontWeight: 700 }}>{Locale.label("mobile.details.downloads")}</Typography>
-            </Box>
-            {instructions.downloads.map((d, idx) => (
-              <Box key={d.id || `${d.url}-${idx}`} sx={{ mb: 0.5 }}>
-                <a href={d.url} target="_blank" rel="noopener noreferrer" style={{ fontWeight: 600, textDecoration: "none" }}>{d.title}</a>
-              </Box>
-            ))}
-          </Box>
+  const activeIndex = Math.max(0, sectionList.findIndex((s) => s.domId === activeSection));
+  const prev = sectionList[activeIndex - 1];
+  const next = sectionList[activeIndex + 1];
+  const current = sectionList[activeIndex];
+
+  return (
+    <Dialog fullScreen open={open} onClose={onClose} slotProps={{ paper: { sx: { bgcolor: tc.background, backgroundImage: "none" } } }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: "8px", px: "8px", minHeight: 52, bgcolor: tc.surface, borderBottom: `1px solid ${tc.border}`, flex: "none" }}>
+        <IconButton onClick={onClose} aria-label={Locale.label("mobile.plans.close")} sx={{ color: tc.text }}>
+          <CloseIcon />
+        </IconButton>
+        <Box sx={{ flex: 1 }} />
+        {sectionList.length > 0 && (
+          <TextLink onClick={() => setShowSections(true)} sx={{ pr: "10px" }}>
+            <FormatListBulletedIcon sx={{ fontSize: 18 }} />{Locale.label("mobile.serving.sections")}
+          </TextLink>
         )}
-        {instructions.items.map((item, idx) => renderTopLevel(item, `top-${item.id || idx}`, sectionDomMap))}
       </Box>
+
+      <Box ref={scrollContainerRef} onScroll={handleScroll} sx={{ flex: 1, overflowY: "auto", py: { xs: "16px", md: "28px" }, px: { md: "32px" } }}>
+        <Box sx={{ maxWidth: 820, mx: "auto" }}>
+          <PageHead
+            title={lessonName || ""}
+            lede={current ? Locale.label("mobile.serving.sectionOf").replace("{}", String(activeIndex + 1)).replace("{}", String(sectionList.length)).replace("{}", current.item.label || "") : undefined}
+          >
+            {prev && <Button variant="outlined" size="small" startIcon={<ChevronLeftIcon />} onClick={() => goToSection(prev.domId)}>{prev.item.label}</Button>}
+            {next && <Button variant="outlined" size="small" endIcon={<ChevronRightIcon />} onClick={() => goToSection(next.domId)}>{next.item.label}</Button>}
+          </PageHead>
+          <Plate>
+            {!!instructions.downloads?.length && (
+              <PlateSection title={Locale.label("mobile.details.downloads")}>
+                <Box data-testid="teach-downloads" sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {instructions.downloads.map((d, idx) => (
+                    <TextLink key={d.id || `${d.url}-${idx}`} href={d.url} sx={{ whiteSpace: "normal" }}>{d.title}</TextLink>
+                  ))}
+                </Box>
+              </PlateSection>
+            )}
+            {instructions.items.flatMap((item, idx) => renderTopLevel(item, `top-${item.id || idx}`))}
+          </Plate>
+        </Box>
+      </Box>
+
+      <Sheet open={showSections} onClose={() => setShowSections(false)} title={Locale.label("mobile.serving.sections")} maxWidth="xs">
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "8px", pb: "8px" }}>
+          {sectionList.map(({ item, domId }, idx) => {
+            const on = domId === activeSection;
+            const secs = sectionSeconds(item);
+            return (
+              <Box
+                key={domId}
+                component="button"
+                type="button"
+                aria-current={on ? "true" : undefined}
+                onClick={() => goToSection(domId)}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "12px",
+                  height: 44,
+                  px: "16px",
+                  borderRadius: 999,
+                  border: `1px solid ${on ? "transparent" : tc.control}`,
+                  bgcolor: on ? tc.selected : "transparent",
+                  color: on ? tc.onSelected : tc.text,
+                  fontSize: 14.5,
+                  fontWeight: on ? 600 : 500,
+                  fontFamily: "inherit",
+                  cursor: "pointer",
+                  textAlign: "left"
+                }}
+              >
+                <span>{`${idx + 1} · ${item.label || ""}`}</span>
+                {secs > 0 && <Box component="span" sx={{ fontSize: 13, color: on ? "inherit" : tc.textSecondary }}>{PlanHelper.formatTime(secs)}</Box>}
+              </Box>
+            );
+          })}
+        </Box>
+      </Sheet>
 
       {media && (
         <Dialog open onClose={() => setMedia(null)} fullWidth maxWidth="lg">
           <DialogTitle>{media.label || ""}</DialogTitle>
           <DialogContent sx={{ p: 0, overflow: "hidden" }}>
-            <ContentRenderer
-              url={media.url}
-              mediaType={media.mediaType}
-              title={media.label}
-              description={media.description}
-            />
+            <ContentRenderer url={media.url} mediaType={media.mediaType} title={media.label} description={media.description} />
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" onClick={() => setMedia(null)}>
-              {Locale.label("mobile.plans.close")}
-            </Button>
+            <Button variant="outlined" onClick={() => setMedia(null)}>{Locale.label("mobile.plans.close")}</Button>
           </DialogActions>
         </Dialog>
       )}

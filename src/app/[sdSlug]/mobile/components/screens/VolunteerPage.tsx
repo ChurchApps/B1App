@@ -1,14 +1,14 @@
 "use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import { Box, Button, Chip, Icon, LinearProgress, Skeleton, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Skeleton } from "@mui/material";
 import { ApiHelper, DateHelper, Locale } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PlanInterface, PositionInterface, TimeInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
 import { LoadErrorAlert } from "../LoadErrorAlert";
+import { FilterPills, PageHead, Plate, PlateSection, QuietEmpty, Row, RowList } from "../kit";
 
 interface Props {
   config: ConfigurationInterface;
@@ -20,10 +20,19 @@ interface SignupPlanData {
   times: TimeInterface[];
 }
 
+type Filter = "all" | "open";
+
+const tc = mobileTheme.colors;
+
+const getSlots = (positions: SignupPlanData["positions"]) => {
+  const total = positions.reduce((s, p) => s + (p.count || 0), 0);
+  const filled = positions.reduce((s, p) => s + (p.filledCount || 0), 0);
+  return { total, filled, remaining: Math.max(0, total - filled) };
+};
+
 export const VolunteerPage = ({ config }: Props) => {
-  const tc = mobileTheme.colors;
-  const router = useRouter();
   const churchId = config?.church?.id;
+  const [filter, setFilter] = useState<Filter>("all");
 
   const { data: signupPlans = null, isError: signupPlansError, refetch: refetchSignupPlans } = useQuery<SignupPlanData[]>({
     queryKey: ["/plans/public/signup/" + churchId, "DoingApi-anon"],
@@ -36,182 +45,77 @@ export const VolunteerPage = ({ config }: Props) => {
     gcTime: 15 * 60 * 1000
   });
 
-  const getSlots = (positions: SignupPlanData["positions"]) => {
-    const total = positions.reduce((s, p) => s + (p.count || 0), 0);
-    const filled = positions.reduce((s, p) => s + (p.filledCount || 0), 0);
-    return { total, filled, remaining: Math.max(0, total - filled) };
-  };
+  const visible = (signupPlans || []).filter((item) => filter === "all" || getSlots(item.positions || []).remaining > 0);
 
-  const getTimesLabel = (item: SignupPlanData) => {
-    if (!item.times?.length) return "";
-    return item.times.map((t) => t.displayName).filter(Boolean).join(", ");
-  };
-
-  const renderCard = (item: SignupPlanData) => {
-    const { total, filled, remaining } = getSlots(item.positions);
-    const progress = total > 0 ? (filled / total) * 100 : 0;
-    const timesLabel = getTimesLabel(item);
-    const isFull = remaining === 0;
-
+  const renderRow = (item: SignupPlanData) => {
+    const { total, filled, remaining } = getSlots(item.positions || []);
+    const timesLabel = (item.times || []).map((t) => t.displayName).filter(Boolean).join(", ");
+    const positionNames = (item.positions || []).map((p) => p.name).filter(Boolean).join(", ");
     return (
-      <Box
+      <Row
         key={item.plan.id}
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mb: 0.25 }}>
-              {item.plan.name}
-            </Typography>
-            <Typography sx={{ fontSize: 13, color: tc.textSecondary }}>
-              {DateHelper.prettyDate(DateHelper.toDate(item.plan.serviceDate))}
-              {timesLabel ? ` \u00b7 ${timesLabel}` : ""}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              px: 1,
-              py: 0.25,
-              borderRadius: "999px",
-              bgcolor: isFull ? `${tc.textSecondary}1A` : `${tc.success}1A`,
-              color: isFull ? tc.textSecondary : tc.success,
-              fontSize: 10.5,
-              fontWeight: 700,
-              whiteSpace: "nowrap"
-            }}
-          >
-            {isFull ? Locale.label("mobile.screens.volunteerFull") : Locale.label("mobile.screens.volunteerOpen").replace("{}", String(remaining))}
-          </Box>
-        </Box>
-
-        {total > 0 && (
-          <Box sx={{ mt: 1.5 }}>
-            <LinearProgress
-              variant="determinate"
-              value={progress}
-              sx={{
-                height: 6,
-                borderRadius: 3,
-                bgcolor: tc.border,
-                "& .MuiLinearProgress-bar": { bgcolor: tc.primary }
-              }}
-            />
-            <Typography sx={{ fontSize: 11, color: tc.textSecondary, mt: 0.5 }}>
-              {Locale.label("mobile.screens.volunteerPositionsFilled").replace("{}", String(filled)).replace("{}", String(total))}
-            </Typography>
-          </Box>
-        )}
-
-        {item.positions?.length > 0 && (
-          <Box sx={{ mt: 1.5, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-            {item.positions.map((p) => {
-              const posOpen = Math.max(0, (p.count || 0) - (p.filledCount || 0));
-              const posFull = posOpen === 0;
-              return (
-                <Chip
-                  key={p.id || p.name}
-                  label={Locale.label("mobile.screens.volunteerPositionOpen").replace("{}", p.name || "").replace("{}", String(posOpen))}
-                  size="small"
-                  sx={{
-                    height: 22,
-                    fontSize: 10.5,
-                    fontWeight: 700,
-                    borderRadius: "999px",
-                    bgcolor: posFull ? `${tc.textSecondary}1A` : tc.primaryLight,
-                    color: posFull ? tc.textSecondary : tc.primary,
-                    "& .MuiChip-label": { px: 1 }
-                  }}
-                />
-              );
-            })}
-          </Box>
-        )}
-
-        {!isFull && (
-          <Box sx={{ mt: 1.5, display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              variant="contained"
-              onClick={() => router.push(`/mobile/volunteer/${item.plan.id}`)}
-              sx={{
-                bgcolor: tc.primary,
-                color: tc.onPrimary,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                textTransform: "none",
-                fontWeight: 500,
-                "&:hover": { bgcolor: tc.primary }
-              }}
-            >
-              {Locale.label("mobile.screens.volunteerViewSignUp")}
-            </Button>
-          </Box>
-        )}
-      </Box>
+        href={`/mobile/volunteer/${item.plan.id}`}
+        chevron
+        sx={{ py: "14px" }}
+        title={item.plan.name}
+        subtitle={<>
+          {DateHelper.prettyDate(DateHelper.toDate(item.plan.serviceDate))}
+          {timesLabel ? ` · ${timesLabel}` : ""}
+          {positionNames && <Box component="span" sx={{ display: "block" }}>{positionNames}</Box>}
+          {total > 0 && (
+            <Box component="span" sx={{ display: "flex", alignItems: "center", gap: "10px", mt: "8px" }}>
+              <Box component="span" aria-hidden sx={{ flex: 1, height: 4, borderRadius: 2, bgcolor: tc.border, overflow: "hidden" }}>
+                <Box component="span" sx={{ display: "block", height: "100%", width: `${(filled / total) * 100}%`, bgcolor: tc.primary }} />
+              </Box>
+              <Box component="span" sx={{ flex: "none" }}>
+                {remaining === 0
+                  ? Locale.label("mobile.screens.volunteerFull")
+                  : Locale.label("mobile.serving.openOf").replace("{}", String(remaining)).replace("{}", String(total))}
+              </Box>
+            </Box>
+          )}
+        </>}
+      />
     );
   };
 
-  const renderSkeleton = (i: number) => (
-    <Box
-      key={`sk-${i}`}
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        p: `${mobileTheme.spacing.md}px`
-      }}
-    >
-      <Skeleton variant="text" width="60%" height={22} />
-      <Skeleton variant="text" width="40%" height={14} />
-      <Skeleton variant="rounded" height={6} sx={{ mt: 1.5 }} />
-      <Skeleton variant="rounded" width={110} height={32} sx={{ mt: 1.5, ml: "auto" }} />
-    </Box>
-  );
-
-  const renderEmpty = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center"
-      }}
-    >
-      <Box
-        sx={{
-          width: 64,
-          height: 64,
-          borderRadius: "11px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>volunteer_activism</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: 0.5 }}>
-        {Locale.label("mobile.screens.volunteerBrowseTitle")}
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-        {Locale.label("mobile.screens.volunteerBrowseBody")}
-      </Typography>
-    </Box>
-  );
+  const renderBody = () => {
+    if (signupPlans === null && signupPlansError) return <LoadErrorAlert onRetry={() => refetchSignupPlans()} />;
+    if (signupPlans === null) {
+      return [0, 1].map((i) => (
+        <Box key={i} sx={{ py: "12px" }}>
+          <Skeleton variant="text" width="60%" height={22} />
+          <Skeleton variant="text" width="40%" height={18} />
+          <Skeleton variant="rounded" height={4} sx={{ mt: 1 }} />
+        </Box>
+      ));
+    }
+    if (signupPlans.length === 0) return <QuietEmpty>{Locale.label("mobile.screens.volunteerBrowseBody")}</QuietEmpty>;
+    if (visible.length === 0) return <QuietEmpty>{Locale.label("mobile.serving.noOpenSpots")}</QuietEmpty>;
+    return <RowList>{visible.map(renderRow)}</RowList>;
+  };
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-        {signupPlans === null && signupPlansError && <LoadErrorAlert onRetry={() => refetchSignupPlans()} />}
-        {signupPlans === null && !signupPlansError && [0, 1].map(renderSkeleton)}
-        {signupPlans !== null && signupPlans.length === 0 && renderEmpty()}
-        {signupPlans !== null && signupPlans.length > 0 && signupPlans.map(renderCard)}
-      </Box>
+    <Box>
+      <PageHead
+        title={Locale.label("mobile.screenTitles.volunteer")}
+        lede={config?.church?.name ? Locale.label("mobile.serving.volunteerLede").replace("{}", config.church.name) : undefined}
+      >
+        <FilterPills
+          label={Locale.label("mobile.serving.volunteerFilter")}
+          value={filter}
+          onChange={setFilter}
+          options={[
+            { value: "all", label: Locale.label("mobile.serving.allFilter") },
+            { value: "open", label: Locale.label("mobile.serving.openSpots") }
+          ]}
+        />
+      </PageHead>
+      <Plate>
+        <PlateSection sx={{ py: { xs: "6px", md: "8px" } }}>
+          {renderBody()}
+        </PlateSection>
+      </Plate>
     </Box>
   );
 };

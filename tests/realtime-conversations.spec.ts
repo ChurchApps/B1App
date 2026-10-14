@@ -17,7 +17,7 @@ async function loginAs(page: Page, email: string, password: string) {
 
 async function openGroupMessages(page: Page) {
   await page.goto(`/mobile/groups/${GROUP_ID}`, { timeout: 60000 });
-  const messagesTab = page.getByRole("tab", { name: /Messages/i });
+  const messagesTab = page.getByTestId("group-open-chat");
   await messagesTab.waitFor({ state: "visible", timeout: 30000 });
   await messagesTab.click();
   const composer = page.getByPlaceholder(/Send a message|message|Post/i).first();

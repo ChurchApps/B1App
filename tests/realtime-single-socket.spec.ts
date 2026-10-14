@@ -19,7 +19,7 @@ test.describe("Realtime — single WebSocket per tab", () => {
     await page.goto("/mobile/groups/GRP00000004");
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
 
-    const messagesTab = page.getByRole("tab", { name: /Messages/i });
+    const messagesTab = page.getByTestId("group-open-chat");
     if (await messagesTab.isVisible().catch(() => false)) {
       await messagesTab.click();
     }

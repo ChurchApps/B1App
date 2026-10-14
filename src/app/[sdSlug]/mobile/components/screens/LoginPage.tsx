@@ -19,6 +19,7 @@ import type { LoginResponseInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { mobileTheme } from "../mobileTheme";
+import { PageHead, Plate, PlateSection, TextLink } from "../kit";
 import { hydrateUserSession } from "../../hooks/hydrateUserSession";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,7 +53,6 @@ const isSameOriginPath = (url: string) => {
 
 export const MobileLoginScreen = ({ config }: Props) => {
   const tc = mobileTheme.colors;
-  const { spacing, radius, shadows } = mobileTheme;
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -121,7 +121,6 @@ export const MobileLoginScreen = ({ config }: Props) => {
   const showInfo = (msg: string) => setSnack({ open: true, msg, severity: "info" });
 
   const churchName = config?.church?.name || "";
-  const logoLight = config?.appearance?.logoLight;
 
   useEffect(() => {
     if (resendCooldown <= 0) return;
@@ -392,19 +391,12 @@ export const MobileLoginScreen = ({ config }: Props) => {
     loginApiCall({ jwt });
   }, []);
 
-  const inputSx = {
-    "& .MuiOutlinedInput-root": {
-      borderRadius: `${radius.md}px`,
-      bgcolor: tc.surface
-    }
-  };
-
   const heroTitle = () => {
     if (mode === "register") return churchName ? `Join ${churchName}` : "Create your account";
     if (mode === "forgot") return "Reset your password";
     if (mode === "verify") return "Enter verification code";
     if (mode === "setPassword") return setPasswordFirstName ? `Welcome, ${setPasswordFirstName}` : "Set your password";
-    return churchName ? "Welcome Back" : "Welcome to B1";
+    return churchName ? Locale.label("mobile.login.signInTo").replace("{}", churchName) : Locale.label("mobile.screenTitles.signIn");
   };
 
   const heroSubtitle = () => {
@@ -412,41 +404,43 @@ export const MobileLoginScreen = ({ config }: Props) => {
     if (mode === "forgot") return "We'll email you a 6-digit code to reset it.";
     if (mode === "verify") return `We emailed a 6-digit code to ${email}.`;
     if (mode === "setPassword") return "Choose a password to finish signing in.";
-    return churchName ? `Sign in to ${churchName}` : "Sign in to access";
+    return Locale.label("mobile.login.lede");
   };
 
-  const primaryBtnSx = {
-    bgcolor: tc.primary,
-    borderRadius: `${radius.md}px`,
-    textTransform: "none",
-    fontWeight: 700,
-    fontSize: 16,
-    py: 1.4,
-    boxShadow: shadows.md,
-    "&:hover": { bgcolor: tc.primary, opacity: 0.92 },
-    "&.Mui-disabled": { bgcolor: tc.border, color: tc.textHint }
-  } as const;
+  const formSx = { display: "flex", flexDirection: "column", gap: "16px" } as const;
+  const spinner = <CircularProgress size={22} color="inherit" />;
+  const centered = { fontSize: 14, color: tc.textSecondary, textAlign: "center" } as const;
+
+  const passwordToggle = (
+    <InputAdornment position="end">
+      <IconButton onClick={() => setShowPassword(v => !v)} edge="end" aria-label={showPassword ? "Hide password" : "Show password"} size="small">
+        <Icon sx={{ color: tc.textSecondary }}>{showPassword ? "visibility_off" : "visibility"}</Icon>
+      </IconButton>
+    </InputAdornment>
+  );
+
+  const emailField = (onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void) => (
+    <TextField
+      label={Locale.label("mobile.screens.emailLabel")}
+      placeholder={Locale.label("mobile.screens.emailPlaceholder")}
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      onBlur={onBlur}
+      type="email"
+      inputProps={{ inputMode: "email", autoComplete: "email", autoCapitalize: "none", autoCorrect: "off" }}
+      fullWidth
+      disabled={loading}
+    />
+  );
 
   const renderLogin = () => (
-    <Box component="form" onSubmit={handleLoginSubmit}>
+    <Box component="form" onSubmit={handleLoginSubmit} sx={formSx}>
       {process.env.NEXT_PUBLIC_STAGE === "demo" && (
-        <Alert severity="info" sx={{ mb: 2 }}>
+        <Alert severity="info">
           <b>Demo:</b> Login with <code>demo@b1.church</code> / <code>password</code>.
         </Alert>
       )}
-      <TextField
-        label={Locale.label("mobile.screens.emailLabel")}
-        placeholder={Locale.label("mobile.screens.emailPlaceholder")}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        type="email"
-        inputProps={{ inputMode: "email", autoComplete: "email", autoCapitalize: "none", autoCorrect: "off" }}
-        variant="outlined"
-        fullWidth
-        sx={{ ...inputSx, mb: `${spacing.md}px` }}
-        InputProps={{ startAdornment: (<InputAdornment position="start"><Icon sx={{ color: tc.textMuted }}>email</Icon></InputAdornment>) }}
-        disabled={loading}
-      />
+      {emailField()}
       <TextField
         label={Locale.label("mobile.screens.passwordLabel")}
         placeholder={Locale.label("mobile.screens.passwordPlaceholder")}
@@ -454,118 +448,56 @@ export const MobileLoginScreen = ({ config }: Props) => {
         onChange={(e) => setPassword(e.target.value)}
         type={showPassword ? "text" : "password"}
         inputProps={{ autoComplete: "current-password" }}
-        variant="outlined"
         fullWidth
-        sx={inputSx}
-        InputProps={{
-          startAdornment: (<InputAdornment position="start"><Icon sx={{ color: tc.textMuted }}>lock</Icon></InputAdornment>),
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => setShowPassword(v => !v)} edge="end" aria-label={showPassword ? "Hide password" : "Show password"} size="small">
-                <Icon sx={{ color: tc.textMuted }}>{showPassword ? "visibility_off" : "visibility"}</Icon>
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
+        InputProps={{ endAdornment: passwordToggle }}
         disabled={loading}
       />
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: `${spacing.sm}px`, mb: `${spacing.lg}px` }}>
-        <Box component="button" type="button" onClick={() => setMode("forgot")} sx={{ fontSize: 14, fontWeight: 500, color: tc.primary, background: "none", border: "none", p: 0, cursor: "pointer", "&:hover": { textDecoration: "underline" } }}>
-          Forgot password?
-        </Box>
-      </Box>
-      <Button type="submit" variant="contained" fullWidth disabled={loading} sx={primaryBtnSx}>
-        {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Sign In"}
+      <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
+        {loading ? spinner : "Sign In"}
       </Button>
-      <Box sx={{ mt: `${spacing.lg}px`, textAlign: "center" }}>
-        <Typography sx={{ fontSize: 12, color: tc.textMuted, lineHeight: 1.5 }}>
-          By signing in, you agree to our{" "}
-          <Box component="a" href="https://churchapps.org/privacy" target="_blank" rel="noopener noreferrer" sx={{ color: tc.primary, fontWeight: 500, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}>
-            {Locale.label("mobile.components.privacyPolicy")}
-          </Box>
-          .
-        </Typography>
-      </Box>
-      <Box sx={{ mt: `${spacing.md}px`, textAlign: "center" }}>
-        <Typography sx={{ fontSize: 14, color: tc.text }}>
-          Don&apos;t have an account?{" "}
-          <Box component="button" type="button" onClick={() => setMode("register")} sx={{ color: tc.primary, fontWeight: 600, background: "none", border: "none", p: 0, cursor: "pointer", fontSize: 14, "&:hover": { textDecoration: "underline" } }}>
-            Register
-          </Box>
-        </Typography>
-      </Box>
+      <TextLink onClick={() => setMode("forgot")} sx={{ alignSelf: "center" }}>Forgot password?</TextLink>
+      <Typography sx={{ ...centered, fontSize: 12.5 }}>
+        By signing in, you agree to our{" "}
+        <TextLink href="https://churchapps.org/privacy" sx={{ fontSize: 12.5 }}>{Locale.label("mobile.components.privacyPolicy")}</TextLink>.
+      </Typography>
     </Box>
   );
 
   const renderRegister = () => (
-    <Box component="form" onSubmit={handleRegisterSubmit}>
+    <Box component="form" onSubmit={handleRegisterSubmit} sx={formSx}>
       {matchedChurchName && (
-        <Alert severity="info" sx={{ mb: 2 }}>
+        <Alert severity="info">
           We found your record at <b>{matchedChurchName}</b>. Complete registration to link your account.
         </Alert>
       )}
-      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: `${spacing.sm}px`, mb: `${spacing.md}px` }}>
-        <TextField label={Locale.label("mobile.screens.firstNameRegister")} value={regFirstName} onChange={e => setRegFirstName(e.target.value)} variant="outlined" fullWidth sx={inputSx} disabled={loading} inputProps={{ autoComplete: "given-name" }} />
-        <TextField label={Locale.label("mobile.screens.lastNameRegister")} value={regLastName} onChange={e => setRegLastName(e.target.value)} variant="outlined" fullWidth sx={inputSx} disabled={loading} inputProps={{ autoComplete: "family-name" }} />
+      <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+        <TextField label={Locale.label("mobile.screens.firstNameRegister")} value={regFirstName} onChange={e => setRegFirstName(e.target.value)} fullWidth disabled={loading} inputProps={{ autoComplete: "given-name" }} />
+        <TextField label={Locale.label("mobile.screens.lastNameRegister")} value={regLastName} onChange={e => setRegLastName(e.target.value)} fullWidth disabled={loading} inputProps={{ autoComplete: "family-name" }} />
       </Box>
-      <TextField
-        label={Locale.label("mobile.screens.emailLabel")}
-        placeholder={Locale.label("mobile.screens.emailPlaceholder")}
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        onBlur={e => prefillRegisterFromMatch(e.target.value)}
-        type="email"
-        variant="outlined"
-        fullWidth
-        sx={{ ...inputSx, mb: `${spacing.lg}px` }}
-        inputProps={{ inputMode: "email", autoComplete: "email", autoCapitalize: "none", autoCorrect: "off" }}
-        InputProps={{ startAdornment: (<InputAdornment position="start"><Icon sx={{ color: tc.textMuted }}>email</Icon></InputAdornment>) }}
-        disabled={loading}
-      />
+      {emailField(e => prefillRegisterFromMatch(e.target.value))}
       <input ref={honeypotRef} type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: "1px", height: "1px", overflow: "hidden" }} />
-      <Button type="submit" variant="contained" fullWidth disabled={loading} sx={primaryBtnSx}>
-        {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Create account"}
+      <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
+        {loading ? spinner : "Create account"}
       </Button>
-      <Box sx={{ mt: `${spacing.md}px`, textAlign: "center" }}>
-        <Typography sx={{ fontSize: 14, color: tc.text }}>
-          Already have an account?{" "}
-          <Box component="button" type="button" onClick={() => setMode("login")} sx={{ color: tc.primary, fontWeight: 600, background: "none", border: "none", p: 0, cursor: "pointer", fontSize: 14, "&:hover": { textDecoration: "underline" } }}>
-            Sign in
-          </Box>
-        </Typography>
-      </Box>
+      <Typography sx={centered}>
+        Already have an account? <TextLink onClick={() => setMode("login")}>Sign in</TextLink>
+      </Typography>
     </Box>
   );
 
   const renderForgot = () => (
-    <Box component="form" onSubmit={handleForgotSubmit}>
-      <TextField
-        label={Locale.label("mobile.screens.emailLabel")}
-        placeholder={Locale.label("mobile.screens.emailPlaceholder")}
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        type="email"
-        variant="outlined"
-        fullWidth
-        sx={{ ...inputSx, mb: `${spacing.lg}px` }}
-        inputProps={{ inputMode: "email", autoComplete: "email", autoCapitalize: "none", autoCorrect: "off" }}
-        InputProps={{ startAdornment: (<InputAdornment position="start"><Icon sx={{ color: tc.textMuted }}>email</Icon></InputAdornment>) }}
-        disabled={loading}
-      />
-      <Button type="submit" variant="contained" fullWidth disabled={loading} sx={primaryBtnSx}>
-        {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Send code"}
+    <Box component="form" onSubmit={handleForgotSubmit} sx={formSx}>
+      {emailField()}
+      <Button type="submit" variant="contained" fullWidth disabled={loading} size="large">
+        {loading ? spinner : "Send code"}
       </Button>
-      <Box sx={{ mt: `${spacing.md}px`, textAlign: "center" }}>
-        <Box component="button" type="button" onClick={() => setMode("login")} sx={{ color: tc.primary, fontWeight: 600, background: "none", border: "none", p: 0, cursor: "pointer", fontSize: 14, "&:hover": { textDecoration: "underline" } }}>
-          Back to sign in
-        </Box>
-      </Box>
+      <TextLink onClick={() => setMode("login")} sx={{ alignSelf: "center" }}>Back to sign in</TextLink>
     </Box>
   );
 
   const renderVerify = () => (
-    <Box component="form" onSubmit={e => { e.preventDefault(); submitCode(); }}>
-      <Box sx={{ display: "flex", gap: "8px", justifyContent: "center", mb: `${spacing.lg}px` }}>
+    <Box component="form" onSubmit={e => { e.preventDefault(); submitCode(); }} sx={formSx}>
+      <Box sx={{ display: "flex", gap: "8px", justifyContent: "center" }}>
         {codeDigits.map((digit, index) => (
           <Box
             key={index}
@@ -591,50 +523,36 @@ export const MobileLoginScreen = ({ config }: Props) => {
               textAlign: "center",
               color: tc.text,
               bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${radius.md}px`,
+              border: `1px solid ${tc.control}`,
+              borderRadius: "6px",
               outline: "none",
-              "&:focus": { borderColor: tc.primary }
+              "&:focus": { borderColor: tc.primary, boxShadow: `0 0 0 1px ${tc.primary}` }
             }}
           />
         ))}
       </Box>
-      <Button type="submit" variant="contained" fullWidth disabled={loading || codeDigits.some(d => d === "")} sx={primaryBtnSx}>
-        {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Verify code"}
+      <Button type="submit" variant="contained" fullWidth disabled={loading || codeDigits.some(d => d === "")} size="large">
+        {loading ? spinner : "Verify code"}
       </Button>
-      <Box sx={{ mt: `${spacing.md}px`, textAlign: "center", display: "flex", justifyContent: "center", gap: 2 }}>
-        <Box component="button" type="button" disabled={resendCooldown > 0 || loading} onClick={resendCode} sx={{ color: resendCooldown > 0 ? tc.textMuted : tc.primary, background: "none", border: "none", p: 0, cursor: resendCooldown > 0 ? "default" : "pointer", fontSize: 14, fontWeight: 500 }}>
+      <Box sx={{ display: "flex", justifyContent: "center", gap: "16px" }}>
+        <TextLink onClick={resendCode} disabled={resendCooldown > 0 || loading}>
           {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend code"}
-        </Box>
-        <Box sx={{ color: tc.textMuted, fontSize: 14 }}>|</Box>
-        <Box component="button" type="button" onClick={() => setMode("login")} sx={{ color: tc.primary, background: "none", border: "none", p: 0, cursor: "pointer", fontSize: 14, fontWeight: 500 }}>
-          Back to sign in
-        </Box>
+        </TextLink>
+        <TextLink onClick={() => setMode("login")}>Back to sign in</TextLink>
       </Box>
     </Box>
   );
 
   const renderSetPassword = () => (
-    <Box component="form" onSubmit={handleSetPasswordSubmit}>
+    <Box component="form" onSubmit={handleSetPasswordSubmit} sx={formSx}>
       <TextField
         label={Locale.label("mobile.screens.newPassword")}
         value={newPassword}
         onChange={e => setNewPassword(e.target.value)}
         type={showPassword ? "text" : "password"}
-        variant="outlined"
         fullWidth
-        sx={{ ...inputSx, mb: `${spacing.md}px` }}
         inputProps={{ autoComplete: "new-password" }}
-        InputProps={{
-          startAdornment: (<InputAdornment position="start"><Icon sx={{ color: tc.textMuted }}>lock</Icon></InputAdornment>),
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => setShowPassword(v => !v)} edge="end" size="small">
-                <Icon sx={{ color: tc.textMuted }}>{showPassword ? "visibility_off" : "visibility"}</Icon>
-              </IconButton>
-            </InputAdornment>
-          )
-        }}
+        InputProps={{ endAdornment: passwordToggle }}
         disabled={loading}
       />
       <TextField
@@ -642,55 +560,41 @@ export const MobileLoginScreen = ({ config }: Props) => {
         value={confirmPassword}
         onChange={e => setConfirmPassword(e.target.value)}
         type={showPassword ? "text" : "password"}
-        variant="outlined"
         fullWidth
-        sx={{ ...inputSx, mb: `${spacing.lg}px` }}
         inputProps={{ autoComplete: "new-password" }}
-        InputProps={{ startAdornment: (<InputAdornment position="start"><Icon sx={{ color: tc.textMuted }}>lock</Icon></InputAdornment>) }}
         disabled={loading}
       />
-      <Button type="submit" variant="contained" fullWidth disabled={loading || !newPassword || !confirmPassword} sx={primaryBtnSx}>
-        {loading ? <CircularProgress size={22} sx={{ color: "#FFF" }} /> : "Save & sign in"}
+      <Button type="submit" variant="contained" fullWidth disabled={loading || !newPassword || !confirmPassword} size="large">
+        {loading ? spinner : "Save & sign in"}
       </Button>
     </Box>
   );
 
   return (
-    <Box sx={{ bgcolor: tc.background, minHeight: "100%", pb: `${spacing.xl}px` }}>
-      <Box sx={{ px: `${spacing.md}px`, pt: `${spacing.xl}px`, pb: `${spacing.lg}px`, textAlign: "center" }}>
-        {logoLight ? (
-          <Box component="img" src={logoLight} alt={churchName || "Church logo"} sx={{ height: 56, maxWidth: "60%", objectFit: "contain", mb: 2, mx: "auto", display: "block" }} />
-        ) : (
-          <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontSize: 28, fontWeight: 600, color: tc.text, mb: churchName ? "6px" : 0.5 }}>
-            {heroTitle()}
-          </Typography>
-        )}
-        {churchName && (
-          <Typography sx={{
-            fontSize: 11.5,
-            fontWeight: 700,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: tc.textSecondary,
-            mb: 1
-          }}>
-            {churchName}
-          </Typography>
-        )}
-        <Typography sx={{ fontSize: 14, color: tc.textSecondary, px: 1 }}>
-          {heroSubtitle()}
-        </Typography>
+    <Box sx={{ maxWidth: { md: 480 }, mx: "auto" }}>
+      <Box sx={{ px: { xs: "16px", md: 0 }, pt: "20px", pb: "16px" }}>
+        <Box component="img" src="/mobile/icon/192" alt="" sx={{ width: 44, height: 44, borderRadius: "10px", objectFit: "cover", display: "block" }} />
       </Box>
-
-      <Box sx={{ px: `${spacing.md}px` }}>
-        <Box sx={{ bgcolor: tc.surface, border: `1px solid ${tc.border}`, borderRadius: `${radius.lg}px`, p: `${spacing.lg}px` }}>
+      <PageHead title={heroTitle()} lede={heroSubtitle()} />
+      <Plate>
+        <PlateSection>
           {mode === "login" && renderLogin()}
           {mode === "register" && renderRegister()}
           {mode === "forgot" && renderForgot()}
           {mode === "verify" && renderVerify()}
           {mode === "setPassword" && renderSetPassword()}
-        </Box>
-      </Box>
+        </PlateSection>
+        {mode === "login" && (
+          <PlateSection>
+            <Typography sx={{ ...centered, fontSize: 13.5, mb: "10px" }}>
+              {churchName ? Locale.label("mobile.login.newTo").replace("{}", churchName) : Locale.label("mobile.login.noAccount")}
+            </Typography>
+            <Button variant="outlined" size="large" fullWidth onClick={() => setMode("register")}>
+              {Locale.label("mobile.login.createAccount")}
+            </Button>
+          </PlateSection>
+        )}
+      </Plate>
 
       <Snackbar
         open={!!noAccountPrompt}

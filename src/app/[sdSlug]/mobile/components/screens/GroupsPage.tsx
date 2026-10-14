@@ -2,9 +2,9 @@
 
 import React, { useCallback, useContext, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Alert, Box, Icon, Skeleton, Typography, Button } from "@mui/material";
+import { Box, Button, Skeleton, Typography, useMediaQuery } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery } from "@tanstack/react-query";
 import type { EventInterface, GroupInterface, GroupJoinRequestInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
@@ -13,25 +13,22 @@ import { mobileTheme } from "../mobileTheme";
 import { useEngagementSort } from "../../hooks/useEngagementSort";
 import { LoadErrorAlert } from "../LoadErrorAlert";
 import { DateHelper } from "@churchapps/helpers";
+import { PageHead, PersonAvatar, Plate, PlateSection, QuietEmpty, Row, RowList, SearchField, TextLink } from "../kit";
 
 interface Props {
   config?: ConfigurationInterface;
 }
 
 const ENGAGEMENT_STORAGE_KEY = "b1app-group-view-counts";
-
-const eyebrowSx = {
-  fontSize: 11.5,
-  fontWeight: 700,
-  letterSpacing: "0.12em",
-  textTransform: "uppercase" as const
-};
+const TOP_GROUPS = 5;
+const tc = mobileTheme.colors;
 
 export const GroupsPage = ({ config: _config }: Props) => {
-  const tc = mobileTheme.colors;
   const router = useRouter();
   const context = useContext(UserContext);
   const loggedIn = !!context?.user?.firstName;
+  const desktop = useMediaQuery("(min-width:900px)");
+  const [search, setSearch] = React.useState("");
 
   const { data: groups = null, isError: groupsError, refetch: refetchGroups } = useQuery<GroupInterface[]>({
     queryKey: ["my-groups", context?.user?.id],
@@ -97,11 +94,13 @@ export const GroupsPage = ({ config: _config }: Props) => {
     getGroupId
   );
 
-  const sortedGroups = useMemo(() => ({
-    hero: orderedGroups[0] || (null as GroupInterface | null),
-    featured: orderedGroups.slice(1, 3),
-    regular: orderedGroups.slice(3)
-  }), [orderedGroups]);
+  const query = search.trim().toLowerCase();
+  const matches = useMemo(
+    () => (query ? orderedGroups.filter((g) => (g.name || "").toLowerCase().includes(query)) : orderedGroups),
+    [orderedGroups, query]
+  );
+  const yourGroups = query ? matches : matches.slice(0, TOP_GROUPS);
+  const otherGroups = query ? [] : matches.slice(TOP_GROUPS);
 
   const formatEventTime = (event: EventInterface) => {
     if (!event.start) return "";
@@ -110,506 +109,159 @@ export const GroupsPage = ({ config: _config }: Props) => {
     if (event.allDay) {
       return `${start.toLocaleDateString(DateHelper.locale, { month: "short", day: "numeric", year: "numeric" })} (${Locale.label("mobile.group.allDay")})`;
     }
-    const fmtDate = (d: Date) => d.toLocaleDateString(DateHelper.locale, { month: "short", day: "numeric" });
+    const fmtDate = (d: Date) => d.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" });
     const fmtTime = (d: Date) => d.toLocaleTimeString(DateHelper.locale, { hour: "numeric", minute: "2-digit" });
-    if (!event.end) return `${fmtDate(start)} ${fmtTime(start)}`;
+    if (!event.end) return `${fmtDate(start)} · ${fmtTime(start)}`;
     const end = new Date(event.end);
-    if (isNaN(end.getTime())) return `${fmtDate(start)} ${fmtTime(start)}`;
+    if (isNaN(end.getTime())) return `${fmtDate(start)} · ${fmtTime(start)}`;
     if (start.toDateString() === end.toDateString()) {
       return `${fmtDate(start)} · ${fmtTime(start)} – ${fmtTime(end)}`;
     }
     return `${fmtDate(start)} ${fmtTime(start)} – ${fmtDate(end)} ${fmtTime(end)}`;
   };
 
-  const handleClick = (group: GroupInterface) => {
-    if (group.id) incrementViewCount(group.id);
-    router.push(`/mobile/groups/${group.id}`);
-  };
+  const groupSubtext = (group: GroupInterface) => [group.meetingTime?.trim(), group.meetingLocation?.trim()].filter(Boolean).join(" · ") || undefined;
 
-  const groupSubtext = (group: GroupInterface): string | null => {
-    const time = group.meetingTime?.trim();
-    const loc = group.meetingLocation?.trim();
-    if (time && loc) return `${time} · ${loc}`;
-    return time || loc || null;
-  };
-
-  const renderHero = (group: GroupInterface) => {
-    const hasPhoto = !!group.photoUrl;
-    return (
-      <Box
-        key={`hero-${group.id}`}
-        onClick={() => handleClick(group)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleClick(group);
-          }
-        }}
-        sx={{
-          position: "relative",
-          width: "100%",
-          height: 200,
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          overflow: "hidden",
-          cursor: "pointer",
-          background: hasPhoto ? `url(${group.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
-          transition: "transform 150ms ease",
-          "&:active": { transform: "scale(0.995)" }
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            p: `${mobileTheme.spacing.md}px`,
-            background: "linear-gradient(transparent, rgba(7,14,27,0.78))"
-          }}
-        >
-          <Typography sx={{ color: "#FFFFFF", fontSize: 24, fontWeight: 700 }}>
-            {group.name}
-          </Typography>
-          <Typography sx={{ color: "#FFFFFF", opacity: 0.9, fontSize: 14 }}>
-            {groupSubtext(group) || Locale.label("mobile.screens.tapToExplore")}
-          </Typography>
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderFeatured = (group: GroupInterface) => {
-    const hasPhoto = !!group.photoUrl;
-    return (
-      <Box
-        key={`featured-${group.id}`}
-        onClick={() => handleClick(group)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleClick(group);
-          }
-        }}
-        sx={{
-          position: "relative",
-          height: 120,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          overflow: "hidden",
-          cursor: "pointer",
-          background: hasPhoto ? `url(${group.photoUrl}) center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash,
-          transition: "transform 150ms ease",
-          "&:active": { transform: "scale(0.995)" }
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            justifyContent: "center",
-            px: "12px",
-            pt: 4,
-            pb: "12px",
-            background: "linear-gradient(transparent, rgba(7,14,27,0.78))"
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#FFFFFF",
-              fontSize: 14,
-              fontWeight: 600,
-              textAlign: "center",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical"
-            }}
-          >
-            {group.name}
-          </Typography>
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderCard = (group: GroupInterface) => {
-    const hasPhoto = !!group.photoUrl;
-    return (
-      <Box
-        key={group.id}
-        onClick={() => handleClick(group)}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleClick(group);
-          }
-        }}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: `${mobileTheme.spacing.md}px`,
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: "12px",
-          cursor: "pointer",
-          transition: "transform 150ms ease",
-          overflow: "hidden",
-          "&:active": { transform: "scale(0.995)" }
-        }}
-      >
-        <Box
-          sx={{
-            width: 44,
-            height: 44,
-            borderRadius: "11px",
-            overflow: "hidden",
-            flexShrink: 0,
-            bgcolor: hasPhoto ? "transparent" : tc.iconBackground,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-        >
-          {hasPhoto ? (
-            <Box
-              component="img"
-              src={group.photoUrl}
-              alt={group.name || Locale.label("mobile.screens.groupFallback")}
-              sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          ) : (
-            <Icon sx={{ fontSize: 22, color: tc.primary }}>groups</Icon>
-          )}
-        </Box>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography
-            sx={{
-              fontSize: 16,
-              fontWeight: 600,
-              color: tc.text,
-              mb: "2px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical"
-            }}
-          >
-            {group.name}
-          </Typography>
-          <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-            {groupSubtext(group) || Locale.label("mobile.screens.tapToExplore")}
-          </Typography>
-          {group.about && (
-            <Box
-              sx={{
-                mt: "4px",
-                fontSize: 12,
-                color: tc.textMuted,
-                lineHeight: 1.4,
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                "& p": { m: 0 }
-              }}
-            >
-              <MarkdownPreviewLight value={group.about} />
-            </Box>
-          )}
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderSkeleton = (key: number) => (
-    <Box
-      key={`skeleton-${key}`}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: `${mobileTheme.spacing.md}px`,
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        px: `${mobileTheme.spacing.md}px`,
-        py: "12px"
-      }}
-    >
-      <Skeleton variant="rounded" width={44} height={44} sx={{ borderRadius: "11px" }} />
-      <Box sx={{ flex: 1 }}>
-        <Skeleton variant="text" width="60%" height={20} />
-        <Skeleton variant="text" width="40%" height={14} />
-      </Box>
-      <Skeleton variant="circular" width={20} height={20} />
-    </Box>
+  const renderGroupRows = (list: GroupInterface[]) => (
+    <RowList>
+      {list.map((group) => (
+        <Row
+          key={group.id}
+          href={`/mobile/groups/${group.id}`}
+          onClick={() => { if (group.id) incrementViewCount(group.id); }}
+          leading={<PersonAvatar name={group.name} src={group.photoUrl || undefined} />}
+          title={group.name}
+          subtitle={groupSubtext(group)}
+          chevron
+        />
+      ))}
+    </RowList>
   );
+
+  const hasAnyGroups = effectiveGroups !== null && effectiveGroups.length > 0;
 
   const renderEmpty = () => {
     const returnUrl = typeof window !== "undefined" ? encodeURIComponent(window.location.pathname) : "";
     return (
-      <Box
-        sx={{
-          bgcolor: tc.surface,
-          border: `1px solid ${tc.border}`,
-          borderRadius: `${mobileTheme.radius.xl}px`,
-          p: `${mobileTheme.spacing.lg}px`,
-          textAlign: "center"
-        }}
-      >
-        <Box
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "11px",
-            bgcolor: tc.iconBackground,
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: `${mobileTheme.spacing.md}px`
-          }}
-        >
-          <Icon sx={{ fontSize: 32, color: tc.primary }}>groups</Icon>
-        </Box>
-        <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
+      <PlateSection>
+        <Typography sx={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, color: tc.text }}>
           {Locale.label(loggedIn ? "mobile.screens.noGroupsTitle" : "mobile.screens.groupsSignInTitle")}
         </Typography>
-        <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-          {Locale.label(loggedIn ? "mobile.screens.noGroupsBody" : "mobile.screens.groupsSignInBody")}
-        </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px`, alignItems: "center" }}>
+        <QuietEmpty>{Locale.label(loggedIn ? "mobile.screens.noGroupsBody" : "mobile.screens.groupsSignInBody")}</QuietEmpty>
+        <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap", mt: "16px" }}>
           {!loggedIn && (
-            <Button
-              variant="contained"
-              href={returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login"}
-              data-testid="groups-sign-in"
-              sx={{
-                bgcolor: tc.primary,
-                color: tc.onPrimary,
-                textTransform: "none",
-                fontWeight: 600,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                "&:hover": { bgcolor: tc.primary }
-              }}
-            >
+            <Button variant="contained" href={returnUrl ? `/mobile/login?returnUrl=${returnUrl}` : "/mobile/login"} data-testid="groups-sign-in">
               {Locale.label("mobile.components.signIn")}
             </Button>
           )}
-          <Button
-            variant="outlined"
-            onClick={() => router.push("/groups")}
-            data-testid="groups-browse"
-            sx={{
-              borderColor: tc.primary,
-              color: tc.primary,
-              textTransform: "none",
-              fontWeight: 500,
-              borderRadius: `${mobileTheme.radius.md}px`
-            }}
-          >
+          <Button variant="outlined" onClick={() => router.push("/groups")} data-testid="groups-browse">
             {Locale.label("mobile.screens.browseGroups")}
           </Button>
         </Box>
-      </Box>
+      </PlateSection>
     );
   };
 
-  const { hero, featured, regular } = sortedGroups;
-  const hasAnyGroups = effectiveGroups !== null && effectiveGroups.length > 0;
-
-  const renderPendingRequests = () => {
-    if (!pendingRequests.length) return null;
-    return (
-      <Box data-testid="my-pending-requests" sx={{ mb: `${mobileTheme.spacing.md}px` }}>
-        <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
-          {Locale.label("mobile.screens.pendingRequests")}
-        </Typography>
-        {cancelRequestError && <Alert severity="error" sx={{ mb: `${mobileTheme.spacing.sm}px` }}>{cancelRequestError}</Alert>}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-          {pendingRequests.map((req) => (
-            <Box
-              key={req.id}
-              data-testid={`my-pending-${req.id}`}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: `${mobileTheme.spacing.sm}px ${mobileTheme.spacing.md}px`,
-                bgcolor: tc.surface,
-                border: `1px solid ${tc.border}`,
-                borderRadius: `${mobileTheme.radius.md}px`
-              }}>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.text }}>
-                  {(req as any).groupName || req.group?.name || Locale.label("mobile.screens.groupFallback")}
-                </Typography>
-                {req.requestDate && (
-                  <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-                    {Locale.label("mobile.screens.requestedOn").replace("{}", new Date(req.requestDate).toLocaleDateString(DateHelper.locale))}
-                  </Typography>
-                )}
-              </Box>
-              <Button
-                size="small"
-                onClick={() => handleCancelRequest(req.id || "")}
-                data-testid={`cancel-request-${req.id}`}
-                sx={{ textTransform: "none" }}>
-                {Locale.label("common.cancel")}
-              </Button>
+  const mainSections = (
+    <>
+      {effectiveGroups === null && groupsError && <PlateSection><LoadErrorAlert onRetry={() => refetchGroups()} /></PlateSection>}
+      {effectiveGroups === null && !groupsError && (
+        <PlateSection>
+          {[0, 1, 2].map((k) => (
+            <Box key={k} sx={{ display: "flex", alignItems: "center", gap: "12px", py: "8px" }}>
+              <Skeleton variant="circular" width={40} height={40} />
+              <Box sx={{ flex: 1 }}><Skeleton variant="text" width="60%" /><Skeleton variant="text" width="40%" /></Box>
             </Box>
           ))}
-        </Box>
-      </Box>
-    );
-  };
+        </PlateSection>
+      )}
+      {effectiveGroups !== null && effectiveGroups.length === 0 && renderEmpty()}
+      {hasAnyGroups && (
+        <PlateSection>
+          <SearchField value={search} onChange={setSearch} label={Locale.label("mobile.group.searchYourGroups")} testId="groups-search" />
+        </PlateSection>
+      )}
+      {hasAnyGroups && (
+        <PlateSection title={Locale.label("mobile.group.yourGroups")}>
+          {yourGroups.length > 0 ? renderGroupRows(yourGroups) : <QuietEmpty>{Locale.label("mobile.group.noResults")}</QuietEmpty>}
+        </PlateSection>
+      )}
+      {otherGroups.length > 0 && (
+        <PlateSection title={Locale.label("mobile.screens.otherGroups")}>{renderGroupRows(otherGroups)}</PlateSection>
+      )}
+    </>
+  );
+
+  const sideSections = (
+    <>
+      {pendingRequests.length > 0 && (
+        <PlateSection title={Locale.label("mobile.screens.pendingRequests")}>
+          <Box data-testid="my-pending-requests">
+            {cancelRequestError && <Typography sx={{ color: tc.error, fontSize: 14, mb: "8px" }}>{cancelRequestError}</Typography>}
+            <RowList>
+              {pendingRequests.map((req) => {
+                const name = (req as any).groupName || req.group?.name || Locale.label("mobile.screens.groupFallback");
+                return (
+                  <Row
+                    key={req.id}
+                    data-testid={`my-pending-${req.id}`}
+                    leading={<PersonAvatar name={name} />}
+                    title={name}
+                    subtitle={req.requestDate ? Locale.label("mobile.screens.requestedOn").replace("{}", new Date(req.requestDate).toLocaleDateString(DateHelper.locale)) : undefined}
+                    trailing={<TextLink danger onClick={() => handleCancelRequest(req.id || "")} data-testid={`cancel-request-${req.id}`}>{Locale.label("mobile.group.cancelRequest")}</TextLink>}
+                  />
+                );
+              })}
+            </RowList>
+          </Box>
+        </PlateSection>
+      )}
+      {upcomingEvents.length > 0 && (
+        <PlateSection title={Locale.label("mobile.screens.upcomingEvents")}>
+          <RowList>
+            {upcomingEvents.map((event) => (
+              <Row
+                key={event.id}
+                title={event.title}
+                subtitle={formatEventTime(event)}
+                trailing={<TextLink href={`/mobile/register/${event.id}`}>{Locale.label("mobile.group.register")}</TextLink>}
+              />
+            ))}
+          </RowList>
+        </PlateSection>
+      )}
+    </>
+  );
+
+  const hasSide = pendingRequests.length > 0 || upcomingEvents.length > 0;
+  const groupCount = effectiveGroups?.length || 0;
+  const lede = loggedIn && effectiveGroups !== null
+    ? [
+      groupCount === 1 ? Locale.label("mobile.group.groupCountOne") : Locale.label("mobile.group.groupCount").replace("{}", String(groupCount)),
+      pendingRequests.length ? Locale.label("mobile.group.pendingCount").replace("{}", String(pendingRequests.length)) : ""
+    ].filter(Boolean).join(" · ")
+    : undefined;
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {renderPendingRequests()}
-      {effectiveGroups === null && groupsError && <LoadErrorAlert onRetry={() => refetchGroups()} />}
-      {effectiveGroups === null && !groupsError && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-          {[0, 1, 2].map(renderSkeleton)}
+    <>
+      <PageHead title={Locale.label("groupsPage.groupsHeading")} lede={lede}>
+        {hasAnyGroups && (
+          <Button variant="contained" startIcon={<SearchIcon />} onClick={() => router.push("/groups")}>
+            {Locale.label("groupsPage.findAGroup")}
+          </Button>
+        )}
+      </PageHead>
+      {desktop && hasSide ? (
+        <Box sx={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)", gap: "24px", alignItems: "start" }}>
+          <Plate>{mainSections}</Plate>
+          <Plate>{sideSections}</Plate>
         </Box>
+      ) : (
+        <Plate>
+          {mainSections}
+          {sideSections}
+        </Plate>
       )}
-
-      {effectiveGroups !== null && effectiveGroups.length === 0 && renderEmpty()}
-
-      {hasAnyGroups && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.lg}px` }}>
-
-          {hero && <Box>{renderHero(hero)}</Box>}
-
-          {featured.length > 0 && (
-            <Box>
-              <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
-                {Locale.label("mobile.screens.featured")}
-              </Typography>
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: `${mobileTheme.spacing.sm}px`
-                }}
-              >
-                {featured.map((g) => renderFeatured(g))}
-              </Box>
-            </Box>
-          )}
-
-          {regular.length > 0 && (
-            <Box>
-              <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.sm}px`, pl: "4px" }}>
-                {Locale.label("mobile.screens.otherGroups")}
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-                {regular.map(renderCard)}
-              </Box>
-            </Box>
-          )}
-        </Box>
-      )}
-
-      {upcomingEvents.length > 0 && (
-        <Box sx={{ mt: `${mobileTheme.spacing.lg}px` }}>
-          <Typography sx={{ ...eyebrowSx, color: tc.textSecondary, mb: `${mobileTheme.spacing.md}px` }}>
-            {Locale.label("mobile.screens.upcomingEvents")}
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-            {upcomingEvents.map((event) => (
-              <Box
-                key={event.id}
-                sx={{
-                  bgcolor: tc.surface,
-                  border: `1px solid ${tc.border}`,
-                  borderRadius: `${mobileTheme.radius.lg}px`,
-                  p: `${mobileTheme.spacing.md}px`,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 1
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}>
-                  <Box sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "20px",
-                    bgcolor: tc.primaryLight,
-                    color: tc.primary,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0
-                  }}>
-                    <Icon sx={{ fontSize: 22 }}>event</Icon>
-                  </Box>
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography sx={{
-                      fontSize: 15,
-                      fontWeight: 600,
-                      color: tc.text,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical"
-                    }}>
-                      {event.title}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, color: tc.textSecondary, mt: 0.25 }}>
-                      {formatEventTime(event)}
-                    </Typography>
-                    {event.description && (
-                      <Typography sx={{
-                        fontSize: 13,
-                        color: tc.textMuted,
-                        mt: 0.5,
-                        lineHeight: 1.4,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical"
-                      }}>
-                        {event.description}
-                      </Typography>
-                    )}
-                  </Box>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => router.push(`/mobile/register/${event.id}`)}
-                    sx={{
-                      bgcolor: tc.success,
-                      color: "#000",
-                      textTransform: "none",
-                      fontWeight: 600,
-                      borderRadius: `${mobileTheme.radius.md}px`,
-                      px: 2,
-                      "&:hover": { bgcolor: tc.success }
-                    }}
-                  >
-                    {Locale.label("mobile.group.register")}
-                  </Button>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      )}
-    </Box>
+    </>
   );
 };

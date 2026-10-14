@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-// Issue #837 — delete UI for notifications and private messages; MessagingApi DELETE responses are intercepted so demo DB is not mutated.
+// Issue #837 — delete UI for notifications (the Inbox "All notifications" slice) and private messages; MessagingApi DELETE responses are intercepted so demo DB is not mutated.
 
 const fakeNotifications = [
   {
@@ -131,7 +131,7 @@ test.describe("Issue #837 — mobile delete UI", () => {
     page.on("dialog", (d) => d.accept());
     await mockNotificationsApi(page, fakeNotifications);
 
-    await page.goto("/mobile/notifications");
+    await page.goto("/mobile/notifications?view=notifications");
     await expect(page.locator('[data-testid^="notification-delete-"]').first()).toBeVisible({ timeout: 30000 });
 
     await expect(page.locator('[data-testid^="notification-delete-"]')).toHaveCount(2);
@@ -142,7 +142,7 @@ test.describe("Issue #837 — mobile delete UI", () => {
     page.on("dialog", (d) => d.accept());
     const tracker = await mockNotificationsApi(page, fakeNotifications);
 
-    await page.goto("/mobile/notifications");
+    await page.goto("/mobile/notifications?view=notifications");
     await expect(page.locator('[data-testid^="notification-delete-"]').first()).toBeVisible({ timeout: 30000 });
     await expect(page.locator('[data-testid^="notification-delete-"]')).toHaveCount(2);
 
@@ -160,7 +160,7 @@ test.describe("Issue #837 — mobile delete UI", () => {
     page.on("dialog", (d) => d.accept());
     const tracker = await mockNotificationsApi(page, fakeNotifications);
 
-    await page.goto("/mobile/notifications");
+    await page.goto("/mobile/notifications?view=notifications");
     await expect(page.locator('[data-testid="notifications-clear-all"]')).toBeVisible({ timeout: 30000 });
 
     const requestPromise = page.waitForRequest((req) => req.method() === "DELETE" && /\/notifications\/my$/.test(req.url()), { timeout: 15000 });

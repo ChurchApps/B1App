@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { ApiHelper, Locale } from "@churchapps/apphelper";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { SongDetailInterface, SongDetailLinkInterface } from "@/helpers";
+import { Eyebrow } from "../kit";
 
 interface Props {
   songDetail: SongDetailInterface;
@@ -18,7 +19,7 @@ export const SongDetailLinks = (props: Props) => {
     }
   }, [props.songDetail]);
 
-  const getLink = (link: SongDetailLinkInterface, idx: number) => {
+  const getLink = (link: SongDetailLinkInterface) => {
     const logos: { [key: string]: string } = {
       PraiseCharts: "/images/praisecharts.png",
       Spotify: "https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg",
@@ -39,11 +40,10 @@ export const SongDetailLinks = (props: Props) => {
   if (!songDetailLinks?.length && !props.songDetail?.praiseChartsId) return null;
   else {
     return <>
-      <hr />
-      <h4>{Locale.label("mobile.plans.links")}</h4>
-      <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: "wrap" }}>
-        {songDetailLinks?.map((sd, i) => getLink(sd, i))}
-        {props.songDetail?.praiseChartsId && getLink({ service: "PraiseCharts", url: `https://www.praisecharts.com/songs/details/${props.songDetail?.praiseChartsId}?XID=churchapps` }, songDetailLinks.length + 1)}
+      <Box sx={{ mt: "16px", mb: "8px" }}><Eyebrow component="h3">{Locale.label("mobile.plans.links")}</Eyebrow></Box>
+      <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: "wrap", alignItems: "center" }}>
+        {songDetailLinks?.map((sd, i) => <React.Fragment key={sd.id || i}>{getLink(sd)}</React.Fragment>)}
+        {props.songDetail?.praiseChartsId && getLink({ service: "PraiseCharts", url: `https://www.praisecharts.com/songs/details/${props.songDetail?.praiseChartsId}?XID=churchapps` })}
       </Stack>
     </>;
   }

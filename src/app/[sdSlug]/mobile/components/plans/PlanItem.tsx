@@ -1,11 +1,16 @@
 "use client";
 import React from "react";
-import { Icon } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { PlanItemInterface, PlanHelper } from "@/helpers";
 import { SongDialog } from "./SongDialog";
 import { LessonDialog } from "./LessonDialog";
 import { ActionDialog } from "./ActionDialog";
 import { isAudioUrl } from "./ContentRenderer";
+import { mobileTheme } from "../mobileTheme";
+import { TextLink } from "../kit";
+
+const tc = mobileTheme.colors;
 
 interface Props {
   planItem: PlanItemInterface;
@@ -16,6 +21,8 @@ interface Props {
   positionLabels?: Record<string, string>;
 }
 
+const muted = { fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, fontVariantNumeric: "tabular-nums", flex: "none" } as const;
+
 export const PlanItem = (props: Props) => {
   const [dialogKeyId, setDialogKeyId] = React.useState<string | null>(null);
   const [lessonSectionId, setLessonSectionId] = React.useState<string | null>(null);
@@ -24,6 +31,7 @@ export const PlanItem = (props: Props) => {
   const pi = props.planItem;
   const positionName = pi.positionId ? props.positionLabels?.[pi.positionId] : undefined;
   const hasProviderFields = pi.providerId && pi.providerPath && pi.providerContentPath;
+  const isSong = pi.itemType === "song" || pi.itemType === "arrangementKey";
 
   const getChildren = () => {
     const result: React.ReactElement[] = [];
@@ -49,48 +57,38 @@ export const PlanItem = (props: Props) => {
   const getHeaderRow = () => {
     const sectionDuration = PlanHelper.getSectionDuration(pi);
     return <>
-      <div className="planItemHeader">
-        <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
-          {sectionDuration > 0 && <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>}
-          <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-            {sectionDuration > 0 ? PlanHelper.formatTime(sectionDuration) : ""}
-          </span>
-        </span>
-        <span>{pi.label}</span>
-        {positionName && <span className="planItemPosition" style={{ color: "#666", fontSize: "0.85em", marginLeft: 8 }}>{positionName}</span>}
-      </div>
+      <Box sx={{ display: "flex", alignItems: "baseline", gap: "12px", pt: "14px", pb: "4px" }}>
+        <Typography component="h3" sx={{ flex: 1, fontSize: 13, fontWeight: 650, letterSpacing: "0.05em", textTransform: "uppercase", color: tc.eyebrow }}>
+          {pi.label}
+          {positionName && <Box component="span" className="planItemPosition" sx={{ ...muted, ml: "8px", textTransform: "none", letterSpacing: 0, fontWeight: 400 }}>{positionName}</Box>}
+        </Typography>
+        {sectionDuration > 0 && <Box component="span" sx={muted}>{PlanHelper.formatTime(sectionDuration)}</Box>}
+      </Box>
       {getChildren()}
     </>;
   };
 
-  const getDescriptionRow = () => <div className="planItemDescription">{pi.description}</div>;
-
-  const getItemRow = (onLabelClick?: () => void) => <>
-    <div className="planItem">
-      <span style={{ float: "right", display: "flex", alignItems: "center", gap: 4 }}>
-        <Icon style={{ fontSize: 16, color: "#999" }}>schedule</Icon>
-        <span style={{ color: "#666", fontSize: "0.9em", minWidth: 40, textAlign: "right" }}>
-          {PlanHelper.formatTime(pi.seconds || 0)}
-        </span>
-      </span>
-      <div>{PlanHelper.formatTime(props.startTime || 0)}</div>
-      <div>
-        {onLabelClick ? (
-          <a href="about:blank" onClick={(e) => { e.preventDefault(); onLabelClick(); }}>
-            {pi.label}
-          </a>
-        ) : pi.link ? (
-          <a href={pi.link} target="_blank" rel="noopener noreferrer">
-            {pi.label}
-          </a>
-        ) : (
-          pi.label
-        )}
-      </div>
-      {getDescriptionRow()}
-      {positionName && <div className="planItemPosition" style={{ color: "#666", fontSize: "0.85em", textAlign: "right" }}>{positionName}</div>}
-    </div>
-  </>;
+  const getItemRow = (onLabelClick?: () => void) => {
+    const label = <>{isSong && <MusicNoteIcon sx={{ fontSize: 16, color: tc.textSecondary }} />}{pi.label}</>;
+    const linkSx = { whiteSpace: "normal", textAlign: "left", fontSize: 15, fontWeight: 500 } as const;
+    return (
+      <Box className="kit-row" sx={{ display: "flex", alignItems: "flex-start", gap: "12px", minHeight: 44, py: "10px", "& + .kit-row": { borderTop: `1px solid ${tc.border}` } }}>
+        <Box component="span" sx={{ ...muted, width: 44, pt: "1px" }}>{PlanHelper.formatTime(props.startTime || 0)}</Box>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          {onLabelClick ? (
+            <TextLink onClick={onLabelClick} sx={linkSx}>{label}</TextLink>
+          ) : pi.link ? (
+            <TextLink href={pi.link} sx={linkSx}>{label}</TextLink>
+          ) : (
+            <Typography component="span" sx={{ display: "flex", alignItems: "center", gap: "6px", fontSize: 15, lineHeight: "21px", fontWeight: 500, color: tc.text, overflowWrap: "anywhere" }}>{label}</Typography>
+          )}
+          {pi.description && <Typography sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, mt: "2px" }}>{pi.description}</Typography>}
+          {positionName && <Typography className="planItemPosition" sx={{ fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary, mt: "2px" }}>{positionName}</Typography>}
+        </Box>
+        <Box component="span" sx={{ ...muted, pt: "1px" }}>{PlanHelper.formatTime(pi.seconds || 0)}</Box>
+      </Box>
+    );
+  };
 
   const getPlanItem = () => {
     switch (pi.itemType) {

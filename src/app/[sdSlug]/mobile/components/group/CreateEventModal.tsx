@@ -1,25 +1,11 @@
 "use client";
 
 import React from "react";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Grid,
-  Icon,
-  IconButton,
-  MenuItem,
-  Switch,
-  TextField,
-  Typography
-} from "@mui/material";
+import { Box, Button, FormControlLabel, Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
 import { ApiHelper, EventHelper, Locale } from "@churchapps/apphelper";
 import type { EventExceptionInterface, EventInterface } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
+import { Sheet, TextLink } from "../kit";
 import { RRuleEditor } from "@churchapps/apphelper/website";
 import { EditRecurringModal } from "../../../../../components/eventCalendar/EditRecurringModal";
 import { MarkdownEditor } from "@churchapps/apphelper/markdown";
@@ -406,41 +392,21 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
 
   return (
     <>
-      <Dialog
-        open={open && !(isEdit && eventProp?.recurrenceRule && !editScope)}
+      <Sheet
+        open={!!(open && !(isEdit && eventProp?.recurrenceRule && !editScope))}
         onClose={onClose}
-        fullWidth
-        maxWidth="sm"
-        PaperProps={{ sx: { borderRadius: `${mobileTheme.radius.xl}px` } }}
+        title={isEdit ? Locale.label("mobile.group.editEvent") : Locale.label("mobile.group.newEvent")}
+        actions={(
+          <>
+            {isEdit && <TextLink danger onClick={handleDelete} disabled={saving} sx={{ mr: "auto" }}>{Locale.label("mobile.group.deleteEvent")}</TextLink>}
+            <Button variant="outlined" onClick={onClose}>{Locale.label("mobile.group.cancel")}</Button>
+            <Button variant="contained" onClick={handleSave} disabled={saving || !title.trim()}>
+              {saving ? Locale.label("mobile.group.saving") : isEdit ? Locale.label("mobile.group.saveChanges") : Locale.label("mobile.group.save")}
+            </Button>
+          </>
+        )}
       >
-        <DialogTitle
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            pb: 1
-          }}
-        >
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text }}>
-            {isEdit ? Locale.label("mobile.group.editEvent") : Locale.label("mobile.group.newEvent")}
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            {isEdit && (
-              <IconButton
-                onClick={handleDelete}
-                aria-label={Locale.label("mobile.group.deleteEvent")}
-                disabled={saving}
-                sx={{ color: tc.error }}
-              >
-                <Icon>delete</Icon>
-              </IconButton>
-            )}
-            <IconButton onClick={onClose} aria-label={Locale.label("mobile.components.close")} sx={{ color: tc.text }}>
-              <Icon>close</Icon>
-            </IconButton>
-          </Box>
-        </DialogTitle>
-        <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 1 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 1 }}>
           <TextField
             fullWidth
             size="small"
@@ -567,27 +533,8 @@ export const CreateEventModal = ({ open, groupId, initialDateIso, event: eventPr
             <EventReminderEdit eventId={eventProp.id} hasRegistration={registrationEnabled} />
           )}
           {error && <Typography sx={{ color: tc.error, fontSize: 13 }}>{error}</Typography>}
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={onClose} sx={{ textTransform: "none", color: tc.text }}>
-            {Locale.label("mobile.group.cancel")}
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleSave}
-            disabled={saving || !title.trim()}
-            sx={{
-              bgcolor: tc.primary,
-              color: tc.onPrimary,
-              textTransform: "none",
-              fontWeight: 600,
-              "&:hover": { bgcolor: tc.primary }
-            }}
-          >
-            {saving ? Locale.label("mobile.group.saving") : isEdit ? Locale.label("mobile.group.saveChanges") : Locale.label("mobile.group.save")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
+      </Sheet>
       {open && isEdit && eventProp?.recurrenceRule && !editScope && (
         <EditRecurringModal action="save" onDone={acceptScope} />
       )}

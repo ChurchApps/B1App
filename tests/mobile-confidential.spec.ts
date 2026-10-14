@@ -20,10 +20,11 @@ test.describe("Confidential groups (member view)", () => {
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
     await expect(page.locator("main")).toContainText("Care & Recovery", { timeout: 15000 });
 
-    // Open it and confirm the members tab renders without crashing.
+    // Open it and confirm the members slice renders without crashing.
     await page.goto("/mobile/groups/GRP00000031");
     await expect(mobileLogoutButton(page)).toBeVisible({ timeout: 30000 });
-    await page.getByRole("tab", { name: /Members/i }).click();
-    await expect(page.locator("main")).toContainText(/Members/i, { timeout: 15000 });
+    await page.getByRole("button", { name: /^All members$/i }).click();
+    await expect(page).toHaveURL(/view=members/, { timeout: 15000 });
+    await expect(page.locator("main h1")).toHaveText(/^Members$/i, { timeout: 15000 });
   });
 });

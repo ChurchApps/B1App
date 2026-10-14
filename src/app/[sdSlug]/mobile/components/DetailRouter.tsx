@@ -47,6 +47,6 @@ export function DetailRouter({ pageSlug, id, config }: Props) {
     case "volunteerSignup": return <VolunteerDetail id={id} config={config} />;
     case "playlist":
     case "playlistDetails": return <PlaylistDetail id={id} config={config} />;
-    default: return <PlaceholderPage title={Locale.label("mobile.components.detailViewTitle").replace("{}", pageSlug)} icon="apps" description={Locale.label("mobile.components.detailViewDescription").replace("{}", pageSlug)} />;
+    default: return <PlaceholderPage title={Locale.label("mobile.components.detailViewTitle").replace("{}", pageSlug)} description={Locale.label("mobile.components.detailViewDescription").replace("{}", pageSlug)} />;
   }
 }

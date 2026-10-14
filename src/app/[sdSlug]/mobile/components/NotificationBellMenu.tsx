@@ -2,14 +2,15 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Badge, Box, Button, Icon, IconButton, Popover, Skeleton, Tab, Tabs, Typography } from "@mui/material";
+import { Avatar, Box, Popover, Skeleton } from "@mui/material";
 import { ApiHelper, Locale, PersonHelper } from "@churchapps/apphelper";
 import { useQuery } from "@tanstack/react-query";
 import type { PersonInterface } from "@churchapps/helpers";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "./mobileTheme";
-import { getInitials, formatRelative, deriveNotificationUrl, getNotificationIcon } from "./util";
+import { getInitials, formatRelative, deriveNotificationUrl } from "./util";
 import { useRealtimeNotifications } from "../hooks/useRealtimeNotifications";
+import { PlateSection, QuietEmpty, Row, RowList, StatusBadge, TextLink } from "./kit";
 
 interface Props {
   anchorEl: HTMLElement | null;
@@ -17,17 +18,21 @@ interface Props {
   onClose: () => void;
 }
 
-interface Conversation {
+export interface Conversation {
   id: string;
-  pmId?: string;
+  pmId: string;
   personId: string;
   conversationId?: string;
   personName: string;
   personPhoto?: string;
+  preview: string;
+  lastTime?: string;
+  unread: boolean;
 }
 
-interface NotificationItem {
+export interface NotificationItem {
   id?: string;
+  churchId?: string;
   title?: string;
   message?: string;
   timeSent?: string | Date;
@@ -38,12 +43,79 @@ interface NotificationItem {
   triggeredByPersonId?: string;
 }
 
+// Same shape as MessagesPage: all three share the ["conversations", personId] cache entry.
+export const fetchConversations = async (myPersonId?: string): Promise<Conversation[]> => {
+  const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
+  if (!Array.isArray(pmData) || pmData.length === 0) return [];
+
+  const rows = pmData.map((pm) => {
+    const otherId = myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId;
+    return { pm, otherId };
+  });
+
+  const otherIds = Array.from(new Set(rows.map((r) => r.otherId).filter(Boolean)));
+  let peopleById: Record<string, PersonInterface> = {};
+  if (otherIds.length > 0) {
+    const people: PersonInterface[] = await ApiHelper.get(`/people/basic?ids=${otherIds.join(",")}`, "MembershipApi");
+    if (Array.isArray(people)) {
+      peopleById = people.reduce((acc, p) => {
+        if (p.id) acc[p.id] = p;
+        return acc;
+      }, {} as Record<string, PersonInterface>);
+    }
+  }
+
+  const seen = new Set<string>();
+  const result: Conversation[] = [];
+  rows.forEach(({ pm, otherId }) => {
+    const pmId = pm.pmId || pm.privateMessageId || pm.privateMessage?.id || pm.id;
+    const conversationId = pm.conversationId || pm.conversation?.id || (pm.pmId ? pm.id : undefined);
+    const id = conversationId || pmId;
+    if (!id || !otherId) return;
+    if (seen.has(id)) return;
+    seen.add(id);
+    const person = peopleById[otherId];
+    let photo = "";
+    if (person) {
+      try {
+        photo = PersonHelper.getPhotoUrl(person) || "";
+      } catch {
+        photo = (person as any).photo || "";
+      }
+    }
+    result.push({
+      id,
+      pmId,
+      personId: otherId,
+      conversationId,
+      personName: person?.name?.display || Locale.label("mobile.components.unknown"),
+      personPhoto: photo,
+      preview: (pm.conversation?.messages?.[0]?.content || "").replace(/<[^>]+>/g, ""),
+      lastTime: pm.lastMessageTime || pm.conversation?.dateCreated,
+      unread: !!myPersonId && pm.notifyPersonId === myPersonId
+    });
+  });
+  return result;
+};
+
+export const conversationHref = (c: Conversation) => {
+  const path = `/mobile/messages/${c.personId}`;
+  return c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path;
+};
+
+export const ConversationAvatar = ({ c }: { c: Conversation }) => (
+  <Avatar src={c.personPhoto || undefined} alt={c.personName} sx={{ width: 36, height: 36, flex: "none", bgcolor: mobileTheme.colors.chip, color: mobileTheme.colors.onChip, fontSize: 13, fontWeight: 600 }}>
+    {getInitials(c.personName)}
+  </Avatar>
+);
+
+const PREVIEW_COUNT = 4;
+
 export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   const tc = mobileTheme.colors;
   const router = useRouter();
   const userContext = React.useContext(UserContext);
   const { counts, refresh } = useRealtimeNotifications(userContext ?? null);
-  const [tab, setTab] = React.useState<"messages" | "notifications">("messages");
   const loggedIn = !!userContext?.user?.firstName;
   const myPersonId = userContext?.person?.id;
 
@@ -53,60 +125,7 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
 
   const { data: conversationsData, isError: conversationsFailed } = useQuery<Conversation[]>({
     queryKey: ["conversations", myPersonId],
-    queryFn: async () => {
-      const pmData: any[] = await ApiHelper.get("/privateMessages", "MessagingApi");
-      if (!Array.isArray(pmData) || pmData.length === 0) return [];
-
-      const rows = pmData.map((pm) => {
-        const otherId = myPersonId && pm.fromPersonId === myPersonId ? pm.toPersonId : pm.fromPersonId;
-        return { pm, otherId };
-      });
-
-      const otherIds = Array.from(new Set(rows.map((r) => r.otherId).filter(Boolean)));
-      let peopleById: Record<string, PersonInterface> = {};
-      if (otherIds.length > 0) {
-        const people: PersonInterface[] = await ApiHelper.get(
-          `/people/basic?ids=${otherIds.join(",")}`,
-          "MembershipApi"
-        );
-        if (Array.isArray(people)) {
-          peopleById = people.reduce((acc, p) => {
-            if (p.id) acc[p.id] = p;
-            return acc;
-          }, {} as Record<string, PersonInterface>);
-        }
-      }
-
-      const seen = new Set<string>();
-      const result: Conversation[] = [];
-      rows.forEach(({ pm, otherId }) => {
-        const pmId = pm.pmId || pm.privateMessageId || pm.privateMessage?.id || pm.id;
-        const conversationId = pm.conversationId || pm.conversation?.id || (pm.pmId ? pm.id : undefined);
-        const id = conversationId || pmId;
-        if (!id || !otherId) return;
-        if (seen.has(id)) return;
-        seen.add(id);
-        const person = peopleById[otherId];
-        const displayName = person?.name?.display || Locale.label("mobile.components.unknown");
-        let photo = "";
-        if (person) {
-          try {
-            photo = PersonHelper.getPhotoUrl(person) || "";
-          } catch {
-            photo = (person as any).photo || "";
-          }
-        }
-        result.push({
-          id,
-          pmId,
-          personId: otherId,
-          conversationId,
-          personName: displayName,
-          personPhoto: photo
-        });
-      });
-      return result;
-    },
+    queryFn: () => fetchConversations(myPersonId),
     enabled: loggedIn && open
   });
 
@@ -122,219 +141,21 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
   const conversations = conversationsData ?? (conversationsFailed ? [] : null);
   const notifications = notificationsData ?? (notificationsFailed ? [] : null);
 
-  const handleConversationClick = (c: Conversation) => {
+  const go = (path: string) => {
     onClose();
-    const path = `/mobile/messages/${c.personId}`;
-    router.push(c.conversationId ? `${path}?conversationId=${encodeURIComponent(c.conversationId)}` : path);
+    router.push(path);
   };
 
   const handleNotificationClick = (n: NotificationItem) => {
     const href = deriveNotificationUrl(n);
     if (!href) return;
-    onClose();
-    router.push(href);
+    go(href);
   };
 
-  const handleViewAll = (path: string) => {
-    onClose();
-    router.push(path);
-  };
-
-  const handleNewMessage = () => {
-    onClose();
-    router.push("/mobile/messages/new");
-  };
-
-  const renderConversationRow = (c: Conversation) => (
-    <Box
-      key={c.id}
-      onClick={() => handleConversationClick(c)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleConversationClick(c);
-        }
-      }}
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1.5,
-        px: 2,
-        py: 1.25,
-        cursor: "pointer",
-        "&:hover": { bgcolor: tc.iconBackground }
-      }}
-    >
-      {c.personPhoto ? (
-        <Box
-          component="img"
-          src={c.personPhoto}
-          alt={c.personName}
-          sx={{ width: 36, height: 36, borderRadius: "18px", objectFit: "cover", flexShrink: 0 }}
-        />
-      ) : (
-        <Box
-          sx={{
-            width: 36,
-            height: 36,
-            borderRadius: "18px",
-            bgcolor: tc.primaryLight,
-            color: tc.primary,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: 700,
-            fontSize: 13,
-            flexShrink: 0
-          }}
-        >
-          {getInitials(c.personName)}
-        </Box>
-      )}
-      <Typography
-        sx={{
-          flex: 1,
-          minWidth: 0,
-          fontSize: 14,
-          fontWeight: 600,
-          color: tc.text,
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap"
-        }}
-      >
-        {c.personName}
-      </Typography>
-      <Icon sx={{ color: tc.textSecondary, fontSize: 20 }}>chevron_right</Icon>
-    </Box>
-  );
-
-  const renderNotificationRow = (n: NotificationItem, idx: number) => {
-    const href = deriveNotificationUrl(n);
-    const iconName = getNotificationIcon(n.contentType);
-    return (
-      <Box
-        key={n.id || `n-${idx}`}
-        role={href ? "button" : undefined}
-        tabIndex={href ? 0 : undefined}
-        onClick={() => handleNotificationClick(n)}
-        onKeyDown={(e) => {
-          if (href && (e.key === "Enter" || e.key === " ")) {
-            e.preventDefault();
-            handleNotificationClick(n);
-          }
-        }}
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          gap: 1.5,
-          px: 2,
-          py: 1.25,
-          cursor: href ? "pointer" : "default",
-          "&:hover": href ? { bgcolor: tc.iconBackground } : undefined
-        }}
-      >
-        <Box
-          sx={{
-            width: 32,
-            height: 32,
-            flexShrink: 0,
-            borderRadius: "16px",
-            bgcolor: tc.iconBackground,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-        >
-          <Icon sx={{ color: tc.primary, fontSize: 18 }}>{iconName}</Icon>
-        </Box>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          {n.message && (
-            <Typography
-              sx={{
-                fontSize: 13,
-                lineHeight: "18px",
-                color: tc.text,
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden"
-              }}
-            >
-              {n.message}
-            </Typography>
-          )}
-          <Typography sx={{ fontSize: 11, color: tc.disabled, mt: 0.25 }}>
-            {formatRelative(n.timeSent)}
-          </Typography>
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderSkeletonRow = (key: number) => (
-    <Box key={`sk-${key}`} sx={{ display: "flex", alignItems: "center", gap: 1.5, px: 2, py: 1.25 }}>
-      <Skeleton variant="circular" width={36} height={36} />
-      <Box sx={{ flex: 1 }}>
-        <Skeleton variant="text" width="70%" height={16} />
-        <Skeleton variant="text" width="40%" height={12} />
-      </Box>
-    </Box>
-  );
-
-  const renderEmpty = (icon: string, text: string, action?: { label: string; onClick: () => void }) => (
-    <Box sx={{ px: 3, py: 5, textAlign: "center" }}>
-      <Icon sx={{ fontSize: 40, color: tc.divider, mb: 1 }}>{icon}</Icon>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: action ? 2 : 0 }}>{text}</Typography>
-      {action && (
-        <Button
-          variant="contained"
-          size="small"
-          startIcon={<Icon>edit</Icon>}
-          onClick={action.onClick}
-          disableElevation
-          sx={{
-            bgcolor: tc.primary,
-            color: tc.onPrimary,
-            textTransform: "none",
-            fontWeight: 600,
-            "&:hover": { bgcolor: tc.primary }
-          }}
-        >
-          {action.label}
-        </Button>
-      )}
-    </Box>
-  );
-
-  const renderFooter = (path: string, label: string) => (
-    <Box
-      onClick={() => handleViewAll(path)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleViewAll(path);
-        }
-      }}
-      sx={{
-        px: 2,
-        py: 1.25,
-        borderTop: `1px solid ${tc.border}`,
-        textAlign: "center",
-        cursor: "pointer",
-        color: tc.primary,
-        fontSize: 13,
-        fontWeight: 600,
-        "&:hover": { bgcolor: tc.iconBackground }
-      }}
-    >
-      {label}
-    </Box>
-  );
+  const skeletons = [0, 1].map((k) => <Skeleton key={k} variant="text" height={40} />);
+  const unreadBadge = (n: number) => n > 0 ? <StatusBadge tone="pri">{Locale.label("mobile.inbox.newCount").replace("{}", String(n))}</StatusBadge> : null;
+  const sectionTitle = (label: string, n: number) => <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>{label}{unreadBadge(n)}</Box>;
+  const sectionSx = { px: "16px", py: "14px" };
 
   return (
     <Popover
@@ -350,83 +171,52 @@ export const NotificationBellMenu = ({ anchorEl, open, onClose }: Props) => {
             maxWidth: "calc(100vw - 16px)",
             mt: 0.5,
             bgcolor: tc.surface,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            boxShadow: mobileTheme.shadows.lg,
+            backgroundImage: "none",
+            border: `1px solid ${tc.border}`,
+            borderRadius: "10px",
+            boxShadow: mobileTheme.shadows.md,
             overflow: "hidden"
           }
         }
       }}
     >
-      <Tabs
-        value={tab}
-        onChange={(_, v) => setTab(v)}
-        variant="fullWidth"
-        sx={{
-          borderBottom: `1px solid ${tc.border}`,
-          minHeight: 44,
-          "& .MuiTab-root": { minHeight: 44, textTransform: "none", fontWeight: 600, fontSize: 14 }
-        }}
-      >
-        <Tab
-          value="messages"
-          label={(
-            <Badge badgeContent={counts.pmCount} color="error" sx={{ "& .MuiBadge-badge": { right: -10, top: 2 } }}>
-              {Locale.label("mobile.components.messages")}
-            </Badge>
+      <Box sx={{ maxHeight: 440, overflowY: "auto", "& > section + section": { borderTop: `1px solid ${tc.border}` } }}>
+        <PlateSection sx={sectionSx} title={sectionTitle(Locale.label("mobile.components.messages"), counts.pmCount)} action={<TextLink onClick={() => go("/mobile/messages/new")}>{Locale.label("mobile.components.newMessage")}</TextLink>}>
+          {conversations === null && skeletons}
+          {conversations !== null && conversations.length === 0 && <QuietEmpty>{Locale.label("mobile.components.noMessages")}</QuietEmpty>}
+          {conversations !== null && conversations.length > 0 && (
+            <RowList>
+              {conversations.slice(0, PREVIEW_COUNT).map((c) => (
+                <Row key={c.id} onClick={() => go(conversationHref(c))} leading={<ConversationAvatar c={c} />} title={c.personName} subtitle={c.preview || undefined} sx={{ minHeight: 48 }} />
+              ))}
+            </RowList>
           )}
-        />
-        <Tab
-          value="notifications"
-          label={(
-            <Badge badgeContent={counts.notificationCount} color="error" sx={{ "& .MuiBadge-badge": { right: -10, top: 2 } }}>
-              {Locale.label("mobile.components.notifications")}
-            </Badge>
+        </PlateSection>
+        <PlateSection sx={sectionSx} title={sectionTitle(Locale.label("mobile.components.notifications"), counts.notificationCount)}>
+          {notifications === null && skeletons}
+          {notifications !== null && notifications.length === 0 && <QuietEmpty>{Locale.label("mobile.components.noNotifications")}</QuietEmpty>}
+          {notifications !== null && notifications.length > 0 && (
+            <RowList>
+              {notifications.slice(0, PREVIEW_COUNT).map((n, idx) => {
+                const href = deriveNotificationUrl(n);
+                return (
+                  <Row
+                    key={n.id || `n-${idx}`}
+                    onClick={href ? () => handleNotificationClick(n) : undefined}
+                    title={n.message || ""}
+                    subtitle={formatRelative(n.timeSent)}
+                    trailing={n.isNew ? <StatusBadge tone="pri">{Locale.label("mobile.inbox.new")}</StatusBadge> : undefined}
+                    sx={{ minHeight: 48 }}
+                  />
+                );
+              })}
+            </RowList>
           )}
-        />
-      </Tabs>
-      {tab === "messages" && (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            px: 1,
-            py: 0.5,
-            borderBottom: `1px solid ${tc.border}`
-          }}
-        >
-          <IconButton
-            aria-label={Locale.label("mobile.components.newMessage")}
-            size="small"
-            onClick={handleNewMessage}
-            sx={{
-              bgcolor: tc.iconBackground,
-              color: tc.primary,
-              "&:hover": { bgcolor: tc.iconBackground }
-            }}
-          >
-            <Icon sx={{ fontSize: 18 }}>edit</Icon>
-          </IconButton>
-        </Box>
-      )}
-      <Box sx={{ maxHeight: 380, overflowY: "auto" }}>
-        {tab === "messages" && (
-          <>
-            {conversations === null && [0, 1, 2].map(renderSkeletonRow)}
-            {conversations !== null && conversations.length === 0 && renderEmpty("chat_bubble_outline", Locale.label("mobile.components.noMessages"), { label: Locale.label("mobile.components.newMessage"), onClick: handleNewMessage })}
-            {conversations !== null && conversations.length > 0 && conversations.map(renderConversationRow)}
-          </>
-        )}
-        {tab === "notifications" && (
-          <>
-            {notifications === null && [0, 1, 2].map(renderSkeletonRow)}
-            {notifications !== null && notifications.length === 0 && renderEmpty("notifications", Locale.label("mobile.components.noNotifications"))}
-            {notifications !== null && notifications.length > 0 && notifications.map(renderNotificationRow)}
-          </>
-        )}
+        </PlateSection>
       </Box>
-      {tab === "messages" && renderFooter("/mobile/messages", Locale.label("mobile.components.viewAllMessages"))}
-      {tab === "notifications" && renderFooter("/mobile/notifications", Locale.label("mobile.components.viewAllNotifications"))}
+      <Box sx={{ px: "16px", py: "12px", borderTop: `1px solid ${tc.border}`, textAlign: "center" }}>
+        <TextLink onClick={() => go("/mobile/notifications")}>{Locale.label("mobile.inbox.seeAll")}</TextLink>
+      </Box>
     </Popover>
   );
 };

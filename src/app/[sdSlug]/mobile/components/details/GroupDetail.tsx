@@ -1,40 +1,28 @@
 "use client";
 
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Icon,
-  Skeleton,
-  Snackbar,
-  Tab,
-  Tabs,
-  Typography
-} from "@mui/material";
-import { ApiHelper, Locale, PersonHelper, UserHelper } from "@churchapps/apphelper";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Box, Button, Skeleton, Snackbar, Typography } from "@mui/material";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import LinkIcon from "@mui/icons-material/Link";
+import { ApiHelper, DateHelper, Locale, PersonHelper, SUBSCRIPTION_MESSAGE_TYPE, UserHelper } from "@churchapps/apphelper";
 import { MarkdownPreviewLight } from "@churchapps/apphelper/markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Permissions, type GroupInterface, type PlanInterface } from "@churchapps/helpers";
+import { Permissions, type GroupInterface, type GroupJoinRequestInterface, type PersonInterface, type PlanInterface } from "@churchapps/helpers";
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import { getFirstDayOfWeek } from "@/helpers/firstDayOfWeek";
 import { mobileTheme } from "../mobileTheme";
-import { cssUrl, getInitials } from "../util";
-import { GroupCalendarTab, type EventRow } from "../group/GroupCalendarTab";
+import { BackVerb, PageHead, PersonAvatar, Pill, PillRow, Plate, PlateSection, QuietEmpty, RecordLayout, Row, RowList, SearchField, Sheet, StatusBadge, TextLink, Thumb, useSliceView } from "../kit";
+import { GroupCalendarTab, GroupNextEvent, type EventRow } from "../group/GroupCalendarTab";
 import { GroupAttendanceTab } from "../group/GroupAttendanceTab";
-import { GroupResourcesTab } from "../group/GroupResourcesTab";
+import { GroupResourcesTab, ResourceRow, isHttpUrl, useGroupResources } from "../group/GroupResourcesTab";
 import { GroupChatModal, type ChatSubTab } from "../group/GroupChatModal";
 import { CreateEventModal } from "../group/CreateEventModal";
 import { GroupPlansTab } from "../group/GroupPlansTab";
 import { GroupLessonTakeHome } from "../group/GroupLessonTakeHome";
 import { AnonymousGroupView } from "../group/AnonymousGroupView";
 import { RequestToJoinDialog } from "./RequestToJoinDialog";
-import type { GroupJoinRequestInterface } from "@churchapps/helpers";
 
 interface Props {
   id: string;
@@ -64,7 +52,36 @@ interface GroupWithExtras extends GroupInterface {
   meetingLocation?: string;
 }
 
-type TabKey = "about" | "messages" | "members" | "attendance" | "events" | "resources" | "plans";
+interface PreviewMessage {
+  id?: string;
+  personId?: string;
+  content?: string;
+  messageType?: string;
+  timeSent?: string;
+  name?: string;
+}
+
+type SliceKey = "events" | "members" | "messages" | "resources" | "plans" | "attendance";
+const SLICES: SliceKey[] = ["events", "members", "messages", "resources", "plans", "attendance"];
+
+const tc = mobileTheme.colors;
+
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+const truncate = (s: string, max = 120) => (s.length > max ? s.slice(0, max - 1) + "…" : s);
+const photoOf = (p?: GroupMember["person"]) => {
+  if (!p?.photo) return undefined;
+  try { return PersonHelper.getPhotoUrl(p as any); } catch { return undefined; }
+};
+const timeAgo = (t?: string) => {
+  if (!t) return "";
+  const d = new Date(t);
+  if (isNaN(d.getTime())) return "";
+  const diff = Math.floor((Date.now() - d.getTime()) / 60000);
+  if (diff < 1) return Locale.label("mobile.now");
+  if (diff < 60) return `${diff}m`;
+  if (diff < 1440) return `${Math.floor(diff / 60)}h`;
+  return `${Math.floor(diff / 1440)}d`;
+};
 
 export const GroupDetail = ({ id, config }: Props) => {
   const isAuthenticated = !!UserHelper.user?.id;
@@ -79,42 +96,39 @@ export const GroupDetail = ({ id, config }: Props) => {
 const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; config: ConfigurationInterface }) => {
   // id is URL param (slug or real group id); derive resolved groupId from loaded group.
   const id = idOrSlug;
-  const tc = mobileTheme.colors;
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const [view, setView] = useSliceView();
   const churchId = config.church.id;
   const [joining, setJoining] = React.useState(false);
   const [requestDialogOpen, setRequestDialogOpen] = React.useState(false);
   const [leaveDialogOpen, setLeaveDialogOpen] = React.useState(false);
   const [actionError, setActionError] = React.useState<string | null>(null);
-  // Initially show the Members tab to avoid the messaging screen popup caused by a mounting bug.
-  const [tab, setTab] = React.useState<TabKey>("members");
-  const [chatOpen, setChatOpen] = React.useState(false);
   const [chatInitialTab, setChatInitialTab] = React.useState<ChatSubTab>("discussions");
   const [createEvent, setCreateEvent] = React.useState<string | null>(null);
   const [editEvent, setEditEvent] = React.useState<EventRow | null>(null);
+  const [memberSearch, setMemberSearch] = React.useState("");
 
+  // Legacy deep links (?activeTab=…, ?openChat=1&chatTab=…) land on the matching ?view= slice.
   React.useEffect(() => {
     if (!searchParams) return;
-    const activeTabParam = searchParams.get("activeTab");
-    if (activeTabParam) {
-      const allowed: TabKey[] = ["about", "messages", "members", "attendance", "events", "resources", "plans"];
-      if ((allowed as string[]).includes(activeTabParam)) {
-        if (activeTabParam === "messages") {
-          setChatOpen(true);
-        } else {
-          setTab(activeTabParam as TabKey);
-        }
-      }
+    const activeTab = searchParams.get("activeTab");
+    const openChat = searchParams.get("openChat");
+    if (!activeTab && !openChat) return;
+    const params = new URLSearchParams(searchParams.toString());
+    ["activeTab", "openChat", "chatTab"].forEach((k) => params.delete(k));
+    let next = "";
+    if (openChat === "1" || openChat === "true") {
+      setChatInitialTab(searchParams.get("chatTab") === "announcements" ? "announcements" : "discussions");
+      next = "messages";
+    } else if (activeTab && (SLICES as string[]).includes(activeTab)) {
+      next = activeTab;
     }
-    const openChatParam = searchParams.get("openChat");
-    if (openChatParam === "1" || openChatParam === "true") {
-      const chatTabParam = searchParams.get("chatTab");
-      setChatInitialTab(chatTabParam === "announcements" ? "announcements" : "discussions");
-      setChatOpen(true);
-    }
-
+    if (next) params.set("view", next);
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname || "/mobile/groups");
   }, []);
 
   const isValidGroup = (data: any): data is GroupWithExtras =>
@@ -199,11 +213,39 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
   const discussionsEnabled = group?.discussionsEnabled !== false;
   const announcementsEnabled = group?.announcementsEnabled !== false;
   const chatEnabled = discussionsEnabled || announcementsEnabled;
+  // Non-members only get the details and the join action; the rest of the plate is for members and staff.
+  const isOutsider = !isMember && !canManageGroup;
 
-  const handleMemberClick = (m: GroupMember) => {
-    const pid = m.personId || m.person?.id;
-    if (pid) router.push(`/mobile/community/${pid}`);
-  };
+  const { data: resources } = useGroupResources(group && !isOutsider ? groupId || "" : "");
+
+  const { data: sessions = [] } = useQuery<{ id?: string; sessionDate?: string }[]>({
+    queryKey: ["group-sessions", groupId],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/sessions?groupId=${groupId}`, "AttendanceApi");
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: !!groupId && canTakeAttendance
+  });
+
+  const previewType = discussionsEnabled ? "group" : "groupAnnouncement";
+  const { data: chatPreview = [] } = useQuery<PreviewMessage[]>({
+    queryKey: ["group-chat-preview", groupId, previewType],
+    queryFn: async () => {
+      const data = await ApiHelper.get(`/conversations/messages/${previewType}/${groupId}?page=1&limit=5`, "MessagingApi");
+      const latest: PreviewMessage[] = (Array.isArray(data) ? data : [])
+        .flatMap((c: { messages?: PreviewMessage[] }) => c.messages || [])
+        .filter((m: PreviewMessage) => m.messageType !== SUBSCRIPTION_MESSAGE_TYPE)
+        .sort((a: PreviewMessage, b: PreviewMessage) => new Date(b.timeSent || 0).getTime() - new Date(a.timeSent || 0).getTime())
+        .slice(0, 2);
+      const ids = Array.from(new Set(latest.map((m) => m.personId).filter(Boolean)));
+      let people: PersonInterface[] = [];
+      if (ids.length) {
+        try { people = await ApiHelper.get(`/people/basic?ids=${ids.join(",")}`, "MembershipApi"); } catch { people = []; }
+      }
+      return latest.map((m) => ({ ...m, name: (Array.isArray(people) ? people : []).find((p) => p.id === m.personId)?.name?.display || "" }));
+    },
+    enabled: !!groupId && isMember && chatEnabled
+  });
 
   const handleLeave = async () => {
     setLeaveDialogOpen(false);
@@ -249,9 +291,6 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     [myJoinRequests, groupId]
   );
 
-  // Non-members only get the details and the join action; the tabs are for members and staff.
-  const isOutsider = !isMember && !canManageGroup;
-
   // "Sign in to join" returns here with ?join=1 so the visitor lands in the join step, not on a bare page.
   const autoJoinHandled = React.useRef(false);
   React.useEffect(() => {
@@ -264,536 +303,295 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
     else if (policy === "open") handleJoin();
   }, [group, currentPersonId, membersSettled, requestsSettled, isMember, myPendingForGroup]);
 
-  const renderMemberAvatar = (m: GroupMember) => {
-    const common = { width: 40, height: 40, borderRadius: "20px", flexShrink: 0, overflow: "hidden" } as const;
-    if (m.person?.photo) {
-      return (
-        <Box
-          component="img"
-          src={PersonHelper.getPhotoUrl(m.person as any)}
-          alt={m.person?.name?.display || Locale.label("mobile.components.member")}
-          sx={{ ...common, objectFit: "cover" }}
-        />
-      );
-    }
-    return (
-      <Box
-        sx={{
-          ...common,
-          bgcolor: tc.primaryLight,
-          color: tc.primary,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontWeight: 700,
-          fontSize: 14
-        }}
-      >
-        {getInitials(m.person)}
-      </Box>
-    );
+  const openChat = () => {
+    setChatInitialTab(discussionsEnabled ? "discussions" : "announcements");
+    setView("messages");
   };
 
-  const renderHero = () => {
-    const memberCount = members?.length ?? 0;
-    const hasPhoto = !!group?.photoUrl;
-    const overlaySx = {
-      position: "absolute",
-      left: 0,
-      right: 0,
-      bottom: 0,
-      px: "20px",
-      py: "20px",
-      background: "linear-gradient(transparent, rgba(7,14,27,0.78))"
-    } as const;
-    const chipSx = {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: "4px",
-      bgcolor: "rgba(255,255,255,0.9)",
-      color: "#000",
-      fontSize: 10.5,
-      fontWeight: 700,
-      px: "8px",
-      py: "4px",
-      borderRadius: "999px"
-    } as const;
-    const leaderChipSx = { ...chipSx, bgcolor: "rgba(255,193,7,0.9)" } as const;
+  const planTeaser = React.useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dated = groupPlans.filter((p) => p.serviceDate).map((p) => ({ p, d: DateHelper.toDate(p.serviceDate as any) }));
+    const upcoming = dated.filter((x) => x.d >= today).sort((a, b) => a.d.getTime() - b.d.getTime());
+    const past = dated.filter((x) => x.d < today).sort((a, b) => b.d.getTime() - a.d.getTime());
+    return upcoming[0] || past[0] || null;
+  }, [groupPlans]);
 
-    return (
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          height: 220,
-          borderRadius: "20px",
-          overflow: "hidden",
-          background: hasPhoto ? `${cssUrl(group!.photoUrl)} center / cover no-repeat, ${mobileTheme.colorWash}` : mobileTheme.colorWash
-        }}
-      >
-        <Box sx={overlaySx}>
-          <Typography
-            sx={{
-              fontSize: 26,
-              fontWeight: 800,
-              color: "#FFFFFF",
-              lineHeight: 1.2,
-              mb: "12px"
-            }}
-          >
-            {group?.name}
-          </Typography>
-          <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {!membersUnavailable && (
-              <Box sx={chipSx}>
-                <Icon sx={{ fontSize: 14 }}>group</Icon>
-                <span>
-                  {memberCount} {memberCount === 1 ? Locale.label("mobile.details.memberSingular") : Locale.label("mobile.details.membersLowercase")}
-                </span>
-              </Box>
-            )}
-            {isLeader && (
-              <Box sx={leaderChipSx}>
-                <Icon sx={{ fontSize: 14 }}>workspace_premium</Icon>
-                <span>{Locale.label("mobile.details.leader")}</span>
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </Box>
-    );
-  };
-
-  const renderAbout = () => {
-    const rows: { icon: string; label: string }[] = [];
-    if (group?.meetingDay) rows.push({ icon: "event", label: group.meetingDay });
-    if (group?.meetingTime) rows.push({ icon: "schedule", label: group.meetingTime });
-    if (group?.meetingLocation) rows.push({ icon: "place", label: group.meetingLocation });
-
-    return (
-      <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-        {(hasAbout || rows.length > 0) && (
-          <Box
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              p: `${mobileTheme.spacing.md}px`
-            }}
-          >
-            <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-              {Locale.label("mobile.details.about")}
-            </Typography>
-            {hasAbout && (
-              <Box
-                sx={{
-                  fontSize: 14,
-                  color: tc.textMuted,
-                  lineHeight: 1.6,
-                  mb: rows.length ? `${mobileTheme.spacing.md}px` : 0,
-                  "& p": { mt: 0, mb: 1 },
-                  "& p:last-child": { mb: 0 },
-                  "& a": { color: tc.primary },
-                  "& h1, & h2, & h3, & h4": { color: tc.text, fontWeight: 700, mt: 1, mb: 0.5 },
-                  "& ul, & ol": { pl: 3, mt: 0, mb: 1 }
-                }}
-              >
-                <MarkdownPreviewLight value={group?.about || ""} />
-              </Box>
-            )}
-            {rows.map((r, idx) => (
-              <Box
-                key={`${r.icon}-${idx}`}
-                sx={{ display: "flex", alignItems: "center", gap: `${mobileTheme.spacing.sm}px`, py: "6px" }}
-              >
-                <Icon sx={{ fontSize: 20, color: tc.primary }}>{r.icon}</Icon>
-                <Typography sx={{ fontSize: 14, color: tc.text }}>{r.label}</Typography>
-              </Box>
-            ))}
-          </Box>
-        )}
-        {!hasAbout && rows.length === 0 && (
-          <Typography sx={{ fontSize: 14, color: tc.textMuted, textAlign: "center", p: 2 }}>
-            {Locale.label("mobile.details.noDetailsYet")}
-          </Typography>
-        )}
-        {renderActions()}
-      </Box>
-    );
-  };
-
-  const renderMembersTab = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        p: `${mobileTheme.spacing.md}px`
-      }}
-    >
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.sm}px` }}>
-        {membersUnavailable
-          ? Locale.label("mobile.details.membersTab")
-          : Locale.label("mobile.details.members").replace("{}", String(members?.length ?? 0))}
-      </Typography>
-      {membersUnavailable && (
-        <Typography sx={{ fontSize: 14, color: tc.textMuted }}>
-          {Locale.label("mobile.details.membersPrivate")}
-        </Typography>
-      )}
-      {members === null &&
-        !membersUnavailable &&
-        [0, 1, 2].map((k) => (
-          <Box
-            key={`msk-${k}`}
-            sx={{ display: "flex", alignItems: "center", gap: `${mobileTheme.spacing.md}px`, py: "4px", height: 48 }}
-          >
-            <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="text" width="50%" height={18} />
-          </Box>
-        ))}
-      {members !== null && members.length === 0 && (
-        <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.details.noMembersYet")}</Typography>
-      )}
-      {members !== null &&
-        members.map((m) => (
-          <Box
-            key={m.id}
-            role="button"
-            tabIndex={0}
-            onClick={() => handleMemberClick(m)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                handleMemberClick(m);
-              }
-            }}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: `${mobileTheme.spacing.md}px`,
-              height: 48,
-              px: "4px",
-              borderRadius: `${mobileTheme.radius.md}px`,
-              cursor: "pointer",
-              "&:hover": { bgcolor: tc.iconBackground }
-            }}
-          >
-            {renderMemberAvatar(m)}
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: tc.text,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap"
-                }}
-              >
-                {m.person?.name?.display || Locale.label("mobile.components.unknown")}
-              </Typography>
-              <Typography sx={{ fontSize: 12, color: tc.textSecondary }}>
-                {m.leader ? Locale.label("mobile.details.leader") : Locale.label("mobile.details.memberLabel")}
-              </Typography>
-            </Box>
-            <Icon sx={{ color: tc.textSecondary }}>chevron_right</Icon>
-          </Box>
-        ))}
-    </Box>
+  const lastSession = React.useMemo(
+    () => [...sessions].filter((s) => s.sessionDate).sort((a, b) => new Date(b.sessionDate!).getTime() - new Date(a.sessionDate!).getTime())[0],
+    [sessions]
   );
 
-  const renderActions = () => {
-    if (!currentPersonId) return null;
-    if (isMember) {
-      return (
-        <Button
-          variant="outlined"
-          color="error"
-          fullWidth
-          disabled={joining}
-          onClick={() => setLeaveDialogOpen(true)}
-          data-testid="leave-group-button"
-          sx={{
-            textTransform: "none",
-            fontWeight: 600,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            py: "10px"
-          }}
-        >
-          {Locale.label("mobile.details.leaveGroup")}
-        </Button>
-      );
-    }
-    const policy = group?.joinPolicy ?? "open";
+  const memberName = (m: GroupMember) => m.person?.name?.display || Locale.label("mobile.components.unknown");
+  const memberHref = (m: GroupMember) => {
+    const pid = m.personId || m.person?.id;
+    return pid ? `/mobile/community/${pid}` : undefined;
+  };
+  const leaderCount = (members || []).filter((m) => m.leader).length;
+  const memberSummary = members
+    ? [
+      plural(members.length, Locale.label("mobile.details.memberSingular"), Locale.label("mobile.details.membersLowercase")),
+      leaderCount ? plural(leaderCount, Locale.label("mobile.group.leaderLowercase"), Locale.label("mobile.group.leadersLowercase")) : ""
+    ].filter(Boolean).join(" · ")
+    : "";
+
+  if (group === undefined) {
+    return (
+      <Box sx={{ px: { xs: "16px", md: 0 } }}>
+        <Skeleton variant="text" width="60%" height={40} />
+        <Skeleton variant="text" width="40%" />
+        <Skeleton variant="rounded" height={200} sx={{ mt: 2 }} />
+      </Box>
+    );
+  }
+
+  if (group === null) {
+    return (
+      <>
+        <PageHead title={Locale.label("mobile.details.groupNotFound")} lede={Locale.label("mobile.details.groupNotFoundDescription")} />
+        <BackVerb href="/mobile/groups" label={Locale.label("mobile.details.backToGroups")} />
+      </>
+    );
+  }
+
+  const groupName = group.name || Locale.label("mobile.components.group");
+  const schedule = [group.meetingDay, group.meetingTime, group.meetingLocation].filter(Boolean).join(" · ");
+  const hasAbout = !!group.about;
+
+  const renderJoinAction = () => {
+    if (!currentPersonId || isMember) return null;
+    const policy = group.joinPolicy ?? "open";
     if (policy === "closed") return null;
     if (policy === "request") {
       if (myPendingForGroup) {
         return (
-          <Box
-            data-testid="request-pending-notice"
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              p: `${mobileTheme.spacing.md}px`,
-              display: "flex",
-              gap: `${mobileTheme.spacing.sm}px`
-            }}
-          >
-            <Icon sx={{ fontSize: 22, color: tc.primary }}>hourglass_top</Icon>
-            <Box>
-              <Typography sx={{ fontSize: 15, fontWeight: 600, color: tc.text }}>{Locale.label("mobile.details.requestPending")}</Typography>
-              <Typography sx={{ fontSize: 14, color: tc.textMuted }}>{Locale.label("mobile.details.requestPendingNote")}</Typography>
-            </Box>
+          <Box data-testid="request-pending-notice">
+            <StatusBadge tone="warn" dot>{Locale.label("mobile.details.requestPending")}</StatusBadge>
+            <Typography sx={{ mt: "6px", fontSize: 13.5, lineHeight: "19px", color: tc.textSecondary }}>{Locale.label("mobile.details.requestPendingNote")}</Typography>
           </Box>
         );
       }
       return (
-        <Button
-          variant="contained"
-          fullWidth
-          disabled={joining}
-          onClick={handleRequest}
-          data-testid="request-to-join-button"
-          sx={{
-            bgcolor: tc.primary,
-            color: tc.onPrimary,
-            textTransform: "none",
-            fontWeight: 600,
-            borderRadius: `${mobileTheme.radius.md}px`,
-            py: "10px",
-            "&:hover": { bgcolor: tc.primary }
-          }}
-        >
+        <Button variant="contained" disabled={joining} onClick={handleRequest} data-testid="request-to-join-button">
           {Locale.label("mobile.group.requestToJoin")}
         </Button>
       );
     }
     return (
-      <Button
-        variant="contained"
-        fullWidth
-        disabled={joining}
-        onClick={handleJoin}
-        data-testid="join-group-button"
-        sx={{
-          bgcolor: tc.primary,
-          color: tc.onPrimary,
-          textTransform: "none",
-          fontWeight: 600,
-          borderRadius: `${mobileTheme.radius.md}px`,
-          py: "10px",
-          "&:hover": { bgcolor: tc.primary }
-        }}
-      >
+      <Button variant="contained" disabled={joining} onClick={handleJoin} data-testid="join-group-button">
         {Locale.label("mobile.details.joinGroup")}
       </Button>
     );
   };
 
-  const renderSkeleton = () => (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-      <Skeleton
-        variant="rounded"
-        sx={{ width: "100%", paddingTop: "56.25%", borderRadius: `${mobileTheme.radius.lg}px` }}
-      />
-      <Box
-        sx={{ bgcolor: tc.surface, borderRadius: `${mobileTheme.radius.lg}px`, p: `${mobileTheme.spacing.md}px` }}
+  const identity = (
+    <>
+      {group.photoUrl && <Box sx={{ display: { xs: "none", md: "block" }, mb: "16px" }}><Thumb src={group.photoUrl} alt={groupName} width="100%" height="auto" /></Box>}
+      <PageHead
+        title={groupName}
+        lede={(schedule || isLeader) ? (
+          <>
+            {schedule && <Box>{schedule}</Box>}
+            {isLeader && <PillRow sx={{ mt: "12px" }}><Pill qualifier={`· ${Locale.label("mobile.details.leader")}`}>{Locale.label("mobile.group.you")}</Pill></PillRow>}
+          </>
+        ) : undefined}
       >
-        <Skeleton variant="text" width="30%" height={24} />
-        <Skeleton variant="text" width="95%" />
-        <Skeleton variant="text" width="85%" />
-      </Box>
-    </Box>
+        {isMember && chatEnabled && (
+          <Button variant="contained" startIcon={<ChatBubbleOutlineIcon />} onClick={openChat} data-testid="group-open-chat">
+            {Locale.label("mobile.group.openChat")}
+          </Button>
+        )}
+        {renderJoinAction()}
+      </PageHead>
+    </>
   );
 
-  const renderNotFound = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center"
-      }}
-    >
-      <Box
-        sx={{
-          width: 64,
-          height: 64,
-          borderRadius: "11px",
-          bgcolor: tc.iconBackground,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          mb: `${mobileTheme.spacing.md}px`
-        }}
-      >
-        <Icon sx={{ fontSize: 32, color: tc.primary }}>groups</Icon>
-      </Box>
-      <Typography sx={{ fontSize: 18, fontWeight: 600, color: tc.text, mb: `${mobileTheme.spacing.xs}px` }}>
-        {Locale.label("mobile.details.groupNotFound")}
-      </Typography>
-      <Typography sx={{ fontSize: 14, color: tc.textMuted, mb: `${mobileTheme.spacing.md}px` }}>
-        {Locale.label("mobile.details.groupNotFoundDescription")}
-      </Typography>
-      <Button
-        variant="outlined"
-        onClick={() => router.push("/mobile/groups")}
-        sx={{
-          borderColor: tc.primary,
-          color: tc.primary,
-          textTransform: "none",
-          fontWeight: 500,
-          borderRadius: `${mobileTheme.radius.md}px`
-        }}
-      >
-        {Locale.label("mobile.details.backToGroups")}
-      </Button>
-    </Box>
-  );
-
-  const hasAbout = !!group?.about;
-  const availableTabs: { key: TabKey; label: string; icon: string }[] = [];
-  if (hasAbout) availableTabs.push({ key: "about", label: Locale.label("mobile.details.tabAbout"), icon: "info" });
-  if (hasPlans) availableTabs.push({ key: "plans", label: Locale.label("groupsPage.plans"), icon: "event_note" });
-  if (isMember && chatEnabled) availableTabs.push({ key: "messages", label: Locale.label("mobile.details.tabMessages"), icon: "forum" });
-  availableTabs.push({ key: "members", label: Locale.label("mobile.details.membersTab"), icon: "group" });
-  if (canTakeAttendance) availableTabs.push({ key: "attendance", label: Locale.label("mobile.details.tabAttendance"), icon: "fact_check" });
-  availableTabs.push({ key: "events", label: Locale.label("mobile.details.tabEvents"), icon: "event" });
-  availableTabs.push({ key: "resources", label: Locale.label("mobile.details.tabResources"), icon: "folder" });
-
-  // Default to the first tab, but never Messages — its modal can't mount before the screen is ready.
-  const defaultTab = availableTabs.find((t) => t.key !== "messages")?.key ?? "members";
-  const tabInitialized = React.useRef(false);
-  React.useEffect(() => {
-    if (!group) return;
-    const explicit = searchParams?.get("activeTab");
-    if (!tabInitialized.current && !explicit) {
-      tabInitialized.current = true;
-      setTab(defaultTab);
-      return;
-    }
-    if (!availableTabs.some((t) => t.key === tab)) {
-      setTab(defaultTab);
-    }
-  }, [
-    group, hasAbout, hasPlans, isMember, isLeader, canTakeAttendance, chatEnabled, tab
-  ]);
-
-  return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      {group === undefined && renderSkeleton()}
-      {group === null && renderNotFound()}
-      {group && isOutsider && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }} data-testid="group-outsider-view">
-          {renderHero()}
-          {renderAbout()}
+  const aboutSection = (
+    <PlateSection title={Locale.label("mobile.details.tabAbout")}>
+      {hasAbout ? (
+        <Box sx={{ fontSize: 15, lineHeight: "22px", color: tc.text, "& p": { mt: 0, mb: 1 }, "& p:last-child": { mb: 0 }, "& a": { color: tc.link }, "& ul, & ol": { pl: 3, mt: 0, mb: 1 } }}>
+          <MarkdownPreviewLight value={group.about || ""} />
         </Box>
+      ) : <QuietEmpty>{Locale.label("mobile.details.noDetailsYet")}</QuietEmpty>}
+    </PlateSection>
+  );
+
+  const allLink = (slice: SliceKey, label: string) => (
+    <TextLink onClick={() => setView(slice)} data-testid={`group-all-${slice}`}>{label}</TextLink>
+  );
+
+  const renderMembersTeaser = () => {
+    if (membersUnavailable) return <QuietEmpty>{Locale.label("mobile.details.membersPrivate")}</QuietEmpty>;
+    if (members === null) return <Skeleton variant="rounded" height={32} width="70%" />;
+    if (members.length === 0) return <QuietEmpty>{Locale.label("mobile.details.noMembersYet")}</QuietEmpty>;
+    const preview = [...members].sort((a, b) => Number(!!b.leader) - Number(!!a.leader)).slice(0, 6);
+    return (
+      <>
+        <PillRow>
+          {preview.map((m) => (
+            <Pill key={m.id} href={memberHref(m)} qualifier={m.leader ? `· ${Locale.label("mobile.details.leader")}` : undefined}>{memberName(m)}</Pill>
+          ))}
+        </PillRow>
+        <Typography sx={{ mt: "10px", fontSize: 14, lineHeight: "20px", color: tc.textSecondary }}>{memberSummary}</Typography>
+      </>
+    );
+  };
+
+  const renderResourcesTeaser = () => {
+    if (!resources) return <Skeleton variant="rounded" height={48} />;
+    const items = [
+      ...resources.links.map((l) => ({ key: `l-${l.id}`, href: isHttpUrl(l.url) ? l.url : undefined, icon: <LinkIcon sx={{ color: tc.textSecondary }} />, title: l.text || Locale.label("mobile.group.linkFallback") })),
+      ...resources.files.map((f) => ({ key: `f-${f.id}`, href: f.contentPath || undefined, icon: <DescriptionOutlinedIcon sx={{ color: tc.textSecondary }} />, title: f.fileName || Locale.label("mobile.group.fileFallback") }))
+    ].slice(0, 3);
+    if (items.length === 0) return <QuietEmpty>{Locale.label("mobile.group.noResources")}</QuietEmpty>;
+    return <RowList>{items.map(({ key, ...r }) => <ResourceRow key={key} {...r} />)}</RowList>;
+  };
+
+  const plate = (
+    <Plate>
+      {groupId && (
+        <PlateSection title={Locale.label("mobile.group.nextEvent")} action={allLink("events", Locale.label("mobile.group.allEvents"))}>
+          <GroupNextEvent groupId={groupId} isMember={isMember} />
+        </PlateSection>
       )}
-      {group && !isOutsider && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-          {renderHero()}
-
-          <GroupLessonTakeHome isMember={isMember} plans={groupPlans} />
-
-          <Box
-            sx={{
-              bgcolor: tc.surface,
-              border: `1px solid ${tc.border}`,
-              borderRadius: `${mobileTheme.radius.lg}px`,
-              overflow: "hidden"
-            }}
-          >
-            <Tabs
-              value={availableTabs.some((t) => t.key === tab) ? tab : defaultTab}
-              onChange={(_, v) => {
-                if (v === "messages") {
-                  setChatInitialTab(discussionsEnabled ? "discussions" : "announcements");
-                  setChatOpen(true);
-                  return;
-                }
-                setTab(v);
-              }}
-              variant="scrollable"
-              scrollButtons="auto"
-              allowScrollButtonsMobile
-              textColor="primary"
-              indicatorColor="primary"
-              sx={{
-                minHeight: 52,
-                "& .MuiTabs-indicator": { backgroundColor: tc.primary, height: 2 },
-                "& .MuiTabs-scrollButtons.Mui-disabled": { opacity: 0.3 },
-                "& .MuiTab-root": {
-                  minHeight: 52,
-                  textTransform: "none",
-                  fontWeight: 500,
-                  fontSize: 14,
-                  color: tc.textSecondary,
-                  minWidth: "auto",
-                  px: 2
-                },
-                "& .Mui-selected": { color: `${tc.primary} !important`, fontWeight: 700 }
-              }}
-            >
-              {availableTabs.map((t) => (
-                <Tab
-                  key={t.key}
-                  value={t.key}
-                  label={
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                      <Icon sx={{ fontSize: 18 }}>{t.icon}</Icon>
-                      <span>{t.label}</span>
-                    </Box>
-                  }
+      <GroupLessonTakeHome isMember={isMember} plans={groupPlans} />
+      {isMember && chatEnabled && (
+        <PlateSection title={Locale.label("mobile.details.tabMessages")} action={<TextLink onClick={openChat}>{Locale.label("mobile.group.openChat")}</TextLink>}>
+          {chatPreview.length === 0 ? <QuietEmpty>{Locale.label("mobile.components.noMessages")}</QuietEmpty> : (
+            <RowList>
+              {chatPreview.map((m, i) => (
+                <Row
+                  key={m.id || i}
+                  onClick={openChat}
+                  leading={<PersonAvatar name={m.name} size={32} />}
+                  title={m.name || Locale.label("mobile.components.unknown")}
+                  subtitle={truncate(m.content || "")}
+                  trailing={<Typography sx={{ fontSize: 12.5, color: tc.textSecondary, flex: "none" }}>{timeAgo(m.timeSent)}</Typography>}
                 />
               ))}
-            </Tabs>
-          </Box>
+            </RowList>
+          )}
+        </PlateSection>
+      )}
+      <PlateSection title={Locale.label("mobile.details.membersTab")} action={!membersUnavailable && allLink("members", Locale.label("mobile.group.allMembers"))}>
+        {renderMembersTeaser()}
+      </PlateSection>
+      <PlateSection title={Locale.label("mobile.details.tabResources")} action={allLink("resources", Locale.label("mobile.group.allResources"))}>
+        {renderResourcesTeaser()}
+      </PlateSection>
+      {hasPlans && (
+        <PlateSection title={Locale.label("groupsPage.plans")} action={allLink("plans", Locale.label("mobile.group.allPlans"))}>
+          {planTeaser
+            ? <Row href={`/mobile/plans/${planTeaser.p.id}`} title={planTeaser.p.name} subtitle={DateHelper.prettyDate(planTeaser.d)} chevron sx={{ minHeight: 0, py: 0 }} />
+            : <QuietEmpty>{Locale.label("groupsPage.noUpcomingPlans")}</QuietEmpty>}
+        </PlateSection>
+      )}
+      {canTakeAttendance && (
+        <PlateSection title={Locale.label("mobile.details.tabAttendance")} action={allLink("attendance", Locale.label("mobile.group.takeAttendance"))}>
+          {lastSession?.sessionDate
+            ? <Typography sx={{ fontSize: 15, color: tc.text }}>{Locale.label("mobile.group.lastTaken").replace("{}", DateHelper.prettyDate(DateHelper.toDate(lastSession.sessionDate as any)))}</Typography>
+            : <QuietEmpty>{Locale.label("mobile.group.noAttendanceYet")}</QuietEmpty>}
+        </PlateSection>
+      )}
+      {hasAbout && aboutSection}
+      {isMember && currentPersonId && (
+        <PlateSection>
+          <TextLink danger disabled={joining} onClick={() => setLeaveDialogOpen(true)} data-testid="leave-group-button">{Locale.label("mobile.details.leaveGroup")}</TextLink>
+        </PlateSection>
+      )}
+    </Plate>
+  );
 
-          {tab === "about" && renderAbout()}
-          {tab === "members" && renderMembersTab()}
-          {tab === "events" && groupId && (
-            <GroupCalendarTab
-              groupId={groupId}
-              canManage={canManageGroup}
-              isMember={isMember}
-              onAddEvent={(dateIso) => setCreateEvent(dateIso)}
-              onEditEvent={(ev) => setEditEvent(ev)}
-              firstDayOfWeek={getFirstDayOfWeek(config.church)}
-            />
-          )}
-          {tab === "attendance" && canTakeAttendance && groupId && members !== null && (
-            <GroupAttendanceTab
-              groupId={groupId}
-              members={(members || [])
-                .filter((m) => m.person?.id)
-                .map((m) => ({
-                  id: m.id,
-                  person: {
-                    id: m.person!.id,
-                    name: { display: m.person!.name?.display },
-                    photo: m.person!.photo
-                  }
-                }))}
-            />
-          )}
-          {tab === "resources" && groupId && <GroupResourcesTab groupId={groupId} canEdit={canEditResources} />}
-          {tab === "plans" && groupId && <GroupPlansTab groupId={groupId} />}
+  const renderMembersSlice = () => {
+    if (membersUnavailable) return <PlateSection><QuietEmpty>{Locale.label("mobile.details.membersPrivate")}</QuietEmpty></PlateSection>;
+    const q = memberSearch.trim().toLowerCase();
+    const list = (members || []).filter((m) => !q || memberName(m).toLowerCase().includes(q));
+    return (
+      <PlateSection>
+        <SearchField value={memberSearch} onChange={setMemberSearch} label={Locale.label("mobile.screens.searchMembers")} />
+        {members === null && <Box sx={{ mt: "12px" }}>{[0, 1, 2].map((k) => <Skeleton key={k} variant="rounded" height={48} sx={{ mb: "8px" }} />)}</Box>}
+        {members !== null && list.length === 0 && <QuietEmpty sx={{ mt: "12px" }}>{members.length === 0 ? Locale.label("mobile.details.noMembersYet") : Locale.label("mobile.screens.noMembersFound")}</QuietEmpty>}
+        {list.length > 0 && (
+          <RowList sx={{ mt: "8px" }}>
+            {list.map((m) => (
+              <Row
+                key={m.id}
+                href={memberHref(m)}
+                leading={<PersonAvatar name={memberName(m)} src={photoOf(m.person)} />}
+                title={memberName(m)}
+                subtitle={m.leader ? Locale.label("mobile.details.leader") : undefined}
+                chevron
+              />
+            ))}
+          </RowList>
+        )}
+      </PlateSection>
+    );
+  };
+
+  const slice = !isOutsider ? (view as SliceKey) : "";
+  const slices: Partial<Record<SliceKey, { title: string; lede?: string; body: React.ReactNode } | null>> = groupId ? {
+    events: {
+      title: Locale.label("mobile.details.tabEvents"),
+      body: (
+        <GroupCalendarTab
+          groupId={groupId}
+          canManage={canManageGroup}
+          isMember={isMember}
+          onAddEvent={(dateIso) => setCreateEvent(dateIso)}
+          onEditEvent={(ev) => setEditEvent(ev)}
+          firstDayOfWeek={getFirstDayOfWeek(config.church)}
+        />
+      )
+    },
+    members: { title: Locale.label("mobile.details.membersTab"), lede: memberSummary, body: renderMembersSlice() },
+    resources: { title: Locale.label("mobile.details.tabResources"), body: <GroupResourcesTab groupId={groupId} canEdit={canEditResources} /> },
+    plans: hasPlans ? { title: Locale.label("groupsPage.plans"), body: <GroupPlansTab groupId={groupId} /> } : null,
+    attendance: canTakeAttendance && members !== null ? {
+      title: Locale.label("mobile.details.tabAttendance"),
+      body: (
+        <GroupAttendanceTab
+          groupId={groupId}
+          members={(members || [])
+            .filter((m) => m.person?.id)
+            .map((m) => ({ id: m.id, person: { id: m.person!.id, name: { display: m.person!.name?.display }, photo: m.person!.photo } }))}
+        />
+      )
+    } : null
+  } : {};
+  const activeSlice = slice ? slices[slice] : null;
+  const chatOpen = view === "messages" && chatEnabled;
+
+  return (
+    <>
+      {/* The full-screen chat replaces the page; the plate's stale message preview must not linger beneath it. */}
+      {chatOpen ? null : activeSlice ? (
+        <>
+          <BackVerb label={Locale.label("mobile.group.backTo").replace("{}", groupName)} onClick={() => setView("")} />
+          <PageHead title={activeSlice.title} lede={activeSlice.lede || undefined} />
+          <Plate>{activeSlice.body}</Plate>
+        </>
+      ) : isOutsider ? (
+        <Box data-testid="group-outsider-view">
+          <RecordLayout identity={identity}><Plate>{aboutSection}</Plate></RecordLayout>
         </Box>
+      ) : (
+        <RecordLayout identity={identity}>{plate}</RecordLayout>
       )}
 
       {groupId && (
         <GroupChatModal
-          open={chatOpen && chatEnabled}
+          open={chatOpen}
           groupId={groupId}
-          groupName={group?.name}
+          groupName={group.name}
           isLeader={isLeader}
           discussionsEnabled={discussionsEnabled}
           announcementsEnabled={announcementsEnabled}
           initialSubTab={chatInitialTab}
-          onClose={() => setChatOpen(false)}
+          onClose={() => {
+            setView("");
+            queryClient.invalidateQueries({ queryKey: ["group-chat-preview", groupId] });
+          }}
         />
       )}
       {groupId && (
@@ -820,22 +618,26 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           }}
         />
       )}
-      <Dialog open={leaveDialogOpen} onClose={() => setLeaveDialogOpen(false)}>
-        <DialogTitle>{Locale.label("mobile.details.leaveGroupTitle")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{Locale.label("mobile.details.leaveGroupBody")}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setLeaveDialogOpen(false)}>{Locale.label("common.cancel")}</Button>
-          <Button color="error" onClick={handleLeave} data-testid="confirm-leave-group">{Locale.label("mobile.details.leaveGroup")}</Button>
-        </DialogActions>
-      </Dialog>
+      <Sheet
+        open={leaveDialogOpen}
+        onClose={() => setLeaveDialogOpen(false)}
+        title={Locale.label("mobile.details.leaveGroupTitle")}
+        maxWidth="xs"
+        actions={(
+          <>
+            <Button variant="outlined" onClick={() => setLeaveDialogOpen(false)}>{Locale.label("common.cancel")}</Button>
+            <Button variant="contained" color="error" onClick={handleLeave} data-testid="confirm-leave-group">{Locale.label("mobile.details.leaveGroup")}</Button>
+          </>
+        )}
+      >
+        <Typography sx={{ color: tc.textSecondary }}>{Locale.label("mobile.details.leaveGroupBody")}</Typography>
+      </Sheet>
       <Snackbar open={!!actionError} autoHideDuration={4000} onClose={() => setActionError(null)} message={actionError} />
       {groupId && (
         <RequestToJoinDialog
           open={requestDialogOpen}
           groupId={groupId}
-          groupName={group?.name}
+          groupName={group.name}
           onClose={() => setRequestDialogOpen(false)}
           onSubmitted={() => {
             setRequestDialogOpen(false);
@@ -843,7 +645,7 @@ const AuthenticatedGroupDetail = ({ idOrSlug, config }: { idOrSlug: string; conf
           }}
         />
       )}
-    </Box>
+    </>
   );
 };
 

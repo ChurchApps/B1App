@@ -19,9 +19,9 @@ export default function PrintPage({ params }: { params: Params }) {
   const [accentColor, setAccentColor] = useState<string>(DEFAULT_ACCENT);
   let currYear = new Date().getFullYear();
   const searchparams = useSearchParams();
-  if (searchparams.get("prev") === "1") {
-    currYear = currYear - 1;
-  }
+  const yearParam = parseInt(searchparams.get("year") || "", 10);
+  if (yearParam > 1900 && yearParam <= currYear) currYear = yearParam;
+  else if (searchparams.get("prev") === "1") currYear = currYear - 1;
   const context = useContext(UserContext);
 
   useEffect(() => {

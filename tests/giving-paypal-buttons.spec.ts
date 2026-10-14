@@ -48,12 +48,9 @@ async function stubPayPal(page: Page): Promise<() => string> {
   return () => sdkUrl;
 }
 
-async function openDonateTab(page: Page) {
-  await page.goto("/mobile/donate");
-  const tab = page.getByRole("tab", { name: /^Donate$/i });
-  await tab.waitFor({ state: "visible", timeout: 30000 });
-  await tab.click();
-  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 15000 });
+async function openGiveSlice(page: Page) {
+  await page.goto("/mobile/donate?view=give");
+  await page.locator("#single-donation-button").waitFor({ state: "visible", timeout: 30000 });
   await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });
 }
 
@@ -86,7 +83,7 @@ test.describe("PayPal wallet buttons on the member form", () => {
       return route.fulfill({ json: { id: "CAPTURE-TEST-1", status: "COMPLETED", provider: "paypal" } });
     });
 
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await expect(page.getByTestId("paypal-buttons")).toBeVisible({ timeout: 20000 });
     await page.locator('input[name="amount"]').first().fill("25");
     await page.getByTestId("fake-paypal-button").click();
@@ -105,7 +102,7 @@ test.describe("PayPal wallet buttons on the member form", () => {
 
   test("wallet buttons are hidden for recurring gifts", async ({ page }) => {
     await stubPayPal(page);
-    await openDonateTab(page);
+    await openGiveSlice(page);
     await expect(page.getByTestId("paypal-buttons")).toBeVisible({ timeout: 20000 });
     await page.locator("#recurring-donation-button").click();
     await page.locator("#donation-details").waitFor({ state: "visible", timeout: 15000 });

@@ -1,21 +1,7 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Icon,
-  IconButton,
-  Skeleton,
-  Typography
-} from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Box, Button, Skeleton, Typography } from "@mui/material";
 import { ApiHelper, DateHelper, Locale, UserHelper } from "@churchapps/apphelper";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
@@ -27,6 +13,7 @@ import type {
 import { ConfigurationInterface } from "@/helpers/ConfigHelper";
 import UserContext from "@/context/UserContext";
 import { mobileTheme } from "../mobileTheme";
+import { PageHead, Plate, PlateSection, QuietEmpty, Row, RowList, Sheet, StatusBadge, TextLink } from "../kit";
 
 interface Props {
   id: string;
@@ -41,7 +28,6 @@ interface SignupPlanData {
 
 export const VolunteerDetail = ({ id, config }: Props) => {
   const tc = mobileTheme.colors;
-  const router = useRouter();
   const userContext = React.useContext(UserContext);
   const queryClient = useQueryClient();
 
@@ -177,256 +163,127 @@ export const VolunteerDetail = ({ id, config }: Props) => {
     : "";
   const timesStr = times.length > 0 ? times.map((t) => (t as any).displayName || "").filter(Boolean).join(", ") : "";
 
-  const renderHeader = () => (
-    <Box>
-      <Typography sx={{ fontSize: 24, fontWeight: 700, color: tc.text, mb: "4px" }}>{plan?.name}</Typography>
-      <Typography sx={{ fontSize: 15, color: tc.textMuted, mb: plan?.notes ? "8px" : 0 }}>
-        {serviceDateStr}
-        {timesStr && ` · ${timesStr}`}
-      </Typography>
-      {plan?.notes && (
-        <Typography sx={{ fontSize: 14, color: tc.textMuted, whiteSpace: "pre-wrap" }}>
-          {plan.notes}
-        </Typography>
-      )}
-    </Box>
-  );
-
-  const renderAlert = (type: "warning" | "info" | "success" | "error", text: string, icon: string) => {
-    const colors = {
-      warning: { bg: "rgba(254,170,36,0.15)", fg: tc.warning },
-      info: { bg: "rgba(86,139,218,0.15)", fg: tc.primary },
-      success: { bg: "rgba(112,220,135,0.2)", fg: tc.success },
-      error: { bg: "rgba(176,18,12,0.15)", fg: tc.error }
-    }[type];
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          bgcolor: colors.bg,
-          color: colors.fg,
-          borderRadius: `${mobileTheme.radius.md}px`,
-          p: `${mobileTheme.spacing.sm}px`
-        }}
-      >
-        <Icon sx={{ color: colors.fg }}>{icon}</Icon>
-        <Typography sx={{ fontSize: 14, color: colors.fg, flex: 1 }}>{text}</Typography>
-      </Box>
-    );
-  };
+  const notices: { text: string; tone: "error" | "muted" | "success" }[] = [];
+  if (isDeadlinePassed) notices.push({ text: Locale.label("mobile.details.signupDeadlinePassed"), tone: "muted" });
+  if (!signedIn) notices.push({ text: Locale.label("mobile.details.signInToSignUp"), tone: "muted" });
+  if (message) notices.push({ text: message.text, tone: message.type });
 
   const renderPosition = (p: PositionInterface & { filledCount: number }) => {
     const needed = (p as any).count || 0;
     const filled = p.filledCount || 0;
     const remaining = Math.max(0, needed - filled);
-    const percent = needed > 0 ? Math.min(100, (filled / needed) * 100) : 0;
     const isFull = remaining === 0 && needed > 0;
     const mine = getMyAssignment(p.id);
     const busy = actionId === p.id || (mine?.id ? actionId === mine.id : false);
     const names = (p.id && volunteerNames[p.id]) || [];
 
-    return (
-      <Box
-        key={p.id}
-        sx={{
-          bgcolor: tc.surface,
-          borderRadius: `${mobileTheme.radius.lg}px`,
-          p: `${mobileTheme.spacing.md}px`,
-          border: mine ? `1px solid ${tc.success}` : `1px solid ${tc.border}`
-        }}
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 1 }}>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
-              <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text }}>{p.name}</Typography>
-              {mine && (
-                <Box
-                  sx={{
-                    px: 1,
-                    py: "2px",
-                    borderRadius: "999px",
-                    bgcolor: "rgba(112,220,135,0.2)",
-                    color: tc.success,
-                    fontSize: 10.5,
-                    fontWeight: 700
-                  }}
-                >
-                  {Locale.label("mobile.details.signedUp")}
-                </Box>
-              )}
-            </Box>
-            {p.description && (
-              <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: "4px" }}>{p.description}</Typography>
-            )}
-            {names.length > 0 && (
-              <Typography sx={{ fontSize: 13, color: tc.textMuted, mt: "4px" }}>
-                {Locale.label("mobile.details.signedUpNames").replace("{}", names.join(", "))}
-              </Typography>
-            )}
-          </Box>
-          {mine ? (
-            <Button
-              variant="outlined"
-              size="small"
-              disabled={isDeadlinePassed || busy}
-              onClick={() => requestRemove(mine)}
-              sx={{
-                color: tc.error,
-                borderColor: tc.error,
-                textTransform: "none",
-                fontWeight: 600,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                flexShrink: 0
-              }}
-            >
-              {busy ? Locale.label("mobile.details.removing") : Locale.label("mobile.details.remove")}
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              size="small"
-              disabled={isFull || isDeadlinePassed || !signedIn || busy}
-              onClick={() => handleSignup(p)}
-              sx={{
-                bgcolor: tc.primary,
-                color: tc.onPrimary,
-                textTransform: "none",
-                fontWeight: 600,
-                borderRadius: `${mobileTheme.radius.md}px`,
-                flexShrink: 0,
-                "&:hover": { bgcolor: tc.primary },
-                "&.Mui-disabled": { bgcolor: tc.disabled, color: "#FFF" }
-              }}
-            >
-              {busy ? Locale.label("mobile.details.signingUp") : isFull ? Locale.label("mobile.details.full") : Locale.label("mobile.details.signUp")}
-            </Button>
-          )}
-        </Box>
-
-        <Box sx={{ mt: 1.5 }}>
-          <Box
-            sx={{
-              height: 6,
-              borderRadius: 3,
-              bgcolor: tc.border,
-              overflow: "hidden"
-            }}
-          >
-            <Box
-              sx={{
-                height: "100%",
-                width: `${percent}%`,
-                bgcolor: isFull ? tc.error : tc.primary,
-                transition: "width 300ms ease"
-              }}
-            />
-          </Box>
-          <Typography sx={{ fontSize: 12, color: tc.textMuted, mt: "4px" }}>
-            {remaining > 0 ? Locale.label("mobile.details.slotsRemaining").replace("{}", String(remaining)).replace("{}", String(needed)) : Locale.label("mobile.details.allSlotsFilled").replace("{}", String(needed))}
-          </Typography>
-        </Box>
+    const trailing = mine ? (
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px", flex: "none" }}>
+        <StatusBadge tone="ok" dot>{Locale.label("mobile.details.signedUp")}</StatusBadge>
+        <TextLink danger disabled={isDeadlinePassed || busy} onClick={() => requestRemove(mine)} sx={{ fontSize: 13.5 }}>
+          {busy ? Locale.label("mobile.details.removing") : Locale.label("mobile.details.remove")}
+        </TextLink>
       </Box>
+    ) : isFull ? (
+      <Button variant="outlined" size="small" disabled sx={{ flex: "none" }}>{Locale.label("mobile.details.full")}</Button>
+    ) : (
+      <Button variant="contained" size="small" disabled={isDeadlinePassed || !signedIn || busy} onClick={() => handleSignup(p)} sx={{ flex: "none" }}>
+        {busy ? Locale.label("mobile.details.signingUp") : Locale.label("mobile.details.signUp")}
+      </Button>
+    );
+
+    return (
+      <Row
+        key={p.id}
+        title={p.name}
+        subtitle={<>
+          {Locale.label("mobile.serving.filledOf").replace("{}", String(filled)).replace("{}", String(needed))}
+          {p.description && <Box component="span" sx={{ display: "block" }}>{p.description}</Box>}
+          {names.length > 0 && (
+            <Box component="span" sx={{ display: "block" }}>{Locale.label("mobile.details.signedUpNames").replace("{}", names.join(", "))}</Box>
+          )}
+        </>}
+        trailing={trailing}
+      />
     );
   };
 
-  const renderSkeleton = (i: number) => (
-    <Box
-      key={`sk-${i}`}
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.lg}px`,
-        p: `${mobileTheme.spacing.md}px`
-      }}
-    >
-      <Skeleton variant="text" width="60%" height={20} />
-      <Skeleton variant="text" width="40%" height={14} />
-      <Skeleton variant="rounded" height={32} sx={{ mt: 1.5 }} />
-    </Box>
-  );
-
-  const renderNotFound = () => (
-    <Box
-      sx={{
-        bgcolor: tc.surface,
-        border: `1px solid ${tc.border}`,
-        borderRadius: `${mobileTheme.radius.xl}px`,
-        p: `${mobileTheme.spacing.lg}px`,
-        textAlign: "center"
-      }}
-    >
-      <Icon sx={{ fontSize: 48, color: tc.textSecondary }}>event_busy</Icon>
-      <Typography sx={{ fontSize: 16, fontWeight: 600, color: tc.text, mt: 1 }}>
-        {Locale.label("mobile.details.planNotFound")}
-      </Typography>
-    </Box>
-  );
+  const renderBody = () => {
+    if (loading) {
+      return (
+        <>
+          <PageHead title={<Skeleton variant="text" width="60%" />} />
+          <Plate>
+            <PlateSection>
+              {[0, 1, 2].map((i) => (
+                <Box key={i} sx={{ py: "10px" }}>
+                  <Skeleton variant="text" width="50%" height={22} />
+                  <Skeleton variant="text" width="35%" height={18} />
+                </Box>
+              ))}
+            </PlateSection>
+          </Plate>
+        </>
+      );
+    }
+    if (notFound || !plan) {
+      return (
+        <PageHead title={Locale.label("mobile.details.planNotFound")}>
+          <TextLink href="/mobile/volunteer">{Locale.label("mobile.screenTitles.volunteer")}</TextLink>
+        </PageHead>
+      );
+    }
+    return (
+      <>
+        <PageHead
+          title={plan.name}
+          lede={<>
+            {serviceDateStr}{timesStr && ` · ${timesStr}`}
+            {notices.map((n, i) => (
+              <Typography
+                key={i}
+                role={n.tone === "error" ? "alert" : "status"}
+                sx={{ mt: "6px", fontSize: 14, fontWeight: n.tone === "muted" ? 400 : 600, color: n.tone === "error" ? tc.error : n.tone === "success" ? tc.success : tc.textSecondary }}
+              >
+                {n.text}
+              </Typography>
+            ))}
+          </>}
+        />
+        <Plate>
+          {plan.notes && (
+            <PlateSection>
+              <Typography sx={{ fontSize: 15, lineHeight: "22px", color: tc.text, whiteSpace: "pre-wrap" }}>{plan.notes}</Typography>
+            </PlateSection>
+          )}
+          {Object.entries(categories).map(([cat, list]) => (
+            <PlateSection key={cat} title={cat}>
+              <RowList>{list.map(renderPosition)}</RowList>
+            </PlateSection>
+          ))}
+          {positions.length === 0 && (
+            <PlateSection><QuietEmpty>{Locale.label("mobile.details.noPositionsAvailable")}</QuietEmpty></PlateSection>
+          )}
+        </Plate>
+      </>
+    );
+  };
 
   return (
-    <Box sx={{ p: `${mobileTheme.spacing.md}px`, bgcolor: tc.background, minHeight: "100%" }}>
-      <Box sx={{ display: "flex", alignItems: "center", mb: `${mobileTheme.spacing.sm}px` }}>
-        <IconButton aria-label={Locale.label("mobile.components.back")} onClick={() => router.back()} sx={{ color: tc.text }} size="small">
-          <ArrowBackIcon />
-        </IconButton>
-      </Box>
-
-      {loading && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-          {[0, 1, 2].map(renderSkeleton)}
-        </Box>
-      )}
-
-      {!loading && notFound && renderNotFound()}
-
-      {!loading && !notFound && plan && (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.md}px` }}>
-          {renderHeader()}
-          {isDeadlinePassed && renderAlert("warning", Locale.label("mobile.details.signupDeadlinePassed"), "schedule")}
-          {!signedIn && renderAlert("info", Locale.label("mobile.details.signInToSignUp"), "info")}
-          {message && renderAlert(message.type, message.text, message.type === "success" ? "check_circle" : "error")}
-
-          {Object.entries(categories).map(([cat, list]) => (
-            <Box key={cat}>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, color: tc.text, mb: 1 }}>{cat}</Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: `${mobileTheme.spacing.sm}px` }}>
-                {list.map(renderPosition)}
-              </Box>
-            </Box>
-          ))}
-
-          {positions.length === 0 && (
-            <Typography sx={{ textAlign: "center", color: tc.textMuted, py: 3 }}>
-              {Locale.label("mobile.details.noPositionsAvailable")}
-            </Typography>
-          )}
-        </Box>
-      )}
-
-      <Dialog
+    <Box>
+      {renderBody()}
+      <Sheet
         open={!!pendingRemoval}
         onClose={() => setPendingRemoval(null)}
-        aria-labelledby="remove-signup-title"
+        title={Locale.label("mobile.details.removeSignup")}
+        maxWidth="xs"
+        actions={<>
+          <Button variant="outlined" onClick={() => setPendingRemoval(null)}>{Locale.label("mobile.details.cancel")}</Button>
+          <Button variant="contained" color="error" onClick={confirmRemove}>{Locale.label("mobile.details.remove")}</Button>
+        </>}
       >
-        <DialogTitle id="remove-signup-title">{Locale.label("mobile.details.removeSignup")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {Locale.label("mobile.details.confirmRemoveSignup")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPendingRemoval(null)} sx={{ color: tc.textMuted, textTransform: "none" }}>
-            {Locale.label("mobile.details.cancel")}
-          </Button>
-          <Button
-            onClick={confirmRemove}
-            sx={{ color: tc.error, textTransform: "none", fontWeight: 600 }}
-          >
-            {Locale.label("mobile.details.remove")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Typography>{Locale.label("mobile.details.confirmRemoveSignup")}</Typography>
+      </Sheet>
     </Box>
   );
 };

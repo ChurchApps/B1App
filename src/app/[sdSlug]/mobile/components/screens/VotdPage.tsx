@@ -1,10 +1,20 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Box, Icon, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
+import ImageIcon from "@mui/icons-material/Image";
 import { Locale } from "@churchapps/apphelper";
+import { DateHelper } from "@churchapps/helpers";
 import { mobileTheme } from "../mobileTheme";
+import { PageHead, Plate, PlateSection, Row, RowList } from "../kit";
 import { getDayOfYear, loadDailyVerse, type DailyVerse } from "../../helpers/dailyVerses";
+
+const daysAgo = (n: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d;
+};
 
 const getShape = () => {
   if (typeof window === "undefined") return "9x16";
@@ -25,6 +35,7 @@ export const VotdPage = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [shareMessage, setShareMessage] = useState<string | null>(null);
+  const [week, setWeek] = useState<{ date: Date; verse: DailyVerse }[]>([]);
 
   useEffect(() => {
     setDay(getDayOfYear());
@@ -43,6 +54,10 @@ export const VotdPage = () => {
     if (day === null) return;
     let cancelled = false;
     loadDailyVerse().then((v) => { if (!cancelled) setVerse(v); });
+    const dates = [1, 2, 3].map(daysAgo);
+    Promise.all(dates.map((d) => loadDailyVerse(d))).then((verses) => {
+      if (!cancelled) setWeek(verses.map((v, i) => ({ date: dates[i], verse: v })));
+    });
     return () => { cancelled = true; };
   }, [day]);
 
@@ -106,121 +121,60 @@ export const VotdPage = () => {
     }
   };
 
-  const pillSx = {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 1,
-    px: "14px",
-    py: "8px",
-    borderRadius: "999px",
-    bgcolor: tc.primary,
-    color: tc.onPrimary,
-    cursor: "pointer",
-    transition: "opacity 150ms ease",
-    "&:hover": { opacity: 0.9 }
-  };
+  const today = day === null ? "" : new Date().toLocaleDateString(DateHelper.locale, { weekday: "long", month: "long", day: "numeric" });
 
   return (
-    <Box sx={{ bgcolor: tc.surface, minHeight: "100%", display: "flex", flexDirection: "column" }}>
-      <Box sx={{
-        position: "relative",
-        flex: 1,
-        minHeight: "calc(100vh - 140px)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        px: `${mobileTheme.spacing.lg}px`,
-        background: mobileTheme.verseGradient,
-        overflow: "hidden"
-      }}>
-        {/* Typeset verse doubles as the loading state and the offline/error fallback. */}
-        {verse && (!showImage || !imageLoaded) && (
-          <>
-            <Typography sx={{
-              fontFamily: mobileTheme.fonts.serif,
-              fontStyle: "italic",
-              fontSize: 26,
-              lineHeight: 1.5,
-              color: "#FFFFFF",
-              maxWidth: 320,
-              mb: "14px"
-            }}>
-              {verse.text}
-            </Typography>
-            <Typography sx={{
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.75)"
-            }}>
-              {verse.reference}
-            </Typography>
-          </>
-        )}
+    <Box>
+      <PageHead title={Locale.label("mobile.screenTitles.votd")} lede={today || undefined}>
+        <Button variant="contained" onClick={handleShare} startIcon={<ShareIcon />} aria-label={Locale.label("mobile.screens.shareVotd")}>
+          {Locale.label("mobile.votd.share")}
+        </Button>
         {showImage && (
-          <img
-            src={imageUrl}
-            alt={verse ? `${verse.reference} — Verse of the Day` : "Verse of the Day"}
-            onLoad={() => setImageLoaded(true)}
-            onError={() => setImageError(true)}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              opacity: imageLoaded ? 1 : 0,
-              transition: "opacity 300ms ease"
-            }}
-          />
+          <Button variant="outlined" onClick={handleShareImage} startIcon={<ImageIcon />} data-testid="votd-share-image">
+            {Locale.label("mobile.votd.shareImage")}
+          </Button>
         )}
-      </Box>
-
-      <Box sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        px: `${mobileTheme.spacing.md}px`,
-        py: `${mobileTheme.spacing.sm}px`,
-        gap: 1
-      }}>
-        {shareMessage && (
-          <Typography sx={{ fontSize: 12, color: tc.textMuted }}>
-            {shareMessage}
-          </Typography>
+        {shareMessage && <Typography role="status" sx={{ fontSize: 13.5, color: tc.textSecondary }}>{shareMessage}</Typography>}
+      </PageHead>
+      <Plate>
+        <PlateSection>
+          {showImage && (
+            <Box sx={{ borderRadius: "10px", overflow: "hidden", bgcolor: tc.primaryDeep, display: imageLoaded ? "flex" : "none", justifyContent: "center", mb: "18px" }}>
+              <img
+                src={imageUrl}
+                alt={verse ? `${verse.reference} — Verse of the Day` : "Verse of the Day"}
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageError(true)}
+                style={{ display: "block", maxWidth: "100%", maxHeight: "62vh", objectFit: "contain" }}
+              />
+            </Box>
+          )}
+          {verse && (
+            <>
+              <Typography sx={{ fontFamily: mobileTheme.fonts.serif, fontStyle: "italic", fontSize: 24, lineHeight: "34px", color: tc.text, maxWidth: 640 }}>
+                &ldquo;{verse.text}&rdquo;
+              </Typography>
+              <Typography sx={{ mt: "8px", fontSize: 14, fontWeight: 600, color: tc.textSecondary }}>
+                {verse.reference}
+              </Typography>
+            </>
+          )}
+        </PlateSection>
+        {week.length > 0 && (
+          <PlateSection title={Locale.label("mobile.votd.thisWeek")}>
+            <RowList>
+              {week.map(({ date, verse: v }) => (
+                <Row
+                  key={date.toDateString()}
+                  title={v.reference}
+                  subtitle={`${date.toLocaleDateString(DateHelper.locale, { weekday: "short", month: "short", day: "numeric" })} · ${v.text}`}
+                  sx={{ "& .MuiTypography-root:last-of-type": { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }}
+                />
+              ))}
+            </RowList>
+          </PlateSection>
         )}
-        {showImage && (
-          <Box
-            role="button"
-            tabIndex={0}
-            onClick={handleShareImage}
-            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleShareImage(); }}
-            data-testid="votd-share-image"
-            sx={pillSx}
-          >
-            <Icon sx={{ fontSize: 18, color: tc.onPrimary }}>image</Icon>
-            <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.onPrimary }}>
-              {Locale.label("mobile.votd.shareImage")}
-            </Typography>
-          </Box>
-        )}
-        <Box
-          role="button"
-          tabIndex={0}
-          onClick={handleShare}
-          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleShare(); }}
-          aria-label={Locale.label("mobile.screens.shareVotd")}
-          sx={pillSx}
-        >
-          <Icon sx={{ fontSize: 18, color: tc.onPrimary }}>share</Icon>
-          <Typography sx={{ fontSize: 14, fontWeight: 600, color: tc.onPrimary }}>
-            {Locale.label("mobile.votd.share")}
-          </Typography>
-        </Box>
-      </Box>
+      </Plate>
     </Box>
   );
 };
