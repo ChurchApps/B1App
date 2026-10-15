@@ -41,13 +41,14 @@ test.describe("Group meetings", () => {
     await page.getByTestId("group-add-note").click();
     const dialog = page.getByRole("dialog");
     await dialog.getByLabel("Date").fill(FUTURE);
-    await dialog.getByTestId("meeting-note-text").locator("textarea").first().fill("Romans 9 next week.");
+    await dialog.getByTestId("meeting-note-text").locator("textarea").first().fill("**Romans 9** next week.");
     await dialog.getByTestId("meeting-note-save").click();
     await expect(dialog).toBeHidden();
 
     const row = main.getByTestId("group-meeting-row").filter({ hasText: "Romans 9 next week." });
     await expect(row).toBeVisible({ timeout: 15000 });
     await expect(row).toContainText("Upcoming");
+    await expect(row.locator("strong")).toHaveText("Romans 9");
   });
 
   test("notes typed on the Attendance screen show in Meetings", async ({ page }) => {
